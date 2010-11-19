@@ -200,7 +200,7 @@ namespace Lunar
                                         parameterIndex );
                                     if( rParameter.name == constantName )
                                     {
-                                        rOutputStream.Seek( rConstantInfo.offset, Stream::SEEK_ORIGIN_BEGIN );
+                                        rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                                         rOutputStream.Write(
                                             &rParameter.value,
                                             sizeof( float32_t ),
@@ -218,7 +218,7 @@ namespace Lunar
                                             parameterIndex );
                                         if( rParameter.name == constantName )
                                         {
-                                            rOutputStream.Seek( rConstantInfo.offset, Stream::SEEK_ORIGIN_BEGIN );
+                                            rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                                             rOutputStream.Write(
                                                 &rParameter.value,
                                                 sizeof( float32_t ),
@@ -238,7 +238,7 @@ namespace Lunar
                                                 parameterIndex );
                                             if( rParameter.name == constantName )
                                             {
-                                                rOutputStream.Seek( rConstantInfo.offset, Stream::SEEK_ORIGIN_BEGIN );
+                                                rOutputStream.Seek( rConstantInfo.offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                                                 rOutputStream.Write(
                                                     &rParameter.value,
                                                     sizeof( float32_t ),
@@ -260,7 +260,7 @@ namespace Lunar
                                                 {
                                                     rOutputStream.Seek(
                                                         rConstantInfo.offset,
-                                                        Stream::SEEK_ORIGIN_BEGIN );
+                                                        SeekOrigins::SEEK_ORIGIN_BEGIN );
                                                     rOutputStream.Write(
                                                         &rParameter.value,
                                                         sizeof( float32_t ),

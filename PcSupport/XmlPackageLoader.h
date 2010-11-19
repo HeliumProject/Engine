@@ -13,6 +13,8 @@
 #include "Engine/PackageLoader.h"
 #include "Engine/Serializer.h"
 
+#include "Foundation/File/Path.h"
+
 /// XML package file extension string.
 #define L_XML_PACKAGE_FILE_EXTENSION TXT( ".xml" )
 /// Directory-based XML package file name string.
@@ -339,7 +341,7 @@ namespace Lunar
         Package* GetPackage() const;
         GameObjectPath GetPackagePath() const;
 
-        inline const String& GetPackageFilePath() const;
+        inline const Path& GetPackageFilePath() const;
         //@}
 
         /// @name Package File Information
@@ -427,7 +429,7 @@ namespace Lunar
         ObjectPool< LoadRequest > m_loadRequestPool;
 
         /// Package file path name.
-        String m_packageFilePath;
+        Path m_packageFilePath;
         /// Size of the package data file.
         size_t m_packageFileSize;
 

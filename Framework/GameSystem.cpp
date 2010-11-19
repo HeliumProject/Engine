@@ -8,9 +8,9 @@
 #include "FrameworkPch.h"
 #include "Framework/GameSystem.h"
 
-#include "Core/AsyncLoader.h"
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/AsyncLoader.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"
@@ -354,7 +354,6 @@ namespace Lunar
         GameObjectPath::Shutdown();
         Name::Shutdown();
 
-        Path::Shutdown();
         File::Shutdown();
 
         // Perform base System shutdown last.

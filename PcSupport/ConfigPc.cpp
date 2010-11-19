@@ -8,8 +8,8 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ConfigPc.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Engine/Config.h"
 #include "PcSupport/XmlPackageLoader.h"
 #include "PcSupport/XmlSerializer.h"
@@ -33,17 +33,21 @@ namespace Lunar
             return false;
         }
 
-        const String& rUserDataDirectory = File::GetUserDataDirectory();
+        Path userDataDirectory;
+        if ( !File::GetUserDataDirectory( userDataDirectory ) )
+        {
+            HELIUM_TRACE( TRACE_WARNING, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
+            return false;
+        }
+
         GameObjectPath configPackagePath = pConfigPackage->GetPath();
 
-        String packageFilePath;
-        Path::Combine( packageFilePath, rUserDataDirectory, configPackagePath.ToFilePathString() );
-        packageFilePath += L_XML_PACKAGE_FILE_EXTENSION;
+        Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + L_XML_PACKAGE_FILE_EXTENSION );
 
         HELIUM_TRACE( TRACE_INFO, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
 
         XmlSerializer serializer;
-        if( !serializer.Initialize( *packageFilePath ) )
+        if( !serializer.Initialize( packageFilePath.c_str() ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,

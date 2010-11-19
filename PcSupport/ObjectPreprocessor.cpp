@@ -8,10 +8,11 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ObjectPreprocessor.h"
 
+#include "Platform/Stat.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/File.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
-#include "Core/Path.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/BinarySerializer.h"
 #include "Engine/CacheManager.h"
@@ -148,9 +149,9 @@ namespace Lunar
             HELIUM_ASSERT( propertyDataSizeActual <= UINT32_MAX );
 
             propertyDataSize = static_cast< uint32_t >( propertyDataSizeActual );
-            rObjectStream.Seek( 0, Stream::SEEK_ORIGIN_BEGIN );
+            rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_BEGIN );
             rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
-            rObjectStream.Seek( 0, Stream::SEEK_ORIGIN_END );
+            rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_END );
 
             // Serialize persistent resource data and the number of chunks of sub-data.
             if( pResource )
@@ -306,10 +307,22 @@ namespace Lunar
             parentPath = parentPath.GetParent();
         } while( !parentPath.IsEmpty() && !parentPath.IsPackage() );
 
-        String sourceFilePath;
-        Path::Combine( sourceFilePath, File::GetDataDirectory(), baseResourcePath.ToFilePathString() );
+        Path sourceFilePath;
+        if ( !File::GetDataDirectory( sourceFilePath ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "ObjectPreprocessor::LoadResourceData(): Could not retrieve data directory.\n" ) );
 
-        int64_t sourceFileTimestamp = File::GetTimestamp( sourceFilePath );
+            return;
+        }
+
+        sourceFilePath += baseResourcePath.ToFilePathString().GetData();
+
+        Helium::Stat stat;
+        sourceFilePath.Stat( stat );
+
+        int64_t sourceFileTimestamp = stat.m_ModifiedTime;
 
         int64_t timestamp = Max( objectTimestamp, sourceFileTimestamp );
 
@@ -376,7 +389,7 @@ namespace Lunar
         }
 
         // Preprocess all resources for each supported platform.
-        if( !PreprocessResource( pResource, sourceFilePath ) )
+        if( !PreprocessResource( pResource, String( sourceFilePath.c_str() ) ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -471,7 +484,7 @@ namespace Lunar
 
         BufferedStream bufferedStream( pFileStream );
 
-        int64_t seekLocation = bufferedStream.Seek( pCacheEntry->offset, Stream::SEEK_ORIGIN_BEGIN );
+        int64_t seekLocation = bufferedStream.Seek( pCacheEntry->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
         if( static_cast< uint64_t >( seekLocation ) != pCacheEntry->offset )
         {
             HELIUM_TRACE(
@@ -542,7 +555,7 @@ namespace Lunar
         }
 
         uint64_t newOffset = pCacheEntry->offset + sizeof( propertyDataSize ) + propertyDataSize;
-        seekLocation = bufferedStream.Seek( newOffset, Stream::SEEK_ORIGIN_BEGIN );
+        seekLocation = bufferedStream.Seek( newOffset, SeekOrigins::SEEK_ORIGIN_BEGIN );
         if( static_cast< uint64_t >( seekLocation ) != newOffset )
         {
             HELIUM_TRACE(
@@ -685,8 +698,8 @@ namespace Lunar
             HELIUM_ASSERT( pResourceCache );
             pResourceCache->EnforceTocLoad();
 
-            const String& rResourceCacheFileName = pResourceCache->GetCacheFileName();
-            if( !File::Exists( rResourceCacheFileName ) )
+            Path resourceCachePath( pResourceCache->GetCacheFileName().GetData() );
+            if( !resourceCachePath.Exists() )
             {
                 HELIUM_TRACE(
                     TRACE_INFO,
@@ -698,7 +711,7 @@ namespace Lunar
                 return false;
             }
 
-            FileStream* pFileStream = File::Open( rResourceCacheFileName, FileStream::MODE_READ );
+            FileStream* pFileStream = File::Open( resourceCachePath.c_str(), FileStream::MODE_READ );
             if( !pFileStream )
             {
                 HELIUM_TRACE(
@@ -733,7 +746,7 @@ namespace Lunar
                     return false;
                 }
 
-                int64_t newOffset = pFileStream->Seek( pResourceCacheEntry->offset, Stream::SEEK_ORIGIN_BEGIN );
+                int64_t newOffset = pFileStream->Seek( pResourceCacheEntry->offset, SeekOrigins::SEEK_ORIGIN_BEGIN );
                 if( static_cast< uint64_t >( newOffset ) != pResourceCacheEntry->offset )
                 {
                     HELIUM_TRACE(

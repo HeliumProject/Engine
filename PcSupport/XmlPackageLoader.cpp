@@ -8,12 +8,12 @@
 #include "PcSupportPch.h"
 #include "PcSupport/XmlPackageLoader.h"
 
-#include "Core/File.h"
-#include "Core/Path.h"
+#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/File/Directory.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Core/DirectoryIterator.h"
-#include "Core/AsyncLoader.h"
+#include "Foundation/AsyncLoader.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
@@ -823,31 +823,47 @@ namespace Lunar
         // Build the package file path.  If the package is a user configuration package, use the user data directory,
         // otherwise use the global data directory.
         Config& rConfig = Config::GetStaticInstance();
-        const String& rDataDirectory =
-            ( packagePath == rConfig.GetUserConfigPackagePath()
-              ? File::GetUserDataDirectory()
-              : File::GetDataDirectory() );
+        Path dataDirectory;
+        
+        if ( packagePath == rConfig.GetUserConfigPackagePath() )
+        {
+            if ( !File::GetUserDataDirectory( dataDirectory ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 
-        String basePackageFilePath;
-        Path::Combine( basePackageFilePath, rDataDirectory, packagePath.ToFilePathString() );
+                return false;
+            }
+        }
+        else
+        {
+            if ( !File::GetDataDirectory( dataDirectory ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 
-        m_packageFilePath = basePackageFilePath;
-        m_packageFilePath += L_PATH_SEPARATOR_CHAR_STRING L_XML_PACKAGE_FILE_NAME;
-        m_packageFilePath.Trim();
+                return false;
+            }
+        }
 
-        if( !File::Exists( m_packageFilePath ) )
+        Path basePackageFilePath( dataDirectory + packagePath.ToFilePathString().GetData() );
+
+        m_packageFilePath.Set( basePackageFilePath.Get() + TXT( "/" ) + L_XML_PACKAGE_FILE_NAME );
+
+        if( !m_packageFilePath.Exists() )
         {
             // Fall back onto the non-directory based package file.
             m_packageFilePath = basePackageFilePath;
             m_packageFilePath += L_XML_PACKAGE_FILE_EXTENSION;
-            m_packageFilePath.Trim();
         }
 
         // Retrieve the size of the package file.  Note that we still keep around the loader even if the package file
         // isn't found so as to allow for memory-only packages or the creation of new packages at editor runtime.
         SetInvalid( m_packageFileSize );
 
-        int64_t packageFileSize = File::GetSize( m_packageFilePath );
+        int64_t packageFileSize = m_packageFilePath.Size();
         if( packageFileSize == -1 )
         {
             HELIUM_TRACE(
@@ -973,7 +989,7 @@ namespace Lunar
             HELIUM_ASSERT( m_pLoadBuffer );
 
             AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-            m_asyncLoadId = rAsyncLoader.QueueRequest( m_pLoadBuffer, m_packageFilePath, 0, m_packageFileSize );
+            m_asyncLoadId = rAsyncLoader.QueueRequest( m_pLoadBuffer, String( m_packageFilePath.c_str() ), 0, m_packageFileSize );
             HELIUM_ASSERT( IsValid( m_asyncLoadId ) );
         }
 
@@ -1298,7 +1314,7 @@ namespace Lunar
     /// @copydoc PackageLoader::GetFileTimestamp()
     int64_t XmlPackageLoader::GetFileTimestamp() const
     {
-        int64_t timestamp = File::GetTimestamp( m_packageFilePath );
+        int64_t timestamp =  m_packageFilePath.ModifiedTime();
 
         return timestamp;
     }
@@ -1431,102 +1447,100 @@ namespace Lunar
         ResourceHandler::GetAllResourceHandlers( resourceHandlers );
         size_t resourceHandlerCount = resourceHandlers.GetSize();
 
-        const String& rDataDirectory = File::GetDataDirectory();
-
-        String packageDirectory;
-        Path::Combine( packageDirectory, rDataDirectory, m_packagePath.ToFilePathString() );
-
-        DirectoryIterator* pDirectoryIterator = File::IterateDirectory( packageDirectory );
-        if( pDirectoryIterator )
+        Path packageDirectoryPath;
+        
+        if ( !File::GetDataDirectory( packageDirectoryPath ) )
         {
-            String packageAssetName;
-            for( ; pDirectoryIterator->IsValid(); pDirectoryIterator->Advance() )
+            HELIUM_TRACE( TRACE_ERROR, TXT( "XmlPackageLoader::TickPreload(): Could not get data directory.\n" ) );
+            return;
+        }
+
+        packageDirectoryPath += m_packagePath.ToFilePathString().GetData();
+
+        Directory packageDirectory( packageDirectoryPath );
+
+        for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+        {
+            const DirectoryItem& item = packageDirectory.GetItem();
+
+            if ( !item.m_Path.IsFile() )
             {
-                HELIUM_VERIFY( pDirectoryIterator->GetFileName( packageAssetName ) );
+                continue;
+            }
 
-                // Skip over non-files.
-                String packageAssetPath;
-                Path::Combine( packageAssetPath, packageDirectory, packageAssetName );
-                File::EType fileType = File::GetFileType( packageAssetPath );
-                if( fileType != File::TYPE_FILE )
+            Path fullPath = item.m_Path.GetAbsolutePath( packageDirectoryPath );
+
+            // Make sure an object entry doesn't already exist for the file.
+            Name objectName( fullPath.c_str() );
+            size_t objectCount = m_objects.GetSize();
+            size_t objectIndex;
+            for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
+            {
+                SerializedObjectData& rObjectData = m_objects[ objectIndex ];
+                if( rObjectData.objectPath.GetName() == objectName &&
+                    rObjectData.objectPath.GetParent() == m_packagePath )
                 {
-                    continue;
-                }
-
-                // Make sure an object entry doesn't already exist for the file.
-                Name objectName( packageAssetName );
-                size_t objectCount = m_objects.GetSize();
-                size_t objectIndex;
-                for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
-                {
-                    SerializedObjectData& rObjectData = m_objects[ objectIndex ];
-                    if( rObjectData.objectPath.GetName() == objectName &&
-                        rObjectData.objectPath.GetParent() == m_packagePath )
-                    {
-                        break;
-                    }
-                }
-
-                if( objectIndex < objectCount )
-                {
-                    continue;
-                }
-
-                // Check the extension to see if the file is supported by one of the resource handlers.
-                ResourceHandler* pBestHandler = NULL;
-                size_t bestHandlerExtensionLength = 0;
-
-                for( size_t handlerIndex = 0; handlerIndex < resourceHandlerCount; ++handlerIndex )
-                {
-                    ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];
-                    HELIUM_ASSERT( pHandler );
-
-                    const tchar_t* const* ppExtensions;
-                    size_t extensionCount;
-                    pHandler->GetSourceExtensions( ppExtensions, extensionCount );
-                    HELIUM_ASSERT( ppExtensions || extensionCount == 0 );
-
-                    for( size_t extensionIndex = 0; extensionIndex < extensionCount; ++extensionIndex )
-                    {
-                        const tchar_t* pExtension = ppExtensions[ extensionIndex ];
-                        HELIUM_ASSERT( pExtension );
-
-                        size_t extensionLength = StringLength( pExtension );
-                        if( extensionLength > bestHandlerExtensionLength &&
-                            packageAssetName.EndsWith( pExtension ) )
-                        {
-                            pBestHandler = pHandler;
-                            bestHandlerExtensionLength = extensionLength;
-
-                            break;
-                        }
-                    }
-                }
-
-                if( pBestHandler )
-                {
-                    // File extension matches a supported source asset type, so add it to the object list.
-                    Type* pResourceType = pBestHandler->GetResourceType();
-                    HELIUM_ASSERT( pResourceType );
-
-                    HELIUM_TRACE(
-                        TRACE_DEBUG,
-                        ( TXT( "XmlPackageLoader: Registered source asset file \"%s\" as as instance of resource " )
-                          TXT( "type \"%s\" in package \"%s\".\n" ) ),
-                        *packageAssetName,
-                        *pResourceType->GetName(),
-                        *m_packagePath.ToString() );
-
-                    SerializedObjectData* pObjectData = m_objects.New();
-                    HELIUM_ASSERT( pObjectData );
-                    HELIUM_VERIFY( pObjectData->objectPath.Set( objectName, false, m_packagePath ) );
-                    pObjectData->typePath = pResourceType->GetPath();
-                    pObjectData->templatePath.Clear();
+                    break;
                 }
             }
 
-            delete pDirectoryIterator;
+            if( objectIndex < objectCount )
+            {
+                continue;
+            }
+
+            // Check the extension to see if the file is supported by one of the resource handlers.
+            ResourceHandler* pBestHandler = NULL;
+            size_t bestHandlerExtensionLength = 0;
+
+            for( size_t handlerIndex = 0; handlerIndex < resourceHandlerCount; ++handlerIndex )
+            {
+                ResourceHandler* pHandler = resourceHandlers[ handlerIndex ];
+                HELIUM_ASSERT( pHandler );
+
+                const tchar_t* const* ppExtensions;
+                size_t extensionCount;
+                pHandler->GetSourceExtensions( ppExtensions, extensionCount );
+                HELIUM_ASSERT( ppExtensions || extensionCount == 0 );
+
+                for( size_t extensionIndex = 0; extensionIndex < extensionCount; ++extensionIndex )
+                {
+                    const tchar_t* pExtension = ppExtensions[ extensionIndex ];
+                    HELIUM_ASSERT( pExtension );
+
+                    size_t extensionLength = StringLength( pExtension );
+                    if( extensionLength > bestHandlerExtensionLength && fullPath.Extension() == pExtension )
+                    {
+                        pBestHandler = pHandler;
+                        bestHandlerExtensionLength = extensionLength;
+
+                        break;
+                    }
+                }
+            }
+
+            if( pBestHandler )
+            {
+                // File extension matches a supported source asset type, so add it to the object list.
+                Type* pResourceType = pBestHandler->GetResourceType();
+                HELIUM_ASSERT( pResourceType );
+
+                HELIUM_TRACE(
+                    TRACE_DEBUG,
+                    ( TXT( "XmlPackageLoader: Registered source asset file \"%s\" as as instance of resource " )
+                      TXT( "type \"%s\" in package \"%s\".\n" ) ),
+                    fullPath.c_str(),
+                    *pResourceType->GetName(),
+                    *m_packagePath.ToString() );
+
+                SerializedObjectData* pObjectData = m_objects.New();
+                HELIUM_ASSERT( pObjectData );
+                HELIUM_VERIFY( pObjectData->objectPath.Set( objectName, false, m_packagePath ) );
+                pObjectData->typePath = pResourceType->GetPath();
+                pObjectData->templatePath.Clear();
+            }
         }
+
 #endif  // L_EDITOR
 
         // Package preloading is now complete.

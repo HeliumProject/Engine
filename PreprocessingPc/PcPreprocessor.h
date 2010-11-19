@@ -33,7 +33,7 @@ namespace Lunar
         //@{
         virtual size_t GetShaderProfileCount() const;
         virtual bool CompileShader(
-            const String& rShaderPath, size_t profileIndex, RShader::EType type, const void* pShaderCode,
+            const Path& rShaderPath, size_t profileIndex, RShader::EType type, const void* pShaderCode,
             size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynArray< uint8_t >& rCompiledCode,
             DynArray< String >* pErrorMessages );
         virtual bool FillShaderReflectionData(

@@ -99,13 +99,13 @@ static Lunar::StrongPtr< Lunar::Package > sp{MODULE}TypePackage;
 '''
 
 sourceFormatString2Engine = \
-'''        HELIUM_VERIFY( Lunar::Object::InitStaticType() );
+'''        HELIUM_VERIFY( Lunar::GameObject::InitStaticType() );
 
-        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
+        Lunar::GameObject* pTypesPackageObject = Lunar::GameObject::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        Lunar::Object* pPackageObject = Lunar::Object::FindChildOf(
+        Lunar::GameObject* pPackageObject = Lunar::GameObject::FindChildOf(
             pTypesPackageObject,
             Lunar::Name( TXT( "{MODULE}" ) ) );
         HELIUM_ASSERT( pPackageObject );
@@ -115,11 +115,11 @@ sourceFormatString2Engine = \
 '''
 
 sourceFormatString2Default = \
-'''        Lunar::Object* pTypesPackageObject = Lunar::Object::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
+'''        Lunar::GameObject* pTypesPackageObject = Lunar::GameObject::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        pPackage = Lunar::Object::Create< Lunar::Package >( Lunar::Name( TXT( "{MODULE}" ) ), pTypesPackageObject );
+        pPackage = Lunar::GameObject::Create< Lunar::Package >( Lunar::Name( TXT( "{MODULE}" ) ), pTypesPackageObject );
         HELIUM_ASSERT( pPackage );
 '''
 
@@ -178,7 +178,7 @@ for module in includeDirListing:
     if not stat.S_ISDIR( pathStat.st_mode ):
         continue
 
-    # Parse each include file in the current module for Object-based class declarations.
+    # Parse each include file in the current module for GameObject-based class declarations.
     print( '[I] Processing module "', module, '"', sep = '' )
     try:
         moduleDirListing = os.listdir( modulePath )
@@ -313,11 +313,11 @@ for module in includeDirListing:
 
     classPathCount = len( classPathNames )
     if classPathCount == 0:
-        print( '[I] No Object-based classes found in ', module, '.', sep = '' )
+        print( '[I] No GameObject-based classes found in ', module, '.', sep = '' )
         print()
         continue
 
-    print( '[I] Found ', classPathCount, ' Object-based class(es) in ', module, '.', sep = '' )
+    print( '[I] Found ', classPathCount, ' GameObject-based class(es) in ', module, '.', sep = '' )
     for classPath in classPathNames:
         print( '[I] -', classPath )
 
@@ -335,7 +335,7 @@ for module in includeDirListing:
         MODULE_TOKEN = moduleToken,
         API_TOKEN_PREFIX = apiTokenPrefix )
 
-    # Special-case handling for Engine module: package creation is performed by the Object type registration due to
+    # Special-case handling for Engine module: package creation is performed by the GameObject type registration due to
     # dependencies, so fetch and use its result.
     if module == 'Engine':
         typeRegFileContents += sourceFormatString2Engine.format( MODULE = module )

@@ -8,7 +8,6 @@
 
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
-#include "Foundation/Atomic.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Attribute.h"
 #include "Foundation/File/Path.h"

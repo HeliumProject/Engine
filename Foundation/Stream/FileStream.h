@@ -2,6 +2,8 @@
 
 #include "Foundation/Stream/Stream.h"
 
+#include "Platform/File.h"
+
 namespace Helium
 {
     /// File stream base class.
@@ -18,28 +20,73 @@ namespace Helium
         /// @name Construction/Destruction
         //@{
         FileStream();
-        virtual ~FileStream() = 0;
+        virtual ~FileStream();
         //@}
 
-        /// @name File Opening
-        //@{
-        bool Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
-        //@}
+        /// Open a file.
+        ///
+        /// @param[in] pPath      Path name of the file to open.
+        /// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
+        /// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
+        ///                       existing file.  This is ignored if MODE_WRITE is not set.
+        ///
+        /// @return  True if the file was successfully opened, false if not.
+        ///
+        /// @see Close(), IsOpen()
+        bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
+        
+        /// @copydoc Stream::Close()
+        virtual void Close();
+
+        /// @copydoc Stream::IsOpen()
+        virtual bool IsOpen() const;
+
+        /// @copydoc Stream::Read()
+        virtual size_t Read( void* pBuffer, size_t size, size_t count );
+
+        /// @copydoc Stream::Write()
+        virtual size_t Write( const void* pBuffer, size_t size, size_t count );
+
+        /// @copydoc Stream::Flush()
+        virtual void Flush();
+
+        /// @copydoc Stream::Seek()
+        virtual int64_t Seek( int64_t offset, SeekOrigin origin );
+
+        /// @copydoc Stream::Tell()
+        virtual int64_t Tell() const;
+
+        /// @copydoc Stream::GetSize()
+        virtual int64_t GetSize() const;
 
         /// @name Stream Capabilities
         //@{
-        virtual bool CanRead() const;
-        virtual bool CanWrite() const;
-        virtual bool CanSeek() const;
+        
+        /// @copydoc Stream::CanRead()
+        virtual bool FileStream::CanRead() const
+        {
+            return( IsOpen() && ( m_modeFlags & MODE_READ ) != 0 );
+        }
+
+        /// @copydoc Stream::CanWrite()
+        virtual bool FileStream::CanWrite() const
+        {
+            return( IsOpen() && ( m_modeFlags & MODE_WRITE ) != 0 );
+        }
+
+        /// @copydoc Stream::CanSeek()
+        virtual bool FileStream::CanSeek() const
+        {
+            return IsOpen();
+        }
         //@}
 
     protected:
         /// Access mode flags.
         uint32_t m_modeFlags;
+        
+        /// handle to the stream
+        Handle m_hFile;
 
-        /// @name File Opening Implementation
-        //@{
-        virtual bool OpenActual( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate ) = 0;
-        //@}
     };
 }

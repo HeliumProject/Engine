@@ -5,8 +5,10 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 
+#include "Editor/App.h"
 #include "Editor/FileDialog.h"
 #include "Editor/Controls/MenuButton.h"
+#include "Editor/MainFrame.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -23,19 +25,23 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     {
         Freeze();
 
-        m_AddFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd ) );
+        m_AddFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd, wxART_OTHER, wxSize(16, 16) ) );
         m_AddFileButton->Enable( false );
         //m_AddFileButton->Hide();
 
-        m_DeleteFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete ) );
+        m_DeleteFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete, wxART_OTHER, wxSize(16, 16) ) );
         m_DeleteFileButton->Enable( false );
         //m_DeleteFileButton->Hide();
 
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
+        m_OptionsButtonStaticLine->Hide();
         m_OptionsButton->Hide();
 
         m_ProjectManagementPanel->Layout();
+        
+        m_OpenProjectPanel->Hide();
+        m_DataViewCtrl->Show();
 
         Layout();
         Thaw();
@@ -86,8 +92,8 @@ ProjectPanel::~ProjectPanel()
 
     if ( m_Model )
     {
-        m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-        m_DocumentManager->e_DocumentRemoved.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
+        m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+        m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
         m_Model->CloseProject();
         m_Model = NULL;
     }
@@ -105,14 +111,16 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
     m_Project = project;
     if ( m_Project )
     {
+        ProjectViewModelNode* node = NULL;
+
         if ( !m_Model )
         {
             // create the model
             m_Model = new ProjectViewModel( m_DocumentManager );
-            m_Model->OpenProject( project, document );
+            node = m_Model->OpenProject( project, document );
 
-            m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-            m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
+            m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+            m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
             
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
@@ -122,12 +130,26 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
         }
         else
         {
-            m_Model->OpenProject( project, document );
+            node = m_Model->OpenProject( project, document );
         }
 
-        m_AddFileButton->Enable( true );
+        if ( node )
+        {
+            m_AddFileButton->Show();
+            m_DeleteFileButton->Show();
+            m_AddFileButton->Enable( true );
 
-        m_DataViewCtrl->Expand( wxDataViewItem( (void*) m_Model->GetRootNode() ) );
+            m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
+
+            //m_OpenProjectPanel->Hide();
+            //m_DataViewCtrl->Show();
+            Layout();
+
+#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE after usibility test" )
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+            m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
+#endif
+        }
     }
 }
 
@@ -143,8 +165,17 @@ void ProjectPanel::CloseProject()
         m_Project = NULL;
     }
 
+    m_AddFileButton->Hide();
     m_AddFileButton->Enable( false );
+
+    m_DeleteFileButton->Hide();
     m_DeleteFileButton->Enable( false );
+
+    m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
+
+    //m_OpenProjectPanel->Show();
+    //m_DataViewCtrl->Hide();
+    Layout();
 }
 
 void ProjectPanel::OnAddFile( wxCommandEvent& event )
@@ -153,6 +184,8 @@ void ProjectPanel::OnAddFile( wxCommandEvent& event )
     FileDialog openDlg( this, TXT( "Open" ), m_Project->a_Path.Get().Directory().c_str() );
 #pragma TODO("Set file dialog filters from Asset::AssetClass::GetExtensions")
     //openDlg.AddFilters( ...
+
+#pragma TODO( "Handle opening a scene" )
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
@@ -171,6 +204,12 @@ void ProjectPanel::OnAddFile( wxCommandEvent& event )
         if ( asset.ReferencesObject() )
         {
             m_Project->AddPath( asset->GetSourcePath() );
+
+            DocumentPtr document = new Document( asset->GetSourcePath() );
+
+            tstring error;
+            bool result = m_DocumentManager->OpenDocument( document, error );
+            HELIUM_ASSERT( result );
         }
     }
 }
@@ -186,7 +225,11 @@ void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
     {
         if ( selection[index].IsOk() )
         {
-            m_Model->RemoveItem( selection[index] );
+            ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( selection[index].GetID()  );
+            if ( node )
+            {
+                m_Project->RemovePath( node->GetPath() );
+            }
         }
     }
 
@@ -259,11 +302,11 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     // it's a project file
     if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
     {
-#pragma TODO( "Close the current project and open the dropped one")
-        //(MainFrame*)GetParent()->OpenProject( path );
+        wxGetApp().GetFrame()->OpenProject( path );
     }
     else if ( m_Project )
     {
+#pragma TODO( "Handle opening a scene" )
         Asset::AssetClassPtr asset;
         if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
         {
@@ -277,6 +320,12 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         if ( asset.ReferencesObject() )
         {
             m_Project->AddPath( asset->GetSourcePath() );
+
+            DocumentPtr document = new Document( asset->GetSourcePath() );
+
+            tstring error;
+            bool result = m_DocumentManager->OpenDocument( document, error );
+            HELIUM_ASSERT( result );
         }
     }
     else

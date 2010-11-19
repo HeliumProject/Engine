@@ -6,7 +6,6 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"
-#include "Platform/String.h"
 
 namespace Helium
 {
@@ -30,7 +29,7 @@ namespace Helium
         static void GuaranteeSeparator( tstring& path );
 
         static bool Exists( const tstring& path );
-        static bool IsAbsolute( const tstring& path );
+        static bool IsAbsolute( const tchar_t* path );
         static bool IsUnder( const tstring& location, const tstring& path );
 
     public:

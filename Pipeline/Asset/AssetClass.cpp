@@ -278,8 +278,32 @@ bool AssetClass::RemoveComponent( int32_t typeID )
     return __super::RemoveComponent( typeID );
 }
 
+void AssetClass::ConnectDocument( Document* document )
+{
+    document->d_Save.Set( this, &AssetClass::OnDocumentSave );
+
+    e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+}
+
+void AssetClass::DisconnectDocument( const Document* document )
+{
+    document->d_Save.Clear();
+
+    e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+}
+
+void AssetClass::OnDocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+    HELIUM_ASSERT( !m_SourcePath.empty() && document->GetPath() == m_SourcePath )
+
+    args.m_Result = Serialize();
+}
+
 bool AssetClass::Serialize()
 {
+    HELIUM_ASSERT( !m_SourcePath.empty() );
     bool result = Reflect::ToArchive( m_SourcePath, this );
 
     m_Modified = !result;

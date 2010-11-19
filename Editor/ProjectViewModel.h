@@ -8,6 +8,8 @@
 
 #include <wx/dataview.h>
 
+#define HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE 1
+
 namespace Helium
 {
     namespace Editor
@@ -93,6 +95,7 @@ namespace Helium
 
 
         ///////////////////////////////////////////////////////////////////////
+        class ProjectViewModel;
         class ProjectViewModelNode;
         typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
         typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
@@ -100,7 +103,8 @@ namespace Helium
         class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
         {
         public:
-            ProjectViewModelNode( ProjectViewModelNode* parent,
+            ProjectViewModelNode( ProjectViewModel* model,
+                ProjectViewModelNode* parent,
                 const Helium::Path& path,
                 const Document* document = NULL,
                 const bool isContainer = false );
@@ -142,6 +146,7 @@ namespace Helium
             }
 
         private:
+            ProjectViewModel* m_Model;
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
@@ -164,13 +169,8 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void OpenProject( Project* project, const Document* document = NULL );
+            ProjectViewModelNode* OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
-
-            ProjectViewModelNode* GetRootNode()
-            {
-                return m_RootNode;
-            }
 
             bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
             bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
@@ -184,9 +184,8 @@ namespace Helium
             void OnPathRemoved( const Helium::Path& path );
 
             // Document and DocumentManager Events
-            void OnProjectPathChanged( const DocumentPathChangedArgs& args );
-            void OnDocumentAdded( const DocumentEventArgs& args );
-            void OnDocumentRemoved( const DocumentEventArgs& args );
+            void OnDocumentOpened( const DocumentEventArgs& args );
+            void OnDocumenClosed( const DocumentEventArgs& args );
 
         public:
             // wxDataViewModel pure virtual interface

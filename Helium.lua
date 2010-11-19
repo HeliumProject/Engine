@@ -16,6 +16,11 @@ defines
 	"wxNO_ZLIB_LIB=1",
 }
 
+flags
+{
+	"FatalWarnings",
+}
+
 local fbxSdkPath = os.getenv( "FBXSDK_DIR" )
 if fbxSdkPath == nil then
 	-- XXX TMC TODO: Make up fallback path for platforms other than Windows?

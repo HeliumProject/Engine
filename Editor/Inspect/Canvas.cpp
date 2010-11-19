@@ -60,7 +60,7 @@ void Canvas::SetWindow( wxWindow* window )
 
 void Canvas::OnShow(wxShowEvent& event)
 {
-    e_Show.Raise( event.GetShow() );
+    e_Show.Raise( event.IsShown() );
 }
 
 void Canvas::OnClick(wxMouseEvent& event)

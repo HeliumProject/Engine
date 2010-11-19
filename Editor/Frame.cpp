@@ -42,7 +42,7 @@ Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
 : wxFrame( parent, id, title, pos, size, style, name )
 {
     // tell wxAuiManager to manage this frame
-    m_FrameManager.SetFrame( this ); 
+    m_FrameManager.SetManagedWindow( this ); 
 
     SetTitle( title.c_str() );
 

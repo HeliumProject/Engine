@@ -6,6 +6,7 @@ use Getopt::Long;
 
 # flags
 my $autobuild = 0;
+my $pull      = 0;
 my $help      = 0;
 my $clean     = 0;
 my $git_clean = 0;
@@ -16,6 +17,7 @@ my $config    = '';
 my $result = 0;
 
 if ( !GetOptions( "autobuild"  => \$autobuild,
+                  "pull"       => \$pull,
                   "clean"      => \$clean,
                   "git_clean"  => \$git_clean,
                   "verbose"    => \$verbose,
@@ -32,8 +34,13 @@ if ( !GetOptions( "autobuild"  => \$autobuild,
   exit( 1 );
 }
 
+if( $autobuild )
+{
+  $pull = 0;
+}
+
 my $git_command;
-if( !$autobuild ) # dont mess with source control status if its an autobuild
+if( $pull ) # dont mess with source control status if its an autobuild
 {
   if ( $git_clean )
   {

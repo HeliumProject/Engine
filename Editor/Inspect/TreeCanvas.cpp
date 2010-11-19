@@ -125,7 +125,6 @@ void TreeCanvas::OnSize(wxSizeEvent& event)
         }
     }
 
-    m_TreeWndCtrl->SetVirtualSizeHints( w, -1, w, -1 );
     m_TreeWndCtrl->Layout();
 
     event.Skip();

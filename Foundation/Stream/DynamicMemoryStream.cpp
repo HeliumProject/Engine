@@ -95,7 +95,7 @@ void DynamicMemoryStream::Flush()
 }
 
 /// @copydoc Stream::Seek()
-int64_t DynamicMemoryStream::Seek( int64_t offset, ESeekOrigin origin )
+int64_t DynamicMemoryStream::Seek( int64_t offset, SeekOrigin origin )
 {
     HELIUM_ASSERT( m_pBuffer );
     if( !m_pBuffer )
@@ -103,26 +103,26 @@ int64_t DynamicMemoryStream::Seek( int64_t offset, ESeekOrigin origin )
         return -1;
     }
 
-    HELIUM_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SEEK_ORIGIN_MAX ) );
+    HELIUM_ASSERT( static_cast< size_t >( origin ) < static_cast< size_t >( SeekOrigins::SEEK_ORIGIN_MAX ) );
 
     size_t referenceOffset;
     switch( origin )
     {
-        case SEEK_ORIGIN_CURRENT:
+        case SeekOrigins::SEEK_ORIGIN_CURRENT:
         {
             referenceOffset = m_offset;
 
             break;
         }
 
-        case SEEK_ORIGIN_BEGIN:
+        case SeekOrigins::SEEK_ORIGIN_BEGIN:
         {
             referenceOffset = 0;
 
             break;
         }
 
-        case SEEK_ORIGIN_END:
+        case SeekOrigins::SEEK_ORIGIN_END:
         {
             referenceOffset = m_pBuffer->GetSize();
 

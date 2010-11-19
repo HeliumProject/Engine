@@ -360,13 +360,3 @@ project "Editor"
 			"Dependencies/p4api/lib/x64/Release",
 		}
 
-project "Core"
-	uuid "B4A1D5A3-C3B3-4AB0-8756-78A48BCBFFD3"
-
-	links
-	{
-		"Platform",
-		"Foundation",
-	}
-
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Core", "CORE" )

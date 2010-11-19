@@ -97,6 +97,6 @@ namespace Helium
             tstring             m_Prefix;
         };
 
-        typedef Helium::SmartPtr<Choice> ChoicePtr;
+        typedef Helium::StrongPtr<Choice> ChoicePtr;
     }
 }

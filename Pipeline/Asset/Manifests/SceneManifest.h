@@ -20,7 +20,7 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<SceneManifest>& comp );
         };
 
-        typedef Helium::SmartPtr<SceneManifest> SceneManifestPtr;
+        typedef Helium::StrongPtr<SceneManifest> SceneManifestPtr;
         typedef std::vector<SceneManifestPtr> V_SceneManifest;
     }
 }

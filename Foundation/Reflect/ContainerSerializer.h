@@ -22,7 +22,7 @@ namespace Helium
             virtual void Clear() = 0;
         };
 
-        typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+        typedef Helium::StrongPtr<ContainerSerializer> ContainerSerializerPtr;
 
         class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
         {
@@ -34,6 +34,6 @@ namespace Helium
             ElementContainerSerializer();
         };
 
-        typedef Helium::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+        typedef Helium::StrongPtr<ContainerSerializer> ContainerSerializerPtr;
     }
 }

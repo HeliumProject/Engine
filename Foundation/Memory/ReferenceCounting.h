@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Foundation/API.h"
+
 #include "Platform/Atomic.h"
+#include "Platform/Utility.h"
 
 /// Utility macro for declaring common functions and variables for an object with strong/weak reference counting
 /// support.
@@ -110,7 +112,7 @@ namespace Helium
         /// @name Construction/Destruction
         //@{
         StrongPtr();
-        explicit StrongPtr( T* pObject );
+        StrongPtr( T* pObject );
         explicit StrongPtr( const WeakPtr< T >& rPointer );
         StrongPtr( const StrongPtr& rPointer );
         ~StrongPtr();
@@ -119,8 +121,11 @@ namespace Helium
         /// @name Object Referencing
         //@{
         T* Get() const;
+        T* Ptr() const;
         void Set( T* pObject );
         void Release();
+
+        bool ReferencesObject() const;
         //@}
 
         /// @name Object Linking Support
@@ -148,12 +153,6 @@ namespace Helium
         bool operator!=( const StrongPtr& rPointer ) const;
         //@}
 
-        /// @name Friend Functions
-        //@{
-        friend bool operator==( const T* pObject, const StrongPtr& rPointer );
-        friend bool operator!=( const T* pObject, const StrongPtr& rPointer );
-        //@}
-
     private:
         /// Proxy object (cast to a void pointer to avoid the need for knowledge about the template type in order to
         /// simply hold an instance of a StrongPtr).
@@ -176,7 +175,7 @@ namespace Helium
         /// @name Construction/Destruction
         //@{
         WeakPtr();
-        explicit WeakPtr( T* pObject );
+        WeakPtr( T* pObject );
         explicit WeakPtr( const StrongPtr< T >& rPointer );
         WeakPtr( const WeakPtr& rPointer );
         ~WeakPtr();
@@ -185,8 +184,11 @@ namespace Helium
         /// @name Object Referencing
         //@{
         T* Get() const;
+        T* Ptr() const;
         void Set( T* pObject );
         void Release();
+
+        bool ReferencesObject() const;
         //@}
 
         /// @name Reference Count Proxy Matching
@@ -210,12 +212,6 @@ namespace Helium
         bool operator==( const WeakPtr& rPointer ) const;
         bool operator!=( const StrongPtr< T >& rPointer ) const;
         bool operator!=( const WeakPtr& rPointer ) const;
-        //@}
-
-        /// @name Friend Functions
-        //@{
-        friend bool operator==( const T* pObject, const WeakPtr& rPointer );
-        friend bool operator!=( const T* pObject, const WeakPtr& rPointer );
         //@}
 
     private:

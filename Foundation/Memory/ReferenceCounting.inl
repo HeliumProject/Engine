@@ -26,6 +26,8 @@ BaseT* Helium::RefCountProxy< BaseT >::GetObject() const
 template< typename BaseT >
 void Helium::RefCountProxy< BaseT >::AddStrongRef()
 {
+    typename BaseT::RefCountSupportType::PreAddStrongRef( m_pObject );
+
     AtomicIncrementAcquire( m_refCounts );
 }
 
@@ -37,6 +39,8 @@ void Helium::RefCountProxy< BaseT >::AddStrongRef()
 template< typename BaseT >
 bool Helium::RefCountProxy< BaseT >::RemoveStrongRef()
 {
+    typename BaseT::RefCountSupportType::PreRemoveStrongRef( m_pObject );
+
     int32_t newRefCounts = AtomicDecrementRelease( m_refCounts );
     HELIUM_ASSERT( ( static_cast< uint32_t >( newRefCounts ) & 0xffff ) != 0xffff );
     if( ( static_cast< uint32_t >( newRefCounts ) & 0xffff ) == 0 )
@@ -64,6 +68,8 @@ uint16_t Helium::RefCountProxy< BaseT >::GetStrongRefCount() const
 template< typename BaseT >
 void Helium::RefCountProxy< BaseT >::AddWeakRef()
 {
+    typename BaseT::RefCountSupportType::PreAddWeakRef( m_pObject );
+
     AtomicAddAcquire( m_refCounts, 0x10000 );
 }
 
@@ -75,6 +81,8 @@ void Helium::RefCountProxy< BaseT >::AddWeakRef()
 template< typename BaseT >
 bool Helium::RefCountProxy< BaseT >::RemoveWeakRef()
 {
+    typename BaseT::RefCountSupportType::PreRemoveWeakRef( m_pObject );
+
     // Remember: AtomicSubtractRelease() returns the original value, not the new value.
     int32_t oldRefCounts = AtomicSubtractRelease( m_refCounts, 0x10000 );
     HELIUM_ASSERT( ( static_cast< uint32_t >( oldRefCounts ) >> 16 ) != 0 );
@@ -225,6 +233,17 @@ T* Helium::StrongPtr< T >::Get() const
         : NULL );
 }
 
+/// Get the object referenced by this smart pointer.
+///
+/// @return  Pointer to the referenced object.
+///
+/// @see Set(), Release()
+template< typename T >
+T* Helium::StrongPtr< T >::Ptr() const
+{
+    return Get();
+}
+
 /// Set the object referenced by this smart pointer.
 ///
 /// @param[in] pObject  Object to reference.
@@ -272,6 +291,21 @@ void Helium::StrongPtr< T >::Release()
     {
         typename T::RefCountSupportType::Release( pProxy );
     }
+}
+
+/// Get whether this smart pointer references an object.
+///
+/// @return  True if this smart pointer is set to a non-null pointer, false if it is null.
+template< typename T >
+bool Helium::StrongPtr< T >::ReferencesObject() const
+{
+    // Proxy object should never be holding a null reference for strong pointers, so we should only have to check
+    // whether we have a proxy object set.
+    HELIUM_ASSERT(
+        !m_pVoidProxy ||
+        static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pVoidProxy )->GetObject() );
+
+    return ( m_pVoidProxy != NULL );
 }
 
 /// Directly write an object link table index to this smart pointer.
@@ -516,30 +550,6 @@ const Helium::StrongPtr< BaseT >& Helium::StrongPtr< T >::ImplicitUpCast(
     return *reinterpret_cast< const StrongPtr< BaseT >* >( this );
 }
 
-/// Equality comparison operator.
-///
-/// @param[in] pObject   Object with which to compare.
-/// @param[in] rPointer  Smart pointer with which to compare.
-///
-/// @return  True if the smart pointer references the given object, false if not.
-template< typename T >
-bool operator==( const T* pObject, const Helium::StrongPtr< T >& rPointer )
-{
-    return ( pObject == rPointer.Get() );
-}
-
-/// Inequality comparison operator.
-///
-/// @param[in] pObject   Object with which to compare.
-/// @param[in] rPointer  Smart pointer with which to compare.
-///
-/// @return  True if the smart pointer does not reference the given object, false if it does.
-template< typename T >
-bool operator!=( const T* pObject, const Helium::StrongPtr< T >& rPointer )
-{
-    return ( pObject != rPointer.Get() );
-}
-
 /// Constructor.
 template< typename T >
 Helium::WeakPtr< T >::WeakPtr()
@@ -619,6 +629,17 @@ T* Helium::WeakPtr< T >::Get() const
         : NULL );
 }
 
+/// Get the object referenced by this smart pointer.
+///
+/// @return  Pointer to the referenced object.
+///
+/// @see Set(), Release()
+template< typename T >
+T* Helium::WeakPtr< T >::Ptr() const
+{
+    return Get();
+}
+
 /// Set the object referenced by this smart pointer.
 ///
 /// @param[in] pObject  Object to reference.
@@ -668,6 +689,16 @@ void Helium::WeakPtr< T >::Release()
     {
         typename T::RefCountSupportType::Release( pProxy );
     }
+}
+
+/// Get whether this smart pointer references an object.
+///
+/// @return  True if this smart pointer is set to a non-null pointer, false if it is null.
+template< typename T >
+bool Helium::WeakPtr< T >::ReferencesObject() const
+{
+    // Proxy object can be holding a null reference for weak pointers, so make sure the actual object reference exists.
+    return ( Get() != NULL );
 }
 
 /// Get whether this weak pointer is holding onto the reference counting proxy object for the given object.
@@ -858,30 +889,6 @@ bool Helium::WeakPtr< T >::operator!=( const WeakPtr& rPointer ) const
     // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check for
     // and handle that case as well.
     return ( Get() != rPointer.Get() );
-}
-
-/// Equality comparison operator.
-///
-/// @param[in] pObject   Object with which to compare.
-/// @param[in] rPointer  Smart pointer with which to compare.
-///
-/// @return  True if the smart pointer references the given object, false if not.
-template< typename T >
-bool operator==( const T* pObject, const Helium::WeakPtr< T >& rPointer )
-{
-    return ( pObject == rPointer.Get() );
-}
-
-/// Inequality comparison operator.
-///
-/// @param[in] pObject   Object with which to compare.
-/// @param[in] rPointer  Smart pointer with which to compare.
-///
-/// @return  True if the smart pointer does not reference the given object, false if it does.
-template< typename T >
-bool operator!=( const T* pObject, const Helium::WeakPtr< T >& rPointer )
-{
-    return ( pObject != rPointer.Get() );
 }
 
 /// Helper function for performing a compile-time verified up-cast of a WeakPtr.

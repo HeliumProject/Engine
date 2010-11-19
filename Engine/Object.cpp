@@ -16,7 +16,7 @@
 
 namespace Lunar
 {
-    /// Static proxy management data.
+    /// Static reference count proxy management data.
     struct ObjectRefCountSupport::StaticData
     {
         /// Number of proxy objects to allocate per block for the proxy pool.
@@ -548,7 +548,7 @@ namespace Lunar
                 size_t ownerChildCount = ownerChildren.GetSize();
                 for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
                 {
-                    if( ownerChildren[ childIndex ] == this )
+                    if( ownerChildren[ childIndex ].Get() == this )
                     {
                         ownerChildren.RemoveSwap( childIndex );
 
@@ -561,7 +561,7 @@ namespace Lunar
                 size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
                 for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
                 {
-                    if( sm_topLevelObjects[ objectIndex ] == this )
+                    if( sm_topLevelObjects[ objectIndex ].Get() == this )
                     {
                         sm_topLevelObjects.RemoveSwap( objectIndex );
 
@@ -1035,7 +1035,7 @@ namespace Lunar
         if( IsValid( pObject->m_id ) )
         {
             HELIUM_ASSERT( sm_objects.IsElementValid( pObject->m_id ) );
-            HELIUM_ASSERT( sm_objects[ pObject->m_id ] == pObject );
+            HELIUM_ASSERT( sm_objects[ pObject->m_id ].Get() == pObject );
 
             HELIUM_TRACE(
                 TRACE_WARNING,

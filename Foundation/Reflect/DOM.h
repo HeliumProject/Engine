@@ -16,13 +16,13 @@ namespace Helium
         class Document;
 
         class DocumentNode;
-        typedef Helium::SmartPtr< DocumentNode > DocumentNodePtr;
+        typedef Helium::StrongPtr< DocumentNode > DocumentNodePtr;
 
         class DocumentAttribute;
-        typedef Helium::SmartPtr< DocumentAttribute > DocumentAttributePtr;
+        typedef Helium::StrongPtr< DocumentAttribute > DocumentAttributePtr;
 
         class DocumentElement;
-        typedef Helium::SmartPtr< DocumentElement > DocumentElementPtr;
+        typedef Helium::StrongPtr< DocumentElement > DocumentElementPtr;
 
         class FOUNDATION_API DocumentNode : public Reflect::Element
         {

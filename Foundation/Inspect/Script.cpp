@@ -270,7 +270,7 @@ bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canv
     //
 
     ControlPtr control = Reflect::ObjectCast<Inspect::Control> ( Reflect::Registry::GetInstance()->CreateInstance( i->second ) );
-    if (control == NULL)
+    if (!control.ReferencesObject())
     {
       Log::Warning( TXT( "Unable to construct control \"%s\"\n" ), symbol.c_str());
       return false;

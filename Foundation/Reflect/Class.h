@@ -71,7 +71,7 @@ namespace Helium
                 if (info->m_Creator)
                 {
                     // create the default object
-                    Helium::SmartPtr<T> temp = (T*)(info->m_Creator());
+                    Helium::StrongPtr<T> temp( (T*)(info->m_Creator()) );
 
                     // enumerate the fields in the class
                     info->EnumerateInstance<T>(*temp);

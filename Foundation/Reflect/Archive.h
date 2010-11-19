@@ -366,7 +366,7 @@ namespace Helium
             void Get( std::vector< ElementPtr >& elements );
 
             template <class T>
-            Helium::SmartPtr<T> Get()
+            Helium::StrongPtr<T> Get()
             {
                 ElementPtr found = Get( Reflect::GetType<T>() );
 
@@ -382,7 +382,7 @@ namespace Helium
 
             // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
             template< class T >
-            void Get( std::vector< Helium::SmartPtr<T> >& elements )
+            void Get( std::vector< Helium::StrongPtr<T> >& elements )
             {
                 std::vector< ElementPtr > archiveElements;
                 Get( archiveElements );
@@ -412,14 +412,14 @@ namespace Helium
         FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
-        Helium::SmartPtr<T> FromArchive( const Path& path )
+        Helium::StrongPtr<T> FromArchive( const Path& path )
         {
             ArchivePtr archive = GetArchive( path );
             return archive->Get< T >();
         }
 
         template< class T >
-        void FromArchive( const Path& path, std::vector< Helium::SmartPtr<T> >& elements )
+        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& elements )
         {
             ArchivePtr archive = GetArchive( path );
             archive->Get< T >( elements );

@@ -137,7 +137,7 @@ namespace Lunar
     {
         VerifySafety();
 
-        if( m_spMesh != pMesh )
+        if( m_spMesh.Get() != pMesh )
         {
             m_spMesh = pMesh;
             DeferredReattach();

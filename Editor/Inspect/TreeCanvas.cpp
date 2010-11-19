@@ -70,7 +70,7 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
 {
     HELIUM_ASSERT( canvas == this || canvas == NULL );
 
-    SmartPtr< TreeCanvasWidget > widget = new TreeCanvasWidget( this );
+    StrongPtr< TreeCanvasWidget > widget = new TreeCanvasWidget( this );
     widget->SetTreeWndCtrl( m_TreeWndCtrl );
     widget->SetId( m_RootId );
     SetWidget( widget );

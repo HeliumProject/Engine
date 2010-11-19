@@ -149,6 +149,15 @@ namespace Lunar
         /// Base type of reference counted object.
         typedef Object BaseType;
 
+        /// @name Reference Count Update Events
+        //@{
+        inline static void PreAddStrongRef( Object* pObject );
+        inline static void PreRemoveStrongRef( Object* pObject );
+
+        inline static void PreAddWeakRef( Object* pObject );
+        inline static void PreRemoveWeakRef( Object* pObject );
+        //@}
+
         /// @name Object Destruction Support
         //@{
         inline static void PreDestroy( Object* pObject );

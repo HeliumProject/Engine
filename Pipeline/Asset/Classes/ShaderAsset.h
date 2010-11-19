@@ -91,7 +91,7 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<ShaderAsset>& comp );
         };
 
-        typedef Helium::SmartPtr< ShaderAsset > ShaderAssetPtr;
+        typedef Helium::StrongPtr< ShaderAsset > ShaderAssetPtr;
         typedef std::vector< ShaderAssetPtr > V_ShaderAsset;
     }
 }

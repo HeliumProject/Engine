@@ -57,7 +57,7 @@ bool PointerSerializer::Equals(const Reflect::Serializer* s) const
         return true;
     }
     // if they are not equal but one is null we are done
-    else if (m_Data.Get() == NULL || rhs->m_Data.Get() == NULL)
+    else if (!m_Data.Get().ReferencesObject() || !rhs->m_Data.Get().ReferencesObject())
     {
         return false;
     }

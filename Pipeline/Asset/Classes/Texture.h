@@ -133,7 +133,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< Texture > TexturePtr;
+        typedef Helium::StrongPtr< Texture > TexturePtr;
         typedef std::vector< TexturePtr > V_Texture;
     }
 }

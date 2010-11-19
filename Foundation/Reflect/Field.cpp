@@ -53,7 +53,7 @@ SerializerPtr Field::CreateSerializer(Element* instance) const
 bool Field::HasDefaultValue(Element* instance) const
 {
     // if we don't have a default value, we can never be at the default value
-    if (m_Default == NULL)
+    if (!m_Default.ReferencesObject())
     {
         return false;
     }
@@ -82,7 +82,7 @@ bool Field::HasDefaultValue(Element* instance) const
 bool Field::SetDefaultValue(Element* instance) const
 {
     // if we don't have a default value, we can never be at the default value
-    if (m_Default == NULL)
+    if (!m_Default.ReferencesObject())
     {
         return false;
     }

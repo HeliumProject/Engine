@@ -26,6 +26,6 @@ namespace Helium
             Attribute<bool> a_Ellipsize;
         };
 
-        typedef Helium::SmartPtr<Label> LabelPtr;
+        typedef Helium::StrongPtr<Label> LabelPtr;
     }
 }

@@ -37,7 +37,7 @@ namespace Helium
         /// class VaultSearchQuery
         ///////////////////////////////////////////////////////////////////////////////
         class VaultSearchQuery;
-        typedef Helium::SmartPtr< VaultSearchQuery > VaultSearchQueryPtr;
+        typedef Helium::StrongPtr< VaultSearchQuery > VaultSearchQueryPtr;
         typedef std::vector< VaultSearchQueryPtr > V_VaultSearchQuery;
         typedef Helium::OrderedSet< Helium::SmartPtrComparator< VaultSearchQuery > > OS_VaultSearchQuery;
 

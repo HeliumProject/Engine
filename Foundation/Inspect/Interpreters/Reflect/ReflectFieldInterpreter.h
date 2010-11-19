@@ -21,7 +21,7 @@ namespace Helium
             std::vector<Reflect::SerializerPtr> m_Serializers;
         };
 
-        typedef Helium::SmartPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
+        typedef Helium::StrongPtr<ReflectFieldInterpreter> ReflectFieldInterpreterPtr;
         typedef std::vector< ReflectFieldInterpreterPtr > V_ReflectFieldInterpreter;
     }
 }

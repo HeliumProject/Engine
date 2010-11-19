@@ -90,7 +90,7 @@ namespace Helium
         protected:
             Control* m_Control;
         };
-        typedef Helium::SmartPtr<ClientData> ClientDataPtr;
+        typedef Helium::StrongPtr<ClientData> ClientDataPtr;
 
         //
         // Widget, a base class for a GUI system implementation-specific Widget classes
@@ -123,7 +123,7 @@ namespace Helium
         protected:
             Inspect::Control* m_Control;
         };
-        typedef Helium::SmartPtr<Widget> WidgetPtr;
+        typedef Helium::StrongPtr<Widget> WidgetPtr;
 
         //
         // Control, a class that is binadable to data and controls the state and appearance of a widget
@@ -383,7 +383,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<Control> ControlPtr;
+        typedef Helium::StrongPtr<Control> ControlPtr;
         typedef std::vector<ControlPtr> V_Control;
 
         template<class T>

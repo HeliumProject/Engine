@@ -11,7 +11,7 @@ namespace Helium
     namespace Editor
     {
         class WindowSettings;
-        typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
+        typedef Helium::StrongPtr< WindowSettings > WindowSettingsPtr;
 
         class WindowSettings : public Reflect::Element
         {

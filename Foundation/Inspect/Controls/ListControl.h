@@ -41,6 +41,6 @@ namespace Helium
             Attribute< std::set< size_t > >     a_SelectedItemIndices;
         };
 
-        typedef Helium::SmartPtr<List> ListPtr;
+        typedef Helium::StrongPtr<List> ListPtr;
     }
 }

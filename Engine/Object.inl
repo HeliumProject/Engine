@@ -59,6 +59,42 @@ namespace Lunar
         return static_cast< TargetType* >( pObject );
     }
 
+    /// Perform any actions immediately prior to incrementing an object's strong reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
+    void ObjectRefCountSupport::PreAddStrongRef( Object* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to decrementing an object's strong reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
+    void ObjectRefCountSupport::PreRemoveStrongRef( Object* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to incrementing an object's weak reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
+    void ObjectRefCountSupport::PreAddWeakRef( Object* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to decrementing an object's weak reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
+    void ObjectRefCountSupport::PreRemoveWeakRef( Object* /*pObject*/ )
+    {
+    }
+
     /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
     /// object.
     ///

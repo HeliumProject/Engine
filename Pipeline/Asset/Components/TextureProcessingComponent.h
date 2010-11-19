@@ -110,6 +110,6 @@ namespace Helium
             }
         };
 
-		typedef Helium::SmartPtr< TextureProcessingComponent > TextureProcessingComponentPtr;
+		typedef Helium::StrongPtr< TextureProcessingComponent > TextureProcessingComponentPtr;
     }
 }

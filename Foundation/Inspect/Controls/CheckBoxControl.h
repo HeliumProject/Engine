@@ -22,6 +22,6 @@ namespace Helium
             Attribute< bool >   a_Highlight;
         };
 
-        typedef Helium::SmartPtr< CheckBox > CheckBoxPtr;
+        typedef Helium::StrongPtr< CheckBox > CheckBoxPtr;
     }
 }

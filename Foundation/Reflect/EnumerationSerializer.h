@@ -34,6 +34,6 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
         };
 
-        typedef Helium::SmartPtr<EnumerationSerializer> EnumerationSerializerPtr;
+        typedef Helium::StrongPtr<EnumerationSerializer> EnumerationSerializerPtr;
     }
 }

@@ -39,18 +39,21 @@ bool Element::ProcessComponent(ElementPtr element, const tstring& fieldName)
 
 void Element::ToXML(tstring& xml) const
 {
-    ArchiveXML::ToString(this, xml);
+#pragma TODO( "Fix const correctness." )
+    ArchiveXML::ToString( const_cast< Element* >( this ), xml );
 }
 
 void Element::ToBinary(std::iostream& stream) const
 {
-    ArchiveBinary::ToStream(this, stream);
+#pragma TODO( "Fix const correctness." )
+    ArchiveBinary::ToStream( const_cast< Element* >( this ), stream );
 }
 
 void Element::ToFile( const Path& path ) const
 {
     ArchivePtr archive = GetArchive( path );
-    archive->Put( this );
+#pragma TODO( "Fix const correctness." )
+    archive->Put( const_cast< Element* >( this ) );
     archive->Close();
 }
 

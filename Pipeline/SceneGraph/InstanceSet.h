@@ -86,7 +86,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< SceneGraph::InstanceSet > InstanceSetPtr;
+        typedef Helium::StrongPtr< SceneGraph::InstanceSet > InstanceSetPtr;
         typedef std::map< tstring, InstanceSetPtr > M_InstanceSetSmartPtr;
     }
 }

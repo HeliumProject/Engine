@@ -172,6 +172,6 @@ namespace Helium
             VertexResourcePtr       m_Vertices;
         };
 
-        typedef Helium::SmartPtr<Curve> CurvePtr;
+        typedef Helium::StrongPtr<Curve> CurvePtr;
     }
 }

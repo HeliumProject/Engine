@@ -16,5 +16,6 @@ Project::~Project()
 bool Project::Save() const 
 {
     HELIUM_ASSERT( !a_Path.Get().empty() );
-    return Reflect::ToArchive( a_Path.Get(), this );
+#pragma TODO( "Fix const correctness." )
+    return Reflect::ToArchive( a_Path.Get(), const_cast< Project* >( this ) );
 }

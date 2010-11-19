@@ -62,6 +62,7 @@ namespace Helium
             void SetHelpText( const tchar_t* text );
 
             void OpenProject( const Helium::Path& path );
+            void CloseProject();
 
             SceneGraph::SceneManager& GetSceneManager()
             {
@@ -178,7 +179,7 @@ namespace Helium
             void OnToolSelected(wxCommandEvent& event);
             void PickWorld( SceneGraph::PickArgs& args );
             
-            void ConnectDocument( const Document* document );
+            void ConnectDocument( Document* document );
             void DisconnectDocument( const Document* document );
             void DocumentChanged( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );

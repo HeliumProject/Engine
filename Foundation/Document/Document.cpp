@@ -26,7 +26,7 @@ Document::~Document()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Document::Save( tstring& error ) const
+bool Document::Save( tstring& error )
 {
     DocumentEventArgs savingArgs( this );
     e_Saving.Raise( savingArgs );
@@ -47,7 +47,7 @@ bool Document::Save( tstring& error ) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Document::Close() const
+void Document::Close()
 {
     e_Closing.Raise( DocumentEventArgs( this ) );
 
@@ -80,7 +80,7 @@ void Document::SetPath( const Helium::Path& newPath )
 // Sets the internal flag indicating the the file has been modified (thus it
 // should probably be saved before closing).
 // 
-void Document::HasChanged( bool changed ) const 
+void Document::HasChanged( bool changed )
 {
     if ( m_HasChanged != changed )
     {
@@ -88,6 +88,11 @@ void Document::HasChanged( bool changed ) const
 
         e_Changed.Raise( DocumentEventArgs( this ) );
     }
+}
+
+void Document::OnObjectChanged( const DocumentObjectChangedArgs& args )
+{
+    HasChanged( args.m_HasChanged );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

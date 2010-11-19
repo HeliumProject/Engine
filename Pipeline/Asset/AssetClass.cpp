@@ -278,6 +278,20 @@ bool AssetClass::RemoveComponent( int32_t typeID )
     return __super::RemoveComponent( typeID );
 }
 
+void AssetClass::ConnectDocument( Document* document )
+{
+    document->d_Save.Set( this, &AssetClass::OnDocumentSave );
+
+    e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+}
+
+void AssetClass::DisconnectDocument( const Document* document )
+{
+    document->d_Save.Clear();
+
+    e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+}
+
 void AssetClass::OnDocumentSave( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );

@@ -195,8 +195,14 @@ namespace Helium
 
 
         public:
+            void ConnectDocument( Document* document );
+            void DisconnectDocument( const Document* document );
+
             // Callback for when a document is saved.
             void OnDocumentSave( const DocumentEventArgs& args );
+
+            mutable DocumentObjectChangedSignature::Event e_HasChanged;
+
 
             // write to the location on disk
             virtual bool Serialize();

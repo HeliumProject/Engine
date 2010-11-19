@@ -302,7 +302,7 @@ namespace Helium
         }
 
         template <class ClassType, typename MethodType>
-        bool Equals( ClassType* instance, MethodType method ) const
+        bool Equals( const ClassType* instance, MethodType method ) const
         {
             if (m_Impl.ReferencesObject() && m_Impl->GetType() == DelegateTypes::Method)
             {
@@ -405,7 +405,7 @@ namespace Helium
         }
 
         template < class ClassType, typename MethodType >
-        void RemoveMethod( ClassType* instance, MethodType method )
+        void RemoveMethod( const ClassType* instance, MethodType method )
         {
             if ( m_Impl.ReferencesObject() )
             {
@@ -608,7 +608,7 @@ namespace Helium
             }
 
             template < class ClassType, typename MethodType >
-            void RemoveMethod( ClassType* instance, MethodType method )
+            void RemoveMethod( const ClassType* instance, MethodType method )
             {
                 typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
                 typename std::vector<Delegate>::iterator end = m_Delegates.end();

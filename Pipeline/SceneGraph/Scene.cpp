@@ -151,6 +151,29 @@ void Scene::SetColor( const Color3& color )
     }
 }
 
+void Scene::ConnectDocument( Document* document )
+{
+    document->d_Save.Set( this, &Scene::OnDocumentSave );
+
+    e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+}
+
+void Scene::DisconnectDocument( const Document* document )
+{
+    document->d_Save.Clear();
+
+    e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+}
+
+void Scene::OnDocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+    HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
+
+    args.m_Result = Serialize();
+}
+
 bool Scene::Reload()
 {
     Reset();
@@ -853,15 +876,6 @@ void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, Reflect::V_Ele
             }
         }
     }
-}
-
-void Scene::OnDocumentSave( const DocumentEventArgs& args )
-{
-    const Document* document = static_cast< const Document* >( args.m_Document );
-    HELIUM_ASSERT( document );
-    HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
-
-    args.m_Result = Serialize();
 }
 
 bool Scene::Serialize()
@@ -1803,8 +1817,7 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
     if ( args.m_Command->IsSignificant() )
     {
-#pragma TODO( "Raise an event so the Document knows this file has been modified" )
-        //m_File->HasChanged( true );
+        e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
     }
 }
 

@@ -32,7 +32,7 @@ SceneManager::~SceneManager()
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document* document, bool nested )
+ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, Document* document, bool nested )
 {
     document->e_Closed.AddMethod( this, &SceneManager::DocumentClosed );
     document->e_PathChanged.AddMethod( this, &SceneManager::DocumentPathChanged );
@@ -41,7 +41,7 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document*
     m_DocumentToSceneTable.insert( M_DocumentToSceneTable::value_type( document, scene.Ptr() ) );
     m_SceneToDocumentTable.insert( M_SceneToDocumentTable::value_type( scene.Ptr(), document ) );
 
-    document->d_Save.Set( scene.Ptr(), &Scene::OnDocumentSave );
+    scene->ConnectDocument( document );
 
     AddScene( scene );
 
@@ -58,7 +58,7 @@ ScenePtr SceneManager::NewScene( SceneGraph::Viewport* viewport, const Document*
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, const Document* document, tstring& error )
+ScenePtr SceneManager::OpenScene( SceneGraph::Viewport* viewport, Document* document, tstring& error )
 {
     ScenePtr scene = NewScene( viewport, document );
     if ( !scene->Load( document->GetPath() ) )
@@ -130,9 +130,10 @@ void SceneManager::RemoveScene( SceneGraph::Scene* scene )
     M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
     if ( findDocument != m_SceneToDocumentTable.end() )
     {
-        const Document* document = findDocument->second;
+        Document* document = findDocument->second;
 
-        document->d_Save.Clear();
+        scene->DisconnectDocument( document );
+
         document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
         document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
 
@@ -321,6 +322,8 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
     {
         Scene* scene = GetScene( document );
 
+        scene->DisconnectDocument( document );
+
         // If the current scene is the one that is being closed, we need to set it
         // to no longer be the current scene.
         if ( HasCurrentScene() && GetCurrentScene() == scene )
@@ -345,7 +348,6 @@ void SceneManager::DocumentClosed( const DocumentEventArgs& args )
             SetCurrentScene( FindFirstNonNestedScene() );
         }
 
-        document->d_Save.Clear();
         document->e_Closed.RemoveMethod( this, &SceneManager::DocumentClosed );
         document->e_PathChanged.RemoveMethod( this, &SceneManager::DocumentPathChanged );
     }

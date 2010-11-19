@@ -11,8 +11,9 @@ using namespace Helium::Editor;
 #pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE and all it's references after usibility test" )
 
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
-: m_ParentNode( parent )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
+: m_Model( model )
+, m_ParentNode( parent )
 , m_Path( path )
 , m_Document( NULL )
 , m_IsContainer( isContainer )
@@ -159,6 +160,8 @@ void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEve
 void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
     m_Path = args.m_Document->GetPath();
+
+    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,7 +259,7 @@ ProjectViewModelNode* ProjectViewModel::OpenProject( Project* project, const Doc
     if ( m_Project )
     {
         // Create the Node     
-        m_RootNode = new ProjectViewModelNode( NULL, m_Project->a_Path.Get(), document, true );
+        m_RootNode = new ProjectViewModelNode( this, NULL, m_Project->a_Path.Get(), document, true );
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
                 
 #if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
@@ -315,7 +318,7 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
 
     // Create the child node
     const Document* document = m_DocumentManager->FindDocument( path );
-    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( parentNode, path, document ) );
+    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document ) );
     if ( inserted.second )
     {
         ProjectViewModelNode* childNode = (*inserted.first);
@@ -447,7 +450,7 @@ void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
     RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
-void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
+void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
@@ -463,7 +466,7 @@ void ProjectViewModel::OnDocumentAdded( const DocumentEventArgs& args )
     }
 }
 
-void ProjectViewModel::OnDocumentRemoved( const DocumentEventArgs& args )
+void ProjectViewModel::OnDocumenClosed( const DocumentEventArgs& args )
 {
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );

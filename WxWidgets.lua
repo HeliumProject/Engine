@@ -15,22 +15,26 @@ Helium.BuildWxWidgets = function( wx )
 		os.chdir( wx .. "/build/msw" );
 
 		local result
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
+		
+        if _OPTIONS["no-unicode"] then
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+        else
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+        end
 	else
 		print("Implement support for " .. os.get() .. " to BuildWxWidgets()")
 		os.exit(1)
@@ -57,22 +61,25 @@ Helium.CleanWxWidgets = function( wx )
 		os.chdir( wx .. "/build/msw" );
 
 		local result
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
+        if _OPTIONS["no-unicode"] then
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=0\"" )
+            if result ~= 0 then os.exit( 1 ) end
+        else
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+            result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
+            if result ~= 0 then os.exit( 1 ) end
+        end
 	else
 		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")
 		os.exit(1)
@@ -83,38 +90,43 @@ end
 Helium.PublishWxWidgets = function( wx )
 
 	local files = {}
-	files[1]  = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
-	files[2]  = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
-	files[3]  = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
-	files[4]  = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
-	files[5]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
-	files[6]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
-	files[7]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
-	files[8]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
-	files[9]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
-	files[10] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
-	files[11] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
-	files[12] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
-	files[13] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[14] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[15] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[16] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
-	files[17] = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[18] = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[19] = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[20] = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
-	files[21] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
-	files[22] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
-	files[23] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
-	files[24] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
-	files[25] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
-	files[26] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
-	files[27] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
-	files[28] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
-	files[29] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
-	files[30] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
-	files[31] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
-	files[32] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+
+    if _OPTIONS["no-unicode"] then
+        files[1]  = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+        files[2]  = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+        files[3]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+        files[4]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+        files[5]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+        files[6]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+        files[7]  = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+        files[8]  = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+        files[9]  = { file="wxmsw291d_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+        files[10] = { file="wxmsw291d_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+        files[11] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+        files[12] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+        files[13] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+        files[14] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+        files[15] = { file="wxmsw291_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+        files[16] = { file="wxmsw291_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+    else
+        files[1]  = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+        files[2]  = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Debug" }
+        files[3]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+        files[4]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Intermediate" }
+        files[5]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+        files[6]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Profile" }
+        files[7]  = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+        files[8]  = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_dll", 			target="Bin/x32/Release" }
+        files[9]  = { file="wxmsw291ud_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+        files[10] = { file="wxmsw291ud_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Debug" }
+        files[11] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+        files[12] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Intermediate" }
+        files[13] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+        files[14] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Profile" }
+        files[15] = { file="wxmsw291u_vc_custom.dll",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+        files[16] = { file="wxmsw291u_vc_custom.pdb",		source=wx .. "/lib/vc_amd64_dll", 		target="Bin/x64/Release" }
+    end
+    
 	Helium.Publish( files )
 
 end

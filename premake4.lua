@@ -16,11 +16,18 @@ newaction
 	execute = Helium.Prebuild
 }
 
+-- Custom option to set the global Unicode (wchar_t/UTF-16,32)) vs. ASCII (char/UTF-8)
+newoption
+{
+    trigger = "no-unicode",
+    description = "Disable Unicode support"
+}
+
 if _ACTION ~= "prebuild" then
 	local wx = "Dependencies/wxWidgets"
 	local tbb = "Dependencies/tbb"
 
-	if _ACTION ~= "clean" then
+    if _ACTION ~= "clean" then
 		Helium.BuildWxWidgets( wx )
 		Helium.PublishWxWidgets( wx )
 		Helium.BuildTBB( tbb )
@@ -38,21 +45,18 @@ if _ACTION ~= "prebuild" then
 	end
 
 	if os.get() == "windows" then
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
-		os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
+        if _OPTIONS["no-unicode"] then
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
+        else
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
+            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
+        end
 	end
-
-	newoption
-	{
-		trigger = "no-unicode",
-		description = "Disable Unicode support"
-	}
 
 	solution "Dependencies"
 	Helium.DoDefaultSolutionSettings()

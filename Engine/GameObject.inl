@@ -64,7 +64,7 @@ namespace Lunar
     /// @param[in] pObject  Object whose reference count is being updated.
     ///
     /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void ObjectRefCountSupport::PreAddStrongRef( Object* /*pObject*/ )
+    void GameObjectRefCountSupport::PreAddStrongRef( GameObject* /*pObject*/ )
     {
     }
 
@@ -73,7 +73,7 @@ namespace Lunar
     /// @param[in] pObject  Object whose reference count is being updated.
     ///
     /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void ObjectRefCountSupport::PreRemoveStrongRef( Object* /*pObject*/ )
+    void GameObjectRefCountSupport::PreRemoveStrongRef( GameObject* /*pObject*/ )
     {
     }
 
@@ -82,7 +82,7 @@ namespace Lunar
     /// @param[in] pObject  Object whose reference count is being updated.
     ///
     /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void ObjectRefCountSupport::PreAddWeakRef( Object* /*pObject*/ )
+    void GameObjectRefCountSupport::PreAddWeakRef( GameObject* /*pObject*/ )
     {
     }
 
@@ -91,7 +91,7 @@ namespace Lunar
     /// @param[in] pObject  Object whose reference count is being updated.
     ///
     /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void ObjectRefCountSupport::PreRemoveWeakRef( Object* /*pObject*/ )
+    void GameObjectRefCountSupport::PreRemoveWeakRef( GameObject* /*pObject*/ )
     {
     }
 
@@ -101,7 +101,7 @@ namespace Lunar
     /// @param[in] pObject  GameObject about to be destroyed.
     ///
     /// @see Destroy()
-    void ObjectRefCountSupport::PreDestroy( GameObject* pObject )
+    void GameObjectRefCountSupport::PreDestroy( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 
@@ -113,7 +113,7 @@ namespace Lunar
     /// @param[in] pObject  GameObject to destroy.
     ///
     /// @see PreDestroy()
-    void ObjectRefCountSupport::Destroy( GameObject* pObject )
+    void GameObjectRefCountSupport::Destroy( GameObject* pObject )
     {
         HELIUM_ASSERT( pObject );
 

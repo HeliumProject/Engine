@@ -143,7 +143,7 @@ namespace Lunar
     HELIUM_DECLARE_WPTR( Type );
 
     /// Reference counting support for GameObject types.
-    class LUNAR_ENGINE_API ObjectRefCountSupport
+    class LUNAR_ENGINE_API GameObjectRefCountSupport
     {
     public:
         /// Base type of reference counted object.
@@ -151,11 +151,11 @@ namespace Lunar
 
         /// @name Reference Count Update Events
         //@{
-        inline static void PreAddStrongRef( Object* pObject );
-        inline static void PreRemoveStrongRef( Object* pObject );
+        inline static void PreAddStrongRef( GameObject* pObject );
+        inline static void PreRemoveStrongRef( GameObject* pObject );
 
-        inline static void PreAddWeakRef( Object* pObject );
-        inline static void PreRemoveWeakRef( Object* pObject );
+        inline static void PreAddWeakRef( GameObject* pObject );
+        inline static void PreRemoveWeakRef( GameObject* pObject );
         //@}
 
         /// @name Object Destruction Support
@@ -191,7 +191,7 @@ namespace Lunar
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API GameObject : NonCopyable
     {
-        HELIUM_DECLARE_REF_COUNT( GameObject, ObjectRefCountSupport );
+        HELIUM_DECLARE_REF_COUNT( GameObject, GameObjectRefCountSupport );
 
     public:
         /// Destruction callback type.

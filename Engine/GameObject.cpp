@@ -17,7 +17,7 @@
 namespace Lunar
 {
     /// Static reference count proxy management data.
-    struct ObjectRefCountSupport::StaticData
+    struct GameObjectRefCountSupport::StaticData
     {
         /// Number of proxy objects to allocate per block for the proxy pool.
         static const size_t POOL_BLOCK_SIZE = 1024;
@@ -45,14 +45,14 @@ namespace Lunar
 
     DynArray< uint8_t > GameObject::sm_serializationBuffer;
 
-    ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
+    GameObjectRefCountSupport::StaticData* GameObjectRefCountSupport::sm_pStaticData = NULL;
 
     /// Retrieve a reference count proxy from the global pool.
     ///
     /// @return  Pointer to a reference count proxy.
     ///
     /// @see Release()
-    RefCountProxy< GameObject >* ObjectRefCountSupport::Allocate()
+    RefCountProxy< GameObject >* GameObjectRefCountSupport::Allocate()
     {
         // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
         // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
@@ -81,7 +81,7 @@ namespace Lunar
     /// @param[in] pProxy  Pointer to the reference count proxy to release.
     ///
     /// @see Allocate()
-    void ObjectRefCountSupport::Release( RefCountProxy< GameObject >* pProxy )
+    void GameObjectRefCountSupport::Release( RefCountProxy< GameObject >* pProxy )
     {
         HELIUM_ASSERT( pProxy );
 
@@ -98,7 +98,7 @@ namespace Lunar
     /// Release the name table and free all allocated memory.
     ///
     /// This should only be called immediately prior to application exit.
-    void ObjectRefCountSupport::Shutdown()
+    void GameObjectRefCountSupport::Shutdown()
     {
         delete sm_pStaticData;
         sm_pStaticData = NULL;
@@ -115,7 +115,7 @@ namespace Lunar
     /// @return  Current number of active smart pointer references.
     ///
     /// @see GetFirstActiveProxy()
-    size_t ObjectRefCountSupport::GetActiveProxyCount()
+    size_t GameObjectRefCountSupport::GetActiveProxyCount()
     {
         HELIUM_ASSERT( sm_pStaticData );
 
@@ -130,7 +130,7 @@ namespace Lunar
     ///          first one, false if not.
     ///
     /// @see GetActiveProxyCount()
-    bool ObjectRefCountSupport::GetFirstActiveProxy(
+    bool GameObjectRefCountSupport::GetFirstActiveProxy(
         ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor )
     {
         HELIUM_ASSERT( sm_pStaticData );
@@ -140,7 +140,7 @@ namespace Lunar
 #endif
 
     /// Constructor.
-    ObjectRefCountSupport::StaticData::StaticData()
+    GameObjectRefCountSupport::StaticData::StaticData()
         : proxyPool( POOL_BLOCK_SIZE )
     {
     }
@@ -1149,12 +1149,12 @@ namespace Lunar
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
         ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor refCountProxyAccessor;
-        if( ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
+        if( GameObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "%" ) TPRIuSZ TXT( " smart pointer(s) still active during shutdown!\n" ),
-                ObjectRefCountSupport::GetActiveProxyCount() );
+                GameObjectRefCountSupport::GetActiveProxyCount() );
 
             while( refCountProxyAccessor.IsValid() )
             {

@@ -349,7 +349,7 @@ namespace Lunar
         AsyncLoader::GetStaticInstance().Shutdown();
         AsyncLoader::DestroyStaticInstance();
 
-        ObjectRefCountSupport::Shutdown();
+        GameObjectRefCountSupport::Shutdown();
 
         GameObjectPath::Shutdown();
         Name::Shutdown();

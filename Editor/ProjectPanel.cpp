@@ -19,27 +19,20 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 , m_Project( NULL )
 , m_Model( NULL )
 , m_OptionsMenu( NULL )
+, m_ContextMenu( NULL )
 , m_DropTarget( NULL )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
 
-        m_AddFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd, wxART_OTHER, wxSize(16, 16) ) );
-        m_AddFileButton->Enable( false );
-        //m_AddFileButton->Hide();
-
-        m_DeleteFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete, wxART_OTHER, wxSize(16, 16) ) );
-        m_DeleteFileButton->Enable( false );
-        //m_DeleteFileButton->Hide();
-
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
-        m_OptionsButtonStaticLine->Hide();
         m_OptionsButton->Hide();
+        m_OptionsButtonStaticLine->Hide();
 
         m_ProjectManagementPanel->Layout();
-        
+
         m_OpenProjectPanel->Hide();
         m_DataViewCtrl->Show();
 
@@ -64,10 +57,20 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_OptionsButton->SetHoldDelay( 0.0f );
     m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
-    m_OptionsButton->Enable( true );
-    m_OptionsButton->Hide();    
+    m_OptionsButton->Enable( false );
 
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
+
+    m_ContextMenu = new wxMenu();
+    {
+        wxMenuItem* addItem = m_ContextMenu->Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
+        Connect( addItem->GetId(), wxCommandEventHandler( ProjectPanel::OnAddItems ), NULL, this );
+
+        wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
+        Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
+    }
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
@@ -97,6 +100,8 @@ ProjectPanel::~ProjectPanel()
         m_Model->CloseProject();
         m_Model = NULL;
     }
+
+    Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 }
 
 void ProjectPanel::OpenProject( Project* project, const Document* document )
@@ -121,7 +126,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
             m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
             m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-            
+
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
 
@@ -135,11 +140,13 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
         if ( node )
         {
-            m_AddFileButton->Show();
-            m_DeleteFileButton->Show();
-            m_AddFileButton->Enable( true );
+            m_OptionsButton->Show();
+            m_OptionsButtonStaticLine->Show();
+
+            m_OptionsButton->Enable( true );
 
             m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
+            m_ProjectNameStaticText->Enable( false );
 
             //m_OpenProjectPanel->Hide();
             //m_DataViewCtrl->Show();
@@ -165,74 +172,46 @@ void ProjectPanel::CloseProject()
         m_Project = NULL;
     }
 
-    m_AddFileButton->Hide();
-    m_AddFileButton->Enable( false );
-
-    m_DeleteFileButton->Hide();
-    m_DeleteFileButton->Enable( false );
+    m_OptionsButtonStaticLine->Hide();
+    m_OptionsButton->Hide();
+    m_OptionsButton->Enable( false );
 
     m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
+    m_ProjectNameStaticText->Enable( true );
 
     //m_OpenProjectPanel->Show();
     //m_DataViewCtrl->Hide();
     Layout();
 }
 
-void ProjectPanel::OnAddFile( wxCommandEvent& event )
+void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 {
-    HELIUM_ASSERT( m_Project );
-    FileDialog openDlg( this, TXT( "Open" ), m_Project->a_Path.Get().Directory().c_str() );
-#pragma TODO("Set file dialog filters from Asset::AssetClass::GetExtensions")
-    //openDlg.AddFilters( ...
+    if ( !m_Project )
+    {
+        return;
+    }
 
-#pragma TODO( "Handle opening a scene" )
+    wxPoint point = wxGetMousePosition();
+    PopupMenu( m_ContextMenu );
+    event.Skip();
+}
+
+void ProjectPanel::OnOpenProject( wxMouseEvent& event )
+{
+    FileDialog openDlg( this, TXT( "Open Project..." ) );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
-        Path path( (const wxChar*)openDlg.GetPath().c_str() );
-
-        Asset::AssetClassPtr asset;
-        if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
-        {
-            asset = Asset::AssetClass::LoadAssetClass( path );
-        }
-        else
-        {
-            asset = Asset::AssetClass::Create( path );
-        }
-
-        if ( asset.ReferencesObject() )
-        {
-            m_Project->AddPath( asset->GetSourcePath() );
-
-            DocumentPtr document = new Document( asset->GetSourcePath() );
-
-            tstring error;
-            bool result = m_DocumentManager->OpenDocument( document, error );
-            HELIUM_ASSERT( result );
-        }
+        wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
     }
 }
 
-void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
+void ProjectPanel::OnAddItems( wxCommandEvent& event )
 {
-    HELIUM_ASSERT( m_Project );
-   
-    wxDataViewItemArray selection;
-    int numSeleted = m_DataViewCtrl->GetSelections( selection );
+}
 
-    for( int index = 0; index < numSeleted; ++index )
-    {
-        if ( selection[index].IsOk() )
-        {
-            ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( selection[index].GetID()  );
-            if ( node )
-            {
-                m_Project->RemovePath( node->GetPath() );
-            }
-        }
-    }
-
+void ProjectPanel::OnDeleteItems( wxCommandEvent& event )
+{
 }
 
 void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )
@@ -265,7 +244,6 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 {
     wxDataViewItemArray selection;
     int numSeleted = m_DataViewCtrl->GetSelections( selection );
-    m_DeleteFileButton->Enable( numSeleted > 0 ? true : false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

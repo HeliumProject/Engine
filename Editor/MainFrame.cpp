@@ -365,11 +365,11 @@ void MainFrame::OpenProject( const Helium::Path& path )
     {
         bool opened = false;
 
-        tstring error;
+        // this is our default error
+        tstring error = TXT( "We could not parse the project file you selected, it has not been loaded." );
         try
         {
             m_Project = Reflect::FromArchive< Project >( path );
-            m_Project->a_Path.Set( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -378,9 +378,9 @@ void MainFrame::OpenProject( const Helium::Path& path )
 
         opened = m_Project.ReferencesObject();
 
-
         if ( opened )
         {
+            m_Project->a_Path.Set( path );
             m_MRU->Insert( path );
         }
         else

@@ -76,7 +76,6 @@ namespace Helium
             virtual int ShowModal();
             bool IsMultipleSelectionEnabled() const;
 
-            virtual wxString GetPath() const HELIUM_OVERRIDE;
             virtual void GetPaths( wxArrayString& paths ) const HELIUM_OVERRIDE;
             virtual const tstring& GetFilePath() const;
             virtual const std::set< tstring >& GetFilePaths() const;

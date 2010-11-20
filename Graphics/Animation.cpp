@@ -9,6 +9,7 @@
 #include "Graphics/Animation.h"
 
 #if L_USE_GRANNY_ANIMATION
+#include "GrannyAnimationInterface.h"
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 

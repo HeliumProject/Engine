@@ -29,7 +29,7 @@
 #pragma warning( pop )
 #endif
 
-namespace Lunar
+namespace Helium
 {
     /// Async loading manager.
     class FOUNDATION_API AsyncLoader : NonCopyable

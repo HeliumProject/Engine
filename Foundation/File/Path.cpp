@@ -544,7 +544,6 @@ Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
 
 bool Path::Exists() const
 {
-    HELIUM_ASSERT( IsAbsolute() );
     return Path::Exists( m_Path );
 }
 

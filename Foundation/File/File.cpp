@@ -13,7 +13,7 @@
 #include "Platform/Process.h"
 
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Free any statically allocated resources.
 ///

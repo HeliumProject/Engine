@@ -159,10 +159,10 @@ namespace Helium
 {
     /// Default GameObjectPath hash.
     template<>
-    class LUNAR_ENGINE_API Hash< GameObjectPath >
+    class LUNAR_ENGINE_API Hash< Lunar::GameObjectPath >
     {
     public:
-        inline size_t operator()( const GameObjectPath& rKey ) const;
+        inline size_t operator()( const Lunar::GameObjectPath& rKey ) const;
     };
 }
 

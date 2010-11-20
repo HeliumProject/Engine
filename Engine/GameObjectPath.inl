@@ -139,7 +139,7 @@ namespace Helium
     /// @param[in] rKey  Key for which to compute a hash value.
     ///
     /// @return  Hash value.
-    size_t Hash< GameObjectPath >::operator()( const GameObjectPath& rKey ) const
+    size_t Hash< Lunar::GameObjectPath >::operator()( const Lunar::GameObjectPath& rKey ) const
     {
         return rKey.ComputeHash();
     }

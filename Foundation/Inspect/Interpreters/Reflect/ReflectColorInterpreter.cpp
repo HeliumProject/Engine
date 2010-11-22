@@ -5,7 +5,7 @@
 #include "Foundation/Inspect/Controls/SliderControl.h"
 #include "Foundation/Inspect/Controls/ValueControl.h"
 #include "Foundation/Inspect/Controls/ColorPickerControl.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -74,7 +74,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
             bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
             colorPicker->a_IsReadOnly.Set( readOnly );
 
-            DataPtr data = new MultiStringFormatter<Serializer>( ser );
+            DataBindingPtr data = new MultiStringFormatter<Serializer>( ser );
             colorPicker->Bind( data );
 
             if ( color3 )

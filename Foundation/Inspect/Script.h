@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Interpreter.h"
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Canvas.h"

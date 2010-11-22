@@ -267,7 +267,6 @@ namespace Helium
 				wxDataViewCtrl* m_DataViewCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnOpenProject( wxMouseEvent& event ) { event.Skip(); }
 				virtual void OnListItemActivated( wxListEvent& event ) { event.Skip(); }
 				
 			

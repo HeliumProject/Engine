@@ -82,7 +82,7 @@ void Container::Clear()
     }
 }
 
-void Container::Bind(const DataPtr& data)
+void Container::Bind(const DataBindingPtr& data)
 {
     Base::Bind( data );
 

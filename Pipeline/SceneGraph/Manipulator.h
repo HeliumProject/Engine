@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 
 #include "Pipeline/API.h"
 #include "Pipeline/SceneGraph/Selection.h"

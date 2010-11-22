@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 #include "InstancePanel.h"
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 #include "EntityInstance.h"

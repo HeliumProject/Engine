@@ -828,7 +828,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -844,7 +844,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -868,7 +868,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -884,7 +884,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -908,7 +908,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -924,7 +924,7 @@ void CreateTool::CreateProperties()
             slider->a_HelpText.Set( helpText );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             textBox->a_HelpText.Set( helpText );
             m_Generator->Add( textBox );
         }
@@ -1017,7 +1017,7 @@ void CreateTool::CreateProperties()
             slider->a_Max.Set( 30.0f );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
@@ -1030,7 +1030,7 @@ void CreateTool::CreateProperties()
             slider->a_Max.Set( 10 );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
@@ -1043,7 +1043,7 @@ void CreateTool::CreateProperties()
             slider->a_Max.Set( 2.0f );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();
@@ -1056,7 +1056,7 @@ void CreateTool::CreateProperties()
             slider->a_Max.Set( 1.0f );
 
             Inspect::ValuePtr textBox = m_Generator->CreateControl<Inspect::Value>();
-            textBox->Bind( slider->GetData() );
+            textBox->Bind( slider->GetBinding() );
             m_Generator->Add( textBox );
         }
         m_Generator->Pop();

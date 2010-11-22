@@ -34,9 +34,9 @@ Control::Control()
 
 Control::~Control()
 {
-    if (m_BoundData)
+    if (m_DataBinding)
     {
-        m_BoundData->RemoveChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
+        m_DataBinding->RemoveChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
     }
 
     m_IsRealized = false;
@@ -85,32 +85,32 @@ void Control::SetParent( Container* parent )
     }
 }
 
-void Control::Bind(const DataPtr& data)
+void Control::Bind(const DataBindingPtr& data)
 {
-    if ( !m_BoundData.ReferencesObject() || !data.ReferencesObject() )
+    if ( !m_DataBinding.ReferencesObject() || !data.ReferencesObject() )
     {
-        if ( m_BoundData.ReferencesObject() )
+        if ( m_DataBinding.ReferencesObject() )
         {
-            m_BoundData->RemoveChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
+            m_DataBinding->RemoveChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
         }
 
-        m_BoundData = data;
+        m_DataBinding = data;
 
-        if ( m_BoundData.ReferencesObject() )
+        if ( m_DataBinding.ReferencesObject() )
         {
-            m_BoundData->AddChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
+            m_DataBinding->AddChangedListener( DataChangedSignature::Delegate ( this, &Control::DataChanged ) );
         }
     }
 }
 
 bool Control::IsDefault() const
 {
-    if (a_Default.Get().empty() || m_BoundData == NULL)
+    if (a_Default.Get().empty() || m_DataBinding == NULL)
     {
         return false;
     }
 
-    StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
+    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
     if ( data )
     {
         tstring val;
@@ -201,7 +201,7 @@ void Control::Read()
 
 bool Control::ReadStringData(tstring& str) const
 {
-    StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
+    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
     if (data)
     {
         str.clear();
@@ -215,7 +215,7 @@ bool Control::ReadStringData(tstring& str) const
 
 bool Control::ReadAllStringData(std::vector< tstring >& strs) const
 {
-    StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
+    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
     if ( data )
     {
         strs.clear();
@@ -263,14 +263,14 @@ bool Control::Write()
 
 bool Control::WriteStringData(const tstring& str, bool preview)
 {
-    StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
+    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
 
     return WriteTypedData(str, data, preview);
 }
 
 bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool preview)
 {
-    StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
+    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
     if (data)
     {
         std::vector< tstring > currentValues;

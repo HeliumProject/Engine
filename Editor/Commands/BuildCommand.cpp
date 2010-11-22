@@ -98,7 +98,6 @@ bool BuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, c
         if ( arg.length() )
         {
             m_SearchQuery = arg;
-            Helium::Path::Normalize( m_SearchQuery );
         }
     }
 

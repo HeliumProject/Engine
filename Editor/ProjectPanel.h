@@ -25,7 +25,7 @@ namespace Helium
 
         protected:
             // UI event handlers
-            virtual void OnOpenProject( wxMouseEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnOpenProject( wxMouseEvent& event );
             virtual void OnContextMenu( wxContextMenuEvent& event );
             
             void ProjectPanel::OnAddItems( wxCommandEvent& event );

@@ -106,12 +106,10 @@ bool RebuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin,
             if ( m_Input.empty() )
             {
                 m_Input = arg;
-                Helium::Path::Normalize( m_Input );
             }
             else if ( m_Output.empty() )
             {
                 m_Output = arg;
-                Helium::Path::Normalize( m_Output );
             }
         }
     }

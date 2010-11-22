@@ -204,7 +204,6 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
             {
                 query->m_SearchType = SearchType::Directory;
 
-                Helium::Path::Normalize( query->m_QueryString );
                 Helium::Path::GuaranteeSeparator( query->m_QueryString );
             }
             return true;

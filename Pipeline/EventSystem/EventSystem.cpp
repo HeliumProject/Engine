@@ -55,7 +55,6 @@ void EventSystem::CreateEventsFilePath( tstring& eventsFilePath )
     tstring fileName = tstring( _tgetenv( TXT( "USERNAME" ) ) ) + TXT( '-' ) + _tgetenv( TXT( "COMPUTERNAME" ) ) + TXT( ".event." ) + ( m_WriteBinaryFormat ? TXT( "dat" ) : TXT( "txt" ) );
 
     eventsFilePath = m_RootDirPath.Get() + fileName;
-    Helium::Path::Normalize( eventsFilePath );
 }
 
 

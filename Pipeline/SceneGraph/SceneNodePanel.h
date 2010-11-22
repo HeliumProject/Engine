@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Container.h"
 
 #include "Pipeline/API.h"

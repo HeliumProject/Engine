@@ -66,7 +66,7 @@ namespace Helium
             }
 
             // recusively binds contained controls to data
-            virtual void Bind(const DataPtr& data) HELIUM_OVERRIDE;
+            virtual void Bind(const DataBindingPtr& data) HELIUM_OVERRIDE;
 
             // process properties coming from script
             virtual bool Process(const tstring& key, const tstring& value) HELIUM_OVERRIDE;

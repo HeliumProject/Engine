@@ -93,7 +93,6 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
         if ( arg.length() )
         {
             fileArg = arg;
-            Helium::Path::Normalize( fileArg );
         }
     }
 

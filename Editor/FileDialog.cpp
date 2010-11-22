@@ -122,14 +122,6 @@ bool FileDialog::IsMultipleSelectionEnabled() const
 void FileDialog::GetPaths( wxArrayString& paths ) const
 {
     __super::GetPaths( paths );
-
-    size_t count = paths.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        tstring file = paths[ n ].c_str();
-        Helium::Path::Normalize( file );
-        paths[n] = file.c_str();
-    }
 }
 
 /////////////////////////////////////////////////////////////////////////////

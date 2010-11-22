@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/Types.h"
+#include "Platform/Condition.h"
 #include "Platform/Mutex.h"
 #include "Platform/Thread.h"
 
@@ -67,14 +67,14 @@ namespace Helium
             virtual void OnEndThread( const ThreadProcArgs& args );
 
         protected:
-            bool             m_StopThread;
-            int32_t              m_CurrentThreadID;
-            Helium::Mutex  m_UpdateMutex;
+            bool              m_StopThread;
+            int32_t           m_CurrentThreadID;
+            Helium::Mutex     m_UpdateMutex;
 
-            DummyWindow*     m_DummyWindow;
-            Helium::Mutex  m_BeginThreadMutex;         // Take Lock until m_ThreadInitializedEvent
-            Helium::Thread::Handle m_ThreadInitializedEvent;   // OK to cancel thread after this is set
-            Helium::Thread::Handle m_EndThreadEvent;
+            DummyWindow*      m_DummyWindow;
+            Helium::Mutex     m_BeginThreadMutex;         // Take Lock until m_ThreadInitializedEvent
+            Helium::Condition m_ThreadInitializedEvent;   // OK to cancel thread after this is set
+            Helium::Condition m_EndThreadEvent;
 
             friend class DummyThread;
         };

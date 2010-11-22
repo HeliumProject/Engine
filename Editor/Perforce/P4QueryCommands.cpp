@@ -70,7 +70,7 @@ m_VersionInfo.push_back( info );
 
 void FStatCommand::OutputStat( StrDict *dict )
 {
-    HELIUM_ASSERT_MSG( m_File, ("No file info object to store file information to") );
+    HELIUM_ASSERT_MSG( m_File, TXT("No file info object to store file information to") );
 
     if ( m_File->m_FileData & RCS::FileData::State )
     {

@@ -82,7 +82,7 @@ M_CastingFuncs g_CastingFuncs;
 template<class S, class D>
 void MapCast()
 {
-    P_i32 key (Reflect::GetType<S>(), Reflect::GetType<D>());
+    P_i32 key (Reflect::GetSerializer<S>(), Reflect::GetSerializer<D>());
     M_CastingFuncs::value_type val (key , &Cast<S, D>);
     bool ins = g_CastingFuncs.insert( val ).second;
     HELIUM_ASSERT(ins);
@@ -228,13 +228,13 @@ bool Serializer::CastValue(const Serializer* src, Serializer* dest, uint32_t fla
 
             if (CastSupported( srcSet->GetItemType(), destSet->GetItemType() ))
             {
-                V_ConstSerializer data;
+                std::vector< ConstSerializerPtr > data;
                 srcSet->GetItems( data );
 
                 destSet->Clear();
 
-                V_ConstSerializer::const_iterator itr = data.begin();
-                V_ConstSerializer::const_iterator end = data.end();
+                std::vector< ConstSerializerPtr >::const_iterator itr = data.begin();
+                std::vector< ConstSerializerPtr >::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
                     SerializerPtr value = AssertCast<Serializer>( Registry::GetInstance()->CreateInstance( destSet->GetItemType() ) );

@@ -34,7 +34,7 @@ namespace Helium
     class PropertyException : public Helium::Exception
     {
     public:
-        PropertyException( const tchar *msgFormat, ... )
+        PropertyException( const tchar_t *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );

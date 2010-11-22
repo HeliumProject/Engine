@@ -98,7 +98,7 @@ bool LinePickVisitor::PickTriangle(const Vector3& v0, const Vector3& v1, const V
 
   Vector3 vertex;
   Vector3 intersection;
-  float32_t distance = (float32_t)BigFloat;
+  float32_t distance = (float32_t)FLT_MAX;
 
   if (!success)
   {
@@ -234,7 +234,7 @@ bool LinePickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,const V
   float32_t dot = 0.f;
   Vector3 normal ( (v1 - v0).Cross(v2 - v1) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);
@@ -313,7 +313,7 @@ bool LinePickVisitor::AddHitTriangleClosestPoint(const Vector3& v0,const Vector3
   float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);
@@ -332,7 +332,7 @@ bool LinePickVisitor::AddHitTriangleClosestPoint(const Vector3& v0,const Vector3
     // transform values into world space
     m_CurrentWorldTransform.TransformVertex(intersection);
 
-    // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+    // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
     if (!HasFlags(PickFlags::IgnoreIntersection))
     {
       hit->SetIntersection( intersection );
@@ -362,7 +362,7 @@ bool LinePickVisitor::AddHitBox(const AlignedBox& box, Vector3& intersection)
     hit->SetVertex(corner, (corner - intersection).Length());
   }
 
-  // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+  // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
   if (!HasFlags(PickFlags::IgnoreIntersection))
   {
     hit->SetIntersection(intersection);
@@ -468,7 +468,7 @@ bool FrustumPickVisitor::AddHitPoint(const Vector3& p)
   // transform values into world space
   m_CurrentWorldTransform.TransformVertex(intersection);
 
-  // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+  // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
   if (!HasFlags(PickFlags::IgnoreIntersection))
   {
     hit->SetIntersection(intersection);
@@ -488,7 +488,7 @@ bool FrustumPickVisitor::AddHitSegment(const Vector3& p1,const Vector3& p2)
   // transform values into world space
   m_CurrentWorldTransform.TransformVertex(intersection);
 
-  // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+  // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
   if (!HasFlags(PickFlags::IgnoreIntersection))
   {
     hit->SetIntersection(intersection);
@@ -502,7 +502,7 @@ bool FrustumPickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,cons
   float32_t dot = 0.f;
   Vector3 normal ( (v2 - v1).Cross (v1 - v0) );
 
-  if (m_Camera->GetShadingMode() != ShadingModes::Wireframe && m_Camera->IsBackFaceCulling())
+  if (m_Camera->GetShadingMode() != ShadingMode::Wireframe && m_Camera->IsBackFaceCulling())
   {
     Vector3 cameraDir;
     m_Camera->GetDirection (cameraDir);
@@ -520,7 +520,7 @@ bool FrustumPickVisitor::AddHitTriangle(const Vector3& v0,const Vector3& v1,cons
     // transform values into world space
     m_CurrentWorldTransform.TransformVertex(intersection);
 
-    // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+    // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
     if (!HasFlags(PickFlags::IgnoreIntersection))
     {
       hit->SetIntersection( intersection );
@@ -543,7 +543,7 @@ bool FrustumPickVisitor::AddHitSphere(const Vector3& center)
   // transform values into world space
   m_CurrentWorldTransform.TransformVertex(intersection);
 
-  // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+  // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
   if (!HasFlags(PickFlags::IgnoreIntersection))
   {
     hit->SetIntersection(intersection);
@@ -563,7 +563,7 @@ bool FrustumPickVisitor::AddHitBox(const AlignedBox& box)
   // transform values into world space
   m_CurrentWorldTransform.TransformVertex(intersection);
 
-  // set intersection in world space (we use BigFloat for the distance since the distance is spacial)
+  // set intersection in world space (we use FLT_MAX for the distance since the distance is spacial)
   if (!HasFlags(PickFlags::IgnoreIntersection))
   {
     hit->SetIntersection(intersection);
@@ -603,7 +603,7 @@ bool FrustumLinePickVisitor::PickPoint(const Vector3& point, const float err)
 {
   if (m_PickSpaceFrustum.IntersectsPoint(point))
   {
-    if (!LinePickVisitor::PickPoint(point, (float32_t)BigFloat))
+    if (!LinePickVisitor::PickPoint(point, (float32_t)FLT_MAX))
     {
       return FrustumPickVisitor::AddHitPoint(point);
     }
@@ -618,7 +618,7 @@ bool FrustumLinePickVisitor::PickSegment(const Vector3& p1,const Vector3& p2, co
 {
   if (m_PickSpaceFrustum.IntersectsSegment (p1, p2))
   {
-    if (!LinePickVisitor::PickSegment(p1, p2, (float32_t)BigFloat))
+    if (!LinePickVisitor::PickSegment(p1, p2, (float32_t)FLT_MAX))
     {
       return FrustumPickVisitor::AddHitSegment(p1, p2);
     }
@@ -647,11 +647,11 @@ float32_t GetClosestPointOnEdge(const Vector3& edge_start, const Vector3& edge_e
 bool GetClosestPointOnTri(const Line& line, const Vector3& v0, const Vector3& v1, const Vector3& v2, Vector3& result)
 {
    Vector3 normal ( (v1 - v0).Cross(v2 - v1) );
-   if (normal.LengthSquared() > ValueNearZero)//should remove this redundant work shared here and in normalized
+   if (normal.LengthSquared() > HELIUM_VALUE_NEAR_ZERO)//should remove this redundant work shared here and in normalized
    {
      normal.Normalized();
      Vector3 line_dir = line.m_Point - line.m_Origin;
-     if (fabs(line_dir.Dot(normal)) < ValueNearZero )
+     if (fabs(line_dir.Dot(normal)) < HELIUM_VALUE_NEAR_ZERO )
      {
        return false;
      }
@@ -693,7 +693,7 @@ bool FrustumLinePickVisitor::PickTriangle(const Vector3& v0,const Vector3& v1,co
 {
   if (m_PickSpaceFrustum.IntersectsTriangle (v0, v1, v2))
   {
-    if (!LinePickVisitor::PickTriangle(v0, v1, v2, (float32_t)BigFloat))
+    if (!LinePickVisitor::PickTriangle(v0, v1, v2, (float32_t)FLT_MAX))
     {
       Vector3 point;
       if (GetClosestPointOnTri(m_PickSpaceLine, v0, v1, v2, point))
@@ -715,7 +715,7 @@ bool FrustumLinePickVisitor::PickSphere(const Vector3& center, const float radiu
 {
   if (m_PickSpaceFrustum.IntersectsPoint(center, radius))
   {
-    if (!LinePickVisitor::PickSphere(center, (float32_t)BigFloat))
+    if (!LinePickVisitor::PickSphere(center, (float32_t)FLT_MAX))
     {
       return FrustumPickVisitor::AddHitSphere(center);
     }
@@ -787,7 +787,7 @@ bool ComparePickDistance( const SortKey& lhs, const SortKey& rhs )
 
 bool ComparePickDistanceThenCameraDistance( const SortKey& lhs, const SortKey& rhs )
 {
-  if ( (fabs(lhs.m_DistanceFromPick - rhs.m_DistanceFromPick) < ValueNearZero) )
+  if ( (fabs(lhs.m_DistanceFromPick - rhs.m_DistanceFromPick) < HELIUM_VALUE_NEAR_ZERO) )
   {
     return CompareCameraDistance(lhs, rhs);
   }

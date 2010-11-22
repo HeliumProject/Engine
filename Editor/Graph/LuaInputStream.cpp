@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Editor/Graph/LuaInputStream.h"
 
-#include <math.h>
+#include "Platform/Math/MathCommon.h"
 
 #include "Editor/Graph/Debug.h"
 
@@ -51,7 +51,7 @@ LuaInputStream::Read()
 		}
 		case TYPE_BYTE:
 		{
-			tchar b;
+			tchar_t b;
 			m_is->Read((void *)&b, sizeof(b));
 			res = (long)b;
 			break;
@@ -75,7 +75,7 @@ LuaInputStream::Read()
 		{
 			int len;
 			m_is->Read((void *)&len, sizeof(len));
-			tchar *str = NEWARRAY(tchar, len + 1);
+			tchar_t *str = NEWARRAY(tchar_t, len + 1);
 			m_is->Read((void *)str, len);
 			str[len] = 0;
 			res = str;
@@ -85,7 +85,7 @@ LuaInputStream::Read()
 		case TYPE_STRING2:
 		{
 			int len = (int)ReadNumber();
-			tchar *str = NEWARRAY(tchar, len + 1);
+			tchar_t *str = NEWARRAY(tchar_t, len + 1);
 			m_is->Read((void *)str, len);
 			str[len] = 0;
 			res = str;
@@ -96,7 +96,7 @@ LuaInputStream::Read()
 			if (type >= TYPE_STR_0 && type <= TYPE_STR_127)
 			{
 				int len = type - TYPE_STR_0;
-				tchar *str = NEWARRAY(tchar, len + 1);
+				tchar_t *str = NEWARRAY(tchar_t, len + 1);
 				m_is->Read((void *)str, len);
 				str[len] = 0;
 				res = str;
@@ -165,7 +165,7 @@ LuaOutputStream::Write(int i)
 	if (i >= -128 && i <= 127)
 	{
 		m_os->PutC(TYPE_BYTE);
-		tchar b = i;
+		tchar_t b = i;
 		m_os->Write((void *)&b, sizeof(b));
 	}
 	else if (i >= -32768 && i <= 32767)
@@ -202,7 +202,7 @@ LuaOutputStream::Write(const wxString& str)
 	size_t len = str.Len();
 	if (len >= 0 && len <= 127)
 	{
-		m_os->PutC((tchar)(TYPE_STR_0 + len));
+		m_os->PutC((tchar_t)(TYPE_STR_0 + len));
 	}
 	else
 	{

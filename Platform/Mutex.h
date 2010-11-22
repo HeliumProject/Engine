@@ -1,21 +1,24 @@
 #pragma once
 
-#include "API.h"
+#include "Platform/ScopeLock.h"
 
-#include "Types.h"
-
-#ifdef __GNUC__
+#if !HELIUM_OS_WIN
 # include <pthread.h>
 #endif
 
 namespace Helium
 {
-    class PLATFORM_API Mutex
+    /// Mutex.
+    ///
+    /// On supported platforms, this is implemented using a lightweight mutex that can only be used within the context
+    /// of the process in which it is created (i.e. critical sections on Windows).  This typically yields better
+    /// performance than a full-scale mutex, making it a more desirable alternative for general use.
+    ///
+    /// If a mutex is needed for synchronization across processes, ProcessMutex should be used instead.
+    class PLATFORM_API Mutex : NonCopyable
     {
     public:
-#ifdef __GNUC__
-        typedef pthread_mutex_t Handle;
-#elif defined( WIN32 )
+#if HELIUM_OS_WIN
         struct Handle
         {
             struct DebugInfoStruct
@@ -40,104 +43,67 @@ namespace Helium
             uint32_t* SpinCount;
         };
 #else
-#  pragma TODO( "Emit an error here..." )
+        typedef pthread_mutex_t Handle;
 #endif
 
     private:
+        /// Platform-specific mutex handle.
         Handle m_Handle;
 
     public:
+        /// @name Construction/Destruction
+        //@{
         Mutex();
-
-    private:
-        Mutex( const Mutex& mutex )
-        {
-
-        }
-
-    public:
         ~Mutex();
+        //@}
 
-        const Handle& GetHandle()
-        {
-            return m_Handle;
-        }
-
+        /// @name Synchronization Interface
+        //@{
         void Lock();
         void Unlock();
+        bool TryLock();
+        //@}
+
+        /// @name Data Access
+        //@{
+        inline const Handle& GetHandle() const;
+        //@}
     };
 
-    //
-    // TakeMutex - Allocate one of these on the stack to have it hold a mutex while in a function
-    //  This technique is preferred in c++ exception throwing APIs
-    //
+    /// Scope-based locking mechanism for Mutex objects.
+    typedef ScopeLock< Mutex > MutexScopeLock;
 
-    class TakeMutex
-    {
-    private:
-        Mutex& m_Mutex;
-
-    public:
-        TakeMutex(Mutex& mutex)
-            : m_Mutex (mutex)
-        {
-            m_Mutex.Lock();
-        }
-
-    private:
-        TakeMutex(const TakeMutex& rhs)
-            : m_Mutex (rhs.m_Mutex)
-        {
-
-        }
-
-    public:
-        ~TakeMutex()
-        {
-            m_Mutex.Unlock();
-        }
-    };
-
-    //
-    // Locker - Simple template to make some data only accessible to one thread at a time
-    //
-
-    template<class T>
-    class Locker
+    /// Simple template to make some data only accessible to one thread at a time.
+    template< typename T, typename LockType = Mutex >
+    class Locker : NonCopyable
     {
     public:
-        friend class Handle;
-        class Handle
+        /// Handle for accessing the protected data.
+        class Handle : NonCopyable
         {
         public:
-            Handle( Locker* locker )
-                : m_Locker( locker )
-            {
-                m_Locker->m_Mutex.Lock();
-            }
+            /// @name Construction/Destruction
+            //@{
+            inline explicit Handle( Locker& locker );
+            inline ~Handle();
+            //@}
 
-        public:
-            ~Handle()
-            {
-                m_Locker->m_Mutex.Unlock();
-            }
-
-            inline T* operator->()
-            {
-                return &m_Locker->m_Data;
-            }
+            /// @name Overloaded Operators
+            //@{
+            inline T* operator->();
+            //@}
 
         private:
-            Locker* m_Locker;
+            /// Protected data locker.
+            Locker& m_Locker;
         };
 
-        inline Handle Lock()
-        {
-            return Handle( this );
-        }
-
     private:
-        T               m_Data;
-        Helium::Mutex m_Mutex;
+        /// Protected data.
+        T m_Data;
+        /// Synchronization object.
+        LockType m_LockObject;
     };
 }
+
+#include "Platform/Mutex.inl"

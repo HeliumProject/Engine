@@ -7,6 +7,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( TreeCanvas );
+
 const static int SCROLL_INCREMENT = 8;
 
 TreeCanvas::TreeCanvas()
@@ -68,7 +70,7 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
 {
     HELIUM_ASSERT( canvas == this || canvas == NULL );
 
-    SmartPtr< TreeCanvasWidget > widget = new TreeCanvasWidget( this );
+    StrongPtr< TreeCanvasWidget > widget = new TreeCanvasWidget( this );
     widget->SetTreeWndCtrl( m_TreeWndCtrl );
     widget->SetId( m_RootId );
     SetWidget( widget );
@@ -123,7 +125,6 @@ void TreeCanvas::OnSize(wxSizeEvent& event)
         }
     }
 
-    m_TreeWndCtrl->SetVirtualSizeHints( w, -1, w, -1 );
     m_TreeWndCtrl->Layout();
 
     event.Skip();

@@ -32,7 +32,7 @@ namespace Helium
 
         };
 
-        typedef Helium::SmartPtr<VertexResource> VertexResourcePtr;
+        typedef Helium::StrongPtr<VertexResource> VertexResourcePtr;
 
     }
 }

@@ -101,7 +101,7 @@ namespace Helium
             int32_t m_InstanceType;
         };
 
-        typedef Helium::SmartPtr< SceneGraph::SceneNodeType > SceneNodeTypePtr;
+        typedef Helium::StrongPtr< SceneGraph::SceneNodeType > SceneNodeTypePtr;
 
         typedef std::vector< SceneGraph::SceneNodeType* > V_SceneNodeTypeDumbPtr;
         typedef std::set< SceneGraph::SceneNodeType* > S_SceneNodeTypeDumbPtr;

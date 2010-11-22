@@ -26,7 +26,7 @@ EnumerationElement* EnumerationElement::Create( uint32_t value, const tstring& n
 
 bool Enumeration::Equals(const Enumeration* rhs) const
 {
-    if ( m_ShortName != rhs->m_ShortName )
+    if ( m_Name != rhs->m_Name )
     {
         return false;
     }
@@ -125,13 +125,13 @@ bool Enumeration::GetBitfieldValue(const tstring& str, uint32_t& value) const
         return false;
     }
 
-    static tchar tmp[1024];
+    static tchar_t tmp[1024];
     _tcscpy( tmp, str.c_str() );
 
     std::vector< tstring > strs;
 
-    tchar seps[] = TXT("|");
-    tchar *token = _tcstok( tmp, seps );
+    tchar_t seps[] = TXT("|");
+    tchar_t *token = _tcstok( tmp, seps );
     while( token != NULL )
     {
         strs.push_back(token);

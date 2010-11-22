@@ -17,7 +17,7 @@ void CommandQueue::Post( VoidSignature::Delegate delegate )
     bool flush;
 
     {
-        Helium::TakeMutex taken( m_Mutex );
+        Helium::MutexScopeLock taken( m_Mutex );
 
         // the flash flag groups commands into a batch
         //  - the first push on an empty queue schedules a flush via message
@@ -40,7 +40,7 @@ void CommandQueue::Flush()
     std::vector< VoidSignature::Delegate > commands;
 
     {
-        Helium::TakeMutex taken ( m_Mutex);
+        Helium::MutexScopeLock taken ( m_Mutex);
         commands = m_Commands;
         m_Commands.clear();
     }

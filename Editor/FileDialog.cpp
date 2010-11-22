@@ -116,17 +116,6 @@ bool FileDialog::IsMultipleSelectionEnabled() const
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Overridden to clean the path before returning it.  Call GetFilePath to work
-// with tstring instead.
-// 
-wxString FileDialog::GetPath() const
-{
-    tstring path( __super::GetPath().c_str() );
-    Helium::Path::Normalize( path );
-    return path.c_str();
-}
-
-/////////////////////////////////////////////////////////////////////////////
 // Overridden to clean the paths before returning them.  Call GetFilePaths to 
 // work with tstring instead.
 // 

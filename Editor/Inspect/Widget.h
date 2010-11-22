@@ -50,6 +50,6 @@ namespace Helium
             wxWindow*           m_Window;
         };
 
-        typedef SmartPtr<Widget> WidgetPtr;
+        typedef StrongPtr<Widget> WidgetPtr;
     }
 }

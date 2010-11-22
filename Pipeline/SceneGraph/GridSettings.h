@@ -4,26 +4,29 @@
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Helium
 {
     namespace SceneGraph
     {
-        namespace GridUnits
+        class GridUnit
         {
-            enum GridUnit
+        public:
+            enum Enum
             {
                 Meters,
                 Centimeters,
             };
 
-            static void GridUnitEnumerateEnum( Reflect::Enumeration* info )
+            REFLECT_DECLARE_ENUMERATION( GridUnit );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(Meters, TXT( "Meters" ) );
-                info->AddElement(Centimeters, TXT( "Centimeters" ) );
+                info.AddElement(Meters,         TXT( "Meters" ) );
+                info.AddElement(Centimeters,    TXT( "Centimeters" ) );
             }
-        }
-        typedef GridUnits::GridUnit GridUnit;
+        };
 
         class PIPELINE_API GridSettings : public Reflect::Element
         {
@@ -31,7 +34,7 @@ namespace Helium
             REFLECT_DECLARE_CLASS( GridSettings, Reflect::Element );
 
             GridSettings( const tstring& version = TXT( "" ),
-                GridUnit units = GridUnits::Meters,
+                GridUnit units = GridUnit::Meters,
                 uint32_t width = 12,
                 uint32_t length = 12,
                 float32_t majorStep = 5.0f,

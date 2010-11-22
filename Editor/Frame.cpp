@@ -27,11 +27,11 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // *R2 <[<title> - ]>[ <code>(<build>), assets: <assets> ]<[: <extra>>]
 // *R2 Editor Asset Editor - [ tech(debug), assets: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.hrb
-static const tchar* s_ProgrammerTitleBarFormat = TXT( "%s(p) %s[ %s%s, assets: %s ]" ); //project, title, code, build, assets, extra
+static const tchar_t* s_ProgrammerTitleBarFormat = TXT( "%s(p) %s[ %s%s, assets: %s ]" ); //project, title, code, build, assets, extra
 
 // *R2 <[<title> - ]>[ assets: <assets>, tech/tools: <code> ]<[: <extra>>]
 // R2 Editor Asset Editor - [ assets: devel, tech/tools: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.hrb
-static const tchar* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: %s ]" ); //project, title, assets, code, extra
+static const tchar_t* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: %s ]" ); //project, title, assets, code, extra
 
 
 
@@ -42,7 +42,7 @@ Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
 : wxFrame( parent, id, title, pos, size, style, name )
 {
     // tell wxAuiManager to manage this frame
-    m_FrameManager.SetFrame( this ); 
+    m_FrameManager.SetManagedWindow( this ); 
 
     SetTitle( title.c_str() );
 
@@ -64,7 +64,7 @@ Frame::~Frame()
     m_ExcludeFromPanelsMenu.clear();
 }
 
-void Frame::SetHelpText( const tchar* text )
+void Frame::SetHelpText( const tchar_t* text )
 {
 }
 

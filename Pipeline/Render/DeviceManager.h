@@ -113,7 +113,7 @@ namespace Helium
 
             IDirect3DSurface9* GetBufferData();
 
-            bool SaveTGA(const tchar* fname);
+            bool SaveTGA(const tchar_t* fname);
 
             inline IDirect3D9* GetD3D()
             {

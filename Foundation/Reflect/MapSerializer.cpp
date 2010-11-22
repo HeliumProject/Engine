@@ -1,4 +1,5 @@
-#include "MapSerializer.h"
+#include "Foundation/Reflect/MapSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -211,13 +212,13 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Helium::Hy
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
 {
-    return Reflect::GetType<KeyT>();
+    return Reflect::GetSerializer<KeyT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 int32_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
 {
-    return Reflect::GetType<ValueT>();
+    return Reflect::GetSerializer<ValueT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
@@ -228,8 +229,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ValueType& 
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].second = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->second, m_Instance, m_Field ) );
     }
 }
 
@@ -241,8 +242,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ConstValueT
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+        items[index].first = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].second = static_cast< const ConstSerializerPtr& >( Serializer::Bind( itr->second, m_Instance, m_Field ) );
     }
 }
 
@@ -327,7 +328,7 @@ template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archive) const
 {
     int i = 0;
-    V_Element components;
+    std::vector< ElementPtr > components;
     components.resize( m_Data->size() * 2 );
 
     {
@@ -360,8 +361,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& arc
 
     archive.Serialize(components);
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         // downcast to serializer type
@@ -378,7 +379,7 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& arc
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& archive)
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
@@ -389,8 +390,8 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& a
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         KeySer* key = ObjectCast<KeySer>( *itr );
@@ -429,7 +430,7 @@ tistream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator<< (tistr
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size);
-    stream.read( const_cast< tchar* >( str.c_str() ), size );
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

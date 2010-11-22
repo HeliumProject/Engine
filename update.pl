@@ -1,21 +1,23 @@
 use strict;
-
+use Cwd;
 use File::Spec;
 use File::Basename;
 use Getopt::Long;
 
 # flags
 my $autobuild = 0;
-my $help      = 0;
+my $pull      = 0;
 my $clean     = 0;
 my $git_clean = 0;
 my $verbose   = 0;
 my $config    = '';
+my $help      = 0;
 
 # result
 my $result = 0;
 
 if ( !GetOptions( "autobuild"  => \$autobuild,
+                  "pull"       => \$pull,
                   "clean"      => \$clean,
                   "git_clean"  => \$git_clean,
                   "verbose"    => \$verbose,
@@ -32,17 +34,61 @@ if ( !GetOptions( "autobuild"  => \$autobuild,
   exit( 1 );
 }
 
-my $git_command;
-if( !$autobuild ) # dont mess with source control status if its an autobuild
+if ( $autobuild )
 {
-  if ( $git_clean )
-  {
-    $git_command = 'git clean -fdx';
-    $result = _Do( $git_command, "Git Clean" );
-  }
+  $pull = 0;
+}
 
+my $git_command;
+
+if( $git_clean )
+{
+  $git_command = 'git clean -fdx';
+  $result = _DoGit( $git_command, "Git Clean" );
+}
+
+if( $pull ) # dont mess with source control status if its an autobuild
+{
   $git_command = 'git pull';
-  $result += _Do( $git_command, "Git Pull" );
+  $result += _DoGit( $git_command, "Git Pull" );
+
+  $git_command = 'git submodule update --init --recursive';
+  $result += _DoGit( $git_command, "Git Update/Init Submodules" );
+}
+
+my $premake = 'premake4 vs2008';
+my $depends = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . " " . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" );
+my $compile = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . " " . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" );
+
+if($config)
+{
+  $depends .= " -config \"$config\"";
+  $compile .= " -config \"$config\"";
+}
+if($clean)
+{
+  $depends .= ' -clean';
+  $compile .= ' -clean';
+}
+if($verbose)
+{
+  $depends .= ' -verbose';
+  $compile .= ' -verbose';
+}
+
+$result += _Do( $premake, "Running Premake" );
+$result += _Do( $depends, "Build Dependencies" );
+$result += _Do( $compile, "Build " . basename( getcwd() ) );
+
+if ( $result )
+{
+  print("\n$result commands failed during update!\n");
+  exit( 1 );
+}
+
+sub _DoGit
+{
+  _Do( shift, shift );
 
   if ( $result )
   {
@@ -55,39 +101,9 @@ if( !$autobuild ) # dont mess with source control status if its an autobuild
   }
 }
 
-my $premake_command = 'premake4 vs2008';
-my $dep_command     = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Premake//Dependencies.sln" );
-my $helium_command  = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl Premake//Helium.sln" );
-
-if($config)
-{
-  $dep_command    .= " -config \"$config\"";
-  $helium_command .= " -config \"$config\"";
-}
-if($clean)
-{
-  $dep_command    .= ' -clean';
-  $helium_command .= ' -clean';
-}
-if($verbose)
-{
-  $dep_command    .= ' -verbose';
-  $helium_command .= ' -verbose';
-}
-
-$result += _Do( $premake_command, "Running Premake" );
-$result += _Do( $dep_command, "Build Dependencies" );
-$result += _Do( $helium_command, "Build Helium" );
-
-if ( $result )
-{
-  print("\n$result commands failed during update!\n");
-  exit( 1 );
-}
-
 sub _Do
 {
-  my $command = shift;
+  my $compile = shift;
   my $description = shift;
   
   if (defined $description)
@@ -99,12 +115,12 @@ sub _Do
     $description = "Command";
   }
   
-  system ("$command");
+  system ("$compile");
   my $result = $? >> 8;
 
   if ( $result )
   {
-    print("$description failed with result $result:\n> $command\n");
+    print("$description failed with result $result:\n> $compile\n");
   }
 
   return $result > 0 ? 1 : 0;

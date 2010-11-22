@@ -170,7 +170,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     caption += wxGetApp().AppVerName().c_str();
     caption += wxT( "..." );
     wxMenuItem* aboutMenuItem = m_MenuHelp->FindItem( ID_About );
-    aboutMenuItem->SetText( caption );
+    aboutMenuItem->SetItemLabel( caption );
 
     // Tool Bar
     m_ToolbarPanel = new ToolbarPanel( this );
@@ -314,6 +314,9 @@ MainFrame::~MainFrame()
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
+    
+    CloseProject();
+
     //
     // Detach event handlers
     //
@@ -343,7 +346,7 @@ MainFrame::~MainFrame()
     }
 }
 
-void MainFrame::SetHelpText( const tchar* text )
+void MainFrame::SetHelpText( const tchar_t* text )
 {
     m_HelpPanel->SetText( text );
 }
@@ -351,17 +354,22 @@ void MainFrame::SetHelpText( const tchar* text )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for common opening code.
 // 
-bool MainFrame::OpenProject( const Helium::Path& path )
+void MainFrame::OpenProject( const Helium::Path& path )
 {
-    bool opened = false;
+    HELIUM_ASSERT( !path.empty() );
+    
+    CloseProject();
 
-    if ( !path.empty() && path.Exists() )
+    bool isNewProject = false;
+    if ( path.Exists() )
     {
-        tstring error;
+        bool opened = false;
+
+        // this is our default error
+        tstring error = TXT( "We could not parse the project file you selected, it has not been loaded." );
         try
         {
             m_Project = Reflect::FromArchive< Project >( path );
-            m_Project->a_Path.Set( path );
         }
         catch ( const Helium::Exception& ex )
         {
@@ -372,43 +380,74 @@ bool MainFrame::OpenProject( const Helium::Path& path )
 
         if ( opened )
         {
+            m_Project->a_Path.Set( path );
             m_MRU->Insert( path );
-
-            Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-            if ( !document )
-            {
-                tstring error;
-                bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
-                HELIUM_ASSERT( result );
-
-                document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-            }
-            ConnectDocument( document );
-            m_ProjectPanel->SetProject( m_Project, document );
-
-            if ( m_VaultPanel )
-            {
-                m_VaultPanel->SetDirectory( path );
-            }
-
-#pragma TODO( "Turn tracker back on where there are assets to track" )
-            //wxGetApp().GetTracker()->SetDirectory( path );
-            //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-            //{
-            //    wxGetApp().GetTracker()->StartThread();
-            //}
         }
         else
         {
             m_MRU->Remove( path );
             if ( !error.empty() )
             {
-                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );    
             }
+            return;
         }
     }
+    else
+    {
+        m_Project = new Project();
+        m_Project->a_Path.Set( path );
+        isNewProject = true;
+    }
 
-    return opened;
+    Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+    if ( !document )
+    {
+        tstring error;
+        bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
+        HELIUM_ASSERT( result );
+
+        document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
+    }
+    ConnectDocument( document );
+
+    document->HasChanged( isNewProject );
+    m_Project->ConnectDocument( document );
+
+    m_DocumentManager.e_DocumentOpened.AddMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
+    m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
+
+    m_ProjectPanel->OpenProject( m_Project, document );
+
+    if ( m_VaultPanel )
+    {
+        m_VaultPanel->SetDirectory( path );
+    }
+
+#pragma TODO( "Turn tracker back on where there are assets to track" )
+    //wxGetApp().GetTracker()->SetDirectory( path );
+    //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
+    //{
+    //    wxGetApp().GetTracker()->StartThread();
+    //}
+}
+
+void MainFrame::CloseProject()
+{
+    if ( m_Project )
+    {
+        m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+
+        m_DocumentManager.e_DocumentOpened.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
+        m_DocumentManager.e_DocumenClosed.RemoveMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
+
+        m_ProjectPanel->CloseProject();
+
+        m_DocumentManager.CloseAll();
+        m_Project = NULL;
+
+        m_UndoQueue.Reset();   
+    }
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -671,37 +710,89 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
     const wxMenu* menu = event.GetMenu();
 
+    const bool isProjectOpen = m_Project.ReferencesObject();
+    const bool hasCurrentScene = m_SceneManager.HasCurrentScene();
+    const bool hasTextClipboardData = hasCurrentScene && IsClipboardFormatAvailable( CF_TEXT );
+    const bool isAnythingSelected = hasCurrentScene && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+
     if ( menu == m_MenuFile )
     {
-        // File->Import is enabled if there is a current editing scene
-        m_MenuFile->Enable( ID_Import, m_SceneManager.HasCurrentScene() );
-        m_MenuFile->Enable( ID_ImportFromClipboard, m_SceneManager.HasCurrentScene() );
-
-        // File->Export is only enabled if there is something selected
-        const bool enableExport = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        m_MenuFile->Enable( ID_Export, enableExport );
-        m_MenuFile->Enable( ID_ExportToClipboard, enableExport );
+        // OnMenuOpen is not called for submenus m_MenuFileNew and m_MenuFileOpenRecent
+        m_MenuFileNew->Enable( ID_NewEntity, isProjectOpen );
+        m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
         m_MRU->PopulateMenu( m_MenuFileOpenRecent );
+
+        // File > Close is enabled if there are documents open in the document manager
+        m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );
+
+        // File > SaveAll is enabled if there are any files in the document manager that have changed
+        bool doAnyDocsNeedSaving = false;
+        OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
+        OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
+        for ( ; docItr != docEnd; ++docItr )
+        {
+            if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
+            {
+                doAnyDocsNeedSaving = true;
+                break;
+            }
+        }
+        m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaving );
+
+        // File > Import is enabled if there is a current editing scene
+        m_MenuFile->Enable( ID_Import, hasCurrentScene );
+        m_MenuFile->Enable( ID_ImportFromClipboard, hasTextClipboardData );
+
+        // File > Export is only enabled if there is something selected
+        m_MenuFile->Enable( ID_Export, isAnythingSelected );
+        m_MenuFile->Enable( ID_ExportToClipboard, isAnythingSelected );
+    }
+    else if ( menu == m_MenuEdit )
+    {
+        // Edit > Undo/Redo is only enabled if there are commands in the queue
+        m_MenuEdit->Enable( wxID_UNDO, CanUndo() );
+        m_MenuEdit->Enable( wxID_REDO, CanRedo() );
+
+        // Edit > Cut/Copy/Paste/Delete
+        m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_PASTE, hasTextClipboardData );
+        m_MenuEdit->Enable( wxID_DELETE, isAnythingSelected );
+
+        // Edit > Select All
+        m_MenuEdit->Enable( ID_SelectAll, hasCurrentScene );
+        // Edit > Invert Selection is only enabled if something is selected
+        m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
+
+        // Edit > Group options
+        m_MenuEdit->Enable( ID_Parent, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Unparent, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Group, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Ungroup, isAnythingSelected );
+        m_MenuEdit->Enable( ID_Center, isAnythingSelected );
+
+        // Edit > Duplicate
+        m_MenuEdit->Enable( ID_Duplicate, isAnythingSelected );
+        m_MenuEdit->Enable( ID_SmartDuplicate, isAnythingSelected );
+
+        m_MenuEdit->Enable( ID_CopyTransform, isAnythingSelected );
+        m_MenuEdit->Enable( ID_PasteTransform, hasTextClipboardData );
+
+        m_MenuEdit->Enable( ID_SnapToCamera, isAnythingSelected );
+        m_MenuEdit->Enable( ID_SnapCameraTo, isAnythingSelected );
+
+        // Edit > Walk
+        m_MenuEdit->Enable( ID_WalkUp, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkDown, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkForward, isAnythingSelected );
+        m_MenuEdit->Enable( ID_WalkBackward, isAnythingSelected );
+
+
     }
     else if ( menu == m_MenuPanels )
     {
         UpdatePanelsMenu( m_MenuPanels );
-    }
-    else if ( menu == m_MenuEdit )
-    {
-        // Edit->Undo/Redo is only enabled if there are commands in the queue
-        m_MenuEdit->Enable( wxID_UNDO, CanUndo() );
-        m_MenuEdit->Enable( wxID_REDO, CanRedo() );
-
-        // Edit->Invert Selection is only enabled if something is selected
-        const bool isAnythingSelected = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
-
-        // Cut/copy/paste
-        m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
-        m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
-        m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
     }
     else
     {
@@ -713,7 +804,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static void GetUniquePathName( const tchar* root, const std::set< Path >& paths, Helium::Path& name )
+static void GetUniquePathName( const tchar_t* root, const std::set< Path >& paths, Helium::Path& name )
 {
     int32_t number = 0;
 
@@ -747,6 +838,9 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     Helium::Path path;
     GetUniquePathName( TXT( "New Scene" ), m_Project->Paths(), path );
 
+    // Add to the project before opening it
+    m_Project->AddPath( path );
+
     DocumentPtr document = new Document( path );
     document->HasChanged( true );
 
@@ -761,32 +855,18 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
 
     m_SceneManager.SetCurrentScene( scene );
-
-    m_Project->AddPath( scene->GetPath() );
 }
 
 void MainFrame::OnNewEntity( wxCommandEvent& event )
 {
+    HELIUM_ASSERT( m_Project );
+
     wxMessageBox( wxT( "Not supported yet." ), wxT( "Error" ), wxOK|wxICON_ERROR );
 }
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    m_Project = new Project();
-    m_Project->a_Path.Set( TXT("New Project") );
-
-    Document* document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-    if ( !document )
-    {
-        tstring error;
-        bool result = m_DocumentManager.OpenDocument( new Document( m_Project->a_Path.Get() ), error );
-        HELIUM_ASSERT( result );
-
-        document = m_DocumentManager.FindDocument( m_Project->a_Path.Get() );
-        document->HasChanged( true );
-    }
-
-    m_ProjectPanel->SetProject( m_Project, document );    
+    OpenProject( Helium::Path( TXT("New Project") ) );
 }
 
 bool MainFrame::DoOpen( const tstring& path )
@@ -832,10 +912,7 @@ bool MainFrame::DoOpen( const tstring& path )
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
-    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
-    m_UndoQueue.Reset();
-    m_DocumentManager.CloseAll();
-    m_Project = NULL;
+    CloseProject();
 }
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )
@@ -926,19 +1003,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewNone:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::None );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::None );
             break;
         }
 
     case EventIds::ID_ViewRender:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Render );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Render );
             break;
         }
 
     case EventIds::ID_ViewCollision:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryModes::Collision );
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetGeometryMode( GeometryMode::Collision );
             break;
         }
 
@@ -956,19 +1033,19 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 
     case EventIds::ID_ViewWireframe:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Wireframe );
             break;
         }
 
     case EventIds::ID_ViewMaterial:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Material );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Material );
             break;
         }
 
     case EventIds::ID_ViewTexture:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingModes::Texture );
+            m_ViewPanel->GetViewCanvas()->GetViewport().GetCamera()->SetShadingMode( ShadingMode::Texture );
             break;
         }
 
@@ -994,25 +1071,25 @@ void MainFrame::OnViewCameraChange(wxCommandEvent& event)
     {
     case EventIds::ID_ViewOrbit:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Orbit);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Orbit);
             break;
         }
 
     case EventIds::ID_ViewFront:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Front);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Front);
             break;
         }
 
     case EventIds::ID_ViewSide:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Side);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Side);
             break;
         }
 
     case EventIds::ID_ViewTop:
         {
-            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraModes::Top);
+            m_ViewPanel->GetViewCanvas()->GetViewport().SetCameraMode(CameraMode::Top);
             break;
         }
     }
@@ -1236,7 +1313,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-            Reflect::V_Element elements;
+            std::vector< Reflect::ElementPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
@@ -1382,7 +1459,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             }
         }
 
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Change the selection or display changes in the Project view" )
+#pragma TODO( "Change the selection or display changes in the Project view" )
 
         // Restore selection-sensitive settings
         args.m_Scene->RefreshSelection();
@@ -1597,7 +1674,7 @@ void MainFrame::PickWorld( PickArgs& args )
 #pragma TODO("Pick the project's root scene -Geoff")
 }
 
-void MainFrame::ConnectDocument( const Document* document )
+void MainFrame::ConnectDocument( Document* document )
 {
     document->e_Changed.AddMethod( this, &MainFrame::DocumentChanged );
     document->e_Saved.AddMethod( this, &MainFrame::DocumentChanged ) ;
@@ -1613,19 +1690,6 @@ void MainFrame::DisconnectDocument( const Document* document )
 
 void MainFrame::DocumentChanged( const DocumentEventArgs& args )
 {
-    bool doAnyDocsNeedSaving = false;
-    OS_DocumentSmartPtr::Iterator docItr = m_DocumentManager.GetDocuments().Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_DocumentManager.GetDocuments().End();
-    for ( ; docItr != docEnd; ++docItr )
-    {
-        if ( ( *docItr )->HasChanged() || !( *docItr )->GetPath().Exists() )
-        {
-            doAnyDocsNeedSaving = true;
-            break;
-        }
-    }
-
-    m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaving );
 }
 
 void MainFrame::DocumentClosed( const DocumentEventArgs& args )
@@ -1913,7 +1977,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         V_Matrix4 transforms;
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
-        Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
+        Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
         data->m_Data.Set( transforms );
 
         tstring xml;
@@ -1943,14 +2007,14 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
 
-        Reflect::V_Element elements;
+        std::vector< Reflect::ElementPtr > elements;
         Reflect::ArchiveXML::FromString( xml, elements );
 
-        Reflect::V_Element::const_iterator itr = elements.begin();
-        Reflect::V_Element::const_iterator end = elements.end();
+        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
-            Helium::SmartPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );
+            Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );
             if ( data.ReferencesObject() )
             {
                 m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
@@ -2698,8 +2762,6 @@ bool MainFrame::SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph:
 // 
 void MainFrame::AllocateNestedScene( const ResolveSceneArgs& args )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - this function should move out to the mainframe" )
-
     args.m_Scene = m_SceneManager.GetScene( args.m_Path );
     if ( !args.m_Scene )
     {

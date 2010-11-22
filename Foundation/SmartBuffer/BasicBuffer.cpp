@@ -32,7 +32,7 @@ using namespace Helium;
     AddDebugInfo(blockType, blockSize, dbgStr, args, 1);\
 }
 
-static tchar g_DebugString[2048];
+static tchar_t g_DebugString[2048];
 
 #else
 
@@ -50,13 +50,13 @@ bool BasicBuffer::IsDebugInfoEnabled()
 #endif
 }
 
-void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const tchar *dbgStr, va_list argptr, tchar ignore_next)
+void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const tchar_t *dbgStr, va_list argptr, tchar_t ignore_next)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     BasicBufferDebugInfo debug_info;
-    tchar* dbg_str;
+    tchar_t* dbg_str;
 
-    static tchar s_ignore_next = 0;
+    static tchar_t s_ignore_next = 0;
 
     if ( s_ignore_next )
     {
@@ -71,7 +71,7 @@ void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsign
 
     if ( dbgStr )
     {
-        static tchar prtbuf[2048];
+        static tchar_t prtbuf[2048];
         vsprintf(prtbuf, dbgStr, argptr);
         dbg_str = prtbuf;
     }
@@ -97,7 +97,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
 
         for (BasicBufferDebugInfoVector::iterator i=m_DebugInfo.begin(); i!=m_DebugInfo.end(); i++)
         {
-            tchar* blockTypeStr = NULL;
+            tchar_t* blockTypeStr = NULL;
 
             switch(i->m_BlockType)
             {
@@ -203,7 +203,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
     }
 }
 
-uint32_t BasicBuffer::AddBuffer( const uint8_t* buffer, uint32_t size, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddBuffer( const uint8_t* buffer, uint32_t size, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_BUFFER, size);
 
@@ -240,7 +240,7 @@ uint32_t BasicBuffer::AddFile( const tstring& filename )
     return AddFile( filename.c_str() );
 }
 
-uint32_t BasicBuffer::AddFile( const tchar* filename )
+uint32_t BasicBuffer::AddFile( const tchar_t* filename )
 {
     FILE *pfile = _tfopen( filename, TXT( "rb" ) );
     if ( pfile == NULL )
@@ -272,21 +272,21 @@ uint32_t BasicBuffer::AddFile( const tchar* filename )
     return m_Size - (uint32_t)file_read;
 }
 
-uint32_t BasicBuffer::AddI8( int8_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI8( int8_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I8, 1);
 
     return AddBuffer( (uint8_t*)&val, sizeof( int8_t ) );
 }
 
-uint32_t BasicBuffer::AddU8( uint8_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU8( uint8_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U8, 1);
 
     return AddBuffer( (uint8_t*)&val, sizeof( uint8_t ) );
 }
 
-uint32_t BasicBuffer::AddU16( uint16_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU16( uint16_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U16, 2);
 
@@ -294,7 +294,7 @@ uint32_t BasicBuffer::AddU16( uint16_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( uint16_t ) );
 }
 
-uint32_t BasicBuffer::AddI16( int16_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI16( int16_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
@@ -302,7 +302,7 @@ uint32_t BasicBuffer::AddI16( int16_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( int16_t ) );
 }
 
-uint32_t BasicBuffer::AddI32( int32_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI32( int32_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I32, 4);
 
@@ -310,7 +310,7 @@ uint32_t BasicBuffer::AddI32( int32_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( int32_t ) );
 }
 
-uint32_t BasicBuffer::AddU32( uint32_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU32( uint32_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U32, 4);
 
@@ -318,7 +318,7 @@ uint32_t BasicBuffer::AddU32( uint32_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( uint32_t ) );
 }
 
-uint32_t BasicBuffer::AddI64( int64_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddI64( int64_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I64, 8);
 
@@ -326,7 +326,7 @@ uint32_t BasicBuffer::AddI64( int64_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( int64_t ) );
 }
 
-uint32_t BasicBuffer::AddU64( uint64_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddU64( uint64_t val, const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U64, 8);
 
@@ -334,7 +334,7 @@ uint32_t BasicBuffer::AddU64( uint64_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&val, sizeof( uint64_t ) );
 }
 
-uint32_t BasicBuffer::AddF16( float32_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF16( float32_t val, const tchar_t* dbgStr, ... )
 {
     int16_t half = FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
@@ -343,7 +343,7 @@ uint32_t BasicBuffer::AddF16( float32_t val, const tchar* dbgStr, ... )
     return AddBuffer( (uint8_t*)&half, sizeof( int16_t ) );
 }
 
-uint32_t BasicBuffer::AddF32( float32_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF32( float32_t val, const tchar_t* dbgStr, ... )
 {
     uint32_t i = *(reinterpret_cast<uint32_t *>(&val));
 
@@ -364,7 +364,7 @@ uint32_t BasicBuffer::AddF32( float32_t val, const tchar* dbgStr, ... )
     return AddU32( i );
 }
 
-uint32_t BasicBuffer::AddF64( float64_t val, const tchar* dbgStr, ... )
+uint32_t BasicBuffer::AddF64( float64_t val, const tchar_t* dbgStr, ... )
 {
     uint64_t i = *(reinterpret_cast<uint64_t *>(&val));
 
@@ -384,7 +384,7 @@ uint32_t BasicBuffer::AddF64( float64_t val, const tchar* dbgStr, ... )
     return AddU64( i );
 }
 
-uint32_t BasicBuffer::AddVector3( const Vector3& v, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector3( const Vector3& v, const tchar_t* debugStr )
 {
     uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -392,7 +392,7 @@ uint32_t BasicBuffer::AddVector3( const Vector3& v, const tchar* debugStr )
     return ret;
 }
 
-uint32_t BasicBuffer::AddVector4( const Vector4& v, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( const Vector4& v, const tchar_t* debugStr )
 {
     uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -401,7 +401,7 @@ uint32_t BasicBuffer::AddVector4( const Vector4& v, const tchar* debugStr )
     return ret;
 }
 
-uint32_t BasicBuffer::AddVector4( const Vector3& v, float32_t w, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( const Vector3& v, float32_t w, const tchar_t* debugStr )
 {
     uint32_t ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -410,7 +410,7 @@ uint32_t BasicBuffer::AddVector4( const Vector3& v, float32_t w, const tchar* de
     return ret;
 }
 
-uint32_t BasicBuffer::AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar* debugStr )
+uint32_t BasicBuffer::AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar_t* debugStr )
 {
     uint32_t ret = AddF32(x, debugStr);
     AddF32(y, debugStr);
@@ -533,7 +533,7 @@ void BasicBuffer::SetCapacity(uint32_t capacity)
     }  
 }
 
-BufferLocation BasicBuffer::Reserve(uint32_t size, const tchar* dbgStr, ...)
+BufferLocation BasicBuffer::Reserve(uint32_t size, const tchar_t* dbgStr, ...)
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_RESERVE, size);
 
@@ -551,7 +551,7 @@ BufferLocation BasicBuffer::Reserve(uint32_t size, const tchar* dbgStr, ...)
     return return_val;
 }
 
-void BasicBuffer::Reserve(BufferLocation& loc, uint32_t size, const tchar* dbgStr, ...)
+void BasicBuffer::Reserve(BufferLocation& loc, uint32_t size, const tchar_t* dbgStr, ...)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -569,7 +569,7 @@ void BasicBuffer::Reserve(BufferLocation& loc, uint32_t size, const tchar* dbgSt
     loc = Reserve(size, dbgStr);
 }
 
-BufferLocation BasicBuffer::ReservePointer(uint32_t size, const tchar* dbgStr, ... )
+BufferLocation BasicBuffer::ReservePointer(uint32_t size, const tchar_t* dbgStr, ... )
 {
     if (size==0)
     {
@@ -587,7 +587,7 @@ BufferLocation BasicBuffer::ReservePointer(uint32_t size, const tchar* dbgStr, .
     return Reserve( size );
 }
 
-void BasicBuffer::ReservePointer(BufferLocation& loc, uint32_t size, const tchar* dbgStr, ... )
+void BasicBuffer::ReservePointer(BufferLocation& loc, uint32_t size, const tchar_t* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -605,14 +605,14 @@ void BasicBuffer::ReservePointer(BufferLocation& loc, uint32_t size, const tchar
     loc = ReservePointer(size, dbgStr);
 }
 
-BufferLocation BasicBuffer::ReserveOffset( const tchar* dbgStr, ... )
+BufferLocation BasicBuffer::ReserveOffset( const tchar_t* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_OFFSET, 4);
 
     return Reserve( 4 );
 }
 
-void BasicBuffer::ReserveOffset(BufferLocation& loc, const tchar* dbgStr, ... )
+void BasicBuffer::ReserveOffset(BufferLocation& loc, const tchar_t* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {

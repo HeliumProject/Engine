@@ -32,7 +32,7 @@ namespace Helium
 
         public:
             tstring m_CommonBaseClass;
-            Reflect::V_Element m_Elements;
+            std::vector< Reflect::ElementPtr > m_Elements;
         };
         typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
     }

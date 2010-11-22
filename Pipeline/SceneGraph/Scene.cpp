@@ -151,6 +151,29 @@ void Scene::SetColor( const Color3& color )
     }
 }
 
+void Scene::ConnectDocument( Document* document )
+{
+    document->d_Save.Set( this, &Scene::OnDocumentSave );
+
+    e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+}
+
+void Scene::DisconnectDocument( const Document* document )
+{
+    document->d_Save.Clear();
+
+    e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+}
+
+void Scene::OnDocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+    HELIUM_ASSERT( !m_Path.empty() && document->GetPath() == m_Path )
+
+    args.m_Result = Serialize();
+}
+
 bool Scene::Reload()
 {
     Reset();
@@ -209,7 +232,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     // read data
     m_Progress = 0;
-    Reflect::V_Element elements;
+    std::vector< Reflect::ElementPtr > elements;
 
     bool success = true;
 
@@ -265,7 +288,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, Sce
 
     // read data
     m_Progress = 0;
-    Reflect::V_Element elements;
+    std::vector< Reflect::ElementPtr > elements;
 
     bool success = true;
 
@@ -337,7 +360,7 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -362,8 +385,8 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     V_SceneNodeSmartPtr createdNodes;
     createdNodes.reserve( elements.size() );
     {
-        Reflect::V_Element::const_iterator itr = elements.begin();
-        Reflect::V_Element::const_iterator end = elements.end();
+        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             command->Push( ImportSceneNode( *itr, createdNodes, action, importFlags, importReflectType ) );
@@ -534,7 +557,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
 Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType )
 {
-    SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
+    SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_Name.c_str()) );
 
     SceneNodePtr sceneNode = Reflect::ObjectCast< SceneNode >( element );
 
@@ -658,7 +681,7 @@ void Scene::ArchiveException( const Reflect::ExceptionInfo& info )
 #pragma TODO( "Sub default assets?" )
 }
 
-bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes )
+bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     bool result = true;
 
@@ -756,7 +779,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
     return result;
 }
 
-void Scene::ExportSceneNode( SceneGraph::SceneNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -809,7 +832,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, Reflect::V_Element& el
     }
 }
 
-void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -855,7 +878,7 @@ void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, Reflect::V_Ele
     }
 }
 
-bool Scene::Save()
+bool Scene::Serialize()
 {
     HELIUM_ASSERT( !m_Path.empty() );
     return Export( m_Path, ExportFlags::Default );
@@ -879,7 +902,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    Reflect::V_Element spool;
+    std::vector< Reflect::ElementPtr > spool;
     result = Export( spool, args, changes );
 
     if (result)
@@ -939,7 +962,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    Reflect::V_Element spool;
+    std::vector< Reflect::ElementPtr > spool;
     result = Export( spool, args, changes );
 
     if ( result && !spool.empty() )
@@ -1794,8 +1817,7 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
     if ( args.m_Command->IsSignificant() )
     {
-#pragma TODO( "Raise an event so the Document knows this file has been modified" )
-        //m_File->HasChanged( true );
+        e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
     }
 }
 
@@ -2837,7 +2859,7 @@ Undo::CommandPtr Scene::SnapSelectedToCamera()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
+    Matrix4 m = Matrix4 ( AngleAxis( static_cast< float32_t >( HELIUM_PI ), Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2868,7 +2890,7 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
 
     if (transform)
     {
-        Matrix4 m = Matrix4 ( AngleAxis( Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
+        Matrix4 m = Matrix4 ( AngleAxis( static_cast< float32_t >( HELIUM_PI ), Vector3::BasisY ) ) * transform->GetGlobalTransform();
 
         m_View->GetCamera()->SetTransform( m );
     }

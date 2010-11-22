@@ -19,8 +19,8 @@ void Helium::CoreInitialize()
         g_InitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
         g_InitStack.Push( &SceneGraph::Initialize,  &SceneGraph::Cleanup );
 
-        g_InitStack.Push( Reflect::RegisterClassType< Project >() );
-        g_InitStack.Push( Reflect::RegisterClassType< SettingsManager >() ); 
+        g_InitStack.Push( Reflect::RegisterClassType< Project >( TXT("Project") ) );
+        g_InitStack.Push( Reflect::RegisterClassType< SettingsManager >( TXT("SettingsManager") ) ); 
     }
 }
 

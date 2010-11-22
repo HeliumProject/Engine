@@ -1,6 +1,6 @@
-#include "TypeIDSerializer.h"
-#include "ArchiveBinary.h"
-#include "ArchiveXML.h"
+#include "Foundation/Reflect/TypeIDSerializer.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -60,7 +60,7 @@ void TypeIDSerializer::Serialize(Archive& archive) const
 
             if ( type )
             {
-                xml.GetStream() << "<![CDATA[" << type->m_ShortName << "]]>";
+                xml.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
             }
 
             break;
@@ -70,7 +70,7 @@ void TypeIDSerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = binary.GetStrings().Insert( type ? type->m_ShortName : TXT("") );
+            int32_t index = binary.GetStrings().Insert( type ? type->m_Name : TXT("") );
             binary.GetStream().Write(&index); 
             break;
         }
@@ -89,7 +89,7 @@ void TypeIDSerializer::Deserialize(Archive& archive)
 
             std::streamsize size = xml.GetStream().ElementsAvailable(); 
             str.resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar*>(str.c_str()), size);
+            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
             break;
         }
 

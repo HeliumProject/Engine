@@ -5,8 +5,10 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 
+#include "Editor/App.h"
 #include "Editor/FileDialog.h"
 #include "Editor/Controls/MenuButton.h"
+#include "Editor/MainFrame.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -17,25 +19,22 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 , m_Project( NULL )
 , m_Model( NULL )
 , m_OptionsMenu( NULL )
+, m_ContextMenu( NULL )
 , m_DropTarget( NULL )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
 
-        m_AddFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileAdd ) );
-        m_AddFileButton->Enable( false );
-        //m_AddFileButton->Hide();
-
-        m_DeleteFileButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::FileDelete ) );
-        m_DeleteFileButton->Enable( false );
-        //m_DeleteFileButton->Hide();
-
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
         m_OptionsButton->Hide();
+        m_OptionsButtonStaticLine->Hide();
 
         m_ProjectManagementPanel->Layout();
+
+        m_OpenProjectPanel->Hide();
+        m_DataViewCtrl->Show();
 
         Layout();
         Thaw();
@@ -58,10 +57,20 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_OptionsButton->SetHoldDelay( 0.0f );
     m_OptionsButton->Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
-    m_OptionsButton->Enable( true );
-    m_OptionsButton->Hide();    
+    m_OptionsButton->Enable( false );
 
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
+
+    m_ContextMenu = new wxMenu();
+    {
+        wxMenuItem* addItem = m_ContextMenu->Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
+        Connect( addItem->GetId(), wxCommandEventHandler( ProjectPanel::OnAddItems ), NULL, this );
+
+        wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
+        Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
+    }
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
@@ -83,97 +92,126 @@ ProjectPanel::~ProjectPanel()
 {
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
+
+    if ( m_Model )
+    {
+        m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+        m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
+        m_Model->CloseProject();
+        m_Model = NULL;
+    }
+
+    Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 }
 
-void ProjectPanel::SetProject( Project* project, const Document* document )
+void ProjectPanel::OpenProject( Project* project, const Document* document )
 {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Clean up m_Project beforing setting new one" )
+    if ( project == m_Project )
+    {
+        return;
+    }
+
+    CloseProject();
+
+    m_Project = project;
     if ( m_Project )
     {
-        document->d_Save.Clear();
+        ProjectViewModelNode* node = NULL;
 
+        if ( !m_Model )
+        {
+            // create the model
+            m_Model = new ProjectViewModel( m_DocumentManager );
+            node = m_Model->OpenProject( project, document );
+
+            m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+            m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
+
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
+
+            // the ctrl will now hold ownership via reference count
+            m_DataViewCtrl->AssociateModel( m_Model.get() );
+        }
+        else
+        {
+            node = m_Model->OpenProject( project, document );
+        }
+
+        if ( node )
+        {
+            m_OptionsButton->Show();
+            m_OptionsButtonStaticLine->Show();
+
+            m_OptionsButton->Enable( true );
+
+            m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
+            m_ProjectNameStaticText->Enable( false );
+
+            //m_OpenProjectPanel->Hide();
+            //m_DataViewCtrl->Show();
+            Layout();
+
+#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE after usibility test" )
+#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
+            m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
+#endif
+        }
+    }
+}
+
+void ProjectPanel::CloseProject()
+{
+    if ( m_Project )
+    {
         if ( m_Model )
         {
-            m_DocumentManager->e_DocumentAdded.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-            m_DocumentManager->e_DocumentRemoved.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
-
-            m_Model = NULL;
+            m_Model->CloseProject();
         }
 
         m_Project = NULL;
     }
 
-    m_AddFileButton->Enable( false );
-    m_DeleteFileButton->Enable( false );
+    m_OptionsButtonStaticLine->Hide();
+    m_OptionsButton->Hide();
+    m_OptionsButton->Enable( false );
 
-    m_Project = project;
-    if ( m_Project )
-    {
-        m_Model = new ProjectViewModel( m_DocumentManager );
-        m_Model->SetProject( project, document );
+    m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
+    m_ProjectNameStaticText->Enable( true );
 
-        m_DocumentManager->e_DocumentAdded.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentAdded );
-        m_DocumentManager->e_DocumentRemoved.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentRemoved );
-
-        m_Model->ResetColumns();
-        m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
-        m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
-
-        // the ctrl will now hold ownership via reference count
-        m_DataViewCtrl->AssociateModel( m_Model.get() );
-
-        m_AddFileButton->Enable( true );
-    }
-
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Do we actually need to refresh?" )
-    Refresh();
+    //m_OpenProjectPanel->Show();
+    //m_DataViewCtrl->Hide();
+    Layout();
 }
 
-void ProjectPanel::OnAddFile( wxCommandEvent& event )
+void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 {
-    if ( m_Project )
+    if ( !m_Project )
     {
-        FileDialog openDlg( this, TXT( "Open" ), m_Project->a_Path.Get().Directory().c_str() );
-#pragma TODO("Set file dialog filters from Asset::AssetClass::GetExtensions")
-        //openDlg.AddFilters( ...
+        return;
+    }
 
-        if ( openDlg.ShowModal() == wxID_OK )
-        {
-            Path path( (const wxChar*)openDlg.GetPath().c_str() );
+    wxPoint point = wxGetMousePosition();
+    PopupMenu( m_ContextMenu );
+    event.Skip();
+}
 
-            Asset::AssetClassPtr asset;
-            if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
-            {
-                asset = Asset::AssetClass::LoadAssetClass( path );
-            }
-            else
-            {
-                asset = Asset::AssetClass::Create( path );
-            }
+void ProjectPanel::OnOpenProject( wxMouseEvent& event )
+{
+    FileDialog openDlg( this, TXT( "Open Project..." ) );
 
-            if ( asset.ReferencesObject() )
-            {
-                m_Project->AddPath( asset->GetSourcePath() );
-            }
-        }
+    if ( openDlg.ShowModal() == wxID_OK )
+    {
+        wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
     }
 }
 
-void ProjectPanel::OnDeleteFile( wxCommandEvent& event )
+void ProjectPanel::OnAddItems( wxCommandEvent& event )
 {
-    if ( m_Project )
-    {
-        wxDataViewItemArray selection;
-        int numSeleted = m_DataViewCtrl->GetSelections( selection );
+}
 
-        for( int index = 0; index < numSeleted; ++index )
-        {
-            if ( selection[index].IsOk() )
-            {
-                m_Model->RemoveItem( selection[index] );
-            }
-        }
-    }
+void ProjectPanel::OnDeleteItems( wxCommandEvent& event )
+{
 }
 
 void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )
@@ -206,21 +244,20 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 {
     wxDataViewItemArray selection;
     int numSeleted = m_DataViewCtrl->GetSelections( selection );
-    m_DeleteFileButton->Enable( numSeleted > 0 ? true : false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-    //Path path( args.m_Path );
+    Path path( args.m_Path );
 
-    //// it's a project file
-    //if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
-    //{
-    //    // allow user to drop a project in
-    //}
-    //else if ( m_Project )
-    //{
+    // it's a project file
+    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    {
+        // allow user to drop a project in
+    }
+    else if ( m_Project )
+    {
         wxDataViewItem item;
         wxDataViewColumn* column;
         m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
@@ -229,11 +266,11 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
         {
             args.m_DragResult = wxDragNone;
         }    
-    //}
-    //else
-    //{
-    //    args.m_DragResult = wxDragNone;
-    //}
+    }
+    else
+    {
+        args.m_DragResult = wxDragNone;
+    }
 }
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
@@ -243,11 +280,11 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     // it's a project file
     if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
     {
-#pragma TODO( "Rachel WIP: "__FUNCTION__" - Close the current project and open the dropped one")
-        //(MainFrame*)GetParent()->OpenProject( path );
+        wxGetApp().GetFrame()->OpenProject( path );
     }
     else if ( m_Project )
     {
+#pragma TODO( "Handle opening a scene" )
         Asset::AssetClassPtr asset;
         if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
         {
@@ -261,6 +298,12 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         if ( asset.ReferencesObject() )
         {
             m_Project->AddPath( asset->GetSourcePath() );
+
+            DocumentPtr document = new Document( asset->GetSourcePath() );
+
+            tstring error;
+            bool result = m_DocumentManager->OpenDocument( document, error );
+            HELIUM_ASSERT( result );
         }
     }
     else

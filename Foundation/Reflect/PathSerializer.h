@@ -34,7 +34,5 @@ namespace Helium
         };
 
         typedef Helium::SmartPtr< PathSerializer > PathSerializerPtr;
-
-        REFLECT_SPECIALIZE_SERIALIZER( PathSerializer );
     }
 }

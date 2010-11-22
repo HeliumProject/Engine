@@ -33,7 +33,7 @@ void FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args 
 
     if ( saveDlg.ShowModal() == wxID_OK )
     {
-        path.Set( static_cast<const tchar*>( saveDlg.GetPath().c_str() ) );
+        path.Set( saveDlg.GetFilePath() );
     }
 
     args.m_Result = path;

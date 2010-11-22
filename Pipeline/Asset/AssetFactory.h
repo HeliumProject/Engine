@@ -5,6 +5,7 @@
 #include "Platform/Types.h"
 
 #include "Foundation/File/Path.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 #include <set>
 
@@ -22,7 +23,7 @@ namespace Helium
             {
             }
 
-            virtual Helium::SmartPtr< class AssetClass > Create( const Helium::Path& path ) = 0;
+            virtual Helium::StrongPtr< class AssetClass > Create( const Helium::Path& path ) = 0;
 
             const std::set< tstring >& GetExtensions() const
             {

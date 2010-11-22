@@ -68,7 +68,7 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
     {
         document->e_Closed.AddMethod( this, &DocumentManager::OnDocumentClosed );
 
-        e_DocumentAdded.Raise( DocumentEventArgs( document ) );
+        e_DocumentOpened.Raise( DocumentEventArgs( document ) );
 
         return true;
     }
@@ -353,7 +353,7 @@ bool DocumentManager::RemoveDocument( const DocumentPtr& document )
 
     if ( m_Documents.Remove( document ) )
     {
-        e_DocumentRemoved.Raise( DocumentEventArgs( document ) );
+        e_DocumenClosed.Raise( DocumentEventArgs( document ) );
         return true;
     }
 
@@ -507,8 +507,7 @@ bool DocumentManager::CheckOut( Document* document ) const
         return false;
     }
 
-#pragma TODO ("Rachel WIP: "__FUNCTION__" - Document CheckedOut")
-    //document->RaiseCheckedOut();
+    document->Checkout();
 
     return true;
 }

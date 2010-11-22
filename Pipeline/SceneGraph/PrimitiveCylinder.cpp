@@ -41,7 +41,7 @@ void PrimitiveCylinder::Update()
   // Wire
   //
 
-  float stepAngle = (float32_t)(Pi)*2.0f / (float32_t)(m_RadiusSteps);
+  float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_RadiusSteps);
   float stepLength = m_Length/(float32_t)(m_LengthSteps-1);
 
   for (int l=0; l<m_LengthSteps; l++)

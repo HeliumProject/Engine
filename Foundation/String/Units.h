@@ -11,7 +11,7 @@ namespace Helium
 {
     inline tstring BytesToString( uint64_t bytes )
     {
-        tchar buf[ BYTE_TO_STR_BUF_SIZE ];
+        tchar_t buf[ BYTE_TO_STR_BUF_SIZE ];
 
         if ( bytes < 1024 )
         {

@@ -1,4 +1,5 @@
-#include "SetSerializer.h"
+#include "Foundation/Reflect/SetSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -96,18 +97,18 @@ void SimpleSetSerializer<DataT, DataSer>::Clear()
 template < class DataT, class DataSer >
 int32_t SimpleSetSerializer<DataT, DataSer>::GetItemType() const
 {
-    return Reflect::GetType<DataT>();
+    return Reflect::GetSerializer<DataT>();
 }
 
 template < class DataT, class DataSer >
-void SimpleSetSerializer<DataT, DataSer>::GetItems(V_ConstSerializer& items) const
+void SimpleSetSerializer<DataT, DataSer>::GetItems(std::vector< ConstSerializerPtr >& items) const
 {
     items.resize( m_Data->size() );
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index] = Serializer::Bind( *itr, m_Instance, m_Field );
+        items[index] = static_cast< const ConstSerializerPtr& >( Serializer::Bind( *itr, m_Instance, m_Field ) );
     }
 }
 
@@ -165,7 +166,7 @@ template < class DataT, class DataSer >
 void SimpleSetSerializer<DataT, DataSer>::Serialize(Archive& archive) const
 {
     int i = 0;
-    V_Element components;
+    std::vector< ElementPtr > components;
     components.resize( m_Data->size() );
 
     {
@@ -191,8 +192,8 @@ void SimpleSetSerializer<DataT, DataSer>::Serialize(Archive& archive) const
 
     archive.Serialize(components);
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         // downcast to serializer type
@@ -209,14 +210,14 @@ void SimpleSetSerializer<DataT, DataSer>::Serialize(Archive& archive) const
 template < class DataT, class DataSer >
 void SimpleSetSerializer<DataT, DataSer>::Deserialize(Archive& archive)
 {
-    V_Element components;
+    std::vector< ElementPtr > components;
     archive.Deserialize(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
+    std::vector< ElementPtr >::iterator itr = components.begin();
+    std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         DataSer* data = ObjectCast<DataSer>(*itr);
@@ -255,7 +256,7 @@ tistream& SimpleSetSerializer<DataT, DataSer>::operator<< (tistream& stream)
     tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
     str.resize( (size_t) size);
-    stream.read( const_cast< tchar* >( str.c_str() ), size );
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
     Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

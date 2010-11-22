@@ -2,7 +2,7 @@
 
 #include "DropTarget.h"
 
-#include "Foundation/Atomic.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium
 {
@@ -17,7 +17,7 @@ namespace Helium
             {
             }
         };
-        typedef Helium::Signature< const FilteredDropTargetArgs&, Helium::AtomicRefCountBase> FilteredDropTargetSignature;
+        typedef Helium::Signature< const FilteredDropTargetArgs&, Helium::AtomicRefCountBase > FilteredDropTargetSignature;
 
         class FilteredDropTarget : public DropTarget
         {

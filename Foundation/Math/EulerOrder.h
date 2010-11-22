@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include "Utils.h"
 
 //

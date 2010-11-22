@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "Platform/Math/MathCommon.h"
 #include <float.h>
 #include "Utils.h"
 
@@ -77,9 +77,9 @@ namespace Helium
             return !(angles == v.angles && order == v.order);
         }
 
-        bool                  Valid()
+        bool                  Finite()
         {
-            return angles.Valid();
+            return angles.Finite();
         }
 
         float32_t                 	I ()

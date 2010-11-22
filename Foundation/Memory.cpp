@@ -1,11 +1,12 @@
 #include "Memory.h"
 #include "Profile.h"
-#include "Timer.h"
 #include "Log.h"
 
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
+#include "Platform/Profile.h"
 #include "Platform/Thread.h"
 #include "Platform/Assert.h"
+#include "Platform/Memory.h"
 
 #include <stdlib.h>
 
@@ -16,13 +17,20 @@
 #define abs64 labs
 #endif
 
+// Define the memory heap for the current module and include the "new"/"delete" operator implementations.
+HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Foundation );
+
+#if HELIUM_SHARED
+#include "Platform/NewDelete.h"
+#endif
+
 using namespace Helium;
 using namespace Helium::Profile; 
 
 static const uint32_t        g_MaxMemoryPools = 64;
 static MemoryPool       g_MemoryPools[g_MaxMemoryPools];
 static uint32_t              g_MemoryPoolCount = 0;
-static Helium::Thread g_MemoryReportThread;
+static Helium::CallbackThread g_MemoryReportThread;
 static bool             g_MemoryReportThreadTerminate = false;
 static bool             g_MemoryProfilingEnabled = false;
 
@@ -31,7 +39,7 @@ bool Profile::Settings::MemoryProfilingEnabled()
     return g_MemoryProfilingEnabled;
 }
 
-static const tchar* MemoryUnitConvert(float32_t& size)
+static const tchar_t* MemoryUnitConvert(float32_t& size)
 {
     if (size > 1 << 10)
     {
@@ -60,7 +68,7 @@ static const tchar* MemoryUnitConvert(float32_t& size)
     }
 }
 
-static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
+static void MemoryReportThread(void*)
 {
     uint32_t oldCount = g_MemoryPoolCount;
     float32_t oldTotal = (float32_t)Helium::GetTotalMemory();
@@ -87,20 +95,20 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
             oldTotal = total;
 
             float accountedFor = total > 0 ? ((float)profiled / (float)total * 100.f) : 0.f;
-            const tchar* profiledUnits = MemoryUnitConvert(profiled);
-            const tchar* totalUnits = MemoryUnitConvert(total);
+            const tchar_t* profiledUnits = MemoryUnitConvert(profiled);
+            const tchar_t* totalUnits = MemoryUnitConvert(total);
 
             Log::Profile( TXT( "Memory - Profiled: %.2f%s / Committed: %.2f%s / Accounted for: %.2f%%\n" ), profiled, profiledUnits, total, totalUnits, accountedFor);
 
             for (uint32_t i=0; i<g_MemoryPoolCount; i++)
             {
                 float32_t size = (float32_t)g_MemoryPools[i].m_Size;
-                const tchar* sizeUnits = MemoryUnitConvert( size );
+                const tchar_t* sizeUnits = MemoryUnitConvert( size );
 
                 float32_t delta = (float32_t)abs64(g_MemoryPools[i].m_Size - g_MemoryPools[i].m_Previous);
-                const tchar* deltaUnits = MemoryUnitConvert( delta );
+                const tchar_t* deltaUnits = MemoryUnitConvert( delta );
 
-                tchar sign = ((int64_t)g_MemoryPools[i].m_Size - (int64_t)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
+                tchar_t sign = ((int64_t)g_MemoryPools[i].m_Size - (int64_t)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
 
                 Log::Profile( TXT( " %-30s: [%7d] %.2f%s (%c%.2f%s)\n" ), g_MemoryPools[i].m_Name, g_MemoryPools[i].m_Count, size, sizeUnits, sign, delta, deltaUnits );
 
@@ -108,15 +116,13 @@ static Helium::Thread::Return MemoryReportThread(Helium::Thread::Param)
             }
         }
 
-        Timer timer;
+        SimpleTimer timer;
 
         while (timer.Elapsed() < 5000 && !g_MemoryReportThreadTerminate)
         {
             Helium::Sleep(10);
         }
     }
-
-    return Helium::Thread::Return(0);
 }
 
 uint32_t Memory::s_InitCount = 0;
@@ -129,7 +135,7 @@ bool Memory::Initialize()
         g_MemoryProfilingEnabled = true;
         g_MemoryReportThreadTerminate = false;
 
-        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, "Profile Memory Report Thread" ))
+        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, TXT( "Profile Memory Report Thread" ) ))
         {
             HELIUM_BREAK();
         }
@@ -145,13 +151,13 @@ void Memory::Cleanup()
     {
         g_MemoryReportThreadTerminate = true;
 
-        g_MemoryReportThread.Wait();
+        g_MemoryReportThread.Join();
         g_MemoryProfilingEnabled = false;
     }
 }
 
 //static
-MemoryPoolHandle Memory::CreatePool(const tchar* name)
+MemoryPoolHandle Memory::CreatePool(const tchar_t* name)
 {
     MemoryPoolHandle pool;
 

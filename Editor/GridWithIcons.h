@@ -2,8 +2,6 @@
 
 #include "Grid.h"
 
-#include "Platform/Compiler.h"
-
 namespace Helium
 {
     namespace Editor

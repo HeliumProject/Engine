@@ -16,9 +16,9 @@ namespace Helium
         class Container;
         class Canvas;
 
-        const static tchar ATTR_VALUE_TRUE[]    = TXT( "true" );
-        const static tchar ATTR_VALUE_FALSE[]   = TXT( "false" );
-        const static tchar ATTR_HELPTEXT[]      = TXT( "helptext" );
+        const static tchar_t ATTR_VALUE_TRUE[]    = TXT( "true" );
+        const static tchar_t ATTR_VALUE_FALSE[]   = TXT( "false" );
+        const static tchar_t ATTR_HELPTEXT[]      = TXT( "helptext" );
 
         //
         // Event Args and Signatures
@@ -90,7 +90,7 @@ namespace Helium
         protected:
             Control* m_Control;
         };
-        typedef Helium::SmartPtr<ClientData> ClientDataPtr;
+        typedef Helium::StrongPtr<ClientData> ClientDataPtr;
 
         //
         // Widget, a base class for a GUI system implementation-specific Widget classes
@@ -123,7 +123,7 @@ namespace Helium
         protected:
             Inspect::Control* m_Control;
         };
-        typedef Helium::SmartPtr<Widget> WidgetPtr;
+        typedef Helium::StrongPtr<Widget> WidgetPtr;
 
         //
         // Control, a class that is binadable to data and controls the state and appearance of a widget
@@ -383,7 +383,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<Control> ControlPtr;
+        typedef Helium::StrongPtr<Control> ControlPtr;
         typedef std::vector<ControlPtr> V_Control;
 
         template<class T>

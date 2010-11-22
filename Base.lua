@@ -36,6 +36,30 @@ Helium.Publish = function( files )
 	end
 end
 
+-- Pre-build script execution.
+Helium.Prebuild = function()
+
+	local commands =
+	{
+		"python Build/JobDefParser.py JobDefinitions . .",
+		"python Build/TypeParser.py . .",
+	}
+
+	local result = 0
+
+	for i, commandString in ipairs( commands ) do
+		result = os.execute( commandString )
+		if result ~= 0 then
+			break
+		end
+	end
+
+	if result ~= 0 then
+		error( "An error occurred processing the pre-build scripts." )
+	end
+
+end
+
 Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
@@ -54,20 +78,35 @@ Helium.DoDefaultSolutionSettings = function()
 		"Release",
 	}
 	
-	configuration {}
+	defines
+	{
+		"XML_STATIC=1",
+	}
+
+	flags
+	{
+		"EnableSSE2",
+		"NoMinimalRebuild",
+	}
+
+	configuration "x64"
 		defines
 		{
-			"XML_STATIC=1",
+			-- Explicitly define "__SSE__" and "__SSE2__" on x86-64 platforms, as Visual C++ does not define them automatically.
+			"__SSE__",
+			"__SSE2__",
 		}
-		flags
+
+	configuration "no-unicode"
+		defines
 		{
-			"EnableSSE2",
-			"NoMinimalRebuild",
+			"HELIUM_UNICODE=0",
 		}
 	
 	configuration "not no-unicode"
 		defines
 		{
+			"HELIUM_UNICODE=1",
 			"UNICODE=1",
 			"LITESQL_UNICODE=1",
 			"XML_UNICODE_WCHAR_T=1",
@@ -92,12 +131,16 @@ Helium.DoDefaultSolutionSettings = function()
 			"_WIN32",
 			"WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
+			"_CRT_NON_CONFORMING_SWPRINTFS",
 		}
 
 	configuration "Debug"
 		defines
 		{
+			"HELIUM_DEBUG=1",
 			"_DEBUG",
+			"HELIUM_SHARED=1",
+			"TBB_USE_DEBUG=1",
 		}
 		flags
 		{
@@ -105,32 +148,44 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		
 	configuration "Intermediate"
+		defines
+		{
+			"HELIUM_INTERMEDIATE=1",
+			"HELIUM_STATIC=1",
+		}
 		flags
 		{
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 			"Symbols",
 		}
 		
 	configuration "Profile"
 		defines
 		{
+			"HELIUM_PROFILE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration "Release"
 		defines
 		{
+			"HELIUM_RELEASE=1",
 			"NDEBUG",
+			"HELIUM_STATIC=1",
 		}
 		flags
 		{
 			"NoFramePointer",
 			"OptimizeSpeed",
+			"NoEditAndContinue",
 		}
 
 	configuration { "windows", "Debug" }
@@ -161,10 +216,12 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
-	includedirs
+	links
 	{
-		"Dependencies/boost",
-		"Dependencies/tbb/include",
+		"Expat",
+		"nvtt",
+		"png",
+		"zlib",
 	}
 
 	configuration "no-unicode"
@@ -185,7 +242,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_DEBUG=1",
 			"L_EDITOR=1",
 			"L_SHARED=1",
-			"TBB_USE_DEBUG=1",
 		}
 
 	configuration "Intermediate"
@@ -210,6 +266,17 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_STATIC=1",
 		}
 
+	configuration "windows"
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"dxguid",
+			"d3dcompiler",
+			"wininet",
+		}
+
 	configuration { "windows", "Debug" }
 		links
 		{
@@ -217,28 +284,42 @@ Helium.DoDefaultLunarProjectSettings = function()
 		}
 
 	configuration { "windows", "x32", "Debug" }
-		libdirs
+		links
 		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+			"fbxsdk_md2008d",
 		}
 
 	configuration { "windows", "x32", "not Debug" }
-		libdirs
+		links
 		{
-			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+			"fbxsdk_md2008",
 		}
 
 	configuration { "windows", "x64", "Debug" }
-		libdirs
+		links
 		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+			"fbxsdk_md2008_amd64d",
 		}
 
 	configuration { "windows", "x64", "not Debug" }
-		libdirs
+		links
 		{
-			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+			"fbxsdk_md2008_amd64",
 		}
+
+	if haveGranny then
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
 
 end
 
@@ -247,7 +328,7 @@ Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleN
 
 	defines
 	{
-		"L_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
 	files

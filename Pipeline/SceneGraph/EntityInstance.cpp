@@ -33,7 +33,7 @@ void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp
 
 void EntityInstance::InitializeType()
 {
-    Reflect::RegisterClassType< EntityInstance >( TXT( "EntityInstance" ) );
+    Reflect::RegisterClassType< EntityInstance >( TXT( "SceneGraph::EntityInstance" ) );
     PropertiesGenerator::InitializePanel( TXT( "EntityInstance" ), CreatePanelSignature::Delegate( &EntityInstance::CreatePanel ) );
 }
 
@@ -110,7 +110,7 @@ const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
             {
                 const ComponentPtr &classAttr = entityClass->GetComponent( typeID );
 
-                if ( classAttr == NULL )
+                if ( !classAttr.ReferencesObject() )
                 {
                     // Fan-fucking-tastic
                     const_cast<EntityInstance*>(this)->RemoveComponent( typeID );

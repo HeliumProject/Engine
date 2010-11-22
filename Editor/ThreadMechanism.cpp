@@ -11,7 +11,7 @@ using namespace Helium::Editor;
 /////////////////////////////////////////////////////////////////////////////
 /// DummyWindow
 /////////////////////////////////////////////////////////////////////////////
-static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
+static const tchar_t* s_DummyWindowName = TXT( "DummyWindowThread" );
 
 // Custom wxEventTypes for the Thread to fire.
 DEFINE_EVENT_TYPE( nocEVT_BEGIN_THREAD )
@@ -21,7 +21,7 @@ DEFINE_EVENT_TYPE( nocEVT_END_THREAD )
 class DummyWindow : public wxFrame
 {
 public:
-    DummyWindow( const tchar* name = NULL )
+    DummyWindow( const tchar_t* name = NULL )
         : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
     {
         Hide();
@@ -137,13 +137,15 @@ ThreadMechanism::ThreadMechanism( const tstring& evenPrefix )
 : m_StopThread( true )
 , m_CurrentThreadID( -1 )
 , m_DummyWindow( NULL )
+, m_ThreadInitializedEvent( Condition::RESET_MODE_MANUAL, true )
+, m_EndThreadEvent( Condition::RESET_MODE_MANUAL, true )
 {
-    tstring eventName;
-    eventName = evenPrefix + TXT( "BeginEvent" );
-    m_ThreadInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
+    //tstring eventName;
+    //eventName = evenPrefix + TXT( "BeginEvent" );
+    //m_ThreadInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 
-    eventName = evenPrefix + TXT( "EndEvent" );
-    m_EndThreadEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
+    //eventName = evenPrefix + TXT( "EndEvent" );
+    //m_EndThreadEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,8 +153,6 @@ ThreadMechanism::~ThreadMechanism()
 {
     // wait for thread to complete
     StopThread();
-    ::CloseHandle( m_ThreadInitializedEvent );
-    ::CloseHandle( m_EndThreadEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,18 +163,18 @@ ThreadMechanism::~ThreadMechanism()
 //
 bool ThreadMechanism::StartThread()
 {
-    Helium::TakeMutex beginMutex( m_BeginThreadMutex );
+    Helium::MutexScopeLock beginMutex( m_BeginThreadMutex );
 
     // kill current thread, if any
     StopThread();
 
-    Helium::TakeMutex resultsMutex( m_UpdateMutex );
+    Helium::MutexScopeLock resultsMutex( m_UpdateMutex );
 
     // Initialize thread data here
     InitData();
 
     // reset event to lockout new threads from starting
-    ::ResetEvent( m_ThreadInitializedEvent );
+    m_ThreadInitializedEvent.Reset();
     m_StopThread = false;
 
     // increment the m_CurrentThreadID for the next thread
@@ -205,11 +205,11 @@ bool ThreadMechanism::StartThread()
 void ThreadMechanism::StopThread()
 {
     // can't cancel a thread until this is initialized and m_ThreadInitializedEvent is set
-    ::WaitForSingleObject( m_ThreadInitializedEvent, INFINITE );
+    m_ThreadInitializedEvent.Wait();
 
     // Stop and wait for the current thread
     m_StopThread = true;
-    ::WaitForSingleObject( m_EndThreadEvent, INFINITE );
+    m_EndThreadEvent.Wait();
 
     if ( m_DummyWindow )
     {
@@ -231,14 +231,14 @@ void ThreadMechanism::StopThread()
 //
 void ThreadMechanism::ThreadEnter( int32_t threadID )
 {
-    ::ResetEvent( m_EndThreadEvent );
+    m_EndThreadEvent.Reset();
 
     wxCommandEvent evt( nocEVT_BEGIN_THREAD, m_DummyWindow->GetId() );
     evt.SetInt( threadID );
     wxPostEvent( m_DummyWindow, evt );
 
     // Main thread is deadlocked until Thread sets this event
-    ::SetEvent( m_ThreadInitializedEvent );
+    m_ThreadInitializedEvent.Signal();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,7 +277,7 @@ void ThreadMechanism::ThreadLeave( int32_t threadID )
     }
 
     // Main thread is deadlocked until Thread sets this event
-    ::SetEvent( m_EndThreadEvent );
+    m_EndThreadEvent.Signal();
 }
 
 

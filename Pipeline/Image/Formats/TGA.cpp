@@ -322,7 +322,7 @@ Image* Image::LoadTGA(const void* filedata, bool convert_to_linear)
 
 
 //-----------------------------------------------------------------------------
-bool Image::WriteTGA(const tchar* fname, uint32_t face, bool convert_to_srgb) const
+bool Image::WriteTGA(const tchar_t* fname, uint32_t face, bool convert_to_srgb) const
 {
   const float32_t* r = GetFacePtr(face, R);
 

@@ -13,7 +13,7 @@ namespace Helium
         class FOUNDATION_API ElementArraySerializer : public ContainerSerializer
         {
         public:
-            typedef V_Element DataType;
+            typedef std::vector< ElementPtr > DataType;
             Serializer::DataPtr<DataType> m_Data;
 
             REFLECT_DECLARE_CLASS( ElementArraySerializer, ContainerSerializer )
@@ -35,7 +35,5 @@ namespace Helium
             virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
         };
         typedef Helium::SmartPtr< ElementArraySerializer > ElementArraySerializerPtr;
-
-        REFLECT_SPECIALIZE_SERIALIZER( ElementArraySerializer );
     }
 }

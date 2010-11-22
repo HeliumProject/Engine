@@ -20,7 +20,7 @@ namespace Helium
             Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );
             virtual ~Frame();
 
-            virtual void SetHelpText( const tchar* text );
+            virtual void SetHelpText( const tchar_t* text );
 
             // Undo/redo support
             virtual bool CanUndo();

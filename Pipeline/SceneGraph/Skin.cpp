@@ -28,8 +28,8 @@ void Skin::EnumerateClass( Reflect::Compositor<Skin>& comp )
 
 void Skin::InitializeType()
 {
-    Reflect::RegisterClassType< Influence >();
-    Reflect::RegisterClassType< Skin >();
+    Reflect::RegisterClassType< Influence >( TXT("SceneGraph::Influence") );
+    Reflect::RegisterClassType< Skin >( TXT("SceneGraph::Skin") );
 }
 
 void Skin::CleanupType()

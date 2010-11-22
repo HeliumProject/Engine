@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<joblist>
+
+    <namespace name="Lunar" />
+    <moduletokenprefix name="LUNAR_" />
+
+    <inline file="Framework/WorldManagerUpdate.inl" />
+
+    <forwarddeclare namespace="Lunar" type="class Entity" />
+    <forwarddeclare namespace="Lunar" type="HELIUM_DECLARE_PTR( World )" />
+
+    <job name="WorldManagerUpdate" description="WorldManager update job launcher.">
+        <templateparam name="EntityUpdateJobType" />
+        <parameters>
+            <input name="pspWorlds" type="const WorldPtr*" description="Array of worlds to update." />
+            <input name="worldCount" type="size_t" description="Number of worlds in the given array." />
+            <input name="startLayerIndex" type="size_t" default="0" description="Index of the layer from which to start spawning update jobs." />
+            <input name="startEntityIndex" type="size_t" default="0" description="Index of the entity from which to start spawning update jobs." />
+        </parameters>
+    </job>
+    <job name="EntityPreUpdate" description="Read-only entity update (entity can only read data, can access other entities).">
+        <parameters>
+            <input name="pEntity" type="Entity*" description="Entity to update." />
+        </parameters>
+    </job>
+    <job name="EntityPostUpdate" description="Entity resolve update (entity can only read and write its own data, cannot access other entities).">
+        <parameters>
+            <input name="pEntity" type="Entity*" description="Entity to update." />
+        </parameters>
+    </job>
+
+</joblist>

@@ -36,7 +36,7 @@ namespace Helium
             static void EnumerateClass( Reflect::Compositor<EntityManifest>& comp );
         };
 
-        typedef Helium::SmartPtr<EntityManifest> EntityManifestPtr;
+        typedef Helium::StrongPtr<EntityManifest> EntityManifestPtr;
         typedef std::vector<EntityManifestPtr> V_EntityManifest;
     }
 }

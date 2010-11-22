@@ -38,7 +38,7 @@ std::stack< ContainerPtr >& ContainerStackPointer::Get()
     if ( !pointer )
     {
         static Helium::Mutex mutex;
-        Helium::TakeMutex lock ( mutex );
+        Helium::MutexScopeLock lock ( mutex );
         SetPointer( pointer = new std::stack< ContainerPtr > );
         s_Stacks.insert( std::multimap< uint32_t, std::stack< ContainerPtr >* >::value_type( m_Key, pointer ) );
     }

@@ -1,7 +1,7 @@
-#include "SimpleSerializer.h"
-#include "ArchiveBinary.h"
-#include "ArchiveXML.h"
-
+#include "Foundation/Reflect/SimpleSerializer.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Memory/Endian.h"
 
 using namespace Helium;
@@ -77,7 +77,7 @@ void SimpleSerializer<T>::Serialize(Archive& archive) const
 }
 
 template <class T>
-void SimpleSerializer<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
+void SimpleSerializer<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
 {
     T val = m_Data.Get();
 
@@ -172,7 +172,7 @@ void StringSerializer::Deserialize(Archive& archive)
 
             std::streamsize size = xml.GetStream().ElementsAvailable(); 
             m_Data->resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar*>(m_Data->c_str()), size);
+            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(m_Data->c_str()), size);
             break;
         }
 
@@ -201,7 +201,7 @@ tistream& StringSerializer::operator<< (tistream& stream)
 {
     std::streamsize size = stream.rdbuf()->in_avail();
     m_Data->resize( (size_t) size);
-    stream.read(const_cast<tchar*>(m_Data.Get().c_str()), size);
+    stream.read(const_cast<tchar_t*>(m_Data.Get().c_str()), size);
 
     return stream;
 }

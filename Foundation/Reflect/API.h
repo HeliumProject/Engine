@@ -1,25 +1,10 @@
 #pragma once
 
-#include <vector>
+#include "Platform/Platform.h"
 
-
-//
-// Platform Settings
-//
-
-// sanity check code generation settings
-#include "Platform/Compiler.h"
-
-// smartpointer system
-#include "Foundation/Memory/SmartPtr.h"
-
-
-//
-// Profile Settings
-//
-
-// profile interface, where the global switch is
+#include "Foundation/API.h"
 #include "Foundation/Profile.h"
+#include "Foundation/Memory/ReferenceCounting.h"
 
 // tracks profile data in reflect only
 //#define REFLECT_PROFILE
@@ -37,31 +22,28 @@
 #define REFLECT_SCOPE_TIMER_INST(__Str)
 #endif
 
-
-//
-// Top Level Forwards
-//
 namespace Helium
 {
     namespace Reflect
     {
+        class Type;
+        class Composite;
+        class Structure;
+        class Class;
+        class Enumeration;
+        class Visitor;
+
         class Object;
-        typedef Helium::SmartPtr<Object> ObjectPtr;
-        typedef std::vector<ObjectPtr> V_Object;
-        typedef Helium::SmartPtr<const Object> ConstObjectPtr;
-        typedef std::vector<ConstObjectPtr> V_ConstObject;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
         class Element;
-        typedef Helium::SmartPtr<Element> ElementPtr;
-        typedef std::vector<ElementPtr> V_Element;
-        typedef Helium::SmartPtr<const Element> ConstElementPtr;
-        typedef std::vector<ConstElementPtr> V_ConstElement;
+        typedef Helium::StrongPtr<Element> ElementPtr;
+        typedef Helium::StrongPtr<const Element> ConstElementPtr;
 
         class Serializer;
-        typedef Helium::SmartPtr<Serializer> SerializerPtr;
-        typedef std::vector<SerializerPtr> V_Serializer;
-        typedef Helium::SmartPtr<const Serializer> ConstSerializerPtr;
-        typedef std::vector<ConstSerializerPtr> V_ConstSerializer;
+        typedef Helium::StrongPtr<Serializer> SerializerPtr;
+        typedef Helium::StrongPtr<const Serializer> ConstSerializerPtr;
 
         // function type for creating object instances
         typedef Object* (*CreateObjectFunc)();
@@ -90,3 +72,115 @@ namespace Helium
 
 // track the create/delete stacks of tracked objects
 //#define REFLECT_OBJECT_STACK_TRACKING
+
+//
+// Internal Macros
+//
+
+// declares creator for constructable types
+#define _REFLECT_DECLARE_CREATOR( __Class ) \
+public: \
+static Reflect::Object* CreateObject() { return new __Class; }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_CLASS( __Class, __Base ) \
+public: \
+typedef __Base Base; \
+typedef __Class This; \
+virtual int32_t GetType() const HELIUM_OVERRIDE; \
+virtual bool HasType(int32_t id) const HELIUM_OVERRIDE; \
+virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
+static Helium::Reflect::Class* CreateClass( const tstring& name ); \
+static const Helium::Reflect::Type* s_Type; \
+static const Helium::Reflect::Class* s_Class;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_CLASS( __Class, __Creator ) \
+int32_t __Class::GetType() const \
+{ \
+    return s_Class->m_TypeID; \
+} \
+\
+bool __Class::HasType(int32_t id) const \
+{ \
+    return s_Class->m_TypeID == id || __Class::Base::HasType(id); \
+} \
+\
+const Helium::Reflect::Class* __Class::GetClass() const \
+{ \
+    return s_Class; \
+} \
+\
+Helium::Reflect::Class* __Class::CreateClass( const tstring& name ) \
+{ \
+    HELIUM_ASSERT( s_Class == NULL ); \
+    HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
+    Reflect::Class* type = Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
+    s_Type = s_Class = type; \
+    return type; \
+} \
+const Helium::Reflect::Type* __Class::s_Type = NULL; \
+const Helium::Reflect::Class* __Class::s_Class = NULL;
+
+// declares type checking functions
+#define _REFLECT_DECLARE_ENUMERATION( __Enumeration ) \
+public: \
+Enum m_Value; \
+__Enumeration() : m_Value() {} \
+__Enumeration( const __Enumeration& e ) : m_Value( e.m_Value ) {} \
+__Enumeration( const Enum& e ) : m_Value( e ) {} \
+__Enumeration( intptr_t e ) : m_Value( (Enum)e ) {} \
+operator intptr_t() const { return (size_t)m_Value; } \
+static Helium::Reflect::Enumeration* CreateEnumeration( const tstring& name ); \
+static const Helium::Reflect::Type* s_Type; \
+static const Helium::Reflect::Enumeration* s_Enumeration;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_ENUMERATION( __Enumeration ) \
+Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( const tstring& name ) \
+{ \
+    HELIUM_ASSERT( s_Enumeration == NULL ); \
+    Reflect::Enumeration* type = Reflect::Enumeration::Create<__Enumeration>(name); \
+    s_Type = s_Enumeration = type; \
+    return type; \
+} \
+const Helium::Reflect::Type* __Enumeration::s_Type = NULL; \
+const Helium::Reflect::Enumeration* __Enumeration::s_Enumeration = NULL;
+
+//
+// User Macros
+//
+
+// declares an HELIUM_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
+#define REFLECT_DECLARE_ABSTRACT(__Class, __Base) \
+    _REFLECT_DECLARE_CLASS(__Class, __Base)
+
+// defines the HELIUM_ABSTRACT element class
+#define REFLECT_DEFINE_ABSTRACT(__Class) \
+    _REFLECT_DEFINE_CLASS(__Class, NULL)
+
+// declares a full element with creator
+#define REFLECT_DECLARE_CLASS(__Class, __Base) \
+    _REFLECT_DECLARE_CLASS(__Class, __Base) \
+    _REFLECT_DECLARE_CREATOR(__Class)
+
+// defines a full element
+#define REFLECT_DEFINE_CLASS(__Class) \
+    _REFLECT_DEFINE_CLASS(__Class, &__Class::CreateObject)
+
+// alias a type name
+#define REFLECT_ALIAS_CLASS(__Class, __Alias) \
+    Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<__Class>(), __Alias);
+
+// unalias a type name
+#define REFLECT_UNALIAS_CLASS(__Class, __Alias) \
+    Reflect::Registry::GetInstance()->UnAliasType( Reflect::GetClass<__Class>(), __Alias);
+
+// declares an enumeration
+#define REFLECT_DECLARE_ENUMERATION(__Class) \
+    _REFLECT_DECLARE_ENUMERATION(__Class)
+
+// defines an enumeration
+#define REFLECT_DEFINE_ENUMERATION(__Class) \
+    _REFLECT_DEFINE_ENUMERATION(__Class)
+

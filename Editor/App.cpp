@@ -70,7 +70,7 @@ using namespace Helium::CommandLine;
 
 static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
-    static std::set<uintptr> disabled;
+    static std::set<uintptr_t> disabled;
     static bool skipAll = false;
     bool skip = skipAll;
 
@@ -96,10 +96,10 @@ static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
             message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
             message += TXT("\n\nWhat do you wish to do?");
 
-            const tchar* nothing = TXT( "Let the OS handle this as an exception" );
-            const tchar* thisOnce = TXT( "Skip this break point once" );
-            const tchar* thisDisable = TXT( "Skip this break point and disable it" );
-            const tchar* allDisable = TXT( "Skip all break points" );
+            const tchar_t* nothing = TXT( "Let the OS handle this as an exception" );
+            const tchar_t* thisOnce = TXT( "Skip this break point once" );
+            const tchar_t* thisDisable = TXT( "Skip this break point and disable it" );
+            const tchar_t* allDisable = TXT( "Skip all break points" );
 
             wxArrayString choices;
             choices.Add(nothing);
@@ -186,7 +186,7 @@ bool App::OnInit()
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    tchar module[MAX_PATH];
+    tchar_t module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
     Helium::Path exePath( module );
@@ -219,38 +219,35 @@ bool App::OnInit()
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // inspect
-    m_InitializerStack.Push( Reflect::RegisterClassType< Widget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< LabelWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ValueWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< SliderWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ChoiceWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< CheckBoxWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ColorPickerWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ListWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ButtonWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< FileDialogButtonWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< TreeCanvasWidget >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvas >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< StripCanvasWidget >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Widget >( TXT("Editor::Widget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::LabelWidget >( TXT("Editor::LabelWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ValueWidget >( TXT("Editor::ValueWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::SliderWidget >( TXT("Editor::SliderWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ChoiceWidget >( TXT("Editor::ChoiceWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::CheckBoxWidget >( TXT("Editor::CheckBoxWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ColorPickerWidget >( TXT("Editor::ColorPickerWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ListWidget >( TXT("Editor::ListWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ButtonWidget >(TXT("Editor::ButtonWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::FileDialogButtonWidget >( TXT("Editor::FileDialogButtonWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >( TXT("Editor::Canvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvas >( TXT("Editor::TreeCanvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvasWidget >( TXT("Editor::TreeCanvasWidget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvas >( TXT("Editor::StripCanvas") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvasWidget >( TXT("Editor::StripCanvasWidget") ) );
 
     // clipboard
-    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >() );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >() );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >( TXT("Editor::ReflectClipboardData") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >( TXT("Editor::ClipboardDataWrapper") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >( TXT("Editor::ClipboardFileList") ) );
 
     // vault
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::SearchTypes::SearchType>( &Editor::SearchTypes::SearchTypesEnumerateEnum, TXT( "SearchType" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType<VaultSearchQuery>( TXT( "VaultSearchQuery" ) ) );
-
-    // settings
-    m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
-    
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::VaultViewModes::VaultViewMode>( &Editor::VaultViewModes::VaultViewModeEnumerateEnum, TXT( "VaultViewMode" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::SearchType >( TXT( "Editor::SearchType" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSearchQuery >( TXT( "Editor::VaultSearchQuery" ) ) );   
+    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
 
-    m_InitializerStack.Push( Reflect::RegisterEnumType<Editor::ProjectMenuIDs::ProjectMenuID>( &Editor::ProjectMenuIDs::ProjectMenuIDsEnumerateEnum, TXT( "ProjectMenuID" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::ProjectMenuID >( TXT( "Editor::ProjectMenuID" ) ) );
 
     LoadSettings();
 
@@ -351,7 +348,7 @@ void App::LoadSettings()
 }
 
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")
-static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* pCmdLine, int nCmdShow)
+static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar_t* pCmdLine, int nCmdShow)
 {
     std::string cmdLine;
     Helium::ConvertString( pCmdLine, cmdLine );
@@ -359,7 +356,7 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* p
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-int Main ( int argc, const tchar** argv )
+int Main ( int argc, const tchar_t** argv )
 {
     // print physical memory
     MEMORYSTATUSEX status;
@@ -509,7 +506,7 @@ int Main ( int argc, const tchar** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int _tmain( int argc, const tchar** argv )
+int _tmain( int argc, const tchar_t** argv )
 {
     Helium::InitializerStack initializerStack( true );
 

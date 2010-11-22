@@ -26,7 +26,7 @@ namespace Helium
 
         typedef Helium::Signature< const InstanceTypeChangeArgs& > InstanceTypeChangeSignature;
 
-        class InstanceType : public SceneGraph::HierarchyNodeType
+        class PIPELINE_API InstanceType : public SceneGraph::HierarchyNodeType
         {
         protected:
             // material that describes the color settings of the configuration

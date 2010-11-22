@@ -15,7 +15,7 @@ void Selection::Refresh()
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    Timer timer;
+    SimpleTimer timer;
 
     m_SelectionChanging.Raise(m_Items);
 
@@ -40,7 +40,7 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
 
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    Timer timer;
+    SimpleTimer timer;
 
     Undo::CommandPtr command;
 
@@ -91,7 +91,7 @@ Undo::CommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const Sel
 
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    Timer timer;
+    SimpleTimer timer;
 
     OS_SceneNodeDumbPtr selectableItems;
 
@@ -166,7 +166,7 @@ Undo::CommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const Sel
 
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    Timer timer;
+    SimpleTimer timer;
 
     std::vector<SceneNode*> added;
     OS_SceneNodeDumbPtr temp = m_Items;
@@ -233,7 +233,7 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SceneNodeDumbPtr& items, const 
 
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
-    Timer timer;
+    SimpleTimer timer;
 
     std::vector<SceneNode*> removed;
     OS_SceneNodeDumbPtr temp = m_Items;

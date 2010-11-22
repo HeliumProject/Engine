@@ -43,7 +43,7 @@ namespace Helium
             virtual bool Set(const Serializer* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Serializer* s) const HELIUM_OVERRIDE;
 
-            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const HELIUM_OVERRIDE;
+            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const HELIUM_OVERRIDE;
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
@@ -51,30 +51,30 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream);
         };
 
-        typedef SimpleSerializer<tstring> StringSerializer;                       REFLECT_SPECIALIZE_SERIALIZER( StringSerializer );
-        typedef SimpleSerializer<bool> BoolSerializer;                            REFLECT_SPECIALIZE_SERIALIZER( BoolSerializer );
-        typedef SimpleSerializer<uint8_t> U8Serializer;                                REFLECT_SPECIALIZE_SERIALIZER( U8Serializer );
-        typedef SimpleSerializer<int8_t> I8Serializer;                                REFLECT_SPECIALIZE_SERIALIZER( I8Serializer );
-        typedef SimpleSerializer<uint16_t> U16Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( U16Serializer );
-        typedef SimpleSerializer<int16_t> I16Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( I16Serializer );
-        typedef SimpleSerializer<uint32_t> U32Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( U32Serializer );
-        typedef SimpleSerializer<int32_t> I32Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( I32Serializer );
-        typedef SimpleSerializer<uint64_t> U64Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( U64Serializer );
-        typedef SimpleSerializer<int64_t> I64Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( I64Serializer );
-        typedef SimpleSerializer<float32_t> F32Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( F32Serializer );
-        typedef SimpleSerializer<float64_t> F64Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( F64Serializer );
-        typedef SimpleSerializer<Helium::GUID> GUIDSerializer;                 REFLECT_SPECIALIZE_SERIALIZER( GUIDSerializer );
-        typedef SimpleSerializer<Helium::TUID> TUIDSerializer;                 REFLECT_SPECIALIZE_SERIALIZER( TUIDSerializer );
+        typedef SimpleSerializer<tstring> StringSerializer;
+        typedef SimpleSerializer<bool> BoolSerializer;
+        typedef SimpleSerializer<uint8_t> U8Serializer;
+        typedef SimpleSerializer<int8_t> I8Serializer;
+        typedef SimpleSerializer<uint16_t> U16Serializer;
+        typedef SimpleSerializer<int16_t> I16Serializer;
+        typedef SimpleSerializer<uint32_t> U32Serializer;
+        typedef SimpleSerializer<int32_t> I32Serializer;
+        typedef SimpleSerializer<uint64_t> U64Serializer;
+        typedef SimpleSerializer<int64_t> I64Serializer;
+        typedef SimpleSerializer<float32_t> F32Serializer;
+        typedef SimpleSerializer<float64_t> F64Serializer;
+        typedef SimpleSerializer<Helium::GUID> GUIDSerializer;
+        typedef SimpleSerializer<Helium::TUID> TUIDSerializer;
 
-        typedef SimpleSerializer<Vector2> Vector2Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector2Serializer );
-        typedef SimpleSerializer<Vector3> Vector3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector3Serializer );
-        typedef SimpleSerializer<Vector4> Vector4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector4Serializer );
-        typedef SimpleSerializer<Matrix3> Matrix3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix3Serializer );
-        typedef SimpleSerializer<Matrix4> Matrix4Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Matrix4Serializer );
+        typedef SimpleSerializer<Vector2> Vector2Serializer;
+        typedef SimpleSerializer<Vector3> Vector3Serializer;
+        typedef SimpleSerializer<Vector4> Vector4Serializer;
+        typedef SimpleSerializer<Matrix3> Matrix3Serializer;
+        typedef SimpleSerializer<Matrix4> Matrix4Serializer;
 
-        typedef SimpleSerializer<Color3> Color3Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color3Serializer );
-        typedef SimpleSerializer<Color4> Color4Serializer;                REFLECT_SPECIALIZE_SERIALIZER( Color4Serializer );
-        typedef SimpleSerializer<HDRColor3> HDRColor3Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor3Serializer );
-        typedef SimpleSerializer<HDRColor4> HDRColor4Serializer;          REFLECT_SPECIALIZE_SERIALIZER( HDRColor4Serializer );
+        typedef SimpleSerializer<Color3> Color3Serializer;
+        typedef SimpleSerializer<Color4> Color4Serializer;
+        typedef SimpleSerializer<HDRColor3> HDRColor3Serializer;
+        typedef SimpleSerializer<HDRColor4> HDRColor4Serializer;
     }
 }

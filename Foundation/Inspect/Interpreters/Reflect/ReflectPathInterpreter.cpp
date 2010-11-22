@@ -123,7 +123,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         }
     }
 
-    if (label == NULL)
+    if (!label.ReferencesObject())
     {
         label = CreateControl< Label >();
         tstring temp;
@@ -186,7 +186,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
-    if (field->m_Default != NULL)
+    if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
         *field->m_Default >> outStream;

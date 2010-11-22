@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform/Compiler.h"
 #include "Platform/Thread.h"
 
 #include "Foundation/Document/DocumentManager.h"

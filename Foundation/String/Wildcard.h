@@ -13,11 +13,11 @@
 namespace Helium
 {
 
-    inline bool WildcardMatch(const tchar *String1,const tchar *String2)
+    inline bool WildcardMatch(const tchar_t *String1,const tchar_t *String2)
     {
         bool    bStar = false;
         /* Set to true when processing a wildcard * in String1 */
-        tchar   *StarPos;	
+        tchar_t   *StarPos;	
         /* Set this to the text just after the
         last star, so we can resurrect String1
         when we find that String2 isnt matching
@@ -43,7 +43,7 @@ namespace Helium
                 {
                     String1++;
                     bStar = true;
-                    StarPos = (tchar *)String1;
+                    StarPos = (tchar_t *)String1;
                     break;
                 }
 

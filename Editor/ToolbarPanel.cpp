@@ -39,8 +39,11 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         m_CurveEditToolButton->SetLabel( wxArtProvider::GetBitmap( ArtIDs::Editor::CurveEdit ) );
 
         m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Play ) );
+        m_PlayButton->Enable( false );
         m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Pause ) );
+        m_PauseButton->Enable( false );
         m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Stop ) );
+        m_StopButton->Enable( false );
 
         Layout();
         Thaw();

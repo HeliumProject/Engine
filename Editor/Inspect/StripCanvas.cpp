@@ -7,6 +7,8 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( StripCanvas );
+
 StripCanvas::StripCanvas()
 : m_Panel( NULL )
 {
@@ -22,7 +24,7 @@ void StripCanvas::Realize( Inspect::Canvas* canvas )
 {
     HELIUM_ASSERT( canvas == this || canvas == NULL );
 
-    SmartPtr< StripCanvasWidget > widget = new StripCanvasWidget( this );
+    StrongPtr< StripCanvasWidget > widget = new StripCanvasWidget( this );
     widget->SetPanel( m_Panel );
     SetWidget( widget );
 

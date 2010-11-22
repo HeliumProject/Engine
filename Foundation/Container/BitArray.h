@@ -1,296 +1,238 @@
 #pragma once
 
-#include "Platform/Types.h"
+#include "Foundation/API.h"
 #include "Platform/Assert.h"
-
-//
-// A one-dimensional array of bits, similar to STL bitset.
-//
-// Copyright 2000 Andrew Kirmse.  All rights reserved.
-//
-// Permission is granted to use this code for any purpose, as long as this
-// copyright message remains intact.
-//
+#include "Platform/Types.h"
+#include "Platform/Math/MathCommon.h"
 
 namespace Helium
 {
+    /// Constant bit array element proxy.
+    class FOUNDATION_API ConstBitArrayElementProxy
+    {
+    public:
+        /// @name Construction/Destruction
+        //@{
+        inline ConstBitArrayElementProxy( const uint32_t& rElement, uint32_t mask );
+        //@}
+
+        /// @name Overloaded Operators
+        //@{
+        inline operator bool() const;
+
+        inline bool operator==( bool bValue ) const;
+        inline bool operator==( const ConstBitArrayElementProxy& rOther ) const;
+        inline bool operator!=( bool bValue ) const;
+        inline bool operator!=( const ConstBitArrayElementProxy& rOther ) const;
+        //@}
+
+    protected:
+        /// Current array element.
+        uint32_t& m_rElement;
+        /// Current bit mask.
+        uint32_t m_mask;
+
+    private:
+        /// @name Overloaded Operators, Private
+        //@{
+        ConstBitArrayElementProxy& operator=( const ConstBitArrayElementProxy& );  // Not implemented.
+        //@}
+    };
+
+    /// Bit array element proxy.
+    class FOUNDATION_API BitArrayElementProxy : public ConstBitArrayElementProxy
+    {
+    public:
+        /// @name Construction/Destruction
+        //@{
+        inline BitArrayElementProxy( uint32_t& rElement, uint32_t mask );
+        //@}
+
+        /// @name Overloaded Operators
+        //@{
+        inline BitArrayElementProxy& operator=( bool bValue );
+        inline BitArrayElementProxy& operator=( const ConstBitArrayElementProxy& rOther );
+        //@}
+    };
+
+    /// Constant bit array iterator.
+    class FOUNDATION_API ConstBitArrayIterator
+    {
+    public:
+        /// Type for iterator values.
+        typedef bool ValueType;
+
+        /// Type for references to iterated elements.
+        typedef BitArrayElementProxy ReferenceType;
+        /// Type for constant references to iterated elements.
+        typedef ConstBitArrayElementProxy ConstReferenceType;
+
+        /// @name Construction/Destruction
+        //@{
+        inline ConstBitArrayIterator();
+        inline ConstBitArrayIterator( const uint32_t* pElement, uint32_t mask );
+        //@}
+
+        /// @name Overloaded Operators
+        //@{
+        inline ConstReferenceType operator*() const;
+
+        inline ConstBitArrayIterator& operator++();
+        inline ConstBitArrayIterator operator++( int );
+        inline ConstBitArrayIterator& operator--();
+        inline ConstBitArrayIterator operator--( int );
+
+        inline ConstBitArrayIterator& operator+=( ptrdiff_t offset );
+        inline ConstBitArrayIterator operator+( ptrdiff_t offset ) const;
+        inline ConstBitArrayIterator& operator-=( ptrdiff_t offset );
+        inline ConstBitArrayIterator operator-( ptrdiff_t offset ) const;
+
+        inline ptrdiff_t operator-( const ConstBitArrayIterator& rOther ) const;
+
+        inline bool operator==( const ConstBitArrayIterator& rOther ) const;
+        inline bool operator!=( const ConstBitArrayIterator& rOther ) const;
+        inline bool operator<( const ConstBitArrayIterator& rOther ) const;
+        inline bool operator>( const ConstBitArrayIterator& rOther ) const;
+        inline bool operator<=( const ConstBitArrayIterator& rOther ) const;
+        inline bool operator>=( const ConstBitArrayIterator& rOther ) const;
+        //@}
+
+    protected:
+        /// Current array element.
+        uint32_t* m_pElement;
+        /// Current bit mask.
+        uint32_t m_mask;
+
+        /// @name Utility Functions
+        //@{
+        inline void UnsignedIncrease( size_t offset );
+        inline void UnsignedDecrease( size_t offset );
+        //@}
+    };
+
+    /// Bit array iterator.
+    class FOUNDATION_API BitArrayIterator : public ConstBitArrayIterator
+    {
+    public:
+        /// Type for iterator values.
+        typedef bool ValueType;
+
+        /// Type for references to iterated elements.
+        typedef BitArrayElementProxy ReferenceType;
+        /// Type for constant references to iterated elements.
+        typedef ConstBitArrayElementProxy ConstReferenceType;
+
+        /// @name Construction/Destruction
+        //@{
+        inline BitArrayIterator();
+        inline BitArrayIterator( uint32_t* pElement, uint32_t mask );
+        //@}
+
+        /// @name Overloaded Operators
+        //@{
+        inline ReferenceType operator*() const;
+
+        inline BitArrayIterator& operator++();
+        inline BitArrayIterator operator++( int );
+        inline BitArrayIterator& operator--();
+        inline BitArrayIterator operator--( int );
+
+        inline BitArrayIterator& operator+=( ptrdiff_t offset );
+        inline BitArrayIterator operator+( ptrdiff_t offset ) const;
+        inline BitArrayIterator& operator-=( ptrdiff_t offset );
+        inline BitArrayIterator operator-( ptrdiff_t offset ) const;
+        //@}
+    };
+
+    /// Resizable bit array (not thread-safe).
+    template< typename Allocator = DefaultAllocator >
     class BitArray
     {
     public:
+        /// Type for array element values.
+        typedef bool ValueType;
 
-        //
-        // Constructors and destructor
-        //
+        /// Type for references to array elements.
+        typedef BitArrayElementProxy ReferenceType;
+        /// Type for constant references to array elements.
+        typedef ConstBitArrayElementProxy ConstReferenceType;
 
-        explicit BitArray(unsigned size)
-        {
-            Init(size);
+        /// Iterator type.
+        typedef BitArrayIterator Iterator;
+        /// Constant iterator type.
+        typedef ConstBitArrayIterator ConstIterator;
 
-            // Clear last bits
-            Trim();
-        }
+        /// @name Construction/Destruction
+        //@{
+        BitArray();
+        BitArray( const BitArray& rSource );
+        ~BitArray();
+        //@}
 
-        BitArray(const BitArray &that)
-        {
-            mpStore = 0;
-            *this = that;
-        }
+        /// @name Array Operations
+        //@{
+        size_t GetSize() const;
+        bool IsEmpty() const;
+        void Resize( size_t size );
 
-        virtual ~BitArray()
-        {
-            if (mLength > 1)
-                delete[] mpStore;
-        }
+        size_t GetCapacity() const;
+        void Reserve( size_t capacity );
+        void Trim();
 
-        //
-        // Operators
-        //
+        void Clear();
 
-        class BitProxy;
+        Iterator Begin();
+        ConstIterator Begin() const;
+        Iterator End();
+        ConstIterator End() const;
 
-        BitArray &operator=(const BitArray &that)
-        {
-            if (this != &that)
-            {
-                if (mLength > 1)
-                    delete[] mpStore;
+        ReferenceType GetElement( size_t index );
+        ConstReferenceType GetElement( size_t index ) const;
+        void SetElement( size_t index );
+        void UnsetElement( size_t index );
+        void ToggleElement( size_t index );
 
-                Init(that.mNumBits);
+        void Add( bool bValue, size_t count = 1 );
 
-                memcpy(mpStore, that.mpStore, mLength * sizeof(store_type));
-            }
-            return *this;
-        }
+        void SetAll( bool bValue = true );
+        void UnsetAll();
+        void ToggleAll();
 
-        BitProxy operator[](unsigned pos)
-        {
-            HELIUM_ASSERT(pos < mNumBits);
-            return BitProxy(*this, pos);
-        }
+        ReferenceType GetFirst();
+        ConstReferenceType GetFirst() const;
+        ReferenceType GetLast();
+        ConstReferenceType GetLast() const;
+        size_t Push( bool bValue );
+        void Pop();
+        //@}
 
-        const BitProxy operator[](unsigned pos) const
-        {
-            HELIUM_ASSERT(pos < mNumBits);
-            return BitProxy(const_cast<BitArray &>(*this), pos);
-        }
+        /// @name Overloaded Operators
+        //@{
+        BitArray& operator=( const BitArray& rSource );
+        template< typename OtherAllocator > BitArray& operator=( const BitArray< OtherAllocator >& rSource );
 
-        bool operator==(const BitArray &that) const
-        {
-            if (mNumBits != that.mNumBits)
-                return false;
-
-            for (unsigned i = 0; i < mLength; i++)
-                if (mpStore[i] != that.mpStore[i])
-                    return false;
-            return true;
-        }
-
-        bool operator!=(const BitArray &that) const
-        {
-            return !(*this == that);
-        }
-
-        BitArray &operator&=(const BitArray &that)
-        {
-            HELIUM_ASSERT(mNumBits == that.mNumBits);
-            for (unsigned i = 0; i < mLength; i++)
-                mpStore[i] &= that.mpStore[i];
-            return *this;
-        }
-
-        BitArray operator|=(const BitArray &that)
-        {
-            HELIUM_ASSERT(mNumBits == that.mNumBits);
-            for (unsigned i = 0; i < mLength; i++)
-                mpStore[i] |= that.mpStore[i];
-            return *this;
-        }
-
-        BitArray operator^=(const BitArray &that)
-        {
-            HELIUM_ASSERT(mNumBits == that.mNumBits);
-            for (unsigned i = 0; i < mLength; i++)
-                mpStore[i] ^= that.mpStore[i];
-            return *this;
-        }
-
-        BitArray operator~() const
-        {
-            return BitArray(*this).FlipAllBits();
-        }
-
-        friend BitArray operator&(const BitArray &a1, const BitArray &a2)
-        {
-            return BitArray(a1) &= a2;
-        }
-
-        friend BitArray operator|(const BitArray &a1, const BitArray &a2)
-        {
-            return BitArray(a1) |= a2;
-        }
-
-        friend BitArray operator^(const BitArray &a1, const BitArray &a2)
-        {
-            return BitArray(a1) ^= a2;
-        }
-
-        //
-        // Plain English interface
-        //
-
-        // Set all bits to false.
-        void Clear()
-        {
-            memset(mpStore, 0, mLength * sizeof(store_type));
-        }
-
-        // Set the bit at position pos to true.
-        void SetBit(unsigned pos)
-        {
-            HELIUM_ASSERT(pos < mNumBits);
-            mpStore[GetIndex(pos)] |= 1 << GetOffset(pos); 
-        }
-
-        // Set the bit at position pos to false.
-        void ClearBit(unsigned pos)
-        { 
-            HELIUM_ASSERT(pos < mNumBits);
-            mpStore[GetIndex(pos)] &= ~(1 << GetOffset(pos)); 
-        }
-
-        // Toggle the bit at position pos.
-        void FlipBit(unsigned pos) 
-        { 
-            HELIUM_ASSERT(pos < mNumBits);
-            mpStore[GetIndex(pos)] ^= 1 << GetOffset(pos); 
-        }
-
-        // Set the bit at position pos to the given value.
-        void Set(unsigned pos, bool val)
-        { 
-            val ? SetBit(pos) : ClearBit(pos);
-        }
-
-        // Returns true iff the bit at position pos is true.
-        bool IsBitSet(unsigned pos) const
-        {
-            HELIUM_ASSERT(pos < mNumBits);
-            return (mpStore[GetIndex(pos)] & (1 << GetOffset(pos))) != 0;
-        }
-
-        // Returns true iff all bits are false.
-        bool AllBitsFalse() const
-        {
-            for (unsigned i=0; i < mLength; i++)
-                if (mpStore[i] != 0)
-                    return false;
-            return true;
-        }
-
-        // Change value of all bits
-        BitArray &FlipAllBits()
-        {
-            for (unsigned i=0; i < mLength; i++)
-                mpStore[i] = ~mpStore[i];
-
-            Trim();
-            return *this;
-        }
-
-        //
-        // Bit proxy (for operator[])
-        //
-
-        friend class BitProxy;
-
-        class BitProxy
-        {
-        public:
-            BitProxy(BitArray &array, unsigned pos):
-              mArray(array), mPos(pos)
-              {}
-
-              BitProxy &operator=(bool value)
-              {
-                  mArray.Set(mPos, value);
-                  return *this;
-              }
-
-              BitProxy &operator=(const BitProxy &that)
-              {
-                  mArray.Set(mPos, that.mArray.IsBitSet(that.mPos));
-                  return *this;
-              }
-
-              operator bool() const
-              {
-                  return mArray.IsBitSet(mPos);
-              }
-
-              bool Flip()
-              {
-                  mArray.FlipBit(mPos);
-                  return mArray.IsBitSet(mPos);
-              }
-
-        private:
-            BitArray &mArray;
-            unsigned  mPos;
-        };
-
-    public:
-
-        typedef uint32_t store_type;
-
-        enum
-        {
-            bits_per_byte = 8,
-            cell_size     = sizeof(store_type) * bits_per_byte
-        };
-
-
-        store_type        *mpStore;  
-        store_type         mSingleWord; // Use this buffer when mLength is 1
-        uint32_t           mLength;     // Length of mpStore in units of store_type
-        uint32_t           mNumBits;
+        ReferenceType operator[]( ptrdiff_t index );
+        ConstReferenceType operator[]( ptrdiff_t index ) const;
+        //@}
 
     private:
+        /// Bit array buffer.
+        uint32_t* m_pBuffer;
+        /// Used number of bits.
+        size_t m_size;
+        /// Array capacity (in bits).
+        size_t m_capacity;
 
-        // Get the index and bit offset for a given bit number.
-        static uint32_t GetIndex(unsigned bit_num)
-        {
-            return bit_num / cell_size;
-        }
+        /// @name Private Utility Functions
+        //@{
+        size_t GetGrowCapacity( size_t desiredCount ) const;
+        void Grow( size_t capacity );
 
-        static uint32_t GetOffset(unsigned bit_num)
-        {
-            return bit_num % cell_size;
-        }
+        template< typename OtherAllocator > BitArray& Assign( const BitArray< OtherAllocator >& rSource );
 
-        void Init(uint32_t size)
-        {
-            mNumBits = size;
-
-            if (size == 0)
-                mLength = 0;
-            else
-                mLength = 1 + GetIndex(size - 1);
-
-            // Avoid allocation if length is 1 (common case)
-            if (mLength <= 1)
-                mpStore = &mSingleWord;      
-            else
-                mpStore = new store_type[mLength];
-
-            Clear();
-        }
-
-        // Force overhang bits at the end to 0
-        inline void Trim()
-        {
-            unsigned extra_bits = mNumBits % cell_size;
-            if (mLength > 0 && extra_bits != 0)
-                mpStore[mLength - 1] &= ~((~(store_type) 0) << extra_bits);
-        }
+        static void Fill( uint32_t* pDest, bool bValue, size_t startIndex, size_t count );
+        //@}
     };
 }
+
+#include "Foundation/Container/BitArray.inl"

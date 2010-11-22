@@ -9,7 +9,7 @@ using namespace Helium;
 bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_size )
 {
     HELIUM_ASSERT_MSG( data_size >= sizeof( ChunkFileHeader ), 
-        ( "Insufficient data in buffer!\n" ) );
+        TXT( "Insufficient data in buffer!" ) );
 
     // 
     chunk_file.m_FileHeader = (ChunkFileHeader*)data;
@@ -17,7 +17,7 @@ bool Helium::LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_
     // 
     // check that the header looks valid
     HELIUM_ASSERT_MSG( chunk_file.m_FileHeader->m_Magic == CHUNK_MAGIC_HW,
-        ( "Invalid magic number!\n" ) );
+        TXT( "Invalid magic number!" ) );
 
     switch ( chunk_file.m_FileHeader->m_Version )
     {
@@ -111,7 +111,7 @@ bool Helium::ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_
 
             // make sure it is in a valid range 
             HELIUM_ASSERT( *pointer <= data_to_fixup_size );
-            *pointer += (uint32_t)(uintptr)(data_to_fixup);
+            *pointer += (uint32_t)(uintptr_t)(data_to_fixup);
         }
     }
 

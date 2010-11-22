@@ -7,10 +7,11 @@
 
 #include "Pipeline/Asset/AssetFactory.h"
 
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/File/Path.h"
 #include "Foundation/Component/Component.h"
 #include "Foundation/Component/ComponentCollection.h" 
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Document/Document.h"
+#include "Foundation/File/Path.h"
 
 namespace Helium
 {
@@ -18,14 +19,14 @@ namespace Helium
     {
         namespace AssetProperties
         {
-            static const tchar* ShortDescription  = TXT( "ShortDescription" );
-            static const tchar* LongDescription   = TXT( "LongDescription" );
-            static const tchar* SmallIcon         = TXT( "SmallIcon" );
-            static const tchar* FileFilter        = TXT( "FileFilter" );
+            static const tchar_t* ShortDescription  = TXT( "ShortDescription" );
+            static const tchar_t* LongDescription   = TXT( "LongDescription" );
+            static const tchar_t* SmallIcon         = TXT( "SmallIcon" );
+            static const tchar_t* FileFilter        = TXT( "FileFilter" );
         }
 
         class AssetClass;
-        typedef Helium::SmartPtr< AssetClass > AssetClassPtr;
+        typedef Helium::StrongPtr< AssetClass > AssetClassPtr;
         typedef std::vector< AssetClassPtr > V_AssetClass;
 
         typedef std::set<AssetClassPtr> S_AssetClass;
@@ -34,7 +35,6 @@ namespace Helium
         class PIPELINE_API AssetClass HELIUM_ABSTRACT : public Component::ComponentCollection
         {
         private:
-
             Helium::Path m_SourcePath;   // optional path where this asset was deserialized from
             Helium::Path m_ContentPath; // path to the asset's backing/art file
 
@@ -61,7 +61,7 @@ namespace Helium
             static AssetClassPtr LoadAssetClass( const Path& path );
 
             template <class T>
-            static Helium::SmartPtr<T> LoadAssetClass( const Path& path )
+            static Helium::StrongPtr<T> LoadAssetClass( const Path& path )
             {
                 return Reflect::TryCast<T>( LoadAssetClass( path ) );
             }
@@ -194,6 +194,15 @@ namespace Helium
 
 
         public:
+            void ConnectDocument( Document* document );
+            void DisconnectDocument( const Document* document );
+
+            // Callback for when a document is saved.
+            void OnDocumentSave( const DocumentEventArgs& args );
+
+            mutable DocumentObjectChangedSignature::Event e_HasChanged;
+
+
             // write to the location on disk
             virtual bool Serialize();
 

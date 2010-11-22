@@ -35,7 +35,7 @@ namespace Helium
             float                       m_env_scale;
             float                       m_env_bias;
 
-            RenderEnvironment(const tchar* name);
+            RenderEnvironment(const tchar_t* name);
             ~RenderEnvironment();
 
             uint32_t DecrementUsage()

@@ -17,7 +17,7 @@ using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Asset;
 
-const tchar* ASSET_VERSION = TXT( "1" );
+const tchar_t* ASSET_VERSION = TXT( "1" );
 
 tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
@@ -170,11 +170,11 @@ namespace Helium
                             return true;
                         }
 
-                        Reflect::V_ConstSerializer data;
+                        std::vector< Reflect::ConstSerializerPtr > data;
                         setSerializer->GetItems( data );
 
-                        Reflect::V_ConstSerializer::const_iterator itr = data.begin();
-                        Reflect::V_ConstSerializer::const_iterator end = data.end();
+                        std::vector< Reflect::ConstSerializerPtr >::const_iterator itr = data.begin();
+                        std::vector< Reflect::ConstSerializerPtr >::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
@@ -197,8 +197,8 @@ namespace Helium
                         return true;
                     }
 
-                    const Reflect::V_Element& vals = arraySerializer->m_Data.Ref();
-                    for ( Reflect::V_Element::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                    const std::vector< Reflect::ElementPtr >& vals = arraySerializer->m_Data.Ref();
+                    for ( std::vector< Reflect::ElementPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
                     }
@@ -278,8 +278,32 @@ bool AssetClass::RemoveComponent( int32_t typeID )
     return __super::RemoveComponent( typeID );
 }
 
+void AssetClass::ConnectDocument( Document* document )
+{
+    document->d_Save.Set( this, &AssetClass::OnDocumentSave );
+
+    e_HasChanged.AddMethod( document, &Document::OnObjectChanged );
+}
+
+void AssetClass::DisconnectDocument( const Document* document )
+{
+    document->d_Save.Clear();
+
+    e_HasChanged.RemoveMethod( document, &Document::OnObjectChanged );
+}
+
+void AssetClass::OnDocumentSave( const DocumentEventArgs& args )
+{
+    const Document* document = static_cast< const Document* >( args.m_Document );
+    HELIUM_ASSERT( document );
+    HELIUM_ASSERT( !m_SourcePath.empty() && document->GetPath() == m_SourcePath )
+
+    args.m_Result = Serialize();
+}
+
 bool AssetClass::Serialize()
 {
+    HELIUM_ASSERT( !m_SourcePath.empty() );
     bool result = Reflect::ToArchive( m_SourcePath, this );
 
     m_Modified = !result;

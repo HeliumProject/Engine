@@ -74,7 +74,7 @@ CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)
 , m_PaintSpeed (NULL)
 , m_PaintDensity (NULL)
 , m_PaintJitter (NULL)
-, m_PaintTimer( "CreateToolPaintTimer", 1000 / s_PaintSpeed )
+, m_PaintTimer( TXT( "CreateToolPaintTimer" ), 1000 / s_PaintSpeed )
 {
     m_Scene->e_NodeAdded.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeAdded ) );
     m_Scene->e_NodeRemoved.Add( NodeChangeSignature::Delegate ( this, &CreateTool::SceneNodeRemoved ) );
@@ -234,11 +234,11 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
             float currentRadius = 0.0f;
             while ( currentRadius < radius )
             {
-                float circumference = 2.0f * Pi * currentRadius;
+                float circumference = static_cast< float32_t >( HELIUM_TWOPI ) * currentRadius;
                 int numInstances = MAX( 1, (int) ( circumference / ( 2.0f * instanceRadius ) ) );
 
-                float deltaAngle = 2.0f * Pi / numInstances;
-                float currentAngle = 2.0f * Pi * rand() / ( (float) RAND_MAX + 1.0f );
+                float deltaAngle = static_cast< float32_t >( HELIUM_TWOPI ) / numInstances;
+                float currentAngle = static_cast< float32_t >( HELIUM_TWOPI ) * rand() / ( (float) RAND_MAX + 1.0f );
 
                 for ( int i = 0; i < numInstances; ++i )
                 {
@@ -248,9 +248,9 @@ void CreateTool::GenerateInstanceOffsets( PlacementStyle style, float radius, fl
                     positions.push_back( v );
 
                     currentAngle += deltaAngle;
-                    while ( currentAngle > ( 2.0f * Pi ) )
+                    while ( currentAngle > HELIUM_TWOPI )
                     {
-                        currentAngle -= ( 2.0f * Pi );
+                        currentAngle -= static_cast< float32_t >( HELIUM_TWOPI );
                     }
                 }
 
@@ -416,7 +416,7 @@ void CreateTool::FinalizeOrientation(Matrix4& position, const Vector3& t, const 
         }
 
         // convert to radians
-        angle *= DegToRad;
+        angle *= static_cast< float32_t >( HELIUM_DEG_TO_RAD );
 
         // pick a random vector
         Vector3 axis (rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f, rand()/(float(RAND_MAX)+1) - 0.5f);
@@ -448,7 +448,7 @@ void CreateTool::FinalizeOrientation(Matrix4& position, const Vector3& t, const 
         }
 
         // convert to radians
-        angle *= DegToRad;
+        angle *= static_cast< float32_t >( HELIUM_DEG_TO_RAD );
 
         // rotate
         position = Matrix4 ( AngleAxis ( angle, UpVector ) ) * position;
@@ -1167,7 +1167,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
     }
 
     float32_t maxTime = 100.0f;
-    Timer instanceTimer;
+    SimpleTimer instanceTimer;
     Vector3 instanceNormalOffset = m_InstanceNormal.Normalize() * 2.0f * s_PaintRadius;
 
     while ( m_InstanceOffsets.size() && ( stamp || ( instanceTimer.Elapsed() < maxTime ) ) )

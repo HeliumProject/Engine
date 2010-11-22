@@ -11,13 +11,13 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-LocatorShape LocatorCreateTool::s_Shape = LocatorShapes::Cross;
+LocatorShape LocatorCreateTool::s_Shape = LocatorShape::Cross;
 
 REFLECT_DEFINE_ABSTRACT(LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "LocatorCreateTool" ) );
+    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "SceneGraph::LocatorCreateTool" ) );
 }
 
 void LocatorCreateTool::CleanupType()
@@ -83,13 +83,13 @@ void LocatorCreateTool::CreateProperties()
 
             {
                 tostringstream str;
-                str << LocatorShapes::Cross;
+                str << LocatorShape::Cross;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cross" ), str.str() ) );
             }
 
             {
                 tostringstream str;
-                str << LocatorShapes::Cube;
+                str << LocatorShape::Cube;
                 items.push_back( Inspect::ChoiceItem( TXT( "Cube" ), str.str() ) );
             }
 
@@ -104,7 +104,7 @@ void LocatorCreateTool::CreateProperties()
 
 int LocatorCreateTool::GetLocatorShape() const
 {
-    return s_Shape;
+    return (int)s_Shape;
 }
 
 void LocatorCreateTool::SetLocatorShape(int value)

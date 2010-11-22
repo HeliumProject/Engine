@@ -355,7 +355,7 @@ interfaceHeaderFormatString = \
 #define {MODULE_TOKEN}_{FILE_TOKEN}
 
 #include "{MODULE}/{MODULE}.h"
-#include "Core/Assert.h"
+#include "Platform/Assert.h"
 {INCLUDES}
 namespace Lunar
 {{
@@ -488,8 +488,8 @@ classInlineFormatString = \
 /// @param[in] pContext  Context associated with the running job instance.
 {TEMPLATE_PARAM_DECL}void {JOB_NAME}{TEMPLATE_PARAM_LIST}::RunCallback( void* pJob, JobContext* pContext )
 {{
-    L_ASSERT( pJob );
-    L_ASSERT( pContext );
+    HELIUM_ASSERT( pJob );
+    HELIUM_ASSERT( pContext );
     static_cast< {JOB_NAME}* >( pJob )->Run( pContext );
 }}
 
@@ -517,8 +517,8 @@ derivedClassInlineFormatString = \
 /// @param[in] pContext  Context associated with the running job instance.
 {TEMPLATE_PARAM_DECL}void {JOB_NAME}{TEMPLATE_PARAM_LIST}::RunCallback( void* pJob, JobContext* pContext )
 {{
-    L_ASSERT( pJob );
-    L_ASSERT( pContext );
+    HELIUM_ASSERT( pJob );
+    HELIUM_ASSERT( pContext );
     static_cast< {JOB_NAME}* >( pJob )->Run( pContext );
 }}
 
@@ -537,7 +537,7 @@ interfaceSourceFormatString = \
 #include "{MODULE}Pch.h"
 #include "{MODULE}/{BASENAME}.h"
 
-#include "Core/Assert.h"
+#include "Platform/Assert.h"
 
 {NAMESPACE_BEGIN}{CLASS_IMPLEMENTATIONS}{NAMESPACE_END}'''
 

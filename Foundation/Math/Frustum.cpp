@@ -26,19 +26,19 @@ inline static ClipCode GetClipCode(const Frustum& f, const Vector3& p)
 {
     int32_t c = ClipCodes::None;
 
-    if (f.top.DistanceAbove(p) < -PointOnPlaneError)
+    if (f.top.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Top;
-    else if (f.bottom.DistanceAbove(p) < -PointOnPlaneError)
+    else if (f.bottom.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Bottom;
 
-    if (f.left.DistanceAbove(p) < -PointOnPlaneError)
+    if (f.left.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Left;
-    else if (f.right.DistanceAbove(p) < -PointOnPlaneError)
+    else if (f.right.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Right;
 
-    if (f.front.DistanceAbove(p) < -PointOnPlaneError)
+    if (f.front.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Near;
-    else if (f.back.DistanceAbove(p) < -PointOnPlaneError)
+    else if (f.back.DistanceAbove(p) < -HELIUM_POINT_ON_PLANE_ERROR)
         c = c | ClipCodes::Far;
 
     return static_cast<ClipCode>(c);
@@ -285,10 +285,10 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
             p = polygon.m_Vertices[j];
 
             // if p is above the plane
-            if (clipPlane.DistanceAbove(p) > -PointOnPlaneError)
+            if (clipPlane.DistanceAbove(p) > -HELIUM_POINT_ON_PLANE_ERROR)
             {
                 // and s is above the plane
-                if (clipPlane.DistanceAbove(s) > -PointOnPlaneError)
+                if (clipPlane.DistanceAbove(s) > -HELIUM_POINT_ON_PLANE_ERROR)
                 {
                     // just take p, its a natural
                     clipped.Append(p);
@@ -311,7 +311,7 @@ bool Frustum::IntersectsTriangle(const Vector3& v0, const Vector3& v1, const Vec
             else
             {
                 // if s is above the plane, compute the intersection and append it
-                if (clipPlane.DistanceAbove(s) > -PointOnPlaneError)
+                if (clipPlane.DistanceAbove(s) > -HELIUM_POINT_ON_PLANE_ERROR)
                 {
                     Vector3 i;
                     bool intersects = Line (p, s).IntersectsPlane( clipPlane, &i );
@@ -342,7 +342,7 @@ bool Frustum::IntersectsBox(const AlignedBox& box, bool precise) const
 {
     MATH_FUNCTION_TIMER();
 
-    if ( fabs((box.maximum - box.minimum).Length()) < LinearIntersectionError )
+    if ( fabs((box.maximum - box.minimum).Length()) < HELIUM_LINEAR_INTERSECTION_ERROR )
     {
         return IntersectsPoint( box.Center() );
     }

@@ -30,6 +30,6 @@ namespace Helium
             Attribute< Color4 >     a_Color4;
         };
 
-        typedef Helium::SmartPtr< ColorPicker > ColorPickerPtr;
+        typedef Helium::StrongPtr< ColorPicker > ColorPickerPtr;
     }
 }

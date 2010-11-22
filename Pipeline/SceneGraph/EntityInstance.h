@@ -107,7 +107,7 @@ namespace Helium
             mutable ScenePtr    m_Scene;
         };
 
-        typedef Helium::SmartPtr<EntityInstance> EntityInstancePtr;
+        typedef Helium::StrongPtr<EntityInstance> EntityInstancePtr;
         typedef std::vector<EntityInstance*> V_EntityInstanceDumbPtr;
     }
 }

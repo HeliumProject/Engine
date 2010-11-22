@@ -2,6 +2,7 @@
 
 #include "Editor/API.h"
 #include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 class wxAuiManager;
 
@@ -10,7 +11,7 @@ namespace Helium
     namespace Editor
     {
         class WindowSettings;
-        typedef Helium::SmartPtr< WindowSettings > WindowSettingsPtr;
+        typedef Helium::StrongPtr< WindowSettings > WindowSettingsPtr;
 
         class WindowSettings : public Reflect::Element
         {
@@ -58,8 +59,8 @@ namespace Helium
             int32_t m_Height;
 
         public:
-            static const tchar* s_Reset;
-            static const tchar* s_ResetLong;
+            static const tchar_t* s_Reset;
+            static const tchar_t* s_ResetLong;
 
             static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
             {

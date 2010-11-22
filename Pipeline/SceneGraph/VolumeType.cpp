@@ -17,7 +17,7 @@ REFLECT_DEFINE_ABSTRACT(VolumeType);
 
 void VolumeType::InitializeType()
 {
-    Reflect::RegisterClassType< VolumeType >( TXT( "VolumeType" ) );
+    Reflect::RegisterClassType< VolumeType >( TXT( "SceneGraph::VolumeType" ) );
 }
 
 void VolumeType::CleanupType()
@@ -73,16 +73,16 @@ const Primitive* VolumeType::GetShape( VolumeShape shape ) const
 {
     switch (shape)
     {
-    case VolumeShapes::Cube:
+    case VolumeShape::Cube:
         return m_Cube;
 
-    case VolumeShapes::Cylinder:
+    case VolumeShape::Cylinder:
         return m_Cylinder;
 
-    case VolumeShapes::Sphere:
+    case VolumeShape::Sphere:
         return m_Sphere;
 
-    case VolumeShapes::Capsule:
+    case VolumeShape::Capsule:
         return m_Capsule;
     }
 

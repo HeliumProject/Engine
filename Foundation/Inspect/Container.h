@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar CONTAINER_ATTR_NAME[] = TXT( "name" );
+        const static tchar_t CONTAINER_ATTR_NAME[] = TXT( "name" );
 
         //
         // Contains other controls and distributes layout logic
@@ -99,7 +99,7 @@ namespace Helium
             mutable tstring m_Path;
         };
 
-        typedef Helium::SmartPtr<Container> ContainerPtr;
+        typedef Helium::StrongPtr<Container> ContainerPtr;
         typedef std::vector<ContainerPtr> V_Container;
     }
 }

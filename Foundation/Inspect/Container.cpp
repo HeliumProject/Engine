@@ -4,6 +4,8 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
+REFLECT_DEFINE_CLASS( Inspect::Container );
+
 Container::Container()
 {
     a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );
@@ -61,7 +63,7 @@ void Container::RemoveChild(Control* control)
         const int32_t numControls = static_cast< int32_t >( m_Children.size() ) - 1;
         for ( int32_t controlIndex = numControls; controlIndex > -1; --controlIndex )
         {
-            if ( control == m_Children.at( controlIndex ) )
+            if ( static_cast< const Control* >( control ) == static_cast< const ControlPtr& >( m_Children.at( controlIndex ) ) )
             {
                 // remove control from our list
                 m_Children.erase( m_Children.begin() + controlIndex );

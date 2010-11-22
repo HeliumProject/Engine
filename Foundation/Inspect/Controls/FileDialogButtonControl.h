@@ -7,8 +7,8 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
-        const static tchar BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
+        const static tchar_t BUTTON_FILEDIALOG_ATTR_FILTER[] = TXT( "filter" );
+        const static tchar_t BUTTON_FILEDIALOG_ATTR_TITLE[] = TXT( "caption" );
 
         namespace FileDialogTypes
         {
@@ -79,6 +79,6 @@ namespace Helium
             virtual bool  Process( const tstring& key, const tstring& value ) HELIUM_OVERRIDE;
         };
 
-        typedef Helium::SmartPtr< FileDialogButton > FileDialogButtonPtr;
+        typedef Helium::StrongPtr< FileDialogButton > FileDialogButtonPtr;
     }
 }

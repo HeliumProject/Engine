@@ -69,7 +69,7 @@ namespace Helium
 
         }
 
-        HybridPtr(uintptr address, PointerState state)
+        HybridPtr(uintptr_t address, PointerState state)
             : m_State (state)
         {
             switch (m_State)
@@ -192,9 +192,9 @@ namespace Helium
             return m_Constant;
         }
 
-        uintptr Address()
+        uintptr_t Address()
         {
-            return (uintptr)m_Mutable;
+            return (uintptr_t)m_Mutable;
         }
 
         PointerState State()

@@ -7,9 +7,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+REFLECT_DEFINE_CLASS( WindowSettings );
+
 // Statics
-const tchar* WindowSettings::s_Reset = TXT( "resetWin" );
-const tchar* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
+const tchar_t* WindowSettings::s_Reset = TXT( "resetWin" );
+const tchar_t* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

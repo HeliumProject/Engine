@@ -116,11 +116,11 @@ void Helium::GUID::ToTUID( tuid& id ) const
 
 void Helium::GUID::ToString(tstring& id) const
 {
-    tchar* l_pszString;
+    tchar_t* l_pszString;
 
     UuidToString((UUID*)(this), (RPC_TSTR*)&l_pszString);
 
-    id = reinterpret_cast<tchar *>(l_pszString);
+    id = reinterpret_cast<tchar_t *>(l_pszString);
 
     RpcStringFree((RPC_TSTR*)&l_pszString);
 }

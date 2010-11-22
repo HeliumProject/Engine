@@ -164,7 +164,7 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 
         if (entity->IsGeometryVisible())
         {
-            for ( int i=0; i<GeometryModes::Count; i++ )
+            for ( int i=0; i<GeometryMode::Count; i++ )
             {
                 Scene* nestedScene = entity->GetNestedScene();
 

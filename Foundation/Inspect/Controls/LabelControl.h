@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar LABEL_ATTR_TEXT[] = TXT( "text" );
+        const static tchar_t LABEL_ATTR_TEXT[] = TXT( "text" );
 
         class FOUNDATION_API Label : public Control
         {
@@ -26,6 +26,6 @@ namespace Helium
             Attribute<bool> a_Ellipsize;
         };
 
-        typedef Helium::SmartPtr<Label> LabelPtr;
+        typedef Helium::StrongPtr<Label> LabelPtr;
     }
 }

@@ -165,7 +165,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     }
 
     // setup the default value
-    if (field->m_Default != NULL)
+    if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
         *field->m_Default >> outStream;

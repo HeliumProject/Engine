@@ -12,14 +12,14 @@
 #include "Class.h"
 #include "StringPool.h"
 #include "Exceptions.h"
-#include "Stream.h" 
+#include "ArchiveStream.h" 
 
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Log.h" 
 #include "Foundation/File/Path.h"
 
-#include "Foundation/Atomic.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Helium
 {
@@ -116,14 +116,14 @@ namespace Helium
         typedef ArchiveTypes::ArchiveType ArchiveType;
 
         // must line up with enum above
-        const static tchar* s_ArchiveExtensions[] =
+        const static tchar_t* s_ArchiveExtensions[] =
         {
             TXT( "hrb" ),   // Binary
             TXT( "xml" )    // XML
         };
 
         // must line up with archive type enum
-        const static tchar* s_ArchiveDescriptions[] =
+        const static tchar_t* s_ArchiveDescriptions[] =
         {
             TXT( "Binary Reflect File" ),
             TXT( "XML Reflect File" )
@@ -145,7 +145,7 @@ namespace Helium
         // Event Delegates
         //
 
-        class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase
+        class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase< ArchiveVisitor >
         {
         public:
             virtual void VisitElement(Element* element)
@@ -158,12 +158,12 @@ namespace Helium
                 // called for each field we serialize to the file (pointer or data...)
             }
 
-            virtual void CreateAppendElements(V_Element& append)
+            virtual void CreateAppendElements(std::vector< ElementPtr >& append)
             {
                 // Called after the main spool is serialized and is a call to the visitor for meta data
             }
 
-            virtual void ProcessAppendElements(V_Element& append)
+            virtual void ProcessAppendElements(std::vector< ElementPtr >& append)
             {
                 // Called after the append spool is deserialized and is a call to the visitor to process the meta data
             }
@@ -198,6 +198,8 @@ namespace Helium
 
         class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
+            friend class RefCountBase< Archive >;
+
         protected:
 
             // The number of bytes Parsed so far
@@ -209,7 +211,7 @@ namespace Helium
             ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
-            V_Element m_Spool;
+            std::vector< ElementPtr > m_Spool;
 
             // The mode
             ArchiveMode m_Mode;
@@ -283,20 +285,20 @@ namespace Helium
             //
         public:
             virtual void Serialize( const ElementPtr& element ) = 0;
-            virtual void Serialize( const V_Element& elements, uint32_t flags = 0 ) = 0;
+            virtual void Serialize( const std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
             virtual void Deserialize( ElementPtr& element ) = 0;
-            virtual void Deserialize( V_Element& elements, uint32_t flags = 0 ) = 0;
+            virtual void Deserialize( std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
 
         public:
-            static const tchar* GetExtension( ArchiveType t )
+            static const tchar_t* GetExtension( ArchiveType t )
             {
-                HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ) );
+                HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ) );
                 return s_ArchiveExtensions[ t ];
             }
 
             static void GetExtensions( std::set< tstring >& extensions )
             {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     extensions.insert( s_ArchiveExtensions[ i ] );
                 }
@@ -304,7 +306,7 @@ namespace Helium
 
             static void GetFileFilters( std::set< tstring > filters )
             {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     tstring filter = tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
                     filters.insert( filter );
@@ -314,7 +316,7 @@ namespace Helium
             static void GetFileFilters( tstring& filters )
             {
                 filters.clear();
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
+                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
                 {
                     if ( i != 0 )
                     {
@@ -340,11 +342,11 @@ namespace Helium
 
             // Archive-level processing (visitor setup and append generation)
             void PreSerialize();
-            void PostSerialize( V_Element& append );
+            void PostSerialize( std::vector< ElementPtr >& append );
 
             // Archive-level processing (visitor setup and append processing)
             void PreDeserialize();
-            void PostDeserialize( V_Element& append );
+            void PostDeserialize( std::vector< ElementPtr >& append );
 
             // Instance-level processing (visit calls and type tracking)
             void PreSerialize( const ElementPtr& element, const Field* field = NULL );
@@ -358,13 +360,13 @@ namespace Helium
             //
 
             void Put( const ElementPtr& element );
-            void Put( const V_Element& elements );
+            void Put( const std::vector< ElementPtr >& elements );
 
             ElementPtr Get( int searchType = Reflect::ReservedTypes::Any );
-            void Get( V_Element& elements );
+            void Get( std::vector< ElementPtr >& elements );
 
             template <class T>
-            Helium::SmartPtr<T> Get()
+            Helium::StrongPtr<T> Get()
             {
                 ElementPtr found = Get( Reflect::GetType<T>() );
 
@@ -380,13 +382,13 @@ namespace Helium
 
             // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
             template< class T >
-            void Get( std::vector< Helium::SmartPtr<T> >& elements )
+            void Get( std::vector< Helium::StrongPtr<T> >& elements )
             {
-                V_Element archiveElements;
+                std::vector< ElementPtr > archiveElements;
                 Get( archiveElements );
 
-                V_Element::iterator itor = archiveElements.begin();
-                V_Element::iterator end = archiveElements.end();
+                std::vector< ElementPtr >::iterator itor = archiveElements.begin();
+                std::vector< ElementPtr >::iterator end = archiveElements.end();
 
                 for( ; itor != end; ++itor )
                 {
@@ -407,17 +409,17 @@ namespace Helium
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
 
         FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        FOUNDATION_API bool ToArchive( const Path& path, const V_Element& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
-        Helium::SmartPtr<T> FromArchive( const Path& path )
+        Helium::StrongPtr<T> FromArchive( const Path& path )
         {
             ArchivePtr archive = GetArchive( path );
             return archive->Get< T >();
         }
 
         template< class T >
-        void FromArchive( const Path& path, std::vector< Helium::SmartPtr<T> >& elements )
+        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& elements )
         {
             ArchivePtr archive = GetArchive( path );
             archive->Get< T >( elements );

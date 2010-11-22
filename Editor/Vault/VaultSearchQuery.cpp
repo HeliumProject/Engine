@@ -46,18 +46,19 @@ using namespace Helium::Editor;
 #define MATCH_PHRASE           TXT( "[a-z0-9_\\-\\.\\\\/:\\s\\*]+" )
 #define MATCH_COLUMN_NAME      TXT( "[a-z][a-z0-9_\\-]{1,}" )
 
-const tchar* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
-const tchar* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
-const tchar* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
-const tchar* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
+const tchar_t* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
+const tchar_t* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
+const tchar_t* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
+const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 //const char* s_MatchAssetPathPattern = "^[a-zA-Z]\\:(/[a-zA-Z0-9]([\\w\\-\\. ]*?[a-zA-Z0-9])*){1,}[/]{0,1}$";
-const tchar* s_MatchAssetPathPattern   = TXT( "^[a-z]\\:(?:[\\\\/]+[a-z0-9_\\-\\. ]+)*[\\\\/]*$" );
-const tchar* s_MatchTUIDPattern        = TXT( "^((?:0[x]){0,1}[a-f0-9]{16}|(?:[\\-]){0,1}[0-9]{16,})$$" );
-const tchar* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" ); // this is also icky, but it might actually be a decimal TUID
+const tchar_t* s_MatchAssetPathPattern   = TXT( "^[a-z]\\:(?:[\\\\/]+[a-z0-9_\\-\\. ]+)*[\\\\/]*$" );
+const tchar_t* s_MatchTUIDPattern        = TXT( "^((?:0[x]){0,1}[a-f0-9]{16}|(?:[\\-]){0,1}[0-9]{16,})$$" );
+const tchar_t* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" ); // this is also icky, but it might actually be a decimal TUID
 
 
 ///////////////////////////////////////////////////////////////////////////////
+REFLECT_DEFINE_ENUMERATION( SearchType );
 REFLECT_DEFINE_CLASS( VaultSearchQuery );
 void VaultSearchQuery::EnumerateClass( Reflect::Compositor<VaultSearchQuery>& comp )
 {
@@ -68,7 +69,7 @@ void VaultSearchQuery::EnumerateClass( Reflect::Compositor<VaultSearchQuery>& co
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultSearchQuery::VaultSearchQuery()
-: m_SearchType( SearchTypes::CacheDB )
+: m_SearchType( SearchType::CacheDB )
 , m_SQLQueryString( TXT("") )
 {
 
@@ -186,8 +187,6 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
 
 bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query )
 {
-#pragma TODO( "Rachel: Need more error checking in VaultSearchQuery::ParseQueryString" )
-
     const tregex matchAssetPath( s_MatchAssetPathPattern, std::tr1::regex::icase ); 
     const tregex matchTUID( s_MatchTUIDPattern, std::tr1::regex::icase );
 
@@ -203,7 +202,7 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
         {
             if ( query )
             {
-                query->m_SearchType = SearchTypes::Directory;
+                query->m_SearchType = SearchType::Directory;
 
                 Helium::Path::Normalize( query->m_QueryString );
                 Helium::Path::GuaranteeSeparator( query->m_QueryString );
@@ -214,7 +213,7 @@ bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& er
         {
             if ( query )
             {
-                query->m_SearchType = SearchTypes::File;
+                query->m_SearchType = SearchType::File;
             }
             return true;
         }

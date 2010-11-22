@@ -73,7 +73,7 @@ void FileDropTarget::AddDroppedListener( FileDroppedSignature::Delegate& listene
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool FileDropTarget::TestExtension( const tchar* testExt )
+bool FileDropTarget::TestExtension( const tchar_t* testExt )
 {
     if ( !m_FileExtensions.empty() )
     {

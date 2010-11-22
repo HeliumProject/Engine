@@ -10,60 +10,33 @@ namespace Helium
 {
     namespace Asset
     {
-        namespace AlphaTypes
+        class AlphaType
         {
-            enum AlphaType
+        public:
+            enum Enum
             {
-                ALPHA_OPAQUE,
-                ALPHA_OVERLAY,
-                ALPHA_ADDITIVE,
-                ALPHA_SCUNGE,
-                ALPHA_CUTOUT,
-                ALPHA_SOFT_EDGE,
-                ALPHA_BLENDED,
-            };
-            static void AlphaTypeEnumerateEnum( Reflect::Enumeration* info )
-            {
-                info->AddElement(ALPHA_OPAQUE, TXT( "ALPHA_OPAQUE" ), TXT( "OPAQUE" ) );
-                info->AddElement(ALPHA_OVERLAY, TXT( "ALPHA_OVERLAY" ), TXT( "OVERLAY" ) );
-                info->AddElement(ALPHA_ADDITIVE, TXT( "ALPHA_ADDITIVE" ), TXT( "ADDITIVE" ) );
-                info->AddElement(ALPHA_SCUNGE, TXT( "ALPHA_SCUNGE" ), TXT( "SCUNGE" ) );
-                info->AddElement(ALPHA_CUTOUT, TXT( "ALPHA_CUTOUT" ), TXT( "CUTOUT" ) );
-                info->AddElement(ALPHA_SOFT_EDGE, TXT( "ALPHA_SOFT_EDGE" ), TXT( "SOFT_EDGE" ) );
-                info->AddElement(ALPHA_BLENDED, TXT( "ALPHA_BLENDED" ), TXT( "BLENDED" ) );
-            }
-        }
-        typedef AlphaTypes::AlphaType AlphaType;
-
-
-        // WetSurface Type
-        namespace WetSurfaceTypes
-        {
-            enum WetSurfaceType
-            {
-                WET_SURFACE_NONE, 
-                WET_SURFACE_SKIN,
-                WET_SURFACE_DIRT,
-                WET_SURFACE_CLOTH, 
-                WET_SURFACE_BRICK, 
-                WET_SURFACE_FOLIAGE, 
-                WET_SURFACE_GUN,
-                WET_SURFACE_METAL,
+                Opaque,
+                Overlay,
+                Additive,
+                Scunge,
+                CutOut,
+                SoftEdge,
+                Blended,
             };
 
-            static void WetSurfaceTypeEnumerateEnum( Reflect::Enumeration* info )
+            REFLECT_DECLARE_ENUMERATION( AlphaType );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement(WET_SURFACE_NONE,     TXT( "WET_SURFACE_NONE" ),        TXT( "None" ) );
-                info->AddElement(WET_SURFACE_SKIN,     TXT( "WET_SURFACE_SKIN" ),        TXT( "Skin" ) );
-                info->AddElement(WET_SURFACE_DIRT,     TXT( "WET_SURFACE_DIRT" ),        TXT( "Dirt" ) );
-                info->AddElement(WET_SURFACE_CLOTH,    TXT( "WET_SURFACE_CLOTH" ),       TXT( "Cloth" ) );
-                info->AddElement(WET_SURFACE_BRICK,    TXT( "WET_SURFACE_BRICK" ),       TXT( "Brick" ) );
-                info->AddElement(WET_SURFACE_FOLIAGE,  TXT( "WET_SURFACE_FOLIAGE" ),     TXT( "Foliage" ) );
-                info->AddElement(WET_SURFACE_GUN,      TXT( "WET_SURFACE_GUN" ),         TXT( "Gun" ) );
-                info->AddElement(WET_SURFACE_METAL,    TXT( "WET_SURFACE_METAL" ),       TXT( "Metal" ) );
+                info.AddElement( Opaque,    TXT( "Opaque" ) );
+                info.AddElement( Overlay,   TXT( "Overlay" ) );
+                info.AddElement( Additive,  TXT( "Additive" ) );
+                info.AddElement( Scunge,    TXT( "Scunge" ) );
+                info.AddElement( CutOut,    TXT( "CutOut" ) );
+                info.AddElement( SoftEdge,  TXT( "SoftEdge" ) );
+                info.AddElement( Blended,   TXT( "Blended" ) );
             }
-        }
-        typedef WetSurfaceTypes::WetSurfaceType WetSurfaceType;
+        };
 
         // Base class for all shader types
         class PIPELINE_API ShaderAsset : public AssetClass
@@ -91,10 +64,9 @@ namespace Helium
             float32_t  m_IncandescentMapScaling;
 
             bool m_DoubleSided;
-            WrapMode m_WrapModeU;
-            WrapMode m_WrapModeV;
+            TextureCoordinateWrapMode m_WrapModeU;
+            TextureCoordinateWrapMode m_WrapModeV;
             AlphaType m_AlphaMode;
-            WetSurfaceType m_WetSurfaceMode;
 
             ShaderAsset()
                 : m_EnableColorMapTint( false )
@@ -108,19 +80,18 @@ namespace Helium
                 , m_IncandescentMapEnabled( false )
                 , m_IncandescentMapScaling( 1.0f )
                 , m_DoubleSided( false )
-                , m_WrapModeU( WrapModes::Wrap )
-                , m_WrapModeV( WrapModes::Wrap )
-                , m_AlphaMode ( AlphaTypes::ALPHA_OPAQUE )
-                , m_WetSurfaceMode( WetSurfaceTypes::WET_SURFACE_BRICK)
+                , m_WrapModeU( TextureCoordinateWrapMode::Wrap )
+                , m_WrapModeV( TextureCoordinateWrapMode::Wrap )
+                , m_AlphaMode ( AlphaType::Opaque )
             {
             }
 
-            REFLECT_DECLARE_ABSTRACT( ShaderAsset, AssetClass );
+            REFLECT_DECLARE_CLASS( ShaderAsset, AssetClass );
 
             static void EnumerateClass( Reflect::Compositor<ShaderAsset>& comp );
         };
 
-        typedef Helium::SmartPtr< ShaderAsset > ShaderAssetPtr;
+        typedef Helium::StrongPtr< ShaderAsset > ShaderAssetPtr;
         typedef std::vector< ShaderAssetPtr > V_ShaderAsset;
     }
 }

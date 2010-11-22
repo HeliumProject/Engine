@@ -56,12 +56,12 @@ Purschke <purschke@bnl.gov>.
 
 /*
 * This package supports both compile-time and run-time determination of CPU
-* byte order.  If BIG_ENDIAN is defined as 0, the code will be
-* compiled to run only on little-endian CPUs; if BIG_ENDIAN is
+* byte order.  If HELIUM_ENDIAN_BIG is defined as 0, the code will be
+* compiled to run only on little-endian CPUs; if HELIUM_ENDIAN_BIG is
 * defined as non-zero, the code will be compiled to run only on big-endian
-* CPUs; if BIG_ENDIAN is not defined, the code will be compiled to
+* CPUs; if HELIUM_ENDIAN_BIG is not defined, the code will be compiled to
 * run on either big- or little-endian CPUs, but will run slightly less
-* efficiently on either one than if BIG_ENDIAN is defined.
+* efficiently on either one than if HELIUM_ENDIAN_BIG is defined.
 */
 
 typedef unsigned char md5_byte_t; /* 8-bit byte */
@@ -89,8 +89,8 @@ void md5_finish(md5_state_t *pms, md5_byte_t digest[16]);
 #endif
 
 /* 1 = big-endian, -1 = little-endian, 0 = unknown */
-#ifdef BIG_ENDIAN
-#  define BYTE_ORDER (BIG_ENDIAN ? 1 : -1)
+#ifdef HELIUM_ENDIAN_BIG
+#  define BYTE_ORDER (HELIUM_ENDIAN_BIG ? 1 : -1)
 #else
 #  define BYTE_ORDER 0
 #endif
@@ -500,7 +500,7 @@ namespace Helium
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        tchar hex_output[16*2 + 1];
+        tchar_t hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
             _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);
@@ -542,7 +542,7 @@ namespace Helium
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        tchar hex_output[16*2 + 1];
+        tchar_t hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
             _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);

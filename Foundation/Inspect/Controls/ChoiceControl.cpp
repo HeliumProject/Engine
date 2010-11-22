@@ -1,7 +1,10 @@
 #include "Foundation/Inspect/Controls/ChoiceControl.h"
 #include "Foundation/Inspect/Container.h"
 
+using namespace Helium;
 using namespace Helium::Inspect;
+
+REFLECT_DEFINE_CLASS( Inspect::Choice );
 
 Choice::Choice()
 : a_Highlight( false )

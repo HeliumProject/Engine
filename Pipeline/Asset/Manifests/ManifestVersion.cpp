@@ -11,14 +11,14 @@ void ManifestVersion::EnumerateClass( Reflect::Compositor<ManifestVersion>& comp
 }
 
 
-const tchar* ManifestVersion::MANIFEST_VERSION = TXT( "5" );
+const tchar_t* ManifestVersion::MANIFEST_VERSION = TXT( "5" );
 
 ManifestVersion::ManifestVersion()
 {
 
 }
 
-ManifestVersion::ManifestVersion(const tchar* source, const tchar* sourceVersion)
+ManifestVersion::ManifestVersion(const tchar_t* source, const tchar_t* sourceVersion)
 : Version (source, sourceVersion)
 {
   m_ManifestVersion = MANIFEST_VERSION;

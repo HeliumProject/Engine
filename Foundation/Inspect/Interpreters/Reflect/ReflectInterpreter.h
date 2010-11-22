@@ -23,7 +23,7 @@ namespace Helium
             V_ReflectFieldInterpreter m_Interpreters;
         };
 
-        typedef Helium::SmartPtr<ReflectInterpreter> ReflectInterpreterPtr;
+        typedef Helium::StrongPtr<ReflectInterpreter> ReflectInterpreterPtr;
 
         class FOUNDATION_API ReflectFieldInterpreterFactory
         {

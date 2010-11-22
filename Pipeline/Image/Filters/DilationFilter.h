@@ -7,7 +7,7 @@ namespace Helium
   class PIPELINE_API DilationFilter : public ImageFilter
   {
   public:
-    DilationFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams);
+    DilationFilter(const tchar_t* inputfile, const tchar_t* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams);
 
     virtual ~DilationFilter(void) {}
 

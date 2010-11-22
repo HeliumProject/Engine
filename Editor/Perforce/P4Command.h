@@ -5,7 +5,7 @@
 #include "P4Exceptions.h"
 #include "Platform/String.h"
 #include "Platform/Thread.h"
-#include "Foundation/Timer.h"
+#include "Platform/Profile.h"
 #include "Foundation/RCS/RCSTypes.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64
@@ -17,7 +17,7 @@ namespace Helium
         class Command : public ClientUser
         {
         public:
-            Command( Provider* provider, const tchar* command = TXT( "" ) )
+            Command( Provider* provider, const tchar_t* command = TXT( "" ) )
                 : m_Provider( provider )
                 , m_Command( command )
                 , m_ErrorCount( 0 )
@@ -49,7 +49,7 @@ namespace Helium
             std::string AsString();
 
             Provider*              m_Provider;
-            const tchar*           m_Command;
+            const tchar_t*           m_Command;
             std::vector< std::string > m_Arguments;
             int                    m_ErrorCount;
             tstring                m_ErrorString;

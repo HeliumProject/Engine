@@ -6,27 +6,24 @@
 #include "Platform/Assert.h"
 #include "Platform/String.h"
 #include "Platform/Debug.h"
+#include "Platform/Trace.h"
 #include "Platform/Windows/Windows.h"
 
 #include <map>
 #include <time.h>
 #include <shlobj.h>
-#include <dbghelp.h>
 #include <tlhelp32.h>
+
+#if HELIUM_UNICODE
+#define DBGHELP_TRANSLATE_TCHAR
+#endif
+
+#include <dbghelp.h>
+
 #pragma comment ( lib, "dbghelp.lib" )
 
 using namespace Helium;
 using namespace Helium::Debug;
-
-#ifdef _UNICODE
-# undef IMAGEHLP_MODULE64
-# define IMAGEHLP_MODULE64 IMAGEHLP_MODULEW64
-# undef IMAGEHLP_LINE64
-# define IMAGEHLP_LINE64 IMAGEHLP_LINEW64
-# define SymInitialize SymInitializeW
-# define SymGetModuleInfo64 SymGetModuleInfoW64
-# define SymGetLineFromAddr64 SymGetLineFromAddrW64
-#endif
 
 //#define DEBUG_SYMBOLS
 
@@ -39,9 +36,9 @@ using namespace Helium::Debug;
 static bool g_Initialized = false;
 
 // Utility to print to a string
-static void PrintString(tstring& buffer, const tchar* tstring, ...)
+static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
 {
-    static tchar buf[4096];
+    static tchar_t buf[4096];
 
     va_list argptr;
     va_start(argptr, tstring);
@@ -53,9 +50,16 @@ static void PrintString(tstring& buffer, const tchar* tstring, ...)
 }
 
 // Callback that loads symbol data from loaded dll into DbgHelp system, dumping error info
-static BOOL CALLBACK EnumerateLoadedModulesProc(PCSTR name, DWORD64 base, ULONG size, PVOID data)
+static BOOL CALLBACK EnumerateLoadedModulesProc(PCTSTR name, DWORD64 base, ULONG size, PVOID data)
 {
-    if (SymLoadModule64(GetCurrentProcess(), 0, name, 0, base, size))
+#if HELIUM_UNICODE
+    char charName[ MAX_PATH ];
+    charName[ 0 ] = '\0';
+    wcstombs_s( NULL, charName, name, _TRUNCATE );
+#else
+    PCSTR charName = name;
+#endif
+    if (SymLoadModule64(GetCurrentProcess(), 0, charName, 0, base, size))
     {
         IMAGEHLP_MODULE64 moduleInfo;
         ZeroMemory(&moduleInfo, sizeof(IMAGEHLP_MODULE64));
@@ -103,11 +107,11 @@ bool Debug::Initialize(const tstring& pdbPaths)
 
         if ( pdbPaths.empty() )
         {
-            tchar module[MAX_PATH];
-            tchar drive[MAX_PATH];
-            tchar path[MAX_PATH];
-            tchar file[MAX_PATH];
-            tchar ext[MAX_PATH];
+            tchar_t module[MAX_PATH];
+            tchar_t drive[MAX_PATH];
+            tchar_t path[MAX_PATH];
+            tchar_t file[MAX_PATH];
+            tchar_t ext[MAX_PATH];
             GetModuleFileName(0,module,MAX_PATH);
             _tsplitpath(module,drive,path,file,ext);
 
@@ -146,7 +150,7 @@ bool Debug::IsInitialized()
     return g_Initialized;
 }
 
-tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
+tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
 {
     HELIUM_ASSERT( Debug::IsInitialized() );
 
@@ -157,24 +161,24 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
     }
 
     // module image name "reflect.dll"
-    static tchar module[MAX_PATH];
+    static tchar_t module[MAX_PATH];
     ZeroMemory(&module, sizeof(module));
-    static tchar extension[MAX_PATH];
+    static tchar_t extension[MAX_PATH];
     ZeroMemory(&extension, sizeof(extension));
 
     // symbol name "Reflect::Class::AddSerializer + 0x16d"
-    static tchar symbol[MAX_SYM_NAME+16];
+    static tchar_t symbol[MAX_SYM_NAME+16];
     ZeroMemory(&symbol, sizeof(symbol));
 
     // source file name "typeinfo.cpp"
-    static tchar filename[MAX_PATH];
+    static tchar_t filename[MAX_PATH];
     ZeroMemory(&filename, sizeof(filename));
 
     // line number in source "246"
     DWORD line = 0xFFFFFFFF;
 
     // resulting line is worst case of all components
-    static tchar result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
+    static tchar_t result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
     ZeroMemory(&result, sizeof(result));
 
 
@@ -221,8 +225,8 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
             {
                 // success, copy the source file name
                 _tcscpy(filename, l.FileName);
-                static tchar ext[MAX_PATH];
-                static tchar file[MAX_PATH];
+                static tchar_t ext[MAX_PATH];
+                static tchar_t file[MAX_PATH];
                 _tsplitpath(filename, NULL, NULL, file, ext);
 
                 _stprintf(result, TXT("%s, %s : %s%s(%d)"), module, symbol, file, ext, l.LineNumber);
@@ -243,7 +247,7 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
     }
 }
 
-Helium::Exception* Debug::GetHeliumException(uintptr addr)
+Helium::Exception* Debug::GetHeliumException(uintptr_t addr)
 {
     Helium::Exception* cppException = (Helium::Exception*)addr;
 
@@ -266,7 +270,7 @@ Helium::Exception* Debug::GetHeliumException(uintptr addr)
     }
 }
 
-std::exception* Debug::GetStandardException(uintptr addr)
+std::exception* Debug::GetStandardException(uintptr_t addr)
 {
     std::exception* cppException = (std::exception*)addr;
 
@@ -289,14 +293,14 @@ std::exception* Debug::GetStandardException(uintptr addr)
     }
 }
 
-bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
+bool Debug::GetStackTrace(std::vector<uintptr_t>& trace, unsigned omitFrames)
 {
     //  Some techniques borrowed from Visual Leak Detector 1.9
     //   (http://www.codeproject.com/tools/visualleakdetector.asp)
 
     CONTEXT context;
 
-    volatile tchar *p = 0;
+    volatile tchar_t *p = 0;
     __try
     {
         *p = 0;
@@ -309,7 +313,7 @@ bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
     return GetStackTrace(&context, trace, omitFrames+1);
 }
 
-bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames)
+bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames)
 {
     HELIUM_ASSERT( Debug::IsInitialized() );
 
@@ -377,7 +381,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
 
         if (omitFrames == 0)
         {
-            stack.push_back( (uintptr)frame.AddrReturn.Offset );
+            stack.push_back( (uintptr_t)frame.AddrReturn.Offset );
         }
         else
         {
@@ -388,19 +392,19 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
     return !stack.empty();
 }
 
-void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, tstring& buffer)
+void Debug::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& buffer)
 {
-    std::vector<uintptr>::const_iterator itr = trace.begin();
-    std::vector<uintptr>::const_iterator end = trace.end();
+    std::vector<uintptr_t>::const_iterator itr = trace.begin();
+    std::vector<uintptr_t>::const_iterator end = trace.end();
     for ( ; itr != end; ++itr )
     {
         PrintString(buffer, TXT("0x%08I64X - %s\n"), *itr, GetSymbolInfo(*itr, false).c_str() );
     }
 }
 
-const tchar* Debug::GetExceptionClass(uint32_t exceptionCode)
+const tchar_t* Debug::GetExceptionClass(uint32_t exceptionCode)
 {
-    const tchar* ex_name = NULL;
+    const tchar_t* ex_name = NULL;
 
     switch (exceptionCode)
     {
@@ -504,7 +508,7 @@ const tchar* Debug::GetExceptionClass(uint32_t exceptionCode)
 void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args )
 {
     static Helium::Mutex s_ExceptionMutex;
-    Helium::TakeMutex mutex ( s_ExceptionMutex );
+    Helium::MutexScopeLock mutex ( s_ExceptionMutex );
 
     typedef std::vector< std::pair<DWORD, HANDLE> > V_ThreadHandles;
     V_ThreadHandles threads;
@@ -575,7 +579,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
             PrintString( args.m_Threads.back(), TXT("\nCallstack:\n") );
 
-            std::vector<uintptr> trace;
+            std::vector<uintptr_t> trace;
             if ( GetStackTrace( &context, trace ) )
             {
                 TranslateStackTrace( trace, args.m_Threads.back() );
@@ -680,7 +684,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         }
     }
 
-    std::vector<uintptr> trace;
+    std::vector<uintptr_t> trace;
     if ( GetStackTrace( info->ContextRecord, trace ) )
     {
         TranslateStackTrace( trace, args.m_Callstack );
@@ -758,7 +762,7 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-    tchar* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
+    tchar_t* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
     if ( tempDir == NULL )
     {
         _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("HELIUM_PROJECT_TMP") );
@@ -766,7 +770,7 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     }
 
     // Make sure that the directory exists
-    tchar directory[MAX_PATH] = { 0 };
+    tchar_t directory[MAX_PATH] = { 0 };
     _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\crashdumps"), tempDir );
     SHCreateDirectoryEx( NULL, directory, NULL );
 
@@ -774,12 +778,12 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     time_t now;
     time( &now );
 
-    tchar module[MAX_PATH];
-    tchar file[MAX_PATH];
+    tchar_t module[MAX_PATH];
+    tchar_t file[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
     _tsplitpath( module, NULL, NULL, file, NULL );
 
-    tchar dmp_file[MAX_PATH] = { '\0' };
+    tchar_t dmp_file[MAX_PATH] = { '\0' };
     _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory, file, now );
 
     HANDLE dmp;
@@ -813,3 +817,228 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 
     return TXT("");
 }
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+
+static Mutex& GetStackWalkMutex()
+{
+    static Mutex stackWalkMutex;
+
+    return stackWalkMutex;
+}
+
+static void ConditionalSymInitialize()
+{
+    static volatile bool bSymInitialized = false;
+    if( !bSymInitialized )
+    {
+        HELIUM_TRACE( TRACE_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
+
+        HANDLE hProcess = GetCurrentProcess();
+        HELIUM_ASSERT( hProcess );
+
+        BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
+        if( bInitialized )
+        {
+            HELIUM_TRACE( TRACE_INFO, TXT( "Symbol handler initialization successful!\n" ) );
+        }
+        else
+        {
+            HELIUM_TRACE(
+                TRACE_INFO,
+                TXT( "Symbol handler initialization failed (error code %u).\n" ),
+                ::GetLastError() );
+        }
+
+        bSymInitialized = true;
+    }
+}
+
+/// Get the current stack trace.
+///
+/// @param[out] ppStackTraceArray    Array in which to store the backtrace of program counter addresses.
+/// @param[in]  stackTraceArraySize  Maximum number of addresses to fill in the output array.
+/// @param[in]  skipCount            Number of stack levels to skip before filling the output array, counting the stack
+///                                  level for this function call.  By default, this is one, meaning that only the call
+///                                  to this function is skipped.
+///
+/// @return  Number of addresses stored in the output array.
+size_t Helium::GetStackTrace( void** ppStackTraceArray, size_t stackTraceArraySize, size_t skipCount )
+{
+    HELIUM_ASSERT( ppStackTraceArray || stackTraceArraySize == 0 );
+
+    MutexScopeLock scopeLock( GetStackWalkMutex() );
+    ConditionalSymInitialize();
+
+    // Get the current context.
+    CONTEXT context;
+    RtlCaptureContext( &context );
+
+    // Initialize the stack frame structure for the first call to StackWalk64().
+    STACKFRAME64 stackFrame;
+    MemoryZero( &stackFrame, sizeof( stackFrame ) );
+    stackFrame.AddrPC.Mode = AddrModeFlat;
+    stackFrame.AddrFrame.Mode = AddrModeFlat;
+    stackFrame.AddrStack.Mode = AddrModeFlat;
+
+#if HELIUM_OS_WIN32
+    const DWORD machineType = IMAGE_FILE_MACHINE_I386;
+    stackFrame.AddrPC.Offset = context.Eip;
+    stackFrame.AddrFrame.Offset = context.Ebp;
+    stackFrame.AddrStack.Offset = context.Esp;
+#else
+    // Assuming x86-64 (likely not supporting Itanium).
+    const DWORD machineType = IMAGE_FILE_MACHINE_AMD64;
+    stackFrame.AddrPC.Offset = context.Rip;
+    stackFrame.AddrFrame.Offset = context.Rdi/*Rbp*/;
+    stackFrame.AddrStack.Offset = context.Rsp;
+#endif
+
+    HANDLE hProcess = GetCurrentProcess();
+    HELIUM_ASSERT( hProcess );
+
+    HANDLE hThread = GetCurrentThread();
+    HELIUM_ASSERT( hThread );
+
+    // Skip addresses first.
+    for( size_t skipIndex = 0; skipIndex < skipCount; ++skipIndex )
+    {
+        BOOL bResult = StackWalk64(
+            machineType,
+            hProcess,
+            hThread,
+            &stackFrame,
+            &context,
+            NULL,
+            SymFunctionTableAccess64,
+            SymGetModuleBase64,
+            NULL );
+        if( !bResult || stackFrame.AddrPC.Offset == 0 )
+        {
+            return 0;
+        }
+    }
+
+    // Fill out the remaining stack frame addresses up to the output array limit.
+    for( size_t traceIndex = 0; traceIndex < stackTraceArraySize; ++traceIndex )
+    {
+        BOOL bResult = StackWalk64(
+            machineType,
+            hProcess,
+            hThread,
+            &stackFrame,
+            &context,
+            NULL,
+            SymFunctionTableAccess64,
+            SymGetModuleBase64,
+            NULL );
+        if( !bResult || stackFrame.AddrPC.Offset == 0 )
+        {
+            return traceIndex;
+        }
+
+        ppStackTraceArray[ traceIndex ] =
+            reinterpret_cast< void* >( static_cast< uintptr_t >( stackFrame.AddrPC.Offset ) );
+    }
+
+    return stackTraceArraySize;
+}
+
+/// Get the symbol for the specified address.
+///
+/// @param[out] rSymbol   Address symbol.
+/// @param[in]  pAddress  Address to translate.
+///
+/// @return  True if the address was successfully resolved, false if not.
+void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
+{
+    HELIUM_ASSERT( pAddress );
+
+    MutexScopeLock scopeLock( GetStackWalkMutex() );
+    ConditionalSymInitialize();
+
+//    rSymbol.Remove( 0, rSymbol.GetSize() );
+    rSymbol.clear();
+
+    HANDLE hProcess = GetCurrentProcess();
+    HELIUM_ASSERT( hProcess );
+
+    bool bAddedModuleName = false;
+
+    DWORD64 moduleBase = SymGetModuleBase64( hProcess, reinterpret_cast< uintptr_t >( pAddress ) );
+    if( moduleBase )
+    {
+        IMAGEHLP_MODULE64 moduleInfo;
+        MemoryZero( &moduleInfo, sizeof( moduleInfo ) );
+        moduleInfo.SizeOfStruct = sizeof( moduleInfo );
+        if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
+        {
+            rSymbol += TXT( "(" );
+            rSymbol += moduleInfo.ModuleName;
+            rSymbol += TXT( ") " );
+
+            bAddedModuleName = true;
+        }
+    }
+
+    if( !bAddedModuleName )
+    {
+        rSymbol += TXT( "(???) " );
+    }
+
+    uint64_t symbolInfoBuffer[
+        ( sizeof( SYMBOL_INFO ) + sizeof( tchar_t ) * ( MAX_SYM_NAME - 1 ) + sizeof( uint64_t ) - 1 ) /
+        sizeof( uint64_t ) ];
+    MemoryZero( symbolInfoBuffer, sizeof( symbolInfoBuffer ) );
+
+    SYMBOL_INFO& rSymbolInfo = *reinterpret_cast< SYMBOL_INFO* >( &symbolInfoBuffer[ 0 ] );
+    rSymbolInfo.SizeOfStruct = sizeof( SYMBOL_INFO );
+    rSymbolInfo.MaxNameLen = MAX_SYM_NAME;
+    if( SymFromAddr( hProcess, reinterpret_cast< uintptr_t >( pAddress ), NULL, &rSymbolInfo ) )
+    {
+        rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = TXT( '\0' );
+        rSymbol += rSymbolInfo.Name;
+        rSymbol += TXT( " " );
+    }
+    else
+    {
+        rSymbol += TXT( "??? " );
+    }
+
+    DWORD displacement = 0;
+    IMAGEHLP_LINE64 lineInfo;
+    MemoryZero( &lineInfo, sizeof( lineInfo ) );
+    lineInfo.SizeOfStruct = sizeof( lineInfo );
+    if( SymGetLineFromAddr64( hProcess, reinterpret_cast< uintptr_t >( pAddress ), &displacement, &lineInfo ) )
+    {
+        tchar_t lineNumberBuffer[ 32 ];
+        StringFormat( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
+        lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
+
+        rSymbol += TXT( "(" );
+        rSymbol += lineInfo.FileName;
+        rSymbol += TXT( ", line " );
+        rSymbol += lineNumberBuffer;
+        rSymbol += TXT( ")" );
+    }
+    else
+    {
+        rSymbol += TXT( "(???, line ?)" );
+    }
+}
+
+/// Write a string to any platform-specific debug log output.
+///
+/// @param[in] pMessage  Message string to write to the debug log.
+void Helium::DebugLog( const tchar_t* pMessage )
+{
+    HELIUM_ASSERT( pMessage );
+
+#if HELIUM_UNICODE
+    OutputDebugStringW( pMessage );
+#else
+    OutputDebugStringA( pMessage );
+#endif
+}
+
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

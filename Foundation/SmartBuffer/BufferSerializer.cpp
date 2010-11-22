@@ -65,7 +65,7 @@ void BufferSerializer::AddBuffers( const BufferSerializer& serializer )
 // we pad when we write to 16 bytes
 const uint32_t BF_ALIGN = 16;
 const uint32_t BF_ALIGN_MINUS_ONE = BF_ALIGN - 1;
-const tchar BF_PAD_STR[BF_ALIGN+1] = TXT( "PAD0PAD1PAD2PAD3" );
+const tchar_t BF_PAD_STR[BF_ALIGN+1] = TXT( "PAD0PAD1PAD2PAD3" );
 
 struct P_Fixup
 {
@@ -174,12 +174,12 @@ uint32_t BufferSerializer::ComputeSize() const
 }
 
 
-bool BufferSerializer::WriteToFile( const tchar* filename ) const
+bool BufferSerializer::WriteToFile( const tchar_t* filename ) const
 {
     bool return_val = false;
 
-    tchar print[512];
-    _sntprintf(print, sizeof(print) / sizeof( tchar ), TXT( "Writing '%s'" ), filename);
+    tchar_t print[512];
+    _sntprintf(print, sizeof(print) / sizeof( tchar_t ), TXT( "Writing '%s'" ), filename);
 #pragma TODO("Profiler support for wide strings")
     PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, ""/*print*/);
     Log::Debug( TXT( "%s\n" ), print);
@@ -232,7 +232,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         file_header.m_Version    = ConvertEndian( CHUNK_VERSION_16_ALIGN, swizzle );
         file_header.m_ChunkCount = ConvertEndian( (uint32_t)buffers.Size(), swizzle );
 
-        strm.write( (const tchar*)&file_header, sizeof( ChunkFileHeader ) );
+        strm.write( (const tchar_t*)&file_header, sizeof( ChunkFileHeader ) );
     }
 
     // how many chunks?
@@ -241,7 +241,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
     // write a header for each chunk
     if ( num_chunks == 0 )
     {
-        strm.write( (const tchar*)&num_chunks, sizeof( num_chunks ) );
+        strm.write( (const tchar_t*)&num_chunks, sizeof( num_chunks ) );
     }
     else
     {
@@ -276,7 +276,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
                 buffer_offset += BF_ALIGN - ( (*itr)->GetSize() & BF_ALIGN_MINUS_ONE );
             }
 
-            strm.write( (const tchar*)&chunk_header, sizeof( ChunkHeader ) );
+            strm.write( (const tchar_t*)&chunk_header, sizeof( ChunkHeader ) );
         }
     }
 
@@ -291,7 +291,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
             // write the buffer
             uint32_t buffer_size = (*itr)->GetSize();
             const uint8_t* buffer_data = (*itr)->GetData();
-            strm.write( (const tchar*)buffer_data, buffer_size );
+            strm.write( (const tchar_t*)buffer_data, buffer_size );
 
             //  align to boundary...
             if ( align && (buffer_size & BF_ALIGN_MINUS_ONE) != 0 )
@@ -336,12 +336,12 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
     // write the number fixups
     uint32_t num_fixups_32 = (uint32_t)fixup_32.size();
     uint32_t num_fixups_32_swizzled = ConvertEndian( num_fixups_32, swizzle );
-    strm.write( (const tchar*)&num_fixups_32_swizzled, sizeof( num_fixups_32_swizzled ) );
+    strm.write( (const tchar_t*)&num_fixups_32_swizzled, sizeof( num_fixups_32_swizzled ) );
 
     // now the fixups themselvs
     if ( num_fixups_32 == 0 )
     {
-        strm.write( (const tchar*)&num_fixups_32, sizeof( num_fixups_32 ) );
+        strm.write( (const tchar_t*)&num_fixups_32, sizeof( num_fixups_32 ) );
     }
     else
     {
@@ -360,20 +360,20 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
             uint32_t source_offset_swizzled = ConvertEndian( source_offset, swizzle );
 
             strm.seekp( source_offset );
-            strm.write( (const tchar*)&target_offset_swizzled, sizeof( target_offset_swizzled ) );
+            strm.write( (const tchar_t*)&target_offset_swizzled, sizeof( target_offset_swizzled ) );
             strm.seekp( curr_offset );
-            strm.write( (const tchar*)&source_offset_swizzled, sizeof( source_offset_swizzled ) );
+            strm.write( (const tchar_t*)&source_offset_swizzled, sizeof( source_offset_swizzled ) );
         }
     }
 
     // write the number fixups
     uint32_t num_fixups_64 = (uint32_t)fixup_64.size();
     uint32_t num_fixups_64_swizzled = ConvertEndian( num_fixups_64, swizzle );
-    strm.write( (const tchar*)&num_fixups_64_swizzled, sizeof( num_fixups_64_swizzled ) );
+    strm.write( (const tchar_t*)&num_fixups_64_swizzled, sizeof( num_fixups_64_swizzled ) );
 
     if ( num_fixups_64 == 0 )
     {
-        strm.write( (const tchar*)&num_fixups_64, sizeof( num_fixups_64 ) );
+        strm.write( (const tchar_t*)&num_fixups_64, sizeof( num_fixups_64 ) );
     }
     else
     {
@@ -394,22 +394,22 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
 
             // an 8 byte pointer, but still uses a 4-byte pointer fixup runtime
             strm.seekp( source_offset );
-            strm.write( (const tchar*)&pad, sizeof(pad) );
-            strm.write( (const tchar*)&target_offset_swizzled, sizeof( target_offset_swizzled ) );
+            strm.write( (const tchar_t*)&pad, sizeof(pad) );
+            strm.write( (const tchar_t*)&target_offset_swizzled, sizeof( target_offset_swizzled ) );
             strm.seekp( curr_offset );
-            strm.write( (const tchar*)&source_offset_swizzled, sizeof( source_offset_swizzled ) );
+            strm.write( (const tchar_t*)&source_offset_swizzled, sizeof( source_offset_swizzled ) );
         }
     }
 
     return true;
 }
 
-bool BufferSerializer::ReadFromFile( const tchar* filename )
+bool BufferSerializer::ReadFromFile( const tchar_t* filename )
 {
     bool return_val = false;
 
-    tchar print[512];
-    _sntprintf(print, sizeof(print) / sizeof( tchar ), TXT( "Reading '%s'" ), filename);
+    tchar_t print[512];
+    _sntprintf(print, sizeof(print) / sizeof( tchar_t ), TXT( "Reading '%s'" ), filename);
 #pragma TODO("Profiler support for wide strings")
     PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, ""/*print*/);
     Log::Debug( TXT( "%s\n" ), print);
@@ -433,7 +433,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
     // read a ChunkFileHeader
     ChunkFileHeader file_header;
-    strm.read( (tchar*)&file_header, sizeof( ChunkFileHeader ) );
+    strm.read( (tchar_t*)&file_header, sizeof( ChunkFileHeader ) );
 
     uint32_t test1 = (uint32_t)strm.tellg();
 
@@ -480,7 +480,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
     // read each chunk header
     for ( uint32_t chunk_index = 0; chunk_index < file_header.m_ChunkCount; ++chunk_index )
     {
-        strm.read( (tchar*)&chunk_headers[ chunk_index ], sizeof( ChunkHeader ) );
+        strm.read( (tchar_t*)&chunk_headers[ chunk_index ], sizeof( ChunkHeader ) );
         chunk_headers[ chunk_index ].m_Type = ConvertEndian(chunk_headers[ chunk_index ].m_Type, swizzle);
         chunk_headers[ chunk_index ].m_Offset = ConvertEndian(chunk_headers[ chunk_index ].m_Offset, swizzle);
         chunk_headers[ chunk_index ].m_Size = ConvertEndian(chunk_headers[ chunk_index ].m_Size, swizzle);
@@ -498,7 +498,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
         buffer->Resize( header.m_Size );
         buffer->SetType( header.m_Type );
-        strm.read( (tchar*)buffer->GetData(), buffer->GetSize() );
+        strm.read( (tchar_t*)buffer->GetData(), buffer->GetSize() );
 
         HELIUM_ASSERT( chunk_map.find( header.m_Offset ) == chunk_map.end() );
         chunk_map[ header.m_Offset ] = chunk_index;
@@ -515,13 +515,13 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
     // read the fixups
     uint32_t num_fixups;
-    strm.read( (tchar*)&num_fixups, sizeof( num_fixups ) );
+    strm.read( (tchar_t*)&num_fixups, sizeof( num_fixups ) );
     num_fixups = ConvertEndian(num_fixups, swizzle);
 
     for ( uint32_t fixup_index = 0; fixup_index < num_fixups; ++fixup_index )
     {
         uint32_t source_offset;
-        strm.read( (tchar*)&source_offset, sizeof( source_offset ) );
+        strm.read( (tchar_t*)&source_offset, sizeof( source_offset ) );
         source_offset = ConvertEndian(source_offset, swizzle);
 
         // figure out which buffer this fixup starts in
@@ -551,7 +551,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
 
     // read the fixups
     uint32_t num_fixups_64;
-    strm.read( (tchar*)&num_fixups_64, sizeof( num_fixups_64 ) );
+    strm.read( (tchar_t*)&num_fixups_64, sizeof( num_fixups_64 ) );
     num_fixups_64 = ConvertEndian(num_fixups_64, swizzle);
 
     if (!strm.eof())
@@ -559,7 +559,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
         for ( uint32_t fixup_index = 0; fixup_index < num_fixups_64; ++fixup_index )
         {
             uint32_t source_offset;
-            strm.read( (tchar*)&source_offset, sizeof( source_offset ) );
+            strm.read( (tchar_t*)&source_offset, sizeof( source_offset ) );
             source_offset = ConvertEndian(source_offset, swizzle);
 
             // figure out which buffer this fixup starts in

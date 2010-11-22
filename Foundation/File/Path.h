@@ -6,7 +6,6 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"
-#include "Platform/String.h"
 
 namespace Helium
 {
@@ -15,14 +14,14 @@ namespace Helium
 
 namespace Helium
 {
-    const static tchar s_InternalPathSeparator = '/';
+    const static tchar_t s_InternalPathSeparator = '/';
 
     class FOUNDATION_API Path : public Helium::RefCountBase< Path >
     {
     private:
         tstring m_Path;
 
-        void Init( const tchar* path );
+        void Init( const tchar_t* path );
 
     public:
         static void Normalize( tstring& path );
@@ -30,11 +29,11 @@ namespace Helium
         static void GuaranteeSeparator( tstring& path );
 
         static bool Exists( const tstring& path );
-        static bool IsAbsolute( const tstring& path );
+        static bool IsAbsolute( const tchar_t* path );
         static bool IsUnder( const tstring& location, const tstring& path );
 
     public:
-        Path( const tchar* path );
+        Path( const tchar_t* path );
         Path( const tstring& path = TXT( "" ) );
         Path( const Path& path );
 
@@ -43,11 +42,11 @@ namespace Helium
 
         bool operator<( const Path& rhs ) const;
 
-        Path operator+( const tchar* rhs ) const;
+        Path operator+( const tchar_t* rhs ) const;
         Path operator+( const tstring& rhs ) const;
         Path operator+( const Path& rhs ) const;
 
-        Path& operator+=( const tchar* rhs );
+        Path& operator+=( const tchar_t* rhs );
         Path& operator+=( const tstring& rhs );
         Path& operator+=( const Helium::Path& rhs );
 
@@ -99,9 +98,6 @@ namespace Helium
         bool Move( const Helium::Path& target ) const;
         bool Delete() const;
 
-        tstring FileCRC() const;
-        bool VerifyFileCRC( const tstring& hash ) const;
-
         tstring FileMD5() const;
         bool VerifyFileMD5( const tstring& hash ) const;
 
@@ -114,8 +110,8 @@ namespace Helium
 
         size_t length() const;
         bool empty() const;
-        const tchar* c_str() const;
-        operator const tchar*() const
+        const tchar_t* c_str() const;
+        operator const tchar_t*() const
         {
             return c_str();
         }
@@ -140,7 +136,7 @@ namespace Helium
         tstring str;
         std::streamsize size = inStream.rdbuf()->in_avail();
         str.resize( (size_t) size );
-        inStream.read( const_cast<tchar*>( str.c_str() ), size );
+        inStream.read( const_cast<tchar_t*>( str.c_str() ), size );
 
         p.Set( str );
 

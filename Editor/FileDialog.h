@@ -2,7 +2,6 @@
 
 #include <wx/filedlg.h>
 
-#include "Platform/Compiler.h"
 #include "Platform/Types.h"
 #include "Foundation/Container/OrderedSet.h"
 
@@ -77,7 +76,6 @@ namespace Helium
             virtual int ShowModal();
             bool IsMultipleSelectionEnabled() const;
 
-            virtual wxString GetPath() const HELIUM_OVERRIDE;
             virtual void GetPaths( wxArrayString& paths ) const HELIUM_OVERRIDE;
             virtual const tstring& GetFilePath() const;
             virtual const std::set< tstring >& GetFilePaths() const;

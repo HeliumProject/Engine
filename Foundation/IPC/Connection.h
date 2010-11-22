@@ -2,7 +2,7 @@
 
 #include "Message.h"
 
-#include "Platform/Platform.h"
+#include "Platform/PlatformUtility.h"
 #include "Platform/Condition.h"
 #include "Platform/Thread.h"
 
@@ -41,7 +41,7 @@ namespace Helium
             static Localization::StringTable s_StringTable;
             static bool                      s_RegisteredStringTable;
 
-            tchar                   m_Name[256];          // friendly name for this connection
+            tchar_t                   m_Name[256];          // friendly name for this connection
             bool                    m_Server;             // are we the server side or the client side
             bool                    m_Terminating;        // used by the closedown code to signal it wants the threads to terminate
             Helium::Condition       m_Terminate;          // used to wake up sleeping threads for when we want to terminate
@@ -55,9 +55,9 @@ namespace Helium
             MessageQueue            m_ReadQueue;          // incoming messages
             MessageQueue            m_WriteQueue;         // outgoing messages
 
-            Helium::Thread          m_ConnectThread;      // handle of the core thread that manages the connection, once
-            Helium::Thread          m_ReadThread;         // handle of the thread reads from the pipe (incomming)
-            Helium::Thread          m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
+            Helium::CallbackThread          m_ConnectThread;      // handle of the core thread that manages the connection, once
+            Helium::CallbackThread          m_ReadThread;         // handle of the thread reads from the pipe (incomming)
+            Helium::CallbackThread          m_WriteThread;        // handle of the thread that writes to the pipe (outgoing)
 
             MessageHeader           m_ReadHeader;
             MessageHeader           m_WriteHeader;
@@ -67,7 +67,7 @@ namespace Helium
             virtual ~Connection();
 
         protected:
-            bool Initialize(bool server, const tchar* name);
+            bool Initialize(bool server, const tchar_t* name);
 
         public:
             void Cleanup();

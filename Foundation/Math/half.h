@@ -483,8 +483,8 @@ namespace Helium
             float32_t		f;
         };
 
-        static void	createBitString(tchar c[19], half h);
-        static void	createBitString(tchar c[35], float32_t f);
+        static void	createBitString(tchar_t c[19], half h);
+        static void	createBitString(tchar_t c[35], float32_t f);
 
         static const uif _toFloat[1 << 16];
         static const uint16_t	_eLut[1 << 9];

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <hash_map>
 
 #include "Platform/Types.h"

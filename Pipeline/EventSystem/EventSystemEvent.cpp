@@ -16,7 +16,7 @@ tstring Event::Dump() const
     // tstring   m_Data;
     tostringstream str;
 
-    tchar timestr[64];
+    tchar_t timestr[64];
     __time64_t created = m_Created / 1000;
     _tctime64_s( timestr, sizeof(timestr), &created );
     timestr[ _tcslen(timestr) - 1 ] = '\0';

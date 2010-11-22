@@ -2,7 +2,6 @@
 
 #include "Foundation/RCS/RCS.h"
 #include "Foundation/RCS/Provider.h"
-#include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Profile.h"
 #include "Platform/Condition.h"
@@ -125,10 +124,10 @@ namespace Helium
         public:
             bool                  m_IsEnabled;
             bool                  m_IsConnected;
-            Timer                 m_ConnectTimer;
-            uint32_t                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
-            uint32_t                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
-            uint32_t                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
+            SimpleTimer           m_ConnectTimer;
+            uint32_t              m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
+            uint32_t              m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
+            uint32_t              m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
 
             bool                  m_Abort;
             ClientApi             m_Client;
@@ -137,7 +136,7 @@ namespace Helium
 
         private:
             // transaction thread
-            Helium::Thread        m_Thread;     // the thread to run commands in
+            Helium::CallbackThread        m_Thread;     // the thread to run commands in
             bool                  m_Shutdown;   // the shutdown signal
             Helium::Mutex         m_Mutex;      // to ensure thread safety
             Helium::Condition     m_Execute;    // to wakeup the command thread

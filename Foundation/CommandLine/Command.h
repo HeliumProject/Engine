@@ -7,7 +7,6 @@
 
 #include "Foundation/API.h"
 #include "Foundation/CommandLine/Option.h"
-#include "Platform/Compiler.h"
 
 namespace Helium
 {
@@ -24,7 +23,7 @@ namespace Helium
 			OptionsMap m_OptionsMap;
 
         public:
-			Command( const tchar* token, const tchar* usage = TXT( "[OPTIONS]" ), const tchar* shortHelp = TXT( "" ) );
+			Command( const tchar_t* token, const tchar_t* usage = TXT( "[OPTIONS]" ), const tchar_t* shortHelp = TXT( "" ) );
             virtual ~Command();
 
 			virtual bool Initialize( tstring& error )

@@ -118,7 +118,7 @@ namespace Helium
             bool m_IsEnabled;
         };
 
-        typedef Helium::SmartPtr< ComponentBase > ComponentPtr;
+        typedef Helium::StrongPtr< ComponentBase > ComponentPtr;
         typedef std::vector< ComponentPtr > V_Component;
         typedef std::map< Reflect::TypeID, ComponentPtr > M_Component;
     }

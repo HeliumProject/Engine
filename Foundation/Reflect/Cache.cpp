@@ -24,7 +24,7 @@ static void GetTypeName(int type, tstring& name)
     const Class* typeInfo = Registry::GetInstance()->GetClass( type );
     HELIUM_ASSERT( typeInfo );
 
-    name = typeInfo->m_ShortName;
+    name = typeInfo->m_Name;
 }
 
 static void CreateInstance(int type, ElementPtr& element)
@@ -38,7 +38,7 @@ static void CreateInstance(int type, ElementPtr& element)
 #ifdef REFLECT_DISPLAY_CACHE_INFO
     std::string name;
     GetTypeName(type, name);
-    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
 }
 
@@ -76,7 +76,7 @@ bool Cache::Create(int type, ElementPtr& element)
 #ifdef REFLECT_DISPLAY_CACHE_INFO
             std::string name;
             GetTypeName(type, name);
-            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
         }
 
@@ -85,9 +85,9 @@ bool Cache::Create(int type, ElementPtr& element)
 #endif
 }
 
-bool Cache::Create(const tstring& shortName, ElementPtr& element)
+bool Cache::Create(const tstring& name, ElementPtr& element)
 {
-    const Class* typeInfo = Registry::GetInstance()->GetClass(shortName);
+    const Class* typeInfo = Registry::GetInstance()->GetClass(name);
 
     if ( typeInfo )
     {

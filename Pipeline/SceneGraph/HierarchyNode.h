@@ -23,7 +23,7 @@ namespace Helium
         typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
 
         class HierarchyNode;
-        typedef Helium::SmartPtr< HierarchyNode > HierarchyNodePtr;
+        typedef Helium::StrongPtr< HierarchyNode > HierarchyNodePtr;
 
         typedef std::vector< HierarchyNode* > V_HierarchyNodeDumbPtr;
         typedef std::vector< HierarchyNodePtr > V_HierarchyNodeSmartPtr;

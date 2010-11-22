@@ -222,7 +222,7 @@ int16_t half::convert(int32_t i)
 // Functions to print the bit-layout of
 // floats and Halfs, mostly for debugging
 //---------------------------------------
-void half::createBitString(tchar c[19], half h)
+void half::createBitString(tchar_t c[19], half h)
 {
     uint16_t b = h.bits();
 
@@ -236,7 +236,7 @@ void half::createBitString(tchar c[19], half h)
 }
 
 
-void half::createBitString(tchar c[35], float32_t f)
+void half::createBitString(tchar_t c[35], float32_t f)
 {
     half::uif x;
     x.f = f;

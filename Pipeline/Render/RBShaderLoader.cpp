@@ -20,10 +20,10 @@ uint32_t TextureAddressModes( uint32_t mode )
 
     switch( mode )
     {
-    case Asset::WrapModes::Wrap:
+    case Asset::TextureCoordinateWrapMode::Wrap:
         outMode = (uint32_t) D3DTADDRESS_WRAP;
         break;
-    case Asset::WrapModes::Clamp:
+    case Asset::TextureCoordinateWrapMode::Clamp:
         outMode = (uint32_t) D3DTADDRESS_CLAMP;
         break;
     default:
@@ -39,22 +39,22 @@ D3DFORMAT GetD3DColorFormat( const Asset::TextureFormat format )
 
     switch( format )
     {
-    case Asset::TextureFormats::ARGB8888:
+    case Asset::TextureFormat::ARGB8888:
         outFormat = D3DFMT_A8R8G8B8;
         break;
-    case Asset::TextureFormats::ARGB4444:
+    case Asset::TextureFormat::ARGB4444:
         outFormat = D3DFMT_A4R4G4B4;
         break;
-    case Asset::TextureFormats::DXT5:
+    case Asset::TextureFormat::DXT5:
         outFormat = D3DFMT_DXT5;
         break;
-    case Asset::TextureFormats::AL88:
+    case Asset::TextureFormat::AL88:
         outFormat = D3DFMT_A8L8;
         break;
-    case Asset::TextureFormats::DXT1:
+    case Asset::TextureFormat::DXT1:
         outFormat = D3DFMT_DXT1;
         break;
-    case Asset::TextureFormats::RGB565:
+    case Asset::TextureFormat::RGB565:
         outFormat = D3DFMT_R5G6B5;
         break;
     default:
@@ -70,17 +70,17 @@ uint32_t TextureFilterMode( const Asset::TextureFilter mode )
 
     switch( mode )
     {
-    case Asset::TextureFilters::Point:
+    case Asset::TextureFilter::Point:
         outMode = Texture::FILTER_POINT;
         break;
-    case Asset::TextureFilters::Bilinear:
-    case Asset::TextureFilters::Trilinear:
+    case Asset::TextureFilter::Bilinear:
+    case Asset::TextureFilter::Trilinear:
         outMode = Texture::FILTER_LINEAR;
         break;
-    case Asset::RunTimeFilters::RTF_ANISO2_BI:
-    case Asset::RunTimeFilters::RTF_ANISO2_TRI:
-    case Asset::RunTimeFilters::RTF_ANISO4_BI:
-    case Asset::RunTimeFilters::RTF_ANISO4_TRI:
+    case Asset::RunTimeFilter::ANISO2_BI:
+    case Asset::RunTimeFilter::ANISO2_TRI:
+    case Asset::RunTimeFilter::ANISO4_BI:
+    case Asset::RunTimeFilter::ANISO4_TRI:
         outMode = Texture::FILTER_ANISOTROPIC;
         break;
     default:
@@ -94,24 +94,22 @@ void SetShaderClassAlpha( RenderShader* sh, Asset::AlphaType alphaMode )
 {
     switch ( alphaMode )
     {
-    case Asset::AlphaTypes::ALPHA_OPAQUE:
+    case Asset::AlphaType::Opaque:
         sh->m_alpha_type = RenderShader::ALPHA_OPAQUE;
         break;
 
-        break;
-
-    case Asset::AlphaTypes::ALPHA_ADDITIVE:
+    case Asset::AlphaType::Additive:
         sh->m_alpha_type = RenderShader::ALPHA_ADDITIVE;
         break;
 
-    case Asset::AlphaTypes::ALPHA_CUTOUT:
-    case Asset::AlphaTypes::ALPHA_SOFT_EDGE:
+    case Asset::AlphaType::CutOut:
+    case Asset::AlphaType::SoftEdge:
         sh->m_alpha_type = RenderShader::ALPHA_CUTOUT;
         break;
 
-    case Asset::AlphaTypes::ALPHA_SCUNGE:
-    case Asset::AlphaTypes::ALPHA_OVERLAY:
-    case Asset::AlphaTypes::ALPHA_BLENDED:
+    case Asset::AlphaType::Scunge:
+    case Asset::AlphaType::Overlay:
+    case Asset::AlphaType::Blended:
         sh->m_alpha_type = RenderShader::ALPHA_BLENDED;
         break;
     }
@@ -127,7 +125,7 @@ RBShaderLoader::~RBShaderLoader()
 
 }
 
-RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
+RenderShader* RBShaderLoader::ParseFile( const tchar_t* fname, ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
@@ -149,8 +147,8 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
 
     TextureSettings settings;
     settings.Clear();
-    settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
-    settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
+    settings.m_WrapU = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeU );
+    settings.m_WrapV = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeV );
 
     Asset::TexturePtr textureClass = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_ColorMapPath );
     if( textureClass.ReferencesObject() )
@@ -187,8 +185,8 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
     }
 
     settings.Clear();
-    settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
-    settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
+    settings.m_WrapU = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeU );
+    settings.m_WrapV = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeV );
 
     if ( shaderClass->m_NormalMapScaling > 0.0f )
     {
@@ -229,8 +227,8 @@ RenderShader* RBShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
     }
 
     settings.Clear();
-    settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
-    settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
+    settings.m_WrapU = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeU );
+    settings.m_WrapV = TextureAddressModes( (uint32_t)shaderClass->m_WrapModeV );
 
     Asset::TexturePtr gpiMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_GPIMapPath );
     if( gpiMap.ReferencesObject() )
@@ -348,7 +346,7 @@ void RBShaderLoader::SetColorFormat( TextureSettings* settings, uint32_t colorFo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar* shaderFilename, uint32_t alphaMode)
+void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar_t* shaderFilename, uint32_t alphaMode)
 {
     uint32_t shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )

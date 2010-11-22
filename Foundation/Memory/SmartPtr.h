@@ -1,95 +1,64 @@
 #pragma once
 
-#include "Platform/Types.h"
-#include "Platform/Assert.h"
-
-//
-// Types
-//
-
-#ifndef NULL
-#define NULL (0)
-#endif
+#include "Platform/Atomic.h"
+#include "Platform/Utility.h"
 
 namespace Helium
 {
-    //
-    // The reference count interface
-    //
-
-    template<class T>
-    class IRefCount
+    /// Base class for non-atomic reference counting support.
+    template< typename T >
+    class RefCountBase
     {
+    private:
+        /// Reference count.
+        mutable uint32_t m_RefCount;
+
     public:
-        virtual ~IRefCount() {}
+        /// @name Construction/Destruction
+        //@{
+        RefCountBase();
+        RefCountBase( const RefCountBase& rSource );
+        //@}
 
-        // returns the current ref count
-        virtual int GetRefCount() const = 0;
+        /// @name Reference Counting
+        //@{
+        uint32_t GetRefCount() const;
+        uint32_t IncrRefCount() const;
+        uint32_t DecrRefCount() const;
+        //@}
 
-        // increments the internal ref count
-        virtual void IncrRefCount() const = 0;
-
-        // decrements the internal ref count
-        virtual void DecrRefCount() const = 0;
+        /// @name Overloaded Operators
+        //@{
+        RefCountBase& operator=( const RefCountBase& rSource );
+        //@}
     };
 
-
-    //
-    // The base class
-    //  Derive from this to enable tracking and cleanup of objects automagically
-    //
-
-    template<class T>
-    class RefCountBase : public IRefCount<T>
+    /// Base class for atomic reference counting support.
+    template< typename T >
+    class AtomicRefCountBase
     {
-    protected:
-        mutable int m_RefCount;
+    private:
+        /// Reference count.
+        mutable volatile int32_t m_RefCount;
 
     public:
-        RefCountBase()
-            : m_RefCount (0)
-        {
+        /// @name Construction/Destruction
+        //@{
+        AtomicRefCountBase();
+        AtomicRefCountBase( const AtomicRefCountBase& rSource );
+        //@}
 
-        }
+        /// @name Reference Counting
+        //@{
+        uint32_t GetRefCount() const;
+        uint32_t IncrRefCount() const;
+        uint32_t DecrRefCount() const;
+        //@}
 
-        RefCountBase(const RefCountBase<T>& rhs)
-            : m_RefCount (0)
-        {
-
-        }
-
-        virtual ~RefCountBase()
-        {
-
-        }
-
-        virtual int GetRefCount() const
-        {
-            return m_RefCount;
-        }
-
-        virtual void IncrRefCount() const
-        {
-            m_RefCount++;
-        }
-
-        virtual void DecrRefCount() const
-        {
-            m_RefCount--;
-
-            HELIUM_ASSERT( m_RefCount >= 0 );
-
-            if (m_RefCount == 0)
-            {
-                delete this;
-            }
-        }
-
-        RefCountBase<T>& operator=(const RefCountBase<T>& rhs)
-        {
-            // do NOT copy the refcount
-            return *this;
-        }
+        /// @name Overloaded Operators
+        //@{
+        AtomicRefCountBase& operator=( const AtomicRefCountBase& rSource );
+        //@}
     };
 
 
@@ -106,13 +75,11 @@ namespace Helium
 
         RefCountAggregator()
         {
-
         }
 
-        RefCountAggregator(const T& rhs)
-            : m_Object (rhs)
+        RefCountAggregator( const T& rhs )
+            : m_Object( rhs )
         {
-
         }
 
         inline T* operator->() const
@@ -131,141 +98,45 @@ namespace Helium
     // SmartPtr safely manages the reference count on the stack
     //
 
-    template <typename T>
+    template< typename T >
     class SmartPtr
     {
-        // Allow access to other template's internal pointer
-        template <typename U>
-        friend class SmartPtr;
+        template< typename U > friend class SmartPtr;
 
     public:
-        SmartPtr() : m_Pointer (NULL)
-        {
+        /// @name Construction/Destruction
+        //@{
+        SmartPtr();
+        SmartPtr( const T* pPointer );
+        SmartPtr( const SmartPtr& rPointer );
+        template< typename U > SmartPtr( const SmartPtr< U >& rPointer );
+        ~SmartPtr();
+        //@}
 
-        }
+        /// @name Data Access
+        //@{
+        T* Get() const;
+        T* Ptr() const;
+        void Set( const T* pResource );
+        void Release();
 
-        inline SmartPtr(const T *p) : m_Pointer(const_cast<T*>(p))
-        {
-            if (m_Pointer)
-            {
-                m_Pointer->IncrRefCount();
-            }
-        }
+        bool ReferencesObject() const;
+        //@}
 
-        inline SmartPtr(const SmartPtr &r) : m_Pointer ( NULL )
-        {
-            m_Pointer = r.m_Pointer;
+        /// @name Overloaded Operators
+        //@{
+        T& operator*() const;
+        T* operator->() const;
 
-            if (m_Pointer)
-            {
-                m_Pointer->IncrRefCount();
-            }
-        }
+        operator T* const&() const;
 
-        template<typename U>
-        inline SmartPtr(const SmartPtr<U> &r) : m_Pointer ( NULL )
-        {
-            m_Pointer = r.m_Pointer;
-
-            if (m_Pointer)
-            {
-                m_Pointer->IncrRefCount();
-            }
-        }
-
-        ~SmartPtr()
-        {
-            operator=(NULL);
-        }
-
-        inline SmartPtr& operator=(const T* p)
-        {
-            // just in case, we do the increment before the decrement, and prior to the assignment
-            T* new_pointer = const_cast<T*>(p);
-
-            // notice the validity check
-            if (new_pointer != NULL)
-            {
-                // and increase a reference on the new guy we look at
-                new_pointer->IncrRefCount();
-            }
-
-            if ( m_Pointer != NULL )
-            {
-                // forget one reference on who we look at...
-                m_Pointer->DecrRefCount();
-            }
-
-            // do the assignment
-            m_Pointer = new_pointer;
-
-            return *this;
-        }
-
-        inline SmartPtr& operator=(const SmartPtr& p)
-        {
-            return operator=(p.m_Pointer);
-        }
-
-        template<typename U>
-        inline SmartPtr& operator=(const SmartPtr<U> &r)
-        {
-            return operator=(r.m_Pointer);
-        }
-
-        inline bool operator==(const T* p) const
-        {
-            return m_Pointer == p;
-        }
-
-        inline bool operator== (const SmartPtr& p) const
-        {
-            return operator==(p.m_Pointer);
-        }
-
-        template<typename U>
-        inline bool operator==(const SmartPtr<U>& r)
-        {
-            return operator==(r.m_Pointer);
-        }
-
-        inline bool operator!=(const T* p) const
-        {
-            return !operator==(p);
-        }
-
-        inline bool operator!=(const SmartPtr& p) const
-        {
-            return operator!=(p.m_Pointer);
-        }
-
-        template<typename U>
-        inline bool operator!=(const SmartPtr<U> &r)
-        {
-            return operator!=(r.m_Pointer);
-        }
-
-        inline T* operator->() const
-        {
-            return m_Pointer;
-        }
-
-        inline operator T*() const
-        {
-            return m_Pointer;
-        }
-
-        inline bool ReferencesObject() const
-        {
-            return m_Pointer != NULL;
-        }
-
-        inline T* Ptr() const
-        {
-            return m_Pointer;
-        }
+        SmartPtr& operator=( const T* pPointer );
+        SmartPtr& operator=( const SmartPtr& rPointer );
+        template< typename U > SmartPtr& operator=( const SmartPtr< U >& rPointer );
+        //@}
 
     private:
+        /// Object referenced by this smart pointer.
         T* m_Pointer;
     };
 
@@ -338,3 +209,5 @@ namespace Helium
         Helium::SmartPtr<T> m_SmartPtr;
     };
 }
+
+#include "Foundation/Memory/SmartPtr.inl"

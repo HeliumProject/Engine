@@ -3,6 +3,7 @@ require "Base"
 configuration {}
 
 project "Expat"
+	uuid "224FF97E-122E-4515-AB71-CBE11D3EC210"
 	kind "StaticLib"
 	language "C++"
 	defines
@@ -16,6 +17,7 @@ project "Expat"
 	}
 
 project "LiteSQL"
+	uuid "6D880828-B2BC-4FB5-A8E2-75FBE177349A"
 	kind "StaticLib"
 	language "C++"
 	includedirs
@@ -58,6 +60,7 @@ project "LiteSQL"
 	}
 
 project "lua"
+	uuid "A6339978-DA6B-4DEE-9997-0D60052CFFC3"
 	kind "StaticLib"
 	language "C++"
 	files
@@ -72,6 +75,7 @@ project "lua"
 	}
 	
 project "nvtt"
+	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
 	kind "StaticLib"
 	language "C++"
 	includedirs
@@ -109,7 +113,34 @@ project "nvtt"
 			"Dependencies/nvtt/project/vc8",
 		}
 
+	-- Override inline function expansion and intrinsic function usage settings for Debug builds.
+	configuration { "windows", "Debug" }
+		buildoptions
+		{
+			"/Ob2",
+			"/Oi",
+		}
+		flags
+		{
+			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
+		}
+
+project "png"
+	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
+	kind "StaticLib"
+	language "C++"
+	includedirs
+	{
+		"Dependencies/zlib"
+	}
+	files
+	{
+		"Dependencies/png/*.h",
+		"Dependencies/png/*.c",
+	}
+
 project "tiff"
+	uuid "FAB06C82-5A66-419A-ACD1-6F771984E35C"
 	kind "StaticLib"
 	language "C++"
 	includedirs
@@ -155,6 +186,7 @@ project "tiff"
 		}
 
 project "zlib"
+	uuid "23112391-0616-46AF-B0C2-5325E8530FBA"
 	kind "StaticLib"
 	language "C++"
 	files

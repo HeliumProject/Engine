@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        const static tchar LIST_ATTR_SORTED[]    = TXT( "sorted" );
+        const static tchar_t LIST_ATTR_SORTED[]    = TXT( "sorted" );
 
         namespace MoveDirections
         {
@@ -41,6 +41,6 @@ namespace Helium
             Attribute< std::set< size_t > >     a_SelectedItemIndices;
         };
 
-        typedef Helium::SmartPtr<List> ListPtr;
+        typedef Helium::StrongPtr<List> ListPtr;
     }
 }

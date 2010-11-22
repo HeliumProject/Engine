@@ -8,6 +8,8 @@
 
 #include <wx/dataview.h>
 
+#define HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE 1
+
 namespace Helium
 {
     namespace Editor
@@ -24,7 +26,7 @@ namespace Helium
                 COUNT //Do not use: must be last
             };
 
-            static const tchar* s_Labels[COUNT+1] = 
+            static const tchar_t* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
                 TXT( "Details" ),
@@ -33,7 +35,7 @@ namespace Helium
                 TXT( "Unknown" ), //COUNT
             };
 
-            inline const tchar* Label( uint32_t id )
+            inline const tchar_t* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
@@ -60,9 +62,10 @@ namespace Helium
 
 
         ///////////////////////////////////////////////////////////////////////
-        namespace ProjectMenuIDs
+        class ProjectMenuID
         {
-            enum ProjectMenuID
+        public:
+            enum Enum
             {
                 Filename = 0,
                 FullPath,
@@ -70,31 +73,29 @@ namespace Helium
 
                 COUNT //Do not use: must be last
             };
-            static void ProjectMenuIDsEnumerateEnum( Reflect::Enumeration* info )
+
+            REFLECT_DECLARE_ENUMERATION( ProjectMenuID );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info->AddElement( Filename, TXT( "Filename" ) );
-                info->AddElement( FullPath, TXT( "FullPath" ) );
-                info->AddElement( RelativePath, TXT( "RelativePath" ) );
+                info.AddElement( Filename,      TXT( "Filename" ) );
+                info.AddElement( FullPath,      TXT( "FullPath" ) );
+                info.AddElement( RelativePath,  TXT( "RelativePath" ) );
             }
 
-            static const tchar* s_Labels[COUNT] = 
-            {
-                TXT( "Filename" ),
-                TXT( "Full Path" ),
-                TXT( "Relative Path" ),
-            };
+            static const tchar_t* s_Labels[COUNT];
 
-            inline const tchar* Label( uint32_t id )
+            inline const tchar_t* Label( uint32_t id )
             {
                 HELIUM_ASSERT( id >= 0 );
                 HELIUM_ASSERT( id < COUNT );
                 return s_Labels[id];
             }
-        }
-        typedef ProjectMenuIDs::ProjectMenuID ProjectMenuID;
+        };
 
 
         ///////////////////////////////////////////////////////////////////////
+        class ProjectViewModel;
         class ProjectViewModelNode;
         typedef Helium::SmartPtr< ProjectViewModelNode > ProjectViewModelNodePtr;
         typedef std::set< ProjectViewModelNodePtr > S_ProjectViewModelNodeChildren;
@@ -102,7 +103,8 @@ namespace Helium
         class ProjectViewModelNode : public Helium::RefCountBase< ProjectViewModelNode >
         {
         public:
-            ProjectViewModelNode( ProjectViewModelNode* parent,
+            ProjectViewModelNode( ProjectViewModel* model,
+                ProjectViewModelNode* parent,
                 const Helium::Path& path,
                 const Document* document = NULL,
                 const bool isContainer = false );
@@ -111,11 +113,11 @@ namespace Helium
             ProjectViewModelNode* GetParent();
             S_ProjectViewModelNodeChildren& GetChildren();
 
+
             bool IsContainer() const;
 
             void SetPath( const Helium::Path& path );
             const Helium::Path& GetPath();
-            //void PathChanged( const Attribute< Helium::Path >::ChangeArgs& text );
 
             tstring GetName() const;
             tstring GetDetails() const;
@@ -127,6 +129,9 @@ namespace Helium
 
             void DocumentSaved( const DocumentEventArgs& args );
             void DocumentClosed( const DocumentEventArgs& args );
+            void DocumentChanging( const DocumentEventArgs& args );
+            void DocumentChanged( const DocumentEventArgs& args );
+            void DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args );
             void DocumentPathChanged( const DocumentPathChangedArgs& args );
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
@@ -141,6 +146,7 @@ namespace Helium
             }
 
         private:
+            ProjectViewModel* m_Model;
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
@@ -163,7 +169,8 @@ namespace Helium
             wxDataViewColumn* CreateColumn( uint32_t id );
             void ResetColumns();
 
-            void SetProject( Project* project, const Document* document = NULL );
+            ProjectViewModelNode* OpenProject( Project* project, const Document* document = NULL );
+            void CloseProject();
 
             bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
             bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
@@ -177,11 +184,8 @@ namespace Helium
             void OnPathRemoved( const Helium::Path& path );
 
             // Document and DocumentManager Events
-            void OnProjectSave( const DocumentEventArgs& args );
-            void OnProjectClosed( const DocumentEventArgs& args );
-            void OnProjectPathChanged( const DocumentPathChangedArgs& args );
-            void OnDocumentAdded( const DocumentEventArgs& args );
-            void OnDocumentRemoved( const DocumentEventArgs& args );
+            void OnDocumentOpened( const DocumentEventArgs& args );
+            void OnDocumenClosed( const DocumentEventArgs& args );
 
         public:
             // wxDataViewModel pure virtual interface

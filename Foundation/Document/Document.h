@@ -10,6 +10,20 @@ namespace Helium
 
     ///////////////////////////////////////////////////////////////////////////
     // Arguments for file save, open, close, etc...
+    class DocumentObjectChangedArgs
+    {
+    public:
+        const bool m_HasChanged;
+
+        DocumentObjectChangedArgs( const bool hasChanged )
+            : m_HasChanged( hasChanged )
+        {
+        }
+    };
+    typedef Helium::Signature< const DocumentObjectChangedArgs& > DocumentObjectChangedSignature;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Arguments for file save, open, close, etc...
     class DocumentEventArgs
     {
     public:
@@ -60,14 +74,17 @@ namespace Helium
         //
         // API
         //
-        bool Save( tstring& error ) const;
-        void Close() const;
+        bool Save( tstring& error );
+        void Close();
+
+        void Checkout() const;
 
         bool HasChanged() const
         {
             return m_HasChanged;
         }
-        void HasChanged( bool changed ) const;
+        void HasChanged( bool changed );
+        void OnObjectChanged( const DocumentObjectChangedArgs& args );
 
         const Helium::Path& GetPath() const
         {
@@ -110,7 +127,7 @@ namespace Helium
         mutable DocumentEventSignature::Event e_Changed; 
 
         // Modified On Disk
-        mutable DocumentPathChangedSignature::Event e_ModifiedOnDiskStateChanged;
+        mutable DocumentEventSignature::Event e_ModifiedOnDiskStateChanged;
 
         // Path
         mutable DocumentPathChangedSignature::Event e_PathChanged;
@@ -119,7 +136,7 @@ namespace Helium
         mutable DocumentEventSignature::Event e_CheckedOut;
 
     private:
-        mutable bool m_HasChanged;  //<! have we been changed since we opened or last saved?
+        bool m_HasChanged;  //<! have we been changed since we opened or last saved?
         Helium::Path m_Path;
         int32_t m_Revision;
         

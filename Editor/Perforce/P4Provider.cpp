@@ -28,6 +28,8 @@ Provider::Provider()
 , m_IsConnected( false )
 , m_Abort( false )
 , m_Shutdown( false )
+, m_Execute( Condition::RESET_MODE_MANUAL )
+, m_Completed( Condition::RESET_MODE_MANUAL )
 , m_Command( NULL )
 , m_Phase( CommandPhases::Unknown )
 {
@@ -52,8 +54,8 @@ Provider::~Provider()
 
 void Provider::Initialize()
 {
-    Helium::Thread::Entry entry = &Helium::Thread::EntryHelper<Provider, &Provider::ThreadEntry>;
-    if ( !m_Thread.Create( entry, this, "Perforce Transaction Thread" ) )
+    Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<Provider, &Provider::ThreadEntry>;
+    if ( !m_Thread.Create( entry, this, TXT( "Perforce Transaction Thread" ) ) )
     {
         throw Perforce::Exception( TXT( "Unable to create thread for perforce transaction" ) );
     }
@@ -71,7 +73,7 @@ void Provider::Cleanup()
 
         m_Shutdown = true;
         m_Execute.Signal();
-        m_Thread.Wait();
+        m_Thread.Join();
     }
 }
 
@@ -129,7 +131,7 @@ void Provider::RunCommand( Command* command )
         throw Perforce::Exception( TXT( "Perforce connection is not enabled" ) );
     }
 
-    Helium::TakeMutex mutex ( m_Mutex );
+    Helium::MutexScopeLock mutex ( m_Mutex );
 
     m_Abort = false;
     m_Phase = CommandPhases::Unknown;
@@ -248,7 +250,7 @@ void Provider::RunCommand( Command* command )
 
     if ( command->m_ErrorCount )
     {
-        HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), ("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
+        HELIUM_ASSERT_MSG( !command->m_ErrorString.empty(), TXT("No error string was captured from a failed perforce command, this indicates a command object is not properly interpreting the server's output") );
         throw Perforce::Exception( TXT( "%d error%s for command '%s':\n%s" ), command->m_ErrorCount, command->m_ErrorCount > 1 ? "s" : "", command->AsString().c_str(), command->m_ErrorString.c_str() );
     }
 }

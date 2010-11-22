@@ -99,7 +99,7 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
     list->Bind( data );
 
     // setup the default value
-    if (field->m_Default != NULL)
+    if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
         *field->m_Default >> outStream;

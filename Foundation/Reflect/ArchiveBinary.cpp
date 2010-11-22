@@ -3,7 +3,6 @@
 #include "Registry.h"
 #include "Serializers.h"
 
-#include "Platform/Compiler.h"
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"
@@ -170,7 +169,7 @@ void ArchiveBinary::Read()
 
     // read and verify CRC
     uint32_t crc = CRC_DEFAULT;
-    uint32_t current_crc = crc;
+    uint32_t current_crc = Helium::BeginCrc32();
     m_Stream->Read(&crc); 
 
 #ifdef REFLECT_DISABLE_BINARY_CRC
@@ -187,7 +186,6 @@ void ArchiveBinary::Read()
         uint32_t count = 0;
         uint8_t block[CRC_BLOCK_SIZE];
         memset(block, 0, CRC_BLOCK_SIZE);
-        HELIUM_ASSERT(current_crc == CRC_DEFAULT);
 
         // snapshot our starting location
         uint32_t start = (uint32_t)m_Stream->TellRead();
@@ -202,7 +200,7 @@ void ArchiveBinary::Read()
             uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
-            current_crc = Helium::Crc32(current_crc, block, got);
+            current_crc = Helium::UpdateCrc32(current_crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, current_crc);
@@ -248,7 +246,7 @@ void ArchiveBinary::Read()
 
     // deserialize type data
     {
-        REFLECT_SCOPE_TIMER( ("RTTI Read") );
+        REFLECT_SCOPE_TIMER( ("Type Information Read") );
 
         m_Stream->SeekRead(type_offset, std::ios_base::beg);
 
@@ -270,7 +268,7 @@ void ArchiveBinary::Read()
             DeserializeComposite(c);
 
             m_ClassesByID[ c->m_TypeID ] = c;
-            m_ClassesByShortName[ c->m_ShortName ] = c;
+            m_ClassesByShortName[ c->m_Name ] = c;
         }
 
         int32_t terminator = -1;
@@ -278,7 +276,7 @@ void ArchiveBinary::Read()
 
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException( TXT( "Error reading file, unterminated RTTI type block" ) );
+            throw Reflect::DataFormatException( TXT( "Error reading file, unterminated type information type block" ) );
         }
     }
 
@@ -303,7 +301,7 @@ void ArchiveBinary::Read()
         m_Skip = false;
     }
 
-    V_Element append;
+    std::vector< ElementPtr > append;
 
     // deserialize appended file elements
     {
@@ -365,7 +363,7 @@ void ArchiveBinary::Write()
     }
 
     // tell visitors to generate append
-    V_Element append;
+    std::vector< ElementPtr > append;
     PostSerialize(append);
 
     // serialize appended file elements
@@ -377,7 +375,7 @@ void ArchiveBinary::Write()
 
     // serialize type data
     {
-        REFLECT_SCOPE_TIMER( ("RTTI Write") );
+        REFLECT_SCOPE_TIMER( ("Type Information Write") );
 
         // write our current location back at our offset
         uint32_t type_location = (uint32_t)m_Stream->TellWrite();
@@ -435,7 +433,7 @@ void ArchiveBinary::Write()
         HELIUM_ASSERT(crc == CRC_INVALID);
 
         // reset this local back to default for computation
-        crc = CRC_DEFAULT;
+        crc = Helium::BeginCrc32();
 
         // seek to our starting point (after crc location)
         m_Stream->SeekRead(crc_offset + sizeof(crc), std::ios_base::beg);
@@ -450,7 +448,7 @@ void ArchiveBinary::Write()
             uint32_t got = (uint32_t) m_Stream->ElementsRead();
 
             // crc block
-            crc = Helium::Crc32(crc, block, got);
+            crc = Helium::UpdateCrc32(crc, block, got);
 
 #ifdef REFLECT_DEBUG_BINARY_CRC
             Log::Print("CRC %d (length %d) for datum 0x%08x is 0x%08x\n", count++, got, *(uint32_t*)block, crc);
@@ -502,10 +500,10 @@ void ArchiveBinary::Finish()
 
 void ArchiveBinary::Serialize(const ElementPtr& element)
 {
-    REFLECT_SCOPE_TIMER_INST( ("Serialize %s", element->GetClass()->m_ShortName.c_str()) );
+    REFLECT_SCOPE_TIMER_INST( ("Serialize %s", element->GetClass()->m_Name.c_str()) );
 
     // use the string pool index for this type's short name
-    int32_t index = m_Strings.Insert(element->GetClass()->m_ShortName);
+    int32_t index = m_Strings.Insert(element->GetClass()->m_Name);
     m_Stream->Write(&index); 
 
     // get and stub out the start offset where we are now (will become length after writing is done)
@@ -514,14 +512,14 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Debug(TXT("Serializing %s (type %d)\n"), element->GetClass()->m_ShortName.c_str(), element->GetType());
+    Debug(TXT("Serializing %s (type %d)\n"), element->GetClass()->m_Name.c_str(), element->GetType());
     m_Indent.Push();
 #endif
 
     PreSerialize(element);
 
     {
-        REFLECT_SCOPE_TIMER_INST( ("PreSerialize %s", element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("PreSerialize %s", element->GetClass()->m_Name.c_str()) );
 
         element->PreSerialize();
     }
@@ -560,7 +558,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
     }
 
     {
-        REFLECT_SCOPE_TIMER_INST( ("PostSerialize %s", element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("PostSerialize %s", element->GetClass()->m_Name.c_str()) );
 
         element->PostSerialize();
     }
@@ -585,7 +583,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
 #endif
 }
 
-void ArchiveBinary::Serialize(const V_Element& elements, uint32_t flags)
+void ArchiveBinary::Serialize(const std::vector< ElementPtr >& elements, uint32_t flags)
 {
     REFLECT_SCOPE_TIMER_INST( "" )
 
@@ -598,8 +596,8 @@ void ArchiveBinary::Serialize(const V_Element& elements, uint32_t flags)
     m_Indent.Push();
 #endif
 
-    V_Element::const_iterator itr = elements.begin();
-    V_Element::const_iterator end = elements.end();
+    std::vector< ElementPtr >::const_iterator itr = elements.begin();
+    std::vector< ElementPtr >::const_iterator end = elements.end();
     for (int index = 0; itr != end; ++itr, ++index )
     {
         Serialize(*itr);
@@ -663,7 +661,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    HELIUM_ASSERT( e != NULL );
+    HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);
@@ -706,7 +704,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     {
         PreSerialize(element, field);
 
-        // write our latent field ID to the stream, this will always be valid since we persist ALL of the RTTI data
+        // write our latent field ID to the stream, this will always be valid since we persist ALL of the type information data
         m_Stream->Write(&field->m_FieldID); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -760,24 +758,24 @@ ElementPtr ArchiveBinary::Allocate()
     M_StrToClass::iterator found = m_ClassesByShortName.find(str);
     if (found == m_ClassesByShortName.end())
     {
-        // we failed to find a type in the latent RTTI data, that is bad
+        // we failed to find a type in the latent type data, that is bad
         HELIUM_BREAK();
         throw Reflect::TypeInformationException( TXT( "Unable to locate type '%s'" ), str.c_str());
     }
 
     // this is guaranteed to be our legacy short name name
-    const tstring& shortName (found->second->m_ShortName);
+    const tstring& name (found->second->m_Name);
 
     // allocate instance by short name and remap the new and different short name to the legacy short name name for later lookup
-    if (m_Cache.Create(shortName, element) && shortName != element->GetClass()->m_ShortName)
+    if (m_Cache.Create(name, element) && name != element->GetClass()->m_Name)
     {
         // map current short name name to LEGACY short name name so we can retrieve type information via a lookup later
-        Insert<std::map< tstring, tstring >>::Result inserted = m_ShortNameMapping.insert( std::map< tstring, tstring >::value_type (element->GetClass()->m_ShortName, shortName) );
+        Insert<std::map< tstring, tstring >>::Result inserted = m_ShortNameMapping.insert( std::map< tstring, tstring >::value_type (element->GetClass()->m_Name, name) );
 
         // check for insanity
-        if ( !inserted.second && inserted.first->second != shortName )
+        if ( !inserted.second && inserted.first->second != name )
         {
-            throw Reflect::TypeInformationException( TXT( "Overloaded shortName mapping for '%s', this is not supported" ), shortName.c_str());
+            throw Reflect::TypeInformationException( TXT( "Overloaded name mapping for '%s', this is not supported" ), name.c_str());
         }
     }
 
@@ -821,16 +819,16 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
 
     if (element.ReferencesObject())
     {
-        REFLECT_SCOPE_TIMER_INST( ("Deserialize %s", element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("Deserialize %s", element->GetClass()->m_Name.c_str()) );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Debug(TXT("Deserializing %s (type %d)\n"), element->GetClass()->m_ShortName.c_str(), element->GetType());
+        Debug(TXT("Deserializing %s (type %d)\n"), element->GetClass()->m_Name.c_str(), element->GetType());
         m_Indent.Push();
 #endif
 
         {
-            REFLECT_SCOPE_TIMER_INST( ("PreDeserialize %s", element->GetClass()->m_ShortName.c_str()) );
+            REFLECT_SCOPE_TIMER_INST( ("PreDeserialize %s", element->GetClass()->m_Name.c_str()) );
 
             element->PreDeserialize();
         }
@@ -847,7 +845,7 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
         }
 
         {
-            REFLECT_SCOPE_TIMER_INST( ("PostDeserialize %s", element->GetClass()->m_ShortName.c_str()) );
+            REFLECT_SCOPE_TIMER_INST( ("PostDeserialize %s", element->GetClass()->m_Name.c_str()) );
 
             if ( !TryElementCallback( element, &Element::PostDeserialize ) )
             {
@@ -866,7 +864,7 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
     }
 }
 
-void ArchiveBinary::Deserialize(V_Element& elements, uint32_t flags)
+void ArchiveBinary::Deserialize(std::vector< ElementPtr >& elements, uint32_t flags)
 {
     uint32_t start_offset = (uint32_t)m_Stream->TellRead();
 
@@ -949,7 +947,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             const Class* type = NULL;
 
             // find the type of this object
-            M_StrToClass::iterator type_found = m_ClassesByShortName.find(element->GetClass()->m_ShortName);
+            M_StrToClass::iterator type_found = m_ClassesByShortName.find(element->GetClass()->m_Name);
 
             // get Element's type info
             if ( type_found != m_ClassesByShortName.end() )
@@ -959,21 +957,21 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             else
             {
                 // our short name has changed so look up the legacy short name name given the short name of the current object
-                std::map< tstring, tstring >::const_iterator shortName_found = m_ShortNameMapping.find( element->GetClass()->m_ShortName );
+                std::map< tstring, tstring >::const_iterator name_found = m_ShortNameMapping.find( element->GetClass()->m_Name );
 
                 // we should always find it, else its a bug/internal error
-                if ( shortName_found == m_ShortNameMapping.end() )
+                if ( name_found == m_ShortNameMapping.end() )
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to remap short name '%s'" ), element->GetClass()->m_ShortName.c_str());
+                    throw Reflect::TypeInformationException( TXT( "Unable to remap short name '%s'" ), element->GetClass()->m_Name.c_str());
                 }
 
                 // we throw if there is an internal error, so just dereference the result
-                type = m_ClassesByShortName.find( shortName_found->second )->second;
+                type = m_ClassesByShortName.find( name_found->second )->second;
             }
 
             if (type == NULL)
             {
-                Log::Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
+                Log::Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_Name.c_str());
             }
 
             // while we haven't hit the terminator
@@ -1111,7 +1109,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         }
         catch (Reflect::LogisticException& ex)
         {
-            Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
+            Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_Name.c_str(), latent_field->m_Name.c_str(), ex.What());
         }
     }
 
@@ -1120,7 +1118,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         // attempt processing
         if (!element->ProcessComponent(component, latent_field->m_Name))
         {
-            Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
+            Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_Name.c_str(), component->GetClass()->m_Name.c_str());
         }
     }
 }
@@ -1128,10 +1126,10 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
 void ArchiveBinary::SerializeComposite(const Composite* composite)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
+    Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_Name.c_str(), composite->m_FieldIDToInfo.size());
 #endif
 
-    int32_t string_index = m_Strings.Insert(composite->m_ShortName);
+    int32_t string_index = m_Strings.Insert(composite->m_Name);
     m_Stream->Write(&string_index); 
     m_Stream->Write(&composite->m_TypeID); 
 
@@ -1153,7 +1151,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 {
     int32_t string_index = -1;
     m_Stream->Read(&string_index); 
-    composite->m_ShortName = m_Strings.Get(string_index);
+    composite->m_Name = m_Strings.Get(string_index);
 
     m_Stream->Read(&composite->m_TypeID); 
 
@@ -1161,7 +1159,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
     m_Stream->Read(&field_count); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT(" Deserializing %s (%d fields)\n"), composite->m_ShortName.c_str(), field_count);
+    Log::Debug(TXT(" Deserializing %s (%d fields)\n"), composite->m_Name.c_str(), field_count);
 #endif
 
     for ( int32_t i=0; i<field_count; ++i )
@@ -1184,7 +1182,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 
     if (terminator != -1)
     {
-        throw Reflect::DataFormatException( TXT( "Error reading file, unterminated RTTI field block" ) );
+        throw Reflect::DataFormatException( TXT( "Error reading file, unterminated type field block" ) );
     }
 
     return !m_Stream->Fail();
@@ -1200,7 +1198,7 @@ void ArchiveBinary::SerializeField(const Field* field)
     const Class* c = Registry::GetInstance()->GetClass(field->m_SerializerID);
     if (c != NULL)
     {
-        string_index = m_Strings.Insert(c->m_ShortName);
+        string_index = m_Strings.Insert(c->m_Name);
     }
     else
     {
@@ -1209,7 +1207,7 @@ void ArchiveBinary::SerializeField(const Field* field)
     m_Stream->Write(&string_index); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT("  Serializing %s (short name %s)\n"), c->m_FullName.c_str(), c->m_ShortName.c_str());
+    Log::Debug(TXT("  Serializing %s (short name %s)\n"), c->m_Name.c_str(), c->m_Name.c_str());
 #endif
 }
 
@@ -1239,7 +1237,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug(TXT("  Deserializing %s (short name %s)\n"), c->m_FullName.c_str(), str.c_str());
+        Log::Debug(TXT("  Deserializing %s (short name %s)\n"), c->m_Name.c_str(), str.c_str());
 #endif
     }
 
@@ -1248,7 +1246,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
 
 void ArchiveBinary::ToStream( const ElementPtr& element, std::iostream& stream )
 {
-    V_Element elements(1);
+    std::vector< ElementPtr > elements(1);
     elements[0] = element;
     ToStream( elements, stream );
 }
@@ -1268,8 +1266,8 @@ ElementPtr ArchiveBinary::FromStream( std::iostream& stream, int searchType )
     archive.Read();
     archive.Close(); 
 
-    V_Element::iterator itr = archive.m_Spool.begin();
-    V_Element::iterator end = archive.m_Spool.end();
+    std::vector< ElementPtr >::iterator itr = archive.m_Spool.begin();
+    std::vector< ElementPtr >::iterator end = archive.m_Spool.end();
     for ( ; itr != end; ++itr )
     {
         if ((*itr)->HasType(searchType))
@@ -1281,7 +1279,7 @@ ElementPtr ArchiveBinary::FromStream( std::iostream& stream, int searchType )
     return NULL;
 }
 
-void ArchiveBinary::ToStream( const V_Element& elements, std::iostream& stream )
+void ArchiveBinary::ToStream( const std::vector< ElementPtr >& elements, std::iostream& stream )
 {
     ArchiveBinary archive;
 
@@ -1294,7 +1292,7 @@ void ArchiveBinary::ToStream( const V_Element& elements, std::iostream& stream )
     archive.Close(); 
 }
 
-void ArchiveBinary::FromStream( std::iostream& stream, V_Element& elements )
+void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ElementPtr >& elements )
 {
     ArchiveBinary archive;
 

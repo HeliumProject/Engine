@@ -64,7 +64,7 @@ void ArchiveXML::Open( bool write )
     Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar>( m_Path, write, m_ByteOrder );
+    Reflect::TCharStreamPtr stream = new FileStream<tchar_t>( m_Path, write, m_ByteOrder );
     OpenStream( stream, write );
 }
 
@@ -132,17 +132,17 @@ void ArchiveXML::Read()
     {
         m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
-        tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
+        tchar_t* pszBuffer = (tchar_t*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
         HELIUM_ASSERT(pszBuffer != NULL);
 
         // divide by the character size so wide char builds don't override the allocation
         //  stream objects read characters, not byte-by-byte
-        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar));
+        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar_t));
 
         int last_read = static_cast<int>(m_Stream->ElementsRead());
-        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar), last_read == 0) != 0)
+        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar_t), last_read == 0) != 0)
         {
-            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);
+            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar_t*)pszBuffer);
         }
     }
 
@@ -171,7 +171,7 @@ void ArchiveXML::Write()
     Serialize(m_Spool, ArchiveFlags::Status);
 
     // tell visitors to generate append
-    V_Element append;
+    std::vector< ElementPtr > append;
     PostSerialize(append);
 
     // serialize appended file elements
@@ -210,7 +210,7 @@ void ArchiveXML::Serialize(const ElementPtr& element)
     PreSerialize(element);
 
     {
-        REFLECT_SCOPE_TIMER_INST( ("PreSerialize %s", element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("PreSerialize %s", element->GetClass()->m_Name.c_str()) );
 
         element->PreSerialize();
     }
@@ -231,18 +231,18 @@ void ArchiveXML::Serialize(const ElementPtr& element)
     SerializeFooter(element);
 
     {
-        REFLECT_SCOPE_TIMER_INST( ("PostSerialize %s", element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("PostSerialize %s", element->GetClass()->m_Name.c_str()) );
 
         element->PostSerialize();
     }
 }
 
-void ArchiveXML::Serialize(const V_Element& elements, uint32_t flags)
+void ArchiveXML::Serialize(const std::vector< ElementPtr >& elements, uint32_t flags)
 {
     m_FieldNames.push( tstring () );
 
-    V_Element::const_iterator itr = elements.begin();
-    V_Element::const_iterator end = elements.end();
+    std::vector< ElementPtr >::const_iterator itr = elements.begin();
+    std::vector< ElementPtr >::const_iterator end = elements.end();
     for (int index = 0; itr != end; ++itr, ++index )
     {
         Serialize(*itr);
@@ -297,7 +297,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     ElementPtr e;
     m_Cache.Create( field->m_SerializerID, e );
 
-    HELIUM_ASSERT( e != NULL );
+    HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
     SerializerPtr serializer = ObjectCast<Serializer>(e);
@@ -360,7 +360,7 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
 
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
-    *m_Stream << TXT( "<Element Type=\"" ) << element->GetClass()->m_ShortName << TXT( "\"" );
+    *m_Stream << TXT( "<Element Type=\"" ) << element->GetClass()->m_Name << TXT( "\"" );
 
     //
     // Field name
@@ -413,7 +413,7 @@ void ArchiveXML::Deserialize(ElementPtr& element)
     }
 }
 
-void ArchiveXML::Deserialize(V_Element& elements, uint32_t flags)
+void ArchiveXML::Deserialize(std::vector< ElementPtr >& elements, uint32_t flags)
 {
     if (!m_Components.empty())
     {
@@ -507,7 +507,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         if ( parentTypeDefinition )
         {
             // look for the field name in the attributes
-            const tchar* fieldName = NULL;
+            const tchar_t* fieldName = NULL;
             for (int i=0; papszAttrs[i]; i+=2)
             {
                 if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )
@@ -537,7 +537,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                     DangerousCast<Serializer>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
                 }
 
-                if (element != NULL)
+                if (element.ReferencesObject())
                 {
                     // flag this as a field
                     newState->SetFlag( ParsingState::kField, true );
@@ -554,7 +554,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Try and get a creator for a new element to store the data
     //
 
-    if (newState->m_Element == NULL)
+    if (!newState->m_Element.ReferencesObject())
     {
         //
         // Attempt creation of element via short name
@@ -562,7 +562,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         m_Cache.Create(elementType, newState->m_Element);
 
-        if (newState->m_Element == NULL)
+        if (!newState->m_Element.ReferencesObject())
         {
             Log::Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
         }
@@ -574,7 +574,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     if (newState->m_Element)
     {
-        REFLECT_SCOPE_TIMER_INST( ("PreDeserialize %s", newState->m_Element->GetClass()->m_ShortName.c_str()) );
+        REFLECT_SCOPE_TIMER_INST( ("PreDeserialize %s", newState->m_Element->GetClass()->m_Name.c_str()) );
 
         newState->m_Element->PreDeserialize();
     }
@@ -654,7 +654,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         // do callbacks
         if ( topState->m_Element )
         {
-            REFLECT_SCOPE_TIMER_INST( ("PostDeserialize %s", topState->m_Element->GetClass()->m_ShortName.c_str()) );
+            REFLECT_SCOPE_TIMER_INST( ("PostDeserialize %s", topState->m_Element->GetClass()->m_Name.c_str()) );
 
             if ( !TryElementCallback( topState->m_Element, &Element::PostDeserialize ) )
             {
@@ -694,7 +694,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     // we are a component, so send us up to be processed by container
                     if (container && !container->ProcessComponent(topState->m_Element, topState->m_Field->m_Name))
                     {
-                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_ShortName.c_str(), topState->m_Element->GetClass()->m_ShortName.c_str());
+                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_Name.c_str(), topState->m_Element->GetClass()->m_Name.c_str());
                     }
                 }
             }
@@ -708,7 +708,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
         parentState->m_Components.push_back(topState->m_Element);
     }
-    else if ( topState->m_Element != NULL )
+    else if ( topState->m_Element.ReferencesObject() )
     {
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Element );
@@ -723,7 +723,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
 void ArchiveXML::ToString(const ElementPtr& element, tstring& xml )
 {
-    V_Element elements(1);
+    std::vector< ElementPtr > elements(1);
     elements[0] = element;
     return ToString( elements, xml );
 }
@@ -743,8 +743,8 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
     archive.m_Stream = new Reflect::TCharStream(&strStream); 
     archive.Read();
 
-    V_Element::iterator itr = archive.m_Spool.begin();
-    V_Element::iterator end = archive.m_Spool.end();
+    std::vector< ElementPtr >::iterator itr = archive.m_Spool.begin();
+    std::vector< ElementPtr >::iterator end = archive.m_Spool.end();
     for ( ; itr != end; ++itr )
     {
         if ((*itr)->HasType(searchType))
@@ -756,7 +756,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
     return NULL;
 }
 
-void ArchiveXML::ToString( const V_Element& elements, tstring& xml )
+void ArchiveXML::ToString( const std::vector< ElementPtr >& elements, tstring& xml )
 {
     ArchiveXML archive;
     tstringstream strStream;
@@ -768,7 +768,7 @@ void ArchiveXML::ToString( const V_Element& elements, tstring& xml )
     xml = strStream.str();
 }
 
-void ArchiveXML::FromString( const tstring& xml, V_Element& elements )
+void ArchiveXML::FromString( const tstring& xml, std::vector< ElementPtr >& elements )
 {
     ArchiveXML archive;
     tstringstream strStream;

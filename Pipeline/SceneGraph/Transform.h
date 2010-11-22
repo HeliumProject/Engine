@@ -11,7 +11,7 @@ namespace Helium
     {
         class Scene;
         class Transform;
-        typedef Helium::SmartPtr< SceneGraph::Transform > TransformPtr;
+        typedef Helium::StrongPtr< SceneGraph::Transform > TransformPtr;
 
         class PIPELINE_API Transform : public HierarchyNode
         {

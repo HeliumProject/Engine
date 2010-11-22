@@ -22,7 +22,7 @@
 using namespace Helium;
 
 //-----------------------------------------------------------------------------
-tchar* Image::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
+tchar_t* Image::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
 {
     TXT( "_anim_" ),
     TXT( "_volume_" ),
@@ -179,7 +179,7 @@ void Image::ConvertGrayScale()
 }
 
 //-----------------------------------------------------------------------------
-bool Image::WriteRAW(const tchar* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const
+bool Image::WriteRAW(const tchar_t* fname, void* data, uint32_t size, uint32_t face, bool convert_to_srgb) const
 {
     // size must be a multiple of 4
     HELIUM_ASSERT( (size&3)==0 );
@@ -230,7 +230,7 @@ bool Image::WriteRAW(const tchar* fname, void* data, uint32_t size, uint32_t fac
 }
 
 //-----------------------------------------------------------------------------
-Image* Image::LoadTIFF(const tchar* fname, bool convert_to_linear)
+Image* Image::LoadTIFF(const tchar_t* fname, bool convert_to_linear)
 {
     TIFF* tiff = NULL;
 #ifdef UNICODE
@@ -452,10 +452,10 @@ static int SortAnimFiles( const void *p_a, const void *p_b )
 }
 
 //-----------------------------------------------------------------------------
-Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo* info )
+Image* Image::LoadFile( const tchar_t* p_path, bool convert_to_linear, LoadRAWInfo* info )
 {
-    tchar p_filename[256];
-    tchar p_ext[256];
+    tchar_t p_filename[256];
+    tchar_t p_ext[256];
     _tsplitpath(p_path, 0, 0, p_filename, p_ext);
 
     // Check for the file being a proxy for an animated texture
@@ -476,19 +476,19 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
     //
     // The selected texture is a proxy for an animated sequence to make into a volume texture
 
-    tchar old_dir[MAX_PATH];
+    tchar_t old_dir[MAX_PATH];
     if(GetCurrentDirectory(MAX_PATH, old_dir) == 0)
     {
         return NULL;
     }
 
-    tchar anim_folder[MAX_PATH];
+    tchar_t anim_folder[MAX_PATH];
     Image* p_anim_texture = NULL;
     uint32_t curr_depth = 0;
 
     // Truncate the file extension to get the folder name
     _tcscpy(anim_folder, p_path);
-    tchar *p_ext_start = _tcsstr(anim_folder, p_ext);
+    tchar_t *p_ext_start = _tcsstr(anim_folder, p_ext);
     if(!p_ext_start)
     {
         return NULL;
@@ -590,7 +590,7 @@ Image* Image::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo
 }
 
 //-----------------------------------------------------------------------------
-Image* Image::LoadSingleFile(const tchar* filename, bool convert_to_linear, LoadRAWInfo* info)
+Image* Image::LoadSingleFile(const tchar_t* filename, bool convert_to_linear, LoadRAWInfo* info)
 {
     FILE* f;
     f = _tfopen(filename,TXT( "rb" ) );
@@ -613,7 +613,7 @@ Image* Image::LoadSingleFile(const tchar* filename, bool convert_to_linear, Load
     if (size<=0)
         return 0;
 
-    tchar ext[256];
+    tchar_t ext[256];
     _tsplitpath(filename, 0, 0, 0, ext);
 
     Image* result = 0;

@@ -28,7 +28,7 @@ namespace Helium
 
         typedef Helium::Signature< const InstanceSetChangeArgs& > InstanceSetChangeSignature;
 
-        class InstanceSet : public Reflect::Object
+        class PIPELINE_API InstanceSet : public Reflect::Object
         {
         protected:
             SceneGraph::InstanceType* m_Type;
@@ -86,7 +86,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr< SceneGraph::InstanceSet > InstanceSetPtr;
+        typedef Helium::StrongPtr< SceneGraph::InstanceSet > InstanceSetPtr;
         typedef std::map< tstring, InstanceSetPtr > M_InstanceSetSmartPtr;
     }
 }

@@ -21,13 +21,13 @@ namespace Helium
         struct EnumerateElementArgs;
 
         class Scene;
-        typedef Helium::SmartPtr< Scene > ScenePtr;
+        typedef Helium::StrongPtr< Scene > ScenePtr;
 
         class SceneNode;
-        typedef Helium::SmartPtr< SceneNode > SceneNodePtr;
+        typedef Helium::StrongPtr< SceneNode > SceneNodePtr;
 
         class SceneNodeType;
-        typedef Helium::SmartPtr< SceneNodeType > SceneNodeTypePtr;
+        typedef Helium::StrongPtr< SceneNodeType > SceneNodeTypePtr;
 
         class Graph;
 

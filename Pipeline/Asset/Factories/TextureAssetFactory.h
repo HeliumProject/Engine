@@ -4,8 +4,6 @@
 #include "Pipeline/Asset/AssetFactory.h"
 #include "Pipeline/Asset/AssetClass.h"
 
-#include "Platform/Compiler.h"
-
 #include "Foundation/File/Path.h"
 
 namespace Helium

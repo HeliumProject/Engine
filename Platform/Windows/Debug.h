@@ -54,7 +54,7 @@ namespace Helium
                 CPP
             };
 
-            static const tchar* Strings[] =
+            static const tchar_t* Strings[] =
             {
                 TXT("SEH"),
                 TXT("C++"),
@@ -94,18 +94,18 @@ namespace Helium
         PLATFORM_API bool IsInitialized();
 
         // Query information from a bare address (should be pretty safe to call)
-        PLATFORM_API tstring GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
-        PLATFORM_API Helium::Exception* GetHeliumException( uintptr addr );
-        PLATFORM_API std::exception* GetStandardException( uintptr addr );
+        PLATFORM_API tstring GetSymbolInfo( uintptr_t adr, bool enumLoadedModules = true );
+        PLATFORM_API Helium::Exception* GetHeliumException( uintptr_t addr );
+        PLATFORM_API std::exception* GetStandardException( uintptr_t addr );
 
         // Stack traces (capture with or without an explicit context, translate to string rep)
-        PLATFORM_API bool GetStackTrace( std::vector<uintptr>& trace, unsigned omitFrames = 0 );
-        PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames = 0 );
-        PLATFORM_API void TranslateStackTrace( const std::vector<uintptr>& trace, tstring& buffer );
+        PLATFORM_API bool GetStackTrace( std::vector<uintptr_t>& trace, unsigned omitFrames = 0 );
+        PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames = 0 );
+        PLATFORM_API void TranslateStackTrace( const std::vector<uintptr_t>& trace, tstring& buffer );
 
         // Query SEH exception pointers for full report, abbreviated name, or more details
         PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
-        PLATFORM_API const tchar* GetExceptionClass( uint32_t exceptionCode );
+        PLATFORM_API const tchar_t* GetExceptionClass( uint32_t exceptionCode );
         PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
         // Core dumps (full dumps include process heaps)

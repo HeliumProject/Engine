@@ -58,22 +58,60 @@ end
 Helium.PublishTBB = function( tbb )
 
 	local files = {}
-	files[1]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_ia32_cl_vc9_debug",		target="Bin/x32/Debug" }
-	files[2]  = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_ia32_cl_vc9_debug",		target="Bin/x32/Debug" }
-	files[3]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Intermediate" }
-	files[4]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Intermediate" }
-	files[5]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Profile" }
-	files[6]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Profile" }
-	files[7]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Release" }
-	files[8]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Release" }
-	files[9]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_intel64_cl_vc9_debug",	target="Bin/x64/Debug" }
-	files[10] = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_intel64_cl_vc9_debug",	target="Bin/x64/Debug" }
-	files[11] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Intermediate" }
-	files[12] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Intermediate" }
-	files[13] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Profile" }
-	files[14] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Profile" }
-	files[15] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Release" }
-	files[16] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Release" }
+	
+	if _ACTION == "vs2005" then
+		files[1]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_ia32_cl_vc8_debug",		target="Bin/x32/Debug" }
+		files[2]  = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_ia32_cl_vc8_debug",		target="Bin/x32/Debug" }
+		files[3]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Intermediate" }
+		files[4]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Intermediate" }
+		files[5]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Profile" }
+		files[6]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Profile" }
+		files[7]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Release" }
+		files[8]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc8_release",		target="Bin/x32/Release" }
+		files[9]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_intel64_cl_vc8_debug",	target="Bin/x64/Debug" }
+		files[10] = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_intel64_cl_vc8_debug",	target="Bin/x64/Debug" }
+		files[11] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Intermediate" }
+		files[12] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Intermediate" }
+		files[13] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Profile" }
+		files[14] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Profile" }
+		files[15] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Release" }
+		files[16] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc8_release",	target="Bin/x64/Release" }
+	elseif _ACTION == "vs2008" then
+		files[1]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_ia32_cl_vc9_debug",		target="Bin/x32/Debug" }
+		files[2]  = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_ia32_cl_vc9_debug",		target="Bin/x32/Debug" }
+		files[3]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Intermediate" }
+		files[4]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Intermediate" }
+		files[5]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Profile" }
+		files[6]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Profile" }
+		files[7]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Release" }
+		files[8]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc9_release",		target="Bin/x32/Release" }
+		files[9]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_intel64_cl_vc9_debug",	target="Bin/x64/Debug" }
+		files[10] = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_intel64_cl_vc9_debug",	target="Bin/x64/Debug" }
+		files[11] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Intermediate" }
+		files[12] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Intermediate" }
+		files[13] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Profile" }
+		files[14] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Profile" }
+		files[15] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Release" }
+		files[16] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc9_release",	target="Bin/x64/Release" }
+	elseif _ACTION == "vs2010" then 
+		files[1]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_ia32_cl_vc10_debug",		target="Bin/x32/Debug" }
+		files[2]  = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_ia32_cl_vc10_debug",		target="Bin/x32/Debug" }
+		files[3]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Intermediate" }
+		files[4]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Intermediate" }
+		files[5]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Profile" }
+		files[6]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Profile" }
+		files[7]  = { file="tbb.dll",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Release" }
+		files[8]  = { file="tbb.pdb",			source=tbb .. "/build/windows_ia32_cl_vc10_release",	target="Bin/x32/Release" }
+		files[9]  = { file="tbb_debug.dll",		source=tbb .. "/build/windows_intel64_cl_vc10_debug",	target="Bin/x64/Debug" }
+		files[10] = { file="tbb_debug.pdb",		source=tbb .. "/build/windows_intel64_cl_vc10_debug",	target="Bin/x64/Debug" }
+		files[11] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Intermediate" }
+		files[12] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Intermediate" }
+		files[13] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Profile" }
+		files[14] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Profile" }
+		files[15] = { file="tbb.dll",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Release" }
+		files[16] = { file="tbb.pdb",			source=tbb .. "/build/windows_intel64_cl_vc10_release",	target="Bin/x64/Release" }
+	end
+	
 	Helium.Publish( files )
 
 end

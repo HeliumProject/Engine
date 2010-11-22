@@ -10,47 +10,47 @@
 //  
 //    struct Serializer
 //    {
-//      int32_t type;             // string pool index of the short name of the serializer
-//      byte[] data;          // serialized data
+//      int32_t type;           // string pool index of the short name of the serializer
+//      byte[] data;            // serialized data
 //    };
 //  
 //    struct Field
 //    {
-//      int32_t field_id;         // latent RTTI field index (id)
-//      Serializer ser;       // serializer instance data
+//      int32_t field_id;       // latent type field index (id)
+//      Serializer ser;         // serializer instance data
 //    };
 //  
 //    struct Element
 //    {
-//      int32_t type;             // string pool index of the short name of the element
-//      int32_t field_count;      // number of serialized fields
-//      Field[] fields;       // field instance data
-//      int32_t term;             // -1
+//      int32_t type;           // string pool index of the short name of the element
+//      int32_t field_count;    // number of serialized fields
+//      Field[] fields;         // field instance data
+//      int32_t term;           // -1
 //    };
 //  
 //    struct Array
 //    {
-//      int32_t count;            // count of contained elements
-//      Element[] elements;   // element instance data
-//      int32_t term;             // -1
+//      int32_t count;          // count of contained elements
+//      Element[] elements;     // element instance data
+//      int32_t term;           // -1
 //    };
 //  
 //    struct File
 //    {
-//      char file_id;         // '!'
+//      char file_id;           // '!'
 //  
-//      uint32_t crc;              // crc of all bytes following the crc value itself
-//    |-int32_t type_offet;       // offset into file for the beginning of the rtti block
-//  |-+-int32_t string_offset;    // offset into file for the beginning of the global string pool
+//      uint32_t crc;           // crc of all bytes following the crc value itself
+//    |-int32_t type_offet;     // offset into file for the beginning of the rtti block
+//  |-+-int32_t string_offset;  // offset into file for the beginning of the global string pool
 //  | |
-//  | | Array spool;          // spooled data from client
-//  | | Array append;         // appended session data
+//  | | Array spool;            // spooled data from client
+//  | | Array append;           // appended session data
 //  | |
-//  | ->int32_t type_count;       // number of types stored
-//  |   Structure[] types;    // see Class.h for details
-//  |   int32_t type_term;        // -1
+//  | ->int32_t type_count;     // number of types stored
+//  |   Structure[] types;      // see Class.h for details
+//  |   int32_t type_term;      // -1
 //  |
-//  --->StringPool strings;   // see StringPool.h for details
+//  --->StringPool strings;     // see StringPool.h for details
 //    };
 //  
 
@@ -78,7 +78,7 @@ namespace Helium
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
             // Indent helper
-            Indent<tchar> m_Indent;
+            Indent<tchar_t> m_Indent;
 #endif
 
             // The strings to cache for binary modes
@@ -162,7 +162,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( const ElementPtr& element );
-            virtual void Serialize( const V_Element& elements, uint32_t flags = 0 );
+            virtual void Serialize( const std::vector< ElementPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -176,7 +176,7 @@ namespace Helium
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
             virtual void Deserialize( ElementPtr& element );
-            virtual void Deserialize( V_Element& elements, uint32_t flags = 0 );
+            virtual void Deserialize( std::vector< ElementPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -195,8 +195,8 @@ namespace Helium
             static ElementPtr FromStream( std::iostream& stream, int searchType = Reflect::ReservedTypes::Any );
 
             // Reading and writing multiple elements via binary
-            static void       ToStream( const V_Element& elements, std::iostream& stream );
-            static void       FromStream( std::iostream& stream, V_Element& elements );
+            static void       ToStream( const std::vector< ElementPtr >& elements, std::iostream& stream );
+            static void       FromStream( std::iostream& stream, std::vector< ElementPtr >& elements );
         };
     }
 }

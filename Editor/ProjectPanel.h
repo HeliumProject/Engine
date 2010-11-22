@@ -20,12 +20,19 @@ namespace Helium
             ProjectPanel( wxWindow* parent, DocumentManager* documentManager );
             virtual ~ProjectPanel();
 
-            void SetProject( Project* project, const Document* document );
+            void OpenProject( Project* project, const Document* document = NULL );
+            void CloseProject();
 
         protected:
             // UI event handlers
-			virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
-			virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnOpenProject( wxMouseEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnContextMenu( wxContextMenuEvent& event );
+            
+            void ProjectPanel::OnAddItems( wxCommandEvent& event );
+            void ProjectPanel::OnDeleteItems( wxCommandEvent& event );
+
+			//virtual void OnAddFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
+			//virtual void OnDeleteFile( wxCommandEvent& event ) HELIUM_OVERRIDE;
 
             void OnOptionsMenuOpen( wxMenuEvent& event );
             void OnOptionsMenuClose( wxMenuEvent& event );
@@ -41,6 +48,7 @@ namespace Helium
             Project* m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
             wxMenu* m_OptionsMenu;
+            wxMenu* m_ContextMenu;
 
             OrderedSet< Path* > m_Selected;
             

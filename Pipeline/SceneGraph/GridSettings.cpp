@@ -7,6 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
+REFLECT_DEFINE_ENUMERATION( GridUnit );
 REFLECT_DEFINE_CLASS( GridSettings );
 
 GridSettings::GridSettings( const tstring& version,
@@ -53,12 +54,12 @@ uint32_t GridSettings::GetLength()
 
 float32_t GridSettings::GetMajorStep()
 {
-  return ConvertUnits( m_MajorStep, m_Units, GridUnits::Meters );
+  return ConvertUnits( m_MajorStep, m_Units, GridUnit::Meters );
 }
 
 float32_t GridSettings::GetMinorStep()
 {
-  return ConvertUnits( m_MinorStep, m_Units, GridUnits::Meters );
+  return ConvertUnits( m_MinorStep, m_Units, GridUnit::Meters );
 }
 
 const Color3& GridSettings::GetAxisColor()
@@ -94,7 +95,7 @@ float32_t GridSettings::GetConversionFactor( GridUnit units )
 {
   switch ( units )
   {
-    case GridUnits::Centimeters:
+    case GridUnit::Centimeters:
       return 0.01f;
   }
   

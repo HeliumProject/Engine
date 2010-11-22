@@ -541,37 +541,37 @@ void Transform::SetScaleZ(float32_t scale)
 
 float32_t Transform::GetRotateX() const
 {
-    return GetRotate().angles.x * RadToDeg;
+    return GetRotate().angles.x * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateX(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.x = rotate * DegToRad;
+    s.x = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 float32_t Transform::GetRotateY() const
 {
-    return GetRotate().angles.y * RadToDeg;
+    return GetRotate().angles.y * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateY(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.y = rotate * DegToRad;
+    s.y = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
 float32_t Transform::GetRotateZ() const
 {
-    return GetRotate().angles.z * RadToDeg;
+    return GetRotate().angles.z * static_cast< float32_t >( HELIUM_RAD_TO_DEG );
 }
 
 void Transform::SetRotateZ(float32_t rotate)
 {
     Vector3 s = GetRotate().angles;
-    s.z = rotate * DegToRad;
+    s.z = rotate * static_cast< float32_t >( HELIUM_DEG_TO_RAD );
     SetRotate(EulerAngles (s, m_Rotate.order));
 }
 
@@ -617,7 +617,7 @@ Matrix4 TransformScaleManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -626,13 +626,13 @@ Matrix4 TransformScaleManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -667,7 +667,7 @@ Matrix4 TransformScalePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -676,13 +676,13 @@ Matrix4 TransformScalePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -717,7 +717,7 @@ Matrix4 TransformRotateManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -726,13 +726,13 @@ Matrix4 TransformRotateManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -767,7 +767,7 @@ Matrix4 TransformRotatePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -776,13 +776,13 @@ Matrix4 TransformRotatePivotManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -817,7 +817,7 @@ Matrix4 TransformTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -826,13 +826,13 @@ Matrix4 TransformTranslateManipulatorAdapter::GetFrame(ManipulatorSpace space)
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;
@@ -867,7 +867,7 @@ Matrix4 TransformTranslatePivotManipulatorAdapter::GetFrame(ManipulatorSpace spa
 
     switch (space)
     {
-    case ManipulatorSpaces::Object:
+    case ManipulatorSpace::Object:
         {
             frame = m_Transform->GetGlobalTransform();
             frame.x *= 1.f / m_Transform->GetScale().x;
@@ -876,13 +876,13 @@ Matrix4 TransformTranslatePivotManipulatorAdapter::GetFrame(ManipulatorSpace spa
             break;
         }
 
-    case ManipulatorSpaces::Local:
+    case ManipulatorSpace::Local:
         {
             frame = m_Transform->GetParentTransform();
             break;
         }
 
-    case ManipulatorSpaces::World:
+    case ManipulatorSpace::World:
         {
             // fall through, world space IS identity
             break;

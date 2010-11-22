@@ -3,14 +3,11 @@
 #include <sstream>
 #include <iostream>
 
-#include "Foundation/Memory/HybridPtr.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Memory/HybridPtr.h"
 #include "Foundation/SmartBuffer/BasicBuffer.h"
-
-#include "Element.h"
-#include "Archive.h"
-
-#include "Foundation/Atomic.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Archive.h"
 
 namespace Helium
 {
@@ -145,7 +142,7 @@ namespace Helium
             }
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0)
+            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField = 0)
             {
                 ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
 
@@ -161,7 +158,7 @@ namespace Helium
 
 
             //
-            // Deduction templates (params are concrete types)
+            // Specializations
             //
 
             template<class T>
@@ -184,7 +181,7 @@ namespace Helium
             template <class T>
             static SerializerPtr Create()
             {
-                int32_t type = Reflect::GetType<T>();
+                int32_t type = Reflect::GetSerializer<T>();
 
                 HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
@@ -300,7 +297,7 @@ namespace Helium
             //
 
             // data serialization (extract to smart buffer)
-            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar* debugStr) const
+            virtual void Serialize (const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
             {
                 HELIUM_BREAK();
             }
@@ -365,7 +362,7 @@ namespace Helium
             }
 
             bool result = false;
-            int type = Reflect::GetType<T>();
+            int type = Reflect::GetSerializer<T>();
 
             // if you die here, then you are not using serializers that
             //  fully implement the type deduction functions above
@@ -412,7 +409,7 @@ namespace Helium
             }
 
             bool result = false;
-            int type = Reflect::GetType<T>();
+            int type = Reflect::GetSerializer<T>();
 
             // if you die here, then you are not using serializers that
             //  fully implement the type deduction functions above
@@ -457,20 +454,28 @@ namespace Helium
             HELIUM_ASSERT(result);
             return result;
         }
+
+        template< class DataType >
+        static int32_t GetSerializer()
+        {
+            return ReservedTypes::Invalid;
+        }
     }
 }
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
-typedef Helium::SmartPtr< Name > ##Name##Ptr; \
-template<> static inline int32_t Reflect::GetType<Name::DataType>() \
+template<> \
+static inline int32_t Helium::Reflect::GetSerializer<Name::DataType>() \
 { \
-    return Reflect::GetType<Name>(); \
+    return Helium::Reflect::GetClass<Name>()->m_TypeID; \
 } \
-template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
+template<> \
+static inline Name::DataType* Helium::Reflect::Serializer::GetData<Name::DataType>( Serializer* serializer ) \
 { \
-    return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return serializer && serializer->GetType() == Helium::Reflect::GetSerializer<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
 } \
-template<> static inline const Name::DataType* Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
+template<> \
+static inline const Name::DataType* Helium::Reflect::Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
 { \
-    return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return serializer && serializer->GetType() == Helium::Reflect::GetSerializer<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
 }

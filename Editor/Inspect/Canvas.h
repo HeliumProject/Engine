@@ -14,7 +14,7 @@ namespace Helium
             return new WidgetT( control );
         }
 
-        typedef Helium::SmartPtr< Widget >    (*WidgetCreator)( Inspect::Control* control );
+        typedef Helium::StrongPtr< Widget >    (*WidgetCreator)( Inspect::Control* control );
         typedef std::map< int32_t, WidgetCreator >  WidgetCreators;
 
         class Canvas : public Inspect::Canvas, public wxEvtHandler

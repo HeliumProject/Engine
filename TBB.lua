@@ -17,7 +17,7 @@ Helium.BuildTBB = function( tbb )
 		local result
 		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " tbb arch=ia32\"" )
 		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " tbb arch=intel64\"" )
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " tbb arch=intel64\"" )
 		if result ~= 0 then os.exit( 1 ) end
 	else
 		print("Implement support for " .. os.get() .. " to BuildTBB()")
@@ -46,7 +46,7 @@ Helium.CleanTBB = function( tbb )
 
 		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " clean arch=ia32\"" )
 		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat amd64 && " .. make .. " clean arch=intel64\"" )
+		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " clean arch=intel64\"" )
 		if result ~= 0 then os.exit( 1 ) end
 	else
 		print("Implement support for " .. os.get() .. " to CleanTBB()")

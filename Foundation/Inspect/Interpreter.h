@@ -4,7 +4,7 @@
 #include "Platform/Mutex.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Controls.h"
 
 namespace Helium
@@ -48,9 +48,9 @@ namespace Helium
 
         struct PickLinkArgs
         {
-            PickLinkArgs(const DataPtr& data) : m_Data (data) {}
+            PickLinkArgs(const DataBindingPtr& data) : m_DataBinding (data) {}
 
-            const DataPtr& m_Data;
+            const DataBindingPtr& m_DataBinding;
         };
         typedef Helium::Signature< const PickLinkArgs&> PickLinkSignature;
 

@@ -5,7 +5,7 @@
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Inspect/Controls/ListControl.h"
 #include "Foundation/Inspect/Container.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

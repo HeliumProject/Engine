@@ -5,7 +5,7 @@
 #include "Foundation/Automation/Attribute.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/ContextMenu.h"
 
 namespace Helium
@@ -185,15 +185,15 @@ namespace Helium
 
             bool IsBound() const
             {
-                return m_BoundData.ReferencesObject();
+                return m_DataBinding.ReferencesObject();
             }
 
-            const Data* GetData() const
+            const DataBinding* GetBinding() const
             {
-                return m_BoundData;
+                return m_DataBinding;
             }
 
-            virtual void Bind(const DataPtr& data);
+            virtual void Bind(const DataBindingPtr& data);
 
             //
             // Defaults
@@ -242,7 +242,7 @@ namespace Helium
 
             // helper write function for all other types of data
             template<class T>
-            bool ReadTypedData(const typename DataTemplate<T>::Ptr& data, T& val);
+            bool ReadTypedData(const typename DataBindingTemplate<T>::Ptr& data, T& val);
 
             // callback when data changed, implements DataReference
             void DataChanged(const DataChangedArgs& args);
@@ -265,7 +265,7 @@ namespace Helium
 
             // helper write function for all other types of data
             template<class T>
-            bool WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview = false);
+            bool WriteTypedData(const T& val, const typename DataBindingTemplate<T>::Ptr& data, bool preview = false);
 
             // fires callback
             void PostWrite();
@@ -307,7 +307,7 @@ namespace Helium
             bool                m_IsRealized;
 
             // the data we manipulate
-            DataPtr             m_BoundData;
+            DataBindingPtr      m_DataBinding;
 
             // GUI toolkit object
             WidgetPtr           m_Widget;
@@ -387,7 +387,7 @@ namespace Helium
         typedef std::vector<ControlPtr> V_Control;
 
         template<class T>
-        inline bool Control::ReadTypedData(const typename DataTemplate<T>::Ptr& data, T& val)
+        inline bool Control::ReadTypedData(const typename DataBindingTemplate<T>::Ptr& data, T& val)
         {
             if (data)
             {
@@ -400,7 +400,7 @@ namespace Helium
         }
 
         template<class T>
-        inline bool Control::WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview)
+        inline bool Control::WriteTypedData(const T& val, const typename DataBindingTemplate<T>::Ptr& data, bool preview)
         {
             if (data)
             {

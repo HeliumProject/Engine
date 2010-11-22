@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Controls.h"
 #include "Foundation/Inspect/Interpreter.h"
 
@@ -161,7 +161,7 @@ namespace Helium
             {
                 Inspect::CheckBoxPtr control = CreateControl<Inspect::CheckBox>();
 
-                Inspect::DataPtr data = new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )); 
+                Inspect::DataBindingPtr data = new Inspect::MultiPropertyStringFormatter<D> (BuildSelectionProperties<T, D, G, S> ( selection, getter, setter )); 
                 data->SetSignificant( significant ); 
                 control->Bind( data );
 

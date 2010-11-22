@@ -10,7 +10,6 @@
 
 #include <iomanip>
 
-
 #define INSPECT_BASE(__Type)                                  \
   public:                                                     \
     virtual int GetType () const                              \
@@ -47,7 +46,7 @@ namespace Helium
         const tchar_t MULTI_VALUE_STRING[] = TXT( "Multi" );
 
         //
-        // Data conversion
+        // DataBinding conversion
         //
 
         template<class T>
@@ -174,14 +173,14 @@ namespace Helium
         }
 
         //
-        // Data base class
+        // DataBinding base class
         //
 
-        class Data;
+        class DataBinding;
 
         struct DataChangingArgs
         {
-            DataChangingArgs( const Data* data, Reflect::Serializer* value )
+            DataChangingArgs( const DataBinding* data, Reflect::Serializer* value )
                 : m_Data ( data )
                 , m_NewValue( value )
                 , m_Veto ( false )
@@ -189,7 +188,7 @@ namespace Helium
             
             }
 
-            const Data*             m_Data;
+            const DataBinding*             m_Data;
             Reflect::SerializerPtr  m_NewValue;
             mutable bool            m_Veto;
         };
@@ -197,15 +196,15 @@ namespace Helium
 
         struct DataChangedArgs
         {
-            DataChangedArgs( const Data* data ) : m_Data (data) {}
+            DataChangedArgs( const DataBinding* data ) : m_Data (data) {}
 
-            const Data* m_Data;
+            const DataBinding* m_Data;
         };
         typedef Helium::Signature< const DataChangedArgs& > DataChangedSignature;
 
-        namespace DataTypes
+        namespace DataBindingTypes
         {
-            enum DataType
+            enum DataBindingType
             {
                 Custom,
                 String,
@@ -213,24 +212,24 @@ namespace Helium
             };
         }
 
-        template< typename T, DataTypes::DataType type >
-        T* CastData( Data* data )
+        template< typename T, DataBindingTypes::DataBindingType type >
+        T* CastDataBinding( DataBinding* data )
         {
             return data ? (data->HasType( type ) ? static_cast<T*>( data ) : NULL) : NULL;
         }
 
-        class Data : public Helium::RefCountBase< Data >
+        class DataBinding : public Helium::RefCountBase< DataBinding >
         {
         public:
-            INSPECT_BASE( DataTypes::Custom );
+            INSPECT_BASE( DataBindingTypes::Custom );
 
-            Data()
+            DataBinding()
                 : m_Significant(true)
             {
 
             }
 
-            virtual ~Data()
+            virtual ~DataBinding()
             {
 
             }
@@ -276,7 +275,7 @@ namespace Helium
             }
         };
 
-        typedef Helium::SmartPtr<Data> DataPtr;
+        typedef Helium::SmartPtr<DataBinding> DataBindingPtr;
 
         //
         // Base template for data, V is the value container, which may or may not be equal to T
@@ -284,13 +283,13 @@ namespace Helium
         //
 
         template<class T>
-        class DataCommand;
+        class DataBindingCommand;
 
         template<class T>
-        class DataTemplate : public Data
+        class DataBindingTemplate : public DataBinding
         {
         public:
-            typedef Helium::SmartPtr< DataTemplate > Ptr;
+            typedef Helium::SmartPtr< DataBindingTemplate > Ptr;
 
         public:
             virtual void Refresh() HELIUM_OVERRIDE
@@ -302,7 +301,7 @@ namespace Helium
 
             virtual Undo::CommandPtr GetUndoCommand() const HELIUM_OVERRIDE
             {
-                return new DataCommand<T>( this );
+                return new DataBindingCommand<T>( this );
             }
 
             // set data
@@ -332,22 +331,22 @@ namespace Helium
         };
 
         //
-        // Command object for Data Undo/Redo
+        // Command object for DataBinding Undo/Redo
         //  Store state of object(s) bound by data
         //
 
         template<class T>
-        class DataCommand : public Undo::Command
+        class DataBindingCommand : public Undo::Command
         {
         protected:
             // the data object that is used to read/write from the client objects
-            typename DataTemplate<T>::Ptr m_Data;
+            typename DataBindingTemplate<T>::Ptr m_Data;
 
             // state information
             std::vector<T> m_Values;
 
         public:
-            DataCommand( const typename DataTemplate<T>::Ptr& data )
+            DataBindingCommand( const typename DataBindingTemplate<T>::Ptr& data )
                 : m_Data ( data )
             {
                 if ( m_Data.ReferencesObject() )
@@ -399,19 +398,19 @@ namespace Helium
         // Base class for all string-translated data types
         //
 
-        class StringData : public DataTemplate< tstring >
+        class StringDataBinding : public DataBindingTemplate< tstring >
         {
         public:
-            INSPECT_TYPE( DataTypes::String );
+            INSPECT_TYPE( DataBindingTypes::String );
         };
-        typedef Helium::SmartPtr< StringData > StringDataPtr;
+        typedef Helium::SmartPtr< StringDataBinding > StringDataPtr;
 
         //
         // StringFormatter handles conversion between T and string
         //
 
         template<class T>
-        class StringFormatter : public StringData
+        class StringFormatter : public StringDataBinding
         {
         public:
             typedef Helium::SmartPtr< StringFormatter<T> > Ptr;
@@ -472,7 +471,7 @@ namespace Helium
         //
 
         template<class T>
-        class MultiStringFormatter : public StringData
+        class MultiStringFormatter : public StringDataBinding
         {
         public:
             typedef Helium::SmartPtr< MultiStringFormatter<T> > Ptr;
@@ -641,7 +640,7 @@ namespace Helium
         //
 
         template<class T>
-        class PropertyStringFormatter : public StringData
+        class PropertyStringFormatter : public StringDataBinding
         {
         public:
             typedef Helium::SmartPtr< PropertyStringFormatter<T> > Ptr;
@@ -696,7 +695,7 @@ namespace Helium
         //
 
         template<class T>
-        class MultiPropertyStringFormatter : public StringData
+        class MultiPropertyStringFormatter : public StringDataBinding
         {
         public:
             typedef Helium::SmartPtr< MultiPropertyStringFormatter<T> > Ptr;
@@ -852,10 +851,10 @@ namespace Helium
         // 
 
         template< class T >
-        class SerializerData : public DataTemplate< T >
+        class SerializerDataBinding : public DataBindingTemplate< T >
         {
         public:
-            INSPECT_TYPE( DataTypes::Serializer );
+            INSPECT_TYPE( DataBindingTypes::Serializer );
         };
 
         //
@@ -863,7 +862,7 @@ namespace Helium
         //
 
         template< class T >
-        class SerializerPropertyFormatter : public SerializerData< T >
+        class SerializerPropertyFormatter : public SerializerDataBinding< T >
         {
         protected:
             Helium::SmartPtr< Helium::Property< T > > m_Property;
@@ -911,7 +910,7 @@ namespace Helium
         //
 
         template< class T >
-        class MultiSerializerFormatter : public SerializerData< T >
+        class MultiSerializerFormatter : public SerializerDataBinding< T >
         {
         protected:
             std::vector< Reflect::SerializerPtr > m_Serializers;

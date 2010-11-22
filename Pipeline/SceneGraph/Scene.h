@@ -6,7 +6,7 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Undo/ExistenceCommand.h"
 #include "Foundation/Undo/Queue.h"
@@ -355,7 +355,7 @@ namespace Helium
             OS_SceneNodeDumbPtr m_Highlighted;
 
             // data for handling picks
-            Inspect::DataPtr m_PickData;
+            Inspect::DataBindingPtr m_PickData;
 
             // holds undoable data
             Undo::Queue m_UndoQueue;

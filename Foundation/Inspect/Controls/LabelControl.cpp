@@ -1,6 +1,6 @@
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Container.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 
 using namespace Helium;
 using namespace Helium::Inspect;

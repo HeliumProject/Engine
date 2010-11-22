@@ -10,7 +10,7 @@
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Version.h"
-#include "Foundation/Inspect/Data.h"
+#include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Undo/PropertyCommand.h"
 #include "Foundation/String/Utilities.h"
@@ -1571,7 +1571,7 @@ void Scene::Select( const SelectArgs& args )
 void Scene::PickLink( const Inspect::PickLinkArgs& args )
 {
     e_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Picking ) );
-    m_PickData = args.m_Data;
+    m_PickData = args.m_DataBinding;
 }
 
 void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
@@ -1886,9 +1886,9 @@ void Scene::PropertyChanging( const Inspect::ControlChangingArgs& args )
         return;
     }
 
-    if ( args.m_Control->GetData() )
+    if ( args.m_Control->GetBinding() )
     {
-        Undo::CommandPtr command = args.m_Control->GetData()->GetUndoCommand();
+        Undo::CommandPtr command = args.m_Control->GetBinding()->GetUndoCommand();
 
         if ( command )
         {
@@ -1923,7 +1923,7 @@ void Scene::SelectionChanging( const SelectionChangingArgs& args )
                 node->GetID().ToString(str);
 
                 // set the picked object ID
-                Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( m_PickData );
+                Inspect::StringDataBinding* data = Inspect::CastDataBinding< Inspect::StringDataBinding, Inspect::DataBindingTypes::String >( m_PickData );
                 if ( data && Push( data->GetUndoCommand() ) )
                 {
                     data->Set( str );

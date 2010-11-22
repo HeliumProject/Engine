@@ -648,14 +648,12 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	this->Layout();
 	
 	// Connect Events
-	m_ProjectNameStaticText->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanelGenerated::OnOpenProject ), NULL, this );
 	m_OpenProjectListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnListItemActivated ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
 	// Disconnect Events
-	m_ProjectNameStaticText->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanelGenerated::OnOpenProject ), NULL, this );
 	m_OpenProjectListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnListItemActivated ), NULL, this );
 	
 }

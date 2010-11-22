@@ -42,6 +42,8 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 
     SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
 
+    m_ProjectNameStaticText->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
+
     m_OptionsMenu = new wxMenu();
     {
         //wxMenuItem* detailsMenuItem = new wxMenuItem(
@@ -69,8 +71,8 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
         wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
         Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
     }
-    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
-    m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->GetMainWindow()->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
@@ -90,6 +92,11 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 
 ProjectPanel::~ProjectPanel()
 {
+    if ( m_Project )
+    {
+        CloseProject();
+    }
+
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 
@@ -97,7 +104,6 @@ ProjectPanel::~ProjectPanel()
     {
         m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
         m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-        m_Model->CloseProject();
         m_Model = NULL;
     }
 
@@ -111,7 +117,10 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
         return;
     }
 
-    CloseProject();
+    if ( m_Project )
+    {
+        CloseProject();
+    }
 
     m_Project = project;
     if ( m_Project )
@@ -145,8 +154,8 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
             m_OptionsButton->Enable( true );
 
+            m_ProjectNameStaticText->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
             m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
-            m_ProjectNameStaticText->Enable( false );
 
             //m_OpenProjectPanel->Hide();
             //m_DataViewCtrl->Show();
@@ -162,22 +171,21 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
 void ProjectPanel::CloseProject()
 {
-    if ( m_Project )
-    {
-        if ( m_Model )
-        {
-            m_Model->CloseProject();
-        }
+    HELIUM_ASSERT( m_Project );
 
-        m_Project = NULL;
+    if ( m_Model )
+    {
+        m_Model->CloseProject();
     }
+
+    m_Project = NULL;
+
+    m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
+    m_ProjectNameStaticText->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
 
     m_OptionsButtonStaticLine->Hide();
     m_OptionsButton->Hide();
     m_OptionsButton->Enable( false );
-
-    m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
-    m_ProjectNameStaticText->Enable( true );
 
     //m_OpenProjectPanel->Show();
     //m_DataViewCtrl->Hide();

@@ -81,7 +81,7 @@ void SceneManager::AddScene(SceneGraph::Scene* scene)
     Helium::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
-    e_SceneAdded.Raise( scene );
+    e_SceneAdded.Raise( SceneChangeArgs( NULL, scene ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ void SceneManager::RemoveScene( SceneGraph::Scene* scene )
         m_SceneToDocumentTable.erase( findDocument );
     }
 
-    e_SceneRemoving.Raise( scene );
+    e_SceneRemoving.Raise( SceneChangeArgs( NULL, scene ) );
 
     scene->d_Editing.Clear();
 
@@ -264,11 +264,12 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
         return;
     }
 
-    e_CurrentSceneChanging.Raise( m_CurrentScene );
+    e_CurrentSceneChanging.Raise( SceneChangeArgs( m_CurrentScene, scene ) );
 
+    Scene* previousScene = m_CurrentScene;
     m_CurrentScene = scene;
 
-    e_CurrentSceneChanged.Raise( m_CurrentScene );
+    e_CurrentSceneChanged.Raise( SceneChangeArgs( previousScene, m_CurrentScene ) );
 }
 
 

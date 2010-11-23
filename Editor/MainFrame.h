@@ -64,6 +64,8 @@ namespace Helium
             void OpenProject( const Helium::Path& path );
             void CloseProject();
 
+            void OpenScene( const Path& path );
+
             SceneGraph::SceneManager& GetSceneManager()
             {
                 return m_SceneManager;

@@ -153,7 +153,7 @@ bool DocumentManager::SaveAll( tstring& error )
 bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 {
     // Check for "save as"
-    if ( document->GetPath().Extension().empty() )
+    if ( document->GetPath().Extension().empty() || !document->GetPath().Exists() )
     {
         tstring filters;
 #pragma TODO( "This needs to be getting the correct file filters for the document being saved" )

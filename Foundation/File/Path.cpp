@@ -36,6 +36,15 @@ Path::Path( const Path& path )
     Init( path.m_Path.c_str() );
 }
 
+const tchar_t* Path::operator*() const
+{
+    static const tchar_t emptyString[] = { TXT( '\0' ) };
+
+    const tchar_t* pString = m_Path.c_str();
+
+    return ( pString ? pString : emptyString );
+}
+
 Path& Path::operator=( const Path& rhs )
 {
     Init( rhs.m_Path.c_str() );

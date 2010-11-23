@@ -37,6 +37,8 @@ namespace Helium
         Path( const tstring& path = TXT( "" ) );
         Path( const Path& path );
 
+        const tchar_t* operator*() const;
+
         Path& operator=( const Path& rhs );
         bool operator==( const Path& rhs ) const;
 

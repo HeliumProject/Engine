@@ -207,7 +207,7 @@ FileStream* File::CreateStream()
 const bool File::GetBaseDirectory( Path& path )
 {
     bool bSuccess;
-    path = GetMutableUserDataDirectory( bSuccess );
+    path = GetMutableBaseDirectory( bSuccess );
 
     return bSuccess;
 }

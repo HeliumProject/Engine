@@ -1,7 +1,7 @@
 #include "ArchiveBinary.h"
 #include "Element.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "SerializerDeduction.h"
 
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 

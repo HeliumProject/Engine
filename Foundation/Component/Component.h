@@ -5,7 +5,7 @@
 #include "Foundation/Component/ComponentExceptions.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 
 #include "Foundation/Component/SearchableProperties.h"
 

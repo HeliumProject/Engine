@@ -1,6 +1,6 @@
 #include "Registry.h"
 #include "Version.h"
-#include "Serializers.h"
+#include "SerializerDeduction.h"
 #include "DOM.h"
 
 #ifdef REFLECT_OBJECT_TRACKING

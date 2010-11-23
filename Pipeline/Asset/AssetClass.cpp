@@ -4,7 +4,7 @@
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Visitor.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 #include "Foundation/Component/Component.h"
 
 #include "Pipeline/Asset/Classes/Entity.h"

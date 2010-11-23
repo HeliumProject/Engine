@@ -34,7 +34,7 @@ if ( !GetOptions( "autobuild"  => \$autobuild,
   exit( 1 );
 }
 
-if ( $autobuild )
+if ( $autobuild ) # dont mess with source control status if its an autobuild
 {
   $pull = 0;
 }
@@ -47,13 +47,10 @@ if( $git_clean )
   $result = _DoGit( $git_command, "Git Clean" );
 }
 
-if( $pull ) # dont mess with source control status if its an autobuild
+if( $pull )
 {
   $git_command = 'pull';
   $result += _DoGit( $git_command, "Git Pull" );
-
-  $git_command = 'submodule --init';
-  $result += _DoGit( $git_command, "Git Init Submodules" );
 }
 
 my $premake = 'premake4 vs2008';

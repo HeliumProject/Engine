@@ -71,6 +71,7 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
         wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
         Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
     }
+    m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( ProjectPanel::OnActivateItem ), NULL, this );
 
@@ -204,12 +205,12 @@ void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 {
     if ( !m_Project )
     {
+        event.Skip();
         return;
     }
 
     wxPoint point = wxGetMousePosition();
     PopupMenu( m_ContextMenu );
-    event.Skip();
 }
 
 void ProjectPanel::OnActivateItem( wxDataViewEvent& event )

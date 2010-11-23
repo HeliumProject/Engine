@@ -2,8 +2,8 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Foundation/Reflect/SimpleSerializer.h"
-#include "Foundation/Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/Data/SimpleData.h"
+#include "Foundation/Reflect/Data/ElementStlVectorData.h"
 
 namespace Helium
 {

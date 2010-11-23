@@ -237,7 +237,7 @@ void Control::DataChanged(const DataChangedArgs& args)
     }
 }
 
-bool Control::PreWrite( Reflect::Serializer* newValue, bool preview )
+bool Control::PreWrite( Reflect::Data* newValue, bool preview )
 {
     ControlChangingArgs args (this, newValue, preview);
     e_ControlChanging.Raise( args );
@@ -281,7 +281,7 @@ bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool previe
             return true;
         }
 
-        Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::vector< tstring > >() );
+        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< std::vector< tstring > >() );
         serializer->ConnectData( const_cast< std::vector< tstring >* >( &strs ) );
         if ( !PreWrite( serializer, preview ) )
         {

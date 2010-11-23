@@ -2005,7 +2005,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         V_Matrix4 transforms;
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
-        Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
+        Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
         data->m_Data.Set( transforms );
 
         tstring xml;
@@ -2042,7 +2042,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
         std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
-            Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );
+            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
                 m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );

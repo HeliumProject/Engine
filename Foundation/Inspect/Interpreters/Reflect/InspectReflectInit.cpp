@@ -8,8 +8,8 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectBitfieldInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectVectorInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectColorInterpreter.h"
-#include "Foundation/Inspect/Interpreters/Reflect/ReflectArrayInterpreter.h"
-#include "Foundation/Inspect/Interpreters/Reflect/ReflectSetInterpreter.h"
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectStlVectorInterpreter.h"
+#include "Foundation/Inspect/Interpreters/Reflect/ReflectStlSetInterpreter.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathContainerInterpreter.h"
@@ -39,23 +39,23 @@ void InspectReflect::Initialize()
         g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
 
         // scalars
-        ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector2Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector3Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector4Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color3Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor3Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color4Serializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor4Serializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldData>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector2Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector3Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetType<Reflect::Vector4Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color3Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor3Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::Color4Data>() );
+        ReflectFieldInterpreterFactory::Register<ReflectColorInterpreter>( Reflect::GetType<Reflect::HDRColor4Data>() );
 
         // containers
-        ReflectFieldInterpreterFactory::Register<ReflectArrayInterpreter>( Reflect::GetType<Reflect::ArraySerializer>() );
-        ReflectFieldInterpreterFactory::Register<ReflectSetInterpreter>( Reflect::GetType<Reflect::SetSerializer>() );
+        ReflectFieldInterpreterFactory::Register<ReflectStlVectorInterpreter>( Reflect::GetType<Reflect::StlVectorData>() );
+        ReflectFieldInterpreterFactory::Register<ReflectStlSetInterpreter>( Reflect::GetType<Reflect::StlSetData>() );
 
         // paths
-        ReflectFieldInterpreterFactory::Register<PathInterpreter>( Reflect::GetType<Reflect::PathSerializer>() );
-        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathArraySerializer>() );
-        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathSetSerializer>() );
+        ReflectFieldInterpreterFactory::Register<PathInterpreter>( Reflect::GetType<Reflect::PathData>() );
+        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathStlVectorData>() );
+        ReflectFieldInterpreterFactory::Register<PathContainerInterpreter>( Reflect::GetType<Reflect::PathStlSetData>() );
     }
 }
 

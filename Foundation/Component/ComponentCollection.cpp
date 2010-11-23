@@ -271,7 +271,7 @@ bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fi
     if ( fieldName == TXT( "m_Components" ) )
     {
         V_Component attributes;
-        Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>( element ), (std::vector< ElementPtr >&)attributes );
+        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ElementPtr >&)attributes );
 
         for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
             itr != end;

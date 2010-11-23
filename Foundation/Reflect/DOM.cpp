@@ -1,5 +1,5 @@
 #include "DOM.h"
-#include "SerializerDeduction.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

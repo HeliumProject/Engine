@@ -262,7 +262,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetSerializer<FieldT>() : serializerType,
+                    serializerType < 0 ? Reflect::GetData<FieldT>() : serializerType,
                     flags );
             }
 
@@ -274,7 +274,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetSerializer<FieldT>() : serializerType,
+                    serializerType < 0 ? Reflect::GetData<FieldT>() : serializerType,
                     flags );
             }
 
@@ -286,7 +286,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetType<Reflect::PointerSerializer>(),
+                    Reflect::GetType<Reflect::PointerData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -299,7 +299,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetType<Reflect::PointerSerializer>(),
+                    Reflect::GetType<Reflect::PointerData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -312,7 +312,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementArraySerializer>(),
+                    Reflect::GetType<Reflect::ElementStlVectorData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -325,7 +325,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementArraySerializer>(),
+                    Reflect::GetType<Reflect::ElementStlVectorData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -338,7 +338,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementSetSerializer>(),
+                    Reflect::GetType<Reflect::ElementStlSetData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -351,7 +351,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementSetSerializer>(),
+                    Reflect::GetType<Reflect::ElementStlSetData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -364,7 +364,7 @@ namespace Helium
                     GetName(name), 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetType<Reflect::SimpleElementMapSerializer< KeyT > >(), 
+                    Reflect::GetType<Reflect::SimpleElementStlMapData< KeyT > >(), 
                     Reflect::GetType<ElementT>(), 
                     flags );
             }
@@ -377,7 +377,7 @@ namespace Helium
                     GetName(name), 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetType<Reflect::SimpleElementMapSerializer< KeyT > >(), 
+                    Reflect::GetType<Reflect::SimpleElementStlMapData< KeyT > >(), 
                     Reflect::GetType<ElementT>(), 
                     flags );
             }
@@ -390,7 +390,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::EnumerationSerializer>(),
+                    Reflect::GetType<Reflect::EnumerationData>(),
                     Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
@@ -403,7 +403,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::EnumerationSerializer>(),
+                    Reflect::GetType<Reflect::EnumerationData>(),
                     Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
@@ -416,7 +416,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::BitfieldSerializer>(),
+                    Reflect::GetType<Reflect::BitfieldData>(),
                     Reflect::GetEnumeration<EnumT>(),
                     flags );
             }
@@ -429,7 +429,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::BitfieldSerializer>(),
+                    Reflect::GetType<Reflect::BitfieldData>(),
                     Reflect::GetEnumeration<EnumT>(),
                     flags );
             }

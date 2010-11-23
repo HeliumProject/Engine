@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isArray = ( field->m_SerializerID == Reflect::GetType<PathArraySerializer>() );
-    bool isSet = ( field->m_SerializerID == Reflect::GetType<PathSetSerializer>() );
+    bool isArray = ( field->m_DataID == Reflect::GetType<PathStlVectorData>() );
+    bool isSet = ( field->m_DataID == Reflect::GetType<PathStlSetData>() );
     bool isContainer = isArray || isSet;
 
     // create the label
@@ -149,15 +149,15 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     std::vector<Reflect::Element*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        SerializerPtr s = field->CreateSerializer();
+        DataPtr s = field->CreateData();
 
         s->ConnectField(*itr, field);
 
-        m_Serializers.push_back(s);
+        m_Datas.push_back(s);
     }
 
     // bind the ui to the serializers
-    Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
+    Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( (std::vector<Reflect::Data*>&)m_Datas );
     list->Bind( data );
     if ( addButton && isContainer )
     {

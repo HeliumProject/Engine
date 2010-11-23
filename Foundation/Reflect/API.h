@@ -41,9 +41,9 @@ namespace Helium
         typedef Helium::StrongPtr<Element> ElementPtr;
         typedef Helium::StrongPtr<const Element> ConstElementPtr;
 
-        class Serializer;
-        typedef Helium::StrongPtr<Serializer> SerializerPtr;
-        typedef Helium::StrongPtr<const Serializer> ConstSerializerPtr;
+        class Data;
+        typedef Helium::StrongPtr<Data> DataPtr;
+        typedef Helium::StrongPtr<const Data> ConstDataPtr;
 
         // function type for creating object instances
         typedef Object* (*CreateObjectFunc)();

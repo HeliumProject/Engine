@@ -3462,27 +3462,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     wxDataViewRenderer *cell = col->GetRenderer();
     unsigned int current = GetLineAt( y );
-
-    if (event.RightUp())
-    {
-        wxWindow *parent = GetParent();
-        wxDataViewModel *model = GetOwner()->GetModel();
-
-        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
-        if ( ( current < GetRowCount() ) && ( x <= GetEndOfLastCol() ) )
-        {
-            wxDataViewItem item = GetItemByRow(current);
-            wxVariant value;
-            model->GetValue( value, item, col->GetModelColumn() );
-            le.SetItem( item );
-            le.SetValue(value);
-        }
-
-        le.SetEventObject(parent);
-        le.SetModel(GetOwner()->GetModel());
-        parent->GetEventHandler()->ProcessEvent(le);
-    }
-
     if ((current >= GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
@@ -3695,6 +3674,18 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SelectRow(m_currentRow,true);
             SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
+    }
+    else if (event.RightUp())
+    {
+        wxVariant value;
+        model->GetValue( value, item, col->GetModelColumn() );
+        wxWindow *parent = GetParent();
+        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
+        le.SetItem( item );
+        le.SetEventObject(parent);
+        le.SetModel(GetOwner()->GetModel());
+        le.SetValue(value);
+        parent->GetEventHandler()->ProcessEvent(le);
     }
     else if (event.MiddleDown())
     {

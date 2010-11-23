@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 
 #include "Foundation/Reflect/Version.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 
 namespace Helium
 {

@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "Element.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "SerializerDeduction.h"
 #include "ArchiveBinary.h"
 
 #include "Foundation/Log.h"

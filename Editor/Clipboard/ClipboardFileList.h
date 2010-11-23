@@ -2,7 +2,7 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 
 namespace Helium
 {

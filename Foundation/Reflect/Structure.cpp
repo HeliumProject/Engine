@@ -1,5 +1,5 @@
 #include "Structure.h"
-#include "Serializers.h"
+#include "SerializerDeduction.h"
 
 using namespace Helium::Reflect;
 

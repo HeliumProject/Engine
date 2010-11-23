@@ -2,7 +2,7 @@
 #include "GridSettings.h"
 
 #include "Foundation/Reflect/Serializer.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

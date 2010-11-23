@@ -5,7 +5,7 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Property.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/SerializerDeduction.h"
 #include "Foundation/Undo/Command.h"
 
 #include <iomanip>

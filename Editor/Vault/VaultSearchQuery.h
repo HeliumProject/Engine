@@ -5,7 +5,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
-#include "Foundation/Reflect/SerializerDeduction.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {

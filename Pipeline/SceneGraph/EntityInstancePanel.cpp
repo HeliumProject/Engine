@@ -114,7 +114,7 @@ void EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& arg
     bool allow = false;
 
     tstring newValue;
-    Reflect::Serializer::GetValue(args.m_NewValue, newValue);
+    Reflect::Data::GetValue(args.m_NewValue, newValue);
 
     Helium::Path path( newValue );
     if ( path.Exists() )

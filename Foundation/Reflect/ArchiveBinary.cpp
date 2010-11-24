@@ -1,7 +1,7 @@
 #include "ArchiveBinary.h"
 #include "Element.h"
 #include "Registry.h"
-#include "SerializerDeduction.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
@@ -524,9 +524,9 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
         element->PreSerialize();
     }
 
-    if (element->HasType(Reflect::GetType<Serializer>()))
+    if (element->HasType(Reflect::GetType<Data>()))
     {
-        Serializer* s = DangerousCast<Serializer>(element);
+        Data* s = DangerousCast<Data>(element);
 
         s->Serialize(*this);
     }
@@ -659,12 +659,12 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
 
     // construct serialization object
     ElementPtr e;
-    m_Cache.Create( field->m_SerializerID, e );
+    m_Cache.Create( field->m_DataID, e );
 
     HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
-    SerializerPtr serializer = ObjectCast<Serializer>(e);
+    DataPtr serializer = ObjectCast<Data>(e);
 
     if (!serializer.ReferencesObject())
     {
@@ -689,9 +689,9 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     }
 
     // don't write empty containers
-    if ( serialize &&  e->HasType( Reflect::GetType<ContainerSerializer>() ) )
+    if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )
     {
-        ContainerSerializerPtr container = DangerousCast<ContainerSerializer>(e);
+        ContainerDataPtr container = DangerousCast<ContainerData>(e);
 
         if ( container->GetSize() == 0 )
         {
@@ -833,9 +833,9 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
             element->PreDeserialize();
         }
 
-        if (element->HasType(Reflect::GetType<Serializer>()))
+        if (element->HasType(Reflect::GetType<Data>()))
         {
-            Serializer* s = DangerousCast<Serializer>(element);
+            Data* s = DangerousCast<Data>(element);
 
             s->Deserialize(*this);
         }
@@ -1039,7 +1039,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
     if ( current_field.ReferencesObject() )
     {
         // pull and element and downcast to serializer
-        SerializerPtr latent_serializer = ObjectCast<Serializer>( Allocate() );
+        DataPtr latent_serializer = ObjectCast<Data>( Allocate() );
 
         if (!latent_serializer.ReferencesObject())
         {
@@ -1047,8 +1047,8 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), latent_field->m_Name.c_str() );
         }
 
-        // keep in mind that m_SerializerID of latent field is the current type id that matches the latent short name
-        if (current_field->m_SerializerID == latent_field->m_SerializerID)
+        // keep in mind that m_DataID of latent field is the current type id that matches the latent short name
+        if (current_field->m_DataID == latent_field->m_DataID)
         {
             // set data pointer
             latent_serializer->ConnectField( element.Ptr(), current_field );
@@ -1068,10 +1068,10 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
 
             // construct current serialization object
             ElementPtr current_element;
-            m_Cache.Create( current_field->m_SerializerID, current_element );
+            m_Cache.Create( current_field->m_DataID, current_element );
 
             // downcast to serializer
-            SerializerPtr current_serializer = ObjectCast<Serializer>(current_element);
+            DataPtr current_serializer = ObjectCast<Data>(current_element);
             if (!current_serializer.ReferencesObject())
             {
                 // this should never happen, the type id in the rtti data is bogus
@@ -1085,7 +1085,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             Deserialize( (ElementPtr&)latent_serializer );
 
             // attempt cast data into new definition
-            if (!Serializer::CastValue( latent_serializer, current_serializer, SerializerFlags::Shallow ))
+            if (!Data::CastValue( latent_serializer, current_serializer, DataFlags::Shallow ))
             {
                 // to the component block!
                 component = latent_serializer;
@@ -1195,7 +1195,7 @@ void ArchiveBinary::SerializeField(const Field* field)
     m_Stream->Write(&string_index); 
 
     // field type id short name
-    const Class* c = Registry::GetInstance()->GetClass(field->m_SerializerID);
+    const Class* c = Registry::GetInstance()->GetClass(field->m_DataID);
     if (c != NULL)
     {
         string_index = m_Strings.Insert(c->m_Name);
@@ -1229,11 +1229,11 @@ bool ArchiveBinary::DeserializeField(Field* field)
 
         if ( c )
         {
-            field->m_SerializerID = c->m_TypeID;
+            field->m_DataID = c->m_TypeID;
         }
         else
         {
-            field->m_SerializerID = -1;
+            field->m_DataID = -1;
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE

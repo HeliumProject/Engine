@@ -34,7 +34,7 @@ if ( !GetOptions( "autobuild"  => \$autobuild,
   exit( 1 );
 }
 
-if ( $autobuild )
+if ( $autobuild ) # dont mess with source control status if its an autobuild
 {
   $pull = 0;
 }
@@ -43,17 +43,14 @@ my $git_command;
 
 if( $git_clean )
 {
-  $git_command = 'git clean -fdx';
+  $git_command = 'clean -fdx';
   $result = _DoGit( $git_command, "Git Clean" );
 }
 
-if( $pull ) # dont mess with source control status if its an autobuild
+if( $pull )
 {
-  $git_command = 'git pull';
+  $git_command = 'pull';
   $result += _DoGit( $git_command, "Git Pull" );
-
-  $git_command = 'git submodule update --init --recursive';
-  $result += _DoGit( $git_command, "Git Update/Init Submodules" );
 }
 
 my $premake = 'premake4 vs2008';
@@ -88,7 +85,10 @@ if ( $result )
 
 sub _DoGit
 {
-  _Do( shift, shift );
+  my $args = shift;
+  my $description = shift; 
+  my $command = "git $args && git submodule foreach --recursive \"git $args\"";
+  _Do( $command, $description );
 
   if ( $result )
   {
@@ -103,7 +103,7 @@ sub _DoGit
 
 sub _Do
 {
-  my $compile = shift;
+  my $command = shift;
   my $description = shift;
   
   if (defined $description)
@@ -115,7 +115,7 @@ sub _Do
     $description = "Command";
   }
   
-  system ("$compile");
+  system ("$command");
   my $result = $? >> 8;
 
   if ( $result )

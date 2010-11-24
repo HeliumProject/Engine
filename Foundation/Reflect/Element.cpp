@@ -2,7 +2,7 @@
 #include "Archive.h"
 #include "Registry.h"
 #include "Version.h"
-#include "SerializerDeduction.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "ArchiveXML.h"
 #include "ArchiveBinary.h"

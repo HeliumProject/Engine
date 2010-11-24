@@ -310,7 +310,7 @@ bool Helium::StrongPtr< T >::ReferencesObject() const
 
 /// Directly write an object link table index to this smart pointer.
 ///
-/// This is intended specifically for Serializer objects that perform object linking.
+/// This is intended specifically for Data objects that perform object linking.
 ///
 /// Be careful when using the object linking interface for a smart pointer, as it is used to read and write integer
 /// values directly to internal pointer variables.  Release() should always be called prior to the first time
@@ -328,7 +328,7 @@ void Helium::StrongPtr< T >::SetLinkIndex( uint32_t index )
 
 /// Get the object link table index stored in this smart pointer.
 ///
-/// This is intended specifically for Serializer objects that perform object linking.
+/// This is intended specifically for Data objects that perform object linking.
 ///
 /// Be careful when using the object linking interface for a smart pointer, as it is used to read and write integer
 /// values directly to internal pointer variables.  Release() should always be called prior to the first time
@@ -346,7 +346,7 @@ uint32_t Helium::StrongPtr< T >::GetLinkIndex() const
 
 /// Clear out the link table index stored in this smart pointer.
 ///
-/// This is intended specifically for Serializer objects that perform object linking.
+/// This is intended specifically for Data objects that perform object linking.
 ///
 /// Be careful when using the object linking interface for a smart pointer, as it is used to read and write integer
 /// values directly to internal pointer variables.  Release() should always be called prior to the first time

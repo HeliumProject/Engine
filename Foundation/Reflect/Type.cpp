@@ -1,6 +1,6 @@
 #include "Type.h"
 #include "Registry.h"
-#include "Serializer.h"
+#include "Foundation/Reflect/Data/Data.h"
 
 #include "Platform/Mutex.h"
 

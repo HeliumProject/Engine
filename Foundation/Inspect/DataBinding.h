@@ -5,7 +5,7 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Property.h"
-#include "Foundation/Reflect/SerializerDeduction.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Undo/Command.h"
 
 #include <iomanip>
@@ -141,17 +141,17 @@ namespace Helium
         }
 
         //
-        // Serializer support
+        // Data support
         //
 
         template<>
-        inline void Extract(tistream& stream, Reflect::Serializer* val)
+        inline void Extract(tistream& stream, Reflect::Data* val)
         {
             stream >> *val;
         }
 
         template<>
-        inline void Insert(tostream& stream, const Reflect::Serializer* val)
+        inline void Insert(tostream& stream, const Reflect::Data* val)
         {
             stream << *val;
         }
@@ -180,7 +180,7 @@ namespace Helium
 
         struct DataChangingArgs
         {
-            DataChangingArgs( const DataBinding* data, Reflect::Serializer* value )
+            DataChangingArgs( const DataBinding* data, Reflect::Data* value )
                 : m_Data ( data )
                 , m_NewValue( value )
                 , m_Veto ( false )
@@ -189,7 +189,7 @@ namespace Helium
             }
 
             const DataBinding*             m_Data;
-            Reflect::SerializerPtr  m_NewValue;
+            Reflect::DataPtr  m_NewValue;
             mutable bool            m_Veto;
         };
         typedef Helium::Signature< const DataChangingArgs& > DataChangingSignature;
@@ -208,7 +208,7 @@ namespace Helium
             {
                 Custom,
                 String,
-                Serializer,
+                Data,
             };
         }
 
@@ -442,14 +442,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
                 
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( serializer, newValue );
                     Extract< T >( tstringstream ( newValue ), m_Data );
                     m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
@@ -508,14 +508,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
 
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( serializer, newValue );
                     std::vector<T*>::iterator itr = m_Data.begin();
                     std::vector<T*>::iterator end = m_Data.end();
                     for ( ; itr != end; ++itr )
@@ -540,13 +540,13 @@ namespace Helium
                     std::vector< tstring >::const_iterator end = values.end();
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
-                        Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
+                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
                         DataChangingArgs args ( this, serializer );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             tstring newValue;
-                            Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                            Reflect::Data::GetValue< tstring >( serializer, newValue );
                             Extract<T>( tstringstream ( newValue ), m_Data[ index ] );
                             result = true;
                         }
@@ -664,14 +664,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T value;
                     tstring newValue;
-                    Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( serializer, newValue );
                     Extract< T >( tstringstream( newValue ), &value );
                     m_Property->Set( value );
                     m_Changed.RaiseWithEmitter( this, emitter );
@@ -719,13 +719,13 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( serializer, newValue );
                     T value;
                     std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator itr = m_Properties.begin();
                     std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator end = m_Properties.end();
@@ -752,14 +752,14 @@ namespace Helium
                     std::vector< tstring >::const_iterator end = s.end();
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
-                        Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
+                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
                         DataChangingArgs args ( this, serializer );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             T value;
                             tstring newValue;
-                            Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+                            Reflect::Data::GetValue< tstring >( serializer, newValue );
                             Extract<T>( tstringstream ( newValue ), &value );
                             m_Properties[ index ]->Set(value);
                             result = true;
@@ -851,30 +851,30 @@ namespace Helium
         // 
 
         template< class T >
-        class SerializerDataBinding : public DataBindingTemplate< T >
+        class DataDataBinding : public DataBindingTemplate< T >
         {
         public:
-            INSPECT_TYPE( DataBindingTypes::Serializer );
+            INSPECT_TYPE( DataBindingTypes::Data );
         };
 
         //
-        // SerializerPropertyFormatter handles conversion between a property of T and string
+        // DataPropertyFormatter handles conversion between a property of T and string
         //
 
         template< class T >
-        class SerializerPropertyFormatter : public SerializerDataBinding< T >
+        class DataPropertyFormatter : public DataDataBinding< T >
         {
         protected:
             Helium::SmartPtr< Helium::Property< T > > m_Property;
 
         public:
-            SerializerPropertyFormatter(const Helium::SmartPtr< Helium::Property< T > >& property)
+            DataPropertyFormatter(const Helium::SmartPtr< Helium::Property< T > >& property)
                 : m_Property(property)
             {
 
             }
 
-            virtual ~SerializerPropertyFormatter()
+            virtual ~DataPropertyFormatter()
             {
 
             }
@@ -883,13 +883,13 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( value ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T newValue;
-                    Reflect::Serializer::GetValue< T >( serializer, newValue );
+                    Reflect::Data::GetValue< T >( serializer, newValue );
                     m_Property->Set( newValue );
                     m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
@@ -906,25 +906,25 @@ namespace Helium
 
 
         //
-        // MultiSerializerFormatter handles conversion between a property of T and string
+        // MultiDataFormatter handles conversion between a property of T and string
         //
 
         template< class T >
-        class MultiSerializerFormatter : public SerializerDataBinding< T >
+        class MultiDataFormatter : public DataDataBinding< T >
         {
         protected:
-            std::vector< Reflect::SerializerPtr > m_Serializers;
+            std::vector< Reflect::DataPtr > m_Datas;
             const Reflect::Field* m_Field;
 
         public:
-            MultiSerializerFormatter( const std::vector< Reflect::SerializerPtr >& serializers, const Reflect::Field* field )
-                : m_Serializers( serializers )
+            MultiDataFormatter( const std::vector< Reflect::DataPtr >& serializers, const Reflect::Field* field )
+                : m_Datas( serializers )
                 , m_Field( field )
             {
 
             }
 
-            virtual ~MultiSerializerFormatter()
+            virtual ~MultiDataFormatter()
             {
 
             }
@@ -938,18 +938,18 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( value ) );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
                 DataChangingArgs args ( this, serializer );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T newValue;
-                    Serializer::GetValue< T >( serializer, newValue );
-                    std::vector< Reflect::SerializerPtr >::iterator itr = m_Serializers.begin();
-                    std::vector< Reflect::SerializerPtr >::iterator end = m_Serializers.end();
+                    Data::GetValue< T >( serializer, newValue );
+                    std::vector< Reflect::DataPtr >::iterator itr = m_Datas.begin();
+                    std::vector< Reflect::DataPtr >::iterator end = m_Datas.end();
                     for ( ; itr != end; ++itr )
                     {
-                        Reflect::Serializer::SetValue< T >( *itr, newValue );
+                        Reflect::Data::SetValue< T >( *itr, newValue );
                         result = true;
                     }
 
@@ -963,20 +963,20 @@ namespace Helium
             {
                 bool result = false;
 
-                if ( values.size() == m_Serializers.size() )
+                if ( values.size() == m_Datas.size() )
                 {
-                    std::vector< Reflect::SerializerPtr >::const_iterator itr = values.begin();
-                    std::vector< Reflect::SerializerPtr >::const_iterator end = values.end();
+                    std::vector< Reflect::DataPtr >::const_iterator itr = values.begin();
+                    std::vector< Reflect::DataPtr >::const_iterator end = values.end();
                     for ( size_t index=0; itr != end; ++itr, ++index )
                     {
-                        Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
+                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
                         DataChangingArgs args ( this, serializer );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             T newValue;
-                            Serializer::GetValue< T >( serializer, newValue );
-                            m_Serializers[ index ]->SetValue( newValue );
+                            Data::GetValue< T >( serializer, newValue );
+                            m_Datas[ index ]->SetValue( newValue );
                             result = true;
                         }
                     }
@@ -993,21 +993,21 @@ namespace Helium
 
             virtual void Get( T& value ) const
             {
-                if ( m_Serializers.size() == 1 )
+                if ( m_Datas.size() == 1 )
                 {
-                    Reflect::Serializer::GetValue< T >( m_Serializers.front(), value );
+                    Reflect::Data::GetValue< T >( m_Datas.front(), value );
                 }
             }
 
             virtual void GetAll(std::vector< T >& values) const HELIUM_OVERRIDE
             {
-                values.resize( m_Serializers.size() );
-                std::vector< Reflect::SerializerPtr >::const_iterator itr = m_Serializers.begin();
-                std::vector< Reflect::SerializerPtr >::const_iterator end = m_Serializers.end();
+                values.resize( m_Datas.size() );
+                std::vector< Reflect::DataPtr >::const_iterator itr = m_Datas.begin();
+                std::vector< Reflect::DataPtr >::const_iterator end = m_Datas.end();
                 for ( size_t index = 0; itr != end; ++itr, ++index )
                 {
                     T v;
-                    Reflect::Serializer::GetValue< T >( *itr, v );
+                    Reflect::Data::GetValue< T >( *itr, v );
                     values[ index ] = v;
                 }
             }

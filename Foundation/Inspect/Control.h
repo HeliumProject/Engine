@@ -28,7 +28,7 @@ namespace Helium
 
         struct ControlChangingArgs
         {
-            ControlChangingArgs( class Control* control, Reflect::Serializer* newValue, bool preview )
+            ControlChangingArgs( class Control* control, Reflect::Data* newValue, bool preview )
                 : m_Control( control )
                 , m_NewValue( newValue )
                 , m_Preview( preview )
@@ -38,7 +38,7 @@ namespace Helium
             }
 
             Control*                m_Control;
-            Reflect::Serializer*    m_NewValue;
+            Reflect::Data*    m_NewValue;
             bool                    m_Preview;
             mutable bool            m_Veto;
         };
@@ -252,7 +252,7 @@ namespace Helium
             //
 
             // fires callback
-            bool PreWrite( Reflect::Serializer* newValue, bool preview );
+            bool PreWrite( Reflect::Data* newValue, bool preview );
 
             // updates the data based on the state of the UI
             virtual bool Write();
@@ -411,7 +411,7 @@ namespace Helium
                     return true;
                 }
 
-                Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create<T>() );
+                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create<T>() );
                 serializer->ConnectData( const_cast< T* >( &val ) );
                 if ( !PreWrite( serializer, preview ) )
                 {

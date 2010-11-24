@@ -11,11 +11,11 @@ using namespace Helium;
 using namespace Helium::Reflect;
 using namespace Helium::Inspect;
 
-class MultiBitfieldStringFormatter : public MultiStringFormatter<Serializer>
+class MultiBitfieldStringFormatter : public MultiStringFormatter<Data>
 {
 public:
-    MultiBitfieldStringFormatter( Reflect::EnumerationElement* element, const std::vector<Serializer*>& data )
-        : MultiStringFormatter<Serializer>( data, false )
+    MultiBitfieldStringFormatter( Reflect::EnumerationElement* element, const std::vector<Data*>& data )
+        : MultiStringFormatter<Data>( data, false )
         , m_EnumerationElement( element )
     {
 
@@ -25,7 +25,7 @@ public:
     {
         // get the full string set
         tstring bitSet;
-        MultiStringFormatter<Serializer>::Get( bitSet );
+        MultiStringFormatter<Data>::Get( bitSet );
 
         if ( s == TXT("1") )
         {
@@ -65,12 +65,12 @@ public:
             bitSet = s;
         }
 
-        return MultiStringFormatter<Serializer>::Set( bitSet, emitter );
+        return MultiStringFormatter<Data>::Set( bitSet, emitter );
     }
 
     virtual void Get(tstring& s) const HELIUM_OVERRIDE
     {
-        MultiStringFormatter<Serializer>::Get( s );
+        MultiStringFormatter<Data>::Get( s );
 
         if ( s.find_first_of( m_EnumerationElement->m_Name ) != std::string::npos )
         {
@@ -95,9 +95,9 @@ ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
 {
     // If you hit this, you are misusing this interpreter
-    HELIUM_ASSERT( field->m_SerializerID == Reflect::GetType<Reflect::BitfieldSerializer>() );
+    HELIUM_ASSERT( field->m_DataID == Reflect::GetType<Reflect::BitfieldData>() );
 
-    if ( field->m_SerializerID != Reflect::GetType<Reflect::BitfieldSerializer>() )
+    if ( field->m_DataID != Reflect::GetType<Reflect::BitfieldData>() )
     {
         return;
     }
@@ -122,9 +122,9 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     std::vector<Reflect::Element*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        SerializerPtr s = field->CreateSerializer();
+        DataPtr s = field->CreateData();
         s->ConnectField(*itr, field);
-        m_Serializers.push_back(s);
+        m_Datas.push_back(s);
     }
 
     tstringstream outStream;
@@ -149,7 +149,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         checkbox->a_HelpText.Set( enumItr->second->m_HelpText );
 #pragma TODO("Compute correct default value")
         checkbox->a_Default.Set( outStream.str() );
-        checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Serializer*>&)m_Serializers ) );
+        checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Data*>&)m_Datas ) );
         row->AddChild( checkbox );
     }
 }

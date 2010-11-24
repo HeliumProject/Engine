@@ -39,11 +39,11 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
 
     // compute dimensions
     int dimensions = 2;
-    if ( field->m_SerializerID == Reflect::GetType<Vector3Serializer>() )
+    if ( field->m_DataID == Reflect::GetType<Vector3Data>() )
     {
         dimensions += 1;
     }
-    if ( field->m_SerializerID == Reflect::GetType<Vector4Serializer>() )
+    if ( field->m_DataID == Reflect::GetType<Vector4Data>() )
     {
         dimensions += 2;
     }
@@ -52,16 +52,16 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
     for ( int offset = 0; offset < dimensions*4; offset += 4 )
     {
         // create the serializers
-        std::vector<Reflect::Serializer*> data;
+        std::vector<Reflect::Data*> data;
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
         std::vector<Reflect::Element*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            SerializerPtr s = new F32Serializer ();
+            DataPtr s = new F32Data ();
 
             s->ConnectField(*itr, field, offset); 
 
-            m_Serializers.push_back(s);
+            m_Datas.push_back(s);
 
             data.push_back(s);
         }
@@ -73,6 +73,6 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
         value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
         // bind the ui to the serializers
-        value->Bind( new MultiStringFormatter<Serializer>( data ) );
+        value->Bind( new MultiStringFormatter<Data>( data ) );
     }
 }

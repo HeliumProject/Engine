@@ -17,16 +17,33 @@ namespace Helium
     //  Clean() pops and calls each cleanup function registered on the stack
     //
 
+    typedef std::stack< CleanupFunc > InitCleanupStack;
+
     class FOUNDATION_API InitializerStack
     {
     private:
-        typedef std::stack< CleanupFunc > InitCleanupStack;
-        InitCleanupStack m_InitCleanupStack;
-        bool m_AutoCleanup;
+        InitCleanupStack    m_InitCleanupStack;
+        bool                m_AutoCleanup;
+        int                 m_Count;
 
     public:
         InitializerStack(bool autoCleanup = false);
         ~InitializerStack();
+
+        int Increment()
+        {
+            return ++m_Count;
+        }
+
+        int Decrement( bool cleanup = true )
+        {
+            if ( --m_Count == 0 && cleanup )
+            {
+                Cleanup();
+            }
+
+            return m_Count;
+        }
 
         // push and call init, call cleanup later
         void Push( InitializeFunc init, CleanupFunc cleanup );

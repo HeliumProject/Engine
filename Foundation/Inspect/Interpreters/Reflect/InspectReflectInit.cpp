@@ -19,24 +19,16 @@ using namespace Helium::Inspect;
 
 REFLECT_DEFINE_ABSTRACT( Inspect::ClientDataFilter );
 
-namespace Helium
-{
-    namespace InspectReflect
-    {
-        int32_t g_InitCount = 0;
-    }
-}
-
-Helium::InitializerStack g_IntializerStack;
+static Helium::InitializerStack g_InspectReflectInitStack;
 
 void InspectReflect::Initialize()
 {
-    if ( ++g_InitCount == 1 )
+    if ( g_InspectReflectInitStack.Increment() == 1 )
     {
-        g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+        g_InspectReflectInitStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-        g_IntializerStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "Inspect::ClientData" ) ) );
-        g_IntializerStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
+        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "Inspect::ClientData" ) ) );
+        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
 
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldData>() );
@@ -61,9 +53,8 @@ void InspectReflect::Initialize()
 
 void InspectReflect::Cleanup()
 {
-    if ( --g_InitCount == 0 )
+    if ( g_InspectReflectInitStack.Decrement() == 0 )
     {
         ReflectFieldInterpreterFactory::Clear();
-        g_IntializerStack.Cleanup();
     }
 }

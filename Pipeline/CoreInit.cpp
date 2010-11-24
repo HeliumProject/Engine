@@ -9,25 +9,21 @@
 
 using namespace Helium;
 
-static uint32_t g_InitCount = 0;
-static Helium::InitializerStack g_InitStack;
+static Helium::InitializerStack g_CoreInitStack;
 
 void Helium::CoreInitialize()
 {
-    if ( ++g_InitCount == 1 )
+    if ( g_CoreInitStack.Increment() == 1 )
     {
-        g_InitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
-        g_InitStack.Push( &SceneGraph::Initialize,  &SceneGraph::Cleanup );
+        g_CoreInitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
+        g_CoreInitStack.Push( &SceneGraph::Initialize,  &SceneGraph::Cleanup );
 
-        g_InitStack.Push( Reflect::RegisterClassType< Project >( TXT("Project") ) );
-        g_InitStack.Push( Reflect::RegisterClassType< SettingsManager >( TXT("SettingsManager") ) ); 
+        g_CoreInitStack.Push( Reflect::RegisterClassType< Project >( TXT("Project") ) );
+        g_CoreInitStack.Push( Reflect::RegisterClassType< SettingsManager >( TXT("SettingsManager") ) ); 
     }
 }
 
 void Helium::CoreCleanup()
 {
-    if ( --g_InitCount == 0 )
-    {
-        g_InitStack.Cleanup();
-    }
+    g_CoreInitStack.Decrement();
 }

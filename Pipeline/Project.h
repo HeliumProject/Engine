@@ -31,20 +31,22 @@ namespace Helium
 
         void AddPath( const Path& path )
         {
-            std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( path );
+            Path relativePath = path.GetRelativePath( a_Path.Get() );
+            std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( relativePath );
             if ( result.second )
             {
-                e_PathAdded.Raise( path );
+                e_PathAdded.Raise( relativePath );
             }
         }
 
         void RemovePath( const Path& path )
         {
-            std::set< Path >::iterator itr = m_Paths.find( path );
+            Path relativePath = path.GetRelativePath( a_Path.Get() );
+            std::set< Path >::iterator itr = m_Paths.find( relativePath );
             if ( itr != m_Paths.end() )
             {
                 m_Paths.erase( itr );
-                e_PathRemoved.Raise( path );
+                e_PathRemoved.Raise( relativePath );
             }
         }
 

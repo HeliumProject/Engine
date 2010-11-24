@@ -185,7 +185,8 @@ namespace Helium
     template<class T>
     inline void Swizzle(T& val, bool swizzle = true)
     {
-        HELIUM_BREAK();
+        // if you hit this, we're trying to swizzle something and we don't know how
+        HELIUM_ASSERT( !swizzle );
     }
 
     template<> inline void Swizzle<bool>(bool& val, bool swizzle)

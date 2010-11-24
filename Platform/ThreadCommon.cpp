@@ -20,6 +20,7 @@ RunnableThread::RunnableThread( Runnable* pRunnable, const tchar_t* pName )
 /// Destructor.
 RunnableThread::~RunnableThread()
 {
+    HELIUM_VERIFY( Join() );
 }
 
 /// Set the runnable instance that this thread is set to execute.
@@ -52,6 +53,7 @@ CallbackThread::CallbackThread()
 /// Destructor.
 CallbackThread::~CallbackThread()
 {
+    HELIUM_VERIFY( Join() );
 }
 
 bool CallbackThread::Create(Entry entry, void* obj, const tchar_t* name, EPriority priority)

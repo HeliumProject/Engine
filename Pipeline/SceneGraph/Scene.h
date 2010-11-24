@@ -274,12 +274,14 @@ namespace Helium
 
         struct UndoCommandArgs
         {
-            UndoCommandArgs( Undo::CommandPtr command )
-                : m_Command( command )
+            UndoCommandArgs( SceneGraph::Scene* scene, Undo::CommandPtr command )
+                : m_Scene( scene )
+                , m_Command( command )
             {
             }
 
-            Undo::CommandPtr m_Command;
+            SceneGraph::Scene* m_Scene;
+            Undo::CommandPtr   m_Command;
         };
         typedef Helium::Signature< const UndoCommandArgs& > UndoCommandSignature; 
 
@@ -357,9 +359,6 @@ namespace Helium
             // data for handling picks
             Inspect::DataBindingPtr m_PickData;
 
-            // holds undoable data
-            Undo::Queue m_UndoQueue;
-
             // the 3d view control
             SceneGraph::Viewport* m_View;
 
@@ -408,12 +407,6 @@ namespace Helium
             // is this scene able to be edited?
             bool IsEditable();
 
-            // sigh, people really should only use this if they know they need to
-            Undo::Queue& GetUndoQueue()
-            {
-                return m_UndoQueue;
-            }
-
             // Path to the file that this scene is currently editing
             const Helium::Path& GetPath() const
             {
@@ -446,11 +439,6 @@ namespace Helium
             // allows external people to modify selection
             Selection& GetSelection()
             {
-                // right now we don't use the selection when undoing/redoing
-                //  and would like to keep it that way so we can clear it without undo support
-                //  use the above prototypes to avoid this issue
-                HELIUM_ASSERT( !m_UndoQueue.IsActive() );
-
                 return m_Selection;
             }
 
@@ -483,10 +471,6 @@ namespace Helium
             // allows external people to modify selection
             const OS_SceneNodeDumbPtr& GetHighlighted() const
             {
-                // right now we don't use the selection when undoing/redoing
-                //  and would like to keep it that way so we can clear it without undo support
-                HELIUM_ASSERT( !m_UndoQueue.IsActive() );
-
                 return m_Highlighted;
             }
 

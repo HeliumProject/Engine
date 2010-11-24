@@ -195,10 +195,10 @@ void ProjectPanel::CloseProject()
 
 void ProjectPanel::SetActive( const Path& path, bool active )
 {
-    HELIUM_ASSERT( m_Project );
-    HELIUM_ASSERT( m_Model );
-
-    m_Model->SetActive( path, active );
+    if ( m_Project && m_Model )
+    {
+        m_Model->SetActive( path, active );
+    }
 }
 
 void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
@@ -226,7 +226,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
     {
         if ( path.FullExtension() == TXT( "scene.hrb" ) )
         {
-            wxGetApp().GetFrame()->OpenScene( path );
+            wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
         }
     }
 

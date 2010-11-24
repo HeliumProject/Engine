@@ -101,7 +101,7 @@ namespace Helium
             }
 
             PropertiesManager*  m_PropertiesManager;
-            uint32_t                 m_SelectionId;
+            uint32_t            m_SelectionId;
             Inspect::V_Control  m_Controls;
         };
 
@@ -121,8 +121,8 @@ namespace Helium
             }
 
             PropertiesStyle             m_Style;
-            uint32_t                         m_SelectionId;
-            const uint32_t*                  m_CurrentSelectionId;
+            uint32_t                    m_SelectionId;
+            const uint32_t*             m_CurrentSelectionId;
             OrderedSet<SceneNodePtr>    m_Selection;
         };
 

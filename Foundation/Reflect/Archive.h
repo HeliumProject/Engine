@@ -232,7 +232,7 @@ namespace Helium
             bool m_Abort;
 
         protected:
-            Archive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
             virtual ~Archive();
 
@@ -406,7 +406,7 @@ namespace Helium
         FOUNDATION_API bool GetFileType( const Path& path, ArchiveType& type );
         
         // Get parser for a file
-        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
         FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );

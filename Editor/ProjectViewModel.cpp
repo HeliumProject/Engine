@@ -452,8 +452,9 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 
 void ProjectViewModel::SetActive( const Path& path, bool active )
 {
-    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( path ),
-        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( path );
+    Path relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( relativePath ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( relativePath );
         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
     ++lower )
     {

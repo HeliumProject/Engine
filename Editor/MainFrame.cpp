@@ -439,6 +439,9 @@ void MainFrame::CloseProject()
     {
         m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
+        // this will release all our listeners which may get signalled with state changes during teardown
+        m_SceneManager.SetCurrentScene( NULL );
+
         m_DocumentManager.e_DocumentOpened.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
         m_DocumentManager.e_DocumenClosed.RemoveMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
@@ -472,7 +475,24 @@ void MainFrame::OpenScene( const Path& path )
             HELIUM_ASSERT( result );
         }
 
-        scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+        if ( path.Exists() )
+        {
+            tstring error;
+            scene = m_SceneManager.OpenScene(  &m_ViewPanel->GetViewCanvas()->GetViewport(), document, error );
+
+            if ( !error.empty() )
+            {
+                wxMessageDialog msgBox( this, error.c_str(), wxT( "Error Loading Scene" ), wxOK | wxICON_EXCLAMATION );
+                msgBox.ShowModal();
+
+                return;
+            }
+        }
+        else
+        {
+            scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+        }
+
         HELIUM_ASSERT( scene );
 
         scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
@@ -885,7 +905,12 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    OpenProject( Helium::Path( TXT("New Project.project.hrb") ) );
+    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
+
+    if ( newProjectDialog.ShowModal() == wxID_OK )
+    {
+        OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
+    }
 }
 
 bool MainFrame::DoOpen( const tstring& path )
@@ -1512,41 +1537,39 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
-    if ( !args.m_Scene )
+    if ( args.m_PreviousScene )
     {
-        return;
+        // Unhook our event handlers
+        args.m_PreviousScene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+        args.m_PreviousScene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+        args.m_PreviousScene->e_Executed.Remove( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+
+        // Selection event handlers
+        args.m_PreviousScene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
+
+        // Remove attribute listeners
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanging );
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanged );
+        m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::SelectLink );
+        m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PickLink );
+
+        // If we were editing a scene, save the outliner info before changing to the new one.
+        OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_PreviousScene, OutlinerStates() ) ).first->second;
+        m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+
+        // Clear the selection attribute canvas
+        m_PropertiesPanel->GetCanvas().Clear();
+
+        // Clear the tool attribute canavs
+        m_ToolbarPanel->GetCanvas().Clear();
+
+        // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
+        // implimented it will cause a crash under certain scenarios (see trac #1322)
+        args.m_PreviousScene->SetTool( NULL );
+        m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
+
+        m_ToolbarPanel->EnableTools( false );
     }
-
-    // Unhook our event handlers
-    args.m_Scene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
-    args.m_Scene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
-    args.m_Scene->e_Executed.Remove( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
-
-    // Selection event handlers
-    args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
-
-    // Remove attribute listeners
-    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanging );
-    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanged );
-    m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_Scene, &SceneGraph::Scene::SelectLink );
-    m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PickLink );
-
-    // If we were editing a scene, save the outliner info before changing to the new one.
-    OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
-    m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
-
-    // Clear the selection attribute canvas
-    m_PropertiesPanel->GetCanvas().Clear();
-
-    // Clear the tool attribute canavs
-    m_ToolbarPanel->GetCanvas().Clear();
-
-    // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
-    // implimented it will cause a crash under certain scenarios (see trac #1322)
-    args.m_Scene->SetTool( NULL );
-    m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
-
-    m_ToolbarPanel->EnableTools( false );
 }
 
 void MainFrame::OnToolSelected( wxCommandEvent& event )
@@ -1792,6 +1815,11 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 
 void MainFrame::OnSceneUndoCommand( const SceneGraph::UndoCommandArgs& args )
 {
+    if ( args.m_Command->IsSignificant() )
+    {
+        args.m_Scene->e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
+    }
+
     m_UndoQueue.Push( args.m_Command );
 }
 

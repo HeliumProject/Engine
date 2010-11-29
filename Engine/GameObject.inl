@@ -9,7 +9,7 @@ namespace Lunar
 {
     /// DynamicCast() implementation for up-cast or same conversions.
     ///
-    /// @param[in] pObject    GameObject to cast.
+    /// @param[in] pObject    Object to cast.
     /// @param[in] rIsUpcast  boost::true_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
@@ -21,7 +21,7 @@ namespace Lunar
 
     /// DynamicCast() implementation for down-cast or invalid conversions.
     ///
-    /// @param[in] pObject    GameObject to cast.
+    /// @param[in] pObject    Object to cast.
     /// @param[in] rIsUpcast  boost::false_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
@@ -35,7 +35,7 @@ namespace Lunar
 
     /// StaticCast() implementation for up-cast or same conversions.
     ///
-    /// @param[in] pObject    GameObject to cast.
+    /// @param[in] pObject    Object to cast.
     /// @param[in] rIsUpcast  boost::true_type.
     ///
     /// @return  Cast pointer.
@@ -47,7 +47,7 @@ namespace Lunar
 
     /// StaticCast() implementation for down-cast or invalid conversions.
     ///
-    /// @param[in] pObject    GameObject to cast.
+    /// @param[in] pObject    Object to cast.
     /// @param[in] rIsUpcast  boost::false_type.
     ///
     /// @return  Cast pointer.
@@ -98,7 +98,7 @@ namespace Lunar
     /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
     /// object.
     ///
-    /// @param[in] pObject  GameObject about to be destroyed.
+    /// @param[in] pObject  Object about to be destroyed.
     ///
     /// @see Destroy()
     void GameObjectRefCountSupport::PreDestroy( GameObject* pObject )
@@ -110,7 +110,7 @@ namespace Lunar
 
     /// Destroy an object after the final strong reference to it has been cleared.
     ///
-    /// @param[in] pObject  GameObject to destroy.
+    /// @param[in] pObject  Object to destroy.
     ///
     /// @see PreDestroy()
     void GameObjectRefCountSupport::Destroy( GameObject* pObject )
@@ -122,7 +122,7 @@ namespace Lunar
 
     /// Get the name of this object.
     ///
-    /// @return  GameObject name.
+    /// @return  Object name.
     ///
     /// @see SetName()
     Name GameObject::GetName() const
@@ -132,7 +132,7 @@ namespace Lunar
 
     /// Get the instance index associated with this object.
     ///
-    /// @return  GameObject instance index.
+    /// @return  Object instance index.
     ///
     /// @see SetInstanceIndex()
     uint32_t GameObject::GetInstanceIndex() const
@@ -142,7 +142,7 @@ namespace Lunar
 
     /// Get the unique ID for this object.
     ///
-    /// @return  GameObject ID.
+    /// @return  Object ID.
     uint32_t GameObject::GetId() const
     {
         return m_id;
@@ -152,7 +152,7 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @return  GameObject flags.
+    /// @return  Object flags.
     ///
     /// @see GetAnyFlagSet(), GetAllFlagsSet(), SetFlags(), ClearFlags(), ToggleFlags()
     uint32_t GameObject::GetFlags() const
@@ -164,7 +164,7 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  GameObject flag bit mask.
+    /// @param[in] flagMask  Object flag bit mask.
     ///
     /// @return  True if any object flags in the given mask are set, false if not.
     ///
@@ -180,7 +180,7 @@ namespace Lunar
     ///
     /// Note that all object flag functions are thread-safe.
     ///
-    /// @param[in] flagMask  GameObject flag bit mask.
+    /// @param[in] flagMask  Object flag bit mask.
     ///
     /// @return  True if all the object flags in the given mask are set, false if not.
     ///
@@ -194,7 +194,7 @@ namespace Lunar
 
     /// Get the owner of this object.
     ///
-    /// @return  GameObject owner.
+    /// @return  Object owner.
     ///
     /// @see SetOwner(), GetChildCount(), GetChild(), GetChildren()
     GameObject* GameObject::GetOwner() const
@@ -237,7 +237,7 @@ namespace Lunar
 
     /// Get the full path name for this object.
     ///
-    /// @return  GameObject path name.
+    /// @return  Object path name.
     GameObjectPath GameObject::GetPath() const
     {
         return m_path;
@@ -293,8 +293,8 @@ namespace Lunar
 
     /// Create a new object.
     ///
-    /// @param[in] name                  GameObject name.
-    /// @param[in] pOwner                GameObject owner.
+    /// @param[in] name                  Object name.
+    /// @param[in] pOwner                Object owner.
     /// @param[in] pTemplate             Optional override template object.  If null, the default template for the
     ///                                  object type will be used.
     /// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
@@ -338,7 +338,7 @@ namespace Lunar
 
     /// Cast an object to a given type if the object is of that type.
     ///
-    /// @param[in] pObject  GameObject to cast.
+    /// @param[in] pObject  Object to cast.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
     ///
@@ -356,7 +356,7 @@ namespace Lunar
     /// only.  No checking is performed if assertions are disabled, and a null pointer is never returned if the cast is
     /// invalid.
     ///
-    /// @param[in] pObject  GameObject to cast.
+    /// @param[in] pObject  Object to cast.
     ///
     /// @return  Cast pointer.
     ///

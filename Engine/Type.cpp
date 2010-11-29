@@ -8,12 +8,131 @@
 #include "EnginePch.h"
 #include "Engine/Type.h"
 
+#include "Foundation/Container/ObjectPool.h"
+
 namespace Lunar
 {
-    L_IMPLEMENT_OBJECT_NOINITTYPE( Type, Engine );
+    /// Static reference count proxy management data.
+    struct TypeRefCountSupport::StaticData
+    {
+        /// Number of proxy objects to allocate per block for the proxy pool.
+        static const size_t POOL_BLOCK_SIZE = 1024;
+
+        /// Proxy object pool.
+        ObjectPool< RefCountProxy< Type > > proxyPool;
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        /// Active reference count proxies.
+        ConcurrentHashSet< RefCountProxy< Type >* > activeProxySet;
+#endif
+
+        /// @name Construction/Destruction
+        //@{
+        StaticData();
+        //@}
+    };
+
+    TypeRefCountSupport::StaticData* TypeRefCountSupport::sm_pStaticData = NULL;
 
     PackagePtr Type::sm_spTypePackage;
     Type::LookupMap* Type::sm_pLookupMap = NULL;
+
+    /// Retrieve a reference count proxy from the global pool.
+    ///
+    /// @return  Pointer to a reference count proxy.
+    ///
+    /// @see Release()
+    RefCountProxy< Type >* TypeRefCountSupport::Allocate()
+    {
+        // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
+        // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
+        // during startup type initialization).
+        StaticData* pStaticData = sm_pStaticData;
+        if( !pStaticData )
+        {
+            pStaticData = new StaticData;
+            HELIUM_ASSERT( pStaticData );
+            sm_pStaticData = pStaticData;
+        }
+
+        RefCountProxy< Type >* pProxy = pStaticData->proxyPool.Allocate();
+        HELIUM_ASSERT( pProxy );
+
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        ConcurrentHashSet< RefCountProxy< Type >* >::Accessor activeProxySetAccessor;
+        HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
+#endif
+
+        return pProxy;
+    }
+
+    /// Release a reference count proxy back to the global pool.
+    ///
+    /// @param[in] pProxy  Pointer to the reference count proxy to release.
+    ///
+    /// @see Allocate()
+    void TypeRefCountSupport::Release( RefCountProxy< Type >* pProxy )
+    {
+        HELIUM_ASSERT( pProxy );
+
+        StaticData* pStaticData = sm_pStaticData;
+        HELIUM_ASSERT( pStaticData );
+
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        HELIUM_VERIFY( pStaticData->activeProxySet.Remove( pProxy ) );
+#endif
+
+        pStaticData->proxyPool.Release( pProxy );
+    }
+
+    /// Release the name table and free all allocated memory.
+    ///
+    /// This should only be called immediately prior to application exit.
+    void TypeRefCountSupport::Shutdown()
+    {
+        delete sm_pStaticData;
+        sm_pStaticData = NULL;
+    }
+
+#if HELIUM_ENABLE_MEMORY_TRACKING
+    /// Get the number of active reference count proxies.
+    ///
+    /// Be careful when using this function, as the number may change if other threads are actively setting and clearing
+    /// references to objects.  Unless all other threads have been halted or are otherwise no longer using any smart
+    /// pointers, you should not expect this value to match the number actually iterated when using functions such as
+    /// GetFirstActiveProxy().
+    ///
+    /// @return  Current number of active smart pointer references.
+    ///
+    /// @see GetFirstActiveProxy()
+    size_t TypeRefCountSupport::GetActiveProxyCount()
+    {
+        HELIUM_ASSERT( sm_pStaticData );
+
+        return sm_pStaticData->activeProxySet.GetSize();
+    }
+
+    /// Initialize a constant accessor to the first active reference count proxy.
+    ///
+    /// @param[in] rAccessor  Accessor to initialize.
+    ///
+    /// @return  True if there are active reference count proxies and the accessor was successfully set to reference the
+    ///          first one, false if not.
+    ///
+    /// @see GetActiveProxyCount()
+    bool TypeRefCountSupport::GetFirstActiveProxy(
+        ConcurrentHashSet< RefCountProxy< Type >* >::ConstAccessor& rAccessor )
+    {
+        HELIUM_ASSERT( sm_pStaticData );
+
+        return sm_pStaticData->activeProxySet.First( rAccessor );
+    }
+#endif
+
+    /// Constructor.
+    TypeRefCountSupport::StaticData::StaticData()
+        : proxyPool( POOL_BLOCK_SIZE )
+    {
+    }
 
     /// Constructor.
     Type::Type()
@@ -24,71 +143,6 @@ namespace Lunar
     /// Destructor.
     Type::~Type()
     {
-    }
-
-    /// Initialize this type.
-    ///
-    /// @param[in] pParent    Parent type.
-    /// @param[in] pTemplate  Template object.
-    /// @param[in] flags      Type flags.
-    ///
-    /// @return  True if initialization was successful, false if initialization failed or if this type has already been
-    ///          initialized.
-    bool Type::Initialize( Type* pParent, GameObject* pTemplate, uint32_t flags )
-    {
-        HELIUM_ASSERT( pTemplate );
-
-        // Make sure we haven't already been initialized.
-        if( m_spTypeTemplate )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "Type::Initialize(): Type \"%s\" has already been initialized.\n" ),
-                GetName().Get() );
-
-            return false;
-        }
-
-        // Set up the template object name, and set this object as its parent.
-        if( !pTemplate->SetOwner( this ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "Type::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
-                GetName().Get() );
-
-            return false;
-        }
-
-        static Name nameTemplate( TXT( "Template" ) );
-        if( !pTemplate->SetName( nameTemplate ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "Type::Initialize(): Failed to set type \"%s\" template object name.\n" ),
-                GetName().Get() );
-
-            return false;
-        }
-
-        // Register the template object with the object system.
-        if( !GameObject::RegisterObject( pTemplate ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "Type::Initialize(): Failed to register type \"%s\" template object.\n" ),
-                GetName().Get() );
-
-            return false;
-        }
-
-        // Store the type parameters.
-        m_spTypeParent = pParent;
-        m_spTypeTemplate = pTemplate;
-
-        m_typeFlags = flags;
-
-        return true;
     }
 
     /// Get whether this type is a subtype of the given type.
@@ -109,16 +163,7 @@ namespace Lunar
         return false;
     }
 
-    /// @copydoc GameObject::Serialize()
-    void Type::Serialize( Serializer& s )
-    {
-        L_SERIALIZE_SUPER( s );
-
-        s << Serializer::Tag( TXT( "TypeFlags" ) ) << m_typeFlags;
-        s << Serializer::Tag( TXT( "TypeTemplate" ) ) << m_spTypeTemplate;
-    }
-
-    /// Get the package in which all Type object packages are stored.
+    /// Set the package in which all template object packages are stored.
     ///
     /// @param[in] pPackage  Main type package.
     ///
@@ -133,17 +178,62 @@ namespace Lunar
         sm_spTypePackage = pPackage;
     }
 
-    /// Register a type.
+    /// Create a type object.
     ///
-    /// @param[in] pType  Type to register.
+    /// @param[in] name          Type name.
+    /// @param[in] pTypePackage  Package in which the template object should be stored.
+    /// @param[in] pParent       Parent type.
+    /// @param[in] pTemplate     Template object.
+    /// @param[in] flags         Type flags.
     ///
-    /// @return  Pointer to the registered type.  If the type was previously registered, then this will point to the
-    ///          type that was originally registered, otherwise it will point to the type given.
+    /// @return  Pointer to the type object if created successfully, null if not.
     ///
     /// @see Unregister()
-    Type* Type::Register( Type* pType )
+    Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject* pTemplate, uint32_t flags )
     {
+        HELIUM_ASSERT( !name.IsEmpty() );
+        HELIUM_ASSERT( pTypePackage );
+        HELIUM_ASSERT( pTemplate );
+
+        // Set up the template object name, and set this object as its parent.
+        if( !pTemplate->SetOwner( pTypePackage ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "Type::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
+                *name );
+
+            return false;
+        }
+
+        if( !pTemplate->SetName( name ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "Type::Initialize(): Failed to set type \"%s\" template object name.\n" ),
+                *name );
+
+            return false;
+        }
+
+        // Register the template object with the object system.
+        if( !GameObject::RegisterObject( pTemplate ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "Type::Initialize(): Failed to register type \"%s\" template object.\n" ),
+                *name );
+
+            return false;
+        }
+
+        // Create the type object and store its parameters.
+        Type* pType = new Type;
         HELIUM_ASSERT( pType );
+        pType->m_name = name;
+        pType->m_spTypeParent = pParent;
+        pType->m_spTypeTemplate = pTemplate;
+        pType->m_typeFlags = flags;
 
         // Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
         // at least one type registered before any sub-threads are spawned.
@@ -153,14 +243,11 @@ namespace Lunar
             HELIUM_ASSERT( sm_pLookupMap );
         }
 
-        // Register the type.
+        // Register the type (note that a type with the same name should not already exist in the lookup map).
         LookupMap::Accessor typeAccessor;
-        if( !sm_pLookupMap->Insert( typeAccessor, std::pair< const Name, Type* >( pType->GetName(), pType ) ) )
-        {
-            // Type already exists in the map, so retrieve it.
-            pType = typeAccessor->second;
-            HELIUM_ASSERT( pType );
-        }
+        HELIUM_VERIFY( sm_pLookupMap->Insert(
+            typeAccessor,
+            std::pair< const Name, Type* >( pType->GetName(), pType ) ) );
 
         return pType;
     }
@@ -203,18 +290,6 @@ namespace Lunar
         return pType;
     }
 
-    /// Look up a type by its full path name.
-    ///
-    /// @param[in] typePath  Full path of the type to look up.
-    ///
-    /// @return  Pointer to the specified type if found, null pointer if not found.
-    Type* Type::Find( GameObjectPath typePath )
-    {
-        Type* pType = Find( typePath.GetName() );
-
-        return ( pType && pType->GetPath() == typePath ? pType : NULL );
-    }
-
     /// Begin iterating on all the registered types.
     ///
     /// @param[out] rIterator  Accessor set to reference the first registered type.
@@ -253,28 +328,5 @@ namespace Lunar
         sm_spTypePackage.Release();
 
         HELIUM_TRACE( TRACE_INFO, TXT( "Type registration shutdown complete.\n" ) );
-    }
-
-    /// Initialize the static type information for the "Type" class.
-    ///
-    /// @return  Static "Type" type.
-    Type* Type::InitStaticType()
-    {
-        Type* pType = sm_spStaticType;
-        if( !pType )
-        {
-            // Type type is registered manually during GameObject type initialization, so retrieve the type info from the
-            // existing registered data.
-            HELIUM_VERIFY( GameObject::InitStaticType() );
-
-            pType = Type::Find( Name( TXT( "Type" ) ) );
-            HELIUM_ASSERT( pType );
-
-            sm_spStaticType = pType;
-            sm_spStaticTypeTemplate = static_cast< Type* >( pType->GetTypeTemplate() );
-            HELIUM_ASSERT( sm_spStaticTypeTemplate );
-        }
-
-        return pType;
     }
 }

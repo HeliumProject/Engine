@@ -108,9 +108,6 @@
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            pType = GameObject::Create< Lunar::Type >( Lunar::Name( TXT( #TYPE ) ), pTypePackage ); \
-            HELIUM_ASSERT( pType ); \
-            \
             Lunar::Type* pParentType = Super::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
@@ -118,12 +115,14 @@
             HELIUM_ASSERT( pTemplate ); \
             sm_spStaticTypeTemplate = pTemplate; \
             \
-            HELIUM_VERIFY( pType->Initialize( pParentType, pTemplate, TYPE_FLAGS ) ); \
+            pType = Lunar::Type::Create( \
+                Lunar::Name( TXT( #TYPE ) ), \
+                pTypePackage, \
+                pParentType, \
+                pTemplate, \
+                TYPE_FLAGS ); \
+            HELIUM_ASSERT( pType ); \
             sm_spStaticType = pType; \
-            \
-            Lunar::Type* pRegisteredType = Lunar::Type::Register( pType ); \
-            HELIUM_ASSERT( pRegisteredType == pType ); \
-            HELIUM_UNREF( pRegisteredType ); \
         } \
         \
         return pType; \
@@ -339,20 +338,20 @@ namespace Lunar
         /// Child object name instance lookup map type.
         typedef ConcurrentHashMap< GameObjectPath, NameInstanceIndexMap > ChildNameInstanceIndexMap;
 
-        /// GameObject name.
+        /// Object name.
         Name m_name;
         /// Instance index.
         uint32_t m_instanceIndex;
-        /// GameObject ID.
+        /// Object ID.
         uint32_t m_id;
-        /// GameObject flags.
+        /// Object flags.
         volatile uint32_t m_flags;
         /// Override object template (null if using the type's default object).
         GameObjectPtr m_spTemplate;
 
-        /// GameObject owner.
+        /// Object owner.
         GameObjectPtr m_spOwner;
-        /// GameObject children.
+        /// Object children.
         DynArray< GameObjectWPtr > m_children;
 
         /// Full object path name.

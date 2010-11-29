@@ -835,7 +835,7 @@ namespace Lunar
                 ( TXT( "ObjectPreprocessor::PreprocessResource(): Failed to locate resource handler for resource " )
                   TXT( "\"%s\" of type \"%s\".\n" ) ),
                 *pResource->GetPath().ToString(),
-                *pResourceType->GetPath().ToString() );
+                *pResourceType->GetName() );
 
             return false;
         }

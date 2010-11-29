@@ -15,14 +15,61 @@
 
 namespace Lunar
 {
-    /// Run-time type information for GameObject classes.
-    class LUNAR_ENGINE_API Type : public GameObject
+    class Type;
+
+    /// Reference counting support for Type types.
+    class LUNAR_ENGINE_API TypeRefCountSupport
     {
-        L_DECLARE_OBJECT( Type, GameObject );
+    public:
+        /// Base type of reference counted object.
+        typedef Type BaseType;
+
+        /// @name Reference Count Update Events
+        //@{
+        inline static void PreAddStrongRef( Type* pObject );
+        inline static void PreRemoveStrongRef( Type* pObject );
+
+        inline static void PreAddWeakRef( Type* pObject );
+        inline static void PreRemoveWeakRef( Type* pObject );
+        //@}
+
+        /// @name Object Destruction Support
+        //@{
+        inline static void PreDestroy( Type* pObject );
+        inline static void Destroy( Type* pObject );
+        //@}
+
+        /// @name Reference Count Proxy Allocation Interface
+        //@{
+        static RefCountProxy< Type >* Allocate();
+        static void Release( RefCountProxy< Type >* pProxy );
+
+        static void Shutdown();
+        //@}
+
+#if HELIUM_ENABLE_MEMORY_TRACKING
+        /// @name Active Proxy Iteration
+        //@{
+        static size_t GetActiveProxyCount();
+        static bool GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy< Type >* >::ConstAccessor& rAccessor );
+        //@}
+#endif
+
+    private:
+        struct StaticData;
+
+        /// Static proxy management data.
+        static StaticData* sm_pStaticData;
+    };
+
+    /// Run-time type information for GameObject classes.
+    class LUNAR_ENGINE_API Type : NonCopyable
+    {
+        HELIUM_DECLARE_REF_COUNT( Type, TypeRefCountSupport );
 
     public:
         /// Type lookup hash map.
-        typedef ConcurrentHashMap< Name, Type* > LookupMap;
+        typedef ConcurrentHashMap< Name, TypePtr > LookupMap;
 
         /// General type flags.
         enum EFlag
@@ -74,13 +121,9 @@ namespace Lunar
         virtual ~Type();
         //@}
 
-        /// @name Initialization
-        //@{
-        bool Initialize( Type* pParent, GameObject* pTemplate, uint32_t flags );
-        //@}
-
         /// @name Data Access
         //@{
+        inline Name GetName() const;
         inline Type* GetTypeParent() const;
         inline GameObject* GetTypeTemplate() const;
 
@@ -92,21 +135,15 @@ namespace Lunar
         bool IsSubtypeOf( const Type* pType ) const;
         //@}
 
-        /// @name Serialization
-        //@{
-        virtual void Serialize( Serializer& s );
-        //@}
-
         /// @name Static Type Registration
         //@{
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static Type* Register( Type* pType );
+        static Type* Create( Name name, Package* pTypePackage, Type* pParent, GameObject* pTemplate, uint32_t flags );
         static void Unregister( Type* pType );
 
         static Type* Find( Name typeName );
-        static Type* Find( GameObjectPath typePath );
 
         static bool GetFirstType( ConstIterator& rIterator );
 
@@ -114,6 +151,8 @@ namespace Lunar
         //@}
 
     private:
+        /// Type name.
+        Name m_name;
         /// Parent type.
         TypePtr m_spTypeParent;
         /// Default template object for this type.
@@ -122,7 +161,7 @@ namespace Lunar
         /// Type flags.
         uint32_t m_typeFlags;
 
-        /// Main package containing all Type objects.
+        /// Main package containing all template objects.
         static PackagePtr sm_spTypePackage;
         /// Type lookup hash map instance.
         static LookupMap* sm_pLookupMap;

@@ -7,6 +7,72 @@
 
 namespace Lunar
 {
+    /// Perform any actions immediately prior to incrementing an object's strong reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
+    void TypeRefCountSupport::PreAddStrongRef( Type* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to decrementing an object's strong reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
+    void TypeRefCountSupport::PreRemoveStrongRef( Type* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to incrementing an object's weak reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
+    void TypeRefCountSupport::PreAddWeakRef( Type* /*pObject*/ )
+    {
+    }
+
+    /// Perform any actions immediately prior to decrementing an object's weak reference count.
+    ///
+    /// @param[in] pObject  Object whose reference count is being updated.
+    ///
+    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
+    void TypeRefCountSupport::PreRemoveWeakRef( Type* /*pObject*/ )
+    {
+    }
+
+    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
+    /// object.
+    ///
+    /// @param[in] pObject  Object about to be destroyed.
+    ///
+    /// @see Destroy()
+    void TypeRefCountSupport::PreDestroy( Type* /*pObject*/ )
+    {
+    }
+
+    /// Destroy an object after the final strong reference to it has been cleared.
+    ///
+    /// @param[in] pObject  Object to destroy.
+    ///
+    /// @see PreDestroy()
+    void TypeRefCountSupport::Destroy( Type* pObject )
+    {
+        HELIUM_ASSERT( pObject );
+
+        delete pObject;
+    }
+
+    /// Get the name of this type.
+    ///
+    /// @return  Type name.
+    Name Type::GetName() const
+    {
+        return m_name;
+    }
+
     /// Get the parent of this type.
     ///
     /// @return  Parent type, or null if there is no parent type (should only be the case with the "GameObject" type).
@@ -31,7 +97,7 @@ namespace Lunar
         return m_typeFlags;
     }
 
-    /// Get the package in which all Type object packages are stored.
+    /// Get the package in which all template object packages are stored.
     ///
     /// @return  Main type package.
     ///

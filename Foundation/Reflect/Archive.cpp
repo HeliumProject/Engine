@@ -7,7 +7,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Reflect/Element.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/ArchiveXML.h"

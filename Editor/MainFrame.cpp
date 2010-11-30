@@ -31,6 +31,7 @@
 #include "Editor/Clipboard/ClipboardDataObject.h"
 #include "Editor/Dialogs/ImportOptionsDialog.h"
 #include "Editor/Dialogs/ExportOptionsDialog.h"
+#include "Editor/Input.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -142,10 +143,10 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     Connect( wxID_SELECTALL, wxCommandEventHandler( MainFrame::OnSelectAll ) );
 
     /*
-EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
-EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
+    EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
+    EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
-*/
+    */
     //
     // Toolbox
     //
@@ -178,7 +179,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_ToolbarPanel->EnableTools( false );
 
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
-	m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
+    m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
 
     // View panel area
     m_ViewPanel = new ViewPanel( m_SettingsManager, this );
@@ -314,7 +315,7 @@ MainFrame::~MainFrame()
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
-    
+
     CloseProject();
 
     //
@@ -357,7 +358,7 @@ void MainFrame::SetHelpText( const tchar_t* text )
 void MainFrame::OpenProject( const Helium::Path& path )
 {
     HELIUM_ASSERT( !path.empty() );
-    
+
     CloseProject();
 
     bool isNewProject = false;
@@ -438,6 +439,9 @@ void MainFrame::CloseProject()
     {
         m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
+        // this will release all our listeners which may get signalled with state changes during teardown
+        m_SceneManager.SetCurrentScene( NULL );
+
         m_DocumentManager.e_DocumentOpened.RemoveMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
         m_DocumentManager.e_DocumenClosed.RemoveMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
@@ -448,6 +452,54 @@ void MainFrame::CloseProject()
 
         m_UndoQueue.Reset();   
     }
+}
+
+void MainFrame::OpenScene( const Path& path )
+{
+    HELIUM_ASSERT( m_Project );
+
+    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+
+    // Add to the project before opening it
+    m_Project->AddPath( path );
+
+    Scene* scene = m_SceneManager.GetScene( path );
+    if ( !scene )
+    {
+        Document* document = m_DocumentManager.FindDocument( path );
+        if ( !document )
+        {
+            tstring error;
+            document = new Document( path );
+            bool result = m_DocumentManager.OpenDocument( document, error );
+            HELIUM_ASSERT( result );
+        }
+
+        if ( path.Exists() )
+        {
+            tstring error;
+            scene = m_SceneManager.OpenScene(  &m_ViewPanel->GetViewCanvas()->GetViewport(), document, error );
+
+            if ( !error.empty() )
+            {
+                wxMessageDialog msgBox( this, error.c_str(), wxT( "Error Loading Scene" ), wxOK | wxICON_EXCLAMATION );
+                msgBox.ShowModal();
+
+                return;
+            }
+        }
+        else
+        {
+            scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
+        }
+
+        HELIUM_ASSERT( scene );
+
+        scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
+        scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );
+    }
+
+    m_SceneManager.SetCurrentScene( scene );
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -592,111 +644,97 @@ void MainFrame::OnMRUOpen( const MRUArgs& args )
 
 void MainFrame::OnChar(wxKeyEvent& event)
 {
-    int keyCode = event.GetKeyCode();
+    Helium::KeyboardInput input;
+    Helium::ConvertEvent( event, input );
 
-    switch ( keyCode )
+    if ( input.IsCtrlDown() )
     {
-    case WXK_SPACE:
+        switch( input.GetKeyCode() )
+        {
+        case KeyCodes::a: // ctrl-a
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::i: // ctrl-i
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_InvertSelection ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::o: // ctrl-o
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Open ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::s: // ctrl-s
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_SaveAll ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::v: // ctrl-v
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::w: // ctrl-w
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Close ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::x: // ctrl-x
+            GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
+            event.Skip( false );
+            return;
+            break;
+        }
+    }
+
+    switch ( input.GetKeyCode() )
+    {
+    case KeyCodes::Space:
         m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
         event.Skip(false);
         break;
 
-    case WXK_UP:
+    case KeyCodes::Up:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
         event.Skip(false);
         break;
 
-    case WXK_DOWN:
+    case KeyCodes::Down:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
         event.Skip(false);
         break;
 
-    case WXK_RIGHT:
+    case KeyCodes::Right:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
         event.Skip(false);
         break;
 
-    case WXK_LEFT:
+    case KeyCodes::Left:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
         event.Skip(false);
         break;
 
-    case WXK_INSERT:
+    case KeyCodes::Insert:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
         event.Skip(false);
         break;
 
-    case WXK_DELETE:
+    case KeyCodes::Delete:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
         event.Skip(false);
         break;
 
-    case WXK_ESCAPE:
+    case KeyCodes::Escape:
         GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
         event.Skip(false);
-        break;
-
-        //
-        // ASCII has some strange key codes for ctrl-<letter> combos
-        //
-        //01 |   1         Ctrl-a         SOH 
-        //02 |   2         Ctrl-b         STX 
-        //03 |   3         Ctrl-c         ETX 
-        //04 |   4         Ctrl-d         EOT 
-        //05 |   5         Ctrl-e         ENQ 
-        //06 |   6         Ctrl-f         ACK 
-        //07 |   7         Ctrl-g         BEL 
-        //08 |   8         Ctrl-h         BS 
-        //09 |   9  Tab    Ctrl-i         HT 
-        //0A |  10         Ctrl-j         LF 
-        //0B |  11         Ctrl-k         VT 
-        //0C |  12         Ctrl-l         FF 
-        //0D |  13  Enter  Ctrl-m         CR 
-        //0E |  14         Ctrl-n         SO 
-        //0F |  15         Ctrl-o         SI 
-        //10 |  16         Ctrl-p         DLE 
-        //11 |  17         Ctrl-q         DC1 
-        //12 |  18         Ctrl-r         DC2 
-        //13 |  19         Ctrl-s         DC3 
-        //14 |  20         Ctrl-t         DC4 
-        //15 |  21         Ctrl-u         NAK 
-        //16 |  22         Ctrl-v         SYN 
-        //17 |  23         Ctrl-w         ETB 
-        //18 |  24         Ctrl-x         CAN 
-        //19 |  25         Ctrl-y         EM 
-        //1A |  26         Ctrl-z         SUB 
-        //1B |  27  Esc    Ctrl-[         ESC 
-        //1C |  28         Ctrl-\         FS 
-        //1D |  29         Ctrl-]         GS 
-
-    case 1: // ctrl-a
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
-        event.Skip( false );
-        break;
-
-    case 9: // ctrl-i
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_InvertSelection ) );
-        event.Skip( false );
-        break;
-
-    case 15: // ctrl-o
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Open ) );
-        event.Skip( false );
-        break;
-
-    case 22: // ctrl-v
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
-        event.Skip( false );
-        break;
-
-    case 23: // ctrl-w
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, ID_Close ) );
-        event.Skip( false );
-        break;
-
-    case 24: // ctrl-x
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
-        event.Skip( false );
         break;
 
     default:
@@ -804,7 +842,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static void GetUniquePathName( const tchar_t* root, const std::set< Path >& paths, Helium::Path& name )
+static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< Path >& paths, Helium::Path& name )
 {
     int32_t number = 0;
 
@@ -817,6 +855,7 @@ static void GetUniquePathName( const tchar_t* root, const std::set< Path >& path
         {
             strm << TXT( "(" ) << number << TXT( ")" );
         }
+        strm << extension;
         name.Set( strm.str() );
     }
     while ( paths.find( name ) != paths.end() );
@@ -836,7 +875,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     }
 
     Helium::Path path;
-    GetUniquePathName( TXT( "New Scene" ), m_Project->Paths(), path );
+    GetUniquePathName( TXT( "New Scene" ), TXT( ".scene.hrb" ), m_Project->Paths(), path );
 
     // Add to the project before opening it
     m_Project->AddPath( path );
@@ -866,7 +905,12 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    OpenProject( Helium::Path( TXT("New Project") ) );
+    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
+
+    if ( newProjectDialog.ShowModal() == wxID_OK )
+    {
+        OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
+    }
 }
 
 bool MainFrame::DoOpen( const tstring& path )
@@ -1399,6 +1443,11 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 {
+    if ( args.m_PreviousScene )
+    {
+        m_ProjectPanel->SetActive( args.m_PreviousScene->GetPath(), false );
+    }
+
     if ( args.m_Scene )
     {
         m_ToolbarPanel->EnableTools();
@@ -1461,6 +1510,8 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 
 #pragma TODO( "Change the selection or display changes in the Project view" )
 
+        m_ProjectPanel->SetActive( args.m_Scene->GetPath(), true );
+
         // Restore selection-sensitive settings
         args.m_Scene->RefreshSelection();
 
@@ -1480,45 +1531,45 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             m_ToolbarPanel->GetCanvas().Read();
         }
     }
+
+    m_ProjectPanel->Refresh();
 }
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
 {
-    if ( !args.m_Scene )
+    if ( args.m_PreviousScene )
     {
-        return;
+        // Unhook our event handlers
+        args.m_PreviousScene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+        args.m_PreviousScene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+        args.m_PreviousScene->e_Executed.Remove( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+
+        // Selection event handlers
+        args.m_PreviousScene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
+
+        // Remove attribute listeners
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanging );
+        m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PropertyChanged );
+        m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::SelectLink );
+        m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_PreviousScene, &SceneGraph::Scene::PickLink );
+
+        // If we were editing a scene, save the outliner info before changing to the new one.
+        OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_PreviousScene, OutlinerStates() ) ).first->second;
+        m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+
+        // Clear the selection attribute canvas
+        m_PropertiesPanel->GetCanvas().Clear();
+
+        // Clear the tool attribute canavs
+        m_ToolbarPanel->GetCanvas().Clear();
+
+        // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
+        // implimented it will cause a crash under certain scenarios (see trac #1322)
+        args.m_PreviousScene->SetTool( NULL );
+        m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
+
+        m_ToolbarPanel->EnableTools( false );
     }
-
-    // Unhook our event handlers
-    args.m_Scene->e_StatusChanged.Remove( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
-    args.m_Scene->e_SceneContextChanged.Remove( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
-    args.m_Scene->e_Executed.Remove( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
-
-    // Selection event handlers
-    args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
-
-    // Remove attribute listeners
-    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanging().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanging );
-    m_PropertiesPanel->GetPropertiesGenerator().PropertyChanged().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PropertyChanged );
-    m_PropertiesPanel->GetPropertiesGenerator().SelectLink().RemoveMethod( args.m_Scene, &SceneGraph::Scene::SelectLink );
-    m_PropertiesPanel->GetPropertiesGenerator().PickLink().RemoveMethod( args.m_Scene, &SceneGraph::Scene::PickLink );
-
-    // If we were editing a scene, save the outliner info before changing to the new one.
-    OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
-    m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
-
-    // Clear the selection attribute canvas
-    m_PropertiesPanel->GetCanvas().Clear();
-
-    // Clear the tool attribute canavs
-    m_ToolbarPanel->GetCanvas().Clear();
-
-    // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
-    // implimented it will cause a crash under certain scenarios (see trac #1322)
-    args.m_Scene->SetTool( NULL );
-    m_ViewPanel->GetViewCanvas()->GetViewport().SetTool( NULL );
-
-    m_ToolbarPanel->EnableTools( false );
 }
 
 void MainFrame::OnToolSelected( wxCommandEvent& event )
@@ -1764,6 +1815,11 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 
 void MainFrame::OnSceneUndoCommand( const SceneGraph::UndoCommandArgs& args )
 {
+    if ( args.m_Command->IsSignificant() )
+    {
+        args.m_Scene->e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
+    }
+
     m_UndoQueue.Push( args.m_Command );
 }
 
@@ -1977,7 +2033,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         V_Matrix4 transforms;
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
-        Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
+        Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
         data->m_Data.Set( transforms );
 
         tstring xml;
@@ -2014,7 +2070,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
         std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
-            Helium::StrongPtr<Reflect::Matrix4ArraySerializer> data = Reflect::ObjectCast< Reflect::Matrix4ArraySerializer >( *itr );
+            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
                 m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );

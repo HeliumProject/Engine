@@ -61,65 +61,65 @@ using namespace Asset;
 
 int32_t g_AssetInitCount = 0;
 
-Helium::InitializerStack g_AssetInitializerStack;
+static Helium::InitializerStack g_AssetInitStack;
 
 std::vector< AssetFactory* > g_AssetFactories;
 
 void Asset::Initialize()
 {
-    if ( ++g_AssetInitCount == 1 )
+    if ( g_AssetInitStack.Increment() == 1 )
     {
-        g_AssetInitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-        g_AssetInitializerStack.Push( Component::Initialize, Component::Cleanup );
+        g_AssetInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
+        g_AssetInitStack.Push( Component::Initialize, Component::Cleanup );
 
         //
         // Enums
         //
 
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< TextureWrapMode >( TXT( "Asset::TextureWrapMode" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< TextureColorFormat >( TXT( "Asset::TextureColorFormat" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< TextureFilter >( TXT( "Asset::TextureFilter" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< TextureCoordinateWrapMode >( TXT( "Asset::WrapMode" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< AlphaType >( TXT( "Asset::AlphaType" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< MipGenFilterType >( TXT( "Asset::MipGenFilterType" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< PostMipFilterType >( TXT( "Asset::PostMipFilterType" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< ReductionRatio >( TXT( "Asset::ReductionRatio" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< AnimationClipMode >( TXT( "Asset::AnimationClipMode" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< AudioClipMode >( TXT( "Asset::AudioClipMode" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< TextureWrapMode >( TXT( "Asset::TextureWrapMode" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< TextureColorFormat >( TXT( "Asset::TextureColorFormat" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< TextureFilter >( TXT( "Asset::TextureFilter" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< TextureCoordinateWrapMode >( TXT( "Asset::WrapMode" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< AlphaType >( TXT( "Asset::AlphaType" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< MipGenFilterType >( TXT( "Asset::MipGenFilterType" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< PostMipFilterType >( TXT( "Asset::PostMipFilterType" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< ReductionRatio >( TXT( "Asset::ReductionRatio" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< AnimationClipMode >( TXT( "Asset::AnimationClipMode" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< AudioClipMode >( TXT( "Asset::AudioClipMode" ) ) );
 
         //
         // Basic Types
         //
 
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< AssetClass >( TXT( "Asset::AssetClass" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< ManifestVersion >( TXT( "Asset::ManifestVersion" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< AssetManifest >( TXT( "Asset::AssetManifest" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< SceneManifest >( TXT( "Asset::SceneManifest" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< AssetClass >( TXT( "Asset::AssetClass" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< ManifestVersion >( TXT( "Asset::ManifestVersion" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< AssetManifest >( TXT( "Asset::AssetManifest" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< SceneManifest >( TXT( "Asset::SceneManifest" ) ) );
 
         //
         // Components
         //
 
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< DependenciesComponent >( TXT( "Asset::DependenciesComponent" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< MeshCompressionFactor >( TXT("Asset::MeshCompressionFactor") ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< MeshProcessingComponent >( TXT( "Asset::MeshProcessingComponent" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterEnumType< TextureDataFormat >( TXT("Asset::TextureDataFormat") ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< TextureProcessingComponent >( TXT( "Asset::TextureProcessingComponent" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< TransformComponent >( TXT( "Asset::TransformComponent" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< BoundingBoxComponent >( TXT( "Asset::BoundingBoxComponent" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< DependenciesComponent >( TXT( "Asset::DependenciesComponent" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< MeshCompressionFactor >( TXT("Asset::MeshCompressionFactor") ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< MeshProcessingComponent >( TXT( "Asset::MeshProcessingComponent" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterEnumType< TextureDataFormat >( TXT("Asset::TextureDataFormat") ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< TextureProcessingComponent >( TXT( "Asset::TextureProcessingComponent" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< TransformComponent >( TXT( "Asset::TransformComponent" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< BoundingBoxComponent >( TXT( "Asset::BoundingBoxComponent" ) ) );
 
 
         //
         // Asset classes
         //
 
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< ShaderAsset >( TXT( "Asset::ShaderAsset" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< Entity >( TXT( "Asset::Entity" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< SceneAsset >( TXT( "Asset::SceneAsset" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< Texture >( TXT( "Asset::Texture" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< AnimationClip >( TXT( "Asset::AnimationClip" ) ) );
-        g_AssetInitializerStack.Push( Reflect::RegisterClassType< AudioClip >( TXT( "Asset::AudioClip" ) ) );
-		g_AssetInitializerStack.Push( Reflect::RegisterClassType< RawFile >( TXT( "Asset::RawFile" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< ShaderAsset >( TXT( "Asset::ShaderAsset" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< Entity >( TXT( "Asset::Entity" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< SceneAsset >( TXT( "Asset::SceneAsset" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< Texture >( TXT( "Asset::Texture" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< AnimationClip >( TXT( "Asset::AnimationClip" ) ) );
+        g_AssetInitStack.Push( Reflect::RegisterClassType< AudioClip >( TXT( "Asset::AudioClip" ) ) );
+		g_AssetInitStack.Push( Reflect::RegisterClassType< RawFile >( TXT( "Asset::RawFile" ) ) );
 
         g_AssetFactories.push_back( new MeshAssetFactory() );
 		g_AssetFactories.push_back( new TextureAssetFactory() );
@@ -136,7 +136,7 @@ void Asset::Initialize()
 
 void Asset::Cleanup()
 {
-    if ( --g_AssetInitCount == 0 )
+    if ( g_AssetInitStack.Decrement( false ) == 0 )
     {
         for ( std::vector< AssetFactory* >::iterator itr = g_AssetFactories.begin(), end = g_AssetFactories.end(); itr != end; ++itr )
         {
@@ -145,6 +145,6 @@ void Asset::Cleanup()
         }
         g_AssetFactories.clear();
 
-        g_AssetInitializerStack.Cleanup();
+        g_AssetInitStack.Cleanup();
     }
 }

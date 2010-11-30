@@ -99,7 +99,7 @@ namespace Helium
             // The container to decode elements to
             std::vector< ElementPtr >* m_Target;
         public:
-            ArchiveXML( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             ~ArchiveXML();
 
         private:

@@ -71,8 +71,9 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
         wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
         Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
     }
-    //m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
-    m_DataViewCtrl->GetMainWindow()->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+    m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( ProjectPanel::OnActivateItem ), NULL, this );
 
     std::set< tstring > extension;
     Asset::AssetClass::GetExtensions( extension );
@@ -192,16 +193,43 @@ void ProjectPanel::CloseProject()
     Layout();
 }
 
+void ProjectPanel::SetActive( const Path& path, bool active )
+{
+    if ( m_Project && m_Model )
+    {
+        m_Model->SetActive( path, active );
+    }
+}
+
 void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
 {
     if ( !m_Project )
     {
+        event.Skip();
         return;
     }
 
     wxPoint point = wxGetMousePosition();
     PopupMenu( m_ContextMenu );
-    event.Skip();
+}
+
+void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
+{
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( event.GetItem().GetID() );
+    if ( !node )
+    {
+        return;
+    }
+
+    const Path& path = node->GetPath();
+    if ( !path.empty() )
+    {
+        if ( path.FullExtension() == TXT( "scene.hrb" ) )
+        {
+            wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
+        }
+    }
+
 }
 
 void ProjectPanel::OnOpenProject( wxMouseEvent& event )

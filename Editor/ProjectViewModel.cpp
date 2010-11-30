@@ -20,12 +20,13 @@ const tchar_t* ProjectMenuID::s_Labels[COUNT] =
 #pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE and all it's references after usibility test" )
 
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer, const bool isActive )
 : m_Model( model )
 , m_ParentNode( parent )
 , m_Path( path )
 , m_Document( NULL )
 , m_IsContainer( isContainer )
+, m_IsActive( isActive )
 {
     if ( document )
     {
@@ -449,6 +450,20 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
     return false;
 }
 
+void ProjectViewModel::SetActive( const Path& path, bool active )
+{
+    Path relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( relativePath ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( relativePath );
+        lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
+    ++lower )
+    {
+        ProjectViewModelNode *node = lower->second;
+        node->m_IsActive = active;
+    }
+}
+
+
 void ProjectViewModel::OnPathAdded( const Helium::Path& path )
 {
     AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
@@ -599,6 +614,28 @@ bool ProjectViewModel::SetValue( const wxVariant& variant, const wxDataViewItem&
     //}
 
     //return true;
+}
+
+bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column, wxDataViewItemAttr& attr ) const
+{
+    if ( !item.IsOk() )
+    {
+        return false;
+    }
+
+    ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
+    if ( node->m_IsActive )
+    {
+        attr.SetItalic( true );
+        attr.SetBold( true );
+    }
+    else
+    {
+        attr.SetItalic( false );
+        attr.SetBold( false );
+    }
+
+    return true;
 }
 
 wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const

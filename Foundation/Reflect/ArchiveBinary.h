@@ -8,7 +8,7 @@
 //  
 //    Reflect Binary Format:
 //  
-//    struct Serializer
+//    struct Data
 //    {
 //      int32_t type;           // string pool index of the short name of the serializer
 //      byte[] data;            // serialized data
@@ -17,7 +17,7 @@
 //    struct Field
 //    {
 //      int32_t field_id;       // latent type field index (id)
-//      Serializer ser;         // serializer instance data
+//      Data ser;         // serializer instance data
 //    };
 //  
 //    struct Element
@@ -113,7 +113,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         public:
-            ArchiveBinary( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            ArchiveBinary( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         private:
             ArchiveBinary();

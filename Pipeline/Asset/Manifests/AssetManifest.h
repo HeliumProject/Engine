@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 
 #include "Foundation/TUID.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {

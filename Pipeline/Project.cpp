@@ -78,7 +78,9 @@ void Project::OnChildDocumentPathChanged( const DocumentPathChangedArgs& args )
     HELIUM_ASSERT( document );
 
     m_Paths.erase( args.m_OldPath );
-    m_Paths.insert( document->GetPath() );
+
+    HELIUM_ASSERT( a_Path.Get().IsAbsolute() );
+    m_Paths.insert( document->GetPath().GetRelativePath( a_Path.Get() ) );
 
     e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
 }

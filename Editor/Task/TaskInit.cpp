@@ -8,21 +8,17 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-static int32_t g_InitCount = 0;
-static Helium::InitializerStack g_InitializerStack;
+static Helium::InitializerStack g_TaskInitStack;
 
 void Editor::TaskInitialize()
 {
-  if ( ++g_InitCount == 1 )
-  {
-    g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
-  }
+    if ( g_TaskInitStack.Increment() == 1 )
+    {
+        g_TaskInitStack.Push( Asset::Initialize, Asset::Cleanup );
+    }
 }
 
 void Editor::TaskCleanup()
 {
-  if ( --g_InitCount == 0 )
-  {
-    g_InitializerStack.Cleanup();
-  }
+    g_TaskInitStack.Decrement();
 }

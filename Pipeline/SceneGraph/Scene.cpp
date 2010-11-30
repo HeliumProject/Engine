@@ -57,11 +57,6 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 , m_Color( 255 )
 , m_IsFocused( true )
 {
-    // Mark the scene as needing to be saved when a command is added to the undo stack
-    m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
-    m_UndoQueue.AddUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
-    m_UndoQueue.AddRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
-
     // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
     m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
     m_Selection.AddChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
@@ -85,11 +80,6 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 Scene::~Scene()
 {
     m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
-
-    // remove undo listener
-    m_UndoQueue.RemoveCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
-    m_UndoQueue.RemoveUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
-    m_UndoQueue.RemoveRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
 
     // remove selection listener
     m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
@@ -326,9 +316,6 @@ void Scene::Reset()
 
     // deallocate the tool
     m_Tool = NULL;
-
-    // Clear undo queue
-    m_UndoQueue.Reset();
 
     // Clear name cache
     m_Names.clear();
@@ -914,6 +901,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
             archive->d_Exception.Set( this, &Scene::ArchiveException );
             archive->Open( true );
             archive->Put( spool );
+            archive->Write();
             archive->Close();
         }
         catch ( Helium::Exception& ex )
@@ -1790,35 +1778,9 @@ bool Scene::Push(const Undo::CommandPtr& command)
         return false;
     }
 
-    UndoCommandArgs args ( command );
+    UndoCommandArgs args ( this, command );
     d_UndoCommand.Invoke( args );
     return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the undo queue is about to undo or redo a command.  Makes
-// sure that the scene is editable before allowing the operation to proceed.
-// 
-void Scene::UndoingOrRedoing( const Undo::QueueChangingArgs& args )
-{
-    bool allow = true;
-    if ( args.m_Command->IsSignificant() )
-    {
-        allow = IsEditable();
-    }
-    args.m_Veto = !allow;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a command is pushed on the undo queue.  If the command was
-// significant, the scene will be marked as dirty (needs to be saved).
-// 
-void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
-{
-    if ( args.m_Command->IsSignificant() )
-    {
-        e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
-    }
 }
 
 SceneGraph::SceneNode* Scene::FindNode(const TUID& id)

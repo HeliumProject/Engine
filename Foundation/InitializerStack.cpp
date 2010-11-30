@@ -4,6 +4,7 @@ using namespace Helium;
 
 InitializerStack::InitializerStack( bool autoCleanup )
 : m_AutoCleanup( autoCleanup )
+, m_Count( 0 )
 {
 
 }

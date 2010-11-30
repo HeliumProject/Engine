@@ -1,7 +1,7 @@
 #include "DocumentManager.h"
 
 #include "Foundation/Reflect/Archive.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/RCS/RCS.h"
 
 #include <algorithm>
@@ -83,58 +83,68 @@ bool DocumentManager::SaveAll( tstring& error )
 {
     bool savedAll = true;
     bool prompt = true;
-    OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
-    OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
-    for ( ; docItr != docEnd; ++docItr )
+    bool dirtyDocuments = true;
+
+    // here, we loop until we couldn't save any more documents (or there was a failure to save a document),
+    // because saving a document can cause other documents to need saving again
+    while ( dirtyDocuments && savedAll )
     {
-        Document* document = *docItr;
-
-        bool abort = false;
-        bool save = true;
-        if ( prompt )
+        dirtyDocuments = false;
+        OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
+        OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
+        for ( ; docItr != docEnd; ++docItr )
         {
-            switch ( QuerySave( document ) )
+            Document* document = *docItr;
+
+            bool abort = false;
+            bool save = true;
+            if ( prompt )
             {
-            case SaveActions::SaveAll:
-                save = true;
-                prompt = false;
-                break;
-
-            case SaveActions::Save:
-                save = true;
-                prompt = true;
-                break;
-
-            case SaveActions::Skip:
-                save = false;
-                prompt = true;
-                break;
-
-            case SaveActions::SkipAll:
-                save = false;
-            case SaveActions::Abort:
-            default:
-                abort = true;
-                break; 
-            }
-        }
-
-        if ( abort )
-        {
-            break;
-        }
-
-        if ( save )
-        {
-            tstring msg;
-            if ( !SaveDocument( document, msg ) )
-            {
-                savedAll = false;
-                if ( !error.empty() )
+                switch ( QuerySave( document ) )
                 {
-                    error += TXT( "\n" );
+                case SaveActions::SaveAll:
+                    save = true;
+                    prompt = false;
+                    break;
+
+                case SaveActions::Save:
+                    save = true;
+                    prompt = true;
+                    break;
+
+                case SaveActions::Skip:
+                    save = false;
+                    prompt = true;
+                    break;
+
+                case SaveActions::SkipAll:
+                    save = false;
+                case SaveActions::Abort:
+                default:
+                    abort = true;
+                    break; 
                 }
-                error += msg;
+            }
+
+            if ( abort )
+            {
+                break;
+            }
+
+            if ( save )
+            {
+                dirtyDocuments = true;
+
+                tstring msg;
+                if ( !SaveDocument( document, msg ) )
+                {
+                    savedAll = false;
+                    if ( !error.empty() )
+                    {
+                        error += TXT( "\n" );
+                    }
+                    error += msg;
+                }
             }
         }
     }
@@ -153,12 +163,12 @@ bool DocumentManager::SaveAll( tstring& error )
 bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 {
     // Check for "save as"
-    if ( document->GetPath().Extension().empty() )
+    if ( document->GetPath().empty() || !document->GetPath().IsAbsolute() )
     {
         tstring filters;
 #pragma TODO( "This needs to be getting the correct file filters for the document being saved" )
         Reflect::Archive::GetFileFilters( filters );
-        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath() );
+        FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath().Filename() );
         m_FileDialog.Invoke( args );
         if ( !args.m_Result.empty() )
         {

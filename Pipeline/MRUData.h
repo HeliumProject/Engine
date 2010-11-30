@@ -2,7 +2,7 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/Reflect/Element.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "Pipeline/API.h"
 

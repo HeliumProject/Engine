@@ -191,7 +191,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             // Pointer support
             //
 
-            if (field->m_SerializerID == Reflect::GetType<Reflect::PointerSerializer>())
+            if (field->m_DataID == Reflect::GetType<Reflect::PointerData>())
             {
                 if (hidden)
                 {
@@ -229,7 +229,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
             ReflectFieldInterpreterPtr fieldInterpreter;
 
-            for ( const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
+            for ( const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_DataID );
                 type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
                 type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
             {
@@ -250,7 +250,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             //
 
 #pragma TODO("Move this out to an interpreter")
-            if (field->m_SerializerID == Reflect::GetType<ElementArraySerializer>())
+            if (field->m_DataID == Reflect::GetType<ElementStlVectorData>())
             {
                 if (hidden)
                 {
@@ -294,8 +294,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             // Lastly fall back to the value interpreter
             //
 
-            const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
-            if ( !type->HasType( Reflect::GetType<Reflect::ContainerSerializer>() ) )
+            const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_DataID );
+            if ( !type->HasType( Reflect::GetType<Reflect::ContainerData>() ) )
             {
                 fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
                 fieldInterpreter->InterpretField( field, instances, container );

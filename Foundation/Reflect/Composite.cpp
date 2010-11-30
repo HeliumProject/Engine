@@ -1,7 +1,7 @@
 #include "Composite.h"
 #include "Element.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
 
 #include "Foundation/Log.h"
@@ -44,7 +44,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_SerializerID = serializerID;
+    field->m_DataID = serializerID;
 
     m_FieldNameToInfo[convertedName] = field;
     m_FieldIDToInfo[m_NextFieldID] = field;
@@ -52,10 +52,10 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
 
     m_NextFieldID++;
 
-    SerializerPtr def = field->CreateSerializer( &instance );
+    DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
     {
-        field->m_Default = field->CreateSerializer();
+        field->m_Default = field->CreateData();
 
         try
         {
@@ -90,7 +90,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_SerializerID = serializerID < 0 ? GetType<PointerSerializer>() : serializerID;
+    field->m_DataID = serializerID < 0 ? GetType<PointerData>() : serializerID;
     field->m_TypeID = typeID;
 
     m_FieldNameToInfo[convertedName] = field;
@@ -99,10 +99,10 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
 
     m_NextFieldID++;
 
-    SerializerPtr def = field->CreateSerializer( &instance );
+    DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
     {
-        field->m_Default = field->CreateSerializer();
+        field->m_Default = field->CreateData();
 
         try
         {
@@ -140,7 +140,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_SerializerID = serializerID;
+    field->m_DataID = serializerID;
 
     m_FieldNameToInfo[convertedName] = field;
     m_FieldIDToInfo[m_NextFieldID] = field;
@@ -148,10 +148,10 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
     m_NextFieldID++;
 
-    SerializerPtr def = field->CreateSerializer( &instance );
+    DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
     {
-        field->m_Default = field->CreateSerializer();
+        field->m_Default = field->CreateData();
 
         try
         {
@@ -262,12 +262,12 @@ bool Composite::Equals(const Element* a, const Element* b)
         return false;
     }
 
-    if (a->HasType(Reflect::GetType<Serializer>()))
+    if (a->HasType(Reflect::GetType<Data>()))
     {
-        const Serializer* aSerializer = static_cast<const Serializer*>(a);
-        const Serializer* bSerializer = static_cast<const Serializer*>(b);
+        const Data* aData = static_cast<const Data*>(a);
+        const Data* bData = static_cast<const Data*>(b);
 
-        return aSerializer->Equals(bSerializer);
+        return aData->Equals(bData);
     }
     else
     {
@@ -278,18 +278,18 @@ bool Composite::Equals(const Element* a, const Element* b)
             const Field* field = itr->second;
 
             // create serializers
-            SerializerPtr aSerializer = field->CreateSerializer();
-            SerializerPtr bSerializer = field->CreateSerializer();
+            DataPtr aData = field->CreateData();
+            DataPtr bData = field->CreateData();
 
             // connnect
-            aSerializer->ConnectField(a, field);
-            bSerializer->ConnectField(b, field);
+            aData->ConnectField(a, field);
+            bData->ConnectField(b, field);
 
-            bool serializersEqual = aSerializer->Equals( bSerializer );
+            bool serializersEqual = aData->Equals( bData );
 
             // disconnect
-            aSerializer->Disconnect();
-            bSerializer->Disconnect();
+            aData->Disconnect();
+            bData->Disconnect();
 
             // If the serialziers aren't equal, the elements can't be equal
             if ( !serializersEqual )
@@ -328,7 +328,7 @@ void Composite::Visit(Element* element, Visitor& visitor)
                 continue;
             }
 
-            SerializerPtr serializer = field->CreateSerializer();
+            DataPtr serializer = field->CreateData();
 
             serializer->ConnectField( element, field );
 
@@ -386,10 +386,10 @@ void Composite::Copy( const Element* src, Element* dest )
     // Carry out the copy operation
     // 
 
-    if (src->HasType(Reflect::GetType<Serializer>()))
+    if (src->HasType(Reflect::GetType<Data>()))
     {
-        const Serializer* ser = static_cast<const Serializer*>(src);
-        Serializer* cln = static_cast<Serializer*>(dest);
+        const Data* ser = static_cast<const Data*>(src);
+        Data* cln = static_cast<Data*>(dest);
 
         cln->Set(ser);
     }
@@ -402,8 +402,8 @@ void Composite::Copy( const Element* src, Element* dest )
             const Field* field = itr->second;
 
             // create serializers
-            SerializerPtr lhs = field->CreateSerializer();
-            SerializerPtr rhs = field->CreateSerializer();
+            DataPtr lhs = field->CreateData();
+            DataPtr rhs = field->CreateData();
 
             // connnect
             lhs->ConnectField(dest, field);
@@ -412,7 +412,7 @@ void Composite::Copy( const Element* src, Element* dest )
             // for normal data types, run overloaded assignement operator via serializer's vtable
             // for reference container types, this deep copies containers (which is bad for 
             //  non-cloneable (FieldFlags::Share) reference containers)
-            bool result = lhs->Set(rhs, field->m_Flags & FieldFlags::Share ? SerializerFlags::Shallow : 0);
+            bool result = lhs->Set(rhs, field->m_Flags & FieldFlags::Share ? DataFlags::Shallow : 0);
             HELIUM_ASSERT(result);
 
             // disconnect

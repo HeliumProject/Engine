@@ -43,7 +43,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     if (!result)
     {
-        if ( field->m_SerializerID == Reflect::GetType<EnumerationSerializer>() )
+        if ( field->m_DataID == Reflect::GetType<EnumerationData>() )
         {
             ChoicePtr choice = CreateControl<Choice>();
 
@@ -73,7 +73,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         }
         else
         {
-            if ( field->m_SerializerID == Reflect::GetType<BoolSerializer>() )
+            if ( field->m_DataID == Reflect::GetType<BoolData>() )
             {
                 CheckBoxPtr checkBox = CreateControl<CheckBox>();
                 checkBox->a_IsReadOnly.Set( readOnly );
@@ -127,27 +127,27 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Bind data
     //
 
-    std::vector<Serializer*> ser;
+    std::vector<Data*> ser;
 
     {
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
         std::vector<Reflect::Element*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            SerializerPtr s = field->CreateSerializer();
+            DataPtr s = field->CreateData();
 
-            if (!s->HasType(Reflect::GetType<ContainerSerializer>()))
+            if (!s->HasType(Reflect::GetType<ContainerData>()))
             {
                 s->ConnectField(*itr, field);
 
                 ser.push_back(s);
 
-                m_Serializers.push_back(s);
+                m_Datas.push_back(s);
             }
         }
     }
 
-    Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
+    Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( ser );
 
     container->Bind( data );
 

@@ -25,6 +25,7 @@ Profile::Accumulator g_CommandAccum( "Perforce Commands" );
 
 Provider::Provider()
 : m_IsEnabled( true )
+, m_IsInitialized( false )
 , m_IsConnected( false )
 , m_Abort( false )
 , m_Shutdown( false )
@@ -54,6 +55,8 @@ Provider::~Provider()
 
 void Provider::Initialize()
 {
+    m_IsInitialized = true;
+
     Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<Provider, &Provider::ThreadEntry>;
     if ( !m_Thread.Create( entry, this, TXT( "Perforce Transaction Thread" ) ) )
     {
@@ -70,7 +73,10 @@ void Provider::Cleanup()
             Error e;
             m_Client.Final( &e );
         }
+    }
 
+    if ( m_IsInitialized )
+    {
         m_Shutdown = true;
         m_Execute.Signal();
         m_Thread.Join();

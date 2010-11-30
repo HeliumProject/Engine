@@ -1,5 +1,5 @@
 #include "Cache.h"
-#include "Serializer.h"
+#include "Foundation/Reflect/Data/Data.h"
 #include "Registry.h"
 #include "Foundation/Container/Insert.h"
 
@@ -101,7 +101,7 @@ bool Cache::Create(const tstring& name, ElementPtr& element)
 
 void Cache::Free(ElementPtr element)
 {
-    if (!element->HasType(Reflect::GetType<Serializer>()))
+    if (!element->HasType(Reflect::GetType<Data>()))
         return;
 
     H_Element::iterator found = m_Elements.find(element->GetType());

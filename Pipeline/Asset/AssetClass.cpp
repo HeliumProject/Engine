@@ -4,7 +4,7 @@
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Visitor.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Component/Component.h"
 
 #include "Pipeline/Asset/Classes/Entity.h"
@@ -98,10 +98,10 @@ namespace Helium
 
             virtual bool VisitField(Element* element, const Field* field) HELIUM_OVERRIDE
             {
-                if ( field->m_SerializerID == Reflect::GetType< Reflect::PathSerializer >() )
+                if ( field->m_DataID == Reflect::GetType< Reflect::PathData >() )
                 {
                     Helium::Path path;
-                    if ( Reflect::Serializer::GetValue( field->CreateSerializer( element ), path ) )
+                    if ( Reflect::Data::GetValue( field->CreateData( element ), path ) )
                     {
                         m_Dependencies.insert( path );
 
@@ -109,20 +109,20 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::ArraySerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::StlVectorData >() )
                 {
-                    const Reflect::ArraySerializer* arraySerializer = Reflect::ConstDangerousCast<Reflect::ArraySerializer>( field->CreateSerializer( element ) );
-                    if ( arraySerializer->GetItemType() == Reflect::GetType< Reflect::PathSerializer >() )
+                    const Reflect::StlVectorData* arrayData = Reflect::ConstDangerousCast<Reflect::StlVectorData>( field->CreateData( element ) );
+                    if ( arrayData->GetItemType() == Reflect::GetType< Reflect::PathData >() )
                     {
-                        if ( (int)arraySerializer->GetSize() < 1 )
+                        if ( (int)arrayData->GetSize() < 1 )
                         {
                             return true;
                         }
 
-                        for ( size_t index = 0; index < arraySerializer->GetSize(); ++index )
+                        for ( size_t index = 0; index < arrayData->GetSize(); ++index )
                         {
                             Helium::Path path;
-                            if ( Reflect::Serializer::GetValue( arraySerializer->GetItem( index ), path ) )
+                            if ( Reflect::Data::GetValue( arrayData->GetItem( index ), path ) )
                             {
                                 m_Dependencies.insert( path );
                             }
@@ -132,25 +132,25 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::MapSerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::StlMapData >() )
                 {
-                    const Reflect::MapSerializer* mapSerializer = Reflect::ConstDangerousCast<Reflect::MapSerializer>( field->CreateSerializer( element ) );
-                    if ( mapSerializer->GetValueType() == Reflect::GetType< Reflect::PathSerializer >() )
+                    const Reflect::StlMapData* mapData = Reflect::ConstDangerousCast<Reflect::StlMapData>( field->CreateData( element ) );
+                    if ( mapData->GetValueType() == Reflect::GetType< Reflect::PathData >() )
                     {
-                        if ( (int)mapSerializer->GetSize() < 1 )
+                        if ( (int)mapData->GetSize() < 1 )
                         {
                             return true;
                         }
 
-                        Reflect::MapSerializer::V_ConstValueType data;
-                        mapSerializer->GetItems( data );
+                        Reflect::StlMapData::V_ConstValueType data;
+                        mapData->GetItems( data );
 
-                        Reflect::MapSerializer::V_ConstValueType::const_iterator itr = data.begin();
-                        Reflect::MapSerializer::V_ConstValueType::const_iterator end = data.end();
+                        Reflect::StlMapData::V_ConstValueType::const_iterator itr = data.begin();
+                        Reflect::StlMapData::V_ConstValueType::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
-                            if ( Reflect::Serializer::GetValue( itr->second, path ) )
+                            if ( Reflect::Data::GetValue( itr->second, path ) )
                             {
                                 m_Dependencies.insert( path );
                             }
@@ -160,25 +160,25 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::StlSetData >() )
                 {
-                    const Reflect::SetSerializer* setSerializer = Reflect::ConstDangerousCast<Reflect::SetSerializer>( field->CreateSerializer( element ) );
-                    if ( setSerializer->GetItemType() == Reflect::GetType< Reflect::PathSerializer >() )
+                    const Reflect::StlSetData* setData = Reflect::ConstDangerousCast<Reflect::StlSetData>( field->CreateData( element ) );
+                    if ( setData->GetItemType() == Reflect::GetType< Reflect::PathData >() )
                     {
-                        if ( (int)setSerializer->GetSize() < 1 )
+                        if ( (int)setData->GetSize() < 1 )
                         {
                             return true;
                         }
 
-                        std::vector< Reflect::ConstSerializerPtr > data;
-                        setSerializer->GetItems( data );
+                        std::vector< Reflect::ConstDataPtr > data;
+                        setData->GetItems( data );
 
-                        std::vector< Reflect::ConstSerializerPtr >::const_iterator itr = data.begin();
-                        std::vector< Reflect::ConstSerializerPtr >::const_iterator end = data.end();
+                        std::vector< Reflect::ConstDataPtr >::const_iterator itr = data.begin();
+                        std::vector< Reflect::ConstDataPtr >::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
-                            if ( Reflect::Serializer::GetValue( (*itr), path ) )
+                            if ( Reflect::Data::GetValue( (*itr), path ) )
                             {
                                 m_Dependencies.insert( path );
                             }
@@ -188,16 +188,16 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementArraySerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlVectorData >() )
                 {
-                    const Reflect::ElementArraySerializer* arraySerializer = Reflect::ConstDangerousCast< Reflect::ElementArraySerializer >( field->CreateSerializer( element ) );
+                    const Reflect::ElementStlVectorData* arrayData = Reflect::ConstDangerousCast< Reflect::ElementStlVectorData >( field->CreateData( element ) );
 
-                    if ( (int)arraySerializer->GetSize() < 1 )
+                    if ( (int)arrayData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const std::vector< Reflect::ElementPtr >& vals = arraySerializer->m_Data.Ref();
+                    const std::vector< Reflect::ElementPtr >& vals = arrayData->m_Data.Ref();
                     for ( std::vector< Reflect::ElementPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
@@ -206,20 +206,20 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementMapSerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlMapData >() )
                 {
-                    const Reflect::ElementMapSerializer* mapSerializer = Reflect::ConstDangerousCast< Reflect::ElementMapSerializer >( field->CreateSerializer( element ) );
+                    const Reflect::ElementStlMapData* mapData = Reflect::ConstDangerousCast< Reflect::ElementStlMapData >( field->CreateData( element ) );
 
-                    if ( (int)mapSerializer->GetSize() < 1 )
+                    if ( (int)mapData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    Reflect::ElementMapSerializer::V_ConstValueType data;
-                    mapSerializer->GetItems( data );
+                    Reflect::ElementStlMapData::V_ConstValueType data;
+                    mapData->GetItems( data );
 
-                    Reflect::ElementMapSerializer::V_ConstValueType::const_iterator itr = data.begin();
-                    Reflect::ElementMapSerializer::V_ConstValueType::const_iterator end = data.end();
+                    Reflect::ElementStlMapData::V_ConstValueType::const_iterator itr = data.begin();
+                    Reflect::ElementStlMapData::V_ConstValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
                         (*itr->second)->Accept( *this );
@@ -228,17 +228,17 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementSetSerializer >() )
+                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlSetData >() )
                 {
-                    const Reflect::ElementSetSerializer* setSerializer = Reflect::ConstDangerousCast< Reflect::ElementSetSerializer >( field->CreateSerializer( element ) );
+                    const Reflect::ElementStlSetData* setData = Reflect::ConstDangerousCast< Reflect::ElementStlSetData >( field->CreateData( element ) );
 
-                    if ( (int)setSerializer->GetSize() < 1 )
+                    if ( (int)setData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const Reflect::ElementSetSerializer::DataType& vals = setSerializer->m_Data.Ref();
-                    for ( Reflect::ElementSetSerializer::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                    const Reflect::ElementStlSetData::DataType& vals = setData->m_Data.Ref();
+                    for ( Reflect::ElementStlSetData::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
                     }

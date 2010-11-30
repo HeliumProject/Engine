@@ -40,7 +40,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
     std::vector< Reflect::Element* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        Reflect::DataPtr ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataID ) );
+        Reflect::DataPtr ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataClass ) );
         uintptr_t fieldAddress = ( uintptr_t )( *itr ) + field->m_Offset;
         ser->ConnectData( ( void* )fieldAddress );
         m_Datas.push_back( ser );

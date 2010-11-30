@@ -74,17 +74,17 @@ bool Cast<Helium::GUID, Helium::TUID>(const Data* src, Data* dest)
     return true;
 }
 
-typedef std::pair<int32_t, int32_t> P_i32;
-typedef std::map<P_i32, bool (*)(const Data*, Data*)> M_CastingFuncs;
+typedef std::pair<const Class*, const Class*> ClassPair;
+typedef std::map<ClassPair, bool (*)(const Data*, Data*)> CastingFunctionMap;
 
-M_CastingFuncs g_CastingFuncs;
+CastingFunctionMap g_CastingFunctions;
 
 template<class S, class D>
 void MapCast()
 {
-    P_i32 key (Reflect::GetData<S>(), Reflect::GetData<D>());
-    M_CastingFuncs::value_type val (key , &Cast<S, D>);
-    bool ins = g_CastingFuncs.insert( val ).second;
+    ClassPair key (Reflect::GetDataClass<S>(), Reflect::GetDataClass<D>());
+    CastingFunctionMap::value_type val (key , &Cast<S, D>);
+    bool ins = g_CastingFunctions.insert( val ).second;
     HELIUM_ASSERT(ins);
 }
 
@@ -97,7 +97,7 @@ void MapCasts()
 
 void Data::Initialize()
 {
-    if (!g_CastingFuncs.empty())
+    if (!g_CastingFunctions.empty())
     {
         return;
     }
@@ -133,7 +133,7 @@ void Data::Initialize()
     MapCasts<uint32_t, int64_t>(); MapCasts<uint32_t, uint64_t>();
 
     // 8^2 - 8 (don't cant to ourself)
-    HELIUM_ASSERT(g_CastingFuncs.size() == 56);
+    HELIUM_ASSERT(g_CastingFunctions.size() == 56);
 
     // float to double
     MapCasts<float32_t, float64_t>();
@@ -151,7 +151,7 @@ void Data::Initialize()
     MapCasts<float64_t, int64_t>(); MapCasts<float64_t, uint64_t>();
 
     // 8 * 4 (to and from float32_t and float64_t across 8 integer type)
-    HELIUM_ASSERT(g_CastingFuncs.size() == 90);
+    HELIUM_ASSERT(g_CastingFunctions.size() == 90);
 
     // uint64_t to TUID and back
     MapCasts<uint64_t, Helium::TUID>();
@@ -162,21 +162,21 @@ void Data::Initialize()
 
 void Data::Cleanup()
 {
-    if (g_CastingFuncs.size()>0)
+    if (g_CastingFunctions.size()>0)
     {
-        g_CastingFuncs.clear();
+        g_CastingFunctions.clear();
     }
 }
 
-bool Data::CastSupported(int32_t srcType, int32_t destType)
+bool Data::CastSupported(const Class* srcType, const Class* destType)
 {
     if (srcType == destType)
     {
         return true;
     }
 
-    M_CastingFuncs::iterator found = g_CastingFuncs.find( P_i32 (srcType, destType) );
-    if (found != g_CastingFuncs.end())
+    CastingFunctionMap::iterator found = g_CastingFunctions.find( ClassPair (srcType, destType) );
+    if (found != g_CastingFunctions.end())
     {
         return true;
     }
@@ -195,8 +195,8 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     }
 
     // next look for a natural casting function (non-container cast)
-    M_CastingFuncs::iterator found = g_CastingFuncs.find( P_i32 (src->GetType(), dest->GetType()) );
-    if (found != g_CastingFuncs.end())
+    CastingFunctionMap::iterator found = g_CastingFunctions.find( ClassPair (src->GetClass(), dest->GetClass()) );
+    if (found != g_CastingFunctions.end())
     {
         return found->second(src, dest);
     }
@@ -209,7 +209,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
             const StlVectorData* srcArray = ConstDangerousCast<StlVectorData>( src );
             StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
 
-            if (CastSupported( srcArray->GetItemType(), destArray->GetItemType() ))
+            if (CastSupported( srcArray->GetItemClass(), destArray->GetItemClass() ))
             {
                 destArray->SetSize( srcArray->GetSize() );
 
@@ -226,7 +226,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
             const StlSetData* srcSet = ConstDangerousCast<StlSetData>( src );
             StlSetData* destSet = DangerousCast<StlSetData>( dest );
 
-            if (CastSupported( srcSet->GetItemType(), destSet->GetItemType() ))
+            if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
             {
                 std::vector< ConstDataPtr > data;
                 srcSet->GetItems( data );
@@ -237,7 +237,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 std::vector< ConstDataPtr >::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr value = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destSet->GetItemType() ) );
+                    DataPtr value = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destSet->GetItemClass() ) );
                     if (Data::CastValue( *itr, value ))
                     {
                         destSet->AddItem( value );
@@ -252,7 +252,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
             const StlMapData* srcMap = ConstDangerousCast<StlMapData>( src );
             StlMapData* destMap = DangerousCast<StlMapData>( dest );
 
-            if ( CastSupported( srcMap->GetKeyType(), destMap->GetKeyType() ) && CastSupported( srcMap->GetValueType(), destMap->GetValueType() ) )
+            if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
             {
                 StlMapData::V_ConstValueType data;
                 srcMap->GetItems( data );
@@ -263,8 +263,8 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 StlMapData::V_ConstValueType::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destMap->GetKeyType() ) );
-                    DataPtr value = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destMap->GetValueType() ) );
+                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destMap->GetKeyClass() ) );
+                    DataPtr value = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destMap->GetValueClass() ) );
                     if (Data::CastValue( itr->first, key ) && Data::CastValue( itr->second, value ))
                     {
                         destMap->SetItem( key, value );
@@ -279,7 +279,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
             const ElementStlMapData* srcElementMap = ConstDangerousCast<ElementStlMapData>( src );
             ElementStlMapData* destElementMap = DangerousCast<ElementStlMapData>( dest );
 
-            if (CastSupported( srcElementMap->GetKeyType(), destElementMap->GetKeyType() ))
+            if (CastSupported( srcElementMap->GetKeyClass(), destElementMap->GetKeyClass() ))
             {
                 ElementStlMapData::V_ConstValueType data;
                 srcElementMap->GetItems( data );
@@ -290,7 +290,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 ElementStlMapData::V_ConstValueType::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destElementMap->GetKeyType() ) );
+                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destElementMap->GetKeyClass() ) );
                     if (Data::CastValue( itr->first, key ))
                     {
                         destElementMap->SetItem( key, flags & DataFlags::Shallow ? itr->second->Ptr() : (*itr->second)->Clone() );

@@ -9,19 +9,19 @@
 
 #define REFLECT_SPECIALIZE_DATA(Name) \
 template<> \
-static inline int32_t Helium::Reflect::GetData<Name::DataType>() \
+static inline const Helium::Reflect::Class* Helium::Reflect::GetDataClass<Name::DataType>() \
 { \
-    return Helium::Reflect::GetClass<Name>()->m_TypeID; \
+    return Helium::Reflect::GetClass<Name>(); \
 } \
 template<> \
 static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* serializer ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetData<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
 } \
 template<> \
 static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* serializer ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetData<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"

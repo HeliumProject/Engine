@@ -24,7 +24,7 @@ Composite::~Composite()
 
 }
 
-Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t flags)
+Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags)
 {
     tstring convertedName;
     {
@@ -44,7 +44,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_DataID = serializerID;
+    field->m_DataClass = dataClass;
 
     m_FieldNameToInfo[convertedName] = field;
     m_FieldIDToInfo[m_NextFieldID] = field;
@@ -70,7 +70,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     return field;
 }
 
-Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags)
+Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags)
 {
     tstring convertedName;
     {
@@ -90,8 +90,8 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_DataID = serializerID < 0 ? GetType<PointerData>() : serializerID;
-    field->m_TypeID = typeID;
+    field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
+    field->m_Type = type;
 
     m_FieldNameToInfo[convertedName] = field;
     m_FieldIDToInfo[m_NextFieldID] = field;
@@ -117,7 +117,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     return field;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const Enumeration* enumeration, int32_t flags)
+Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags)
 {
     tstring convertedName;
     {
@@ -140,7 +140,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_FieldID = m_NextFieldID;
-    field->m_DataID = serializerID;
+    field->m_DataClass = dataClass;
 
     m_FieldNameToInfo[convertedName] = field;
     m_FieldIDToInfo[m_NextFieldID] = field;
@@ -168,7 +168,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
 void Composite::Report() const
 {
-    Log::Debug(Log::Levels::Verbose, TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_Name.c_str() );
+    Log::Debug(Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, m_Name.c_str() );
 
     uint32_t computedSize = 0;
     M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();
@@ -185,18 +185,18 @@ void Composite::Report() const
     }
 }
 
-bool Composite::HasType(int32_t type) const
+bool Composite::HasType(const Type* type) const
 {
-    const Composite* typeInfo = this;
+    const Composite* base = this;
 
-    while ( typeInfo )
+    while ( type )
     {
-        if ( typeInfo->m_TypeID == type )
+        if ( base == type )
         {
             return true;
         }
 
-        typeInfo = ReflectionCast<const Composite>( Reflect::Registry::GetInstance()->GetType( typeInfo->m_Base ) );
+        base = ReflectionCast<const Composite>( Reflect::Registry::GetInstance()->GetType( base->m_Base ) );
     }
 
     return false;
@@ -367,7 +367,7 @@ void Composite::Copy( const Element* src, Element* dest )
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
         for ( const Class* currentType = srcType; currentType && !type; currentType = registry->GetClass( currentType->m_Base ) )
         {
-            if ( dest->HasType( currentType->m_TypeID ) )
+            if ( dest->HasType( currentType ) )
             {
                 // We found the match (which breaks out of this loop)
                 type = currentType;

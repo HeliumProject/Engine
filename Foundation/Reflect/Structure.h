@@ -32,7 +32,6 @@ namespace Helium
             {
                 Structure* info = Structure::Create();
 
-                info->m_TypeID = AssignTypeID();
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
                 info->m_Base = base;

@@ -64,7 +64,7 @@ HierarchyNode::~HierarchyNode()
 
 SceneNodeTypePtr HierarchyNode::CreateNodeType( SceneGraph::Scene* scene ) const
 {
-    SceneGraph::HierarchyNodeType* nodeType = new SceneGraph::HierarchyNodeType( scene, GetType() );
+    SceneGraph::HierarchyNodeType* nodeType = new SceneGraph::HierarchyNodeType( scene, GetClass() );
 
     nodeType->SetImageIndex( GetImageIndex() );
 

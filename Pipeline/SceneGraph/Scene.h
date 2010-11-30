@@ -348,7 +348,7 @@ namespace Helium
             HM_StrToSceneNodeTypeSmartPtr m_NodeTypesByName;
 
             // references to the node types by the compile time type id
-            HMS_TypeToSceneNodeTypeDumbPtr m_NodeTypesByType;
+            HMS_InstanceClassToSceneNodeTypeDumbPtr m_NodeTypesByType;
 
             // selection of this scene
             Selection m_Selection;
@@ -505,7 +505,7 @@ namespace Helium
             }
 
             // the node types of the scene
-            const HMS_TypeToSceneNodeTypeDumbPtr& GetNodeTypesByType() const
+            const HMS_InstanceClassToSceneNodeTypeDumbPtr& GetNodeTypesByType() const
             {
                 return m_NodeTypesByType;
             }
@@ -610,15 +610,15 @@ namespace Helium
             bool Load( const Helium::Path& path ); 
 
             // Import data into this scene, possibly merging with existing nodes.
-            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, int32_t importReflectType = Reflect::ReservedTypes::Invalid );
+            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
             Undo::CommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
-            Undo::CommandPtr ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType = Reflect::ReservedTypes::Invalid );
+            Undo::CommandPtr ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
 
         private:
             // loading helpers
             void Reset();
 
-            Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType = Reflect::ReservedTypes::Invalid  );
+            Undo::CommandPtr ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
 
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
@@ -844,7 +844,7 @@ namespace Helium
         class SceneImportCommand : public Undo::Command
         {
         public:
-            SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, int32_t importReflectType = Reflect::ReservedTypes::Invalid )
+            SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
                 : m_Scene( scene )
                 , m_Path( path )
                 , m_ImportAction( importAction )
@@ -878,13 +878,13 @@ namespace Helium
             }
 
         private:
-            SceneGraph::Scene*           m_Scene;
-            Helium::Path             m_Path;
-            ImportAction             m_ImportAction;
-            uint32_t                      m_ImportFlags;
-            SceneGraph::HierarchyNode*   m_ImportRoot;
-            Undo::CommandPtr         m_UndoCommand;
-            int32_t                      m_ImportReflectType;
+            SceneGraph::Scene*          m_Scene;
+            Helium::Path                m_Path;
+            ImportAction                m_ImportAction;
+            uint32_t                    m_ImportFlags;
+            SceneGraph::HierarchyNode*  m_ImportRoot;
+            Undo::CommandPtr            m_UndoCommand;
+            const Reflect::Class*       m_ImportReflectType;
         };
 
 

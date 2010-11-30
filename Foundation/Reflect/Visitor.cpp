@@ -1,11 +1,12 @@
 #include "Foundation/Reflect/Visitor.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
-FindByTypeVisitor::FindByTypeVisitor(int32_t type, std::vector< ElementPtr >& found)
-: m_Type (type)
-, m_Found (found)
+FindByTypeVisitor::FindByTypeVisitor(const Reflect::Type* type, std::vector< ElementPtr >& found)
+: m_Type( type )
+, m_Found( found )
 {
 
 }
@@ -20,17 +21,17 @@ bool FindByTypeVisitor::VisitElement(Element* element)
     return true;
 }
 
-FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< int32_t >& types, std::vector< ElementPtr >& found)
-: m_Types (types)
-, m_Found (found)
+FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< const Reflect::Type* >& types, std::vector< ElementPtr >& found)
+: m_Types( types )
+, m_Found( found )
 {
 
 }
 
 bool FindByTypeSetVisitor::VisitElement(Element* element)
 {
-    std::set< int32_t >::const_iterator itr = m_Types.begin();
-    std::set< int32_t >::const_iterator end = m_Types.end();
+    std::set< const Reflect::Type* >::const_iterator itr = m_Types.begin();
+    std::set< const Reflect::Type* >::const_iterator end = m_Types.end();
     for ( ; itr != end; ++itr )
     {
         if (element->HasType(*itr))

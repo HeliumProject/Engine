@@ -6,7 +6,7 @@ using namespace Helium::Reflect;
 REFLECT_DEFINE_CLASS( PointerData );
 
 PointerData::PointerData ()
-: m_TypeID( ReservedTypes::Invalid )
+: m_Type( NULL )
 {
 
 }

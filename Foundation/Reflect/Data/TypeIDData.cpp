@@ -8,7 +8,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS( TypeIDData );
 
-TypeIDData::TypeIDData ()
+TypeIDData::TypeIDData()
 {
 
 }
@@ -51,7 +51,7 @@ bool TypeIDData::Equals(const Reflect::Data* s) const
 
 void TypeIDData::Serialize(Archive& archive) const
 {
-    const Reflect::Type* type = Reflect::Registry::GetInstance()->GetType( m_Data.Get() );
+    const Reflect::Type* type = m_Data.Get();
 
     switch (archive.GetType())
     {
@@ -109,6 +109,6 @@ void TypeIDData::Deserialize(Archive& archive)
 
     if ( type )
     {
-        m_Data.Set( type->m_TypeID );
+        m_Data.Set( type );
     }
 }

@@ -181,11 +181,10 @@ namespace Helium
             template <class T>
             static DataPtr Create()
             {
-                int32_t type = Reflect::GetData<T>();
+                const Class* dataClass = Reflect::GetDataClass<T>();
+                HELIUM_ASSERT( dataClass );
 
-                HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
-
-                return AssertCast<Data>( Registry::GetInstance()->CreateInstance(type) );
+                return AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
             }
 
             template <class T>
@@ -248,7 +247,7 @@ namespace Helium
             //
 
             // check to see if a cast is supported
-            static bool CastSupported(int32_t srcType, int32_t destType);
+            static bool CastSupported(const Class* srcType, const Class* destType);
 
             // convert value data from one serializer to another
             static bool CastValue(const Data* src, Data* dest, uint32_t flags = 0);
@@ -353,7 +352,7 @@ namespace Helium
         // GetValue / SetValue templates
         //
 
-        template <typename T>
+        template <class T>
         inline bool Data::GetValue(const Data* ser, T& value)
         {
             if ( ser == NULL )
@@ -362,14 +361,14 @@ namespace Helium
             }
 
             bool result = false;
-            int type = Reflect::GetData<T>();
+            const Class* dataClass = Reflect::GetDataClass<T>();
 
             // if you die here, then you are not using serializers that
             //  fully implement the type deduction functions above
-            HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
+            HELIUM_ASSERT( dataClass != NULL );
 
             // sanity check our element type
-            if ( ser->HasType(type) )
+            if ( ser->HasType( dataClass ) )
             {
                 // get internal data pointer
                 const T* data = GetData<T>( ser );
@@ -382,7 +381,7 @@ namespace Helium
             else
             {
                 // create a temporary serializer of the value type
-                DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( type ) );
+                DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
                 // connect the temp serializer to the temp value
                 T tempValue; temp->ConnectData( &tempValue );
@@ -400,7 +399,7 @@ namespace Helium
             return result;
         }
 
-        template <typename T>
+        template <class T>
         inline bool Data::SetValue(Data* ser, const T& value, bool raiseEvents)
         {
             if ( ser == NULL )
@@ -409,14 +408,14 @@ namespace Helium
             }
 
             bool result = false;
-            int type = Reflect::GetData<T>();
+            const Class* dataClass = Reflect::GetDataClass< T >();
 
             // if you die here, then you are not using serializers that
             //  fully implement the type deduction functions above
-            HELIUM_ASSERT( type != Reflect::ReservedTypes::Invalid );
+            HELIUM_ASSERT( dataClass != NULL );
 
             // sanity check our element type
-            if ( ser->HasType(type) )
+            if ( ser->HasType( dataClass ) )
             {
                 // get internal data pointer
                 T* data = GetData<T>( ser );
@@ -429,7 +428,7 @@ namespace Helium
             else
             {
                 // create a temporary serializer of the value type
-                DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( type ) );
+                DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
                 // connect the temp serializer to the temp value
                 temp->ConnectData( &value );
@@ -444,7 +443,7 @@ namespace Helium
             if (result)
             {
                 // Notify interested listeners that the data has changed.
-                if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+                if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
                 {
                     Element* element = (Element*)( ser->m_Instance );
                     element->RaiseChanged( ser->m_Field );
@@ -455,10 +454,10 @@ namespace Helium
             return result;
         }
 
-        template< class DataType >
-        static int32_t GetData()
+        template <class T>
+        static const Class* GetDataClass()
         {
-            return ReservedTypes::Invalid;
+            return NULL;
         }
     }
 }

@@ -14,6 +14,7 @@
 
 #include <regex> 
 
+using namespace Helium;
 using namespace Helium::Inspect;
 
 // #define INSPECT_DEBUG_SCRIPT_COMPILE
@@ -31,7 +32,7 @@ using namespace Helium::Inspect;
 // Control Registry
 //
 
-typedef std::map<tstring, int> M_ControlType;
+typedef std::map<tstring, const Reflect::Class*> M_ControlType;
 
 M_ControlType g_ControlTypeMap;
 
@@ -49,20 +50,20 @@ void Script::Initialize()
 
   struct ControlEntry
   {
-    const tchar_t* name;
-    int type;
+    const tchar_t*          name;
+    const Reflect::Class*   type;
   };
 
   const ControlEntry controls[] =
   {
-    { TXT( "label" ),       Reflect::GetType<Label>()},
-    { TXT( "value" ),       Reflect::GetType<Value>()},
-    { TXT( "slider" ),      Reflect::GetType<Slider>()},
-    { TXT( "check" ),       Reflect::GetType<CheckBox>()},
-    { TXT( "color" ),       Reflect::GetType<ColorPicker>()},
-    { TXT( "choice" ),      Reflect::GetType<Choice>()},
-    { TXT( "combo" ),       Reflect::GetType<Choice>()},
-    { TXT( "list" ),        Reflect::GetType<List>()},
+    { TXT( "label" ),       Reflect::GetClass<Label>()},
+    { TXT( "value" ),       Reflect::GetClass<Value>()},
+    { TXT( "slider" ),      Reflect::GetClass<Slider>()},
+    { TXT( "check" ),       Reflect::GetClass<CheckBox>()},
+    { TXT( "color" ),       Reflect::GetClass<ColorPicker>()},
+    { TXT( "choice" ),      Reflect::GetClass<Choice>()},
+    { TXT( "combo" ),       Reflect::GetClass<Choice>()},
+    { TXT( "list" ),        Reflect::GetClass<List>()},
   };
 
   int size = sizeof(controls)/sizeof(controls[0]);

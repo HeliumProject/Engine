@@ -73,9 +73,9 @@ namespace Helium
             // attribute should occupy.  By default, every attribute will occupy an
             // individual slot.  Derived classes can override this function to specify
             // what slot they belong to.
-            virtual int32_t GetSlot() const
+            virtual const Reflect::Class* GetSlot() const
             {
-                return GetType();
+                return GetClass();
             }
 
 

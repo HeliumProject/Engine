@@ -11,44 +11,44 @@ namespace Helium
         {
         public:
             TypeID()
-                : m_ID ( -1 )
+                : m_Type ( NULL )
             {
 
             }
 
-            TypeID( int32_t id )
-                : m_ID ( id )
+            TypeID( const Type* type )
+                : m_Type ( type )
             {
 
             }
 
-            int32_t GetID() const
+            const Type* GetType() const
             {
-                return m_ID;
+                return m_Type;
             }
 
             bool operator==( const TypeID& rhs ) const
             {
-                return m_ID == rhs.m_ID;
+                return m_Type == rhs.m_Type;
             }
 
             bool operator!=( const TypeID& rhs ) const
             {
-                return m_ID != rhs.m_ID;
+                return m_Type != rhs.m_Type;
             }
 
             bool operator<( const TypeID& rhs ) const
             {
-                return m_ID < rhs.m_ID;
+                return m_Type < rhs.m_Type;
             }
 
-            operator int32_t() const
+            operator const Type*() const
             {
-                return m_ID;
+                return m_Type;
             }
 
         private:
-            int32_t m_ID;
+            const Type* m_Type;
         };
     }
 }

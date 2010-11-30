@@ -7,11 +7,11 @@
 
 using namespace Helium::Reflect;
 
-Field::Field(const Composite* type)
-: m_Type ( type )
+Field::Field(const Composite* composite)
+: m_Composite ( composite )
 , m_Flags ( 0 )
 , m_FieldID ( -1 )
-, m_DataID ( ReservedTypes::Invalid )
+, m_DataClass ( NULL )
 , m_Offset ( -1 )
 , m_Creator ( NULL )
 {
@@ -32,9 +32,9 @@ DataPtr Field::CreateData(Element* instance) const
 {
     DataPtr ser;
 
-    if (m_DataID != Reflect::ReservedTypes::Invalid)
+    if (m_DataClass != NULL)
     {
-        ObjectPtr object = Registry::GetInstance()->CreateInstance(m_DataID);
+        ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
 
         if (object.ReferencesObject())
         {
@@ -126,7 +126,7 @@ void Field::SetName(const tstring& name)
 
 ElementField::ElementField(const Composite* type)
 : Field ( type )
-, m_TypeID ( Reflect::GetType<Reflect::Element>() )
+, m_Type ( Reflect::GetType<Reflect::Element>() )
 {
 
 }
@@ -150,14 +150,14 @@ DataPtr ElementField::CreateData(Element* instance) const
         PointerData* pointerData = ObjectCast<PointerData>( ser );
         if ( pointerData )
         {
-            pointerData->m_TypeID = m_TypeID;
+            pointerData->m_Type = m_Type;
         }
         else
         {
             ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
             if ( containerData )
             {
-                containerData->m_TypeID = m_TypeID;
+                containerData->m_Type = m_Type;
             }
         }
     }

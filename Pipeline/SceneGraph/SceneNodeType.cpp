@@ -19,9 +19,9 @@ void SceneNodeType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::SceneNodeType >();
 }
 
-SceneNodeType::SceneNodeType(SceneGraph::Scene* scene, int32_t instanceType)
+SceneNodeType::SceneNodeType(SceneGraph::Scene* scene, const Reflect::Class* instanceClass)
 : m_Scene( scene )
-, m_InstanceType ( instanceType )
+, m_InstanceClass ( instanceClass )
 , m_ImageIndex( -1 )
 {
 
@@ -92,9 +92,9 @@ const HM_SceneNodeSmartPtr& SceneNodeType::GetInstances() const
     return m_Instances;
 }
 
-int32_t SceneNodeType::GetInstanceType() const
+const Reflect::Class* SceneNodeType::GetInstanceClass() const
 {
-    return m_InstanceType;
+    return m_InstanceClass;
 }
 
 void SceneNodeType::PopulateManifest( Asset::SceneManifest* manifest ) const

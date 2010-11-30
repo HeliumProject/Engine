@@ -16,24 +16,24 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( StlSetData, ContainerData );
 
-            virtual int32_t GetItemType() const = 0;
+            virtual const Class* GetItemClass() const = 0;
             virtual void GetItems(std::vector< ConstDataPtr >& items) const = 0;
             virtual void AddItem(const Data* value) = 0;
             virtual void RemoveItem(const Data* value) = 0;
             virtual bool ContainsItem(const Data* value) const = 0;
         };
 
-        template <class DataT, class DataSer>
+        template <class DataT, class DataClassT>
         class FOUNDATION_API SimpleStlSetData : public StlSetData
         {
         public:
             typedef std::set<DataT> DataType;
             Data::Pointer<DataType> m_Data;
 
-            typedef SimpleStlSetData<DataT, DataSer> StlSetDataT;
+            typedef SimpleStlSetData<DataT, DataClassT> StlSetDataT;
             REFLECT_DECLARE_CLASS( StlSetDataT, StlSetData )
 
-                SimpleStlSetData();
+            SimpleStlSetData();
             virtual ~SimpleStlSetData();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
@@ -41,7 +41,7 @@ namespace Helium
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual int32_t GetItemType() const HELIUM_OVERRIDE;
+            virtual const Class* GetItemClass() const HELIUM_OVERRIDE;
             virtual void GetItems(std::vector< ConstDataPtr >& items) const HELIUM_OVERRIDE;
             virtual void AddItem(const Data* value) HELIUM_OVERRIDE;
             virtual void RemoveItem(const Data* value) HELIUM_OVERRIDE;

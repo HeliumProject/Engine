@@ -102,7 +102,6 @@ namespace Helium
         typedef void (*DestroyedFunc)(Object* object);
 
         // Registry containers
-        typedef std::map< int, Helium::SmartPtr<Type> > M_IDToType;
         typedef std::map< tstring, Helium::SmartPtr<Type> > M_StrToType;
 
         // Profile interface
@@ -131,7 +130,6 @@ namespace Helium
             friend bool Reflect::IsInitialized();
             friend void Reflect::Cleanup();
 
-            M_IDToType m_TypesByID;
             M_StrToType m_TypesByName;
             M_StrToType m_TypesByAlias;
             InitializerStack m_InitializerStack;
@@ -162,19 +160,15 @@ namespace Helium
             void UnAliasType (const Type* type, const tstring& alias);
 
             // retrieves type info
-            const Type* GetType(int id) const;
             const Type* GetType(const tstring& str) const;
 
             // class lookup
-            const Class* GetClass(int32_t id) const;
             const Class* GetClass(const tstring& str) const;
 
             // enumeration lookup
-            const Enumeration* GetEnumeration(int32_t id) const;
             const Enumeration* GetEnumeration(const tstring& str) const;
 
             // create instances of classes
-            ObjectPtr CreateInstance(int id) const;
             ObjectPtr CreateInstance(const Class* type) const;
             ObjectPtr CreateInstance(const tstring& str) const;
 
@@ -205,11 +199,11 @@ namespace Helium
         //
 
         template<class T>
-        inline int32_t GetType()
+        inline const Type* GetType()
         {
             const Type* type = T::s_Type;
             HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            return type->m_TypeID;
+            return type;
         }
 
         template<class T>

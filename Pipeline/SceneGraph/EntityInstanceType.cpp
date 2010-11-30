@@ -30,8 +30,8 @@ void EntityInstanceType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::EntityInstanceType >();
 }
 
-EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, int32_t instanceType )
-: SceneGraph::InstanceType( scene, instanceType )
+EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, const Reflect::Class* instanceClass )
+: SceneGraph::InstanceType( scene, instanceClass )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));
     m_Material.Ambient = SceneGraph::Color::BLACK;

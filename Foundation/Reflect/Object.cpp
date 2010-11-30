@@ -166,14 +166,14 @@ void Object::operator delete(void *ptr, size_t bytes)
     ::free(ptr);
 }
 
-int32_t Object::GetType() const
+const Reflect::Type* Object::GetType() const
 {
-    return ReservedTypes::First;
+    return Reflect::GetType<Object>();
 }
 
-bool Object::HasType(int32_t type) const
+bool Object::HasType( const Reflect::Type* type ) const
 {
-    return type == 0;
+    return type == Reflect::GetType<Object>();
 }
 
 const Reflect::Class* Object::GetClass() const

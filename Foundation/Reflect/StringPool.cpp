@@ -1,13 +1,13 @@
-#include "StringPool.h"
-
-#include "Serializer.h" 
-#include "ArchiveBinary.h" 
-#include "Compression.h" 
+#include "Foundation/Reflect/StringPool.h"
 
 #include "Platform/Assert.h"
 #include "Platform/String.h"
-#include "Foundation/Memory/ArrayPtr.h" 
+
 #include "Foundation/Log.h"
+#include "Foundation/Memory/ArrayPtr.h" 
+#include "Foundation/Reflect/Data/Data.h" 
+#include "Foundation/Reflect/ArchiveBinary.h" 
+#include "Foundation/Reflect/Compression.h" 
 
 using Helium::ArrayPtr; 
 

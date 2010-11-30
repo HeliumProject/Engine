@@ -107,12 +107,12 @@ namespace Helium
                 ProjectViewModelNode* parent,
                 const Helium::Path& path,
                 const Document* document = NULL,
-                const bool isContainer = false );
+                const bool isContainer = false,
+                const bool isActive = false );
             virtual ~ProjectViewModelNode();
 
             ProjectViewModelNode* GetParent();
             S_ProjectViewModelNodeChildren& GetChildren();
-
 
             bool IsContainer() const;
 
@@ -145,11 +145,14 @@ namespace Helium
                     && m_ParentNode == rhs.m_ParentNode ) ;
             }
 
+            friend class ProjectViewModel;
+
         private:
             ProjectViewModel* m_Model;
             ProjectViewModelNode* m_ParentNode;
             S_ProjectViewModelNodeChildren m_ChildNodes;
             bool m_IsContainer;
+            bool m_IsActive;
 
             Helium::Path m_Path;
             const Document* m_Document;
@@ -179,6 +182,8 @@ namespace Helium
 
             bool IsDropPossible( const wxDataViewItem& item );
 
+            void SetActive( const Path& path, bool active );
+
             // Project Events
             void OnPathAdded( const Helium::Path& path );
             void OnPathRemoved( const Helium::Path& path );
@@ -194,6 +199,7 @@ namespace Helium
 
             virtual void GetValue( wxVariant& variant, const wxDataViewItem& item, unsigned int column ) const HELIUM_OVERRIDE;
             virtual bool SetValue( const wxVariant& variant, const wxDataViewItem& item, unsigned int column ) HELIUM_OVERRIDE;
+            virtual bool GetAttr( const wxDataViewItem& item, unsigned int column, wxDataViewItemAttr& attr ) const HELIUM_OVERRIDE;
 
             virtual wxDataViewItem GetParent( const wxDataViewItem& item ) const HELIUM_OVERRIDE;
             virtual unsigned int GetChildren( const wxDataViewItem& item, wxDataViewItemArray& items ) const HELIUM_OVERRIDE;

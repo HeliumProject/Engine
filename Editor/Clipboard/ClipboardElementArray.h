@@ -2,8 +2,8 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Foundation/Reflect/SimpleSerializer.h"
-#include "Foundation/Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/Data/SimpleData.h"
+#include "Foundation/Reflect/Data/ElementStlVectorData.h"
 
 namespace Helium
 {
@@ -22,8 +22,8 @@ namespace Helium
             ClipboardElementArray();
             virtual ~ClipboardElementArray();
 
-            int32_t GetCommonBaseTypeID() const;
-            void SetCommonBaseTypeID( int32_t typeID );
+            const Reflect::Class* GetCommonBaseClass() const;
+            void SetCommonBaseTypeID( const Reflect::Type* type );
             bool Add( const Reflect::ElementPtr& item );
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 

@@ -23,11 +23,15 @@ namespace Helium
             void OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
+            void SetActive( const Path& path, bool active );
+
         protected:
             // UI event handlers
             virtual void OnOpenProject( wxMouseEvent& event );
             virtual void OnContextMenu( wxContextMenuEvent& event );
             
+            virtual void OnActivateItem( wxDataViewEvent& event );
+
             void ProjectPanel::OnAddItems( wxCommandEvent& event );
             void ProjectPanel::OnDeleteItems( wxCommandEvent& event );
 

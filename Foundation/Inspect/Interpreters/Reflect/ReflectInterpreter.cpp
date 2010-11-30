@@ -191,7 +191,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             // Pointer support
             //
 
-            if (field->m_SerializerID == Reflect::GetType<Reflect::PointerSerializer>())
+            if (field->m_DataClass == Reflect::GetType<Reflect::PointerData>())
             {
                 if (hidden)
                 {
@@ -229,11 +229,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
             ReflectFieldInterpreterPtr fieldInterpreter;
 
-            for ( const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
+            for ( const Reflect::Class* type = field->m_DataClass;
                 type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
                 type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
             {
-                fieldInterpreter = ReflectFieldInterpreterFactory::Create( type->m_TypeID, field->m_Flags, m_Container );
+                fieldInterpreter = ReflectFieldInterpreterFactory::Create( type, field->m_Flags, m_Container );
             }
 
             if ( fieldInterpreter.ReferencesObject() )
@@ -250,7 +250,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             //
 
 #pragma TODO("Move this out to an interpreter")
-            if (field->m_SerializerID == Reflect::GetType<ElementArraySerializer>())
+            if (field->m_DataClass == Reflect::GetType<ElementStlVectorData>())
             {
                 if (hidden)
                 {
@@ -294,8 +294,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
             // Lastly fall back to the value interpreter
             //
 
-            const Reflect::Class* type = Registry::GetInstance()->GetClass( field->m_SerializerID );
-            if ( !type->HasType( Reflect::GetType<Reflect::ContainerSerializer>() ) )
+            const Reflect::Class* type = field->m_DataClass;
+            if ( !type->HasType( Reflect::GetType<Reflect::ContainerData>() ) )
             {
                 fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
                 fieldInterpreter->InterpretField( field, instances, container );
@@ -315,12 +315,12 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 }
 
 
-void ReflectFieldInterpreterFactory::Register(int32_t type, uint32_t mask, Creator creator)
+void ReflectFieldInterpreterFactory::Register(const Reflect::Class* type, uint32_t mask, Creator creator)
 {
     m_Map[ type ].push_back( std::make_pair(mask, creator) );
 }
 
-void ReflectFieldInterpreterFactory::Unregister(int32_t type, uint32_t mask, Creator creator)
+void ReflectFieldInterpreterFactory::Unregister(const Reflect::Class* type, uint32_t mask, Creator creator)
 {
     M_Creator::iterator found = m_Map.find( type );
     if ( found != m_Map.end() )
@@ -329,7 +329,7 @@ void ReflectFieldInterpreterFactory::Unregister(int32_t type, uint32_t mask, Cre
     }
 }
 
-ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(int32_t type, uint32_t flags, Container* container)
+ReflectFieldInterpreterPtr ReflectFieldInterpreterFactory::Create(const Reflect::Class* type, uint32_t flags, Container* container)
 {
     Creator creator = NULL;
 

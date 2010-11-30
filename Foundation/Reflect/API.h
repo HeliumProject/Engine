@@ -41,9 +41,9 @@ namespace Helium
         typedef Helium::StrongPtr<Element> ElementPtr;
         typedef Helium::StrongPtr<const Element> ConstElementPtr;
 
-        class Serializer;
-        typedef Helium::StrongPtr<Serializer> SerializerPtr;
-        typedef Helium::StrongPtr<const Serializer> ConstSerializerPtr;
+        class Data;
+        typedef Helium::StrongPtr<Data> DataPtr;
+        typedef Helium::StrongPtr<const Data> ConstDataPtr;
 
         // function type for creating object instances
         typedef Object* (*CreateObjectFunc)();
@@ -87,8 +87,8 @@ static Reflect::Object* CreateObject() { return new __Class; }
 public: \
 typedef __Base Base; \
 typedef __Class This; \
-virtual int32_t GetType() const HELIUM_OVERRIDE; \
-virtual bool HasType(int32_t id) const HELIUM_OVERRIDE; \
+virtual const Helium::Reflect::Type* GetType() const HELIUM_OVERRIDE; \
+virtual bool HasType(const Reflect::Type* id) const HELIUM_OVERRIDE; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
 static Helium::Reflect::Class* CreateClass( const tstring& name ); \
 static const Helium::Reflect::Type* s_Type; \
@@ -96,14 +96,14 @@ static const Helium::Reflect::Class* s_Class;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_CLASS( __Class, __Creator ) \
-int32_t __Class::GetType() const \
+const Helium::Reflect::Type* __Class::GetType() const \
 { \
-    return s_Class->m_TypeID; \
+    return s_Class; \
 } \
 \
-bool __Class::HasType(int32_t id) const \
+bool __Class::HasType(const Helium::Reflect::Type* type) const \
 { \
-    return s_Class->m_TypeID == id || __Class::Base::HasType(id); \
+    return s_Class == type || __Class::Base::HasType(type); \
 } \
 \
 const Helium::Reflect::Class* __Class::GetClass() const \

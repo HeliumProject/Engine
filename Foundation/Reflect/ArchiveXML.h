@@ -99,7 +99,7 @@ namespace Helium
             // The container to decode elements to
             std::vector< ElementPtr >* m_Target;
         public:
-            ArchiveXML( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             ~ArchiveXML();
 
         private:
@@ -192,7 +192,7 @@ namespace Helium
         public:
             // Reading and writing single element from string data
             static void       ToString( const ElementPtr& element, tstring& xml );
-            static ElementPtr FromString( const tstring& xml, int searchType = Reflect::ReservedTypes::Any );
+            static ElementPtr FromString( const tstring& xml, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements from string data
             static void       ToString( const std::vector< ElementPtr >& elements, tstring& xml );

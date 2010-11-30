@@ -1,8 +1,7 @@
 /*#include "Precompile.h"*/
 #include "GridSettings.h"
 
-#include "Foundation/Reflect/Serializer.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

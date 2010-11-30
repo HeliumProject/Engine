@@ -57,7 +57,7 @@ tstring Locator::GetApplicationTypeName() const
 SceneNodeTypePtr Locator::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an locator-specific type
-    LocatorType* nodeType = new LocatorType( scene, GetType() );
+    LocatorType* nodeType = new LocatorType( scene, GetClass() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );

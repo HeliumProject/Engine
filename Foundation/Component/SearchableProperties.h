@@ -2,7 +2,7 @@
 
 #include "Foundation/API.h" 
 
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {

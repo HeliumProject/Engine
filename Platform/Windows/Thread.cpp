@@ -49,6 +49,8 @@ Thread::Thread( const tchar_t* pName )
 Thread::~Thread()
 {
     HELIUM_VERIFY( Join() );
+
+    delete [] m_Name;
 }
 
 /// Set the thread name (for debugging purposes).

@@ -2,6 +2,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Math/Point.h"
+#include "Foundation/Flags.h"
 
 namespace Helium
 {
@@ -358,11 +359,23 @@ namespace Helium
     }
     typedef KeyCodes::KeyCode KeyCode;
 
+    namespace Modifiers
+    {
+        enum Modifier
+        {
+            Ctrl  = 1 << 0,
+            Alt   = 1 << 1,
+            Shift = 1 << 2,
+            Meta  = 1 << 3,
+        };
+    }
+
     class FOUNDATION_API KeyboardInput : public Input
     {
     public:
-        KeyboardInput( KeyCode code = (KeyCode)0x0 )
+        KeyboardInput( KeyCode code = (KeyCode)0x0, short modifier = 0x0 )
             : m_KeyCode( code )
+            , m_Modifiers( modifier )
         {
 
         }
@@ -377,7 +390,44 @@ namespace Helium
             m_KeyCode = code;
         }
 
+        void SetCtrlDown( bool value )
+        {
+            SetFlag< short >( m_Modifiers, Modifiers::Ctrl, value );
+        }
+        bool IsCtrlDown()
+        {
+            return HasFlags< short >( m_Modifiers, Modifiers::Ctrl );
+        }
+
+        void SetAltDown( bool value )
+        {
+            SetFlag< short >( m_Modifiers, Modifiers::Alt, value );
+        }
+        bool IsAltDown()
+        {
+            return HasFlags< short >( m_Modifiers, Modifiers::Alt );
+        }
+
+        void SetShiftDown( bool value )
+        {
+            SetFlag< short >( m_Modifiers, Modifiers::Shift, value );
+        }
+        bool IsShiftDown()
+        {
+            return HasFlags< short >( m_Modifiers, Modifiers::Shift );
+        }
+
+        void SetMetaDown( bool value )
+        {
+            SetFlag< short >( m_Modifiers, Modifiers::Meta, value );
+        }
+        bool IsMetaDown()
+        {
+            return HasFlags< short >( m_Modifiers, Modifiers::Meta );
+        }
+
     private:
         KeyCode m_KeyCode;
+        short   m_Modifiers;
     };
 }

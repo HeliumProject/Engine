@@ -86,7 +86,10 @@ namespace Lunar
         ByteSwappingStream byteSwappingStream( &directStream );
 
         GameObjectPath objectPath = pObject->GetPath();
-        Resource* pResource = DynamicCast< Resource >( pObject );
+
+        // Only worry about resource data caching if the object is a Resource type that's not the default template
+        // object for its specific type.
+        Resource* pResource = ( !pObject->IsDefaultTemplate() ? DynamicCast< Resource >( pObject ) : NULL );
 
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
@@ -119,7 +122,7 @@ namespace Lunar
 
             HELIUM_TRACE(
                 TRACE_INFO,
-                TXT( "ObjectPreprocessor: GameObject \"%s\" is out of date.  Recaching...\n" ),
+                TXT( "ObjectPreprocessor: Object \"%s\" is out of date.  Recaching...\n" ),
                 *objectPath.ToString() );
 
             bUpdatedAnyCache = true;
@@ -808,6 +811,7 @@ namespace Lunar
     bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& rSourceFilePath )
     {
         HELIUM_ASSERT( pResource );
+        HELIUM_ASSERT( !pResource->IsDefaultTemplate() );
 
         HELIUM_TRACE(
             TRACE_INFO,
@@ -835,7 +839,7 @@ namespace Lunar
                 ( TXT( "ObjectPreprocessor::PreprocessResource(): Failed to locate resource handler for resource " )
                   TXT( "\"%s\" of type \"%s\".\n" ) ),
                 *pResource->GetPath().ToString(),
-                *pResourceType->GetPath().ToString() );
+                *pResourceType->GetName() );
 
             return false;
         }

@@ -35,6 +35,8 @@ namespace Lunar
         //@}
     };
 
+    GameObjectRefCountSupport::StaticData* GameObjectRefCountSupport::sm_pStaticData = NULL;
+
     TypeWPtr GameObject::sm_spStaticType;
     GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
@@ -44,8 +46,6 @@ namespace Lunar
     ReadWriteLock GameObject::sm_objectListLock;
 
     DynArray< uint8_t > GameObject::sm_serializationBuffer;
-
-    GameObjectRefCountSupport::StaticData* GameObjectRefCountSupport::sm_pStaticData = NULL;
 
     /// Retrieve a reference count proxy from the global pool.
     ///
@@ -456,9 +456,9 @@ namespace Lunar
                 if( bFoundChildMap )
                 {
                     NameInstanceIndexMap::ConstAccessor indexSetAccessor;
-                    if( childNameMapAccessor->second.Find( indexSetAccessor, m_name ) )
+                    if( childNameMapAccessor->Second().Find( indexSetAccessor, m_name ) )
                     {
-                        const InstanceIndexSet& rIndexSet = indexSetAccessor->second;
+                        const InstanceIndexSet& rIndexSet = indexSetAccessor->Second();
                         InstanceIndexSet::ConstAccessor indexAccessor;
                         while( rIndexSet.Find( indexAccessor, newInstanceIndex ) )
                         {
@@ -805,12 +805,12 @@ namespace Lunar
         GameObject* pObjectTemplate = pTemplate;
         if( pObjectTemplate )
         {
-            if( pType->GetTypeFlags() & Type::FLAG_NO_TEMPLATE )
+            if( pType->GetTypeFlags() & Type::FLAG_NO_TEMPLATE && pType->GetTypeTemplate() != pObjectTemplate )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
                     TXT( "GameObject::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
-                    *pType->GetPath().ToString() );
+                    *pType->GetName() );
 
                 return NULL;
             }
@@ -1224,7 +1224,6 @@ namespace Lunar
             // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
             // package, its type, etc.), we will create and register all the dependencies here manually as well.
             Name nameObject( TXT( "GameObject" ) );
-            Name nameType( TXT( "Type" ) );
             Name namePackage( TXT( "Package" ) );
             Name nameEngine( TXT( "Engine" ) );
             Name nameTypes( TXT( "Types" ) );
@@ -1242,36 +1241,9 @@ namespace Lunar
             HELIUM_VERIFY( pEnginePackage->SetOwner( pTypesPackage ) );
             HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
 
-            pObjectType = new Type();
-            HELIUM_ASSERT( pObjectType );
-            pObjectType->SetName( nameObject );
-            pObjectType->SetOwner( pEnginePackage );
-            pObjectType->SetFlags( GameObject::FLAG_TRANSIENT );
-            HELIUM_VERIFY( RegisterObject( pObjectType ) );
-            pObjectType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
-
-            Type* pTypeType = new Type();
-            HELIUM_ASSERT( pTypeType );
-            pTypeType->SetName( nameType );
-            pTypeType->SetOwner( pEnginePackage );
-            pTypeType->SetFlags( GameObject::FLAG_TRANSIENT );
-            HELIUM_VERIFY( RegisterObject( pTypeType ) );
-            pTypeType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
-
-            Type* pPackageType = new Type();
-            HELIUM_ASSERT( pPackageType );
-            pPackageType->SetName( namePackage );
-            pPackageType->SetOwner( pEnginePackage );
-            pPackageType->SetFlags( GameObject::FLAG_TRANSIENT );
-            HELIUM_VERIFY( RegisterObject( pPackageType ) );
-            pPackageType->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
-
             // Don't set up templates here; they're initialized during type registration.
             GameObject* pObjectTemplate = new GameObject();
             HELIUM_ASSERT( pObjectTemplate );
-
-            Type* pTypeTemplate = new Type();
-            HELIUM_ASSERT( pTypeTemplate );
 
             Package* pPackageTemplate = new Package();
             HELIUM_ASSERT( pPackageTemplate );
@@ -1281,19 +1253,15 @@ namespace Lunar
             pPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
             // Initialize and register all types.
-            HELIUM_VERIFY( pObjectType->Initialize( NULL, pObjectTemplate, Type::FLAG_ABSTRACT ) );
-            HELIUM_VERIFY( Type::Register( pObjectType ) );
+            pObjectType = Type::Create( nameObject, pEnginePackage, NULL, pObjectTemplate, Type::FLAG_ABSTRACT );
+            HELIUM_ASSERT( pObjectType );
 
-            HELIUM_VERIFY( pTypeType->Initialize( pObjectType, pTypeTemplate, 0 ) );
-            HELIUM_VERIFY( Type::Register( pTypeType ) );
-
-            HELIUM_VERIFY( pPackageType->Initialize( pObjectType, pPackageTemplate, 0 ) );
-            HELIUM_VERIFY( Type::Register( pPackageType ) );
+            Type* pPackageType = Type::Create( namePackage, pEnginePackage, pObjectType, pPackageTemplate, 0 );
+            HELIUM_ASSERT( pPackageType );
 
             sm_spStaticType = pObjectType;
 
-            // Force initialization of Type and Package so they can report their static types.
-            HELIUM_VERIFY( Type::InitStaticType() );
+            // Force initialization of Package so it can report its static type information.
             HELIUM_VERIFY( Package::InitStaticType() );
         }
 
@@ -1344,11 +1312,11 @@ namespace Lunar
 
         GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
 
-        std::pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
-        childMapEntry.first = ownerPath;
+        Pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
+        childMapEntry.First() = ownerPath;
 
-        std::pair< Name, InstanceIndexSet > indexSetEntry;
-        indexSetEntry.first = m_name;
+        Pair< Name, InstanceIndexSet > indexSetEntry;
+        indexSetEntry.First() = m_name;
 
         ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
 
@@ -1356,10 +1324,10 @@ namespace Lunar
         rNameInstanceIndexMap.Insert( childMapAccessor, childMapEntry );
 
         NameInstanceIndexMap::Accessor nameMapAccessor;
-        childMapAccessor->second.Insert( nameMapAccessor, indexSetEntry );
+        childMapAccessor->Second().Insert( nameMapAccessor, indexSetEntry );
 
         InstanceIndexSet::Accessor indexSetAccessor;
-        HELIUM_VERIFY( nameMapAccessor->second.Insert( indexSetAccessor, m_instanceIndex ) );
+        HELIUM_VERIFY( nameMapAccessor->Second().Insert( indexSetAccessor, m_instanceIndex ) );
     }
 
     /// Remove the tracking information for the instance index associated with this object.
@@ -1379,11 +1347,11 @@ namespace Lunar
         ChildNameInstanceIndexMap::Accessor childMapAccessor;
         HELIUM_VERIFY( rNameInstanceIndexMap.Find( childMapAccessor, ownerPath ) );
 
-        NameInstanceIndexMap& rNameMap = childMapAccessor->second;
+        NameInstanceIndexMap& rNameMap = childMapAccessor->Second();
         NameInstanceIndexMap::Accessor nameMapAccessor;
         HELIUM_VERIFY( rNameMap.Find( nameMapAccessor, m_name ) );
 
-        InstanceIndexSet& rIndexSet = nameMapAccessor->second;
+        InstanceIndexSet& rIndexSet = nameMapAccessor->Second();
         HELIUM_VERIFY( rIndexSet.Remove( m_instanceIndex ) );
         /*
         if( rIndexSet.IsEmpty() )

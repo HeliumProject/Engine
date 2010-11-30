@@ -8,7 +8,7 @@
 //  
 //    Reflect Binary Format:
 //  
-//    struct Serializer
+//    struct Data
 //    {
 //      int32_t type;           // string pool index of the short name of the serializer
 //      byte[] data;            // serialized data
@@ -17,7 +17,7 @@
 //    struct Field
 //    {
 //      int32_t field_id;       // latent type field index (id)
-//      Serializer ser;         // serializer instance data
+//      Data ser;         // serializer instance data
 //    };
 //  
 //    struct Element
@@ -84,9 +84,6 @@ namespace Helium
             // The strings to cache for binary modes
             StringPool m_Strings;
 
-            // Latent types by latent ids
-            M_IDToClass m_ClassesByID;
-
             // Latent types by latent short name
             M_StrToClass m_ClassesByShortName;
 
@@ -113,7 +110,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         public:
-            ArchiveBinary( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            ArchiveBinary( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         private:
             ArchiveBinary();
@@ -192,7 +189,7 @@ namespace Helium
         public:
             // Reading and writing single element via binary
             static void       ToStream( const ElementPtr& element, std::iostream& stream );
-            static ElementPtr FromStream( std::iostream& stream, int searchType = Reflect::ReservedTypes::Any );
+            static ElementPtr FromStream( std::iostream& stream, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements via binary
             static void       ToStream( const std::vector< ElementPtr >& elements, std::iostream& stream );

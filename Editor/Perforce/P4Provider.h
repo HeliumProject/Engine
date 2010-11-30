@@ -123,6 +123,7 @@ namespace Helium
 
         public:
             bool                  m_IsEnabled;
+            bool                  m_IsInitialized;
             bool                  m_IsConnected;
             SimpleTimer           m_ConnectTimer;
             uint32_t              m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running

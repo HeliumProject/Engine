@@ -23,7 +23,7 @@ ComponentCollection::ComponentCollection()
 
 ComponentCollection::ComponentCollection( const ComponentPtr& component )
 {
-    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != NULL );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
     component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
@@ -76,11 +76,11 @@ const M_Component& ComponentCollection::GetComponents() const
     return m_Components;
 }
 
-const ComponentPtr& ComponentCollection::GetComponent(int32_t slotID) const
+const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slotClass) const
 {
     static const ComponentPtr kNull;
     const M_Component::const_iterator end = m_Components.end();
-    M_Component::const_iterator found = m_Components.find( slotID );
+    M_Component::const_iterator found = m_Components.find( slotClass );
     if ( found != end )
     {
         return found->second;
@@ -90,15 +90,15 @@ const ComponentPtr& ComponentCollection::GetComponent(int32_t slotID) const
         // Travel up the inheritance hierarchy looking for a base class slot within
         // this collection.
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
-        const Reflect::Class* type = registry->GetClass( slotID );
+        const Reflect::Class* type = slotClass;
         type = registry->GetInstance()->GetClass( type->m_Base );
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
-        while ( type && ( type->m_TypeID != Reflect::GetType< ComponentBase >() ) )
+        while ( type && ( type != Reflect::GetType< ComponentBase >() ) )
         {
             // See if the base class has a slot in this collection.
-            found = m_Components.find( type->m_TypeID );
+            found = m_Components.find( type );
             if ( found != end )
             {
                 return found->second;
@@ -113,7 +113,7 @@ const ComponentPtr& ComponentCollection::GetComponent(int32_t slotID) const
 
 bool ComponentCollection::SetComponent(const ComponentPtr& component, bool validate, tstring* error )
 {
-    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != NULL );
 
     M_Component::const_iterator found = m_Components.find( component->GetSlot() );
     if (found != m_Components.end() && found->second == component)
@@ -148,11 +148,11 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     return true;
 }
 
-bool ComponentCollection::RemoveComponent( int32_t slotID )
+bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
 {
-    HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( slotClass != NULL );
 
-    M_Component::iterator found = m_Components.find(slotID);
+    M_Component::iterator found = m_Components.find(slotClass);
     if (found == m_Components.end())
     {
         return false;
@@ -179,16 +179,16 @@ bool ComponentCollection::RemoveComponent( int32_t slotID )
     return true;
 }
 
-bool ComponentCollection::ContainsComponent( int32_t slotID ) const
+bool ComponentCollection::ContainsComponent( const Reflect::Class* slotClass ) const
 {
-    HELIUM_ASSERT( slotID != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( slotClass != NULL );
 
-    return ComponentCollection::GetComponent( slotID ).ReferencesObject();
+    return ComponentCollection::GetComponent( slotClass ).ReferencesObject();
 }
 
 bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstring& error ) const
 {
-    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != NULL );
 
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
@@ -220,7 +220,7 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
 
 bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tstring& error ) const
 {
-    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != NULL );
 
     if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
     {
@@ -233,7 +233,7 @@ bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tst
 
 bool ComponentCollection::ValidatePersistent( const ComponentPtr& component ) const
 {
-    HELIUM_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
+    HELIUM_ASSERT( component->GetSlot() != NULL );
 
     // by default, all attributes are persistent
     return true;
@@ -271,15 +271,15 @@ bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fi
     if ( fieldName == TXT( "m_Components" ) )
     {
         V_Component attributes;
-        Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>( element ), (std::vector< ElementPtr >&)attributes );
+        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ElementPtr >&)attributes );
 
         for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
             itr != end;
             ++itr )
         {
-            HELIUM_ASSERT( (*itr)->GetSlot() != Reflect::ReservedTypes::Invalid );
+            HELIUM_ASSERT( (*itr)->GetSlot() != NULL );
 
-            if ( (*itr)->GetSlot() != Reflect::ReservedTypes::Invalid )
+            if ( (*itr)->GetSlot() != NULL )
             {
                 m_Components[ (*itr)->GetSlot() ] = *itr;
             }
@@ -296,10 +296,10 @@ void ComponentCollection::PreSerialize()
     __super::PreSerialize();
 
     // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
-    HELIUM_ASSERT( m_Components.find( Reflect::ReservedTypes::Invalid ) == m_Components.end() ); 
+    HELIUM_ASSERT( m_Components.find( NULL ) == m_Components.end() ); 
 
     // this *must* be junk
-    m_Components.erase( Reflect::ReservedTypes::Invalid );
+    m_Components.erase( Reflect::TypeID( NULL ) );
 }
 
 void ComponentCollection::PostDeserialize()
@@ -307,7 +307,7 @@ void ComponentCollection::PostDeserialize()
     __super::PostDeserialize();
 
     // this *must* be junk
-    m_Components.erase( Reflect::ReservedTypes::Invalid );
+    m_Components.erase( Reflect::TypeID( NULL ) );
 
     M_Component::const_iterator itr = m_Components.begin();
     M_Component::const_iterator end = m_Components.end();
@@ -346,7 +346,7 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
                 for ( ; derivedItr != derivedEnd; ++derivedItr )
                 {
                     const Reflect::Class* currentType = Reflect::Registry::GetInstance()->GetClass(*derivedItr);
-                    if ( currentType->m_TypeID != attrib->GetType() )
+                    if ( currentType != attrib->GetType() )
                     {
                         destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( currentType ) );
                         if ( destAttrib.ReferencesObject() )

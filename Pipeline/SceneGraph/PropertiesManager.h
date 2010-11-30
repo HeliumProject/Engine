@@ -25,7 +25,7 @@ namespace Helium
 
         struct ElementTypeFlags
         {
-            ElementTypeFlags( int32_t type, int32_t includeFlags, int32_t excludeFlags )
+            ElementTypeFlags( const Reflect::Class* type, int32_t includeFlags, int32_t excludeFlags )
                 : m_Type( type )
                 , m_IncludeFlags( includeFlags )
                 , m_ExcludeFlags( excludeFlags )
@@ -61,7 +61,7 @@ namespace Helium
                 return m_ExcludeFlags < rhs.m_ExcludeFlags;
             }
 
-            int32_t m_Type;
+            const Reflect::Class* m_Type;
             int32_t m_IncludeFlags;
             int32_t m_ExcludeFlags;
         };
@@ -83,7 +83,7 @@ namespace Helium
             void EnumerateElement(Reflect::Element* element, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0 )
             {
                 // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
-                Helium::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
+                Helium::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetClass(), includeFlags, excludeFlags ), element) );
             }
 
             M_ElementByType&        m_CurrentElements;
@@ -101,7 +101,7 @@ namespace Helium
             }
 
             PropertiesManager*  m_PropertiesManager;
-            uint32_t                 m_SelectionId;
+            uint32_t            m_SelectionId;
             Inspect::V_Control  m_Controls;
         };
 
@@ -121,8 +121,8 @@ namespace Helium
             }
 
             PropertiesStyle             m_Style;
-            uint32_t                         m_SelectionId;
-            const uint32_t*                  m_CurrentSelectionId;
+            uint32_t                    m_SelectionId;
+            const uint32_t*             m_CurrentSelectionId;
             OrderedSet<SceneNodePtr>    m_Selection;
         };
 

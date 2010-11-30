@@ -5,7 +5,7 @@
 #include <hash_map>
 
 #include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "Component.h"
 
@@ -30,7 +30,6 @@ namespace Helium
 
         typedef Helium::Signature< const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
-
         class FOUNDATION_API ComponentCollection : public Reflect::Element
         {
         public:
@@ -54,13 +53,13 @@ namespace Helium
             const M_Component& GetComponents() const;
 
             // retrieve attribute from a slot
-            virtual const ComponentPtr& GetComponent(int32_t slotID) const;
+            virtual const ComponentPtr& GetComponent(const Reflect::Class* slotClass) const;
 
             // casting helper will get you what you need, baby ;)
             template <class T>
             Helium::StrongPtr<T> GetComponent() const
             {
-                return Reflect::ObjectCast<T>( GetComponent( Reflect::GetType<T>() ) );
+                return Reflect::ObjectCast<T>( GetComponent( Reflect::GetClass<T>() ) );
             }
 
             // template helper function for removing by type... 
@@ -76,10 +75,10 @@ namespace Helium
             virtual bool SetComponent(const ComponentPtr& attr, bool validate = true, tstring* error = NULL );
 
             // remove attribute from a slot
-            virtual bool RemoveComponent( int32_t slotID );
+            virtual bool RemoveComponent( const Reflect::Class* type );
 
             // queries the container for the existence of the specified attribute
-            virtual bool ContainsComponent( int32_t slotID ) const;
+            virtual bool ContainsComponent( const Reflect::Class* type ) const;
 
             // Validates the attribute for add to this attribute collection.  If the addition is
             // not valid, the return value will be false and "error" will have additional info about

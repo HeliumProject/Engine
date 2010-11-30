@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isArray = ( field->m_SerializerID == Reflect::GetType<PathArraySerializer>() );
-    bool isSet = ( field->m_SerializerID == Reflect::GetType<PathSetSerializer>() );
+    bool isArray = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
+    bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
     bool isContainer = isArray || isSet;
 
     // create the label
@@ -70,13 +70,13 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         {
             // Add button - normal file open dialog
             addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAddFile ) );
-            addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
+            addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetClass(), filter ) );
 
             // Add button - opens file browser
             findButton = CreateControl< Button >();
             findButton->a_Icon.Set( TXT( "actions/system-search" ) );
             findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnFindFile ) );
-            findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
+            findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetClass(), filter ) );
 
             // Edit button - attempt to edit the selected file
             editButton = CreateControl< Button >();
@@ -149,15 +149,15 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     std::vector<Reflect::Element*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
-        SerializerPtr s = field->CreateSerializer();
+        DataPtr s = field->CreateData();
 
         s->ConnectField(*itr, field);
 
-        m_Serializers.push_back(s);
+        m_Datas.push_back(s);
     }
 
     // bind the ui to the serializers
-    Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( (std::vector<Reflect::Serializer*>&)m_Serializers );
+    Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( (std::vector<Reflect::Data*>&)m_Datas );
     list->Bind( data );
     if ( addButton && isContainer )
     {

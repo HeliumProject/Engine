@@ -148,7 +148,7 @@ namespace Lunar
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "WorldManager::CreateDefaultWorld(): Type \"%s\" specified is not a World subtype.\n" ),
-                *pType->GetPath().ToString() );
+                *pType->GetName() );
 
             return NULL;
         }
@@ -176,7 +176,7 @@ namespace Lunar
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "WorldManager::CreateDefaultWorld(): Failed to create world of type \"%s\".\n" ),
-                *pType->GetPath().ToString() );
+                *pType->GetName() );
 
             return NULL;
         }

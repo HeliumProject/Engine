@@ -43,7 +43,7 @@ namespace Lunar
         ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor requestConstAccessor;
         if( m_loadRequestMap.Find( requestConstAccessor, path ) )
         {
-            LoadRequest* pRequest = requestConstAccessor->second;
+            LoadRequest* pRequest = requestConstAccessor->Second();
             HELIUM_ASSERT( pRequest );
             AtomicIncrementRelease( pRequest->requestCount );
 
@@ -76,7 +76,7 @@ namespace Lunar
         pRequest->requestCount = 1;
 
         ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
-        if( m_loadRequestMap.Insert( requestAccessor, std::pair< const GameObjectPath, LoadRequest* >( path, pRequest ) ) )
+        if( m_loadRequestMap.Insert( requestAccessor, KeyValue< GameObjectPath, LoadRequest* >( path, pRequest ) ) )
         {
             // New load request was created, so tick it once to get the load process running.
             requestAccessor.Release();
@@ -87,7 +87,7 @@ namespace Lunar
             // A matching request was added while we were building our request, so reuse it.
             m_loadRequestPool.Release( pRequest );
 
-            pRequest = requestAccessor->second;
+            pRequest = requestAccessor->Second();
             HELIUM_ASSERT( pRequest );
             AtomicIncrementRelease( pRequest->requestCount );
 
@@ -130,7 +130,7 @@ namespace Lunar
 
         ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor requestAccessor;
         HELIUM_VERIFY( m_loadRequestMap.Find( requestAccessor, objectPath ) );
-        HELIUM_ASSERT( requestAccessor->second == pRequest );
+        HELIUM_ASSERT( requestAccessor->Second() == pRequest );
 
         // Decrement the reference count on the load request, releasing it if the reference count reaches zero.
         int32_t newRequestCount = AtomicDecrementRelease( pRequest->requestCount );
@@ -232,7 +232,7 @@ namespace Lunar
         {
             do
             {
-                LoadRequest* pRequest = loadRequestConstAccessor->second;
+                LoadRequest* pRequest = loadRequestConstAccessor->Second();
                 HELIUM_ASSERT( pRequest );
                 AtomicIncrementUnsafe( pRequest->requestCount );
                 m_loadRequestTickArray.Add( pRequest );
@@ -256,7 +256,7 @@ namespace Lunar
                 ConcurrentHashMap< GameObjectPath, LoadRequest* >::Accessor loadRequestAccessor;
                 if( m_loadRequestMap.Find( loadRequestAccessor, pRequest->path ) )
                 {
-                    pRequest = loadRequestAccessor->second;
+                    pRequest = loadRequestAccessor->Second();
                     HELIUM_ASSERT( pRequest );
                     if( pRequest->requestCount == 0 )
                     {
@@ -579,10 +579,13 @@ namespace Lunar
 
             rLinkTable.Resize( 0 );
 
-            // Perform any pre-precaching work.
+            // Perform any pre-precaching work (note that we don't precache anything for the default template object for
+            // a given type).
             OnPrecacheReady( pObject, pRequest->pPackageLoader );
 
-            if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) && pObject->NeedsPrecacheResourceData() )
+            if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) &&
+                !pObject->IsDefaultTemplate() &&
+                pObject->NeedsPrecacheResourceData() )
             {
                 if( !( pRequest->stateFlags & LOAD_FLAG_PRECACHE_STARTED ) )
                 {
@@ -817,7 +820,7 @@ namespace Lunar
                     TRACE_ERROR,
                     TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
                     *pObject->GetPath().ToString(),
-                    *pType->GetPath().ToString() );
+                    *pType->GetName() );
 
                 m_bError = true;
             }

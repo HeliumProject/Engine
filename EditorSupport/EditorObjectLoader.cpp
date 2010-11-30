@@ -81,38 +81,41 @@ namespace Lunar
 
         int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
 
-        Resource* pResource = DynamicCast< Resource >( pObject );
-        if( pResource )
+        if( !pObject->IsDefaultTemplate() )
         {
-            GameObjectPath baseResourcePath = pResource->GetPath();
-            HELIUM_ASSERT( !baseResourcePath.IsPackage() );
-            for( ; ; )
+            Resource* pResource = DynamicCast< Resource >( pObject );
+            if( pResource )
             {
-                GameObjectPath parentPath = baseResourcePath.GetParent();
-                if( parentPath.IsEmpty() || parentPath.IsPackage() )
+                GameObjectPath baseResourcePath = pResource->GetPath();
+                HELIUM_ASSERT( !baseResourcePath.IsPackage() );
+                for( ; ; )
                 {
-                    break;
+                    GameObjectPath parentPath = baseResourcePath.GetParent();
+                    if( parentPath.IsEmpty() || parentPath.IsPackage() )
+                    {
+                        break;
+                    }
+
+                    baseResourcePath = parentPath;
                 }
 
-                baseResourcePath = parentPath;
-            }
+                Path sourceFilePath;
+                if ( !File::GetDataDirectory( sourceFilePath ) )
+                {
+                    HELIUM_TRACE(
+                        TRACE_WARNING,
+                        TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
-            Path sourceFilePath;
-            if ( !File::GetDataDirectory( sourceFilePath ) )
-            {
-                HELIUM_TRACE(
-                    TRACE_WARNING,
-                    TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
+                    return false;
+                }
 
-                return false;
-            }
+                sourceFilePath += baseResourcePath.ToFilePathString().GetData();
 
-            sourceFilePath += baseResourcePath.ToFilePathString().GetData();
-
-            int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
-            if( sourceFileTimestamp > objectTimestamp )
-            {
-                objectTimestamp = sourceFileTimestamp;
+                int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
+                if( sourceFileTimestamp > objectTimestamp )
+                {
+                    objectTimestamp = sourceFileTimestamp;
+                }
             }
         }
 
@@ -123,7 +126,10 @@ namespace Lunar
             bEvictPlatformPreprocessedResourceData );
         if( !bSuccess )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ), *objectPath.ToString() );
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ),
+                *objectPath.ToString() );
         }
 
         return bSuccess;
@@ -165,6 +171,13 @@ namespace Lunar
     {
         HELIUM_ASSERT( pObject );
         HELIUM_ASSERT( pPackageLoader );
+
+        // The default template object for a given type never has its resource data preprocessed, so there's no need to
+        // precache default template objects.
+        if( pObject->IsDefaultTemplate() )
+        {
+            return;
+        }
 
         // Retrieve the object preprocessor if it exists.
         ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();

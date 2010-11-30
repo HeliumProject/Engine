@@ -219,20 +219,20 @@ namespace Helium
             // The cache of serializers
             Cache m_Cache;
 
-            // The types used
-            std::set< int32_t > m_Types;
+            // The classes used
+            std::set< const Class* > m_Classes;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
 
             // The type to serach for
-            int32_t m_SearchType;
+            const Class* m_SearchClass;
 
             // The abort status
             bool m_Abort;
 
         protected:
-            Archive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+            Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
             virtual ~Archive();
 
@@ -362,13 +362,13 @@ namespace Helium
             void Put( const ElementPtr& element );
             void Put( const std::vector< ElementPtr >& elements );
 
-            ElementPtr Get( int searchType = Reflect::ReservedTypes::Any );
+            ElementPtr Get( const Class* searchClass = NULL );
             void Get( std::vector< ElementPtr >& elements );
 
             template <class T>
             Helium::StrongPtr<T> Get()
             {
-                ElementPtr found = Get( Reflect::GetType<T>() );
+                ElementPtr found = Get( Reflect::GetClass<T>() );
 
                 if (found.ReferencesObject())
                 {
@@ -406,7 +406,7 @@ namespace Helium
         FOUNDATION_API bool GetFileType( const Path& path, ArchiveType& type );
         
         // Get parser for a file
-        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = ByteOrders::Unknown );
+        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
         FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );

@@ -113,15 +113,23 @@ namespace Lunar
     {
         Super::FinalizeLoad();
 
-        // Cache the number of user variants for each shader type.
-        const Options& rUserOptions = m_persistentResourceData.GetUserOptions();
-
-        for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
+        // Cache the number of user variants for each shader type.  Note that we don't need to create variants for the
+        // default type template.
+        if( IsDefaultTemplate() )
         {
-            size_t count = rUserOptions.ComputeOptionSetCount( static_cast< RShader::EType >( shaderTypeIndex ) );
-            HELIUM_ASSERT( count <= UINT32_MAX );
+            MemoryZero( m_variantCounts, sizeof( m_variantCounts ) );
+        }
+        else
+        {
+            const Options& rUserOptions = m_persistentResourceData.GetUserOptions();
 
-            m_variantCounts[ shaderTypeIndex ] = static_cast< uint32_t >( count );
+            for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_variantCounts ); ++shaderTypeIndex )
+            {
+                size_t count = rUserOptions.ComputeOptionSetCount( static_cast< RShader::EType >( shaderTypeIndex ) );
+                HELIUM_ASSERT( count <= UINT32_MAX );
+
+                m_variantCounts[ shaderTypeIndex ] = static_cast< uint32_t >( count );
+            }
         }
     }
 
@@ -134,7 +142,7 @@ namespace Lunar
         // Precache all shader variants if flagged to do so and the load process has been overridden by the shader
         // variant resource handler.
         // XXX TMC TODO: Replace with a more robust method for checking whether we're running within the editor.
-        if( m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
+        if( !IsDefaultTemplate() && m_bPrecacheAllVariants && sm_pBeginLoadVariantOverride )
         {
             GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );

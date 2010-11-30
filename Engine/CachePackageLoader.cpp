@@ -156,11 +156,11 @@ namespace Lunar
             pRequest->pSerializedData = NULL;
             pRequest->pPropertyStreamEnd = NULL;
             pRequest->pPersistentResourceStreamEnd = NULL;
-            HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
+            HELIUM_ASSERT( pRequest->typeLinkTable.IsEmpty() );
+            HELIUM_ASSERT( pRequest->objectLinkTable.IsEmpty() );
             HELIUM_ASSERT( !pRequest->spType );
             HELIUM_ASSERT( !pRequest->spTemplate );
             HELIUM_ASSERT( !pRequest->spOwner );
-            SetInvalid( pRequest->typeLinkIndex );
             SetInvalid( pRequest->templateLinkIndex );
             SetInvalid( pRequest->ownerLinkIndex );
 
@@ -217,11 +217,11 @@ namespace Lunar
         pRequest->pSerializedData = NULL;
         pRequest->pPropertyStreamEnd = NULL;
         pRequest->pPersistentResourceStreamEnd = NULL;
-        HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
+        HELIUM_ASSERT( pRequest->typeLinkTable.IsEmpty() );
+        HELIUM_ASSERT( pRequest->objectLinkTable.IsEmpty() );
         HELIUM_ASSERT( !pRequest->spType );
         HELIUM_ASSERT( !pRequest->spTemplate );
         HELIUM_ASSERT( !pRequest->spOwner );
-        SetInvalid( pRequest->typeLinkIndex );
         SetInvalid( pRequest->templateLinkIndex );
         SetInvalid( pRequest->ownerLinkIndex );
 
@@ -292,22 +292,11 @@ namespace Lunar
             return false;
         }
 
-        // Sync on type, template, and owner dependencies.
+        // Sync on template and owner dependencies.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
-        DynArray< size_t >& rInternalLinkTable = pRequest->linkTable;
-
-        if( IsValid( pRequest->typeLinkIndex ) )
-        {
-            size_t linkLoadId = rInternalLinkTable[ pRequest->typeLinkIndex ];
-            if( IsValid( linkLoadId ) && !pObjectLoader->TryFinishLoad( linkLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLinkIndex );
-        }
+        DynArray< size_t >& rInternalLinkTable = pRequest->objectLinkTable;
 
         if( IsValid( pRequest->templateLinkIndex ) )
         {
@@ -480,7 +469,7 @@ namespace Lunar
             pRequest->pPropertyStreamEnd = pBufferEnd;
             pRequest->pPersistentResourceStreamEnd = pBufferEnd;
 
-            if( DeserializeLinkTable( pRequest ) )
+            if( DeserializeLinkTables( pRequest ) )
             {
                 return true;
             }
@@ -518,48 +507,14 @@ namespace Lunar
         const Cache::Entry* pCacheEntry = pRequest->pEntry;
         HELIUM_ASSERT( pCacheEntry );
 
-        // Wait for the type, template, and owner objects to load.
+        // Wait for the template and owner objects to load.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
-        if( IsValid( pRequest->typeLinkIndex ) )
-        {
-            HELIUM_ASSERT( pRequest->typeLinkIndex < pRequest->linkTable.GetSize() );
-            size_t typeLoadId = pRequest->linkTable[ pRequest->typeLinkIndex ];
-            if( IsValid( typeLoadId ) && !pObjectLoader->TryFinishLoad( typeLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLinkIndex );
-        }
-
-        Type* pType = DynamicCast< Type >( pRequest->spType.Get() );
-        if( !pType )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "CachePackageLoader: Failed to load type object for \"%s\".\n" ),
-                *pCacheEntry->path.ToString() );
-
-            if( pObject )
-            {
-                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
-                pObject->ConditionalFinalizeLoad();
-            }
-
-            DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
-            pRequest->pAsyncLoadBuffer = NULL;
-
-            pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-            return true;
-        }
-
         if( IsValid( pRequest->templateLinkIndex ) )
         {
-            HELIUM_ASSERT( pRequest->templateLinkIndex < pRequest->linkTable.GetSize() );
-            size_t templateLoadId = pRequest->linkTable[ pRequest->templateLinkIndex ];
+            HELIUM_ASSERT( pRequest->templateLinkIndex < pRequest->objectLinkTable.GetSize() );
+            size_t templateLoadId = pRequest->objectLinkTable[ pRequest->templateLinkIndex ];
             if( IsValid( templateLoadId ) && !pObjectLoader->TryFinishLoad( templateLoadId, pRequest->spTemplate ) )
             {
                 return false;
@@ -593,8 +548,8 @@ namespace Lunar
 
         if( IsValid( pRequest->ownerLinkIndex ) )
         {
-            HELIUM_ASSERT( pRequest->ownerLinkIndex < pRequest->linkTable.GetSize() );
-            size_t ownerLoadId = pRequest->linkTable[ pRequest->ownerLinkIndex ];
+            HELIUM_ASSERT( pRequest->ownerLinkIndex < pRequest->objectLinkTable.GetSize() );
+            size_t ownerLoadId = pRequest->objectLinkTable[ pRequest->ownerLinkIndex ];
             if( IsValid( ownerLoadId ) && !pObjectLoader->TryFinishLoad( ownerLoadId, pRequest->spOwner ) )
             {
                 return false;
@@ -626,9 +581,11 @@ namespace Lunar
 
         GameObject* pOwner = pRequest->spOwner;
 
-        HELIUM_ASSERT( pType->IsFullyLoaded() );
         HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
         HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
+
+        Type* pType = pRequest->spType;
+        HELIUM_ASSERT( pType );
 
         // If we already had an existing object, make sure the type and template match.
         if( pObject )
@@ -642,8 +599,8 @@ namespace Lunar
                     ( TXT( "CachePackageLoader: Cannot load \"%s\" using the existing object as the types do not " )
                       TXT( "match (existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
                     *pCacheEntry->path.ToString(),
-                    *pExistingType->GetPath().ToString(),
-                    *pType->GetPath().ToString() );
+                    *pExistingType->GetName(),
+                    *pType->GetName() );
 
                 pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
@@ -697,7 +654,7 @@ namespace Lunar
 
             pRequest->flags |= LOAD_FLAG_ERROR;
         }
-        else
+        else if( !pObject->IsDefaultTemplate() )
         {
             // Load persistent resource data.
             Resource* pResource = DynamicCast< Resource >( pObject );
@@ -757,10 +714,10 @@ namespace Lunar
         rspPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );
     }
 
-    /// Deserialize the link table for an object load.
+    /// Deserialize the link tables for an object load.
     ///
     /// @param[in] pRequest  Load request data.
-    bool CachePackageLoader::DeserializeLinkTable( LoadRequest* pRequest )
+    bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     {
         HELIUM_ASSERT( pRequest );
 
@@ -810,8 +767,11 @@ namespace Lunar
             pRequest->pPersistentResourceStreamEnd = pPropertyStreamEnd;
         }
 
-        uint32_t linkTableSize = 0;
-        if( pBufferCurrent + sizeof( linkTableSize ) > pPropertyStreamEnd )
+        StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+
+        // Load the type link table.
+        uint32_t typeLinkTableSize = 0;
+        if( pBufferCurrent + sizeof( typeLinkTableSize ) > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -821,28 +781,97 @@ namespace Lunar
             return false;
         }
 
-        MemoryCopy( &linkTableSize, pBufferCurrent, sizeof( linkTableSize ) );
-        pBufferCurrent += sizeof( linkTableSize );
+        MemoryCopy( &typeLinkTableSize, pBufferCurrent, sizeof( typeLinkTableSize ) );
+        pBufferCurrent += sizeof( typeLinkTableSize );
 
-        pRequest->linkTable.Resize( 0 );
-        pRequest->linkTable.Reserve( linkTableSize );
+        pRequest->typeLinkTable.Resize( 0 );
+        pRequest->typeLinkTable.Reserve( typeLinkTableSize );
 
-        StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+        uint_fast32_t typeLinkTableSizeFast = typeLinkTableSize;
+        for( uint_fast32_t linkTableIndex = 0; linkTableIndex < typeLinkTableSizeFast; ++linkTableIndex )
+        {
+            uint32_t typeNameSize;
+            if( pBufferCurrent + sizeof( typeNameSize ) > pPropertyStreamEnd )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
+                    *pRequest->pEntry->path.ToString() );
+
+                return false;
+            }
+
+            MemoryCopy( &typeNameSize, pBufferCurrent, sizeof( typeNameSize ) );
+            pBufferCurrent += sizeof( typeNameSize );
+
+            if( pBufferCurrent + sizeof( tchar_t ) * typeNameSize > pPropertyStreamEnd )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
+                    *pRequest->pEntry->path.ToString() );
+
+                return false;
+            }
+
+            StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+            tchar_t* pTypeNameString = static_cast< tchar_t* >( rStackHeap.Allocate(
+                sizeof( tchar_t ) * ( typeNameSize + 1 ) ) );
+            HELIUM_ASSERT( pTypeNameString );
+
+            MemoryCopy( pTypeNameString, pBufferCurrent, sizeof( tchar_t ) * typeNameSize );
+            pBufferCurrent += sizeof( tchar_t ) * typeNameSize;
+
+            pTypeNameString[ typeNameSize ] = TXT( '\0' );
+
+            Name typeName( pTypeNameString );
+
+            Type* pType = Type::Find( typeName );
+            if( !pType )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "CachePackageLoader: Failed to locate type \"%s\" when attempting to deserialize \"%s\".\n" ),
+                    pTypeNameString,
+                    *pRequest->pEntry->path.ToString() );
+            }
+
+            pRequest->typeLinkTable.Push( pType );
+        }
+
+        // Load the object link table.
+        uint32_t objectLinkTableSize = 0;
+        if( pBufferCurrent + sizeof( objectLinkTableSize ) > pPropertyStreamEnd )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
+                *pRequest->pEntry->path.ToString() );
+
+            return false;
+        }
+
+        MemoryCopy( &objectLinkTableSize, pBufferCurrent, sizeof( objectLinkTableSize ) );
+        pBufferCurrent += sizeof( objectLinkTableSize );
+
+        pRequest->objectLinkTable.Resize( 0 );
+        pRequest->objectLinkTable.Reserve( objectLinkTableSize );
+
         StackMemoryHeap<>::Marker stackMarker( rStackHeap );
 
-        // Track the link table object paths so that we can use them for issuing additonal load requests for the object
-        // type, template, and owner dependencies (this way, we can sync on those load requests during the preload
-        // process while still providing load requests for the caller to resolve if necessary).
-        GameObjectPath* pLinkTablePaths = static_cast< GameObjectPath* >( rStackHeap.Allocate(
-            sizeof( GameObjectPath ) * linkTableSize ) );
-        HELIUM_ASSERT( pLinkTablePaths );
-        ArrayUninitializedFill( pLinkTablePaths, GameObjectPath( NULL_NAME ), linkTableSize );
+        // Track the link table object paths so that we can use them for issuing additional load requests for the object
+        // template and owner dependencies (this way, we can sync on those load requests during the preload process
+        // while still providing load requests for the caller to resolve if necessary).
+        GameObjectPath* pObjectLinkTablePaths = static_cast< GameObjectPath* >( rStackHeap.Allocate(
+            sizeof( GameObjectPath ) * objectLinkTableSize ) );
+        HELIUM_ASSERT( pObjectLinkTablePaths );
+        ArrayUninitializedFill( pObjectLinkTablePaths, GameObjectPath( NULL_NAME ), objectLinkTableSize );
 
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
 
-        uint_fast32_t linkTableSizeFast = linkTableSize;
-        for( uint_fast32_t linkTableIndex = 0; linkTableIndex < linkTableSizeFast; ++linkTableIndex )
+        uint_fast32_t objectLinkTableSizeFast = objectLinkTableSize;
+        for( uint_fast32_t linkTableIndex = 0; linkTableIndex < objectLinkTableSizeFast; ++linkTableIndex )
         {
             uint32_t pathStringSize;
             if( pBufferCurrent + sizeof( pathStringSize ) > pPropertyStreamEnd )
@@ -895,7 +924,7 @@ namespace Lunar
             }
             else
             {
-                pLinkTablePaths[ linkTableIndex ] = path;
+                pObjectLinkTablePaths[ linkTableIndex ] = path;
 
                 // Begin loading the link table entry.
                 linkLoadId = pObjectLoader->BeginLoadObject( path );
@@ -912,11 +941,12 @@ namespace Lunar
                 }
             }
 
-            pRequest->linkTable.Push( linkLoadId );
+            pRequest->objectLinkTable.Push( linkLoadId );
         }
 
         // Read the type link information.
-        if( pBufferCurrent + sizeof( pRequest->typeLinkIndex ) > pPropertyStreamEnd )
+        uint32_t typeLinkIndex;
+        if( pBufferCurrent + sizeof( typeLinkIndex ) > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -926,24 +956,31 @@ namespace Lunar
             return false;
         }
 
-        MemoryCopy( &pRequest->typeLinkIndex, pBufferCurrent, sizeof( pRequest->typeLinkIndex ) );
-        pBufferCurrent += sizeof( pRequest->typeLinkIndex );
+        MemoryCopy( &typeLinkIndex, pBufferCurrent, sizeof( typeLinkIndex ) );
+        pBufferCurrent += sizeof( typeLinkIndex );
 
-        if( pRequest->typeLinkIndex >= linkTableSizeFast )
+        if( typeLinkIndex >= typeLinkTableSizeFast )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "CachePackageLoader: Invalid link table index for the type of \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
-            SetInvalid( pRequest->typeLinkIndex );
+            return false;
+        }
+
+        Type* pType = pRequest->typeLinkTable[ typeLinkIndex ];
+        if( !pType )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "CachePackageLoader: Type not found for object \"%s\".\n" ),
+                *pRequest->pEntry->path.ToString() );
 
             return false;
         }
 
-        size_t typeLoadId = pObjectLoader->BeginLoadObject( pLinkTablePaths[ pRequest->typeLinkIndex ] );
-        HELIUM_ASSERT( typeLoadId == pRequest->linkTable[ pRequest->typeLinkIndex ] );
-        HELIUM_UNREF( typeLoadId );
+        pRequest->spType = pType;
 
         // Read the template link information.
         if( pBufferCurrent + sizeof( pRequest->templateLinkIndex ) > pPropertyStreamEnd )
@@ -961,7 +998,7 @@ namespace Lunar
 
         if( IsValid( pRequest->templateLinkIndex ) )
         {
-            if( pRequest->templateLinkIndex >= linkTableSizeFast )
+            if( pRequest->templateLinkIndex >= objectLinkTableSizeFast )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
@@ -973,8 +1010,9 @@ namespace Lunar
                 return false;
             }
 
-            size_t templateLoadId = pObjectLoader->BeginLoadObject( pLinkTablePaths[ pRequest->templateLinkIndex ] );
-            HELIUM_ASSERT( templateLoadId == pRequest->linkTable[ pRequest->templateLinkIndex ] );
+            size_t templateLoadId = pObjectLoader->BeginLoadObject(
+                pObjectLinkTablePaths[ pRequest->templateLinkIndex ] );
+            HELIUM_ASSERT( templateLoadId == pRequest->objectLinkTable[ pRequest->templateLinkIndex ] );
             HELIUM_UNREF( templateLoadId );
         }
 
@@ -994,7 +1032,7 @@ namespace Lunar
 
         if( IsValid( pRequest->ownerLinkIndex ) )
         {
-            if( pRequest->ownerLinkIndex >= linkTableSizeFast )
+            if( pRequest->ownerLinkIndex >= objectLinkTableSizeFast )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
@@ -1006,8 +1044,8 @@ namespace Lunar
                 return false;
             }
 
-            size_t ownerLoadId = pObjectLoader->BeginLoadObject( pLinkTablePaths[ pRequest->ownerLinkIndex ] );
-            HELIUM_ASSERT( ownerLoadId == pRequest->linkTable[ pRequest->ownerLinkIndex ] );
+            size_t ownerLoadId = pObjectLoader->BeginLoadObject( pObjectLinkTablePaths[ pRequest->ownerLinkIndex ] );
+            HELIUM_ASSERT( ownerLoadId == pRequest->objectLinkTable[ pRequest->ownerLinkIndex ] );
             HELIUM_UNREF( ownerLoadId );
         }
 

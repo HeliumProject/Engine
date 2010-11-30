@@ -14,17 +14,17 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ClientDataFilter, ClientData );
 
-            ClientDataFilter( List* list, int32_t classType, const tstring& filter )
+            ClientDataFilter( List* list, const Reflect::Class* instanceClass, const tstring& filter )
                 : m_List( list )
-                , m_ClassType( classType )
+                , m_InstanceClass( instanceClass )
                 , m_FileFilter( filter )
             {
 
             }
 
-            List*       m_List;
-            int32_t         m_ClassType;
-            tstring     m_FileFilter;
+            List*                   m_List;
+            const Reflect::Class*   m_InstanceClass;
+            tstring                 m_FileFilter;
         };
     }
 

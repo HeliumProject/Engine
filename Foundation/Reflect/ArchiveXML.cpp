@@ -2,7 +2,7 @@
 
 #include "Element.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "Foundation/Log.h"
 
@@ -217,9 +217,9 @@ void ArchiveXML::Serialize(const ElementPtr& element)
 
     SerializeHeader(element);
 
-    if (element->HasType(Reflect::GetType<Serializer>()))
+    if (element->HasType(Reflect::GetType<Data>()))
     {
-        Serializer* s = DangerousCast<Serializer>(element);
+        Data* s = DangerousCast<Data>(element);
 
         s->Serialize(*this);
     }
@@ -295,12 +295,12 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
 
     // construct serialization object
     ElementPtr e;
-    m_Cache.Create( field->m_SerializerID, e );
+    m_Cache.Create( field->m_DataClass, e );
 
     HELIUM_ASSERT( e.ReferencesObject() );
 
     // downcast serializer
-    SerializerPtr serializer = ObjectCast<Serializer>(e);
+    DataPtr serializer = ObjectCast<Data>(e);
 
     if (!serializer.ReferencesObject())
     {
@@ -326,9 +326,9 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
         }
 
         // don't write empty containers
-        if ( serialize &&  e->HasType( Reflect::GetType<ContainerSerializer>() ) )
+        if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )
         {
-            ContainerSerializerPtr container = DangerousCast<ContainerSerializer>(e);
+            ContainerDataPtr container = DangerousCast<ContainerData>(e);
 
             if ( container->GetSize() == 0 )
             {
@@ -502,7 +502,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         ElementPtr parentElement = topState->m_Element;
 
         // retrieve the type information for our parent structure
-        const Class* parentTypeDefinition = Registry::GetInstance()->GetClass( parentElement->GetType() );
+        const Class* parentTypeDefinition = parentElement->GetClass();
 
         if ( parentTypeDefinition )
         {
@@ -528,13 +528,13 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 ElementPtr element = NULL;
 
                 // create the object
-                m_Cache.Create(newState->m_Field->m_SerializerID, element);
+                m_Cache.Create(newState->m_Field->m_DataClass, element);
 
                 // if we are a serializer
-                if (element->HasType(Reflect::GetType<Serializer>()))
+                if (element->HasType(Reflect::GetType<Data>()))
                 {
                     // connect the current instance to the serializer
-                    DangerousCast<Serializer>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
+                    DangerousCast<Data>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
                 }
 
                 if (element.ReferencesObject())
@@ -638,10 +638,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
     if ( topState->m_Element )
     {
-        // do Serializer logic
-        if ( topState->m_Element->HasType(Reflect::GetType<Serializer>()) && !topState->m_Buffer.empty())
+        // do Data logic
+        if ( topState->m_Element->HasType(Reflect::GetType<Data>()) && !topState->m_Buffer.empty())
         {
-            Serializer* serializer = DangerousCast<Serializer>(topState->m_Element);
+            Data* serializer = DangerousCast<Data>(topState->m_Element);
 
             tstringstream stream (topState->m_Buffer);
 
@@ -675,7 +675,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                 // see if we should process this element as a as a field, or as a component
                 if ( topState->GetFlag( ParsingState::kField ) )
                 {
-                    SerializerPtr serializer = ObjectCast<Serializer>(topState->m_Element);
+                    DataPtr serializer = ObjectCast<Data>(topState->m_Element);
                     if ( serializer.ReferencesObject() )
                     {
                         // disconnect our serializer for neatness
@@ -728,15 +728,15 @@ void ArchiveXML::ToString(const ElementPtr& element, tstring& xml )
     return ToString( elements, xml );
 }
 
-ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
+ElementPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
 {
-    if (searchType == Reflect::ReservedTypes::Any)
+    if ( searchClass == NULL )
     {
-        searchType = Reflect::GetType<Element>();
+        searchClass = Reflect::GetClass<Element>();
     }
 
     ArchiveXML archive;
-    archive.m_SearchType = searchType;
+    archive.m_SearchClass = searchClass;
 
     tstringstream strStream;
     strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
@@ -747,7 +747,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
     std::vector< ElementPtr >::iterator end = archive.m_Spool.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchType))
+        if ((*itr)->HasType(searchClass))
         {
             return *itr;
         }

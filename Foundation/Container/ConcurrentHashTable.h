@@ -5,8 +5,8 @@
 namespace Helium
 {
     template<
-        typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey,
-        typename Allocator >
+        typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+        typename InternalValue >
     class ConcurrentHashTable;
 
     /// Constant concurrent hash table accessor.
@@ -16,10 +16,11 @@ namespace Helium
         typename HashFunction,
         typename ExtractKey,
         typename EqualKey,
-        typename Allocator >
+        typename Allocator,
+        typename InternalValue >
     class ConstConcurrentHashTableAccessor : NonCopyable
     {
-        friend class ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >;
+        friend class ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >;
 
     public:
         /// Hash table value type.
@@ -35,7 +36,8 @@ namespace Helium
         typedef const Value& ConstReferenceType;
 
         /// Hash table type.
-        typedef ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator > TableType;
+        typedef ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >
+            TableType;
 
         /// @name Construction/Destruction
         //@{
@@ -82,10 +84,11 @@ namespace Helium
         typename HashFunction,
         typename ExtractKey,
         typename EqualKey,
-        typename Allocator >
+        typename Allocator,
+        typename InternalValue >
     class ConcurrentHashTableAccessor : NonCopyable
     {
-        friend class ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >;
+        friend class ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >;
 
     public:
         /// Hash table value type.
@@ -101,7 +104,8 @@ namespace Helium
         typedef const Value& ConstReferenceType;
 
         /// Hash table type.
-        typedef ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator > TableType;
+        typedef ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >
+            TableType;
 
         /// @name Construction/Destruction
         //@{
@@ -148,11 +152,12 @@ namespace Helium
         typename HashFunction,
         typename ExtractKey,
         typename EqualKey,
-        typename Allocator >
+        typename Allocator,
+        typename InternalValue >
     class ConcurrentHashTable
     {
-        friend class ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >;
-        friend class ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >;
+        friend class ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >;
+        friend class ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >;
 
     public:
         /// Default hash table bucket count (prime numbers are recommended).
@@ -163,6 +168,9 @@ namespace Helium
         /// Type for hash table entries.
         typedef Value ValueType;
 
+        /// Internal value type (type used for actual value storage).
+        typedef InternalValue InternalValueType;
+
         /// Type for key hashing function.
         typedef HashFunction HasherType;
         /// Type for testing two keys for equality.
@@ -171,9 +179,10 @@ namespace Helium
         typedef Allocator AllocatorType;
 
         /// Accessor type.
-        typedef ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator > Accessor;
+        typedef ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >
+            Accessor;
         /// Constant accessor type.
-        typedef ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >
+        typedef ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >
             ConstAccessor;
 
         /// @name Hash Table Operations
@@ -204,7 +213,7 @@ namespace Helium
         struct Bucket
         {
             /// Bucket entries.
-            DynArray< Value, Allocator > entries;
+            DynArray< InternalValue, Allocator > entries;
             /// Read-write lock for access synchronization.
             ReadWriteLock lock;
             /// State tag (incremented when entries are removed).

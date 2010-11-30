@@ -33,7 +33,7 @@ InstanceSet::~InstanceSet()
 
 }
 
-SceneGraph::InstanceType* InstanceSet::GetInstanceType()
+SceneGraph::InstanceType* InstanceSet::GetInstanceClass()
 {
   return m_Type;
 }

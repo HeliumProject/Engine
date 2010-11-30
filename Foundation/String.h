@@ -46,6 +46,11 @@ namespace Helium
         void Insert( size_t index, const CharType* pString );
         void Remove( size_t index, size_t count = 1 );
 
+        template< typename OtherAllocator > void Substring(
+            StringBase< CharType, OtherAllocator >& rOutput, size_t index = 0,
+            size_t count = Invalid< size_t >() ) const;
+        StringBase Substring( size_t index = 0, size_t count = Invalid< size_t >() ) const;
+
         CharType& GetFirst();
         const CharType& GetFirst() const;
         CharType& GetLast();

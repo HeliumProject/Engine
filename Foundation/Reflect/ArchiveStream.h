@@ -451,6 +451,7 @@ namespace Helium
                 if (m_OpenForWrite)
                 {
                     fmode |= std::ios_base::in | std::ios_base::out | std::ios_base::trunc;
+                    m_Path.MakePath();
                 }
                 else
                 {
@@ -463,7 +464,6 @@ namespace Helium
                 fstream->imbue( std::locale( std::locale::classic(), &null_codecvt::GetStaticInstance() )) ;
 #endif
 
-                m_Path.MakePath();
                 fstream->open( m_Path.c_str(), fmode );
                 if (!fstream->is_open())
                 {

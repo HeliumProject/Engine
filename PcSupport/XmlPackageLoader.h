@@ -39,8 +39,8 @@ namespace Lunar
             /// GameObject path.
             GameObjectPath objectPath;
 
-            /// Type path.
-            GameObjectPath typePath;
+            /// Type name.
+            Name typeName;
             /// Template path.
             GameObjectPath templatePath;
 
@@ -387,13 +387,11 @@ namespace Lunar
             DynArray< LinkEntry > linkTable;
 
             /// Cached type reference.
-            GameObjectPtr spType;
+            TypePtr spType;
             /// Cached template reference.
             GameObjectPtr spTemplate;
             /// Cached owner reference.
             GameObjectPtr spOwner;
-            /// Type object load request ID.
-            size_t typeLoadId;
             /// Template object load request ID.
             size_t templateLoadId;
             /// Owner object load request ID.

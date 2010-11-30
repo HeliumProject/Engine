@@ -45,96 +45,92 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-static int32_t g_InitCount = 0;
-static Helium::InitializerStack g_InitializerStack;
+static Helium::InitializerStack g_SceneGraphInitStack;
 
 void SceneGraph::Initialize()
 {
-    if ( ++g_InitCount == 1 )
+    if ( g_SceneGraphInitStack.Increment() == 1 )
     {
         // core library initiailization
-        g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-        g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
-        g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
+        g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
+        g_SceneGraphInitStack.Push( Component::Initialize, Component::Cleanup );
+        g_SceneGraphInitStack.Push( Asset::Initialize, Asset::Cleanup );
 
-        g_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
-        g_InitializerStack.Push( Reflect::RegisterClassType<MRUData>( TXT("SceneGraph::MRUData") ) );
+        g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType<MRUData>( TXT("SceneGraph::MRUData") ) );
 
-        g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
-        g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
+        g_SceneGraphInitStack.Push( Viewport::InitializeType, Viewport::CleanupType );
+        g_SceneGraphInitStack.Push( Primitive::InitializeType, Primitive::CleanupType );
 
-        g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );
-        g_InitializerStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
-        g_InitializerStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
+        g_SceneGraphInitStack.Push( Tool::InitializeType, Tool::CleanupType );
+        g_SceneGraphInitStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
+        g_SceneGraphInitStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ManipulatorSpace>( TXT( "SceneGraph::ManipulatorSpace" ) ) ); 
-        g_InitializerStack.Push( TransformManipulator::InitializeType, TransformManipulator::CleanupType );
-        g_InitializerStack.Push( Reflect::RegisterEnumType<TranslateSnappingMode>( TXT( "SceneGraph::TranslateSnappingMode" ) ) ); 
-        g_InitializerStack.Push( TranslateManipulator::InitializeType, TranslateManipulator::CleanupType );
-        g_InitializerStack.Push( RotateManipulator::InitializeType, RotateManipulator::CleanupType );
-        g_InitializerStack.Push( ScaleManipulator::InitializeType, ScaleManipulator::CleanupType );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ManipulatorSpace>( TXT( "SceneGraph::ManipulatorSpace" ) ) ); 
+        g_SceneGraphInitStack.Push( TransformManipulator::InitializeType, TransformManipulator::CleanupType );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<TranslateSnappingMode>( TXT( "SceneGraph::TranslateSnappingMode" ) ) ); 
+        g_SceneGraphInitStack.Push( TranslateManipulator::InitializeType, TranslateManipulator::CleanupType );
+        g_SceneGraphInitStack.Push( RotateManipulator::InitializeType, RotateManipulator::CleanupType );
+        g_SceneGraphInitStack.Push( ScaleManipulator::InitializeType, ScaleManipulator::CleanupType );
 
-        g_InitializerStack.Push( Graph::InitializeType, Graph::CleanupType );
-        g_InitializerStack.Push( SceneNode::InitializeType, SceneNode::CleanupType );
-        g_InitializerStack.Push( SceneNodeType::InitializeType, SceneNodeType::CleanupType );
-        g_InitializerStack.Push( HierarchyNode::InitializeType, HierarchyNode::CleanupType );
-        g_InitializerStack.Push( HierarchyNodeType::InitializeType, HierarchyNodeType::CleanupType );
-        g_InitializerStack.Push( Transform::InitializeType, Transform::CleanupType );
-        g_InitializerStack.Push( JointTransform::InitializeType, JointTransform::CleanupType );
-        g_InitializerStack.Push( PivotTransform::InitializeType, PivotTransform::CleanupType );
-        g_InitializerStack.Push( Layer::InitializeType, Layer::CleanupType );
+        g_SceneGraphInitStack.Push( Graph::InitializeType, Graph::CleanupType );
+        g_SceneGraphInitStack.Push( SceneNode::InitializeType, SceneNode::CleanupType );
+        g_SceneGraphInitStack.Push( SceneNodeType::InitializeType, SceneNodeType::CleanupType );
+        g_SceneGraphInitStack.Push( HierarchyNode::InitializeType, HierarchyNode::CleanupType );
+        g_SceneGraphInitStack.Push( HierarchyNodeType::InitializeType, HierarchyNodeType::CleanupType );
+        g_SceneGraphInitStack.Push( Transform::InitializeType, Transform::CleanupType );
+        g_SceneGraphInitStack.Push( JointTransform::InitializeType, JointTransform::CleanupType );
+        g_SceneGraphInitStack.Push( PivotTransform::InitializeType, PivotTransform::CleanupType );
+        g_SceneGraphInitStack.Push( Layer::InitializeType, Layer::CleanupType );
 
-        g_InitializerStack.Push( Shader::InitializeType, Shader::CleanupType );
-        g_InitializerStack.Push( Mesh::InitializeType, Mesh::CleanupType );
-        g_InitializerStack.Push( Skin::InitializeType, Skin::CleanupType );
+        g_SceneGraphInitStack.Push( Shader::InitializeType, Shader::CleanupType );
+        g_SceneGraphInitStack.Push( Mesh::InitializeType, Mesh::CleanupType );
+        g_SceneGraphInitStack.Push( Skin::InitializeType, Skin::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<CurveType>( TXT( "SceneGraph::CurveType" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ControlPointLabel>( TXT( "SceneGraph::ControlPointLabel" ) ) );
-        g_InitializerStack.Push( CurveControlPoint::InitializeType, CurveControlPoint::CleanupType );
-        g_InitializerStack.Push( Curve::InitializeType, Curve::CleanupType );
-        g_InitializerStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
-        g_InitializerStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<CurveType>( TXT( "SceneGraph::CurveType" ) ) );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ControlPointLabel>( TXT( "SceneGraph::ControlPointLabel" ) ) );
+        g_SceneGraphInitStack.Push( CurveControlPoint::InitializeType, CurveControlPoint::CleanupType );
+        g_SceneGraphInitStack.Push( Curve::InitializeType, Curve::CleanupType );
+        g_SceneGraphInitStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
+        g_SceneGraphInitStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );
 
-        g_InitializerStack.Push( Instance::InitializeType, Instance::CleanupType );
-        g_InitializerStack.Push( InstanceSet::InitializeType, InstanceSet::CleanupType );
-        g_InitializerStack.Push( InstanceType::InitializeType, InstanceType::CleanupType );
+        g_SceneGraphInitStack.Push( Instance::InitializeType, Instance::CleanupType );
+        g_SceneGraphInitStack.Push( InstanceSet::InitializeType, InstanceSet::CleanupType );
+        g_SceneGraphInitStack.Push( InstanceType::InitializeType, InstanceType::CleanupType );
 
-        g_InitializerStack.Push( Light::InitializeType, Light::CleanupType );
+        g_SceneGraphInitStack.Push( Light::InitializeType, Light::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<VolumeShape>( TXT( "SceneGraph::VolumeShape" ) ) );
-        g_InitializerStack.Push( Volume::InitializeType, Volume::CleanupType );
-        g_InitializerStack.Push( VolumeType::InitializeType, VolumeType::CleanupType );
-        g_InitializerStack.Push( VolumeCreateTool::InitializeType, VolumeCreateTool::CleanupType );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<VolumeShape>( TXT( "SceneGraph::VolumeShape" ) ) );
+        g_SceneGraphInitStack.Push( Volume::InitializeType, Volume::CleanupType );
+        g_SceneGraphInitStack.Push( VolumeType::InitializeType, VolumeType::CleanupType );
+        g_SceneGraphInitStack.Push( VolumeCreateTool::InitializeType, VolumeCreateTool::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<LocatorShape>( TXT( "SceneGraph::LocatorShape" ) ) );
-        g_InitializerStack.Push( Locator::InitializeType, Locator::CleanupType );
-        g_InitializerStack.Push( LocatorType::InitializeType, LocatorType::CleanupType );
-        g_InitializerStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<LocatorShape>( TXT( "SceneGraph::LocatorShape" ) ) );
+        g_SceneGraphInitStack.Push( Locator::InitializeType, Locator::CleanupType );
+        g_SceneGraphInitStack.Push( LocatorType::InitializeType, LocatorType::CleanupType );
+        g_SceneGraphInitStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
 
-        g_InitializerStack.Push( EntityInstance::InitializeType, EntityInstance::CleanupType );
-        g_InitializerStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
-        g_InitializerStack.Push( EntityInstanceType::InitializeType, EntityInstanceType::CleanupType );
-        g_InitializerStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
+        g_SceneGraphInitStack.Push( EntityInstance::InitializeType, EntityInstance::CleanupType );
+        g_SceneGraphInitStack.Push( EntitySet::InitializeType, EntitySet::CleanupType );
+        g_SceneGraphInitStack.Push( EntityInstanceType::InitializeType, EntityInstanceType::CleanupType );
+        g_SceneGraphInitStack.Push( EntityInstanceCreateTool::InitializeType, EntityInstanceCreateTool::CleanupType );
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<CameraMode>( TXT( "SceneGraph::CameraMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ShadingMode>( TXT( "SceneGraph::ShadingMode" ) ) );
-        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >( TXT("SceneGraph::CameraSettings") ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<CameraMode>( TXT( "SceneGraph::CameraMode" ) ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ShadingMode>( TXT( "SceneGraph::ShadingMode" ) ) );
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >( TXT("SceneGraph::CameraSettings") ) ); 
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<GeometryMode>( TXT( "SceneGraph::GeometryMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<ViewColorMode>( TXT( "SceneGraph::ViewColorMode" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::ViewportSettings >( TXT("SceneGraph::ViewportSettings") ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GeometryMode>( TXT( "SceneGraph::GeometryMode" ) ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ViewColorMode>( TXT( "SceneGraph::ViewColorMode" ) ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::ViewportSettings >( TXT("SceneGraph::ViewportSettings") ) ); 
 
-        g_InitializerStack.Push( Reflect::RegisterEnumType<GridUnit>( TXT( "SceneGraph::GridUnit" ) ) ); 
-        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::GridSettings >( TXT("SceneGraph::GridSettings") ) );
+        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GridUnit>( TXT( "SceneGraph::GridUnit" ) ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::GridSettings >( TXT("SceneGraph::GridSettings") ) );
 
-        g_InitializerStack.Push( Reflect::RegisterClassType< SceneGraph::SceneSettings >( TXT("SceneGraph::SceneSettings") ) );
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::SceneSettings >( TXT("SceneGraph::SceneSettings") ) );
     }
 }
 
 void SceneGraph::Cleanup()
 {
-    if ( --g_InitCount == 0 )
-    {
-        g_InitializerStack.Cleanup();
-    }
+    g_SceneGraphInitStack.Decrement();
 }

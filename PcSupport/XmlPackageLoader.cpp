@@ -140,7 +140,7 @@ namespace Lunar
 
             // Parse the name, type, and template attributes.
             String objectName;
-            GameObjectPath typePath( NULL_NAME );
+            Name typeName;
             GameObjectPath templatePath( NULL_NAME );
 
             while( *ppAtts != NULL )
@@ -159,12 +159,13 @@ namespace Lunar
 
                 if( StringCompare( pAttName, TXT( "type" ) ) == 0 )
                 {
-                    if( !typePath.Set( pAttValue ) )
+                    typeName.Set( pAttValue );
+                    if( !Type::Find( typeName ) )
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
                             ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") \"%s\" " )
-                              TXT( "is not a valid object path.\n" ) ),
+                              TXT( "is not a valid object type.\n" ) ),
                             line,
                             column,
                             pAttValue );
@@ -210,7 +211,7 @@ namespace Lunar
                 return;
             }
 
-            if( typePath.IsEmpty() )
+            if( typeName.IsEmpty() )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
@@ -241,7 +242,7 @@ namespace Lunar
 
             XmlPackageLoader::SerializedObjectData objectData;
             objectData.objectPath = objectPath;
-            objectData.typePath = typePath;
+            objectData.typeName = typeName;
             objectData.templatePath = templatePath;
 
             DynArray< XmlPackageLoader::SerializedObjectData >& rObjects = *pContext->pObjects;
@@ -535,8 +536,8 @@ namespace Lunar
             pContext->propertyTextBuffer.Add( static_cast< XML_Char >( '\0' ) );
 
             // Set up the property map entry.
-            std::pair< String, String > newProperty;
-            newProperty.second = pContext->propertyTextBuffer.GetData();
+            Pair< String, String > newProperty;
+            newProperty.Second() = pContext->propertyTextBuffer.GetData();
 
             pContext->propertyTextBuffer.Resize( 0 );
 
@@ -546,15 +547,15 @@ namespace Lunar
             {
                 if( levelIndex != 0 )
                 {
-                    newProperty.first += TXT( '.' );
+                    newProperty.First() += TXT( '.' );
                 }
 
                 XmlPackageParseProperty& rCurrentProperty = rPropertyStack[ levelIndex ];
-                newProperty.first += *rCurrentProperty.name;
+                newProperty.First() += *rCurrentProperty.name;
                 if( IsValid( rCurrentProperty.index ) )
                 {
                     arrayIndexFormat.Format( TXT( "[%" ) TPRIu32 TXT( "]" ), rCurrentProperty.index );
-                    newProperty.first += arrayIndexFormat;
+                    newProperty.First() += arrayIndexFormat;
                 }
             }
 
@@ -573,9 +574,9 @@ namespace Lunar
                       TXT( "\"%s\" property encountered in object; overwriting existing property.\n" ) ),
                     line,
                     column,
-                    *newProperty.first );
+                    *newProperty.First() );
 
-                propertyAccessor->second = newProperty.second;
+                propertyAccessor->Second() = newProperty.Second();
             }
 
             // If this was an array property, update the array index, otherwise clear the property name data for the
@@ -635,8 +636,8 @@ namespace Lunar
             HELIUM_ASSERT( StringCompare( pName, TXT( "array" ) ) == 0 );
 
             // Add an array size entry.
-            std::pair< String, uint32_t > arraySizeEntry;
-            arraySizeEntry.second = rPropertyTop.index;
+            Pair< String, uint32_t > arraySizeEntry;
+            arraySizeEntry.Second() = rPropertyTop.index;
             SetInvalid( rPropertyTop.index );
 
             String arrayIndexFormat;
@@ -644,15 +645,15 @@ namespace Lunar
             {
                 if( levelIndex != 0 )
                 {
-                    arraySizeEntry.first += TXT( '.' );
+                    arraySizeEntry.First() += TXT( '.' );
                 }
 
                 XmlPackageParseProperty& rCurrentProperty = rPropertyStack[ levelIndex ];
-                arraySizeEntry.first += *rCurrentProperty.name;
+                arraySizeEntry.First() += *rCurrentProperty.name;
                 if( IsValid( rCurrentProperty.index ) )
                 {
                     arrayIndexFormat.Format( TXT( "[%" ) TPRIu32 TXT( "]" ), rCurrentProperty.index );
-                    arraySizeEntry.first += arrayIndexFormat;
+                    arraySizeEntry.First() += arrayIndexFormat;
                 }
             }
 
@@ -670,9 +671,9 @@ namespace Lunar
                       TXT( "\"%s\" array property encountered in object; overwriting existing array size.\n" ) ),
                     line,
                     column,
-                    *arraySizeEntry.first );
+                    *arraySizeEntry.First() );
 
-                arraySizeMapAccessor->second = arraySizeEntry.second;
+                arraySizeMapAccessor->Second() = arraySizeEntry.Second();
             }
 
             // Tag is now closed.
@@ -1030,7 +1031,6 @@ namespace Lunar
             HELIUM_ASSERT( !pRequest->spType );
             HELIUM_ASSERT( !pRequest->spTemplate );
             HELIUM_ASSERT( !pRequest->spOwner );
-            SetInvalid( pRequest->typeLoadId );
             SetInvalid( pRequest->templateLoadId );
             SetInvalid( pRequest->ownerLoadId );
             SetInvalid( pRequest->persistentResourceDataLoadId );
@@ -1066,6 +1066,22 @@ namespace Lunar
             return Invalid< size_t >();
         }
 
+        SerializedObjectData& rObjectData = m_objects[ objectIndex ];
+
+        // Locate the type object.
+        HELIUM_ASSERT( !rObjectData.typeName.IsEmpty() );
+        Type* pType = Type::Find( rObjectData.typeName );
+        if( !pType )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "XmlPackageLoader::BeginLoadObject(): Failed to locate type \"%s\" for loading object \"%s\".\n" ),
+                *rObjectData.typeName,
+                *path.ToString() );
+
+            return Invalid< size_t >();
+        }
+
 #ifndef NDEBUG
         size_t loadRequestSize = m_loadRequests.GetSize();
         for( size_t loadRequestIndex = 0; loadRequestIndex < loadRequestSize; ++loadRequestIndex )
@@ -1090,10 +1106,9 @@ namespace Lunar
         HELIUM_ASSERT( !pRequest->spObject );
         pRequest->index = objectIndex;
         HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
-        HELIUM_ASSERT( !pRequest->spType );
+        pRequest->spType = pType;
         HELIUM_ASSERT( !pRequest->spTemplate );
         HELIUM_ASSERT( !pRequest->spOwner );
-        SetInvalid( pRequest->typeLoadId );
         SetInvalid( pRequest->templateLoadId );
         SetInvalid( pRequest->ownerLoadId );
         SetInvalid( pRequest->persistentResourceDataLoadId );
@@ -1115,18 +1130,27 @@ namespace Lunar
         {
             HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
 
-            // Begin loading the type, template, and owner objects.  Note that there isn't much reason to check for
-            // failure until we tick this request, as we need to make sure any other load requests for the
-            // type/template/owner that did succeed are properly synced anyway.
-            SerializedObjectData& rObjectData = m_objects[ objectIndex ];
-
+            // Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
+            // until we tick this request, as we need to make sure any other load requests for the template/owner that
+            // did succeed are properly synced anyway.
             GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
-            HELIUM_ASSERT( !rObjectData.typePath.IsEmpty() );
-            pRequest->typeLoadId = pObjectLoader->BeginLoadObject( rObjectData.typePath );
-
-            if( !rObjectData.templatePath.IsEmpty() )
+            if( rObjectData.templatePath.IsEmpty() )
+            {
+                // Make sure the template is fully loaded.
+                GameObject* pTemplate = pType->GetTypeTemplate();
+                rObjectData.templatePath = pTemplate->GetPath();
+                if( pTemplate->IsFullyLoaded() )
+                {
+                    pRequest->spTemplate = pTemplate;
+                }
+                else
+                {
+                    pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
+                }
+            }
+            else
             {
                 pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
             }
@@ -1164,19 +1188,9 @@ namespace Lunar
             return false;
         }
 
-        // Sync on type, template, and owner dependencies.
+        // Sync on template and owner dependencies.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
-
-        if( IsValid( pRequest->typeLoadId ) )
-        {
-            if( !pObjectLoader->TryFinishLoad( pRequest->typeLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLoadId );
-        }
 
         if( IsValid( pRequest->templateLoadId ) )
         {
@@ -1468,10 +1482,16 @@ namespace Lunar
                 continue;
             }
 
-            Path fullPath = item.m_Path.GetAbsolutePath( packageDirectoryPath );
-
             // Make sure an object entry doesn't already exist for the file.
-            Name objectName( fullPath.c_str() );
+            String objectNameString( *item.m_Path );
+
+            size_t pathSeparatorLocation = objectNameString.FindReverse( TXT( '/' ) );
+            if( IsValid( pathSeparatorLocation ) )
+            {
+                objectNameString.Substring( objectNameString, pathSeparatorLocation + 1 );
+            }
+
+            Name objectName( objectNameString );
             size_t objectCount = m_objects.GetSize();
             size_t objectIndex;
             for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
@@ -1509,7 +1529,7 @@ namespace Lunar
                     HELIUM_ASSERT( pExtension );
 
                     size_t extensionLength = StringLength( pExtension );
-                    if( extensionLength > bestHandlerExtensionLength && fullPath.Extension() == pExtension )
+                    if( extensionLength > bestHandlerExtensionLength && objectNameString.EndsWith( pExtension ) )
                     {
                         pBestHandler = pHandler;
                         bestHandlerExtensionLength = extensionLength;
@@ -1529,14 +1549,14 @@ namespace Lunar
                     TRACE_DEBUG,
                     ( TXT( "XmlPackageLoader: Registered source asset file \"%s\" as as instance of resource " )
                       TXT( "type \"%s\" in package \"%s\".\n" ) ),
-                    fullPath.c_str(),
+                    *objectNameString,
                     *pResourceType->GetName(),
                     *m_packagePath.ToString() );
 
                 SerializedObjectData* pObjectData = m_objects.New();
                 HELIUM_ASSERT( pObjectData );
                 HELIUM_VERIFY( pObjectData->objectPath.Set( objectName, false, m_packagePath ) );
-                pObjectData->typePath = pResourceType->GetPath();
+                pObjectData->typeName = pResourceType->GetName();
                 pObjectData->templatePath.Clear();
             }
         }
@@ -1597,38 +1617,9 @@ namespace Lunar
         HELIUM_ASSERT( pRequest->index < m_objects.GetSize() );
         SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
-        // Wait for the type, template, and owner objects to load.
+        // Wait for the template and owner objects to load.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
-
-        if( IsValid( pRequest->typeLoadId ) )
-        {
-            if( !pObjectLoader->TryFinishLoad( pRequest->typeLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLoadId );
-        }
-
-        Type* pType = DynamicCast< Type >( pRequest->spType.Get() );
-        if( !pType )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "XmlPackageLoader: Failed to load type object for \"%s\".\n" ),
-                *rObjectData.objectPath.ToString() );
-
-            if( pObject )
-            {
-                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
-                pObject->ConditionalFinalizeLoad();
-            }
-
-            pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-            return true;
-        }
 
         if( !rObjectData.templatePath.IsEmpty() )
         {
@@ -1699,7 +1690,9 @@ namespace Lunar
         HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
         GameObject* pOwner = pRequest->spOwner;
 
-        HELIUM_ASSERT( pType->IsFullyLoaded() );
+        Type* pType = pRequest->spType;
+        HELIUM_ASSERT( pType );
+
         HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
         HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
@@ -1715,8 +1708,8 @@ namespace Lunar
                     ( TXT( "XmlPackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
                       TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
                     *rObjectData.objectPath.ToString(),
-                    *pExistingType->GetPath().ToString(),
-                    *pType->GetPath().ToString() );
+                    *pExistingType->GetName(),
+                    *pType->GetName() );
 
                 pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();
@@ -1768,36 +1761,39 @@ namespace Lunar
             return true;
         }
 
-        // If the object is a resource, attempt to begin loading any existing persistent resource data stored in the
-        // object cache.
-        Resource* pResource = DynamicCast< Resource >( pObject );
-        if( pResource )
+        // If the object is a resource (not including the default template object for resource types), attempt to begin
+        // loading any existing persistent resource data stored in the object cache.
+        if( !pObject->IsDefaultTemplate() )
         {
-            Name objectCacheName = pObjectLoader->GetCacheName();
-            CacheManager& rCacheManager = CacheManager::GetStaticInstance();
-
-            Cache* pCache = rCacheManager.GetCache( objectCacheName );
-            HELIUM_ASSERT( pCache );
-            pCache->EnforceTocLoad();
-
-            const Cache::Entry* pEntry = pCache->FindEntry( rObjectData.objectPath, 0 );
-            if( pEntry && pEntry->size != 0 )
+            Resource* pResource = DynamicCast< Resource >( pObject );
+            if( pResource )
             {
-                HELIUM_ASSERT( IsInvalid( pRequest->persistentResourceDataLoadId ) );
-                HELIUM_ASSERT( !pRequest->pCachedObjectDataBuffer );
+                Name objectCacheName = pObjectLoader->GetCacheName();
+                CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-                pRequest->pCachedObjectDataBuffer =
-                    static_cast< uint8_t* >( DefaultAllocator().Allocate( pEntry->size ) );
-                HELIUM_ASSERT( pRequest->pCachedObjectDataBuffer );
-                pRequest->cachedObjectDataBufferSize = pEntry->size;
+                Cache* pCache = rCacheManager.GetCache( objectCacheName );
+                HELIUM_ASSERT( pCache );
+                pCache->EnforceTocLoad();
 
-                AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-                pRequest->persistentResourceDataLoadId = rAsyncLoader.QueueRequest(
-                    pRequest->pCachedObjectDataBuffer,
-                    pCache->GetCacheFileName(),
-                    pEntry->offset,
-                    pEntry->size );
-                HELIUM_ASSERT( IsValid( pRequest->persistentResourceDataLoadId ) );
+                const Cache::Entry* pEntry = pCache->FindEntry( rObjectData.objectPath, 0 );
+                if( pEntry && pEntry->size != 0 )
+                {
+                    HELIUM_ASSERT( IsInvalid( pRequest->persistentResourceDataLoadId ) );
+                    HELIUM_ASSERT( !pRequest->pCachedObjectDataBuffer );
+
+                    pRequest->pCachedObjectDataBuffer =
+                        static_cast< uint8_t* >( DefaultAllocator().Allocate( pEntry->size ) );
+                    HELIUM_ASSERT( pRequest->pCachedObjectDataBuffer );
+                    pRequest->cachedObjectDataBufferSize = pEntry->size;
+
+                    AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+                    pRequest->persistentResourceDataLoadId = rAsyncLoader.QueueRequest(
+                        pRequest->pCachedObjectDataBuffer,
+                        pCache->GetCacheFileName(),
+                        pEntry->offset,
+                        pEntry->size );
+                    HELIUM_ASSERT( IsValid( pRequest->persistentResourceDataLoadId ) );
+                }
             }
         }
 
@@ -2018,7 +2014,7 @@ namespace Lunar
         {
             do
             {
-                rTagNames.Add( propertyAccessor->first );
+                rTagNames.Add( propertyAccessor->First() );
                 ++propertyAccessor;
             } while( propertyAccessor.IsValid() );
         }
@@ -2110,7 +2106,7 @@ namespace Lunar
                 ConcurrentHashMap< String, uint32_t >::ConstAccessor arraySizeAccessor;
                 if( m_pObjectData->arraySizes.Find( arraySizeAccessor, propertyName ) )
                 {
-                    rValue = arraySizeAccessor->second;
+                    rValue = arraySizeAccessor->Second();
                 }
             }
 
@@ -2385,7 +2381,7 @@ namespace Lunar
         ConcurrentHashMap< String, String >::ConstAccessor propertyAccessor;
         if( rProperties.Find( propertyAccessor, propertyName ) )
         {
-            if( !rParser( propertyAccessor->second, rValue ) )
+            if( !rParser( propertyAccessor->Second(), rValue ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,

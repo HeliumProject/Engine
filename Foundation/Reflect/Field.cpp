@@ -1,17 +1,17 @@
 #include "Field.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
 
 #include "Foundation/Log.h"
 
 using namespace Helium::Reflect;
 
-Field::Field(const Composite* type)
-: m_Type ( type )
+Field::Field(const Composite* composite)
+: m_Composite ( composite )
 , m_Flags ( 0 )
 , m_FieldID ( -1 )
-, m_SerializerID ( ReservedTypes::Invalid )
+, m_DataClass ( NULL )
 , m_Offset ( -1 )
 , m_Creator ( NULL )
 {
@@ -28,17 +28,17 @@ Field* Field::Create(const Composite* type)
     return new Field( type );
 }
 
-SerializerPtr Field::CreateSerializer(Element* instance) const
+DataPtr Field::CreateData(Element* instance) const
 {
-    SerializerPtr ser;
+    DataPtr ser;
 
-    if (m_SerializerID != Reflect::ReservedTypes::Invalid)
+    if (m_DataClass != NULL)
     {
-        ObjectPtr object = Registry::GetInstance()->CreateInstance(m_SerializerID);
+        ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
 
         if (object.ReferencesObject())
         {
-            ser = AssertCast<Serializer>(object);
+            ser = AssertCast<Data>(object);
         }
     }
 
@@ -59,7 +59,7 @@ bool Field::HasDefaultValue(Element* instance) const
     }
 
     // get a serializer
-    SerializerPtr serializer = CreateSerializer();
+    DataPtr serializer = CreateData();
 
     if (serializer.ReferencesObject())
     {
@@ -88,7 +88,7 @@ bool Field::SetDefaultValue(Element* instance) const
     }
 
     // get a serializer
-    SerializerPtr serializer = CreateSerializer();
+    DataPtr serializer = CreateData();
 
     if (serializer.ReferencesObject())
     {
@@ -126,7 +126,7 @@ void Field::SetName(const tstring& name)
 
 ElementField::ElementField(const Composite* type)
 : Field ( type )
-, m_TypeID ( Reflect::GetType<Reflect::Element>() )
+, m_Type ( Reflect::GetType<Reflect::Element>() )
 {
 
 }
@@ -141,23 +141,23 @@ ElementField* ElementField::Create(const Composite* type)
     return new ElementField( type );
 }
 
-SerializerPtr ElementField::CreateSerializer(Element* instance) const
+DataPtr ElementField::CreateData(Element* instance) const
 {
-    SerializerPtr ser = __super::CreateSerializer(instance);
+    DataPtr ser = __super::CreateData(instance);
 
     if (ser.ReferencesObject())
     {
-        PointerSerializer* pointerSerializer = ObjectCast<PointerSerializer>( ser );
-        if ( pointerSerializer )
+        PointerData* pointerData = ObjectCast<PointerData>( ser );
+        if ( pointerData )
         {
-            pointerSerializer->m_TypeID = m_TypeID;
+            pointerData->m_Type = m_Type;
         }
         else
         {
-            ElementContainerSerializer* containerSerializer = ObjectCast<ElementContainerSerializer>( ser );
-            if ( containerSerializer )
+            ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+            if ( containerData )
             {
-                containerSerializer->m_TypeID = m_TypeID;
+                containerData->m_Type = m_Type;
             }
         }
     }
@@ -182,9 +182,9 @@ EnumerationField* EnumerationField::Create(const Composite* type, const Enumerat
     return new EnumerationField( type, enumeration );
 }
 
-SerializerPtr EnumerationField::CreateSerializer(Element* instance) const
+DataPtr EnumerationField::CreateData(Element* instance) const
 {
-    EnumerationSerializerPtr ser = AssertCast<EnumerationSerializer>(__super::CreateSerializer(instance));
+    EnumerationDataPtr ser = AssertCast<EnumerationData>(__super::CreateData(instance));
 
     if (ser.ReferencesObject())
     {

@@ -1,7 +1,7 @@
 #include "Class.h"
 #include "Element.h"
 #include "Registry.h"
-#include "Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
 
 #include "Foundation/Log.h"
@@ -31,7 +31,7 @@ ElementPtr Class::Clone(Element* element)
         return NULL;
     }
 
-    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance(element->GetType()) );
+    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance( element->GetClass()) );
 
     element->PreSerialize();
 

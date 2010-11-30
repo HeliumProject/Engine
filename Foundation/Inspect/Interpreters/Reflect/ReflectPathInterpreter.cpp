@@ -37,7 +37,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     ContainerPtr container = CreateControl<Container>();
     groups.push_back( container );
 
-    bool pathField = field->m_SerializerID == Reflect::GetType< PathSerializer >();
+    bool pathField = field->m_DataClass == Reflect::GetType< PathData >();
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
     DataChangingSignature::Delegate changingDelegate;
@@ -53,7 +53,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (!result)
     {
-        if ( pathField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
+        if ( pathField || field->m_DataClass == Reflect::GetType<StringData>() )
         {
             ContainerPtr valueContainer = CreateControl<Container>();
             ValuePtr value = CreateControl< Value >();
@@ -140,16 +140,16 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Create type m_FinderSpecific data bound to this and additional instances
     //
 
-    std::vector<Serializer*> ser;
+    std::vector<Data*> ser;
 
     {
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
         std::vector<Reflect::Element*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            SerializerPtr s = field->CreateSerializer();
+            DataPtr s = field->CreateData();
 
-            if (s->HasType(Reflect::GetType<ContainerSerializer>()))
+            if (s->HasType(Reflect::GetType<ContainerData>()))
             {
                 return;
             }
@@ -158,7 +158,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
             ser.push_back(s);
 
-            m_Serializers.push_back(s);
+            m_Datas.push_back(s);
         }
     }
 
@@ -166,7 +166,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Create data and bind
     //
 
-    Helium::SmartPtr< MultiStringFormatter<Serializer> > data = new MultiStringFormatter<Serializer>( ser );
+    Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( ser );
 
     if (changingDelegate.Valid())
     {
@@ -214,7 +214,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 void PathInterpreter::DataChanging( const DataChangingArgs& args )
 {
     tstring text;
-    Reflect::Serializer::GetValue( args.m_NewValue, text );
+    Reflect::Data::GetValue( args.m_NewValue, text );
 
     if ( !text.empty() )
     {
@@ -229,7 +229,7 @@ void PathInterpreter::DataChanging( const DataChangingArgs& args )
 
         FileDialogArgs fileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
         d_FindMissingFile.Invoke( fileDialogArgs );
-        Reflect::Serializer::SetValue< tstring >( args.m_NewValue, fileDialogArgs.m_Result.Get() );
+        Reflect::Data::SetValue< tstring >( args.m_NewValue, fileDialogArgs.m_Result.Get() );
     }
 }
 

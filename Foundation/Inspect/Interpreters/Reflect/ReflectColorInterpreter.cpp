@@ -33,38 +33,38 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
     container->AddChild( label );
 
-    bool color3 = field->m_SerializerID == Reflect::GetType<Color3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>();
-    bool color4 = field->m_SerializerID == Reflect::GetType<Color4Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>();
+    bool color3 = field->m_DataClass == Reflect::GetType<Color3Data>() || field->m_DataClass == Reflect::GetType<HDRColor3Data>();
+    bool color4 = field->m_DataClass == Reflect::GetType<Color4Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>();
     HELIUM_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
 
     if ( color3 || color4 )
     {
-        std::vector<Serializer*> ser;
+        std::vector<Data*> ser;
         std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
         std::vector<Reflect::Element*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
-            SerializerPtr s;
+            DataPtr s;
 
             if ( color3 )
             {
-                s = new Color3Serializer();
+                s = new Color3Data();
             }
 
             if ( color4 )
             {
-                s = new Color4Serializer();
+                s = new Color4Data();
             }
 
             if (s.ReferencesObject())
             {
                 s->ConnectField( *itr, field );
                 ser.push_back( s );
-                m_Serializers.push_back( s );
+                m_Datas.push_back( s );
             }
         }
 
-        if ( !m_Serializers.empty() )
+        if ( !m_Datas.empty() )
         {
             ColorPickerPtr colorPicker = CreateControl<ColorPicker>();
             container->AddChild( colorPicker );
@@ -74,7 +74,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
             bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
             colorPicker->a_IsReadOnly.Set( readOnly );
 
-            DataBindingPtr data = new MultiStringFormatter<Serializer>( ser );
+            DataBindingPtr data = new MultiStringFormatter<Data>( ser );
             colorPicker->Bind( data );
 
             if ( color3 )
@@ -98,12 +98,12 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_IsReadOnly.Set( readOnly );
                 value->a_HelpText.Set( TXT( "Sets the alpha value for the color." ) );
 
-                std::vector<Serializer*> alphaSer;
+                std::vector<Data*> alphaSer;
                 std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
                 std::vector<Reflect::Element*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
-                    SerializerPtr s = new U8Serializer ();
+                    DataPtr s = new U8Data ();
 
                     uintptr_t fieldAddress = (uintptr_t)(*itr) + field->m_Offset;
 
@@ -113,15 +113,15 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
                     alphaSer.push_back( s );
 
-                    m_Serializers.push_back( s );
+                    m_Datas.push_back( s );
                 }
 
-                data = new MultiStringFormatter<Serializer>( alphaSer );
+                data = new MultiStringFormatter<Data>( alphaSer );
                 slider->Bind( data );
                 value->Bind( data );
             }
 
-            if ( field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor4Serializer>() )
+            if ( field->m_DataClass == Reflect::GetType<HDRColor3Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>() )
             {
                 SliderPtr slider = CreateControl<Slider>();
                 container->AddChild( slider );
@@ -135,12 +135,12 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_IsReadOnly.Set( readOnly );
                 value->a_HelpText.Set( TXT( "Adjusts the HDR value of the color." ) );
 
-                std::vector<Serializer*> intensitySer;
+                std::vector<Data*> intensitySer;
                 std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
                 std::vector<Reflect::Element*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
-                    SerializerPtr s = new F32Serializer();
+                    DataPtr s = new F32Data();
 
                     uintptr_t fieldAddress = (uintptr_t)(*itr) + field->m_Offset;
 
@@ -160,10 +160,10 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
                     intensitySer.push_back( s );
 
-                    m_Serializers.push_back( s );
+                    m_Datas.push_back( s );
                 }
 
-                data = new MultiStringFormatter<Serializer>( intensitySer );
+                data = new MultiStringFormatter<Data>( intensitySer );
                 slider->Bind( data );
                 value->Bind( data );
             }

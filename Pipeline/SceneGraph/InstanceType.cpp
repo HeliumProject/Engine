@@ -26,8 +26,8 @@ void InstanceType::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::InstanceType >();
 }
 
-InstanceType::InstanceType( SceneGraph::Scene* scene, int32_t instanceType )
-: SceneGraph::HierarchyNodeType( scene, instanceType )
+InstanceType::InstanceType( SceneGraph::Scene* scene, const Reflect::Class* instanceClass )
+: SceneGraph::HierarchyNodeType( scene, instanceClass )
 , m_Pointer( NULL )
 {
     ZeroMemory(&m_Material, sizeof(m_WireMaterial));

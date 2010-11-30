@@ -114,7 +114,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 
     if ( GetDataSize() > 0 )
     {
-        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar_t*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
+        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar_t*)GetData(), Reflect::GetClass< ClipboardDataWrapper >() ) );
         if ( wrapper.ReferencesObject() )
         {
             data = wrapper->m_Data;

@@ -30,10 +30,12 @@ namespace Helium
 
         struct SceneChangeArgs
         {
+            SceneGraph::Scene* m_PreviousScene;
             SceneGraph::Scene* m_Scene;
 
-            SceneChangeArgs (SceneGraph::Scene* scene)
-                : m_Scene (scene)
+            SceneChangeArgs ( SceneGraph::Scene* previousScene, SceneGraph::Scene* scene )
+                : m_PreviousScene( previousScene )
+                , m_Scene( scene )
             {
             }
         };

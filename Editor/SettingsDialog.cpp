@@ -142,7 +142,7 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-    Reflect::ElementPtr defaultElement = Reflect::ObjectCast<Reflect::Element>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetType() ) );
+    Reflect::ElementPtr defaultElement = Reflect::ObjectCast<Reflect::Element>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetClass() ) );
     if ( !defaultElement )
     {
         return;

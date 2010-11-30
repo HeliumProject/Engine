@@ -302,7 +302,7 @@ namespace Lunar
             return NULL;
         }
 
-        Entry* pEntry = mapAccessor->second;
+        Entry* pEntry = mapAccessor->Second();
         HELIUM_ASSERT( pEntry );
 
         return pEntry;
@@ -348,7 +348,7 @@ namespace Lunar
         key.subDataIndex = subDataIndex;
 
         EntryMapType::Accessor entryAccessor;
-        bool bNewEntry = m_entryMap.Insert( entryAccessor, std::pair< EntryKey, Entry* >( key, pEntryUpdate ) );
+        bool bNewEntry = m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntryUpdate ) );
         if( bNewEntry )
         {
             HELIUM_TRACE( TRACE_INFO, TXT( "Cache: Adding \"%s\" to cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
@@ -361,7 +361,7 @@ namespace Lunar
 
             m_pEntryPool->Release( pEntryUpdate );
 
-            pEntryUpdate = entryAccessor->second;
+            pEntryUpdate = entryAccessor->Second();
             HELIUM_ASSERT( pEntryUpdate );
 
             originalOffset = pEntryUpdate->offset;
@@ -729,7 +729,7 @@ namespace Lunar
 
             m_entries.Add( pEntry );
 
-            HELIUM_VERIFY( m_entryMap.Insert( entryAccessor, std::pair< EntryKey, Entry* >( key, pEntry ) ) );
+            HELIUM_VERIFY( m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntry ) ) );
         }
 
         return true;

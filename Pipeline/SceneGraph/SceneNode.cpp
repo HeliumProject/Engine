@@ -381,7 +381,7 @@ tstring SceneNode::GetApplicationTypeName() const
 
 SceneNodeTypePtr SceneNode::CreateNodeType( SceneGraph::Scene* scene ) const
 {
-    SceneNodeTypePtr nodeType = new SceneGraph::SceneNodeType( scene, GetType() );
+    SceneNodeTypePtr nodeType = new SceneGraph::SceneNodeType( scene, GetClass() );
 
     nodeType->SetImageIndex( GetImageIndex() );
 

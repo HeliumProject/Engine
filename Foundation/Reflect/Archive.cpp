@@ -7,7 +7,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Reflect/Element.h"
-#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/ArchiveXML.h"
@@ -24,7 +24,7 @@ Archive::Archive( const Path& path, ByteOrder byteOrder )
 : m_Path( path )
 , m_ByteOrder( byteOrder )
 , m_Progress( 0 )
-, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_SearchClass( NULL )
 , m_Abort( false )
 , m_Mode( ArchiveModes::Read )
 {
@@ -33,7 +33,7 @@ Archive::Archive( const Path& path, ByteOrder byteOrder )
 Archive::Archive()
 : m_ByteOrder( ByteOrders::LittleEndian )
 , m_Progress( 0 )
-, m_SearchType( Reflect::ReservedTypes::Invalid )
+, m_SearchClass( NULL )
 , m_Abort( false )
 , m_Mode( ArchiveModes::Read )
 {
@@ -125,7 +125,7 @@ void Archive::PreSerialize(const ElementPtr& element, const Field* field)
         }
     }
 
-    m_Types.insert(element->GetType());
+    m_Classes.insert(element->GetClass());
 }
 
 void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
@@ -144,7 +144,7 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
         }
     }
 
-    m_Types.insert(element->GetType());
+    m_Classes.insert(element->GetClass());
 }
 
 bool Archive::TryElementCallback( Element* element, ElementCallback callback )
@@ -202,16 +202,16 @@ void Archive::Put( const std::vector< ElementPtr >& elements )
 }
 
 
-ElementPtr Archive::Get( int searchType )
+ElementPtr Archive::Get( const Class* searchClass )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
     std::vector< ElementPtr > elements;
     Get( elements );
 
-    if ( searchType == Reflect::ReservedTypes::Any )
+    if ( searchClass == NULL )
     {
-        searchType = Reflect::GetType< Element >();
+        searchClass = Reflect::GetClass< Element >();
     }
 
     ElementPtr result = NULL;
@@ -219,7 +219,7 @@ ElementPtr Archive::Get( int searchType )
     std::vector< ElementPtr >::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
-        if ( (*itr)->HasType( searchType ) )
+        if ( (*itr)->HasType( searchClass ) )
         {
             return *itr;
         }

@@ -536,8 +536,8 @@ namespace Lunar
             pContext->propertyTextBuffer.Add( static_cast< XML_Char >( '\0' ) );
 
             // Set up the property map entry.
-            std::pair< String, String > newProperty;
-            newProperty.second = pContext->propertyTextBuffer.GetData();
+            Pair< String, String > newProperty;
+            newProperty.Second() = pContext->propertyTextBuffer.GetData();
 
             pContext->propertyTextBuffer.Resize( 0 );
 
@@ -547,15 +547,15 @@ namespace Lunar
             {
                 if( levelIndex != 0 )
                 {
-                    newProperty.first += TXT( '.' );
+                    newProperty.First() += TXT( '.' );
                 }
 
                 XmlPackageParseProperty& rCurrentProperty = rPropertyStack[ levelIndex ];
-                newProperty.first += *rCurrentProperty.name;
+                newProperty.First() += *rCurrentProperty.name;
                 if( IsValid( rCurrentProperty.index ) )
                 {
                     arrayIndexFormat.Format( TXT( "[%" ) TPRIu32 TXT( "]" ), rCurrentProperty.index );
-                    newProperty.first += arrayIndexFormat;
+                    newProperty.First() += arrayIndexFormat;
                 }
             }
 
@@ -574,9 +574,9 @@ namespace Lunar
                       TXT( "\"%s\" property encountered in object; overwriting existing property.\n" ) ),
                     line,
                     column,
-                    *newProperty.first );
+                    *newProperty.First() );
 
-                propertyAccessor->second = newProperty.second;
+                propertyAccessor->Second() = newProperty.Second();
             }
 
             // If this was an array property, update the array index, otherwise clear the property name data for the
@@ -636,8 +636,8 @@ namespace Lunar
             HELIUM_ASSERT( StringCompare( pName, TXT( "array" ) ) == 0 );
 
             // Add an array size entry.
-            std::pair< String, uint32_t > arraySizeEntry;
-            arraySizeEntry.second = rPropertyTop.index;
+            Pair< String, uint32_t > arraySizeEntry;
+            arraySizeEntry.Second() = rPropertyTop.index;
             SetInvalid( rPropertyTop.index );
 
             String arrayIndexFormat;
@@ -645,15 +645,15 @@ namespace Lunar
             {
                 if( levelIndex != 0 )
                 {
-                    arraySizeEntry.first += TXT( '.' );
+                    arraySizeEntry.First() += TXT( '.' );
                 }
 
                 XmlPackageParseProperty& rCurrentProperty = rPropertyStack[ levelIndex ];
-                arraySizeEntry.first += *rCurrentProperty.name;
+                arraySizeEntry.First() += *rCurrentProperty.name;
                 if( IsValid( rCurrentProperty.index ) )
                 {
                     arrayIndexFormat.Format( TXT( "[%" ) TPRIu32 TXT( "]" ), rCurrentProperty.index );
-                    arraySizeEntry.first += arrayIndexFormat;
+                    arraySizeEntry.First() += arrayIndexFormat;
                 }
             }
 
@@ -671,9 +671,9 @@ namespace Lunar
                       TXT( "\"%s\" array property encountered in object; overwriting existing array size.\n" ) ),
                     line,
                     column,
-                    *arraySizeEntry.first );
+                    *arraySizeEntry.First() );
 
-                arraySizeMapAccessor->second = arraySizeEntry.second;
+                arraySizeMapAccessor->Second() = arraySizeEntry.Second();
             }
 
             // Tag is now closed.
@@ -2014,7 +2014,7 @@ namespace Lunar
         {
             do
             {
-                rTagNames.Add( propertyAccessor->first );
+                rTagNames.Add( propertyAccessor->First() );
                 ++propertyAccessor;
             } while( propertyAccessor.IsValid() );
         }
@@ -2106,7 +2106,7 @@ namespace Lunar
                 ConcurrentHashMap< String, uint32_t >::ConstAccessor arraySizeAccessor;
                 if( m_pObjectData->arraySizes.Find( arraySizeAccessor, propertyName ) )
                 {
-                    rValue = arraySizeAccessor->second;
+                    rValue = arraySizeAccessor->Second();
                 }
             }
 
@@ -2381,7 +2381,7 @@ namespace Lunar
         ConcurrentHashMap< String, String >::ConstAccessor propertyAccessor;
         if( rProperties.Find( propertyAccessor, propertyName ) )
         {
-            if( !rParser( propertyAccessor->second, rValue ) )
+            if( !rParser( propertyAccessor->Second(), rValue ) )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,

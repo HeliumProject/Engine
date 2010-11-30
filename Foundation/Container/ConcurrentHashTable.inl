@@ -2,9 +2,10 @@
 ///
 /// Creates a read-only hash table accessor, initialized in an invalid state (not referencing any hash table entry).
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Helium::ConstConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::ConstConcurrentHashTableAccessor()
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::ConstConcurrentHashTableAccessor()
     : m_pTable( NULL )
     , m_bucketIndex( 0 )
     , m_elementIndex( 0 )
@@ -13,9 +14,10 @@ Helium::ConstConcurrentHashTableAccessor<
 
 /// Destructor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Helium::ConstConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::~ConstConcurrentHashTableAccessor()
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::~ConstConcurrentHashTableAccessor()
 {
     Release();
 }
@@ -26,9 +28,10 @@ Helium::ConstConcurrentHashTableAccessor<
 ///
 /// @see Release()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 bool Helium::ConstConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::IsValid() const
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsValid() const
 {
     return( m_pTable != NULL );
 }
@@ -37,8 +40,10 @@ bool Helium::ConstConcurrentHashTableAccessor<
 ///
 /// @see IsValid()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Release()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConstConcurrentHashTableAccessor<
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Release()
 {
     if( m_pTable )
     {
@@ -54,9 +59,10 @@ void Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, Extract
 ///
 /// @return  Constant reference to the current hash table entry.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 const Value& Helium::ConstConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator*() const
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator*() const
 {
     HELIUM_ASSERT( m_pTable );
     HELIUM_ASSERT( m_pTable->m_pBuckets );
@@ -68,9 +74,10 @@ const Value& Helium::ConstConcurrentHashTableAccessor<
 ///
 /// @return  Constant pointer to the current hash table entry.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 const Value* Helium::ConstConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator->() const
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator->() const
 {
     HELIUM_ASSERT( m_pTable );
     HELIUM_ASSERT( m_pTable->m_pBuckets );
@@ -82,9 +89,10 @@ const Value* Helium::ConstConcurrentHashTableAccessor<
 ///
 /// @return  Reference to this accessor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
-    Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator++()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >&
+    Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator++()
 {
     HELIUM_ASSERT( m_pTable );
 
@@ -126,9 +134,10 @@ Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 ///
 /// @return  Reference to this accessor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
-    Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator--()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >&
+    Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator--()
 {
     HELIUM_ASSERT( m_pTable );
 
@@ -177,8 +186,9 @@ Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 ///
 /// @return  True if this accessor references the same hash table location as the given accessor, false if not.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator==(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator==(
     const ConstConcurrentHashTableAccessor& rOther ) const
 {
     return( m_pTable == rOther.m_pTable &&
@@ -193,8 +203,9 @@ bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, Extract
 /// @return  True if this accessor does not reference the same hash table location as the given accessor, false if
 ///          they do match.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator!=(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=(
     const ConstConcurrentHashTableAccessor& rOther ) const
 {
     return( m_pTable != rOther.m_pTable ||
@@ -211,8 +222,9 @@ bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, Extract
 /// @param[in] bucketIndex   Index of the bucket containing the entry to reference.
 /// @param[in] elementIndex  Index of the bucket element in which the table entry is stored.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Set(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Set(
     const TableType* pTable,
     size_t bucketIndex,
     size_t elementIndex )
@@ -229,9 +241,10 @@ void Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, Extract
 /// Creates a read-write hash table accessor, initialized in an invalid state (not referencing any hash table
 /// entry).
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Helium::ConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::ConcurrentHashTableAccessor()
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::ConcurrentHashTableAccessor()
     : m_pTable( NULL )
     , m_bucketIndex( 0 )
     , m_elementIndex( 0 )
@@ -240,9 +253,10 @@ Helium::ConcurrentHashTableAccessor<
 
 /// Destructor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Helium::ConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::~ConcurrentHashTableAccessor()
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::~ConcurrentHashTableAccessor()
 {
     Release();
 }
@@ -253,8 +267,9 @@ Helium::ConcurrentHashTableAccessor<
 ///
 /// @see Release()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::IsValid() const
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsValid() const
 {
     return( m_pTable != NULL );
 }
@@ -263,8 +278,9 @@ bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 ///
 /// @see IsValid()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Release()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Release()
 {
     if( m_pTable )
     {
@@ -280,9 +296,10 @@ void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 ///
 /// @return  Reference to the current hash table entry.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Value& Helium::ConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator*() const
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator*() const
 {
     HELIUM_ASSERT( m_pTable );
     HELIUM_ASSERT( m_pTable->m_pBuckets );
@@ -294,9 +311,10 @@ Value& Helium::ConcurrentHashTableAccessor<
 ///
 /// @return  Pointer to the current hash table entry.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
 Value* Helium::ConcurrentHashTableAccessor<
-    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator->() const
+    Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator->() const
 {
     HELIUM_ASSERT( m_pTable );
     HELIUM_ASSERT( m_pTable->m_pBuckets );
@@ -308,9 +326,10 @@ Value* Helium::ConcurrentHashTableAccessor<
 ///
 /// @return  Reference to this accessor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
-    Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator++()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >&
+    Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator++()
 {
     HELIUM_ASSERT( m_pTable );
 
@@ -352,9 +371,10 @@ Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, Equal
 ///
 /// @return  Reference to this accessor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
-    Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator--()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >&
+    Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator--()
 {
     HELIUM_ASSERT( m_pTable );
 
@@ -403,8 +423,9 @@ Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, Equal
 ///
 /// @return  True if this accessor references the same hash table location as the given accessor, false if not.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator==(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator==(
     const ConcurrentHashTableAccessor& rOther ) const
 {
     return( m_pTable == rOther.m_pTable &&
@@ -419,8 +440,9 @@ bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 /// @return  True if this accessor does not reference the same hash table location as the given accessor, false if
 ///          they do match.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator!=(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=(
     const ConcurrentHashTableAccessor& rOther ) const
 {
     return( m_pTable != rOther.m_pTable ||
@@ -437,8 +459,9 @@ bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 /// @param[in] bucketIndex   Index of the bucket containing the entry to reference.
 /// @param[in] elementIndex  Index of the bucket element in which the table entry is stored.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Set(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Set(
     TableType* pTable,
     size_t bucketIndex,
     size_t elementIndex )
@@ -459,8 +482,9 @@ void Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, 
 /// @param[in] rExtractKey  Key extraction functor.
 /// @param[in] rAllocator   Allocator functor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::ConcurrentHashTable(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::ConcurrentHashTable(
     size_t bucketCount,
     const HashFunction& rHasher,
     const EqualKey& rKeyEquals,
@@ -484,8 +508,9 @@ Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, All
 /// @param[in] rKeyEquals   Key equal comparison functor.
 /// @param[in] rAllocator   Allocator functor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::ConcurrentHashTable(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::ConcurrentHashTable(
     size_t bucketCount,
     const HashFunction& rHasher,
     const EqualKey& rKeyEquals,
@@ -503,8 +528,9 @@ Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, All
 ///
 /// @param[in] rSource  Hash table from which to construct a copy.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::ConcurrentHashTable(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::ConcurrentHashTable(
     const ConcurrentHashTable& rSource )
 {
     CopyConstruct( rSource );
@@ -512,8 +538,9 @@ Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, All
 
 /// Destructor.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::~ConcurrentHashTable()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::~ConcurrentHashTable()
 {
     Finalize();
 }
@@ -524,8 +551,9 @@ Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, All
 ///
 /// @see IsEmpty()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-size_t Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::GetSize() const
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+size_t Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::GetSize() const
 {
     return static_cast< uint32_t >( m_size );
 }
@@ -536,8 +564,9 @@ size_t Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualK
 ///
 /// @see GetSize()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::IsEmpty() const
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsEmpty() const
 {
     return( m_size == 0 );
 }
@@ -546,8 +575,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see Trim()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Clear()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Clear()
 {
     size_t bucketCount = m_bucketCount;
     for( size_t bucketIndex = 0; bucketIndex < bucketCount; ++bucketIndex )
@@ -566,8 +596,9 @@ void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see Clear()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Trim()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Trim()
 {
     size_t bucketCount = m_bucketCount;
     for( size_t bucketIndex = 0; bucketIndex < bucketCount; ++bucketIndex )
@@ -589,8 +620,9 @@ void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see Last()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::First(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::First(
     Accessor& rAccessor )
 {
     rAccessor.Release();
@@ -633,8 +665,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see Last()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::First(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::First(
     ConstAccessor& rAccessor ) const
 {
     rAccessor.Release();
@@ -677,8 +710,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see First()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Last(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Last(
     Accessor& rAccessor )
 {
     rAccessor.Release();
@@ -724,8 +758,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @see First()
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Last(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Last(
     ConstAccessor& rAccessor ) const
 {
     rAccessor.Release();
@@ -769,8 +804,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  True if an entry with the given key was found, false if not.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Find(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Find(
     Accessor& rAccessor,
     const Key& rKey )
 {
@@ -782,7 +818,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     Bucket& rBucket = m_pBuckets[ bucketIndex ];
     rBucket.lock.LockWrite();
 
-    DynArray< Value >& rEntries = rBucket.entries;
+    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -808,8 +844,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  True if an entry with the given key was found, false if not.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Find(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Find(
     ConstAccessor& rAccessor,
     const Key& rKey ) const
 {
@@ -821,7 +858,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     Bucket& rBucket = m_pBuckets[ bucketIndex ];
     rBucket.lock.LockRead();
 
-    DynArray< Value >& rEntries = rBucket.entries;
+    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -848,8 +885,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  True if a new entry was inserted, false if one already exists.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Insert(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Insert(
     ConstAccessor& rAccessor,
     const Value& rValue )
 {
@@ -869,7 +907,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     for( ; ; )
     {
         // Search for an existing entry.
-        DynArray< Value, Allocator >& rEntries = rBucket.entries;
+        DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
         size_t entryCount = rEntries.GetSize();
         size_t entryIndex;
         for( entryIndex = 0; entryIndex < entryCount; ++entryIndex )
@@ -941,8 +979,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  True if a new entry was inserted, false if one already exists.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Insert(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Insert(
     Accessor& rAccessor,
     const Value& rValue )
 {
@@ -957,7 +996,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     rBucket.lock.LockWrite();
 
     // Search for an existing entry.
-    DynArray< Value, Allocator >& rEntries = rBucket.entries;
+    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -984,8 +1023,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  True if an entry was found and removed, false if not.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Remove( const Key& rKey )
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Remove( const Key& rKey )
 {
     // Acquire a read-write lock on the target bucket.
     size_t bucketIndex = m_hasher( rKey ) % m_bucketCount;
@@ -995,7 +1035,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     rBucket.lock.LockWrite();
 
     // Search for an entry with the specified key.
-    DynArray< Value, Allocator >& rEntries = rBucket.entries;
+    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -1024,8 +1064,9 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 /// @return  True if the entry was removed, false if not (accessor is not valid or references an entry in another
 ///          table).
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Remove(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Remove(
     Accessor& rAccessor )
 {
     // Accessor must reference this table.
@@ -1056,9 +1097,10 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @return  Reference to this object.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >&
-    Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::operator=(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >&
+    Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator=(
         const ConcurrentHashTable& rSource )
 {
     if( this != &rSource )
@@ -1072,8 +1114,9 @@ Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, All
 
 /// Allocate hash table buckets.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::AllocateBuckets()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::AllocateBuckets()
 {
     size_t bucketCount = m_bucketCount;
 
@@ -1094,8 +1137,9 @@ void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 ///
 /// @param[in] rSource  Object to copy.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::CopyConstruct(
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::CopyConstruct(
     const ConcurrentHashTable& rSource )
 {
     size_t bucketCount = rSource.m_bucketCount;
@@ -1118,8 +1162,9 @@ void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
 
 /// Free all allocated resources, but don't clear out any variables unless necessary.
 template<
-    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator >
-void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator >::Finalize()
+    typename Value, typename Key, typename HashFunction, typename ExtractKey, typename EqualKey, typename Allocator,
+    typename InternalValue >
+void Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::Finalize()
 {
     ArrayInPlaceDestroy( m_pBuckets, m_bucketCount );
     m_allocator.Free( m_pBuckets );

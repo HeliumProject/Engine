@@ -52,7 +52,7 @@ namespace Lunar
         ConcurrentHashMap< Name, Cache* >::Accessor cacheAccessor;
         if( m_cacheMaps[ platform ].Find( cacheAccessor, name ) )
         {
-            Cache *pCache = cacheAccessor->second;
+            Cache *pCache = cacheAccessor->Second();
             HELIUM_ASSERT( pCache );
 
             return pCache;
@@ -85,14 +85,14 @@ namespace Lunar
             return NULL;
         }
 
-        if( !m_cacheMaps[ platform ].Insert( cacheAccessor, std::pair< Name, Cache* >( name, pCache ) ) )
+        if( !m_cacheMaps[ platform ].Insert( cacheAccessor, KeyValue< Name, Cache* >( name, pCache ) ) )
         {
             // Cache instance was added while we were trying to create a new one, so release the one we allocated and
             // use the existing instance.
             pCache->Shutdown();
             m_cachePool.Release( pCache );
 
-            pCache = cacheAccessor->second;
+            pCache = cacheAccessor->Second();
             HELIUM_ASSERT( pCache );
         }
 

@@ -130,7 +130,7 @@ namespace Lunar
     /// @return  Reference to the referenced type.
     Type& Type::ConstIterator::operator*() const
     {
-        Type* pType = m_accessor->second;
+        Type* pType = m_accessor->Second();
         HELIUM_ASSERT( pType );
 
         return *pType;
@@ -141,7 +141,7 @@ namespace Lunar
     /// @return  Pointer to the referenced type.
     Type* Type::ConstIterator::operator->() const
     {
-        Type* pType = m_accessor->second;
+        Type* pType = m_accessor->Second();
         HELIUM_ASSERT( pType );
 
         return pType;

@@ -352,7 +352,8 @@ namespace Lunar
         GameObjectRefCountSupport::Shutdown();
 
         GameObjectPath::Shutdown();
-        Name::Shutdown();
+        CharName::Shutdown();
+        WideName::Shutdown();
 
         File::Shutdown();
 

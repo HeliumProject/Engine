@@ -554,7 +554,8 @@ void CreateTool::AddToScene()
 
         if ( !m_Instance->IsInitialized() )
         {
-            m_Instance->Initialize( m_Scene );
+            m_Instance->SetOwner( m_Scene );
+            m_Instance->Initialize();
         }
 
         HELIUM_ASSERT( m_Instance->GetOwner() == m_Scene );

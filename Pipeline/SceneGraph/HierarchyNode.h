@@ -88,7 +88,7 @@ namespace Helium
             virtual SceneNodeTypePtr CreateNodeType( SceneGraph::Scene* scene ) const HELIUM_OVERRIDE;
 
             // Initialize this and children
-            void InitializeHierarchy(Scene* scene);
+            void InitializeHierarchy();
 
             // Persistence managment
             virtual void Reset() HELIUM_OVERRIDE;

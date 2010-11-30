@@ -71,14 +71,15 @@ SceneNodeTypePtr HierarchyNode::CreateNodeType( SceneGraph::Scene* scene ) const
     return nodeType;
 }
 
-void HierarchyNode::InitializeHierarchy(Scene* scene)
+void HierarchyNode::InitializeHierarchy()
 {
-    Initialize(scene);
+    Initialize();
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
         SceneGraph::HierarchyNode* child = *itr;
-        child->InitializeHierarchy(scene);
+        child->SetOwner( m_Owner );
+        child->InitializeHierarchy();
     }
 }
 

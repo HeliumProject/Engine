@@ -129,6 +129,11 @@ namespace Helium
             {
                 return m_Owner;
             }
+            void SetOwner( Scene* owner )
+            {
+                HELIUM_ASSERT( m_Owner == NULL || m_Owner == owner );
+                m_Owner = owner;
+            }
 
             virtual bool IsTransient() const
             {
@@ -219,7 +224,7 @@ namespace Helium
             virtual void Reset();
 
             // Callback after new scene data is loaded, and initial evaluation is complete
-            virtual void Initialize(Scene* scene);
+            virtual void Initialize();
 
             // Check for initialization state
             bool IsInitialized()

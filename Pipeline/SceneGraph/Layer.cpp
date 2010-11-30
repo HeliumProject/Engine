@@ -69,9 +69,9 @@ tstring Layer::GetApplicationTypeName() const
 // dependency graph (representing what objects are members of the layer) from
 // the list of ids stored on the persistent data.
 // 
-void Layer::Initialize(Scene* scene)
+void Layer::Initialize()
 {
-    __super::Initialize(scene);
+    __super::Initialize();
 
     m_Descendants.clear();
 

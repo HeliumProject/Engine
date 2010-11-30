@@ -35,7 +35,7 @@ namespace Helium
             EntityInstance();
             ~EntityInstance();
 
-            virtual void Initialize( Scene* scene ) HELIUM_OVERRIDE;
+            virtual void Initialize() HELIUM_OVERRIDE;
 
             virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
             virtual const Component::ComponentPtr& GetComponent( int32_t typeID ) const HELIUM_OVERRIDE;

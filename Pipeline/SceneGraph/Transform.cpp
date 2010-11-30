@@ -61,9 +61,9 @@ Transform::~Transform()
 
 }
 
-void Transform::Initialize(Scene* scene)
+void Transform::Initialize()
 {
-    __super::Initialize(scene);
+    __super::Initialize();
 
     SceneGraph::PrimitiveAxes* axes = static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
     m_ObjectBounds.minimum = Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);

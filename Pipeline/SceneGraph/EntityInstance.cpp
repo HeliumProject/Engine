@@ -64,9 +64,9 @@ EntityInstance::~EntityInstance()
     }
 }
 
-void EntityInstance::Initialize( Scene* scene )
+void EntityInstance::Initialize()
 {
-    __super::Initialize( scene );
+    __super::Initialize();
 
     CheckSets();
 }

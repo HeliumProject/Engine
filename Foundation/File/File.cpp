@@ -12,8 +12,135 @@
 #include "Platform/Environment.h"
 #include "Platform/Process.h"
 
-
 using namespace Helium;
+
+/// Get the full path to the base directory of the application.
+///
+/// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
+///
+/// @return  Application base directory path, with a trailing path separator character.
+static Path& GetMutableBaseDirectory( bool& rbSuccess )
+{
+    static Path baseDirectory;
+    static bool bLocateRequested = false;
+    static bool bLocateSuccess = false;
+
+    rbSuccess = bLocateSuccess;
+
+    if( !bLocateRequested )
+    {
+        bLocateRequested = true;
+
+        baseDirectory.Set( Helium::GetProcessPath() );
+
+        // Strip the executable file.
+        // Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
+        // Strip the platform binary subdirectory (i.e. x32, x64).
+        // Strip the "Bin" directory.
+        baseDirectory.Set( baseDirectory.Directory() + TXT( "../../.." ) );
+
+        if( !baseDirectory.Exists() )
+        {
+            baseDirectory.Clear();
+
+            return baseDirectory;
+        }
+
+        baseDirectory += TXT( "/" );
+        bLocateSuccess = true;
+        rbSuccess = true;
+    }
+
+    return baseDirectory;
+}
+
+/// Get the full path to the base directory in which data files are stored.
+///
+/// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
+///
+/// @return  Data directory path, with a trailing path separator character.
+static Path& GetMutableDataDirectory( bool& rbSuccess )
+{
+    static Path dataDirectory;
+    static bool bLocateRequested = false;
+    static bool bLocateSuccess = false;
+
+    rbSuccess = bLocateSuccess;
+
+    if( !bLocateRequested )
+    {
+        bLocateRequested = true;
+
+        // Get the application base directory.
+        bool bBaseDirectorySuccess;
+        dataDirectory = GetMutableBaseDirectory( bBaseDirectorySuccess );
+        if( !bBaseDirectorySuccess )
+        {
+            dataDirectory.Clear();
+
+            return dataDirectory;
+        }
+
+        dataDirectory += TXT( "Data" );
+        if( !dataDirectory.Exists() )
+        {
+            dataDirectory.Clear();
+
+            return dataDirectory;
+        }
+
+        dataDirectory += TXT( "/" );
+        bLocateSuccess = true;
+        rbSuccess = true;
+    }
+
+    return dataDirectory;
+}
+
+/// Get the full path to the base directory in which user data is stored.
+///
+/// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
+///
+/// @return  User data directory path, with a trailing path separator character.
+static Path& GetMutableUserDataDirectory( bool& rbSuccess )
+{
+    static Path userDataDirectory;
+    static bool bLocateRequested = false;
+    static bool bLocateSuccess = false;
+
+    rbSuccess = bLocateSuccess;
+
+    if( !bLocateRequested )
+    {
+        bLocateRequested = true;
+
+        tstring prefsDir;
+        if( !Helium::GetPreferencesDirectory( prefsDir ) )
+        {
+            return userDataDirectory;
+        }
+
+        String subDirectory = AppInfo::GetName();
+        if( subDirectory.IsEmpty() )
+        {
+            subDirectory = TXT( "Lunar" );
+        }
+
+        userDataDirectory.Set( prefsDir + TXT( "/" ) + subDirectory.GetData() );
+        if( !userDataDirectory.MakePath() )
+        {
+            userDataDirectory.Clear();
+
+            return userDataDirectory;
+        }
+
+        userDataDirectory += TXT( "/" );
+        bLocateSuccess = true;
+        rbSuccess = true;
+    }
+
+    return userDataDirectory;
+}
 
 /// Free any statically allocated resources.
 ///
@@ -61,108 +188,6 @@ FileStream* File::Open( const String& rPath, uint32_t modeFlags, bool bTruncate 
     return Open( *rPath, modeFlags, bTruncate );
 }
 
-
-/// Get the full path to the base directory of the application.
-///
-/// @return  Application base directory path, with a trailing path separator character.
-static bool GetMutableBaseDirectory( Path& path )
-{
-    static Path baseDirectory;
-    static bool bLocateRequested = false;
-
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
-
-        baseDirectory.Set( Helium::GetProcessPath() );
-
-        // Strip the executable file.
-        // Strip the configuration type subdirectory (i.e. Debug, Intermediate, Release, etc.).
-        // Strip the platform binary subdirectory (i.e. x32, x64).
-        // Strip the "Bin" directory.
-        baseDirectory.Set( baseDirectory.Directory() + TXT( "../../../" ) );
-
-        if( !baseDirectory.Exists() )
-        {
-            bLocateRequested = false;
-            return false;
-        }
-    }
-
-    path = baseDirectory;
-    return true;
-}
-
-/// Get the full path to the base directory in which data files are stored.
-///
-/// @return  Data directory path, with a trailing path separator character.
-static bool GetMutableDataDirectory( Path& path )
-{
-    static Path dataDirectory;
-    static bool bLocateRequested = false;
-
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
-
-        // Get the application base directory.
-        if ( !GetMutableBaseDirectory( dataDirectory ) )
-        {
-            return false;
-        }
-
-        dataDirectory += TXT( "Data/" );
-
-        if( !dataDirectory.Exists() )
-        {
-            bLocateRequested = false;
-            return false;
-        }
-    }
-
-    path = dataDirectory;
-    return true;
-}
-
-/// Get the full path to the base directory in which user data is stored.
-///
-/// @return  User data directory path, with a trailing path separator character.
-static bool GetMutableUserDataDirectory( Path& path )
-{
-    static Path userDataDirectory;
-    static bool bLocateRequested = false;
-
-    if( !bLocateRequested )
-    {
-        bLocateRequested = true;
-
-        tstring prefsDir;
-        if ( !Helium::GetPreferencesDirectory( prefsDir ) )
-        {
-            bLocateRequested = false;
-            return false;
-        }
-
-
-        String subDirectory = AppInfo::GetName();
-        if( subDirectory.IsEmpty() )
-        {
-            subDirectory = TXT( "Lunar" );
-        }
-
-        userDataDirectory.Set( prefsDir + TXT( "/" ) + subDirectory.GetData() + TXT( "/" ) );
-
-        if ( !userDataDirectory.MakePath() )
-        {
-            bLocateRequested = false;
-            return false;
-        }
-    }
-
-    path = userDataDirectory;
-    return true;
-}
-
 /// Create a new file stream object for this platform.
 ///
 /// @return  File stream object.
@@ -181,7 +206,10 @@ FileStream* File::CreateStream()
 /// @see GetDataDirectory(), GetUserDataDirectory()
 const bool File::GetBaseDirectory( Path& path )
 {
-    return GetMutableBaseDirectory( path );
+    bool bSuccess;
+    path = GetMutableBaseDirectory( bSuccess );
+
+    return bSuccess;
 }
 
 /// Get the full path to the base directory in which data files are stored.
@@ -191,7 +219,10 @@ const bool File::GetBaseDirectory( Path& path )
 /// @see GetBaseDirectory(), GetUserDataDirectory()
 const bool File::GetDataDirectory( Path& path )
 {
-    return GetMutableDataDirectory( path );
+    bool bSuccess;
+    path = GetMutableDataDirectory( bSuccess );
+
+    return bSuccess;
 }
 
 /// Get the full path to the base directory in which user-specific data files are stored.
@@ -201,15 +232,19 @@ const bool File::GetDataDirectory( Path& path )
 /// @see GetBaseDirectory(), GetDataDirectory()
 const bool File::GetUserDataDirectory( Path& path )
 {
-    return GetMutableUserDataDirectory( path );
+    bool bSuccess;
+    path = GetMutableUserDataDirectory( bSuccess );
+
+    return bSuccess;
 }
 
 /// Free any resources statically allocated for platform-specific purposes.
 void File::PlatformShutdown()
 {
-    //GetMutableUserDataDirectory().Clear();
-    //GetMutableDataDirectory().Clear();
-    //GetMutableBaseDirectory().Clear();
+    bool bSuccess;
+    GetMutableUserDataDirectory( bSuccess ).Clear();
+    GetMutableDataDirectory( bSuccess ).Clear();
+    GetMutableBaseDirectory( bSuccess ).Clear();
 }
 
 

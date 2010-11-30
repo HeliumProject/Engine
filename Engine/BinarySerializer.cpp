@@ -49,7 +49,7 @@ namespace Lunar
         // Serialize the object type reference.
         Type* pType = pObject->GetType();
         HELIUM_ASSERT( pType );
-        uint32_t typeIndex = ResolveDependency( pType->GetPath() );
+        uint32_t typeIndex = ResolveTypeDependency( pType->GetName() );
         HELIUM_ASSERT( IsValid( typeIndex ) );
         m_pPropertyStream->Write( &typeIndex, sizeof( typeIndex ), 1 );
 
@@ -58,13 +58,9 @@ namespace Lunar
         SetInvalid( templateIndex );
 
         GameObject* pTemplate = pObject->GetTemplate();
-        if( pTemplate != pType->GetTypeTemplate() )
-        {
-            HELIUM_ASSERT( pTemplate );
-            templateIndex = ResolveDependency( pTemplate->GetPath() );
-            HELIUM_ASSERT( IsValid( templateIndex ) );
-        }
-
+        HELIUM_ASSERT( pTemplate );
+        templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
+        HELIUM_ASSERT( IsValid( templateIndex ) );
         m_pPropertyStream->Write( &templateIndex, sizeof( templateIndex ), 1 );
 
         // Serialize the object owner.
@@ -74,7 +70,7 @@ namespace Lunar
         GameObject* pOwner = pObject->GetOwner();
         if( pOwner )
         {
-            ownerIndex = ResolveDependency( pOwner->GetPath() );
+            ownerIndex = ResolveObjectDependency( pOwner->GetPath() );
             HELIUM_ASSERT( IsValid( ownerIndex ) );
         }
 
@@ -291,7 +287,7 @@ namespace Lunar
             GameObject* pObject = rspObject.Get();
             if( pObject )
             {
-                objectIndex = ResolveDependency( pObject->GetPath() );
+                objectIndex = ResolveObjectDependency( pObject->GetPath() );
                 HELIUM_ASSERT( IsValid( objectIndex ) );
             }
 
@@ -321,7 +317,8 @@ namespace Lunar
     {
         HELIUM_ASSERT( !m_directPropertyStream.IsOpen() );
 
-        m_dependencies.Clear();
+        m_typeDependencies.Clear();
+        m_objectDependencies.Clear();
 
         m_propertyStreamBuffer.Resize( 0 );
         m_directPropertyStream.Open( &m_propertyStreamBuffer );
@@ -348,61 +345,111 @@ namespace Lunar
     {
         HELIUM_ASSERT( pStream );
 
-        HELIUM_ASSERT( m_dependencies.GetSize() <= UINT32_MAX );
-        uint32_t dependencyCount = static_cast< uint32_t >( m_dependencies.GetSize() );
+        // Write the type and object link tables first.
+        uint32_t dependencyCount;
+        uint_fast32_t dependencyCountFast;
+
+        HELIUM_ASSERT( m_typeDependencies.GetSize() <= UINT32_MAX );
+        dependencyCount = static_cast< uint32_t >( m_typeDependencies.GetSize() );
+        pStream->Write( &dependencyCount, sizeof( dependencyCount ), 1 );
+
+        dependencyCountFast = dependencyCount;
+        for( uint_fast32_t dependencyIndex = 0; dependencyIndex < dependencyCountFast; ++dependencyIndex )
+        {
+            const tchar_t* pTypeName = *m_typeDependencies[ dependencyIndex ];
+
+            size_t typeNameSize = StringLength( pTypeName );
+            HELIUM_ASSERT( typeNameSize <= UINT32_MAX );
+            uint32_t typeNameSize32 = static_cast< uint32_t >( typeNameSize );
+            pStream->Write( &typeNameSize32, sizeof( typeNameSize32 ), 1 );
+            if( typeNameSize )
+            {
+                pStream->Write( pTypeName, sizeof( tchar_t ), typeNameSize );
+            }
+        }
+
+        HELIUM_ASSERT( m_objectDependencies.GetSize() <= UINT32_MAX );
+        dependencyCount = static_cast< uint32_t >( m_objectDependencies.GetSize() );
         pStream->Write( &dependencyCount, sizeof( dependencyCount ), 1 );
 
         String pathString;
 
-        uint_fast32_t dependencyCountFast = dependencyCount;
+        dependencyCountFast = dependencyCount;
         for( uint_fast32_t dependencyIndex = 0; dependencyIndex < dependencyCountFast; ++dependencyIndex )
         {
-            m_dependencies[ dependencyIndex ].ToString( pathString );
+            m_objectDependencies[ dependencyIndex ].ToString( pathString );
 
-            HELIUM_ASSERT( pathString.GetSize() <= UINT32_MAX );
-            uint32_t pathStringSize = static_cast< uint32_t >( pathString.GetSize() );
-            pStream->Write( &pathStringSize, sizeof( pathStringSize ), 1 );
-
-            uint_fast32_t pathStringSizeFast = pathStringSize;
-            for( uint_fast32_t characterIndex = 0; characterIndex < pathStringSizeFast; ++characterIndex )
+            size_t pathStringSize = pathString.GetSize();
+            HELIUM_ASSERT( pathStringSize <= UINT32_MAX );
+            uint32_t pathStringSize32 = static_cast< uint32_t >( pathString.GetSize() );
+            pStream->Write( &pathStringSize32, sizeof( pathStringSize32 ), 1 );
+            if( pathStringSize )
             {
-                tchar_t character = pathString[ characterIndex ];
-                pStream->Write( &character, sizeof( character ), 1 );
+                pStream->Write( pathString.GetData(), sizeof( tchar_t ), pathStringSize );
             }
         }
 
+        // Write the serialized data to the output stream.
         pStream->Write( m_propertyStreamBuffer.GetData(), 1, m_propertyStreamBuffer.GetSize() );
+    }
+
+    /// Resolve a dependency on a type reference.
+    ///
+    /// @param[in] typeName  Type name.
+    ///
+    /// @return  Dependency index.
+    ///
+    /// @see ResolveObjectDependency()
+    uint32_t BinarySerializer::ResolveTypeDependency( Name typeName )
+    {
+        uint32_t typeIndex;
+        SetInvalid( typeIndex );
+
+        if( !typeName.IsEmpty() )
+        {
+            size_t dependencyCount = m_typeDependencies.GetSize();
+            for( size_t dependencyIndex = 0; dependencyIndex < dependencyCount; ++dependencyIndex )
+            {
+                if( m_typeDependencies[ dependencyIndex ] == typeName )
+                {
+                    return static_cast< uint32_t >( dependencyIndex );
+                }
+            }
+
+            HELIUM_ASSERT( dependencyCount < UINT32_MAX );
+            m_typeDependencies.Push( typeName );
+            typeIndex = static_cast< uint32_t >( dependencyCount );
+        }
+
+        return typeIndex;
     }
 
     /// Resolve a dependency on an object reference.
     ///
-    /// @param[in] path  GameObject path.
+    /// @param[in] path  Object path.
     ///
     /// @return  Dependency index.
-    uint32_t BinarySerializer::ResolveDependency( GameObjectPath path )
+    ///
+    /// @see ResolveTypeDependency()
+    uint32_t BinarySerializer::ResolveObjectDependency( GameObjectPath path )
     {
         uint32_t objectIndex;
         SetInvalid( objectIndex );
 
         if( !path.IsEmpty() )
         {
-            size_t dependencyCount = m_dependencies.GetSize();
+            size_t dependencyCount = m_objectDependencies.GetSize();
             for( size_t dependencyIndex = 0; dependencyIndex < dependencyCount; ++dependencyIndex )
             {
-                if( m_dependencies[ dependencyIndex ] == path )
+                if( m_objectDependencies[ dependencyIndex ] == path )
                 {
-                    objectIndex = static_cast< uint32_t >( dependencyIndex );
-
-                    break;
+                    return static_cast< uint32_t >( dependencyIndex );
                 }
             }
 
-            if( IsInvalid( objectIndex ) )
-            {
-                HELIUM_ASSERT( dependencyCount < UINT32_MAX );
-                m_dependencies.Push( path );
-                objectIndex = static_cast< uint32_t >( dependencyCount );
-            }
+            HELIUM_ASSERT( dependencyCount < UINT32_MAX );
+            m_objectDependencies.Push( path );
+            objectIndex = static_cast< uint32_t >( dependencyCount );
         }
 
         return objectIndex;

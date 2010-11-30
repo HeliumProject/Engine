@@ -143,7 +143,7 @@ namespace Lunar
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "Layer::CreateEntity(): Type \"%s\" specified is not an entity type.\n" ),
-                *pType->GetPath().ToString() );
+                *pType->GetName() );
 
             return NULL;
         }
@@ -166,7 +166,7 @@ namespace Lunar
                 ( TXT( "Layer::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in layer package \"%s\" " )
                   TXT( "(template: %s; assign instance index: %s).\n" ) ),
                 *name,
-                *pType->GetPath().ToString(),
+                *pType->GetName(),
                 *m_spPackage->GetPath().ToString(),
                 ( pTemplate ? *pTemplate->GetPath().ToString() : TXT( "none" ) ),
                 ( bAssignInstanceIndex ? TXT( "yes" ) : TXT( "no" ) ) );

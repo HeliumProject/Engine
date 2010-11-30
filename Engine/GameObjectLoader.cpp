@@ -817,7 +817,7 @@ namespace Lunar
                     TRACE_ERROR,
                     TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
                     *pObject->GetPath().ToString(),
-                    *pType->GetPath().ToString() );
+                    *pType->GetName() );
 
                 m_bError = true;
             }

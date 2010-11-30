@@ -89,17 +89,17 @@ namespace Lunar
             /// End of the serialized persistent resource data.
             uint8_t* pPersistentResourceStreamEnd;
 
-            /// Link table (table stores load request IDs for objects to link).
-            DynArray< size_t > linkTable;
+            /// Type link table (table stores type object instances).
+            DynArray< TypePtr > typeLinkTable;
+            /// Object link table (table stores load request IDs for objects to link).
+            DynArray< size_t > objectLinkTable;
 
             /// Cached type reference.
-            GameObjectPtr spType;
+            TypePtr spType;
             /// Cached template reference.
             GameObjectPtr spTemplate;
             /// Cached owner reference.
             GameObjectPtr spOwner;
-            /// Type link table index.
-            uint32_t typeLinkIndex;
             /// Template link table index.
             uint32_t templateLinkIndex;
             /// Owner link reference.
@@ -128,7 +128,7 @@ namespace Lunar
         /// @name Static Private Utility Functions
         //@{
         static void ResolvePackage( GameObjectPtr& spPackage, GameObjectPath packagePath );
-        static bool DeserializeLinkTable( LoadRequest* pRequest );
+        static bool DeserializeLinkTables( LoadRequest* pRequest );
         //@}
     };
 }

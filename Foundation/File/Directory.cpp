@@ -151,6 +151,7 @@ bool Directory::Find()
             else
             {
                 m_Item.m_Path = m_Path;
+                m_Item.m_Path += TXT( "/" );
                 m_Item.m_Path += foundFile.m_Filename;
             }
             m_Item.m_CreateTime = foundFile.m_Stat.m_CreatedTime;

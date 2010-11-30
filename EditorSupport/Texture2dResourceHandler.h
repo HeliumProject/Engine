@@ -33,7 +33,7 @@ namespace Lunar
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(
-            ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const Path& rSourceFilePath );
+            ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
         //@}
     };
 }

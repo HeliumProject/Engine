@@ -124,8 +124,9 @@ namespace Lunar
 
         Type* pType = pObject->GetType();
         HELIUM_ASSERT( pType );
-        pType->GetPath().ToString( objectPath );
-        WriteStringAsUtf8( m_pStream, objectPath.GetData(), objectPath.GetSize(), true );
+        pNameString = pType->GetName().Get();
+        HELIUM_ASSERT( pNameString );
+        WriteStringAsUtf8( m_pStream, pNameString, StringLength( pNameString ), true );
 
         m_pStream->Write( OBJECT_TAG_START_C, 1, sizeof( OBJECT_TAG_START_C ) - 1 );
 

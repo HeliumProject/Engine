@@ -76,8 +76,10 @@ namespace Lunar
         //@}
 
     private:
+        /// Type dependency table.
+        DynArray< Name > m_typeDependencies;
         /// GameObject dependency table.
-        DynArray< GameObjectPath > m_dependencies;
+        DynArray< GameObjectPath > m_objectDependencies;
 
         /// GameObject property stream.
         DynamicMemoryStream m_directPropertyStream;
@@ -97,7 +99,8 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        uint32_t ResolveDependency( GameObjectPath path );
+        uint32_t ResolveTypeDependency( Name typeName );
+        uint32_t ResolveObjectDependency( GameObjectPath path );
 
         uint32_t GetCurrentPropertyFlags() const;
         bool ShouldSerializeCurrentProperty() const;

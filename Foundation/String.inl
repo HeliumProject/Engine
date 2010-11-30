@@ -266,6 +266,65 @@ void Helium::StringBase< CharType, Allocator >::Remove( size_t index, size_t cou
     m_buffer.Remove( index, count );
 }
 
+/// Extract a substring from this string.
+///
+/// @param[out] rOutput  Extracted substring.
+/// @param[in]  index    Starting character index.
+/// @param[in]  count    Maximum number of characters to extract.
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+void Helium::StringBase< CharType, Allocator >::Substring(
+    StringBase< CharType, OtherAllocator >& rOutput,
+    size_t index,
+    size_t count ) const
+{
+    size_t stringSize = GetSize();
+    HELIUM_ASSERT( index <= stringSize );
+
+    if( index >= stringSize || count == 0 )
+    {
+        rOutput.Clear();
+
+        return;
+    }
+
+    count = Min( count, stringSize - index );
+    size_t endIndex = index + count;
+
+    if( &rOutput == this )
+    {
+        rOutput.Remove( endIndex, stringSize - endIndex );
+        rOutput.Remove( 0, index );
+
+        return;
+    }
+
+    rOutput.Clear();
+    rOutput.Reserve( count );
+
+    for( ; index < endIndex; ++index )
+    {
+        rOutput.Push( m_buffer[ index ] );
+    }
+}
+
+/// Extract a substring from this string.
+///
+/// @param[in] index  Starting character index.
+/// @param[in] count  Maximum number of characters to extract.
+///
+/// @return  Extracted substring.
+template< typename CharType, typename Allocator >
+Helium::StringBase< CharType, Allocator > Helium::StringBase< CharType, Allocator >::Substring(
+    size_t index,
+    size_t count ) const
+{
+    StringBase output;
+    Substring( output, index, count );
+
+    return output;
+}
+
 /// Get the first character in this string.
 ///
 /// @return  Reference to the first element in this string.

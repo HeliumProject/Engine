@@ -140,7 +140,7 @@ namespace Lunar
 
             // Parse the name, type, and template attributes.
             String objectName;
-            GameObjectPath typePath( NULL_NAME );
+            Name typeName;
             GameObjectPath templatePath( NULL_NAME );
 
             while( *ppAtts != NULL )
@@ -159,12 +159,13 @@ namespace Lunar
 
                 if( StringCompare( pAttName, TXT( "type" ) ) == 0 )
                 {
-                    if( !typePath.Set( pAttValue ) )
+                    typeName.Set( pAttValue );
+                    if( !Type::Find( typeName ) )
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
                             ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") \"%s\" " )
-                              TXT( "is not a valid object path.\n" ) ),
+                              TXT( "is not a valid object type.\n" ) ),
                             line,
                             column,
                             pAttValue );
@@ -210,7 +211,7 @@ namespace Lunar
                 return;
             }
 
-            if( typePath.IsEmpty() )
+            if( typeName.IsEmpty() )
             {
                 HELIUM_TRACE(
                     TRACE_ERROR,
@@ -241,7 +242,7 @@ namespace Lunar
 
             XmlPackageLoader::SerializedObjectData objectData;
             objectData.objectPath = objectPath;
-            objectData.typePath = typePath;
+            objectData.typeName = typeName;
             objectData.templatePath = templatePath;
 
             DynArray< XmlPackageLoader::SerializedObjectData >& rObjects = *pContext->pObjects;
@@ -1030,7 +1031,6 @@ namespace Lunar
             HELIUM_ASSERT( !pRequest->spType );
             HELIUM_ASSERT( !pRequest->spTemplate );
             HELIUM_ASSERT( !pRequest->spOwner );
-            SetInvalid( pRequest->typeLoadId );
             SetInvalid( pRequest->templateLoadId );
             SetInvalid( pRequest->ownerLoadId );
             SetInvalid( pRequest->persistentResourceDataLoadId );
@@ -1066,6 +1066,22 @@ namespace Lunar
             return Invalid< size_t >();
         }
 
+        SerializedObjectData& rObjectData = m_objects[ objectIndex ];
+
+        // Locate the type object.
+        HELIUM_ASSERT( !rObjectData.typeName.IsEmpty() );
+        Type* pType = Type::Find( rObjectData.typeName );
+        if( !pType )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "XmlPackageLoader::BeginLoadObject(): Failed to locate type \"%s\" for loading object \"%s\".\n" ),
+                *rObjectData.typeName,
+                *path.ToString() );
+
+            return Invalid< size_t >();
+        }
+
 #ifndef NDEBUG
         size_t loadRequestSize = m_loadRequests.GetSize();
         for( size_t loadRequestIndex = 0; loadRequestIndex < loadRequestSize; ++loadRequestIndex )
@@ -1090,10 +1106,9 @@ namespace Lunar
         HELIUM_ASSERT( !pRequest->spObject );
         pRequest->index = objectIndex;
         HELIUM_ASSERT( pRequest->linkTable.IsEmpty() );
-        HELIUM_ASSERT( !pRequest->spType );
+        pRequest->spType = pType;
         HELIUM_ASSERT( !pRequest->spTemplate );
         HELIUM_ASSERT( !pRequest->spOwner );
-        SetInvalid( pRequest->typeLoadId );
         SetInvalid( pRequest->templateLoadId );
         SetInvalid( pRequest->ownerLoadId );
         SetInvalid( pRequest->persistentResourceDataLoadId );
@@ -1115,18 +1130,27 @@ namespace Lunar
         {
             HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
 
-            // Begin loading the type, template, and owner objects.  Note that there isn't much reason to check for
-            // failure until we tick this request, as we need to make sure any other load requests for the
-            // type/template/owner that did succeed are properly synced anyway.
-            SerializedObjectData& rObjectData = m_objects[ objectIndex ];
-
+            // Begin loading the template and owner objects.  Note that there isn't much reason to check for failure
+            // until we tick this request, as we need to make sure any other load requests for the template/owner that
+            // did succeed are properly synced anyway.
             GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
             HELIUM_ASSERT( pObjectLoader );
 
-            HELIUM_ASSERT( !rObjectData.typePath.IsEmpty() );
-            pRequest->typeLoadId = pObjectLoader->BeginLoadObject( rObjectData.typePath );
-
-            if( !rObjectData.templatePath.IsEmpty() )
+            if( rObjectData.templatePath.IsEmpty() )
+            {
+                // Make sure the template is fully loaded.
+                GameObject* pTemplate = pType->GetTypeTemplate();
+                rObjectData.templatePath = pTemplate->GetPath();
+                if( pTemplate->IsFullyLoaded() )
+                {
+                    pRequest->spTemplate = pTemplate;
+                }
+                else
+                {
+                    pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
+                }
+            }
+            else
             {
                 pRequest->templateLoadId = pObjectLoader->BeginLoadObject( rObjectData.templatePath );
             }
@@ -1164,19 +1188,9 @@ namespace Lunar
             return false;
         }
 
-        // Sync on type, template, and owner dependencies.
+        // Sync on template and owner dependencies.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
-
-        if( IsValid( pRequest->typeLoadId ) )
-        {
-            if( !pObjectLoader->TryFinishLoad( pRequest->typeLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLoadId );
-        }
 
         if( IsValid( pRequest->templateLoadId ) )
         {
@@ -1468,10 +1482,16 @@ namespace Lunar
                 continue;
             }
 
-            Path fullPath = item.m_Path.GetAbsolutePath( packageDirectoryPath );
-
             // Make sure an object entry doesn't already exist for the file.
-            Name objectName( fullPath.c_str() );
+            String objectNameString( *item.m_Path );
+
+            size_t pathSeparatorLocation = objectNameString.FindReverse( TXT( '/' ) );
+            if( IsValid( pathSeparatorLocation ) )
+            {
+                objectNameString.Substring( objectNameString, pathSeparatorLocation + 1 );
+            }
+
+            Name objectName( objectNameString );
             size_t objectCount = m_objects.GetSize();
             size_t objectIndex;
             for( objectIndex = 0; objectIndex < objectCount; ++objectIndex )
@@ -1509,7 +1529,7 @@ namespace Lunar
                     HELIUM_ASSERT( pExtension );
 
                     size_t extensionLength = StringLength( pExtension );
-                    if( extensionLength > bestHandlerExtensionLength && fullPath.Extension() == pExtension )
+                    if( extensionLength > bestHandlerExtensionLength && objectNameString.EndsWith( pExtension ) )
                     {
                         pBestHandler = pHandler;
                         bestHandlerExtensionLength = extensionLength;
@@ -1529,14 +1549,14 @@ namespace Lunar
                     TRACE_DEBUG,
                     ( TXT( "XmlPackageLoader: Registered source asset file \"%s\" as as instance of resource " )
                       TXT( "type \"%s\" in package \"%s\".\n" ) ),
-                    fullPath.c_str(),
+                    *objectNameString,
                     *pResourceType->GetName(),
                     *m_packagePath.ToString() );
 
                 SerializedObjectData* pObjectData = m_objects.New();
                 HELIUM_ASSERT( pObjectData );
                 HELIUM_VERIFY( pObjectData->objectPath.Set( objectName, false, m_packagePath ) );
-                pObjectData->typePath = pResourceType->GetPath();
+                pObjectData->typeName = pResourceType->GetName();
                 pObjectData->templatePath.Clear();
             }
         }
@@ -1597,38 +1617,9 @@ namespace Lunar
         HELIUM_ASSERT( pRequest->index < m_objects.GetSize() );
         SerializedObjectData& rObjectData = m_objects[ pRequest->index ];
 
-        // Wait for the type, template, and owner objects to load.
+        // Wait for the template and owner objects to load.
         GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
         HELIUM_ASSERT( pObjectLoader );
-
-        if( IsValid( pRequest->typeLoadId ) )
-        {
-            if( !pObjectLoader->TryFinishLoad( pRequest->typeLoadId, pRequest->spType ) )
-            {
-                return false;
-            }
-
-            SetInvalid( pRequest->typeLoadId );
-        }
-
-        Type* pType = DynamicCast< Type >( pRequest->spType.Get() );
-        if( !pType )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "XmlPackageLoader: Failed to load type object for \"%s\".\n" ),
-                *rObjectData.objectPath.ToString() );
-
-            if( pObject )
-            {
-                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
-                pObject->ConditionalFinalizeLoad();
-            }
-
-            pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
-            return true;
-        }
 
         if( !rObjectData.templatePath.IsEmpty() )
         {
@@ -1699,7 +1690,9 @@ namespace Lunar
         HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
         GameObject* pOwner = pRequest->spOwner;
 
-        HELIUM_ASSERT( pType->IsFullyLoaded() );
+        Type* pType = pRequest->spType;
+        HELIUM_ASSERT( pType );
+
         HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
         HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
@@ -1715,8 +1708,8 @@ namespace Lunar
                     ( TXT( "XmlPackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
                       TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
                     *rObjectData.objectPath.ToString(),
-                    *pExistingType->GetPath().ToString(),
-                    *pType->GetPath().ToString() );
+                    *pExistingType->GetName(),
+                    *pType->GetName() );
 
                 pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
                 pObject->ConditionalFinalizeLoad();

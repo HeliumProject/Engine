@@ -19,27 +19,24 @@
 #define HELIUM_USE_EXTERNAL_HEAP 1
 #endif
 
-/// Define a dynamic memory heap, associating it with the given name in non-release builds.
+/// Define the parameter list for a dynamic memory heap, associating it with the given name in non-release builds.
 ///
-/// @param[in] OBJECT_NAME  Name of the memory heap object.
 /// @param[in] NAME_STRING  Name string to assign to the heap.
 #if HELIUM_RELEASE || HELIUM_PROFILE
-#define HELIUM_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Helium::DynamicMemoryHeap OBJECT_NAME
+#define HELIUM_DYNAMIC_MEMORY_HEAP_INIT( NAME_STRING )
 #else
-#define HELIUM_DYNAMIC_MEMORY_HEAP( OBJECT_NAME, NAME_STRING ) Helium::DynamicMemoryHeap OBJECT_NAME( NAME_STRING )
+#define HELIUM_DYNAMIC_MEMORY_HEAP_INIT( NAME_STRING ) ( NAME_STRING )
 #endif
 
-/// Define a fixed-capacity dynamic memory heap, associating it with the given name in non-release builds.
+/// Define the parameter list for a fixed-capacity dynamic memory heap, associating it with the given name in
+/// non-release builds.
 ///
-/// @param[in] OBJECT_NAME  Name of the memory heap object.
 /// @param[in] NAME_STRING  Name string to assign to the heap.
 /// @param[in] CAPACITY     Heap capacity, in bytes.
 #if HELIUM_RELEASE || HELIUM_PROFILE
-#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
-    Helium::DynamicMemoryHeap OBJECT_NAME( CAPACITY )
+#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP_INIT( NAME_STRING, CAPACITY ) ( CAPACITY )
 #else
-#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP( OBJECT_NAME, NAME_STRING, CAPACITY ) \
-    Helium::DynamicMemoryHeap OBJECT_NAME( NAME_STRING, CAPACITY )
+#define HELIUM_DYNAMIC_MEMORY_HEAP_CAP_INIT( NAME_STRING, CAPACITY ) ( NAME_STRING, CAPACITY )
 #endif
 
 /// Define the default memory heap for the current module.
@@ -53,8 +50,14 @@
     { \
         DynamicMemoryHeap& HELIUM_MODULE_HEAP_FUNCTION() \
         { \
-            static HELIUM_DYNAMIC_MEMORY_HEAP( moduleHeap, TXT( #MODULE_NAME ) ); \
-            return moduleHeap; \
+            static DynamicMemoryHeap* pModuleHeap = NULL; \
+            if( !pModuleHeap ) \
+            { \
+                pModuleHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) ) \
+                    DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( #MODULE_NAME ) ); \
+            } \
+            \
+            return *pModuleHeap; \
         } \
     }
 

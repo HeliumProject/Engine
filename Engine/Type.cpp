@@ -248,9 +248,7 @@ namespace Lunar
 
         // Register the type (note that a type with the same name should not already exist in the lookup map).
         LookupMap::Accessor typeAccessor;
-        HELIUM_VERIFY( sm_pLookupMap->Insert(
-            typeAccessor,
-            std::pair< const Name, Type* >( pType->GetName(), pType ) ) );
+        HELIUM_VERIFY( sm_pLookupMap->Insert( typeAccessor, KeyValue< Name, TypePtr >( pType->GetName(), pType ) ) );
 
         return pType;
     }
@@ -285,7 +283,7 @@ namespace Lunar
             LookupMap::ConstAccessor typeAccessor;
             if( sm_pLookupMap->Find( typeAccessor, typeName ) )
             {
-                pType = typeAccessor->second;
+                pType = typeAccessor->Second();
                 HELIUM_ASSERT( pType );
             }
         }

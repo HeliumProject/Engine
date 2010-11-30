@@ -121,8 +121,14 @@ ThreadLocalPointer& ThreadLocalStackAllocator::GetMemoryHeapTls()
 /// @return  Reference to the default dynamic memory heap.
 DynamicMemoryHeap& GetDefaultHeap()
 {
-    static HELIUM_DYNAMIC_MEMORY_HEAP( defaultHeap, TXT( "Default" ) );
-    return defaultHeap;
+    static DynamicMemoryHeap* pDefaultHeap = NULL;
+    if( !pDefaultHeap )
+    {
+        pDefaultHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) )
+            DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "Default" ) );
+    }
+
+    return *pDefaultHeap;
 }
 #endif
 
@@ -132,7 +138,13 @@ DynamicMemoryHeap& GetDefaultHeap()
 /// @return  Reference for the external allocation fallback heap.
 DynamicMemoryHeap& GetExternalHeap()
 {
-    static HELIUM_DYNAMIC_MEMORY_HEAP( externalHeap, TXT( "External" ) );
-    return externalHeap;
+    static DynamicMemoryHeap* pExternalHeap = NULL;
+    if( !pExternalHeap )
+    {
+        pExternalHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) )
+            DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "External" ) );
+    }
+
+    return *pExternalHeap;
 }
 #endif

@@ -456,9 +456,9 @@ namespace Lunar
                 if( bFoundChildMap )
                 {
                     NameInstanceIndexMap::ConstAccessor indexSetAccessor;
-                    if( childNameMapAccessor->second.Find( indexSetAccessor, m_name ) )
+                    if( childNameMapAccessor->Second().Find( indexSetAccessor, m_name ) )
                     {
-                        const InstanceIndexSet& rIndexSet = indexSetAccessor->second;
+                        const InstanceIndexSet& rIndexSet = indexSetAccessor->Second();
                         InstanceIndexSet::ConstAccessor indexAccessor;
                         while( rIndexSet.Find( indexAccessor, newInstanceIndex ) )
                         {
@@ -1312,11 +1312,11 @@ namespace Lunar
 
         GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
 
-        std::pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
-        childMapEntry.first = ownerPath;
+        Pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
+        childMapEntry.First() = ownerPath;
 
-        std::pair< Name, InstanceIndexSet > indexSetEntry;
-        indexSetEntry.first = m_name;
+        Pair< Name, InstanceIndexSet > indexSetEntry;
+        indexSetEntry.First() = m_name;
 
         ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
 
@@ -1324,10 +1324,10 @@ namespace Lunar
         rNameInstanceIndexMap.Insert( childMapAccessor, childMapEntry );
 
         NameInstanceIndexMap::Accessor nameMapAccessor;
-        childMapAccessor->second.Insert( nameMapAccessor, indexSetEntry );
+        childMapAccessor->Second().Insert( nameMapAccessor, indexSetEntry );
 
         InstanceIndexSet::Accessor indexSetAccessor;
-        HELIUM_VERIFY( nameMapAccessor->second.Insert( indexSetAccessor, m_instanceIndex ) );
+        HELIUM_VERIFY( nameMapAccessor->Second().Insert( indexSetAccessor, m_instanceIndex ) );
     }
 
     /// Remove the tracking information for the instance index associated with this object.
@@ -1347,11 +1347,11 @@ namespace Lunar
         ChildNameInstanceIndexMap::Accessor childMapAccessor;
         HELIUM_VERIFY( rNameInstanceIndexMap.Find( childMapAccessor, ownerPath ) );
 
-        NameInstanceIndexMap& rNameMap = childMapAccessor->second;
+        NameInstanceIndexMap& rNameMap = childMapAccessor->Second();
         NameInstanceIndexMap::Accessor nameMapAccessor;
         HELIUM_VERIFY( rNameMap.Find( nameMapAccessor, m_name ) );
 
-        InstanceIndexSet& rIndexSet = nameMapAccessor->second;
+        InstanceIndexSet& rIndexSet = nameMapAccessor->Second();
         HELIUM_VERIFY( rIndexSet.Remove( m_instanceIndex ) );
         /*
         if( rIndexSet.IsEmpty() )

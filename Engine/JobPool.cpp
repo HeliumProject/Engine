@@ -24,7 +24,7 @@ namespace Lunar
         AllocationPoolMap::Accessor poolAccessor;
         for( m_allocationPools.First( poolAccessor ); poolAccessor.IsValid(); ++poolAccessor )
         {
-            AllocationHeader* pHeader = poolAccessor->second;
+            AllocationHeader* pHeader = poolAccessor->Second();
             while( pHeader )
             {
                 AllocationHeader* pNext = pHeader->pNext;
@@ -64,7 +64,7 @@ namespace Lunar
 
         // Pop the allocation off the head of the pool.
         AllocationHeader* pTestHeader;
-        AllocationHeader* pHeader = poolAccessor->second;
+        AllocationHeader* pHeader = poolAccessor->Second();
         do
         {
             pTestHeader = pHeader;
@@ -77,7 +77,7 @@ namespace Lunar
             HELIUM_ASSERT( pNext != pTestHeader );
 
             pHeader = AtomicCompareExchangeRelease(
-                const_cast< AllocationHeader*& >( poolAccessor->second ),
+                const_cast< AllocationHeader*& >( poolAccessor->Second() ),
                 pNext,
                 pTestHeader );
         } while( pHeader != pTestHeader );
@@ -111,20 +111,20 @@ namespace Lunar
 
         // Update the appropriate allocation pool, initializing a new pool if a pool for the specified size does not yet
         // exist.
-        std::pair< size_t, AllocationHeader* > poolEntry( size, pHeader );
+        KeyValue< size_t, AllocationHeader* > poolEntry( size, pHeader );
 
         AllocationPoolMap::ConstAccessor poolAccessor;
         if( !m_allocationPools.Insert( poolAccessor, poolEntry ) )
         {
             AllocationHeader* pTestNext;
-            AllocationHeader* pNext = poolAccessor->second;
+            AllocationHeader* pNext = poolAccessor->Second();
             do
             {
                 pTestNext = pNext;
                 pHeader->pNext = pTestNext;
 
                 pNext = AtomicCompareExchangeRelease(
-                    const_cast< AllocationHeader*& >( poolAccessor->second ),
+                    const_cast< AllocationHeader*& >( poolAccessor->Second() ),
                     pHeader,
                     pTestNext );
             } while( pNext != pTestNext );

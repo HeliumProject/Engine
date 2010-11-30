@@ -97,14 +97,13 @@ void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 
         if ( image.Ok() && downArrowImage.Ok() )
         {
-            IconArtFile::Paste( image, bitmap.ConvertToImage(), 0, 0, true );
+            image.Paste( bitmap.ConvertToImage(), 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSITE );
 
-
-            IconArtFile::Paste( image,
+            image.Paste(
                 ( which == wxButtonBase::State_Disabled ? downArrowImage.ConvertToDisabled() : downArrowImage ),
                 ( width - downArrowImage.GetWidth() ),
                 ( height/2 - downArrowImage.GetHeight()/2 ),
-                true );
+                wxIMAGE_ALPHA_BLEND_COMPOSITE );
             
             wxBitmap newBitmap = wxBitmap( image );
             __super::DoSetBitmap( newBitmap, which );

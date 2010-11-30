@@ -4,9 +4,9 @@
 ///
 /// @return  Constant reference to the key.
 template< typename Key, typename Data >
-const Key& Helium::ConcurrentHashMapExtractKey< Key, Data >::operator()( const std::pair< Key, Data >& rValue ) const
+const Key& Helium::ConcurrentHashMapExtractKey< Key, Data >::operator()( const KeyValue< Key, Data >& rValue ) const
 {
-    return rValue.first;
+    return rValue.First();
 }
 
 /// Constructor.

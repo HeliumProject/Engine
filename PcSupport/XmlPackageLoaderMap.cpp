@@ -25,7 +25,7 @@ namespace Lunar
         {
             do
             {
-                XmlPackageLoader* pLoader = loaderAccessor->second;
+                XmlPackageLoader* pLoader = loaderAccessor->Second();
                 HELIUM_ASSERT( pLoader );
 
                 delete pLoader;
@@ -65,7 +65,7 @@ namespace Lunar
         ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::ConstAccessor constMapAccessor;
         if( m_packageLoaderMap.Find( constMapAccessor, packagePath ) )
         {
-            XmlPackageLoader* pLoader = constMapAccessor->second;
+            XmlPackageLoader* pLoader = constMapAccessor->Second();
             HELIUM_ASSERT( pLoader );
 
             return pLoader;
@@ -75,7 +75,7 @@ namespace Lunar
         ConcurrentHashMap< GameObjectPath, XmlPackageLoader* >::Accessor mapAccessor;
         bool bInserted = m_packageLoaderMap.Insert(
             mapAccessor,
-            std::pair< GameObjectPath, XmlPackageLoader* >( packagePath, NULL ) );
+            KeyValue< GameObjectPath, XmlPackageLoader* >( packagePath, NULL ) );
         if( bInserted )
         {
             // Entry added, so create and initialize the package loader.
@@ -98,10 +98,10 @@ namespace Lunar
 
             HELIUM_VERIFY( pLoader->BeginPreload() );
 
-            mapAccessor->second = pLoader;
+            mapAccessor->Second() = pLoader;
         }
 
-        XmlPackageLoader* pLoader = mapAccessor->second;
+        XmlPackageLoader* pLoader = mapAccessor->Second();
         HELIUM_ASSERT( pLoader );
 
         return pLoader;
@@ -120,7 +120,7 @@ namespace Lunar
         {
             do
             {
-                XmlPackageLoader* pLoader = loaderAccessor->second;
+                XmlPackageLoader* pLoader = loaderAccessor->Second();
                 HELIUM_ASSERT( pLoader );
                 m_packageLoaderTickArray.Push( pLoader );
 

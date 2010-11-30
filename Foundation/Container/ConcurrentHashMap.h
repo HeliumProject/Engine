@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Foundation/Container/ConcurrentHashTable.h"
+
+#include "Foundation/Container/Pair.h"
 #include "Foundation/Functions.h"
 #include "Foundation/HashFunctions.h"
 
@@ -13,7 +15,7 @@ namespace Helium
     class ConcurrentHashMapExtractKey
     {
     public:
-        const Key& operator()( const std::pair< Key, Data >& rValue ) const;
+        const Key& operator()( const KeyValue< Key, Data >& rValue ) const;
     };
 
     /// Thread-safe hash map container.
@@ -25,7 +27,8 @@ namespace Helium
         typename Allocator = DefaultAllocator >
     class ConcurrentHashMap
         : public ConcurrentHashTable<
-            std::pair< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator >
+            KeyValue< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            Pair< Key, Data > >
     {
     public:
         /// Default hash table bucket count (prime numbers are recommended).
@@ -33,7 +36,8 @@ namespace Helium
 
         /// Parent class type.
         typedef ConcurrentHashTable<
-            std::pair< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator >
+            KeyValue< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            Pair< Key, Data > >
                 Super;
 
         /// Type for hash map keys.

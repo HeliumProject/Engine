@@ -1761,36 +1761,39 @@ namespace Lunar
             return true;
         }
 
-        // If the object is a resource, attempt to begin loading any existing persistent resource data stored in the
-        // object cache.
-        Resource* pResource = DynamicCast< Resource >( pObject );
-        if( pResource )
+        // If the object is a resource (not including the default template object for resource types), attempt to begin
+        // loading any existing persistent resource data stored in the object cache.
+        if( !pObject->IsDefaultTemplate() )
         {
-            Name objectCacheName = pObjectLoader->GetCacheName();
-            CacheManager& rCacheManager = CacheManager::GetStaticInstance();
-
-            Cache* pCache = rCacheManager.GetCache( objectCacheName );
-            HELIUM_ASSERT( pCache );
-            pCache->EnforceTocLoad();
-
-            const Cache::Entry* pEntry = pCache->FindEntry( rObjectData.objectPath, 0 );
-            if( pEntry && pEntry->size != 0 )
+            Resource* pResource = DynamicCast< Resource >( pObject );
+            if( pResource )
             {
-                HELIUM_ASSERT( IsInvalid( pRequest->persistentResourceDataLoadId ) );
-                HELIUM_ASSERT( !pRequest->pCachedObjectDataBuffer );
+                Name objectCacheName = pObjectLoader->GetCacheName();
+                CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-                pRequest->pCachedObjectDataBuffer =
-                    static_cast< uint8_t* >( DefaultAllocator().Allocate( pEntry->size ) );
-                HELIUM_ASSERT( pRequest->pCachedObjectDataBuffer );
-                pRequest->cachedObjectDataBufferSize = pEntry->size;
+                Cache* pCache = rCacheManager.GetCache( objectCacheName );
+                HELIUM_ASSERT( pCache );
+                pCache->EnforceTocLoad();
 
-                AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-                pRequest->persistentResourceDataLoadId = rAsyncLoader.QueueRequest(
-                    pRequest->pCachedObjectDataBuffer,
-                    pCache->GetCacheFileName(),
-                    pEntry->offset,
-                    pEntry->size );
-                HELIUM_ASSERT( IsValid( pRequest->persistentResourceDataLoadId ) );
+                const Cache::Entry* pEntry = pCache->FindEntry( rObjectData.objectPath, 0 );
+                if( pEntry && pEntry->size != 0 )
+                {
+                    HELIUM_ASSERT( IsInvalid( pRequest->persistentResourceDataLoadId ) );
+                    HELIUM_ASSERT( !pRequest->pCachedObjectDataBuffer );
+
+                    pRequest->pCachedObjectDataBuffer =
+                        static_cast< uint8_t* >( DefaultAllocator().Allocate( pEntry->size ) );
+                    HELIUM_ASSERT( pRequest->pCachedObjectDataBuffer );
+                    pRequest->cachedObjectDataBufferSize = pEntry->size;
+
+                    AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+                    pRequest->persistentResourceDataLoadId = rAsyncLoader.QueueRequest(
+                        pRequest->pCachedObjectDataBuffer,
+                        pCache->GetCacheFileName(),
+                        pEntry->offset,
+                        pEntry->size );
+                    HELIUM_ASSERT( IsValid( pRequest->persistentResourceDataLoadId ) );
+                }
             }
         }
 

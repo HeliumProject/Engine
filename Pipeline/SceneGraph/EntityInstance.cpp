@@ -80,7 +80,7 @@ bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) c
         // if the value of the attribute we are setting to is the default value, don't set the attribute, and attempt to remove it if it exists in the Entity
         if ( attr->GetComponentUsage() == ComponentUsages::Overridable )
         {
-            ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
+            ComponentPtr classAttr = entityClass->GetComponent( attr->GetClass() );
 
             if ( attr->Equals( classAttr ) )
             {
@@ -92,10 +92,10 @@ bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) c
     return __super::ValidatePersistent(attr);
 }
 
-const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
+const ComponentPtr& EntityInstance::GetComponent(const Reflect::Class* type) const
 {
     // try to get the attribute from the Entity
-    const ComponentPtr &instAttr = __super::GetComponent( typeID );
+    const ComponentPtr &instAttr = __super::GetComponent( type );
 
     if ( instAttr )
     {
@@ -108,12 +108,12 @@ const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
 
             if ( entityClass.ReferencesObject() )
             {
-                const ComponentPtr &classAttr = entityClass->GetComponent( typeID );
+                const ComponentPtr &classAttr = entityClass->GetComponent( type );
 
                 if ( !classAttr.ReferencesObject() )
                 {
                     // Fan-fucking-tastic
-                    const_cast<EntityInstance*>(this)->RemoveComponent( typeID );
+                    const_cast<EntityInstance*>(this)->RemoveComponent( type );
                     return classAttr;
                 }
             }
@@ -127,7 +127,7 @@ const ComponentPtr& EntityInstance::GetComponent(int32_t typeID) const
 
     if ( entityClass.ReferencesObject() )
     {
-        return entityClass->GetComponent( typeID );
+        return entityClass->GetComponent( type );
     }
 
     return instAttr;
@@ -141,7 +141,7 @@ bool EntityInstance::SetComponent( const ComponentPtr& attr, bool validate, tstr
     if ( entityClass.ReferencesObject() )
     {
         // find the attribute of the corresponding type in the asset class
-        ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
+        ComponentPtr classAttr = entityClass->GetComponent( attr->GetClass() );
 
         // make sure we aren't attempting to pass in an attribute with the same address as the corresponding attribute in the EntityAsset attr
         if ( classAttr == attr )
@@ -184,7 +184,7 @@ tstring EntityInstance::GetApplicationTypeName() const
 SceneNodeTypePtr EntityInstance::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an entity-specific type
-    EntityInstanceType* nodeType = new EntityInstanceType( scene, GetType() );
+    EntityInstanceType* nodeType = new EntityInstanceType( scene, GetClass() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );

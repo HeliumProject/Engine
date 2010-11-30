@@ -38,7 +38,7 @@ namespace Helium
             virtual void Initialize() HELIUM_OVERRIDE;
 
             virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const HELIUM_OVERRIDE;
-            virtual const Component::ComponentPtr& GetComponent( int32_t typeID ) const HELIUM_OVERRIDE;
+            virtual const Component::ComponentPtr& GetComponent( const Reflect::Class* type ) const HELIUM_OVERRIDE;
             virtual bool SetComponent( const Component::ComponentPtr& component, bool validate = true, tstring* error = NULL ) HELIUM_OVERRIDE;
 
             virtual tstring GenerateName() const HELIUM_OVERRIDE;

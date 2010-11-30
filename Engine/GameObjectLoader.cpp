@@ -579,10 +579,13 @@ namespace Lunar
 
             rLinkTable.Resize( 0 );
 
-            // Perform any pre-precaching work.
+            // Perform any pre-precaching work (note that we don't precache anything for the default template object for
+            // a given type).
             OnPrecacheReady( pObject, pRequest->pPackageLoader );
 
-            if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) && pObject->NeedsPrecacheResourceData() )
+            if( !pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) &&
+                !pObject->IsDefaultTemplate() &&
+                pObject->NeedsPrecacheResourceData() )
             {
                 if( !( pRequest->stateFlags & LOAD_FLAG_PRECACHE_STARTED ) )
                 {

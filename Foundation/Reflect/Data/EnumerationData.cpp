@@ -200,7 +200,7 @@ tistream& EnumerationData::operator<< (tistream& stream)
     {
         m_Enumeration->GetElementValue(buf, m_Data.Ref());
 
-        if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+        if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
             Element* element = (Element*)m_Instance;
             element->RaiseChanged( m_Field );

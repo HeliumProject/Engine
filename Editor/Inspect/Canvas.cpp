@@ -76,7 +76,7 @@ void Canvas::RealizeControl( Inspect::Control* control )
 
     if ( this != control )
     {
-        WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetType() );
+        WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetClass() );
         HELIUM_ASSERT( found != m_WidgetCreators.end() );
         WidgetPtr widget = found->second( control );
         HELIUM_ASSERT( widget );

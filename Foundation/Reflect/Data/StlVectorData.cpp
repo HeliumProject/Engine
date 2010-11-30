@@ -105,9 +105,9 @@ void SimpleStlVectorData<T>::Clear()
 }
 
 template < class T >
-int32_t SimpleStlVectorData<T>::GetItemType() const
+const Class* SimpleStlVectorData<T>::GetItemClass() const
 {
-    return Reflect::GetData<T>();
+    return Reflect::GetDataClass<T>();
 }
 
 template < class T >

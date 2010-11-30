@@ -39,7 +39,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            SceneNodeType(SceneGraph::Scene* scene, int32_t instanceType);
+            SceneNodeType(SceneGraph::Scene* scene, const Reflect::Class* instanceClass);
             virtual ~SceneNodeType();
 
             SceneGraph::Scene* GetScene();
@@ -55,8 +55,7 @@ namespace Helium
             virtual void AddInstance(SceneNodePtr n);
             virtual void RemoveInstance(SceneNodePtr n);
             const HM_SceneNodeSmartPtr& GetInstances() const;
-
-            int32_t GetInstanceType() const;
+            const Reflect::Class* GetInstanceClass() const;
 
             virtual void PopulateManifest( Asset::SceneManifest* manifest ) const;
 
@@ -98,7 +97,7 @@ namespace Helium
             HM_SceneNodeSmartPtr m_Instances;
 
             // compile time type id of the instances
-            int32_t m_InstanceType;
+            const Reflect::Class* m_InstanceClass;
         };
 
         typedef Helium::StrongPtr< SceneGraph::SceneNodeType > SceneNodeTypePtr;
@@ -106,7 +105,7 @@ namespace Helium
         typedef std::vector< SceneGraph::SceneNodeType* > V_SceneNodeTypeDumbPtr;
         typedef std::set< SceneGraph::SceneNodeType* > S_SceneNodeTypeDumbPtr;
 
-        typedef stdext::hash_map< int32_t, S_SceneNodeTypeDumbPtr > HMS_TypeToSceneNodeTypeDumbPtr;
+        typedef stdext::hash_map< const Reflect::Class*, S_SceneNodeTypeDumbPtr > HMS_InstanceClassToSceneNodeTypeDumbPtr;
         typedef stdext::hash_map< tstring, SceneNodeTypePtr > HM_StrToSceneNodeTypeSmartPtr;
     }
 }

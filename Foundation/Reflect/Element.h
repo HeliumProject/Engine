@@ -59,7 +59,7 @@ namespace Helium
 
         public:
             // Reflection prototypes
-            static void EnumerateClass( Reflect::Compositor<Element>& comp );
+            static void                 EnumerateClass( Reflect::Compositor<Element>& comp );
 
             // Returns the string to use as the title of this element in UI (uses the UI name of the type info by default)
             virtual const tstring&      GetTitle() const;

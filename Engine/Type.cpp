@@ -216,6 +216,9 @@ namespace Lunar
             return false;
         }
 
+        // Flag the object as the default template object for the type being created.
+        pTemplate->SetFlags( GameObject::FLAG_DEFAULT_TEMPLATE );
+
         // Register the template object with the object system.
         if( !GameObject::RegisterObject( pTemplate ) )
         {

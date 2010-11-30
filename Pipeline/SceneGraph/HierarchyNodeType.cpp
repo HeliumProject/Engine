@@ -23,8 +23,8 @@ void SceneGraph::HierarchyNodeType::CleanupType()
   Reflect::UnregisterClassType< SceneGraph::HierarchyNodeType >();
 }
 
-HierarchyNodeType::HierarchyNodeType( SceneGraph::Scene* scene, int32_t instanceType )
-: SceneGraph::SceneNodeType( scene, instanceType )
+HierarchyNodeType::HierarchyNodeType( SceneGraph::Scene* scene, const Reflect::Class* instanceClass )
+: SceneGraph::SceneNodeType( scene, instanceClass )
 {
   int index = -1;
 

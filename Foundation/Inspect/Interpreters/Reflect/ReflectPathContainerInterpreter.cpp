@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isArray = ( field->m_DataID == Reflect::GetType<PathStlVectorData>() );
-    bool isSet = ( field->m_DataID == Reflect::GetType<PathStlSetData>() );
+    bool isArray = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
+    bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
     bool isContainer = isArray || isSet;
 
     // create the label
@@ -70,13 +70,13 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         {
             // Add button - normal file open dialog
             addButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnAddFile ) );
-            addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
+            addButton->SetClientData( new ClientDataFilter( list, instances.front()->GetClass(), filter ) );
 
             // Add button - opens file browser
             findButton = CreateControl< Button >();
             findButton->a_Icon.Set( TXT( "actions/system-search" ) );
             findButton->ButtonClickedEvent().Add( ButtonClickedSignature::Delegate ( this, &PathContainerInterpreter::OnFindFile ) );
-            findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), filter ) );
+            findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetClass(), filter ) );
 
             // Edit button - attempt to edit the selected file
             editButton = CreateControl< Button >();

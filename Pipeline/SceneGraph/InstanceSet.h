@@ -44,7 +44,7 @@ namespace Helium
 
             virtual ~InstanceSet();
 
-            SceneGraph::InstanceType* GetInstanceType();
+            SceneGraph::InstanceType* GetInstanceClass();
 
             virtual void AddInstance(SceneGraph::Instance* i);
 

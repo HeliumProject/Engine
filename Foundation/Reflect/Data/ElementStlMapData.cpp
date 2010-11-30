@@ -40,9 +40,9 @@ void SimpleElementStlMapData<KeyT>::Clear()
 }
 
 template < class KeyT >
-int32_t SimpleElementStlMapData<KeyT>::GetKeyType() const
+const Class* SimpleElementStlMapData<KeyT>::GetKeyClass() const
 {
-    return Reflect::GetData<KeyT>();
+    return Reflect::GetDataClass<KeyT>();
 }
 
 template < class KeyT >
@@ -199,7 +199,7 @@ void SimpleElementStlMapData<KeyT>::Serialize(Archive& archive) const
             }
 
             ElementPtr elem;
-            archive.GetCache().Create( Reflect::GetData<KeyT>(), elem );
+            archive.GetCache().Create( Reflect::GetDataClass<KeyT>(), elem );
 
             Data* ser = AssertCast<Data>(elem.Ptr());
             ser->ConnectData((void*)&(itr->first));

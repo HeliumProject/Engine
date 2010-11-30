@@ -22,8 +22,8 @@ namespace Helium
             typedef std::pair< ConstDataPtr, ConstDataPtr > ConstValueType;
             typedef std::vector< ConstValueType > V_ConstValueType;
 
-            virtual int32_t GetKeyType() const = 0;
-            virtual int32_t GetValueType() const = 0;
+            virtual const Class* GetKeyClass() const = 0;
+            virtual const Class* GetValueClass() const = 0;
             virtual void GetItems(V_ValueType& items) = 0;
             virtual void GetItems(V_ConstValueType& items) const = 0;
             virtual DataPtr GetItem(const Data* key) = 0;
@@ -32,14 +32,14 @@ namespace Helium
             virtual void RemoveItem(const Data* key) = 0;
         };
 
-        template <class KeyT, class KeySer, class ValueT, class ValueSer>
+        template <class KeyT, class KeyClassT, class ValueT, class ValueClassT>
         class FOUNDATION_API SimpleStlMapData : public StlMapData
         {
         public:
             typedef std::map<KeyT, ValueT> DataType;
             Data::Pointer<DataType> m_Data;
 
-            typedef SimpleStlMapData< KeyT, KeySer, ValueT, ValueSer > StlMapDataT;
+            typedef SimpleStlMapData< KeyT, KeyClassT, ValueT, ValueClassT > StlMapDataT;
             REFLECT_DECLARE_CLASS( StlMapDataT, StlMapData );
 
             SimpleStlMapData();
@@ -50,8 +50,8 @@ namespace Helium
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual int32_t GetKeyType() const HELIUM_OVERRIDE;
-            virtual int32_t GetValueType() const HELIUM_OVERRIDE;
+            virtual const Class* GetKeyClass() const HELIUM_OVERRIDE;
+            virtual const Class* GetValueClass() const HELIUM_OVERRIDE;
             virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
             virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
             virtual DataPtr GetItem(const Data* key) HELIUM_OVERRIDE;

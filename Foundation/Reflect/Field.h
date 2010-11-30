@@ -34,7 +34,7 @@ namespace Helium
             REFLECTION_BASE( ReflectionTypes::Field );
 
         protected:
-            Field(const Composite* type);
+            Field(const Composite* composite);
             virtual ~Field();
 
         public:
@@ -53,16 +53,16 @@ namespace Helium
             // set the name (and UI name if its not set)
             void SetName(const tstring& name);
 
-            const Composite*    m_Type;         // the type we are a field of
-            tstring             m_Name;         // name of this field
-            tstring             m_UIName;       // friendly name
-            uint32_t            m_Size;         // the size of this field
-            uintptr_t           m_Offset;       // the offset to the field
-            uint32_t            m_Flags;        // flags for special behavior
-            int32_t             m_FieldID;      // the unique id of this field
-            int32_t             m_DataID; // type id of the serializer to use
-            DataPtr       m_Default;      // the value of the default
-            CreateObjectFunc    m_Creator;      // function to create a new instance for this field (optional)
+            const Composite*        m_Composite;    // the type we are a field of
+            tstring                 m_Name;         // name of this field
+            tstring                 m_UIName;       // friendly name
+            uint32_t                m_Size;         // the size of this field
+            uintptr_t               m_Offset;       // the offset to the field
+            uint32_t                m_Flags;        // flags for special behavior
+            int32_t                 m_FieldID;      // the unique id of this field
+            const Class*            m_DataClass;     // type id of the serializer to use
+            DataPtr                 m_Default;      // the value of the default
+            CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)
         };
 
         typedef Helium::SmartPtr< Field > FieldPtr;
@@ -91,7 +91,7 @@ namespace Helium
             // creates a suitable serializer (that has a pointer to the enum info)
             virtual DataPtr CreateData ( Element* instance = NULL ) const HELIUM_OVERRIDE;
 
-            int32_t m_TypeID;
+            const Reflect::Type* m_Type;
         };
 
         //

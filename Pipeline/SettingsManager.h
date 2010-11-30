@@ -42,7 +42,7 @@ namespace Helium
             else
             {
                 // if we haven't seen this type of settings object before, just new one up
-                Type* newSettings = Reflect::ObjectCast< Type >( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Type >() )->m_Creator() );
+                Type* newSettings = Reflect::ObjectCast< Type >( Reflect::GetClass< Type >()->m_Creator() );
                 HELIUM_ASSERT( newSettings );
 
                 m_SettingsMap[ Reflect::GetType< Type >() ] = newSettings;

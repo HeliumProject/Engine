@@ -6,6 +6,7 @@
 #include <memory>
 
 using Helium::Insert; 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 // uncomment to disable caching completely
@@ -19,30 +20,19 @@ static int g_HitCount = 0;
 static int g_MissCount = 0;
 #endif
 
-static void GetTypeName(int type, tstring& name)
-{
-    const Class* typeInfo = Registry::GetInstance()->GetClass( type );
-    HELIUM_ASSERT( typeInfo );
-
-    name = typeInfo->m_Name;
-}
-
-static void CreateInstance(int type, ElementPtr& element)
+static void CreateInstance( const Class* type, ElementPtr& element )
 {
     ObjectPtr object = Registry::GetInstance()->CreateInstance(type);
-
     HELIUM_ASSERT( object.ReferencesObject() );
 
     element = AssertCast<Element>( object );
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-    std::string name;
-    GetTypeName(type, name);
-    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_Name.c_str(), type);
+    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
 }
 
-bool Cache::Create(int type, ElementPtr& element)
+bool Cache::Create( const Class* type, ElementPtr& element )
 {
 #ifdef REFLECT_DISABLE_CACHING
     ::CreateInstance(type, element);
@@ -74,9 +64,7 @@ bool Cache::Create(int type, ElementPtr& element)
             element = top;
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-            std::string name;
-            GetTypeName(type, name);
-            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_Name.c_str(), type);
+            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
         }
 
@@ -87,11 +75,11 @@ bool Cache::Create(int type, ElementPtr& element)
 
 bool Cache::Create(const tstring& name, ElementPtr& element)
 {
-    const Class* typeInfo = Registry::GetInstance()->GetClass(name);
+    const Class* type = Registry::GetInstance()->GetClass(name);
 
-    if ( typeInfo )
+    if ( type )
     {
-        return Create(typeInfo->m_TypeID, element);
+        return Create(type, element);
     }
     else
     {

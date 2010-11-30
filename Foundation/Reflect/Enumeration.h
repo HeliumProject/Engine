@@ -61,7 +61,6 @@ namespace Helium
             {
                 Enumeration* info = Enumeration::Create();
 
-                info->m_TypeID = AssignTypeID();
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
                 info->m_UIName = info->m_Name;

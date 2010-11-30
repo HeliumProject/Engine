@@ -43,7 +43,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     if (!result)
     {
-        if ( field->m_DataID == Reflect::GetType<EnumerationData>() )
+        if ( field->m_DataClass == Reflect::GetType<EnumerationData>() )
         {
             ChoicePtr choice = CreateControl<Choice>();
 
@@ -73,7 +73,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         }
         else
         {
-            if ( field->m_DataID == Reflect::GetType<BoolData>() )
+            if ( field->m_DataClass == Reflect::GetType<BoolData>() )
             {
                 CheckBoxPtr checkBox = CreateControl<CheckBox>();
                 checkBox->a_IsReadOnly.Set( readOnly );

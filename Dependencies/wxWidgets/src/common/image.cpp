@@ -1312,103 +1312,151 @@ wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
     return image;
 }
 
-void wxImage::Paste( const wxImage &image, int x, int y )
+void wxImage::Paste( const wxImage &image, int x, int y, wxImageAlphaBlending alphaBlend )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
     wxCHECK_RET( image.Ok(), wxT("invalid image") );
 
     AllocExclusive();
 
-    int xx = 0;
-    int yy = 0;
-    int width = image.GetWidth();
-    int height = image.GetHeight();
+    int offset_x = 0;
+    int offset_y = 0;
+    int target_width = image.GetWidth();
+    int target_height = image.GetHeight();
 
     if (x < 0)
     {
-        xx = -x;
-        width += x;
+        offset_x = -x;
+        target_width += x;
     }
     if (y < 0)
     {
-        yy = -y;
-        height += y;
+        offset_y = -y;
+        target_height += y;
     }
 
-    if ((x+xx)+width > M_IMGDATA->m_width)
-        width = M_IMGDATA->m_width - (x+xx);
-    if ((y+yy)+height > M_IMGDATA->m_height)
-        height = M_IMGDATA->m_height - (y+yy);
+    // insertion point onto the target image
+    int target_x = x + offset_x; 
+    int target_y = y + offset_y; 
 
-    if (width < 1) return;
-    if (height < 1) return;
+    if (target_x+target_width > M_IMGDATA->m_width)
+        target_width = M_IMGDATA->m_width - target_x;
+    if (target_y+target_height > M_IMGDATA->m_height)
+        target_height = M_IMGDATA->m_height - target_y;
 
-    if ((!HasMask() && !image.HasMask()) ||
-        (HasMask() && !image.HasMask()) ||
-       ((HasMask() && image.HasMask() &&
-         (GetMaskRed()==image.GetMaskRed()) &&
-         (GetMaskGreen()==image.GetMaskGreen()) &&
-         (GetMaskBlue()==image.GetMaskBlue()))))
+    if (target_width < 1) return;
+    if (target_height < 1) return;
+
+    // Masking
+    // if the source image has a mask and either the target image does NOT 
+    // or the target image's mask is different than the source
+    // then use the source mask when pasting onto the target 
+    bool maskSource = false;
+    unsigned char source_mask_r = 0;
+    unsigned char source_mask_g = 0;
+    unsigned char source_mask_b = 0;
+    if (image.HasMask() &&
+        (!HasMask() ||
+         GetMaskRed() != image.GetMaskRed() ||
+         GetMaskGreen() != image.GetMaskGreen() ||
+         GetMaskBlue() != image.GetMaskBlue()))
     {
-        unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
-        int source_step = image.GetWidth()*3;
-
-        unsigned char* target_data = GetData() + (x+xx)*3 + (y+yy)*3*M_IMGDATA->m_width;
-        int target_step = M_IMGDATA->m_width*3;
-        for (int j = 0; j < height; j++)
-        {
-            memcpy( target_data, source_data, width*3 );
-            source_data += source_step;
-            target_data += target_step;
-        }
+        maskSource = true;
+        source_mask_r = image.GetMaskRed();
+        source_mask_g = image.GetMaskGreen();
+        source_mask_b = image.GetMaskBlue();
     }
 
-    // Copy over the alpha channel from the original image
+    // Alpha blending
+    bool doAlphaCompositing = (alphaBlend == wxIMAGE_ALPHA_BLEND_COMPOSITE);
+    bool hasAlpha = false;
+
+    unsigned char* source_alpha_data = NULL;
+    int source_alpha_data_step = 0;
+    
+    unsigned char* target_alpha_data = NULL;
+    int target_alpha_data_step = 0;
+
     if ( image.HasAlpha() )
     {
         if ( !HasAlpha() )
             InitAlpha();
 
-        unsigned char* source_data = image.GetAlpha() + xx + yy*image.GetWidth();
-        int source_step = image.GetWidth();
+        source_alpha_data = image.GetAlpha() + offset_x + offset_y*image.GetWidth();
+        source_alpha_data_step = image.GetWidth();
 
-        unsigned char* target_data = GetAlpha() + (x+xx) + (y+yy)*M_IMGDATA->m_width;
-        int target_step = M_IMGDATA->m_width;
+        target_alpha_data = GetAlpha() + target_x + target_y*M_IMGDATA->m_width;
+        target_alpha_data_step = M_IMGDATA->m_width;
 
-        for (int j = 0; j < height; j++,
-                                    source_data += source_step,
-                                    target_data += target_step)
-        {
-            memcpy( target_data, source_data, width );
-        }
+        hasAlpha = true;
     }
+    doAlphaCompositing &= hasAlpha; // can't blend alpha if there is none
 
-    if (!HasMask() && image.HasMask())
+    unsigned char* source_data = image.GetData() + offset_x*3 + offset_y*3*image.GetWidth();
+    int source_data_step = image.GetWidth()*3;
+
+    unsigned char* target_data = GetData() + target_x*3 + target_y*3*M_IMGDATA->m_width;
+    int target_data_step = M_IMGDATA->m_width*3;
+
+    for (int height_index = 0; height_index < target_height; ++height_index)
     {
-        unsigned char r = image.GetMaskRed();
-        unsigned char g = image.GetMaskGreen();
-        unsigned char b = image.GetMaskBlue();
-
-        unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
-        int source_step = image.GetWidth()*3;
-
-        unsigned char* target_data = GetData() + (x+xx)*3 + (y+yy)*3*M_IMGDATA->m_width;
-        int target_step = M_IMGDATA->m_width*3;
-
-        for (int j = 0; j < height; j++)
+        if (!maskSource && !hasAlpha )
         {
-            for (int i = 0; i < width*3; i+=3)
+            memcpy( target_data, source_data, target_width*3 );
+        }
+        else
+        {
+            for (int width_index = 0; width_index < target_width; ++width_index)
             {
-                if ((source_data[i]   != r) ||
-                    (source_data[i+1] != g) ||
-                    (source_data[i+2] != b))
+                int r_index = width_index*3;
+                int g_index = width_index*3 + 1;
+                int b_index = width_index*3 + 2;
+
+                // paste the pixel if either:
+                // - not masking the source
+                // - are masking, and the source pixel is NOT masked
+                if (!maskSource ||
+                    !((source_data[r_index] == source_mask_r) &&
+                      (source_data[g_index] == source_mask_g) &&
+                      (source_data[b_index] == source_mask_b)))
                 {
-                    memcpy( target_data+i, source_data+i, 3 );
+                    if ( doAlphaCompositing )
+                    {
+                        // value of 255 means that the pixel is 100% opaque
+                        float source_alpha = ( source_alpha_data[width_index] / 255.f );
+                        float inverse_source_alpha = 1 - source_alpha;
+
+                        target_data[r_index] = ( inverse_source_alpha * target_data[r_index] ) + ( source_data[r_index] * source_alpha );
+                        target_data[g_index] = ( inverse_source_alpha * target_data[g_index] ) + ( source_data[g_index] * source_alpha );
+                        target_data[b_index] = ( inverse_source_alpha * target_data[b_index] ) + ( source_data[b_index] * source_alpha );
+
+                        // merge alpha channels
+                        target_alpha_data[width_index] = ( target_alpha_data[width_index] + source_alpha_data[width_index] ) > 255
+                            ? 255
+                            : target_alpha_data[width_index] + source_alpha_data[width_index];
+                    }
+                    else
+                    {
+                        // Copy over the alpha channel from the original image
+                        if ( hasAlpha )
+                        {
+                            target_alpha_data[width_index] = source_alpha_data[width_index];
+                        }
+
+                        memcpy( target_data+r_index, source_data+r_index, 3 );
+                    }
                 }
             }
-            source_data += source_step;
-            target_data += target_step;
         }
+
+        if ( hasAlpha )
+        {
+            source_alpha_data += source_alpha_data_step;
+            target_alpha_data += target_alpha_data_step;
+        }
+
+        source_data += source_data_step;
+        target_data += target_data_step;
     }
 }
 

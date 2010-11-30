@@ -196,28 +196,30 @@ namespace Lunar
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
 
-        /// GameObject flags.
+        /// Object flags.
         enum EFlag
         {
-            /// GameObject property data has been loaded, but object is not ready for use.
-            FLAG_PRELOADED    = 1 << 0,
-            /// GameObject references have been linked.
-            FLAG_LINKED       = 1 << 1,
-            /// GameObject resource data has been precached.
-            FLAG_PRECACHED    = 1 << 2,
-            /// GameObject loading has completed (object and all its dependencies are ready for use).
-            FLAG_LOADED       = 1 << 3,
+            /// Object property data has been loaded, but object is not ready for use.
+            FLAG_PRELOADED        = 1 << 0,
+            /// Object references have been linked.
+            FLAG_LINKED           = 1 << 1,
+            /// Object resource data has been precached.
+            FLAG_PRECACHED        = 1 << 2,
+            /// Object loading has completed (object and all its dependencies are ready for use).
+            FLAG_LOADED           = 1 << 3,
 
-            /// GameObject has gone through pre-destruction cleanup.
-            FLAG_PREDESTROYED = 1 << 4,
+            /// Object has gone through pre-destruction cleanup.
+            FLAG_PREDESTROYED     = 1 << 4,
 
-            /// GameObject is broken.
-            FLAG_BROKEN       = 1 << 5,
+            /// Object is broken.
+            FLAG_BROKEN           = 1 << 5,
 
-            /// GameObject and its children are transient.
-            FLAG_TRANSIENT    = 1 << 6,
-            /// GameObject is a package (only set for Package objects *excluding* the Package type template).
-            FLAG_PACKAGE      = 1 << 7
+            /// Object is the default template for its type.
+            FLAG_DEFAULT_TEMPLATE = 1 << 6,
+            /// Object and its children are transient.
+            FLAG_TRANSIENT        = 1 << 7,
+            /// Object is a package (only set for Package objects *excluding* the Package type template).
+            FLAG_PACKAGE          = 1 << 8
         };
 
         /// @name Construction/Destruction
@@ -256,6 +258,7 @@ namespace Lunar
         inline GameObjectPath GetPath() const;
 
         inline bool IsFullyLoaded() const;
+        inline bool IsDefaultTemplate() const;
         inline bool IsPackage() const;
 
         virtual void PreDestroy();

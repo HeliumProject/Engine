@@ -654,7 +654,7 @@ namespace Lunar
 
             pRequest->flags |= LOAD_FLAG_ERROR;
         }
-        else
+        else if( !pObject->IsDefaultTemplate() )
         {
             // Load persistent resource data.
             Resource* pResource = DynamicCast< Resource >( pObject );

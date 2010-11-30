@@ -251,6 +251,16 @@ namespace Lunar
         return GetAllFlagsSet( FLAG_PRELOADED | FLAG_LINKED | FLAG_LOADED );
     }
 
+    /// Get whether this object is the default template object for its type.
+    ///
+    /// This uses the FLAG_DEFAULT_TEMPLATE flag to determine whether this object is the default template for the type.
+    ///
+    /// @return  True if this object is the default type template, false if not.
+    bool GameObject::IsDefaultTemplate() const
+    {
+        return GetAnyFlagSet( FLAG_DEFAULT_TEMPLATE );
+    }
+
     /// Get whether this object is a package based on the object flags.
     ///
     /// Note that this only returns true for Package objects that are *not* the template object for the Package type, as

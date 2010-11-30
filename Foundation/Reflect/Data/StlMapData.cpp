@@ -178,65 +178,52 @@ inline void Tokenize( const tstring& str, std::map< tstring, tstring >& tokens, 
     }
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::SimpleStlMapData()
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SimpleStlMapData()
 {
 
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::~SimpleStlMapData()
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::~SimpleStlMapData()
 {
 
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-size_t SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetSize() const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+size_t SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetSize() const
 {
     return m_Data->size();
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Clear()
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Clear()
 {
     return m_Data->clear();
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Helium::HybridPtr<void> data)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-int32_t SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+const Class* SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetKeyClass() const
 {
-    return Reflect::GetData<KeyT>();
+    return Reflect::GetDataClass<KeyT>();
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-int32_t SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+const Class* SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetValueClass() const
 {
-    return Reflect::GetData<ValueT>();
+    return Reflect::GetDataClass<ValueT>();
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ValueType& items)
-{
-    items.resize(m_Data->size());
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( size_t index=0; itr != end; ++itr, ++index )
-    {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
-    }
-}
-
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ConstValueType& items) const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ValueType& items)
 {
     items.resize(m_Data->size());
     DataType::const_iterator itr = m_Data->begin();
@@ -248,8 +235,21 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ConstValueType
     }
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-DataPtr SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Data* key)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ConstValueType& items) const
+{
+    items.resize(m_Data->size());
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( size_t index=0; itr != end; ++itr, ++index )
+    {
+        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
+    }
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -263,8 +263,8 @@ DataPtr SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Data* ke
     return NULL;
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-ConstDataPtr SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Data* key) const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+ConstDataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key) const
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -278,8 +278,8 @@ ConstDataPtr SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Dat
     return NULL;
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::SetItem(const Data* key, const Data* value)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data* key, const Data* value)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -290,8 +290,8 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::SetItem(const Data* key, 
     (m_Data.Ref())[keyValue] = valueValue;
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::RemoveItem(const Data* key)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -299,8 +299,8 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::RemoveItem(const Data* ke
     (m_Data.Ref()).erase(keyValue);
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-bool SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Set(const Data* src, uint32_t flags)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src, uint32_t flags)
 {
     const StlMapDataT* rhs = ConstObjectCast<StlMapDataT>(src);
     if (!rhs)
@@ -313,8 +313,8 @@ bool SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Set(const Data* src, uint
     return true;
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-bool SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Equals(const Data* s) const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Data* s) const
 {
     const StlMapDataT* rhs = ConstObjectCast<StlMapDataT>(s);
     if (!rhs)
@@ -325,8 +325,8 @@ bool SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Equals(const Data* s) con
     return m_Data.Get() == rhs->m_Data.Get();
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archive) const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive) const
 {
     int i = 0;
     std::vector< ElementPtr > components;
@@ -341,12 +341,12 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archiv
             ElementPtr dataElem;
 
             // query cache for a serializer of this type
-            archive.GetCache().Create( Reflect::GetType<KeySer>(), keyElem );
-            archive.GetCache().Create( Reflect::GetType<ValueSer>(), dataElem );
+            archive.GetCache().Create( Reflect::GetClass<KeyClassT>(), keyElem );
+            archive.GetCache().Create( Reflect::GetClass<ValueClassT>(), dataElem );
 
             // downcast to serializer type
-            KeySer* keySer = DangerousCast<KeySer>(keyElem);
-            ValueSer* dataSer = DangerousCast<ValueSer>(dataElem);
+            KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
+            ValueClassT* dataSer = DangerousCast<ValueClassT>(dataElem);
 
             // connect to our map key memory address
             keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
@@ -377,8 +377,8 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archiv
     }
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& archive)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive& archive)
 {
     std::vector< ElementPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
@@ -395,8 +395,8 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& arch
     std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        KeySer* key = ObjectCast<KeySer>( *itr );
-        ValueSer* value = ObjectCast<ValueSer>( *(++itr) );
+        KeyClassT* key = ObjectCast<KeyClassT>( *itr );
+        ValueClassT* value = ObjectCast<ValueClassT>( *(++itr) );
 
         if (key && value)
         {
@@ -405,8 +405,8 @@ void SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& arch
     }
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-tostream& SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::operator>> (tostream& stream) const
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>> (tostream& stream) const
 {
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -423,8 +423,8 @@ tostream& SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::operator>> (tostream
     return stream;
 }
 
-template < class KeyT, class KeySer, class ValueT, class ValueSer >
-tistream& SimpleStlMapData<KeyT, KeySer, ValueT, ValueSer>::operator<< (tistream& stream)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<< (tistream& stream)
 {
     m_Data->clear();
 

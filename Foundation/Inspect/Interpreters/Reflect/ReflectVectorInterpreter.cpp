@@ -39,11 +39,11 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
 
     // compute dimensions
     int dimensions = 2;
-    if ( field->m_DataID == Reflect::GetType<Vector3Data>() )
+    if ( field->m_DataClass == Reflect::GetType<Vector3Data>() )
     {
         dimensions += 1;
     }
-    if ( field->m_DataID == Reflect::GetType<Vector4Data>() )
+    if ( field->m_DataClass == Reflect::GetType<Vector4Data>() )
     {
         dimensions += 2;
     }

@@ -14,7 +14,7 @@ ContainerData::ContainerData()
 REFLECT_DEFINE_ABSTRACT( ElementContainerData )
 
 ElementContainerData::ElementContainerData()
-: m_TypeID ( ReservedTypes::Invalid )
+: m_Type ( NULL )
 {
 
 }

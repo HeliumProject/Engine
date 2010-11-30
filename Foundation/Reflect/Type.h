@@ -20,17 +20,6 @@ namespace Helium
         // Type, fully qualified type information
         //
 
-        namespace ReservedTypes
-        {
-            enum ReservedType
-            {
-                Invalid  = -1,
-                First,
-                Any,
-            };
-        }
-        typedef ReservedTypes::ReservedType ReservedType;
-
         class FOUNDATION_API Type HELIUM_ABSTRACT : public ReflectionInfo
         {
         public:
@@ -40,14 +29,9 @@ namespace Helium
             Type();
             virtual ~Type();
 
-            // assign unique type id
-            static int32_t AssignTypeID();
-
         public:
             tstring                         m_Name;         // the name of this type in the codebase
             tstring                         m_UIName;       // the friendly name for the field, its optional (will use the short name if not specified)
-
-            int32_t                         m_TypeID;       // the unique id of this type
             uint32_t                        m_Size;         // the size of the object in bytes
         };
     }

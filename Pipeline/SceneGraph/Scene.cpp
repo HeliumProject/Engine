@@ -184,7 +184,7 @@ bool Scene::Load( const Helium::Path& path )
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, int32_t importReflectType )
+Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -347,7 +347,7 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, int32_t importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -542,15 +542,15 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     return command;
 }
 
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, int32_t importReflectType )
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_Name.c_str()) );
 
     SceneNodePtr sceneNode = Reflect::ObjectCast< SceneNode >( element );
 
-    if ( importReflectType == Reflect::ReservedTypes::Invalid )
+    if ( importReflectType == NULL )
     {
-        importReflectType = Reflect::GetType< SceneNode >();
+        importReflectType = Reflect::GetClass< SceneNode >();
     }
 
     // 
@@ -681,8 +681,8 @@ bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportAr
         manifest->m_BoundingBoxMax = m_Root->GetGlobalHierarchyBounds().maximum;
 
         // iterate over the types' containers
-        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesItr = m_NodeTypesByType.begin();
-        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesEnd = m_NodeTypesByType.end();
+        HMS_InstanceClassToSceneNodeTypeDumbPtr::const_iterator typesItr = m_NodeTypesByType.begin();
+        HMS_InstanceClassToSceneNodeTypeDumbPtr::const_iterator typesEnd = m_NodeTypesByType.end();
         for ( ; typesItr != typesEnd; ++typesItr )
         {
             // iterate over every instance of the type
@@ -1170,14 +1170,14 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
     m_NodeTypesByName.insert( HM_StrToSceneNodeTypeSmartPtr::value_type( nodeType->GetName(), nodeType ) );
 
     // insert into the map by compile time type id
-    Helium::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceType(), S_SceneNodeTypeDumbPtr() ) );
+    Helium::Insert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceClass(), S_SceneNodeTypeDumbPtr() ) );
     typeSet.first->second.insert( nodeType );
 
     // insert it into the types for its bases
-    const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-    for ( ; type->m_TypeID != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+    const Reflect::Class* type = nodeType->GetInstanceClass();
+    for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
     {
-        Helium::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( type->m_TypeID, S_SceneNodeTypeDumbPtr() ) );
+        Helium::Insert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
     }
 
@@ -1190,7 +1190,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
     m_NodeTypesByName.erase( nodeType->GetName() );
 
     // erase from the map by compile time type id
-    HMS_TypeToSceneNodeTypeDumbPtr::iterator typeSet = m_NodeTypesByType.find( nodeType->GetInstanceType() );
+    HMS_InstanceClassToSceneNodeTypeDumbPtr::iterator typeSet = m_NodeTypesByType.find( nodeType->GetInstanceClass() );
     typeSet->second.erase( nodeType );
 
     // we can conditional here to save time becase if our exact type set is not empty some other type stil must exist in the base class sets
@@ -1199,10 +1199,10 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
     {
         m_NodeTypesByType.erase( typeSet );
 
-        const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-        for ( ; type->m_TypeID != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+        const Reflect::Class* type = nodeType->GetInstanceClass();
+        for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
         {
-            HMS_TypeToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type->m_TypeID );
+            HMS_InstanceClassToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type );
 
             // don't remove it until we are the last one, each base type is probably shared with other derivations
             if (baseTypeSet->second.empty())
@@ -1618,9 +1618,9 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
     // Map engine internal type to luna internal type
     //
 
-    int32_t typeID = Reflect::GetType<SceneGraph::SceneNode>();
+    const Reflect::Class* type = Reflect::GetClass<SceneGraph::SceneNode>();
 
-    HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
+    HMS_InstanceClassToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( type );
     if (found != m_NodeTypesByType.end())
     {
         S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
@@ -2295,7 +2295,7 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     {
-        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<SceneGraph::HierarchyNode>() );
+        HMS_InstanceClassToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetClass<SceneGraph::HierarchyNode>() );
 
         if (found != m_NodeTypesByType.end())
         {

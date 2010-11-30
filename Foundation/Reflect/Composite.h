@@ -133,9 +133,9 @@ namespace Helium
             // Add fields to the composite
             //
 
-            Reflect::Field* AddField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t flags = 0 );
-            Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, int32_t typeID, int32_t flags = 0 );
-            Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, int32_t serializerID, const Enumeration* enumeration, int32_t flags = 0 );
+            Reflect::Field* AddField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
+            Reflect::ElementField* AddElementField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
+            Reflect::EnumerationField* AddEnumerationField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
             // Report information to stdout
@@ -147,7 +147,7 @@ namespace Helium
             // Test for type of this or it base classes
             //
 
-            bool HasType(int32_t type) const;
+            bool HasType(const Type* type) const;
 
             // 
             // Name utilities
@@ -255,26 +255,26 @@ namespace Helium
             }
 
             template <class FieldT>
-            inline Reflect::Field* AddField( FieldT T::* field, const std::string& name, int32_t flags = 0, int32_t serializerType = -1 )
+            inline Reflect::Field* AddField( FieldT T::* field, const std::string& name, int32_t flags = 0, const Class* dataClass = NULL )
             {
                 return m_Composite.AddField(
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetData<FieldT>() : serializerType,
+                    dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
                     flags );
             }
 
             template <class FieldT>
-            inline Reflect::Field* AddField( Attribute<FieldT> T::* field, const std::string& name, int32_t flags = 0, int32_t serializerType = -1 )
+            inline Reflect::Field* AddField( Attribute<FieldT> T::* field, const std::string& name, int32_t flags = 0, const Class* dataClass = NULL )
             {
                 return m_Composite.AddField(
                     m_Instance,
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    serializerType < 0 ? Reflect::GetData<FieldT>() : serializerType,
+                    dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
                     flags );
             }
 
@@ -286,7 +286,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetType<Reflect::PointerData>(),
+                    Reflect::GetClass<Reflect::PointerData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -299,7 +299,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetType<Reflect::PointerData>(),
+                    Reflect::GetClass<Reflect::PointerData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -312,7 +312,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementStlVectorData>(),
+                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -325,7 +325,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementStlVectorData>(),
+                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -338,7 +338,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementStlSetData>(),
+                    Reflect::GetClass<Reflect::ElementStlSetData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -351,7 +351,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetType<Reflect::ElementStlSetData>(),
+                    Reflect::GetClass<Reflect::ElementStlSetData>(),
                     Reflect::GetType<ElementT>(),
                     flags );
             }
@@ -364,7 +364,7 @@ namespace Helium
                     GetName(name), 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetType<Reflect::SimpleElementStlMapData< KeyT > >(), 
+                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
                     Reflect::GetType<ElementT>(), 
                     flags );
             }
@@ -377,7 +377,7 @@ namespace Helium
                     GetName(name), 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetType<Reflect::SimpleElementStlMapData< KeyT > >(), 
+                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
                     Reflect::GetType<ElementT>(), 
                     flags );
             }
@@ -390,7 +390,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::EnumerationData>(),
+                    Reflect::GetClass<Reflect::EnumerationData>(),
                     Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
@@ -403,7 +403,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::EnumerationData>(),
+                    Reflect::GetClass<Reflect::EnumerationData>(),
                     Reflect::GetEnumeration<FieldT>(),
                     flags );
             }
@@ -416,7 +416,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::BitfieldData>(),
+                    Reflect::GetClass<Reflect::BitfieldData>(),
                     Reflect::GetEnumeration<EnumT>(),
                     flags );
             }
@@ -429,7 +429,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetType<Reflect::BitfieldData>(),
+                    Reflect::GetClass<Reflect::BitfieldData>(),
                     Reflect::GetEnumeration<EnumT>(),
                     flags );
             }

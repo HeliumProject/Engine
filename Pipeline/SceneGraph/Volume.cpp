@@ -60,7 +60,7 @@ tstring Volume::GetApplicationTypeName() const
 SceneNodeTypePtr Volume::CreateNodeType( Scene* scene ) const
 {
     // Overridden to create an volume-specific type
-    VolumeType* nodeType = new VolumeType( scene, GetType() );
+    VolumeType* nodeType = new VolumeType( scene, GetClass() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );

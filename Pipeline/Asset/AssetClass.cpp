@@ -98,7 +98,7 @@ namespace Helium
 
             virtual bool VisitField(Element* element, const Field* field) HELIUM_OVERRIDE
             {
-                if ( field->m_DataID == Reflect::GetType< Reflect::PathData >() )
+                if ( field->m_DataClass == Reflect::GetClass< Reflect::PathData >() )
                 {
                     Helium::Path path;
                     if ( Reflect::Data::GetValue( field->CreateData( element ), path ) )
@@ -109,10 +109,10 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::StlVectorData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlVectorData >() )
                 {
                     const Reflect::StlVectorData* arrayData = Reflect::ConstDangerousCast<Reflect::StlVectorData>( field->CreateData( element ) );
-                    if ( arrayData->GetItemType() == Reflect::GetType< Reflect::PathData >() )
+                    if ( arrayData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)arrayData->GetSize() < 1 )
                         {
@@ -132,10 +132,10 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::StlMapData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlMapData >() )
                 {
                     const Reflect::StlMapData* mapData = Reflect::ConstDangerousCast<Reflect::StlMapData>( field->CreateData( element ) );
-                    if ( mapData->GetValueType() == Reflect::GetType< Reflect::PathData >() )
+                    if ( mapData->GetValueClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)mapData->GetSize() < 1 )
                         {
@@ -160,10 +160,10 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::StlSetData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlSetData >() )
                 {
                     const Reflect::StlSetData* setData = Reflect::ConstDangerousCast<Reflect::StlSetData>( field->CreateData( element ) );
-                    if ( setData->GetItemType() == Reflect::GetType< Reflect::PathData >() )
+                    if ( setData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)setData->GetSize() < 1 )
                         {
@@ -188,7 +188,7 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlVectorData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlVectorData >() )
                 {
                     const Reflect::ElementStlVectorData* arrayData = Reflect::ConstDangerousCast< Reflect::ElementStlVectorData >( field->CreateData( element ) );
 
@@ -206,7 +206,7 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlMapData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlMapData >() )
                 {
                     const Reflect::ElementStlMapData* mapData = Reflect::ConstDangerousCast< Reflect::ElementStlMapData >( field->CreateData( element ) );
 
@@ -228,7 +228,7 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataID == Reflect::GetType< Reflect::ElementStlSetData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlSetData >() )
                 {
                     const Reflect::ElementStlSetData* setData = Reflect::ConstDangerousCast< Reflect::ElementStlSetData >( field->CreateData( element ) );
 
@@ -273,9 +273,9 @@ bool AssetClass::SetComponent( const Component::ComponentPtr& component, bool va
     return __super::SetComponent( component, validate, error );
 }
 
-bool AssetClass::RemoveComponent( int32_t typeID )
+bool AssetClass::RemoveComponent( const Reflect::Class* type )
 {
-    return __super::RemoveComponent( typeID );
+    return __super::RemoveComponent( type );
 }
 
 void AssetClass::ConnectDocument( Document* document )

@@ -31,7 +31,7 @@ ElementPtr Class::Clone(Element* element)
         return NULL;
     }
 
-    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance(element->GetType()) );
+    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance( element->GetClass()) );
 
     element->PreSerialize();
 

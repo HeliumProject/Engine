@@ -63,46 +63,46 @@ inline void Tokenize( const tstring& str, std::set< tstring >& tokens, const tst
     }
 }
 
-template < class DataT, class DataSer >
-SimpleStlSetData<DataT, DataSer>::SimpleStlSetData()
+template < class DataT, class DataClassT >
+SimpleStlSetData<DataT, DataClassT>::SimpleStlSetData()
 {
 
 }
 
-template < class DataT, class DataSer >
-SimpleStlSetData<DataT, DataSer>::~SimpleStlSetData()
+template < class DataT, class DataClassT >
+SimpleStlSetData<DataT, DataClassT>::~SimpleStlSetData()
 {
 
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::ConnectData(Helium::HybridPtr<void> data)
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-template < class DataT, class DataSer >
-size_t SimpleStlSetData<DataT, DataSer>::GetSize() const
+template < class DataT, class DataClassT >
+size_t SimpleStlSetData<DataT, DataClassT>::GetSize() const
 {
     return m_Data->size();
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::Clear()
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Clear()
 {
     return m_Data->clear();
 }
 
-template < class DataT, class DataSer >
-int32_t SimpleStlSetData<DataT, DataSer>::GetItemType() const
+template < class DataT, class DataClassT >
+const Class* SimpleStlSetData<DataT, DataClassT>::GetItemClass() const
 {
-    return Reflect::GetData<DataT>();
+    return Reflect::GetDataClass<DataT>();
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::GetItems(std::vector< ConstDataPtr >& items) const
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::GetItems(std::vector< ConstDataPtr >& items) const
 {
     items.resize( m_Data->size() );
     DataType::const_iterator itr = m_Data->begin();
@@ -113,32 +113,32 @@ void SimpleStlSetData<DataT, DataSer>::GetItems(std::vector< ConstDataPtr >& ite
     }
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::AddItem(const Data* value)
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::AddItem(const Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
     m_Data->insert( dataValue );
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::RemoveItem(const Data* value)
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::RemoveItem(const Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
     m_Data->erase( dataValue );
 }
 
-template < class DataT, class DataSer >
-bool SimpleStlSetData<DataT, DataSer>::ContainsItem(const Data* value) const
+template < class DataT, class DataClassT >
+bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
     return m_Data->find( dataValue ) != m_Data->end();
 }
 
-template < class DataT, class DataSer >
-bool SimpleStlSetData<DataT, DataSer>::Set(const Data* src, uint32_t flags)
+template < class DataT, class DataClassT >
+bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 {
     const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(src);
     if (!rhs)
@@ -151,8 +151,8 @@ bool SimpleStlSetData<DataT, DataSer>::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-template < class DataT, class DataSer >
-bool SimpleStlSetData<DataT, DataSer>::Equals(const Data* s) const
+template < class DataT, class DataClassT >
+bool SimpleStlSetData<DataT, DataClassT>::Equals(const Data* s) const
 {
     const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(s);
     if (!rhs)
@@ -163,8 +163,8 @@ bool SimpleStlSetData<DataT, DataSer>::Equals(const Data* s) const
     return m_Data.Get() == rhs->m_Data.Get();
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::Serialize(Archive& archive) const
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 {
     int i = 0;
     std::vector< ElementPtr > components;
@@ -178,10 +178,10 @@ void SimpleStlSetData<DataT, DataSer>::Serialize(Archive& archive) const
             ElementPtr dataElem;
 
             // query cache for a serializer of this type
-            archive.GetCache().Create( Reflect::GetType<DataSer>(), dataElem );
+            archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
 
             // downcast to serializer type
-            DataSer* dataSer = DangerousCast<DataSer>(dataElem);
+            DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
 
             // connect to our map data memory address
             dataSer->ConnectData(const_cast<DataT*>(&(*itr)));
@@ -208,8 +208,8 @@ void SimpleStlSetData<DataT, DataSer>::Serialize(Archive& archive) const
     }
 }
 
-template < class DataT, class DataSer >
-void SimpleStlSetData<DataT, DataSer>::Deserialize(Archive& archive)
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
 {
     std::vector< ElementPtr > components;
     archive.Deserialize(components);
@@ -221,7 +221,7 @@ void SimpleStlSetData<DataT, DataSer>::Deserialize(Archive& archive)
     std::vector< ElementPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        DataSer* data = ObjectCast<DataSer>(*itr);
+        DataClassT* data = ObjectCast<DataClassT>(*itr);
         if (!data)
         {
             throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
@@ -231,8 +231,8 @@ void SimpleStlSetData<DataT, DataSer>::Deserialize(Archive& archive)
     }
 }
 
-template < class DataT, class DataSer >
-tostream& SimpleStlSetData<DataT, DataSer>::operator>> (tostream& stream) const
+template < class DataT, class DataClassT >
+tostream& SimpleStlSetData<DataT, DataClassT>::operator>> (tostream& stream) const
 {
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -249,8 +249,8 @@ tostream& SimpleStlSetData<DataT, DataSer>::operator>> (tostream& stream) const
     return stream;
 }
 
-template < class DataT, class DataSer >
-tistream& SimpleStlSetData<DataT, DataSer>::operator<< (tistream& stream)
+template < class DataT, class DataClassT >
+tistream& SimpleStlSetData<DataT, DataClassT>::operator<< (tistream& stream)
 {
     m_Data->clear();
 

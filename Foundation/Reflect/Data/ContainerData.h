@@ -29,7 +29,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ElementContainerData, ContainerData );
 
-            int32_t m_TypeID;
+            const Type* m_Type;
 
             ElementContainerData();
         };

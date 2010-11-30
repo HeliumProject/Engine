@@ -58,7 +58,7 @@ int32_t Instance::GetImageIndex() const
 SceneNodeTypePtr Instance::CreateNodeType( SceneGraph::Scene* scene ) const
 {
     // Overridden to create an light-specific type
-    InstanceType* nodeType = new InstanceType( scene, GetType() );
+    InstanceType* nodeType = new InstanceType( scene, GetClass() );
 
     // Set the image index (usually this is handled by the base class, but we aren't calling the base)
     nodeType->SetImageIndex( GetImageIndex() );

@@ -15,7 +15,7 @@ void ClipboardElementArray::EnumerateClass( Reflect::Compositor<ClipboardElement
 ClipboardElementArray::ClipboardElementArray()
 {
     // By default, all items added to this array should derive from Reflect::Element
-    bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( Reflect::GetType< Reflect::Element >() )->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -27,17 +27,17 @@ ClipboardElementArray::~ClipboardElementArray()
 // Returns the type ID of the base class that all elements in this collection
 // must derive from.
 // 
-int32_t ClipboardElementArray::GetCommonBaseTypeID() const
+const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 {
-    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass )->m_TypeID;
+    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the base class that all elements in this collection must derive from.
 // 
-void ClipboardElementArray::SetCommonBaseTypeID( int32_t typeID )
+void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
 {
-    bool converted = Helium::ConvertString( Reflect::Registry::GetInstance()->GetClass( typeID )->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( type->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -94,5 +94,5 @@ bool ClipboardElementArray::CanAdd( const Reflect::ElementPtr& item ) const
         return false;
     }
 
-    return item->HasType( GetCommonBaseTypeID() );
+    return item->HasType( GetCommonBaseClass() );
 }

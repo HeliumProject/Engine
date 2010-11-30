@@ -295,7 +295,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
 
     // construct serialization object
     ElementPtr e;
-    m_Cache.Create( field->m_DataID, e );
+    m_Cache.Create( field->m_DataClass, e );
 
     HELIUM_ASSERT( e.ReferencesObject() );
 
@@ -502,7 +502,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         ElementPtr parentElement = topState->m_Element;
 
         // retrieve the type information for our parent structure
-        const Class* parentTypeDefinition = Registry::GetInstance()->GetClass( parentElement->GetType() );
+        const Class* parentTypeDefinition = parentElement->GetClass();
 
         if ( parentTypeDefinition )
         {
@@ -528,7 +528,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 ElementPtr element = NULL;
 
                 // create the object
-                m_Cache.Create(newState->m_Field->m_DataID, element);
+                m_Cache.Create(newState->m_Field->m_DataClass, element);
 
                 // if we are a serializer
                 if (element->HasType(Reflect::GetType<Data>()))
@@ -728,15 +728,15 @@ void ArchiveXML::ToString(const ElementPtr& element, tstring& xml )
     return ToString( elements, xml );
 }
 
-ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
+ElementPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
 {
-    if (searchType == Reflect::ReservedTypes::Any)
+    if ( searchClass == NULL )
     {
-        searchType = Reflect::GetType<Element>();
+        searchClass = Reflect::GetClass<Element>();
     }
 
     ArchiveXML archive;
-    archive.m_SearchType = searchType;
+    archive.m_SearchClass = searchClass;
 
     tstringstream strStream;
     strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
@@ -747,7 +747,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, int searchType )
     std::vector< ElementPtr >::iterator end = archive.m_Spool.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchType))
+        if ((*itr)->HasType(searchClass))
         {
             return *itr;
         }

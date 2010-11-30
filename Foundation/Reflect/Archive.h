@@ -219,14 +219,14 @@ namespace Helium
             // The cache of serializers
             Cache m_Cache;
 
-            // The types used
-            std::set< int32_t > m_Types;
+            // The classes used
+            std::set< const Class* > m_Classes;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
 
             // The type to serach for
-            int32_t m_SearchType;
+            const Class* m_SearchClass;
 
             // The abort status
             bool m_Abort;
@@ -362,13 +362,13 @@ namespace Helium
             void Put( const ElementPtr& element );
             void Put( const std::vector< ElementPtr >& elements );
 
-            ElementPtr Get( int searchType = Reflect::ReservedTypes::Any );
+            ElementPtr Get( const Class* searchClass = NULL );
             void Get( std::vector< ElementPtr >& elements );
 
             template <class T>
             Helium::StrongPtr<T> Get()
             {
-                ElementPtr found = Get( Reflect::GetType<T>() );
+                ElementPtr found = Get( Reflect::GetClass<T>() );
 
                 if (found.ReferencesObject())
                 {

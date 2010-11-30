@@ -256,7 +256,6 @@ Registry::Registry()
 
 Registry::~Registry()
 {
-    m_TypesByID.clear();
     m_TypesByName.clear();
     m_TypesByAlias.clear();
 
@@ -280,51 +279,40 @@ bool Registry::RegisterType(Type* type)
         {
             Class* classType = static_cast<Class*>(type);
 
-            Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (classType->m_TypeID, classType));
+            m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
 
-            if (idResult.second)
+            if ( !classType->m_Name.empty() )
             {
-                m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
+                Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
 
-                if ( !classType->m_Name.empty() )
+                if (!nameResult.second && classType != nameResult.first->second)
                 {
-                    Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
+                    Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
+                    HELIUM_BREAK();
+                    return false;
+                }
+            }
 
-                    if (!nameResult.second && classType != nameResult.first->second)
+            if ( !classType->m_Base.empty() )
+            {
+                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
+                if (found != m_TypesByName.end())
+                {
+                    Type* baseClass = found->second;
+                    if (baseClass->GetReflectionType() == ReflectionTypes::Class)
                     {
-                        Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
+                        static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_Name );
+                    }
+                    else
+                    {
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
                         HELIUM_BREAK();
                         return false;
                     }
                 }
-
-                if ( !classType->m_Base.empty() )
-                {
-                    M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-                    if (found != m_TypesByName.end())
-                    {
-                        Type* baseClass = found->second;
-                        if (baseClass->GetReflectionType() == ReflectionTypes::Class)
-                        {
-                            static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_Name );
-                        }
-                        else
-                        {
-                            Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
-                            HELIUM_BREAK();
-                            return false;
-                        }
-                    }
-                }
-
-                classType->Report();
             }
-            else if (classType != idResult.first->second)
-            {
-                Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
-                HELIUM_BREAK();
-                return false;
-            }
+
+            classType->Report();
             break;
         }
 
@@ -332,29 +320,18 @@ bool Registry::RegisterType(Type* type)
         {
             Enumeration* enumeration = static_cast<Enumeration*>(type);
 
-            Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (enumeration->m_TypeID, enumeration));
+            Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
 
-            if (idResult.second)
+            if (!enumResult.second && enumeration != enumResult.first->second)
             {
-                Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
-
-                if (!enumResult.second && enumeration != enumResult.first->second)
-                {
-                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
-                    HELIUM_BREAK();
-                    return false;
-                }
-
-                enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
-
-                if (!enumResult.second && enumeration != enumResult.first->second)
-                {
-                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
-                    HELIUM_BREAK();
-                    return false;
-                }
+                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
+                HELIUM_BREAK();
+                return false;
             }
-            else if (enumeration != idResult.first->second)
+
+            enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
+
+            if (!enumResult.second && enumeration != enumResult.first->second)
             {
                 Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
                 HELIUM_BREAK();
@@ -401,7 +378,6 @@ void Registry::UnregisterType(const Type* type)
             }
 
             m_TypesByName.erase(classType->m_Name);
-            m_TypesByID.erase(classType->m_TypeID);
 
             break;
         }
@@ -434,20 +410,6 @@ void Registry::UnAliasType(const Type* type, const tstring& alias)
     }
 }
 
-const Type* Registry::GetType(int id) const
-{
-    M_IDToType::const_iterator found = m_TypesByID.find (id);
-
-    if (found != m_TypesByID.end())
-    {
-        return found->second;
-    }
-    else
-    {
-        return NULL;
-    }
-}
-
 const Type* Registry::GetType(const tstring& str) const
 {
     M_StrToType::const_iterator found = m_TypesByAlias.find(str);
@@ -474,47 +436,14 @@ const Type* Registry::GetType(const tstring& str) const
     return NULL;
 }
 
-const Class* Registry::GetClass(int32_t id) const
-{
-    return ReflectionCast<const Class>(GetType( id ));
-}
-
 const Class* Registry::GetClass(const tstring& str) const
 {
     return ReflectionCast<const Class>(GetType( str ));
 }
 
-const Enumeration* Registry::GetEnumeration(int32_t id) const
-{
-    return ReflectionCast<const Enumeration>(GetType( id ));
-}
-
 const Enumeration* Registry::GetEnumeration(const tstring& str) const
 {
     return ReflectionCast<const Enumeration>(GetType( str ));
-}
-
-ObjectPtr Registry::CreateInstance(int id) const
-{
-    M_IDToType::const_iterator type = m_TypesByID.find(id);
-
-    if (type != m_TypesByID.end() && type->second->GetReflectionType() == ReflectionTypes::Class)
-    {
-        const Class* cls = ReflectionCast<const Class>(type->second);
-        HELIUM_ASSERT( cls->m_Creator );
-        if ( cls->m_Creator )
-        {
-            return cls->m_Creator();
-        }
-        else
-        {
-            throw Reflect::TypeInformationException( TXT( "Class '%s' cannot be instanced, it is abstract" ), cls->m_Name.c_str() );
-        }
-    }
-    else
-    {
-        return NULL;
-    }
 }
 
 ObjectPtr Registry::CreateInstance(const Class* type) const

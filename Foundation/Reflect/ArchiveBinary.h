@@ -84,9 +84,6 @@ namespace Helium
             // The strings to cache for binary modes
             StringPool m_Strings;
 
-            // Latent types by latent ids
-            M_IDToClass m_ClassesByID;
-
             // Latent types by latent short name
             M_StrToClass m_ClassesByShortName;
 
@@ -192,7 +189,7 @@ namespace Helium
         public:
             // Reading and writing single element via binary
             static void       ToStream( const ElementPtr& element, std::iostream& stream );
-            static ElementPtr FromStream( std::iostream& stream, int searchType = Reflect::ReservedTypes::Any );
+            static ElementPtr FromStream( std::iostream& stream, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements via binary
             static void       ToStream( const std::vector< ElementPtr >& elements, std::iostream& stream );

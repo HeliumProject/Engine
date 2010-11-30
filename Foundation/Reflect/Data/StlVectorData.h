@@ -15,7 +15,7 @@ namespace Helium
 
             virtual void SetSize(size_t size) = 0;
 
-            virtual int32_t GetItemType() const = 0;
+            virtual const Class* GetItemClass() const = 0;
             virtual DataPtr GetItem(size_t at) = 0;
             virtual ConstDataPtr GetItem(size_t at) const = 0;
             virtual void SetItem(size_t at, const Data* value) = 0;
@@ -44,7 +44,7 @@ namespace Helium
             virtual void SetSize(size_t size) HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual int32_t GetItemType() const HELIUM_OVERRIDE;
+            virtual const Class* GetItemClass() const HELIUM_OVERRIDE;
             virtual DataPtr GetItem(size_t at) HELIUM_OVERRIDE;
             virtual ConstDataPtr GetItem(size_t at) const HELIUM_OVERRIDE;
             virtual void SetItem(size_t at, const Data* value) HELIUM_OVERRIDE;

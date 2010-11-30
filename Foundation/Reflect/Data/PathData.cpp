@@ -134,7 +134,7 @@ tistream& PathData::operator<<( tistream& stream )
     {
         m_Data.Ref().Set( str );
 
-        if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+        if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
             Element* element = (Element*)m_Instance;
             element->RaiseChanged( m_Field );

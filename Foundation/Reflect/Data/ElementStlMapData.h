@@ -22,7 +22,7 @@ namespace Helium
             typedef std::pair< ConstDataPtr, const ElementPtr* > ConstValueType;
             typedef std::vector< ConstValueType > V_ConstValueType;
 
-            virtual int32_t GetKeyType() const = 0;
+            virtual const Class* GetKeyClass() const = 0;
             virtual void GetItems(V_ValueType& items) = 0;
             virtual void GetItems(V_ConstValueType& items) const = 0;
             virtual ElementPtr* GetItem(const Data* key) = 0;
@@ -49,7 +49,7 @@ namespace Helium
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
-            virtual int32_t GetKeyType() const HELIUM_OVERRIDE;
+            virtual const Class* GetKeyClass() const HELIUM_OVERRIDE;
             virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
             virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
             virtual ElementPtr* GetItem(const Data* key) HELIUM_OVERRIDE;

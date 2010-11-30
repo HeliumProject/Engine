@@ -14,7 +14,7 @@ namespace Helium
         class FOUNDATION_API Element;
         typedef Helium::StrongPtr<Element> ElementPtr;
         typedef std::stack<ElementPtr> S_Element;
-        typedef stdext::hash_map<int, S_Element> H_Element;
+        typedef stdext::hash_map<const Type*, S_Element> H_Element;
 
         class Cache
         {
@@ -24,7 +24,7 @@ namespace Helium
 
         public:
             // creator
-            bool Create(int type, ElementPtr& element);
+            bool Create(const Class* type, ElementPtr& element);
 
             // creator
             bool Create(const tstring& name, ElementPtr& element);

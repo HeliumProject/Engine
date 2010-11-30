@@ -189,7 +189,7 @@ bool Composite::HasType(const Type* type) const
 {
     const Composite* base = this;
 
-    while ( type )
+    while ( base )
     {
         if ( base == type )
         {

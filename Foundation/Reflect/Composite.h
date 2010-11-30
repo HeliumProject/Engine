@@ -262,7 +262,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    dataClass < 0 ? Reflect::GetDataClass<FieldT>() : dataClass,
+                    dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
                     flags );
             }
 
@@ -274,7 +274,7 @@ namespace Helium
                     GetName(name),
                     GetOffset(field),
                     sizeof(FieldT),
-                    dataClass < 0 ? Reflect::GetDataClass<FieldT>() : dataClass,
+                    dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
                     flags );
             }
 

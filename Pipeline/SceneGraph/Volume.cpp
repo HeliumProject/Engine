@@ -215,7 +215,7 @@ void Volume::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer();
         {
-            static const tstring helpText = TXT( "Select the shape of this volume." );
+            const tstring helpText = TXT( "Select the shape of this volume." );
             args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );
 
             Inspect::Choice* choice = args.m_Generator->AddChoice<Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);

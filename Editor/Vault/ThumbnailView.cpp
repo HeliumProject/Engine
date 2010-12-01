@@ -919,9 +919,9 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         // Thumbnail Size...
         {
             wxMenu* viewMenu = new wxMenu();
-            viewMenu->AppendCheckItem( ID_ViewSmall, VaultMenu::Label( ID_ViewSmall ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
-            viewMenu->AppendCheckItem( ID_ViewMedium, VaultMenu::Label( ID_ViewMedium ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
-            viewMenu->AppendCheckItem( ID_ViewLarge, VaultMenu::Label( ID_ViewLarge ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
+            viewMenu->AppendCheckItem( ID_ViewSmall, tstring( VaultMenu::Label( ID_ViewSmall ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ), VaultMenu::Label( ID_ViewSmall ) );
+            viewMenu->AppendCheckItem( ID_ViewMedium, tstring( VaultMenu::Label( ID_ViewMedium ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ), VaultMenu::Label( ID_ViewMedium ) );
+            viewMenu->AppendCheckItem( ID_ViewLarge, tstring( VaultMenu::Label( ID_ViewLarge ) ) + TXT( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ), VaultMenu::Label( ID_ViewLarge ) );
             menu.AppendSubMenu( viewMenu, TXT( "Thumbnail Size" ) );
 
             // Make sure view option is correct

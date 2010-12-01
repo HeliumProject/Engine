@@ -47,6 +47,18 @@ enum wxImageResizeQuality
 };
 
 /**
+    Constants for wxImage::Paste() for specifying alpha blending option
+*/
+enum wxImageAlphaBlending
+{
+    /// Pasted image pixel data should clobber this instance's
+    wxIMAGE_ALPHA_BLEND_NONE = 0,
+
+    /// Pasted image's pixel data should be blended into this instance using its alpha data
+    wxIMAGE_ALPHA_BLEND_COMPOSITE = 1,
+};
+
+/**
     Possible values for PNG image type option.
 
     @see wxImage::GetOptionInt().
@@ -667,9 +679,16 @@ public:
     wxImage Mirror(bool horizontally = true) const;
 
     /**
-        Copy the data of the given @a image to the specified position in this image.
+        Copy the data of the given @a image to the specified position in this instance. 
+        Takes care of the mask colour and out of bounds problems.
+
+        @param alphaBlend
+            The @a alphaBlend param (new in wx 2.9.2) will determine if the @a image
+            data should clobber this instance's data or if the pixels should be blended
+            using the @a image alpha channel
     */
-    void Paste(const wxImage& image, int x, int y);
+    void Paste(const wxImage& image, int x, int y,
+               wxImageAlphaBlending alphaBlend = wxIMAGE_ALPHA_BLEND_NONE);
 
     /**
         Replaces the colour specified by @e r1,g1,b1 by the colour @e r2,g2,b2.

@@ -38,24 +38,24 @@ if _ACTION ~= "prebuild" then
 			Helium.PublishGranny( granny )
 		end
 
+        if os.get() == "windows" then
+            if _OPTIONS["no-unicode"] then
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
+            else
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
+                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
+            end
+        end
+
 		Helium.Prebuild()
 	else
 		Helium.CleanWxWidgets( wx )
 		Helium.CleanTBB( tbb )
-	end
-
-	if os.get() == "windows" then
-        if _OPTIONS["no-unicode"] then
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-        else
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
-        end
 	end
 
 	solution "Dependencies"

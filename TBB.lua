@@ -53,6 +53,8 @@ Helium.CleanTBB = function( tbb )
 		os.exit(1)
 	end
 
+	os.chdir( cwd )
+
 end
 
 Helium.PublishTBB = function( tbb )

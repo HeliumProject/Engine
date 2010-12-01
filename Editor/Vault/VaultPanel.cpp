@@ -43,7 +43,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             m_OptionsMenu,
             VaultMenu::ViewResultDetails,
             VaultMenu::Label( VaultMenu::ViewResultDetails ),
-            VaultMenu::Label( VaultMenu::ViewResultDetails ).c_str(),
+            VaultMenu::Label( VaultMenu::ViewResultDetails ),
             wxITEM_RADIO );
         m_OptionsMenu->Append( detailsMenuItem );
         Connect( VaultMenu::ViewResultDetails, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
@@ -52,7 +52,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             m_OptionsMenu,
             VaultMenu::ViewResultList,
             VaultMenu::Label( VaultMenu::ViewResultList ),
-            VaultMenu::Label( VaultMenu::ViewResultList ).c_str(),
+            VaultMenu::Label( VaultMenu::ViewResultList ),
             wxITEM_RADIO );
         m_OptionsMenu->Append( listMenuItem );
         Connect( VaultMenu::ViewResultList, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
@@ -61,7 +61,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             m_OptionsMenu,
             VaultMenu::ViewThumbnailsSmall,
             VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ),
-            VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ).c_str(),
+            VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ),
             wxITEM_RADIO );
         smallMenuItem->Enable( false );
         m_OptionsMenu->Append( smallMenuItem );

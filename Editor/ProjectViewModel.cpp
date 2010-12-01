@@ -28,6 +28,9 @@ ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectView
 , m_IsContainer( isContainer )
 , m_IsActive( isActive )
 {
+    // projects shouldn't have references absolute paths in them
+    HELIUM_ASSERT( m_ParentNode == NULL || !m_Path.IsAbsolute() );
+
     if ( document )
     {
         ConnectDocument( document );
@@ -169,9 +172,16 @@ void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEve
 
 void ProjectViewModelNode::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-    m_Path = args.m_Document->GetPath();
+    if ( m_ParentNode )
+    {
+        m_Path = args.m_Document->GetPath().GetRelativePath( m_ParentNode->GetPath() );
 
-    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
+        m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
+    }
+    else
+    {
+        m_Path = args.m_Document->GetPath();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -46,9 +46,9 @@ JointTransform::~JointTransform()
 {
 }
 
-void JointTransform::Initialize(Scene* scene)
+void JointTransform::Initialize()
 {
-    __super::Initialize( scene );
+    __super::Initialize();
 
     SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
     m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);

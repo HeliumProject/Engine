@@ -84,6 +84,8 @@ Helium.CleanWxWidgets = function( wx )
 		os.exit(1)
 	end
 
+	os.chdir( cwd )
+
 end
 
 Helium.PublishWxWidgets = function( wx )

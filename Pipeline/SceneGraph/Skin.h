@@ -40,7 +40,7 @@ namespace Helium
             Skin();
             ~Skin();
 
-            virtual void Initialize(Scene* scene) HELIUM_OVERRIDE;
+            virtual void Initialize() HELIUM_OVERRIDE;
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
 
         private:

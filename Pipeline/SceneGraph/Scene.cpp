@@ -66,7 +66,8 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
 
     // Setup root node
     m_Root = new PivotTransform();
-    m_Root->Initialize( this );
+    m_Root->SetOwner( this );
+    m_Root->Initialize();
     m_Root->SetName( TXT( "Root" ) );
     m_Root->Evaluate( GraphDirections::Downstream );
     m_Graph->AddNode( m_Root.Ptr() );
@@ -479,7 +480,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
     for ( ; itr != end; ++itr )
     {
-        (*itr)->Initialize( this );
+        (*itr)->Initialize();
 
         if ( importFlags & ImportFlags::Select )
         {
@@ -1255,6 +1256,8 @@ void Scene::RemoveObject( const SceneNodePtr& node )
 
 void Scene::AddSceneNode( const SceneNodePtr& node )
 {
+    node->SetOwner( this );
+
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Insert in node list") );
 
@@ -2579,7 +2582,7 @@ Undo::CommandPtr Scene::GroupSelected()
 
     // Create the new group
     SceneGraph::PivotTransform* group = new SceneGraph::PivotTransform();
-    group->Initialize( this );
+    group->Initialize();
 
     // Get a decent name
     group->Rename( TXT( "group1" ) );
@@ -2734,7 +2737,7 @@ Undo::CommandPtr Scene::DuplicateSelected()
         duplicate->SetParent( node->GetParent() );
 
         // make sure the new nodes are initialized
-        duplicate->InitializeHierarchy( node->GetOwner() );
+        duplicate->InitializeHierarchy();
     }
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
@@ -2801,7 +2804,7 @@ Undo::CommandPtr Scene::SmartDuplicateSelected()
     batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
-    duplicate->InitializeHierarchy( node->GetOwner() );
+    duplicate->InitializeHierarchy();
 
     // setting the selection will invalidate the flag for having a valid smart duplicate matrix
     batch->Push( m_Selection.SetItem(duplicate) );

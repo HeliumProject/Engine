@@ -383,7 +383,8 @@ void LayersPanel::OnNewLayer( wxCommandEvent& event )
     if ( m_Scene )
     {
         LayerPtr layer = new Layer();
-        layer->Initialize( m_Scene );
+        layer->SetOwner( m_Scene );
+        layer->Initialize();
         m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
         m_Scene->Execute( false ); 
     }
@@ -403,7 +404,8 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
 
         Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
         LayerPtr layer = new Layer();
-        layer->Initialize( m_Scene );
+        layer->SetOwner( m_Scene );
+        layer->Initialize();
 
         // Generate a name for this layer
         GenerateLayerName(layer);

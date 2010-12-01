@@ -138,8 +138,9 @@ bool TreeWndCtrl::Layout()
         if ( m_root != TreeWndCtrlItemIdInvalid )
             AddNodeToLayout(sizer, m_root);
 
-        returnVal = __super::Layout();
+        // need to call this before calling __super::Layout, as it does some adjustment of the sizer's settings
         AdjustTreeScrollbars();
+        returnVal = __super::Layout();
         Thaw();
         m_dirty = false;
     }

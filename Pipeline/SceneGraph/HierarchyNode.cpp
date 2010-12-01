@@ -71,14 +71,15 @@ SceneNodeTypePtr HierarchyNode::CreateNodeType( SceneGraph::Scene* scene ) const
     return nodeType;
 }
 
-void HierarchyNode::InitializeHierarchy(Scene* scene)
+void HierarchyNode::InitializeHierarchy()
 {
-    Initialize(scene);
+    Initialize();
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
         SceneGraph::HierarchyNode* child = *itr;
-        child->InitializeHierarchy(scene);
+        child->SetOwner( m_Owner );
+        child->InitializeHierarchy();
     }
 }
 
@@ -1049,7 +1050,7 @@ void HierarchyNode::CreatePanel(CreatePanelArgs& args)
     {
         args.m_Generator->PushContainer( TXT( "Hidden Settings" ) );
         {
-            static const tstring helpText = TXT( "Controls if this node is hidden/visible." );
+            const tstring helpText = TXT( "Controls if this node is hidden/visible." );
             args.m_Generator->AddLabel( TXT( "Hidden" ) )->a_HelpText.Set( helpText );
             args.m_Generator->AddCheckBox<SceneGraph::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false )->a_HelpText.Set( helpText );
         }
@@ -1057,7 +1058,7 @@ void HierarchyNode::CreatePanel(CreatePanelArgs& args)
 
         args.m_Generator->PushContainer( TXT( "Live Settings" ) );
         {
-            static const tstring helpText = TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." );
+            const tstring helpText = TXT( "Controls if this node is 'live' with regard to the placement tool.  Only live objects will be tested for snapping, etc." );
             args.m_Generator->AddLabel( TXT( "Live" ) )->a_HelpText.Set( helpText );   
             args.m_Generator->AddCheckBox<SceneGraph::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive )->a_HelpText.Set( helpText );
         }

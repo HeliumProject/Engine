@@ -30,7 +30,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
 
     m_Generator->PushContainer();
     {
-        static const tstring helpText = TXT( "This sets the path on disk of the entity instance." );
+        const tstring helpText = TXT( "This sets the path on disk of the entity instance." );
         m_Generator->AddLabel( TXT( "Class Path" ) )->a_HelpText.Set( helpText );
 
         m_EntityPath = m_Generator->AddValue<EntityInstance, tstring>( m_Selection, &EntityInstance::GetEntityPath, &EntityInstance::SetEntityPath );
@@ -81,7 +81,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
 
     m_Generator->PushContainer();
     {
-        static const tstring helpText = TXT( "This determines if a pointer should be drawn in the 3d view where this entity is placed." );
+        const tstring helpText = TXT( "This determines if a pointer should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
         m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsPointerVisible, &EntityInstance::SetPointerVisible, false )->a_HelpText.Set( helpText );
     }
@@ -89,7 +89,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
 
     m_Generator->PushContainer();
     {
-        static const tstring helpText = TXT( "This determines if the bounding box for the entity should be drawn in the 3d view where this entity is placed." );
+        const tstring helpText = TXT( "This determines if the bounding box for the entity should be drawn in the 3d view where this entity is placed." );
         m_Generator->AddLabel( TXT( "Show Bounds" ) )->a_HelpText.Set( helpText );
         m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsBoundsVisible, &EntityInstance::SetBoundsVisible, false )->a_HelpText.Set( helpText );
     }
@@ -97,7 +97,7 @@ EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SceneNodeDumbP
 
     m_Generator->PushContainer();
     {
-        static const tstring helpText = TXT( "This determines if the entity's geometry should be drawn in the 3d view." );
+        const tstring helpText = TXT( "This determines if the entity's geometry should be drawn in the 3d view." );
         m_Generator->AddLabel( TXT( "Show Geometry" ) )->a_HelpText.Set( helpText );
         m_Generator->AddCheckBox<EntityInstance, bool>( m_Selection, &EntityInstance::IsGeometryVisible,  &EntityInstance::SetGeometryVisible, false )->a_HelpText.Set( helpText );
     }

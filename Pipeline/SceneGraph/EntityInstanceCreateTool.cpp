@@ -95,7 +95,8 @@ SceneGraph::TransformPtr EntityInstanceCreateTool::CreateNode()
         }
 
         EntityInstancePtr entityInstance = new EntityInstance ();
-        entityInstance->Initialize( m_Scene );
+        entityInstance->SetOwner( m_Scene );
+        entityInstance->Initialize();
         entityInstance->SetEntityPath( entityClassPath );
         entityInstance->SetPointerVisible( s_PointerVisible );
         entityInstance->SetBoundsVisible( s_BoundsVisible );

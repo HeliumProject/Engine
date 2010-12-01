@@ -133,10 +133,9 @@ void SceneNode::Reset()
     m_Descendants.clear();
 }
 
-void SceneNode::Initialize(Scene* scene)
+void SceneNode::Initialize()
 {
-    HELIUM_ASSERT( m_Owner == NULL );
-    m_Owner = scene;
+    HELIUM_ASSERT( m_Owner );
 
     // we start out dirty, of course
     Dirty();

@@ -35,7 +35,7 @@ Helium.CleanTBB = function( tbb )
 	local files = {}
 	
 	if os.get() == "windows" then
-		local make = "nmake.exe "
+		local make = "make.exe "
 
 		if not os.getenv("VCINSTALLDIR") then
 			print("VCINSTALLDIR is not detected in your environment")
@@ -52,6 +52,8 @@ Helium.CleanTBB = function( tbb )
 		print("Implement support for " .. os.get() .. " to CleanTBB()")
 		os.exit(1)
 	end
+
+	os.chdir( cwd )
 
 end
 

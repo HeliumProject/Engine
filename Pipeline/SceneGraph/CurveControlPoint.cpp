@@ -122,7 +122,7 @@ void CurveControlPoint::CreatePanel( CreatePanelArgs& args )
     args.m_Generator->PushContainer( TXT( "CurveControlPoint" ) );
     {
         args.m_Generator->PushContainer();
-        static const tstring helpText = TXT( "Sets the position of this point in 3d space." );
+        const tstring helpText = TXT( "Sets the position of this point in 3d space." );
         args.m_Generator->AddLabel( TXT( "Position" ) )->a_HelpText.Set( helpText );
         args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionX, &CurveControlPoint::SetPositionX )->a_HelpText.Set( helpText );
         args.m_Generator->AddValue<CurveControlPoint, float32_t>( args.m_Selection, &CurveControlPoint::GetPositionY, &CurveControlPoint::SetPositionY )->a_HelpText.Set( helpText );

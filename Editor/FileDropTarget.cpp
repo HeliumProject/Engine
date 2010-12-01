@@ -16,7 +16,10 @@ FileDropTarget::FileDropTarget( const std::set< tstring >& extensions )
 ///////////////////////////////////////////////////////////////////////////////
 FileDropTarget::FileDropTarget( const tstring& extensions, const tstring& delims )
 {
-    Tokenize( extensions, m_FileExtensions, delims );
+    if ( !extensions.empty() )
+    {
+        Tokenize( extensions, m_FileExtensions, delims );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

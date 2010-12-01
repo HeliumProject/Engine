@@ -174,7 +174,7 @@ void Locator::CreatePanel( CreatePanelArgs& args )
     {
         args.m_Generator->PushContainer( TXT( "Shape Control" ) );
         {
-            static const tstring helpText = TXT( "Choose the shape of the locator." );
+            const tstring helpText = TXT( "Choose the shape of the locator." );
             args.m_Generator->AddLabel( TXT( "Shape" ) )->a_HelpText.Set( helpText );
 
             Inspect::Choice* choice = args.m_Generator->AddChoice<Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);

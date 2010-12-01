@@ -9,8 +9,7 @@ using namespace Helium::SceneGraph;
 REFLECT_DEFINE_CLASS( SceneSettings );
 
 SceneSettings::SceneSettings()
-: m_MRU( new MRUData() )
-, m_ScaleManipulatorSize( 0.3f )
+: m_ScaleManipulatorSize( 0.3f )
 , m_RotateManipulatorSize( 0.3f )
 , m_RotateManipulatorAxisSnap( false )
 , m_RotateManipulatorSnapDegrees( 15.0f )
@@ -23,11 +22,6 @@ SceneSettings::SceneSettings()
 , m_ScaleManipulatorGridSnap( false )
 , m_ScaleManipulatorDistance( 1.0f )
 {
-}
-
-MRUData* SceneSettings::GetMRU()
-{
-    return m_MRU;
 }
 
 float32_t SceneSettings::ScaleManipulatorSize() const

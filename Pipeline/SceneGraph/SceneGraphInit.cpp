@@ -57,7 +57,6 @@ void SceneGraph::Initialize()
         g_SceneGraphInitStack.Push( Asset::Initialize, Asset::Cleanup );
 
         g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType<MRUData>( TXT("SceneGraph::MRUData") ) );
 
         g_SceneGraphInitStack.Push( Viewport::InitializeType, Viewport::CleanupType );
         g_SceneGraphInitStack.Push( Primitive::InitializeType, Primitive::CleanupType );

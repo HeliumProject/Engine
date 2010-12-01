@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -267,7 +267,7 @@ namespace Helium
 				wxDataViewCtrl* m_DataViewCtrl;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnListItemActivated( wxListEvent& event ) { event.Skip(); }
+				virtual void OnOpenProjectListItemActivated( wxListEvent& event ) { event.Skip(); }
 				
 			
 			public:

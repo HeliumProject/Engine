@@ -3,7 +3,6 @@
 #include "Pipeline/API.h"
 #include "Pipeline/SceneGraph/Manipulator.h"
 #include "Pipeline/SceneGraph/TranslateManipulator.h"
-#include "Pipeline/MRUData.h"
 
 namespace Helium
 {
@@ -15,8 +14,6 @@ namespace Helium
             REFLECT_DECLARE_CLASS( SceneSettings, Reflect::Element );
 
             SceneSettings();
-
-            MRUData* GetMRU();
 
             float32_t ScaleManipulatorSize() const;
             bool ScaleManipulatorGridSnap() const;
@@ -34,8 +31,6 @@ namespace Helium
             bool TranslateManipulatorLiveObjectsOnly() const;
 
         private:
-            MRUDataPtr m_MRU;
-
             float32_t m_ScaleManipulatorSize;
             bool m_ScaleManipulatorGridSnap;
             float32_t m_ScaleManipulatorDistance;
@@ -54,8 +49,6 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor<SceneSettings>& comp )
             {
-                comp.AddField( &SceneSettings::m_MRU, "m_MRU" );
-
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, "m_ScaleManipulatorDistance" );

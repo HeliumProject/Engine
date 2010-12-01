@@ -25,6 +25,7 @@
 #include "Editor/EditorIDs.h"
 #include "Editor/FileDialog.h"
 #include "Editor/ArtProvider.h"
+#include "Editor/EditorSettings.h"
 #include "Editor/SettingsDialog.h"
 #include "Editor/WindowSettings.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
@@ -111,7 +112,7 @@ public:
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_SettingsManager( settingsManager )
-, m_MRU( new MenuMRU( 30, this ) )
+, m_MenuMRU( new MenuMRU( 30, this ) )
 , m_TreeMonitor( &m_SceneManager )
 , m_Project( NULL )
 , m_MessageDisplayer( this )
@@ -241,22 +242,9 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_SceneManager.e_SceneAdded.AddMethod( this, &MainFrame::SceneAdded );
     m_SceneManager.e_SceneRemoving.AddMethod( this, &MainFrame::SceneRemoving );
 
-    m_MRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+    m_MenuMRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
-#if MRU_REFACTOR
-    std::vector< tstring > paths;
-    std::vector< tstring >::const_iterator itr = wxGetApp().GetSettings()->GetMRU()->GetPaths().begin();
-    std::vector< tstring >::const_iterator end = wxGetApp().GetSettings()->GetMRU()->GetPaths().end();
-    for ( ; itr != end; ++itr )
-    {
-        Helium::Path path( *itr );
-        if ( path.Exists() )
-        {
-            paths.push_back( *itr );
-        }
-    }
-    m_MRU->FromVector( paths );
-#endif
+    m_MenuMRU->FromVector( wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects() );
 
     DropTarget* dropTarget = new DropTarget();
     dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
@@ -306,11 +294,7 @@ MainFrame::~MainFrame()
     }
 
     // Save preferences and MRU
-#if MRU_REFACTOR
-    std::vector< tstring > mruPaths;
-    m_MRU->ToVector( mruPaths );
-    wxGetApp().GetSettings()->GetMRU()->SetPaths( mruPaths );
-#endif
+    wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
 
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
@@ -327,7 +311,7 @@ MainFrame::~MainFrame()
     m_SceneManager.e_SceneAdded.RemoveMethod( this, &MainFrame::SceneAdded );
     m_SceneManager.e_SceneRemoving.RemoveMethod( this, &MainFrame::SceneRemoving );
 
-    m_MRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+    m_MenuMRU->RemoveItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewCanvas()->GetViewport().RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
@@ -382,11 +366,11 @@ void MainFrame::OpenProject( const Helium::Path& path )
         if ( opened )
         {
             m_Project->a_Path.Set( path );
-            m_MRU->Insert( path );
+            m_MenuMRU->Insert( path );
         }
         else
         {
-            m_MRU->Remove( path );
+            m_MenuMRU->Remove( path );
             if ( !error.empty() )
             {
                 wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );    
@@ -419,6 +403,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
     m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
     m_ProjectPanel->OpenProject( m_Project, document );
+    m_MenuMRU->Insert( path );
 
     if ( m_VaultPanel )
     {
@@ -583,7 +568,10 @@ void MainFrame::SceneAdded( const SceneChangeArgs& args )
         m_PropertiesPanel->GetPropertiesGenerator().PopulateLink().Add( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &SceneGraph::Scene::PopulateLink) );
 
         Document* document = m_DocumentManager.FindDocument( args.m_Scene->GetPath() );
-        ConnectDocument( document );
+        if ( document )
+        {
+            ConnectDocument( document );
+        }
     }
 }
 
@@ -759,7 +747,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         m_MenuFileNew->Enable( ID_NewEntity, isProjectOpen );
         m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
-        m_MRU->PopulateMenu( m_MenuFileOpenRecent );
+        m_MenuMRU->PopulateMenu( m_MenuFileOpenRecent );
 
         // File > Close is enabled if there are documents open in the document manager
         m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );
@@ -938,11 +926,11 @@ bool MainFrame::DoOpen( const tstring& path )
 
     //        if ( opened )
     //        {
-    //            m_MRU->Insert( path );
+    //            m_MenuMRU->Insert( path );
     //        }
     //        else
     //        {
-    //            m_MRU->Remove( path );
+    //            m_MenuMRU->Remove( path );
     //            if ( !error.empty() )
     //            {
     //                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );

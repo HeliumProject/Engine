@@ -26,6 +26,9 @@ namespace Helium
             void SetActive( const Path& path, bool active );
 
         protected:
+            void PopulateOpenProjectListItems();
+            virtual void OnOpenProjectListItemActivated( wxListEvent& event );
+
             // UI event handlers
             virtual void OnOpenProject( wxMouseEvent& event );
             virtual void OnContextMenu( wxContextMenuEvent& event );

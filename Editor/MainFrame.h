@@ -100,7 +100,7 @@ namespace Helium
 
             SettingsManager*            m_SettingsManager;
 
-            MenuMRUPtr                  m_MRU;
+            MenuMRUPtr                  m_MenuMRU;
             M_IDToColorMode             m_ColorModeLookup;
 
             //context items ordered by name  

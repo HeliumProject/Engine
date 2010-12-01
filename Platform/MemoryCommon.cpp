@@ -124,8 +124,8 @@ DynamicMemoryHeap& GetDefaultHeap()
     static DynamicMemoryHeap* pDefaultHeap = NULL;
     if( !pDefaultHeap )
     {
-        pDefaultHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) )
-            DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "Default" ) );
+        pDefaultHeap = static_cast< DynamicMemoryHeap* >( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
+        new( pDefaultHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "Default" ) );
     }
 
     return *pDefaultHeap;
@@ -141,8 +141,8 @@ DynamicMemoryHeap& GetExternalHeap()
     static DynamicMemoryHeap* pExternalHeap = NULL;
     if( !pExternalHeap )
     {
-        pExternalHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) )
-            DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "External" ) );
+        pExternalHeap = static_cast< DynamicMemoryHeap* >( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
+        new( pExternalHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "External" ) );
     }
 
     return *pExternalHeap;

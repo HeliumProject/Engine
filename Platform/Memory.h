@@ -53,8 +53,9 @@
             static DynamicMemoryHeap* pModuleHeap = NULL; \
             if( !pModuleHeap ) \
             { \
-                pModuleHeap = new( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) ) \
-                    DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( #MODULE_NAME ) ); \
+                pModuleHeap = static_cast< DynamicMemoryHeap* >( \
+                    PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) ); \
+                new( pModuleHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( #MODULE_NAME ) ); \
             } \
             \
             return *pModuleHeap; \

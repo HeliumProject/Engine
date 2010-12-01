@@ -75,15 +75,8 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( ProjectPanel::OnActivateItem ), NULL, this );
 
-    std::set< tstring > extension;
-    Asset::AssetClass::GetExtensions( extension );
-
-#pragma TODO("Why isn't hrb part of the AssetClass extensions?")
-    extension.insert( TXT( "hrb" ) );
-    extension.insert( TXT( "obj" ) );
-
     m_DataViewCtrl->EnableDropTarget( wxDF_FILENAME );
-    m_DropTarget = new FileDropTarget( extension );
+    m_DropTarget = new FileDropTarget( TXT( "" ) );
     //m_DropTarget->AddDragOverListener( FileDragEnterSignature::Delegate( this, &ProjectPanel::DragEnter ) );
     m_DropTarget->AddDragOverListener( FileDragOverSignature::Delegate( this, &ProjectPanel::OnDragOver ) );
     //m_DropTarget->AddDragLeaveListener( FileDragLeaveSignature::Delegate( this, &ProjectPanel::DragLeave ) );
@@ -222,14 +215,16 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
     }
 
     const Path& path = node->GetPath();
-    if ( !path.empty() )
+    HELIUM_ASSERT( !path.empty() );
+
+    if ( path.FullExtension() == TXT( "scene.hrb" ) )
     {
-        if ( path.FullExtension() == TXT( "scene.hrb" ) )
-        {
-            wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
-        }
+        wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
+        return;
     }
 
+    // we've gotten to an item we don't know how to activate yet
+    HELIUM_BREAK();
 }
 
 void ProjectPanel::OnOpenProject( wxMouseEvent& event )
@@ -285,28 +280,19 @@ void ProjectPanel::OnSelectionChanged( wxDataViewEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
-    Path path( args.m_Path );
-
-    // it's a project file
-    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    if ( !m_Project )
     {
-        // allow user to drop a project in
+        return;
     }
-    else if ( m_Project )
-    {
-        wxDataViewItem item;
-        wxDataViewColumn* column;
-        m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
 
-        if ( item.IsOk() && !m_Model->IsDropPossible( item ) )
-        {
-            args.m_DragResult = wxDragNone;
-        }    
-    }
-    else
+    wxDataViewItem item;
+    wxDataViewColumn* column;
+    m_DataViewCtrl->HitTest( wxPoint( args.m_X, args.m_Y ), item, column );
+
+    if ( item.IsOk() && !m_Model->IsDropPossible( item ) )
     {
         args.m_DragResult = wxDragNone;
-    }
+    }    
 }
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
@@ -318,33 +304,64 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     {
         wxGetApp().GetFrame()->OpenProject( path );
     }
-    else if ( m_Project )
+    else if ( !m_Project )
     {
-#pragma TODO( "Handle opening a scene" )
-        Asset::AssetClassPtr asset;
-        if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
+        int32_t result = wxMessageBox( wxT( "You don't have a project loaded, but you're trying to add files.\nWould you like to create a new project?" ),  wxT( "No Project Loaded" ), wxYES_NO | wxICON_QUESTION );
+        if ( result == wxYES )
         {
-            asset = Asset::AssetClass::LoadAssetClass( path );
-        }
-        else
-        {
-            asset = Asset::AssetClass::Create( path );
-        }
+            FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
 
-        if ( asset.ReferencesObject() )
-        {
-            m_Project->AddPath( asset->GetSourcePath() );
-
-            DocumentPtr document = new Document( asset->GetSourcePath() );
-
-            tstring error;
-            bool result = m_DocumentManager->OpenDocument( document, error );
-            HELIUM_ASSERT( result );
+            if ( newProjectDialog.ShowModal() == wxID_OK )
+            {
+                wxGetApp().GetFrame()->OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
+            }
         }
+    }
+
+    if ( !m_Project ) // they failed to create a new project above
+    {
+        return;
+    }
+
+    if ( !path.IsUnder( m_Project->a_Path.Get().Directory() ) )
+    {
+        tstringstream error;
+        error << TXT( "You can only add files that live below the project.\nYou must move the file you're trying to drag somewhere below the directory:\n  " ) << m_Project->a_Path.Get().Directory().c_str();
+        wxMessageBox( error.str(), TXT( "Error Adding File" ), wxOK | wxICON_ERROR );
+        return;
+    }
+
+    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "scene.hrb" ) ) == 0 )
+    {
+        m_Project->AddPath( path );
+        return;
+    }
+
+    Asset::AssetClassPtr asset;
+    if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
+    {
+        asset = Asset::AssetClass::LoadAssetClass( path );
     }
     else
     {
-#pragma TODO( "Offer to make the user a project" )
+        asset = Asset::AssetClass::Create( path );
     }
+
+    if ( asset.ReferencesObject() )
+    {
+        m_Project->AddPath( asset->GetSourcePath() );
+
+    }
+    else
+    {
+        // we could not create a known asset type for this file, ask if they'd like to add it anyway
+        int32_t result = wxMessageBox( wxT( "You've dragged a type of file into the project that we don't know how to handle.\n\nThat's ok, we can still add the file to the project and it will get included with the game, you just won't be able to do much else with it.\n\nWould you still like to add the file to the project?" ), wxT( "Unknown File Type" ), wxYES_NO | wxICON_QUESTION );
+        if ( result == wxYES )
+        {
+            m_Project->AddPath( path );
+        }
+    }
+
+#pragma TODO( "Set the item we just added to be selected" )
 }
 

@@ -176,8 +176,8 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
         }
         else
         {
-            // No error, operation cancelled
-            return true;
+            error = TXT( "Cancelled saving of document." );
+            return false;
         }
     }
 

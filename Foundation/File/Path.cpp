@@ -135,7 +135,7 @@ bool Path::IsAbsolute( const tchar_t* path )
 
 bool Path::IsUnder( const tstring& location, const tstring& path )
 {
-    return ( path.find( location ) == 0 );
+    return _tcsnicmp( location.c_str(), path.c_str(), location.length() ) == 0;
 }
 
 bool Path::IsFile() const

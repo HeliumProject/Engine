@@ -40,7 +40,7 @@ namespace Helium
         {
         public:
             FileDropTarget( const std::set< tstring >& extensions );
-            FileDropTarget( const tstring& extensions, const tstring& delims = TXT( "," ) );
+            FileDropTarget( const tstring& extensions = TXT( "" ), const tstring& delims = TXT( "," ) );
 
             //void AddDragEnterListener( const FileDragEnterSignature::Delegate& listener );
             void AddDragOverListener( const FileDragOverSignature::Delegate& listener );

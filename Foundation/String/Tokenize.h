@@ -98,7 +98,7 @@ namespace Helium
 
         for(; i != end; i++)
         {
-            if( (*i).matched)
+            if( (*i).matched )
             {
                 tokens.insert( *i ); 
             }

@@ -244,7 +244,8 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 
     m_MenuMRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
-    m_MenuMRU->FromVector( wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects() );
+    const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+    m_MenuMRU->FromVector( mruPaths );
 
     DropTarget* dropTarget = new DropTarget();
     dropTarget->SetDragOverCallback( DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
@@ -366,15 +367,14 @@ void MainFrame::OpenProject( const Helium::Path& path )
         if ( opened )
         {
             m_Project->a_Path.Set( path );
+
             m_MenuMRU->Insert( path );
+            wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
         }
         else
         {
-            m_MenuMRU->Remove( path );
-            if ( !error.empty() )
-            {
-                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );    
-            }
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+            
             return;
         }
     }
@@ -402,8 +402,10 @@ void MainFrame::OpenProject( const Helium::Path& path )
     m_DocumentManager.e_DocumentOpened.AddMethod( m_Project.Ptr(), &Project::OnDocumentOpened );
     m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
-    m_ProjectPanel->OpenProject( m_Project, document );
     m_MenuMRU->Insert( path );
+    wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
+
+    m_ProjectPanel->OpenProject( m_Project, document );
 
     if ( m_VaultPanel )
     {
@@ -732,6 +734,11 @@ void MainFrame::OnChar(wxKeyEvent& event)
     }
 }
 
+bool CheckMRUPathExists( const tstring& item )
+{
+    return Path( item ).Exists();
+}
+
 void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
     const wxMenu* menu = event.GetMenu();
@@ -747,7 +754,7 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         m_MenuFileNew->Enable( ID_NewEntity, isProjectOpen );
         m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
-        m_MenuMRU->PopulateMenu( m_MenuFileOpenRecent );
+        m_MenuMRU->PopulateMenu( m_MenuFileOpenRecent, &CheckMRUPathExists );
 
         // File > Close is enabled if there are documents open in the document manager
         m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );

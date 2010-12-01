@@ -339,9 +339,9 @@ tstring Path::Basename() const
     if ( slash != tstring::npos )
     {
         size_t pos = m_Path.rfind( TXT( '.' ) );
-        if ( pos != tstring::npos )
+        if ( pos != tstring::npos && pos > slash + 1 )
         {
-            return m_Path.substr( slash + 1, pos + 1 );
+            return m_Path.substr( slash + 1, pos - ( slash + 1 ) );
         }
         else
         {

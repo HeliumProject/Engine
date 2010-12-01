@@ -302,13 +302,18 @@ namespace Helium
             }
         }
 
+        bool FromVector( const std::vector< T >& vec )
+        {
+            Clear();
+            return AppendVector( vec );
+        }
+
         // 
         // Returns false if not all elements could be copied from the
         // vector (probably because of duplicates).
         // 
-        bool FromVector( const std::vector< T >& vec )
+        bool AppendVector( const std::vector< T >& vec )
         {
-            //Clear()???
             bool ok = true;
             std::vector< T >::const_iterator itr = vec.begin();
             std::vector< T >::const_iterator end = vec.end();

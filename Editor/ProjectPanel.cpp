@@ -268,7 +268,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
 
     wxListItem item;
     item.SetId( m_OpenProjectListCtrl->GetItemCount() );
-    item.SetText( wxT( "New Project..." ) );
+    item.SetText( wxT( "Create New Project..." ) );
     item.SetFont( *wxITALIC_FONT );
     m_OpenProjectListCtrl->InsertItem( item );
 

@@ -26,6 +26,8 @@ namespace Helium
         };
         typedef Helium::Signature< const MRUArgs& > MRUSignature;
 
+        typedef bool (*EnabledCallback)(const tstring&);
+
         /////////////////////////////////////////////////////////////////////////////
         // Class for managing a list of "most recently used" items.  The items are
         // strings (paths to files).  The MRU can be saved to and restored from
@@ -38,11 +40,11 @@ namespace Helium
             MenuMRU( int32_t maxItems, wxWindow* owner );
             virtual ~MenuMRU();
 
-            void RemoveInvalidItems( bool tuidRequired = false );
+            void RemoveNonexistentPaths();
 
             void AddItemSelectedListener( const MRUSignature::Delegate& listener );
             void RemoveItemSelectedListener( const MRUSignature::Delegate& listener );
-            void PopulateMenu( wxMenu* menu );
+            void PopulateMenu( wxMenu* menu, EnabledCallback enabledCallback = NULL );
 
         private:
             wxWindow* m_Owner;

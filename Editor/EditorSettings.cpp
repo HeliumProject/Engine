@@ -18,17 +18,6 @@ GeneralSettings::GeneralSettings()
 
 std::vector< tstring >& GeneralSettings::GetMRUProjects()
 {
-    //std::vector< tstring > paths;
-    //std::vector< tstring >::const_iterator itr = wxGetApp().GetSettings()->GetMRU()->GetPaths().begin();
-    //std::vector< tstring >::const_iterator end = wxGetApp().GetSettings()->GetMRU()->GetPaths().end();
-    //for ( ; itr != end; ++itr )
-    //{
-    //    Helium::Path path( *itr );
-    //    if ( path.Exists() )
-    //    {
-    //        paths.push_back( *itr );
-    //    }
-    //}
     return m_MRUProjects;
 }
 

@@ -70,14 +70,14 @@ namespace Helium
                 m_OrderedSet.Clear(); 
             }
 
-            virtual void FromVector( std::vector< T > vec )
+            virtual void FromVector( const std::vector< T >& vec )
             {
-                m_OrderedSet.Clear();
-                if ( m_MaxCount > 0 && vec.size() > ( size_t )( m_MaxCount ) )
-                {
-                    vec.resize( m_MaxCount );
-                }
                 m_OrderedSet.FromVector( vec );
+            }
+
+            virtual void AppendVector( const std::vector< T >& vec )
+            {
+                m_OrderedSet.AppendVector( vec );
             }
 
             virtual void ToVector( std::vector< T >& vec )

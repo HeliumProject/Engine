@@ -14,64 +14,77 @@ typedef std::map< int32_t, tstring> M_MenuItemIDToString;
 class MenuMRUEvtHandler : public wxEvtHandler
 {
 public:
-  wxMenu*               m_Menu;
-  M_MenuItemIDToString  m_MenuItemIDToString;
-  MRUSignature::Event   m_ItemSelected;
+    wxMenu*               m_Menu;
+    M_MenuItemIDToString  m_MenuItemIDToString;
+    MRUSignature::Event   m_ItemSelected;
 
-  MenuMRUEvtHandler()
-    : m_Menu( NULL )
-  {
-  }
-
-  virtual ~MenuMRUEvtHandler()
-  {
-    M_MenuItemIDToString::iterator itr = m_MenuItemIDToString.begin();
-    M_MenuItemIDToString::iterator end = m_MenuItemIDToString.end();
-    for ( ; itr != end ; ++itr )
+    MenuMRUEvtHandler()
+        : m_Menu( NULL )
     {
-      Disconnect( itr->first, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MenuMRUEvtHandler::OnMRUMenuItem ) );
-    }
-  }
-
-  void SetMenu( wxMenu* menu, const OS_string& items )
-  {
-    // protect the MRU so that it is only tied to one menu
-    if ( m_Menu != NULL )
-    {
-      HELIUM_ASSERT( !m_Menu || m_Menu == menu );
     }
 
-    m_Menu = menu;
-
-    m_MenuItemIDToString.clear();
-
-    // Clear out the old menu items
-    while ( m_Menu->GetMenuItemCount() > 0 )
+    virtual ~MenuMRUEvtHandler()
     {
-      m_Menu->Delete( *( m_Menu->GetMenuItems().begin() ) );
+        M_MenuItemIDToString::iterator itr = m_MenuItemIDToString.begin();
+        M_MenuItemIDToString::iterator end = m_MenuItemIDToString.end();
+        for ( ; itr != end ; ++itr )
+        {
+            Disconnect( itr->first, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MenuMRUEvtHandler::OnMRUMenuItem ) );
+        }
     }
 
-    // Build a new list of menu items from the MRU
-    OS_string::ReverseIterator mruItr = items.ReverseBegin();
-    OS_string::ReverseIterator mruEnd = items.ReverseEnd();
-    for ( ; mruItr != mruEnd; ++mruItr )
+    void SetMenu( wxMenu* menu, const OS_string& items, EnabledCallback enabledCallback = NULL )
     {
-      const tstring& item = *mruItr;
+        // protect the MRU so that it is only tied to one menu
+        HELIUM_ASSERT( m_Menu == NULL || m_Menu == menu );
 
-      wxMenuItem* menuItem = menu->Append( wxID_ANY, item.c_str() );
-      Connect( menuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MenuMRUEvtHandler::OnMRUMenuItem ), NULL, this );
-      m_MenuItemIDToString.insert( M_MenuItemIDToString::value_type( menuItem->GetId(), item ) );
+        m_Menu = menu;
+
+        m_MenuItemIDToString.clear();
+
+        // Clear out the old menu items
+        while ( m_Menu->GetMenuItemCount() > 0 )
+        {
+            m_Menu->Delete( *( m_Menu->GetMenuItems().begin() ) );
+        }
+
+        // Build a new list of menu items from the MRU
+        OS_string::ReverseIterator mruItr = items.ReverseBegin();
+        OS_string::ReverseIterator mruEnd = items.ReverseEnd();
+        for ( ; mruItr != mruEnd; ++mruItr )
+        {
+            const tstring& item = *mruItr;
+
+            wxMenuItem* menuItem = menu->Append( wxID_ANY, item.c_str() );
+
+            bool enabled = true;
+            if ( enabledCallback )
+            {
+                enabled = (*enabledCallback)( item );
+            }
+
+            if ( enabled )
+            {
+                Connect( menuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MenuMRUEvtHandler::OnMRUMenuItem ), NULL, this );
+            }
+            else
+            {
+                menuItem->SetItemLabel( ( item + TXT( " (missing)" ) ).c_str() );
+                menuItem->Enable( false );
+            }
+
+            m_MenuItemIDToString.insert( M_MenuItemIDToString::value_type( menuItem->GetId(), item ) );
+        }
     }
-  }
 
-  void OnMRUMenuItem( wxCommandEvent& args )
-  {
-    M_MenuItemIDToString::iterator findMenuItem = m_MenuItemIDToString.find( args.GetId() );
-    if ( findMenuItem != m_MenuItemIDToString.end() ) 
+    void OnMRUMenuItem( wxCommandEvent& args )
     {
-      m_ItemSelected.Raise( MRUArgs( findMenuItem->second ) );
+        M_MenuItemIDToString::iterator findMenuItem = m_MenuItemIDToString.find( args.GetId() );
+        if ( findMenuItem != m_MenuItemIDToString.end() ) 
+        {
+            m_ItemSelected.Raise( MRUArgs( findMenuItem->second ) );
+        }
     }
-  }
 
 };
 
@@ -83,9 +96,9 @@ MenuMRU::MenuMRU( int32_t maxItems, wxWindow* owner )
 : MRU< tstring >( maxItems )
 , m_Owner( owner )
 {
-  m_MenuMRUEvtHandler = new MenuMRUEvtHandler();
+    m_MenuMRUEvtHandler = new MenuMRUEvtHandler();
 
-  m_Owner->PushEventHandler( m_MenuMRUEvtHandler );
+    m_Owner->PushEventHandler( m_MenuMRUEvtHandler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,9 +106,9 @@ MenuMRU::MenuMRU( int32_t maxItems, wxWindow* owner )
 // 
 MenuMRU::~MenuMRU()
 {
-  m_Owner->PopEventHandler();
+    m_Owner->PopEventHandler();
 
-  delete m_MenuMRUEvtHandler;
+    delete m_MenuMRUEvtHandler;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,40 +117,36 @@ MenuMRU::~MenuMRU()
 // ensure that it is in the file resolver.  Any invalid files are removed
 // from the MRU.
 // 
-void MenuMRU::RemoveInvalidItems( bool tuidRequired )
+void MenuMRU::RemoveNonexistentPaths()
 {
-  std::set< tstring > remove; // Lame, we should fix this
-  OS_OrderedTypeSet::Iterator mruItr = m_OrderedSet.Begin();
-  OS_OrderedTypeSet::Iterator mruEnd = m_OrderedSet.End();
+    std::set< tstring > remove; // Lame, we should fix this
+    OS_OrderedTypeSet::Iterator mruItr = m_OrderedSet.Begin();
+    OS_OrderedTypeSet::Iterator mruEnd = m_OrderedSet.End();
 
-  for ( ; mruItr != mruEnd; ++mruItr )
-  {
-    const tstring& current = *mruItr;
-
-    // Empty file paths are not allowed
-    if ( current.empty() )
+    for ( ; mruItr != mruEnd; ++mruItr )
     {
-      remove.insert( current );
-      continue;
+        const tstring& current = *mruItr;
+
+        // Empty file paths are not allowed
+        HELIUM_ASSERT( !current.empty() );
+
+        // Check to make sure the file exists on disk
+        bool exists = Helium::Path( current ).Exists();
+
+        if ( !exists )
+        {
+            remove.insert( current );
+            continue;
+        }
     }
 
-    // Check to make sure the file exists on disk
-    bool exists = Helium::Path( current ).Exists();
-
-    if ( !exists )
+    // Remove all the bad items
+    std::set< tstring >::const_iterator removeItr = remove.begin();
+    std::set< tstring >::const_iterator removeEnd = remove.end();
+    for ( ; removeItr != removeEnd; ++removeItr )
     {
-      remove.insert( current );
-      continue;
+        Remove( *removeItr );
     }
-  }
-
-  // Remove all the bad items
-  std::set< tstring >::const_iterator removeItr = remove.begin();
-  std::set< tstring >::const_iterator removeEnd = remove.end();
-  for ( ; removeItr != removeEnd; ++removeItr )
-  {
-    Remove( *removeItr );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +154,7 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
 //
 void MenuMRU::AddItemSelectedListener( const MRUSignature::Delegate& listener )
 {
-  m_MenuMRUEvtHandler->m_ItemSelected.Add( listener );
+    m_MenuMRUEvtHandler->m_ItemSelected.Add( listener );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,20 +162,14 @@ void MenuMRU::AddItemSelectedListener( const MRUSignature::Delegate& listener )
 // 
 void MenuMRU::RemoveItemSelectedListener( const MRUSignature::Delegate& listener )
 {
-  m_MenuMRUEvtHandler->m_ItemSelected.Remove( listener );
+    m_MenuMRUEvtHandler->m_ItemSelected.Remove( listener );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Populates the specified menu with the MRU items.  The caller can register 
 // with the MRU to be notified when one of the items is selected.
 // 
-void MenuMRU::PopulateMenu( wxMenu* menu )
+void MenuMRU::PopulateMenu( wxMenu* menu, EnabledCallback enabledCallback )
 {
-  // Remove any items that are not valid file paths.  Note: An option might
-  // need to be passed into this function so we know whether or not to
-  // require TUIDs for all items in the MRU.  For now, just allow any valid
-  // file paths, and don't require TUIDs.
-  RemoveInvalidItems( false );
-
-  m_MenuMRUEvtHandler->SetMenu( menu, GetItems() );
+    m_MenuMRUEvtHandler->SetMenu( menu, GetItems(), enabledCallback );
 }

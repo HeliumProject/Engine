@@ -8,10 +8,9 @@
 #include "RenderingPch.h"
 #include "Rendering/RVertexDescription.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+RVertexDescription::~RVertexDescription()
 {
-    /// Destructor.
-    RVertexDescription::~RVertexDescription()
-    {
-    }
 }

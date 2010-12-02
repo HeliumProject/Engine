@@ -10,20 +10,19 @@
 
 #include "PcSupport/ConfigPc.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// @copydoc ConfigInitialization::Initialize()
+bool ConfigInitializationWin::Initialize()
 {
-    /// @copydoc ConfigInitialization::Initialize()
-    bool ConfigInitializationWin::Initialize()
+    if( !ConfigInitialization::Initialize() )
     {
-        if( !ConfigInitialization::Initialize() )
-        {
-            return false;
-        }
-
-        HELIUM_TRACE( TRACE_INFO, TXT( "Saving user configuration.\n" ) );
-        ConfigPc::SaveUserConfig();
-        HELIUM_TRACE( TRACE_INFO, TXT( "User configuration saved.\n" ) );
-
-        return true;
+        return false;
     }
+
+    HELIUM_TRACE( TRACE_INFO, TXT( "Saving user configuration.\n" ) );
+    ConfigPc::SaveUserConfig();
+    HELIUM_TRACE( TRACE_INFO, TXT( "User configuration saved.\n" ) );
+
+    return true;
 }

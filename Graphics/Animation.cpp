@@ -13,45 +13,44 @@
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
-namespace Lunar
+using namespace Lunar;
+
+L_IMPLEMENT_OBJECT( Animation, Graphics, Type::FLAG_NO_TEMPLATE );
+
+/// Constructor.
+Animation::Animation()
 {
-    L_IMPLEMENT_OBJECT( Animation, Graphics, Type::FLAG_NO_TEMPLATE );
+}
 
-    /// Constructor.
-    Animation::Animation()
-    {
-    }
+/// Destructor.
+Animation::~Animation()
+{
+}
 
-    /// Destructor.
-    Animation::~Animation()
-    {
-    }
-
-    /// @copydoc GameObject::Serialize()
-    void Animation::Serialize( Serializer& s )
-    {
-        L_SERIALIZE_SUPER( s );
+/// @copydoc GameObject::Serialize()
+void Animation::Serialize( Serializer& s )
+{
+    L_SERIALIZE_SUPER( s );
 
 #if L_USE_GRANNY_ANIMATION
-        m_grannyData.Serialize( s );
+    m_grannyData.Serialize( s );
 #endif
-    }
+}
 
-    /// @copydoc Resource::SerializePersistentResourceData()
-    void Animation::SerializePersistentResourceData( Serializer& s )
-    {
+/// @copydoc Resource::SerializePersistentResourceData()
+void Animation::SerializePersistentResourceData( Serializer& s )
+{
 #if L_USE_GRANNY_ANIMATION
-        m_grannyData.SerializePersistentResourceData( s );
+    m_grannyData.SerializePersistentResourceData( s );
 #else
-        HELIUM_UNREF( s );
+    HELIUM_UNREF( s );
 #endif
-    }
+}
 
-    /// @copydoc Resource::GetCacheName()
-    Name Animation::GetCacheName() const
-    {
-        static Name cacheName( TXT( "Animation" ) );
+/// @copydoc Resource::GetCacheName()
+Name Animation::GetCacheName() const
+{
+    static Name cacheName( TXT( "Animation" ) );
 
-        return cacheName;
-    }
+    return cacheName;
 }

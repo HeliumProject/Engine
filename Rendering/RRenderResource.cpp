@@ -8,10 +8,9 @@
 #include "RenderingPch.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+RRenderResource::~RRenderResource()
 {
-    /// Destructor.
-    RRenderResource::~RRenderResource()
-    {
-    }
 }

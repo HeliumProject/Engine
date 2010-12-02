@@ -8,12 +8,11 @@
 #include "FrameworkPch.h"
 #include "Framework/NullRendererInitialization.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// @copydoc RendererInitialization::Initialize()
+bool NullRendererInitialization::Initialize()
 {
-    /// @copydoc RendererInitialization::Initialize()
-    bool NullRendererInitialization::Initialize()
-    {
-        // No Renderer instance is created, so simply return that we have been successful.
-        return true;
-    }
+    // No Renderer instance is created, so simply return that we have been successful.
+    return true;
 }

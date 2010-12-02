@@ -8,15 +8,14 @@
 #include "RenderingPch.h"
 #include "Rendering/RSamplerState.h"
 
-namespace Lunar
-{
-    /// Destructor.
-    RSamplerState::~RSamplerState()
-    {
-    }
+using namespace Lunar;
 
-    /// @fn void RSamplerState::GetDescription( Description& rDescription ) const
-    /// Get the engine description of this state object.
-    ///
-    /// @param[out] rDescription  State description.
+/// Destructor.
+RSamplerState::~RSamplerState()
+{
 }
+
+/// @fn void RSamplerState::GetDescription( Description& rDescription ) const
+/// Get the engine description of this state object.
+///
+/// @param[out] rDescription  State description.

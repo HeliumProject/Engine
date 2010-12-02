@@ -17,27 +17,26 @@ extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
 
-namespace Lunar
+using namespace Lunar;
+
+/// @copydoc ObjectTypeRegistration::Register()
+void ObjectTypeRegistrationWin::Register()
 {
-    /// @copydoc ObjectTypeRegistration::Register()
-    void ObjectTypeRegistrationWin::Register()
-    {
-        ObjectTypeRegistration::Register();
+    ObjectTypeRegistration::Register();
 
-        RegisterPcSupportTypes();
+    RegisterPcSupportTypes();
 #if L_EDITOR
-        RegisterEditorSupportTypes();
+    RegisterEditorSupportTypes();
 #endif
-    }
+}
 
-    /// @copydoc ObjectTypeRegistration::Unregister()
-    void ObjectTypeRegistrationWin::Unregister()
-    {
+/// @copydoc ObjectTypeRegistration::Unregister()
+void ObjectTypeRegistrationWin::Unregister()
+{
 #if L_EDITOR
-        UnregisterEditorSupportTypes();
+    UnregisterEditorSupportTypes();
 #endif
-        UnregisterPcSupportTypes();
+    UnregisterPcSupportTypes();
 
-        ObjectTypeRegistration::Unregister();
-    }
+    ObjectTypeRegistration::Unregister();
 }

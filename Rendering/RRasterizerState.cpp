@@ -8,15 +8,14 @@
 #include "RenderingPch.h"
 #include "Rendering/RRasterizerState.h"
 
-namespace Lunar
-{
-    /// Destructor.
-    RRasterizerState::~RRasterizerState()
-    {
-    }
+using namespace Lunar;
 
-    /// @fn void RRasterizerState::GetDescription( Description& rDescription ) const
-    /// Get the engine description of this state object.
-    ///
-    /// @param[out] rDescription  State description.
+/// Destructor.
+RRasterizerState::~RRasterizerState()
+{
 }
+
+/// @fn void RRasterizerState::GetDescription( Description& rDescription ) const
+/// Get the engine description of this state object.
+///
+/// @param[out] rDescription  State description.

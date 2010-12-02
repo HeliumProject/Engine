@@ -17,30 +17,29 @@ extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
 extern void UnregisterFrameworkTypes();
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+ObjectTypeRegistration::~ObjectTypeRegistration()
 {
-    /// Destructor.
-    ObjectTypeRegistration::~ObjectTypeRegistration()
-    {
-    }
+}
 
-    /// Register type information for modules that will be used by the application.
-    ///
-    /// @see Unregister()
-    void ObjectTypeRegistration::Register()
-    {
-        RegisterEngineTypes();
-        RegisterGraphicsTypes();
-        RegisterFrameworkTypes();
-    }
+/// Register type information for modules that will be used by the application.
+///
+/// @see Unregister()
+void ObjectTypeRegistration::Register()
+{
+    RegisterEngineTypes();
+    RegisterGraphicsTypes();
+    RegisterFrameworkTypes();
+}
 
-    /// Unregister type information previously registered using Register().
-    ///
-    /// @see Unregister()
-    void ObjectTypeRegistration::Unregister()
-    {
-        UnregisterFrameworkTypes();
-        UnregisterGraphicsTypes();
-        UnregisterEngineTypes();
-    }
+/// Unregister type information previously registered using Register().
+///
+/// @see Unregister()
+void ObjectTypeRegistration::Unregister()
+{
+    UnregisterFrameworkTypes();
+    UnregisterGraphicsTypes();
+    UnregisterEngineTypes();
 }

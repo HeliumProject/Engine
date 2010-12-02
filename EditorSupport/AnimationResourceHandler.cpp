@@ -20,72 +20,71 @@
 #include "EditorSupport/GrannyStreamWriter.h"
 #endif
 
-namespace Lunar
+using namespace Lunar;
+
+L_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
+
+/// Constructor.
+AnimationResourceHandler::AnimationResourceHandler()
+: m_rFbxSupport( FbxSupport::StaticAcquire() )
 {
-    L_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
+}
 
-    /// Constructor.
-    AnimationResourceHandler::AnimationResourceHandler()
-        : m_rFbxSupport( FbxSupport::StaticAcquire() )
-    {
-    }
+/// Destructor.
+AnimationResourceHandler::~AnimationResourceHandler()
+{
+    m_rFbxSupport.Release();
+}
 
-    /// Destructor.
-    AnimationResourceHandler::~AnimationResourceHandler()
-    {
-        m_rFbxSupport.Release();
-    }
+/// @copydoc ResourceHandler::GetResourceType()
+Type* AnimationResourceHandler::GetResourceType() const
+{
+    return Animation::GetStaticType();
+}
 
-    /// @copydoc ResourceHandler::GetResourceType()
-    Type* AnimationResourceHandler::GetResourceType() const
-    {
-        return Animation::GetStaticType();
-    }
+/// @copydoc ResourceHandler::GetSourceExtensions()
+void AnimationResourceHandler::GetSourceExtensions(
+    const tchar_t* const*& rppExtensions,
+    size_t& rExtensionCount ) const
+{
+    static const tchar_t* extensions[] = { TXT( "_anim.fbx" ) };
 
-    /// @copydoc ResourceHandler::GetSourceExtensions()
-    void AnimationResourceHandler::GetSourceExtensions(
-        const tchar_t* const*& rppExtensions,
-        size_t& rExtensionCount ) const
-    {
-        static const tchar_t* extensions[] = { TXT( "_anim.fbx" ) };
+    rppExtensions = extensions;
+    rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
+}
 
-        rppExtensions = extensions;
-        rExtensionCount = HELIUM_ARRAY_COUNT( extensions );
-    }
-
-    /// @copydoc ResourceHandler::CacheResource()
-    bool AnimationResourceHandler::CacheResource(
-        ObjectPreprocessor* pObjectPreprocessor,
-        Resource* pResource,
-        const String& rSourceFilePath )
-    {
-        HELIUM_ASSERT( pObjectPreprocessor );
-        HELIUM_ASSERT( pResource );
+/// @copydoc ResourceHandler::CacheResource()
+bool AnimationResourceHandler::CacheResource(
+    ObjectPreprocessor* pObjectPreprocessor,
+    Resource* pResource,
+    const String& rSourceFilePath )
+{
+    HELIUM_ASSERT( pObjectPreprocessor );
+    HELIUM_ASSERT( pResource );
 
 #if L_USE_GRANNY_ANIMATION
-        Animation* pAnimation = StaticCast< Animation >( pResource );
+    Animation* pAnimation = StaticCast< Animation >( pResource );
 
-        bool bCacheResult = Granny::CacheAnimationResourceData(
-            pObjectPreprocessor,
-            pAnimation,
-            rSourceFilePath,
-            m_rFbxSupport );
+    bool bCacheResult = Granny::CacheAnimationResourceData(
+        pObjectPreprocessor,
+        pAnimation,
+        rSourceFilePath,
+        m_rFbxSupport );
 
-        return bCacheResult;
+    return bCacheResult;
 #else
-        HELIUM_UNREF( pObjectPreprocessor );
-        HELIUM_UNREF( rSourceFilePath );
+    HELIUM_UNREF( pObjectPreprocessor );
+    HELIUM_UNREF( rSourceFilePath );
 
-        for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-        {
-            Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
-                static_cast< Cache::EPlatform >( platformIndex ) );
-            rPreprocessedData.persistentDataBuffer.Clear();
-            rPreprocessedData.subDataBuffers.Clear();
-            rPreprocessedData.bLoaded = true;
-        }
-
-        return true;
-#endif
+    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    {
+        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        rPreprocessedData.persistentDataBuffer.Clear();
+        rPreprocessedData.subDataBuffers.Clear();
+        rPreprocessedData.bLoaded = true;
     }
+
+    return true;
+#endif
 }

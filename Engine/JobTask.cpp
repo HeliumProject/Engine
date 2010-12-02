@@ -10,41 +10,41 @@
 
 #include "Engine/JobContext.h"
 
-namespace Lunar
+using namespace Lunar;
+
+
+/// Constructor.
+///
+/// @param[in] pContext  Job execution context.
+JobTask::JobTask( JobContext* pContext )
+: m_pContext( pContext )
 {
-    /// Constructor.
-    ///
-    /// @param[in] pContext  Job execution context.
-    JobTask::JobTask( JobContext* pContext )
-        : m_pContext( pContext )
-    {
-        HELIUM_ASSERT( pContext );
-    }
+    HELIUM_ASSERT( pContext );
+}
 
-    /// Execute this task.
-    ///
-    /// @return  Next task to run on the current thread (bypassing task scheduling).
-    tbb::task* JobTask::execute()
+/// Execute this task.
+///
+/// @return  Next task to run on the current thread (bypassing task scheduling).
+tbb::task* JobTask::execute()
+{
+    if( m_pContext )
     {
-        if( m_pContext )
+        // Execute the job.
+        const JobContext::AttachData& rAttachData = m_pContext->GetAttachData();
+        void* pData = rAttachData.GetData();
+        if( pData )
         {
-            // Execute the job.
-            const JobContext::AttachData& rAttachData = m_pContext->GetAttachData();
-            void* pData = rAttachData.GetData();
-            if( pData )
-            {
-                JobContext::JOB_EXECUTE_CALLBACK* pExecuteCallback = rAttachData.GetExecuteCallback();
-                HELIUM_ASSERT( pExecuteCallback );
+            JobContext::JOB_EXECUTE_CALLBACK* pExecuteCallback = rAttachData.GetExecuteCallback();
+            HELIUM_ASSERT( pExecuteCallback );
 
-                pExecuteCallback( pData, m_pContext );
-            }
-
-            // Delete the job context object, as it is no longer needed.
-            JobManager& rJobManager = JobManager::GetStaticInstance();
-            rJobManager.ReleaseJob( m_pContext );
-            m_pContext = NULL;
+            pExecuteCallback( pData, m_pContext );
         }
 
-        return NULL;
+        // Delete the job context object, as it is no longer needed.
+        JobManager& rJobManager = JobManager::GetStaticInstance();
+        rJobManager.ReleaseJob( m_pContext );
+        m_pContext = NULL;
     }
+
+    return NULL;
 }

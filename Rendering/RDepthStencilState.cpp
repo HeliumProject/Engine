@@ -8,15 +8,14 @@
 #include "RenderingPch.h"
 #include "Rendering/RDepthStencilState.h"
 
-namespace Lunar
-{
-    /// Destructor.
-    RDepthStencilState::~RDepthStencilState()
-    {
-    }
+using namespace Lunar;
 
-    /// @fn void RDepthStencilState::GetDescription( Description& rDescription ) const
-    /// Get the engine description of this state object.
-    ///
-    /// @param[out] rDescription  State description.
+/// Destructor.
+RDepthStencilState::~RDepthStencilState()
+{
 }
+
+/// @fn void RDepthStencilState::GetDescription( Description& rDescription ) const
+/// Get the engine description of this state object.
+///
+/// @param[out] rDescription  State description.

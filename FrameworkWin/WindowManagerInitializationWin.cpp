@@ -10,36 +10,35 @@
 
 #include "WinWindowing/WinWindowManager.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Constructor.
+///
+/// @param[in] hInstance  Handle to the application instance.
+/// @param[in] nCmdShow   Flags specifying how the application window should be shown (passed in from WinMain()).
+WindowManagerInitializationWin::WindowManagerInitializationWin( HINSTANCE hInstance, int nCmdShow )
+: m_hInstance( hInstance )
+, m_nCmdShow( nCmdShow )
 {
-    /// Constructor.
-    ///
-    /// @param[in] hInstance  Handle to the application instance.
-    /// @param[in] nCmdShow   Flags specifying how the application window should be shown (passed in from WinMain()).
-    WindowManagerInitializationWin::WindowManagerInitializationWin( HINSTANCE hInstance, int nCmdShow )
-        : m_hInstance( hInstance )
-        , m_nCmdShow( nCmdShow )
+    HELIUM_ASSERT( hInstance );
+}
+
+/// @copydoc WindowManager::Initialize()
+bool WindowManagerInitializationWin::Initialize()
+{
+    WinWindowManager* pWindowManager = WinWindowManager::CreateStaticInstance();
+    HELIUM_ASSERT( pWindowManager );
+    if( !pWindowManager )
     {
-        HELIUM_ASSERT( hInstance );
+        return false;
     }
 
-    /// @copydoc WindowManager::Initialize()
-    bool WindowManagerInitializationWin::Initialize()
+    if( !pWindowManager->Initialize( m_hInstance, m_nCmdShow ) )
     {
-        WinWindowManager* pWindowManager = WinWindowManager::CreateStaticInstance();
-        HELIUM_ASSERT( pWindowManager );
-        if( !pWindowManager )
-        {
-            return false;
-        }
+        WindowManager::DestroyStaticInstance();
 
-        if( !pWindowManager->Initialize( m_hInstance, m_nCmdShow ) )
-        {
-            WindowManager::DestroyStaticInstance();
-
-            return false;
-        }
-
-        return true;
+        return false;
     }
+
+    return true;
 }

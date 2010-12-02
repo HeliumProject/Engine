@@ -8,10 +8,9 @@
 #include "RenderingPch.h"
 #include "Rendering/RFence.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+RFence::~RFence()
 {
-    /// Destructor.
-    RFence::~RFence()
-    {
-    }
 }

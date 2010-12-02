@@ -10,25 +10,24 @@
 
 #include "D3D9Rendering/D3D9Renderer.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// @copydoc RendererInitialization::Initialize()
+bool RendererInitializationWin::Initialize()
 {
-    /// @copydoc RendererInitialization::Initialize()
-    bool RendererInitializationWin::Initialize()
+    if( !D3D9Renderer::CreateStaticInstance() )
     {
-        if( !D3D9Renderer::CreateStaticInstance() )
-        {
-            return false;
-        }
-
-        Renderer* pRenderer = D3D9Renderer::GetStaticInstance();
-        HELIUM_ASSERT( pRenderer );
-        if( !pRenderer->Initialize() )
-        {
-            Renderer::DestroyStaticInstance();
-
-            return false;
-        }
-
-        return true;
+        return false;
     }
+
+    Renderer* pRenderer = D3D9Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+    if( !pRenderer->Initialize() )
+    {
+        Renderer::DestroyStaticInstance();
+
+        return false;
+    }
+
+    return true;
 }

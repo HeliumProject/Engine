@@ -13,50 +13,49 @@
 #include "PreprocessingPc/PcPreprocessor.h"
 #include "EditorSupport/EditorObjectLoader.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// @copydoc ObjectLoaderInitialization::Initialize()
+GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
 {
-    /// @copydoc ObjectLoaderInitialization::Initialize()
-    GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
-    {
 #if L_EDITOR && 1
-        if( !EditorObjectLoader::InitializeStaticInstance() )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "ObjectLoaderFactoryWin::Create(): Failed to initialize EditorObjectLoader instance.\n" ) );
-
-            return NULL;
-        }
-
-        ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
-        HELIUM_ASSERT( pObjectPreprocessor );
-        PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
-        HELIUM_ASSERT( pPlatformPreprocessor );
-        pObjectPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
-#else
-        if( !PcCacheObjectLoader::InitializeStaticInstance() )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "ObjectLoaderFactoryWin::Create() Failed to initialize PcCacheObjectLoader instance.\n" ) );
-
-            return NULL;
-        }
-#endif
-
-        GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
-        HELIUM_ASSERT( pObjectLoader );
-
-        return pObjectLoader;
-    }
-
-    /// @copydoc ObjectLoaderInitialization::Shutdown()
-    void ObjectLoaderInitializationWin::Shutdown()
+    if( !EditorObjectLoader::InitializeStaticInstance() )
     {
-#if L_EDITOR
-        ObjectPreprocessor::DestroyStaticInstance();
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "ObjectLoaderFactoryWin::Create(): Failed to initialize EditorObjectLoader instance.\n" ) );
+
+        return NULL;
+    }
+
+    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
+    HELIUM_ASSERT( pObjectPreprocessor );
+    PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
+    HELIUM_ASSERT( pPlatformPreprocessor );
+    pObjectPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+#else
+    if( !PcCacheObjectLoader::InitializeStaticInstance() )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "ObjectLoaderFactoryWin::Create() Failed to initialize PcCacheObjectLoader instance.\n" ) );
+
+        return NULL;
+    }
 #endif
 
-        ObjectLoaderInitialization::Shutdown();
-    }
+    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    HELIUM_ASSERT( pObjectLoader );
+
+    return pObjectLoader;
+}
+
+/// @copydoc ObjectLoaderInitialization::Shutdown()
+void ObjectLoaderInitializationWin::Shutdown()
+{
+#if L_EDITOR
+    ObjectPreprocessor::DestroyStaticInstance();
+#endif
+
+    ObjectLoaderInitialization::Shutdown();
 }

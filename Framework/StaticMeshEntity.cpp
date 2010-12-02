@@ -8,17 +8,16 @@
 #include "FrameworkPch.h"
 #include "Framework/StaticMeshEntity.h"
 
-namespace Lunar
+using namespace Lunar;
+
+L_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
+
+/// Constructor.
+StaticMeshEntity::StaticMeshEntity()
 {
-    L_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
+}
 
-    /// Constructor.
-    StaticMeshEntity::StaticMeshEntity()
-    {
-    }
-
-    /// Destructor.
-    StaticMeshEntity::~StaticMeshEntity()
-    {
-    }
+/// Destructor.
+StaticMeshEntity::~StaticMeshEntity()
+{
 }

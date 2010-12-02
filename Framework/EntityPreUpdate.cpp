@@ -12,29 +12,28 @@
 #include "Framework/Entity.h"
 #include "Framework/WorldManager.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Run the EntityPreUpdate job.
+///
+/// @param[in] pContext  Context in which this job is running.
+void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 {
-    /// Run the EntityPreUpdate job.
-    ///
-    /// @param[in] pContext  Context in which this job is running.
-    void EntityPreUpdate::Run( JobContext* /*pContext*/ )
-    {
-        Entity* pEntity = m_parameters.pEntity;
-        HELIUM_ASSERT( pEntity );
-        HELIUM_ASSERT( pEntity->NeedsAsynchronousUpdate() );
+    Entity* pEntity = m_parameters.pEntity;
+    HELIUM_ASSERT( pEntity );
+    HELIUM_ASSERT( pEntity->NeedsAsynchronousUpdate() );
 
 #if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-        WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-        rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
 #endif
 
-        pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
+    pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
 
 #if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-        rWorldManager.SetCurrentThreadUpdateEntity( NULL );
+    rWorldManager.SetCurrentThreadUpdateEntity( NULL );
 #endif
 
-        JobManager& rJobManager = JobManager::GetStaticInstance();
-        rJobManager.ReleaseJob( this );
-    }
+    JobManager& rJobManager = JobManager::GetStaticInstance();
+    rJobManager.ReleaseJob( this );
 }

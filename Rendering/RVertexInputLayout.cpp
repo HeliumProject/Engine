@@ -8,10 +8,9 @@
 #include "RenderingPch.h"
 #include "Rendering/RVertexInputLayout.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+RVertexInputLayout::~RVertexInputLayout()
 {
-    /// Destructor.
-    RVertexInputLayout::~RVertexInputLayout()
-    {
-    }
 }

@@ -11,6 +11,4 @@
 #include "Platform/Trace.h"
 #include "Engine/JobContext.h"
 
-namespace Lunar
-{
-}
+using namespace Lunar;

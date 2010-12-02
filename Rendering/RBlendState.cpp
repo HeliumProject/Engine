@@ -8,15 +8,14 @@
 #include "RenderingPch.h"
 #include "Rendering/RBlendState.h"
 
-namespace Lunar
-{
-    /// Destructor.
-    RBlendState::~RBlendState()
-    {
-    }
+using namespace Lunar;
 
-    /// @fn void RBlendState::GetDescription( Description& rDescription ) const
-    /// Get the engine description of this state object.
-    ///
-    /// @param[out] rDescription  State description.
+/// Destructor.
+RBlendState::~RBlendState()
+{
 }
+
+/// @fn void RBlendState::GetDescription( Description& rDescription ) const
+/// Get the engine description of this state object.
+///
+/// @param[out] rDescription  State description.

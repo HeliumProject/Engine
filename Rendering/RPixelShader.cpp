@@ -8,16 +8,15 @@
 #include "RenderingPch.h"
 #include "Rendering/RPixelShader.h"
 
-namespace Lunar
-{
-    /// Destructor.
-    RPixelShader::~RPixelShader()
-    {
-    }
+using namespace Lunar;
 
-    /// @copydoc RShader::GetType()
-    RShader::EType RPixelShader::GetType() const
-    {
-        return TYPE_PIXEL;
-    }
+/// Destructor.
+RPixelShader::~RPixelShader()
+{
+}
+
+/// @copydoc RShader::GetType()
+RShader::EType RPixelShader::GetType() const
+{
+    return TYPE_PIXEL;
 }

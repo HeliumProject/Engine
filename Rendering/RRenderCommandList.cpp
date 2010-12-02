@@ -8,10 +8,9 @@
 #include "RenderingPch.h"
 #include "Rendering/RRenderCommandList.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Destructor.
+RRenderCommandList::~RRenderCommandList()
 {
-    /// Destructor.
-    RRenderCommandList::~RRenderCommandList()
-    {
-    }
 }

@@ -15,203 +15,202 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/XmlPackageLoader.h"
 
-namespace Lunar
+using namespace Lunar;
+
+/// Constructor.
+EditorObjectLoader::EditorObjectLoader()
 {
-    /// Constructor.
-    EditorObjectLoader::EditorObjectLoader()
+}
+
+/// Destructor.
+EditorObjectLoader::~EditorObjectLoader()
+{
+}
+
+/// @copydoc GameObjectLoader::CacheObject()
+bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
+{
+    HELIUM_ASSERT( pObject );
+
+    // Don't cache broken objects or packages.
+    if( pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) || pObject->IsPackage() )
     {
+        return false;
     }
 
-    /// Destructor.
-    EditorObjectLoader::~EditorObjectLoader()
+    // Make sure we have an object preprocessor instance with which to cache the object.
+    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
+    if( !pObjectPreprocessor )
     {
+        HELIUM_TRACE(
+            TRACE_WARNING,
+            TXT( "EditorObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
+
+        return false;
     }
 
-    /// @copydoc GameObjectLoader::CacheObject()
-    bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
-    {
-        HELIUM_ASSERT( pObject );
+    // Configuration objects should not be cached.
+    GameObjectPath objectPath = pObject->GetPath();
 
-        // Don't cache broken objects or packages.
-        if( pObject->GetAnyFlagSet( GameObject::FLAG_BROKEN ) || pObject->IsPackage() )
+    Config& rConfig = Config::GetStaticInstance();
+    GameObjectPath configPackagePath = rConfig.GetConfigContainerPackagePath();
+    HELIUM_ASSERT( !configPackagePath.IsEmpty() );
+
+    for( GameObjectPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+    {
+        if( testPath == configPackagePath )
         {
             return false;
         }
+    }
 
-        // Make sure we have an object preprocessor instance with which to cache the object.
-        ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
-        if( !pObjectPreprocessor )
+    // Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
+    // the timestamp of the source resource file.
+    GameObject* pPackageObject;
+    for( pPackageObject = pObject;
+        pPackageObject && !pPackageObject->IsPackage();
+        pPackageObject = pPackageObject->GetOwner() )
+    {
+    }
+
+    HELIUM_ASSERT( pPackageObject );
+
+    PackageLoader* pPackageLoader = StaticCast< Package >( pPackageObject )->GetLoader();
+    HELIUM_ASSERT( pPackageLoader );
+    HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+
+    int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+
+    if( !pObject->IsDefaultTemplate() )
+    {
+        Resource* pResource = DynamicCast< Resource >( pObject );
+        if( pResource )
         {
-            HELIUM_TRACE(
-                TRACE_WARNING,
-                TXT( "EditorObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
-
-            return false;
-        }
-
-        // Configuration objects should not be cached.
-        GameObjectPath objectPath = pObject->GetPath();
-
-        Config& rConfig = Config::GetStaticInstance();
-        GameObjectPath configPackagePath = rConfig.GetConfigContainerPackagePath();
-        HELIUM_ASSERT( !configPackagePath.IsEmpty() );
-
-        for( GameObjectPath testPath = objectPath; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-        {
-            if( testPath == configPackagePath )
+            GameObjectPath baseResourcePath = pResource->GetPath();
+            HELIUM_ASSERT( !baseResourcePath.IsPackage() );
+            for( ; ; )
             {
+                GameObjectPath parentPath = baseResourcePath.GetParent();
+                if( parentPath.IsEmpty() || parentPath.IsPackage() )
+                {
+                    break;
+                }
+
+                baseResourcePath = parentPath;
+            }
+
+            Path sourceFilePath;
+            if ( !File::GetDataDirectory( sourceFilePath ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
+
                 return false;
             }
-        }
 
-        // Get the timestamp for the object based on the timestamp of its source package file and, if it's a resource,
-        // the timestamp of the source resource file.
-        GameObject* pPackageObject;
-        for( pPackageObject = pObject;
-             pPackageObject && !pPackageObject->IsPackage();
-             pPackageObject = pPackageObject->GetOwner() )
-        {
-        }
+            sourceFilePath += baseResourcePath.ToFilePathString().GetData();
 
-        HELIUM_ASSERT( pPackageObject );
-
-        PackageLoader* pPackageLoader = StaticCast< Package >( pPackageObject )->GetLoader();
-        HELIUM_ASSERT( pPackageLoader );
-        HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
-
-        int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
-
-        if( !pObject->IsDefaultTemplate() )
-        {
-            Resource* pResource = DynamicCast< Resource >( pObject );
-            if( pResource )
+            int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
+            if( sourceFileTimestamp > objectTimestamp )
             {
-                GameObjectPath baseResourcePath = pResource->GetPath();
-                HELIUM_ASSERT( !baseResourcePath.IsPackage() );
-                for( ; ; )
-                {
-                    GameObjectPath parentPath = baseResourcePath.GetParent();
-                    if( parentPath.IsEmpty() || parentPath.IsPackage() )
-                    {
-                        break;
-                    }
-
-                    baseResourcePath = parentPath;
-                }
-
-                Path sourceFilePath;
-                if ( !File::GetDataDirectory( sourceFilePath ) )
-                {
-                    HELIUM_TRACE(
-                        TRACE_WARNING,
-                        TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
-
-                    return false;
-                }
-
-                sourceFilePath += baseResourcePath.ToFilePathString().GetData();
-
-                int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
-                if( sourceFileTimestamp > objectTimestamp )
-                {
-                    objectTimestamp = sourceFileTimestamp;
-                }
+                objectTimestamp = sourceFileTimestamp;
             }
         }
-
-        // Cache the object.
-        bool bSuccess = pObjectPreprocessor->CacheObject(
-            pObject,
-            objectTimestamp,
-            bEvictPlatformPreprocessedResourceData );
-        if( !bSuccess )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ),
-                *objectPath.ToString() );
-        }
-
-        return bSuccess;
     }
 
-    /// Initialize the static object loader instance as an EditorObjectLoader.
-    ///
-    /// @return  True if the loader was initialized successfully, false if not or another object loader instance already
-    ///          exists.
-    bool EditorObjectLoader::InitializeStaticInstance()
+    // Cache the object.
+    bool bSuccess = pObjectPreprocessor->CacheObject(
+        pObject,
+        objectTimestamp,
+        bEvictPlatformPreprocessedResourceData );
+    if( !bSuccess )
     {
-        if( sm_pInstance )
-        {
-            return false;
-        }
-
-        sm_pInstance = new EditorObjectLoader;
-        HELIUM_ASSERT( sm_pInstance );
-
-        return true;
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ),
+            *objectPath.ToString() );
     }
 
-    /// @copydoc GameObjectLoader::GetPackageLoader()
-    PackageLoader* EditorObjectLoader::GetPackageLoader( GameObjectPath path )
-    {
-        XmlPackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+    return bSuccess;
+}
 
-        return pLoader;
+/// Initialize the static object loader instance as an EditorObjectLoader.
+///
+/// @return  True if the loader was initialized successfully, false if not or another object loader instance already
+///          exists.
+bool EditorObjectLoader::InitializeStaticInstance()
+{
+    if( sm_pInstance )
+    {
+        return false;
     }
 
-    /// @copydoc GameObjectLoader::TickPackageLoaders()
-    void EditorObjectLoader::TickPackageLoaders()
+    sm_pInstance = new EditorObjectLoader;
+    HELIUM_ASSERT( sm_pInstance );
+
+    return true;
+}
+
+/// @copydoc GameObjectLoader::GetPackageLoader()
+PackageLoader* EditorObjectLoader::GetPackageLoader( GameObjectPath path )
+{
+    XmlPackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+
+    return pLoader;
+}
+
+/// @copydoc GameObjectLoader::TickPackageLoaders()
+void EditorObjectLoader::TickPackageLoaders()
+{
+    m_packageLoaderMap.TickPackageLoaders();
+}
+
+/// @copydoc GameObjectLoader::OnPrecacheReady()
+void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
+{
+    HELIUM_ASSERT( pObject );
+    HELIUM_ASSERT( pPackageLoader );
+
+    // The default template object for a given type never has its resource data preprocessed, so there's no need to
+    // precache default template objects.
+    if( pObject->IsDefaultTemplate() )
     {
-        m_packageLoaderMap.TickPackageLoaders();
+        return;
     }
 
-    /// @copydoc GameObjectLoader::OnPrecacheReady()
-    void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
+    // Retrieve the object preprocessor if it exists.
+    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
+    if( !pObjectPreprocessor )
     {
-        HELIUM_ASSERT( pObject );
-        HELIUM_ASSERT( pPackageLoader );
+        HELIUM_TRACE(
+            TRACE_WARNING,
+            ( TXT( "EditorObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
+            TXT( "preprocessing.\n" ) ) );
 
-        // The default template object for a given type never has its resource data preprocessed, so there's no need to
-        // precache default template objects.
-        if( pObject->IsDefaultTemplate() )
-        {
-            return;
-        }
-
-        // Retrieve the object preprocessor if it exists.
-        ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
-        if( !pObjectPreprocessor )
-        {
-            HELIUM_TRACE(
-                TRACE_WARNING,
-                ( TXT( "EditorObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
-                  TXT( "preprocessing.\n" ) ) );
-
-            return;
-        }
-
-        // We only need to do precache handling for resources, so skip non-resource types.
-        Resource* pResource = DynamicCast< Resource >( pObject );
-        if( !pResource )
-        {
-            return;
-        }
-
-        // Grab the package timestamp.
-        HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
-        int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
-
-        // Attempt to load the resource data.
-        pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
+        return;
     }
 
-    /// @copydoc GameObjectLoader::OnLoadComplete()
-    void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
+    // We only need to do precache handling for resources, so skip non-resource types.
+    Resource* pResource = DynamicCast< Resource >( pObject );
+    if( !pResource )
     {
-        if( pObject )
-        {
-            CacheObject( pObject, true );
-        }
+        return;
+    }
+
+    // Grab the package timestamp.
+    HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+    int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+
+    // Attempt to load the resource data.
+    pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
+}
+
+/// @copydoc GameObjectLoader::OnLoadComplete()
+void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
+{
+    if( pObject )
+    {
+        CacheObject( pObject, true );
     }
 }

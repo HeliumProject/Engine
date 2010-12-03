@@ -64,6 +64,9 @@ namespace Helium
             void OpenProject( const Helium::Path& path );
             void CloseProject();
 
+            void NewProjectDialog();
+            void OpenProjectDialog();
+
             void OpenScene( const Path& path );
 
             SceneGraph::SceneManager& GetSceneManager()
@@ -75,6 +78,8 @@ namespace Helium
             {
                 return &m_DocumentManager;
             }
+
+
 
         private:
             // Stores information about the state of each outliner for each scene

@@ -657,6 +657,8 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer45->Add( bSizer43, 0, 0, 5 );
 	
 	m_staticline16 = new wxStaticLine( m_RecentProjectsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline16->Hide();
+	
 	bSizer45->Add( m_staticline16, 0, wxEXPAND | wxALL, 12 );
 	
 	m_RecentProjectsSizer = new wxBoxSizer( wxVERTICAL );

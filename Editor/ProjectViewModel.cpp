@@ -490,7 +490,7 @@ void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-
+    HELIUM_ASSERT( m_Project );
     for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) ),
         upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) );
         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();

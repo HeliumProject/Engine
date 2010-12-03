@@ -92,25 +92,19 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 
 ProjectPanel::~ProjectPanel()
 {
-    if ( m_Project )
-    {
-        if ( m_Model )
-        {
-            m_Model->CloseProject();
-        }
-
-        m_Project = NULL;
-    }
-
-    m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
-    m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
-
     if ( m_Model )
     {
         m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
         m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-        m_Model = NULL;
+
+        m_Model->CloseProject();
     }
+
+    m_Project = NULL;
+    m_Model = NULL;
+
+    m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
+    m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 
     Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 }
@@ -143,9 +137,6 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             m_Model = new ProjectViewModel( m_DocumentManager );
             node = m_Model->OpenProject( project, document );
 
-            m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
-            m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
-
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
 
@@ -156,6 +147,9 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
         {
             node = m_Model->OpenProject( project, document );
         }
+
+        m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+        m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
 
         if ( node )
         {
@@ -183,6 +177,9 @@ void ProjectPanel::CloseProject()
 
     if ( m_Model )
     {
+        m_DocumentManager->e_DocumentOpened.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+        m_DocumentManager->e_DocumenClosed.RemoveMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
+
         m_Model->CloseProject();
     }
 
@@ -294,22 +291,12 @@ void ProjectPanel::OnRecentProjectButtonClick( wxCommandEvent& event )
 
 void ProjectPanel::OnOpenProjectButtonClick( wxCommandEvent& event )
 {
-    FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "*.project.hrb" ), FileDialogStyles::Open );
-
-    if ( openDlg.ShowModal() == wxID_OK )
-    {
-        wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
-    }
+    wxGetApp().GetFrame()->OpenProjectDialog();
 }
 
 void ProjectPanel::OnNewProjectButtonClick( wxCommandEvent& event )
 {
-    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::DefaultSave );
-
-    if ( newProjectDialog.ShowModal() == wxID_OK )
-    {
-        wxGetApp().GetFrame()->OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
-    }
+    wxGetApp().GetFrame()->NewProjectDialog();
 }
 
 void ProjectPanel::OnAddItems( wxCommandEvent& event )
@@ -384,12 +371,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         int32_t result = wxMessageBox( wxT( "You don't have a project loaded, but you're trying to add files.\nWould you like to create a new project?" ),  wxT( "No Project Loaded" ), wxYES_NO | wxICON_QUESTION );
         if ( result == wxYES )
         {
-            FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
-
-            if ( newProjectDialog.ShowModal() == wxID_OK )
-            {
-                wxGetApp().GetFrame()->OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
-            }
+            wxGetApp().GetFrame()->NewProjectDialog();
         }
     }
 

@@ -247,8 +247,8 @@ Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject*
     }
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
-    LookupMap::Accessor typeAccessor;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeAccessor, KeyValue< Name, TypePtr >( pType->GetName(), pType ) ) );
+    LookupMap::Iterator typeIterator;
+    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, TypePtr >( pType->GetName(), pType ) ) );
 
     return pType;
 }
@@ -280,10 +280,10 @@ Type* Type::Find( Name typeName )
     Type* pType = NULL;
     if( sm_pLookupMap )
     {
-        LookupMap::ConstAccessor typeAccessor;
-        if( sm_pLookupMap->Find( typeAccessor, typeName ) )
+        LookupMap::ConstIterator typeIterator = sm_pLookupMap->Find( typeName );
+        if( typeIterator != sm_pLookupMap->End() )
         {
-            pType = typeAccessor->Second();
+            pType = typeIterator->Second();
             HELIUM_ASSERT( pType );
         }
     }
@@ -291,21 +291,40 @@ Type* Type::Find( Name typeName )
     return pType;
 }
 
-/// Begin iterating on all the registered types.
+/// Get an iterator referencing the first registered type.
 ///
-/// @param[out] rIterator  Accessor set to reference the first registered type.
+/// @return  Iterator referencing the first registered type.
 ///
-/// @return  True if the iterator was set to the first type, false if no types are registered.
-bool Type::GetFirstType( ConstIterator& rIterator )
+/// @see GetTypeEnd()
+Type::ConstIterator Type::GetTypeBegin()
 {
-    if( !sm_pLookupMap )
+    if( sm_pLookupMap )
     {
-        rIterator.m_accessor.Release();
-
-        return false;
+        return ConstIterator( sm_pLookupMap->Begin() );
     }
 
-    return sm_pLookupMap->First( rIterator.m_accessor );
+    ConstIterator nullIterator;
+    MemoryZero( &nullIterator, sizeof( nullIterator ) );
+
+    return nullIterator;
+}
+
+/// Get an iterator referencing the end of the type registration map.
+///
+/// @return  Iterator referencing the end of the type registration map (one past the last entry).
+///
+/// @see GetTypeBegin()
+Type::ConstIterator Type::GetTypeEnd()
+{
+    if( sm_pLookupMap )
+    {
+        return ConstIterator( sm_pLookupMap->End() );
+    }
+
+    ConstIterator nullIterator;
+    MemoryZero( &nullIterator, sizeof( nullIterator ) );
+
+    return nullIterator;
 }
 
 /// Perform shutdown of the Type registration system.

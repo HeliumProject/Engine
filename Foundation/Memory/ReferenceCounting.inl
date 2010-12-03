@@ -26,8 +26,6 @@ BaseT* Helium::RefCountProxy< BaseT >::GetObject() const
 template< typename BaseT >
 void Helium::RefCountProxy< BaseT >::AddStrongRef()
 {
-    typename BaseT::RefCountSupportType::PreAddStrongRef( m_pObject );
-
     AtomicIncrementAcquire( m_refCounts );
 }
 
@@ -39,8 +37,6 @@ void Helium::RefCountProxy< BaseT >::AddStrongRef()
 template< typename BaseT >
 bool Helium::RefCountProxy< BaseT >::RemoveStrongRef()
 {
-    typename BaseT::RefCountSupportType::PreRemoveStrongRef( m_pObject );
-
     int32_t newRefCounts = AtomicDecrementRelease( m_refCounts );
     HELIUM_ASSERT( ( static_cast< uint32_t >( newRefCounts ) & 0xffff ) != 0xffff );
     if( ( static_cast< uint32_t >( newRefCounts ) & 0xffff ) == 0 )
@@ -68,8 +64,6 @@ uint16_t Helium::RefCountProxy< BaseT >::GetStrongRefCount() const
 template< typename BaseT >
 void Helium::RefCountProxy< BaseT >::AddWeakRef()
 {
-    typename BaseT::RefCountSupportType::PreAddWeakRef( m_pObject );
-
     AtomicAddAcquire( m_refCounts, 0x10000 );
 }
 
@@ -81,8 +75,6 @@ void Helium::RefCountProxy< BaseT >::AddWeakRef()
 template< typename BaseT >
 bool Helium::RefCountProxy< BaseT >::RemoveWeakRef()
 {
-    typename BaseT::RefCountSupportType::PreRemoveWeakRef( m_pObject );
-
     // Remember: AtomicSubtractRelease() returns the original value, not the new value.
     int32_t oldRefCounts = AtomicSubtractRelease( m_refCounts, 0x10000 );
     HELIUM_ASSERT( ( static_cast< uint32_t >( oldRefCounts ) >> 16 ) != 0 );

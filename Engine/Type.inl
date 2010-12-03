@@ -7,42 +7,6 @@
 
 namespace Lunar
 {
-    /// Perform any actions immediately prior to incrementing an object's strong reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void TypeRefCountSupport::PreAddStrongRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to decrementing an object's strong reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void TypeRefCountSupport::PreRemoveStrongRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to incrementing an object's weak reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void TypeRefCountSupport::PreAddWeakRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to decrementing an object's weak reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void TypeRefCountSupport::PreRemoveWeakRef( Type* /*pObject*/ )
-    {
-    }
-
     /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
     /// object.
     ///

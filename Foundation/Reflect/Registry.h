@@ -15,88 +15,6 @@ namespace Helium
 {
     namespace Reflect
     {
-#ifdef REFLECT_OBJECT_TRACKING
-
-        //
-        // Stack record captures stack addresses
-        //
-
-        class StackRecord : public Helium::RefCountBase<StackRecord>
-        {
-        public:
-            std::vector<uintptr_t>  m_Stack;
-            tstring                 m_String;
-            bool                    m_Converted;
-
-            StackRecord()
-                : m_Converted ( false )
-            {
-                m_Stack.reserve( 30 );
-            }
-
-            const tstring& Convert();  
-        };
-
-        typedef Helium::SmartPtr< StackRecord > StackRecordPtr;
-        typedef std::vector< StackRecordPtr > V_StackRecordPtr;
-        typedef std::map< std::vector<uintptr_t>, StackRecordPtr > M_StackRecord;
-
-
-        //
-        // Creation record stores object information
-        //
-
-        class CreationRecord
-        {
-        public:
-            uintptr_t         m_Address;
-            tstring         m_Name;
-            int             m_Type;
-
-            StackRecordPtr m_CreateStack;
-            StackRecordPtr m_DeleteStack;
-
-            CreationRecord();
-            CreationRecord(uintptr_t ptr);
-
-            void Dump(FILE* f);
-        };
-
-        typedef std::map<uintptr_t, CreationRecord> M_CreationRecord;
-
-
-        //
-        // Tracker object
-        //
-
-        class Tracker
-        {
-        public:
-            M_CreationRecord m_CreatedObjects;
-            M_CreationRecord m_DeletedObjects;
-            M_StackRecord    m_Stacks;
-
-            Tracker();
-            virtual ~Tracker();
-
-            // make a stack record
-            StackRecordPtr GetStack();
-
-            // save debug info during creation
-            void Create(uintptr_t ptr);
-
-            // callback on object delete
-            void Delete(uintptr_t ptr);
-
-            // validate a pointer
-            void Check(uintptr_t ptr);
-
-            // dump all debug info
-            void Dump();
-        };
-
-#endif
-
         // Callbacks for external APIs
         typedef void (*CreatedFunc)(Object* object);
         typedef void (*DestroyedFunc)(Object* object);
@@ -136,10 +54,6 @@ namespace Helium
 
             CreatedFunc m_Created; // the callback on creation
             DestroyedFunc m_Destroyed; // the callback on deletion
-
-#ifdef REFLECT_OBJECT_TRACKING
-            Tracker m_Tracker;
-#endif
 
             Registry();
             virtual ~Registry();
@@ -185,13 +99,6 @@ namespace Helium
             // callback setup
             void SetCreatedCallback(CreatedFunc created);
             void SetDestroyedCallback(DestroyedFunc destroyed);
-
-#ifdef REFLECT_OBJECT_TRACKING
-            void TrackCreate(uintptr_t ptr);
-            void TrackDelete(uintptr_t ptr);
-            void TrackCheck(uintptr_t ptr);
-            void TrackDump();
-#endif
         };
 
         //

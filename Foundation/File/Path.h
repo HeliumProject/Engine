@@ -72,6 +72,7 @@ namespace Helium
         void RemoveFullExtension();
         void ReplaceExtension( const tstring& newExtension );
         void ReplaceFullExtension( const tstring& newExtension );
+        bool HasExtension( const tchar_t* extension ) const;
 
         tstring Native() const;
         tstring Absolute() const;

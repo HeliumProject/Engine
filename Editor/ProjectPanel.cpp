@@ -228,7 +228,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
     const Path& path = node->GetPath();
     HELIUM_ASSERT( !path.empty() );
 
-    if ( path.FullExtension() == TXT( "scene.hrb" ) )
+    if ( path.HasExtension( TXT( "scene.hrb" ) ) )
     {
         wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
         return;

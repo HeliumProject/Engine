@@ -394,7 +394,7 @@ namespace Helium
         {
             SetFlag< short >( m_Modifiers, Modifiers::Ctrl, value );
         }
-        bool IsCtrlDown()
+        bool IsCtrlDown() const
         {
             return HasFlags< short >( m_Modifiers, Modifiers::Ctrl );
         }
@@ -403,7 +403,7 @@ namespace Helium
         {
             SetFlag< short >( m_Modifiers, Modifiers::Alt, value );
         }
-        bool IsAltDown()
+        bool IsAltDown() const
         {
             return HasFlags< short >( m_Modifiers, Modifiers::Alt );
         }
@@ -412,7 +412,7 @@ namespace Helium
         {
             SetFlag< short >( m_Modifiers, Modifiers::Shift, value );
         }
-        bool IsShiftDown()
+        bool IsShiftDown() const
         {
             return HasFlags< short >( m_Modifiers, Modifiers::Shift );
         }
@@ -421,7 +421,7 @@ namespace Helium
         {
             SetFlag< short >( m_Modifiers, Modifiers::Meta, value );
         }
-        bool IsMetaDown()
+        bool IsMetaDown() const
         {
             return HasFlags< short >( m_Modifiers, Modifiers::Meta );
         }

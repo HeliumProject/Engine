@@ -10,7 +10,6 @@ Helium::Map< Key, Data, EqualKey, Allocator >::Map()
 template< typename Key, typename Data, typename EqualKey, typename Allocator >
 Helium::Map< Key, Data, EqualKey, Allocator >::Map( const Map& rSource )
     : m_elements( rSource.m_elements )
-    , m_keyEquals( rSource.m_keyEquals )
 {
 }
 
@@ -21,7 +20,6 @@ template< typename Key, typename Data, typename EqualKey, typename Allocator >
 template< typename OtherAllocator >
 Helium::Map< Key, Data, EqualKey, Allocator >::Map( const Map< Key, Data, EqualKey, OtherAllocator >& rSource )
     : m_elements( rSource.m_elements )
-    , m_keyEquals( rSource.m_keyEquals )
 {
 }
 
@@ -143,10 +141,12 @@ template< typename Key, typename Data, typename EqualKey, typename Allocator >
 typename Helium::Map< Key, Data, EqualKey, Allocator >::Iterator Helium::Map< Key, Data, EqualKey, Allocator >::Find(
     const Key& rKey )
 {
+    EqualKey keyEquals;
+
     Iterator endIterator = End();
     for( Iterator iterator = Begin(); iterator != endIterator; ++iterator )
     {
-        if( m_keyEquals( rKey, iterator->First() ) )
+        if( keyEquals( rKey, iterator->First() ) )
         {
             return iterator;
         }
@@ -165,10 +165,12 @@ template< typename Key, typename Data, typename EqualKey, typename Allocator >
 typename Helium::Map< Key, Data, EqualKey, Allocator >::ConstIterator
     Helium::Map< Key, Data, EqualKey, Allocator >::Find( const Key& rKey ) const
 {
+    EqualKey keyEquals;
+
     ConstIterator endIterator = End();
     for( ConstIterator iterator = Begin(); iterator != endIterator; ++iterator )
     {
-        if( m_keyEquals( rKey, iterator->First() ) )
+        if( keyEquals( rKey, iterator->First() ) )
         {
             return iterator;
         }

@@ -33,7 +33,7 @@ template<
 bool Helium::ConstConcurrentHashTableAccessor<
     Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsValid() const
 {
-    return( m_pTable != NULL );
+    return ( m_pTable != NULL );
 }
 
 /// Clear out any reference to a hash table entry, releasing any necessary locks as well.
@@ -191,9 +191,9 @@ template<
 bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator==(
     const ConstConcurrentHashTableAccessor& rOther ) const
 {
-    return( m_pTable == rOther.m_pTable &&
-            m_bucketIndex == rOther.m_bucketIndex &&
-            m_elementIndex == rOther.m_elementIndex );
+    return ( m_pTable == rOther.m_pTable &&
+             m_bucketIndex == rOther.m_bucketIndex &&
+             m_elementIndex == rOther.m_elementIndex );
 }
 
 /// Get whether this accessor does not reference the same hash table location as another accessor.
@@ -208,9 +208,9 @@ template<
 bool Helium::ConstConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=(
     const ConstConcurrentHashTableAccessor& rOther ) const
 {
-    return( m_pTable != rOther.m_pTable ||
-            m_bucketIndex != rOther.m_bucketIndex ||
-            m_elementIndex != rOther.m_elementIndex );
+    return ( m_pTable != rOther.m_pTable ||
+             m_bucketIndex != rOther.m_bucketIndex ||
+             m_elementIndex != rOther.m_elementIndex );
 }
 
 /// Directly set the hash table entry reference for this accessor.
@@ -271,7 +271,7 @@ template<
     typename InternalValue >
 bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsValid() const
 {
-    return( m_pTable != NULL );
+    return ( m_pTable != NULL );
 }
 
 /// Clear out any reference to a hash table entry, releasing any necessary locks as well.
@@ -428,9 +428,9 @@ template<
 bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator==(
     const ConcurrentHashTableAccessor& rOther ) const
 {
-    return( m_pTable == rOther.m_pTable &&
-            m_bucketIndex == rOther.m_bucketIndex &&
-            m_elementIndex == rOther.m_elementIndex );
+    return ( m_pTable == rOther.m_pTable &&
+             m_bucketIndex == rOther.m_bucketIndex &&
+             m_elementIndex == rOther.m_elementIndex );
 }
 
 /// Get whether this accessor does not reference the same hash table location as another accessor.
@@ -445,9 +445,9 @@ template<
 bool Helium::ConcurrentHashTableAccessor< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=(
     const ConcurrentHashTableAccessor& rOther ) const
 {
-    return( m_pTable != rOther.m_pTable ||
-            m_bucketIndex != rOther.m_bucketIndex ||
-            m_elementIndex != rOther.m_elementIndex );
+    return ( m_pTable != rOther.m_pTable ||
+             m_bucketIndex != rOther.m_bucketIndex ||
+             m_elementIndex != rOther.m_elementIndex );
 }
 
 /// Directly set the hash table entry reference for this accessor.
@@ -568,7 +568,7 @@ template<
     typename InternalValue >
 bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey, Allocator, InternalValue >::IsEmpty() const
 {
-    return( m_size == 0 );
+    return ( m_size == 0 );
 }
 
 /// Clear out all entries in this table.

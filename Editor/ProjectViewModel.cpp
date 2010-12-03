@@ -162,7 +162,8 @@ void ProjectViewModelNode::DocumentChanging( const DocumentEventArgs& args )
 
 void ProjectViewModelNode::DocumentChanged( const DocumentEventArgs& args )
 {
-#pragma TODO( "Add the icon dirty overlay and change text format" )
+#pragma TODO( "Add the icon dirty overlay" )
+    m_Model->ItemChanged( wxDataViewItem( (void*)this ) );
 }
 
 void ProjectViewModelNode::DocumentModifiedOnDiskStateChanged( const DocumentEventArgs& args )
@@ -490,8 +491,8 @@ void ProjectViewModel::OnDocumentOpened( const DocumentEventArgs& args )
     HELIUM_ASSERT( document );
 
 
-    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath() ),
-        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath() );
+    for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) ),
+        upper = m_MM_ProjectViewModelNodesByPath.upper_bound( document->GetPath().GetRelativePath( m_Project->a_Path.Get() ) );
         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
     ++lower )
     {
@@ -636,14 +637,22 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( node->m_IsActive )
     {
-        attr.SetItalic( true );
         attr.SetBold( true );
     }
     else
     {
-        attr.SetItalic( false );
         attr.SetBold( false );
     }
+
+    if ( node->GetDocument() && node->GetDocument()->HasChanged() )
+    {
+        attr.SetItalic( true );
+    }
+    else
+    {
+        attr.SetItalic( false );
+    }
+
 
     return true;
 }

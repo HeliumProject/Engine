@@ -29,15 +29,6 @@ namespace Helium
             /// Base type of reference counted object.
             typedef Object BaseType;
 
-            /// @name Reference Count Update Events
-            //@{
-            inline static void PreAddStrongRef( Object* pObject );
-            inline static void PreRemoveStrongRef( Object* pObject );
-
-            inline static void PreAddWeakRef( Object* pObject );
-            inline static void PreRemoveWeakRef( Object* pObject );
-            //@}
-
             /// @name Object Destruction Support
             //@{
             inline static void PreDestroy( Object* pObject );
@@ -211,67 +202,6 @@ namespace Helium
             {
                 return NULL;
             }
-        }
-
-        /// Perform any actions immediately prior to incrementing an object's strong reference count.
-        ///
-        /// @param[in] pObject  Object whose reference count is being updated.
-        ///
-        /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-        void ObjectRefCountSupport::PreAddStrongRef( Object* pObject )
-        {
-            HELIUM_UNREF( pObject );
-
-#ifdef REFLECT_OBJECT_TRACKING
-            HELIUM_ASSERT( pObject );
-
-            if ( Reflect::IsInitialized() )
-            {
-                RefCountProxy< Object >* pRefCountProxy = pObject->GetRefCountProxy();
-                HELIUM_ASSERT( pRefCountProxy );
-                if( pRefCountProxy->GetStrongRefCount() != 0 )
-                {
-                    Reflect::Registry::GetInstance()->TrackCheck( reinterpret_cast< uintptr_t >( pObject ) );
-                }
-            }
-#endif
-        }
-
-        /// Perform any actions immediately prior to decrementing an object's strong reference count.
-        ///
-        /// @param[in] pObject  Object whose reference count is being updated.
-        ///
-        /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-        void ObjectRefCountSupport::PreRemoveStrongRef( Object* pObject )
-        {
-            HELIUM_UNREF( pObject );
-
-#ifdef REFLECT_OBJECT_TRACKING
-            HELIUM_ASSERT( pObject );
-
-            if ( Reflect::IsInitialized() )
-            {
-                Reflect::Registry::GetInstance()->TrackCheck( reinterpret_cast< uintptr_t >( this ) );
-            }
-#endif
-        }
-
-        /// Perform any actions immediately prior to incrementing an object's weak reference count.
-        ///
-        /// @param[in] pObject  Object whose reference count is being updated.
-        ///
-        /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-        void ObjectRefCountSupport::PreAddWeakRef( Object* /*pObject*/ )
-        {
-        }
-
-        /// Perform any actions immediately prior to decrementing an object's weak reference count.
-        ///
-        /// @param[in] pObject  Object whose reference count is being updated.
-        ///
-        /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-        void ObjectRefCountSupport::PreRemoveWeakRef( Object* /*pObject*/ )
-        {
         }
 
         /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the

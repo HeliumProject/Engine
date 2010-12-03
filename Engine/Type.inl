@@ -7,42 +7,6 @@
 
 namespace Lunar
 {
-    /// Perform any actions immediately prior to incrementing an object's strong reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void TypeRefCountSupport::PreAddStrongRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to decrementing an object's strong reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveStrongRef(), PreAddWeakRef(), PreRemoveWeakRef()
-    void TypeRefCountSupport::PreRemoveStrongRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to incrementing an object's weak reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void TypeRefCountSupport::PreAddWeakRef( Type* /*pObject*/ )
-    {
-    }
-
-    /// Perform any actions immediately prior to decrementing an object's weak reference count.
-    ///
-    /// @param[in] pObject  Object whose reference count is being updated.
-    ///
-    /// @see PreRemoveWeakRef(), PreAddStrongRef(), PreRemoveStrongRef()
-    void TypeRefCountSupport::PreRemoveWeakRef( Type* /*pObject*/ )
-    {
-    }
-
     /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
     /// object.
     ///
@@ -107,22 +71,19 @@ namespace Lunar
         return sm_spTypePackage;
     }
 
-    /// Get whether this iterator is referencing a registered type.
+    /// Constructor.
     ///
-    /// @return  True if this iterator is referencing a type, false if it is referencing nothing.
-    ///
-    /// @see Release()
-    bool Type::ConstIterator::IsValid() const
+    /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
+    Type::ConstIterator::ConstIterator()
     {
-        return m_accessor.IsValid();
     }
 
-    /// Release access to the registered type map and invalidate this iterator.
+    /// Constructor.
     ///
-    /// @see IsValid()
-    void Type::ConstIterator::Release()
+    /// @param[in] iterator  Type map iterator from which to initialize this iterator.
+    Type::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
+        : m_iterator( iterator )
     {
-        m_accessor.Release();
     }
 
     /// Get the type referenced by this iterator.
@@ -130,7 +91,7 @@ namespace Lunar
     /// @return  Reference to the referenced type.
     Type& Type::ConstIterator::operator*() const
     {
-        Type* pType = m_accessor->Second();
+        Type* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );
 
         return *pType;
@@ -141,7 +102,7 @@ namespace Lunar
     /// @return  Pointer to the referenced type.
     Type* Type::ConstIterator::operator->() const
     {
-        Type* pType = m_accessor->Second();
+        Type* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );
 
         return pType;
@@ -152,9 +113,20 @@ namespace Lunar
     /// @return  Reference to this iterator.
     Type::ConstIterator& Type::ConstIterator::operator++()
     {
-        ++m_accessor;
+        ++m_iterator;
 
         return *this;
+    }
+
+    /// Advance this iterator to the next type.
+    ///
+    /// @return  Copy of this iterator prior to advancing.
+    Type::ConstIterator Type::ConstIterator::operator++( int )
+    {
+        ConstIterator result = *this;
+        ++m_iterator;
+
+        return result;
     }
 
     /// Move this iterator back to the previous type.
@@ -162,24 +134,79 @@ namespace Lunar
     /// @return  Reference to this iterator.
     Type::ConstIterator& Type::ConstIterator::operator--()
     {
-        --m_accessor;
+        --m_iterator;
 
         return *this;
     }
 
+    /// Move this iterator back to the previous type.
+    ///
+    /// @return  Copy of this iterator prior to decrementing.
+    Type::ConstIterator Type::ConstIterator::operator--( int )
+    {
+        ConstIterator result = *this;
+        --m_iterator;
+
+        return result;
+    }
+
     /// Get whether this iterator is referencing the same type entry as the given iterator.
+    ///
+    /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator and the given iterator match, false if not.
     bool Type::ConstIterator::operator==( const ConstIterator& rOther ) const
     {
-        return ( m_accessor == rOther.m_accessor );
+        return ( m_iterator == rOther.m_iterator );
     }
 
     /// Get whether this iterator is not referencing the same type entry as the given iterator.
     ///
+    /// @param[in] rOther  Iterator with which to compare.
+    ///
     /// @return  True if this iterator and the given iterator do not match, false if they do match.
     bool Type::ConstIterator::operator!=( const ConstIterator& rOther ) const
     {
-        return ( m_accessor != rOther.m_accessor );
+        return ( m_iterator != rOther.m_iterator );
+    }
+
+    /// Get whether this iterator is referencing a type entry prior to the given iterator.
+    ///
+    /// @param[in] rOther  Iterator with which to compare.
+    ///
+    /// @return  True if this iterator is referencing a type entry prior to the given iterator, false if not.
+    bool Type::ConstIterator::operator<( const ConstIterator& rOther ) const
+    {
+        return ( m_iterator < rOther.m_iterator );
+    }
+
+    /// Get whether this iterator is referencing a type entry after the given iterator.
+    ///
+    /// @param[in] rOther  Iterator with which to compare.
+    ///
+    /// @return  True if this iterator is referencing a type entry after the given iterator, false if not.
+    bool Type::ConstIterator::operator>( const ConstIterator& rOther ) const
+    {
+        return ( m_iterator > rOther.m_iterator );
+    }
+
+    /// Get whether this iterator is referencing a type entry prior to or the same as the given iterator.
+    ///
+    /// @param[in] rOther  Iterator with which to compare.
+    ///
+    /// @return  True if this iterator is referencing the same or a prior type entry, false if not.
+    bool Type::ConstIterator::operator<=( const ConstIterator& rOther ) const
+    {
+        return ( m_iterator <= rOther.m_iterator );
+    }
+
+    /// Get whether this iterator is referencing a type entry after or the same as the given iterator.
+    ///
+    /// @param[in] rOther  Iterator with which to compare.
+    ///
+    /// @return  True if this iterator is referencing the same or a later type entry, false if not.
+    bool Type::ConstIterator::operator>=( const ConstIterator& rOther ) const
+    {
+        return ( m_iterator >= rOther.m_iterator );
     }
 }

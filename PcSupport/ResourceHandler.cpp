@@ -69,8 +69,8 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
     Type* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    Type::ConstIterator typeIterator;
-    for( Type::GetFirstType( typeIterator ); typeIterator.IsValid(); ++typeIterator )
+    Type::ConstIterator typeEnd = Type::GetTypeEnd();
+    for( Type::ConstIterator typeIterator = Type::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
         Type& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )
@@ -94,8 +94,8 @@ ResourceHandler* ResourceHandler::FindResourceHandlerForType( Type* pType )
     Type* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    Type::ConstIterator typeIterator;
-    for( Type::GetFirstType( typeIterator ); typeIterator.IsValid(); ++typeIterator )
+    Type::ConstIterator typeEnd = Type::GetTypeEnd();
+    for( Type::ConstIterator typeIterator = Type::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
         Type& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )

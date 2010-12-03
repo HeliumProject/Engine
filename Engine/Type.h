@@ -10,7 +10,7 @@
 #define LUNAR_ENGINE_TYPE_H
 
 #include "Foundation/Name.h"
-#include "Foundation/Container/ConcurrentHashMap.h"
+#include "Foundation/Container/HashMap.h"
 #include "Engine/GameObject.h"
 
 namespace Lunar
@@ -23,15 +23,6 @@ namespace Lunar
     public:
         /// Base type of reference counted object.
         typedef Type BaseType;
-
-        /// @name Reference Count Update Events
-        //@{
-        inline static void PreAddStrongRef( Type* pObject );
-        inline static void PreRemoveStrongRef( Type* pObject );
-
-        inline static void PreAddWeakRef( Type* pObject );
-        inline static void PreRemoveWeakRef( Type* pObject );
-        //@}
 
         /// @name Object Destruction Support
         //@{
@@ -69,7 +60,7 @@ namespace Lunar
 
     public:
         /// Type lookup hash map.
-        typedef ConcurrentHashMap< Name, TypePtr > LookupMap;
+        typedef HashMap< Name, TypePtr > LookupMap;
 
         /// General type flags.
         enum EFlag
@@ -83,19 +74,14 @@ namespace Lunar
         };
 
         /// Type iterator.
-        ///
-        /// This wraps a non-exclusive accessor to the type lookup map.  As such, multiple threads can iterate over the
-        /// lookup map at the same time, but holding onto a valid iterator will block types from being registered or
-        /// unregistered.
-        class LUNAR_ENGINE_API ConstIterator : Lunar::NonCopyable
+        class LUNAR_ENGINE_API ConstIterator
         {
             friend class Type;
 
         public:
-            /// @name Accessor Information
+            /// @name Construction/Destruction
             //@{
-            inline bool IsValid() const;
-            inline void Release();
+            inline ConstIterator();
             //@}
 
             /// @name Overloaded Operators
@@ -104,15 +90,26 @@ namespace Lunar
             inline Type* operator->() const;
 
             inline ConstIterator& operator++();
+            inline ConstIterator operator++( int );
             inline ConstIterator& operator--();
+            inline ConstIterator operator--( int );
 
             inline bool operator==( const ConstIterator& rOther ) const;
             inline bool operator!=( const ConstIterator& rOther ) const;
+            inline bool operator<( const ConstIterator& rOther ) const;
+            inline bool operator>( const ConstIterator& rOther ) const;
+            inline bool operator<=( const ConstIterator& rOther ) const;
+            inline bool operator>=( const ConstIterator& rOther ) const;
             //@}
 
         private:
-            /// Type map accessor.
-            LookupMap::ConstAccessor m_accessor;
+            /// Type map iterator.
+            LookupMap::ConstIterator m_iterator;
+
+            /// @name Construction/Destruction, Private
+            //@{
+            inline explicit ConstIterator( LookupMap::ConstIterator iterator );
+            //@}
         };
 
         /// @name Construction/Destruction
@@ -145,7 +142,8 @@ namespace Lunar
 
         static Type* Find( Name typeName );
 
-        static bool GetFirstType( ConstIterator& rIterator );
+        static ConstIterator GetTypeBegin();
+        static ConstIterator GetTypeEnd();
 
         static void Shutdown();
         //@}

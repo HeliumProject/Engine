@@ -80,9 +80,6 @@ namespace Helium
     private:
         /// Internal array of map elements.
         DynArray< Pair< Key, Data >, Allocator > m_elements;
-
-        /// Key equal comparison functor.
-        EqualKey m_keyEquals;
     };
 }
 

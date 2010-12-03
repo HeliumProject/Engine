@@ -148,15 +148,6 @@ namespace Lunar
         /// Base type of reference counted object.
         typedef GameObject BaseType;
 
-        /// @name Reference Count Update Events
-        //@{
-        inline static void PreAddStrongRef( GameObject* pObject );
-        inline static void PreRemoveStrongRef( GameObject* pObject );
-
-        inline static void PreAddWeakRef( GameObject* pObject );
-        inline static void PreRemoveWeakRef( GameObject* pObject );
-        //@}
-
         /// @name Object Destruction Support
         //@{
         inline static void PreDestroy( GameObject* pObject );

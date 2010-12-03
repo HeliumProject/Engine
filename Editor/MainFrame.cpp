@@ -755,6 +755,13 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
         m_MenuMRU->PopulateMenu( m_MenuFileOpenRecent, &CheckMRUPathExists );
+        
+        // Item was found using FindItemByPosition 2 because
+        // that's the place the "Open Recent" submenu should be
+        wxMenuItem* item = m_MenuFile->FindItemByPosition( 2 );
+        HELIUM_ASSERT( item->GetSubMenu() == m_MenuFileOpenRecent );
+
+        item->Enable( m_MenuFileOpenRecent->GetMenuItemCount() > 0 );
 
         // File > Close is enabled if there are documents open in the document manager
         m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );

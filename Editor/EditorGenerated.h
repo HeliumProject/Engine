@@ -38,7 +38,6 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/statline.h>
-#include <wx/listctrl.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
@@ -262,21 +261,28 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_ProjectManagementPanel;
-				
+				wxStaticText* m_ProjectNameStaticText;
 				Helium::Editor::MenuButton* m_OptionsButton;
 				wxDataViewCtrl* m_DataViewCtrl;
+				wxScrolledWindow* m_OpenProjectPanel;
+				wxPanel* m_RecentProjectsPanel;
+				wxStaticBitmap* m_RecentProjectsBitmap;
+				wxStaticText* m_RecentProjectsStaticText;
+				wxStaticLine* m_staticline16;
+				wxBoxSizer* m_RecentProjectsSizer;
+				wxStaticLine* m_staticline13;
+				wxButton* m_OpenProjectButton;
+				wxButton* m_CreateNewProjectButton;
 				
 				// Virtual event handlers, overide them in your derived class
-				virtual void OnOpenProjectListItemActivated( wxListEvent& event ) { event.Skip(); }
+				virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
+				virtual void OnNewProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
 				
 			
 			public:
-				wxStaticText* m_ProjectNameStaticText;
-				wxStaticLine* m_OptionsButtonStaticLine;
-				wxPanel* m_OpenProjectPanel;
-				wxListCtrl* m_OpenProjectListCtrl;
+				wxPanel* m_OpenProjectPanelOld;
 				
-				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL );
 				~ProjectPanelGenerated();
 			
 		};

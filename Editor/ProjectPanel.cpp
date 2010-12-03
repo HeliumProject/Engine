@@ -15,6 +15,9 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+#define HELIUM_MAX_RECENT_PROJECTS 5
+
+
 ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 : ProjectPanelGenerated( parent )
 , m_DocumentManager( documentManager )
@@ -26,15 +29,19 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 {
     Freeze();
     {
-        m_OptionsButtonStaticLine->Hide();
 #pragma TODO( "Remove call(s) to SetBitmap if/when wxFormBuilder supports wxArtProvider" )
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         m_OptionsButton->SetMargins( 3, 3 );
-        m_OptionsButton->Hide();
-        m_OptionsButton->Enable( false );
         
-        m_ProjectManagementPanel->Layout();
+        m_RecentProjectsBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFolder ) );
 
+        m_OpenProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ) );
+        m_OpenProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ).ConvertToImage().ConvertToDisabled() );
+
+        m_CreateNewProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ) );
+        m_CreateNewProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ).ConvertToImage().ConvertToDisabled() );
+
+        m_ProjectManagementPanel->Hide();
         m_DataViewCtrl->Hide();
         m_OpenProjectPanel->Show();
         PopulateOpenProjectListItems();
@@ -43,9 +50,6 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     Thaw();
 
     SetHelpText( TXT( "This is the project outliner.  Manage what's included in your project here." ) );
-
-    m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
-    m_ProjectNameStaticText->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
 
     m_OptionsMenu = new wxMenu();
     {
@@ -90,7 +94,12 @@ ProjectPanel::~ProjectPanel()
 {
     if ( m_Project )
     {
-        CloseProject();
+        if ( m_Model )
+        {
+            m_Model->CloseProject();
+        }
+
+        m_Project = NULL;
     }
 
     m_OptionsButton->Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( ProjectPanel::OnOptionsMenuOpen ), NULL, this );
@@ -115,57 +124,56 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
 
     if ( m_Project )
     {
-        CloseProject();
+        if ( m_Model )
+        {
+            m_Model->CloseProject();
+        }
+
+        m_Project = NULL;
     }
 
     m_Project = project;
     if ( m_Project )
     {
-        Freeze();
+        ProjectViewModelNode* node = NULL;
+
+        if ( !m_Model )
         {
-            ProjectViewModelNode* node = NULL;
+            // create the model
+            m_Model = new ProjectViewModel( m_DocumentManager );
+            node = m_Model->OpenProject( project, document );
 
-            if ( !m_Model )
-            {
-                // create the model
-                m_Model = new ProjectViewModel( m_DocumentManager );
-                node = m_Model->OpenProject( project, document );
+            m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
+            m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
 
-                m_DocumentManager->e_DocumentOpened.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumentOpened );
-                m_DocumentManager->e_DocumenClosed.AddMethod( m_Model.get(), &ProjectViewModel::OnDocumenClosed );
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
+            m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
 
-                m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
-                m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
+            // the ctrl will now hold ownership via reference count
+            m_DataViewCtrl->AssociateModel( m_Model.get() );
+        }
+        else
+        {
+            node = m_Model->OpenProject( project, document );
+        }
 
-                // the ctrl will now hold ownership via reference count
-                m_DataViewCtrl->AssociateModel( m_Model.get() );
-            }
-            else
-            {
-                node = m_Model->OpenProject( project, document );
-            }
+        if ( node )
+        {
+            m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
 
-            if ( node )
-            {
-                m_OptionsButtonStaticLine->Show();
-                m_OptionsButton->Show();
-                m_OptionsButton->Enable( true );
-
-                m_ProjectNameStaticText->SetLabel( m_Project->a_Path.Get().Basename() );
-                m_ProjectNameStaticText->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
-
-                m_OpenProjectPanel->Hide();
-                m_DataViewCtrl->Show();
-                Layout();
+            m_RecentProjectsPanel->Hide();
+            m_OpenProjectPanel->Hide();
+            m_ProjectManagementPanel->Show();
+            m_DataViewCtrl->Show();
+            Layout();
 
 #pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE after usibility test" )
 #if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-                m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
+            m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
 #endif
-            }
         }
+    
         Layout();
-        Thaw();
     }
 }
 
@@ -173,28 +181,19 @@ void ProjectPanel::CloseProject()
 {
     HELIUM_ASSERT( m_Project );
 
-    Freeze();
+    if ( m_Model )
     {
-        if ( m_Model )
-        {
-            m_Model->CloseProject();
-        }
-
-        m_Project = NULL;
-
-        m_ProjectNameStaticText->SetLabel( TXT( "Open Project..." ) );
-        m_ProjectNameStaticText->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ProjectPanel::OnOpenProject ), NULL, this );
-
-        m_OptionsButtonStaticLine->Hide();
-        m_OptionsButton->Hide();
-        m_OptionsButton->Enable( false );
-
-        m_DataViewCtrl->Hide();
-        m_OpenProjectPanel->Show();
-        PopulateOpenProjectListItems();
+        m_Model->CloseProject();
     }
+
+    m_Project = NULL;
+
+    m_ProjectManagementPanel->Hide();
+    m_DataViewCtrl->Hide();
+    m_OpenProjectPanel->Show();
+    PopulateOpenProjectListItems();
+
     Layout();
-    Thaw();
 }
 
 void ProjectPanel::SetActive( const Path& path, bool active )
@@ -240,65 +239,76 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 
 void ProjectPanel::PopulateOpenProjectListItems()
 {
-    m_OpenProjectListCtrl->ClearAll();
-
-    m_OpenProjectListCtrl->SetImageList( GlobalFileIconsTable().GetSmallImageList(), wxIMAGE_LIST_SMALL);
-
-    // note that under MSW for SetColumnWidth() to work we need to create the
-    // items with images initially even if we specify dummy image id
-    wxListItem itemColumn;
-    itemColumn.SetText( wxT("") );
-    itemColumn.SetImage( -1 );
-    m_OpenProjectListCtrl->InsertColumn( 0, itemColumn );
-
-    for ( std::vector< tstring >::const_iterator itr = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects().begin(),
-        end = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects().end();
-        itr != end; ++itr )
+    Freeze();
     {
-        Helium::Path path( *itr );
-        if ( path.Exists() )
+        m_ProjectMRULookup.clear();
+        const std::vector< tstring >& projectMRU = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+        
+        int mruCount = (int)projectMRU.size();
+        if ( mruCount > 0 )
         {
-            wxListItem item;
-            item.SetId( m_OpenProjectListCtrl->GetItemCount() );
-            item.SetText( path.c_str() );
-            item.SetImage( GlobalFileIconsTable().GetIconIDFromPath( path ) );
-            m_OpenProjectListCtrl->InsertItem( item );
+            m_RecentProjectsSizer->Clear( true ); // true - deletes windows cleared from the sizer
+                    
+            int numberAdded = 0;
+            for ( std::vector< tstring >::const_reverse_iterator itr = projectMRU.rbegin(), end = projectMRU.rend();
+                itr != end && numberAdded < HELIUM_MAX_RECENT_PROJECTS; ++itr, ++numberAdded )
+            {
+                Helium::Path path( *itr );
+                bool fileExists = path.Exists();
+
+                wxButton* button = new wxButton( m_RecentProjectsPanel, wxNewId(), path.Basename().c_str(), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
+                button->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ) );
+                button->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ).ConvertToImage().ConvertToDisabled() );
+                //button->SetLabel( path.Basename().c_str() );
+                button->Enable( fileExists );
+                m_RecentProjectsSizer->Add( button, 0, wxEXPAND, 5 );
+
+                m_ProjectMRULookup.insert( M_ProjectMRULookup::value_type( button->GetId(), path.Get() ) );
+
+                if ( fileExists )
+                {
+                    button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnRecentProjectButtonClick ), NULL, this );
+                }
+            }
+
+            m_RecentProjectsPanel->Show();
+        }
+        else
+        {
+            m_RecentProjectsPanel->Hide();
         }
     }
 
-    wxListItem item;
-    item.SetId( m_OpenProjectListCtrl->GetItemCount() );
-    item.SetText( wxT( "Create New Project..." ) );
-    item.SetFont( *wxITALIC_FONT );
-    m_OpenProjectListCtrl->InsertItem( item );
-
-    m_OpenProjectListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    Layout();
+    Thaw();
 }
 
-void ProjectPanel::OnOpenProjectListItemActivated( wxListEvent& event )
+void ProjectPanel::OnRecentProjectButtonClick( wxCommandEvent& event )
 {
-    if ( event.GetIndex() == m_OpenProjectListCtrl->GetItemCount() - 1 )
+    if ( m_ProjectMRULookup.find( event.GetId() ) != m_ProjectMRULookup.end() )
     {
-        FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
-
-        if ( newProjectDialog.ShowModal() == wxID_OK )
-        {
-            wxGetApp().GetFrame()->OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
-        }
-    }
-    else
-    {
-        wxGetApp().GetFrame()->OpenProject( (const wxChar*)event.GetText().c_str() );
+        wxGetApp().GetFrame()->OpenProject( m_ProjectMRULookup.find( event.GetId() )->second.c_str() );
+        event.Skip( false );
     }
 }
 
-void ProjectPanel::OnOpenProject( wxMouseEvent& event )
+void ProjectPanel::OnOpenProjectButtonClick( wxCommandEvent& event )
 {
-    FileDialog openDlg( this, TXT( "Open Project..." ) );
+    FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "*.project.hrb" ), FileDialogStyles::Open );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
         wxGetApp().GetFrame()->OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
+    }
+}
+
+void ProjectPanel::OnNewProjectButtonClick( wxCommandEvent& event )
+{
+    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::DefaultSave );
+
+    if ( newProjectDialog.ShowModal() == wxID_OK )
+    {
+        wxGetApp().GetFrame()->OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
     }
 }
 

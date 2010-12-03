@@ -603,58 +603,112 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	m_ProjectManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer36;
-	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer36 = new wxBoxSizer( wxVERTICAL );
 	
-	m_ProjectNameStaticText = new wxStaticText( m_ProjectManagementPanel, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer39;
+	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ProjectNameStaticText = new wxStaticText( m_ProjectManagementPanel, wxID_ANY, _("PROJECT NAME"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ProjectNameStaticText->Wrap( -1 );
 	m_ProjectNameStaticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizer36->Add( m_ProjectNameStaticText, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	
-	bSizer36->Add( 0, 0, 0, wxEXPAND, 5 );
-	
-	m_OptionsButtonStaticLine = new wxStaticLine( m_ProjectManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer36->Add( m_OptionsButtonStaticLine, 0, wxEXPAND | wxALL, 2 );
+	bSizer39->Add( m_ProjectNameStaticText, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_OptionsButton = new Helium::Editor::MenuButton( m_ProjectManagementPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_OptionsButton->SetToolTip( _("Project View Settings...") );
 	
 	m_OptionsButton->SetToolTip( _("Project View Settings...") );
 	
-	bSizer36->Add( m_OptionsButton, 0, wxALL, 2 );
+	bSizer39->Add( m_OptionsButton, 0, wxALL, 2 );
+	
+	bSizer36->Add( bSizer39, 0, wxEXPAND, 5 );
+	
+	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
+	bSizer36->Add( m_DataViewCtrl, 1, wxEXPAND, 5 );
 	
 	m_ProjectManagementPanel->SetSizer( bSizer36 );
 	m_ProjectManagementPanel->Layout();
 	bSizer36->Fit( m_ProjectManagementPanel );
-	bSizer24->Add( m_ProjectManagementPanel, 0, wxEXPAND | wxALL, 2 );
+	bSizer24->Add( m_ProjectManagementPanel, 1, wxALL|wxEXPAND, 5 );
 	
-	m_OpenProjectPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_OpenProjectPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_OpenProjectPanel->SetScrollRate( 5, 5 );
+	wxBoxSizer* bSizer48;
+	bSizer48 = new wxBoxSizer( wxVERTICAL );
+	
+	m_RecentProjectsPanel = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer45;
+	bSizer45 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer43;
+	bSizer43 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_RecentProjectsBitmap = new wxStaticBitmap( m_RecentProjectsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_RecentProjectsBitmap->Hide();
+	
+	bSizer43->Add( m_RecentProjectsBitmap, 0, wxALL, 5 );
+	
+	m_RecentProjectsStaticText = new wxStaticText( m_RecentProjectsPanel, wxID_ANY, _("Recent Projects:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RecentProjectsStaticText->Wrap( -1 );
+	m_RecentProjectsStaticText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer43->Add( m_RecentProjectsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	bSizer45->Add( bSizer43, 0, 0, 5 );
+	
+	m_staticline16 = new wxStaticLine( m_RecentProjectsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer45->Add( m_staticline16, 0, wxEXPAND | wxALL, 12 );
+	
+	m_RecentProjectsSizer = new wxBoxSizer( wxVERTICAL );
+	
+	bSizer45->Add( m_RecentProjectsSizer, 1, wxEXPAND, 5 );
+	
+	m_staticline13 = new wxStaticLine( m_RecentProjectsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer45->Add( m_staticline13, 0, wxALL|wxEXPAND, 12 );
+	
+	m_RecentProjectsPanel->SetSizer( bSizer45 );
+	m_RecentProjectsPanel->Layout();
+	bSizer45->Fit( m_RecentProjectsPanel );
+	bSizer48->Add( m_RecentProjectsPanel, 0, wxEXPAND, 5 );
+	
+	m_OpenProjectPanelOld = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer361;
 	bSizer361 = new wxBoxSizer( wxVERTICAL );
 	
-	m_OpenProjectListCtrl = new wxListCtrl( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_NO_SORT_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer361->Add( m_OpenProjectListCtrl, 1, wxEXPAND, 5 );
+	wxBoxSizer* bSizer40;
+	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	
-	m_OpenProjectPanel->SetSizer( bSizer361 );
+	m_OpenProjectButton = new wxButton( m_OpenProjectPanelOld, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
+	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND, 5 );
+	
+	m_CreateNewProjectButton = new wxButton( m_OpenProjectPanelOld, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxSize( -1,-1 ), wxBU_LEFT );
+	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND, 5 );
+	
+	bSizer361->Add( bSizer40, 1, wxEXPAND, 5 );
+	
+	m_OpenProjectPanelOld->SetSizer( bSizer361 );
+	m_OpenProjectPanelOld->Layout();
+	bSizer361->Fit( m_OpenProjectPanelOld );
+	bSizer48->Add( m_OpenProjectPanelOld, 1, wxEXPAND, 5 );
+	
+	m_OpenProjectPanel->SetSizer( bSizer48 );
 	m_OpenProjectPanel->Layout();
-	bSizer361->Fit( m_OpenProjectPanel );
+	bSizer48->Fit( m_OpenProjectPanel );
 	bSizer24->Add( m_OpenProjectPanel, 1, wxEXPAND | wxALL, 5 );
-	
-	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
-	bSizer24->Add( m_DataViewCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();
 	
 	// Connect Events
-	m_OpenProjectListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnOpenProjectListItemActivated ), NULL, this );
+	m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
+	m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
 	// Disconnect Events
-	m_OpenProjectListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( ProjectPanelGenerated::OnOpenProjectListItemActivated ), NULL, this );
+	m_OpenProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
+	m_CreateNewProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
 	
 }
 

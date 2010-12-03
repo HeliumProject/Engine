@@ -2,6 +2,9 @@
 
 #include "Foundation/Container/HashTable.h"
 
+#include "Foundation/Functions.h"
+#include "Foundation/HashFunctions.h"
+
 namespace Helium
 {
     /// Hash map key extract function.

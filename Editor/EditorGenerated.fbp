@@ -3299,7 +3299,7 @@
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
                         <property name="window_extra_style"></property>
-                        <property name="window_name"></property>
+                        <property name="window_name">m_ProjectManagementPanel</property>
                         <property name="window_style">wxTAB_TRAVERSAL</property>
                         <event name="OnChar"></event>
                         <event name="OnEnterWindow"></event>
@@ -3465,7 +3465,7 @@
                                 <object class="CustomControl" expanded="0">
                                     <property name="bg"></property>
                                     <property name="class">wxDataViewCtrl</property>
-                                    <property name="construction">m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );</property>
+                                    <property name="construction">m_DataViewCtrl = new wxDataViewCtrl ( m_ProjectManagementPanel, wxID_ANY );</property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="declaration">wxDataViewCtrl* m_DataViewCtrl;</property>
@@ -3489,7 +3489,7 @@
                                     <property name="validator_type">wxDefaultValidator</property>
                                     <property name="validator_variable"></property>
                                     <property name="window_extra_style"></property>
-                                    <property name="window_name"></property>
+                                    <property name="window_name">m_DataViewCtrl</property>
                                     <property name="window_style"></property>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
@@ -3547,7 +3547,7 @@
                         <property name="validator_type">wxDefaultValidator</property>
                         <property name="validator_variable"></property>
                         <property name="window_extra_style"></property>
-                        <property name="window_name"></property>
+                        <property name="window_name">m_OpenProjectPanel</property>
                         <property name="window_style">wxHSCROLL|wxVSCROLL</property>
                         <event name="OnChar"></event>
                         <event name="OnEnterWindow"></event>
@@ -3603,7 +3603,7 @@
                                     <property name="validator_type">wxDefaultValidator</property>
                                     <property name="validator_variable"></property>
                                     <property name="window_extra_style"></property>
-                                    <property name="window_name"></property>
+                                    <property name="window_name">m_RecentProjectsPanel</property>
                                     <property name="window_style">wxTAB_TRAVERSAL</property>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
@@ -3891,7 +3891,7 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_OpenProjectPanelOld</property>
+                                    <property name="name">m_OpenOrCreateProjectPanel</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
@@ -3902,7 +3902,7 @@
                                     <property name="validator_type">wxDefaultValidator</property>
                                     <property name="validator_variable"></property>
                                     <property name="window_extra_style"></property>
-                                    <property name="window_name"></property>
+                                    <property name="window_name">m_OpenOrCreateProjectPanel</property>
                                     <property name="window_style">wxTAB_TRAVERSAL</property>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
@@ -3927,25 +3927,25 @@
                                     <event name="OnSetFocus"></event>
                                     <event name="OnSize"></event>
                                     <event name="OnUpdateUI"></event>
-                                    <object class="wxBoxSizer" expanded="1">
+                                    <object class="wxBoxSizer" expanded="0">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer361</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxBoxSizer" expanded="1">
+                                            <object class="wxBoxSizer" expanded="0">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer40</property>
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxButton" expanded="1">
+                                                    <object class="wxButton" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -3998,11 +3998,11 @@
                                                         <event name="OnUpdateUI"></event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxButton" expanded="1">
+                                                    <object class="wxButton" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>

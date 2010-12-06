@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -222,40 +222,40 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
-	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
-	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
-	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
-	this->Connect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
-	this->Connect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
-	this->Connect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
-	this->Connect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( ID_ImportFromClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( ID_Export, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( ID_ExportToClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( ID_Exit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
-	this->Connect( wxID_UNDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
-	this->Connect( wxID_REDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
-	this->Connect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
-	this->Connect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
-	this->Connect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
-	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
-	this->Connect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
-	this->Connect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
-	this->Connect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
-	this->Connect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
-	this->Connect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
-	this->Connect( ID_Ungroup, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
-	this->Connect( ID_Center, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
-	this->Connect( ID_Duplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
-	this->Connect( ID_SmartDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
-	this->Connect( ID_CopyTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
-	this->Connect( ID_PasteTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
-	this->Connect( ID_SnapToCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
-	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
-	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
-	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
+	this->Connect( m_ItemFileNewScene->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
+	this->Connect( m_ItemFileNewEntity->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
+	this->Connect( m_ItemFileNewProject->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
+	this->Connect( m_ItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Connect( m_ItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
+	this->Connect( m_ItemSaveAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Connect( m_ItemImport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( m_ItemImportFromClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( m_ItemExport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( m_ItemExportToClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( m_ItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
+	this->Connect( m_ItemUndo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Connect( m_ItemRedo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	this->Connect( m_ItemCut->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Connect( m_ItemCopy->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Connect( m_ItemPaste->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( m_ItemDelete->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
+	this->Connect( m_ItemSelectAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
+	this->Connect( m_ItemInvertSelection->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
+	this->Connect( m_ItemParent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
+	this->Connect( m_ItemUnparent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
+	this->Connect( m_ItemGroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
+	this->Connect( m_ItemUngroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
+	this->Connect( m_ItemCenter->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
+	this->Connect( m_ItemDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
+	this->Connect( m_ItemSmartDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
+	this->Connect( m_ItemCopyTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
+	this->Connect( m_ItemPasteTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
+	this->Connect( m_ItemSnapToCamera->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
+	this->Connect( m_ItemSnapCameraTo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
+	this->Connect( m_ItemWalkUp->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( m_ItemWalkForward->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( m_ItemSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
+	this->Connect( m_ItemAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 }
 
 MainFrameGenerated::~MainFrameGenerated()
@@ -601,7 +601,7 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
-	m_ProjectManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_ProjectManagementPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("m_ProjectManagementPanel") );
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxVERTICAL );
 	
@@ -623,7 +623,7 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	bSizer36->Add( bSizer39, 0, wxEXPAND, 5 );
 	
-	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
+	m_DataViewCtrl = new wxDataViewCtrl ( m_ProjectManagementPanel, wxID_ANY );
 	bSizer36->Add( m_DataViewCtrl, 1, wxEXPAND, 5 );
 	
 	m_ProjectManagementPanel->SetSizer( bSizer36 );
@@ -631,12 +631,12 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer36->Fit( m_ProjectManagementPanel );
 	bSizer24->Add( m_ProjectManagementPanel, 1, wxALL|wxEXPAND, 5 );
 	
-	m_OpenProjectPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_OpenProjectPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL, wxT("m_OpenProjectPanel") );
 	m_OpenProjectPanel->SetScrollRate( 5, 5 );
 	wxBoxSizer* bSizer48;
 	bSizer48 = new wxBoxSizer( wxVERTICAL );
 	
-	m_RecentProjectsPanel = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_RecentProjectsPanel = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("m_RecentProjectsPanel") );
 	wxBoxSizer* bSizer45;
 	bSizer45 = new wxBoxSizer( wxVERTICAL );
 	
@@ -673,25 +673,25 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer45->Fit( m_RecentProjectsPanel );
 	bSizer48->Add( m_RecentProjectsPanel, 0, wxEXPAND, 5 );
 	
-	m_OpenProjectPanelOld = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_OpenOrCreateProjectPanel = new wxPanel( m_OpenProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("m_OpenOrCreateProjectPanel") );
 	wxBoxSizer* bSizer361;
 	bSizer361 = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	
-	m_OpenProjectButton = new wxButton( m_OpenProjectPanelOld, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
+	m_OpenProjectButton = new wxButton( m_OpenOrCreateProjectPanel, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
 	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND, 5 );
 	
-	m_CreateNewProjectButton = new wxButton( m_OpenProjectPanelOld, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxSize( -1,-1 ), wxBU_LEFT );
+	m_CreateNewProjectButton = new wxButton( m_OpenOrCreateProjectPanel, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxSize( -1,-1 ), wxBU_LEFT );
 	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND, 5 );
 	
 	bSizer361->Add( bSizer40, 1, wxEXPAND, 5 );
 	
-	m_OpenProjectPanelOld->SetSizer( bSizer361 );
-	m_OpenProjectPanelOld->Layout();
-	bSizer361->Fit( m_OpenProjectPanelOld );
-	bSizer48->Add( m_OpenProjectPanelOld, 1, wxEXPAND, 5 );
+	m_OpenOrCreateProjectPanel->SetSizer( bSizer361 );
+	m_OpenOrCreateProjectPanel->Layout();
+	bSizer361->Fit( m_OpenOrCreateProjectPanel );
+	bSizer48->Add( m_OpenOrCreateProjectPanel, 1, wxEXPAND, 5 );
 	
 	m_OpenProjectPanel->SetSizer( bSizer48 );
 	m_OpenProjectPanel->Layout();

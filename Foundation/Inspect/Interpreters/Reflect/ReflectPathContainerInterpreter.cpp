@@ -31,9 +31,9 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isArray = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
+    bool isVector = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
     bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
-    bool isContainer = isArray || isSet;
+    bool isContainer = isVector || isSet;
 
     // create the label
     ContainerPtr labelContainer = CreateControl< Container >();
@@ -43,6 +43,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     labelContainer->AddChild( label );
     label->BindText( field->m_UIName );
     label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
+    // only allow modification if we've only got one backing list
+    label->a_IsEnabled.Set( instances.size() == 1 );
 
     // create the list view
     ContainerPtr listContainer = CreateControl<Container>();
@@ -52,6 +54,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     m_List = list;
     listContainer->AddChild( list );
     m_List->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
+    listContainer->a_IsEnabled.Set( instances.size() == 1 );
 
     // create the buttons
     ButtonPtr editButton;
@@ -98,7 +101,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         removeButton->SetClientData( new ClientData( list ) );
         removeButton->a_HelpText.Set( TXT( "Remove a file from the list." ) );
 
-        if ( isArray )
+        if ( isVector )
         {
             upButton = CreateControl< Button >();
             upButton->a_Icon.Set( TXT( "actions/go-up" ) );
@@ -144,12 +147,22 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         buttonContainer->AddChild( downButton );
     }
 
+    // we only let them modify the data if we're only dealing with a single list
+    buttonContainer->a_IsEnabled.Set( instances.size() == 1 );
+
     // create the serializers
     std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
     std::vector<Reflect::Element*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();
+
+        if ( instances.size() == 1 )
+        {
+            m_PathVector = Reflect::ObjectCast< Reflect::PathStlVectorData >( s );
+            m_PathSet = Reflect::ObjectCast< Reflect::PathStlSetData >( s );
+            HELIUM_ASSERT( ( m_PathVector || m_PathSet ) && !( m_PathVector && m_PathSet ) );
+        }
 
         s->ConnectField(*itr, field);
 
@@ -175,23 +188,24 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
 
 void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
-    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) );
+    d_OpenFileDialog.Invoke( fileDialogArgs );
+    if ( !fileDialogArgs.m_Result.empty() )
     {
-        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
+        Reflect::PathData pathData;
+        pathData.m_Data.Set( fileDialogArgs.m_Result.Get() );
 
-        FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Add File" ), TXT( "*.*" ) );
-        d_OpenFileDialog.Invoke( fileDialogArgs );
-        if ( !fileDialogArgs.m_Result.empty() )
+        if ( m_PathVector )
         {
-            List* list = static_cast< List* >( data->GetControl() );
-#ifdef INSPECT_REFACTOR
-            list->AddItem( fileDialogArgs.m_Result.Get() );
-#endif
+            m_PathVector->Insert( m_PathVector->GetSize(), &pathData );
         }
-
-        args.m_Control->GetCanvas()->Read();
+        else if ( m_PathSet )
+        {
+            m_PathSet->AddItem( &pathData );
+        }
     }
+
+    args.m_Control->GetCanvas()->Read();
 }
 
 void PathContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
@@ -235,70 +249,104 @@ void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 
 void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
 {
-    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Edit File Path" ), TXT( "*.*" ) );
+    d_OpenFileDialog.Invoke( fileDialogArgs );
+    if ( !fileDialogArgs.m_Result.empty() )
     {
-        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-        List* list = static_cast< List* >( data->GetControl() );
-        const std::set< size_t >& selectedItemIndices = list->a_SelectedItemIndices.Get();
+        Reflect::PathData pathData;
+        pathData.m_Data.Set( fileDialogArgs.m_Result.Get() );
 
-        // It would be nice to iterate over the selection here, but this is not safe since
-        // each call to open can destroy this control and invalidate our iterator.
-        if ( !selectedItemIndices.empty() )
+        std::vector< Path > paths;
+
+        if ( m_PathSet )
         {
-#ifdef INSPECT_REFACTOR
-            // need to resolve from index to path in the data
-            g_EditFilePath.Raise( EditFilePathArgs( *( selectedItemIndices.begin() ) ) );
-#endif
+            for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data.Get().begin(), end = m_PathSet->m_Data.Get().end(); itr != end; ++itr )
+            {
+                paths.push_back( *itr );
+            }
+        }
+
+        for ( std::set< size_t >::const_iterator itr = m_List->a_SelectedItemIndices.Get().begin(), end = m_List->a_SelectedItemIndices.Get().end(); itr != end; ++itr )
+        {
+            if ( m_PathVector )
+            {
+                m_PathVector->Remove( *itr );
+                m_PathVector->Insert( *itr, &pathData );
+            }
+            else if ( m_PathSet )
+            {
+                Reflect::PathData tempData;
+                HELIUM_ASSERT( *itr < paths.size() );
+                tempData.m_Data.Set( paths[ *itr ] );
+                m_PathSet->RemoveItem( &tempData );
+            }
+        }
+
+        if ( m_PathSet )
+        {
+            m_PathSet->AddItem( &pathData );
         }
     }
+
+    args.m_Control->GetCanvas()->Read();
 }
 
 void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
-    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    std::vector< Path > paths;
+
+    if ( m_PathVector )
     {
-        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-        List* list = static_cast< List* >( data->GetControl() );
-        const std::set< size_t >& selectedItemIndices = list->a_SelectedItemIndices.Get();
-        if ( !selectedItemIndices.empty() )
+        paths = m_PathVector->m_Data.Get();
+    }
+    else if ( m_PathSet )
+    {
+        for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data.Get().begin(), end = m_PathSet->m_Data.Get().end(); itr != end; ++itr )
         {
-            std::set< size_t >::const_iterator itr = selectedItemIndices.begin();
-            std::set< size_t >::const_iterator end = selectedItemIndices.end();
-            for ( ; itr != end; ++itr )
-            {
-#ifdef INSPECT_REFACTOR
-                const tstring& selection = *itr;
-                list->RemoveItem( selection );
-#endif
-            }
+            paths.push_back( *itr );
         }
     }
+
+    std::set< size_t >::const_reverse_iterator itr = m_List->a_SelectedItemIndices.Get().rbegin(), end = m_List->a_SelectedItemIndices.Get().rend();
+    for ( ; itr != end; ++itr )
+    {
+        paths.erase( paths.begin() + *itr );
+    }
+
+    if ( m_PathVector )
+    {
+        m_PathVector->m_Data.Set( paths );
+    }
+    else if ( m_PathSet )
+    {
+        std::set< Path > pathSet;
+        for ( std::vector< Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
+        {
+            pathSet.insert( std::set< Path >::value_type( *itr ) );
+        }
+
+        m_PathSet->m_Data.Set( pathSet );
+    }
+
+    args.m_Control->GetCanvas()->Read();
 }
 
 void PathContainerInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 {
-    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
-    {
-        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-        List* list = static_cast< List* >( data->GetControl() );
-#ifdef INSPECT_REFACTOR
-        list->MoveSelectedItems( Inspect::MoveDirections::Up );
-#endif
-    }
+    HELIUM_ASSERT( m_PathVector );
+
+    std::set< size_t > temp = m_List->a_SelectedItemIndices.Get();
+    m_PathVector->MoveUp( temp );
+
+    args.m_Control->GetCanvas()->Read();
 }
 
 void PathContainerInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 {
-    Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
-    {
-        ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
-        List* list = static_cast< List* >( data->GetControl() );
-#ifdef INSPECT_REFACTOR
-        list->MoveSelectedItems( Inspect::MoveDirections::Down );
-#endif
-    }
+    HELIUM_ASSERT( m_PathVector );
+
+    std::set< size_t > temp = m_List->a_SelectedItemIndices.Get();
+    m_PathVector->MoveDown( temp );
+
+    args.m_Control->GetCanvas()->Read();
 }

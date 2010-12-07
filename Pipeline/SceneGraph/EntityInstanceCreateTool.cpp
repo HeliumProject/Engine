@@ -339,9 +339,10 @@ void EntityInstanceCreateTool::OnNormalize( const Inspect::ButtonClickedArgs& ar
 
 void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args )
 {
-    std::map< uint64_t, uint64_t > selectedHashes;
 
 #ifdef INSPECT_REFACTOR
+    std::map< uint64_t, uint64_t > selectedHashes;
+
     const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
     std::vector< tstring >::const_iterator selectedItr = selectedItems.begin();
     std::vector< tstring >::const_iterator selectedEnd = selectedItems.end();

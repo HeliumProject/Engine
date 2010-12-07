@@ -24,7 +24,6 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 , m_Project( NULL )
 , m_Model( NULL )
 , m_OptionsMenu( NULL )
-, m_ContextMenu( NULL )
 , m_DropTarget( NULL )
 {
     Freeze();
@@ -69,12 +68,11 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
 
     m_DataViewCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ProjectPanel::OnSelectionChanged ), NULL, this );
 
-    m_ContextMenu = new wxMenu();
     {
-        wxMenuItem* addItem = m_ContextMenu->Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
+        wxMenuItem* addItem = m_ContextMenu.Append( wxNewId(), wxT( "Add Item(s)..." ), wxT( "Allows you to add items to the project." ) );
         Connect( addItem->GetId(), wxCommandEventHandler( ProjectPanel::OnAddItems ), NULL, this );
 
-        wxMenuItem* deleteItem = m_ContextMenu->Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
+        wxMenuItem* deleteItem = m_ContextMenu.Append( wxNewId(), wxT( "Remove Selected Item(s)" ), wxT( "Removes the selected item(s) from the project." ) );
         Connect( deleteItem->GetId(), wxCommandEventHandler( ProjectPanel::OnDeleteItems ), NULL, this );
     }
     m_DataViewCtrl->Connect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
@@ -210,7 +208,7 @@ void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )
     }
 
     wxPoint point = wxGetMousePosition();
-    PopupMenu( m_ContextMenu );
+    PopupMenu( &m_ContextMenu );
 }
 
 void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
@@ -301,10 +299,12 @@ void ProjectPanel::OnNewProjectButtonClick( wxCommandEvent& event )
 
 void ProjectPanel::OnAddItems( wxCommandEvent& event )
 {
+    HELIUM_BREAK();
 }
 
 void ProjectPanel::OnDeleteItems( wxCommandEvent& event )
 {
+    HELIUM_BREAK();
 }
 
 void ProjectPanel::OnOptionsMenuOpen( wxMenuEvent& event )

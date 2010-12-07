@@ -56,7 +56,7 @@ namespace Helium
             Project* m_Project;
             wxObjectDataPtr< ProjectViewModel > m_Model;
             wxMenu* m_OptionsMenu;
-            wxMenu* m_ContextMenu;
+            wxMenu m_ContextMenu;
 
             OrderedSet< Path* > m_Selected;
 

@@ -224,6 +224,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
 
     if ( path.HasExtension( TXT( "scene.hrb" ) ) )
     {
+        wxGetApp().GetFrame()->CloseAllScenes();
         wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
         return;
     }

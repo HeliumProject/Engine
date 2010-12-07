@@ -509,6 +509,11 @@ void MainFrame::OpenScene( const Path& path )
     m_SceneManager.SetCurrentScene( scene );
 }
 
+void MainFrame::CloseAllScenes()
+{
+    m_SceneManager.RemoveAllScenes();
+}
+
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 {
     bool canHandleArgs = false;

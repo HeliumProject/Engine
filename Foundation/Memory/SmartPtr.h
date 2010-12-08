@@ -46,6 +46,7 @@ namespace Helium
         //@{
         AtomicRefCountBase();
         AtomicRefCountBase( const AtomicRefCountBase& rSource );
+        virtual ~AtomicRefCountBase();
         //@}
 
         /// @name Reference Counting

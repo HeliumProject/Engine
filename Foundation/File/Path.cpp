@@ -476,6 +476,16 @@ void Path::ReplaceFullExtension( const tstring& newExtension )
     }
 }
 
+bool Path::HasExtension( const tchar_t* extension ) const
+{
+    if ( m_Path.length() - _tcslen( extension ) < 0 )
+    {
+        return false;
+    }
+
+    return _tcsicmp( m_Path.c_str() + ( m_Path.length() - _tcslen( extension ) ), extension ) == 0;
+}
+
 tstring Path::Native() const
 {
     tstring native = m_Path;

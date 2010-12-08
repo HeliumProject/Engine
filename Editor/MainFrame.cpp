@@ -374,7 +374,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
         else
         {
             wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-            
+
             return;
         }
     }
@@ -441,6 +441,26 @@ void MainFrame::CloseProject()
     }
 }
 
+void MainFrame::NewProjectDialog()
+{
+    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project" ), TXT( "*.project.hrb" ), FileDialogStyles::DefaultSave );
+
+    if ( newProjectDialog.ShowModal() == wxID_OK )
+    {
+        OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
+    }
+}
+
+void MainFrame::OpenProjectDialog()
+{
+    FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "*.project.hrb" ), FileDialogStyles::Open );
+
+    if ( openDlg.ShowModal() == wxID_OK )
+    {
+        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
+    }
+}
+
 void MainFrame::OpenScene( const Path& path )
 {
     HELIUM_ASSERT( m_Project );
@@ -487,6 +507,11 @@ void MainFrame::OpenScene( const Path& path )
     }
 
     m_SceneManager.SetCurrentScene( scene );
+}
+
+void MainFrame::CloseAllScenes()
+{
+    m_SceneManager.RemoveAllScenes();
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -615,12 +640,7 @@ void MainFrame::SceneExecuted( const ExecuteArgs& args )
 
 void MainFrame::OnOpen( wxCommandEvent& event )
 {
-    FileDialog openDlg( this, TXT( "Open" ) );
-
-    if ( openDlg.ShowModal() == wxID_OK )
-    {
-        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
-    }
+    OpenProjectDialog();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -755,6 +775,13 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         m_MenuFileNew->Enable( ID_NewScene, isProjectOpen );
 
         m_MenuMRU->PopulateMenu( m_MenuFileOpenRecent, &CheckMRUPathExists );
+
+        // Item was found using FindItemByPosition 2 because
+        // that's the place the "Open Recent" submenu should be
+        wxMenuItem* item = m_MenuFile->FindItemByPosition( 2 );
+        HELIUM_ASSERT( item->GetSubMenu() == m_MenuFileOpenRecent );
+
+        item->Enable( m_MenuFileOpenRecent->GetMenuItemCount() > 0 );
 
         // File > Close is enabled if there are documents open in the document manager
         m_MenuFile->Enable( ID_Close, m_DocumentManager.GetDocuments().Size() > 0 );
@@ -900,12 +927,7 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
 
 void MainFrame::OnNewProject( wxCommandEvent& event )
 {
-    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project.project.hrb" ), TXT( "*.project.hrb" ), FileDialogStyles::Open );
-
-    if ( newProjectDialog.ShowModal() == wxID_OK )
-    {
-        OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
-    }
+    NewProjectDialog();
 }
 
 bool MainFrame::DoOpen( const tstring& path )

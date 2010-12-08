@@ -113,10 +113,12 @@ namespace Helium
                 static const wxChar* Helium = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_HELIUM );
                 static const wxChar* HighlightMode = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_HIGHLIGHT_MODE );
                 static const wxChar* Locator = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_LOCATOR );
+                static const wxChar* NewProject = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_NEW_PROJECT );
                 static const wxChar* NextView = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_NEXT_VIEW );
                 static const wxChar* PerspectiveCamera = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_PERSPECTIVE_CAMERA );
                 static const wxChar* PreviousView = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_PREVIOUS_VIEW );
-                static const wxChar* ProjectFolder = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_CREATE_PROJECT_FOLDER );
+                static const wxChar* ProjectFile = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_PROJECT_FILE );
+                static const wxChar* ProjectFolder = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_PROJECT_FOLDER );
                 static const wxChar* RemoveSelectionFromLayers = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_REMOVE_SELECTION_FROM_LAYERS );
                 static const wxChar* RotateTool = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_ROTATE_TOOL );
                 static const wxChar* ScaleTool = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SCALE_TOOL );
@@ -145,6 +147,7 @@ namespace Helium
             namespace FileSystem
             {
                 static const wxChar* File = wxART_MAKE_ART_ID( HELIUM_ART_ID_FILE );
+                static const wxChar* FindFolder = wxART_MAKE_ART_ID( HELIUM_ART_ID_FIND_FOLDER );
                 static const wxChar* Folder = wxART_MAKE_ART_ID( HELIUM_ART_ID_FOLDER );
             }
 

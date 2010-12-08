@@ -280,9 +280,11 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Helium, IconArtFile( TXT( "editor/editor.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::HighlightMode, IconArtFile( TXT( "editor/highlight.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::Locator, IconArtFile( TXT( "editor/locator.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NewProject, IconArtFile( TXT( "editor/project.png" ) ).AddOverlay( TXT( "actions/create.png" ), OverlayQuadrants::TopRight ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::NextView, IconArtFile( TXT( "editor/view_next.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PerspectiveCamera, IconArtFile( TXT( "editor/view_perspective.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::PreviousView, IconArtFile( TXT( "editor/view_previous.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFile, IconArtFile( TXT( "editor/project.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::ProjectFolder, IconArtFile( TXT( "editor/project_folder.png" ) ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::RemoveSelectionFromLayers, IconArtFile( TXT( "status/unknown.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::Editor::RotateTool, IconArtFile( TXT( "editor/rotate.png" ) ) ) );
@@ -313,7 +315,8 @@ void ArtProvider::Create()
     // FileSystem
     //
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::File, IconArtFile( TXT( "filesystem/file.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::Folder, IconArtFile( TXT( "editor/folder.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::FindFolder, IconArtFile( TXT( "filesystem/folder.png" ) ).AddOverlay( TXT( "actions/find.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::FileSystem::Folder, IconArtFile( TXT( "filesystem/folder.png" ) ) ) );
 
 
     //

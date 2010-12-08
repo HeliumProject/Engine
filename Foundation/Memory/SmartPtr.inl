@@ -86,6 +86,12 @@ Helium::AtomicRefCountBase< T >::AtomicRefCountBase( const AtomicRefCountBase& /
     // Do not copy the reference count.
 }
 
+/// Virtual destructor.
+template< typename T >
+Helium::AtomicRefCountBase< T >::~AtomicRefCountBase()
+{
+}
+
 /// Get the current reference count of this object.
 ///
 /// @return  Current reference count.
@@ -122,7 +128,7 @@ uint32_t Helium::AtomicRefCountBase< T >::DecrRefCount() const
     int32_t newRefCount = AtomicDecrementUnsafe( m_RefCount );
     if( newRefCount == 0 )
     {
-        delete const_cast< T* >( static_cast< const T* >( this ) );
+        delete this;
     }
 
     return newRefCount;

@@ -274,18 +274,13 @@ bool Registry::RegisterType(Type* type)
         {
             Class* classType = static_cast<Class*>(type);
 
-            m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
+            Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
 
-            if ( !classType->m_Name.empty() )
+            if (!nameResult.second)
             {
-                Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
-
-                if (!nameResult.second && classType != nameResult.first->second)
-                {
-                    Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_Name.c_str());
-                    HELIUM_BREAK();
-                    return false;
-                }
+                Log::Error( TXT( "Re-registration of class '%s'\n" ), classType->m_Name.c_str());
+                HELIUM_BREAK();
+                return false;
             }
 
             if ( !classType->m_Base.empty() )
@@ -317,18 +312,9 @@ bool Registry::RegisterType(Type* type)
 
             Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
 
-            if (!enumResult.second && enumeration != enumResult.first->second)
+            if (!enumResult.second)
             {
-                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
-                HELIUM_BREAK();
-                return false;
-            }
-
-            enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
-
-            if (!enumResult.second && enumeration != enumResult.first->second)
-            {
-                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_Name.c_str());
+                Log::Error( TXT( "Re-registration of enumeration '%s'\n" ), enumeration->m_Name.c_str());
                 HELIUM_BREAK();
                 return false;
             }

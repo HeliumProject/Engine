@@ -1195,6 +1195,13 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
 {
     TranslateSnappingMode mode = m_HotSnappingMode;
 
+#pragma TODO( "Track ctrl up/down for replacement of wxIsCtrlDown above" )
+    if ( e.IsCtrlDown() || e.IsAltDown() || e.IsMetaDown() || e.IsShiftDown() )
+    {
+        __super::KeyDown( e );
+        return;
+    }
+
     switch (e.GetKeyCode())
     {
     case TXT('S'):

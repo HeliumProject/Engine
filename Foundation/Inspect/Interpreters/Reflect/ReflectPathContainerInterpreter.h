@@ -2,6 +2,8 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
+#include "Foundation/Reflect/Data/StlVectorData.h"
+#include "Foundation/Reflect/Data/StlSetData.h"
 
 #include "Foundation/FileDialog.h"
 
@@ -32,11 +34,15 @@ namespace Helium
             void OnMoveDown( const ButtonClickedArgs& args );
 
             FileDialogSignature::Delegate d_OpenFileDialog;
+            
         private:
+            Helium::SmartPtr< MultiStringFormatter< Reflect::Data > > m_DataPtr;
+            Reflect::PathStlVectorData* m_PathVector;
+            Reflect::PathStlSetData* m_PathSet;
             Inspect::List* m_List;
         };
 
-        typedef Helium::SmartPtr<PathContainerInterpreter> PathContainerInterpreterPtr;
+        typedef Helium::SmartPtr< PathContainerInterpreter > PathContainerInterpreterPtr;
         typedef std::vector< PathContainerInterpreterPtr > V_PathContainerInterpreterSmartPtr;
     }
 }

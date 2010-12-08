@@ -273,6 +273,15 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
     parentNodeIndex = rParentLinkData.parent;
     while( IsValid( parentNodeIndex ) )
     {
+        // If the current node is black, we no longer need to correct anything, as there should be no more coloring
+        // violations.
+        BitArray< Allocator >::ReferenceType nodeIsBlack( m_blackNodes[ nodeIndex ] );
+        if( nodeIsBlack )
+        {
+            break;
+        }
+
+        // Get the sibling of the current node and the direction from which we're ascending the tree to the parent node.
         const LinkData& rLinkData = m_links[ parentNodeIndex ];
 
         size_t childLeftIndex = rLinkData.children[ 0 ];
@@ -291,19 +300,19 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
             siblingIndex = childLeftIndex;
         }
 
-        BitArray< Allocator >::ReferenceType nodeIsBlack = m_blackNodes[ nodeIndex ];
-        if( nodeIsBlack )
-        {
-            break;
-        }
-
+        // If we have a red node with a red sibling, perform a color swap with the parent node to resolve any potential
+        // red coloring violation between the current node and its children.
         bool bUpdatedNodes = false;
+
         if( IsValid( siblingIndex ) )
         {
-            BitArray< Allocator >::ReferenceType siblingIsBlack = m_blackNodes[ siblingIndex ];
+            BitArray< Allocator >::ReferenceType siblingIsBlack( m_blackNodes[ siblingIndex ] );
             if( !siblingIsBlack )
             {
+                // Parent must be black, since red nodes can't have red children (current node can be potentially
+                // breaking this rule at this point, but its sibling can't).
                 HELIUM_ASSERT( m_blackNodes[ parentNodeIndex ] );
+
                 m_blackNodes[ parentNodeIndex ] = false;
                 nodeIsBlack = true;
                 siblingIsBlack = true;
@@ -314,11 +323,16 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 
         if( !bUpdatedNodes )
         {
+            // The sibling is black (or doesn't exist), so perform a node rotation as necessary to resolve any potential
+            // red coloring violation between the current node and its children.
             const LinkData& rNodeLinkData = m_links[ nodeIndex ];
             size_t grandChildIndex = rNodeLinkData.children[ linkDirection ];
             if( IsValid( grandChildIndex ) && !m_blackNodes[ grandChildIndex ] )
             {
-                parentNodeIndex = RotateNode( parentNodeIndex, linkDirection );
+                RotateNode( parentNodeIndex, linkDirection );
+
+                // The (new) parent node is now black, so no more color violations should exist.
+                break;
             }
             else
             {
@@ -326,23 +340,316 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
                 if( IsValid( grandChildIndex ) && !m_blackNodes[ grandChildIndex ] )
                 {
                     RotateNode( nodeIndex, !linkDirection );
-                    parentNodeIndex = RotateNode( parentNodeIndex, linkDirection );
+                    RotateNode( parentNodeIndex, linkDirection );
+
+                    // The (new) parent node is now black, so no more color violations should exist.
+                    break;
                 }
             }
         }
 
         nodeIndex = parentNodeIndex;
-        parentNodeIndex = m_links[ parentNodeIndex ].parent;
+        parentNodeIndex = rLinkData.parent;
     }
 
+    // Force the root node to always be black.
     m_blackNodes[ m_root ] = true;
 
     return true;
 }
 
-//bool Remove( const Key& rKey );
-//void Remove( Iterator iterator );
-//void Remove( Iterator start, Iterator end );
+/// Remove any entry with the specified key from this tree.
+///
+/// @param[in] rKey  Key to locate.
+///
+/// @return  True if an entry was found and removed, false if not.
+template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
+bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( const Key& rKey )
+{
+    size_t nodeIndex = FindNodeIndex( rKey );
+    bool bIsValidNode = IsValid( nodeIndex );
+    if( bIsValidNode )
+    {
+        Remove( Iterator( this, nodeIndex ) );
+    }
+
+    return bIsValidNode;
+}
+
+/// Remove the entry referenced by the specified iterator.
+///
+/// @param[in] iterator  Iterator for the entry to remove.
+template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
+void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( Iterator iterator )
+{
+    HELIUM_ASSERT( iterator.m_pTree == this );
+
+    size_t removeNodeIndex = iterator.m_index;
+    size_t nodeCount = m_values.GetSize();
+    HELIUM_ASSERT( removeNodeIndex < nodeCount );
+
+    // Special case: handle removal of the last node in the tree.
+    if( nodeCount == 1 )
+    {
+        HELIUM_ASSERT( removeNodeIndex == 0 );
+        HELIUM_ASSERT( m_root == removeNodeIndex );
+
+        m_values.Remove( 0 );
+        m_links.Remove( 0 );
+        m_blackNodes.Pop();
+        HELIUM_ASSERT( m_values.IsEmpty() );
+        HELIUM_ASSERT( m_links.IsEmpty() );
+        HELIUM_ASSERT( m_blackNodes.IsEmpty() );
+
+        SetInvalid( m_root );
+
+        return;
+    }
+
+    // If the node has two children, swap it with its immediate predecessor and try to remove the node from the old
+    // predecessor location.
+    LinkData& rRemoveNodeLinkData = m_links[ removeNodeIndex ];
+    size_t parentNodeIndex = rRemoveNodeLinkData.parent;
+    size_t child0Index = rRemoveNodeLinkData.children[ 0 ];
+    size_t child1Index = rRemoveNodeLinkData.children[ 1 ];
+    if( IsValid( child0Index ) && IsValid( child1Index ) )
+    {
+        size_t predecessorChildIndex = child0Index;
+        size_t predecessorIndex;
+        do
+        {
+            predecessorIndex = predecessorChildIndex;
+            predecessorChildIndex = m_links[ predecessorChildIndex ].children[ 1 ];
+        } while( IsValid( predecessorChildIndex ) );
+
+        LinkData& rPredecessorLinkData = m_links[ predecessorIndex ];
+        size_t predecessorParentIndex = rPredecessorLinkData.parent;
+        size_t predecessorChild0Index = rPredecessorLinkData.children[ 0 ];
+        size_t predecessorChild1Index = rPredecessorLinkData.children[ 1 ];
+
+        HELIUM_ASSERT( IsValid( predecessorParentIndex ) );
+        LinkData& rPredecessorParentLinkData = m_links[ predecessorParentIndex ];
+        size_t predecessorParentLinkDirection = ( rPredecessorParentLinkData.children[ 1 ] == predecessorIndex );
+        HELIUM_ASSERT( rPredecessorParentLinkData.children[ predecessorParentLinkDirection ] == predecessorIndex );
+        rPredecessorParentLinkData.children[ predecessorParentLinkDirection ] = removeNodeIndex;
+
+        if( IsValid( predecessorChild0Index ) )
+        {
+            HELIUM_ASSERT( m_links[ predecessorChild0Index ].parent == predecessorIndex );
+            m_links[ predecessorChild0Index ].parent = removeNodeIndex;
+        }
+
+        if( IsValid( predecessorChild1Index ) )
+        {
+            HELIUM_ASSERT( m_links[ predecessorChild1Index ].parent == predecessorIndex );
+            m_links[ predecessorChild1Index ].parent = removeNodeIndex;
+        }
+
+        if( IsValid( parentNodeIndex ) )
+        {
+            HELIUM_ASSERT( m_root != removeNodeIndex );
+
+            LinkData& rParentLinkData = m_links[ parentNodeIndex ];
+            size_t parentLinkDirection = ( rParentLinkData.children[ 1 ] == removeNodeIndex );
+            HELIUM_ASSERT( rParentLinkData.children[ parentLinkDirection ] == removeNodeIndex );
+            rParentLinkData.children[ parentLinkDirection ] = predecessorIndex;
+        }
+        else
+        {
+            HELIUM_ASSERT( m_root == removeNodeIndex );
+            m_root = predecessorIndex;
+        }
+
+        HELIUM_ASSERT( m_links[ child0Index ].parent == removeNodeIndex );
+        m_links[ child0Index ].parent = predecessorIndex;
+
+        HELIUM_ASSERT( m_links[ child1Index ].parent == removeNodeIndex );
+        m_links[ child1Index ].parent = predecessorIndex;
+
+        // We may have just remapped indices in the link structures we're about to swap (as is the case if the immediate
+        // predecessor of the node we want to remove is a child of said node), so re-fetch the node link data from the
+        // link structures.
+        parentNodeIndex = rPredecessorLinkData.parent;
+        child0Index = rPredecessorLinkData.children[ 0 ];
+        child1Index = rPredecessorLinkData.children[ 1 ];
+
+        rPredecessorLinkData = rRemoveNodeLinkData;
+
+        rRemoveNodeLinkData.parent = parentNodeIndex;
+        rRemoveNodeLinkData.children[ 0 ] = child0Index;
+        rRemoveNodeLinkData.children[ 1 ] = child1Index;
+
+        BitArray< DefaultAllocator >::ReferenceType removeNodeIsBlack( m_blackNodes[ removeNodeIndex ] );
+        BitArray< DefaultAllocator >::ReferenceType predecessorIsBlack( m_blackNodes[ predecessorIndex ] );
+
+        bool bBlack = removeNodeIsBlack;
+        removeNodeIsBlack = static_cast< bool >( predecessorIsBlack );
+        predecessorIsBlack = bBlack;
+    }
+
+    HELIUM_ASSERT( IsInvalid( child0Index ) || IsInvalid( child1Index ) );
+
+    // If attempting to delete a black node, try to rebalance the tree to make the node we want to delete red.
+    if( m_blackNodes[ removeNodeIndex ] )
+    {
+        size_t nodeIndex = removeNodeIndex;
+        while( IsValid( parentNodeIndex ) )
+        {
+            LinkData& rParentLinkData = m_links[ parentNodeIndex ];
+            size_t parentLinkDirection = ( rParentLinkData.children[ 1 ] == nodeIndex );
+            HELIUM_ASSERT( rParentLinkData.children[ parentLinkDirection ] == nodeIndex );
+
+            size_t siblingNodeIndex = rParentLinkData.children[ !parentLinkDirection ];
+            HELIUM_ASSERT( IsValid( siblingNodeIndex ) );
+            if( !m_blackNodes[ siblingNodeIndex ] )
+            {
+                RotateNode( parentNodeIndex, !parentLinkDirection );
+
+                HELIUM_ASSERT( rParentLinkData.children[ parentLinkDirection ] == nodeIndex );
+                siblingNodeIndex = rParentLinkData.children[ !parentLinkDirection ];
+                HELIUM_ASSERT( IsValid( siblingNodeIndex ) );
+            }
+
+            {
+                BitArray< Allocator >::ReferenceType siblingIsBlack( m_blackNodes[ siblingNodeIndex ] );
+                if( !siblingIsBlack )
+                {
+                    break;
+                }
+
+                LinkData& rSiblingLinkData = m_links[ siblingNodeIndex ];
+                size_t siblingChildIndex = rSiblingLinkData.children[ parentLinkDirection ];
+                if( IsInvalid( siblingChildIndex ) || m_blackNodes[ siblingChildIndex ] )
+                {
+                    siblingChildIndex = rSiblingLinkData.children[ !parentLinkDirection ];
+                    if( IsInvalid( siblingChildIndex ) || m_blackNodes[ siblingChildIndex ] )
+                    {
+                        siblingIsBlack = false;
+
+                        BitArray< Allocator >::ReferenceType parentIsBlack( m_blackNodes[ parentNodeIndex ] );
+                        if( !parentIsBlack )
+                        {
+                            parentIsBlack = true;
+
+                            break;
+                        }
+
+                        nodeIndex = parentNodeIndex;
+                        parentNodeIndex = rParentLinkData.parent;
+
+                        continue;
+                    }
+                }
+                else
+                {
+                    siblingChildIndex = rSiblingLinkData.children[ !parentLinkDirection ];
+                    if( IsInvalid( siblingChildIndex ) || m_blackNodes[ siblingChildIndex ] )
+                    {
+                        siblingNodeIndex = RotateNode( siblingNodeIndex, parentLinkDirection );
+                        HELIUM_ASSERT( IsValid( siblingNodeIndex ) );
+                    }
+                }
+            }
+
+            BitArray< Allocator >::ReferenceType parentIsBlack( m_blackNodes[ parentNodeIndex ] );
+            bool bParentIsBlackState = parentIsBlack;
+
+            LinkData& rSiblingLinkData = m_links[ siblingNodeIndex ];
+            size_t siblingChildIndex = rSiblingLinkData.children[ !parentLinkDirection ];
+            HELIUM_ASSERT( IsValid( siblingChildIndex ) );
+            HELIUM_ASSERT( !m_blackNodes[ siblingChildIndex ] );
+
+            RotateNode( parentNodeIndex, !parentLinkDirection );
+
+            m_blackNodes[ parentNodeIndex ] = true;
+            m_blackNodes[ siblingChildIndex ] = true;
+            m_blackNodes[ siblingNodeIndex ] = bParentIsBlackState;
+
+            break;
+        }
+    }
+
+    // Remove the node from the tree.
+    HELIUM_ASSERT( rRemoveNodeLinkData.children[ 0 ] == child0Index );
+    HELIUM_ASSERT( rRemoveNodeLinkData.children[ 1 ] == child1Index );
+
+    size_t childNodeIndex = child0Index;
+    if( IsInvalid( childNodeIndex ) )
+    {
+        childNodeIndex = child1Index;
+    }
+
+    parentNodeIndex = rRemoveNodeLinkData.parent;
+    if( IsValid( parentNodeIndex ) )
+    {
+        HELIUM_ASSERT( m_root != removeNodeIndex );
+
+        LinkData& rParentLinkData = m_links[ parentNodeIndex ];
+        size_t parentLinkDirection = ( rParentLinkData.children[ 1 ] == removeNodeIndex );
+        rParentLinkData.children[ parentLinkDirection ] = childNodeIndex;
+    }
+    else
+    {
+        HELIUM_ASSERT( m_root == removeNodeIndex );
+        m_root = childNodeIndex;
+    }
+
+    if( IsValid( childNodeIndex ) )
+    {
+        m_links[ childNodeIndex ].parent = parentNodeIndex;
+    }
+
+    // Update indices referencing the node that will be replacing the node we want to remove (the node from the end of
+    // each internal array will be swapped into the array slots occupied by the node we are removing).
+    size_t replacementNodeIndex = nodeCount - 1;
+
+    if( removeNodeIndex != replacementNodeIndex )
+    {
+        LinkData& rReplacementLinkData = m_links[ replacementNodeIndex ];
+
+        parentNodeIndex = rReplacementLinkData.parent;
+        if( IsValid( parentNodeIndex ) )
+        {
+            HELIUM_ASSERT( m_root != replacementNodeIndex );
+
+            LinkData& rParentLinkData = m_links[ parentNodeIndex ];
+            size_t parentLinkDirection = ( rParentLinkData.children[ 1 ] == replacementNodeIndex );
+            HELIUM_ASSERT( rParentLinkData.children[ parentLinkDirection ] == replacementNodeIndex );
+            rParentLinkData.children[ parentLinkDirection ] = removeNodeIndex;
+        }
+        else
+        {
+            HELIUM_ASSERT( m_root == replacementNodeIndex );
+            m_root = removeNodeIndex;
+        }
+
+        child0Index = rReplacementLinkData.children[ 0 ];
+        if( IsValid( child0Index ) )
+        {
+            LinkData& rChildLinkData = m_links[ child0Index ];
+            HELIUM_ASSERT( rChildLinkData.parent == replacementNodeIndex );
+            rChildLinkData.parent = removeNodeIndex;
+        }
+
+        child1Index = rReplacementLinkData.children[ 1 ];
+        if( IsValid( child1Index ) )
+        {
+            LinkData& rChildLinkData = m_links[ child1Index ];
+            HELIUM_ASSERT( rChildLinkData.parent == replacementNodeIndex );
+            rChildLinkData.parent = removeNodeIndex;
+        }
+    }
+
+    // Remove the node from each internal array, swapping in the replacement node from the ends of each array.
+    m_values.RemoveSwap( removeNodeIndex );
+    m_links.RemoveSwap( removeNodeIndex );
+
+    m_blackNodes[ removeNodeIndex ] = static_cast< bool >( m_blackNodes[ replacementNodeIndex ] );
+    m_blackNodes.Pop();
+
+    // Enforce the root node color to be black.
+    m_blackNodes[ m_root ] = true;
+}
 
 /// Swap the contents of this tree with another tree.
 ///

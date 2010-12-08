@@ -51,7 +51,12 @@ namespace Helium
         /// @name Overloaded Operators
         //@{
         inline BitArrayElementProxy& operator=( bool bValue );
-        inline BitArrayElementProxy& operator=( const ConstBitArrayElementProxy& rOther );
+        //@}
+
+    private:
+        /// @name Overloaded Operators, Private
+        //@{
+        BitArrayElementProxy& operator=( const BitArrayElementProxy& );  // Not implemented.
         //@}
     };
 

@@ -119,7 +119,6 @@ namespace Helium
 
         bool Remove( const Key& rKey );
         void Remove( Iterator iterator );
-        void Remove( Iterator start, Iterator end );
 
         void Swap( RbTree& rTree );
         //@}

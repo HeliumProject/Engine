@@ -90,6 +90,8 @@ namespace Lunar
         //@{
         bool CreateMainContext( const ContextInitParameters& rInitParameters );
         RRenderContext* GetMainContext();
+
+        RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters );
         //@}
 
         /// @name State Object Creation
@@ -196,6 +198,12 @@ namespace Lunar
         //@{
         D3D9Renderer();
         virtual ~D3D9Renderer();
+        //@}
+
+        /// @name Private Utility Functions
+        //@{
+        void GetPresentParameters(
+            D3DPRESENT_PARAMETERS& rParameters, const ContextInitParameters& rContextInitParameters ) const;
         //@}
 
         /// @name Private Static Utility Functions

@@ -6,5 +6,6 @@
 #include "Foundation/Container/HashMap.h"
 #include "Foundation/Container/HashSet.h"
 #include "Foundation/Container/Map.h"
-#include "Foundation/Container/RbTree.h"
+#include "Foundation/Container/SortedMap.h"
+#include "Foundation/Container/SortedSet.h"
 #include "Foundation/Container/SparseArray.h"

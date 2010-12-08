@@ -17,6 +17,19 @@ namespace Helium
         struct LinkData;
 
     public:
+        /// Type for tree keys.
+        typedef Key KeyType;
+        /// Type for tree entries.
+        typedef Value ValueType;
+
+        /// Internal value type (type used for actual value storage).
+        typedef InternalValue InternalValueType;
+
+        /// Type for comparing two keys.
+        typedef CompareKey KeyCompareType;
+        /// Allocator type.
+        typedef Allocator AllocatorType;
+
         /// Constant red-black tree iterator.
         class ConstIterator
         {
@@ -128,6 +141,13 @@ namespace Helium
         bool Verify() const;
         //@}
 
+        /// @name Overloaded Operators
+        //@{
+        RbTree& operator=( const RbTree& rSource );
+        template< typename OtherAllocator > RbTree& operator=(
+            const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
+        //@}
+
     private:
         /// Node link data.
         struct LinkData
@@ -150,6 +170,9 @@ namespace Helium
 
         /// @name Private Utility Functions
         //@{
+        template< typename OtherAllocator > void Copy(
+            const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
+
         size_t FindNodeIndex( const Key& rKey ) const;
 
         size_t FindFirstNodeIndex() const;

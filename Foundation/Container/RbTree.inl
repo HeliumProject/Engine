@@ -690,6 +690,57 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
     return IsValid( blackCount );
 }
 
+/// Assignment operator.
+///
+/// @param[in] rSource  Source object from which to copy.
+///
+/// @return  Reference to this object.
+template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
+Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
+    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=( const RbTree& rSource )
+{
+    if( this != &rSource )
+    {
+        Copy( rSource );
+    }
+
+    return *this;
+}
+
+/// Assignment operator.
+///
+/// @param[in] rSource  Source object from which to copy.
+///
+/// @return  Reference to this object.
+template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
+template< typename OtherAllocator >
+Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
+    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=(
+        const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
+{
+    if( this != &rSource )
+    {
+        Copy( rSource );
+    }
+
+    return *this;
+}
+
+/// Copy the contents of another object into this object.
+///
+/// @param[in] rSource  Source object from which to copy.
+template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
+template< typename OtherAllocator >
+void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Copy(
+    const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
+{
+    m_values = rSource.m_values;
+    m_links = rSource.m_links;
+    m_blackNodes = rSource.m_blackNodes;
+
+    m_root = rSource.m_root;
+}
+
 /// Find the node in this tree with the given key.
 ///
 /// @param[in] rKey  Key to locate.

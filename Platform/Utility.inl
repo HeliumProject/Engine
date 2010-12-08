@@ -841,13 +841,14 @@ void Helium::SetBitRange( ElementType* pElements, size_t bitStart, size_t bitCou
     size_t endElementIndex, endMaskIndex;
     GetBitElementAndMaskIndex< ElementType >( bitStart + bitCount - 1, endElementIndex, endMaskIndex );
 
+    ElementType endMaskBit = static_cast< ElementType >( 1 ) << endMaskIndex;
+
     if( startMaskIndex != 0 )
     {
         if( startElementIndex == endElementIndex )
         {
             ElementType mask =
-                ( ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1 ) &
-                ~( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
+                ( ( endMaskBit - 1 ) | endMaskBit ) & ~( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
             pElements[ startElementIndex ] |= mask;
 
             return;
@@ -864,7 +865,7 @@ void Helium::SetBitRange( ElementType* pElements, size_t bitStart, size_t bitCou
         0xff,
         ( endElementIndex - startElementIndex ) * sizeof( ElementType ) );
 
-    ElementType mask = ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1;
+    ElementType mask = ( endMaskBit - 1 ) | endMaskBit;
     pElements[ endElementIndex ] |= mask;
 }
 
@@ -891,13 +892,14 @@ void Helium::ClearBitRange( ElementType* pElements, size_t bitStart, size_t bitC
     size_t endElementIndex, endMaskIndex;
     GetBitElementAndMaskIndex< ElementType >( bitStart + bitCount - 1, endElementIndex, endMaskIndex );
 
+    ElementType endMaskBit = static_cast< ElementType >( 1 ) << endMaskIndex;
+
     if( startMaskIndex != 0 )
     {
         if( startElementIndex == endElementIndex )
         {
             ElementType mask =
-                ~( ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1 ) |
-                ( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
+                ~( ( endMaskBit - 1 ) | endMaskBit ) | ( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
             pElements[ startElementIndex ] &= mask;
 
             return;
@@ -911,7 +913,7 @@ void Helium::ClearBitRange( ElementType* pElements, size_t bitStart, size_t bitC
 
     MemoryZero( pElements + startElementIndex, ( endElementIndex - startElementIndex ) * sizeof( ElementType ) );
 
-    ElementType mask = ~( ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1 );
+    ElementType mask = ~( ( endMaskBit - 1 ) | endMaskBit );
     pElements[ endElementIndex ] &= mask;
 }
 
@@ -938,13 +940,14 @@ void Helium::ToggleBitRange( ElementType* pElements, size_t bitStart, size_t bit
     size_t endElementIndex, endMaskIndex;
     GetBitElementAndMaskIndex< ElementType >( bitStart + bitCount - 1, endElementIndex, endMaskIndex );
 
+    ElementType endMaskBit = static_cast< ElementType >( 1 ) << endMaskIndex;
+
     if( startMaskIndex != 0 )
     {
         if( startElementIndex == endElementIndex )
         {
             ElementType mask =
-                ( ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1 ) &
-                ~( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
+                ( ( endMaskBit - 1 ) | endMaskBit ) & ~( ( static_cast< ElementType >( 1 ) << startMaskIndex ) - 1 );
             pElements[ startElementIndex ] ^= mask;
 
             return;
@@ -962,7 +965,7 @@ void Helium::ToggleBitRange( ElementType* pElements, size_t bitStart, size_t bit
         pElements[ elementIndex ] ^= mask;
     }
 
-    mask = ( static_cast< ElementType >( 1 ) << ( endMaskIndex + 1 ) ) - 1;
+    mask = ( endMaskBit - 1 ) | endMaskBit;
     pElements[ endElementIndex ] ^= mask;
 }
 

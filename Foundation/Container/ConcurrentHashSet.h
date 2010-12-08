@@ -6,14 +6,6 @@
 
 namespace Helium
 {
-    /// Hash set key extract function.
-    template< typename T >
-    class ConcurrentHashSetExtractKey
-    {
-    public:
-        const T& operator()( const T& rValue ) const;
-    };
-
     /// Thread-safe hash set container.
     template<
         typename Key,
@@ -21,15 +13,14 @@ namespace Helium
         typename EqualKey = Equals< Key >,
         typename Allocator = DefaultAllocator >
     class ConcurrentHashSet
-        : public ConcurrentHashTable< Key, Key, HashFunction, ConcurrentHashSetExtractKey< Key >, EqualKey, Allocator, Key >
+        : public ConcurrentHashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key >
     {
     public:
         /// Default hash table bucket count (prime numbers are recommended).
         static const size_t DEFAULT_BUCKET_COUNT = 37;
 
         /// Parent class type.
-        typedef ConcurrentHashTable< Key, Key, HashFunction, ConcurrentHashSetExtractKey< Key >, EqualKey, Allocator, Key >
-            Super;
+        typedef ConcurrentHashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key > Super;
 
         /// Type for hash set keys.
         typedef typename Super::KeyType KeyType;

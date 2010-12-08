@@ -83,6 +83,15 @@ namespace Helium
     public:
         bool operator()( const wchar_t* pA, const wchar_t* pB ) const;
     };
+
+    /// Identity value selection function.
+    template< typename T >
+    class Identity
+    {
+    public:
+        T& operator()( T& rValue ) const;
+        const T& operator()( const T& rValue ) const;
+    };
 }
 
 #include "Foundation/Functions.inl"

@@ -7,14 +7,6 @@
 
 namespace Helium
 {
-    /// Hash map key extract function.
-    template< typename Key, typename Data >
-    class HashMapExtractKey
-    {
-    public:
-        const Key& operator()( const KeyValue< Key, Data >& rValue ) const;
-    };
-
     /// Non-thread safe hash map container.
     template<
         typename Key,
@@ -24,7 +16,7 @@ namespace Helium
         typename Allocator = DefaultAllocator >
     class HashMap
         : public HashTable<
-            KeyValue< Key, Data >, Key, HashFunction, HashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
     {
     public:
@@ -33,7 +25,7 @@ namespace Helium
 
         /// Parent class type.
         typedef HashTable<
-            KeyValue< Key, Data >, Key, HashFunction, HashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
                 Super;
 

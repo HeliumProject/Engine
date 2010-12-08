@@ -70,6 +70,46 @@ namespace Helium
         Pair& operator=( const KeyValue< T1, T2 >& rOther );
         //@}
     };
+
+    /// Function class for extracting the first value from a heterogeneous pair.
+    template< typename PairType >
+    class SelectFirst
+    {
+    public:
+        /// @name Overloaded Operators
+        //@{
+        typename PairType::FirstType& operator()( PairType& rPair ) const;
+        const typename PairType::FirstType& operator()( const PairType& rPair ) const;
+        //@}
+    };
+
+    /// Function class for extracting the second value from a heterogeneous pair.
+    template< typename PairType >
+    class SelectSecond
+    {
+    public:
+        /// @name Overloaded Operators
+        //@{
+        typename PairType::SecondType& operator()( PairType& rPair ) const;
+        const typename PairType::SecondType& operator()( const PairType& rPair ) const;
+        //@}
+    };
+
+    /// Function class for extracting the first value from a KeyValue pair.
+    ///
+    /// Using SelectFirst with a KeyValue type as its template parameter causes compiler errors due to the fact it does
+    /// not implement a First() that returns a non-constant reference (the compiler still tries to compile the operator
+    /// overload that takes a non-constant PairType reference and returns a non-constant PairType::FirstType reference
+    /// even though we don't actually want to use it).
+    template< typename PairType >
+    class SelectKey
+    {
+    public:
+        /// @name Overloaded Operators
+        //@{
+        typename const PairType::FirstType& operator()( const PairType& rPair ) const;
+        //@}
+    };
 }
 
 #include "Foundation/Container/Pair.inl"

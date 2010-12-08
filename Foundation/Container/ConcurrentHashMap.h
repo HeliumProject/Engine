@@ -10,14 +10,6 @@
 
 namespace Helium
 {
-    /// Hash map key extract function.
-    template< typename Key, typename Data >
-    class ConcurrentHashMapExtractKey
-    {
-    public:
-        const Key& operator()( const KeyValue< Key, Data >& rValue ) const;
-    };
-
     /// Thread-safe hash map container.
     template<
         typename Key,
@@ -27,7 +19,7 @@ namespace Helium
         typename Allocator = DefaultAllocator >
     class ConcurrentHashMap
         : public ConcurrentHashTable<
-            KeyValue< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
     {
     public:
@@ -36,7 +28,7 @@ namespace Helium
 
         /// Parent class type.
         typedef ConcurrentHashTable<
-            KeyValue< Key, Data >, Key, HashFunction, ConcurrentHashMapExtractKey< Key, Data >, EqualKey, Allocator,
+            KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
                 Super;
 

@@ -123,9 +123,9 @@ void EntityInstanceCreateTool::CreateProperties()
             m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
             m_FileButtonAdd->a_Icon.Set( TXT( "ellipses_add" ) );
 
-            Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
-            modifyButton->a_HelpText.Set( TXT( "Modify" ) );
-            modifyButton->a_Icon.Set( TXT( "percent" ) );
+            //Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
+            //modifyButton->a_HelpText.Set( TXT( "Modify" ) );
+            //modifyButton->a_Icon.Set( TXT( "percent" ) );
 
             Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
             normalizeButton->a_HelpText.Set( TXT( "Normalize" ) );
@@ -339,56 +339,6 @@ void EntityInstanceCreateTool::OnNormalize( const Inspect::ButtonClickedArgs& ar
 
 void EntityInstanceCreateTool::OnModify( const Inspect::ButtonClickedArgs& args )
 {
-
-#ifdef INSPECT_REFACTOR
-    std::map< uint64_t, uint64_t > selectedHashes;
-
-    const std::vector< tstring >& selectedItems = m_RandomEntityList->GetSelectedItems();
-    std::vector< tstring >::const_iterator selectedItr = selectedItems.begin();
-    std::vector< tstring >::const_iterator selectedEnd = selectedItems.end();
-    for ( ; selectedItr != selectedEnd; ++selectedItr )
-    {
-        V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-        V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
-        for ( ; itr != end; ++itr )
-        {
-            tstring listName = (*itr).GetListName();
-            if ( listName == *selectedItr )
-            {
-                selectedHashes.insert( std::make_pair( (*itr).m_ClassPath.Hash(), (*itr).m_ClassPath.Hash() ) );
-            }
-        }
-    }
-
-    if ( selectedHashes.empty() )
-    {
-        Log::Warning( TXT( "No entities selected for modification in OnModify()!" ) );
-        return;
-    }
-
-    wxTextEntryDialog dlg( NULL, TXT( "Please enter the new percentage" ), TXT( "Modify Percentage" ) );
-    if ( dlg.ShowModal() != wxID_OK )
-    {
-        return;
-    }
-
-    tstring input = dlg.GetValue().c_str();
-    if ( input.empty() )
-    {
-        return;
-    }
-
-    float32_t newPercentage = _tstof( input.c_str() ) / 100.0f;
-    V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-    V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
-    for ( ; itr != end; ++itr )
-    {
-        if ( selectedHashes.find( (*itr).m_ClassPath.Hash() ) != selectedHashes.end() )
-        {
-            (*itr).m_Probability = newPercentage;
-        }
-    }
-#endif
-
+    HELIUM_BREAK();
     m_Generator->GetContainer()->GetCanvas()->Read();
 }

@@ -72,7 +72,7 @@ bool GameSystem::Initialize(
                             ConfigInitialization& rConfigInitialization,
                             WindowManagerInitialization& rWindowManagerInitialization,
                             RendererInitialization& rRendererInitialization,
-                            Type* pWorldType )
+                            GameObjectType* pWorldType )
 {
     // Initialize the timer first of all, in case someone wants to use it.
     Timer::StaticInitialize();
@@ -343,13 +343,13 @@ void GameSystem::Shutdown()
         m_pObjectTypeRegistration = NULL;
     }
 
-    Type::Shutdown();
+    GameObjectType::Shutdown();
     GameObject::Shutdown();
 
     AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
-    TypeRefCountSupport::Shutdown();
+    GameObjectTypeRefCountSupport::Shutdown();
     GameObjectRefCountSupport::Shutdown();
 
     GameObjectPath::Shutdown();

@@ -7,28 +7,20 @@
 
 namespace Helium
 {
-    /// Hash set key extract function.
-    template< typename T >
-    class HashSetExtractKey
-    {
-    public:
-        const T& operator()( const T& rValue ) const;
-    };
-
     /// Non-thread safe hash set container.
     template<
         typename Key,
         typename HashFunction = Hash< Key >,
         typename EqualKey = Equals< Key >,
         typename Allocator = DefaultAllocator >
-    class HashSet : public HashTable< Key, Key, HashFunction, HashSetExtractKey< Key >, EqualKey, Allocator, Key >
+    class HashSet : public HashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key >
     {
     public:
         /// Default hash table bucket count (prime numbers are recommended).
         static const size_t DEFAULT_BUCKET_COUNT = 37;
 
         /// Parent class type.
-        typedef HashTable< Key, Key, HashFunction, HashSetExtractKey< Key >, EqualKey, Allocator, Key > Super;
+        typedef HashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key > Super;
 
         /// Type for hash set keys.
         typedef typename Super::KeyType KeyType;

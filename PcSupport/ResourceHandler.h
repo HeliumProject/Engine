@@ -37,7 +37,7 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual Type* GetResourceType() const;
+        virtual GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
 #if L_EDITOR
@@ -49,7 +49,7 @@ namespace Lunar
         /// @name Static Resource Handling Support
         //@{
         static void GetAllResourceHandlers( DynArray< ResourceHandler* >& rResourceHandlers );
-        static ResourceHandler* FindResourceHandlerForType( Type* pType );
+        static ResourceHandler* FindResourceHandlerForType( GameObjectType* pType );
         //@}
     };
 }

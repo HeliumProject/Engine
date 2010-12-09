@@ -33,7 +33,7 @@ ShaderResourceHandler::~ShaderResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-Type* ShaderResourceHandler::GetResourceType() const
+GameObjectType* ShaderResourceHandler::GetResourceType() const
 {
     return Shader::GetStaticType();
 }

@@ -1400,9 +1400,9 @@ void wxImage::Paste( const wxImage &image, int x, int y, wxImageAlphaBlending al
 
     for (int height_index = 0; height_index < target_height; ++height_index)
     {
-        if (!maskSource && !hasAlpha )
+        if ( !maskSource && !hasAlpha )
         {
-            memcpy( target_data, source_data, target_width*3 );
+            memcpy( target_data, source_data, target_width*3 ); 
         }
         else
         {
@@ -1417,8 +1417,8 @@ void wxImage::Paste( const wxImage &image, int x, int y, wxImageAlphaBlending al
                 // - are masking, and the source pixel is NOT masked
                 if (!maskSource ||
                     !((source_data[r_index] == source_mask_r) &&
-                      (source_data[g_index] == source_mask_g) &&
-                      (source_data[b_index] == source_mask_b)))
+                    (source_data[g_index] == source_mask_g) &&
+                    (source_data[b_index] == source_mask_b)))
                 {
                     if ( doAlphaCompositing )
                     {
@@ -1447,12 +1447,12 @@ void wxImage::Paste( const wxImage &image, int x, int y, wxImageAlphaBlending al
                     }
                 }
             }
-        }
 
-        if ( hasAlpha )
-        {
-            source_alpha_data += source_alpha_data_step;
-            target_alpha_data += target_alpha_data_step;
+            if ( hasAlpha )
+            {
+                source_alpha_data += source_alpha_data_step;
+                target_alpha_data += target_alpha_data_step;
+            }
         }
 
         source_data += source_data_step;

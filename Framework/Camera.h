@@ -46,11 +46,16 @@ namespace Lunar
 
         /// @name Camera Parameters
         //@{
+        inline uint32_t GetSceneViewId() const;
+        void SetSceneViewId( uint32_t sceneViewId );
+
         inline float32_t GetFov() const;
         void SetFov( float32_t fov );
         //@}
 
     private:
+        /// Scene view ID.
+        uint32_t m_sceneViewId;
         /// Horizontal field-of-view angle, in degrees.
         float32_t m_fov;
     };

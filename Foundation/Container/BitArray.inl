@@ -94,25 +94,6 @@ Helium::BitArrayElementProxy& Helium::BitArrayElementProxy::operator=( bool bVal
     return *this;
 }
 
-/// Set the current bit value.
-///
-/// @param[in] rOther  Bit array element whose state should be replicated to the current bit.
-///
-/// @return  Reference to this proxy object.
-Helium::BitArrayElementProxy& Helium::BitArrayElementProxy::operator=( const ConstBitArrayElementProxy& rOther )
-{
-    if( static_cast< bool >( rOther ) )
-    {
-        m_rElement |= m_mask;
-    }
-    else
-    {
-        m_rElement &= ~m_mask;
-    }
-
-    return *this;
-}
-
 /// Constructor.
 ///
 /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.

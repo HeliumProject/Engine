@@ -92,7 +92,7 @@ namespace Lunar
             virtual void SerializeWideName( WideName& rValue );
             virtual void SerializeCharString( CharString& rValue );
             virtual void SerializeWideString( WideString& rValue );
-            virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
+            virtual void SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject );
 
             virtual void BeginStruct( EStructTag tag );
             virtual void EndStruct();
@@ -387,7 +387,7 @@ namespace Lunar
             DynArray< LinkEntry > linkTable;
 
             /// Cached type reference.
-            TypePtr spType;
+            GameObjectTypePtr spType;
             /// Cached template reference.
             GameObjectPtr spTemplate;
             /// Cached owner reference.

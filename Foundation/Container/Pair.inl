@@ -142,3 +142,68 @@ Helium::Pair< T1, T2 >& Helium::Pair< T1, T2 >::operator=( const KeyValue< T1, T
 
     return *this;
 }
+
+/// Extract the first value from a heterogeneous pair.
+///
+/// Note that this expects the interface provided by KeyValue and Pair, and is not compatible with std::pair.
+///
+/// @param[in] rPair  Reference to the value pair.
+///
+/// @return  Reference to the first value in the pair.
+template< typename PairType >
+typename PairType::FirstType& Helium::SelectFirst< PairType >::operator()( PairType& rPair ) const
+{
+    return rPair.First();
+}
+
+/// Extract the first value from a heterogeneous pair.
+///
+/// Note that this expects the interface provided by KeyValue and Pair, and is not compatible with std::pair.
+///
+/// @param[in] rPair  Constant reference to the value pair.
+///
+/// @return  Constant reference to the first value in the pair.
+template< typename PairType >
+const typename PairType::FirstType& Helium::SelectFirst< PairType >::operator()( const PairType& rPair ) const
+{
+    return rPair.First();
+}
+
+/// Extract the second value from a heterogeneous pair.
+///
+/// Note that this expects the interface provided by KeyValue and Pair, and is not compatible with std::pair.
+///
+/// @param[in] rPair  Reference to the value pair.
+///
+/// @return  Reference to the second value in the pair.
+template< typename PairType >
+typename PairType::SecondType& Helium::SelectSecond< PairType >::operator()( PairType& rPair ) const
+{
+    return rPair.Second();
+}
+
+/// Extract the second value from a heterogeneous pair.
+///
+/// Note that this expects the interface provided by KeyValue and Pair, and is not compatible with std::pair.
+///
+/// @param[in] rPair  Constant reference to the value pair.
+///
+/// @return  Constant reference to the second value in the pair.
+template< typename PairType >
+const typename PairType::SecondType& Helium::SelectSecond< PairType >::operator()( const PairType& rPair ) const
+{
+    return rPair.Second();
+}
+
+/// Extract the first value from a key-value pair.
+///
+/// Note that this expects the interface provided by KeyValue and Pair, and is not compatible with std::pair.
+///
+/// @param[in] rPair  Constant reference to the value pair.
+///
+/// @return  Constant reference to the first value in the pair.
+template< typename PairType >
+const typename PairType::FirstType& Helium::SelectKey< PairType >::operator()( const PairType& rPair ) const
+{
+    return rPair.First();
+}

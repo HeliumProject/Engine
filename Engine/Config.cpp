@@ -226,7 +226,7 @@ bool Config::TryFinishLoad()
 
         if( userObjectIndex >= userConfigObjectCount )
         {
-            Type* pConfigObjectType = pDefaultConfigObject->GetType();
+            GameObjectType* pConfigObjectType = pDefaultConfigObject->GetType();
             HELIUM_ASSERT( pConfigObjectType );
 
             GameObjectPtr spUserConfigObject( GameObject::CreateObject(

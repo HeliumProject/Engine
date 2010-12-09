@@ -1,14 +1,3 @@
-/// Hash set key extract function.
-///
-/// @param[in] rValue  Value from which to extract the key.
-///
-/// @return  Constant reference to the key.
-template< typename T >
-const T& Helium::HashSetExtractKey< T >::operator()( const T& rValue ) const
-{
-    return rValue;
-}
-
 /// Constructor.
 ///
 /// @param[in] bucketCount  Number of buckets to allocate in the hash table.

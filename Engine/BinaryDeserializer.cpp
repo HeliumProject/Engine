@@ -295,7 +295,7 @@ void BinaryDeserializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void BinaryDeserializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
+void BinaryDeserializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     // ALWAYS release the current object reference first.  This is done in case we encounter an error during the
     // deserialization process.  When such load errors occur, the object is passed through a NullLinker to zero out

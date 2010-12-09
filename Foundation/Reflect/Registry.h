@@ -7,6 +7,7 @@
 
 #include "Foundation/Memory.h"
 #include "Foundation/InitializerStack.h"
+#include "Foundation/Name.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/API.h"
@@ -20,7 +21,8 @@ namespace Helium
         typedef void (*DestroyedFunc)(Object* object);
 
         // Registry containers
-        typedef std::map< tstring, Helium::SmartPtr<Type> > M_StrToType;
+        typedef std::map< Name, Helium::SmartPtr< Type > > M_NameToType;
+        typedef std::map< tstring, Helium::SmartPtr< Type > > M_StrToType;
 
         // Profile interface
 #ifdef PROFILE_ACCUMULATION
@@ -48,8 +50,8 @@ namespace Helium
             friend bool Reflect::IsInitialized();
             friend void Reflect::Cleanup();
 
-            M_StrToType m_TypesByName;
-            M_StrToType m_TypesByAlias;
+            M_NameToType m_TypesByName;
+            M_NameToType m_TypesByAlias;
             InitializerStack m_InitializerStack;
 
             CreatedFunc m_Created; // the callback on creation
@@ -66,25 +68,25 @@ namespace Helium
             bool IsInitThread();
 
             // register type with registry with type id only
-            bool RegisterType (Type* type);
-            void UnregisterType (const Type* type);
+            bool RegisterType( Type* type );
+            void UnregisterType( const Type* type );
 
             // give a type an alias (for legacy considerations)
-            void AliasType (const Type* type, const tstring& alias);
-            void UnAliasType (const Type* type, const tstring& alias);
+            void AliasType( const Type* type, Name alias );
+            void UnAliasType( const Type* type, Name alias );
 
             // retrieves type info
-            const Type* GetType(const tstring& str) const;
+            const Type* GetType( Name name ) const;
 
             // class lookup
-            const Class* GetClass(const tstring& str) const;
+            const Class* GetClass( Name name ) const;
 
             // enumeration lookup
-            const Enumeration* GetEnumeration(const tstring& str) const;
+            const Enumeration* GetEnumeration( Name name ) const;
 
             // create instances of classes
-            ObjectPtr CreateInstance(const Class* type) const;
-            ObjectPtr CreateInstance(const tstring& str) const;
+            ObjectPtr CreateInstance( const Class* type ) const;
+            ObjectPtr CreateInstance( Name name ) const;
 
             template<class T>
             Helium::SmartPtr< T > CreateInstance()
@@ -158,8 +160,8 @@ namespace Helium
 
         typedef void EnumerateEnumFunc( Reflect::Enumeration& info );
 
-        template<class T>
-        inline UnregisterFunc RegisterEnumType( const tstring& name )
+        template< class T >
+        inline UnregisterFunc RegisterEnumType( Name name )
         {
             Reflect::Enumeration* enumeration = T::CreateEnumeration( name );
 
@@ -167,11 +169,17 @@ namespace Helium
             if ( Reflect::Registry::GetInstance()->RegisterType( enumeration ) )
             {
                 // this function will unregister the type we just registered
-                return &UnregisterEnumType<T>;
+                return &UnregisterEnumType< T >;
             }
 
             // there was a problem
             return NULL;
+        }
+
+        template< class T >
+        inline UnregisterFunc RegisterEnumType( const tchar_t* name )
+        {
+            return RegisterEnumType< T >( Name( name ) );
         }
 
         template<class T>

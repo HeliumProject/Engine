@@ -38,15 +38,15 @@ namespace Helium
                 Class* info = Class::Create();
 
                 info->m_Size = sizeof(T);
-                info->m_Name = name;
-                info->m_Base = base;
+                info->m_Name.Set( name.c_str() );
+                info->m_Base.Set( base.c_str() );
                 info->m_Creator = creator;
-                info->m_UIName = info->m_Name;
+                info->m_UIName = *info->m_Name;
 
                 // c++ can give us the address of base class static functions, so check each base class
                 bool baseEnumerator = false;
-                tstring baseName = info->m_Base;
-                while ( !baseEnumerator && !baseName.empty() )
+                Name baseName = info->m_Base;
+                while ( !baseEnumerator && !baseName.IsEmpty() )
                 {
                     const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
                     if (base)
@@ -57,7 +57,7 @@ namespace Helium
                     else
                     {
                         HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
-                        baseName.clear();
+                        baseName.Clear();
                     }
                 }
 

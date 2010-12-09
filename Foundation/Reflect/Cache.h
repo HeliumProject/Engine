@@ -4,6 +4,7 @@
 #include <hash_map>
 
 #include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/Name.h"
 
 #include "API.h"
 
@@ -24,13 +25,13 @@ namespace Helium
 
         public:
             // creator
-            bool Create(const Class* type, ElementPtr& element);
+            bool Create( const Class* type, ElementPtr& element );
 
             // creator
-            bool Create(const tstring& name, ElementPtr& element);
+            bool Create( Name name, ElementPtr& element );
 
             // push into free list
-            void Free(ElementPtr element);
+            void Free( ElementPtr element );
         };
     }
 }

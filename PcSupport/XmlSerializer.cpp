@@ -130,7 +130,7 @@ void XmlSerializer::PreSerialize( GameObject* pObject )
 
     m_pStream->Write( OBJECT_TAG_START_C, 1, sizeof( OBJECT_TAG_START_C ) - 1 );
 
-    if( pTemplate != pType->GetTypeTemplate() )
+    if( pTemplate != pType->GetTemplate() )
     {
         pTemplate->GetPath().ToString( objectPath );
         WriteStringAsUtf8( m_pStream, objectPath.GetData(), objectPath.GetSize(), true );

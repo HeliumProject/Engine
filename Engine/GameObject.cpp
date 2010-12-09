@@ -37,7 +37,7 @@ struct GameObjectRefCountSupport::StaticData
 
 GameObjectRefCountSupport::StaticData* GameObjectRefCountSupport::sm_pStaticData = NULL;
 
-GameObjectTypeWPtr GameObject::sm_spStaticType;
+GameObjectType* GameObject::sm_pStaticType = NULL;
 GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
@@ -394,7 +394,7 @@ GameObject* GameObject::GetTemplate() const
     {
         GameObjectType* pType = GetType();
         HELIUM_ASSERT( pType );
-        pTemplate = pType->GetTypeTemplate();
+        pTemplate = pType->GetTemplate();
         HELIUM_ASSERT( pTemplate );
     }
 
@@ -734,7 +734,7 @@ bool GameObject::IsTransient() const
 
         GameObjectType* pType = pObject->GetType();
         HELIUM_ASSERT( pType );
-        if( pType->GetTypeFlags() & GameObjectType::FLAG_TRANSIENT )
+        if( pType->GetFlags() & GameObjectType::FLAG_TRANSIENT )
         {
             return true;
         }
@@ -810,7 +810,7 @@ GameObject* GameObject::CreateObject(
     GameObject* pObjectTemplate = pTemplate;
     if( pObjectTemplate )
     {
-        if( pType->GetTypeFlags() & GameObjectType::FLAG_NO_TEMPLATE && pType->GetTypeTemplate() != pObjectTemplate )
+        if( pType->GetFlags() & GameObjectType::FLAG_NO_TEMPLATE && pType->GetTemplate() != pObjectTemplate )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -822,7 +822,7 @@ GameObject* GameObject::CreateObject(
     }
     else
     {
-        pObjectTemplate = pType->GetTypeTemplate();
+        pObjectTemplate = pType->GetTemplate();
         HELIUM_ASSERT( pObjectTemplate );
     }
 
@@ -1223,8 +1223,7 @@ void GameObject::Shutdown()
 /// @return  Static "GameObject" type.
 GameObjectType* GameObject::InitStaticType()
 {
-    GameObjectType* pObjectType = sm_spStaticType;
-    if( !pObjectType )
+    if( !sm_pStaticType )
     {
         // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
         // package, its type, etc.), we will create and register all the dependencies here manually as well.
@@ -1258,31 +1257,28 @@ GameObjectType* GameObject::InitStaticType()
         pPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        pObjectType = GameObjectType::Create( nameObject, pEnginePackage, NULL, pObjectTemplate, GameObjectType::FLAG_ABSTRACT );
-        HELIUM_ASSERT( pObjectType );
+        sm_pStaticType = GameObjectType::Create( nameObject, pEnginePackage, NULL, pObjectTemplate, GameObjectType::FLAG_ABSTRACT );
+        HELIUM_ASSERT( sm_pStaticType );
 
-        GameObjectType* pPackageType = GameObjectType::Create( namePackage, pEnginePackage, pObjectType, pPackageTemplate, 0 );
+        GameObjectType* pPackageType = GameObjectType::Create( namePackage, pEnginePackage, sm_pStaticType, pPackageTemplate, 0 );
         HELIUM_ASSERT( pPackageType );
-
-        sm_spStaticType = pObjectType;
 
         // Force initialization of Package so it can report its static type information.
         HELIUM_VERIFY( Package::InitStaticType() );
     }
 
-    return pObjectType;
+    return sm_pStaticType;
 }
 
 /// Release static type information for this class.
 void GameObject::ReleaseStaticType()
 {
-    GameObjectType* pType = sm_spStaticType;
-    if( pType )
+    if( sm_pStaticType )
     {
-        GameObjectType::Unregister( pType );
+        GameObjectType::Unregister( sm_pStaticType );
+        sm_pStaticType = NULL;
     }
 
-    sm_spStaticType.Release();
     sm_spStaticTypeTemplate.Release();
 }
 
@@ -1291,8 +1287,8 @@ void GameObject::ReleaseStaticType()
 /// @return  Static "GameObject" type.
 GameObjectType* GameObject::GetStaticType()
 {
-    HELIUM_ASSERT( sm_spStaticType );
-    return sm_spStaticType;
+    HELIUM_ASSERT( sm_pStaticType );
+    return sm_pStaticType;
 }
 
 /// Set the custom destruction callback for this object.

@@ -32,7 +32,7 @@ void ComponentBase::SetCollection(ComponentCollection* collection)
 {
     if ( m_Collection && collection && m_Collection != collection )
     {
-        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), GetClass()->m_Name.c_str(), collection->GetClass()->m_Name.c_str(), m_Collection->GetClass()->m_Name.c_str() );
+        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), *GetClass()->m_Name, *collection->GetClass()->m_Name, *m_Collection->GetClass()->m_Name );
     }
 
     m_Collection = collection;

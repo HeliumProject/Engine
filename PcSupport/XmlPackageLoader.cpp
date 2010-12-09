@@ -1139,7 +1139,7 @@ size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
         if( rObjectData.templatePath.IsEmpty() )
         {
             // Make sure the template is fully loaded.
-            GameObject* pTemplate = pType->GetTypeTemplate();
+            GameObject* pTemplate = pType->GetTemplate();
             rObjectData.templatePath = pTemplate->GetPath();
             if( pTemplate->IsFullyLoaded() )
             {

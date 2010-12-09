@@ -349,7 +349,6 @@ void GameSystem::Shutdown()
     AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
-    GameObjectTypeRefCountSupport::Shutdown();
     GameObjectRefCountSupport::Shutdown();
 
     GameObjectPath::Shutdown();

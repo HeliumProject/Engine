@@ -81,7 +81,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name.c_str(), m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -100,7 +100,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name.c_str(), m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -134,7 +134,7 @@ void EnumerationData::Deserialize(Archive& archive)
             {
                 if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name.c_str(), buf.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, buf.c_str() );
                 }
                 else
                 {
@@ -157,7 +157,7 @@ void EnumerationData::Deserialize(Archive& archive)
 
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name.c_str(), str.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
                 }
                 else
                 {

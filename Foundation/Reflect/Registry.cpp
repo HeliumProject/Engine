@@ -30,20 +30,37 @@ Profile::Accumulator Reflect::g_PreDeserializeAccum ( "Reflect Deserialize Pre-P
 Profile::Accumulator Reflect::g_PostDeserializeAccum ( "Reflect Deserialize Post-Process" );
 #endif
 
-template <class T>
+template< class T >
 struct CaseInsensitiveCompare
 {
     const tstring& value;
 
-    CaseInsensitiveCompare(const tstring& str)
-        : value (str)
+    CaseInsensitiveCompare( const tstring& str )
+        : value( str )
     {
 
     }
 
-    bool operator()(const std::pair<const tstring, T> &rhs)
+    bool operator()( const std::pair< const tstring, T >& rhs )
     {
-        return _tcsicmp(rhs.first.c_str(), value.c_str()) == 0;
+        return _tcsicmp( rhs.first.c_str(), value.c_str() ) == 0;
+    }
+};
+
+template< class T >
+struct CaseInsensitiveNameCompare
+{
+    Name value;
+
+    CaseInsensitiveNameCompare( Name name )
+        : value( name )
+    {
+
+    }
+
+    bool operator()( const std::pair< Name, T >& rhs )
+    {
+        return _tcsicmp( *rhs.first, *value ) == 0;
     }
 };
 
@@ -274,28 +291,28 @@ bool Registry::RegisterType(Type* type)
         {
             Class* classType = static_cast<Class*>(type);
 
-            Insert<M_StrToType>::Result nameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_Name, classType));
+            Insert< M_NameToType >::Result nameResult = m_TypesByName.insert( M_NameToType::value_type( classType->m_Name, classType ) );
 
-            if (!nameResult.second)
+            if ( !nameResult.second )
             {
-                Log::Error( TXT( "Re-registration of class '%s'\n" ), classType->m_Name.c_str());
+                Log::Error( TXT( "Re-registration of class '%s'\n" ), *classType->m_Name );
                 HELIUM_BREAK();
                 return false;
             }
 
-            if ( !classType->m_Base.empty() )
+            if ( !classType->m_Base.IsEmpty() )
             {
-                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-                if (found != m_TypesByName.end())
+                M_NameToType::const_iterator found = m_TypesByName.find( classType->m_Base );
+                if ( found != m_TypesByName.end() )
                 {
                     Type* baseClass = found->second;
-                    if (baseClass->GetReflectionType() == ReflectionTypes::Class)
+                    if ( baseClass->GetReflectionType() == ReflectionTypes::Class )
                     {
-                        static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_Name );
+                        static_cast< Class* >( baseClass )->m_Derived.insert( classType->m_Name );
                     }
                     else
                     {
-                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), *classType->m_Name );
                         HELIUM_BREAK();
                         return false;
                     }
@@ -310,11 +327,11 @@ bool Registry::RegisterType(Type* type)
         {
             Enumeration* enumeration = static_cast<Enumeration*>(type);
 
-            Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_Name, enumeration));
+            Insert< M_NameToType >::Result enumResult = m_TypesByName.insert( M_NameToType::value_type( enumeration->m_Name, enumeration ) );
 
-            if (!enumResult.second)
+            if ( !enumResult.second )
             {
-                Log::Error( TXT( "Re-registration of enumeration '%s'\n" ), enumeration->m_Name.c_str());
+                Log::Error( TXT( "Re-registration of enumeration '%s'\n" ), *enumeration->m_Name );
                 HELIUM_BREAK();
                 return false;
             }
@@ -336,29 +353,29 @@ void Registry::UnregisterType(const Type* type)
         {
             const Class* classType = static_cast<const Class*>(type);
 
-            if ( !classType->m_Name.empty() )
+            if ( !classType->m_Name.IsEmpty() )
             {
                 m_TypesByName.erase( classType->m_Name );
             }
 
-            if ( !classType->m_Base.empty() )
+            if ( !classType->m_Base.IsEmpty() )
             {
-                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
+                M_NameToType::const_iterator found = m_TypesByName.find( classType->m_Base );
                 if ( found != m_TypesByName.end() )
                 {
                     if ( found->second->GetReflectionType() == ReflectionTypes::Class )
                     {
-                        static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_Name );
+                        static_cast< Class* >( found->second.Ptr() )->m_Derived.erase( classType->m_Name );
                     }
                     else
                     {
-                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), *classType->m_Name );
                         HELIUM_BREAK();
                     }
                 }
             }
 
-            m_TypesByName.erase(classType->m_Name);
+            m_TypesByName.erase( classType->m_Name );
 
             break;
         }
@@ -373,43 +390,43 @@ void Registry::UnregisterType(const Type* type)
     }
 }
 
-void Registry::AliasType(const Type* type, const tstring& alias)
+void Registry::AliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
+    m_TypesByAlias.insert( M_NameToType::value_type( alias, type ) );
 }
 
-void Registry::UnAliasType(const Type* type, const tstring& alias)
+void Registry::UnAliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    M_StrToType::iterator found = m_TypesByAlias.find( alias );
-    if (found != m_TypesByAlias.end() && found->second == type)
+    M_NameToType::iterator found = m_TypesByAlias.find( alias );
+    if ( found != m_TypesByAlias.end() && found->second == type )
     {
-        m_TypesByAlias.erase(found);
+        m_TypesByAlias.erase( found );
     }
 }
 
-const Type* Registry::GetType(const tstring& str) const
+const Type* Registry::GetType( Name name ) const
 {
-    M_StrToType::const_iterator found = m_TypesByAlias.find(str);
+    M_NameToType::const_iterator found = m_TypesByAlias.find( name );
 
-    if (found != m_TypesByAlias.end())
+    if ( found != m_TypesByAlias.end() )
     {
         return found->second;
     }
 
-    found = m_TypesByName.find(str);
+    found = m_TypesByName.find( name );
 
-    if (found != m_TypesByName.end())
+    if ( found != m_TypesByName.end() )
     {
         return found->second;
     }
 
-    found = std::find_if(m_TypesByName.begin(), m_TypesByName.end(), CaseInsensitiveCompare<Type*>(str));
+    found = std::find_if( m_TypesByName.begin(), m_TypesByName.end(), CaseInsensitiveNameCompare< Type* >( name ) );
 
-    if (found != m_TypesByName.end())
+    if ( found != m_TypesByName.end() )
     {
         return found->second;
     }
@@ -417,19 +434,19 @@ const Type* Registry::GetType(const tstring& str) const
     return NULL;
 }
 
-const Class* Registry::GetClass(const tstring& str) const
+const Class* Registry::GetClass( Name name ) const
 {
-    return ReflectionCast<const Class>(GetType( str ));
+    return ReflectionCast< const Class >( GetType( name ) );
 }
 
-const Enumeration* Registry::GetEnumeration(const tstring& str) const
+const Enumeration* Registry::GetEnumeration( Name name ) const
 {
-    return ReflectionCast<const Enumeration>(GetType( str ));
+    return ReflectionCast< const Enumeration >( GetType( name ) );
 }
 
-ObjectPtr Registry::CreateInstance(const Class* type) const
+ObjectPtr Registry::CreateInstance( const Class* type ) const
 {
-    if (type && type->m_Creator)
+    if ( type && type->m_Creator )
     {
         return type->m_Creator();
     }
@@ -439,17 +456,17 @@ ObjectPtr Registry::CreateInstance(const Class* type) const
     }
 }
 
-ObjectPtr Registry::CreateInstance(const tstring& str) const
+ObjectPtr Registry::CreateInstance( Name name ) const
 {
-    M_StrToType::const_iterator type = m_TypesByName.find(str);
+    M_NameToType::const_iterator type = m_TypesByName.find( name );
 
-    if (type == m_TypesByName.end())
+    if ( type == m_TypesByName.end() )
         return NULL;
 
-    if (type->second->GetReflectionType() != ReflectionTypes::Class)
+    if ( type->second->GetReflectionType() != ReflectionTypes::Class )
         return NULL;
 
-    return CreateInstance(static_cast<Class*>(type->second.Ptr()));
+    return CreateInstance( static_cast< Class* >( type->second.Ptr() ) );
 }
 
 void Registry::Created(Object* object)

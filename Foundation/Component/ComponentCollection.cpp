@@ -126,7 +126,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error )
         {
-            *error = tstring( TXT( "Component '" ) ) + component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + GetClass()->m_Name + TXT( "': " ) + errorMessage;
+            *error = tstring( TXT( "Component '" ) ) + *component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + *GetClass()->m_Name + TXT( "': " ) + errorMessage;
         }
         
         return false;
@@ -340,9 +340,9 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                const std::set<tstring>& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
-                std::set<tstring>::const_iterator derivedItr = derived.begin();
-                std::set<tstring>::const_iterator derivedEnd = derived.end();
+                const std::set< Name >& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
+                std::set< Name >::const_iterator derivedItr = derived.begin();
+                std::set< Name >::const_iterator derivedEnd = derived.end();
                 for ( ; derivedItr != derivedEnd; ++derivedItr )
                 {
                     const Reflect::Class* currentType = Reflect::Registry::GetInstance()->GetClass(*derivedItr);

@@ -44,8 +44,8 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::Composite );
 
-            tstring                 m_Base;               // the base type name
-            std::set<tstring>       m_Derived;            // the derived type names
+            Name                    m_Base;               // the base type name
+            std::set< Name >        m_Derived;            // the derived type names
 
             CompositeEnumerator     m_Enumerator;         // the function to enumerate this type
             bool                    m_Enumerated;         // flag if we are enumerated
@@ -74,10 +74,10 @@ namespace Helium
 
                 // walk our base classes and build a list
                 std::vector<const Reflect::Composite*> bases;
-                if ( !m_Base.empty() )
+                if ( !m_Base.IsEmpty() )
                 {
-                    tstring baseName = m_Base;
-                    while ( !baseName.empty() )
+                    Name baseName = m_Base;
+                    while ( !baseName.IsEmpty() )
                     {
                         const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
                         if (base)
@@ -88,7 +88,7 @@ namespace Helium
                         else
                         {
                             HELIUM_BREAK();
-                            baseName.clear();
+                            baseName.Clear();
                         }
                     }
                 }

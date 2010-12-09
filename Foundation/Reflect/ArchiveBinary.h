@@ -63,6 +63,7 @@ namespace Helium
         //
 
         typedef std::map< int, Helium::SmartPtr<const Class> > M_IDToClass;
+        typedef std::map< Name, Helium::SmartPtr<const Class> > M_NameToClass;
         typedef std::map< tstring, Helium::SmartPtr<const Class> > M_StrToClass;
 
         class FOUNDATION_API ArchiveBinary : public Archive
@@ -85,10 +86,10 @@ namespace Helium
             StringPool m_Strings;
 
             // Latent types by latent short name
-            M_StrToClass m_ClassesByShortName;
+            M_NameToClass m_ClassesByShortName;
 
             // Mapping from CURRENT short name to LEGACY short name
-            std::map< tstring, tstring > m_ShortNameMapping;
+            std::map< Name, Name > m_ShortNameMapping;
 
             // File format version
             uint32_t m_Version;

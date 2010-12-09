@@ -73,13 +73,13 @@ bool Cache::Create( const Class* type, ElementPtr& element )
 #endif
 }
 
-bool Cache::Create(const tstring& name, ElementPtr& element)
+bool Cache::Create( Name name, ElementPtr& element )
 {
-    const Class* type = Registry::GetInstance()->GetClass(name);
+    const Class* type = Registry::GetInstance()->GetClass( name );
 
     if ( type )
     {
-        return Create(type, element);
+        return Create( type, element );
     }
     else
     {

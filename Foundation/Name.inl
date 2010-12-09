@@ -133,6 +133,66 @@ const typename Helium::NameBase< TableType >::CharType* Helium::NameBase< TableT
     return Get();
 }
 
+/// Less-than comparison operator.
+///
+/// Note that only the name table entry pointers are compared.  The result of the comparison does not imply any
+/// alphabetical sorting, nor can it be ensured to remain consistent across multiple executions of an application.
+///
+/// @param[in] rName  Name with which to compare.
+///
+/// @return  True if the name table entry for this name precedes that of the given name, false if not.
+template< typename TableType >
+bool Helium::NameBase< TableType >::operator<( const NameBase& rName ) const
+{
+    // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
+    return ( m_pEntry < rName.m_pEntry );
+}
+
+/// Greater-than comparison operator.
+///
+/// Note that only the name table entry pointers are compared.  The result of the comparison does not imply any
+/// alphabetical sorting, nor can it be ensured to remain consistent across multiple executions of an application.
+///
+/// @param[in] rName  Name with which to compare.
+///
+/// @return  True if the name table entry for this name succeeds that of the given name, false if not.
+template< typename TableType >
+bool Helium::NameBase< TableType >::operator>( const NameBase& rName ) const
+{
+    // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
+    return ( m_pEntry > rName.m_pEntry );
+}
+
+/// Less-or-equal comparison operator.
+///
+/// Note that only the name table entry pointers are compared.  The result of the comparison does not imply any
+/// alphabetical sorting, nor can it be ensured to remain consistent across multiple executions of an application.
+///
+/// @param[in] rName  Name with which to compare.
+///
+/// @return  True if the name table entry for this name precedes or is the same as that of the given name, false if not.
+template< typename TableType >
+bool Helium::NameBase< TableType >::operator<=( const NameBase& rName ) const
+{
+    // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
+    return ( m_pEntry <= rName.m_pEntry );
+}
+
+/// Greater-or-equal comparison operator.
+///
+/// Note that only the name table entry pointers are compared.  The result of the comparison does not imply any
+/// alphabetical sorting, nor can it be ensured to remain consistent across multiple executions of an application.
+///
+/// @param[in] rName  Name with which to compare.
+///
+/// @return  True if the name table entry for this name succeeds or is the same as that of the given name, false if not.
+template< typename TableType >
+bool Helium::NameBase< TableType >::operator>=( const NameBase& rName ) const
+{
+    // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
+    return ( m_pEntry >= rName.m_pEntry );
+}
+
 /// Equality comparison operator.
 ///
 /// @param[in] rName  Name with which to compare.
@@ -142,7 +202,7 @@ template< typename TableType >
 bool Helium::NameBase< TableType >::operator==( const NameBase& rName ) const
 {
     // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
-    return( m_pEntry == rName.m_pEntry );
+    return ( m_pEntry == rName.m_pEntry );
 }
 
 /// Inequality comparison operator.
@@ -154,7 +214,7 @@ template< typename TableType >
 bool Helium::NameBase< TableType >::operator!=( const NameBase& rName ) const
 {
     // Each name entry has a unique name pointer, so we can use the pointer itself in our comparisons.
-    return( m_pEntry != rName.m_pEntry );
+    return ( m_pEntry != rName.m_pEntry );
 }
 
 /// Release the name table and free all allocated memory.
@@ -264,4 +324,18 @@ size_t Helium::Hash< Helium::NameBase< TableType > >::operator()( const NameBase
 {
     // Each name entry has a unique name pointer, so we can use the pointer itself as our hash.
     return static_cast< size_t >( reinterpret_cast< uintptr_t >( rKey.GetDirect() ) );
+}
+
+/// Write a name to the given output stream.
+///
+/// @param[in] rStream  Output stream.
+/// @param[in] rName    Name to write.
+///
+/// @return  Reference to the given output stream.
+template< typename CharType, typename CharTypeTraits, typename NameTableType >
+std::basic_ostream< CharType, CharTypeTraits >& Helium::operator<<(
+    std::basic_ostream< CharType, CharTypeTraits >& rStream,
+    const NameBase< NameTableType >& rName )
+{
+    return ( rStream << *rName );
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Foundation/API.h"
+
+#include "Platform/ReadWriteLock.h"
 #include "Foundation/String.h"
 #include "Foundation/HashFunctions.h"
 
@@ -64,6 +67,10 @@ namespace Helium
         //@{
         const CharType* operator*() const;
 
+        bool operator<( const NameBase& rName ) const;
+        bool operator>( const NameBase& rName ) const;
+        bool operator<=( const NameBase& rName ) const;
+        bool operator>=( const NameBase& rName ) const;
         bool operator==( const NameBase& rName ) const;
         bool operator!=( const NameBase& rName ) const;
         //@}
@@ -133,6 +140,16 @@ namespace Helium
     public:
         inline size_t operator()( const NameBase< TableType >& rKey ) const;
     };
+
+#pragma TODO( "Remove std::iostream Name support once we can get rid of our dependency on STL" )
+    /// @defgroup nameiostream std::iostream Name Support
+    //@{
+
+    template< typename CharType, typename CharTypeTraits, typename NameTableType >
+    std::basic_ostream< CharType, CharTypeTraits >& operator<<(
+        std::basic_ostream< CharType, CharTypeTraits >& rStream, const NameBase< NameTableType >& rName );
+
+    //@}
 }
 
 #include "Foundation/Name.inl"

@@ -71,7 +71,7 @@ void TypeIDData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = binary.GetStrings().Insert( type ? type->m_Name : TXT("") );
+            int32_t index = binary.GetStrings().Insert( type ? *type->m_Name : TXT("") );
             binary.GetStream().Write(&index); 
             break;
         }
@@ -105,7 +105,7 @@ void TypeIDData::Deserialize(Archive& archive)
         }
     }
 
-    const Reflect::Type* type = Reflect::Registry::GetInstance()->GetType( str );
+    const Reflect::Type* type = Reflect::Registry::GetInstance()->GetType( Name( str.c_str() ) );
 
     if ( type )
     {

@@ -157,7 +157,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name.c_str(), GetClass<DerivedT>()->m_Name.c_str() );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), *base->GetClass()->m_Name, *GetClass<DerivedT>()->m_Name );
             }
 
             return DangerousCast<DerivedT>( base );
@@ -168,7 +168,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name.c_str(), GetClass<DerivedT>()->m_Name.c_str() );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), *base->GetClass()->m_Name, *GetClass<DerivedT>()->m_Name );
             }
 
             return ConstDangerousCast<DerivedT>( base );

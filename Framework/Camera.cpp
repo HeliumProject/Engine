@@ -18,7 +18,8 @@ const float32_t Camera::DEFAULT_FOV = 70.0f;
 
 /// Constructor.
 Camera::Camera()
-: m_fov( DEFAULT_FOV )
+: m_sceneViewId( Invalid< uint32_t >() )
+, m_fov( DEFAULT_FOV )
 {
 }
 
@@ -40,24 +41,25 @@ void Camera::Attach()
 {
     Super::Attach();
 
-    // Get the main scene view.
-    World* pWorld = GetWorld();
-    HELIUM_ASSERT( pWorld );
-
-    size_t mainSceneViewId = pWorld->GetMainSceneViewId();
-    if( IsValid( mainSceneViewId ) )
+    // Update the scene view associated with this camera.
+    if( IsValid( m_sceneViewId ) )
     {
+        World* pWorld = GetWorld();
+        HELIUM_ASSERT( pWorld );
         GraphicsScene* pScene = pWorld->GetGraphicsScene();
-        HELIUM_ASSERT( pScene );
-        GraphicsSceneView* pSceneView = pScene->GetSceneView( mainSceneViewId );
-        HELIUM_ASSERT( pSceneView );
-
-        Simd::Matrix44 rotationMatrix( Simd::Matrix44::INIT_ROTATION, GetRotation() );
-        pSceneView->SetView(
-            GetPosition(),
-            Vector4ToVector3( rotationMatrix.GetRow( 2 ) ),
-            Vector4ToVector3( rotationMatrix.GetRow( 1 ) ) );
-        pSceneView->SetHorizontalFov( m_fov );
+        if( pScene )
+        {
+            GraphicsSceneView* pSceneView = pScene->GetSceneView( m_sceneViewId );
+            if( pSceneView )
+            {
+                Simd::Matrix44 rotationMatrix( Simd::Matrix44::INIT_ROTATION, GetRotation() );
+                pSceneView->SetView(
+                    GetPosition(),
+                    Vector4ToVector3( rotationMatrix.GetRow( 2 ) ),
+                    Vector4ToVector3( rotationMatrix.GetRow( 1 ) ) );
+                pSceneView->SetHorizontalFov( m_fov );
+            }
+        }
     }
 }
 
@@ -75,6 +77,24 @@ void Camera::SetRotation( const Simd::Quat& rRotation )
     Super::SetRotation( rRotation );
 
     DeferredReattach();
+}
+
+/// Set the ID scene view associated with this camera.
+///
+/// Changing the scene view will trigger a reattach and update of the scene view based on the camera parameters.
+///
+/// @param[in] sceneViewId  ID of the scene view to associate with this camera.
+///
+/// @see GetSceneViewId()
+void Camera::SetSceneViewId( uint32_t sceneViewId )
+{
+    VerifySafety();
+
+    if( m_sceneViewId != sceneViewId )
+    {
+        m_sceneViewId = sceneViewId;
+        DeferredReattach();
+    }
 }
 
 /// Set the horizontal field-of-view angle.

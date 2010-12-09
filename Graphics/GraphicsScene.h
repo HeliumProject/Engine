@@ -40,9 +40,9 @@ namespace Lunar
 
         /// @name Scene View Management
         //@{
-        size_t AllocateSceneView();
-        void ReleaseSceneView( size_t id );
-        inline GraphicsSceneView* GetSceneView( size_t id );
+        uint32_t AllocateSceneView();
+        void ReleaseSceneView( uint32_t id );
+        inline GraphicsSceneView* GetSceneView( uint32_t id );
 
         void SetActiveSceneView( size_t id );
         //@}
@@ -159,7 +159,7 @@ namespace Lunar
         float32_t m_directionalLightBrightness;
 
         /// ID of the currently active scene view.
-        size_t m_activeViewId;
+        uint32_t m_activeViewId;
 
         /// Pre-computed shadow depth pass inverse view/projection matrices.
         DynArray< Simd::Matrix44 > m_shadowViewInverseViewProjectionMatrices;

@@ -48,7 +48,7 @@ GraphicsScene::GraphicsScene()
 , m_directionalLightDirection( 0.0f, -1.0f, 0.0f )
 , m_directionalLightColor( 0xffffffff )
 , m_directionalLightBrightness( 1.0f )
-, m_activeViewId( Invalid< size_t >() )
+, m_activeViewId( Invalid< uint32_t >() )
 , m_constantBufferSetIndex( 0 )
 {
 }
@@ -284,12 +284,12 @@ void GraphicsScene::Update()
 /// @return  ID of the newly allocated view.
 ///
 /// @see ReleaseSceneView(), GetSceneView(), SetActiveSceneView()
-size_t GraphicsScene::AllocateSceneView()
+uint32_t GraphicsScene::AllocateSceneView()
 {
     GraphicsSceneView* pSceneView = m_sceneViews.New();
     HELIUM_ASSERT( pSceneView );
 
-    return m_sceneViews.GetElementIndex( pSceneView );
+    return static_cast< uint32_t >( m_sceneViews.GetElementIndex( pSceneView ) );
 }
 
 /// Release previously allocated scene view.
@@ -297,7 +297,7 @@ size_t GraphicsScene::AllocateSceneView()
 /// @param[in] id  ID of the view to release.
 ///
 /// @see AllocateSceneView(), GetSceneView(), SetActiveSceneView()
-void GraphicsScene::ReleaseSceneView( size_t id )
+void GraphicsScene::ReleaseSceneView( uint32_t id )
 {
     HELIUM_ASSERT( id < m_sceneViews.GetSize() );
     HELIUM_ASSERT( m_sceneViews.IsElementValid( id ) );
@@ -315,7 +315,7 @@ void GraphicsScene::ReleaseSceneView( size_t id )
 /// @param[in] id  ID of the view to set active.
 ///
 /// @see AllocateSceneView(), ReleaseSceneView(), GetSceneView()
-void GraphicsScene::SetActiveSceneView( size_t id )
+void GraphicsScene::SetActiveSceneView( uint32_t id )
 {
     HELIUM_ASSERT( IsInvalid( id ) || ( id < m_sceneViews.GetSize() && m_sceneViews.IsElementValid( id ) ) );
 

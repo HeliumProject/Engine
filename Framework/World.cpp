@@ -26,7 +26,7 @@ L_IMPLEMENT_OBJECT( World, Framework, 0 );
 
 /// Constructor.
 World::World()
-: m_mainSceneViewId( Invalid< size_t >() )
+: m_mainSceneViewId( Invalid< uint32_t >() )
 {
 }
 
@@ -70,7 +70,9 @@ bool World::Initialize()
         HELIUM_ASSERT( IsValid( m_mainSceneViewId ) );
         if( IsInvalid( m_mainSceneViewId ) )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "World::Initialize(): Failed to allocate a primary graphics scene view.\n" ) );
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "World::Initialize(): Failed to allocate a primary graphics scene view.\n" ) );
 
             Shutdown();
 

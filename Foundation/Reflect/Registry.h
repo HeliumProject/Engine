@@ -22,7 +22,6 @@ namespace Helium
 
         // Registry containers
         typedef std::map< Name, Helium::SmartPtr< Type > > M_NameToType;
-        typedef std::map< tstring, Helium::SmartPtr< Type > > M_StrToType;
 
         // Profile interface
 #ifdef PROFILE_ACCUMULATION

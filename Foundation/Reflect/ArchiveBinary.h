@@ -62,9 +62,7 @@ namespace Helium
         // Binary Archive Class
         //
 
-        typedef std::map< int, Helium::SmartPtr<const Class> > M_IDToClass;
-        typedef std::map< Name, Helium::SmartPtr<const Class> > M_NameToClass;
-        typedef std::map< tstring, Helium::SmartPtr<const Class> > M_StrToClass;
+        typedef std::map< Name, Helium::SmartPtr< const Class > > M_NameToClass;
 
         class FOUNDATION_API ArchiveBinary : public Archive
         {

@@ -312,6 +312,14 @@ void App::SaveSettings()
     path += TXT("EditorSettings.xml");
 
     tstring error;
+
+    if ( !path.MakePath() )
+    {
+        error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "': We could not create the directory to store the settings file." );
+        wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
+        return;
+    }
+
     if ( Helium::IsDebuggerPresent() )
     {
         Reflect::ToArchive( path, m_SettingsManager );

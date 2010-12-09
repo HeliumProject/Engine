@@ -44,7 +44,7 @@ namespace Lunar
         void ReleaseSceneView( uint32_t id );
         inline GraphicsSceneView* GetSceneView( uint32_t id );
 
-        void SetActiveSceneView( size_t id );
+        void SetActiveSceneView( uint32_t id );
         //@}
 
         /// @name Scene GameObject Allocation

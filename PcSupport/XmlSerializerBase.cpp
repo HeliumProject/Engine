@@ -215,7 +215,7 @@ void XmlSerializerBase::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void XmlSerializerBase::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
+void XmlSerializerBase::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     WriteValue( rspObject, TXT( "GameObject reference" ), ObjectFormatter() );
 }

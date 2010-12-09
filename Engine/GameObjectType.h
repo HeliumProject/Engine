@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Type.h
+// GameObjectType.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_TYPE_H
-#define LUNAR_ENGINE_TYPE_H
+#ifndef LUNAR_ENGINE_GAME_OBJECT_TYPE_H
+#define LUNAR_ENGINE_GAME_OBJECT_TYPE_H
 
 #include "Foundation/Name.h"
 #include "Foundation/Container/HashMap.h"
@@ -15,25 +15,25 @@
 
 namespace Lunar
 {
-    class Type;
+    class GameObjectType;
 
-    /// Reference counting support for Type types.
-    class LUNAR_ENGINE_API TypeRefCountSupport
+    /// Reference counting support for GameObjectType types.
+    class LUNAR_ENGINE_API GameObjectTypeRefCountSupport
     {
     public:
         /// Base type of reference counted object.
-        typedef Type BaseType;
+        typedef GameObjectType BaseType;
 
         /// @name Object Destruction Support
         //@{
-        inline static void PreDestroy( Type* pObject );
-        inline static void Destroy( Type* pObject );
+        inline static void PreDestroy( GameObjectType* pObject );
+        inline static void Destroy( GameObjectType* pObject );
         //@}
 
         /// @name Reference Count Proxy Allocation Interface
         //@{
-        static RefCountProxy< Type >* Allocate();
-        static void Release( RefCountProxy< Type >* pProxy );
+        static RefCountProxy< GameObjectType >* Allocate();
+        static void Release( RefCountProxy< GameObjectType >* pProxy );
 
         static void Shutdown();
         //@}
@@ -42,7 +42,7 @@ namespace Lunar
         /// @name Active Proxy Iteration
         //@{
         static size_t GetActiveProxyCount();
-        static bool GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy< Type >* >::ConstAccessor& rAccessor );
+        static bool GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy< GameObjectType >* >::ConstAccessor& rAccessor );
         //@}
 #endif
 
@@ -54,13 +54,13 @@ namespace Lunar
     };
 
     /// Run-time type information for GameObject classes.
-    class LUNAR_ENGINE_API Type : NonCopyable
+    class LUNAR_ENGINE_API GameObjectType : NonCopyable
     {
-        HELIUM_DECLARE_REF_COUNT( Type, TypeRefCountSupport );
+        HELIUM_DECLARE_REF_COUNT( GameObjectType, GameObjectTypeRefCountSupport );
 
     public:
         /// Type lookup hash map.
-        typedef HashMap< Name, TypePtr > LookupMap;
+        typedef HashMap< Name, GameObjectTypePtr > LookupMap;
 
         /// General type flags.
         enum EFlag
@@ -76,7 +76,7 @@ namespace Lunar
         /// Type iterator.
         class LUNAR_ENGINE_API ConstIterator
         {
-            friend class Type;
+            friend class GameObjectType;
 
         public:
             /// @name Construction/Destruction
@@ -86,8 +86,8 @@ namespace Lunar
 
             /// @name Overloaded Operators
             //@{
-            inline Type& operator*() const;
-            inline Type* operator->() const;
+            inline GameObjectType& operator*() const;
+            inline GameObjectType* operator->() const;
 
             inline ConstIterator& operator++();
             inline ConstIterator operator++( int );
@@ -114,14 +114,14 @@ namespace Lunar
 
         /// @name Construction/Destruction
         //@{
-        Type();
-        virtual ~Type();
+        GameObjectType();
+        virtual ~GameObjectType();
         //@}
 
         /// @name Data Access
         //@{
         inline Name GetName() const;
-        inline Type* GetTypeParent() const;
+        inline GameObjectType* GetTypeParent() const;
         inline GameObject* GetTypeTemplate() const;
 
         inline uint32_t GetTypeFlags() const;
@@ -129,7 +129,7 @@ namespace Lunar
 
         /// @name Type Information
         //@{
-        bool IsSubtypeOf( const Type* pType ) const;
+        bool IsSubtypeOf( const GameObjectType* pType ) const;
         //@}
 
         /// @name Static Type Registration
@@ -137,10 +137,10 @@ namespace Lunar
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static Type* Create( Name name, Package* pTypePackage, Type* pParent, GameObject* pTemplate, uint32_t flags );
-        static void Unregister( Type* pType );
+        static GameObjectType* Create( Name name, Package* pTypePackage, GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
+        static void Unregister( GameObjectType* pType );
 
-        static Type* Find( Name typeName );
+        static GameObjectType* Find( Name typeName );
 
         static ConstIterator GetTypeBegin();
         static ConstIterator GetTypeEnd();
@@ -152,7 +152,7 @@ namespace Lunar
         /// Type name.
         Name m_name;
         /// Parent type.
-        TypePtr m_spTypeParent;
+        GameObjectTypePtr m_spTypeParent;
         /// Default template object for this type.
         GameObjectPtr m_spTypeTemplate;
 
@@ -166,6 +166,6 @@ namespace Lunar
     };
 }
 
-#include "Engine/Type.inl"
+#include "Engine/GameObjectType.inl"
 
-#endif  // LUNAR_ENGINE_TYPE_H
+#endif  // LUNAR_ENGINE_GAME_OBJECT_TYPE_H

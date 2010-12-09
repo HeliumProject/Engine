@@ -57,7 +57,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
         virtual void SerializeWideString( WideString& rValue );
-        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
+        virtual void SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject );
 
         virtual void PushPropertyFlags( uint32_t flags );
         virtual void PopPropertyFlags();
@@ -78,7 +78,7 @@ namespace Lunar
     private:
         /// Type dependency table.
         DynArray< Name > m_typeDependencies;
-        /// GameObject dependency table.
+        /// Object dependency table.
         DynArray< GameObjectPath > m_objectDependencies;
 
         /// GameObject property stream.

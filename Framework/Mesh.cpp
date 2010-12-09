@@ -21,7 +21,7 @@
 
 using namespace Lunar;
 
-L_IMPLEMENT_OBJECT( Mesh, Framework, Type::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Mesh::Mesh()

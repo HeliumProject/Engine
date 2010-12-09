@@ -15,7 +15,7 @@
 
 namespace Lunar
 {
-    class Type;
+    class GameObjectType;
 
     class CommandLineInitialization;
     class ObjectTypeRegistration;
@@ -42,7 +42,7 @@ namespace Lunar
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
             ObjectLoaderInitialization& rObjectLoaderInitialization, ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
-            RendererInitialization& rRendererInitialization, Type* pWorldType );
+            RendererInitialization& rRendererInitialization, GameObjectType* pWorldType );
         virtual void Shutdown();
         //@}
 

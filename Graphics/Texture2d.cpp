@@ -14,7 +14,7 @@
 
 using namespace Lunar;
 
-L_IMPLEMENT_OBJECT( Texture2d, Graphics, Type::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Texture2d::Texture2d()

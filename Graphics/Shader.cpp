@@ -17,8 +17,8 @@
 
 using namespace Lunar;
 
-L_IMPLEMENT_OBJECT( Shader, Graphics, Type::FLAG_NO_TEMPLATE );
-L_IMPLEMENT_OBJECT( ShaderVariant, Graphics, Type::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 Shader::BEGIN_LOAD_VARIANT_FUNC* Shader::sm_pBeginLoadVariantOverride = NULL;
 Shader::TRY_FINISH_LOAD_VARIANT_FUNC* Shader::sm_pTryFinishLoadVariantOverride = NULL;

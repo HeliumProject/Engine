@@ -15,7 +15,7 @@
 #include "Platform/Trace.h"
 #include "Platform/Memory.h"
 #include "Engine/GameObject.h"
-#include "Engine/Type.h"
+#include "Engine/GameObjectType.h"
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"
 #include "D3D9Rendering/D3D9Renderer.h"

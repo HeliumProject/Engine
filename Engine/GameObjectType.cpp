@@ -1,28 +1,28 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Type.cpp
+// GameObjectType.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EnginePch.h"
-#include "Engine/Type.h"
+#include "Engine/GameObjectType.h"
 
 #include "Foundation/Container/ObjectPool.h"
 
 using namespace Lunar;
 
 /// Static reference count proxy management data.
-struct TypeRefCountSupport::StaticData
+struct GameObjectTypeRefCountSupport::StaticData
 {
     /// Number of proxy objects to allocate per block for the proxy pool.
     static const size_t POOL_BLOCK_SIZE = 1024;
 
     /// Proxy object pool.
-    ObjectPool< RefCountProxy< Type > > proxyPool;
+    ObjectPool< RefCountProxy< GameObjectType > > proxyPool;
 #if HELIUM_ENABLE_MEMORY_TRACKING
     /// Active reference count proxies.
-    ConcurrentHashSet< RefCountProxy< Type >* > activeProxySet;
+    ConcurrentHashSet< RefCountProxy< GameObjectType >* > activeProxySet;
 #endif
 
     /// @name Construction/Destruction
@@ -31,17 +31,17 @@ struct TypeRefCountSupport::StaticData
     //@}
 };
 
-TypeRefCountSupport::StaticData* TypeRefCountSupport::sm_pStaticData = NULL;
+GameObjectTypeRefCountSupport::StaticData* GameObjectTypeRefCountSupport::sm_pStaticData = NULL;
 
-PackagePtr Type::sm_spTypePackage;
-Type::LookupMap* Type::sm_pLookupMap = NULL;
+PackagePtr GameObjectType::sm_spTypePackage;
+GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
 
 /// Retrieve a reference count proxy from the global pool.
 ///
 /// @return  Pointer to a reference count proxy.
 ///
 /// @see Release()
-RefCountProxy< Type >* TypeRefCountSupport::Allocate()
+RefCountProxy< GameObjectType >* GameObjectTypeRefCountSupport::Allocate()
 {
     // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
     // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
@@ -54,11 +54,11 @@ RefCountProxy< Type >* TypeRefCountSupport::Allocate()
         sm_pStaticData = pStaticData;
     }
 
-    RefCountProxy< Type >* pProxy = pStaticData->proxyPool.Allocate();
+    RefCountProxy< GameObjectType >* pProxy = pStaticData->proxyPool.Allocate();
     HELIUM_ASSERT( pProxy );
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-    ConcurrentHashSet< RefCountProxy< Type >* >::Accessor activeProxySetAccessor;
+    ConcurrentHashSet< RefCountProxy< GameObjectType >* >::Accessor activeProxySetAccessor;
     HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
 #endif
 
@@ -70,7 +70,7 @@ RefCountProxy< Type >* TypeRefCountSupport::Allocate()
 /// @param[in] pProxy  Pointer to the reference count proxy to release.
 ///
 /// @see Allocate()
-void TypeRefCountSupport::Release( RefCountProxy< Type >* pProxy )
+void GameObjectTypeRefCountSupport::Release( RefCountProxy< GameObjectType >* pProxy )
 {
     HELIUM_ASSERT( pProxy );
 
@@ -87,7 +87,7 @@ void TypeRefCountSupport::Release( RefCountProxy< Type >* pProxy )
 /// Release the name table and free all allocated memory.
 ///
 /// This should only be called immediately prior to application exit.
-void TypeRefCountSupport::Shutdown()
+void GameObjectTypeRefCountSupport::Shutdown()
 {
     delete sm_pStaticData;
     sm_pStaticData = NULL;
@@ -104,7 +104,7 @@ void TypeRefCountSupport::Shutdown()
 /// @return  Current number of active smart pointer references.
 ///
 /// @see GetFirstActiveProxy()
-size_t TypeRefCountSupport::GetActiveProxyCount()
+size_t GameObjectTypeRefCountSupport::GetActiveProxyCount()
 {
     HELIUM_ASSERT( sm_pStaticData );
 
@@ -119,8 +119,8 @@ size_t TypeRefCountSupport::GetActiveProxyCount()
 ///          first one, false if not.
 ///
 /// @see GetActiveProxyCount()
-bool TypeRefCountSupport::GetFirstActiveProxy(
-    ConcurrentHashSet< RefCountProxy< Type >* >::ConstAccessor& rAccessor )
+bool GameObjectTypeRefCountSupport::GetFirstActiveProxy(
+    ConcurrentHashSet< RefCountProxy< GameObjectType >* >::ConstAccessor& rAccessor )
 {
     HELIUM_ASSERT( sm_pStaticData );
 
@@ -129,30 +129,30 @@ bool TypeRefCountSupport::GetFirstActiveProxy(
 #endif
 
 /// Constructor.
-TypeRefCountSupport::StaticData::StaticData()
+GameObjectTypeRefCountSupport::StaticData::StaticData()
 : proxyPool( POOL_BLOCK_SIZE )
 {
 }
 
 /// Constructor.
-Type::Type()
+GameObjectType::GameObjectType()
 : m_typeFlags( 0 )
 {
 }
 
 /// Destructor.
-Type::~Type()
+GameObjectType::~GameObjectType()
 {
 }
 
 /// Get whether this type is a subtype of the given type.
 ///
 /// @param[in] pType  Type against which to check.
-bool Type::IsSubtypeOf( const Type* pType ) const
+bool GameObjectType::IsSubtypeOf( const GameObjectType* pType ) const
 {
     HELIUM_ASSERT( pType );
 
-    for( const Type* pThisType = this; pThisType != NULL; pThisType = pThisType->GetTypeParent() )
+    for( const GameObjectType* pThisType = this; pThisType != NULL; pThisType = pThisType->GetTypeParent() )
     {
         if( pThisType == pType )
         {
@@ -168,7 +168,7 @@ bool Type::IsSubtypeOf( const Type* pType ) const
 /// @param[in] pPackage  Main type package.
 ///
 /// @see GetTypePackage()
-void Type::SetTypePackage( Package* pPackage )
+void GameObjectType::SetTypePackage( Package* pPackage )
 {
     HELIUM_ASSERT( pPackage );
 
@@ -189,7 +189,7 @@ void Type::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject* pTemplate, uint32_t flags )
+GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameObjectType* pParent, GameObject* pTemplate, uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
     HELIUM_ASSERT( pTypePackage );
@@ -200,7 +200,7 @@ Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject*
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "Type::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
+            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
             *name );
 
         return false;
@@ -210,7 +210,7 @@ Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject*
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "Type::Initialize(): Failed to set type \"%s\" template object name.\n" ),
+            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name.\n" ),
             *name );
 
         return false;
@@ -224,14 +224,14 @@ Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject*
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "Type::Initialize(): Failed to register type \"%s\" template object.\n" ),
+            TXT( "GameObjectType::Initialize(): Failed to register type \"%s\" template object.\n" ),
             *name );
 
         return false;
     }
 
     // Create the type object and store its parameters.
-    Type* pType = new Type;
+    GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
     pType->m_name = name;
     pType->m_spTypeParent = pParent;
@@ -248,18 +248,17 @@ Type* Type::Create( Name name, Package* pTypePackage, Type* pParent, GameObject*
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
     LookupMap::Iterator typeIterator;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, TypePtr >( pType->GetName(), pType ) ) );
+    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
 
     return pType;
 }
 
 /// Unregister a type.
 ///
-/// @param[in] pType  Type to unregister.  References to the parent type and the type template will be released as
-///                   well.
+/// @param[in] pType  Type to unregister.  References to the parent type and the type template will be released as well.
 ///
 /// @see Register()
-void Type::Unregister( Type* pType )
+void GameObjectType::Unregister( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
@@ -275,9 +274,9 @@ void Type::Unregister( Type* pType )
 /// @param[in] typeName  Name of the type to look up.
 ///
 /// @return  Pointer to the specified type if found, null pointer if not found.
-Type* Type::Find( Name typeName )
+GameObjectType* GameObjectType::Find( Name typeName )
 {
-    Type* pType = NULL;
+    GameObjectType* pType = NULL;
     if( sm_pLookupMap )
     {
         LookupMap::ConstIterator typeIterator = sm_pLookupMap->Find( typeName );
@@ -296,7 +295,7 @@ Type* Type::Find( Name typeName )
 /// @return  Iterator referencing the first registered type.
 ///
 /// @see GetTypeEnd()
-Type::ConstIterator Type::GetTypeBegin()
+GameObjectType::ConstIterator GameObjectType::GetTypeBegin()
 {
     if( sm_pLookupMap )
     {
@@ -314,7 +313,7 @@ Type::ConstIterator Type::GetTypeBegin()
 /// @return  Iterator referencing the end of the type registration map (one past the last entry).
 ///
 /// @see GetTypeBegin()
-Type::ConstIterator Type::GetTypeEnd()
+GameObjectType::ConstIterator GameObjectType::GetTypeEnd()
 {
     if( sm_pLookupMap )
     {
@@ -327,15 +326,15 @@ Type::ConstIterator Type::GetTypeEnd()
     return nullIterator;
 }
 
-/// Perform shutdown of the Type registration system.
+/// Perform shutdown of the GameObjectType registration system.
 ///
 /// This releases all final references to objects and releases all allocated memory.  This should be called during
 /// the shutdown process prior to calling GameObject::Shutdown().
 ///
 /// @see GameObject::Shutdown()
-void Type::Shutdown()
+void GameObjectType::Shutdown()
 {
-    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down Type registration.\n" ) );
+    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObjectType registration.\n" ) );
 
     // Make sure the GameObject type is unregistered, as it does not get included in the unregistration of the Engine
     // type package.
@@ -347,5 +346,5 @@ void Type::Shutdown()
     // Release the reference to the main "Types" package.
     sm_spTypePackage.Release();
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Type registration shutdown complete.\n" ) );
+    HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectType registration shutdown complete.\n" ) );
 }

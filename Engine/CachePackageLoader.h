@@ -90,12 +90,12 @@ namespace Lunar
             uint8_t* pPersistentResourceStreamEnd;
 
             /// Type link table (table stores type object instances).
-            DynArray< TypePtr > typeLinkTable;
+            DynArray< GameObjectTypePtr > typeLinkTable;
             /// Object link table (table stores load request IDs for objects to link).
             DynArray< size_t > objectLinkTable;
 
             /// Cached type reference.
-            TypePtr spType;
+            GameObjectTypePtr spType;
             /// Cached template reference.
             GameObjectPtr spTemplate;
             /// Cached owner reference.

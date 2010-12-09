@@ -245,9 +245,9 @@ namespace Lunar
     /// @return  True if this is an instance of the given type, false if not.
     ///
     /// @see GetType(), IsA()
-    bool GameObject::IsInstanceOf( const Type* pType ) const
+    bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
     {
-        const Type* pThisType = GetType();
+        const GameObjectType* pThisType = GetType();
         HELIUM_ASSERT( pThisType );
 
         return( pThisType == pType );
@@ -280,7 +280,7 @@ namespace Lunar
     template< typename T >
     T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
     {
-        Type* pType = T::GetStaticType();
+        GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
         GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
@@ -299,7 +299,7 @@ namespace Lunar
         GameObject* pObject = FindObject( path );
         if( pObject )
         {
-            Type* pType = T::GetStaticType();
+            GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
             if( !pObject->IsA( pType ) )
             {

@@ -53,7 +53,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
         virtual void SerializeWideString( WideString& rValue );
-        virtual void SerializeObjectReference( Type* pType, GameObjectPtr& rspObject );
+        virtual void SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject );
         //@}
 
     private:

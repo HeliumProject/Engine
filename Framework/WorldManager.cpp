@@ -131,7 +131,7 @@ Name WorldManager::GetDefaultWorldName() const
 /// @param[in] pType  World type.
 ///
 /// @return  Default world instance.
-World* WorldManager::CreateDefaultWorld( Type* pType )
+World* WorldManager::CreateDefaultWorld( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
     if( !pType )

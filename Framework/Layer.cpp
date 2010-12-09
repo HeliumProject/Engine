@@ -100,7 +100,7 @@ void Layer::BindPackage( Package* pPackage )
 /// @param[in] rRotation             Entity rotation.
 /// @param[in] rScale                Entity scale.
 /// @param[in] pTemplate             Template from which to create the entity.
-/// @param[in] name                  GameObject name to assign to the entity, or a null name to automatically generate a
+/// @param[in] name                  Object name to assign to the entity, or a null name to automatically generate a
 ///                                  name based on the entity type.
 /// @param[in] bAssignInstanceIndex  True to assign an instance index to the entity, false to not include an
 ///                                  instance index.
@@ -109,7 +109,7 @@ void Layer::BindPackage( Package* pPackage )
 ///
 /// @see DestroyEntity()
 Entity* Layer::CreateEntity(
-                            Type* pType,
+                            GameObjectType* pType,
                             const Simd::Vector3& rPosition,
                             const Simd::Quat& rRotation,
                             const Simd::Vector3& rScale,
@@ -142,7 +142,7 @@ Entity* Layer::CreateEntity(
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "Layer::CreateEntity(): Type \"%s\" specified is not an entity type.\n" ),
+            TXT( "Layer::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
             *pType->GetName() );
 
         return NULL;

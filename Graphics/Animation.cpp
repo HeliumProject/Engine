@@ -15,7 +15,7 @@
 
 using namespace Lunar;
 
-L_IMPLEMENT_OBJECT( Animation, Graphics, Type::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Animation::Animation()

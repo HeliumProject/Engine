@@ -12,9 +12,6 @@ using namespace Helium::Reflect;
 Composite::Composite()
 : m_Enumerator (NULL)
 , m_Enumerated (false)
-, m_FirstFieldID (-1)
-, m_NextFieldID (0)
-, m_LastFieldID (-1)
 {
 
 }
@@ -32,25 +29,14 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
         HELIUM_ASSERT( converted );
     }
 
-    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end()); 
-
-    // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
-
     Field* field = Field::Create( this );
-
     field->SetName( convertedName );
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_FieldID = m_NextFieldID;
+    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
     field->m_DataClass = dataClass;
-
-    m_FieldNameToInfo[convertedName] = field;
-    m_FieldIDToInfo[m_NextFieldID] = field;
-    m_FieldOffsetToInfo[offset] = field;
-
-    m_NextFieldID++;
+    m_Fields.push_back( field );
 
     DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
@@ -78,26 +64,15 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
         HELIUM_ASSERT( converted );
     }
 
-    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
-
-    // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
-
     ElementField* field = ElementField::Create( this );
-
     field->SetName( convertedName );
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_FieldID = m_NextFieldID;
+    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
     field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
     field->m_Type = type;
-
-    m_FieldNameToInfo[convertedName] = field;
-    m_FieldIDToInfo[m_NextFieldID] = field;
-    m_FieldOffsetToInfo[offset] = field;
-
-    m_NextFieldID++;
+    m_Fields.push_back( field );
 
     DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
@@ -125,28 +100,17 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
         HELIUM_ASSERT( converted );
     }
 
-    HELIUM_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
-
-    // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    HELIUM_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
-
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
     HELIUM_ASSERT(enumeration != NULL);
 
     EnumerationField* field = EnumerationField::Create( this, enumeration );
-
     field->SetName( convertedName );
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_FieldID = m_NextFieldID;
+    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
     field->m_DataClass = dataClass;
-
-    m_FieldNameToInfo[convertedName] = field;
-    m_FieldIDToInfo[m_NextFieldID] = field;
-    m_FieldOffsetToInfo[offset] = field;
-
-    m_NextFieldID++;
+    m_Fields.push_back( field );
 
     DataPtr def = field->CreateData( &instance );
     if (def.ReferencesObject())
@@ -171,12 +135,12 @@ void Composite::Report() const
     Log::Debug(Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, m_Name.c_str() );
 
     uint32_t computedSize = 0;
-    M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();
-    M_FieldIDToInfo::const_iterator end = m_FieldIDToInfo.end();
+    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
     for ( ; itr != end; ++itr )
     {
-        computedSize += itr->second->m_Size;
-        Log::Debug(Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
+        computedSize += (*itr)->m_Size;
+        Log::Debug(Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str());
     }
 
     if (computedSize != m_Size)
@@ -187,16 +151,12 @@ void Composite::Report() const
 
 bool Composite::HasType(const Type* type) const
 {
-    const Composite* base = this;
-
-    while ( base )
+    for ( const Composite* base = this; base; base = base->m_Base )
     {
         if ( base == type )
         {
             return true;
         }
-
-        base = ReflectionCast<const Composite>( Reflect::Registry::GetInstance()->GetType( base->m_Base ) );
     }
 
     return false;
@@ -223,11 +183,29 @@ tstring Composite::ShortenName(const tstring& name)
 
 const Field* Composite::FindFieldByName(const tstring& name) const
 {
-    M_FieldNameToInfo::const_iterator iter = m_FieldNameToInfo.find( name );
-
-    if ( iter != m_FieldNameToInfo.end() )
+    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
+    for ( ; itr != end; ++itr )
     {
-        return iter->second;
+        if ( (*itr)->m_Name == name )
+        {
+            return *itr;
+        }
+    }
+
+    return NULL;
+}
+
+const Field* Composite::FindFieldByIndex(uint32_t index) const
+{
+    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
+    for ( ; itr != end; ++itr )
+    {
+        if ( (*itr)->m_Index == index )
+        {
+            return *itr;
+        }
     }
 
     return NULL;
@@ -235,11 +213,16 @@ const Field* Composite::FindFieldByName(const tstring& name) const
 
 const Field* Composite::FindFieldByOffset(uint32_t offset) const
 {
-    M_FieldOffsetToInfo::const_iterator found = m_FieldOffsetToInfo.find( offset );
-    if ( found != m_FieldOffsetToInfo.end() )
+    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
+    for ( ; itr != end; ++itr )
     {
-        return found->second;
+        if ( (*itr)->m_Offset == offset )
+        {
+            return *itr;
+        }
     }
+
     return NULL;
 }
 
@@ -271,11 +254,11 @@ bool Composite::Equals(const Element* a, const Element* b)
     }
     else
     {
-        M_FieldIDToInfo::const_iterator itr = type->m_FieldIDToInfo.begin();
-        M_FieldIDToInfo::const_iterator end = type->m_FieldIDToInfo.end();
+        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = itr->second;
+            const Field* field = (*itr);
 
             // create serializers
             DataPtr aData = field->CreateData();
@@ -317,11 +300,11 @@ void Composite::Visit(Element* element, Visitor& visitor)
     const Class* type = element->GetClass();
 
     {
-        M_FieldIDToInfo::const_iterator itr = type->m_FieldIDToInfo.begin();
-        M_FieldIDToInfo::const_iterator end = type->m_FieldIDToInfo.end();
+        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = itr->second;
+            const Field* field = (*itr);
 
             if (!visitor.VisitField(element, field))
             {
@@ -365,12 +348,12 @@ void Composite::Copy( const Element* src, Element* dest )
         // Types are not the same, we have to search...
         // Iterate up inheritance of src, and look check to see if dest HasType for each one
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
-        for ( const Class* currentType = srcType; currentType && !type; currentType = registry->GetClass( currentType->m_Base ) )
+        for ( const Composite* base = srcType; base && !type; base = base->m_Base )
         {
-            if ( dest->HasType( currentType ) )
+            if ( dest->HasType( base ) )
             {
                 // We found the match (which breaks out of this loop)
-                type = currentType;
+                type = ReflectionCast<const Class>( base );
             }
         }
 
@@ -395,11 +378,11 @@ void Composite::Copy( const Element* src, Element* dest )
     }
     else
     {
-        M_FieldIDToInfo::const_iterator itr = type->m_FieldIDToInfo.begin();
-        M_FieldIDToInfo::const_iterator end = type->m_FieldIDToInfo.end();
+        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = itr->second;
+            const Field* field = (*itr);
 
             // create serializers
             DataPtr lhs = field->CreateData();

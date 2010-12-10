@@ -33,37 +33,28 @@ namespace Helium
             static Class* Create();
 
             template<class T>
-            static Class* Create( const tstring& name, const tstring& base, CreateObjectFunc creator = NULL )
+            static Class* Create( const tstring& name, const tstring& baseName, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
-                info->m_Base = base;
                 info->m_Creator = creator;
+                info->m_Enumerator = (CompositeEnumerator)&T::EnumerateClass;
                 info->m_UIName = info->m_Name;
 
-                // c++ can give us the address of base class static functions, so check each base class
-                bool baseEnumerator = false;
-                tstring baseName = info->m_Base;
-                while ( !baseEnumerator && !baseName.empty() )
-                {
-                    const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
-                    if (base)
-                    {
-                        baseEnumerator = base->m_Enumerator && base->m_Enumerator == (CompositeEnumerator)&T::EnumerateClass;
-                        baseName = base->m_Base;
-                    }
-                    else
-                    {
-                        HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
-                        baseName.clear();
-                    }
-                }
+                // lookup base class
+                info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );
+                info->m_Base->m_Derived.insert( info );
 
-                if (!baseEnumerator)
+                // if you hit this break your base class is not registered yet!
+                HELIUM_ASSERT( info->m_Base );
+
+                // c++ can give us the address of base class static functions, so check each base class
+                for ( const Composite* base = info->m_Base; base; base = base->m_Base )
                 {
-                    info->m_Enumerator = (CompositeEnumerator)&T::EnumerateClass;
+                    // this would cause us to call the same enumerate function twice!
+                    HELIUM_ASSERT( base->m_Enumerator != (CompositeEnumerator)&T::EnumerateClass );
                 }
 
                 // enumerate reflection data, but only if we are concrete (instantiatable)
@@ -74,11 +65,6 @@ namespace Helium
 
                     // enumerate the fields in the class
                     info->EnumerateInstance<T>(*temp);
-                }
-
-                if (info->m_FirstFieldID == info->m_LastFieldID)
-                {
-                    info->m_FirstFieldID = info->m_LastFieldID = -1;
                 }
 
                 return info;

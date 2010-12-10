@@ -59,7 +59,7 @@ namespace Helium
             uint32_t                m_Size;         // the size of this field
             uintptr_t               m_Offset;       // the offset to the field
             uint32_t                m_Flags;        // flags for special behavior
-            int32_t                 m_FieldID;      // the unique id of this field
+            int32_t                 m_Index;      // the unique id of this field
             const Class*            m_DataClass;     // type id of the serializer to use
             DataPtr                 m_Default;      // the value of the default
             CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)
@@ -67,9 +67,6 @@ namespace Helium
 
         typedef Helium::SmartPtr< Field > FieldPtr;
         typedef Helium::SmartPtr< const Field > ConstFieldPtr;
-        typedef std::map< int32_t, ConstFieldPtr > M_FieldIDToInfo;
-        typedef std::map< tstring, ConstFieldPtr > M_FieldNameToInfo;
-        typedef std::map< uint32_t, ConstFieldPtr > M_FieldOffsetToInfo;
 
         //
         // ElementField store additional information the compile-time type of a pointer

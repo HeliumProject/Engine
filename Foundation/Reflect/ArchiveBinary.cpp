@@ -632,14 +632,11 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
 
     REFLECT_SCOPE_TIMER_INST( "" );
 
-    M_FieldIDToInfo::const_iterator iter = type->m_FieldIDToInfo.begin();
-    M_FieldIDToInfo::const_iterator end  = type->m_FieldIDToInfo.end();
-    for ( ; iter != end; ++iter )
+    std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+    for ( ; itr != end; ++itr )
     {
-        const Field* field = iter->second;
-        HELIUM_ASSERT(field != NULL);
-
-        SerializeField(element, field);
+        SerializeField(element, *itr);
     }
 }
 
@@ -701,11 +698,11 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
         PreSerialize(element, field);
 
         // write our latent field ID to the stream, this will always be valid since we persist ALL of the type information data
-        m_Stream->Write(&field->m_FieldID); 
+        m_Stream->Write(&field->m_Index); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Debug(TXT("Serializing field %s (field id %d)\n"), field->m_Name.c_str(), field->m_FieldID);
+        Debug(TXT("Serializing field %s (field id %d)\n"), field->m_Name.c_str(), field->m_Index);
         m_Indent.Push();
 #endif
 
@@ -978,17 +975,17 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
                 if (type != NULL)
                 {
-                    M_FieldIDToInfo::const_iterator field_found = type->m_FieldIDToInfo.find(field_id);
-                    HELIUM_ASSERT(field_found != type->m_FieldIDToInfo.end());
+                    const Field* field = type->FindFieldByIndex(field_id);
+                    HELIUM_ASSERT(field);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                     m_Indent.Get(stdout);
-                    Debug(TXT("Deserializing field %s (field id %d)\n"), field_found->second->m_Name.c_str(), field_id);
+                    Debug(TXT("Deserializing field %s (field id %d)\n"), field->m_Name.c_str(), field_id);
                     m_Indent.Push();
 #endif
 
                     // process
-                    DeserializeField(element, field_found->second);
+                    DeserializeField(element, field);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                     m_Indent.Pop();
@@ -1013,26 +1010,13 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
     // get the type info for the instance we are writing too
     const Class* type = element->GetClass();
 
-    // lookup the current field info by latent field name
-    M_FieldNameToInfo::const_iterator found = type->m_FieldNameToInfo.find(latent_field->m_Name);
+    // the field to serialize
+    const Field* current_field = type->FindFieldByName(latent_field->m_Name);
 
     // our missing component
     ElementPtr component;
 
-    // the field to serialize
-    FieldPtr current_field;
-
-    // sanity check
-    if (found == type->m_FieldNameToInfo.end())
-    {
-        current_field = NULL;
-    }
-    else
-    {
-        current_field = found->second;
-    }
-
-    if ( current_field.ReferencesObject() )
+    if ( current_field )
     {
         // pull and element and downcast to serializer
         DataPtr latent_serializer = ObjectCast<Data>( Allocate() );
@@ -1122,20 +1106,29 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
 void ArchiveBinary::SerializeComposite(const Composite* composite)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_Name.c_str(), composite->m_FieldIDToInfo.size());
+    Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_Name.c_str(), composite->m_Fields.size());
 #endif
 
     int32_t string_index = m_Strings.Insert(composite->m_Name);
     m_Stream->Write(&string_index); 
 
-    int32_t field_count = (int32_t)composite->m_FieldIDToInfo.size();
+    int32_t field_count = (int32_t)composite->m_Fields.size();
     m_Stream->Write(&field_count);
 
-    M_FieldIDToInfo::const_iterator itr = composite->m_FieldIDToInfo.begin();
-    M_FieldIDToInfo::const_iterator end = composite->m_FieldIDToInfo.end();
-    for ( ; itr != end; ++itr )
+    std::stack< const Composite* > bases;
+    for ( const Composite* current = composite; current != NULL; current = current->m_Base )
     {
-        SerializeField(itr->second);
+        bases.push( current );
+    }
+
+    for ( const Composite* current = bases.top(); !bases.empty(); bases.pop(), current = bases.top() )
+    {
+        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        for ( ; itr != end; ++itr )
+        {
+            SerializeField(*itr);
+        }
     }
 
     const static int32_t terminator = -1;
@@ -1158,16 +1151,13 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
     for ( int32_t i=0; i<field_count; ++i )
     {
         FieldPtr field = Field::Create(composite);
-
-        field->m_FieldID = i;
+        field->m_Index = i;
+        composite->m_Fields.push_back( field );
 
         if (!DeserializeField(field))
         {
             return false;
         }
-
-        composite->m_FieldIDToInfo[  field->m_FieldID ] = field;
-        composite->m_FieldNameToInfo[ field->m_Name ] = field;
     }
 
     int32_t terminator = -1;

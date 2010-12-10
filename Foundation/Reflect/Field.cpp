@@ -10,7 +10,7 @@ using namespace Helium::Reflect;
 Field::Field(const Composite* composite)
 : m_Composite ( composite )
 , m_Flags ( 0 )
-, m_FieldID ( -1 )
+, m_Index ( -1 )
 , m_DataClass ( NULL )
 , m_Offset ( -1 )
 , m_Creator ( NULL )

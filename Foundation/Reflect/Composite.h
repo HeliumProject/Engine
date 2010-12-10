@@ -44,19 +44,11 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::Composite );
 
-            tstring                 m_Base;               // the base type name
-            std::set<tstring>       m_Derived;            // the derived type names
-
-            CompositeEnumerator     m_Enumerator;         // the function to enumerate this type
-            bool                    m_Enumerated;         // flag if we are enumerated
-
-            M_FieldNameToInfo       m_FieldNameToInfo;    // maps field name to field info block
-            M_FieldIDToInfo         m_FieldIDToInfo;      // maps field id to field info block
-            M_FieldOffsetToInfo     m_FieldOffsetToInfo;  // maps offset (through pointer to member reference) to field info block
-
-            int32_t                 m_FirstFieldID;       // first field id of this class's fields (exclusive of base and derived class's fields)
-            int32_t                 m_LastFieldID;        // last field id of this class's fields (exclusive of base and derived class's fields)
-            int32_t                 m_NextFieldID;        // id used for the next field (as we are enumerating)
+            const Composite*                        m_Base;                 // the base type name
+            mutable std::set< const Composite* >    m_Derived;              // the derived type names, mutable since its populated by other objects
+            CompositeEnumerator                     m_Enumerator;           // the function to enumerate this type
+            bool                                    m_Enumerated;           // flag if we are enumerated
+            std::vector< ConstFieldPtr >            m_Fields;               // fields in this composite
 
         protected:
             Composite();
@@ -73,57 +65,33 @@ namespace Helium
                 Compositor<T> compositor (*this, instance);
 
                 // walk our base classes and build a list
-                std::vector<const Reflect::Composite*> bases;
-                if ( !m_Base.empty() )
+                std::stack< const Reflect::Composite* > bases;
+                for ( const Composite* base = m_Base; base; base = base->m_Base )
                 {
-                    tstring baseName = m_Base;
-                    while ( !baseName.empty() )
-                    {
-                        const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
-                        if (base)
-                        {
-                            bases.push_back(base);
-                            baseName = base->m_Base;
-                        }
-                        else
-                        {
-                            HELIUM_BREAK();
-                            baseName.clear();
-                        }
-                    }
+                    bases.push( base );
                 }
 
                 // walk that list from base to derived
-                std::vector<const Reflect::Composite*>::const_reverse_iterator itr = bases.rbegin();
-                std::vector<const Reflect::Composite*>::const_reverse_iterator end = bases.rend();
-                for ( ; itr != end; ++itr )
+                for ( const Composite* base = bases.top(); !bases.empty(); bases.pop() )
                 {
-                    const Reflect::Composite* base = *itr;
-
                     // enumerate our base type information, note we use the derived instance since its ctor could modify base members
                     if (base->m_Enumerator)
                     {
                         base->m_Enumerator(&compositor);
                     }
 
-                    // handle HELIUM_ABSTRACT base classes by enumerating their type info with our derived instance
+                    // handle abstract base classes by enumerating their type info with our derived instance
                     if (!base->m_Enumerated)
                     {
                         const_cast<Composite*>(base)->EnumerateInstance<T>(instance);
                     }
                 }
 
-                // mark the first field of *this* type
-                m_FirstFieldID = m_NextFieldID;
-
                 // enumerate our derived type information
                 if (m_Enumerator)
                 {
                     m_Enumerator(&compositor);
                 }
-
-                // mark the last field of *this* type
-                m_LastFieldID = m_NextFieldID-1;
 
                 // we are now enumerated
                 m_Enumerated = true;
@@ -160,7 +128,7 @@ namespace Helium
             //
 
             const Field* FindFieldByName(const tstring& name) const;
-
+            const Field* FindFieldByIndex(uint32_t index) const;
             const Field* FindFieldByOffset(uint32_t offset) const;
 
             // 
@@ -172,12 +140,7 @@ namespace Helium
             template<typename FieldT, class ClassT>
             const Field* FindField( FieldT ClassT::* pointerToMember ) const
             {
-                M_FieldOffsetToInfo::const_iterator found = m_FieldOffsetToInfo.find( Reflect::Compositor<ClassT>::GetOffset<FieldT>( pointerToMember ) );
-                if ( found != m_FieldOffsetToInfo.end() )
-                {
-                    return found->second;
-                }
-                return NULL;
+                return FindFieldByOffset( Reflect::Compositor<ClassT>::GetOffset<FieldT>( pointerToMember ) );
             }
 
             //

@@ -283,25 +283,6 @@ bool Registry::RegisterType(Type* type)
                 return false;
             }
 
-            if ( !classType->m_Base.empty() )
-            {
-                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-                if (found != m_TypesByName.end())
-                {
-                    Type* baseClass = found->second;
-                    if (baseClass->GetReflectionType() == ReflectionTypes::Class)
-                    {
-                        static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_Name );
-                    }
-                    else
-                    {
-                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
-                        HELIUM_BREAK();
-                        return false;
-                    }
-                }
-            }
-
             classType->Report();
             break;
         }
@@ -341,21 +322,9 @@ void Registry::UnregisterType(const Type* type)
                 m_TypesByName.erase( classType->m_Name );
             }
 
-            if ( !classType->m_Base.empty() )
+            if ( classType->m_Base )
             {
-                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-                if ( found != m_TypesByName.end() )
-                {
-                    if ( found->second->GetReflectionType() == ReflectionTypes::Class )
-                    {
-                        static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_Name );
-                    }
-                    else
-                    {
-                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_Name.c_str());
-                        HELIUM_BREAK();
-                    }
-                }
+                classType->m_Base->m_Derived.erase( classType );
             }
 
             m_TypesByName.erase(classType->m_Name);

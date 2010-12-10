@@ -122,7 +122,7 @@ void XmlSerializer::PreSerialize( GameObject* pObject )
 
     m_pStream->Write( OBJECT_TAG_START_B, 1, sizeof( OBJECT_TAG_START_B ) - 1 );
 
-    GameObjectType* pType = pObject->GetType();
+    GameObjectType* pType = pObject->GetGameObjectType();
     HELIUM_ASSERT( pType );
     pNameString = pType->GetName().Get();
     HELIUM_ASSERT( pNameString );

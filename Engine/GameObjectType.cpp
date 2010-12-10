@@ -9,6 +9,7 @@
 #include "Engine/GameObjectType.h"
 
 #include "Foundation/Container/ObjectPool.h"
+#include "Foundation/Reflect/Registry.h"
 
 using namespace Lunar;
 

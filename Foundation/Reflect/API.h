@@ -81,7 +81,7 @@ typedef __Class This; \
 virtual const Helium::Reflect::Type* GetType() const HELIUM_OVERRIDE; \
 virtual bool HasType(const Reflect::Type* id) const HELIUM_OVERRIDE; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
-static Helium::Reflect::Class* CreateClass( const tstring& name ); \
+static Helium::Reflect::Class* CreateClass( Name name ); \
 static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Class* s_Class;
 
@@ -102,11 +102,11 @@ const Helium::Reflect::Class* __Class::GetClass() const \
     return s_Class; \
 } \
 \
-Helium::Reflect::Class* __Class::CreateClass( const tstring& name ) \
+Helium::Reflect::Class* __Class::CreateClass( Helium::Name name ) \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
-    Reflect::Class* type = Reflect::Class::Create<__Class>(name, *__Class::Base::s_Class->m_Name, __Creator); \
+    Reflect::Class* type = Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
     s_Type = s_Class = type; \
     return type; \
 } \
@@ -128,7 +128,7 @@ static const Helium::Reflect::Enumeration* s_Enumeration;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_ENUMERATION( __Enumeration ) \
-Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( Name name ) \
+Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( Helium::Name name ) \
 { \
     HELIUM_ASSERT( s_Enumeration == NULL ); \
     Reflect::Enumeration* type = Reflect::Enumeration::Create<__Enumeration>( name ); \

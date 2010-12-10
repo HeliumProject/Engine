@@ -33,13 +33,13 @@ namespace Helium
             static Class* Create();
 
             template<class T>
-            static Class* Create( const tstring& name, const tstring& base, CreateObjectFunc creator = NULL )
+            static Class* Create( Name name, Name base, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
                 info->m_Size = sizeof(T);
-                info->m_Name.Set( name.c_str() );
-                info->m_Base.Set( base.c_str() );
+                info->m_Name = name;
+                info->m_Base = base;
                 info->m_Creator = creator;
                 info->m_UIName = *info->m_Name;
 

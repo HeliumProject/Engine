@@ -47,7 +47,7 @@ bool BinarySerializer::Serialize( GameObject* pObject )
     BeginSerialize( true );
 
     // Serialize the object type reference.
-    GameObjectType* pType = pObject->GetType();
+    GameObjectType* pType = pObject->GetGameObjectType();
     HELIUM_ASSERT( pType );
     uint32_t typeIndex = ResolveTypeDependency( pType->GetName() );
     HELIUM_ASSERT( IsValid( typeIndex ) );

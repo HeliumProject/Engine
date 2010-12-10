@@ -4,6 +4,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Utility.h"
 
+#include "Foundation/Name.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Reflect/API.h"
@@ -78,8 +79,13 @@ namespace Helium
             // Memory
             //
 
-            void* operator new(size_t bytes);
-            void operator delete(void *ptr, size_t bytes);
+            void* operator new( size_t bytes );
+            void* operator new( size_t bytes, void* memory );
+            void operator delete( void* ptr, size_t bytes );
+            void operator delete( void* ptr, void* memory );
+
+            virtual void PreDestroy();
+            virtual void Destroy();  // This should only be called by the reference counting system!
 
             //
             // Type id
@@ -95,7 +101,7 @@ namespace Helium
             virtual const Reflect::Class* GetClass() const;
 
             // Create class data block for this type
-            static Reflect::Class* CreateClass( const tstring& name );
+            static Reflect::Class* CreateClass( Name name );
 
             // Enumerates member data (stub)
             static void EnumerateClass( Reflect::Compositor<Object>& comp );
@@ -210,8 +216,11 @@ namespace Helium
         /// @param[in] pObject  Object about to be destroyed.
         ///
         /// @see Destroy()
-        void ObjectRefCountSupport::PreDestroy( Object* /*pObject*/ )
+        void ObjectRefCountSupport::PreDestroy( Object* pObject )
         {
+            HELIUM_ASSERT( pObject );
+
+            pObject->PreDestroy();
         }
 
         /// Destroy an object after the final strong reference to it has been cleared.
@@ -223,7 +232,7 @@ namespace Helium
         {
             HELIUM_ASSERT( pObject );
 
-            delete pObject;
+            pObject->Destroy();
         }
    }
 }

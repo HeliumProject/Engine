@@ -136,18 +136,24 @@ namespace Helium
 
         typedef void (*UnregisterFunc)();
 
-        template<class T>
-        inline UnregisterFunc RegisterClassType( const tstring& name )
+        template< class T >
+        inline UnregisterFunc RegisterClassType( Name name )
         {
             // create the type information and register it with the registry
             if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( name ) ) )
             {
                 // this function will unregister the type we just registered
-                return &UnregisterClassType<T>;
+                return &UnregisterClassType< T >;
             }
 
             // there was a problem
             return NULL;
+        }
+
+        template< class T >
+        inline UnregisterFunc RegisterClassType( const tchar_t* name )
+        {
+            return RegisterClassType< T >( Name( name ) );
         }
 
         template<class T>

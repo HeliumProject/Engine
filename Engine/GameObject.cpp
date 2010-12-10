@@ -16,27 +16,6 @@
 
 using namespace Lunar;
 
-/// Static reference count proxy management data.
-struct GameObjectRefCountSupport::StaticData
-{
-    /// Number of proxy objects to allocate per block for the proxy pool.
-    static const size_t POOL_BLOCK_SIZE = 1024;
-
-    /// Proxy object pool.
-    ObjectPool< RefCountProxy< GameObject > > proxyPool;
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    /// Active reference count proxies.
-    ConcurrentHashSet< RefCountProxy< GameObject >* > activeProxySet;
-#endif
-
-    /// @name Construction/Destruction
-    //@{
-    StaticData();
-    //@}
-};
-
-GameObjectRefCountSupport::StaticData* GameObjectRefCountSupport::sm_pStaticData = NULL;
-
 GameObjectType* GameObject::sm_pStaticType = NULL;
 GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
@@ -46,104 +25,6 @@ GameObject::ChildNameInstanceIndexMap* GameObject::sm_pNameInstanceIndexMap = NU
 ReadWriteLock GameObject::sm_objectListLock;
 
 DynArray< uint8_t > GameObject::sm_serializationBuffer;
-
-/// Retrieve a reference count proxy from the global pool.
-///
-/// @return  Pointer to a reference count proxy.
-///
-/// @see Release()
-RefCountProxy< GameObject >* GameObjectRefCountSupport::Allocate()
-{
-    // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
-    // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
-    // during startup type initialization).
-    StaticData* pStaticData = sm_pStaticData;
-    if( !pStaticData )
-    {
-        pStaticData = new StaticData;
-        HELIUM_ASSERT( pStaticData );
-        sm_pStaticData = pStaticData;
-    }
-
-    RefCountProxy< GameObject >* pProxy = pStaticData->proxyPool.Allocate();
-    HELIUM_ASSERT( pProxy );
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    ConcurrentHashSet< RefCountProxy< GameObject >* >::Accessor activeProxySetAccessor;
-    HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
-#endif
-
-    return pProxy;
-}
-
-/// Release a reference count proxy back to the global pool.
-///
-/// @param[in] pProxy  Pointer to the reference count proxy to release.
-///
-/// @see Allocate()
-void GameObjectRefCountSupport::Release( RefCountProxy< GameObject >* pProxy )
-{
-    HELIUM_ASSERT( pProxy );
-
-    StaticData* pStaticData = sm_pStaticData;
-    HELIUM_ASSERT( pStaticData );
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    HELIUM_VERIFY( pStaticData->activeProxySet.Remove( pProxy ) );
-#endif
-
-    pStaticData->proxyPool.Release( pProxy );
-}
-
-/// Release the name table and free all allocated memory.
-///
-/// This should only be called immediately prior to application exit.
-void GameObjectRefCountSupport::Shutdown()
-{
-    delete sm_pStaticData;
-    sm_pStaticData = NULL;
-}
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-/// Get the number of active reference count proxies.
-///
-/// Be careful when using this function, as the number may change if other threads are actively setting and clearing
-/// references to objects.  Unless all other threads have been halted or are otherwise no longer using any smart
-/// pointers, you should not expect this value to match the number actually iterated when using functions such as
-/// GetFirstActiveProxy().
-///
-/// @return  Current number of active smart pointer references.
-///
-/// @see GetFirstActiveProxy()
-size_t GameObjectRefCountSupport::GetActiveProxyCount()
-{
-    HELIUM_ASSERT( sm_pStaticData );
-
-    return sm_pStaticData->activeProxySet.GetSize();
-}
-
-/// Initialize a constant accessor to the first active reference count proxy.
-///
-/// @param[in] rAccessor  Accessor to initialize.
-///
-/// @return  True if there are active reference count proxies and the accessor was successfully set to reference the
-///          first one, false if not.
-///
-/// @see GetActiveProxyCount()
-bool GameObjectRefCountSupport::GetFirstActiveProxy(
-    ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor )
-{
-    HELIUM_ASSERT( sm_pStaticData );
-
-    return sm_pStaticData->activeProxySet.First( rAccessor );
-}
-#endif
-
-/// Constructor.
-GameObjectRefCountSupport::StaticData::StaticData()
-: proxyPool( POOL_BLOCK_SIZE )
-{
-}
 
 /// Constructor.
 GameObject::GameObject()
@@ -392,7 +273,7 @@ GameObject* GameObject::GetTemplate() const
     GameObject* pTemplate = m_spTemplate;
     if( !pTemplate )
     {
-        GameObjectType* pType = GetType();
+        GameObjectType* pType = GetGameObjectType();
         HELIUM_ASSERT( pType );
         pTemplate = pType->GetTemplate();
         HELIUM_ASSERT( pTemplate );
@@ -601,9 +482,7 @@ GameObject* GameObject::FindChild( Name name, uint32_t instanceIndex ) const
     return FindChildOf( this, name, instanceIndex );
 }
 
-/// Perform any necessary work immediately prior to destroying this object.
-///
-/// Note that the parent-class implementation should always be chained last.
+/// @copydoc Object::PreDestroy()
 void GameObject::PreDestroy()
 {
     if( IsValid( m_id ) )
@@ -617,10 +496,7 @@ void GameObject::PreDestroy()
     SetFlags( GameObject::FLAG_PREDESTROYED );
 }
 
-/// Actually destroy this object.
-///
-/// This should only be called by the reference counting system once the last strong reference to this object has
-/// been cleared.  It should never be called manually
+/// @copydoc Object::Destroy()
 void GameObject::Destroy()
 {
     HELIUM_ASSERT( !GetRefCountProxy() || GetRefCountProxy()->GetStrongRefCount() == 0 );
@@ -638,7 +514,7 @@ void GameObject::Destroy()
 /// Get the type of this object.
 ///
 /// @return  GameObject type.
-GameObjectType* GameObject::GetType() const
+GameObjectType* GameObject::GetGameObjectType() const
 {
     return GameObject::GetStaticType();
 }
@@ -649,10 +525,10 @@ GameObjectType* GameObject::GetType() const
 ///
 /// @return  True if this is an instance of the given type or one of its subtypes, false if not.
 ///
-/// @see GetType(), IsInstanceOf()
+/// @see GetGameObjectType(), IsInstanceOf()
 bool GameObject::IsA( const GameObjectType* pType ) const
 {
-    const GameObjectType* pThisType = GetType();
+    const GameObjectType* pThisType = GetGameObjectType();
     HELIUM_ASSERT( pThisType );
 
     return pThisType->IsSubtypeOf( pType );
@@ -732,7 +608,7 @@ bool GameObject::IsTransient() const
             return true;
         }
 
-        GameObjectType* pType = pObject->GetType();
+        GameObjectType* pType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pType );
         if( pType->GetFlags() & GameObjectType::FLAG_TRANSIENT )
         {
@@ -1152,32 +1028,60 @@ void GameObject::Shutdown()
 
     GameObject::ReleaseStaticType();
 
+#pragma TODO( "Fix support for casting between Reflect::Object and GameObject once the type systems have been properly integrated." )
 #if HELIUM_ENABLE_MEMORY_TRACKING
-    ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor refCountProxyAccessor;
-    if( GameObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
+    ConcurrentHashSet< RefCountProxy< Reflect::Object >* >::ConstAccessor refCountProxyAccessor;
+    if( Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
             TXT( "%" ) TPRIuSZ TXT( " smart pointer(s) still active during shutdown!\n" ),
-            GameObjectRefCountSupport::GetActiveProxyCount() );
+            Reflect::ObjectRefCountSupport::GetActiveProxyCount() );
 
+#if 1
+        refCountProxyAccessor.Release();
+#else
+        size_t activeGameObjectCount = 0;
         while( refCountProxyAccessor.IsValid() )
         {
-            RefCountProxy< GameObject >* pProxy = *refCountProxyAccessor;
+            RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
             HELIUM_ASSERT( pProxy );
 
-            GameObject* pObject = pProxy->GetObject();
-
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "- 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
-                pProxy,
-                ( pObject ? *pObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
-                pProxy->GetStrongRefCount(),
-                pProxy->GetWeakRefCount() );
+            GameObject* pGameObject = Reflect::ObjectCast< GameObject >( pProxy->GetObject() );
+            if( pGameObject )
+            {
+                ++activeGameObjectCount;
+            }
 
             ++refCountProxyAccessor;
         }
+
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "%" ) TPRIuSZ TXT( " active GameObject smart pointer(s):\n" ),
+            activeGameObjectCount );
+
+        Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor );
+        while( refCountProxyAccessor.IsValid() )
+        {
+            RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
+            HELIUM_ASSERT( pProxy );
+
+            GameObject* pGameObject = Reflect::ObjectCast< GameObject >( pProxy->GetObject() );
+            if( pGameObject )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "- 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
+                    pProxy,
+                    ( pGameObject ? *pGameObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
+                    pProxy->GetStrongRefCount(),
+                    pProxy->GetWeakRefCount() );
+            }
+
+            ++refCountProxyAccessor;
+        }
+#endif
     }
 #endif  // HELIUM_ENABLE_MEMORY_TRACKING
 

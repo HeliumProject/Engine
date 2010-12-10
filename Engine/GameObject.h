@@ -10,6 +10,7 @@
 #define LUNAR_ENGINE_OBJECT_H
 
 #include "Engine/Engine.h"
+#include "Foundation/Reflect/Object.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
@@ -32,7 +33,7 @@
         static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
     public: \
         typedef PARENT Super; \
-        virtual Lunar::GameObjectType* GetType() const; \
+        virtual Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
         virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
@@ -48,7 +49,7 @@
     Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
     Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
     \
-    Lunar::GameObjectType* TYPE::GetType() const \
+    Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
         return TYPE::GetStaticType(); \
     } \
@@ -142,48 +143,9 @@ namespace Lunar
 
     HELIUM_DECLARE_WPTR( GameObject );
 
-    /// Reference counting support for GameObject types.
-    class LUNAR_ENGINE_API GameObjectRefCountSupport
-    {
-    public:
-        /// Base type of reference counted object.
-        typedef GameObject BaseType;
-
-        /// @name Object Destruction Support
-        //@{
-        inline static void PreDestroy( GameObject* pObject );
-        inline static void Destroy( GameObject* pObject );
-        //@}
-
-        /// @name Reference Count Proxy Allocation Interface
-        //@{
-        static RefCountProxy< GameObject >* Allocate();
-        static void Release( RefCountProxy< GameObject >* pProxy );
-
-        static void Shutdown();
-        //@}
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-        /// @name Active Proxy Iteration
-        //@{
-        static size_t GetActiveProxyCount();
-        static bool GetFirstActiveProxy(
-            ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor );
-        //@}
-#endif
-
-    private:
-        struct StaticData;
-
-        /// Static proxy management data.
-        static StaticData* sm_pStaticData;
-    };
-
     /// Base class for the engine's game object system.
-    class LUNAR_ENGINE_API GameObject : NonCopyable
+    class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
     {
-        HELIUM_DECLARE_REF_COUNT( GameObject, GameObjectRefCountSupport );
-
     public:
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
@@ -254,14 +216,12 @@ namespace Lunar
         inline bool IsPackage() const;
 
         virtual void PreDestroy();
-
-        // This should only be called by the reference counting system!
-        void Destroy();
+        void Destroy();  // This should only be called by the reference counting system!
         //@}
 
         /// @name RTTI
         //@{
-        virtual GameObjectType* GetType() const;
+        virtual GameObjectType* GetGameObjectType() const;
         bool IsA( const GameObjectType* pType ) const;
         inline bool IsInstanceOf( const GameObjectType* pType ) const;
         //@}

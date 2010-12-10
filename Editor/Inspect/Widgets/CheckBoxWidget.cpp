@@ -32,7 +32,7 @@ CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* checkBox )
     SetControl( checkBox );
 }
 
-void CheckBoxWidget::Create( wxWindow* parent )
+void CheckBoxWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_CheckBoxWindow );
 
@@ -51,7 +51,7 @@ void CheckBoxWidget::Create( wxWindow* parent )
     m_CheckBoxControl->a_Highlight.RaiseChanged();
 }
 
-void CheckBoxWidget::Destroy()
+void CheckBoxWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_CheckBoxWindow );
 

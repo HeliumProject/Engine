@@ -16,7 +16,7 @@ StripCanvasWidget::StripCanvasWidget( Inspect::Container* container )
     SetControl( container );
 }
 
-void StripCanvasWidget::Create( wxWindow* parent )
+void StripCanvasWidget::CreateWindow( wxWindow* parent )
 {
     SetWindow( m_ContainerWindow = new wxPanel( parent, wxID_ANY ) );
 
@@ -78,7 +78,7 @@ void StripCanvasWidget::Create( wxWindow* parent )
     m_ContainerWindow->Thaw();
 }
 
-void StripCanvasWidget::Destroy()
+void StripCanvasWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ContainerWindow );
 

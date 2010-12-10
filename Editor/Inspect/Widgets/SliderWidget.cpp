@@ -53,7 +53,7 @@ SliderWidget::SliderWidget( Inspect::Slider* slider )
     SetControl( slider );
 }
 
-void SliderWidget::Create( wxWindow* parent )
+void SliderWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_SliderWindow );
 
@@ -77,7 +77,7 @@ void SliderWidget::Create( wxWindow* parent )
     m_SliderControl->a_Max.RaiseChanged();
 }
 
-void SliderWidget::Destroy()
+void SliderWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_SliderWindow );
 

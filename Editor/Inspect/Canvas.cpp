@@ -93,7 +93,7 @@ void Canvas::RealizeControl( Inspect::Control* control )
         HELIUM_ASSERT( parentWindow );
 
         // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
-        widget->Create( parentWindow );
+        widget->CreateWindow( parentWindow );
     }
 }
 

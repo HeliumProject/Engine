@@ -73,7 +73,7 @@ ButtonWidget::ButtonWidget( Inspect::Button* button )
     SetControl( button );
 }
 
-void ButtonWidget::Create( wxWindow* parent )
+void ButtonWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ButtonWindow );
 
@@ -100,7 +100,7 @@ void ButtonWidget::Create( wxWindow* parent )
     m_ButtonControl->a_Label.Changed().AddMethod( this, &ButtonWidget::OnLabelChanged );
 }
 
-void ButtonWidget::Destroy()
+void ButtonWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ButtonWindow );
 

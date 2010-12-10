@@ -35,7 +35,7 @@ ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* colorPicker )
     SetControl( colorPicker );
 }
 
-void ColorPickerWidget::Create( wxWindow* parent )
+void ColorPickerWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ColorPickerWindow );
 
@@ -54,7 +54,7 @@ void ColorPickerWidget::Create( wxWindow* parent )
     m_ColorPickerControl->a_Highlight.RaiseChanged();
 }
 
-void ColorPickerWidget::Destroy()
+void ColorPickerWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ColorPickerWindow );
 

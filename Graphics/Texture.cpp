@@ -12,7 +12,7 @@
 
 using namespace Lunar;
 
-L_IMPLEMENT_OBJECT( Texture, Graphics, Type::FLAG_ABSTRACT | Type::FLAG_NO_TEMPLATE );
+L_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Texture::Texture()

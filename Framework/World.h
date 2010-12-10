@@ -58,7 +58,7 @@ namespace Lunar
         /// @name Entity Creation
         //@{
         virtual Entity* CreateEntity(
-            Layer* pLayer, Type* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
+            Layer* pLayer, GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
             const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ), Entity* pTemplate = NULL,
             Name name = NULL_NAME, bool bAssignInstanceIndex = true );
         virtual bool DestroyEntity( Entity* pEntity );
@@ -76,7 +76,7 @@ namespace Lunar
         /// @name Scene Access
         //@{
         GraphicsScene* GetGraphicsScene() const;
-        inline size_t GetMainSceneViewId() const;
+        inline uint32_t GetMainSceneViewId() const;
         //@}
 
     private:
@@ -86,7 +86,7 @@ namespace Lunar
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
         /// Main scene view ID.
-        size_t m_mainSceneViewId;
+        uint32_t m_mainSceneViewId;
     };
 }
 

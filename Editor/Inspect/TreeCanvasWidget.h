@@ -64,8 +64,8 @@ namespace Helium
                 m_Window = m_TreeWndCtrl = ctrl;
             }
 
-            virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void Destroy() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
+            virtual void DestroyWindow() HELIUM_OVERRIDE;
 
             virtual void Read() HELIUM_OVERRIDE {}
             virtual bool Write() HELIUM_OVERRIDE { return true; }

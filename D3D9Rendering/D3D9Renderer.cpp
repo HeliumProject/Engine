@@ -23,6 +23,7 @@
 #include "D3D9Rendering/D3D9RasterizerState.h"
 #include "D3D9Rendering/D3D9SamplerState.h"
 #include "D3D9Rendering/D3D9StaticTexture2d.h"
+#include "D3D9Rendering/D3D9SubContext.h"
 #include "D3D9Rendering/D3D9Surface.h"
 #include "D3D9Rendering/D3D9Texture2d.h"
 #include "D3D9Rendering/D3D9VertexBuffer.h"
@@ -260,58 +261,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
 
     // Build the presentation parameters.
     D3DPRESENT_PARAMETERS presentParameters;
-    MemoryZero( &presentParameters, sizeof( presentParameters ) );
-
-    presentParameters.BackBufferWidth = rInitParameters.displayWidth;
-    presentParameters.BackBufferHeight = rInitParameters.displayHeight;
-    presentParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
-    presentParameters.BackBufferCount = 1;
-
-    presentParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
-    if( rInitParameters.multisampleCount > 1 )
-    {
-        uint32_t multisampleCount = rInitParameters.multisampleCount;
-        if( multisampleCount > 16 )
-        {
-            HELIUM_TRACE(
-                TRACE_WARNING,
-                TXT( "D3D9Renderer: Multisample count cannot be more than 16.  Value will be clamped.\n" ) );
-            multisampleCount = 16;
-        }
-
-        D3DMULTISAMPLE_TYPE multisampleType = static_cast< D3DMULTISAMPLE_TYPE >(
-            static_cast< uint32_t >( D3DMULTISAMPLE_2_SAMPLES ) + multisampleCount - 2 );
-
-        HRESULT checkResult = m_pD3D->CheckDeviceMultiSampleType(
-            D3DADAPTER_DEFAULT,
-            D3DDEVTYPE_HAL,
-            D3DFMT_X8R8G8B8,
-            !rInitParameters.bFullscreen,
-            multisampleType,
-            NULL );
-        if( FAILED( checkResult ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "D3D9Renderer: Multisample count of %u is not supported.  Disabling multisampling.\n" ),
-                multisampleCount );
-        }
-        else
-        {
-            presentParameters.MultiSampleType = multisampleType;
-        }
-    }
-
-    presentParameters.MultiSampleQuality = 0;
-
-    presentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    presentParameters.hDeviceWindow = static_cast< HWND >( rInitParameters.pWindow );
-    presentParameters.Windowed = !rInitParameters.bFullscreen;
-    presentParameters.EnableAutoDepthStencil = FALSE;
-    presentParameters.Flags = 0;
-    presentParameters.FullScreen_RefreshRateInHz = 0;
-    presentParameters.PresentationInterval =
-        rInitParameters.bVsync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
+    GetPresentParameters( presentParameters, rInitParameters );
 
     HRESULT createResult = m_pD3D->CreateDevice(
         D3DADAPTER_DEFAULT,
@@ -332,7 +282,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     HELIUM_TRACE(
         TRACE_INFO,
         ( TXT( "D3D9Renderer: Display context created:\n- Dimensions: %ux%u\n- Multisample count: %u\n" )
-        TXT( "- Fullscreen: %d\n- VSync: %d\n" ) ),
+          TXT( "- Fullscreen: %d\n- VSync: %d\n" ) ),
         rInitParameters.displayWidth,
         rInitParameters.displayHeight,
         rInitParameters.multisampleCount,
@@ -357,6 +307,47 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
 RRenderContext* D3D9Renderer::GetMainContext()
 {
     return m_spMainContext;
+}
+
+/// @copydoc Renderer::CreateSubContext()
+RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rInitParameters )
+{
+    // Make sure the main context has been initialized.
+    HELIUM_ASSERT( m_spMainContext );
+    if( !m_spMainContext )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            ( TXT( "D3D9Renderer: Attempted creation of a renderer sub-context without creating a main context " )
+              TXT( "first.\n" ) ) );
+
+        return NULL;
+    }
+
+    // Build the presentation parameters and create the swap chain.
+    D3DPRESENT_PARAMETERS presentParameters;
+    GetPresentParameters( presentParameters, rInitParameters );
+
+    IDirect3DSwapChain9* pSwapChain = NULL;
+    HRESULT createResult = m_pD3DDevice->CreateAdditionalSwapChain( &presentParameters, &pSwapChain );
+    if( FAILED( createResult ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Swap chain creation failed (error code: 0x%x).\n" ),
+            createResult );
+
+        return NULL;
+    }
+
+    // Create the rendering sub-context interface.
+    D3D9SubContext* pSubContext = new D3D9SubContext( pSwapChain );
+    HELIUM_ASSERT( pSubContext );
+
+    // D3D9SubContext instance now has its own reference to the swap chain, so release our reference.
+    pSwapChain->Release();
+
+    return pSubContext;
 }
 
 /// @copydoc Renderer::CreateRasterizerState()
@@ -1328,6 +1319,69 @@ ERendererPixelFormat D3D9Renderer::D3DFormatToPixelFormat( D3DFORMAT d3dFormat, 
     }
 
     return RENDERER_PIXEL_FORMAT_INVALID;
+}
+
+/// Fill out a D3DPRESENT_PARAMETERS structure from values provided by a Renderer::ContextInitParameters structure for
+/// initializing a render context.
+///
+/// @param[out] rParameters             Direct3D presentation parameters.
+/// @param[in]  rContextInitParameters  Render context initialization parameters.
+void D3D9Renderer::GetPresentParameters(
+    D3DPRESENT_PARAMETERS& rParameters,
+    const ContextInitParameters& rContextInitParameters ) const
+{
+    MemoryZero( &rParameters, sizeof( rParameters ) );
+
+    rParameters.BackBufferWidth = rContextInitParameters.displayWidth;
+    rParameters.BackBufferHeight = rContextInitParameters.displayHeight;
+    rParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
+    rParameters.BackBufferCount = 1;
+
+    rParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+    if( rContextInitParameters.multisampleCount > 1 )
+    {
+        uint32_t multisampleCount = rContextInitParameters.multisampleCount;
+        if( multisampleCount > 16 )
+        {
+            HELIUM_TRACE(
+                TRACE_WARNING,
+                TXT( "D3D9Renderer: Multisample count cannot be more than 16.  Value will be clamped.\n" ) );
+            multisampleCount = 16;
+        }
+
+        D3DMULTISAMPLE_TYPE multisampleType = static_cast< D3DMULTISAMPLE_TYPE >(
+            static_cast< uint32_t >( D3DMULTISAMPLE_2_SAMPLES ) + multisampleCount - 2 );
+
+        HRESULT checkResult = m_pD3D->CheckDeviceMultiSampleType(
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
+            D3DFMT_X8R8G8B8,
+            !rContextInitParameters.bFullscreen,
+            multisampleType,
+            NULL );
+        if( FAILED( checkResult ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "D3D9Renderer: Multisample count of %u is not supported.  Disabling multisampling.\n" ),
+                multisampleCount );
+        }
+        else
+        {
+            rParameters.MultiSampleType = multisampleType;
+        }
+    }
+
+    rParameters.MultiSampleQuality = 0;
+
+    rParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    rParameters.hDeviceWindow = static_cast< HWND >( rContextInitParameters.pWindow );
+    rParameters.Windowed = !rContextInitParameters.bFullscreen;
+    rParameters.EnableAutoDepthStencil = FALSE;
+    rParameters.Flags = 0;
+    rParameters.FullScreen_RefreshRateInHz = 0;
+    rParameters.PresentationInterval =
+        rContextInitParameters.bVsync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
 }
 
 /// Get information about the static texture map target pool for a given texture size.

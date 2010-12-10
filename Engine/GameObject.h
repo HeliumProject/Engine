@@ -9,11 +9,15 @@
 #ifndef LUNAR_ENGINE_OBJECT_H
 #define LUNAR_ENGINE_OBJECT_H
 
+#include "Engine/Engine.h"
+#include "Foundation/Reflect/Object.h"
+
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
 #include "Foundation/Container/DynArray.h"
 #include "Foundation/Container/SparseArray.h"
 #include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Engine/GameObjectPath.h"
 
 /// @defgroup objectmacros Common "GameObject"-class Macros
@@ -25,27 +29,27 @@
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
     private: \
-        static Lunar::TypeWPtr sm_spStaticType; \
+        static Lunar::GameObjectType* sm_pStaticType; \
         static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
     public: \
         typedef PARENT Super; \
-        virtual Lunar::Type* GetType() const; \
+        virtual Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
         virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
-        static Lunar::Type* InitStaticType(); \
+        static Lunar::GameObjectType* InitStaticType(); \
         static void ReleaseStaticType(); \
-        static Lunar::Type* GetStaticType();
+        static Lunar::GameObjectType* GetStaticType();
 
 /// Utility macro for implementing standard GameObject-class variables and functions, without implementing InitStaticType().
 ///
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
-    Lunar::TypeWPtr TYPE::sm_spStaticType; \
+    Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
     Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
     \
-    Lunar::Type* TYPE::GetType() const \
+    Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
         return TYPE::GetStaticType(); \
     } \
@@ -73,20 +77,19 @@
     \
     void TYPE::ReleaseStaticType() \
     { \
-        Lunar::Type* pType = sm_spStaticType; \
-        if( pType ) \
+        if( sm_pStaticType ) \
         { \
-            Lunar::Type::Unregister( pType ); \
+            Lunar::GameObjectType::Unregister( sm_pStaticType ); \
+            sm_pStaticType = NULL; \
         } \
         \
-        sm_spStaticType.Release(); \
         sm_spStaticTypeTemplate.Release(); \
     } \
     \
-    Lunar::Type* TYPE::GetStaticType() \
+    Lunar::GameObjectType* TYPE::GetStaticType() \
     { \
-        HELIUM_ASSERT( sm_spStaticType ); \
-        return sm_spStaticType; \
+        HELIUM_ASSERT( sm_pStaticType ); \
+        return sm_pStaticType; \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -97,10 +100,9 @@
 #define L_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
     L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     \
-    Lunar::Type* TYPE::InitStaticType() \
+    Lunar::GameObjectType* TYPE::InitStaticType() \
     { \
-        Lunar::Type* pType = sm_spStaticType; \
-        if( !pType ) \
+        if( !sm_pStaticType ) \
         { \
             HELIUM_ASSERT( !sm_spStaticTypeTemplate ); \
             \
@@ -108,24 +110,23 @@
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            Lunar::Type* pParentType = Super::InitStaticType(); \
+            Lunar::GameObjectType* pParentType = Super::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
             TYPE* pTemplate = new TYPE; \
             HELIUM_ASSERT( pTemplate ); \
             sm_spStaticTypeTemplate = pTemplate; \
             \
-            pType = Lunar::Type::Create( \
+            sm_pStaticType = Lunar::GameObjectType::Create( \
                 Lunar::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
                 pTemplate, \
                 TYPE_FLAGS ); \
-            HELIUM_ASSERT( pType ); \
-            sm_spStaticType = pType; \
+            HELIUM_ASSERT( sm_pStaticType ); \
         } \
         \
-        return pType; \
+        return sm_pStaticType; \
     }
 
 //@}
@@ -134,55 +135,17 @@ namespace Lunar
 {
     class Serializer;
 
+    class GameObjectType;
+    typedef SmartPtr< GameObjectType > GameObjectTypePtr;
+
     HELIUM_DECLARE_PTR( GameObject );
-    HELIUM_DECLARE_PTR( Type );
     HELIUM_DECLARE_PTR( Package );
 
     HELIUM_DECLARE_WPTR( GameObject );
-    HELIUM_DECLARE_WPTR( Type );
-
-    /// Reference counting support for GameObject types.
-    class LUNAR_ENGINE_API GameObjectRefCountSupport
-    {
-    public:
-        /// Base type of reference counted object.
-        typedef GameObject BaseType;
-
-        /// @name Object Destruction Support
-        //@{
-        inline static void PreDestroy( GameObject* pObject );
-        inline static void Destroy( GameObject* pObject );
-        //@}
-
-        /// @name Reference Count Proxy Allocation Interface
-        //@{
-        static RefCountProxy< GameObject >* Allocate();
-        static void Release( RefCountProxy< GameObject >* pProxy );
-
-        static void Shutdown();
-        //@}
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-        /// @name Active Proxy Iteration
-        //@{
-        static size_t GetActiveProxyCount();
-        static bool GetFirstActiveProxy(
-            ConcurrentHashSet< RefCountProxy< GameObject >* >::ConstAccessor& rAccessor );
-        //@}
-#endif
-
-    private:
-        struct StaticData;
-
-        /// Static proxy management data.
-        static StaticData* sm_pStaticData;
-    };
 
     /// Base class for the engine's game object system.
-    class LUNAR_ENGINE_API GameObject : NonCopyable
+    class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
     {
-        HELIUM_DECLARE_REF_COUNT( GameObject, GameObjectRefCountSupport );
-
     public:
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
@@ -253,16 +216,14 @@ namespace Lunar
         inline bool IsPackage() const;
 
         virtual void PreDestroy();
-
-        // This should only be called by the reference counting system!
-        void Destroy();
+        void Destroy();  // This should only be called by the reference counting system!
         //@}
 
         /// @name RTTI
         //@{
-        virtual Type* GetType() const;
-        bool IsA( const Type* pType ) const;
-        inline bool IsInstanceOf( const Type* pType ) const;
+        virtual GameObjectType* GetGameObjectType() const;
+        bool IsA( const GameObjectType* pType ) const;
+        inline bool IsInstanceOf( const GameObjectType* pType ) const;
         //@}
 
         /// @name Serialization
@@ -293,7 +254,7 @@ namespace Lunar
         /// @name GameObject Management
         //@{
         static GameObject* CreateObject(
-            Type* pType, Name name, GameObject* pOwner, GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
+            GameObjectType* pType, Name name, GameObject* pOwner, GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
         template< typename T > static T* Create(
             Name name, GameObject* pOwner, T* pTemplate = NULL, bool bAssignInstanceIndex = false );
 
@@ -313,9 +274,9 @@ namespace Lunar
 
         /// @name Static Interface
         //@{
-        static Type* InitStaticType();
+        static GameObjectType* InitStaticType();
         static void ReleaseStaticType();
-        static Type* GetStaticType();
+        static GameObjectType* GetStaticType();
         //@}
 
     protected:
@@ -356,7 +317,7 @@ namespace Lunar
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
 
         /// Static "GameObject" type instance.
-        static TypeWPtr sm_spStaticType;
+        static GameObjectType* sm_pStaticType;
         /// Static "GameObject" template instance.
         static GameObjectPtr sm_spStaticTypeTemplate;
 

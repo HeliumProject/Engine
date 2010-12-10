@@ -33,7 +33,7 @@ namespace Helium
             static Class* Create();
 
             template<class T>
-            static Class* Create( const tstring& name, const tstring& base, CreateObjectFunc creator = NULL )
+            static Class* Create( Name name, Name base, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
@@ -41,12 +41,12 @@ namespace Helium
                 info->m_Name = name;
                 info->m_Base = base;
                 info->m_Creator = creator;
-                info->m_UIName = info->m_Name;
+                info->m_UIName = *info->m_Name;
 
                 // c++ can give us the address of base class static functions, so check each base class
                 bool baseEnumerator = false;
-                tstring baseName = info->m_Base;
-                while ( !baseEnumerator && !baseName.empty() )
+                Name baseName = info->m_Base;
+                while ( !baseEnumerator && !baseName.IsEmpty() )
                 {
                     const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
                     if (base)
@@ -57,7 +57,7 @@ namespace Helium
                     else
                     {
                         HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
-                        baseName.clear();
+                        baseName.Clear();
                     }
                 }
 

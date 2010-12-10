@@ -168,7 +168,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
 void Composite::Report() const
 {
-    Log::Debug(Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, m_Name.c_str() );
+    Log::Debug( Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
 
     uint32_t computedSize = 0;
     M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();
@@ -176,12 +176,12 @@ void Composite::Report() const
     for ( ; itr != end; ++itr )
     {
         computedSize += itr->second->m_Size;
-        Log::Debug(Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
+        Log::Debug( Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), itr->first, itr->second->m_Size, itr->second->m_Name.c_str() );
     }
 
     if (computedSize != m_Size)
     {
-        Log::Debug(Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize);
+        Log::Debug( Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
     }
 }
 

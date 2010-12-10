@@ -44,12 +44,21 @@ Renderer::~Renderer()
 ///
 /// @return  True if the context was created successfully, false if not.
 ///
-/// @see GetMainContext()
+/// @see GetMainContext(), CreateSubContext()
 
 /// @fn RRenderContext* Renderer::GetMainContext()
 /// Get a reference to the main rendering context.
 ///
 /// @return  Main rendering context.
+///
+/// @see CreateMainContext()
+
+/// @fn RRenderContext* Renderer::CreateSubContext( const ContextInitParameters& rInitParameters )
+/// Create a child rendering context for rendering to multiple windows or displays.
+///
+/// @param[in] rInitParameters  Context initialization parameters.
+///
+/// @return  True if the context was created successfully, false if not.
 ///
 /// @see CreateMainContext()
 

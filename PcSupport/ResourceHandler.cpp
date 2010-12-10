@@ -25,7 +25,7 @@ ResourceHandler::~ResourceHandler()
 /// Get the type of resource associated with this handler.
 ///
 /// @return  Resource type.
-Type* ResourceHandler::GetResourceType() const
+GameObjectType* ResourceHandler::GetResourceType() const
 {
     return NULL;
 }
@@ -66,16 +66,16 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
 {
     rResourceHandlers.Resize( 0 );
 
-    Type* pResourceHandlerType = GetStaticType();
+    GameObjectType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    Type::ConstIterator typeEnd = Type::GetTypeEnd();
-    for( Type::ConstIterator typeIterator = Type::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
+    GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
+    for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        Type& rType = *typeIterator;
+        GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )
         {
-            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTypeTemplate() );
+            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );
             rResourceHandlers.Push( pHandler );
         }
@@ -87,20 +87,20 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
 /// @param[in] pType  Resource type.
 ///
 /// @return  Resource handler for the given type if found, null if no resource handler was found.
-ResourceHandler* ResourceHandler::FindResourceHandlerForType( Type* pType )
+ResourceHandler* ResourceHandler::FindResourceHandlerForType( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
-    Type* pResourceHandlerType = GetStaticType();
+    GameObjectType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
-    Type::ConstIterator typeEnd = Type::GetTypeEnd();
-    for( Type::ConstIterator typeIterator = Type::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
+    GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
+    for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        Type& rType = *typeIterator;
+        GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )
         {
-            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTypeTemplate() );
+            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );
             if( pHandler->GetResourceType() == pType )
             {

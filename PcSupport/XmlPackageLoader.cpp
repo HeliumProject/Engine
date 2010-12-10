@@ -160,7 +160,7 @@ static void XMLCALL XmlPackageStartElementHandler(
             if( StringCompare( pAttName, TXT( "type" ) ) == 0 )
             {
                 typeName.Set( pAttValue );
-                if( !Type::Find( typeName ) )
+                if( !GameObjectType::Find( typeName ) )
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
@@ -1070,7 +1070,7 @@ size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
 
     // Locate the type object.
     HELIUM_ASSERT( !rObjectData.typeName.IsEmpty() );
-    Type* pType = Type::Find( rObjectData.typeName );
+    GameObjectType* pType = GameObjectType::Find( rObjectData.typeName );
     if( !pType )
     {
         HELIUM_TRACE(
@@ -1139,7 +1139,7 @@ size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
         if( rObjectData.templatePath.IsEmpty() )
         {
             // Make sure the template is fully loaded.
-            GameObject* pTemplate = pType->GetTypeTemplate();
+            GameObject* pTemplate = pType->GetTemplate();
             rObjectData.templatePath = pTemplate->GetPath();
             if( pTemplate->IsFullyLoaded() )
             {
@@ -1542,7 +1542,7 @@ void XmlPackageLoader::TickPreload()
         if( pBestHandler )
         {
             // File extension matches a supported source asset type, so add it to the object list.
-            Type* pResourceType = pBestHandler->GetResourceType();
+            GameObjectType* pResourceType = pBestHandler->GetResourceType();
             HELIUM_ASSERT( pResourceType );
 
             HELIUM_TRACE(
@@ -1690,7 +1690,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( IsInvalid( pRequest->ownerLoadId ) );
     GameObject* pOwner = pRequest->spOwner;
 
-    Type* pType = pRequest->spType;
+    GameObjectType* pType = pRequest->spType;
     HELIUM_ASSERT( pType );
 
     HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
@@ -1699,7 +1699,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        Type* pExistingType = pObject->GetType();
+        GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -2200,7 +2200,7 @@ void XmlPackageLoader::Deserializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void XmlPackageLoader::Deserializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
+void XmlPackageLoader::Deserializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     ReadValue(
         rspObject,

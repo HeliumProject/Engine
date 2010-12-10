@@ -158,7 +158,7 @@ void DirectSerializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void DirectSerializer::SerializeObjectReference( Type* /*pType*/, GameObjectPtr& rspObject )
+void DirectSerializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     GameObject* pObject = rspObject;
     WriteValue( pObject );

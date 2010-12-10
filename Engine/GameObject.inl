@@ -59,31 +59,6 @@ namespace Lunar
         return static_cast< TargetType* >( pObject );
     }
 
-    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
-    /// object.
-    ///
-    /// @param[in] pObject  Object about to be destroyed.
-    ///
-    /// @see Destroy()
-    void GameObjectRefCountSupport::PreDestroy( GameObject* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        pObject->PreDestroy();
-    }
-
-    /// Destroy an object after the final strong reference to it has been cleared.
-    ///
-    /// @param[in] pObject  Object to destroy.
-    ///
-    /// @see PreDestroy()
-    void GameObjectRefCountSupport::Destroy( GameObject* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        pObject->Destroy();
-    }
-
     /// Get the name of this object.
     ///
     /// @return  Object name.
@@ -244,10 +219,10 @@ namespace Lunar
     ///
     /// @return  True if this is an instance of the given type, false if not.
     ///
-    /// @see GetType(), IsA()
-    bool GameObject::IsInstanceOf( const Type* pType ) const
+    /// @see GetGameObjectType(), IsA()
+    bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
     {
-        const Type* pThisType = GetType();
+        const GameObjectType* pThisType = GetGameObjectType();
         HELIUM_ASSERT( pThisType );
 
         return( pThisType == pType );
@@ -280,7 +255,7 @@ namespace Lunar
     template< typename T >
     T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
     {
-        Type* pType = T::GetStaticType();
+        GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
         GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
@@ -299,7 +274,7 @@ namespace Lunar
         GameObject* pObject = FindObject( path );
         if( pObject )
         {
-            Type* pType = T::GetStaticType();
+            GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
             if( !pObject->IsA( pType ) )
             {

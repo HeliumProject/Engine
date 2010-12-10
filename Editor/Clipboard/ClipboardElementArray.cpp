@@ -15,7 +15,7 @@ void ClipboardElementArray::EnumerateClass( Reflect::Compositor<ClipboardElement
 ClipboardElementArray::ClipboardElementArray()
 {
     // By default, all items added to this array should derive from Reflect::Element
-    bool converted = Helium::ConvertString( Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( *Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -29,7 +29,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // 
 const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 {
-    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass );
+    return Reflect::Registry::GetInstance()->GetClass( Name( m_CommonBaseClass.c_str() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 // 
 void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
 {
-    bool converted = Helium::ConvertString( type->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( *type->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 

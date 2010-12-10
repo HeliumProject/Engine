@@ -26,7 +26,7 @@ L_IMPLEMENT_OBJECT( World, Framework, 0 );
 
 /// Constructor.
 World::World()
-: m_mainSceneViewId( Invalid< size_t >() )
+: m_mainSceneViewId( Invalid< uint32_t >() )
 {
 }
 
@@ -49,7 +49,7 @@ bool World::Initialize()
     HELIUM_ASSERT( IsInvalid( m_mainSceneViewId ) );
 
     // Create the main graphics scene.
-    Type* pSceneType = GraphicsScene::GetStaticType();
+    GameObjectType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
     GraphicsScene* pGraphicsScene = GameObject::Create< GraphicsScene >( pSceneType->GetName(), this );
     HELIUM_ASSERT( pGraphicsScene );
@@ -70,7 +70,9 @@ bool World::Initialize()
         HELIUM_ASSERT( IsValid( m_mainSceneViewId ) );
         if( IsInvalid( m_mainSceneViewId ) )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "World::Initialize(): Failed to allocate a primary graphics scene view.\n" ) );
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "World::Initialize(): Failed to allocate a primary graphics scene view.\n" ) );
 
             Shutdown();
 
@@ -188,7 +190,7 @@ void World::PreDestroy()
 /// @see DestroyEntity()
 Entity* World::CreateEntity(
                             Layer* pLayer,
-                            Type* pType,
+                            GameObjectType* pType,
                             const Simd::Vector3& rPosition,
                             const Simd::Quat& rRotation,
                             const Simd::Vector3& rScale,

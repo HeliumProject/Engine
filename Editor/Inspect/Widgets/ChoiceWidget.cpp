@@ -59,7 +59,7 @@ ChoiceWidget::ChoiceWidget( Inspect::Choice* choice )
     SetControl( choice );
 }
 
-void ChoiceWidget::Create( wxWindow* parent )
+void ChoiceWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ChoiceWindow );
 
@@ -91,7 +91,7 @@ void ChoiceWidget::Create( wxWindow* parent )
     m_ChoiceControl->a_Items.RaiseChanged();
 }
 
-void ChoiceWidget::Destroy()
+void ChoiceWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ChoiceWindow );
 

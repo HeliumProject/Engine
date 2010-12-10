@@ -17,7 +17,7 @@ TreeCanvasWidget::TreeCanvasWidget( Inspect::Container* container )
     SetControl( container );
 }
 
-void TreeCanvasWidget::Create( wxWindow* parent )
+void TreeCanvasWidget::CreateWindow( wxWindow* parent )
 {
     // find the parent TreeCanvasWidget
     Inspect::Container*     parentContainer = m_ContainerControl->GetParent();
@@ -157,7 +157,7 @@ void TreeCanvasWidget::Create( wxWindow* parent )
     m_ContainerControl->a_Name.Changed().AddMethod( this, &TreeCanvasWidget::NameChanged );
 }
 
-void TreeCanvasWidget::Destroy()
+void TreeCanvasWidget::DestroyWindow()
 {
     m_ContainerControl->a_Name.Changed().RemoveMethod( this, &TreeCanvasWidget::NameChanged );
 

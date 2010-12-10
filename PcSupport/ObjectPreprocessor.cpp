@@ -829,7 +829,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     }
 
     // Locate a resource handler for the resource type.
-    Type* pResourceType = pResource->GetType();
+    GameObjectType* pResourceType = pResource->GetGameObjectType();
     HELIUM_ASSERT( pResourceType );
     ResourceHandler* pResourceHandler = ResourceHandler::FindResourceHandlerForType( pResourceType );
     if( !pResourceHandler )

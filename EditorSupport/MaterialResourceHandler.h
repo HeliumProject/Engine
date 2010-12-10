@@ -28,7 +28,7 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual Type* GetResourceType() const;
+        virtual GameObjectType* GetResourceType() const;
 
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );

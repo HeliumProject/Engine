@@ -14,7 +14,7 @@ namespace Lunar
     /// @return  Pointer to the specified scene view.
     ///
     /// @see AllocateSceneView(), ReleaseSceneView(), SetActiveSceneView()
-    GraphicsSceneView* GraphicsScene::GetSceneView( size_t id )
+    GraphicsSceneView* GraphicsScene::GetSceneView( uint32_t id )
     {
         HELIUM_ASSERT( id < m_sceneViews.GetSize() );
         HELIUM_ASSERT( m_sceneViews.IsElementValid( id ) );

@@ -1,6 +1,10 @@
 /*#include "Precompile.h"*/
 #include "Camera.h"
 
+// Include our Windows header data first to make sure everything is set up properly before the Direct3D includes pull it
+// in.
+#include "Platform/Windows/Windows.h"
+
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Matrix3.h"
 

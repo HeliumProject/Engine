@@ -584,13 +584,13 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
     HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
-    Type* pType = pRequest->spType;
+    GameObjectType* pType = pRequest->spType;
     HELIUM_ASSERT( pType );
 
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        Type* pExistingType = pObject->GetType();
+        GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -826,7 +826,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
 
         Name typeName( pTypeNameString );
 
-        Type* pType = Type::Find( typeName );
+        GameObjectType* pType = GameObjectType::Find( typeName );
         if( !pType )
         {
             HELIUM_TRACE(
@@ -969,7 +969,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         return false;
     }
 
-    Type* pType = pRequest->typeLinkTable[ typeLinkIndex ];
+    GameObjectType* pType = pRequest->typeLinkTable[ typeLinkIndex ];
     if( !pType )
     {
         HELIUM_TRACE(

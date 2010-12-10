@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Type.inl
+// GameObjectType.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -7,58 +7,47 @@
 
 namespace Lunar
 {
-    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
-    /// object.
-    ///
-    /// @param[in] pObject  Object about to be destroyed.
-    ///
-    /// @see Destroy()
-    void TypeRefCountSupport::PreDestroy( Type* /*pObject*/ )
-    {
-    }
-
-    /// Destroy an object after the final strong reference to it has been cleared.
-    ///
-    /// @param[in] pObject  Object to destroy.
-    ///
-    /// @see PreDestroy()
-    void TypeRefCountSupport::Destroy( Type* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        delete pObject;
-    }
-
     /// Get the name of this type.
     ///
     /// @return  Type name.
-    Name Type::GetName() const
+    Name GameObjectType::GetName() const
     {
-        return m_name;
+        return m_Name;
     }
 
-    /// Get the parent of this type.
+    /// Get the parent of this type, cast to a GameObjectType.
     ///
-    /// @return  Parent type, or null if there is no parent type (should only be the case with the "GameObject" type).
-    Type* Type::GetTypeParent() const
+    /// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
+    ///          "GameObject" type itself).
+    GameObjectType* GameObjectType::GetBaseType() const
     {
-        return m_spTypeParent;
+        Reflect::ObjectType* pBaseType = m_BaseType;
+#pragma TODO( "Restore m_BaseType validity checking once Reflect::Object and GameObject type checking are integrated." )
+#if 1
+        HELIUM_ASSERT( !pBaseType || pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
+        return static_cast< GameObjectType* >( pBaseType );
+#else
+        HELIUM_ASSERT( pBaseType );
+        return ( pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
+                 ? static_cast< GameObjectType* >( pBaseType )
+                 : NULL );
+#endif
     }
 
     /// Get the default template object for this type.
     ///
     /// @return  Type template object.
-    GameObject* Type::GetTypeTemplate() const
+    GameObject* GameObjectType::GetTemplate() const
     {
-        return m_spTypeTemplate;
+        return m_spTemplate;
     }
 
-    /// Get the type flags for this type.
+    /// Get the flags associated with this type.
     ///
     /// @return  Type flags.
-    uint32_t Type::GetTypeFlags() const
+    uint32_t GameObjectType::GetFlags() const
     {
-        return m_typeFlags;
+        return m_flags;
     }
 
     /// Get the package in which all template object packages are stored.
@@ -66,7 +55,7 @@ namespace Lunar
     /// @return  Main type package.
     ///
     /// @see SetTypePackage()
-    Package* Type::GetTypePackage()
+    Package* GameObjectType::GetTypePackage()
     {
         return sm_spTypePackage;
     }
@@ -74,14 +63,14 @@ namespace Lunar
     /// Constructor.
     ///
     /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
-    Type::ConstIterator::ConstIterator()
+    GameObjectType::ConstIterator::ConstIterator()
     {
     }
 
     /// Constructor.
     ///
     /// @param[in] iterator  Type map iterator from which to initialize this iterator.
-    Type::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
+    GameObjectType::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
         : m_iterator( iterator )
     {
     }
@@ -89,9 +78,9 @@ namespace Lunar
     /// Get the type referenced by this iterator.
     ///
     /// @return  Reference to the referenced type.
-    Type& Type::ConstIterator::operator*() const
+    GameObjectType& GameObjectType::ConstIterator::operator*() const
     {
-        Type* pType = m_iterator->Second();
+        GameObjectType* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );
 
         return *pType;
@@ -100,9 +89,9 @@ namespace Lunar
     /// Get the type referenced by this iterator.
     ///
     /// @return  Pointer to the referenced type.
-    Type* Type::ConstIterator::operator->() const
+    GameObjectType* GameObjectType::ConstIterator::operator->() const
     {
-        Type* pType = m_iterator->Second();
+        GameObjectType* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );
 
         return pType;
@@ -111,7 +100,7 @@ namespace Lunar
     /// Advance this iterator to the next type.
     ///
     /// @return  Reference to this iterator.
-    Type::ConstIterator& Type::ConstIterator::operator++()
+    GameObjectType::ConstIterator& GameObjectType::ConstIterator::operator++()
     {
         ++m_iterator;
 
@@ -121,7 +110,7 @@ namespace Lunar
     /// Advance this iterator to the next type.
     ///
     /// @return  Copy of this iterator prior to advancing.
-    Type::ConstIterator Type::ConstIterator::operator++( int )
+    GameObjectType::ConstIterator GameObjectType::ConstIterator::operator++( int )
     {
         ConstIterator result = *this;
         ++m_iterator;
@@ -132,7 +121,7 @@ namespace Lunar
     /// Move this iterator back to the previous type.
     ///
     /// @return  Reference to this iterator.
-    Type::ConstIterator& Type::ConstIterator::operator--()
+    GameObjectType::ConstIterator& GameObjectType::ConstIterator::operator--()
     {
         --m_iterator;
 
@@ -142,7 +131,7 @@ namespace Lunar
     /// Move this iterator back to the previous type.
     ///
     /// @return  Copy of this iterator prior to decrementing.
-    Type::ConstIterator Type::ConstIterator::operator--( int )
+    GameObjectType::ConstIterator GameObjectType::ConstIterator::operator--( int )
     {
         ConstIterator result = *this;
         --m_iterator;
@@ -155,7 +144,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator and the given iterator match, false if not.
-    bool Type::ConstIterator::operator==( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator==( const ConstIterator& rOther ) const
     {
         return ( m_iterator == rOther.m_iterator );
     }
@@ -165,7 +154,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator and the given iterator do not match, false if they do match.
-    bool Type::ConstIterator::operator!=( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator!=( const ConstIterator& rOther ) const
     {
         return ( m_iterator != rOther.m_iterator );
     }
@@ -175,7 +164,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator is referencing a type entry prior to the given iterator, false if not.
-    bool Type::ConstIterator::operator<( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator<( const ConstIterator& rOther ) const
     {
         return ( m_iterator < rOther.m_iterator );
     }
@@ -185,7 +174,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator is referencing a type entry after the given iterator, false if not.
-    bool Type::ConstIterator::operator>( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator>( const ConstIterator& rOther ) const
     {
         return ( m_iterator > rOther.m_iterator );
     }
@@ -195,7 +184,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator is referencing the same or a prior type entry, false if not.
-    bool Type::ConstIterator::operator<=( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator<=( const ConstIterator& rOther ) const
     {
         return ( m_iterator <= rOther.m_iterator );
     }
@@ -205,7 +194,7 @@ namespace Lunar
     /// @param[in] rOther  Iterator with which to compare.
     ///
     /// @return  True if this iterator is referencing the same or a later type entry, false if not.
-    bool Type::ConstIterator::operator>=( const ConstIterator& rOther ) const
+    bool GameObjectType::ConstIterator::operator>=( const ConstIterator& rOther ) const
     {
         return ( m_iterator >= rOther.m_iterator );
     }

@@ -249,7 +249,10 @@ int64_t Path::Size() const
 
 bool Path::MakePath() const
 {
-    return Helium::MakePath( Directory().c_str() );
+#pragma TODO( "FIXME: This seems excessive, but Helium::MakePath expects native separators" )
+    tstring dir = Directory();
+    Path::MakeNative( dir );
+    return Helium::MakePath( dir.c_str() );
 }
 
 bool Path::Create() const

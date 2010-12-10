@@ -83,6 +83,8 @@ namespace Lunar
 
         inline uint32_t GetMainContextWidth() const;
         inline uint32_t GetMainContextHeight() const;
+
+        virtual RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters ) = 0;
         //@}
 
         /// @name State Object Creation

@@ -165,7 +165,7 @@ void Serializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
 ///
 /// @param[in,out] rValue  Wide-character string.
 
-/// @fn void Serializer::SerializeObjectReference( Type* pType, GameObjectPtr& rspObject )
+/// @fn void Serializer::SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject )
 /// Serialize an object reference.
 ///
 /// @param[in]     pType      Actual object type used by the object smart pointer.

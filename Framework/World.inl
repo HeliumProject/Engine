@@ -20,7 +20,7 @@ namespace Lunar
     /// Get the ID of the main graphics scene view.
     ///
     /// @return  Main graphics scene view ID.
-    size_t World::GetMainSceneViewId() const
+    uint32_t World::GetMainSceneViewId() const
     {
         return m_mainSceneViewId;
     }

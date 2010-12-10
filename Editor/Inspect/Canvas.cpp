@@ -115,7 +115,7 @@ void Canvas::UnrealizeControl( Inspect::Control* control )
         Widget* widget = Reflect::AssertCast< Widget >( control->GetWidget() );
         HELIUM_ASSERT( widget );
 
-        widget->Destroy();
+        widget->DestroyWindow();
         control->SetWidget( NULL );
     }
 }

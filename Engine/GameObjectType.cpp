@@ -130,7 +130,13 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
     LookupMap::Iterator typeIterator;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
+    HELIUM_VERIFY( sm_pLookupMap->Insert(
+        typeIterator,
+        KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
+
+    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
+    HELIUM_ASSERT( pRegistry );
+    pRegistry->RegisterType( pType );
 
     return pType;
 }
@@ -144,11 +150,15 @@ void GameObjectType::Unregister( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
+    pType->m_BaseType.Release();
+    pType->m_spTemplate.Release();
+
     HELIUM_ASSERT( sm_pLookupMap );
     HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );
 
-    pType->m_BaseType.Release();
-    pType->m_spTemplate.Release();
+    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
+    HELIUM_ASSERT( pRegistry );
+    pRegistry->UnregisterType( pType );
 }
 
 /// Look up a type by name.

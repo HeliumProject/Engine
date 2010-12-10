@@ -11,6 +11,7 @@
 #include "Foundation/AsyncLoader.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
+#include "Foundation/Reflect/Registry.h"
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"
@@ -107,7 +108,9 @@ bool GameSystem::Initialize(
         return false;
     }
 
-    // Register GameObject-based types.
+    // Initialize the reflection type registry and register GameObject-based types.
+    Reflect::Initialize();
+
     rObjectTypeRegistration.Register();
     m_pObjectTypeRegistration = &rObjectTypeRegistration;
 
@@ -345,6 +348,8 @@ void GameSystem::Shutdown()
 
     GameObjectType::Shutdown();
     GameObject::Shutdown();
+
+    Reflect::Cleanup();
 
     AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();

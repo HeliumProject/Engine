@@ -7,6 +7,7 @@
 #include "Platform/Thread.h"
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h"
+#include "Foundation/Reflect/ObjectType.h"
 
 #include <io.h>
 
@@ -323,6 +324,23 @@ bool Registry::RegisterType(Type* type)
             break;
         }
 
+    case ReflectionTypes::ObjectType:
+    case ReflectionTypes::GameObjectType:
+        {
+            ObjectType* objectType = static_cast< ObjectType* >( type );
+
+            Insert< M_NameToType >::Result objectTypeResult = m_TypesByName.insert( M_NameToType::value_type( objectType->m_Name, objectType ) );
+
+            if( !objectTypeResult.second )
+            {
+                Log::Error( TXT( "Re-registration of object type '%s'\n" ), *objectType->m_Name );
+                HELIUM_BREAK();
+                return false;
+            }
+
+            break;
+        }
+
     case ReflectionTypes::Enumeration:
         {
             Enumeration* enumeration = static_cast<Enumeration*>(type);
@@ -380,12 +398,24 @@ void Registry::UnregisterType(const Type* type)
             break;
         }
 
+    case ReflectionTypes::ObjectType:
+    case ReflectionTypes::GameObjectType:
+        {
+            const ObjectType* objectType = static_cast< const ObjectType* >( type );
+
+            m_TypesByName.erase( objectType->m_Name );
+
+            break;
+        }
+
     case ReflectionTypes::Enumeration:
         {
             const Enumeration* enumeration = static_cast<const Enumeration*>(type);
 
             m_TypesByName.erase(enumeration->m_Name);
             m_TypesByName.erase(enumeration->m_Name);
+
+            break;
         }
     }
 }

@@ -3,6 +3,7 @@
 #include "ProjectViewModel.h"
 
 #include "Editor/FileIconsTable.h"
+#include "Foundation/Flags.h"
 #include "Foundation/String/Units.h"
 
 using namespace Helium;
@@ -17,7 +18,7 @@ const tchar_t* ProjectMenuID::s_Labels[COUNT] =
     TXT( "Relative Path" ),
 };
 
-#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE and all it's references after usibility test" )
+const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 
 ///////////////////////////////////////////////////////////////////////////////
 ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer, const bool isActive )
@@ -112,6 +113,15 @@ const Document* ProjectViewModelNode::GetDocument() const
     return m_Document;
 }
 
+uint32_t ProjectViewModelNode::GetDocumentStatus() const
+{
+    if ( m_Document )
+    {
+        return m_Document->GetStatus();
+    }
+    return DocumentStatus::Default;
+}
+
 void ProjectViewModelNode::ConnectDocument( const Document* document)
 {
     if ( m_Document && m_Document != document )
@@ -191,11 +201,20 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
 , m_Project( NULL )
 , m_RootNode( NULL )
 {
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "hrb" ), ArtIDs::MimeTypes::ReflectBinary ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "entity.hrb" ), ArtIDs::MimeTypes::Entity ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "project.hrb" ), ArtIDs::MimeTypes::Project ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "scene.hrb" ), ArtIDs::MimeTypes::Scene ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 }
 
 ProjectViewModel::~ProjectViewModel()
 {
     CloseProject();
+
+    m_FileIconExtensionLookup.clear();
 }
 
 wxDataViewColumn* ProjectViewModel::CreateColumn( uint32_t id )
@@ -225,6 +244,26 @@ wxDataViewColumn* ProjectViewModel::CreateColumn( uint32_t id )
             return column;
         }
         break;
+
+    //case ProjectModelColumns::Icon:
+    //    {
+    //        wxDataViewBitmapRenderer *render = new wxDataViewBitmapRenderer();
+
+    //        wxDataViewColumn *column = new wxDataViewColumn(
+    //            ProjectModelColumns::Label( ProjectModelColumns::Icon ),
+    //            render,
+    //            m_ColumnLookupTable.size(),
+    //            ProjectModelColumns::Width( ProjectModelColumns::Icon ),
+    //            wxALIGN_RIGHT,
+    //            0 );
+
+    //        column->IS
+
+    //        m_ColumnLookupTable.push_back( id );
+
+    //        return column;
+    //    }
+    //    break;
 
     case ProjectModelColumns::Details:
         {
@@ -283,10 +322,6 @@ ProjectViewModelNode* ProjectViewModel::OpenProject( Project* project, const Doc
         m_RootNode = new ProjectViewModelNode( this, NULL, m_Project->a_Path.Get(), document, true );
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
                 
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-        ItemAdded( NULL, (void*)m_RootNode.Ptr() );
-#endif
-
         // Add the Project's Children
         for ( std::set< Path >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
             itr != end; ++itr )
@@ -337,9 +372,11 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
         parentNode = m_RootNode.Ptr();
     }
 
+    bool isContainer = path.HasExtension( TXT( "scene.hrb" ) );
+
     // Create the child node
     const Document* document = m_DocumentManager->FindDocument( path );
-    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document ) );
+    Helium::Insert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document, isContainer ) );
     if ( inserted.second )
     {
         ProjectViewModelNode* childNode = (*inserted.first);
@@ -355,14 +392,10 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
 
         // Add the node to the multimap and call ItemAdded
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( path, childNode ));
-
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-#else
         if ( parentNode == m_RootNode.Ptr() )
         {
             parentNode = NULL;
         }
-#endif
         ItemAdded( (void*)parentNode, (void*)childNode );
 
         return true;
@@ -426,6 +459,11 @@ void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
         }
     }
 
+    if ( node == m_RootNode )
+    {
+        return;
+    }
+
     // Remove from the parent's childern
     // this should free the node if there are no more references to it
     ProjectViewModelNode *parentNode = node->GetParent();
@@ -434,13 +472,10 @@ void ProjectViewModel::RemoveItem( const wxDataViewItem& item )
         parentNode->GetChildren().erase( node );
     }
 
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-#else
-        if ( parentNode == m_RootNode.Ptr() )
-        {
-            parentNode = NULL;
-        }
-#endif
+    if ( parentNode == m_RootNode.Ptr() )
+    {
+        parentNode = NULL;
+    }
 
     ItemDeleted( wxDataViewItem( (void*) parentNode ), item );
 }
@@ -449,11 +484,7 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
 {
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
 
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-    if ( !node || node == m_RootNode.Ptr() )
-#else
     if ( !node )
-#endif
     {
         return true;
     }
@@ -556,11 +587,74 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
         break;
 
     case ProjectModelColumns::Name:
-        {
-            int32_t imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
-            variant << wxDataViewIconText( node->GetName(), GlobalFileIconsTable().GetSmallImageList()->GetIcon( imageID ) );
+        {            
+            uint32_t docStatus = node->GetDocumentStatus();
+
+            wxString name = node->GetName();
+            if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
+            {
+                name = wxString( TXT( '*' ) ) + name; 
+            }
+
+            wxBitmap bitmap = wxArtProvider::GetBitmap( GetArtIDFromPath( node->GetPath() ), wxART_OTHER, wxSize(16, 16) );
+            if ( docStatus > 0 )
+            {
+                wxImage image = bitmap.ConvertToImage();
+                HELIUM_ASSERT( image.Ok() );
+
+                int overlayWidth = image.GetWidth() / 2;
+                int overlayHeight = image.GetHeight() / 2;
+
+                wxImage overlayImage;
+
+                if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Saving ) )
+                {
+                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+                    HELIUM_ASSERT( overlayImage.Ok() );
+                }
+                else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Loading ) )
+                {
+                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Status::Busy, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+                    HELIUM_ASSERT( overlayImage.Ok() );
+                }
+                else if ( HasFlags<uint32_t>( docStatus, DocumentStatus::Changed ) )
+                {
+                    overlayImage = wxArtProvider::GetBitmap( ArtIDs::Actions::Edit, wxART_OTHER, wxSize( overlayWidth, overlayHeight ) ).ConvertToImage();
+                    HELIUM_ASSERT( overlayImage.Ok() );
+                }
+
+                if ( overlayImage.Ok() )
+                {
+                    if ( overlayImage.GetWidth() != overlayWidth || overlayImage.GetHeight() != overlayHeight )
+                    {
+                        overlayImage.Rescale( overlayWidth, overlayHeight );
+                    }
+
+                    int x = 0;
+                    int y = 0;
+                    IconArtFile::CalculatePlacement( image, overlayImage, OverlayQuadrants::BottomRight, x, y );
+                    image.Paste( overlayImage, x, y, wxIMAGE_ALPHA_BLEND_COMPOSITE );
+                }
+
+                bitmap = wxBitmap( image );
+            }
+
+            wxIcon icon;
+            icon.CopyFromBitmap( bitmap );
+
+            variant << wxDataViewIconText( name, icon );
+
         }
         break;
+
+    //case ProjectModelColumns::Icon:
+    //    {
+    //        int32_t imageID = GlobalFileIconsTable().GetIconIDFromPath( node->GetPath() );
+    //        wxVariant bitmapVariant;
+    //        bitmapVariant.
+    //        variant = GlobalFileIconsTable().GetSmallImageList()->GetBitmap( imageID );
+    //    }
+    //    break;
 
     case ProjectModelColumns::Details:
         {
@@ -665,15 +759,6 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
     }
 
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-    if ( !node
-        || node == m_RootNode.Ptr()
-        || !node->GetParent() )
-    {
-        return wxDataViewItem( 0 );
-    }
-#else
     if ( !node
         || node == m_RootNode.Ptr()
         || !node->GetParent()
@@ -681,7 +766,6 @@ wxDataViewItem ProjectViewModel::GetParent( const wxDataViewItem& item ) const
     {
         return wxDataViewItem( 0 );
     }
-#endif
 
     return wxDataViewItem( (void*) node->GetParent() );
 }
@@ -691,12 +775,7 @@ unsigned int ProjectViewModel::GetChildren( const wxDataViewItem& item, wxDataVi
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( item.GetID() );
     if ( !parentNode )
     {
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-        items.Add( wxDataViewItem( (void*) m_RootNode.Ptr() ) );
-        return 1;
-#else
         parentNode = m_RootNode.Ptr();
-#endif
     }
 
     if ( parentNode->GetChildren().size() < 1 )
@@ -724,4 +803,32 @@ bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
 
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
     return node ? node->IsContainer() : false;
+}
+
+const wxArtID& ProjectViewModel::GetArtIDFromPath( const Path& path ) const
+{
+    tstring extension = path.FullExtension();
+    if ( extension.empty() )
+    {
+        return DefaultFileIcon;
+    }
+
+    M_FileIconExtensionLookup::const_iterator foundArtID = m_FileIconExtensionLookup.find( extension );
+    if ( foundArtID != m_FileIconExtensionLookup.end() )
+    {
+        return foundArtID->second;
+    }
+
+    // try just the end extension
+    if ( extension.find( '.' ) != tstring::npos )
+    {
+        extension = path.Extension();
+        foundArtID = m_FileIconExtensionLookup.find( extension );
+        if ( foundArtID != m_FileIconExtensionLookup.end() )
+        {
+            return foundArtID->second;
+        }
+    }
+    
+    return DefaultFileIcon;
 }

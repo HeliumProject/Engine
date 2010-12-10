@@ -183,7 +183,6 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
 
     if ( document->Save( error ) )
     {
-        document->HasChanged( false );
         return true;
     }
 

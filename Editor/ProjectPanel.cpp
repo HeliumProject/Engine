@@ -135,6 +135,7 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             m_Model = new ProjectViewModel( m_DocumentManager );
             node = m_Model->OpenProject( project, document );
 
+            //m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Icon ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::Name ) );
             m_DataViewCtrl->AppendColumn( m_Model->CreateColumn( ProjectModelColumns::FileSize ) );
 
@@ -158,11 +159,6 @@ void ProjectPanel::OpenProject( Project* project, const Document* document )
             m_ProjectManagementPanel->Show();
             m_DataViewCtrl->Show();
             Layout();
-
-#pragma TODO ( "Remove HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE after usibility test" )
-#if HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE
-            m_DataViewCtrl->Expand( wxDataViewItem( (void*)node ) );
-#endif
         }
     
         Layout();

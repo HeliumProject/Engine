@@ -1,11 +1,11 @@
 #pragma once
 
-#include <string>
 #include <vector>
 #include <algorithm>
 
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
+#include "Foundation/Name.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
@@ -30,7 +30,7 @@ namespace Helium
             virtual ~Type();
 
         public:
-            tstring                         m_Name;         // the name of this type in the codebase
+            Name                            m_Name;         // the name of this type in the codebase
             tstring                         m_UIName;       // the friendly name for the field, its optional (will use the short name if not specified)
             uint32_t                        m_Size;         // the size of the object in bytes
         };

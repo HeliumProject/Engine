@@ -7,58 +7,47 @@
 
 namespace Lunar
 {
-    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
-    /// object.
-    ///
-    /// @param[in] pObject  Object about to be destroyed.
-    ///
-    /// @see Destroy()
-    void GameObjectTypeRefCountSupport::PreDestroy( GameObjectType* /*pObject*/ )
-    {
-    }
-
-    /// Destroy an object after the final strong reference to it has been cleared.
-    ///
-    /// @param[in] pObject  Object to destroy.
-    ///
-    /// @see PreDestroy()
-    void GameObjectTypeRefCountSupport::Destroy( GameObjectType* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        delete pObject;
-    }
-
     /// Get the name of this type.
     ///
     /// @return  Type name.
     Name GameObjectType::GetName() const
     {
-        return m_name;
+        return m_Name;
     }
 
-    /// Get the parent of this type.
+    /// Get the parent of this type, cast to a GameObjectType.
     ///
-    /// @return  Parent type, or null if there is no parent type (should only be the case with the "GameObject" type).
-    GameObjectType* GameObjectType::GetTypeParent() const
+    /// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
+    ///          "GameObject" type itself).
+    GameObjectType* GameObjectType::GetBaseType() const
     {
-        return m_spTypeParent;
+        Reflect::ObjectType* pBaseType = m_BaseType;
+#pragma TODO( "Restore m_BaseType validity checking once Reflect::Object and GameObject type checking are integrated." )
+#if 1
+        HELIUM_ASSERT( !pBaseType || pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
+        return static_cast< GameObjectType* >( pBaseType );
+#else
+        HELIUM_ASSERT( pBaseType );
+        return ( pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
+                 ? static_cast< GameObjectType* >( pBaseType )
+                 : NULL );
+#endif
     }
 
     /// Get the default template object for this type.
     ///
     /// @return  Type template object.
-    GameObject* GameObjectType::GetTypeTemplate() const
+    GameObject* GameObjectType::GetTemplate() const
     {
-        return m_spTypeTemplate;
+        return m_spTemplate;
     }
 
-    /// Get the type flags for this type.
+    /// Get the flags associated with this type.
     ///
     /// @return  Type flags.
-    uint32_t GameObjectType::GetTypeFlags() const
+    uint32_t GameObjectType::GetFlags() const
     {
-        return m_typeFlags;
+        return m_flags;
     }
 
     /// Get the package in which all template object packages are stored.

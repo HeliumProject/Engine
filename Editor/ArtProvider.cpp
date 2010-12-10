@@ -323,7 +323,10 @@ void ArtProvider::Create()
     // MimeTypes
     //
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Binary, IconArtFile( TXT( "mimetypes/binary.png" ) ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( TXT( "filesystem/file.png" ) ).AddOverlay( TXT( "editor/editor.png" ), OverlayQuadrants::Centered ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Entity, IconArtFile( TXT( "editor/entity.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Project, IconArtFile( TXT( "editor/project.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::ReflectBinary, IconArtFile( TXT( "editor/editor.png" ) ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Scene, IconArtFile( TXT( "editor/scene.png" ) ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( ArtIDs::MimeTypes::Text, IconArtFile( TXT( "mimetypes/txt.png" ) ) ) );
 
 

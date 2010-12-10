@@ -5,6 +5,9 @@
 // Visual C++ does not support exception specifications at this time, but we still want to retain them for compilers
 // that do support them.  This is harmless to ignore.
 #pragma warning( disable : 4290 ) // C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+// Visual C++ specific keywords such as "override" and "abstract" are used, but are abstracted via "HELIUM_OVERRIDE" and
+// "HELIUM_ABSTRACT" macros.
+#pragma warning( disable : 4481 ) // nonstandard extension used: override specifier 'keyword'
 // This spuriously comes up on occasion with certain template class methods.
 #pragma warning( disable : 4505 ) // 'function' : unreferenced local function has been removed
 

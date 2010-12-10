@@ -23,7 +23,7 @@ LabelWidget::LabelWidget( Inspect::Label* label )
     SetControl( label );
 }
 
-void LabelWidget::Create( wxWindow* parent )
+void LabelWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_LabelWindow );
 
@@ -37,7 +37,7 @@ void LabelWidget::Create( wxWindow* parent )
     m_LabelControl->a_HelpText.RaiseChanged();
 }
 
-void LabelWidget::Destroy()
+void LabelWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_LabelWindow );
 

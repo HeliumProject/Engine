@@ -18,7 +18,7 @@ ListWidget::ListWidget( Inspect::List* list )
     SetControl( list );
 }
 
-void ListWidget::Create(wxWindow* parent)
+void ListWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ListWindow );
 
@@ -35,7 +35,7 @@ void ListWidget::Create(wxWindow* parent)
     // update state of attributes that are not refreshed during Read()
 }
 
-void ListWidget::Destroy()
+void ListWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ListWindow );
 

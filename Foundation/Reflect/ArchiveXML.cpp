@@ -560,7 +560,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         // Attempt creation of element via short name
         //
 
-        m_Cache.Create(elementType, newState->m_Element);
+        m_Cache.Create( Name( elementType.c_str() ), newState->m_Element );
 
         if (!newState->m_Element.ReferencesObject())
         {
@@ -694,7 +694,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     // we are a component, so send us up to be processed by container
                     if (container && !container->ProcessComponent(topState->m_Element, topState->m_Field->m_Name))
                     {
-                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_Name.c_str(), topState->m_Element->GetClass()->m_Name.c_str());
+                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), *container->GetClass()->m_Name, *topState->m_Element->GetClass()->m_Name );
                     }
                 }
             }

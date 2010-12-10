@@ -9,134 +9,16 @@
 #include "Engine/GameObjectType.h"
 
 #include "Foundation/Container/ObjectPool.h"
+#include "Foundation/Reflect/Registry.h"
 
 using namespace Lunar;
-
-/// Static reference count proxy management data.
-struct GameObjectTypeRefCountSupport::StaticData
-{
-    /// Number of proxy objects to allocate per block for the proxy pool.
-    static const size_t POOL_BLOCK_SIZE = 1024;
-
-    /// Proxy object pool.
-    ObjectPool< RefCountProxy< GameObjectType > > proxyPool;
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    /// Active reference count proxies.
-    ConcurrentHashSet< RefCountProxy< GameObjectType >* > activeProxySet;
-#endif
-
-    /// @name Construction/Destruction
-    //@{
-    StaticData();
-    //@}
-};
-
-GameObjectTypeRefCountSupport::StaticData* GameObjectTypeRefCountSupport::sm_pStaticData = NULL;
 
 PackagePtr GameObjectType::sm_spTypePackage;
 GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
 
-/// Retrieve a reference count proxy from the global pool.
-///
-/// @return  Pointer to a reference count proxy.
-///
-/// @see Release()
-RefCountProxy< GameObjectType >* GameObjectTypeRefCountSupport::Allocate()
-{
-    // Lazy initialization of the proxy management data.  Even though this isn't thread-safe, it should still be
-    // fine as the proxy system should be initialized from the main thread before any sub-threads are spawned (i.e.
-    // during startup type initialization).
-    StaticData* pStaticData = sm_pStaticData;
-    if( !pStaticData )
-    {
-        pStaticData = new StaticData;
-        HELIUM_ASSERT( pStaticData );
-        sm_pStaticData = pStaticData;
-    }
-
-    RefCountProxy< GameObjectType >* pProxy = pStaticData->proxyPool.Allocate();
-    HELIUM_ASSERT( pProxy );
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    ConcurrentHashSet< RefCountProxy< GameObjectType >* >::Accessor activeProxySetAccessor;
-    HELIUM_VERIFY( pStaticData->activeProxySet.Insert( activeProxySetAccessor, pProxy ) );
-#endif
-
-    return pProxy;
-}
-
-/// Release a reference count proxy back to the global pool.
-///
-/// @param[in] pProxy  Pointer to the reference count proxy to release.
-///
-/// @see Allocate()
-void GameObjectTypeRefCountSupport::Release( RefCountProxy< GameObjectType >* pProxy )
-{
-    HELIUM_ASSERT( pProxy );
-
-    StaticData* pStaticData = sm_pStaticData;
-    HELIUM_ASSERT( pStaticData );
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    HELIUM_VERIFY( pStaticData->activeProxySet.Remove( pProxy ) );
-#endif
-
-    pStaticData->proxyPool.Release( pProxy );
-}
-
-/// Release the name table and free all allocated memory.
-///
-/// This should only be called immediately prior to application exit.
-void GameObjectTypeRefCountSupport::Shutdown()
-{
-    delete sm_pStaticData;
-    sm_pStaticData = NULL;
-}
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-/// Get the number of active reference count proxies.
-///
-/// Be careful when using this function, as the number may change if other threads are actively setting and clearing
-/// references to objects.  Unless all other threads have been halted or are otherwise no longer using any smart
-/// pointers, you should not expect this value to match the number actually iterated when using functions such as
-/// GetFirstActiveProxy().
-///
-/// @return  Current number of active smart pointer references.
-///
-/// @see GetFirstActiveProxy()
-size_t GameObjectTypeRefCountSupport::GetActiveProxyCount()
-{
-    HELIUM_ASSERT( sm_pStaticData );
-
-    return sm_pStaticData->activeProxySet.GetSize();
-}
-
-/// Initialize a constant accessor to the first active reference count proxy.
-///
-/// @param[in] rAccessor  Accessor to initialize.
-///
-/// @return  True if there are active reference count proxies and the accessor was successfully set to reference the
-///          first one, false if not.
-///
-/// @see GetActiveProxyCount()
-bool GameObjectTypeRefCountSupport::GetFirstActiveProxy(
-    ConcurrentHashSet< RefCountProxy< GameObjectType >* >::ConstAccessor& rAccessor )
-{
-    HELIUM_ASSERT( sm_pStaticData );
-
-    return sm_pStaticData->activeProxySet.First( rAccessor );
-}
-#endif
-
-/// Constructor.
-GameObjectTypeRefCountSupport::StaticData::StaticData()
-: proxyPool( POOL_BLOCK_SIZE )
-{
-}
-
 /// Constructor.
 GameObjectType::GameObjectType()
-: m_typeFlags( 0 )
+: m_flags( 0 )
 {
 }
 
@@ -152,7 +34,7 @@ bool GameObjectType::IsSubtypeOf( const GameObjectType* pType ) const
 {
     HELIUM_ASSERT( pType );
 
-    for( const GameObjectType* pThisType = this; pThisType != NULL; pThisType = pThisType->GetTypeParent() )
+    for( const GameObjectType* pThisType = this; pThisType != NULL; pThisType = pThisType->GetBaseType() )
     {
         if( pThisType == pType )
         {
@@ -233,10 +115,10 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
     // Create the type object and store its parameters.
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
-    pType->m_name = name;
-    pType->m_spTypeParent = pParent;
-    pType->m_spTypeTemplate = pTemplate;
-    pType->m_typeFlags = flags;
+    pType->m_Name = name;
+    pType->m_BaseType = pParent;
+    pType->m_spTemplate = pTemplate;
+    pType->m_flags = flags;
 
     // Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
     // at least one type registered before any sub-threads are spawned.
@@ -248,7 +130,13 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
     LookupMap::Iterator typeIterator;
-    HELIUM_VERIFY( sm_pLookupMap->Insert( typeIterator, KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
+    HELIUM_VERIFY( sm_pLookupMap->Insert(
+        typeIterator,
+        KeyValue< Name, GameObjectTypePtr >( pType->GetName(), pType ) ) );
+
+    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
+    HELIUM_ASSERT( pRegistry );
+    pRegistry->RegisterType( pType );
 
     return pType;
 }
@@ -262,11 +150,15 @@ void GameObjectType::Unregister( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
+    pType->m_BaseType.Release();
+    pType->m_spTemplate.Release();
+
     HELIUM_ASSERT( sm_pLookupMap );
     HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );
 
-    pType->m_spTypeParent.Release();
-    pType->m_spTypeTemplate.Release();
+    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
+    HELIUM_ASSERT( pRegistry );
+    pRegistry->UnregisterType( pType );
 }
 
 /// Look up a type by name.

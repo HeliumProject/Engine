@@ -28,8 +28,8 @@ namespace Helium
             int GetStringWidth(const tstring& str);
             bool EllipsizeString(tstring& str, int width);
 
-            virtual void Create( wxWindow* parent ) = 0;
-            virtual void Destroy() = 0;
+            virtual void CreateWindow( wxWindow* parent ) = 0;
+            virtual void DestroyWindow() = 0;
 
             // initialize state
             virtual void SetWindow( wxWindow* window );

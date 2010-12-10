@@ -41,6 +41,8 @@ namespace Helium
                 Composite,
                 Structure,
                 Class,
+                ObjectType,
+                GameObjectType,
                 Field,
                 ElementField,
                 EnumerationField,

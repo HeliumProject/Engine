@@ -75,8 +75,8 @@ namespace Helium
 
             ColorPickerWidget( Inspect::ColorPicker* colorPicker );
 
-            virtual void Create( wxWindow* parent ) HELIUM_OVERRIDE;
-            virtual void Destroy() HELIUM_OVERRIDE;
+            virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
+            virtual void DestroyWindow() HELIUM_OVERRIDE;
 
             // Inspect::Widget
             virtual void Read() HELIUM_OVERRIDE;

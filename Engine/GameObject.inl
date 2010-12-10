@@ -59,31 +59,6 @@ namespace Lunar
         return static_cast< TargetType* >( pObject );
     }
 
-    /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
-    /// object.
-    ///
-    /// @param[in] pObject  Object about to be destroyed.
-    ///
-    /// @see Destroy()
-    void GameObjectRefCountSupport::PreDestroy( GameObject* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        pObject->PreDestroy();
-    }
-
-    /// Destroy an object after the final strong reference to it has been cleared.
-    ///
-    /// @param[in] pObject  Object to destroy.
-    ///
-    /// @see PreDestroy()
-    void GameObjectRefCountSupport::Destroy( GameObject* pObject )
-    {
-        HELIUM_ASSERT( pObject );
-
-        pObject->Destroy();
-    }
-
     /// Get the name of this object.
     ///
     /// @return  Object name.
@@ -244,10 +219,10 @@ namespace Lunar
     ///
     /// @return  True if this is an instance of the given type, false if not.
     ///
-    /// @see GetType(), IsA()
+    /// @see GetGameObjectType(), IsA()
     bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
     {
-        const GameObjectType* pThisType = GetType();
+        const GameObjectType* pThisType = GetGameObjectType();
         HELIUM_ASSERT( pThisType );
 
         return( pThisType == pType );

@@ -1139,7 +1139,7 @@ size_t XmlPackageLoader::BeginLoadObject( GameObjectPath path )
         if( rObjectData.templatePath.IsEmpty() )
         {
             // Make sure the template is fully loaded.
-            GameObject* pTemplate = pType->GetTypeTemplate();
+            GameObject* pTemplate = pType->GetTemplate();
             rObjectData.templatePath = pTemplate->GetPath();
             if( pTemplate->IsFullyLoaded() )
             {
@@ -1699,7 +1699,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        GameObjectType* pExistingType = pObject->GetType();
+        GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {

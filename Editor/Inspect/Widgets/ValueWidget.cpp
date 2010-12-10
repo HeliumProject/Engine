@@ -74,7 +74,7 @@ ValueWidget::ValueWidget( Inspect::Value* value )
     SetControl( value );
 }
 
-void ValueWidget::Create( wxWindow* parent )
+void ValueWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_ValueWindow );
 
@@ -94,7 +94,7 @@ void ValueWidget::Create( wxWindow* parent )
     m_ValueControl->a_Highlight.RaiseChanged();
 }
 
-void ValueWidget::Destroy()
+void ValueWidget::DestroyWindow()
 {
     HELIUM_ASSERT( m_ValueWindow );
 

@@ -715,7 +715,7 @@ void D3D9ImmediateCommandProxy::SetTexture( size_t samplerIndex, RTexture* pText
     {
         switch( pTexture->GetType() )
         {
-        case RTexture::TYPE_2D:
+            case RTexture::TYPE_2D:
             {
                 pD3DTexture = static_cast< D3D9Texture2d* >( pTexture )->GetD3DTexture();
                 bSrgb = static_cast< D3D9Texture2d* >( pTexture )->IsSrgb();

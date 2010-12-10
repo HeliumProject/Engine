@@ -146,9 +146,9 @@ Object::~Object()
     }
 }
 
-void* Object::operator new(size_t bytes)
+void* Object::operator new( size_t bytes )
 {
-    if (Reflect::MemoryPool().Valid())
+    if ( Reflect::MemoryPool().Valid() )
     {
         Profile::Memory::Allocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
@@ -156,14 +156,39 @@ void* Object::operator new(size_t bytes)
     return ::malloc( bytes );
 }
 
-void Object::operator delete(void *ptr, size_t bytes)
+void* Object::operator new( size_t /*bytes*/, void* memory )
 {
-    if (Reflect::MemoryPool().Valid())
+    return memory;
+}
+
+void Object::operator delete( void *ptr, size_t bytes )
+{
+    if ( Reflect::MemoryPool().Valid() )
     {
         Profile::Memory::Deallocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
 
-    ::free(ptr);
+    ::free( ptr );
+}
+
+void Object::operator delete( void* /*ptr*/, void* /*memory*/ )
+{
+}
+
+/// Perform any necessary work immediately prior to destroying this object.
+///
+/// Note that the parent-class implementation should always be chained last.
+void Object::PreDestroy()
+{
+}
+
+/// Actually destroy this object.
+///
+/// This should only be called by the reference counting system once the last strong reference to this object has
+/// been cleared.  It should never be called manually.
+void Object::Destroy()
+{
+    delete this;
 }
 
 const Reflect::Type* Object::GetType() const
@@ -181,10 +206,10 @@ const Reflect::Class* Object::GetClass() const
     return Reflect::GetClass<Object>();
 }
 
-Reflect::Class* Object::CreateClass( const tstring& name )
+Reflect::Class* Object::CreateClass( Name name )
 {
     HELIUM_ASSERT( s_Class == NULL );
-    Reflect::Class* type = Class::Create<Object>( name, TXT("") );
+    Reflect::Class* type = Class::Create<Object>( name, NULL_NAME );
     s_Type = s_Class = type;
     return type;
 }

@@ -33,15 +33,14 @@ namespace Helium
             static Class* Create();
 
             template<class T>
-            static Class* Create( const tstring& name, const tstring& baseName, CreateObjectFunc creator = NULL )
+            static Class* Create( Name name, Name baseName, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
                 info->m_Creator = creator;
-                info->m_Enumerator = (CompositeEnumerator)&T::EnumerateClass;
-                info->m_UIName = info->m_Name;
+                info->m_UIName = *info->m_Name;
 
                 // lookup base class
                 info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );

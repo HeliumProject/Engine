@@ -126,7 +126,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error )
         {
-            *error = tstring( TXT( "Component '" ) ) + component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + GetClass()->m_Name + TXT( "': " ) + errorMessage;
+            *error = tstring( TXT( "Component '" ) ) + *component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + *GetClass()->m_Name + TXT( "': " ) + errorMessage;
         }
         
         return false;

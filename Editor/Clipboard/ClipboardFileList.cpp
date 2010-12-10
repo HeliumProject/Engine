@@ -27,7 +27,7 @@ ClipboardFileList::~ClipboardFileList()
 // 
 bool ClipboardFileList::AddFilePath( const tstring& file )
 {
-    Helium::Insert< std::set< tstring > >::Result inserted = m_Files.insert( file );
+    Helium::StdInsert< std::set< tstring > >::Result inserted = m_Files.insert( file );
     m_IsDirty = inserted.second;
     return m_IsDirty;
 }

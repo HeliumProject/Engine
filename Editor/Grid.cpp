@@ -483,7 +483,7 @@ int32_t Grid::InsertName( const tstring& name )
   int32_t row = -1;
 
   // The name should be unique, so add it to our list
-  Insert<S_NaturalOrderString>::Result inserted = m_Names.insert( name );
+  StdInsert<S_NaturalOrderString>::Result inserted = m_Names.insert( name );
   if ( inserted.second )
   {
     // Figure out where it was inserted in the list

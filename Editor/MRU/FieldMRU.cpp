@@ -51,7 +51,7 @@ ManagedStringSetPtr FieldMRU::GetFieldItems( const tstring& fieldKey, const tstr
   // Auto-Init the ManagedStringSet if it's not there
   else if ( autoInit )
   {
-    Insert<M_ManagedStringSet>::Result inserted = m_Fields.insert( M_ManagedStringSet::value_type( fieldKey, new ManagedStringSet() ) );
+    StdInsert<M_ManagedStringSet>::Result inserted = m_Fields.insert( M_ManagedStringSet::value_type( fieldKey, new ManagedStringSet() ) );
 
     if ( inserted.second )
     {

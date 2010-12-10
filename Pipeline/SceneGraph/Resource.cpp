@@ -44,7 +44,7 @@ void ResourceTracker::ResetState()
 
 void ResourceTracker::Register(Resource* resource)
 {
-    Insert<S_Resource>::Result inserted = m_Resources.insert( resource );
+    StdInsert<S_Resource>::Result inserted = m_Resources.insert( resource );
     HELIUM_ASSERT(inserted.second);
 }
 

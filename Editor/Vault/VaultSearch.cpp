@@ -377,7 +377,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
             Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
             Helium::Path path = itr->mPath.value();
-            Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
+            Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
             if ( m_SearchResults && inserted.second )
             {
                 m_SearchResults->AddPath( path );
@@ -471,7 +471,7 @@ uint32_t VaultSearch::AddPath( const Helium::Path& path, int32_t searchID )
 
     Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
-    Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
+    Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
     if ( m_SearchResults && inserted.second )
     {
         m_SearchResults->AddPath( path );
@@ -484,7 +484,7 @@ uint32_t VaultSearch::AddPath( const Helium::Path& path, int32_t searchID )
         Helium::Directory::GetFiles( path.Get(), files );
         for ( std::set< Helium::Path >::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
         {
-            Helium::Insert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( *itr );
+            Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( *itr );
             if ( inserted.second )
             {
                 m_SearchResults->AddPath( *itr );

@@ -362,7 +362,7 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
                     const SceneNodePtr& dependNode = *memberItr;
 
                     // Try to insert the item into our running list of all the items (the union)
-                    Helium::Insert<HM_SceneNodeDumbPtr>::Result inserted =
+                    Helium::StdInsert<HM_SceneNodeDumbPtr>::Result inserted =
                         mapUnion.insert( HM_SceneNodeDumbPtr::value_type( dependNode->GetID(), dependNode ) );
 
                     if ( inserted.second )

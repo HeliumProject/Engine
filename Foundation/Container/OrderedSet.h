@@ -117,7 +117,7 @@ namespace Helium
         // Inserts an item at the end of the list
         bool Append(const T& value)
         {
-            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::StdInsert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -153,7 +153,7 @@ namespace Helium
         // Inserts an item at the front of the list
         bool Prepend(const T& value)
         {
-            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::StdInsert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)
@@ -188,7 +188,7 @@ namespace Helium
         // Inserts 'value' into the set before 'before'.
         bool Insert( const T& value, const T& before )
         {
-            Helium::Insert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
+            Helium::StdInsert<S_Element>::Result inserted = m_Elements.insert( Element (value) );
 
             // if we succeeded
             if (inserted.second)

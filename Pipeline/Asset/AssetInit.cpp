@@ -31,7 +31,7 @@
 using namespace Helium;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
-    Helium::Insert<M_AssetTypeInfo>::Result et_inserted;
+    Helium::StdInsert<M_AssetTypeInfo>::Result et_inserted;
 
 #define ASSET_REGISTER_ENGINETYPE( __AssetTypeName )                           \
     et_inserted = g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::__AssetTypeName, AssetTypeInfo( #__AssetTypeName, #__AssetTypeName"Builder.dll" ) ) ) );

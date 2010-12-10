@@ -2,7 +2,7 @@
 
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Container/DynArray.h"
-
+#include "Foundation/Container/Pair.h"
 #include "Foundation/Functions.h"
 
 namespace Helium
@@ -36,6 +36,14 @@ namespace Helium
             friend class RbTree;
 
         public:
+            // STL iterator support.
+            typedef std::bidirectional_iterator_tag iterator_category;
+            typedef Value value_type;
+            typedef ptrdiff_t difference_type;
+
+            typedef const Value* pointer;
+            typedef const Value& reference;
+
             /// @name Construction/Destruction
             //@{
             ConstIterator();
@@ -77,6 +85,14 @@ namespace Helium
             friend class RbTree;
 
         public:
+            // STL iterator support.
+            typedef ConstIterator::iterator_category iterator_category;
+            typedef typename ConstIterator::value_type value_type;
+            typedef ConstIterator::difference_type difference_type;
+
+            typedef Value* pointer;
+            typedef Value& reference;
+
             /// @name Construction/Destruction
             //@{
             Iterator();

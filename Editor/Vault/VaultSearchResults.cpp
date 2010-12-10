@@ -59,7 +59,7 @@ const Helium::Path* VaultSearchResults::Find( const uint64_t& hash ) const
 ///////////////////////////////////////////////////////////////////////////////
 bool VaultSearchResults::AddPath( const Helium::Path& path )
 {
-    Helium::Insert< std::map< uint64_t, Helium::Path > >::Result inserted = m_Paths.insert( std::map< uint64_t, Helium::Path >::value_type( path.Hash(), path ) );
+    Helium::StdInsert< std::map< uint64_t, Helium::Path > >::Result inserted = m_Paths.insert( std::map< uint64_t, Helium::Path >::value_type( path.Hash(), path ) );
     return inserted.second;
 }
 

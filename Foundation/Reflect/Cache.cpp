@@ -100,7 +100,7 @@ void Cache::Free(ElementPtr element)
 
         stack.push(element);
 
-        Insert<H_Element>::Result result = m_Elements.insert(H_Element::value_type (element->GetType(), stack));
+        StdInsert<H_Element>::Result result = m_Elements.insert(H_Element::value_type (element->GetType(), stack));
 
         HELIUM_ASSERT( result.second );
     }

@@ -1129,7 +1129,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
     sceneNode->SetName( realName );
 
     // mark it taken
-    Helium::Insert<HM_NameToSceneNodeDumbPtr>::Result inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
+    Helium::StdInsert<HM_NameToSceneNodeDumbPtr>::Result inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
     bool previouslyInserted = sceneNode == inserted.first->second && sceneNode->GetName() == realName;
     bool newlyInserted = inserted.second;
     HELIUM_ASSERT( previouslyInserted || newlyInserted );
@@ -1171,14 +1171,14 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
     m_NodeTypesByName.insert( HM_StrToSceneNodeTypeSmartPtr::value_type( nodeType->GetName(), nodeType ) );
 
     // insert into the map by compile time type id
-    Helium::Insert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceClass(), S_SceneNodeTypeDumbPtr() ) );
+    Helium::StdInsert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceClass(), S_SceneNodeTypeDumbPtr() ) );
     typeSet.first->second.insert( nodeType );
 
     // insert it into the types for its bases
     const Reflect::Class* type = nodeType->GetInstanceClass();
     for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
     {
-        Helium::Insert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
+        Helium::StdInsert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
     }
 
@@ -1264,7 +1264,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         // this would be bad
         HELIUM_ASSERT( node->GetID() != TUID::Null );
 
-        Helium::Insert<HM_SceneNodeDumbPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeDumbPtr::value_type( node->GetID(), node ) );
+        Helium::StdInsert<HM_SceneNodeDumbPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeDumbPtr::value_type( node->GetID(), node ) );
         HELIUM_ASSERT( inserted.first->second == node );
         if ( !inserted.second )
         {

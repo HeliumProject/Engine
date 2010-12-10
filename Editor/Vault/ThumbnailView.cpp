@@ -181,7 +181,7 @@ void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcon
 #pragma TODO( "reimplement icons as resources" )
     tstring file = fileName;
 
-    Helium::Insert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) ) ) );
+    Helium::StdInsert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) ) ) );
     HELIUM_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
 }
 
@@ -1251,7 +1251,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             DWORD ribbonColor = 0;
             if ( tile->GetTypeColor( ribbonColor ) )
             {
-                Helium::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( ribbonColor, V_TileCorners() ) );
+                Helium::StdInsert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( ribbonColor, V_TileCorners() ) );
                 inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
             }
             else
@@ -1259,7 +1259,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
                 M_FileTypeColors::iterator findColor = m_FileTypeColors.find( tile->GetPath().FullExtension() );
                 if ( findColor != m_FileTypeColors.end() )
                 {
-                    Helium::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
+                    Helium::StdInsert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
             }
@@ -1268,13 +1268,13 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
                 M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetPath().FullExtension() );
                 if ( findIcon != m_FileTypeIcons.end() )
                 {
-                    Helium::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
                 else if ( tile->GetPath().Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
                     && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
                 {
-                    Helium::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
             }

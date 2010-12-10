@@ -44,10 +44,10 @@ namespace Helium
         {
             bool result = false;
 
-            Helium::Insert<M_AToB>::Result insertedAtoB = m_AToB.insert( M_AToB::value_type( a, NULL ) );
+            Helium::StdInsert<M_AToB>::Result insertedAtoB = m_AToB.insert( M_AToB::value_type( a, NULL ) );
             if ( insertedAtoB.second )
             {
-                Helium::Insert<M_BToA>::Result insertedBtoA = m_BToA.insert( M_BToA::value_type ( b, &( insertedAtoB.first->first ) ) );
+                Helium::StdInsert<M_BToA>::Result insertedBtoA = m_BToA.insert( M_BToA::value_type ( b, &( insertedAtoB.first->first ) ) );
                 if ( insertedBtoA.second )
                 {
                     insertedAtoB.first->second = &(insertedBtoA.first->first);

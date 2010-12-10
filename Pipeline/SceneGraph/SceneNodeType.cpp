@@ -68,7 +68,7 @@ void SceneNodeType::AddInstance(SceneNodePtr n)
     {
         n->SetNodeType( this );
 
-        Helium::Insert<HM_SceneNodeSmartPtr>::Result inserted = m_Instances.insert( HM_SceneNodeSmartPtr::value_type( n->GetID(), n ) );
+        Helium::StdInsert<HM_SceneNodeSmartPtr>::Result inserted = m_Instances.insert( HM_SceneNodeSmartPtr::value_type( n->GetID(), n ) );
         HELIUM_ASSERT( inserted.second );
 
         if ( !n->IsTransient() )

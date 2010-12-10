@@ -62,6 +62,19 @@ namespace Helium
 
 
     ///////////////////////////////////////////////////////////////////////////
+    namespace DocumentStatus
+    {
+        enum Status
+        {
+            Changed = 1 << 0,
+            Loading = 1 << 1,
+            Saving  = 1 << 2,
+        };
+        const uint32_t Default = 0;
+    }   
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // Wraps all files manipulated by editors in Editor.  Handles all interaction
     // with revision control.
     // 
@@ -79,10 +92,7 @@ namespace Helium
 
         void Checkout() const;
 
-        bool HasChanged() const
-        {
-            return m_HasChanged;
-        }
+        bool HasChanged() const;
         void HasChanged( bool changed );
         void OnObjectChanged( const DocumentObjectChangedArgs& args );
 
@@ -91,6 +101,8 @@ namespace Helium
             return m_Path;
         }
         void SetPath( const Helium::Path& path );
+
+        uint32_t GetStatus() const;
 
         int GetRevision() const
         {
@@ -136,11 +148,10 @@ namespace Helium
         mutable DocumentEventSignature::Event e_CheckedOut;
 
     private:
-        bool m_HasChanged;  //<! have we been changed since we opened or last saved?
         Helium::Path m_Path;
-        int32_t m_Revision;
-        
+        uint32_t m_DocumentStatus;
         bool m_AllowUnsavableChanges;        //<! allows override of checkout (but you can't save)
+        int32_t m_Revision;
 
         void UpdateRCSFileInfo();
     };

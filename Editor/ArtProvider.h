@@ -154,7 +154,10 @@ namespace Helium
             namespace MimeTypes
             {
                 static const wxChar* Binary = wxART_MAKE_ART_ID( HELIUM_ART_ID_BINARY );
+                static const wxChar* Entity = wxART_MAKE_ART_ID( HELIUM_ART_ID_ENTITY );
+                static const wxChar* Project = wxART_MAKE_ART_ID( HELIUM_ART_ID_PROJECT );
                 static const wxChar* ReflectBinary = wxART_MAKE_ART_ID( HELIUM_ART_ID_REFLECTBINARY );
+                static const wxChar* Scene = wxART_MAKE_ART_ID( HELIUM_ART_ID_SCENE );
                 static const wxChar* Text = wxART_MAKE_ART_ID( HELIUM_ART_ID_TEXT );
             }
 

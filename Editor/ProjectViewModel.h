@@ -8,8 +8,6 @@
 
 #include <wx/dataview.h>
 
-#define HELIUM_IS_PROJECT_VIEW_ROOT_NODE_VISIBLE 1
-
 namespace Helium
 {
     namespace Editor
@@ -20,6 +18,7 @@ namespace Helium
             enum ProjectModelColumn
             {
                 Name = 0,
+                Icon,
                 Details,
                 FileSize,
 
@@ -29,6 +28,7 @@ namespace Helium
             static const tchar_t* s_Labels[COUNT+1] = 
             {
                 TXT( "Name" ),
+                TXT( "" ), //Icon
                 TXT( "Details" ),
                 TXT( "Size" ),
 
@@ -45,6 +45,7 @@ namespace Helium
             static const uint32_t s_Widths[COUNT+1] = 
             {
                 200, // Name
+                18, // Icon
                 300, // Details
                 50,  // FileSize
 
@@ -93,7 +94,6 @@ namespace Helium
             }
         };
 
-
         ///////////////////////////////////////////////////////////////////////
         class ProjectViewModel;
         class ProjectViewModelNode;
@@ -124,6 +124,7 @@ namespace Helium
             tstring GetFileSize() const;
 
             const Document* GetDocument() const;
+            uint32_t GetDocumentStatus() const;
             void ConnectDocument( const Document* document);
             void DisconnectDocument();
 
@@ -220,6 +221,12 @@ namespace Helium
 
             typedef std::vector< uint32_t > M_ColumnLookupTable;
             M_ColumnLookupTable m_ColumnLookupTable;
+
+            typedef std::map<tstring, wxArtID> M_FileIconExtensionLookup;
+            M_FileIconExtensionLookup m_FileIconExtensionLookup;
+
+            static const wxArtID DefaultFileIcon;
+            const wxArtID& GetArtIDFromPath( const Path& path ) const;
         };
     }
 }

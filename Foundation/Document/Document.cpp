@@ -1,6 +1,7 @@
 #include "Document.h"
 
 #include "Platform/Assert.h"
+#include "Foundation/Flags.h"
 #include "Foundation/Log.h"
 #include "Foundation/RCS/RCS.h"
 
@@ -11,7 +12,7 @@ using namespace Helium;
 // 
 Document::Document( const tstring& path )
 : m_Path( path )
-, m_HasChanged( false )
+, m_DocumentStatus( DocumentStatus::Default )
 , m_AllowUnsavableChanges( false )
 , m_Revision( -1 )
 {
@@ -28,22 +29,31 @@ Document::~Document()
 ///////////////////////////////////////////////////////////////////////////////
 bool Document::Save( tstring& error )
 {
+    SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, true );
+
+    bool result = false;
+
     DocumentEventArgs savingArgs( this );
     e_Saving.Raise( savingArgs );
-
-    if ( savingArgs.m_Veto )
+    if ( !savingArgs.m_Veto )
     {
-        return false;
+        DocumentEventArgs saveArgs( this, &error );
+        d_Save.Invoke( saveArgs );
+        if ( saveArgs.m_Result )
+        {
+            SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
+
+            e_Saved.Raise( DocumentEventArgs( this ) );
+
+            HasChanged( false );
+
+            result = true;
+        }
     }
 
-    DocumentEventArgs saveArgs( this, &error );
-    d_Save.Invoke( saveArgs );
-    if ( saveArgs.m_Result )
-    {
-        e_Saved.Raise( DocumentEventArgs( this ) );
-    }
+    SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Saving, false );
 
-    return saveArgs.m_Result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,14 +87,26 @@ void Document::SetPath( const Helium::Path& newPath )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+uint32_t Document::GetStatus() const
+{
+    return m_DocumentStatus;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+bool Document::HasChanged() const
+{
+    return HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Sets the internal flag indicating the the file has been modified (thus it
 // should probably be saved before closing).
 // 
 void Document::HasChanged( bool changed )
 {
-    if ( m_HasChanged != changed )
+    if ( HasFlags<uint32_t>( m_DocumentStatus, DocumentStatus::Changed ) != changed )
     {
-        m_HasChanged = changed;
+        SetFlag<uint32_t>( m_DocumentStatus, DocumentStatus::Changed, changed );
 
         e_Changed.Raise( DocumentEventArgs( this ) );
     }

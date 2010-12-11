@@ -340,9 +340,9 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                const std::set< const Composite* >& derived = attrib->GetClass()->m_Base->m_Derived;
-                std::set< const Composite* >::const_iterator derivedItr = derived.begin();
-                std::set< const Composite* >::const_iterator derivedEnd = derived.end();
+                const Set< Name >& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
+                Set< Name >::ConstIterator derivedItr = derived.Begin();
+                Set< Name >::ConstIterator derivedEnd = derived.End();
                 for ( ; derivedItr != derivedEnd; ++derivedItr )
                 {
                     const Reflect::Composite* currentType = *derivedItr;

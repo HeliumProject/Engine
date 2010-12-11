@@ -59,9 +59,9 @@ struct CaseInsensitiveNameCompare
 
     }
 
-    bool operator()( const std::pair< Name, T >& rhs )
+    bool operator()( const KeyValue< Name, T >& rhs )
     {
-        return _tcsicmp( *rhs.first, *value ) == 0;
+        return _tcsicmp( *rhs.First(), *value ) == 0;
     }
 };
 
@@ -269,8 +269,8 @@ Registry::Registry()
 
 Registry::~Registry()
 {
-    m_TypesByName.clear();
-    m_TypesByAlias.clear();
+    m_TypesByName.Clear();
+    m_TypesByAlias.Clear();
 
     m_Created = NULL;
     m_Destroyed = NULL;
@@ -292,9 +292,9 @@ bool Registry::RegisterType(Type* type)
         {
             Class* classType = static_cast<Class*>(type);
 
-            Insert< M_NameToType >::Result nameResult = m_TypesByName.insert( M_NameToType::value_type( classType->m_Name, classType ) );
+            Insert< M_NameToType >::Result nameResult = m_TypesByName.Insert( M_NameToType::ValueType( classType->m_Name, classType ) );
 
-            if ( !nameResult.second )
+            if ( !nameResult.Second() )
             {
                 Log::Error( TXT( "Re-registration of class '%s'\n" ), *classType->m_Name );
                 HELIUM_BREAK();
@@ -310,9 +310,9 @@ bool Registry::RegisterType(Type* type)
         {
             ObjectType* objectType = static_cast< ObjectType* >( type );
 
-            Insert< M_NameToType >::Result objectTypeResult = m_TypesByName.insert( M_NameToType::value_type( objectType->m_Name, objectType ) );
+            Insert< M_NameToType >::Result objectTypeResult = m_TypesByName.Insert( M_NameToType::ValueType( objectType->m_Name, objectType ) );
 
-            if( !objectTypeResult.second )
+            if( !objectTypeResult.Second() )
             {
                 Log::Error( TXT( "Re-registration of object type '%s'\n" ), *objectType->m_Name );
                 HELIUM_BREAK();
@@ -326,9 +326,9 @@ bool Registry::RegisterType(Type* type)
         {
             Enumeration* enumeration = static_cast<Enumeration*>(type);
 
-            Insert< M_NameToType >::Result enumResult = m_TypesByName.insert( M_NameToType::value_type( enumeration->m_Name, enumeration ) );
+            Insert< M_NameToType >::Result enumResult = m_TypesByName.Insert( M_NameToType::ValueType( enumeration->m_Name, enumeration ) );
 
-            if ( !enumResult.second )
+            if ( !enumResult.Second() )
             {
                 Log::Error( TXT( "Re-registration of enumeration '%s'\n" ), *enumeration->m_Name );
                 HELIUM_BREAK();
@@ -354,7 +354,7 @@ void Registry::UnregisterType(const Type* type)
 
             if ( !classType->m_Name.IsEmpty() )
             {
-                m_TypesByName.erase( classType->m_Name );
+                m_TypesByName.Remove( classType->m_Name );
             }
 
             if ( classType->m_Base )
@@ -362,7 +362,7 @@ void Registry::UnregisterType(const Type* type)
                 classType->m_Base->m_Derived.erase( classType );
             }
 
-            m_TypesByName.erase( classType->m_Name );
+            m_TypesByName.Remove( classType->m_Name );
 
             break;
         }
@@ -372,7 +372,7 @@ void Registry::UnregisterType(const Type* type)
         {
             const ObjectType* objectType = static_cast< const ObjectType* >( type );
 
-            m_TypesByName.erase( objectType->m_Name );
+            m_TypesByName.Remove( objectType->m_Name );
 
             break;
         }
@@ -381,8 +381,8 @@ void Registry::UnregisterType(const Type* type)
         {
             const Enumeration* enumeration = static_cast<const Enumeration*>(type);
 
-            m_TypesByName.erase(enumeration->m_Name);
-            m_TypesByName.erase(enumeration->m_Name);
+            m_TypesByName.Remove(enumeration->m_Name);
+            m_TypesByName.Remove(enumeration->m_Name);
 
             break;
         }
@@ -393,41 +393,41 @@ void Registry::AliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    m_TypesByAlias.insert( M_NameToType::value_type( alias, type ) );
+    m_TypesByAlias.Insert( M_NameToType::ValueType( alias, type ) );
 }
 
 void Registry::UnAliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    M_NameToType::iterator found = m_TypesByAlias.find( alias );
-    if ( found != m_TypesByAlias.end() && found->second == type )
+    M_NameToType::Iterator found = m_TypesByAlias.Find( alias );
+    if ( found != m_TypesByAlias.End() && found->Second() == type )
     {
-        m_TypesByAlias.erase( found );
+        m_TypesByAlias.Remove( found );
     }
 }
 
 const Type* Registry::GetType( Name name ) const
 {
-    M_NameToType::const_iterator found = m_TypesByAlias.find( name );
+    M_NameToType::ConstIterator found = m_TypesByAlias.Find( name );
 
-    if ( found != m_TypesByAlias.end() )
+    if ( found != m_TypesByAlias.End() )
     {
-        return found->second;
+        return found->Second();
     }
 
-    found = m_TypesByName.find( name );
+    found = m_TypesByName.Find( name );
 
-    if ( found != m_TypesByName.end() )
+    if ( found != m_TypesByName.End() )
     {
-        return found->second;
+        return found->Second();
     }
 
-    found = std::find_if( m_TypesByName.begin(), m_TypesByName.end(), CaseInsensitiveNameCompare< Type* >( name ) );
+    found = std::find_if( m_TypesByName.Begin(), m_TypesByName.End(), CaseInsensitiveNameCompare< SmartPtr< Type > >( name ) );
 
-    if ( found != m_TypesByName.end() )
+    if ( found != m_TypesByName.End() )
     {
-        return found->second;
+        return found->Second();
     }
 
     return NULL;
@@ -457,15 +457,15 @@ ObjectPtr Registry::CreateInstance( const Class* type ) const
 
 ObjectPtr Registry::CreateInstance( Name name ) const
 {
-    M_NameToType::const_iterator type = m_TypesByName.find( name );
+    M_NameToType::ConstIterator type = m_TypesByName.Find( name );
 
-    if ( type == m_TypesByName.end() )
+    if ( type == m_TypesByName.End() )
         return NULL;
 
-    if ( type->second->GetReflectionType() != ReflectionTypes::Class )
+    if ( type->Second()->GetReflectionType() != ReflectionTypes::Class )
         return NULL;
 
-    return CreateInstance( static_cast< Class* >( type->second.Ptr() ) );
+    return CreateInstance( static_cast< Class* >( type->Second().Ptr() ) );
 }
 
 void Registry::Created(Object* object)

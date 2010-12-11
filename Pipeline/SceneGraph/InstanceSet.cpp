@@ -45,7 +45,7 @@ void InstanceSet::AddInstance(SceneGraph::Instance* i)
     m_Type->AddSet(this);
   }
 
-  Insert<S_InstanceDumbPtr>::Result inserted = m_Instances.insert( i );
+  StdInsert<S_InstanceDumbPtr>::Result inserted = m_Instances.insert( i );
   HELIUM_ASSERT( *inserted.first == i );
 
   if ( !i->IsTransient() )

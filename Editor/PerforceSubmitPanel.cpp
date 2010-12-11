@@ -306,7 +306,7 @@ void PerforceSubmitPanel::Populate()
         //displayPath += " ";
         //displayPath += GetOperationString( File.m_Operation );
 
-        Helium::Insert<M_FileItemTable>::Result inserted = m_FileItemTable.insert( M_FileItemTable::value_type( depotPath, listBox->Append( displayPath.c_str() ) ) );
+        Helium::StdInsert<M_FileItemTable>::Result inserted = m_FileItemTable.insert( M_FileItemTable::value_type( depotPath, listBox->Append( displayPath.c_str() ) ) );
         if ( shouldShowCommitButtons && inserted.second )
         {
             m_FileCheckList->Check( inserted.first->second, true ); //File.IsCheckedOutByMe() );

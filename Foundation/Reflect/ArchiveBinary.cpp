@@ -763,7 +763,7 @@ ElementPtr ArchiveBinary::Allocate()
     if ( m_Cache.Create( name, element ) && name != element->GetClass()->m_Name )
     {
         // map current short name name to LEGACY short name name so we can retrieve type information via a lookup later
-        Insert< std::map< Name, Name > >::Result inserted = m_ShortNameMapping.insert( std::map< Name, Name >::value_type( element->GetClass()->m_Name, name ) );
+        StdInsert< std::map< Name, Name > >::Result inserted = m_ShortNameMapping.insert( std::map< Name, Name >::value_type( element->GetClass()->m_Name, name ) );
 
         // check for insanity
         if ( !inserted.second && inserted.first->second != name )

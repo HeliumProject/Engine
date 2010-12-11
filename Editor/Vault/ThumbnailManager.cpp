@@ -74,7 +74,7 @@ void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& arg
     }
     else
     {
-        Helium::Insert< std::map< uint64_t, Helium::Path* > >::Result inserted = list->insert( std::make_pair( args.m_Path->Hash(), args.m_Path ) );
+        Helium::StdInsert< std::map< uint64_t, Helium::Path* > >::Result inserted = list->insert( std::make_pair( args.m_Path->Hash(), args.m_Path ) );
         if ( inserted.second )
         {
             // Only post to the window if we still have a pointer

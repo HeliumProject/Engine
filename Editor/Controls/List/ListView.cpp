@@ -209,7 +209,7 @@ const tstring& StringLookup( long item, SortData* data )
             const tchar_t* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : TXT( "" );
 
             // Cache the value so that the lookup is faster next time
-            Insert<M_i32ToString>::Result inserted = data->m_Cache.insert( M_i32ToString::value_type( item, tstring( temp ) ) );
+            StdInsert<M_i32ToString>::Result inserted = data->m_Cache.insert( M_i32ToString::value_type( item, tstring( temp ) ) );
             text = &( inserted.first->second );
         }
     }

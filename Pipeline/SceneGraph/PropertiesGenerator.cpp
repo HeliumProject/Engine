@@ -48,7 +48,7 @@ bool PropertiesGenerator::InitializePanel(const tstring& name, const CreatePanel
 
     HELIUM_ASSERT(g_Initialized);
 
-    Helium::Insert<M_PanelCreators>::Result inserted = s_PanelCreators.insert(M_PanelCreators::value_type (name, creator));
+    Helium::StdInsert<M_PanelCreators>::Result inserted = s_PanelCreators.insert(M_PanelCreators::value_type (name, creator));
 
     if (!inserted.second)
     {

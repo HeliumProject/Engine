@@ -64,7 +64,7 @@ bool Processor::ParseOptions( std::vector< tstring >::const_iterator& argsBegin,
 
 bool Processor::RegisterCommand( Command* command, tstring& error )
 {
-	Helium::Insert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
+	Helium::StdInsert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
 	if ( !inserted.second )
 	{
 		error = tstring( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();

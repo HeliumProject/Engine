@@ -70,7 +70,7 @@ const D3DMATERIAL9& InstanceType::GetMaterial() const
 
 void InstanceType::AddSet(SceneGraph::InstanceSet* set)
 {
-    Insert<M_InstanceSetSmartPtr>::Result inserted = m_Sets.insert( M_InstanceSetSmartPtr::value_type( set->GetName(), set ) );
+    StdInsert<M_InstanceSetSmartPtr>::Result inserted = m_Sets.insert( M_InstanceSetSmartPtr::value_type( set->GetName(), set ) );
 
     if ( inserted.second )
     {

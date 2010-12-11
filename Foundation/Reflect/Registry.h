@@ -8,6 +8,7 @@
 #include "Foundation/Memory.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Name.h"
+#include "Foundation/Container/SortedMap.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/API.h"
@@ -21,7 +22,7 @@ namespace Helium
         typedef void (*DestroyedFunc)(Object* object);
 
         // Registry containers
-        typedef std::map< Name, Helium::SmartPtr< Type > > M_NameToType;
+        typedef SortedMap< Name, Helium::SmartPtr< Type > > M_NameToType;
 
         // Profile interface
 #ifdef PROFILE_ACCUMULATION

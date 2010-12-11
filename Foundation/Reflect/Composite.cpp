@@ -45,6 +45,22 @@ void Composite::Unregister() const
     m_Base->m_Derived.Remove( this );
 }
 
+uint32_t Composite::GetBaseFieldCount() const
+{
+    uint32_t count = 0;
+
+    for ( const Composite* base = m_Base; base; base = base->m_Base )
+    {
+        if ( m_Base->m_Fields.size() )
+        {
+            count = m_Base->m_Fields.back()->m_Index;
+            break;
+        }
+    }
+
+    return count;
+}
+
 Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags)
 {
     tstring convertedName;
@@ -58,7 +74,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
+    field->m_Index = GetBaseFieldCount();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 
@@ -93,7 +109,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
+    field->m_Index = GetBaseFieldCount();
     field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
     field->m_Type = type;
     m_Fields.push_back( field );
@@ -132,7 +148,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = m_Base->m_Fields.back()->m_Index + (int32_t)m_Fields.size();
+    field->m_Index = GetBaseFieldCount();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 

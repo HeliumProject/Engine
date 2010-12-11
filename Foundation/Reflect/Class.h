@@ -51,11 +51,34 @@ namespace Helium
                 // populate base classes' derived class list (unregister will remove it)
                 info->m_Base->m_Derived.Insert( info );
 
-                // c++ can give us the address of base class static functions, so check each base class
-                for ( const Composite* base = info->m_Base; base; base = base->m_Base )
+                // the static enumerate function for this particular class' fields
+                CompositeEnumerator enumerator = (CompositeEnumerator)&T::EnumerateClass;
+
+                // c++ can give us the address of base class static functions,
+                //  so check each base class to see if this is really a base class enumerate function
+                bool baseEnumerator = false;
                 {
-                    // this would cause us to call the same enumerate function twice!
-                    HELIUM_ASSERT( base->m_Enumerator != (CompositeEnumerator)&T::EnumerateClass );
+                    const Reflect::Composite* base = info->m_Base;
+                    while ( !baseEnumerator && base )
+                    {
+                        if (base)
+                        {
+                            baseEnumerator = base->m_Enumerator && base->m_Enumerator == enumerator;
+                            base = base->m_Base;
+                        }
+                        else
+                        {
+                            HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
+                            baseName.Clear();
+                        }
+                    }
+                }
+
+                // if our enumerate function isn't one from a base class
+                if ( !baseEnumerator )
+                {
+                    // the enumerator function will populate our field data
+                    info->m_Enumerator = enumerator;
                 }
 
                 // enumerate reflection data, but only if we are concrete (instantiatable)

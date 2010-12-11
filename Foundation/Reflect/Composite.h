@@ -109,6 +109,9 @@ namespace Helium
             // Add fields to the composite
             //
 
+            // computes the number of fields in all our base classes (the base index for our fields)
+            uint32_t GetBaseFieldCount() const;
+
             Reflect::Field* AddField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
             Reflect::ElementField* AddElementField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
             Reflect::EnumerationField* AddEnumerationField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );

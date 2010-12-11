@@ -309,7 +309,7 @@ bool Registry::RegisterType(Type* type)
                     Type* baseClass = found->Second();
                     if ( baseClass->GetReflectionType() == ReflectionTypes::Class )
                     {
-                        static_cast< Class* >( baseClass )->m_Derived.insert( classType->m_Name );
+                        static_cast< Class* >( baseClass )->m_Derived.Insert( classType->m_Name );
                     }
                     else
                     {
@@ -383,7 +383,7 @@ void Registry::UnregisterType(const Type* type)
                 {
                     if ( found->Second()->GetReflectionType() == ReflectionTypes::Class )
                     {
-                        static_cast< Class* >( found->Second().Ptr() )->m_Derived.erase( classType->m_Name );
+                        static_cast< Class* >( found->Second().Ptr() )->m_Derived.Remove( classType->m_Name );
                     }
                     else
                     {

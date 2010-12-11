@@ -146,11 +146,12 @@ typename Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalVal
         const Key& rKey )
 {
     EqualKey keyEquals;
+    ExtractKey keyExtract;
 
     Iterator endIterator = End();
     for( Iterator iterator = Begin(); iterator != endIterator; ++iterator )
     {
-        if( keyEquals( rKey, iterator->First() ) )
+        if( keyEquals( rKey, keyExtract( *iterator ) ) )
         {
             return iterator;
         }
@@ -170,11 +171,12 @@ typename Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalVal
     Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::Find( const Key& rKey ) const
 {
     EqualKey keyEquals;
+    ExtractKey keyExtract;
 
     ConstIterator endIterator = End();
     for( ConstIterator iterator = Begin(); iterator != endIterator; ++iterator )
     {
-        if( keyEquals( rKey, iterator->First() ) )
+        if( keyEquals( rKey, keyExtract( *iterator ) ) )
         {
             return iterator;
         }
@@ -194,7 +196,9 @@ template< typename Value, typename Key, typename ExtractKey, typename EqualKey, 
 Helium::Pair< typename Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::Iterator, bool >
     Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::Insert( const ValueType& rValue )
 {
-    Iterator iterator = Find( rValue.First() );
+    ExtractKey keyExtract;
+
+    Iterator iterator = Find( keyExtract( rValue ) );
     bool bInserted = ( iterator == End() );
 
     if( bInserted )
@@ -218,7 +222,9 @@ bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >
     ConstIterator& rIterator,
     const ValueType& rValue )
 {
-    rIterator = Find( rValue.First() );
+    ExtractKey keyExtract;
+
+    rIterator = Find( keyExtract( rValue ) );
     bool bInserted = ( rIterator == End() );
 
     if( bInserted )

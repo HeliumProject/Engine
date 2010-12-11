@@ -2,6 +2,8 @@
 
 #include "Foundation/Container/Table.h"
 
+#include "Foundation/Functions.h"
+
 namespace Helium
 {
     /// Unique set container type (not thread-safe).

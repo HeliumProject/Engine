@@ -6,6 +6,7 @@
 #include "Foundation/Reflect/Field.h"
 #include "Foundation/Reflect/Visitor.h"
 #include "Foundation/Automation/Attribute.h"
+#include "Foundation/Container/Set.h"
 
 //
 //  Composite Binary format:
@@ -45,7 +46,7 @@ namespace Helium
             REFLECTION_TYPE( ReflectionTypes::Composite );
 
             Name                    m_Base;               // the base type name
-            std::set< Name >        m_Derived;            // the derived type names
+            Set< Name >             m_Derived;            // the derived type names
 
             CompositeEnumerator     m_Enumerator;         // the function to enumerate this type
             bool                    m_Enumerated;         // flag if we are enumerated

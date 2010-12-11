@@ -137,13 +137,13 @@ Helium::ConstArrayIterator< T > Helium::ConstArrayIterator< T >::operator-( ptrd
 
 /// Subtraction operator.
 ///
-/// @param[in] rOther  Bit array iterator to subtract.
+/// @param[in] rOther  Array iterator to subtract.
 ///
-/// @return  Offset from the given bit array iterator to this iterator.
+/// @return  Offset from the given array iterator to this iterator.
 template< typename T >
 ptrdiff_t Helium::ConstArrayIterator< T >::operator-( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement - rOther.m_pElement );
+    return ( m_pElement - rOther.m_pElement );
 }
 
 /// Equality comparison operator.
@@ -154,7 +154,7 @@ ptrdiff_t Helium::ConstArrayIterator< T >::operator-( const ConstArrayIterator& 
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator==( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement == rOther.m_pElement );
+    return ( m_pElement == rOther.m_pElement );
 }
 
 /// Inequality comparison operator.
@@ -165,7 +165,7 @@ bool Helium::ConstArrayIterator< T >::operator==( const ConstArrayIterator& rOth
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator!=( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement != rOther.m_pElement );
+    return ( m_pElement != rOther.m_pElement );
 }
 
 /// Less-than comparison operator.
@@ -176,7 +176,7 @@ bool Helium::ConstArrayIterator< T >::operator!=( const ConstArrayIterator& rOth
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator<( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement < rOther.m_pElement );
+    return ( m_pElement < rOther.m_pElement );
 }
 
 /// Greater-than comparison operator.
@@ -187,7 +187,7 @@ bool Helium::ConstArrayIterator< T >::operator<( const ConstArrayIterator& rOthe
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator>( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement > rOther.m_pElement );
+    return ( m_pElement > rOther.m_pElement );
 }
 
 /// Less-than-or-equals comparison operator.
@@ -198,7 +198,7 @@ bool Helium::ConstArrayIterator< T >::operator>( const ConstArrayIterator& rOthe
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator<=( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement <= rOther.m_pElement );
+    return ( m_pElement <= rOther.m_pElement );
 }
 
 /// Greater-than-or-equals comparison operator.
@@ -209,7 +209,7 @@ bool Helium::ConstArrayIterator< T >::operator<=( const ConstArrayIterator& rOth
 template< typename T >
 bool Helium::ConstArrayIterator< T >::operator>=( const ConstArrayIterator& rOther ) const
 {
-    return( m_pElement >= rOther.m_pElement );
+    return ( m_pElement >= rOther.m_pElement );
 }
 
 /// Constructor.
@@ -347,4 +347,15 @@ template< typename T >
 Helium::ArrayIterator< T > Helium::ArrayIterator< T >::operator-( ptrdiff_t offset ) const
 {
     return ArrayIterator( ConstArrayIterator< T >::m_pElement - offset );
+}
+
+/// Subtraction operator.
+///
+/// @param[in] rOther  Array iterator to subtract.
+///
+/// @return  Offset from the given array iterator to this iterator.
+template< typename T >
+ptrdiff_t Helium::ArrayIterator< T >::operator-( const ConstArrayIterator& rOther ) const
+{
+    return ConstArrayIterator< T >::operator-( rOther );
 }

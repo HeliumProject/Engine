@@ -40,9 +40,19 @@ namespace Helium
     template< typename T > class StrongPtr;
     template< typename T > class WeakPtr;
 
+    /// Base type for reference counting object proxies.
+    class RefCountProxyBase
+    {
+    protected:
+        /// Reference-counted object.
+        void* volatile m_pObject;
+        /// Reference counts (strong references in lower 16-bits, weak references in upper 16-bits).
+        volatile int32_t m_refCounts;
+    };
+
     /// Reference counting object proxy.
     template< typename BaseT >
-    class RefCountProxy
+    class RefCountProxy : public RefCountProxyBase
     {
     public:
         /// @name Initialization
@@ -67,11 +77,6 @@ namespace Helium
         //@}
 
     private:
-        /// Reference-counted object.
-        BaseT* volatile m_pObject;
-        /// Reference counts (strong references in lower 16-bits, weak references in upper 16-bits).
-        volatile int32_t m_refCounts;
-
         /// @name Private Utility Functions
         //@{
         void DestroyObject();
@@ -154,9 +159,9 @@ namespace Helium
         //@}
 
     private:
-        /// Proxy object (cast to a void pointer to avoid the need for knowledge about the template type in order to
-        /// simply hold an instance of a StrongPtr).
-        void* m_pVoidProxy;
+        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared
+        /// types).
+        RefCountProxyBase* m_pProxy;
 
         /// @name Conversion Utility Functions, Private
         //@{
@@ -215,9 +220,9 @@ namespace Helium
         //@}
 
     private:
-        /// Proxy object (cast to a void pointer to avoid the need for knowledge about the template type in order to
-        /// simply hold an instance of a WeakPtr).
-        void* m_pVoidProxy;
+        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared
+        /// types).
+        RefCountProxyBase* m_pProxy;
 
         /// @name Conversion Utility Functions, Private
         //@{

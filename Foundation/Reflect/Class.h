@@ -44,10 +44,12 @@ namespace Helium
 
                 // lookup base class
                 info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );
-                info->m_Base->m_Derived.insert( info );
 
                 // if you hit this break your base class is not registered yet!
                 HELIUM_ASSERT( info->m_Base );
+
+                // populate base classes' derived class list (unregister will remove it)
+                info->m_Base->m_Derived.insert( info );
 
                 // c++ can give us the address of base class static functions, so check each base class
                 for ( const Composite* base = info->m_Base; base; base = base->m_Base )
@@ -80,5 +82,8 @@ namespace Helium
 
         typedef Helium::SmartPtr< Class > ClassPtr;
         typedef Helium::SmartPtr< const Class > ConstClassPtr;
+
+        template<>
+        Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creator );
     }
 }

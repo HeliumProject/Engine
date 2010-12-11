@@ -346,47 +346,9 @@ void Registry::UnregisterType(const Type* type)
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    switch (type->GetReflectionType())
-    {
-    case ReflectionTypes::Class:
-        {
-            const Class* classType = static_cast<const Class*>(type);
+    type->Unregister();
 
-            if ( !classType->m_Name.IsEmpty() )
-            {
-                m_TypesByName.Remove( classType->m_Name );
-            }
-
-            if ( classType->m_Base )
-            {
-                classType->m_Base->m_Derived.erase( classType );
-            }
-
-            m_TypesByName.Remove( classType->m_Name );
-
-            break;
-        }
-
-    case ReflectionTypes::ObjectType:
-    case ReflectionTypes::GameObjectType:
-        {
-            const ObjectType* objectType = static_cast< const ObjectType* >( type );
-
-            m_TypesByName.Remove( objectType->m_Name );
-
-            break;
-        }
-
-    case ReflectionTypes::Enumeration:
-        {
-            const Enumeration* enumeration = static_cast<const Enumeration*>(type);
-
-            m_TypesByName.Remove(enumeration->m_Name);
-            m_TypesByName.Remove(enumeration->m_Name);
-
-            break;
-        }
-    }
+    m_TypesByName.Remove( type->m_Name );
 }
 
 void Registry::AliasType( const Type* type, Name alias )

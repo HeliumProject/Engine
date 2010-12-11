@@ -21,6 +21,30 @@ Composite::~Composite()
 
 }
 
+void Composite::Report() const
+{
+    Log::Debug( Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
+
+    uint32_t computedSize = 0;
+    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
+    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
+    for ( ; itr != end; ++itr )
+    {
+        computedSize += (*itr)->m_Size;
+        Log::Debug( Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str() );
+    }
+
+    if (computedSize != m_Size)
+    {
+        Log::Debug( Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
+    }
+}
+
+void Composite::Unregister() const
+{
+    m_Base->m_Derived.Remove( this );
+}
+
 Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags)
 {
     tstring convertedName;
@@ -130,25 +154,6 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     return field;
 }
 
-void Composite::Report() const
-{
-    Log::Debug( Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
-
-    uint32_t computedSize = 0;
-    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
-    for ( ; itr != end; ++itr )
-    {
-        computedSize += (*itr)->m_Size;
-        Log::Debug( Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str() );
-    }
-
-    if (computedSize != m_Size)
-    {
-        Log::Debug( Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
-    }
-}
-
 bool Composite::HasType(const Type* type) const
 {
     for ( const Composite* base = this; base; base = base->m_Base )
@@ -160,25 +165,6 @@ bool Composite::HasType(const Type* type) const
     }
 
     return false;
-}
-
-tstring Composite::ShortenName(const tstring& name)
-{
-    if (name.find( TXT("<") ) != tstring::npos)
-    {
-        HELIUM_BREAK();
-    }
-    else
-    {
-        // look for the space after "struct " or "class "
-        size_t offset = name.rfind( TXT(" ") );
-        if (offset != std::string::npos)
-        {
-            return name.substr(offset+1);
-        }
-    }
-
-    return name;
 }
 
 const Field* Composite::FindFieldByName(const tstring& name) const

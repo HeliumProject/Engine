@@ -56,6 +56,10 @@ namespace Helium
             virtual ~Composite();
 
         public:
+            // overload from Type
+            virtual void Report() const HELIUM_OVERRIDE;
+            virtual void Unregister() const HELIUM_OVERRIDE;
+
             //
             // Call all the enumerator functions related to this type
             //
@@ -110,22 +114,10 @@ namespace Helium
             Reflect::EnumerationField* AddEnumerationField( Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
-            // Report information to stdout
-            //
-
-            void Report() const;
-
-            //
             // Test for type of this or it base classes
             //
 
             bool HasType(const Type* type) const;
-
-            // 
-            // Name utilities
-            //
-
-            static tstring ShortenName(const tstring& name);
 
             //
             // Find a field by name

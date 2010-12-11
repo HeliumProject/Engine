@@ -13,14 +13,15 @@ namespace Helium
         typename EqualKey = Equals< Key >,
         typename Allocator = DefaultAllocator >
     class ConcurrentHashSet
-        : public ConcurrentHashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key >
+        : public ConcurrentHashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key >
     {
     public:
         /// Default hash table bucket count (prime numbers are recommended).
         static const size_t DEFAULT_BUCKET_COUNT = 37;
 
         /// Parent class type.
-        typedef ConcurrentHashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key > Super;
+        typedef ConcurrentHashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key >
+            Super;
 
         /// Type for hash set keys.
         typedef typename Super::KeyType KeyType;

@@ -100,8 +100,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
         bases.push( current );
     }
 
-    for ( const Composite* current = bases.top(); !bases.empty(); bases.pop(), current = bases.top() )
+    while ( !bases.empty() )
     {
+        const Composite* current = bases.top();
+        bases.pop();
+
         // for each field in the type
         std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
         std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();

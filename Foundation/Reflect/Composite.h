@@ -72,18 +72,21 @@ namespace Helium
                 }
 
                 // walk that list from base to derived
-                for ( const Composite* base = bases.top(); !bases.empty(); bases.pop() )
+                while ( !bases.empty() )
                 {
+                    const Composite* current = bases.top();
+                    bases.pop();
+
                     // enumerate our base type information, note we use the derived instance since its ctor could modify base members
-                    if (base->m_Enumerator)
+                    if ( current->m_Enumerator )
                     {
-                        base->m_Enumerator(&compositor);
+                        current->m_Enumerator( &compositor );
                     }
 
                     // handle abstract base classes by enumerating their type info with our derived instance
-                    if (!base->m_Enumerated)
+                    if ( !current->m_Enumerated )
                     {
-                        const_cast<Composite*>(base)->EnumerateInstance<T>(instance);
+                        const_cast< Composite* >( current )->EnumerateInstance<T>( instance );
                     }
                 }
 

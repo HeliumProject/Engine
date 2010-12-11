@@ -1121,8 +1121,11 @@ void ArchiveBinary::SerializeComposite(const Composite* composite)
         bases.push( current );
     }
 
-    for ( const Composite* current = bases.top(); !bases.empty(); bases.pop(), current = bases.top() )
+    while ( !bases.empty() )
     {
+        const Composite* current = bases.top();
+        bases.pop();
+
         std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
         std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
         for ( ; itr != end; ++itr )

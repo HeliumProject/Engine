@@ -43,3 +43,14 @@ const T& Helium::Identity< T >::operator()( const T& rValue ) const
 {
     return rValue;
 }
+
+/// Identity selection function.
+///
+/// @param[in] rValue  Constant reference to any value.
+///
+/// @return  Constant reference to the given value.
+template< typename T >
+const T& Helium::Identity< const T >::operator()( const T& rValue ) const
+{
+    return rValue;
+}

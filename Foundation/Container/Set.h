@@ -18,11 +18,11 @@ namespace Helium
     /// Removal does not maintain such order, as elements are moved from the end of the set to the space occupied by the
     /// set slot being removed in order to reduce the amount of data copied during removal.
     template< typename Key, typename EqualKey = Equals< Key >, typename Allocator = DefaultAllocator >
-    class Set : public Table< Key, Key, Identity< Key >, EqualKey, Allocator >
+    class Set : public Table< const Key, const Key, Identity< const Key >, EqualKey, Allocator, Key >
     {
     public:
         /// Parent class type.
-        typedef Table< Key, Key, Identity< Key >, EqualKey, Allocator > Super;
+        typedef Table< const Key, const Key, Identity< const Key >, EqualKey, Allocator, Key > Super;
 
         /// Type for set keys.
         typedef typename Super::KeyType KeyType;

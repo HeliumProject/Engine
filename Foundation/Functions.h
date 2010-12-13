@@ -92,6 +92,14 @@ namespace Helium
         T& operator()( T& rValue ) const;
         const T& operator()( const T& rValue ) const;
     };
+
+    /// Identity value selection function.
+    template< typename T >
+    class Identity< const T >
+    {
+    public:
+        const T& operator()( const T& rValue ) const;
+    };
 }
 
 #include "Foundation/Functions.inl"

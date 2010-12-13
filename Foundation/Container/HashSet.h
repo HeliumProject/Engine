@@ -13,14 +13,14 @@ namespace Helium
         typename HashFunction = Hash< Key >,
         typename EqualKey = Equals< Key >,
         typename Allocator = DefaultAllocator >
-    class HashSet : public HashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key >
+    class HashSet : public HashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key >
     {
     public:
         /// Default hash table bucket count (prime numbers are recommended).
         static const size_t DEFAULT_BUCKET_COUNT = 37;
 
         /// Parent class type.
-        typedef HashTable< Key, Key, HashFunction, Identity< Key >, EqualKey, Allocator, Key > Super;
+        typedef HashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key > Super;
 
         /// Type for hash set keys.
         typedef typename Super::KeyType KeyType;

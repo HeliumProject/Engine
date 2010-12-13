@@ -261,7 +261,7 @@ bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >
 template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
 void Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::Remove( Iterator iterator )
 {
-    m_elements.RemoveSwap( static_cast< size_t >( iterator - m_elements.Begin() ) );
+    m_elements.RemoveSwap( static_cast< size_t >( &( *iterator ) - m_elements.GetData() ) );
 }
 
 /// Remove the elements referenced by the given range from this table.
@@ -271,7 +271,9 @@ void Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >
 template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
 void Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::Remove( Iterator start, Iterator end )
 {
-    m_elements.RemoveSwap( static_cast< size_t >( start - m_elements.Begin() ), static_cast< size_t >( end - start ) );
+    m_elements.RemoveSwap(
+        static_cast< size_t >( &( *start ) - m_elements.GetData() ),
+        static_cast< size_t >( end - start ) );
 }
 
 /// Swap the contents of this table with another table.

@@ -3172,29 +3172,29 @@ Helium::NameBase<Helium::WideNameTable>{
 
 Helium::StrongPtr<*>{
 	preview (
-		#if ($e.m_pVoidProxy == 0) (
+		#if ($e.m_pProxy == 0) (
 			"empty"
 		) #else (
 			#(
 				"StrongPtr ",
-				**($T1 **)$e.m_pVoidProxy,
+				*($T1 *)$e.m_pProxy->m_pObject,
 				" [",
-				(*(unsigned int *)((void **)$e.m_pVoidProxy + 1) & 0xffff),
-				#if ((*(unsigned int *)((void **)$e.m_pVoidProxy + 1) & 0xffff) == 1) (" strong ref") #else (" strong refs"),
+				($e.m_pProxy->m_refCounts & 0xffff),
+				#if (($e.m_pProxy->m_refCounts & 0xffff) == 1) (" strong ref") #else (" strong refs"),
 				", ",
-				(*(unsigned int *)((void **)$e.m_pVoidProxy + 1) >> 0x10),
-				#if ((*(unsigned int *)((void **)$e.m_pVoidProxy + 1) >> 0x10) == 1) (" weak ref") #else (" weak refs"),
+				($e.m_pProxy->m_refCounts >> 0x10),
+				#if (($e.m_pProxy->m_refCounts >> 0x10) == 1) (" weak ref") #else (" weak refs"),
 				"]"
 			)
 		)
 	)
 
 	children (
-		#if ($e.m_pVoidProxy == 0) (
+		#if ($e.m_pProxy == 0) (
 			#array(expr: 0, size: 0)
 		) #else (
 			#(
-				#([ptr] : *($T1 **)$e.m_pVoidProxy),
+				#([ptr] : ($T1 *)$e.m_pProxy->m_pObject),
 				#([actual members] : [$e,!])
 			)
 		)
@@ -3203,35 +3203,35 @@ Helium::StrongPtr<*>{
 
 Helium::WeakPtr<*>{
 	preview (
-		#if ($e.m_pVoidProxy == 0) (
+		#if ($e.m_pProxy == 0) (
 			"empty"
-		) #elif (*($T1 **)$e.m_pVoidProxy == 0) (
+		) #elif (($T1 *)$e.m_pProxy->m_pObject == 0) (
 			; WeakPtr is just like StrongPtr, except that a WeakPtr can be expired.
 			"expired"
 		) #else (
 			#(
 				"WeakPtr ",
-				**($T1 **)$e.m_pVoidProxy,
+				*($T1 *)$e.m_pProxy->m_pObject,
 				" [",
-				(*(unsigned int *)((void **)$e.m_pVoidProxy + 1) & 0xffff),
-				#if ((*(unsigned int *)((void **)$e.m_pVoidProxy + 1) & 0xffff) == 1) (" strong ref") #else (" strong refs"),
+				($e.m_pProxy->m_refCounts & 0xffff),
+				#if (($e.m_pProxy->m_refCounts & 0xffff) == 1) (" strong ref") #else (" strong refs"),
 				", ",
-				(*(unsigned int *)((void **)$e.m_pVoidProxy + 1) >> 0x10),
-				#if ((*(unsigned int *)((void **)$e.m_pVoidProxy + 1) >> 0x10) == 1) (" weak ref") #else (" weak refs"),
+				($e.m_pProxy->m_refCounts >> 0x10),
+				#if (($e.m_pProxy->m_refCounts >> 0x10) == 1) (" weak ref") #else (" weak refs"),
 				"]"
 			)
 		)
 	)
 
 	children (
-		#if ($e.m_pVoidProxy == 0) (
+		#if ($e.m_pProxy == 0) (
 			#array(expr: 0, size: 0)
-		) #elif (*($T1 **)$e.m_pVoidProxy == 0) (
+		) #elif (($T1 *)$e.m_pProxy->m_pObject == 0) (
 			; When a WeakPtr is expired, we make it appear to have no children.
 			#array(expr: 0, size: 0)
 		) #else (
 			#(
-				#([ptr] : *($T1 **)$e.m_pVoidProxy),
+				#([ptr] : ($T1 *)$e.m_pProxy->m_pObject),
 				#([actual members] : [$e,!])
 			)
 		)

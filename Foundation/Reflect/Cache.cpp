@@ -28,7 +28,7 @@ static void CreateInstance( const Class* type, ElementPtr& element )
     element = AssertCast<Element>( object );
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
+    Log::Print("Cache miss %d on type '%s', name '%s', id '%d'\n", ++g_MissCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
 }
 
@@ -64,7 +64,7 @@ bool Cache::Create( const Class* type, ElementPtr& element )
             element = top;
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
+            Log::Print("Cache hit %d on type '%s', name '%s', id '%d'\n", ++g_HitCount, type->m_Name.c_str(), element->GetClass()->m_Name.c_str(), type);
 #endif
         }
 

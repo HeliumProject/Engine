@@ -232,7 +232,7 @@ void Archive::Get( std::vector< ElementPtr >& elements )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-    Log::Debug( TXT( "Parsing '%s'" ), m_Path.c_str() );
+    Log::Debug( TXT( "Parsing '%s'\n" ), m_Path.c_str() );
 
     if ( Helium::IsDebuggerPresent() )
     {

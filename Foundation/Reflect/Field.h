@@ -59,7 +59,7 @@ namespace Helium
             uint32_t                m_Size;         // the size of this field
             uintptr_t               m_Offset;       // the offset to the field
             uint32_t                m_Flags;        // flags for special behavior
-            int32_t                 m_Index;      // the unique id of this field
+            uint32_t                m_Index;      // the unique id of this field
             const Class*            m_DataClass;     // type id of the serializer to use
             DataPtr                 m_Default;      // the value of the default
             CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)

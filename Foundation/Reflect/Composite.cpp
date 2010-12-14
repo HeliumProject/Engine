@@ -23,7 +23,7 @@ Composite::~Composite()
 
 void Composite::Report() const
 {
-    Log::Debug( Log::Levels::Verbose, TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
+    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
 
     uint32_t computedSize = 0;
     std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
@@ -31,12 +31,12 @@ void Composite::Report() const
     for ( ; itr != end; ++itr )
     {
         computedSize += (*itr)->m_Size;
-        Log::Debug( Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str() );
+        Log::Debug( TXT( "  Index: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str() );
     }
 
     if (computedSize != m_Size)
     {
-        Log::Debug( Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
+        Log::Debug( TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
     }
 }
 
@@ -53,7 +53,7 @@ uint32_t Composite::GetBaseFieldCount() const
     {
         if ( m_Base->m_Fields.size() )
         {
-            count = m_Base->m_Fields.back()->m_Index;
+            count = m_Base->m_Fields.back()->m_Index + 1;
             break;
         }
     }
@@ -74,7 +74,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount();
+    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 
@@ -109,7 +109,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount();
+    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
     field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
     field->m_Type = type;
     m_Fields.push_back( field );
@@ -148,7 +148,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount();
+    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 
@@ -185,13 +185,16 @@ bool Composite::HasType(const Type* type) const
 
 const Field* Composite::FindFieldByName(const tstring& name) const
 {
-    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
-    for ( ; itr != end; ++itr )
+    for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        if ( (*itr)->m_Name == name )
+        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        for ( ; itr != end; ++itr )
         {
-            return *itr;
+            if ( (*itr)->m_Name == name )
+            {
+                return *itr;
+            }
         }
     }
 
@@ -200,13 +203,11 @@ const Field* Composite::FindFieldByName(const tstring& name) const
 
 const Field* Composite::FindFieldByIndex(uint32_t index) const
 {
-    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
-    for ( ; itr != end; ++itr )
+    for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        if ( (*itr)->m_Index == index )
+        if ( !current->m_Fields.empty() && index >= current->m_Fields.front()->m_Index && index <= current->m_Fields.front()->m_Index )
         {
-            return *itr;
+            return current->m_Fields[ index - current->m_Fields.front()->m_Index ];
         }
     }
 
@@ -215,13 +216,19 @@ const Field* Composite::FindFieldByIndex(uint32_t index) const
 
 const Field* Composite::FindFieldByOffset(uint32_t offset) const
 {
-    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
-    for ( ; itr != end; ++itr )
+    for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        if ( (*itr)->m_Offset == offset )
+        if ( !current->m_Fields.empty() && offset >= current->m_Fields.front()->m_Offset && offset <= current->m_Fields.front()->m_Offset )
         {
-            return *itr;
+            std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
+            std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+            for ( ; itr != end; ++itr )
+            {
+                if ( (*itr)->m_Offset == offset )
+                {
+                    return *itr;
+                }
+            }
         }
     }
 

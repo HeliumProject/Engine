@@ -10,7 +10,7 @@
 //  
 //    struct Data
 //    {
-//      int32_t type;           // string pool index of the short name of the serializer
+//      int32_t type;           // string pool index of the name of the serializer
 //      byte[] data;            // serialized data
 //    };
 //  
@@ -22,7 +22,7 @@
 //  
 //    struct Element
 //    {
-//      int32_t type;           // string pool index of the short name of the element
+//      int32_t type;           // string pool index of the name of the element
 //      int32_t field_count;    // number of serialized fields
 //      Field[] fields;         // field instance data
 //      int32_t term;           // -1
@@ -83,11 +83,11 @@ namespace Helium
             // The strings to cache for binary modes
             StringPool m_Strings;
 
-            // Latent types by latent short name
+            // Latent types by latent name
             M_NameToClass m_ClassesByShortName;
 
-            // Mapping from CURRENT short name to LEGACY short name
-            std::map< Name, Name > m_ShortNameMapping;
+            // Mapping from CURRENT name to LEGACY name
+            std::map< Name, Name > m_NameMapping;
 
             // File format version
             uint32_t m_Version;

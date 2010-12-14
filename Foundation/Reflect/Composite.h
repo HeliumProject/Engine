@@ -14,12 +14,12 @@
 //  struct Field
 //  {
 //      int32_t name;               // string pool index of the name of this field
-//      int32_t serializer_id;      // string pool index of the short name of the serializer type
+//      int32_t serializer_id;      // string pool index of the name of the serializer type
 //  };
 //
 //  struct Composite
 //  {
-//      int32_t short_name;         // string pool index of the short name for this type
+//      int32_t short_name;         // string pool index of the name for this type
 //      int32_t count;              // number of field infos to follow
 //      Field[] fields;             // field rtti data
 //      int32_t term;               // -1
@@ -81,12 +81,6 @@ namespace Helium
                 {
                     const Composite* current = bases.top();
                     bases.pop();
-
-                    // enumerate our base type information, note we use the derived instance since its ctor could modify base members
-                    if ( current->m_Enumerator )
-                    {
-                        current->m_Enumerator( &compositor );
-                    }
 
                     // handle abstract base classes by enumerating their type info with our derived instance
                     if ( !current->m_Enumerated )

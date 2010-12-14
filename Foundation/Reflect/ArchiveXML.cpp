@@ -61,7 +61,7 @@ ArchiveXML::~ArchiveXML()
 void ArchiveXML::Open( bool write )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug(TXT("Opening file '%s'\n"), file.c_str());
+    Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
     Reflect::TCharStreamPtr stream = new FileStream<tchar_t>( m_Path, write, m_ByteOrder );
@@ -557,14 +557,14 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     if (!newState->m_Element.ReferencesObject())
     {
         //
-        // Attempt creation of element via short name
+        // Attempt creation of element via name
         //
 
         m_Cache.Create( Name( elementType.c_str() ), newState->m_Element );
 
         if (!newState->m_Element.ReferencesObject())
         {
-            Log::Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
+            Log::Debug( TXT( "Unable to create element with name: %s\n" ), elementType);
         }
     }
 

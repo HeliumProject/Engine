@@ -25,7 +25,7 @@ namespace Helium
             class ParsingState : public Helium::RefCountBase<ParsingState>
             {
             public:
-                // the name of the short name being processed
+                // the name of the name being processed
                 tstring m_Name;
 
                 // the cdata section for xml files

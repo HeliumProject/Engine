@@ -62,7 +62,7 @@ namespace Helium
 //
 
 // enable verbose archive printing
-//#define REFLECT_ARCHIVE_VERBOSE
+#define REFLECT_ARCHIVE_VERBOSE
 
 //
 // Internal Macros

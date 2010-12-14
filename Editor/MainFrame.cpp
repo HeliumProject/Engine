@@ -426,6 +426,8 @@ void MainFrame::CloseProject()
     {
         m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
+#pragma TODO( "Turn tracker off" )
+
         // this will release all our listeners which may get signalled with state changes during teardown
         m_SceneManager.SetCurrentScene( NULL );
 
@@ -447,7 +449,19 @@ void MainFrame::NewProjectDialog()
 
     if ( newProjectDialog.ShowModal() == wxID_OK )
     {
-        OpenProject( (const wxChar*)newProjectDialog.GetPath().c_str() );
+        Path newProjectPath( newProjectDialog.GetPath().c_str() );
+
+        // the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
+        if ( newProjectPath.Exists() )
+        {
+            if ( !newProjectPath.Delete() )
+            {
+                wxMessageBox( wxT( "Could not remove the existing project: FIXME -- add an error" ), wxT( "Error Removing Exising Project" ), wxOK );
+                return;
+            }
+        }
+
+        OpenProject( newProjectPath );
     }
 }
 
@@ -457,7 +471,15 @@ void MainFrame::OpenProjectDialog()
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
-        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
+        Path existingProjectPath( openDlg.GetPath().c_str() );
+
+        if ( !existingProjectPath.Exists() )
+        {
+            wxMessageBox( wxT( "No such project exists on the disk." ), wxT( "No Such Project" ), wxOK );
+            return;
+        }
+
+        OpenProject( existingProjectPath );
     }
 }
 

@@ -11,16 +11,15 @@
 
 #include "Graphics/Graphics.h"
 
-#include "Platform/Math/Float16.h"
-#include "Platform/Math/Simd/Vector2.h"
-#include "Platform/Math/Simd/Vector3.h"
-#include "Rendering/Color.h"
 #include "Rendering/RRenderResource.h"
+#include "GraphicsTypes/VertexTypes.h"
 
 namespace Lunar
 {
     class Renderer;
     class RRenderCommandProxy;
+
+    class RenderResourceManager;
 
     L_DECLARE_RPTR( RFence );
     L_DECLARE_RPTR( RIndexBuffer );
@@ -44,45 +43,6 @@ namespace Lunar
         /// Number of simultaneous textured triangle buffers.
         static const size_t TEXTURED_TRIANGLE_BUFFER_COUNT = 4;
 
-        /// Untextured vertex.
-        struct Vertex
-        {
-            /// Vertex position.
-            float32_t position[ 3 ];
-            /// Packed color (see Color class for more information).
-            uint32_t color;
-
-            /// @name Construction/Destruction
-            //@{
-            inline Vertex();
-            inline Vertex(
-                float32_t positionX, float32_t positionY, float32_t positionZ, uint32_t packedColor = 0xffffffff );
-            inline Vertex( const Simd::Vector3& rPosition, const Color& rColor = Color( 0xffffffff ) );
-            //@}
-        };
-
-        /// Textured vertex.
-        struct VertexTextured
-        {
-            /// Vertex position.
-            float32_t position[ 3 ];
-            /// Packed color (see Color class for more information).
-            uint32_t color;
-            /// Texture coordinates.
-            Float16 texCoords[ 2 ];
-
-            /// @name Construction/Destruction
-            //@{
-            inline VertexTextured();
-            inline VertexTextured(
-                float32_t positionX, float32_t positionY, float32_t positionZ, Float16 texCoordU, Float16 texCoordV,
-                uint32_t packedColor = 0xffffffff );
-            inline VertexTextured(
-                const Simd::Vector3& rPosition, const Simd::Vector2& rTexCoords,
-                const Color& rColor = Color( 0xffffffff ) );
-            //@}
-        };
-
         /// @name Initialization
         //@{
         bool Initialize();
@@ -94,11 +54,12 @@ namespace Lunar
         void Begin();
 
         void DrawScreenSpaceQuad(
-            const Vertex& rVertex0, const Vertex& rVertex1, const Vertex& rVertex2, const Vertex& rVertex3,
-            bool bFlush = false );
+            const SimpleVertex& rVertex0, const SimpleVertex& rVertex1, const SimpleVertex& rVertex2,
+            const SimpleVertex& rVertex3, bool bFlush = false );
         void DrawScreenSpaceQuad(
-            const VertexTextured& rVertex0, const VertexTextured& rVertex1, const VertexTextured& rVertex2,
-            const VertexTextured& rVertex3, RTexture2d* pTexture, bool bFlush = false );
+            const SimpleTexturedVertex& rVertex0, const SimpleTexturedVertex& rVertex1,
+            const SimpleTexturedVertex& rVertex2, const SimpleTexturedVertex& rVertex3, RTexture2d* pTexture,
+            bool bFlush = false );
 
         void Flush();
         //@}
@@ -155,8 +116,8 @@ namespace Lunar
 
             void Map( Renderer* pRenderer, uint8_t*& rpMappedVertices, uint16_t*& rpMappedIndices );
             void FlushTriangles(
-                DynamicDrawer* pDynamicDrawer, Renderer* pRenderer, RRenderCommandProxy* pCommandProxy,
-                bool bAdvanceDivision );
+                DynamicDrawer* pDynamicDrawer, RenderResourceManager& rRenderResourceManager, Renderer* pRenderer,
+                RRenderCommandProxy* pCommandProxy, bool bAdvanceDivision );
             //@}
         };
 
@@ -166,14 +127,14 @@ namespace Lunar
         public:
             /// @name Buffer Management Functions
             //@{
-            RVertexDescription* GetVertexDescription( DynamicDrawer* pDynamicDrawer ) const;
+            RVertexDescription* GetVertexDescription( RenderResourceManager& rRenderResourceManager ) const;
             RVertexShader* GetVertexShader( DynamicDrawer* pDynamicDrawer ) const;
             RPixelShader* GetPixelShader( DynamicDrawer* pDynamicDrawer ) const;
 
             void PrepareDraw(
                 DynamicDrawer* pDynamicDrawer, RRenderCommandProxy* pCommandProxy,
                 BufferData<
-                    Vertex, UntexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
+                    SimpleVertex, UntexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
                     BUFFER_DIVISION_INDEX_COUNT >* pBufferData ) const;
             //@}
         };
@@ -184,45 +145,41 @@ namespace Lunar
         public:
             /// @name Buffer Management Functions
             //@{
-            RVertexDescription* GetVertexDescription( DynamicDrawer* pDynamicDrawer ) const;
+            RVertexDescription* GetVertexDescription( RenderResourceManager& rRenderResourceManager ) const;
             RVertexShader* GetVertexShader( DynamicDrawer* pDynamicDrawer ) const;
             RPixelShader* GetPixelShader( DynamicDrawer* pDynamicDrawer ) const;
 
             void PrepareDraw(
                 DynamicDrawer* pDynamicDrawer, RRenderCommandProxy* pCommandProxy,
                 BufferData<
-                    VertexTextured, TexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
+                    SimpleTexturedVertex, TexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
                     BUFFER_DIVISION_INDEX_COUNT >* pBufferData ) const;
             //@}
         };
 
         /// Untextured triangle buffer.
         BufferData<
-            Vertex, UntexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
+            SimpleVertex, UntexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
             BUFFER_DIVISION_INDEX_COUNT > m_untexturedTriangles;
 
         /// Textured triangle buffers.
         BufferData<
-            VertexTextured, TexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
+            SimpleTexturedVertex, TexturedBufferFunctions, BUFFER_DIVISION_COUNT, BUFFER_DIVISION_VERTEX_COUNT,
             BUFFER_DIVISION_INDEX_COUNT > m_texturedTriangles[ TEXTURED_TRIANGLE_BUFFER_COUNT ];
         /// Textured triangle buffer textures.
         RTexture2dPtr m_texturedTriangleTextures[ TEXTURED_TRIANGLE_BUFFER_COUNT ];
 
-        /// Untextured vertex description.
-        RVertexDescriptionPtr m_spVertexDescription;
-        /// Textured vertex description.
-        RVertexDescriptionPtr m_spVertexTexturedDescription;
         /// Active vertex description.
         RVertexDescription* m_pActiveDescription;
 
         /// Vertex shader for untextured screen-space rendering.
-        RVertexShaderPtr m_spUntexturedVertexShader;
+        RVertexShaderPtr m_spUntexturedScreenVertexShader;
         /// Pixel shader for untextured screen-space rendering.
-        RPixelShaderPtr m_spUntexturedPixelShader;
+        RPixelShaderPtr m_spUntexturedScreenPixelShader;
         /// Vertex shader for textured screen-space rendering.
-        RVertexShaderPtr m_spTexturedVertexShader;
+        RVertexShaderPtr m_spTexturedScreenVertexShader;
         /// Pixel shader for textured screen-space rendering.
-        RPixelShaderPtr m_spTexturedPixelShader;
+        RPixelShaderPtr m_spTexturedScreenPixelShader;
 
         /// Singleton instance.
         static DynamicDrawer* sm_pInstance;
@@ -235,13 +192,14 @@ namespace Lunar
 
         /// @name Static Buffer Management
         //@{
-        void FlushUntexturedTriangles( Renderer* pRenderer, RRenderCommandProxy* pCommandProxy, bool bAdvanceDivision );
+        void FlushUntexturedTriangles(
+            RenderResourceManager& rRenderResourceManager, Renderer* pRenderer, RRenderCommandProxy* pCommandProxy,
+            bool bAdvanceDivision );
         void FlushTexturedTriangles(
-            Renderer* pRenderer, RRenderCommandProxy* pCommandProxy, size_t bufferSetIndex, bool bAdvanceDivision );
+            RenderResourceManager& rRenderResourceManager, Renderer* pRenderer, RRenderCommandProxy* pCommandProxy,
+            size_t bufferSetIndex, bool bAdvanceDivision );
         //@}
     };
 }
-
-#include "Graphics/DynamicDrawer.inl"
 
 #endif  // LUNAR_GRAPHICS_DYNAMIC_DRAWER_H

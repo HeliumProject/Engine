@@ -127,6 +127,8 @@ namespace Lunar
 
         /// @name Vertex Description Access
         //@{
+        RVertexDescription* GetSimpleVertexDescription() const;
+        RVertexDescription* GetSimpleTexturedVertexDescription() const;
         RVertexDescription* GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const;
         RVertexDescription* GetSkinnedMeshVertexDescription() const;
         //@}
@@ -137,8 +139,10 @@ namespace Lunar
         RTexture2d* GetShadowDepthTexture() const;
 
         ShaderVariant* GetPrePassVertexShader() const;
-        ShaderVariant* GetScreenSpaceTextureVertexShader() const;
-        ShaderVariant* GetScreenSpaceTexturePixelShader() const;
+        ShaderVariant* GetSimpleWorldSpaceVertexShader() const;
+        ShaderVariant* GetSimpleWorldSpacePixelShader() const;
+        ShaderVariant* GetSimpleScreenSpaceVertexShader() const;
+        ShaderVariant* GetSimpleScreenSpacePixelShader() const;
 
         inline GraphicsConfig::EShadowMode GetShadowMode() const;
         inline uint32_t GetShadowDepthTextureUsableSize() const;
@@ -160,6 +164,10 @@ namespace Lunar
         /// Standard sampler states.
         RSamplerStatePtr m_samplerStates[ TEXTURE_FILTER_MAX ][ RENDERER_TEXTURE_ADDRESS_MODE_MAX ];
 
+        /// Simple vertex description.
+        RVertexDescriptionPtr m_spSimpleVertexDescription;
+        /// Simple textured vertex description.
+        RVertexDescriptionPtr m_spSimpleTexturedVertexDescription;
         /// Static mesh vertex descriptions.
         RVertexDescriptionPtr m_staticMeshVertexDescriptions[ MESH_TEXTURE_COORDINATE_SET_COUNT_MAX ];
         /// Skinned mesh vertex description.
@@ -172,10 +180,14 @@ namespace Lunar
 
         /// Depth-only pre-pass vertex shader.
         ShaderVariantPtr m_spPrePassVertexShader;
-        /// Screen-space textured primitive vertex shader.
-        ShaderVariantPtr m_spScreenSpaceTextureVertexShader;
-        /// Screen-space textured primitive pixel shader.
-        ShaderVariantPtr m_spScreenSpaceTexturePixelShader;
+        /// Simple world-space primitive vertex shader.
+        ShaderVariantPtr m_spSimpleWorldSpaceVertexShader;
+        /// Simple world-space primitive pixel shader.
+        ShaderVariantPtr m_spSimpleWorldSpacePixelShader;
+        /// Simple screen-space primitive vertex shader.
+        ShaderVariantPtr m_spSimpleScreenSpaceVertexShader;
+        /// Simple screen-space primitive pixel shader.
+        ShaderVariantPtr m_spSimpleScreenSpacePixelShader;
 
         /// Effective shadow mode in use (accounting for whether a shadow buffer was allocated, etc.).
         GraphicsConfig::EShadowMode m_shadowMode;

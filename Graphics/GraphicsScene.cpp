@@ -264,10 +264,10 @@ void GraphicsScene::Update()
         float32_t quadMaxY = halfPixelY - 1.0f;
 
         rDynamicDrawer.DrawScreenSpaceQuad(
-            DynamicDrawer::VertexTextured( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
-            DynamicDrawer::VertexTextured( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
-            DynamicDrawer::VertexTextured( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
-            DynamicDrawer::VertexTextured( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
+            SimpleTexturedVertex( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
+            SimpleTexturedVertex( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
+            SimpleTexturedVertex( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
+            SimpleTexturedVertex( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
             spSceneTexture );
         rDynamicDrawer.Flush();
 

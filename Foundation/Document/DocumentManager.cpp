@@ -165,9 +165,7 @@ bool DocumentManager::SaveDocument( DocumentPtr document, tstring& error )
     // Check for "save as"
     if ( document->GetPath().empty() || !document->GetPath().IsAbsolute() )
     {
-        tstring filters;
-#pragma TODO( "This needs to be getting the correct file filters for the document being saved" )
-        Reflect::Archive::GetFileFilters( filters );
+        tstring filters = document->GetPath().Extension() + TXT( "|*." ) + document->GetPath().Extension() + TXT( "|All Files|*" );
         FileDialogArgs args ( FileDialogTypes::SaveFile, TXT("Save As..."), filters, document->GetPath().Directory(), document->GetPath().Filename() );
         m_FileDialog.Invoke( args );
         if ( !args.m_Result.empty() )

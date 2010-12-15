@@ -116,22 +116,20 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     CalculateTotalItemSize();
 
     // Setup Ribbon colors and FileType Icons
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.entity.*" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.scene.*" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.shader.*" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
 
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.hrb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.entity.*" ), TXT( "moon" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.scene.*" ), TXT( "enginetype_level" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumEntity" ), TXT( "entity" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumScene" ), TXT( "scene" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumShader" ), TXT( "shader" ) );
 
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.hrb" ), TXT( "moon" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
 
     // Connect Listeners
@@ -1267,12 +1265,6 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             // FileType Overlay
                 M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetPath().FullExtension() );
                 if ( findIcon != m_FileTypeIcons.end() )
-                {
-                    Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-                }
-                else if ( tile->GetPath().Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
-                    && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
                 {
                     Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );

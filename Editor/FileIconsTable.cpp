@@ -207,17 +207,17 @@ void FileIconsTable::Create()
             wxART_OTHER,
             wxSize(16, 16)) );
 
-        m_HashTable->Put( TXT( "entity.hrb" ), new FileIconEntry( id ) );
+        m_HashTable->Put( TXT( "HeliumEntity" ), new FileIconEntry( id ) );
         
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Project,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "project.hrb" ), new FileIconEntry( id ) );
+        m_HashTable->Put( TXT( "HeliumProject" ), new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Scene,
             wxART_OTHER,
             wxSize(16, 16)) );
-        m_HashTable->Put( TXT( "scene.hrb" ), new FileIconEntry( id ) );
+        m_HashTable->Put( TXT( "HeliumScene" ), new FileIconEntry( id ) );
 
         id = m_SmallImageList->Add( wxArtProvider::GetBitmap( ArtIDs::MimeTypes::Text,
             wxART_OTHER,

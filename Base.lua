@@ -217,13 +217,14 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
-	links
-	{
-		"Expat",
-		"nvtt",
-		"png",
-		"zlib",
-	}
+	configuration "SharedLib or *App"
+		links
+		{
+			"Expat",
+			"nvtt",
+			"png",
+			"zlib",
+		}
 
 	configuration "no-unicode"
 		defines
@@ -267,7 +268,7 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_STATIC=1",
 		}
 
-	configuration "windows"
+	configuration { "windows", "SharedLib or *App" }
 		links
 		{
 			"d3d9",
@@ -278,32 +279,32 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"wininet",
 		}
 
-	configuration { "windows", "Debug" }
+	configuration { "windows", "Debug", "SharedLib or *App" }
 		links
 		{
 			"dbghelp",
 		}
 
-	configuration { "windows", "x32" }
+	configuration { "windows", "x32", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1",
 		}
 
-	configuration { "windows", "x64" }
+	configuration { "windows", "x64", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1_amd64",
 		}
 
 	if haveGranny then
-		configuration "x32"
+		configuration { "x32", "SharedLib or *App" }
 			links
 			{
 				"granny2",
 			}
 
-		configuration "x64"
+		configuration { "x64", "SharedLib or *App" }
 			links
 			{
 				"granny2_x64",

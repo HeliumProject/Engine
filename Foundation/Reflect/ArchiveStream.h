@@ -73,6 +73,20 @@ namespace Helium
         extern Profile::Accumulator g_StreamRead; 
 
         //
+        // How characters are encoded
+        //
+
+        namespace CharacterEncodings
+        {
+            enum CharacterEncoding
+            {
+                ASCII,  // default encoding, legacy 7-bit
+                UTF_16, // used by windows' Unicode build
+            };
+        }
+        typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
+
+        //
         // Stream object, read and write data to/from a buffer
         //
 
@@ -80,18 +94,20 @@ namespace Helium
         class Stream : public Helium::RefCountBase< Stream< StreamCharT > >
         {
         public: 
-            Stream()
+            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
                 : m_Stream( NULL )
-                , m_ByteOrder( ByteOrders::LittleEndian )
+                , m_ByteOrder( byteOrder )
+                , m_CharacterEncoding( characterEncoding )
                 , m_OwnStream( false )
             {
 
             }
 
-            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, ByteOrder byteOrder = ByteOrders::LittleEndian, bool ownStream = false )
+            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
                 : m_Stream( stream )
-                , m_ByteOrder( byteOrder )
                 , m_OwnStream( ownStream )
+                , m_ByteOrder( byteOrder )
+                , m_CharacterEncoding( characterEncoding )
             {
 
             }
@@ -232,6 +248,16 @@ namespace Helium
                 return *this;
             }
 
+            inline const tstring& ReadString()
+            {
+
+            }
+
+            inline void WriteString( const tstring& string )
+            {
+
+            }
+
             Stream& Flush()
             {
                 m_Stream->flush(); 
@@ -258,9 +284,15 @@ namespace Helium
                 return m_ByteOrder;
             }
 
+            const CharacterEncoding& GetCharacterEncoding()
+            {
+                return m_CharacterEncoding;
+            }
+
         protected: 
             std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >*    m_Stream; 
             ByteOrder                                                               m_ByteOrder;
+            CharacterEncoding                                                       m_CharacterEncoding;
             bool                                                                    m_OwnStream;
         };
 
@@ -490,5 +522,13 @@ namespace Helium
             Path  m_Path; 
             bool  m_OpenForWrite; 
         };
+
+        typedef FileStream<char> CharFileStream;
+        typedef FileStream<wchar_t> WCharFileStream;
+        typedef FileStream<tchar_t> TCharFileStream;
+
+        typedef Helium::SmartPtr< FileStream<char> > CharFileStreamPtr; 
+        typedef Helium::SmartPtr< FileStream<wchar_t> > WCharFileStreamPtr; 
+        typedef Helium::SmartPtr< FileStream<tchar_t> > TCharFileStreamPtr;
     }
 }

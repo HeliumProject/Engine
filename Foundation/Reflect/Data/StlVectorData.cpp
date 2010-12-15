@@ -410,8 +410,10 @@ void StringStlVectorData::Serialize(Archive& archive) const
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
+#ifdef HRB_REFACTOR
                 int32_t index = binary.GetStrings().Insert(m_Data.Get()[i]);
                 binary.GetStream().Write(&index); 
+#endif
             }
 
             break;
@@ -476,9 +478,11 @@ void StringStlVectorData::Deserialize(Archive& archive)
             m_Data->resize(size);
             for (int32_t i=0; i<size; i++)
             {
+#ifdef HRB_REFACTOR
                 int32_t index;
                 binary.GetStream().Read(&index); 
                 m_Data.Ref()[i] = binary.GetStrings().Get(index);
+#endif
             }
 
             break;

@@ -33,16 +33,6 @@ namespace Helium
         // String pool for serializing string data in binary
         //
 
-        namespace CharacterEncodings
-        {
-            enum CharacterEncoding
-            {
-                ASCII,  // default encoding, legacy 7-bit
-                UTF_16, // used by windows' Unicode build
-            };
-        }
-        typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
-
         class FOUNDATION_API StringPool
         {
         public:

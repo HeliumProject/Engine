@@ -67,11 +67,9 @@ void PathData::Serialize( Archive& archive ) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            // get string pool index
-            int32_t index = binary.GetStrings().Insert( data );
-
-            // write that index
-            binary.GetStream().Write( &index ); 
+#ifdef HRB_REFACTOR
+            binary.GetStream().Write( data.c_str(), data.length() * sizeof( tchar ) ); 
+#endif
             break;
         }
     }
@@ -102,9 +100,10 @@ void PathData::Deserialize( Archive& archive )
 
             if ( index >= 0 )
             {
+#ifdef HRB_REFACTOR
                 const tstring& str ( binary.GetStrings().Get( index ) );
-
                 m_Data.Ref().Set( str );
+#endif
             }
 
             break;

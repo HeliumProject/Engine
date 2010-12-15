@@ -104,11 +104,10 @@ void EnumerationData::Serialize(Archive& archive) const
                 }
             }
 
-            // get string pool index
+#ifdef HRB_REFACTOR
             int32_t index = binary.GetStrings().Insert(label);
-
-            // write that index
             binary.GetStream().Write(&index); 
+#endif
 
             break;
         }
@@ -153,8 +152,8 @@ void EnumerationData::Deserialize(Archive& archive)
 
             if (index >= 0)
             {
+#ifdef HRB_REFACTOR
                 const tstring& str (binary.GetStrings().Get(index));
-
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {
                     Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
@@ -163,6 +162,7 @@ void EnumerationData::Deserialize(Archive& archive)
                 {
                     m_String = str;
                 }
+#endif
             }
 
             break;

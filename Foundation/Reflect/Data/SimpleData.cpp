@@ -154,8 +154,10 @@ void StringData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
+#ifdef HRB_REFACTOR
             int32_t index = binary.GetStrings().Insert(m_Data.Get());
             binary.GetStream().Write(&index); 
+#endif
             break;
         }
     }
@@ -181,9 +183,11 @@ void StringData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
+#ifdef HRB_REFACTOR
             int32_t index;
             binary.GetStream().Read(&index); 
             m_Data.Set( binary.GetStrings().Get(index) );
+#endif
             break;
         }
     }

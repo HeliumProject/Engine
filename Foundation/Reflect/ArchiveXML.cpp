@@ -64,7 +64,7 @@ void ArchiveXML::Open( bool write )
     Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new FileStream<tchar_t>( m_Path, write, m_ByteOrder );
+    Reflect::TCharStreamPtr stream = new TCharFileStream( m_Path, write, m_ByteOrder );
     OpenStream( stream, write );
 }
 
@@ -595,7 +595,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
             tstringstream stream (topState->m_Buffer);
 
             ArchiveXML xml;
-            xml.m_Stream = new Reflect::TCharStream (&stream); 
+            xml.m_Stream = new Reflect::TCharStream(&stream, false);
             xml.m_Components = topState->m_Components;
             serializer->Deserialize(xml);
         }
@@ -687,7 +687,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass 
 
     tstringstream strStream;
     strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
-    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.m_Stream = new Reflect::TCharStream(&strStream, false); 
     archive.Read();
 
     std::vector< ElementPtr >::iterator itr = archive.m_Spool.begin();
@@ -708,7 +708,7 @@ void ArchiveXML::ToString( const std::vector< ElementPtr >& elements, tstring& x
     ArchiveXML archive;
     tstringstream strStream;
 
-    archive.m_Stream = new Reflect::TCharStream( &strStream ); 
+    archive.m_Stream = new Reflect::TCharStream( &strStream, false ); 
     archive.m_Spool  = elements;
     archive.Write();
 
@@ -721,7 +721,7 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ElementPtr >& elem
     tstringstream strStream;
     strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
 
-    archive.m_Stream = new Reflect::TCharStream( &strStream );
+    archive.m_Stream = new Reflect::TCharStream( &strStream, false );
     archive.Read();
 
     elements = archive.m_Spool;

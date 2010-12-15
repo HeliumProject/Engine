@@ -57,8 +57,10 @@ void BitfieldData::Serialize(Archive& archive) const
                 std::vector< tstring >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
+#ifdef HRB_REFACTOR
                     index = binary.GetStrings().Insert(*itr);
                     binary.GetStream().Write(&index); 
+#endif
                 }
             }
 
@@ -107,10 +109,10 @@ void BitfieldData::Deserialize(Archive& archive)
             std::vector< tstring > strs;
             while (index >= 0)
             {
+#ifdef HRB_REFACTOR
                 strs.push_back(binary.GetStrings().Get(index));
-
-                // read next index
                 binary.GetStream().Read(&index); 
+#endif
             }
 
             tstring str;

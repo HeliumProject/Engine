@@ -71,8 +71,8 @@ void TypeIDData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = binary.GetStrings().Insert( type ? *type->m_Name : TXT("") );
-            binary.GetStream().Write(&index); 
+            uint32_t crc = type ? Crc32( *type->m_Name ) : BeginCrc32();
+            binary.GetStream().Write(&crc); 
             break;
         }
     }
@@ -80,7 +80,7 @@ void TypeIDData::Serialize(Archive& archive) const
 
 void TypeIDData::Deserialize(Archive& archive)
 {
-    tstring str;
+    const Reflect::Type* type = NULL;
 
     switch (archive.GetType())
     {
@@ -89,8 +89,10 @@ void TypeIDData::Deserialize(Archive& archive)
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            tstring str;
             str.resize( (size_t)size );
             xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
+            type = Reflect::Registry::GetInstance()->GetType( Name( str.c_str() ) );
             break;
         }
 
@@ -98,14 +100,12 @@ void TypeIDData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index;
-            binary.GetStream().Read(&index); 
-            str = binary.GetStrings().Get(index);
+            uint32_t crc;
+            binary.GetStream().Read(&crc);
+            type = Reflect::Registry::GetInstance()->GetType( crc );
             break;
         }
     }
-
-    const Reflect::Type* type = Reflect::Registry::GetInstance()->GetType( Name( str.c_str() ) );
 
     if ( type )
     {

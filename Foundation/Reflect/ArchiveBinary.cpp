@@ -63,7 +63,7 @@ void ArchiveBinary::Open( bool write )
     Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
-    Reflect::CharStreamPtr stream = new FileStream<char>( m_Path, write, m_ByteOrder ); 
+    Reflect::CharStreamPtr stream = new CharFileStream( m_Path, write, m_ByteOrder ); 
     OpenStream( stream, write );
 }
 
@@ -861,7 +861,7 @@ ElementPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* search
     ArchiveBinary archive;
     archive.m_SearchClass = searchClass;
 
-    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>( &stream ); 
+    Reflect::CharStreamPtr charStream = new CharStream( &stream, false ); 
     archive.OpenStream( charStream, false );
     archive.Read();
     archive.Close(); 
@@ -886,7 +886,7 @@ void ArchiveBinary::ToStream( const std::vector< ElementPtr >& elements, std::io
     // fix the spool
     archive.m_Spool = elements;
 
-    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
+    Reflect::CharStreamPtr charStream = new CharStream( &stream, false ); 
     archive.OpenStream( charStream, true );
     archive.Write();   
     archive.Close(); 
@@ -896,7 +896,7 @@ void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ElementPtr >
 {
     ArchiveBinary archive;
 
-    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
+    Reflect::CharStreamPtr charStream = new CharStream( &stream, false ); 
     archive.OpenStream( charStream, false );
     archive.Read();
     archive.Close(); 

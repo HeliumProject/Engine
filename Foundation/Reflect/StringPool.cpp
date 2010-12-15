@@ -157,7 +157,7 @@ void StringPool::SerializeCompressed( CharStream& stream )
 
     // serialize the strings to a temp buffer
     std::stringstream memoryStream;
-    Reflect::CharStream tempStream( &memoryStream ); 
+    Reflect::CharStream tempStream( &memoryStream, false ); 
     SerializeDirect( tempStream ); 
 
     // get the pointer
@@ -192,7 +192,7 @@ void StringPool::DeserializeCompressed( CharStream& stream, CharacterEncoding en
     std::streamsize copied = memoryStream.rdbuf()->sputn( originalData, originalSize );
     HELIUM_ASSERT( copied == originalSize );
 
-    Reflect::CharStream tempStream( &memoryStream ); 
+    Reflect::CharStream tempStream( &memoryStream, false ); 
     DeserializeDirect( tempStream, encoding ); 
 }
 

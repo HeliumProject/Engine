@@ -73,24 +73,12 @@ bool Cache::Create( const Class* type, ElementPtr& element )
 #endif
 }
 
-bool Cache::Create( Name name, ElementPtr& element )
-{
-    const Class* type = Registry::GetInstance()->GetClass( name );
-
-    if ( type )
-    {
-        return Create( type, element );
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void Cache::Free(ElementPtr element)
 {
     if (!element->HasType(Reflect::GetType<Data>()))
+    {
         return;
+    }
 
     H_Element::iterator found = m_Elements.find(element->GetType());
 

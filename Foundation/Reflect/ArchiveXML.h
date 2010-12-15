@@ -93,9 +93,6 @@ namespace Helium
             // The current collection of components
             std::vector< ElementPtr > m_Components;
 
-            // The append elements
-            std::vector< ElementPtr > m_Append;
-
             // The container to decode elements to
             std::vector< ElementPtr >* m_Target;
         public:
@@ -128,12 +125,6 @@ namespace Helium
 
             // Write to the OutputStream
             virtual void Write();
-
-            // Write the file header
-            virtual void Start();
-
-            // Write the file footer
-            virtual void Finish();
 
         public:
             // Access indentation

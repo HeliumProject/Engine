@@ -132,18 +132,12 @@ ObjectRefCountSupport::StaticData::StaticData()
 
 Object::Object()
 {
-    if (Reflect::IsInitialized())
-    {
-        Reflect::Registry::GetInstance()->Created(this);
-    }
+
 }
 
 Object::~Object()
 {
-    if (Reflect::IsInitialized())
-    {
-        Reflect::Registry::GetInstance()->Destroyed(this);
-    }
+
 }
 
 void* Object::operator new( size_t bytes )

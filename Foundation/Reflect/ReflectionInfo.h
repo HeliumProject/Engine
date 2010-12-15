@@ -2,11 +2,12 @@
 
 #include <map>
 
-#include "API.h"
-
 #include "Platform/Types.h"
+
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Memory/SmartPtr.h"
+
+#include "Foundation/Reflect/API.h"
 
 //
 // Obviously the reflection system itself can't use the same type checking as the code

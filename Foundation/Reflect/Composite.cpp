@@ -1,10 +1,10 @@
-#include "Composite.h"
-#include "Element.h"
-#include "Registry.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
-#include "ArchiveBinary.h"
+#include "Foundation/Reflect/Composite.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -183,7 +183,7 @@ bool Composite::HasType(const Type* type) const
     return false;
 }
 
-const Field* Composite::FindFieldByName(const tstring& name) const
+const Field* Composite::FindFieldByName(uint32_t crc) const
 {
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
@@ -191,7 +191,7 @@ const Field* Composite::FindFieldByName(const tstring& name) const
         std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
         for ( ; itr != end; ++itr )
         {
-            if ( (*itr)->m_Name == name )
+            if ( Crc32( (*itr)->m_Name.c_str() ) == crc )
             {
                 return *itr;
             }
@@ -216,6 +216,7 @@ const Field* Composite::FindFieldByIndex(uint32_t index) const
 
 const Field* Composite::FindFieldByOffset(uint32_t offset) const
 {
+#pragma TODO("Implement binary search")
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
         if ( !current->m_Fields.empty() && offset >= current->m_Fields.front()->m_Offset && offset <= current->m_Fields.front()->m_Offset )

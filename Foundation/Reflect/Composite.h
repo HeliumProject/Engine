@@ -120,7 +120,7 @@ namespace Helium
             // Find a field by name
             //
 
-            const Field* FindFieldByName(const tstring& name) const;
+            const Field* FindFieldByName(uint32_t crc) const;
             const Field* FindFieldByIndex(uint32_t index) const;
             const Field* FindFieldByOffset(uint32_t offset) const;
 

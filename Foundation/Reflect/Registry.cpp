@@ -1,13 +1,14 @@
-#include "Registry.h"
-#include "Version.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
-#include "DOM.h"
+#include "Foundation/Reflect/Registry.h"
 
-#include "Platform/Atomic.h"
-#include "Platform/Thread.h"
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Reflect/ObjectType.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/DOM.h"
+
+#include "Platform/Atomic.h"
+#include "Platform/Thread.h"
 
 #include <io.h>
 
@@ -258,8 +259,6 @@ Profile::MemoryPoolHandle Reflect::MemoryPool()
 
 // private constructor
 Registry::Registry()
-: m_Created (NULL)
-, m_Destroyed (NULL)
 {
     if ( Profile::Settings::MemoryProfilingEnabled() )
     {
@@ -269,11 +268,7 @@ Registry::Registry()
 
 Registry::~Registry()
 {
-    m_TypesByName.Clear();
-    m_TypesByAlias.Clear();
-
-    m_Created = NULL;
-    m_Destroyed = NULL;
+    m_TypesByHash.Clear();
 }
 
 Registry* Registry::GetInstance()
@@ -286,59 +281,16 @@ bool Registry::RegisterType(Type* type)
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    switch (type->GetReflectionType())
+    uint32_t crc = Crc32( *type->m_Name );
+    Insert< M_HashToType >::Result result = m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
+    if ( !result.Second() )
     {
-    case ReflectionTypes::Class:
-        {
-            Class* classType = static_cast<Class*>(type);
-
-            Insert< M_NameToType >::Result nameResult = m_TypesByName.Insert( M_NameToType::ValueType( classType->m_Name, classType ) );
-
-            if ( !nameResult.Second() )
-            {
-                Log::Error( TXT( "Re-registration of class '%s'\n" ), *classType->m_Name );
-                HELIUM_BREAK();
-                return false;
-            }
-
-            classType->Report();
-            break;
-        }
-
-    case ReflectionTypes::ObjectType:
-    case ReflectionTypes::GameObjectType:
-        {
-            ObjectType* objectType = static_cast< ObjectType* >( type );
-
-            Insert< M_NameToType >::Result objectTypeResult = m_TypesByName.Insert( M_NameToType::ValueType( objectType->m_Name, objectType ) );
-
-            if( !objectTypeResult.Second() )
-            {
-                Log::Error( TXT( "Re-registration of object type '%s'\n" ), *objectType->m_Name );
-                HELIUM_BREAK();
-                return false;
-            }
-
-            break;
-        }
-
-    case ReflectionTypes::Enumeration:
-        {
-            Enumeration* enumeration = static_cast<Enumeration*>(type);
-
-            Insert< M_NameToType >::Result enumResult = m_TypesByName.Insert( M_NameToType::ValueType( enumeration->m_Name, enumeration ) );
-
-            if ( !enumResult.Second() )
-            {
-                Log::Error( TXT( "Re-registration of enumeration '%s'\n" ), *enumeration->m_Name );
-                HELIUM_BREAK();
-                return false;
-            }
-
-            break;
-        }
+        Log::Error( TXT( "Re-registration of type '%s', could be ambigouous crc: 0x%08x\n" ), *type->m_Name, crc );
+        HELIUM_BREAK();
+        return false;
     }
 
+    type->Report();
     return true;
 }
 
@@ -348,46 +300,35 @@ void Registry::UnregisterType(const Type* type)
 
     type->Unregister();
 
-    m_TypesByName.Remove( type->m_Name );
+    uint32_t crc = Crc32( *type->m_Name );
+    m_TypesByHash.Remove( crc );
 }
 
 void Registry::AliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    m_TypesByAlias.Insert( M_NameToType::ValueType( alias, type ) );
+    uint32_t crc = Crc32( *alias );
+    m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
 }
 
-void Registry::UnAliasType( const Type* type, Name alias )
+void Registry::UnaliasType( const Type* type, Name alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    M_NameToType::Iterator found = m_TypesByAlias.Find( alias );
-    if ( found != m_TypesByAlias.End() && found->Second() == type )
+    uint32_t crc = Crc32( *alias );
+    M_HashToType::Iterator found = m_TypesByHash.Find( crc );
+    if ( found != m_TypesByHash.End() && found->Second() == type )
     {
-        m_TypesByAlias.Remove( found );
+        m_TypesByHash.Remove( crc );
     }
 }
 
-const Type* Registry::GetType( Name name ) const
+const Type* Registry::GetType( uint32_t crc ) const
 {
-    M_NameToType::ConstIterator found = m_TypesByAlias.Find( name );
+    M_HashToType::ConstIterator found = m_TypesByHash.Find( crc );
 
-    if ( found != m_TypesByAlias.End() )
-    {
-        return found->Second();
-    }
-
-    found = m_TypesByName.Find( name );
-
-    if ( found != m_TypesByName.End() )
-    {
-        return found->Second();
-    }
-
-    found = std::find_if( m_TypesByName.Begin(), m_TypesByName.End(), CaseInsensitiveNameCompare< SmartPtr< Type > >( name ) );
-
-    if ( found != m_TypesByName.End() )
+    if ( found != m_TypesByHash.End() )
     {
         return found->Second();
     }
@@ -395,14 +336,14 @@ const Type* Registry::GetType( Name name ) const
     return NULL;
 }
 
-const Class* Registry::GetClass( Name name ) const
+const Class* Registry::GetClass( uint32_t crc ) const
 {
-    return ReflectionCast< const Class >( GetType( name ) );
+    return ReflectionCast< const Class >( GetType( crc ) );
 }
 
-const Enumeration* Registry::GetEnumeration( Name name ) const
+const Enumeration* Registry::GetEnumeration( uint32_t crc ) const
 {
-    return ReflectionCast< const Enumeration >( GetType( name ) );
+    return ReflectionCast< const Enumeration >( GetType( crc ) );
 }
 
 ObjectPtr Registry::CreateInstance( const Class* type ) const
@@ -417,41 +358,18 @@ ObjectPtr Registry::CreateInstance( const Class* type ) const
     }
 }
 
-ObjectPtr Registry::CreateInstance( Name name ) const
+ObjectPtr Registry::CreateInstance( uint32_t crc ) const
 {
-    M_NameToType::ConstIterator type = m_TypesByName.Find( name );
+    M_HashToType::ConstIterator found = m_TypesByHash.Find( crc );
 
-    if ( type == m_TypesByName.End() )
-        return NULL;
-
-    if ( type->Second()->GetReflectionType() != ReflectionTypes::Class )
-        return NULL;
-
-    return CreateInstance( static_cast< Class* >( type->Second().Ptr() ) );
-}
-
-void Registry::Created(Object* object)
-{
-    if (m_Created != NULL)
+    if ( found != m_TypesByHash.End() )
     {
-        m_Created(object);
+        const Class* type = ReflectionCast< const Class >( found->Second() );
+        if ( type )
+        {
+            return CreateInstance( type );
+        }
     }
-}
 
-void Registry::Destroyed(Object* object)
-{
-    if (m_Destroyed != NULL)
-    {
-        m_Destroyed(object);
-    }
-}
-
-void Registry::SetCreatedCallback(CreatedFunc created)
-{
-    m_Created = created;
-}
-
-void Registry::SetDestroyedCallback(DestroyedFunc destroyed)
-{
-    m_Destroyed = destroyed;
+    return NULL;
 }

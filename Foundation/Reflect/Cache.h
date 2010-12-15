@@ -27,9 +27,6 @@ namespace Helium
             // creator
             bool Create( const Class* type, ElementPtr& element );
 
-            // creator
-            bool Create( Name name, ElementPtr& element );
-
             // push into free list
             void Free( ElementPtr element );
         };

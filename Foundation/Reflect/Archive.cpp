@@ -61,19 +61,9 @@ void Archive::PostSerialize(std::vector< ElementPtr >& append)
     info.m_Progress = m_Progress = 100;
     e_Status.Raise( info );
 
+    PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
     info.m_ArchiveState = ArchiveStates::PostProcessing;
     e_Status.Raise( info );
-
-    {
-        PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
-
-        V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-        V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-        for ( ; itr != end; ++itr )
-        {
-            (*itr)->CreateAppendElements(append);
-        }
-    }
 }
 
 void Archive::PreDeserialize()
@@ -94,19 +84,9 @@ void Archive::PostDeserialize(std::vector< ElementPtr >& append)
     info.m_Progress = m_Progress = 100;
     e_Status.Raise( info );
 
+    PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
     info.m_ArchiveState = ArchiveStates::PostProcessing;
     e_Status.Raise( info );
-
-    {
-        PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
-
-        V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-        V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-        for ( ; itr != end; ++itr )
-        {
-            (*itr)->ProcessAppendElements(append);
-        }
-    }
 }
 
 void Archive::PreSerialize(const ElementPtr& element, const Field* field)
@@ -124,8 +104,6 @@ void Archive::PreSerialize(const ElementPtr& element, const Field* field)
             (*itr)->VisitElement(element);
         }
     }
-
-    m_Classes.insert(element->GetClass());
 }
 
 void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
@@ -143,8 +121,6 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
             (*itr)->VisitElement(element);
         }
     }
-
-    m_Classes.insert(element->GetClass());
 }
 
 bool Archive::TryElementCallback( Element* element, ElementCallback callback )
@@ -200,7 +176,6 @@ void Archive::Put( const std::vector< ElementPtr >& elements )
     m_Spool.reserve( m_Spool.size() + elements.size() );
     m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
 }
-
 
 ElementPtr Archive::Get( const Class* searchClass )
 {

@@ -20,6 +20,7 @@ namespace Lunar
 /// Constructor.
 BufferedDrawer::BufferedDrawer()
     : m_currentResourceSetIndex( 0 )
+    , m_bDrawing( false )
 {
     for( size_t resourceSetIndex = 0; resourceSetIndex < HELIUM_ARRAY_COUNT( m_resourceSets ); ++resourceSetIndex )
     {
@@ -79,6 +80,8 @@ void BufferedDrawer::Shutdown()
     }
 
     m_currentResourceSetIndex = 0;
+
+    m_bDrawing = false;
 }
 
 /// Buffer a line list draw call.
@@ -99,6 +102,9 @@ void BufferedDrawer::DrawLines(
     HELIUM_ASSERT( vertexCount );
     HELIUM_ASSERT( pIndices );
     HELIUM_ASSERT( lineCount );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
 
     // Don't buffer any drawing information if we have no renderer.
     if( !Renderer::GetStaticInstance() )
@@ -139,6 +145,9 @@ void BufferedDrawer::DrawWireMesh(
     HELIUM_ASSERT( pIndices );
     HELIUM_ASSERT( triangleCount );
 
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
     // Don't buffer any drawing information if we have no renderer.
     if( !Renderer::GetStaticInstance() )
     {
@@ -177,6 +186,9 @@ void BufferedDrawer::DrawSolidMesh(
     HELIUM_ASSERT( vertexCount );
     HELIUM_ASSERT( pIndices );
     HELIUM_ASSERT( triangleCount );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
 
     // Don't buffer any drawing information if we have no renderer.
     if( !Renderer::GetStaticInstance() )
@@ -220,6 +232,9 @@ void BufferedDrawer::DrawTexturedMesh(
     HELIUM_ASSERT( triangleCount );
     HELIUM_ASSERT( pTexture );
 
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
     // Don't buffer any drawing information if we have no renderer.
     if( !Renderer::GetStaticInstance() )
     {
@@ -241,13 +256,18 @@ void BufferedDrawer::DrawTexturedMesh(
     pDrawCall->spTexture = pTexture;
 }
 
-/// Issue draw commands for buffered development-mode draw calls.
+/// Push buffered draw command data into vertex and index buffers for rendering.
 ///
-/// Note that this expects the proper global shader constant data to be already set in vertex constant buffer 0.
+/// This must be called prior to calling Draw().  EndDrawing() should be called when rendering is complete.  No new draw
+/// calls can be added between a BeginDrawing() and EndDrawing() call pair.
 ///
-/// @see DrawLines(), DrawWireMesh(), DrawSolidMesh(), DrawTexturedMesh()
-void BufferedDrawer::Flush()
+/// @see EndDrawing(), Draw()
+void BufferedDrawer::BeginDrawing()
 {
+    // Flag that we have begun drawing.
+    HELIUM_ASSERT( !m_bDrawing );
+    m_bDrawing = true;
+
     // If a renderer is not initialized, we don't need to do anything.
     Renderer* pRenderer = Renderer::GetStaticInstance();
     if( !pRenderer )
@@ -259,48 +279,6 @@ void BufferedDrawer::Flush()
 
         return;
     }
-
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-
-    // Get the shaders to use for debug drawing.
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-    ShaderVariant* pShaderVariant;
-    RShader* pShaderResource;
-
-    pShaderVariant = rRenderResourceManager.GetSimpleWorldSpaceVertexShader();
-    if( !pShaderVariant )
-    {
-        return;
-    }
-
-    pShaderResource = pShaderVariant->GetRenderResource( 0 );
-    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShaderPtr spUntexturedVertexShader = static_cast< RVertexShader* >( pShaderResource );
-
-    pShaderResource = pShaderVariant->GetRenderResource( 1 );
-    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_VERTEX );
-    RVertexShaderPtr spTexturedVertexShader = static_cast< RVertexShader* >( pShaderResource );
-
-    pShaderVariant = rRenderResourceManager.GetSimpleWorldSpacePixelShader();
-    if( !pShaderVariant )
-    {
-        return;
-    }
-
-    pShaderResource = pShaderVariant->GetRenderResource( 0 );
-    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
-    RPixelShaderPtr spUntexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
-
-    pShaderResource = pShaderVariant->GetRenderResource( 1 );
-    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
-    RPixelShaderPtr spTexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
-
-    // Get the vertex description resources for the untextured and textured vertex types.
-    RVertexDescriptionPtr spUntexturedVertexDescription = rRenderResourceManager.GetSimpleVertexDescription();
-    HELIUM_ASSERT( spUntexturedVertexDescription );
-
-    RVertexDescriptionPtr spTexturedVertexDescription = rRenderResourceManager.GetSimpleTexturedVertexDescription();
-    HELIUM_ASSERT( spTexturedVertexDescription );
 
     // Prepare the vertex and index buffers with the buffered data.
     ResourceSet& rResourceSet = m_resourceSets[ m_currentResourceSetIndex ];
@@ -399,6 +377,157 @@ void BufferedDrawer::Flush()
         }
     }
 
+    // Fill the vertex and index buffers for rendering.
+    if( untexturedVertexCount && untexturedIndexCount &&
+        rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+    {
+        void* pMappedVertexBuffer = rResourceSet.spUntexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+        HELIUM_ASSERT( pMappedVertexBuffer );
+        MemoryCopy(
+            pMappedVertexBuffer,
+            m_untexturedVertices.GetData(),
+            untexturedVertexCount * sizeof( SimpleVertex ) );
+        rResourceSet.spUntexturedVertexBuffer->Unmap();
+
+        void* pMappedIndexBuffer = rResourceSet.spUntexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+        HELIUM_ASSERT( pMappedIndexBuffer );
+        MemoryCopy(
+            pMappedIndexBuffer,
+            m_untexturedIndices.GetData(),
+            untexturedIndexCount * sizeof( uint16_t ) );
+        rResourceSet.spUntexturedIndexBuffer->Unmap();
+    }
+
+    if( texturedVertexCount && texturedIndexCount &&
+        rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
+    {
+        void* pMappedVertexBuffer = rResourceSet.spTexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+        HELIUM_ASSERT( pMappedVertexBuffer );
+        MemoryCopy(
+            pMappedVertexBuffer,
+            m_texturedVertices.GetData(),
+            texturedVertexCount * sizeof( SimpleVertex ) );
+        rResourceSet.spTexturedVertexBuffer->Unmap();
+
+        void* pMappedIndexBuffer = rResourceSet.spTexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
+        HELIUM_ASSERT( pMappedIndexBuffer );
+        MemoryCopy(
+            pMappedIndexBuffer,
+            m_texturedIndices.GetData(),
+            texturedIndexCount * sizeof( uint16_t ) );
+        rResourceSet.spTexturedIndexBuffer->Unmap();
+    }
+
+    // Clear the buffered vertex and index data, as it is no longer needed.
+    m_untexturedVertices.Remove( 0, m_untexturedVertices.GetSize() );
+    m_texturedVertices.Remove( 0, m_texturedVertices.GetSize() );
+    m_untexturedIndices.Remove( 0, m_untexturedIndices.GetSize() );
+    m_texturedIndices.Remove( 0, m_texturedIndices.GetSize() );
+}
+
+/// Finish issuing draw commands and reset buffered data for the next set of draw calls.
+///
+/// This must be called when all drawing has completed after an earlier BeginDrawing() call.
+///
+/// @see BeginDrawing(), Draw()
+void BufferedDrawer::EndDrawing()
+{
+    // Flag that we are no longer drawing.
+    HELIUM_ASSERT( m_bDrawing );
+    m_bDrawing = false;
+
+    // If a renderer is not initialized, we don't need to do anything.
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    if( !pRenderer )
+    {
+        HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
+        HELIUM_ASSERT( m_untexturedIndices.IsEmpty() );
+        HELIUM_ASSERT( m_texturedVertices.IsEmpty() );
+        HELIUM_ASSERT( m_texturedIndices.IsEmpty() );
+
+        return;
+    }
+
+    // Clear all buffered draw call data and swap rendering resources for the next set of buffered draw calls.
+    m_texturedMeshDrawCalls.Remove( 0, m_texturedMeshDrawCalls.GetSize() );
+    m_solidMeshDrawCalls.Remove( 0, m_solidMeshDrawCalls.GetSize() );
+    m_wireMeshDrawCalls.Remove( 0, m_wireMeshDrawCalls.GetSize() );
+    m_lineDrawCalls.Remove( 0, m_lineDrawCalls.GetSize() );
+
+    m_currentResourceSetIndex = ( m_currentResourceSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_resourceSets );
+}
+
+/// Issue draw commands for buffered development-mode draw calls.
+///
+/// BeginDrawing() must be called before issuing calls to this function.  This function can be called multiple times
+/// between a BeginDrawing() and EndDrawing() pair.
+///
+/// Special care should be taken with regards to the following:
+/// - This function expects the proper global shader constant data (view/projection matrices) to be already set in
+///   vertex constant buffer 0.
+/// - The rasterizer state may be altered when this function returns.
+///
+/// @see BeginDrawing(), EndDrawing()
+void BufferedDrawer::Draw()
+{
+    HELIUM_ASSERT( m_bDrawing );
+
+    // If a renderer is not initialized, we don't need to do anything.
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    if( !pRenderer )
+    {
+        HELIUM_ASSERT( m_untexturedVertices.IsEmpty() );
+        HELIUM_ASSERT( m_untexturedIndices.IsEmpty() );
+        HELIUM_ASSERT( m_texturedVertices.IsEmpty() );
+        HELIUM_ASSERT( m_texturedIndices.IsEmpty() );
+
+        return;
+    }
+
+    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+
+    ResourceSet& rResourceSet = m_resourceSets[ m_currentResourceSetIndex ];
+
+    // Get the shaders to use for debug drawing.
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    ShaderVariant* pShaderVariant;
+    RShader* pShaderResource;
+
+    pShaderVariant = rRenderResourceManager.GetSimpleWorldSpaceVertexShader();
+    if( !pShaderVariant )
+    {
+        return;
+    }
+
+    pShaderResource = pShaderVariant->GetRenderResource( 0 );
+    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_VERTEX );
+    RVertexShaderPtr spUntexturedVertexShader = static_cast< RVertexShader* >( pShaderResource );
+
+    pShaderResource = pShaderVariant->GetRenderResource( 1 );
+    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_VERTEX );
+    RVertexShaderPtr spTexturedVertexShader = static_cast< RVertexShader* >( pShaderResource );
+
+    pShaderVariant = rRenderResourceManager.GetSimpleWorldSpacePixelShader();
+    if( !pShaderVariant )
+    {
+        return;
+    }
+
+    pShaderResource = pShaderVariant->GetRenderResource( 0 );
+    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
+    RPixelShaderPtr spUntexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
+
+    pShaderResource = pShaderVariant->GetRenderResource( 1 );
+    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
+    RPixelShaderPtr spTexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
+
+    // Get the vertex description resources for the untextured and textured vertex types.
+    RVertexDescriptionPtr spUntexturedVertexDescription = rRenderResourceManager.GetSimpleVertexDescription();
+    HELIUM_ASSERT( spUntexturedVertexDescription );
+
+    RVertexDescriptionPtr spTexturedVertexDescription = rRenderResourceManager.GetSimpleTexturedVertexDescription();
+    HELIUM_ASSERT( spTexturedVertexDescription );
+
     // Draw textured meshes first.
     if( spTexturedVertexShader && spTexturedPixelShader &&
         rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
@@ -406,30 +535,17 @@ void BufferedDrawer::Flush()
         size_t texturedMeshDrawCallCount = m_texturedMeshDrawCalls.GetSize();
         if( texturedMeshDrawCallCount )
         {
-            void* pMappedVertexBuffer = rResourceSet.spTexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-            HELIUM_ASSERT( pMappedVertexBuffer );
-            HELIUM_ASSERT( !m_texturedVertices.IsEmpty() );
-            MemoryCopy(
-                pMappedVertexBuffer,
-                m_texturedVertices.GetData(),
-                m_texturedVertices.GetSize() * sizeof( SimpleTexturedVertex ) );
-            rResourceSet.spTexturedVertexBuffer->Unmap();
-
-            void* pMappedIndexBuffer = rResourceSet.spTexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-            HELIUM_ASSERT( pMappedIndexBuffer );
-            HELIUM_ASSERT( !m_texturedIndices.IsEmpty() );
-            MemoryCopy(
-                pMappedIndexBuffer,
-                m_texturedIndices.GetData(),
-                m_texturedIndices.GetSize() * sizeof( uint16_t ) );
-            rResourceSet.spTexturedIndexBuffer->Unmap();
-
             spCommandProxy->SetVertexShader( spTexturedVertexShader );
             spCommandProxy->SetPixelShader( spTexturedPixelShader );
 
             uint32_t vertexStride = static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) );
             uint32_t vertexOffset = 0;
-            spCommandProxy->SetVertexBuffers( 0, 1, &rResourceSet.spTexturedVertexBuffer, &vertexStride, &vertexOffset );
+            spCommandProxy->SetVertexBuffers(
+                0,
+                1,
+                &rResourceSet.spTexturedVertexBuffer,
+                &vertexStride,
+                &vertexOffset );
             spCommandProxy->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
 
             spTexturedVertexShader->CacheDescription( pRenderer, spTexturedVertexDescription );
@@ -469,24 +585,6 @@ void BufferedDrawer::Flush()
         size_t lineDrawCallCount = m_lineDrawCalls.GetSize();
         if( solidMeshDrawCallCount | wireMeshDrawCallCount | lineDrawCallCount )
         {
-            void* pMappedVertexBuffer = rResourceSet.spUntexturedVertexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-            HELIUM_ASSERT( pMappedVertexBuffer );
-            HELIUM_ASSERT( !m_untexturedVertices.IsEmpty() );
-            MemoryCopy(
-                pMappedVertexBuffer,
-                m_untexturedVertices.GetData(),
-                m_untexturedVertices.GetSize() * sizeof( SimpleVertex ) );
-            rResourceSet.spUntexturedVertexBuffer->Unmap();
-
-            void* pMappedIndexBuffer = rResourceSet.spUntexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );
-            HELIUM_ASSERT( pMappedIndexBuffer );
-            HELIUM_ASSERT( !m_untexturedIndices.IsEmpty() );
-            MemoryCopy(
-                pMappedIndexBuffer,
-                m_untexturedIndices.GetData(),
-                m_untexturedIndices.GetSize() * sizeof( uint16_t ) );
-            rResourceSet.spUntexturedIndexBuffer->Unmap();
-
             spCommandProxy->SetVertexShader( spUntexturedVertexShader );
             spCommandProxy->SetPixelShader( spUntexturedPixelShader );
 
@@ -553,17 +651,4 @@ void BufferedDrawer::Flush()
             }
         }
     }
-
-    // Clear all buffered data and swap rendering resources for the next set of buffered draw calls.
-    m_untexturedVertices.Remove( 0, m_untexturedVertices.GetSize() );
-    m_texturedVertices.Remove( 0, m_texturedVertices.GetSize() );
-    m_untexturedIndices.Remove( 0, m_untexturedIndices.GetSize() );
-    m_texturedIndices.Remove( 0, m_texturedIndices.GetSize() );
-
-    m_texturedMeshDrawCalls.Remove( 0, m_texturedMeshDrawCalls.GetSize() );
-    m_solidMeshDrawCalls.Remove( 0, m_solidMeshDrawCalls.GetSize() );
-    m_wireMeshDrawCalls.Remove( 0, m_wireMeshDrawCalls.GetSize() );
-    m_lineDrawCalls.Remove( 0, m_lineDrawCalls.GetSize() );
-
-    m_currentResourceSetIndex = ( m_currentResourceSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_resourceSets );
 }

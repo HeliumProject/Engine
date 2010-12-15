@@ -124,4 +124,18 @@ namespace Lunar
     {
         return m_directionalLightBrightness;
     }
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    /// Get the buffered drawing interface for the entire scene.
+    ///
+    /// Draw calls buffered through this interface will be presented on all views for this scene.
+    ///
+    /// @return  Reference to the buffered drawing interface for this scene.
+    ///
+    /// @see GetSceneViewBufferedDrawer()
+    BufferedDrawer& GraphicsScene::GetSceneBufferedDrawer()
+    {
+        return m_sceneBufferedDrawer;
+    }
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 }

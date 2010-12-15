@@ -30,7 +30,7 @@ namespace Lunar
         void Shutdown();
         //@}
 
-        /// @name Drawing
+        /// @name Draw Call Generation
         //@{
         void DrawLines(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount );
@@ -41,8 +41,14 @@ namespace Lunar
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
             uint32_t triangleCount, RTexture2d* pTexture );
+        //@}
 
-        void Flush();
+        /// @name Rendering
+        //@{
+        void BeginDrawing();
+        void EndDrawing();
+
+        void Draw();
         //@}
 
     private:
@@ -113,5 +119,9 @@ namespace Lunar
         ResourceSet m_resourceSets[ 2 ];
         /// Current resource set to use for buffered draw calls.
         size_t m_currentResourceSetIndex;
+
+        /// True if the buffered draw commands are in use for rendering (no new commands can be buffered), false if not
+        /// (new commands can be buffered).
+        bool m_bDrawing;
     };
 }

@@ -540,7 +540,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Get(stdout);
-                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name.c_str(), field->m_Index);
+                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name.c_str(), *field->m_DataClass->m_Name);
                 m_Indent.Push();
 #endif
 

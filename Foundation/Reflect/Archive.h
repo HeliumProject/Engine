@@ -10,7 +10,6 @@
 #include "API.h"
 #include "Cache.h"
 #include "Class.h"
-#include "StringPool.h"
 #include "Exceptions.h"
 #include "ArchiveStream.h" 
 

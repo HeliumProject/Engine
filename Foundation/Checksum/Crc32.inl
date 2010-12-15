@@ -32,7 +32,7 @@ uint32_t Helium::Crc32( const void* pData, size_t byteCount )
 uint32_t Helium::Crc32( const tchar_t* pString )
 {
     uint32_t crc = BeginCrc32();
-    crc = UpdateCrc32( crc, pString, StringLength( pString ) );
+    crc = UpdateCrc32( crc, pString, StringLength( pString ) * sizeof( tchar_t ) );
     crc = FinishCrc32( crc );
 
     return crc;

@@ -10,11 +10,8 @@
 #endif
 
 #if HELIUM_CC_MSC
-# if HELIUM_UNICODE
-#  define SNPRINTF( BUFFER, FORMAT, ... ) _snwprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
-# else
-#  define SNPRINTF( BUFFER, FORMAT, ... ) _snprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
-# endif
+#  define SNPRINTF( BUFFER, FORMAT, ... )           _sntprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
+#  define VSNPRINTF( BUFFER, FORMAT, FMT, ARGS )    _vsntprintf_s( BUFFER, _TRUNCATE, FORMAT, FMT, ARGS )
 #else
 # if HELIUM_UNICODE
 #  define SNPRINTF( BUFFER, FORMAT, ... ) { swprintf( BUFFER, HELIUM_ARRAY_COUNT( BUFFER ) - 1, FORMAT, __VA_ARGS__ ); BUFFER[ HELIUM_BUFFER_ARRAY_COUNT( BUFFER ) - 1 ] = L'\0'; }
@@ -37,10 +34,11 @@ volatile int32_t Assert::sm_active = 0;
 /// @param[in] line         Line number at which the assertion occurred.
 Assert::EResult Assert::Trigger(
     const tchar_t* pExpression,
-    const tchar_t* pMessage,
     const char* pFunction,
     const char* pFile,
-    int line )
+    int line,
+    const tchar_t* pMessage,
+    ... )
 {
     // Only allow one assert handler to be active at a time.
     while( AtomicCompareExchangeAcquire( sm_active, 1, 0 ) != 0 )
@@ -68,13 +66,19 @@ Assert::EResult Assert::Trigger(
     {
         if( pMessage )
         {
+            va_list args;
+            va_start(args, pMessage); 
+            tchar_t message[1024];
+            VSNPRINTF(message, sizeof(message) / sizeof(tchar_t), pMessage, args);
+            va_end(args); 
+
             SNPRINTF(
                 messageText,
-                TXT( "Assertion failed in %s (%s, line %d): %s (%s)" ),
+                TXT( "%s\n\nAssertion failed in %s (%s, line %d): (%s)" ),
+                message,
                 functionName,
                 fileName,
                 line,
-                pMessage,
                 pExpression );
         }
         else
@@ -92,13 +96,19 @@ Assert::EResult Assert::Trigger(
     {
         if( pMessage )
         {
+            va_list args;
+            va_start(args, pMessage); 
+            tchar_t message[1024];
+            VSNPRINTF(message, sizeof(message) / sizeof(tchar_t), pMessage, args);
+            va_end(args); 
+
             SNPRINTF(
                 messageText,
-                TXT( "Assertion failed in %s (%s, line %d): %s" ),
+                TXT( "%s\n\nAssertion failed in %s (%s, line %d)" ),
+                message,
                 functionName,
                 fileName,
-                line,
-                pMessage );
+                line );
         }
         else
         {

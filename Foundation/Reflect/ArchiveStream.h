@@ -248,14 +248,52 @@ namespace Helium
                 return *this;
             }
 
-            inline const tstring& ReadString()
+            inline Stream& ReadString( tstring& string )
             {
+                uint32_t length = 0;
+                Read( &length );
 
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+#ifdef UNICODE
+                        std::string temp;
+                        temp.resize( length );
+                        ReadBuffer( &temp[ 0 ], length );
+                        Helium::ConvertString( temp, string );
+#else
+                        // read the bytes directly into the string
+                        string.resize( length ); 
+                        ReadBuffer( &string[ 0 ], length ); 
+#endif
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+#ifdef UNICODE
+                        // read the bytes directly into the string
+                        string.resize( length ); 
+                        ReadBuffer( &string[ 0 ], length * 2 ); 
+#else
+                        std::wstring temp;
+                        temp.resize( length );
+                        ReadBuffer( &temp[ 0 ], length * 2 ); 
+                        Helium::ConvertString( temp, string );
+#endif
+                        break;
+                    }
+                }
+                return *this;
             }
 
-            inline void WriteString( const tstring& string )
+            inline Stream& WriteString( const tstring& string )
             {
-
+                uint32_t length = (uint32_t)string.length();
+                Write( &length );
+                WriteBuffer( string.c_str(), length * sizeof(tchar_t) );
+                return *this;
             }
 
             Stream& Flush()

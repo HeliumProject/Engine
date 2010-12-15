@@ -405,15 +405,12 @@ void StringStlVectorData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t size = (int32_t)m_Data->size();
-            binary.GetStream().Write(&size); 
+            uint32_t count = (uint32_t)m_Data->size();
+            binary.GetStream().Write( &count ); 
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-#ifdef HRB_REFACTOR
-                int32_t index = binary.GetStrings().Insert(m_Data.Get()[i]);
-                binary.GetStream().Write(&index); 
-#endif
+                binary.GetStream().WriteString( m_Data.Get()[i] ); 
             }
 
             break;
@@ -472,17 +469,13 @@ void StringStlVectorData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t size = (int32_t)m_Data->size();
-            binary.GetStream().Read(&size); 
+            uint32_t count = (uint32_t)m_Data->size();
+            binary.GetStream().Read( &count ); 
 
-            m_Data->resize(size);
-            for (int32_t i=0; i<size; i++)
+            m_Data->resize(count);
+            for ( uint32_t i=0; i<count; i++ )
             {
-#ifdef HRB_REFACTOR
-                int32_t index;
-                binary.GetStream().Read(&index); 
-                m_Data.Ref()[i] = binary.GetStrings().Get(index);
-#endif
+                binary.GetStream().ReadString( m_Data.Ref()[i] ); 
             }
 
             break;

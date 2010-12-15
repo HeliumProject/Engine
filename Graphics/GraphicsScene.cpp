@@ -30,18 +30,27 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
 
+using namespace Lunar;
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
+#endif !HELIUM_RELEASE && !HELIUM_PROFILE
+
 namespace Lunar
 {
     L_DECLARE_RPTR( RRenderCommandProxy );
 }
 
-using namespace Lunar;
-
 L_IMPLEMENT_OBJECT( GraphicsScene, Graphics, 0 );
 
 /// Constructor.
 GraphicsScene::GraphicsScene()
-: m_ambientLightTopColor( 0xffffffff )
+:
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+  m_viewBufferedDrawerPool( SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE )
+,
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+  m_ambientLightTopColor( 0xffffffff )
 , m_ambientLightTopBrightness( 0.25f )
 , m_ambientLightBottomColor( 0xff000000 )
 , m_ambientLightBottomBrightness( 0.0f )
@@ -70,9 +79,6 @@ void GraphicsScene::Update()
         return;
     }
 
-    RSurfacePtr spSceneTextureSurface = spSceneTexture->GetSurface( 0 );
-    HELIUM_ASSERT( spSceneTextureSurface );
-
     size_t sceneViewCount = m_sceneViews.GetSize();
     if( sceneViewCount == 0 )
     {
@@ -81,8 +87,6 @@ void GraphicsScene::Update()
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
-
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
 
     // Prepare the array of inverse view/projection matrices for each view's shadow depth pass.
     if( m_shadowViewInverseViewProjectionMatrices.GetSize() < sceneViewCount )
@@ -122,161 +126,42 @@ void GraphicsScene::Update()
     m_visibleSceneObjects.Reserve( sceneObjectCount );
     m_visibleSceneObjects.Resize( sceneObjectCount );
 
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    // Set up the scene's buffered drawer for the current frame.
+    m_sceneBufferedDrawer.BeginDrawing();
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+
     // Update and render each scene view.
-    DynArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers =
-        m_viewVertexGlobalDataBuffers[ m_constantBufferSetIndex ];
-
-    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
-    HELIUM_ASSERT( spCommandProxy );
-
-    RenderResourceManager& rResourceManager = RenderResourceManager::GetStaticInstance();
-    RRasterizerState* pRasterizerStateDefault = rResourceManager.GetRasterizerState(
-        RenderResourceManager::RASTERIZER_STATE_DEFAULT );
-    RDepthStencilState* pDepthStateDefault = rResourceManager.GetDepthStencilState(
-        RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
-    RDepthStencilState* pDepthStateNone = rResourceManager.GetDepthStencilState(
-        RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
-    RSamplerState* pSamplerStatePointClamp = rResourceManager.GetSamplerState(
-        RenderResourceManager::TEXTURE_FILTER_POINT,
-        RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
-
     for( size_t viewIndex = 0; viewIndex < sceneViewCount; ++viewIndex )
     {
-        if( !m_sceneViews.IsElementValid( viewIndex ) )
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+        // Set up the current view's buffered drawer for the current frame.
+        BufferedDrawer* pDrawer = NULL;
+        if( viewIndex < m_viewBufferedDrawers.GetSize() )
         {
-            continue;
-        }
-
-        RConstantBuffer* pViewVertexGlobalDataBuffer = rViewVertexGlobalDataBuffers[ viewIndex ];
-        if( !pViewVertexGlobalDataBuffer )
-        {
-            continue;
-        }
-
-        GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
-        RRenderContext* pRenderContext = rView.GetRenderContext();
-        if( !pRenderContext )
-        {
-            continue;
-        }
-
-        // Determine which scene objects are visible in the current view.
-        m_visibleSceneObjects.UnsetAll();
-
-        const Simd::Frustum& rViewFrustum = rView.GetFrustum();
-        for( size_t sceneObjectIndex = 0; sceneObjectIndex < sceneObjectCount; ++sceneObjectIndex )
-        {
-            if( m_sceneObjects.IsElementValid( sceneObjectIndex ) )
+            pDrawer = m_viewBufferedDrawers[ viewIndex ];
+            if( pDrawer )
             {
-                //const AaBox& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldBox();
-                const Simd::Sphere& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldSphere();
-                if( rViewFrustum.Intersects( rObjectBounds ) )
-                {
-                    m_visibleSceneObjects.SetElement( sceneObjectIndex );
-                }
+                pDrawer->BeginDrawing();
             }
         }
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
-        // Build a list of indices for each visible sub-mesh for sorting.
-        m_sceneObjectSubMeshIndices.Resize( 0 );
+        DrawSceneView( static_cast< uint_fast32_t >( viewIndex ) );
 
-        size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
-        for( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+        // Finish drawing with the current view's buffered drawer.
+        if( pDrawer )
         {
-            if( m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
-            {
-                size_t sceneObjectId = m_sceneObjectSubMeshes[ subMeshIndex ].GetSceneObjectId();
-                HELIUM_ASSERT( sceneObjectId < m_visibleSceneObjects.GetSize() );
-                if( m_visibleSceneObjects[ sceneObjectId ] )
-                {
-                    m_sceneObjectSubMeshIndices.Push( subMeshIndex );
-                }
-            }
+            pDrawer->EndDrawing();
         }
-
-        // Set the default depth state.
-        spCommandProxy->SetDepthStencilState( pDepthStateDefault, 0 );
-
-        // Draw shadow depth pass (this will also set up the shadow depth scene as needed).
-        DrawShadowDepthPass( viewIndex );
-
-        // Set up normal scene rendering.
-        RSurface* pDepthStencilSurface = rView.GetDepthStencilSurface();
-        // Depth-stencil surfaces can be null, so we don't assert on the depth-stencil surface returned.
-        spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, pDepthStencilSurface );
-
-        spCommandProxy->SetViewport(
-            rView.GetViewportX(),
-            rView.GetViewportY(),
-            rView.GetViewportWidth(),
-            rView.GetViewportHeight() );
-
-        spCommandProxy->BeginScene();
-        spCommandProxy->Clear( RENDERER_CLEAR_FLAG_ALL, rView.GetClearColor() );
-
-        spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
-        spCommandProxy->SetVertexConstantBuffers( 0, 1, &pViewVertexGlobalDataBuffer );
-
-        // Draw passes...
-        DrawDepthPrePass( viewIndex );
-        DrawBasePass( viewIndex );
-
-        spCommandProxy->EndScene();
-
-        // Draw the scene texture to the screen.
-        RSurface* pBackBuffer = pRenderContext->GetBackBufferSurface();
-        HELIUM_ASSERT( pBackBuffer );
-        spCommandProxy->SetRenderSurfaces( pBackBuffer, NULL );
-
-        spCommandProxy->SetViewport(
-            rView.GetViewportX(),
-            rView.GetViewportY(),
-            rView.GetViewportWidth(),
-            rView.GetViewportHeight() );
-
-        spCommandProxy->BeginScene();
-
-        spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
-        spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
-
-        rDynamicDrawer.Begin();
-
-        float32_t viewportWidthFloat = static_cast< float32_t >( rView.GetViewportWidth() );
-        float32_t viewportHeightFloat = static_cast< float32_t >( rView.GetViewportHeight() );
-
-        Float16 zeroFloat16;
-        zeroFloat16.packed = 0;
-
-        Float32 floatPacker;
-
-        floatPacker.value = viewportWidthFloat / static_cast< float32_t >( spSceneTexture->GetWidth() );
-        Float16 sceneWidthFloat16 = Float32To16( floatPacker );
-
-        floatPacker.value = viewportHeightFloat / static_cast< float32_t >( spSceneTexture->GetHeight() );
-        Float16 sceneHeightFloat16 = Float32To16( floatPacker );
-
-        float32_t halfPixelX = 1.0f / viewportWidthFloat;
-        float32_t halfPixelY = 1.0f / viewportHeightFloat;
-
-        float32_t quadMinX = -1.0f - halfPixelX;
-        float32_t quadMinY = halfPixelY + 1.0f;
-        float32_t quadMaxX = 1.0f - halfPixelX;
-        float32_t quadMaxY = halfPixelY - 1.0f;
-
-        rDynamicDrawer.DrawScreenSpaceQuad(
-            DynamicDrawer::VertexTextured( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
-            DynamicDrawer::VertexTextured( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
-            DynamicDrawer::VertexTextured( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
-            DynamicDrawer::VertexTextured( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
-            spSceneTexture );
-        rDynamicDrawer.Flush();
-
-        spCommandProxy->EndScene();
-
-        spCommandProxy->UnbindResources();
-
-        pRenderContext->Swap();
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
     }
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    // Finish drawing with the scene's buffered drawer.
+    m_sceneBufferedDrawer.EndDrawing();
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 }
 
 /// Allocate a new scene view.
@@ -308,6 +193,20 @@ void GraphicsScene::ReleaseSceneView( uint32_t id )
     {
         SetInvalid( m_activeViewId );
     }
+
+    // Release any allocated buffered drawing interface for the view being released.
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    if( id < m_viewBufferedDrawers.GetSize() )
+    {
+        BufferedDrawer* pDrawer = m_viewBufferedDrawers[ id ];
+        if( pDrawer )
+        {
+            pDrawer->Shutdown();
+            m_viewBufferedDrawerPool.Release( pDrawer );
+            m_viewBufferedDrawers[ id ] = NULL;
+        }
+    }
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 }
 
 /// Set the active scene view to use for rendering.
@@ -416,6 +315,52 @@ void GraphicsScene::SetDirectionalLight( const Simd::Vector3& rDirection, const 
     m_directionalLightColor = rColor;
     m_directionalLightBrightness = brightness;
 }
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+/// Get the buffered drawing interface for the specified scene view.
+///
+/// Draw calls buffered through the provided interface will only be rendered on the scene view with the specified
+/// ID.
+///
+/// @param[in] id  Scene view ID.
+///
+/// @return  Pointer to the buffered drawing interface for the specified scene view if valid, null if not.
+///
+/// @see GetSceneBufferedDrawer()
+BufferedDrawer* GraphicsScene::GetSceneViewBufferedDrawer( uint32_t id )
+{
+    // Make sure the ID references a valid view first.
+    if( id >= m_sceneViews.GetSize() || !m_sceneViews.IsElementValid( id ) )
+    {
+        return NULL;
+    }
+
+    // If a buffered drawer does not already exist for the specified view, allocate one from the object pool.
+    BufferedDrawer* pDrawer = NULL;
+
+    size_t viewBufferedDrawerCount = m_viewBufferedDrawers.GetSize();
+    if( id < viewBufferedDrawerCount )
+    {
+        pDrawer = m_viewBufferedDrawers[ id ];
+    }
+
+    if( !pDrawer )
+    {
+        pDrawer = m_viewBufferedDrawerPool.Allocate();
+        if( pDrawer )
+        {
+            if( id >= viewBufferedDrawerCount )
+            {
+                m_viewBufferedDrawers.Add( NULL, id - viewBufferedDrawerCount + 1 );
+            }
+
+            m_viewBufferedDrawers[ id ] = pDrawer;
+        }
+    }
+
+    return pDrawer;
+}
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
 /// Get the name of the default sampler state used by material shaders.  Note that this must match the name given in
 /// Data/Shaders/Common.inl.
@@ -1111,6 +1056,197 @@ void GraphicsScene::SwapDynamicConstantBuffers()
     }
 }
 
+/// Render the specified scene view.
+///
+/// @param[in] viewIndex  Index of the scene view to render (can be an invalid element, but must be less than the size
+///                       of the scene view sparse array).
+void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
+{
+    HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
+
+    if( !m_sceneViews.IsElementValid( viewIndex ) )
+    {
+        return;
+    }
+
+    RConstantBuffer* pViewVertexGlobalDataBuffer =
+        m_viewVertexGlobalDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
+    if( !pViewVertexGlobalDataBuffer )
+    {
+        return;
+    }
+
+    GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
+    RRenderContext* pRenderContext = rView.GetRenderContext();
+    if( !pRenderContext )
+    {
+        return;
+    }
+
+    // Determine which scene objects are visible in the current view.
+    m_visibleSceneObjects.UnsetAll();
+
+    const Simd::Frustum& rViewFrustum = rView.GetFrustum();
+
+    size_t sceneObjectCount = m_sceneObjects.GetSize();
+    for( size_t sceneObjectIndex = 0; sceneObjectIndex < sceneObjectCount; ++sceneObjectIndex )
+    {
+        if( m_sceneObjects.IsElementValid( sceneObjectIndex ) )
+        {
+            //const AaBox& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldBox();
+            const Simd::Sphere& rObjectBounds = m_sceneObjects[ sceneObjectIndex ].GetWorldSphere();
+            if( rViewFrustum.Intersects( rObjectBounds ) )
+            {
+                m_visibleSceneObjects.SetElement( sceneObjectIndex );
+            }
+        }
+    }
+
+    // Build a list of indices for each visible sub-mesh for sorting.
+    m_sceneObjectSubMeshIndices.Resize( 0 );
+
+    size_t subMeshCount = m_sceneObjectSubMeshes.GetSize();
+    for( size_t subMeshIndex = 0; subMeshIndex < subMeshCount; ++subMeshIndex )
+    {
+        if( m_sceneObjectSubMeshes.IsElementValid( subMeshIndex ) )
+        {
+            size_t sceneObjectId = m_sceneObjectSubMeshes[ subMeshIndex ].GetSceneObjectId();
+            HELIUM_ASSERT( sceneObjectId < m_visibleSceneObjects.GetSize() );
+            if( m_visibleSceneObjects[ sceneObjectId ] )
+            {
+                m_sceneObjectSubMeshIndices.Push( subMeshIndex );
+            }
+        }
+    }
+
+    // Get the renderer interface and the main command proxy for the renderer.
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+
+    RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
+    HELIUM_ASSERT( spCommandProxy );
+
+    // Get the state objects that we will use during rendering.
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+
+    RRasterizerState* pRasterizerStateDefault = rRenderResourceManager.GetRasterizerState(
+        RenderResourceManager::RASTERIZER_STATE_DEFAULT );
+    RDepthStencilState* pDepthStateDefault = rRenderResourceManager.GetDepthStencilState(
+        RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
+    RDepthStencilState* pDepthStateNone = rRenderResourceManager.GetDepthStencilState(
+        RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+    RSamplerState* pSamplerStatePointClamp = rRenderResourceManager.GetSamplerState(
+        RenderResourceManager::TEXTURE_FILTER_POINT,
+        RENDERER_TEXTURE_ADDRESS_MODE_CLAMP );
+
+    // Set the default depth state.
+    spCommandProxy->SetDepthStencilState( pDepthStateDefault, 0 );
+
+    // Draw shadow depth pass (this will also set up the shadow depth scene as needed).
+    DrawShadowDepthPass( viewIndex );
+
+    // Set up normal scene rendering.
+    RSurface* pDepthStencilSurface = rView.GetDepthStencilSurface();
+
+    // Depth-stencil surfaces can be null, so we don't assert on the depth-stencil surface returned.
+    RTexture2dPtr spSceneTexture = rRenderResourceManager.GetSceneTexture();
+    HELIUM_ASSERT( spSceneTexture );
+    RSurfacePtr spSceneTextureSurface = spSceneTexture->GetSurface( 0 );
+    HELIUM_ASSERT( spSceneTextureSurface );
+
+    spCommandProxy->SetRenderSurfaces( spSceneTextureSurface, pDepthStencilSurface );
+
+    spCommandProxy->SetViewport(
+        rView.GetViewportX(),
+        rView.GetViewportY(),
+        rView.GetViewportWidth(),
+        rView.GetViewportHeight() );
+
+    spCommandProxy->BeginScene();
+    spCommandProxy->Clear( RENDERER_CLEAR_FLAG_ALL, rView.GetClearColor() );
+
+    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+    spCommandProxy->SetVertexConstantBuffers( 0, 1, &pViewVertexGlobalDataBuffer );
+
+    // Draw passes...
+    DrawDepthPrePass( viewIndex );
+    DrawBasePass( viewIndex );
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+    // Draw buffered draw calls for the current scene and view.
+    m_sceneBufferedDrawer.Draw();
+
+    if( viewIndex < m_viewBufferedDrawers.GetSize() )
+    {
+        BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
+        if( pDrawer )
+        {
+            pDrawer->Draw();
+        }
+    }
+
+    // Set the default rasterizer state, as the rasterizer state may have been altered by BufferedDrawer::Draw().
+    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+
+    spCommandProxy->EndScene();
+
+    // Draw the scene texture to the screen.
+    RSurface* pBackBuffer = pRenderContext->GetBackBufferSurface();
+    HELIUM_ASSERT( pBackBuffer );
+    spCommandProxy->SetRenderSurfaces( pBackBuffer, NULL );
+
+    spCommandProxy->SetViewport(
+        rView.GetViewportX(),
+        rView.GetViewportY(),
+        rView.GetViewportWidth(),
+        rView.GetViewportHeight() );
+
+    spCommandProxy->BeginScene();
+
+    spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
+    spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
+
+    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+    rDynamicDrawer.Begin();
+
+    float32_t viewportWidthFloat = static_cast< float32_t >( rView.GetViewportWidth() );
+    float32_t viewportHeightFloat = static_cast< float32_t >( rView.GetViewportHeight() );
+
+    Float16 zeroFloat16;
+    zeroFloat16.packed = 0;
+
+    Float32 floatPacker;
+
+    floatPacker.value = viewportWidthFloat / static_cast< float32_t >( spSceneTexture->GetWidth() );
+    Float16 sceneWidthFloat16 = Float32To16( floatPacker );
+
+    floatPacker.value = viewportHeightFloat / static_cast< float32_t >( spSceneTexture->GetHeight() );
+    Float16 sceneHeightFloat16 = Float32To16( floatPacker );
+
+    float32_t halfPixelX = 1.0f / viewportWidthFloat;
+    float32_t halfPixelY = 1.0f / viewportHeightFloat;
+
+    float32_t quadMinX = -1.0f - halfPixelX;
+    float32_t quadMinY = halfPixelY + 1.0f;
+    float32_t quadMaxX = 1.0f - halfPixelX;
+    float32_t quadMaxY = halfPixelY - 1.0f;
+
+    rDynamicDrawer.DrawScreenSpaceQuad(
+        SimpleTexturedVertex( quadMinX, quadMaxY, 0.0f, zeroFloat16, sceneHeightFloat16 ),
+        SimpleTexturedVertex( quadMinX, quadMinY, 0.0f, zeroFloat16, zeroFloat16 ),
+        SimpleTexturedVertex( quadMaxX, quadMinY, 0.0f, sceneWidthFloat16, zeroFloat16 ),
+        SimpleTexturedVertex( quadMaxX, quadMaxY, 0.0f, sceneWidthFloat16, sceneHeightFloat16 ),
+        spSceneTexture );
+    rDynamicDrawer.Flush();
+
+    spCommandProxy->EndScene();
+
+    spCommandProxy->UnbindResources();
+
+    pRenderContext->Swap();
+}
+
 /// Draw the shadow depth render pass.
 ///
 /// - The m_sceneObjectSubMeshIndices array should already be prepared with the (unsorted) list of visible sub
@@ -1120,7 +1256,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
 /// @param[in] viewIndex  Index of the view for which the shadow depth pass is being rendered.
 ///
 /// @see DrawDepthPrePass(), DrawBasePass()
-void GraphicsScene::DrawShadowDepthPass( size_t viewIndex )
+void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
 {
     HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
     HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
@@ -1354,7 +1490,7 @@ void GraphicsScene::DrawShadowDepthPass( size_t viewIndex )
 /// @param[in] viewIndex  Index of the view for which the depth-only pre-pass is being rendered.
 ///
 /// @see DrawShadowDepthPass(), DrawBasePass()
-void GraphicsScene::DrawDepthPrePass( size_t viewIndex )
+void GraphicsScene::DrawDepthPrePass( uint_fast32_t viewIndex )
 {
     HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
     HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );
@@ -1546,7 +1682,7 @@ void GraphicsScene::DrawDepthPrePass( size_t viewIndex )
 /// @param[in] viewIndex  Index of the view for which the base pass is being rendered.
 ///
 /// @see DrawShadowDepthPass(), DrawDepthPrePass()
-void GraphicsScene::DrawBasePass( size_t viewIndex )
+void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
 {
     HELIUM_ASSERT( viewIndex < m_sceneViews.GetSize() );
     HELIUM_ASSERT( m_sceneViews.IsElementValid( viewIndex ) );

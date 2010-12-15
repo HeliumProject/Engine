@@ -193,7 +193,6 @@ configuration { "windows", "x64", "not Debug" }
 
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
-	kind "SharedLib"
 	language "C++"
 	defines
 	{
@@ -216,10 +215,6 @@ project "Platform"
 			"Platform/Math/Simd/Sse/*",
 			"Platform/Windows/*",
 		}
-		links
-		{
-			"ws2_32",
-		}
 	configuration "macosx"
 		files
 		{
@@ -235,9 +230,20 @@ project "Platform"
 			"Platform/POSIX/*",
 		}
 
+	configuration "Debug"
+		kind "SharedLib"
+
+	configuration "not Debug"
+		kind "StaticLib"
+
+	configuration { "windows", "Debug" }
+		links
+		{
+			"ws2_32",
+		}
+
 project "Foundation"
 	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
-	kind "SharedLib"
 	language "C++"
 	defines
 	{
@@ -249,17 +255,27 @@ project "Foundation"
 		"Foundation/**",
 		"Foundation/**",
 	}
-	links
-	{
-		"Platform",
-		"ws2_32",
-		"Expat",
-		"zlib",
-	}
+
+	configuration "Debug"
+		kind "SharedLib"
+		links
+		{
+			"Platform",
+			"Expat",
+			"zlib",
+		}
+
+	configuration "not Debug"
+		kind "StaticLib"
+
+	configuration { "windows", "Debug" }
+		links
+		{
+			"ws2_32",
+		}
 
 project "Pipeline"
 	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
-	kind "SharedLib"
 	language "C++"
 	defines
 	{
@@ -279,21 +295,27 @@ project "Pipeline"
 		"Pipeline/**.h",
 		"Pipeline/**.cpp",
 	}
-	links
-	{
-		"Platform",
-		"Foundation",
-		"nvtt",
-		"tiff",
-		"d3d9",
-		"d3dx9",
-	}
 
 	configuration "windows"
 		includedirs
 		{
 			"Dependencies/nvtt/project/vc8",
 		}
+
+	configuration "Debug"
+		kind "SharedLib"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"nvtt",
+			"tiff",
+			"d3d9",
+			"d3dx9",
+		}
+
+	configuration "not Debug"
+		kind "StaticLib"
 
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
@@ -404,229 +426,246 @@ project "Editor"
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-	}
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+		}
 
 project "EngineJobs"
 	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-	}
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "EngineJobs", "ENGINE_JOBS" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+		}
 
 project "Windowing"
 	uuid "B68268DF-3942-432F-89B1-DBC82C21218E"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Windowing", "WINDOWING" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+		}
 
 project "Rendering"
 	uuid "3F1BD209-272C-4833-AF8E-35C317F21452"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Rendering", "RENDERING" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+		}
 
 project "GraphicsTypes"
 	uuid "4A13A4F6-6860-4F52-A217-B0C3943E7025"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+		}
 
 project "GraphicsJobs"
 	uuid "4D83346D-DCB2-40E6-AAF1-508341728E57"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-		"GraphicsTypes",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+			"GraphicsTypes",
+		}
 
 project "Graphics"
 	uuid "3342921C-F6C7-4A81-A6FF-1C93373AF285"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-		"GraphicsTypes",
-		"GraphicsJobs",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Graphics", "GRAPHICS" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+		}
 
 project "Framework"
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Windowing",
-		"Rendering",
-		"GraphicsTypes",
-		"GraphicsJobs",
-		"Graphics",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Framework", "FRAMEWORK" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+		}
 
 project "WinWindowing"
 	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Windowing",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "WinWindowing", "WIN_WINDOWING" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+		}
 
 project "D3D9Rendering"
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+		}
 
 project "PcSupport"
 	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "PcSupport", "PC_SUPPORT" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+		}
 
 project "PreprocessingPc"
 	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Rendering",
-		"GraphicsTypes",
-		"GraphicsJobs",
-		"Graphics",
-		"PcSupport",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"PcSupport",
+		}
 
 project "EditorSupport"
 	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Windowing",
-		"Rendering",
-		"GraphicsTypes",
-		"GraphicsJobs",
-		"Graphics",
-		"Framework",
-		"PcSupport",
-		"PreprocessingPc",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"Framework",
+			"PcSupport",
+			"PreprocessingPc",
+		}
 
 project "FrameworkWin"
 	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-		"Windowing",
-		"Rendering",
-		"GraphicsTypes",
-		"GraphicsJobs",
-		"Graphics",
-		"Framework",
-		"WinWindowing",
-		"D3D9Rendering",
-		"PcSupport",
-		"PreprocessingPc",
-		"EditorSupport",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"Framework",
+			"WinWindowing",
+			"D3D9Rendering",
+			"PcSupport",
+			"PreprocessingPc",
+			"EditorSupport",
+		}
 
 project "TestJobs"  -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Engine",
-		"EngineJobs",
-	}
-
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "TestJobs", "TEST_JOBS" )
+
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+		}

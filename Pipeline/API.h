@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef PIPELINE_DLL
+#if HELIUM_SHARED
 # ifdef PIPELINE_EXPORTS
 #  define PIPELINE_API __declspec (dllexport)
 # else

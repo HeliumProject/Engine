@@ -177,6 +177,22 @@ void RenderResourceManager::Initialize()
     vertexElements[ 0 ].bufferIndex = 0;
 
     vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
+    vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
+    vertexElements[ 1 ].semanticIndex = 0;
+    vertexElements[ 1 ].bufferIndex = 0;
+
+    vertexElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
+    vertexElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+    vertexElements[ 2 ].semanticIndex = 0;
+    vertexElements[ 2 ].bufferIndex = 0;
+
+    m_spSimpleVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 2 );
+    HELIUM_ASSERT( m_spSimpleVertexDescription );
+
+    m_spSimpleTexturedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
+    HELIUM_ASSERT( m_spSimpleTexturedVertexDescription );
+
+    vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
     vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
     vertexElements[ 1 ].semanticIndex = 0;
     vertexElements[ 1 ].bufferIndex = 0;
@@ -265,34 +281,66 @@ void RenderResourceManager::Initialize()
         }
     }
 
-    // Attempt to load the screen-space textured primitive shaders.
-    // XXX TMC: Migrate to a more data-driven solution.
-    GameObjectPath screenSpaceTextureShaderPath;
-    HELIUM_VERIFY( screenSpaceTextureShaderPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
+    // Attempt to load the simple world-space and screen-space primitive shaders.
+#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
+    GameObjectPath simpleShaderPath;
+    GameObjectPtr spSimpleShader;
+    Shader* pSimpleShader;
 
-    GameObjectPtr spScreenSpaceTextureShader;
-    HELIUM_VERIFY( pObjectLoader->LoadObject( screenSpaceTextureShaderPath, spScreenSpaceTextureShader ) );
+    HELIUM_VERIFY( simpleShaderPath.Set(
+        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
 
-    Shader* pScreenSpaceTextureShader = DynamicCast< Shader >( spScreenSpaceTextureShader.Get() );
-    HELIUM_ASSERT( pScreenSpaceTextureShader );
-    if( pScreenSpaceTextureShader )
+    HELIUM_VERIFY( pObjectLoader->LoadObject( simpleShaderPath, spSimpleShader ) );
+
+    pSimpleShader = DynamicCast< Shader >( spSimpleShader.Get() );
+    HELIUM_ASSERT( pSimpleShader );
+    if( pSimpleShader )
     {
-        size_t loadId = pScreenSpaceTextureShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+        size_t loadId = pSimpleShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
         HELIUM_ASSERT( IsValid( loadId ) );
         if( IsValid( loadId ) )
         {
-            while( !pScreenSpaceTextureShader->TryFinishLoadVariant( loadId, m_spScreenSpaceTextureVertexShader ) )
+            while( !pSimpleShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpaceVertexShader ) )
             {
                 pObjectLoader->Tick();
             }
         }
 
-        loadId = pScreenSpaceTextureShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
+        loadId = pSimpleShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
         HELIUM_ASSERT( IsValid( loadId ) );
         if( IsValid( loadId ) )
         {
-            while( !pScreenSpaceTextureShader->TryFinishLoadVariant( loadId, m_spScreenSpaceTexturePixelShader ) )
+            while( !pSimpleShader->TryFinishLoadVariant( loadId, m_spSimpleWorldSpacePixelShader ) )
+            {
+                pObjectLoader->Tick();
+            }
+        }
+    }
+
+    HELIUM_VERIFY( simpleShaderPath.Set(
+        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
+
+    HELIUM_VERIFY( pObjectLoader->LoadObject( simpleShaderPath, spSimpleShader ) );
+
+    pSimpleShader = DynamicCast< Shader >( spSimpleShader.Get() );
+    HELIUM_ASSERT( pSimpleShader );
+    if( pSimpleShader )
+    {
+        size_t loadId = pSimpleShader->BeginLoadVariant( RShader::TYPE_VERTEX, 0 );
+        HELIUM_ASSERT( IsValid( loadId ) );
+        if( IsValid( loadId ) )
+        {
+            while( !pSimpleShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpaceVertexShader ) )
+            {
+                pObjectLoader->Tick();
+            }
+        }
+
+        loadId = pSimpleShader->BeginLoadVariant( RShader::TYPE_PIXEL, 0 );
+        HELIUM_ASSERT( IsValid( loadId ) );
+        if( IsValid( loadId ) )
+        {
+            while( !pSimpleShader->TryFinishLoadVariant( loadId, m_spSimpleScreenSpacePixelShader ) )
             {
                 pObjectLoader->Tick();
             }
@@ -305,8 +353,10 @@ void RenderResourceManager::Initialize()
 /// @see Initialize(), PostConfigUpdate()
 void RenderResourceManager::Shutdown()
 {
-    m_spScreenSpaceTexturePixelShader.Release();
-    m_spScreenSpaceTextureVertexShader.Release();
+    m_spSimpleWorldSpacePixelShader.Release();
+    m_spSimpleWorldSpaceVertexShader.Release();
+    m_spSimpleScreenSpacePixelShader.Release();
+    m_spSimpleScreenSpaceVertexShader.Release();
     m_spPrePassVertexShader.Release();
 
     m_spShadowDepthTexture.Release();
@@ -337,6 +387,9 @@ void RenderResourceManager::Shutdown()
             pSamplerStates[ addressModeIndex ].Release();
         }
     }
+
+    m_spSimpleTexturedVertexDescription.Release();
+    m_spSimpleVertexDescription.Release();
 
     for( size_t descriptionIndex = 0;
         descriptionIndex < HELIUM_ARRAY_COUNT( m_staticMeshVertexDescriptions );
@@ -547,6 +600,26 @@ RSamplerState* RenderResourceManager::GetSamplerState(
     return m_samplerStates[ filterType ][ addressMode ];
 }
 
+/// Get the description for SimpleVertex vertices.
+///
+/// @return  SimpleVertex vertex description.
+///
+/// @see GetSimpleTexturedVertexDescription(), GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
+RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
+{
+    return m_spSimpleVertexDescription;
+}
+
+/// Get the description for SimpleTexturedVertex vertices.
+///
+/// @return  SimpleTexturedVertex vertex description.
+///
+/// @see GetSimpleVertexDescription(), GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
+RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() const
+{
+    return m_spSimpleTexturedVertexDescription;
+}
+
 /// Get the description for static mesh vertices with the specified number of texture coordinate sets.
 ///
 /// @param[in] textureCoordinateSetCount  Number of texture coordinate sets (must be between 1 and
@@ -554,7 +627,7 @@ RSamplerState* RenderResourceManager::GetSamplerState(
 ///
 /// @return  Vertex description.
 ///
-/// @see GetSkinnedMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const
 {
     HELIUM_ASSERT( textureCoordinateSetCount >= 1 );
@@ -567,7 +640,7 @@ RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_
 ///
 /// @return  Skinned mesh vertex description.
 ///
-/// @see GetStaticMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetStaticMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSkinnedMeshVertexDescription() const
 {
     return m_spSkinnedMeshVertexDescription;
@@ -601,24 +674,44 @@ ShaderVariant* RenderResourceManager::GetPrePassVertexShader() const
     return m_spPrePassVertexShader;
 }
 
-/// Get the vertex shader variant resource for screen-space textured primitive rendering.
+/// Get the vertex shader variant resource for basic world-space primitive rendering.
 ///
-/// @return  Screen-space textured primitive vertex shader variant.
+/// @return  Simple world-space primitive vertex shader variant.
 ///
-/// @see GetScreenSpaceTexturePixelShader()
-ShaderVariant* RenderResourceManager::GetScreenSpaceTextureVertexShader() const
+/// @see GetSimpleWorldSpacePixelShader(), GetSimpleScreenSpaceVertexShader(), GetSimpleScreenSpacePixelShader()
+ShaderVariant* RenderResourceManager::GetSimpleWorldSpaceVertexShader() const
 {
-    return m_spScreenSpaceTextureVertexShader;
+    return m_spSimpleWorldSpaceVertexShader;
 }
 
-/// Get the pixel shader variant resource for screen-space textured primitive rendering.
+/// Get the pixel shader variant resource for basic world-space primitive rendering.
 ///
-/// @return  Screen-space textured primitive pixel shader variant.
+/// @return  Simple world-space primitive pixel shader variant.
 ///
-/// @see GetScreenSpaceTextureVertexShader()
-ShaderVariant* RenderResourceManager::GetScreenSpaceTexturePixelShader() const
+/// @see GetSimpleWorldSpaceVertexShader(), GetSimpleScreenSpaceVertexShader(), GetSimpleScreenSpacePixelShader()
+ShaderVariant* RenderResourceManager::GetSimpleWorldSpacePixelShader() const
 {
-    return m_spScreenSpaceTexturePixelShader;
+    return m_spSimpleWorldSpacePixelShader;
+}
+
+/// Get the vertex shader variant resource for basic screen-space primitive rendering.
+///
+/// @return  Simple screen-space primitive vertex shader variant.
+///
+/// @see GetSimpleScreenSpacePixelShader(), GetSimpleWorldSpaceVertexShader(), GetSimpleWorldSpacePixelShader()
+ShaderVariant* RenderResourceManager::GetSimpleScreenSpaceVertexShader() const
+{
+    return m_spSimpleScreenSpaceVertexShader;
+}
+
+/// Get the pixel shader variant resource for basic screen-space primitive rendering.
+///
+/// @return  Simple screen-space primitive pixel shader variant.
+///
+/// @see GetSimpleScreenSpaceVertexShader(), GetSimpleWorldSpaceVertexShader(), GetSimpleWorldSpacePixelShader()
+ShaderVariant* RenderResourceManager::GetSimpleScreenSpacePixelShader() const
+{
+    return m_spSimpleScreenSpacePixelShader;
 }
 
 /// Get the singleton RenderResourceManager instance, creating it if necessary.

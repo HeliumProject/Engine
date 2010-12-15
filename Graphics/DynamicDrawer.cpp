@@ -29,7 +29,7 @@ DynamicDrawer* DynamicDrawer::sm_pInstance = NULL;
 
 /// Constructor.
 DynamicDrawer::DynamicDrawer()
-: m_pActiveDescription( NULL )
+    : m_pActiveDescription( NULL )
 {
 }
 
@@ -83,29 +83,6 @@ bool DynamicDrawer::Initialize()
         }
     }
 
-    // Create vertex descriptions for rendering.
-    RVertexDescription::Element vertexDescriptionElements[ 3 ];
-
-    vertexDescriptionElements[ 0 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_3;
-    vertexDescriptionElements[ 0 ].semantic = RENDERER_VERTEX_SEMANTIC_POSITION;
-    vertexDescriptionElements[ 0 ].semanticIndex = 0;
-    vertexDescriptionElements[ 0 ].bufferIndex = 0;
-
-    vertexDescriptionElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
-    vertexDescriptionElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_COLOR;
-    vertexDescriptionElements[ 1 ].semanticIndex = 0;
-    vertexDescriptionElements[ 1 ].bufferIndex = 0;
-
-    vertexDescriptionElements[ 2 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT16_2;
-    vertexDescriptionElements[ 2 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
-    vertexDescriptionElements[ 2 ].semanticIndex = 0;
-    vertexDescriptionElements[ 2 ].bufferIndex = 0;
-
-    m_spVertexDescription = pRenderer->CreateVertexDescription( vertexDescriptionElements, 2 );
-    HELIUM_ASSERT( m_spVertexDescription );
-    m_spVertexTexturedDescription = pRenderer->CreateVertexDescription( vertexDescriptionElements, 3 );
-    HELIUM_ASSERT( m_spVertexTexturedDescription );
-
     return true;
 }
 
@@ -114,14 +91,12 @@ bool DynamicDrawer::Initialize()
 /// @see Initialize()
 void DynamicDrawer::Shutdown()
 {
-    m_spUntexturedVertexShader.Release();
-    m_spUntexturedPixelShader.Release();
-    m_spTexturedVertexShader.Release();
-    m_spTexturedPixelShader.Release();
+    m_spUntexturedScreenVertexShader.Release();
+    m_spUntexturedScreenPixelShader.Release();
+    m_spTexturedScreenVertexShader.Release();
+    m_spTexturedScreenPixelShader.Release();
 
     m_pActiveDescription = NULL;
-    m_spVertexTexturedDescription.Release();
-    m_spVertexDescription.Release();
 
     m_untexturedTriangles.Shutdown();
 
@@ -144,28 +119,28 @@ void DynamicDrawer::Begin()
     // Grab the screen-space shaders.
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
-    ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetScreenSpaceTextureVertexShader();
+    ShaderVariant* pVertexShaderVariant = rRenderResourceManager.GetSimpleScreenSpaceVertexShader();
     if( pVertexShaderVariant )
     {
         RShader* pShader = pVertexShaderVariant->GetRenderResource( 0 );
         HELIUM_ASSERT( !pShader || pShader->GetType() == RShader::TYPE_VERTEX );
-        m_spUntexturedVertexShader = static_cast< RVertexShader* >( pShader );
+        m_spUntexturedScreenVertexShader = static_cast< RVertexShader* >( pShader );
 
         pShader = pVertexShaderVariant->GetRenderResource( 1 );
         HELIUM_ASSERT( !pShader || pShader->GetType() == RShader::TYPE_VERTEX );
-        m_spTexturedVertexShader = static_cast< RVertexShader* >( pShader );
+        m_spTexturedScreenVertexShader = static_cast< RVertexShader* >( pShader );
     }
 
-    ShaderVariant* pPixelShaderVariant = rRenderResourceManager.GetScreenSpaceTexturePixelShader();
+    ShaderVariant* pPixelShaderVariant = rRenderResourceManager.GetSimpleScreenSpacePixelShader();
     if( pPixelShaderVariant )
     {
         RShader* pShader = pPixelShaderVariant->GetRenderResource( 0 );
         HELIUM_ASSERT( !pShader || pShader->GetType() == RShader::TYPE_PIXEL );
-        m_spUntexturedPixelShader = static_cast< RPixelShader* >( pShader );
+        m_spUntexturedScreenPixelShader = static_cast< RPixelShader* >( pShader );
 
         pShader = pPixelShaderVariant->GetRenderResource( 1 );
         HELIUM_ASSERT( !pShader || pShader->GetType() == RShader::TYPE_PIXEL );
-        m_spTexturedPixelShader = static_cast< RPixelShader* >( pShader );
+        m_spTexturedScreenPixelShader = static_cast< RPixelShader* >( pShader );
     }
 }
 
@@ -179,11 +154,11 @@ void DynamicDrawer::Begin()
 /// @param[in] rVertex3  Fourth quad vertex.
 /// @param[in] bFlush    True to flush the dynamic vertex buffers for the quad immediately, false to buffer drawing.
 void DynamicDrawer::DrawScreenSpaceQuad(
-                                        const Vertex& rVertex0,
-                                        const Vertex& rVertex1,
-                                        const Vertex& rVertex2,
-                                        const Vertex& rVertex3,
-                                        bool bFlush )
+    const SimpleVertex& rVertex0,
+    const SimpleVertex& rVertex1,
+    const SimpleVertex& rVertex2,
+    const SimpleVertex& rVertex3,
+    bool bFlush )
 {
     // Do nothing if we have no untextured dynamic buffers.
     if( !m_untexturedTriangles.m_spVertices )
@@ -192,6 +167,8 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     }
 
     HELIUM_ASSERT( m_untexturedTriangles.m_spIndices );
+
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
@@ -204,7 +181,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     if( m_untexturedTriangles.m_vertexCountTotal > BUFFER_DIVISION_VERTEX_COUNT - 4 ||
         m_untexturedTriangles.m_indexCountTotal > BUFFER_DIVISION_INDEX_COUNT - 6 )
     {
-        FlushUntexturedTriangles( pRenderer, spCommandProxy, true );
+        FlushUntexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, true );
     }
 
     // Add the quad vertices.
@@ -214,7 +191,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     HELIUM_ASSERT( pMappedVertices );
     HELIUM_ASSERT( pMappedIndices );
 
-    pMappedVertices += m_untexturedTriangles.m_vertexCountTotal * sizeof( Vertex );
+    pMappedVertices += m_untexturedTriangles.m_vertexCountTotal * sizeof( SimpleVertex );
     pMappedIndices += m_untexturedTriangles.m_indexCountTotal;
 
     MemoryCopy( pMappedVertices, &rVertex0, sizeof( rVertex0 ) );
@@ -242,7 +219,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     // Flush if requested.
     if( bFlush )
     {
-        FlushUntexturedTriangles( pRenderer, spCommandProxy, false );
+        FlushUntexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, false );
     }
 }
 
@@ -257,18 +234,20 @@ void DynamicDrawer::DrawScreenSpaceQuad(
 /// @param[in] pTexture  Texture to apply.
 /// @param[in] bFlush    True to flush the dynamic vertex buffers for the quad immediately, false to buffer drawing.
 void DynamicDrawer::DrawScreenSpaceQuad(
-                                        const VertexTextured& rVertex0,
-                                        const VertexTextured& rVertex1,
-                                        const VertexTextured& rVertex2,
-                                        const VertexTextured& rVertex3,
-                                        RTexture2d* pTexture,
-                                        bool bFlush )
+    const SimpleTexturedVertex& rVertex0,
+    const SimpleTexturedVertex& rVertex1,
+    const SimpleTexturedVertex& rVertex2,
+    const SimpleTexturedVertex& rVertex3,
+    RTexture2d* pTexture,
+    bool bFlush )
 {
     // Do nothing if we have no dynamic buffers.
     if( !m_untexturedTriangles.m_spVertices )
     {
         return;
     }
+
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
@@ -305,12 +284,12 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     if( bufferSetIndex >= HELIUM_ARRAY_COUNT( m_texturedTriangles ) )
     {
         bufferSetIndex = largestUsedBufferSetIndex;
-        FlushTexturedTriangles( pRenderer, spCommandProxy, bufferSetIndex, true );
+        FlushTexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, bufferSetIndex, true );
     }
 
     // Flush the buffers if we don't have enough space left in the vertex and index buffers for this quad.
     BufferData<
-        VertexTextured,
+        SimpleTexturedVertex,
         TexturedBufferFunctions,
         BUFFER_DIVISION_COUNT,
         BUFFER_DIVISION_VERTEX_COUNT,
@@ -318,7 +297,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     if( rBufferData.m_vertexCountTotal > BUFFER_DIVISION_VERTEX_COUNT - 4 ||
         rBufferData.m_indexCountTotal > BUFFER_DIVISION_INDEX_COUNT - 6 )
     {
-        FlushTexturedTriangles( pRenderer, spCommandProxy, bufferSetIndex, true );
+        FlushTexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, bufferSetIndex, true );
     }
 
     // Add the quad vertices.
@@ -328,7 +307,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     HELIUM_ASSERT( pMappedVertices );
     HELIUM_ASSERT( pMappedIndices );
 
-    pMappedVertices += rBufferData.m_vertexCountTotal * sizeof( VertexTextured );
+    pMappedVertices += rBufferData.m_vertexCountTotal * sizeof( SimpleTexturedVertex );
     pMappedIndices += rBufferData.m_indexCountTotal;
 
     MemoryCopy( pMappedVertices, &rVertex0, sizeof( rVertex0 ) );
@@ -359,7 +338,7 @@ void DynamicDrawer::DrawScreenSpaceQuad(
     // Flush if requested.
     if( bFlush )
     {
-        FlushTexturedTriangles( pRenderer, spCommandProxy, bufferSetIndex, false );
+        FlushTexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, bufferSetIndex, false );
     }
 }
 
@@ -374,25 +353,29 @@ void DynamicDrawer::Flush()
         return;
     }
 
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+
     RRenderCommandProxyPtr spCommandProxy = pRenderer->GetImmediateCommandProxy();
     HELIUM_ASSERT( spCommandProxy );
 
-    FlushUntexturedTriangles( pRenderer, spCommandProxy, true );
+    FlushUntexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, true );
 
     for( size_t bufferSetIndex = 0; bufferSetIndex < HELIUM_ARRAY_COUNT( m_texturedTriangles ); ++bufferSetIndex )
     {
-        FlushTexturedTriangles( pRenderer, spCommandProxy, bufferSetIndex, true );
+        FlushTexturedTriangles( rRenderResourceManager, pRenderer, spCommandProxy, bufferSetIndex, true );
     }
 
     m_pActiveDescription = NULL;
 
-    m_spUntexturedVertexShader.Release();
-    m_spUntexturedPixelShader.Release();
-    m_spTexturedVertexShader.Release();
-    m_spTexturedPixelShader.Release();
+    m_spUntexturedScreenVertexShader.Release();
+    m_spUntexturedScreenPixelShader.Release();
+    m_spTexturedScreenVertexShader.Release();
+    m_spTexturedScreenPixelShader.Release();
 }
 
 /// Get the singleton DynamicDrawer instance, creating it if necessary.
+///
+/// Note that this expects the 
 ///
 /// @return  Reference to the DynamicDrawer instance.
 ///
@@ -419,30 +402,34 @@ void DynamicDrawer::DestroyStaticInstance()
 
 /// Flush buffered drawing of untextured triangles.
 ///
-/// @param[in] pRenderer         Renderer interface.
-/// @param[in] pCommandProxy     Interface to use for issuing render commands.
-/// @param[in] bAdvanceDivision  True to advance to the next dynamic buffer division, false to continue writing
-///                              vertex data to the current division.
+/// @param[in] rRenderResourceManager  Render resource manager instance.
+/// @param[in] pRenderer               Renderer interface.
+/// @param[in] pCommandProxy           Interface to use for issuing render commands.
+/// @param[in] bAdvanceDivision        True to advance to the next dynamic buffer division, false to continue writing
+///                                    vertex data to the current division.
 ///
 /// @see FlushTexturedTriangles()
 void DynamicDrawer::FlushUntexturedTriangles(
+    RenderResourceManager& rRenderResourceManager,
     Renderer* pRenderer,
     RRenderCommandProxy* pCommandProxy,
     bool bAdvanceDivision )
 {
-    m_untexturedTriangles.FlushTriangles( this, pRenderer, pCommandProxy, bAdvanceDivision );
+    m_untexturedTriangles.FlushTriangles( this, rRenderResourceManager, pRenderer, pCommandProxy, bAdvanceDivision );
 }
 
 /// Flush buffered drawing of textured triangles.
 ///
-/// @param[in] pRenderer         Renderer interface.
-/// @param[in] pCommandProxy     Interface to use for issuing render commands.
-/// @param[in] bufferSetIndex    Index of the textured triangle buffer set to flush.
-/// @param[in] bAdvanceDivision  True to advance to the next dynamic buffer division, false to continue writing
-///                              vertex data to the current division.
+/// @param[in] pRenderer               Renderer interface.
+/// @param[in] rRenderResourceManager  Render resource manager instance.
+/// @param[in] pCommandProxy           Interface to use for issuing render commands.
+/// @param[in] bufferSetIndex          Index of the textured triangle buffer set to flush.
+/// @param[in] bAdvanceDivision        True to advance to the next dynamic buffer division, false to continue writing
+///                                    vertex data to the current division.
 ///
 /// @see FlushUntexturedTriangles()
 void DynamicDrawer::FlushTexturedTriangles(
+    RenderResourceManager& rRenderResourceManager,
     Renderer* pRenderer,
     RRenderCommandProxy* pCommandProxy,
     size_t bufferSetIndex,
@@ -450,7 +437,12 @@ void DynamicDrawer::FlushTexturedTriangles(
 {
     HELIUM_ASSERT( bufferSetIndex < HELIUM_ARRAY_COUNT( m_texturedTriangles ) );
 
-    m_texturedTriangles[ bufferSetIndex ].FlushTriangles( this, pRenderer, pCommandProxy, bAdvanceDivision );
+    m_texturedTriangles[ bufferSetIndex ].FlushTriangles(
+        this,
+        rRenderResourceManager,
+        pRenderer,
+        pCommandProxy,
+        bAdvanceDivision );
 }
 
 /// Constructor.
@@ -569,9 +561,9 @@ void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
 
 /// Get mapped pointers to the vertex and index buffers in this buffer set.
 ///
-/// @param[in]  pRenderer                      Renderer interface.
-/// @param[out] rpMappedVertices               Base address of the mapped vertex buffer.
-/// @param[out] rpMappedIndices                Base address of the mapped index buffer.
+/// @param[in]  pRenderer         Renderer interface.
+/// @param[out] rpMappedVertices  Base address of the mapped vertex buffer.
+/// @param[out] rpMappedIndices   Base address of the mapped index buffer.
 template<
 typename VertexType,
 typename Functions,
@@ -617,19 +609,21 @@ void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
 
 /// Flush buffered drawing of triangles.
 ///
-/// @param[in] pDynamicDrawer    Dynamic drawer instance.
-/// @param[in] pRenderer         Renderer interface.
-/// @param[in] pCommandProxy     Interface to use for issuing render commands.
-/// @param[in] bAdvanceDivision  True to advance to the next dynamic buffer division, false to continue writing
-///                              vertex data to the current division.
+/// @param[in] pDynamicDrawer          Dynamic drawer instance.
+/// @param[in] rRenderResourceManager  Render resource manager instance.
+/// @param[in] pRenderer               Renderer interface.
+/// @param[in] pCommandProxy           Interface to use for issuing render commands.
+/// @param[in] bAdvanceDivision        True to advance to the next dynamic buffer division, false to continue writing
+///                                    vertex data to the current division.
 template<
-typename VertexType,
-typename Functions,
-uint32_t DivisionCount,
-uint32_t DivisionVertexCount,
-uint32_t DivisionIndexCount >
+    typename VertexType,
+    typename Functions,
+    uint32_t DivisionCount,
+    uint32_t DivisionVertexCount,
+    uint32_t DivisionIndexCount >
 void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVertexCount, DivisionIndexCount >::FlushTriangles(
     DynamicDrawer* pDynamicDrawer,
+    RenderResourceManager& rRenderResourceManager,
     Renderer* pRenderer,
     RRenderCommandProxy* pCommandProxy,
     bool bAdvanceDivision )
@@ -650,7 +644,7 @@ void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
         m_pMappedVertices = NULL;
         m_pMappedIndices = NULL;
 
-        RVertexDescription* pVertexDescription = m_functions.GetVertexDescription( pDynamicDrawer );
+        RVertexDescription* pVertexDescription = m_functions.GetVertexDescription( rRenderResourceManager );
         HELIUM_ASSERT( pVertexDescription );
         if( pDynamicDrawer->m_pActiveDescription != pVertexDescription )
         {
@@ -717,17 +711,15 @@ void DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
 
 /// Get the description for untextured vertices.
 ///
-/// @param[in] pDynamicDrawer  Dynamic drawing interface.
+/// @param[in] rRenderResourceManager  Render resource manager instance.
 ///
 /// @return  Untextured vertex description.
 ///
 /// @see GetVertexShader(), GetPixelShader()
 RVertexDescription* DynamicDrawer::UntexturedBufferFunctions::GetVertexDescription(
-    DynamicDrawer* pDynamicDrawer ) const
+    RenderResourceManager& rRenderResourceManager ) const
 {
-    HELIUM_ASSERT( pDynamicDrawer );
-
-    return pDynamicDrawer->m_spVertexDescription;
+    return rRenderResourceManager.GetSimpleVertexDescription();
 }
 
 /// Get the vertex shader for untextured screen-space rendering.
@@ -741,7 +733,7 @@ RVertexShader* DynamicDrawer::UntexturedBufferFunctions::GetVertexShader( Dynami
 {
     HELIUM_ASSERT( pDynamicDrawer );
 
-    return pDynamicDrawer->m_spUntexturedVertexShader;
+    return pDynamicDrawer->m_spUntexturedScreenVertexShader;
 }
 
 /// Get the pixel shader for untextured screen-space rendering.
@@ -755,7 +747,7 @@ RPixelShader* DynamicDrawer::UntexturedBufferFunctions::GetPixelShader( DynamicD
 {
     HELIUM_ASSERT( pDynamicDrawer );
 
-    return pDynamicDrawer->m_spUntexturedPixelShader;
+    return pDynamicDrawer->m_spUntexturedScreenPixelShader;
 }
 
 /// Perform any necessary renderer setup prior to issuing a draw command for untextured primitive rendering.
@@ -767,28 +759,26 @@ void DynamicDrawer::UntexturedBufferFunctions::PrepareDraw(
     DynamicDrawer* /*pDynamicDrawer*/,
     RRenderCommandProxy* /*pCommandProxy*/,
     BufferData<
-    Vertex,
-    UntexturedBufferFunctions,
-    BUFFER_DIVISION_COUNT,
-    BUFFER_DIVISION_VERTEX_COUNT,
-    BUFFER_DIVISION_INDEX_COUNT >* /*pBufferData*/ ) const
+        SimpleVertex,
+        UntexturedBufferFunctions,
+        BUFFER_DIVISION_COUNT,
+        BUFFER_DIVISION_VERTEX_COUNT,
+        BUFFER_DIVISION_INDEX_COUNT >* /*pBufferData*/ ) const
 {
     // Nothing needs to be done for untextured rendering.
 }
 
 /// Get the description for textured vertices.
 ///
-/// @param[in] pDynamicDrawer  Dynamic drawing interface.
+/// @param[in] rRenderResourceManager  Render resource manager instance.
 ///
 /// @return  Textured vertex description.
 ///
 /// @see GetVertexShader(), GetPixelShader()
 RVertexDescription* DynamicDrawer::TexturedBufferFunctions::GetVertexDescription(
-    DynamicDrawer* pDynamicDrawer ) const
+    RenderResourceManager& rRenderResourceManager ) const
 {
-    HELIUM_ASSERT( pDynamicDrawer );
-
-    return pDynamicDrawer->m_spVertexTexturedDescription;
+    return rRenderResourceManager.GetSimpleTexturedVertexDescription();
 }
 
 /// Get the vertex shader for textured screen-space rendering.
@@ -802,7 +792,7 @@ RVertexShader* DynamicDrawer::TexturedBufferFunctions::GetVertexShader( DynamicD
 {
     HELIUM_ASSERT( pDynamicDrawer );
 
-    return pDynamicDrawer->m_spTexturedVertexShader;
+    return pDynamicDrawer->m_spTexturedScreenVertexShader;
 }
 
 /// Get the pixel shader for textured screen-space rendering.
@@ -816,7 +806,7 @@ RPixelShader* DynamicDrawer::TexturedBufferFunctions::GetPixelShader( DynamicDra
 {
     HELIUM_ASSERT( pDynamicDrawer );
 
-    return pDynamicDrawer->m_spTexturedPixelShader;
+    return pDynamicDrawer->m_spTexturedScreenPixelShader;
 }
 
 /// Perform any necessary renderer setup prior to issuing a draw command for textured primitive rendering.
@@ -828,11 +818,11 @@ void DynamicDrawer::TexturedBufferFunctions::PrepareDraw(
     DynamicDrawer* pDynamicDrawer,
     RRenderCommandProxy* pCommandProxy,
     BufferData<
-    VertexTextured,
-    TexturedBufferFunctions,
-    BUFFER_DIVISION_COUNT,
-    BUFFER_DIVISION_VERTEX_COUNT,
-    BUFFER_DIVISION_INDEX_COUNT >* pBufferData ) const
+        SimpleTexturedVertex,
+        TexturedBufferFunctions,
+        BUFFER_DIVISION_COUNT,
+        BUFFER_DIVISION_VERTEX_COUNT,
+        BUFFER_DIVISION_INDEX_COUNT >* pBufferData ) const
 {
     HELIUM_ASSERT( pDynamicDrawer );
     HELIUM_ASSERT( pCommandProxy );

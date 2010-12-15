@@ -269,7 +269,7 @@ Scene* EntityInstance::GetNestedScene()
             if ( entity )
             {
                 Path meshPath = entity->GetContentPath().GetAbsolutePath( entity->GetSourcePath() );
-                meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
+                meshPath.ReplaceExtension( TXT( "HeliumMesh" ) );
 
                 ResolveSceneArgs args( m_Owner->GetViewport(), meshPath );
                 m_Owner->d_ResolveScene.Invoke( args );

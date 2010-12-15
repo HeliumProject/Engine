@@ -204,9 +204,9 @@ ProjectViewModel::ProjectViewModel( DocumentManager* documentManager )
     m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "bin" ), ArtIDs::MimeTypes::Binary ) );
     m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "dat" ),ArtIDs::MimeTypes::Binary ) );
     m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "hrb" ), ArtIDs::MimeTypes::ReflectBinary ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "entity.hrb" ), ArtIDs::MimeTypes::Entity ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "project.hrb" ), ArtIDs::MimeTypes::Project ) );
-    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "scene.hrb" ), ArtIDs::MimeTypes::Scene ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumEntity" ), ArtIDs::MimeTypes::Entity ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumProject" ), ArtIDs::MimeTypes::Project ) );
+    m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "HeliumScene" ), ArtIDs::MimeTypes::Scene ) );
     m_FileIconExtensionLookup.insert( M_FileIconExtensionLookup::value_type( TXT( "txt" ), ArtIDs::MimeTypes::Text ) );
 }
 
@@ -372,7 +372,7 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
         parentNode = m_RootNode.Ptr();
     }
 
-    bool isContainer = path.HasExtension( TXT( "scene.hrb" ) );
+    bool isContainer = path.HasExtension( TXT( "HeliumScene" ) );
 
     // Create the child node
     const Document* document = m_DocumentManager->FindDocument( path );

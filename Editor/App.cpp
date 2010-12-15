@@ -322,11 +322,11 @@ void App::SaveSettings()
 
     if ( Helium::IsDebuggerPresent() )
     {
-        Reflect::ToArchive( path, m_SettingsManager );
+        Reflect::ToArchive( path, m_SettingsManager, Reflect::ArchiveTypes::XML );
     }
     else
     {
-        if ( !Reflect::ToArchive( path, m_SettingsManager ) )
+        if ( !Reflect::ToArchive( path, m_SettingsManager, Reflect::ArchiveTypes::XML ) )
         {
             error = tstring( TXT( "Could not save '" ) ) + path.c_str() + TXT( "'." );
             wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
@@ -345,7 +345,7 @@ void App::LoadSettings()
 		return;
 	}
 
-    SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path );
+    SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path, Reflect::ArchiveTypes::XML );
 
     if ( settingsManager.ReferencesObject() )
     {

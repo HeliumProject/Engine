@@ -445,7 +445,7 @@ void MainFrame::CloseProject()
 
 void MainFrame::NewProjectDialog()
 {
-    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project" ), TXT( "*.project.hrb" ), FileDialogStyles::DefaultSave );
+    FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project" ), TXT( "Project File (*.HeliumProject)|*.HeliumProject|All Files (*)|*" ), FileDialogStyles::DefaultSave );
 
     if ( newProjectDialog.ShowModal() == wxID_OK )
     {
@@ -467,7 +467,7 @@ void MainFrame::NewProjectDialog()
 
 void MainFrame::OpenProjectDialog()
 {
-    FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "*.project.hrb" ), FileDialogStyles::Open );
+    FileDialog openDlg( this, TXT( "Open Project..." ), wxEmptyString, wxEmptyString, TXT( "Project File (*.HeliumProject)|*.HeliumProject|All Files (*)|*" ), FileDialogStyles::Open );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
@@ -538,10 +538,10 @@ void MainFrame::CloseAllScenes()
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 {
+#pragma TODO( "This whole function is kind of fucked..." )
     bool canHandleArgs = false;
 
     std::set< tstring > supportedExtensions;
-    Reflect::Archive::GetExtensions( supportedExtensions );
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
     ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
@@ -555,10 +555,12 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 
             if ( path.Exists() )
             {
-                tstring ext = path.Extension();
-                if ( supportedExtensions.find( ext ) != supportedExtensions.end() )
+                for ( std::set< tstring >::const_iterator extItr = supportedExtensions.begin(), extEnd = supportedExtensions.end(); extItr != extEnd; ++extItr )
                 {
-                    canHandleArgs = true;
+                    if ( path.HasExtension( (*extItr).c_str() ) )
+                    {
+                        canHandleArgs = true;
+                    }
                 }
             }
         }
@@ -919,7 +921,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
     }
 
     Helium::Path path;
-    GetUniquePathName( TXT( "New Scene" ), TXT( ".scene.hrb" ), m_Project->Paths(), path );
+    GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->Paths(), path );
 
     // Add to the project before opening it
     m_Project->AddPath( path );
@@ -1314,7 +1316,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
                     FileDialog fileDialog( this, TXT( "Import" ) );
 
                     std::set< tstring > filters;
-                    Reflect::Archive::GetFileFilters( filters );
+#pragma TODO( "Populate the filters with a list of our supported file types" )
                     for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                     {
                         fileDialog.AddFilter( (*itr) );
@@ -1405,13 +1407,6 @@ void MainFrame::OnExport(wxCommandEvent& event)
                 case EventIds::ID_FileExport:
                     {
                         FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, FileDialogStyles::DefaultSave );
-
-                        std::set< tstring > filters;
-                        Reflect::Archive::GetFileFilters( filters );
-                        for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
-                        {
-                            fileDialog.AddFilter( (*itr) );
-                        }
 
                         if ( fileDialog.ShowModal() != wxID_OK )
                         {

@@ -33,12 +33,16 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
         m_OptionsButton->SetMargins( 3, 3 );
         
         m_RecentProjectsBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFolder ) );
+        m_RecentProjectsBitmap->SetHelpText( TXT( "This area provides a list of recently opened projects which you can choose from.\n\nSimply click the button for a given project to open it in the editor." ) );
+        m_RecentProjectsStaticText->SetHelpText( m_RecentProjectsBitmap->GetHelpText() );
 
         m_OpenProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ) );
         m_OpenProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ).ConvertToImage().ConvertToDisabled() );
+        m_OpenProjectButton->SetHelpText( TXT( "Clicking this button will allow you to open a project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
 
         m_CreateNewProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ) );
         m_CreateNewProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ).ConvertToImage().ConvertToDisabled() );
+        m_CreateNewProjectButton->SetHelpText( TXT( "Clicking this button will allow you to create a new project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
 
         m_ProjectManagementPanel->Hide();
         m_DataViewCtrl->Hide();
@@ -218,7 +222,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
     const Path& path = node->GetPath();
     HELIUM_ASSERT( !path.empty() );
 
-    if ( path.HasExtension( TXT( "scene.hrb" ) ) )
+    if ( path.HasExtension( TXT( "HeliumScene" ) ) )
     {
         wxGetApp().GetFrame()->CloseAllScenes();
         wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
@@ -260,6 +264,13 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 if ( fileExists )
                 {
                     button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnRecentProjectButtonClick ), NULL, this );
+                    tstring helpText = tstring( TXT( "Clicking this button will open the recently used project '" ) ) + path.Basename() + TXT( "'." );
+                    button->SetHelpText( helpText.c_str() );
+                }
+                else
+                {
+                    tstring helpText = tstring( TXT( "Clicking this button would normally open the recently used project '" ) ) + path.Basename() + TXT( "'.\n\nHowever, the file is missing from its previous location on the disk, so the button is disabled." );
+                    button->SetHelpText( helpText.c_str() );
                 }
             }
 
@@ -359,7 +370,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     Path path( args.m_Path );
 
     // it's a project file
-    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "project.hrb" ) ) == 0 ) 
+    if ( _tcsicmp( path.Extension().c_str(), TXT( "HeliumProject" ) ) == 0 ) 
     {
         wxGetApp().GetFrame()->OpenProject( path );
     }
@@ -385,26 +396,17 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
-    if ( _tcsicmp( path.FullExtension().c_str(), TXT( "scene.hrb" ) ) == 0 )
+    if ( _tcsicmp( path.Extension().c_str(), TXT( "HeliumScene" ) ) == 0 )
     {
         m_Project->AddPath( path );
         return;
     }
 
-    Asset::AssetClassPtr asset;
-    if ( _tcsicmp( path.Extension().c_str(), TXT( "hrb" ) ) == 0 )
-    {
-        asset = Asset::AssetClass::LoadAssetClass( path );
-    }
-    else
-    {
-        asset = Asset::AssetClass::Create( path );
-    }
+    Asset::AssetClassPtr asset = Asset::AssetClass::LoadAssetClass( path );
 
     if ( asset.ReferencesObject() )
     {
         m_Project->AddPath( asset->GetSourcePath() );
-
     }
     else
     {

@@ -119,10 +119,7 @@ void EntityPanel::OnEntityAssetChanging( const Inspect::ControlChangingArgs& arg
     Helium::Path path( newValue );
     if ( path.Exists() )
     {
-        // Make sure the file has a reflect extension
-        std::set< tstring > extensions;
-        Reflect::Archive::GetExtensions( extensions );
-        if ( extensions.find( path.Extension() ) != extensions.end() )
+        if ( path.HasExtension( TXT( "HeliumEntity" ) ) )
         {
             allow = true;
         }

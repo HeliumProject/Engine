@@ -15,7 +15,7 @@ using namespace Helium::Asset;
 AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
 {
     Helium::Path assetPath = path;
-    assetPath.ReplaceExtension( TXT( "entity.hrb" ) );
+    assetPath.ReplaceExtension( TXT( "HeliumEntity" ) );
 
     if ( !assetPath.Exists() )
     {
@@ -36,7 +36,7 @@ AssetClassPtr MeshAssetFactory::Create( const Helium::Path& path )
     }
 
     Path meshPath = path;
-    meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
+    meshPath.ReplaceExtension( TXT( "HeliumMesh" ) );
 
     if ( !meshPath.Exists() )
     {

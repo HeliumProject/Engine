@@ -245,55 +245,37 @@ void Archive::Get( std::vector< ElementPtr >& elements )
     elements = m_Spool;
 }
 
-bool Reflect::GetFileType( const Path& path, ArchiveType& type )
+ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )
 {
-    tstring ext = path.Extension();
-
-    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
+    switch ( archiveType )
     {
-        type = ArchiveTypes::XML;
-        return true;
-    }
-    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
-    {
-        type = ArchiveTypes::Binary;
-        return true;
-    }
-
-    return false;
-}
-
-ArchivePtr Reflect::GetArchive( const Path& path, ByteOrder byteOrder )
-{
-    HELIUM_ASSERT( !path.empty() );
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( path, archiveType ) )
-    {
-        switch ( archiveType )
+    case ArchiveTypes::Auto:
+        if ( path.Exists() )
         {
-        case ArchiveTypes::Binary:
-            return new ArchiveBinary( path, byteOrder );
-
-        case ArchiveTypes::XML:
-            return new ArchiveXML( path, byteOrder );
-
-        default:
-            throw Reflect::StreamException( TXT( "Unknown archive type" ) );
+#pragma TODO( "Check the file's existing type and return it." )
         }
+        // fall through to binary if the file doesn't exist
+    case ArchiveTypes::Binary:
+        return new ArchiveBinary( path, byteOrder );
+
+    case ArchiveTypes::XML:
+        return new ArchiveXML( path, byteOrder );
+
+    default:
+        throw Reflect::StreamException( TXT( "Unknown archive type" ) );
     }
 
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, ElementPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     std::vector< ElementPtr > elements;
     elements.push_back( element );
-    return ToArchive( path, elements, error, byteOrder );
+    return ToArchive( path, elements, archiveType, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );
@@ -307,7 +289,7 @@ bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elem
     Path safetyPath( path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( path.Extension() );
 
-    ArchivePtr archive = GetArchive( safetyPath, byteOrder );
+    ArchivePtr archive = GetArchive( safetyPath, archiveType, byteOrder );
     archive->Put( elements );
 
     // generate the file to the safety location

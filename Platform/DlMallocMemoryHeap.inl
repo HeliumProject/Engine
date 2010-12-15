@@ -557,7 +557,7 @@ void Helium::MEMORY_HEAP_CLASS_NAME::AddAllocation( void* pMemory )
 
             AllocationBacktrace backtrace;
             MemoryZero( backtrace.pAddresses, sizeof( backtrace.pAddresses ) );
-            Helium::GetStackTrace( backtrace.pAddresses, HELIUM_ARRAY_COUNT( backtrace.pAddresses ) );
+            Helium::GetStackTrace( backtrace.pAddresses, HELIUM_ARRAY_COUNT( backtrace.pAddresses ), 2 );
             m_pVerboseTrackingData->allocationBacktraceMap[ pMemory ] = backtrace;
 
             sm_bDisableBacktraceTracking = false;

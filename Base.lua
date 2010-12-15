@@ -81,6 +81,7 @@ Helium.DoDefaultSolutionSettings = function()
 	defines
 	{
 		"XML_STATIC=1",
+		"KFBX_DLLINFO=1",
 	}
 
 	flags
@@ -283,28 +284,16 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"dbghelp",
 		}
 
-	configuration { "windows", "x32", "Debug" }
+	configuration { "windows", "x32" }
 		links
 		{
-			"fbxsdk_md2008d",
+			"fbxsdk_20113_1",
 		}
 
-	configuration { "windows", "x32", "not Debug" }
+	configuration { "windows", "x64" }
 		links
 		{
-			"fbxsdk_md2008",
-		}
-
-	configuration { "windows", "x64", "Debug" }
-		links
-		{
-			"fbxsdk_md2008_amd64d",
-		}
-
-	configuration { "windows", "x64", "not Debug" }
-		links
-		{
-			"fbxsdk_md2008_amd64",
+			"fbxsdk_20113_1_amd64",
 		}
 
 	if haveGranny then

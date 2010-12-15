@@ -34,7 +34,7 @@ includedirs
 
 libdirs
 {
-	"Integrations/FBX/lib",
+	"Integrations/FBX/lib/vs2008",
 }
 
 if haveGranny then

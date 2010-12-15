@@ -17,6 +17,11 @@
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+#include "Foundation/Container/ObjectPool.h"
+#include "Graphics/BufferedDrawer.h"
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
+
 namespace Lunar
 {
     L_DECLARE_RPTR( RConstantBuffer );
@@ -75,6 +80,14 @@ namespace Lunar
         inline const Color& GetDirectionalLightColor() const;
         inline float32_t GetDirectionalLightBrightness() const;
         //@}
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+        /// @name Buffered Drawing Support
+        //@{
+        inline BufferedDrawer& GetSceneBufferedDrawer();
+        BufferedDrawer* GetSceneViewBufferedDrawer( uint32_t id );
+        //@}
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
         /// @name Static Reserved Names
         //@{
@@ -136,6 +149,15 @@ namespace Lunar
         SparseArray< GraphicsSceneObject > m_sceneObjects;
         /// Scene object sub-data list.
         SparseArray< GraphicsSceneObject::SubMeshData > m_sceneObjectSubMeshes;
+
+#if !HELIUM_RELEASE && !HELIUM_PROFILE
+        /// Buffered drawing support for the entire scene (presented in all views).
+        BufferedDrawer m_sceneBufferedDrawer;
+        /// Pool of buffered drawing objects for various scene views.
+        ObjectPool< BufferedDrawer > m_viewBufferedDrawerPool;
+        /// Buffered drawing objects for each scene view.
+        DynArray< BufferedDrawer* > m_viewBufferedDrawers;
+#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
         /// Visible scene objects for the current view.
         BitArray<> m_visibleSceneObjects;
@@ -200,9 +222,11 @@ namespace Lunar
 
         void SwapDynamicConstantBuffers();
 
-        void DrawShadowDepthPass( size_t viewIndex );
-        void DrawDepthPrePass( size_t viewIndex );
-        void DrawBasePass( size_t viewIndex );
+        void DrawSceneView( uint_fast32_t viewIndex );
+
+        void DrawShadowDepthPass( uint_fast32_t viewIndex );
+        void DrawDepthPrePass( uint_fast32_t viewIndex );
+        void DrawBasePass( uint_fast32_t viewIndex );
         //@}
 
         /// @name Private Static Utility Functions

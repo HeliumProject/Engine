@@ -3,7 +3,7 @@
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 //#include "Foundation/Profile.h"
 
-#ifdef FOUNDATION_DLL
+#if HELIUM_SHARED
 # ifdef FOUNDATION_EXPORTS
 #  define FOUNDATION_API __declspec(dllexport)
 # else

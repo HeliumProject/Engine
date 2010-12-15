@@ -147,7 +147,10 @@ void* Object::operator new( size_t bytes )
         Profile::Memory::Allocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
 
-    return ::malloc( bytes );
+    Helium::DefaultAllocator allocator;
+    void* memory = Helium::AllocateAlignmentHelper( allocator, bytes );
+
+    return memory;
 }
 
 void* Object::operator new( size_t /*bytes*/, void* memory )
@@ -162,7 +165,8 @@ void Object::operator delete( void *ptr, size_t bytes )
         Profile::Memory::Deallocate( Reflect::MemoryPool(), (uint32_t)bytes );
     }
 
-    ::free( ptr );
+    Helium::DefaultAllocator allocator;
+    allocator.Free( ptr );
 }
 
 void Object::operator delete( void* /*ptr*/, void* /*memory*/ )

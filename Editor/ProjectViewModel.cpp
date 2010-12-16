@@ -729,24 +729,23 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
     }
 
     ProjectViewModelNode *node = static_cast< ProjectViewModelNode* >( item.GetID() );
-    if ( node->m_IsActive )
+    HELIUM_ASSERT( node );
+
+    // bold the entry if the node is active
+    attr.SetBold( node->m_IsActive );
+
+    // italicize the entry if it is modified
+    attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
+
+    Path nodePath = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
+    if ( !nodePath.Exists() )
     {
-        attr.SetBold( true );
+        attr.SetColour( *wxRED );
     }
     else
     {
-        attr.SetBold( false );
+        attr.SetColour( *wxBLACK );
     }
-
-    if ( node->GetDocument() && node->GetDocument()->HasChanged() )
-    {
-        attr.SetItalic( true );
-    }
-    else
-    {
-        attr.SetItalic( false );
-    }
-
 
     return true;
 }

@@ -219,13 +219,20 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
         return;
     }
 
-    const Path& path = node->GetPath();
+    const Path& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
     HELIUM_ASSERT( !path.empty() );
+
+    if ( !path.Exists() )
+    {
+#pragma TODO( "Walk the user through locating the missing file." )
+        wxMessageBox( wxT( "Unfortunately, the file you're trying to load does not exist.  In the future, we'll help you find and fix this reference.  For now, all we can do is apologize." ), wxT( "Nonexistent File" ), wxOK | wxICON_ERROR );
+        return;
+    }
 
     if ( path.HasExtension( TXT( "HeliumScene" ) ) )
     {
         wxGetApp().GetFrame()->CloseAllScenes();
-        wxGetApp().GetFrame()->OpenScene( path.GetAbsolutePath( m_Project->a_Path.Get() ) );
+        wxGetApp().GetFrame()->OpenScene( path );
         return;
     }
 

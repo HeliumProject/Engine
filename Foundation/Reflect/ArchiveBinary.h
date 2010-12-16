@@ -10,25 +10,25 @@
 //  
 //    struct Data
 //    {
-//      int32_t type;           // string pool index of the short name of the serializer
+//      int32_t type;           // string pool index of the name of the serializer
 //      byte[] data;            // serialized data
 //    };
 //  
 //    struct Field
 //    {
 //      int32_t field_id;       // latent type field index (id)
-//      Data ser;         // serializer instance data
+//      Data ser;               // serializer instance data
 //    };
 //  
 //    struct Element
 //    {
-//      int32_t type;           // string pool index of the short name of the element
+//      int32_t type;           // string pool index of the name of the element
 //      int32_t field_count;    // number of serialized fields
 //      Field[] fields;         // field instance data
 //      int32_t term;           // -1
 //    };
 //  
-//    struct Array
+//    struct ElementArray
 //    {
 //      int32_t count;          // count of contained elements
 //      Element[] elements;     // element instance data
@@ -37,22 +37,14 @@
 //  
 //    struct File
 //    {
-//      char file_id;           // '!'
-//  
+//      uint8_t byte_order;     // BOM
+//      uint8_t encoding;       // character encoding
+//      uint32_t version;       // file format version
 //      uint32_t crc;           // crc of all bytes following the crc value itself
-//    |-int32_t type_offet;     // offset into file for the beginning of the rtti block
-//  |-+-int32_t string_offset;  // offset into file for the beginning of the global string pool
-//  | |
-//  | | Array spool;            // spooled data from client
-//  | | Array append;           // appended session data
-//  | |
-//  | ->int32_t type_count;     // number of types stored
-//  |   Structure[] types;      // see Class.h for details
-//  |   int32_t type_term;      // -1
-//  |
-//  --->StringPool strings;     // see StringPool.h for details
+//
+//      ElementArray elements;  // client objects
 //    };
-//  
+//
 
 namespace Helium
 {
@@ -80,15 +72,6 @@ namespace Helium
             Indent<tchar_t> m_Indent;
 #endif
 
-            // The strings to cache for binary modes
-            StringPool m_Strings;
-
-            // Latent types by latent short name
-            M_NameToClass m_ClassesByShortName;
-
-            // Mapping from CURRENT short name to LEGACY short name
-            std::map< Name, Name > m_ShortNameMapping;
-
             // File format version
             uint32_t m_Version;
 
@@ -101,8 +84,8 @@ namespace Helium
             // Data for the current field we are writing
             struct WriteFields
             {
-                int32_t            m_Count;
-                std::streamoff m_CountOffset;
+                int32_t         m_Count;
+                std::streamoff  m_CountOffset;
             };
 
             // The stack of fields we are writing
@@ -115,16 +98,9 @@ namespace Helium
             ArchiveBinary();
 
         public:
-            // Stream access
             CharStream& GetStream()
             {
                 return *m_Stream;
-            }
-
-            // Strings access
-            StringPool& GetStrings()
-            {
-                return m_Strings;
             }
 
             uint32_t GetVersion()
@@ -149,12 +125,6 @@ namespace Helium
             // Write to the OutputStream
             virtual void Write();
 
-            // Write the file header
-            virtual void Start();
-
-            // Write the file footer
-            virtual void Finish();
-
         public:
             // Serialize
             virtual void Serialize( const ElementPtr& element );
@@ -163,7 +133,6 @@ namespace Helium
         protected:
             // Helpers
             void SerializeFields( const ElementPtr& element );
-            void SerializeField( const ElementPtr& element, const Field* field );
 
         private:
             // pulls an element from the head of the stream
@@ -177,13 +146,6 @@ namespace Helium
         protected:
             // Helpers
             void DeserializeFields( const ElementPtr& element );
-            void DeserializeField( const ElementPtr& element, const Field* latent_field );
-
-            // Reflection Helpers
-            void SerializeComposite( const Composite* composite );
-            bool DeserializeComposite( Composite* composite );
-            void SerializeField( const Field* field );
-            bool DeserializeField( Field* field );
 
         public:
             // Reading and writing single element via binary

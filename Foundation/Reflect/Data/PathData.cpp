@@ -51,7 +51,7 @@ bool PathData::Equals( const Data* s ) const
 
 void PathData::Serialize( Archive& archive ) const
 {
-    tstring data = m_Data.Get().Get();
+    const tstring& str = m_Data.Get().Get();
 
     switch ( archive.GetType() )
     {
@@ -59,7 +59,7 @@ void PathData::Serialize( Archive& archive ) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            xml.GetStream() << data;
+            xml.GetStream() << str;
             break;
         }
 
@@ -67,11 +67,7 @@ void PathData::Serialize( Archive& archive ) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            // get string pool index
-            int32_t index = binary.GetStrings().Insert( data );
-
-            // write that index
-            binary.GetStream().Write( &index ); 
+            binary.GetStream().WriteString( str ); 
             break;
         }
     }
@@ -97,16 +93,9 @@ void PathData::Deserialize( Archive& archive )
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = -1;
-            binary.GetStream().Read( &index ); 
-
-            if ( index >= 0 )
-            {
-                const tstring& str ( binary.GetStrings().Get( index ) );
-
-                m_Data.Ref().Set( str );
-            }
-
+            tstring str;
+            binary.GetStream().ReadString( str );
+            m_Data.Ref().Set( str );
             break;
         }
     }

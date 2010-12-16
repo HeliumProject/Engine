@@ -1176,7 +1176,7 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
 
     // insert it into the types for its bases
     const Reflect::Class* type = nodeType->GetInstanceClass();
-    for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+    for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
     {
         Helium::StdInsert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
@@ -1201,7 +1201,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
         m_NodeTypesByType.erase( typeSet );
 
         const Reflect::Class* type = nodeType->GetInstanceClass();
-        for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+        for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
         {
             HMS_InstanceClassToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type );
 

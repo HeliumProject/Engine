@@ -2,6 +2,12 @@ require "Base"
 require "TBB"
 require "WxWidgets"
 
+-- Check for FBX integration.
+haveFbx = os.isfile( "Integrations/FBX/FBX.lua" )
+if haveFbx then
+	require "Integrations/Fbx/Fbx"
+end
+
 -- Check for Granny integration.
 haveGranny = os.isfile( "Integrations/Granny/Granny.lua" )
 if haveGranny then
@@ -27,30 +33,32 @@ if _ACTION ~= "prebuild" then
 	local wx = "Dependencies/wxWidgets"
 	local tbb = "Dependencies/tbb"
 
-    if _ACTION ~= "clean" then
+	if _ACTION ~= "clean" then
 		Helium.BuildWxWidgets( wx )
 		Helium.PublishWxWidgets( wx )
 		Helium.BuildTBB( tbb )
 		Helium.PublishTBB( tbb )
+
+		if haveFbx then
+			local fbx = "Integrations/FBX"
+			Helium.PublishFBX( fbx )
+		end
 
 		if haveGranny then
 			local granny = "Integrations/Granny/granny_sdk"
 			Helium.PublishGranny( granny )
 		end
 
-        if os.get() == "windows" then
-            if _OPTIONS["no-unicode"] then
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-            else
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
-                os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
-            end
-        end
+		if os.get() == "windows" then
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Intermediate\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Profile\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Intermediate\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Profile\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
+		end
 
 		Helium.Prebuild()
 	else

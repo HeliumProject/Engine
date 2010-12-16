@@ -104,12 +104,7 @@ void EnumerationData::Serialize(Archive& archive) const
                 }
             }
 
-            // get string pool index
-            int32_t index = binary.GetStrings().Insert(label);
-
-            // write that index
-            binary.GetStream().Write(&index); 
-
+            binary.GetStream().WriteString( label ); 
             break;
         }
     }
@@ -148,21 +143,15 @@ void EnumerationData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = -1;
-            binary.GetStream().Read(&index); 
-
-            if (index >= 0)
+            tstring str;
+            binary.GetStream().ReadString( str );
+            if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
             {
-                const tstring& str (binary.GetStrings().Get(index));
-
-                if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
-                {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
-                }
-                else
-                {
-                    m_String = str;
-                }
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
+            }
+            else
+            {
+                m_String = str;
             }
 
             break;

@@ -10,7 +10,6 @@
 #include "API.h"
 #include "Cache.h"
 #include "Class.h"
-#include "StringPool.h"
 #include "Exceptions.h"
 #include "ArchiveStream.h" 
 
@@ -144,16 +143,6 @@ namespace Helium
             {
                 // called for each field we serialize to the file (pointer or data...)
             }
-
-            virtual void CreateAppendElements(std::vector< ElementPtr >& append)
-            {
-                // Called after the main spool is serialized and is a call to the visitor for meta data
-            }
-
-            virtual void ProcessAppendElements(std::vector< ElementPtr >& append)
-            {
-                // Called after the append spool is deserialized and is a call to the visitor to process the meta data
-            }
         };
         typedef Helium::SmartPtr<ArchiveVisitor> ArchiveVisitorPtr;
         typedef std::vector<ArchiveVisitorPtr> V_ArchiveVisitor;
@@ -195,6 +184,7 @@ namespace Helium
             // The file we are working with
             Path m_Path;
 
+            // The byte order
             ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
@@ -203,11 +193,8 @@ namespace Helium
             // The mode
             ArchiveMode m_Mode;
 
-            // The cache of serializers
+            // The cache of data objects
             Cache m_Cache;
-
-            // The classes used
-            std::set< const Class* > m_Classes;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
@@ -260,12 +247,6 @@ namespace Helium
 
             // Write to the OutputStream
             virtual void Write() = 0;
-
-            // Write the file header
-            virtual void Start() = 0;
-
-            // Write the file footer
-            virtual void Finish() = 0;
 
             //
             // Serialization

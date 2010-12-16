@@ -27,8 +27,39 @@
 #pragma warning( pop )
 #endif
 
+// Non-zero to enable wrapping of the FBX memory allocator with our own allocator (currently disabled due to
+// long-standing bugs with the FBX SDK attempting to free allocations returned by CRT functions, i.e. strdup()).
+#define L_ENABLE_FBX_MEMORY_ALLOCATOR 0
+
 namespace Lunar
 {
+#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+    /// Custom FBX memory allocator.
+    class FbxMemoryAllocator : public KFbxMemoryAllocator
+    {
+    public:
+        /// @name Construction/Destruction
+        //@{
+        FbxMemoryAllocator();
+        //@}
+
+    protected:
+        /// @name Memory Routines
+        //@{
+        static void* Malloc( size_t size );
+        static void* Calloc( size_t count, size_t size );
+        static void* Realloc( void* pMemory, size_t size );
+        static void Free( void* pMemory );
+        static size_t Msize( void* pMemory );
+        static void* MallocDebug( size_t size, int, const char*, int );
+        static void* CallocDebug( size_t count, size_t size, int, const char*, int );
+        static void* ReallocDebug( void* pMemory, size_t size, int, const char*, int );
+        static void FreeDebug( void* pMemory, int );
+        static size_t MsizeDebug( void* pMemory, int );
+        //@}
+    };
+#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+
     /// FBX SDK support.
     class FbxSupport : NonCopyable
     {
@@ -126,6 +157,11 @@ namespace Lunar
         KFbxIOSettings* m_pIoSettings;
         /// Import handler.
         KFbxImporter* m_pImporter;
+
+#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+        /// Memory allocation handler.
+        FbxMemoryAllocator m_memoryAllocator;
+#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
 
         /// Reference count.
         volatile int32_t m_referenceCount;

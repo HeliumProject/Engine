@@ -41,30 +41,26 @@ void BitfieldData::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            int32_t index = -1;
-            std::vector< tstring > strs;
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
             if (m_Enumeration)
             {
+                std::vector< tstring > strs;
                 if (!m_Enumeration->GetBitfieldStrings(m_Data.Get(), strs))
                 {
                     throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
                 }
 
-                // search the map
+                uint32_t count = (uint32_t)strs.size();
+                binary.GetStream().Write(&count); 
+
                 std::vector< tstring >::const_iterator itr = strs.begin();
                 std::vector< tstring >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
-                    index = binary.GetStrings().Insert(*itr);
-                    binary.GetStream().Write(&index); 
+                    binary.GetStream().WriteString( *itr );
                 }
             }
-
-            // term
-            index = -1;
-            binary.GetStream().Write(&index); 
 
             break;
         }
@@ -101,16 +97,16 @@ void BitfieldData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = -1;
-            binary.GetStream().Read(&index); 
+            uint32_t count = 0;
+            binary.GetStream().Read(&count); 
 
             std::vector< tstring > strs;
-            while (index >= 0)
+            strs.reserve( count );
+            while ( count-- > 0 )
             {
-                strs.push_back(binary.GetStrings().Get(index));
-
-                // read next index
-                binary.GetStream().Read(&index); 
+                tstring str;
+                binary.GetStream().ReadString( str );
+                strs.push_back( str );
             }
 
             tstring str;

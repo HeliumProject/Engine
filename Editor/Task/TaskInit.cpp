@@ -4,6 +4,7 @@
 #include "Pipeline/Asset/AssetInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Object.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

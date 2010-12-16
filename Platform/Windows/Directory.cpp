@@ -1,5 +1,6 @@
 #include "Platform/Directory.h"
 
+#include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Exception.h"
 #include "Platform/Windows/Windows.h"
@@ -10,6 +11,7 @@ void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ou
 {
     ourFile.m_Filename = windowsFile.cFileName;
 
+#pragma TODO( "FileFindData should have a flag set as to whether or not we have file stat data retrieved." )
 #ifndef _DEBUG
     ourFile.m_Stat.m_CreatedTime = ( (uint64_t)windowsFile.ftCreationTime.dwHighDateTime << 32 ) | windowsFile.ftCreationTime.dwLowDateTime;
     ourFile.m_Stat.m_ModifiedTime = ( (uint64_t)windowsFile.ftLastWriteTime.dwHighDateTime << 32 ) | windowsFile.ftLastWriteTime.dwLowDateTime;

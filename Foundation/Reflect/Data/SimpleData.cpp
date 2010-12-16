@@ -138,7 +138,7 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
 // must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StringData::Serialize(Archive& archive) const
+void StlStringData::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -154,8 +154,7 @@ void StringData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index = binary.GetStrings().Insert(m_Data.Get());
-            binary.GetStream().Write(&index); 
+            binary.GetStream().WriteString( m_Data.Get() ); 
             break;
         }
     }
@@ -163,7 +162,7 @@ void StringData::Serialize(Archive& archive) const
 
 // keep reading the string until we run out of buffer
 template <>
-void StringData::Deserialize(Archive& archive)
+void StlStringData::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -181,16 +180,14 @@ void StringData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t index;
-            binary.GetStream().Read(&index); 
-            m_Data.Set( binary.GetStrings().Get(index) );
+            binary.GetStream().ReadString( m_Data.Ref() );
             break;
         }
     }
 }
 
 template<>
-tostream& StringData::operator>> (tostream& stream) const
+tostream& StlStringData::operator>> (tostream& stream) const
 {
     stream << m_Data.Get();
 
@@ -198,7 +195,7 @@ tostream& StringData::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& StringData::operator<< (tistream& stream)
+tistream& StlStringData::operator<< (tistream& stream)
 {
     std::streamsize size = stream.rdbuf()->in_avail();
     m_Data->resize( (size_t) size);
@@ -209,7 +206,7 @@ tistream& StringData::operator<< (tistream& stream)
 
 // this is a char, we must treat it as a number
 template <>
-void U8Data::Serialize(Archive& archive) const
+void UInt8Data::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -233,7 +230,7 @@ void U8Data::Serialize(Archive& archive) const
 }
 
 template <>
-void U8Data::Deserialize(Archive& archive)
+void UInt8Data::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -258,7 +255,7 @@ void U8Data::Deserialize(Archive& archive)
 }
 
 template<>
-tostream& U8Data::operator>> (tostream& stream) const
+tostream& UInt8Data::operator>> (tostream& stream) const
 {
     uint16_t val = m_Data.Get();
     stream << val;
@@ -267,7 +264,7 @@ tostream& U8Data::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& U8Data::operator<< (tistream& stream)
+tistream& UInt8Data::operator<< (tistream& stream)
 {
     uint16_t val;
     stream >> val;
@@ -278,7 +275,7 @@ tistream& U8Data::operator<< (tistream& stream)
 
 // this is a char, we must treat it as a number
 template <>
-void I8Data::Serialize(Archive& archive) const
+void Int8Data::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -302,7 +299,7 @@ void I8Data::Serialize(Archive& archive) const
 }
 
 template <>
-void I8Data::Deserialize(Archive& archive)
+void Int8Data::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -327,7 +324,7 @@ void I8Data::Deserialize(Archive& archive)
 }
 
 template<>
-tostream& I8Data::operator>> (tostream& stream) const
+tostream& Int8Data::operator>> (tostream& stream) const
 {
     int16_t val = m_Data.Get();
     stream << val;
@@ -336,7 +333,7 @@ tostream& I8Data::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& I8Data::operator<< (tistream& stream)
+tistream& Int8Data::operator<< (tistream& stream)
 {
     int16_t val;
     stream >> val;
@@ -372,18 +369,18 @@ template SimpleData<HDRColor3>;
 template SimpleData<Color4>;
 template SimpleData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StringData);
+REFLECT_DEFINE_CLASS(StlStringData);
 REFLECT_DEFINE_CLASS(BoolData);
-REFLECT_DEFINE_CLASS(U8Data);
-REFLECT_DEFINE_CLASS(I8Data);
-REFLECT_DEFINE_CLASS(U16Data);
-REFLECT_DEFINE_CLASS(I16Data);
-REFLECT_DEFINE_CLASS(U32Data);
-REFLECT_DEFINE_CLASS(I32Data);
-REFLECT_DEFINE_CLASS(U64Data);
-REFLECT_DEFINE_CLASS(I64Data);
-REFLECT_DEFINE_CLASS(F32Data);
-REFLECT_DEFINE_CLASS(F64Data);
+REFLECT_DEFINE_CLASS(UInt8Data);
+REFLECT_DEFINE_CLASS(Int8Data);
+REFLECT_DEFINE_CLASS(UInt16Data);
+REFLECT_DEFINE_CLASS(Int16Data);
+REFLECT_DEFINE_CLASS(UInt32Data);
+REFLECT_DEFINE_CLASS(Int32Data);
+REFLECT_DEFINE_CLASS(UInt64Data);
+REFLECT_DEFINE_CLASS(Int64Data);
+REFLECT_DEFINE_CLASS(Float32Data);
+REFLECT_DEFINE_CLASS(Float64Data);
 REFLECT_DEFINE_CLASS(GUIDData);
 REFLECT_DEFINE_CLASS(TUIDData);
 

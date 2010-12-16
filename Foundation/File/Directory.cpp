@@ -109,6 +109,9 @@ bool Directory::Find()
     while( !m_Done )
     {
         bool ok = true;
+        bool needStatPath = true;
+
+        tstring absolutePath;
 
         // skip relative path directories if fileName is "." or ".."
         if ( ( _tcscmp( foundFile.m_Filename.c_str(), TXT( "." ) ) == 0 ) || ( _tcscmp( foundFile.m_Filename.c_str(), TXT( ".." ) ) == 0 ) )
@@ -117,6 +120,13 @@ bool Directory::Find()
         }
         else
         {
+            absolutePath = m_Path.c_str();
+            absolutePath += TXT( "/" );
+            absolutePath += foundFile.m_Filename;
+
+            HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
+            needStatPath = false;
+
             // directory...
             if ( foundFile.m_Stat.m_Mode & FileModeFlags::Directory )
             {
@@ -144,16 +154,24 @@ bool Directory::Find()
         {
             // It's a keeper! store the data and format the file name
             // add the path path to the fileName
+            if ( needStatPath )
+            {
+                absolutePath = m_Path.c_str();
+                absolutePath += TXT( "/" );
+                absolutePath += foundFile.m_Filename;
+
+                HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
+            }
+
             if ( m_Flags & DirectoryFlags::RelativePath )
             {
                 m_Item.m_Path.Set( foundFile.m_Filename );
             }
             else
             {
-                m_Item.m_Path = m_Path;
-                m_Item.m_Path += TXT( "/" );
-                m_Item.m_Path += foundFile.m_Filename;
+                m_Item.m_Path = absolutePath;
             }
+
             m_Item.m_CreateTime = foundFile.m_Stat.m_CreatedTime;
             m_Item.m_ModTime = foundFile.m_Stat.m_ModifiedTime;
             m_Item.m_Size = foundFile.m_Stat.m_Size;

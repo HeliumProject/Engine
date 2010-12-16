@@ -18,3 +18,13 @@ Type::~Type()
 {
 
 }
+
+void Type::Report() const
+{
+
+}
+
+void Type::Unregister() const
+{
+
+}

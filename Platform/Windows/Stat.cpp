@@ -10,6 +10,8 @@ bool Helium::StatPath( const tchar_t* path, Helium::Stat& stat )
 
     if ( result )
     {
+        stat.m_Mode = 0;
+
         if ( ( windowsStats.st_mode & _S_IFREG ) == _S_IFREG )
             stat.m_Mode |= FileModeFlags::File;
         if ( ( windowsStats.st_mode & _S_IFDIR ) == _S_IFDIR )

@@ -119,7 +119,7 @@ ThreadLocalPointer& ThreadLocalStackAllocator::GetMemoryHeapTls()
 /// Get the default heap used for dynamic allocations within the engine.
 ///
 /// @return  Reference to the default dynamic memory heap.
-DynamicMemoryHeap& GetDefaultHeap()
+DynamicMemoryHeap& Helium::GetDefaultHeap()
 {
     static DynamicMemoryHeap* pDefaultHeap = NULL;
     if( !pDefaultHeap )
@@ -136,7 +136,7 @@ DynamicMemoryHeap& GetDefaultHeap()
 /// Get the fallback heap for allocations made by external libraries.
 ///
 /// @return  Reference for the external allocation fallback heap.
-DynamicMemoryHeap& GetExternalHeap()
+DynamicMemoryHeap& Helium::GetExternalHeap()
 {
     static DynamicMemoryHeap* pExternalHeap = NULL;
     if( !pExternalHeap )

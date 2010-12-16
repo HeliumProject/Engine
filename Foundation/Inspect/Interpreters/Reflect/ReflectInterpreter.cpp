@@ -28,7 +28,7 @@ void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instanc
 
 void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
 {
-    const Class* typeInfo = instances[0]->GetClass();
+    const Composite* composite = instances[0]->GetClass();
 
     // create a container
     ContainerPtr container = CreateControl<Container>();
@@ -37,7 +37,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
     ContainerPtr scriptOutput = CreateControl<Container>();
 
     tstring typeInfoUI;
-    typeInfo->GetProperty( TXT( "UIScript" ), typeInfoUI );
+    composite->GetProperty( TXT( "UIScript" ), typeInfoUI );
     bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
 
     // compute container label
@@ -85,7 +85,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
         if ( labelText.empty() )
         {
-            labelText = typeInfo->m_UIName;
+            labelText = composite->m_UIName;
         }
     }
 
@@ -94,213 +94,222 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
     std::map< tstring, ContainerPtr > containersMap;
     containersMap.insert( std::make_pair( TXT( "" ), container) );
 
-    // don't bother including Element's fields
-    int offset = Reflect::GetClass<Element>()->m_LastFieldID;
-
-    // for each field in the type
-    M_FieldIDToInfo::const_iterator itr = typeInfo->m_FieldIDToInfo.find(offset + 1);
-    M_FieldIDToInfo::const_iterator end = typeInfo->m_FieldIDToInfo.end();
-    for ( ; itr != end; ++itr )
+    std::stack< const Composite* > bases;
+    for ( const Composite* current = composite; current != NULL; current = current->m_Base )
     {
-        const Field* field = itr->second;
+        bases.push( current );
+    }
 
-        bool noFlags = ( field->m_Flags == 0 && includeFlags == 0xFFFFFFFF );
-        bool doInclude = ( field->m_Flags & includeFlags ) != 0;
-        bool dontExclude = ( excludeFlags == 0 ) || !(field->m_Flags & excludeFlags );
-        bool hidden = (field->m_Flags & Reflect::FieldFlags::Hide) != 0; 
+    while ( !bases.empty() )
+    {
+        const Composite* current = bases.top();
+        bases.pop();
 
-        // if we don't have flags (or we are included, and we aren't excluded) then make UI
-        if ( ( noFlags || doInclude ) && ( dontExclude ) )
+        // for each field in the type
+        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
+        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        for ( ; itr != end; ++itr )
         {
-            tstring fieldUIGroup;
-            field->GetProperty( TXT( "UIGroup" ), fieldUIGroup );
-            if ( !fieldUIGroup.empty() )
+            const Field* field = (*itr);
+
+            bool noFlags = ( field->m_Flags == 0 && includeFlags == 0xFFFFFFFF );
+            bool doInclude = ( field->m_Flags & includeFlags ) != 0;
+            bool dontExclude = ( excludeFlags == 0 ) || !(field->m_Flags & excludeFlags );
+            bool hidden = (field->m_Flags & Reflect::FieldFlags::Hide) != 0; 
+
+            // if we don't have flags (or we are included, and we aren't excluded) then make UI
+            if ( ( noFlags || doInclude ) && ( dontExclude ) )
             {
-                std::map< tstring, ContainerPtr >::iterator itr = containersMap.find( fieldUIGroup );
-                if ( itr == containersMap.end() )
+                tstring fieldUIGroup;
+                field->GetProperty( TXT( "UIGroup" ), fieldUIGroup );
+                if ( !fieldUIGroup.empty() )
                 {
-                    // This container isn't in our list so make a new one
-                    ContainerPtr newContainer = CreateControl<Container>();
-                    containersMap.insert( std::make_pair(fieldUIGroup, newContainer) );
-
-                    ContainerPtr parent;
-                    tstring groupName;
-                    size_t idx = fieldUIGroup.find_last_of( TXT( "/" ) );
-                    if ( idx != tstring::npos )
+                    std::map< tstring, ContainerPtr >::iterator itr = containersMap.find( fieldUIGroup );
+                    if ( itr == containersMap.end() )
                     {
-                        tstring parentName = fieldUIGroup.substr( 0, idx );
-                        groupName = fieldUIGroup.substr( idx+1 );
-                        if ( containersMap.find( parentName ) == containersMap.end() )
-                        {          
-                            parent = CreateControl<Container>();
+                        // This container isn't in our list so make a new one
+                        ContainerPtr newContainer = CreateControl<Container>();
+                        containersMap.insert( std::make_pair(fieldUIGroup, newContainer) );
 
-                            // create the parent hierarchy since it hasn't already been made
-                            tstring currentParent = parentName;
-                            for (;;)
-                            {
-                                idx = currentParent.find_last_of( TXT( "/" ) );
-                                if ( idx == tstring::npos )
-                                {
-                                    // no more parents so we add it to the root
-                                    containersMap.insert( std::make_pair(currentParent, parent) );
-                                    parent->a_Name.Set( currentParent );
-                                    containersMap[ TXT( "" ) ]->AddChild( parent );
-                                    break;
-                                }
-                                else
-                                {
-                                    parent->a_Name.Set( currentParent.substr( idx+1 ) );
+                        ContainerPtr parent;
+                        tstring groupName;
+                        size_t idx = fieldUIGroup.find_last_of( TXT( "/" ) );
+                        if ( idx != tstring::npos )
+                        {
+                            tstring parentName = fieldUIGroup.substr( 0, idx );
+                            groupName = fieldUIGroup.substr( idx+1 );
+                            if ( containersMap.find( parentName ) == containersMap.end() )
+                            {          
+                                parent = CreateControl<Container>();
 
-                                    if ( containersMap.find( currentParent ) != containersMap.end() )
+                                // create the parent hierarchy since it hasn't already been made
+                                tstring currentParent = parentName;
+                                for (;;)
+                                {
+                                    idx = currentParent.find_last_of( TXT( "/" ) );
+                                    if ( idx == tstring::npos )
                                     {
+                                        // no more parents so we add it to the root
+                                        containersMap.insert( std::make_pair(currentParent, parent) );
+                                        parent->a_Name.Set( currentParent );
+                                        containersMap[ TXT( "" ) ]->AddChild( parent );
                                         break;
                                     }
                                     else
                                     {
-                                        ContainerPtr grandParent = CreateControl<Container>();
-                                        grandParent->AddChild( parent );
-                                        containersMap.insert( std::make_pair(currentParent, parent) );
+                                        parent->a_Name.Set( currentParent.substr( idx+1 ) );
 
-                                        parent = grandParent;
+                                        if ( containersMap.find( currentParent ) != containersMap.end() )
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            ContainerPtr grandParent = CreateControl<Container>();
+                                            grandParent->AddChild( parent );
+                                            containersMap.insert( std::make_pair(currentParent, parent) );
+
+                                            parent = grandParent;
+                                        }
+                                        currentParent = currentParent.substr( 0, idx );
                                     }
-                                    currentParent = currentParent.substr( 0, idx );
                                 }
+                                containersMap.insert( std::make_pair(parentName, parent) );
                             }
-                            containersMap.insert( std::make_pair(parentName, parent) );
+                            parent = containersMap[parentName];
                         }
-                        parent = containersMap[parentName];
+                        else
+                        {
+                            parent = containersMap[ TXT( "" )];
+                            groupName = fieldUIGroup;
+                        }
+                        newContainer->a_Name.Set( groupName );
+                        parent->AddChild( newContainer );
                     }
-                    else
+
+                    container = containersMap[fieldUIGroup];
+                }
+                else
+                {
+                    container = containersMap[ TXT( "" )];
+                }
+
+
+                //
+                // Pointer support
+                //
+
+                if (field->m_DataClass == Reflect::GetType<Reflect::PointerData>())
+                {
+                    if (hidden)
                     {
-                        parent = containersMap[ TXT( "" )];
-                        groupName = fieldUIGroup;
-                    }
-                    newContainer->a_Name.Set( groupName );
-                    parent->AddChild( newContainer );
-                }
+                        continue; 
+                    }        
 
-                container = containersMap[fieldUIGroup];
-            }
-            else
-            {
-                container = containersMap[ TXT( "" )];
-            }
+                    std::vector<Reflect::Element*> fieldInstances;
 
-
-            //
-            // Pointer support
-            //
-
-            if (field->m_DataClass == Reflect::GetType<Reflect::PointerData>())
-            {
-                if (hidden)
-                {
-                    continue; 
-                }        
-
-                std::vector<Reflect::Element*> fieldInstances;
-
-                std::vector<Reflect::Element*>::const_iterator elementItr = instances.begin();
-                std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
-                for ( ; elementItr != elementEnd; ++elementItr )
-                {
-                    uintptr_t fieldAddress = (uintptr_t)(*elementItr) + itr->second->m_Offset;
-
-                    Element* element = *((ElementPtr*)(fieldAddress));
-
-                    if ( element )
+                    std::vector<Reflect::Element*>::const_iterator elementItr = instances.begin();
+                    std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
+                    for ( ; elementItr != elementEnd; ++elementItr )
                     {
-                        fieldInstances.push_back( element );
+                        uintptr_t fieldAddress = (uintptr_t)(*elementItr) + (*itr)->m_Offset;
+
+                        Element* element = *((ElementPtr*)(fieldAddress));
+
+                        if ( element )
+                        {
+                            fieldInstances.push_back( element );
+                        }
                     }
-                }
 
-                if ( !fieldInstances.empty() && fieldInstances.size() == instances.size() )
-                {
-                    InterpretType(fieldInstances, container);
-                }
+                    if ( !fieldInstances.empty() && fieldInstances.size() == instances.size() )
+                    {
+                        InterpretType(fieldInstances, container);
+                    }
 
-                continue;
-            }
-
-
-            //
-            // Attempt to find a handler via the factory
-            //
-
-            ReflectFieldInterpreterPtr fieldInterpreter;
-
-            for ( const Reflect::Class* type = field->m_DataClass;
-                type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
-                type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
-            {
-                fieldInterpreter = ReflectFieldInterpreterFactory::Create( type, field->m_Flags, m_Container );
-            }
-
-            if ( fieldInterpreter.ReferencesObject() )
-            {
-                Interpreter::ConnectInterpreterEvents( this, fieldInterpreter );
-                fieldInterpreter->InterpretField( field, instances, container );
-                m_Interpreters.push_back( fieldInterpreter );
-                continue;
-            }
-
-
-            //
-            // ElementArray support
-            //
-
-#pragma TODO("Move this out to an interpreter")
-            if (field->m_DataClass == Reflect::GetType<ElementStlVectorData>())
-            {
-                if (hidden)
-                {
                     continue;
                 }
 
-                if ( instances.size() == 1 )
+
+                //
+                // Attempt to find a handler via the factory
+                //
+
+                ReflectFieldInterpreterPtr fieldInterpreter;
+
+                for ( const Reflect::Class* type = field->m_DataClass;
+                    type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
+                    type = Reflect::ReflectionCast< const Class >( type->m_Base ) )
                 {
-                    uintptr_t fieldAddress = (uintptr_t)(instances.front()) + itr->second->m_Offset;
-
-                    std::vector< ElementPtr >* elements = (std::vector< ElementPtr >*)fieldAddress;
-
-                    if ( elements->size() > 0 )
-                    {
-                        ContainerPtr childContainer = CreateControl<Container>();
-
-                        tstring temp;
-                        bool converted = Helium::ConvertString( field->m_UIName, temp );
-                        HELIUM_ASSERT( converted );
-
-                        childContainer->a_Name.Set( temp );
-
-                        std::vector< ElementPtr >::const_iterator elementItr = elements->begin();
-                        std::vector< ElementPtr >::const_iterator elementEnd = elements->end();
-                        for ( ; elementItr != elementEnd; ++elementItr )
-                        {
-                            std::vector<Reflect::Element*> childInstances;
-                            childInstances.push_back(*elementItr);
-                            InterpretType(childInstances, childContainer);
-                        }
-
-                        container->AddChild( childContainer );
-                    }
+                    fieldInterpreter = ReflectFieldInterpreterFactory::Create( type, field->m_Flags, m_Container );
                 }
 
-                continue;
-            }
+                if ( fieldInterpreter.ReferencesObject() )
+                {
+                    Interpreter::ConnectInterpreterEvents( this, fieldInterpreter );
+                    fieldInterpreter->InterpretField( field, instances, container );
+                    m_Interpreters.push_back( fieldInterpreter );
+                    continue;
+                }
 
 
-            //
-            // Lastly fall back to the value interpreter
-            //
+                //
+                // ElementArray support
+                //
 
-            const Reflect::Class* type = field->m_DataClass;
-            if ( !type->HasType( Reflect::GetType<Reflect::ContainerData>() ) )
-            {
-                fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
-                fieldInterpreter->InterpretField( field, instances, container );
-                m_Interpreters.push_back( fieldInterpreter );
-                continue;
+    #pragma TODO("Move this out to an interpreter")
+                if (field->m_DataClass == Reflect::GetType<ElementStlVectorData>())
+                {
+                    if (hidden)
+                    {
+                        continue;
+                    }
+
+                    if ( instances.size() == 1 )
+                    {
+                        uintptr_t fieldAddress = (uintptr_t)(instances.front()) + (*itr)->m_Offset;
+
+                        std::vector< ElementPtr >* elements = (std::vector< ElementPtr >*)fieldAddress;
+
+                        if ( elements->size() > 0 )
+                        {
+                            ContainerPtr childContainer = CreateControl<Container>();
+
+                            tstring temp;
+                            bool converted = Helium::ConvertString( field->m_UIName, temp );
+                            HELIUM_ASSERT( converted );
+
+                            childContainer->a_Name.Set( temp );
+
+                            std::vector< ElementPtr >::const_iterator elementItr = elements->begin();
+                            std::vector< ElementPtr >::const_iterator elementEnd = elements->end();
+                            for ( ; elementItr != elementEnd; ++elementItr )
+                            {
+                                std::vector<Reflect::Element*> childInstances;
+                                childInstances.push_back(*elementItr);
+                                InterpretType(childInstances, childContainer);
+                            }
+
+                            container->AddChild( childContainer );
+                        }
+                    }
+
+                    continue;
+                }
+
+
+                //
+                // Lastly fall back to the value interpreter
+                //
+
+                const Reflect::Class* type = field->m_DataClass;
+                if ( !type->HasType( Reflect::GetType<Reflect::ContainerData>() ) )
+                {
+                    fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
+                    fieldInterpreter->InterpretField( field, instances, container );
+                    m_Interpreters.push_back( fieldInterpreter );
+                    continue;
+                }
             }
         }
     }

@@ -27,39 +27,39 @@ FbxSupport* FbxSupport::sm_pInstance = NULL;
 /// @return  Direct array index.
 template< typename T >
 static int GetLayerElementValueIndex(
-                                     const KFbxLayerElementTemplate< T >* pLayerElement,
-                                     int controlPointIndex,
-                                     int vertexIndex,
-                                     int polygonIndex )
+     const KFbxLayerElementTemplate< T >* pLayerElement,
+     int controlPointIndex,
+     int vertexIndex,
+     int polygonIndex )
 {
     int valueIndex;
     switch( pLayerElement->GetMappingMode() )
     {
-    case KFbxLayerElement::eBY_CONTROL_POINT:
+        case KFbxLayerElement::eBY_CONTROL_POINT:
         {
             valueIndex = controlPointIndex;
             break;
         }
 
-    case KFbxLayerElement::eBY_POLYGON_VERTEX:
+        case KFbxLayerElement::eBY_POLYGON_VERTEX:
         {
             valueIndex = vertexIndex;
             break;
         }
 
-    case KFbxLayerElement::eBY_POLYGON:
+        case KFbxLayerElement::eBY_POLYGON:
         {
             valueIndex = polygonIndex;
             break;
         }
 
-    case KFbxLayerElement::eALL_SAME:
+        case KFbxLayerElement::eALL_SAME:
         {
             valueIndex = 0;
             break;
         }
 
-    default:
+        default:
         {
             return -1;
         }
@@ -87,11 +87,11 @@ static int GetLayerElementValueIndex(
 ///                                 read.
 template< typename T >
 static void GetLayerElementValue(
-                                 const KFbxLayerElementTemplate< T >* pLayerElement,
-                                 int controlPointIndex,
-                                 int vertexIndex,
-                                 int polygonIndex,
-                                 T& rValue )
+     const KFbxLayerElementTemplate< T >* pLayerElement,
+     int controlPointIndex,
+     int vertexIndex,
+     int polygonIndex,
+     T& rValue )
 {
     int valueIndex = GetLayerElementValueIndex( pLayerElement, controlPointIndex, vertexIndex, polygonIndex );
     if( valueIndex != -1 )
@@ -104,12 +104,149 @@ static void GetLayerElementValue(
     }
 }
 
+#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+/// Constructor.
+FbxMemoryAllocator::FbxMemoryAllocator()
+    : KFbxMemoryAllocator(
+        Malloc,
+        Calloc,
+        Realloc,
+        Free,
+        Msize,
+        MallocDebug,
+        CallocDebug,
+        ReallocDebug,
+        FreeDebug,
+        MsizeDebug )
+{
+}
+
+/// Memory allocation handler.
+///
+/// @param[in] size  Number of bytes to allocate.
+///
+/// @return  Pointer to the allocated memory.
+void* FbxMemoryAllocator::Malloc( size_t size )
+{
+    DynamicMemoryHeap& rExternalHeap = HELIUM_EXTERNAL_HEAP;
+    void* pMemory = rExternalHeap.Allocate( size );
+
+    return pMemory;
+}
+
+/// Cleared memory allocation handler.
+///
+/// @param[in] count  Number of elements to allocate.
+/// @param[in] size   Number of bytes in each element.
+///
+/// @return  Pointer to the allocated memory.
+void* FbxMemoryAllocator::Calloc( size_t count, size_t size )
+{
+    size_t byteCount = count * size;
+
+    DynamicMemoryHeap& rExternalHeap = HELIUM_EXTERNAL_HEAP;
+    void* pMemory = rExternalHeap.Allocate( byteCount );
+    if( pMemory )
+    {
+        MemoryZero( pMemory, byteCount );
+    }
+
+    return pMemory;
+}
+
+/// Memory reallocation handler.
+///
+/// @param[in] pMemory  Block of memory to reallocate.
+/// @param[in] size     Number of bytes to which the memory should be resized.
+///
+/// @return  Pointer to the reallocated memory.
+void* FbxMemoryAllocator::Realloc( void* pMemory, size_t size )
+{
+    DynamicMemoryHeap& rExternalHeap = HELIUM_EXTERNAL_HEAP;
+    pMemory = rExternalHeap.Reallocate( pMemory, size );
+
+    return pMemory;
+}
+
+/// Free memory handler.
+///
+/// @param[in] pMemory  Block of memory to free.
+void FbxMemoryAllocator::Free( void* pMemory )
+{
+    DynamicMemoryHeap& rExternalHeap = HELIUM_EXTERNAL_HEAP;
+    rExternalHeap.Free( pMemory );
+}
+
+/// Memory size handler.
+///
+/// @param[in] pMemory  Block of allocated memory.
+///
+/// @return  Number of usable bytes in the given block of memory.
+size_t FbxMemoryAllocator::Msize( void* pMemory )
+{
+    DynamicMemoryHeap& rExternalHeap = HELIUM_EXTERNAL_HEAP;
+    size_t size = rExternalHeap.GetMemorySize( pMemory );
+
+    return size;
+}
+
+/// Debug memory allocation handler.
+///
+/// @param[in] size  Number of bytes to allocate.
+///
+/// @return  Pointer to the allocated memory.
+void* FbxMemoryAllocator::MallocDebug( size_t size, int, const char*, int )
+{
+    return Malloc( size );
+}
+
+/// Debug cleared memory allocation handler.
+///
+/// @param[in] count  Number of elements to allocate.
+/// @param[in] size   Number of bytes in each element.
+///
+/// @return  Pointer to the allocated memory.
+void* FbxMemoryAllocator::CallocDebug( size_t count, size_t size, int, const char*, int )
+{
+    return Calloc( count, size );
+}
+
+/// Debug memory reallocation handler.
+///
+/// @param[in] pMemory  Block of memory to reallocate.
+/// @param[in] size     Number of bytes to which the memory should be resized.
+///
+/// @return  Pointer to the reallocated memory.
+void* FbxMemoryAllocator::ReallocDebug( void* pMemory, size_t size, int, const char*, int )
+{
+    return Realloc( pMemory, size );
+}
+
+/// Free memory handler.
+///
+/// @param[in] pMemory  Block of memory to free.
+void FbxMemoryAllocator::FreeDebug( void* pMemory, int )
+{
+    Free( pMemory );
+}
+
+/// Memory size handler.
+///
+/// @param[in] pMemory  Block of allocated memory.
+///
+/// @return  Number of usable bytes in the given block of memory.
+size_t FbxMemoryAllocator::MsizeDebug( void* pMemory, int )
+{
+    return Msize( pMemory );
+}
+#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+
 /// Constructor.
 FbxSupport::FbxSupport()
-: m_pSdkManager( NULL )
-, m_pIoSettings( NULL )
-, m_pImporter( NULL )
-, m_referenceCount( 1 )
+    : m_pSdkManager( NULL )
+    , m_pIoSettings( NULL )
+    , m_pImporter( NULL )
+    , m_referenceCount( 1 )
 {
 }
 
@@ -383,6 +520,10 @@ void FbxSupport::LazyInitialize()
 
     m_pSdkManager = KFbxSdkManager::Create();
     HELIUM_ASSERT( m_pSdkManager );
+
+#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+    m_pSdkManager->SetMemoryAllocator( &m_memoryAllocator );
+#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
 
     m_pIoSettings = KFbxIOSettings::Create( m_pSdkManager, IOSROOT );
     HELIUM_ASSERT( m_pIoSettings );

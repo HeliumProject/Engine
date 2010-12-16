@@ -34,7 +34,7 @@ includedirs
 
 libdirs
 {
-	"Integrations/FBX/lib",
+	"Integrations/FBX/lib/vs2008",
 }
 
 if haveGranny then
@@ -236,7 +236,7 @@ project "Platform"
 	configuration "not Debug"
 		kind "StaticLib"
 
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib" }
 		links
 		{
 			"ws2_32",
@@ -258,6 +258,11 @@ project "Foundation"
 
 	configuration "Debug"
 		kind "SharedLib"
+
+	configuration "not Debug"
+		kind "StaticLib"
+
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -265,10 +270,7 @@ project "Foundation"
 			"zlib",
 		}
 
-	configuration "not Debug"
-		kind "StaticLib"
-
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib" }
 		links
 		{
 			"ws2_32",
@@ -304,6 +306,11 @@ project "Pipeline"
 
 	configuration "Debug"
 		kind "SharedLib"
+
+	configuration "not Debug"
+		kind "StaticLib"
+
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -313,9 +320,6 @@ project "Pipeline"
 			"d3d9",
 			"d3dx9",
 		}
-
-	configuration "not Debug"
-		kind "StaticLib"
 
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
@@ -347,6 +351,8 @@ project "Editor"
 		"Platform",
 		"Foundation",
 		"Pipeline",
+		"Expat",
+		"zlib",
 		"LiteSQL",
 		"libclient",
 		"librpc",
@@ -429,7 +435,7 @@ project "Engine"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -442,7 +448,7 @@ project "EngineJobs"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "EngineJobs", "ENGINE_JOBS" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -455,7 +461,7 @@ project "Windowing"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Windowing", "WINDOWING" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -469,7 +475,7 @@ project "Rendering"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Rendering", "RENDERING" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -483,7 +489,7 @@ project "GraphicsTypes"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -498,7 +504,7 @@ project "GraphicsJobs"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -514,7 +520,7 @@ project "Graphics"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Graphics", "GRAPHICS" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -531,7 +537,7 @@ project "Framework"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "Framework", "FRAMEWORK" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -550,7 +556,7 @@ project "WinWindowing"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "WinWindowing", "WIN_WINDOWING" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -565,7 +571,7 @@ project "D3D9Rendering"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -580,7 +586,7 @@ project "PcSupport"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "PcSupport", "PC_SUPPORT" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -595,7 +601,7 @@ project "PreprocessingPc"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -614,7 +620,7 @@ project "EditorSupport"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -636,7 +642,7 @@ project "FrameworkWin"
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -661,7 +667,7 @@ project "TestJobs"  -- DEPRECATED
 
 	Helium.DoLunarModuleProjectSettings( "LUNAR", "TestJobs", "TEST_JOBS" )
 
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",

@@ -12,7 +12,7 @@
 
 // http://www.codeproject.com/KB/stl/upgradingstlappstounicode.aspx
 
-class null_codecvt : public std::codecvt< wchar_t , char , mbstate_t >
+class null_codecvt : public std::codecvt< wchar_t, char, mbstate_t >
 {
 public:
     typedef wchar_t _E;
@@ -72,26 +72,44 @@ namespace Helium
         extern Profile::Accumulator g_StreamWrite;
         extern Profile::Accumulator g_StreamRead; 
 
+        namespace CharacterEncodings
+        {
+            enum CharacterEncoding
+            {
+                ASCII,  // default encoding, legacy 7-bit
+                UTF_16, // used by windows' Unicode build
+            };
+        }
+        typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
+
+#if UNICODE
+        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_16;
+#else
+        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::ASCII;
+#endif
+
         //
         // Stream object, read and write data to/from a buffer
         //
 
-        template< class StreamCharT >
-        class Stream : public Helium::RefCountBase< Stream< StreamCharT > >
+        template< class StreamPrimitiveT >
+        class Stream : public Helium::RefCountBase< Stream< StreamPrimitiveT > >
         {
         public: 
             Stream()
                 : m_Stream( NULL )
                 , m_ByteOrder( ByteOrders::LittleEndian )
+                , m_CharacterEncoding( CharacterEncodings::ASCII )
                 , m_OwnStream( false )
             {
 
             }
 
-            Stream( std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >* stream, ByteOrder byteOrder = ByteOrders::LittleEndian, bool ownStream = false )
+            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream )
                 : m_Stream( stream )
-                , m_ByteOrder( byteOrder )
                 , m_OwnStream( ownStream )
+                , m_ByteOrder( ByteOrders::LittleEndian )
+                , m_CharacterEncoding( CharacterEncodings::ASCII )
             {
 
             }
@@ -167,7 +185,7 @@ namespace Helium
             {
                 PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
-                m_Stream->read((StreamCharT*)t, streamElementCount); 
+                m_Stream->read((StreamPrimitiveT*)t, streamElementCount); 
 
                 if (m_Stream->fail() && !m_Stream->eof())
                 {
@@ -181,8 +199,8 @@ namespace Helium
             inline Stream& Read(PointerT* ptr)
             {
                 // amount to read must align with stream element size
-                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
-                return ReadBuffer( (StreamCharT*)ptr, sizeof(PointerT) / sizeof(StreamCharT) );
+                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamPrimitiveT) == 0  );
+                return ReadBuffer( (StreamPrimitiveT*)ptr, sizeof(PointerT) / sizeof(StreamPrimitiveT) );
                 Swizzle( ptr, m_ByteOrder != Helium::PlatformByteOrder );
             }
 
@@ -190,7 +208,7 @@ namespace Helium
             {
                 PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-                m_Stream->write( (const StreamCharT*)t, streamElementCount );
+                m_Stream->write( (const StreamPrimitiveT*)t, streamElementCount );
 
                 if (m_Stream->fail())
                 {
@@ -204,10 +222,10 @@ namespace Helium
             inline Stream& Write(const PointerT* ptr)
             {
                 // amount to write must align with stream element size
-                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamCharT) == 0  );
+                HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamPrimitiveT) == 0  );
                 PointerT temp = *ptr;
                 Swizzle( temp, m_ByteOrder != Helium::PlatformByteOrder );
-                return WriteBuffer( (const StreamCharT*)&temp, sizeof(PointerT) / sizeof(StreamCharT) ); 
+                return WriteBuffer( (const StreamPrimitiveT*)&temp, sizeof(PointerT) / sizeof(StreamPrimitiveT) ); 
             }
 
             template <typename PointerT>
@@ -232,6 +250,54 @@ namespace Helium
                 return *this;
             }
 
+            inline Stream& ReadString( tstring& string )
+            {
+                uint32_t length = 0;
+                Read( &length );
+
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+#ifdef UNICODE
+                        std::string temp;
+                        temp.resize( length );
+                        ReadBuffer( &temp[ 0 ], length );
+                        Helium::ConvertString( temp, string );
+#else
+                        // read the bytes directly into the string
+                        string.resize( length ); 
+                        ReadBuffer( &string[ 0 ], length ); 
+#endif
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+#ifdef UNICODE
+                        // read the bytes directly into the string
+                        string.resize( length ); 
+                        ReadBuffer( &string[ 0 ], length * 2 ); 
+#else
+                        std::wstring temp;
+                        temp.resize( length );
+                        ReadBuffer( &temp[ 0 ], length * 2 ); 
+                        Helium::ConvertString( temp, string );
+#endif
+                        break;
+                    }
+                }
+                return *this;
+            }
+
+            inline Stream& WriteString( const tstring& string )
+            {
+                uint32_t length = (uint32_t)string.length();
+                Write( &length );
+                WriteBuffer( string.c_str(), length * sizeof(tchar_t) );
+                return *this;
+            }
+
             Stream& Flush()
             {
                 m_Stream->flush(); 
@@ -248,24 +314,40 @@ namespace Helium
                 return m_Stream->eof(); 
             }
 
-            std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >& GetInternal()
+            std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >& GetInternal()
             {
                 return *m_Stream;
             } 
 
-            const ByteOrder& GetByteOrder()
+            ByteOrder GetByteOrder()
             {
                 return m_ByteOrder;
             }
 
+            void SetByteOrder( ByteOrder byteOrder )
+            {
+                m_ByteOrder = byteOrder;
+            }
+
+            CharacterEncoding GetCharacterEncoding()
+            {
+                return m_CharacterEncoding;
+            }
+
+            void SetCharacterEncoding( CharacterEncoding characterEncoding )
+            {
+                m_CharacterEncoding = characterEncoding;
+            }
+
         protected: 
-            std::basic_iostream< StreamCharT, std::char_traits< StreamCharT > >*    m_Stream; 
+            std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >*    m_Stream; 
             ByteOrder                                                               m_ByteOrder;
+            CharacterEncoding                                                       m_CharacterEncoding;
             bool                                                                    m_OwnStream;
         };
 
-        template <class T, class StreamCharT>
-        Stream< StreamCharT >& operator>>(Stream< StreamCharT >& stream, T& val)
+        template <class T, class StreamPrimitiveT>
+        Stream< StreamPrimitiveT >& operator>>(Stream< StreamPrimitiveT >& stream, T& val)
         {
             HELIUM_ASSERT( stream.GetByteOrder() == Helium::PlatformByteOrder );
             stream.GetInternal() >> val;
@@ -278,8 +360,8 @@ namespace Helium
             return stream; 
         }
 
-        template <class T, class StreamCharT>
-        Stream< StreamCharT >& operator<<(Stream< StreamCharT >& stream, const T& val)
+        template <class T, class StreamPrimitiveT>
+        Stream< StreamPrimitiveT >& operator<<(Stream< StreamPrimitiveT >& stream, const T& val)
         {
             HELIUM_ASSERT( stream.GetByteOrder() == Helium::PlatformByteOrder );
             stream.GetInternal() << val;
@@ -428,15 +510,15 @@ namespace Helium
         // FileStream, a stream object backed by file data
         //
 
-        template< class StreamCharT >
-        class FileStream : public Stream< StreamCharT >
+        template< class StreamPrimitiveT >
+        class FileStream : public Stream< StreamPrimitiveT >
         {
         public: 
-            FileStream( const Path& path, bool write, const ByteOrder byteOrder = Helium::PlatformByteOrder )
+            FileStream( const Path& path, bool write )
                 : m_Path( path )
                 , m_OpenForWrite( write )
             {
-                m_ByteOrder = byteOrder;
+
             }
 
             ~FileStream()
@@ -458,7 +540,7 @@ namespace Helium
                     fmode |= std::ios_base::in;
                 }
 
-                std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >* fstream = new std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >(); 
+                std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* fstream = new std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >(); 
 
 #ifdef UNICODE
                 fstream->imbue( std::locale( std::locale::classic(), &null_codecvt::GetStaticInstance() )) ;
@@ -477,7 +559,7 @@ namespace Helium
 
             virtual void Close() HELIUM_OVERRIDE
             {
-                std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > >* fstream = static_cast< std::basic_fstream< StreamCharT, std::char_traits< StreamCharT > > *>( &GetInternal() );
+                std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* fstream = static_cast< std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > > *>( &GetInternal() );
 
                 fstream->close();
                 if (fstream->is_open())
@@ -490,5 +572,13 @@ namespace Helium
             Path  m_Path; 
             bool  m_OpenForWrite; 
         };
+
+        typedef FileStream<char> CharFileStream;
+        typedef FileStream<wchar_t> WCharFileStream;
+        typedef FileStream<tchar_t> TCharFileStream;
+
+        typedef Helium::SmartPtr< FileStream<char> > CharFileStreamPtr; 
+        typedef Helium::SmartPtr< FileStream<wchar_t> > WCharFileStreamPtr; 
+        typedef Helium::SmartPtr< FileStream<tchar_t> > TCharFileStreamPtr;
     }
 }

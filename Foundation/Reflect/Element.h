@@ -64,7 +64,7 @@ namespace Helium
             // Returns the string to use as the title of this element in UI (uses the UI name of the type info by default)
             virtual const tstring&      GetTitle() const;
 
-            // Specifies if the value is directly between the start and end short name
+            // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance

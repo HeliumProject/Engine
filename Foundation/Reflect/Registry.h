@@ -1,17 +1,16 @@
 #pragma once
 
-#include <map>
-#include <string>
-
 #include "Platform/Types.h"
 
-#include "Foundation/Memory.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Name.h"
+#include "Foundation/Memory.h"
+#include "Foundation/Checksum/Crc32.h"
 #include "Foundation/Container/SortedMap.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Reflect/API.h"
+
+#include "Foundation/Reflect/ReflectionInfo.h"
 
 namespace Helium
 {
@@ -22,7 +21,7 @@ namespace Helium
         typedef void (*DestroyedFunc)(Object* object);
 
         // Registry containers
-        typedef SortedMap< Name, Helium::SmartPtr< Type > > M_NameToType;
+        typedef SortedMap< uint32_t, Helium::SmartPtr< Type > > M_HashToType;
 
         // Profile interface
 #ifdef PROFILE_ACCUMULATION
@@ -50,13 +49,6 @@ namespace Helium
             friend bool Reflect::IsInitialized();
             friend void Reflect::Cleanup();
 
-            M_NameToType m_TypesByName;
-            M_NameToType m_TypesByAlias;
-            InitializerStack m_InitializerStack;
-
-            CreatedFunc m_Created; // the callback on creation
-            DestroyedFunc m_Destroyed; // the callback on deletion
-
             Registry();
             virtual ~Registry();
 
@@ -73,20 +65,24 @@ namespace Helium
 
             // give a type an alias (for legacy considerations)
             void AliasType( const Type* type, Name alias );
-            void UnAliasType( const Type* type, Name alias );
+            void UnaliasType( const Type* type, Name alias );
 
-            // retrieves type info
-            const Type* GetType( Name name ) const;
+            // type lookup
+            const Type* GetType( uint32_t crc ) const;
+            inline const Type* GetType( Name name ) const;
 
             // class lookup
-            const Class* GetClass( Name name ) const;
+            inline const Class* GetClass( uint32_t crc ) const;
+            inline const Class* GetClass( Name name ) const;
 
             // enumeration lookup
-            const Enumeration* GetEnumeration( Name name ) const;
+            inline const Enumeration* GetEnumeration( uint32_t crc ) const;
+            inline const Enumeration* GetEnumeration( Name name ) const;
 
             // create instances of classes
             ObjectPtr CreateInstance( const Class* type ) const;
-            ObjectPtr CreateInstance( Name name ) const;
+            ObjectPtr CreateInstance( uint32_t crc ) const;
+            inline ObjectPtr CreateInstance( Name name ) const;
 
             template<class T>
             Helium::SmartPtr< T > CreateInstance()
@@ -94,13 +90,9 @@ namespace Helium
                 return Reflect::AssertCast< T >( CreateInstance( Reflect::GetType< T >() ) );
             }
 
-            // callbacks
-            void Created(Object* object);
-            void Destroyed(Object* object);
-
-            // callback setup
-            void SetCreatedCallback(CreatedFunc created);
-            void SetDestroyedCallback(DestroyedFunc destroyed);
+        private:
+            M_HashToType        m_TypesByHash;
+            InitializerStack    m_InitializerStack;
         };
 
         //
@@ -196,3 +188,5 @@ namespace Helium
         }
     }
 }
+
+#include "Foundation/Reflect/Registry.inl"

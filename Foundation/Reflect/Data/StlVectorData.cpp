@@ -371,7 +371,7 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
 
 // keep reading the string until we run out of buffer
 template <>
-void StringStlVectorData::Serialize(Archive& archive) const
+void StlStringStlVectorData::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -405,13 +405,12 @@ void StringStlVectorData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t size = (int32_t)m_Data->size();
-            binary.GetStream().Write(&size); 
+            uint32_t count = (uint32_t)m_Data->size();
+            binary.GetStream().Write( &count ); 
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                int32_t index = binary.GetStrings().Insert(m_Data.Get()[i]);
-                binary.GetStream().Write(&index); 
+                binary.GetStream().WriteString( m_Data.Get()[i] ); 
             }
 
             break;
@@ -421,7 +420,7 @@ void StringStlVectorData::Serialize(Archive& archive) const
 
 // must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StringStlVectorData::Deserialize(Archive& archive)
+void StlStringStlVectorData::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -470,15 +469,13 @@ void StringStlVectorData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            int32_t size = (int32_t)m_Data->size();
-            binary.GetStream().Read(&size); 
+            uint32_t count = (uint32_t)m_Data->size();
+            binary.GetStream().Read( &count ); 
 
-            m_Data->resize(size);
-            for (int32_t i=0; i<size; i++)
+            m_Data->resize(count);
+            for ( uint32_t i=0; i<count; i++ )
             {
-                int32_t index;
-                binary.GetStream().Read(&index); 
-                m_Data.Ref()[i] = binary.GetStrings().Get(index);
+                binary.GetStream().ReadString( m_Data.Ref()[i] ); 
             }
 
             break;
@@ -551,18 +548,18 @@ template SimpleStlVectorData<Color4>;
 template SimpleStlVectorData<HDRColor3>;
 template SimpleStlVectorData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StringStlVectorData);
+REFLECT_DEFINE_CLASS(StlStringStlVectorData);
 REFLECT_DEFINE_CLASS(BoolStlVectorData);
-REFLECT_DEFINE_CLASS(U8StlVectorData);
-REFLECT_DEFINE_CLASS(I8StlVectorData);
-REFLECT_DEFINE_CLASS(U16StlVectorData);
-REFLECT_DEFINE_CLASS(I16StlVectorData);
-REFLECT_DEFINE_CLASS(U32StlVectorData);
-REFLECT_DEFINE_CLASS(I32StlVectorData);
-REFLECT_DEFINE_CLASS(U64StlVectorData);
-REFLECT_DEFINE_CLASS(I64StlVectorData);
-REFLECT_DEFINE_CLASS(F32StlVectorData);
-REFLECT_DEFINE_CLASS(F64StlVectorData);
+REFLECT_DEFINE_CLASS(UInt8StlVectorData);
+REFLECT_DEFINE_CLASS(Int8StlVectorData);
+REFLECT_DEFINE_CLASS(UInt16StlVectorData);
+REFLECT_DEFINE_CLASS(Int16StlVectorData);
+REFLECT_DEFINE_CLASS(UInt32StlVectorData);
+REFLECT_DEFINE_CLASS(Int32StlVectorData);
+REFLECT_DEFINE_CLASS(UInt64StlVectorData);
+REFLECT_DEFINE_CLASS(Int64StlVectorData);
+REFLECT_DEFINE_CLASS(Float32StlVectorData);
+REFLECT_DEFINE_CLASS(Float64StlVectorData);
 REFLECT_DEFINE_CLASS(GUIDStlVectorData);
 REFLECT_DEFINE_CLASS(TUIDStlVectorData);
 REFLECT_DEFINE_CLASS( PathStlVectorData );

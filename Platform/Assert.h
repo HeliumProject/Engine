@@ -75,8 +75,7 @@ namespace Helium
 
         /// @name Static Utility Functions
         //@{
-        static EResult Trigger(
-            const tchar_t* pExpression, const tchar_t* pMessage, const char* pFunction, const char* pFile, int line );
+        static EResult Trigger( const tchar_t* pExpression, const char* pFunction, const char* pFile, int line, const tchar_t* pMessage, ... );
         //@}
 
     private:
@@ -94,15 +93,15 @@ namespace Helium
 ///
 /// @param[in] EXP      Expression string.
 /// @param[in] MESSAGE  Message string.
-#define HELIUM_TRIGGER_ASSERT_HANDLER( EXP, MESSAGE ) \
+#define HELIUM_TRIGGER_ASSERT_HANDLER( EXP, ... ) \
     { \
         HELIUM_DISABLEABLE_CODE_BLOCK( \
             Helium::Assert::EResult result = Helium::Assert::Trigger( \
                 EXP, \
-                MESSAGE, \
                 HELIUM_FUNCTION_NAME, \
                 __FILE__, \
-                __LINE__ ); \
+                __LINE__, \
+                __VA_ARGS__ ); \
             if( result == Helium::Assert::RESULT_BREAK ) \
             { \
                 HELIUM_ISSUE_BREAK(); \
@@ -123,10 +122,10 @@ namespace Helium
 /// Trigger a debug breakpoint with a customized message if the result of an expression is false in non-release builds.
 ///
 /// @param[in] EXP      Expression to evaluate.
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...      Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_FALSE(), HELIUM_ASSERT_MSG_FALSE() HELIUM_VERIFY(), HELIUM_VERIFY_MSG()
-#define HELIUM_ASSERT_MSG( EXP, MESSAGE ) { if( !( EXP ) ) HELIUM_TRIGGER_ASSERT_HANDLER( TXT( #EXP ), MESSAGE ) }
+#define HELIUM_ASSERT_MSG( EXP, ... ) { if( !( EXP ) ) HELIUM_TRIGGER_ASSERT_HANDLER( TXT( #EXP ), __VA_ARGS__ ) }
 
 /// Trigger a debug breakpoint unconditionally in non-release builds.
 ///
@@ -135,10 +134,10 @@ namespace Helium
 
 /// Trigger a debug breakpoint with a customized message unconditionally in non-release builds.
 ///
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...  Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_MSG(), HELIUM_ASSERT_FALSE(), HELIUM_VERIFY(), HELIUM_VERIFY_MSG()
-#define HELIUM_ASSERT_MSG_FALSE( MESSAGE ) HELIUM_TRIGGER_ASSERT_HANDLER( NULL, MESSAGE )
+#define HELIUM_ASSERT_MSG_FALSE( ... ) HELIUM_TRIGGER_ASSERT_HANDLER( NULL, __VA_ARGS__ )
 
 /// Trigger a debug breakpoint if the result of an expression is false in non-release builds while still evaluating the
 /// expression in release builds.
@@ -152,10 +151,10 @@ namespace Helium
 /// while still evaluating the expression in release builds.
 ///
 /// @param[in] EXP      Expression to evaluate.
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...      Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_MSG(), HELIUM_ASSERT_FALSE(), HELIUM_ASSERT_MSG_FALSE(), HELIUM_VERIFY()
-#define HELIUM_VERIFY_MSG( EXP, MESSAGE ) HELIUM_ASSERT_MSG( EXP, MESSAGE )
+#define HELIUM_VERIFY_MSG( EXP, ... ) HELIUM_ASSERT_MSG( EXP, __VA_ARGS__ )
 
 #else  // HELIUM_ASSERT_ENABLED
 
@@ -169,10 +168,10 @@ namespace Helium
 /// Trigger a debug breakpoint with a customized message if the result of an expression is false in non-release builds.
 ///
 /// @param[in] EXP      Expression to evaluate.
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...      Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_FALSE(), HELIUM_ASSERT_MSG_FALSE() HELIUM_VERIFY(), HELIUM_VERIFY_MSG()
-#define HELIUM_ASSERT_MSG( EXP, MESSAGE )
+#define HELIUM_ASSERT_MSG( EXP, ... )
 
 /// Trigger a debug breakpoint unconditionally in non-release builds.
 ///
@@ -181,10 +180,10 @@ namespace Helium
 
 /// Trigger a debug breakpoint with a customized message unconditionally in non-release builds.
 ///
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...  Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_MSG(), HELIUM_ASSERT_FALSE(), HELIUM_VERIFY(), HELIUM_VERIFY_MSG()
-#define HELIUM_ASSERT_MSG_FALSE( MESSAGE )
+#define HELIUM_ASSERT_MSG_FALSE( ... )
 
 /// Trigger a debug breakpoint if the result of an expression is false in non-release builds while still evaluating the
 /// expression in release builds.
@@ -198,10 +197,10 @@ namespace Helium
 /// while still evaluating the expression in release builds.
 ///
 /// @param[in] EXP      Expression to evaluate.
-/// @param[in] MESSAGE  Message to display if the assertion is triggered.
+/// @param[in] ...  Message to display if the assertion is triggered.
 ///
 /// @see HELIUM_ASSERT(), HELIUM_ASSERT_MSG(), HELIUM_ASSERT_FALSE(), HELIUM_ASSERT_MSG_FALSE(), HELIUM_VERIFY()
-#define HELIUM_VERIFY_MSG( EXP, MESSAGE ) EXP
+#define HELIUM_VERIFY_MSG( EXP, ... ) EXP
 
 #endif
 

@@ -138,7 +138,7 @@ namespace Helium
 
             Helium::Path GetBuiltDirectory();
 
-            // stuff/fruitBasketFromHell/appleSuccubus.entity.hrb
+            // stuff/fruitBasketFromHell/appleSuccubus.HeliumEntity
             tstring GetFullName() const;
 
             // appleSuccubus

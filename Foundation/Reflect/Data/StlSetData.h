@@ -57,10 +57,9 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
         };
 
-        typedef SimpleStlSetData<tstring, StringData> StringStlSetData;
-        typedef SimpleStlSetData<uint32_t, U32Data> U32StlSetData;
-        typedef SimpleStlSetData<uint64_t, U64Data> U64StlSetData;
-        typedef SimpleStlSetData<float32_t, F32Data> F32StlSetData;
+        typedef SimpleStlSetData<tstring, StlStringData> StlStringStlSetData;
+        typedef SimpleStlSetData<uint32_t, UInt32Data> UInt32StlSetData;
+        typedef SimpleStlSetData<uint64_t, UInt64Data> UInt64StlSetData;
         typedef SimpleStlSetData<Helium::GUID, GUIDData> GUIDStlSetData;
         typedef SimpleStlSetData<Helium::TUID, TUIDData> TUIDStlSetData;
         typedef SimpleStlSetData<Helium::Path, PathData> PathStlSetData;

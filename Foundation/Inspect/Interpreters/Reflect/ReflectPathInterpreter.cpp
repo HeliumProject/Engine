@@ -53,7 +53,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (!result)
     {
-        if ( pathField || field->m_DataClass == Reflect::GetType<StringData>() )
+        if ( pathField || field->m_DataClass == Reflect::GetType<StlStringData>() )
         {
             ContainerPtr valueContainer = CreateControl<Container>();
             ValuePtr value = CreateControl< Value >();

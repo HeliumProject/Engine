@@ -61,19 +61,9 @@ void Archive::PostSerialize(std::vector< ElementPtr >& append)
     info.m_Progress = m_Progress = 100;
     e_Status.Raise( info );
 
+    PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
     info.m_ArchiveState = ArchiveStates::PostProcessing;
     e_Status.Raise( info );
-
-    {
-        PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
-
-        V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-        V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-        for ( ; itr != end; ++itr )
-        {
-            (*itr)->CreateAppendElements(append);
-        }
-    }
 }
 
 void Archive::PreDeserialize()
@@ -94,19 +84,9 @@ void Archive::PostDeserialize(std::vector< ElementPtr >& append)
     info.m_Progress = m_Progress = 100;
     e_Status.Raise( info );
 
+    PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
     info.m_ArchiveState = ArchiveStates::PostProcessing;
     e_Status.Raise( info );
-
-    {
-        PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
-
-        V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-        V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-        for ( ; itr != end; ++itr )
-        {
-            (*itr)->ProcessAppendElements(append);
-        }
-    }
 }
 
 void Archive::PreSerialize(const ElementPtr& element, const Field* field)
@@ -124,8 +104,6 @@ void Archive::PreSerialize(const ElementPtr& element, const Field* field)
             (*itr)->VisitElement(element);
         }
     }
-
-    m_Classes.insert(element->GetClass());
 }
 
 void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
@@ -143,8 +121,6 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
             (*itr)->VisitElement(element);
         }
     }
-
-    m_Classes.insert(element->GetClass());
 }
 
 bool Archive::TryElementCallback( Element* element, ElementCallback callback )
@@ -201,7 +177,6 @@ void Archive::Put( const std::vector< ElementPtr >& elements )
     m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
 }
 
-
 ElementPtr Archive::Get( const Class* searchClass )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
@@ -232,7 +207,7 @@ void Archive::Get( std::vector< ElementPtr >& elements )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-    Log::Debug( TXT( "Parsing '%s'" ), m_Path.c_str() );
+    Log::Debug( TXT( "Parsing '%s'\n" ), m_Path.c_str() );
 
     if ( Helium::IsDebuggerPresent() )
     {
@@ -270,55 +245,37 @@ void Archive::Get( std::vector< ElementPtr >& elements )
     elements = m_Spool;
 }
 
-bool Reflect::GetFileType( const Path& path, ArchiveType& type )
+ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )
 {
-    tstring ext = path.Extension();
-
-    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
+    switch ( archiveType )
     {
-        type = ArchiveTypes::XML;
-        return true;
-    }
-    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
-    {
-        type = ArchiveTypes::Binary;
-        return true;
-    }
-
-    return false;
-}
-
-ArchivePtr Reflect::GetArchive( const Path& path, ByteOrder byteOrder )
-{
-    HELIUM_ASSERT( !path.empty() );
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( path, archiveType ) )
-    {
-        switch ( archiveType )
+    case ArchiveTypes::Auto:
+        if ( path.Exists() )
         {
-        case ArchiveTypes::Binary:
-            return new ArchiveBinary( path, byteOrder );
-
-        case ArchiveTypes::XML:
-            return new ArchiveXML( path, byteOrder );
-
-        default:
-            throw Reflect::StreamException( TXT( "Unknown archive type" ) );
+#pragma TODO( "Check the file's existing type and return it." )
         }
+        // fall through to binary if the file doesn't exist
+    case ArchiveTypes::Binary:
+        return new ArchiveBinary( path, byteOrder );
+
+    case ArchiveTypes::XML:
+        return new ArchiveXML( path, byteOrder );
+
+    default:
+        throw Reflect::StreamException( TXT( "Unknown archive type" ) );
     }
 
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ElementPtr element, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, ElementPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     std::vector< ElementPtr > elements;
     elements.push_back( element );
-    return ToArchive( path, elements, error, byteOrder );
+    return ToArchive( path, elements, archiveType, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );
@@ -332,7 +289,7 @@ bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elem
     Path safetyPath( path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( path.Extension() );
 
-    ArchivePtr archive = GetArchive( safetyPath, byteOrder );
+    ArchivePtr archive = GetArchive( safetyPath, archiveType, byteOrder );
     archive->Put( elements );
 
     // generate the file to the safety location

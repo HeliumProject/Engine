@@ -173,44 +173,41 @@ void Tracker::TrackEverything()
                     Log::Debug( TXT("Caught litesql::NotFound excption when selecting file from DB" ));
                 }
 
-                if ( assetFilePath.FullExtension() == TXT( "hrb" ) )
+                const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
+                if ( assetClass.ReferencesObject() )
                 {
-                    const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
-                    if ( assetClass.ReferencesObject() )
+                    // get file's properties
+                    Helium::SearchableProperties fileProperties;
+                    assetClass->GatherSearchableProperties( &fileProperties );
+                    for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(),
+                        filePropertiesItrEnd = fileProperties.GetStringProperties().end();
+                        filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
                     {
-                        // get file's properties
-                        Helium::SearchableProperties fileProperties;
-                        assetClass->GatherSearchableProperties( &fileProperties );
-                        for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(),
-                            filePropertiesItrEnd = fileProperties.GetStringProperties().end();
-                            filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
-                        {
-                            //TrackedProperty
-                            TrackedProperty prop( m_TrackerDB );
-                            prop.mName = filePropertiesItr->first;
-                            prop.update();
+                        //TrackedProperty
+                        TrackedProperty prop( m_TrackerDB );
+                        prop.mName = filePropertiesItr->first;
+                        prop.update();
 
-                            assetTrackedFile.properties().link( prop, filePropertiesItr->second );
-                        }
-
-                        // get file's dependencies
-                        std::set< Helium::Path > fileReferences;
-                        assetClass->GetFileReferences( fileReferences );
-                        for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(),
-                            fileRefsItrEnd = fileReferences.end();
-                            fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
-                        {
-                            //   see if the file has changed
-                            const Helium::Path& fileRefPath = (*fileRefsItr);
-
-                            TrackedFile fileRefTrackedFile( m_TrackerDB );
-                            fileRefTrackedFile.mPath = fileRefPath.Get();
-                            fileRefTrackedFile.update();
-
-                            assetTrackedFile.fileReferences().link( fileRefTrackedFile );
-                        }
-
+                        assetTrackedFile.properties().link( prop, filePropertiesItr->second );
                     }
+
+                    // get file's dependencies
+                    std::set< Helium::Path > fileReferences;
+                    assetClass->GetFileReferences( fileReferences );
+                    for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(),
+                        fileRefsItrEnd = fileReferences.end();
+                        fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
+                    {
+                        //   see if the file has changed
+                        const Helium::Path& fileRefPath = (*fileRefsItr);
+
+                        TrackedFile fileRefTrackedFile( m_TrackerDB );
+                        fileRefTrackedFile.mPath = fileRefPath.Get();
+                        fileRefTrackedFile.update();
+
+                        assetTrackedFile.fileReferences().link( fileRefTrackedFile );
+                    }
+
                 }
                 
                 // update LastModified

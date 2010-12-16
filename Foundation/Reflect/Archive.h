@@ -10,7 +10,6 @@
 #include "API.h"
 #include "Cache.h"
 #include "Class.h"
-#include "StringPool.h"
 #include "Exceptions.h"
 #include "ArchiveStream.h" 
 
@@ -108,26 +107,13 @@ namespace Helium
         {
             enum ArchiveType
             {
+                Auto,
                 Binary,
                 XML,
                 Base
             };
         }
         typedef ArchiveTypes::ArchiveType ArchiveType;
-
-        // must line up with enum above
-        const static tchar_t* s_ArchiveExtensions[] =
-        {
-            TXT( "hrb" ),   // Binary
-            TXT( "xml" )    // XML
-        };
-
-        // must line up with archive type enum
-        const static tchar_t* s_ArchiveDescriptions[] =
-        {
-            TXT( "Binary Reflect File" ),
-            TXT( "XML Reflect File" )
-        };
 
         namespace ArchiveModes
         {
@@ -156,16 +142,6 @@ namespace Helium
             virtual void VisitField(Element* element, const Field* field)
             {
                 // called for each field we serialize to the file (pointer or data...)
-            }
-
-            virtual void CreateAppendElements(std::vector< ElementPtr >& append)
-            {
-                // Called after the main spool is serialized and is a call to the visitor for meta data
-            }
-
-            virtual void ProcessAppendElements(std::vector< ElementPtr >& append)
-            {
-                // Called after the append spool is deserialized and is a call to the visitor to process the meta data
             }
         };
         typedef Helium::SmartPtr<ArchiveVisitor> ArchiveVisitorPtr;
@@ -208,6 +184,7 @@ namespace Helium
             // The file we are working with
             Path m_Path;
 
+            // The byte order
             ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
@@ -216,11 +193,8 @@ namespace Helium
             // The mode
             ArchiveMode m_Mode;
 
-            // The cache of serializers
+            // The cache of data objects
             Cache m_Cache;
-
-            // The classes used
-            std::set< const Class* > m_Classes;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
@@ -274,12 +248,6 @@ namespace Helium
             // Write to the OutputStream
             virtual void Write() = 0;
 
-            // Write the file header
-            virtual void Start() = 0;
-
-            // Write the file footer
-            virtual void Finish() = 0;
-
             //
             // Serialization
             //
@@ -288,45 +256,6 @@ namespace Helium
             virtual void Serialize( const std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
             virtual void Deserialize( ElementPtr& element ) = 0;
             virtual void Deserialize( std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
-
-        public:
-            static const tchar_t* GetExtension( ArchiveType t )
-            {
-                HELIUM_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ) );
-                return s_ArchiveExtensions[ t ];
-            }
-
-            static void GetExtensions( std::set< tstring >& extensions )
-            {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
-                {
-                    extensions.insert( s_ArchiveExtensions[ i ] );
-                }
-            }
-
-            static void GetFileFilters( std::set< tstring > filters )
-            {
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
-                {
-                    tstring filter = tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
-                    filters.insert( filter );
-                }
-            }
-
-            static void GetFileFilters( tstring& filters )
-            {
-                filters.clear();
-                for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar_t* ); ++i )
-                {
-                    if ( i != 0 )
-                    {
-                        filters.push_back( TXT('|') );
-                    }
-
-                    filters += tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
-                }
-            }
-
 
             //
             // Event API
@@ -402,26 +331,23 @@ namespace Helium
 
         typedef Helium::SmartPtr< Archive > ArchivePtr;
 
-        // Peek the type of file
-        FOUNDATION_API bool GetFileType( const Path& path, ArchiveType& type );
-        
         // Get parser for a file
-        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
-        Helium::StrongPtr<T> FromArchive( const Path& path )
+        Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
-            ArchivePtr archive = GetArchive( path );
+            ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
             return archive->Get< T >();
         }
 
         template< class T >
-        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& elements )
+        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& elements, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
-            ArchivePtr archive = GetArchive( path );
+            ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
             archive->Get< T >( elements );
         }
     }

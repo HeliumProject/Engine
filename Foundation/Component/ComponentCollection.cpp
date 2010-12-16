@@ -91,7 +91,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
         // this collection.
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
         const Reflect::Class* type = slotClass;
-        type = registry->GetInstance()->GetClass( type->m_Base );
+        type = Reflect::ReflectionCast< const Class >( type->m_Base );
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
@@ -104,7 +104,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
                 return found->second;
             }
 
-            type = registry->GetInstance()->GetClass( type->m_Base );
+            type = Reflect::ReflectionCast< const Class >( type->m_Base );
         }
     }
 
@@ -340,15 +340,15 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                const Set< Name >& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
-                Set< Name >::ConstIterator derivedItr = derived.Begin();
-                Set< Name >::ConstIterator derivedEnd = derived.End();
+                const Set< const Composite* >& derived = attrib->GetClass()->m_Base->m_Derived;
+                Set< const Composite* >::ConstIterator derivedItr = derived.Begin();
+                Set< const Composite* >::ConstIterator derivedEnd = derived.End();
                 for ( ; derivedItr != derivedEnd; ++derivedItr )
                 {
-                    const Reflect::Class* currentType = Reflect::Registry::GetInstance()->GetClass(*derivedItr);
+                    const Reflect::Composite* currentType = *derivedItr;
                     if ( currentType != attrib->GetType() )
                     {
-                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( currentType ) );
+                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( currentType ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
                             if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )

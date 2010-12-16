@@ -234,5 +234,5 @@ namespace Helium
 
             pObject->Destroy();
         }
-   }
+    }
 }

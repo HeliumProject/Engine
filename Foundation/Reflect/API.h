@@ -6,20 +6,12 @@
 #include "Foundation/Profile.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 
-// tracks profile data in reflect only
 //#define REFLECT_PROFILE
-//#define REFLECT_PROFILE_INSTANCE_API
 
 #if defined(PROFILE_INSTRUMENT_ALL) || defined(REFLECT_PROFILE)
 #define REFLECT_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
 #else
 #define REFLECT_SCOPE_TIMER(__Str)
-#endif
-
-#if defined(PROFILE_INSTRUMENT_ALL) || defined(REFLECT_PROFILE_INSTANCE_API)
-#define REFLECT_SCOPE_TIMER_INST(__Str) PROFILE_SCOPE_TIMER(__Str)
-#else
-#define REFLECT_SCOPE_TIMER_INST(__Str)
 #endif
 
 namespace Helium
@@ -62,7 +54,7 @@ namespace Helium
 //
 
 // enable verbose archive printing
-//#define REFLECT_ARCHIVE_VERBOSE
+#define REFLECT_ARCHIVE_VERBOSE
 
 //
 // Internal Macros
@@ -165,7 +157,7 @@ const Helium::Reflect::Enumeration* __Enumeration::s_Enumeration = NULL;
 
 // unalias a type name
 #define REFLECT_UNALIAS_CLASS(__Class, __Alias) \
-    Reflect::Registry::GetInstance()->UnAliasType( Reflect::GetClass<__Class>(), __Alias);
+    Reflect::Registry::GetInstance()->UnaliasType( Reflect::GetClass<__Class>(), __Alias);
 
 // declares an enumeration
 #define REFLECT_DECLARE_ENUMERATION(__Class) \

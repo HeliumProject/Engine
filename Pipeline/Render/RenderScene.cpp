@@ -373,15 +373,7 @@ uint32_t RenderScene::ExtractMesh(const tchar_t* name, ObjectLoaderPtr loader, i
 
         tchar_t shader_name[ MAX_PATH ];
         Helium::Path shaderPath( loader->m_fragments[ f ].m_shader );
-
-        if ( shaderPath.Extension() == TXT( "hrb" ) )
-        {
-            _stprintf( shader_name, TXT( "%s" ), shaderPath.c_str() );
-        }
-        else
-        {
-            _stprintf( shader_name, TXT( "%s.xml" ), loader->m_fragments[f].m_shader.c_str() );
-        }
+        _stprintf( shader_name, TXT( "%s" ), shaderPath.c_str() );
 
         uint32_t idx_count = (uint32_t)loader->m_fragments[f].m_indices.size();
         result->m_fragments[currentFragment].m_orig_shader = m_renderer->m_shader_manager.LoadShader(shader_name, true, loader->m_fragments[ f ].m_shader_loader);

@@ -23,18 +23,6 @@ EVT_CLOSE( Frame::OnExiting )
 EVT_TIMER( FrameTimerID, Frame::OnHelpTimer )
 END_EVENT_TABLE()
 
-
-///////////////////////////////////////////////////////////////////////////////
-// *R2 <[<title> - ]>[ <code>(<build>), assets: <assets> ]<[: <extra>>]
-// *R2 Editor Asset Editor - [ tech(debug), assets: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.hrb
-static const tchar_t* s_ProgrammerTitleBarFormat = TXT( "%s(p) %s[ %s%s, assets: %s ]" ); //project, title, code, build, assets, extra
-
-// *R2 <[<title> - ]>[ assets: <assets>, tech/tools: <code> ]<[: <extra>>]
-// R2 Editor Asset Editor - [ assets: devel, tech/tools: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.hrb
-static const tchar_t* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: %s ]" ); //project, title, assets, code, extra
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 

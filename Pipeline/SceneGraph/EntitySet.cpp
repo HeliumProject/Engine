@@ -96,7 +96,7 @@ void EntitySet::LoadAssetClass()
             else
             {
                 Path meshPath = m_Class->GetContentPath().GetAbsolutePath( m_Class->GetSourcePath() );
-                meshPath.ReplaceExtension( TXT( "mesh.hrb" ) );
+                meshPath.ReplaceExtension( TXT( "HeliumMesh" ) );
 
                 if ( meshPath.Exists() )
                 {

@@ -72,7 +72,7 @@ namespace Helium
             inline const Type* GetType( Name name ) const;
 
             // class lookup
-            inline const Class* GetClass( uint32_t crc ) const;
+            const Class* GetClass( uint32_t crc ) const;
             inline const Class* GetClass( Name name ) const;
 
             // enumeration lookup

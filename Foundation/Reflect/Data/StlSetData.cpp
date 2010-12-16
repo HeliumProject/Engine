@@ -264,14 +264,14 @@ tistream& SimpleStlSetData<DataT, DataClassT>::operator<< (tistream& stream)
     return stream;
 }  
 
-template SimpleStlSetData< tstring, StringData >;
+template SimpleStlSetData< tstring, StlStringData >;
 template SimpleStlSetData< uint32_t, UInt32Data >;
 template SimpleStlSetData< uint64_t, UInt64Data >;
 template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
-REFLECT_DEFINE_CLASS( StringStlSetData );
+REFLECT_DEFINE_CLASS( StlStringStlSetData );
 REFLECT_DEFINE_CLASS( UInt32StlSetData );
 REFLECT_DEFINE_CLASS( UInt64StlSetData );
 REFLECT_DEFINE_CLASS( GUIDStlSetData );

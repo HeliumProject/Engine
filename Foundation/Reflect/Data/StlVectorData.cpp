@@ -371,7 +371,7 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
 
 // keep reading the string until we run out of buffer
 template <>
-void StringStlVectorData::Serialize(Archive& archive) const
+void StlStringStlVectorData::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -420,7 +420,7 @@ void StringStlVectorData::Serialize(Archive& archive) const
 
 // must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StringStlVectorData::Deserialize(Archive& archive)
+void StlStringStlVectorData::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -548,18 +548,18 @@ template SimpleStlVectorData<Color4>;
 template SimpleStlVectorData<HDRColor3>;
 template SimpleStlVectorData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StringStlVectorData);
+REFLECT_DEFINE_CLASS(StlStringStlVectorData);
 REFLECT_DEFINE_CLASS(BoolStlVectorData);
-REFLECT_DEFINE_CLASS(U8StlVectorData);
-REFLECT_DEFINE_CLASS(I8StlVectorData);
-REFLECT_DEFINE_CLASS(U16StlVectorData);
-REFLECT_DEFINE_CLASS(I16StlVectorData);
+REFLECT_DEFINE_CLASS(UInt8StlVectorData);
+REFLECT_DEFINE_CLASS(Int8StlVectorData);
+REFLECT_DEFINE_CLASS(UInt16StlVectorData);
+REFLECT_DEFINE_CLASS(Int16StlVectorData);
 REFLECT_DEFINE_CLASS(UInt32StlVectorData);
-REFLECT_DEFINE_CLASS(I32StlVectorData);
+REFLECT_DEFINE_CLASS(Int32StlVectorData);
 REFLECT_DEFINE_CLASS(UInt64StlVectorData);
-REFLECT_DEFINE_CLASS(I64StlVectorData);
-REFLECT_DEFINE_CLASS(F32StlVectorData);
-REFLECT_DEFINE_CLASS(F64StlVectorData);
+REFLECT_DEFINE_CLASS(Int64StlVectorData);
+REFLECT_DEFINE_CLASS(Float32StlVectorData);
+REFLECT_DEFINE_CLASS(Float64StlVectorData);
 REFLECT_DEFINE_CLASS(GUIDStlVectorData);
 REFLECT_DEFINE_CLASS(TUIDStlVectorData);
 REFLECT_DEFINE_CLASS( PathStlVectorData );

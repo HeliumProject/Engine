@@ -51,7 +51,7 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream);
         };
 
-        typedef SimpleData<tstring> StringData;
+        typedef SimpleData<tstring> StlStringData;
         typedef SimpleData<bool> BoolData;
         typedef SimpleData<uint8_t> UInt8Data;
         typedef SimpleData<int8_t> Int8Data;

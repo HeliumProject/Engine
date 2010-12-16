@@ -138,7 +138,7 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
 // must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StringData::Serialize(Archive& archive) const
+void StlStringData::Serialize(Archive& archive) const
 {
     switch (archive.GetType())
     {
@@ -162,7 +162,7 @@ void StringData::Serialize(Archive& archive) const
 
 // keep reading the string until we run out of buffer
 template <>
-void StringData::Deserialize(Archive& archive)
+void StlStringData::Deserialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -187,7 +187,7 @@ void StringData::Deserialize(Archive& archive)
 }
 
 template<>
-tostream& StringData::operator>> (tostream& stream) const
+tostream& StlStringData::operator>> (tostream& stream) const
 {
     stream << m_Data.Get();
 
@@ -195,7 +195,7 @@ tostream& StringData::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& StringData::operator<< (tistream& stream)
+tistream& StlStringData::operator<< (tistream& stream)
 {
     std::streamsize size = stream.rdbuf()->in_avail();
     m_Data->resize( (size_t) size);
@@ -369,7 +369,7 @@ template SimpleData<HDRColor3>;
 template SimpleData<Color4>;
 template SimpleData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StringData);
+REFLECT_DEFINE_CLASS(StlStringData);
 REFLECT_DEFINE_CLASS(BoolData);
 REFLECT_DEFINE_CLASS(UInt8Data);
 REFLECT_DEFINE_CLASS(Int8Data);

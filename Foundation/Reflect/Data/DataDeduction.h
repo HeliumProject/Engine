@@ -37,7 +37,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathData );
 #include "Foundation/Reflect/Data/ContainerData.h"
 
 #include "Foundation/Reflect/Data/SimpleData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8Data );
@@ -62,18 +62,18 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4Data );
 
 #include "Foundation/Reflect/Data/StlVectorData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolStlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::U8StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::I8StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::U16StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::I16StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt16StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int16StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::I32StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::I64StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::F32StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::F64StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32StlVectorData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathStlVectorData );
@@ -88,7 +88,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4StlVectorData );
 
 #include "Foundation/Reflect/Data/StlSetData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStlSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32StlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDStlSetData );
@@ -96,10 +96,10 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDStlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathStlSetData );
 
 #include "Foundation/Reflect/Data/StlMapData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStringStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringBoolStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringUInt32StlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringInt32StlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlStringStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringBoolStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringUInt32StlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32StringStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32UInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32Int32StlMapData );
@@ -125,7 +125,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::ElementStlSetData );
 
 #include "Foundation/Reflect/Data/ElementStlMapData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringElementStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringElementStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ElementStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ElementStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ElementStlMapData );

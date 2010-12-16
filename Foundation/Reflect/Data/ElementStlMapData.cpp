@@ -284,7 +284,7 @@ template SimpleElementStlMapData<Helium::GUID>;
 template SimpleElementStlMapData<Helium::TUID>;
 
 REFLECT_DEFINE_CLASS(TypeIDElementStlMapData);
-REFLECT_DEFINE_CLASS(StringElementStlMapData);
+REFLECT_DEFINE_CLASS(StlStringElementStlMapData);
 REFLECT_DEFINE_CLASS(UInt32ElementStlMapData);
 REFLECT_DEFINE_CLASS(Int32ElementStlMapData);
 REFLECT_DEFINE_CLASS(UInt64ElementStlMapData);

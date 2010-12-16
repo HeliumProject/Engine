@@ -69,22 +69,22 @@ namespace Helium
             virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
         };
 
-        typedef SimpleStlMapData<tstring, StringData, tstring, StringData> StringStringStlMapData;
-        typedef SimpleStlMapData<tstring, StringData, bool, BoolData> StringBoolStlMapData;
-        typedef SimpleStlMapData<tstring, StringData, uint32_t, UInt32Data> StringUInt32StlMapData;
-        typedef SimpleStlMapData<tstring, StringData, int32_t, Int32Data> StringInt32StlMapData;
+        typedef SimpleStlMapData<tstring, StlStringData, tstring, StlStringData> StlStringStlStringStlMapData;
+        typedef SimpleStlMapData<tstring, StlStringData, bool, BoolData> StlStringBoolStlMapData;
+        typedef SimpleStlMapData<tstring, StlStringData, uint32_t, UInt32Data> StlStringUInt32StlMapData;
+        typedef SimpleStlMapData<tstring, StlStringData, int32_t, Int32Data> StlStringInt32StlMapData;
 
-        typedef SimpleStlMapData<uint32_t, UInt32Data, tstring, StringData> UInt32StringStlMapData;
+        typedef SimpleStlMapData<uint32_t, UInt32Data, tstring, StlStringData> UInt32StringStlMapData;
         typedef SimpleStlMapData<uint32_t, UInt32Data, uint32_t, UInt32Data> UInt32UInt32StlMapData;
         typedef SimpleStlMapData<uint32_t, UInt32Data, int32_t, Int32Data> UInt32Int32StlMapData;
         typedef SimpleStlMapData<uint32_t, UInt32Data, uint64_t, UInt64Data> UInt32UInt64StlMapData;
 
-        typedef SimpleStlMapData<int32_t, Int32Data, tstring, StringData> Int32StringStlMapData;
+        typedef SimpleStlMapData<int32_t, Int32Data, tstring, StlStringData> Int32StringStlMapData;
         typedef SimpleStlMapData<int32_t, Int32Data, uint32_t, UInt32Data> Int32UInt32StlMapData;
         typedef SimpleStlMapData<int32_t, Int32Data, int32_t, Int32Data> Int32Int32StlMapData;
         typedef SimpleStlMapData<int32_t, Int32Data, uint64_t, UInt64Data> Int32UInt64StlMapData;
 
-        typedef SimpleStlMapData<uint64_t, UInt64Data, tstring, StringData> UInt64StringStlMapData;
+        typedef SimpleStlMapData<uint64_t, UInt64Data, tstring, StlStringData> UInt64StringStlMapData;
         typedef SimpleStlMapData<uint64_t, UInt64Data, uint32_t, UInt32Data> UInt64UInt32StlMapData;
         typedef SimpleStlMapData<uint64_t, UInt64Data, uint64_t, UInt64Data> UInt64UInt64StlMapData;
         typedef SimpleStlMapData<uint64_t, UInt64Data, Matrix4, Matrix4Data> UInt64Matrix4StlMapData;

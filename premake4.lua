@@ -50,17 +50,14 @@ if _ACTION ~= "prebuild" then
 		end
 
 		if os.get() == "windows" then
-			if _OPTIONS["no-unicode"] then
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-			else
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\DebugUnicode\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\ReleaseUnicode\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\DebugUnicode\\Icons\" *.png")
-				os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\ReleaseUnicode\\Icons\" *.png")
-			end
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Intermediate\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Profile\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Intermediate\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Profile\\Icons\" *.png")
+			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
 		end
 
 		Helium.Prebuild()

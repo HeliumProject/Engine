@@ -217,7 +217,8 @@ Helium.DoDefaultLunarProjectSettings = function()
 		"NoRTTI",
 	}
 
-	configuration "SharedLib or *App"
+	--configuration "SharedLib or *App"
+	configuration "Debug"
 		links
 		{
 			"Expat",
@@ -268,7 +269,8 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"L_STATIC=1",
 		}
 
-	configuration { "windows", "SharedLib or *App" }
+	--configuration { "windows", "SharedLib or *App" }
+	configuration { "windows", "Debug" }
 		links
 		{
 			"d3d9",
@@ -279,32 +281,37 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"wininet",
 		}
 
-	configuration { "windows", "Debug", "SharedLib or *App" }
+	--configuration { "windows", "Debug", "SharedLib or *App" }
+	configuration { "windows", "Debug" }
 		links
 		{
 			"dbghelp",
 		}
 
-	configuration { "windows", "x32", "SharedLib or *App" }
+	--configuration { "windows", "x32", "SharedLib or *App" }
+	configuration { "windows", "x32", "Debug" }
 		links
 		{
 			"fbxsdk_20113_1",
 		}
 
-	configuration { "windows", "x64", "SharedLib or *App" }
+	--configuration { "windows", "x64", "SharedLib or *App" }
+	configuration { "windows", "x64", "Debug" }
 		links
 		{
 			"fbxsdk_20113_1_amd64",
 		}
 
 	if haveGranny then
-		configuration { "x32", "SharedLib or *App" }
+		--configuration { "x32", "SharedLib or *App" }
+		configuration { "x32", "Debug" }
 			links
 			{
 				"granny2",
 			}
 
-		configuration { "x64", "SharedLib or *App" }
+		--configuration { "x64", "SharedLib or *App" }
+		configuration { "x64", "Debug" }
 			links
 			{
 				"granny2_x64",

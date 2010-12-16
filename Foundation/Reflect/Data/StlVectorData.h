@@ -69,9 +69,9 @@ namespace Helium
         typedef SimpleStlVectorData<int8_t> I8StlVectorData;
         typedef SimpleStlVectorData<uint16_t> U16StlVectorData;
         typedef SimpleStlVectorData<int16_t> I16StlVectorData;
-        typedef SimpleStlVectorData<uint32_t> U32StlVectorData;
+        typedef SimpleStlVectorData<uint32_t> UInt32StlVectorData;
         typedef SimpleStlVectorData<int32_t> I32StlVectorData;
-        typedef SimpleStlVectorData<uint64_t> U64StlVectorData;
+        typedef SimpleStlVectorData<uint64_t> UInt64StlVectorData;
         typedef SimpleStlVectorData<int64_t> I64StlVectorData;
         typedef SimpleStlVectorData<float32_t> F32StlVectorData;
         typedef SimpleStlVectorData<float64_t> F64StlVectorData;

@@ -3,7 +3,6 @@
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
 
-
 namespace Helium
 {
     namespace ByteOrders
@@ -18,13 +17,9 @@ namespace Helium
     typedef ByteOrders::ByteOrder ByteOrder;
 
 #if HELIUM_ENDIAN_LITTLE
-    const ByteOrder PlatformByteOrder = ByteOrders::LittleEndian;
+    const static ByteOrder PlatformByteOrder = ByteOrders::LittleEndian;
 #else
-#  if HELIUM_ENDIAN_BIG
-    const ByteOrder PlatformByteOrder = ByteOrders::BigEndian;
-#  else
-#       error "Unknown byte order"
-#  endif
+    const static ByteOrder PlatformByteOrder = ByteOrders::BigEndian;
 #endif
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

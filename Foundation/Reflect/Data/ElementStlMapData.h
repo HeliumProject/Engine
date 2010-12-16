@@ -68,10 +68,10 @@ namespace Helium
 
         typedef SimpleElementStlMapData<TypeID> TypeIDElementStlMapData;
         typedef SimpleElementStlMapData<std::string> StringElementStlMapData;
-        typedef SimpleElementStlMapData<uint32_t> U32ElementStlMapData;
-        typedef SimpleElementStlMapData<int32_t> I32ElementStlMapData;
-        typedef SimpleElementStlMapData<uint64_t> U64ElementStlMapData;
-        typedef SimpleElementStlMapData<int64_t> I64ElementStlMapData;
+        typedef SimpleElementStlMapData<uint32_t> UInt32ElementStlMapData;
+        typedef SimpleElementStlMapData<int32_t> Int32ElementStlMapData;
+        typedef SimpleElementStlMapData<uint64_t> UInt64ElementStlMapData;
+        typedef SimpleElementStlMapData<int64_t> Int64ElementStlMapData;
         typedef SimpleElementStlMapData<Helium::GUID> GUIDElementStlMapData;
         typedef SimpleElementStlMapData<Helium::TUID> TUIDElementStlMapData;
     }

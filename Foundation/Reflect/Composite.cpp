@@ -23,7 +23,7 @@ Composite::~Composite()
 
 void Composite::Report() const
 {
-    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: `%s`\n" ), this, m_Size, *m_Name );
+    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, *m_Name, Crc32( *m_Name ) );
 
     uint32_t computedSize = 0;
     std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();

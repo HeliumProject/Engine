@@ -53,16 +53,16 @@ namespace Helium
 
         typedef SimpleData<tstring> StringData;
         typedef SimpleData<bool> BoolData;
-        typedef SimpleData<uint8_t> U8Data;
-        typedef SimpleData<int8_t> I8Data;
-        typedef SimpleData<uint16_t> U16Data;
-        typedef SimpleData<int16_t> I16Data;
-        typedef SimpleData<uint32_t> U32Data;
-        typedef SimpleData<int32_t> I32Data;
-        typedef SimpleData<uint64_t> U64Data;
-        typedef SimpleData<int64_t> I64Data;
-        typedef SimpleData<float32_t> F32Data;
-        typedef SimpleData<float64_t> F64Data;
+        typedef SimpleData<uint8_t> UInt8Data;
+        typedef SimpleData<int8_t> Int8Data;
+        typedef SimpleData<uint16_t> UInt16Data;
+        typedef SimpleData<int16_t> Int16Data;
+        typedef SimpleData<uint32_t> UInt32Data;
+        typedef SimpleData<int32_t> Int32Data;
+        typedef SimpleData<uint64_t> UInt64Data;
+        typedef SimpleData<int64_t> Int64Data;
+        typedef SimpleData<float32_t> Float32Data;
+        typedef SimpleData<float64_t> Float64Data;
         typedef SimpleData<Helium::GUID> GUIDData;
         typedef SimpleData<Helium::TUID> TUIDData;
 

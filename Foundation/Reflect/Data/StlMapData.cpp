@@ -440,50 +440,50 @@ tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<< (ti
 
 template SimpleStlMapData<tstring, StringData, tstring, StringData>;
 template SimpleStlMapData<tstring, StringData, bool, BoolData>;
-template SimpleStlMapData<tstring, StringData, uint32_t, U32Data>;
-template SimpleStlMapData<tstring, StringData, int32_t, I32Data>;
+template SimpleStlMapData<tstring, StringData, uint32_t, UInt32Data>;
+template SimpleStlMapData<tstring, StringData, int32_t, Int32Data>;
 
-template SimpleStlMapData<uint32_t, U32Data, tstring, StringData>;
-template SimpleStlMapData<uint32_t, U32Data, uint32_t, U32Data>;
-template SimpleStlMapData<uint32_t, U32Data, int32_t, I32Data>;
-template SimpleStlMapData<uint32_t, U32Data, uint64_t, U64Data>;
+template SimpleStlMapData<uint32_t, UInt32Data, tstring, StringData>;
+template SimpleStlMapData<uint32_t, UInt32Data, uint32_t, UInt32Data>;
+template SimpleStlMapData<uint32_t, UInt32Data, int32_t, Int32Data>;
+template SimpleStlMapData<uint32_t, UInt32Data, uint64_t, UInt64Data>;
 
-template SimpleStlMapData<int32_t, I32Data, tstring, StringData>;
-template SimpleStlMapData<int32_t, I32Data, uint32_t, U32Data>;
-template SimpleStlMapData<int32_t, I32Data, int32_t, I32Data>;
-template SimpleStlMapData<int32_t, I32Data, uint64_t, U64Data>;
+template SimpleStlMapData<int32_t, Int32Data, tstring, StringData>;
+template SimpleStlMapData<int32_t, Int32Data, uint32_t, UInt32Data>;
+template SimpleStlMapData<int32_t, Int32Data, int32_t, Int32Data>;
+template SimpleStlMapData<int32_t, Int32Data, uint64_t, UInt64Data>;
 
-template SimpleStlMapData<uint64_t, U64Data, tstring, StringData>;
-template SimpleStlMapData<uint64_t, U64Data, uint32_t, U32Data>;
-template SimpleStlMapData<uint64_t, U64Data, uint64_t, U64Data>;
-template SimpleStlMapData<uint64_t, U64Data, Matrix4, Matrix4Data>;
+template SimpleStlMapData<uint64_t, UInt64Data, tstring, StringData>;
+template SimpleStlMapData<uint64_t, UInt64Data, uint32_t, UInt32Data>;
+template SimpleStlMapData<uint64_t, UInt64Data, uint64_t, UInt64Data>;
+template SimpleStlMapData<uint64_t, UInt64Data, Matrix4, Matrix4Data>;
 
-template SimpleStlMapData<Helium::GUID, GUIDData, uint32_t, U32Data>;
+template SimpleStlMapData<Helium::GUID, GUIDData, uint32_t, UInt32Data>;
 template SimpleStlMapData<Helium::GUID, GUIDData, Matrix4, Matrix4Data>;
-template SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, U32Data>;
+template SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, UInt32Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, Matrix4, Matrix4Data>;
 
 REFLECT_DEFINE_CLASS(StringStringStlMapData);
 REFLECT_DEFINE_CLASS(StringBoolStlMapData);
-REFLECT_DEFINE_CLASS(StringU32StlMapData);
-REFLECT_DEFINE_CLASS(StringI32StlMapData);
+REFLECT_DEFINE_CLASS(StringUInt32StlMapData);
+REFLECT_DEFINE_CLASS(StringInt32StlMapData);
 
-REFLECT_DEFINE_CLASS(U32StringStlMapData);
-REFLECT_DEFINE_CLASS(U32U32StlMapData);
-REFLECT_DEFINE_CLASS(U32I32StlMapData);
-REFLECT_DEFINE_CLASS(U32U64StlMapData);
+REFLECT_DEFINE_CLASS(UInt32StringStlMapData);
+REFLECT_DEFINE_CLASS(UInt32UInt32StlMapData);
+REFLECT_DEFINE_CLASS(UInt32Int32StlMapData);
+REFLECT_DEFINE_CLASS(UInt32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(I32StringStlMapData);
-REFLECT_DEFINE_CLASS(I32U32StlMapData);
-REFLECT_DEFINE_CLASS(I32I32StlMapData);
-REFLECT_DEFINE_CLASS(I32U64StlMapData);
+REFLECT_DEFINE_CLASS(Int32StringStlMapData);
+REFLECT_DEFINE_CLASS(Int32UInt32StlMapData);
+REFLECT_DEFINE_CLASS(Int32Int32StlMapData);
+REFLECT_DEFINE_CLASS(Int32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(U64StringStlMapData);
-REFLECT_DEFINE_CLASS(U64U32StlMapData);
-REFLECT_DEFINE_CLASS(U64U64StlMapData);
-REFLECT_DEFINE_CLASS(U64Matrix4StlMapData);
+REFLECT_DEFINE_CLASS(UInt64StringStlMapData);
+REFLECT_DEFINE_CLASS(UInt64UInt32StlMapData);
+REFLECT_DEFINE_CLASS(UInt64UInt64StlMapData);
+REFLECT_DEFINE_CLASS(UInt64Matrix4StlMapData);
 
-REFLECT_DEFINE_CLASS(GUIDU32StlMapData);
+REFLECT_DEFINE_CLASS(GUIDUInt32StlMapData);
 REFLECT_DEFINE_CLASS(GUIDMatrix4StlMapData);
-REFLECT_DEFINE_CLASS(TUIDU32StlMapData);
+REFLECT_DEFINE_CLASS(TUIDUInt32StlMapData);
 REFLECT_DEFINE_CLASS(TUIDMatrix4StlMapData);

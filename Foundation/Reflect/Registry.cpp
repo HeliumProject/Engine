@@ -103,16 +103,16 @@ void Reflect::Initialize()
         // SimpleData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringData>( TXT( "String" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BoolData>( TXT( "Bool" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U8Data>( TXT( "U8" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I8Data>( TXT( "I8" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U16Data>( TXT( "U16" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I16Data>( TXT( "I16" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32Data>( TXT( "U32" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32Data>( TXT( "I32" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64Data>( TXT( "U64" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64Data>( TXT( "I64" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32Data>( TXT( "F32" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F64Data>( TXT( "F64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt8Data>( TXT( "U8" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int8Data>( TXT( "I8" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt16Data>( TXT( "U16" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int16Data>( TXT( "I16" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32Data>( TXT( "U32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32Data>( TXT( "I32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64Data>( TXT( "U64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64Data>( TXT( "I64" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Float32Data>( TXT( "F32" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Float64Data>( TXT( "F64" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDData>( TXT( "GUID" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDData>( TXT( "TUID" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector2Data>( TXT( "Vector2" ) ) );
@@ -133,9 +133,9 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I8StlVectorData>( TXT( "I8StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U16StlVectorData>( TXT( "U16StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I16StlVectorData>( TXT( "I16StlVector" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32StlVectorData>( TXT( "U32StlVector" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32StlVectorData>( TXT( "UInt32StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32StlVectorData>( TXT( "I32StlVector" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64StlVectorData>( TXT( "U64StlVector" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64StlVectorData>( TXT( "UInt64StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64StlVectorData>( TXT( "I64StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32StlVectorData>( TXT( "F32StlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F64StlVectorData>( TXT( "F64StlVector" ) ) );
@@ -154,35 +154,34 @@ void Reflect::Initialize()
 
         // StlSetData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlSetData>( TXT( "StlSet" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStlSetData>( TXT( "StrStlSet" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32StlSetData>( TXT( "U32StlSet" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64StlSetData>( TXT( "U64StlSet" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<F32StlSetData>( TXT( "F32StlSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStlSetData>( TXT( "StringStlSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32StlSetData>( TXT( "UInt32StlSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64StlSetData>( TXT( "UInt64StlSet" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDStlSetData>( TXT( "GUIDStlSet" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDStlSetData>( TXT( "TUIDStlSet" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType< PathStlSetData>( TXT( "PathStlSet" ) ) );
 
         // StlMapData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlMapData>( TXT( "StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStringStlMapData>( TXT( "StrStrStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringBoolStlMapData>( TXT( "StrBoolStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringU32StlMapData>( TXT( "StrU32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringI32StlMapData>( TXT( "StrI32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32StringStlMapData>( TXT( "U32StrStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32U32StlMapData>( TXT( "U32U32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32I32StlMapData>( TXT( "U32I32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32U64StlMapData>( TXT( "U32U64StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32StringStlMapData>( TXT( "I32StrStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32U32StlMapData>( TXT( "I32U32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32I32StlMapData>( TXT( "I32I32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32U64StlMapData>( TXT( "I32U64StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64StringStlMapData>( TXT( "U64StrStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64U32StlMapData>( TXT( "U64U32StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64U64StlMapData>( TXT( "U64U64StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64Matrix4StlMapData>( TXT( "U64Matrix4StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDU32StlMapData>( TXT( "GUIDU32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStringStlMapData>( TXT( "StringStringStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringBoolStlMapData>( TXT( "StringBoolStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringUInt32StlMapData>( TXT( "StringUInt32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringInt32StlMapData>( TXT( "StringInt32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32StringStlMapData>( TXT( "UInt32StringStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32UInt32StlMapData>( TXT( "UInt32UInt32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32Int32StlMapData>( TXT( "UInt32Int32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32UInt64StlMapData>( TXT( "UInt32UInt64StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32StringStlMapData>( TXT( "Int32StringStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32UInt32StlMapData>( TXT( "Int32UInt32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32Int32StlMapData>( TXT( "Int32Int32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32UInt64StlMapData>( TXT( "Int32UInt64StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64StringStlMapData>( TXT( "UInt64StringStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64UInt32StlMapData>( TXT( "UInt64UInt32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64UInt64StlMapData>( TXT( "UInt64UInt64StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64Matrix4StlMapData>( TXT( "UInt64Matrix4StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDUInt32StlMapData>( TXT( "GUIDUInt32StlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDMatrix4StlMapData>( TXT( "GUIDMatrix4StlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDU32StlMapData>( TXT( "TUIDU32StlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDUInt32StlMapData>( TXT( "TUIDUInt32StlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDMatrix4StlMapData>( TXT( "TUIDMatrix4StlMap" ) ) );
 
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementStlVectorData>( TXT( "ElementStlVector" ) ) );
@@ -190,10 +189,10 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementStlMapData>( TXT( "ElementStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDElementStlMapData>( TXT( "TypeIDElementStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringElementStlMapData>( TXT( "StringElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U32ElementStlMapData>( TXT( "U32ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I32ElementStlMapData>( TXT( "I32ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<U64ElementStlMapData>( TXT( "U64ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<I64ElementStlMapData>( TXT( "I64ElementStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ElementStlMapData>( TXT( "UInt32ElementStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32ElementStlMapData>( TXT( "Int32ElementStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64ElementStlMapData>( TXT( "UInt64ElementStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ElementStlMapData>( TXT( "Int64ElementStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDElementStlMapData>( TXT( "GUIDElementStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDElementStlMapData>( TXT( "TUIDElementStlMap" ) ) );
 

@@ -71,27 +71,27 @@ namespace Helium
 
         typedef SimpleStlMapData<tstring, StringData, tstring, StringData> StringStringStlMapData;
         typedef SimpleStlMapData<tstring, StringData, bool, BoolData> StringBoolStlMapData;
-        typedef SimpleStlMapData<tstring, StringData, uint32_t, U32Data> StringU32StlMapData;
-        typedef SimpleStlMapData<tstring, StringData, int32_t, I32Data> StringI32StlMapData;
+        typedef SimpleStlMapData<tstring, StringData, uint32_t, UInt32Data> StringUInt32StlMapData;
+        typedef SimpleStlMapData<tstring, StringData, int32_t, Int32Data> StringInt32StlMapData;
 
-        typedef SimpleStlMapData<uint32_t, U32Data, tstring, StringData> U32StringStlMapData;
-        typedef SimpleStlMapData<uint32_t, U32Data, uint32_t, U32Data> U32U32StlMapData;
-        typedef SimpleStlMapData<uint32_t, U32Data, int32_t, I32Data> U32I32StlMapData;
-        typedef SimpleStlMapData<uint32_t, U32Data, uint64_t, U64Data> U32U64StlMapData;
+        typedef SimpleStlMapData<uint32_t, UInt32Data, tstring, StringData> UInt32StringStlMapData;
+        typedef SimpleStlMapData<uint32_t, UInt32Data, uint32_t, UInt32Data> UInt32UInt32StlMapData;
+        typedef SimpleStlMapData<uint32_t, UInt32Data, int32_t, Int32Data> UInt32Int32StlMapData;
+        typedef SimpleStlMapData<uint32_t, UInt32Data, uint64_t, UInt64Data> UInt32UInt64StlMapData;
 
-        typedef SimpleStlMapData<int32_t, I32Data, tstring, StringData> I32StringStlMapData;
-        typedef SimpleStlMapData<int32_t, I32Data, uint32_t, U32Data> I32U32StlMapData;
-        typedef SimpleStlMapData<int32_t, I32Data, int32_t, I32Data> I32I32StlMapData;
-        typedef SimpleStlMapData<int32_t, I32Data, uint64_t, U64Data> I32U64StlMapData;
+        typedef SimpleStlMapData<int32_t, Int32Data, tstring, StringData> Int32StringStlMapData;
+        typedef SimpleStlMapData<int32_t, Int32Data, uint32_t, UInt32Data> Int32UInt32StlMapData;
+        typedef SimpleStlMapData<int32_t, Int32Data, int32_t, Int32Data> Int32Int32StlMapData;
+        typedef SimpleStlMapData<int32_t, Int32Data, uint64_t, UInt64Data> Int32UInt64StlMapData;
 
-        typedef SimpleStlMapData<uint64_t, U64Data, tstring, StringData> U64StringStlMapData;
-        typedef SimpleStlMapData<uint64_t, U64Data, uint32_t, U32Data> U64U32StlMapData;
-        typedef SimpleStlMapData<uint64_t, U64Data, uint64_t, U64Data> U64U64StlMapData;
-        typedef SimpleStlMapData<uint64_t, U64Data, Matrix4, Matrix4Data> U64Matrix4StlMapData;
+        typedef SimpleStlMapData<uint64_t, UInt64Data, tstring, StringData> UInt64StringStlMapData;
+        typedef SimpleStlMapData<uint64_t, UInt64Data, uint32_t, UInt32Data> UInt64UInt32StlMapData;
+        typedef SimpleStlMapData<uint64_t, UInt64Data, uint64_t, UInt64Data> UInt64UInt64StlMapData;
+        typedef SimpleStlMapData<uint64_t, UInt64Data, Matrix4, Matrix4Data> UInt64Matrix4StlMapData;
 
-        typedef SimpleStlMapData<Helium::GUID, GUIDData, uint32_t, U32Data> GUIDU32StlMapData;
+        typedef SimpleStlMapData<Helium::GUID, GUIDData, uint32_t, UInt32Data> GUIDUInt32StlMapData;
         typedef SimpleStlMapData<Helium::GUID, GUIDData, Matrix4, Matrix4Data> GUIDMatrix4StlMapData;
-        typedef SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, U32Data> TUIDU32StlMapData;
+        typedef SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, UInt32Data> TUIDUInt32StlMapData;
         typedef SimpleStlMapData<Helium::TUID, TUIDData, Matrix4, Matrix4Data> TUIDMatrix4StlMapData;
     }
 }

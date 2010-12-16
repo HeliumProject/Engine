@@ -63,7 +63,8 @@ void ArchiveBinary::Open( bool write )
     Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
-    Reflect::CharStreamPtr stream = new CharFileStream( m_Path, write, m_ByteOrder ); 
+    Reflect::CharStreamPtr stream = new CharFileStream( m_Path, write ); 
+    stream->SetByteOrder( m_ByteOrder );
     OpenStream( stream, write );
 }
 
@@ -74,9 +75,6 @@ void ArchiveBinary::OpenStream( CharStream* stream, bool write )
 
     // open the stream, this is "our interface" 
     stream->Open(); 
-
-    // Set precision
-    stream->SetPrecision(32);
 
     // Setup stream
     m_Stream = stream; 
@@ -136,16 +134,18 @@ void ArchiveBinary::Read()
     default:
         throw Helium::Exception( TXT( "Unknown byte order read from file: %s" ), m_Path.c_str() );
     }
+    m_Stream->SetByteOrder( byteOrder );
 
     // read character encoding
-    CharacterEncoding encoding = CharacterEncodings::ASCII;
+    CharacterEncoding characterEncoding = CharacterEncodings::ASCII;
     uint8_t encodingByte;
     m_Stream->Read(&encodingByte);
-    encoding = (CharacterEncoding)encodingByte;
-    if ( encoding != CharacterEncodings::ASCII && encoding != CharacterEncodings::UTF_16 )
+    characterEncoding = (CharacterEncoding)encodingByte;
+    if ( characterEncoding != CharacterEncodings::ASCII && characterEncoding != CharacterEncodings::UTF_16 )
     {
-        throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), encoding); 
+        throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), characterEncoding ); 
     }
+    m_Stream->SetCharacterEncoding( characterEncoding );
 
     // read version
     m_Stream->Read(&m_Version);
@@ -331,7 +331,6 @@ void ArchiveBinary::Write()
         m_Stream->SeekWrite(crc_offset, std::ios_base::beg);
         HELIUM_ASSERT(!m_Stream->Fail());
         m_Stream->Write(&crc); 
-
     }
 
     // do cleanup
@@ -348,11 +347,11 @@ void ArchiveBinary::Write()
 
 void ArchiveBinary::Serialize(const ElementPtr& element)
 {
-    // use the string pool index for this type's name
+    // write the crc of the class of object (used to factory allocate an instance when reading)
     uint32_t classCrc = Helium::Crc32( *element->GetClass()->m_Name );
     m_Stream->Write(&classCrc); 
 
-    // get and stub out the start offset where we are now (will become length after writing is done)
+    // stub out the length we are about to write
     uint32_t start_offset = (uint32_t)m_Stream->TellWrite();
     m_Stream->Write(&start_offset); 
 
@@ -379,38 +378,28 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
         data.m_Count = 0;
         data.m_CountOffset = m_Stream->TellWrite();
         m_FieldStack.push(data);
+        {
+            // stub out the number of fields we are about to write
+            m_Stream->Write(&m_FieldStack.top().m_Count);
 
-        // write some placeholder info
-        m_Stream->Write(&m_FieldStack.top().m_Count);
+            // serialize each field of the element
+            SerializeFields(element);
 
-        SerializeFields(element);
-
-        // write our terminator
-        const static int32_t terminator = -1;
-        m_Stream->Write(&terminator); 
-
-        // seek back and write our count
-        HELIUM_ASSERT(m_FieldStack.size() > 0);
-        m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
-        m_Stream->Write(&m_FieldStack.top().m_Count); 
+            // seek back and write our count
+            m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
+            m_Stream->Write(&m_FieldStack.top().m_Count); 
+        }
         m_FieldStack.pop();
-
-        // seek back to end
-        m_Stream->SeekWrite(0, std::ios_base::end);
     }
 
     element->PostSerialize();
 
-    // save our end offset to substract the start from
-    uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
-
-    // seek back to the start offset
-    m_Stream->SeekWrite(start_offset, std::ios_base::beg);
-
     // compute amound written
+    uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
     uint32_t length = end_offset - start_offset;
 
-    // write written amount at start offset
+    // seek back and write written amount at start offset
+    m_Stream->SeekWrite(start_offset, std::ios_base::beg);
     m_Stream->Write(&length); 
 
     // seek back to the end of the stream
@@ -457,7 +446,7 @@ void ArchiveBinary::Serialize(const std::vector< ElementPtr >& elements, uint32_
     m_Indent.Pop();
 #endif
 
-    const static int32_t terminator = -1;
+    const int32_t terminator = -1;
     m_Stream->Write(&terminator); 
 }
 
@@ -485,7 +474,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             // don't write no write fields
             if ( field->m_Flags & FieldFlags::Discard )
             {
-                return;
+                continue;
             }
 
             // construct serialization object
@@ -560,6 +549,9 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             data->Disconnect();
         }
     }
+
+    const int32_t terminator = -1;
+    m_Stream->Write(&terminator); 
 }
 
 ElementPtr ArchiveBinary::Allocate()

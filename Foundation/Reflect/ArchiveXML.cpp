@@ -64,7 +64,7 @@ void ArchiveXML::Open( bool write )
     Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
-    Reflect::TCharStreamPtr stream = new TCharFileStream( m_Path, write, m_ByteOrder );
+    Reflect::TCharStreamPtr stream = new TCharFileStream( m_Path, write );
     OpenStream( stream, write );
 }
 

@@ -443,6 +443,58 @@ void MainFrame::CloseProject()
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Returns a different name each time this function is called so that scenes
+// can be uniquely named.
+// 
+static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< Path >& paths, Helium::Path& name )
+{
+    int32_t number = 0;
+
+    do
+    {
+        tostringstream strm;
+        strm << root;
+        // number will have a value of 1 on first run     
+        if ( ++number > 1 )
+        {
+            strm << TXT( "(" ) << number << TXT( ")" );
+        }
+        strm << extension;
+        name.Set( strm.str() );
+    }
+    while ( paths.find( name ) != paths.end() );
+}
+
+Path MainFrame::NewSceneDialog()
+{
+    Path path;
+    GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->Paths(), path );
+
+    FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, path.c_str(), TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
+
+    if ( newSceneDialog.ShowModal() != wxID_OK )
+    {
+        path.Set( TXT( "" ) );
+    }
+    else
+    {
+        path.Set( tstring( newSceneDialog.GetPath().c_str() ) );
+
+        // the newSceneDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
+        if ( path.Exists() )
+        {
+            if ( !path.Delete() )
+            {
+                wxMessageBox( wxT( "Could not remove the existing scene: FIXME -- add an error" ), wxT( "Error Removing Exising Scene" ), wxOK );
+                path.Set( TXT( "" ) );
+            }
+        }
+    }
+
+    return path;
+}
+
 void MainFrame::NewProjectDialog()
 {
     FileDialog newProjectDialog( this, TXT( "Select New Project Location" ), wxEmptyString, TXT( "New Project" ), TXT( "Project File (*.HeliumProject)|*.HeliumProject|All Files (*)|*" ), FileDialogStyles::DefaultSave );
@@ -533,6 +585,15 @@ void MainFrame::OpenScene( const Path& path )
 
 void MainFrame::CloseAllScenes()
 {
+    tstring error;
+    m_SceneManager.SaveAllScenes( error );
+
+    if ( !error.empty() )
+    {
+        wxMessageBox( error.c_str(), wxT( "Error Saving Scenes" ), wxOK );
+        return;
+    }
+
     m_SceneManager.RemoveAllScenes();
 }
 
@@ -884,34 +945,18 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Returns a different name each time this function is called so that scenes
-// can be uniquely named.
-// 
-static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< Path >& paths, Helium::Path& name )
-{
-    int32_t number = 0;
-
-    do
-    {
-        tostringstream strm;
-        strm << root;
-        // number will have a value of 1 on first run     
-        if ( ++number > 1 )
-        {
-            strm << TXT( "(" ) << number << TXT( ")" );
-        }
-        strm << extension;
-        name.Set( strm.str() );
-    }
-    while ( paths.find( name ) != paths.end() );
-}
-
 void MainFrame::OnNewScene( wxCommandEvent& event )
 {
     HELIUM_ASSERT( m_Project );
 
     m_PropertiesPanel->GetPropertiesManager().SyncThreads();
+
+    Path path = NewSceneDialog();
+
+    if ( path.empty() )
+    {
+        return;
+    }
 
     ScenePtr currentScene = m_SceneManager.GetCurrentScene();
     if ( currentScene.ReferencesObject() )
@@ -919,9 +964,6 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
         currentScene->d_ResolveScene.Clear();
         currentScene->d_ReleaseScene.Clear();
     }
-
-    Helium::Path path;
-    GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->Paths(), path );
 
     // Add to the project before opening it
     m_Project->AddPath( path );
@@ -935,6 +977,8 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
     ScenePtr scene = m_SceneManager.NewScene( &m_ViewPanel->GetViewCanvas()->GetViewport(), document );
     HELIUM_ASSERT( scene.ReferencesObject() );
+
+    scene->Serialize();
 
     scene->d_ResolveScene.Set( ResolveSceneSignature::Delegate( this, &MainFrame::AllocateNestedScene ) );
     scene->d_ReleaseScene.Set( ReleaseSceneSignature::Delegate( this, &MainFrame::ReleaseNestedScene ) );

@@ -64,6 +64,8 @@ namespace Helium
             void OpenProject( const Helium::Path& path );
             void CloseProject();
 
+            Path NewSceneDialog();
+
             void NewProjectDialog();
             void OpenProjectDialog();
 

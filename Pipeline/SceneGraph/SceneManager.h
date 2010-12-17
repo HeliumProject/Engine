@@ -76,6 +76,7 @@ namespace Helium
             SceneGraph::Scene* GetScene( const Document* document ) const;
             SceneGraph::Scene* GetScene( const tstring& path ) const;
             const M_SceneSmartPtr& GetScenes() const;
+            void SaveAllScenes( tstring& error );
             void RemoveScene( SceneGraph::Scene* scene );
             void RemoveAllScenes();
 

@@ -118,6 +118,29 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
     return m_Scenes;
 }
 
+void SceneManager::SaveAllScenes( tstring& error )
+{
+    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+    for ( ; sceneItr != sceneEnd; ++sceneItr )
+    {
+        SceneGraph::Scene* scene = sceneItr->second;
+
+        M_SceneToDocumentTable::iterator findDocument = m_SceneToDocumentTable.find( scene );
+        if ( findDocument != m_SceneToDocumentTable.end() )
+        {
+            Document* document = findDocument->second;
+            tstring saveError;
+            document->Save( saveError );
+
+            if ( !saveError.empty() )
+            {
+                error += saveError;
+            }
+        }
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Removes a scene from this manager
 // 

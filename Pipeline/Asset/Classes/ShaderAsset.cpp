@@ -13,7 +13,6 @@ REFLECT_DEFINE_CLASS( ShaderAsset );
 
 void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
 {
-    comp.GetComposite().m_UIName = TXT( "Shader" );
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
     comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath" );

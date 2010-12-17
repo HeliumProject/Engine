@@ -67,7 +67,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         interpreter->Interpret( elems );
         m_Interpreters.push_back( interpreter );
 
-        int index = propertiesListBox->Append( (*itr).second->GetTitle() );
+        int index = propertiesListBox->Append( *(*itr).second->GetClass()->m_Name );
         m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr).second, clone, canvas ) ) );
     }
 

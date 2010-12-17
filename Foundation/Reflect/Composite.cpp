@@ -336,7 +336,7 @@ void Composite::Copy( const Element* src, Element* dest )
 {
     if ( src == dest )
     {
-        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), src->GetClass()->m_UIName.c_str() );
+        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), *src->GetClass()->m_Name );
     }
 
     // 
@@ -371,7 +371,7 @@ void Composite::Copy( const Element* src, Element* dest )
         {
             // This should be impossible... at the very least, Element is a common base class for both pointers.
             // This exeception means there's a bug in this function.
-            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), srcType->m_UIName.c_str(), destType->m_UIName.c_str() );
+            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), *srcType->m_Name, *destType->m_Name );
         }
     }
 

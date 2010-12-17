@@ -326,7 +326,9 @@ bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, t
 {
     if ( component->GetComponentUsage() == Component::ComponentUsages::Instance )
     {
-        error = TXT( "The " ) + component->GetClass()->m_UIName + TXT( " component can only be added to an instance of an asset." );
+        error = TXT( "The " );
+        error += *component->GetClass()->m_Name;
+        error += TXT( " component can only be added to an instance of an asset." );
         return false;
     }
 

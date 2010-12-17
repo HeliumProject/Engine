@@ -8,7 +8,6 @@ REFLECT_DEFINE_CLASS( AnimationClip );
 
 void AnimationClip::EnumerateClass( Reflect::Compositor< AnimationClip >& comp )
 {
-    comp.GetComposite().m_UIName = TXT( "Animation Clip" );
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.fbx;" );
 
     comp.AddField( &AnimationClip::m_Compressed, "m_Compressed" );

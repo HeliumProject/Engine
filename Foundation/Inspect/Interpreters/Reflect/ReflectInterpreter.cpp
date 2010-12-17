@@ -63,30 +63,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
     if (labelText.empty())
     {
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
-        for ( ; itr != end; ++itr )
-        {
-            Reflect::Element* instance = *itr;
-
-            if ( labelText.empty() )
-            {
-                labelText = instance->GetTitle();
-            }
-            else
-            {
-                if ( labelText != instance->GetTitle() )
-                {
-                    labelText.clear();
-                    break;
-                }
-            }
-        }
-
-        if ( labelText.empty() )
-        {
-            labelText = composite->m_UIName;
-        }
+        labelText = *composite->m_Name;
     }
 
     container->a_Name.Set( labelText );

@@ -22,11 +22,6 @@ void Element::EnumerateClass( Reflect::Compositor<Element>& comp )
 
 }
 
-const tstring& Element::GetTitle() const
-{
-    return GetClass()->m_UIName;
-}
-
 bool Element::IsCompact() const
 {
     return false;

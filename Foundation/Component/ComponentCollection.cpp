@@ -193,7 +193,7 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
     {
-        error = tstring( TXT( "The component '" ) )+ component->GetClass()->m_UIName + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
+        error = tstring( TXT( "The component '" ) )+ *component->GetClass()->m_Name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
         return false;
     }
 
@@ -224,7 +224,10 @@ bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tst
 
     if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
     {
-        error = component->GetClass()->m_UIName + TXT( " cannot be added to a(n) " ) + GetClass()->m_UIName + TXT( " because it is an exclusive component." );
+        error = *component->GetClass()->m_Name;
+        error += TXT( " cannot be added to a(n) " );
+        error += *GetClass()->m_Name;
+        error += TXT( " because it is an exclusive component." );
         return false;
     }
 

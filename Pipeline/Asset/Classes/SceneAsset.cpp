@@ -12,7 +12,6 @@ REFLECT_DEFINE_CLASS( SceneAsset );
 
 void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
 {
-  comp.GetComposite().m_UIName = TXT( "Scene" );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A Scene locates objects in space." );
   comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.level.*" );
 

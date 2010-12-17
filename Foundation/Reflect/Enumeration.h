@@ -63,7 +63,6 @@ namespace Helium
 
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
-                info->m_UIName = *info->m_Name;
 
                 T::EnumerateEnum( *info );
 

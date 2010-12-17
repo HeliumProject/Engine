@@ -40,7 +40,6 @@ namespace Helium
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
                 info->m_Creator = creator;
-                info->m_UIName = *info->m_Name;
 
                 // lookup base class
                 info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );

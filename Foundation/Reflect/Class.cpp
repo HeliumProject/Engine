@@ -16,7 +16,6 @@ Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creat
 
     info->m_Size = sizeof( Object );
     info->m_Name = name;
-    info->m_UIName = *info->m_Name;
 
     // object should have no creator
     HELIUM_ASSERT( creator == NULL );

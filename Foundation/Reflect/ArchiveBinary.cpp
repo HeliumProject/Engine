@@ -574,8 +574,11 @@ ElementPtr ArchiveBinary::Allocate()
     }
     else
     {
-        // allocate instance by name
-        m_Cache.Create( type, element );
+        if (type)
+        {
+            // allocate instance by name
+            m_Cache.Create( type, element );
+        }
 
         // if we failed
         if (!element.ReferencesObject())
@@ -586,7 +589,7 @@ ElementPtr ArchiveBinary::Allocate()
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
             //  2 - a type was not found because its type library is not registered
-            Log::Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), *type->m_Name, length);
+            Log::Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), type ? *type->m_Name : TXT("Unknown"), length);
 #pragma TODO("Support blind data")
         }
     }

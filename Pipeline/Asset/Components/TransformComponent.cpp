@@ -7,11 +7,9 @@ REFLECT_DEFINE_CLASS( TransformComponent );
 
 void TransformComponent::EnumerateClass( Reflect::Compositor< TransformComponent >& comp )
 {
-  comp.GetComposite().m_UIName = TXT( "Transform" );
-
-  Reflect::Field* fieldTranslation = comp.AddField( &TransformComponent::m_Translation, "m_Translation" );
-  Reflect::Field* fieldRotation = comp.AddField( &TransformComponent::m_Rotation, "m_Rotation" );
-  Reflect::Field* fieldScale = comp.AddField( &TransformComponent::m_Scale, "m_Scale" );
+    Reflect::Field* fieldTranslation = comp.AddField( &TransformComponent::m_Translation, "m_Translation" );
+    Reflect::Field* fieldRotation = comp.AddField( &TransformComponent::m_Rotation, "m_Rotation" );
+    Reflect::Field* fieldScale = comp.AddField( &TransformComponent::m_Scale, "m_Scale" );
 }
 
 Component::ComponentUsage TransformComponent::GetComponentUsage() const

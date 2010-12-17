@@ -7,8 +7,6 @@ REFLECT_DEFINE_CLASS( ColorComponent );
 
 void ColorComponent::EnumerateClass( Reflect::Compositor< ColorComponent >& comp )
 {
-    comp.GetComposite().m_UIName = TXT( "Color" );
-
     comp.AddField( &ColorComponent::m_ColorHDR, "m_ColorHDR" );
 
     comp.AddField( &ColorComponent::m_Alpha, "m_Alpha" );

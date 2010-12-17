@@ -66,7 +66,7 @@ void SceneNode::SetID( const TUID& id )
 
 tstring SceneNode::GenerateName() const
 {
-    tstring name = GetClass()->m_UIName;
+    tstring name = *GetClass()->m_Name;
     name[0] = tolower( name[0] );
     name += TXT( "1" );
     return name;
@@ -375,7 +375,7 @@ int32_t SceneNode::GetImageIndex() const
 
 tstring SceneNode::GetApplicationTypeName() const
 {
-    return GetClass()->m_UIName;
+    return *GetClass()->m_Name;
 }
 
 SceneNodeTypePtr SceneNode::CreateNodeType( SceneGraph::Scene* scene ) const

@@ -359,6 +359,12 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
     if ( !m_Project )
     {
+        Path path( args.m_Path );
+        if ( !path.HasExtension( TXT( "HeliumProject" ) ) )
+        {
+            args.m_DragResult = wxDragNone;
+        }
+
         return;
     }
 
@@ -409,7 +415,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
-    Asset::AssetClassPtr asset = Asset::AssetClass::LoadAssetClass( path );
+    Asset::AssetClassPtr asset = Asset::AssetClass::Create( path );
 
     if ( asset.ReferencesObject() )
     {

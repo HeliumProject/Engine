@@ -29,27 +29,8 @@ namespace Helium
             return m_Paths;
         }
 
-        void AddPath( const Path& path )
-        {
-            Path relativePath = path.GetRelativePath( a_Path.Get() );
-            HELIUM_ASSERT( !relativePath.IsAbsolute() );
-            std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( relativePath );
-            if ( result.second )
-            {
-                e_PathAdded.Raise( relativePath );
-            }
-        }
-
-        void RemovePath( const Path& path )
-        {
-            Path relativePath = path.GetRelativePath( a_Path.Get() );
-            std::set< Path >::iterator itr = m_Paths.find( relativePath );
-            if ( itr != m_Paths.end() )
-            {
-                m_Paths.erase( itr );
-                e_PathRemoved.Raise( relativePath );
-            }
-        }
+        void AddPath( const Path& path );
+        void RemovePath( const Path& path );
 
     public:
         Helium::Attribute< Path >    a_Path;

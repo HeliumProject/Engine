@@ -13,6 +13,30 @@ Project::~Project()
 {
 }
 
+void Project::AddPath( const Path& path )
+{
+    Path relativePath = path.GetRelativePath( a_Path.Get() );
+    HELIUM_ASSERT( !relativePath.IsAbsolute() );
+    std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( relativePath );
+    if ( result.second )
+    {
+        e_PathAdded.Raise( relativePath );
+        e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
+    }
+}
+
+void Project::RemovePath( const Path& path )
+{
+    Path relativePath = path.GetRelativePath( a_Path.Get() );
+    std::set< Path >::iterator itr = m_Paths.find( relativePath );
+    if ( itr != m_Paths.end() )
+    {
+        m_Paths.erase( itr );
+        e_PathRemoved.Raise( relativePath );
+        e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
+    }
+}
+
 void Project::ConnectDocument( Document* document )
 {
     document->d_Save.Set( this, &Project::OnDocumentSave );
@@ -70,6 +94,7 @@ void Project::OnDocumentSave( const DocumentEventArgs& args )
 void Project::OnDocumentPathChanged( const DocumentPathChangedArgs& args )
 {
     a_Path.Set( args.m_Document->GetPath() );
+    e_HasChanged.Raise( DocumentObjectChangedArgs( true ) );
 }
 
 void Project::OnChildDocumentPathChanged( const DocumentPathChangedArgs& args )

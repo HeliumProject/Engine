@@ -80,16 +80,16 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor<ViewportSettings>& comp )
             {
-                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, "m_CameraMode" );
-                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, "m_GeometryMode" );
-                comp.AddField( &ViewportSettings::m_CameraPrefs, "m_CameraPrefs" );
-                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, "m_ColorMode" );
+                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, "Camera Mode" );
+                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, "Geometry Mode" );
+                comp.AddField( &ViewportSettings::m_CameraPrefs, "Camera Preferences" );
+                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, "Coloring Mode" );
 
-                comp.AddField( &ViewportSettings::m_Highlighting, "m_Highlighting" );
-                comp.AddField( &ViewportSettings::m_AxesVisible, "m_AxesVisible" );
-                comp.AddField( &ViewportSettings::m_GridVisible, "m_GridVisible" );
-                comp.AddField( &ViewportSettings::m_BoundsVisible, "m_BoundsVisible" );
-                comp.AddField( &ViewportSettings::m_StatisticsVisible, "m_StatisticsVisible" );
+                comp.AddField( &ViewportSettings::m_Highlighting, "Highlighting" );
+                comp.AddField( &ViewportSettings::m_AxesVisible, "Draw Axes" );
+                comp.AddField( &ViewportSettings::m_GridVisible, "Draw Grid" );
+                comp.AddField( &ViewportSettings::m_BoundsVisible, "Draw Bounding Boxes" );
+                comp.AddField( &ViewportSettings::m_StatisticsVisible, "Draw Statistics" );
             }
         }; 
 

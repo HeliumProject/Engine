@@ -74,14 +74,14 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )
             {
-                comp.AddEnumerationField( &GridSettings::m_Units, "m_Units" );
-                comp.AddField( &GridSettings::m_Width, "m_Width" );
-                comp.AddField( &GridSettings::m_Length, "m_Length" );
-                comp.AddField( &GridSettings::m_MajorStep, "m_MajorStep" );
-                comp.AddField( &GridSettings::m_MinorStep, "m_MinorStep" );
-                comp.AddField( &GridSettings::m_AxisColor, "m_AxisColor" );
-                comp.AddField( &GridSettings::m_MajorColor, "m_MajorColor" );
-                comp.AddField( &GridSettings::m_MinorColor, "m_MinorColor" );
+                comp.AddEnumerationField( &GridSettings::m_Units, "Units" );
+                comp.AddField( &GridSettings::m_Width, "Width" );
+                comp.AddField( &GridSettings::m_Length, "Length" );
+                comp.AddField( &GridSettings::m_MajorStep, "Major Step" );
+                comp.AddField( &GridSettings::m_MinorStep, "Minor Step" );
+                comp.AddField( &GridSettings::m_AxisColor, "Axis Color" );
+                comp.AddField( &GridSettings::m_MajorColor, "Major Color" );
+                comp.AddField( &GridSettings::m_MinorColor, "Minor Color" );
             }
         };
 

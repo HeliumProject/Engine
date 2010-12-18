@@ -116,16 +116,20 @@ void SceneGraph::Initialize()
 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<CameraMode>( TXT( "SceneGraph::CameraMode" ) ) ); 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ShadingMode>( TXT( "SceneGraph::ShadingMode" ) ) );
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >( TXT("SceneGraph::CameraSettings") ) ); 
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >( TXT("SceneGraph::CameraSettings") ) );
+        Reflect::GetClass< SceneGraph::CameraSettings >()->SetProperty( TXT( "UIName" ), TXT( "Camera Settings" ) );
 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GeometryMode>( TXT( "SceneGraph::GeometryMode" ) ) ); 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ViewColorMode>( TXT( "SceneGraph::ViewColorMode" ) ) ); 
         g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::ViewportSettings >( TXT("SceneGraph::ViewportSettings") ) ); 
+        Reflect::GetClass< SceneGraph::ViewportSettings >()->SetProperty( TXT( "UIName" ), TXT( "Viewport Settings" ) );
 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GridUnit>( TXT( "SceneGraph::GridUnit" ) ) ); 
         g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::GridSettings >( TXT("SceneGraph::GridSettings") ) );
+        Reflect::GetClass< SceneGraph::GridSettings >()->SetProperty( TXT( "UIName" ), TXT( "Grid Settings" ) );
 
         g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::SceneSettings >( TXT("SceneGraph::SceneSettings") ) );
+        Reflect::GetClass< SceneGraph::SceneSettings >()->SetProperty( TXT( "UIName" ), TXT( "Scene Settings" ) );
     }
 }
 

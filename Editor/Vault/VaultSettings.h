@@ -27,10 +27,10 @@ namespace Helium
         public:
             static void EnumerateClass( Reflect::Compositor< VaultSettings >& comp )
             {
-                comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, "m_VaultViewMode" );
+                comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, "Vault View Mode" );
 
                 {
-                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, "m_ThumbnailSize" );
+                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, "Thumbnail Size" );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
                 }
                 //comp.AddField( &VaultSettings::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );

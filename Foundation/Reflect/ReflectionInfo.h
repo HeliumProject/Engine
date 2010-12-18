@@ -64,7 +64,7 @@ namespace Helium
             mutable std::map< tstring, tstring > m_Properties;
 
             template<class T>
-            inline void SetProperty( const tstring& key, const T& value )
+            inline void SetProperty( const tstring& key, const T& value ) const
             {
                 tostringstream str;
                 str << value;
@@ -76,7 +76,7 @@ namespace Helium
             }
 
             template<>
-            inline void SetProperty( const tstring& key, const tstring& value )
+            inline void SetProperty( const tstring& key, const tstring& value ) const
             {
                 m_Properties[key] = value;
             }

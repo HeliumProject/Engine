@@ -19,7 +19,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( ColorComponent, Component::ComponentBase );
 
-            static void EnumerateClass( Reflect::Compositor< ColorComponent >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             ColorComponent()

@@ -11,7 +11,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(ComponentCollection)
 
-void ComponentCollection::EnumerateClass( Reflect::Compositor<ComponentCollection>& comp )
+void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, "m_Components" );
 }

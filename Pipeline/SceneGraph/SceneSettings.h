@@ -47,7 +47,7 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<SceneSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );

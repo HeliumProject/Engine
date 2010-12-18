@@ -273,6 +273,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
         bool serialize = true;
 
         // check for equality
+#ifdef REFLECT_REFACTOR
         if ( serialize && field->m_Default.ReferencesObject() )
         {
             bool force = (field->m_Flags & FieldFlags::Force) != 0;
@@ -281,6 +282,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
                 serialize = false;
             }
         }
+#endif
 
         // don't write empty containers
         if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )

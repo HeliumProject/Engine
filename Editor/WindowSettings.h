@@ -62,7 +62,7 @@ namespace Helium
             static const tchar_t* s_Reset;
             static const tchar_t* s_ResetLong;
 
-            static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
                 comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );

@@ -18,7 +18,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS( DependenciesComponent, ComponentBase );
 
-            static void EnumerateClass( Reflect::Compositor<DependenciesComponent>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             virtual Component::ComponentUsage GetComponentUsage() const HELIUM_OVERRIDE { return Component::ComponentUsages::Class; }
         };

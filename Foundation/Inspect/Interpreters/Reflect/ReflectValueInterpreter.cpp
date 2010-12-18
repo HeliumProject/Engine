@@ -155,14 +155,14 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Set default
     //
 
+#ifdef REFLECT_REFACTOR
     if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
-
         *field->m_Default >> outStream;
-
         container->a_Default.Set( outStream.str() );
     }
+#endif
 
     //
     // Close

@@ -6,7 +6,7 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( MeshCompressionFactor );
 REFLECT_DEFINE_CLASS( MeshProcessingComponent );
 
-void MeshProcessingComponent::EnumerateClass( Reflect::Compositor< MeshProcessingComponent >& comp )
+void MeshProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &MeshProcessingComponent::a_ScalingFactor, "a_ScalingFactor" );
     comp.AddEnumerationField( &MeshProcessingComponent::a_MeshCompressionFactor, "a_MeshCompressionFactor" );

@@ -99,12 +99,14 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-    if (field->m_Default.ReferencesObject())
+#ifdef REFLECT_REFACTOR
+    if (field->m_Default)
     {
         tstringstream outStream;
         *field->m_Default >> outStream;
         list->a_Default.Set( outStream.str() );
     }
+#endif
 }
 
 ButtonPtr ReflectStlVectorInterpreter::AddAddButton( List* list )

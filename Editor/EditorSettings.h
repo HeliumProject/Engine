@@ -22,7 +22,7 @@ namespace Helium
 
         public:
             REFLECT_DECLARE_CLASS( GeneralSettings, Reflect::Element );
-            static void EnumerateClass( Reflect::Compositor<GeneralSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddField( &GeneralSettings::m_MRUProjects, "m_MRUProjects" );
             }

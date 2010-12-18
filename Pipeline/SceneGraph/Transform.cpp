@@ -26,7 +26,7 @@ struct ScaleColorInfo
     float32_t m_ScaleMax;
 };
 
-void Transform::EnumerateClass( Reflect::Compositor<Transform>& comp )
+void Transform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( (Vector3 Transform::*)&Transform::m_Scale,   "m_Scale" );
     comp.AddField( (Vector3 Transform::*)&Transform::m_Rotate,  "m_Rotate" );

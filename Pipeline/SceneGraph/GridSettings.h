@@ -72,7 +72,7 @@ namespace Helium
             Color3 m_MinorColor;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddEnumerationField( &GridSettings::m_Units, "m_Units" );
                 comp.AddField( &GridSettings::m_Width, "m_Width" );

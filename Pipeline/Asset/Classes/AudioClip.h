@@ -37,7 +37,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS( AudioClip, AssetClass );
 
-            static void EnumerateClass( Reflect::Compositor< AudioClip >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             AudioClip()

@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneNode );
 
-void SceneNode::EnumerateClass( Reflect::Compositor<SceneNode>& comp )
+void SceneNode::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &SceneNode::m_ID,            "m_ID",             Reflect::FieldFlags::ReadOnly );
     comp.AddField( &SceneNode::m_DefaultName,   "m_DefaultName",    Reflect::FieldFlags::Hide );

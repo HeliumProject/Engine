@@ -15,7 +15,7 @@ REFLECT_DEFINE_CLASS( Shader );
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Shader::EnumerateClass( Reflect::Compositor<Shader>& comp )
+void Shader::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &Shader::m_WrapU,      "m_WrapU" );
     comp.AddField( &Shader::m_WrapV,      "m_WrapV" );

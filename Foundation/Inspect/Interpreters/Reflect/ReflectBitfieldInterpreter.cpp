@@ -128,7 +128,12 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     }
 
     tstringstream outStream;
-    *field->m_Default >> outStream;
+#ifdef REFLECT_REFACTOR
+    if ( field->m_Default )
+    {
+        *field->m_Default >> outStream;
+    }
+#endif
 
     // build the child gui elements
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;

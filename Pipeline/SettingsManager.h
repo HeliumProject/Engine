@@ -61,7 +61,7 @@ namespace Helium
         M_Settings m_SettingsMap;
 
     public:
-        static void EnumerateClass( Reflect::Compositor< SettingsManager >& comp )
+        static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
             comp.AddField( &SettingsManager::m_SettingsMap, "m_SettingsMap" );
         }

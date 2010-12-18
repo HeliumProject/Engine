@@ -25,7 +25,7 @@ namespace Helium
             //WindowSettingsPtr     m_WindowSettings;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< VaultSettings >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, "m_VaultViewMode" );
 

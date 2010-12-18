@@ -12,7 +12,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( PivotTransform );
 
-void PivotTransform::EnumerateClass( Reflect::Compositor<PivotTransform>& comp )
+void PivotTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( (Vector3 PivotTransform::*)&PivotTransform::m_Shear, "m_Shear" );
     comp.AddField( &PivotTransform::m_ScalePivot,                       "m_ScalePivot" );

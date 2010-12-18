@@ -23,7 +23,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS(Influence, Reflect::Element);
 
-            static void EnumerateClass( Reflect::Compositor<Influence>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };
 
         typedef Helium::StrongPtr<Influence> InfluencePtr;
@@ -33,7 +33,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( Skin, SceneNode );
-            static void EnumerateClass( Reflect::Compositor<Skin>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

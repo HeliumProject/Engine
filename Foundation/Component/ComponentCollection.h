@@ -34,7 +34,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Element);
-            static void EnumerateClass( Reflect::Compositor<ComponentCollection>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ComponentCollection();
             ComponentCollection( const ComponentPtr& attr );

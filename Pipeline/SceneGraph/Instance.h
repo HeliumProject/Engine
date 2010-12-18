@@ -12,7 +12,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_ABSTRACT( Instance, PivotTransform );
-            static void EnumerateClass( Reflect::Compositor<Instance>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

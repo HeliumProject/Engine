@@ -67,7 +67,7 @@ namespace Helium
 
         public:
             REFLECT_DECLARE_CLASS( VaultSearchQuery, Reflect::Element );
-            static void EnumerateClass( Reflect::Compositor<VaultSearchQuery>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             virtual void PostDeserialize() HELIUM_OVERRIDE; 
 
         private:

@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( ColorComponent );
 
-void ColorComponent::EnumerateClass( Reflect::Compositor< ColorComponent >& comp )
+void ColorComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &ColorComponent::m_ColorHDR, "m_ColorHDR" );
 

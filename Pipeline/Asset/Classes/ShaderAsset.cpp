@@ -11,9 +11,9 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AlphaType );
 REFLECT_DEFINE_CLASS( ShaderAsset );
 
-void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
+void ShaderAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
+    comp.SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
     comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath" );
     comp.AddField( &ShaderAsset::m_NormalMapPath, "m_NormalMapPath" );

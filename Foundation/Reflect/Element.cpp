@@ -17,7 +17,7 @@ Element::Element()
 
 }
 
-void Element::EnumerateClass( Reflect::Compositor<Element>& comp )
+void Element::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 
 }

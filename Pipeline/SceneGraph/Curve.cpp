@@ -30,7 +30,7 @@ REFLECT_DEFINE_CLASS( Curve );
 D3DMATERIAL9 Curve::s_Material;
 D3DMATERIAL9 Curve::s_HullMaterial;
 
-void Curve::EnumerateClass( Reflect::Compositor<Curve>& comp )
+void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
   comp.AddField(            &Curve::m_Closed,               "m_Closed" );
   comp.AddEnumerationField( &Curve::m_Type,                 "m_Type" );

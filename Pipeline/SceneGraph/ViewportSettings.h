@@ -78,7 +78,7 @@ namespace Helium
             ViewColorMode        m_ColorMode;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<ViewportSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 comp.AddEnumerationField( &ViewportSettings::m_CameraMode, "m_CameraMode" );
                 comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, "m_GeometryMode" );

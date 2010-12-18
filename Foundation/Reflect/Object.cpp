@@ -212,7 +212,7 @@ Reflect::Class* Object::CreateClass( Name name )
     return type;
 }
 
-void Object::EnumerateClass( Reflect::Compositor<Object>& comp )
+void Object::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 
 }

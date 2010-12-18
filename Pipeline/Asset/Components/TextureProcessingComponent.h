@@ -53,7 +53,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( TextureProcessingComponent, Component::ComponentBase );
 
-            static void EnumerateClass( Reflect::Compositor< TextureProcessingComponent >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             TextureProcessingComponent()

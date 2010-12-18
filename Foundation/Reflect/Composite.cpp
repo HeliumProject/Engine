@@ -10,8 +10,6 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 Composite::Composite()
-: m_Enumerator (NULL)
-, m_Enumerated (false)
 {
 
 }
@@ -61,7 +59,7 @@ uint32_t Composite::GetBaseFieldCount() const
     return count;
 }
 
-Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags)
+Reflect::Field* Composite::AddField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
 {
     tstring convertedName;
     {
@@ -78,25 +76,10 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
-
     return field;
 }
 
-Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags)
+Reflect::ElementField* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
     tstring convertedName;
     {
@@ -114,25 +97,10 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Type = type;
     m_Fields.push_back( field );
 
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
-
     return field;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags)
+Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
 {
     tstring convertedName;
     {
@@ -151,21 +119,6 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
-
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
 
     return field;
 }

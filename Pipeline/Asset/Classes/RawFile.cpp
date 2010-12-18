@@ -7,8 +7,8 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( RawFile );
 
-void RawFile::EnumerateClass( Reflect::Compositor<RawFile>& comp )
+void RawFile::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-	comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A raw file asset wraps a single raw file for inclusion for the project." );
-	comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.rawfile.*" );
+	comp.SetProperty( AssetProperties::LongDescription, "A raw file asset wraps a single raw file for inclusion for the project." );
+	comp.SetProperty( AssetProperties::FileFilter, "*.rawfile.*" );
 }

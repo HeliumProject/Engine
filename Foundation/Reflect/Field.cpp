@@ -52,6 +52,7 @@ DataPtr Field::CreateData(Element* instance) const
 
 bool Field::HasDefaultValue(Element* instance) const
 {
+#ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
     if (!m_Default.ReferencesObject())
     {
@@ -75,12 +76,14 @@ bool Field::HasDefaultValue(Element* instance) const
         // result
         return result;
     }
+#endif
 
     return false;
 }
 
 bool Field::SetDefaultValue(Element* instance) const
 {
+#ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
     if (!m_Default.ReferencesObject())
     {
@@ -103,6 +106,7 @@ bool Field::SetDefaultValue(Element* instance) const
 
         return true;
     }
+#endif
 
     return false;
 }

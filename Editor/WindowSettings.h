@@ -64,12 +64,12 @@ namespace Helium
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
-                comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
-                comp.AddField( &WindowSettings::m_PosX, "m_PosX" );
-                comp.AddField( &WindowSettings::m_PosY, "m_PosY" );
-                comp.AddField( &WindowSettings::m_Width, "m_Width" );
-                comp.AddField( &WindowSettings::m_Height, "m_Height" );
+                comp.AddField( &WindowSettings::m_DockingState, "Docking State" );
+                comp.AddField( &WindowSettings::m_IsMaximized, "Maximized" );
+                comp.AddField( &WindowSettings::m_PosX, "X Position" );
+                comp.AddField( &WindowSettings::m_PosY, "Y Position" );
+                comp.AddField( &WindowSettings::m_Width, "Width" );
+                comp.AddField( &WindowSettings::m_Height, "Height" );
             }
         };
     }

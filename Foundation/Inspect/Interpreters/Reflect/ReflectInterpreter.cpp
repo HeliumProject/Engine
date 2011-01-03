@@ -63,6 +63,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
     if (labelText.empty())
     {
+        composite->GetProperty( TXT( "UIName" ), labelText );
+    }
+
+    if ( labelText.empty() )
+    {
         labelText = *composite->m_Name;
     }
 

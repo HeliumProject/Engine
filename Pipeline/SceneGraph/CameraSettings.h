@@ -74,12 +74,12 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraSettings::m_CameraMode, "m_CameraMode" );
-                Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "m_ShadingMode" );
-                Reflect::Field* fieldWireframeOnMesh = comp.AddField( &CameraSettings::m_WireframeOnMesh, "m_WireframeOnMesh" );
-                Reflect::Field* fieldWireframeOnShaded = comp.AddField( &CameraSettings::m_WireframeOnShaded, "m_WireframeOnShaded" );
-                Reflect::Field* fieldViewFrustumCulling = comp.AddField( &CameraSettings::m_ViewFrustumCulling, "m_ViewFrustumCulling" );
-                Reflect::Field* fieldBackFaceCulling = comp.AddField( &CameraSettings::m_BackFaceCulling, "m_BackFaceCulling" );
+                Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraSettings::m_CameraMode, "Camera Mode" );
+                Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "Shading Mode" );
+                Reflect::Field* fieldWireframeOnMesh = comp.AddField( &CameraSettings::m_WireframeOnMesh, "Wireframe On Mesh" );
+                Reflect::Field* fieldWireframeOnShaded = comp.AddField( &CameraSettings::m_WireframeOnShaded, "Wireframe On Shaded" );
+                Reflect::Field* fieldViewFrustumCulling = comp.AddField( &CameraSettings::m_ViewFrustumCulling, "View Frustum Culling" );
+                Reflect::Field* fieldBackFaceCulling = comp.AddField( &CameraSettings::m_BackFaceCulling, "Backface Culling" );
             }
         };
 

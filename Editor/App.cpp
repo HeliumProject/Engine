@@ -245,9 +245,16 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::SearchType >( TXT( "Editor::SearchType" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSearchQuery >( TXT( "Editor::VaultSearchQuery" ) ) );   
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
+
+    // settings
     m_InitializerStack.Push( Reflect::RegisterClassType< GeneralSettings >( TXT( "Editor::GeneralSettings" ) ) );
+    Reflect::GetClass< GeneralSettings >()->SetProperty( TXT( "UIName" ), TXT( "General Settings" ) );
+
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
+    Reflect::GetClass< VaultSettings >()->SetProperty( TXT( "UIName" ), TXT( "Vault Settings" ) );
+
     m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
+    Reflect::GetClass< WindowSettings >()->SetProperty( TXT( "UIName" ), TXT( "Window Settings" ) );
 
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::ProjectMenuID >( TXT( "Editor::ProjectMenuID" ) ) );
 

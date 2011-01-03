@@ -49,20 +49,20 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
-                comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );
-                comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, "m_ScaleManipulatorDistance" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "Scale Manipulator Size" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "Scale Manipulator Grid Snapping" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, "Scale Manipulator Distance" );
 
-                comp.AddField( &SceneSettings::m_RotateManipulatorSize, "m_RotateManipulatorSize" );
-                comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, "m_RotateManipulatorAxisSnap" );
-                comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, "m_RotateManipulatorSnapDegrees" );
-                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, "m_RotateManipulatorSpace" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSize, "Rotate Manipulator Size" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, "Rotate Manipulator Axis Snapping" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, "Rotate Manipulator Snap Degrees" );
+                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, "Rotate Manipulator Space" );
 
-                comp.AddField( &SceneSettings::m_TranslateManipulatorSize, "m_TranslateManipulatorSize" );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, "m_TranslateManipulatorSpace" );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, "m_TranslateManipulatorSnappingMode" );
-                comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, "m_TranslateManipulatorDistance" );
-                comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, "m_TranslateManipulatorLiveObjectsOnly" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorSize, "Translate Manipulator Size" );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, "Translate Manipulator Space" );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, "Translate Manipulator Snapping Mode" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, "Translate Manipulator Distance" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, "Translate Manipulator Live Objects Only" );
             }
         };
         typedef Helium::SmartPtr< SceneSettings > SceneSettingsPtr;

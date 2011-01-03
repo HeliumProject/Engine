@@ -67,7 +67,15 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         interpreter->Interpret( elems );
         m_Interpreters.push_back( interpreter );
 
-        int index = propertiesListBox->Append( *(*itr).second->GetClass()->m_Name );
+        tstring uiName;
+        (*itr).second->GetClass()->GetProperty( TXT( "UIName" ), uiName );
+
+        if ( uiName.empty() )
+        {
+            uiName = *(*itr).second->GetClass()->m_Name;
+        }
+
+        int index = propertiesListBox->Append( uiName.c_str() );
         m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr).second, clone, canvas ) ) );
     }
 

@@ -19,7 +19,7 @@ my $g_Clean = 0;
 my $g_Verbose = 0;
 my $g_Incred = 0;
 my $g_NoPrompt = 0;
-my $g_Architecture = 'x64';
+my $g_Architecture = ( $ENV{ PATH } =~ /x64/ ? 'x64' : 'Win32' );
 
 my @supportedConfigs = ( 'Debug', 'Intermediate', 'Profile', 'Release' ); 
 

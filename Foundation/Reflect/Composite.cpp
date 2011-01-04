@@ -10,6 +10,8 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 Composite::Composite()
+: m_Base( NULL )
+, m_Accept( NULL )
 {
 
 }

@@ -109,7 +109,10 @@ namespace Helium
                 }
 
                 // populate reflection information
-                info->m_Accept( *info );
+                if ( info->m_Accept )
+                {
+                    info->m_Accept( *info );
+                }
             }
 
             //

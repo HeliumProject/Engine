@@ -38,7 +38,7 @@ namespace Helium
                 Class* info = Class::Create();
 
                 // populate reflection information
-                CreateComposite< ClassT >( name, baseName, &ClassT::AcceptCompositeVisitor, info );
+                Composite::Create< ClassT >( name, baseName, &ClassT::AcceptCompositeVisitor, info );
 
                 // setup factory function
                 info->m_Creator = creator;

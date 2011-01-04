@@ -28,12 +28,12 @@ namespace Helium
             static Structure* Create();
 
             template< class StructureT >
-            static Structure* Create ( Name name, Name baseName, AcceptVisitor accept )
+            static Structure* Create( Name name, Name baseName, AcceptVisitor accept )
             {
                 Structure* info = Structure::Create();
 
                 // populate reflection information
-                CreateComposite< StructureT >( name, baseName, accept, info );
+                Composite::Create< StructureT >( name, baseName, accept, info );
 
                 return info;
             }

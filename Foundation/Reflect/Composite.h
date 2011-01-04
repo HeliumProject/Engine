@@ -64,7 +64,7 @@ namespace Helium
             //
 
             template< class CompositeT >
-            static void CreateComposite( Name name, Name baseName, AcceptVisitor accept, Composite* info )
+            static void Create( Name name, Name baseName, AcceptVisitor accept, Composite* info )
             {
                 // the size
                 info->m_Size = sizeof( CompositeT );

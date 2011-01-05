@@ -20,15 +20,15 @@ namespace Helium
             std::vector< tstring >& GetMRUProjects();
             void SetMRUProjects( MRU< tstring >* mru );
 
-        public:
+            bool GetLoadLastOpenedProjectOnStartup() const;
+            void SetLoadLastOpenedProjectOnStartup( bool value );
+
             REFLECT_DECLARE_CLASS( GeneralSettings, Reflect::Element );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-                comp.AddField( &GeneralSettings::m_MRUProjects, "m_MRUProjects" );
-            }
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         private:
             std::vector< tstring > m_MRUProjects;
+            bool m_LoadLastOpenedProjectOnStartup;
         };
     }
 }

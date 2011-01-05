@@ -13,7 +13,17 @@ using namespace Helium::Editor;
 REFLECT_DEFINE_CLASS( GeneralSettings );
 
 GeneralSettings::GeneralSettings()
+: m_LoadLastOpenedProjectOnStartup( true )
 {
+}
+
+void GeneralSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
+{
+    comp.AddField( &GeneralSettings::m_MRUProjects, "m_MRUProjects", Reflect::FieldFlags::Hide );
+
+    Reflect::Field* field = comp.AddField( &GeneralSettings::m_LoadLastOpenedProjectOnStartup, "m_LoadLastOpenedProjectOnStartup" );
+    field->SetProperty( TXT( "UIName"), TXT( "Load Last Opened Project On Startup" ) );
+    field->SetProperty( TXT( "HelpText"), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
 }
 
 std::vector< tstring >& GeneralSettings::GetMRUProjects()
@@ -24,4 +34,14 @@ std::vector< tstring >& GeneralSettings::GetMRUProjects()
 void GeneralSettings::SetMRUProjects( MRU< tstring >* mru )
 {
     mru->ToVector( m_MRUProjects );
+}
+
+bool GeneralSettings::GetLoadLastOpenedProjectOnStartup() const
+{
+    return m_LoadLastOpenedProjectOnStartup;
+}
+
+void GeneralSettings::SetLoadLastOpenedProjectOnStartup( bool value )
+{
+    m_LoadLastOpenedProjectOnStartup = value;
 }

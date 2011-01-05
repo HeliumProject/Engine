@@ -11,6 +11,8 @@ using namespace Helium::Reflect;
 
 Composite::Composite()
 : m_Base( NULL )
+, m_FirstDerived( NULL )
+, m_NextSibling( NULL )
 , m_Accept( NULL )
 {
 
@@ -42,7 +44,44 @@ void Composite::Report() const
 
 void Composite::Unregister() const
 {
-    m_Base->m_Derived.Remove( this );
+    m_Base->RemoveDerived( this );
+}
+
+void Composite::AddDerived( const Composite* derived ) const
+{
+    const Composite* last = m_FirstDerived;
+
+    while ( last && last->m_NextSibling )
+    {
+        last = last->m_NextSibling;
+    }
+
+    if ( last )
+    {
+        last->m_NextSibling = derived;
+    }
+    else
+    {
+        m_FirstDerived = derived;
+    }
+}
+
+void Composite::RemoveDerived( const Composite* derived ) const
+{
+    if ( m_Base->m_FirstDerived == derived )
+    {
+        m_Base->m_FirstDerived = m_NextSibling;
+    }
+    else
+    {
+        for ( const Composite* sibling = m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
+        {
+            if ( sibling->m_NextSibling == derived )
+            {
+                sibling->m_NextSibling = m_NextSibling;
+            }
+        }
+    }
 }
 
 uint32_t Composite::GetBaseFieldCount() const

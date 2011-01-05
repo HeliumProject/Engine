@@ -46,7 +46,8 @@ namespace Helium
             REFLECTION_TYPE( ReflectionTypes::Composite );
 
             const Composite*                        m_Base;                 // the base type name
-            mutable Set< const Composite* >         m_Derived;              // the derived type names, mutable since its populated by other objects
+            mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
+            mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
             std::vector< ConstFieldPtr >            m_Fields;               // fields in this composite
             AcceptVisitor                           m_Accept;
 
@@ -79,7 +80,7 @@ namespace Helium
                 HELIUM_ASSERT( info->m_Base );
 
                 // populate base classes' derived class list (unregister will remove it)
-                info->m_Base->m_Derived.Insert( info );
+                info->m_Base->AddDerived( info );
 
                 // c++ can give us the address of base class static functions,
                 //  so check each base class to see if this is really a base class enumerate function
@@ -114,6 +115,12 @@ namespace Helium
                     info->m_Accept( *info );
                 }
             }
+
+            //
+            // Derived list managment
+            //
+            void AddDerived( const Composite* derived ) const;
+            void RemoveDerived( const Composite* derived ) const;
 
             //
             // Add fields to the composite

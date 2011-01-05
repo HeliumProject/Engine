@@ -126,7 +126,7 @@ Reflect::Field* Composite::AddField( const std::string& name, const uint32_t off
     return field;
 }
 
-Reflect::ElementField* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
+Reflect::Field* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
     tstring convertedName;
     {
@@ -134,20 +134,20 @@ Reflect::ElementField* Composite::AddElementField( const std::string& name, cons
         HELIUM_ASSERT( converted );
     }
 
-    ElementField* field = ElementField::Create( this );
+    Field* field = Field::Create( this );
     field->m_Name = convertedName;
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
-    field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
     field->m_Type = type;
+    field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
     m_Fields.push_back( field );
 
     return field;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
+Reflect::Field* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
 {
     tstring convertedName;
     {
@@ -158,12 +158,13 @@ Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& na
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
     HELIUM_ASSERT(enumeration != NULL);
 
-    EnumerationField* field = EnumerationField::Create( this, enumeration );
+    Field* field = Field::Create( this );
     field->m_Name = convertedName;
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
     field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
+    field->m_Type = enumeration;
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 

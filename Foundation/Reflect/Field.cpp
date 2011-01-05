@@ -8,12 +8,13 @@
 using namespace Helium::Reflect;
 
 Field::Field(const Composite* composite)
-: m_Composite ( composite )
-, m_Flags ( 0 )
-, m_Index ( -1 )
-, m_DataClass ( NULL )
-, m_Offset ( -1 )
-, m_Creator ( NULL )
+: m_Composite( composite )
+, m_Flags( 0 )
+, m_Index( -1 )
+, m_Type( NULL )
+, m_DataClass( NULL )
+, m_Offset( -1 )
+, m_Creator( NULL )
 {
 
 }
@@ -32,7 +33,7 @@ DataPtr Field::CreateData(Element* instance) const
 {
     DataPtr ser;
 
-    if (m_DataClass != NULL)
+    if ( m_DataClass != NULL )
     {
         ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
 
@@ -42,9 +43,30 @@ DataPtr Field::CreateData(Element* instance) const
         }
     }
 
-    if (ser.ReferencesObject() && instance)
+    if ( ser.ReferencesObject() )
     {
-        ser->ConnectField( instance, this );
+        if ( instance )
+        {
+            ser->ConnectField( instance, this );
+        }
+
+        const Class* classType = ReflectionCast< Class >( m_Type );
+        if ( classType )
+        {
+            PointerData* pointerData = ObjectCast<PointerData>( ser );
+            if ( pointerData )
+            {
+                pointerData->m_Type = m_Type;
+            }
+            else
+            {
+                ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+                if ( containerData )
+                {
+                    containerData->m_Type = m_Type;
+                }
+            }
+        }
     }
 
     return ser;
@@ -109,74 +131,4 @@ bool Field::SetDefaultValue(Element* instance) const
 #endif
 
     return false;
-}
-
-ElementField::ElementField(const Composite* type)
-: Field ( type )
-, m_Type ( Reflect::GetType<Reflect::Element>() )
-{
-
-}
-
-ElementField::~ElementField()
-{
-
-}
-
-ElementField* ElementField::Create(const Composite* type)
-{
-    return new ElementField( type );
-}
-
-DataPtr ElementField::CreateData(Element* instance) const
-{
-    DataPtr ser = __super::CreateData(instance);
-
-    if (ser.ReferencesObject())
-    {
-        PointerData* pointerData = ObjectCast<PointerData>( ser );
-        if ( pointerData )
-        {
-            pointerData->m_Type = m_Type;
-        }
-        else
-        {
-            ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
-            if ( containerData )
-            {
-                containerData->m_Type = m_Type;
-            }
-        }
-    }
-
-    return ser;
-}
-
-EnumerationField::EnumerationField(const Composite* type, const Enumeration* enumeration)
-: Field ( type )
-, m_Enumeration ( enumeration )
-{
-
-}
-
-EnumerationField::~EnumerationField()
-{
-
-}
-
-EnumerationField* EnumerationField::Create(const Composite* type, const Enumeration* enumeration)
-{
-    return new EnumerationField( type, enumeration );
-}
-
-DataPtr EnumerationField::CreateData(Element* instance) const
-{
-    EnumerationDataPtr ser = AssertCast<EnumerationData>(__super::CreateData(instance));
-
-    if (ser.ReferencesObject())
-    {
-        ser->m_Enumeration = m_Enumeration;
-    }
-
-    return ser;
 }

@@ -47,13 +47,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         {
             ChoicePtr choice = CreateControl<Choice>();
 
-            const EnumerationField* enumInfo = static_cast<const EnumerationField*>(field);
+            const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 
             std::vector< ChoiceItem > items;
-            items.resize( enumInfo->m_Enumeration->m_Elements.size() );
+            items.resize( enumeration->m_Elements.size() );
 
-            V_EnumerationElement::const_iterator itr = enumInfo->m_Enumeration->m_Elements.begin();
-            V_EnumerationElement::const_iterator end = enumInfo->m_Enumeration->m_Elements.end();
+            V_EnumerationElement::const_iterator itr = enumeration->m_Elements.begin();
+            V_EnumerationElement::const_iterator end = enumeration->m_Elements.end();
             for ( size_t index=0; itr != end; ++itr, ++index )
             {
                 ChoiceItem& item = items[index];

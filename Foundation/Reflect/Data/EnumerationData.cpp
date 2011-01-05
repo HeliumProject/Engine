@@ -36,10 +36,7 @@ void EnumerationData::ConnectField(Helium::HybridPtr<Element> instance, const Fi
 {
     __super::ConnectField(instance, field, offsetInField);
 
-    const EnumerationField* enumField = ReflectionCast<EnumerationField>(field);
-    HELIUM_ASSERT( enumField );
-
-    m_Enumeration = enumField->m_Enumeration;
+    m_Enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 }
 
 bool EnumerationData::Set(const Data* src, uint32_t flags)

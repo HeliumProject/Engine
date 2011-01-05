@@ -107,8 +107,6 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         return;
     }
 
-    const EnumerationField* enumField = static_cast< const EnumerationField* >( field );
-
     // create the container
     ContainerPtr container = CreateControl<Container>();
 
@@ -142,10 +140,12 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     }
 #endif
 
+    const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
+
     // build the child gui elements
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
-    M_StrEnumerationElement::const_iterator enumItr = enumField->m_Enumeration->m_ElementsByLabel.begin();
-    M_StrEnumerationElement::const_iterator enumEnd = enumField->m_Enumeration->m_ElementsByLabel.end();
+    M_StrEnumerationElement::const_iterator enumItr = enumeration->m_ElementsByLabel.begin();
+    M_StrEnumerationElement::const_iterator enumEnd = enumeration->m_ElementsByLabel.end();
     for ( ; enumItr != enumEnd; ++enumItr )
     {
         ContainerPtr row = CreateControl< Container >();

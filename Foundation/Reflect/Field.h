@@ -18,13 +18,13 @@ namespace Helium
 
         namespace FieldFlags
         {
-            enum FieldFlags
+            enum Enum
             {
-                Discard     = 1 << 0,        // disposable fields are not serialized
-                Force       = 1 << 1,        // forced fields are always serialized
-                Share       = 1 << 2,        // shared fields are not cloned or compared deeply
-                Hide        = 1 << 3,        // hidden fields are not inherently visible in UI
-                ReadOnly    = 1 << 4,        // read-only fields cannot be edited in the UI inherently
+                Discard     = 1 << 0,       // disposable fields are not serialized
+                Force       = 1 << 1,       // forced fields are always serialized
+                Share       = 1 << 2,       // shared fields are not cloned or compared deeply
+                Hide        = 1 << 3,       // hidden fields are not inherently visible in UI
+                ReadOnly    = 1 << 4,       // read-only fields cannot be edited in the UI inherently
             };
         }
 
@@ -56,57 +56,12 @@ namespace Helium
             uintptr_t               m_Offset;       // the offset to the field
             uint32_t                m_Flags;        // flags for special behavior
             uint32_t                m_Index;        // the unique id of this field
+            const Type*             m_Type;         // the type of this field (NULL for POD types)
             const Class*            m_DataClass;    // type id of the serializer to use
             CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)
         };
 
         typedef Helium::SmartPtr< Field > FieldPtr;
         typedef Helium::SmartPtr< const Field > ConstFieldPtr;
-
-        //
-        // ElementField store additional information the compile-time type of a pointer
-        //
-
-        class FOUNDATION_API ElementField : public Field
-        {
-        public:
-            REFLECTION_TYPE( ReflectionTypes::ElementField );
-
-        protected:
-            ElementField(const Composite* type);
-            virtual ~ElementField();
-
-        public:
-            // protect external allocation to keep inlined code in this dll
-            static ElementField* Create( const Composite* type );
-
-            // creates a suitable serializer (that has a pointer to the enum info)
-            virtual DataPtr CreateData ( Element* instance = NULL ) const HELIUM_OVERRIDE;
-
-            const Reflect::Type* m_Type;
-        };
-
-        //
-        // EnumerationField store additional information to map enumerations as string values in the file
-        //
-
-        class FOUNDATION_API EnumerationField : public Field
-        {
-        public:
-            REFLECTION_TYPE( ReflectionTypes::EnumerationField );
-
-        protected:
-            EnumerationField(const Composite* type, const Enumeration* enumeration);
-            virtual ~EnumerationField();
-
-        public:
-            // protect external allocation to keep inlined code in this dll
-            static EnumerationField* Create( const Composite* type, const Enumeration* enumeration );
-
-            // creates a suitable serializer (that has a pointer to the enum info)
-            virtual DataPtr CreateData ( Element* instance = NULL ) const HELIUM_OVERRIDE;
-
-            const Enumeration* m_Enumeration;
-        };
     }
 }

@@ -42,11 +42,9 @@ namespace Helium
                 Composite,
                 Structure,
                 Class,
+                Field,
                 ObjectType,
                 GameObjectType,
-                Field,
-                ElementField,
-                EnumerationField,
             };
         }
         typedef ReflectionTypes::ReflectionType ReflectionType;

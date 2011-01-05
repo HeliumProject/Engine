@@ -16,8 +16,8 @@ namespace Helium
     {
         class Object;
         class Type;
+        class Composite;
         class Class;
-        template< class T > class Compositor;
 
         //
         // Reflect::ObjectRefCountSupport provides the support interface for managing reference counting data for
@@ -104,7 +104,7 @@ namespace Helium
             static Reflect::Class* CreateClass( Name name );
 
             // Enumerates member data (stub)
-            static void EnumerateClass( Reflect::Compositor<Object>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             static const Type* s_Type;

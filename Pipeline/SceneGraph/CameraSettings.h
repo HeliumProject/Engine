@@ -72,7 +72,7 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void EnumerateClass( Reflect::Compositor<CameraSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
                 Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraSettings::m_CameraMode, "Camera Mode" );
                 Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "Shading Mode" );

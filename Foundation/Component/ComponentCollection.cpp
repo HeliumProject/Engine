@@ -11,7 +11,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(ComponentCollection)
 
-void ComponentCollection::EnumerateClass( Reflect::Compositor<ComponentCollection>& comp )
+void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, "m_Components" );
 }
@@ -343,15 +343,11 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                const Set< const Composite* >& derived = attrib->GetClass()->m_Base->m_Derived;
-                Set< const Composite* >::ConstIterator derivedItr = derived.Begin();
-                Set< const Composite* >::ConstIterator derivedEnd = derived.End();
-                for ( ; derivedItr != derivedEnd; ++derivedItr )
+                for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    const Reflect::Composite* currentType = *derivedItr;
-                    if ( currentType != attrib->GetType() )
+                    if ( sibling != attrib->GetType() )
                     {
-                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( currentType ) ) );
+                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
                             if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )

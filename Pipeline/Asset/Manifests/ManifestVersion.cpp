@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS(ManifestVersion)
 
-void ManifestVersion::EnumerateClass( Reflect::Compositor<ManifestVersion>& comp )
+void ManifestVersion::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
   Reflect::Field* fieldManifestVersion = comp.AddField( &ManifestVersion::m_ManifestVersion, "m_ManifestVersion", Reflect::FieldFlags::Force );
 }

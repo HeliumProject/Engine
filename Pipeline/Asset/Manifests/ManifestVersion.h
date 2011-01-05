@@ -21,7 +21,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
 
-            static void EnumerateClass( Reflect::Compositor<ManifestVersion>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ManifestVersion();
 

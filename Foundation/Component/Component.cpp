@@ -6,7 +6,7 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_ABSTRACT(ComponentBase)
 
-void ComponentBase::EnumerateClass( Reflect::Compositor<ComponentBase>& comp )
+void ComponentBase::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_IsEnabled, "m_IsEnabled" );
 }

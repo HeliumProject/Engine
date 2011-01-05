@@ -42,7 +42,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( MeshProcessingComponent, Component::ComponentBase );
 
-            static void EnumerateClass( Reflect::Compositor< MeshProcessingComponent >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             MeshProcessingComponent()

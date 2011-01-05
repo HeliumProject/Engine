@@ -59,7 +59,7 @@ namespace Helium
 
         public:
             // Reflection prototypes
-            static void                 EnumerateClass( Reflect::Compositor<Element>& comp );
+            static void                 AcceptCompositeVisitor( Reflect::Composite& comp );
 
             // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;

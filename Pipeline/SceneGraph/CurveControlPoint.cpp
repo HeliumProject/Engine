@@ -9,7 +9,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( CurveControlPoint );
 
-void CurveControlPoint::EnumerateClass( Reflect::Compositor<CurveControlPoint>& comp )
+void CurveControlPoint::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &CurveControlPoint::m_Position, "m_Position" );
 }

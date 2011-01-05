@@ -19,7 +19,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( BoundingBoxComponent, Component::ComponentBase );
 
-            static void EnumerateClass( Reflect::Compositor< BoundingBoxComponent >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             BoundingBoxComponent()

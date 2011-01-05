@@ -6,9 +6,9 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AudioClipMode );
 REFLECT_DEFINE_CLASS( AudioClip );
 
-void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
+void AudioClip::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.wav;*.mp3;*.ogg" );
+    comp.SetProperty( AssetProperties::FileFilter, "*.wav;*.mp3;*.ogg" );
 
     comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
 }

@@ -10,10 +10,10 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( SceneAsset );
 
-void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
+void SceneAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A Scene locates objects in space." );
-  comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.level.*" );
+  comp.SetProperty( AssetProperties::LongDescription, "A Scene locates objects in space." );
+  comp.SetProperty( AssetProperties::FileFilter, "*.level.*" );
 
   Reflect::Field* fieldNearClipDist = comp.AddField( &SceneAsset::m_NearClipDist, "m_NearClipDist" );
   Reflect::Field* fieldFarClipDist = comp.AddField( &SceneAsset::m_FarClipDist, "m_FarClipDist" );

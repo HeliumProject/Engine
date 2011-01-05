@@ -27,25 +27,13 @@ namespace Helium
             // protect external allocation to keep inlined code in this dll
             static Structure* Create();
 
-            template<class T>
-            static Structure* Create ( const tstring& name, const tstring& base )
+            template< class StructureT >
+            static Structure* Create( Name name, Name baseName, AcceptVisitor accept )
             {
                 Structure* info = Structure::Create();
 
-                info->m_Size = sizeof(T);
-                info->m_Name = name;
-                info->m_Base = base;
-                info->m_UIName = info->m_Name;
-                info->m_Enumerator = (CompositeEnumerator)&Reflect::Enumerate<T>;
-
-                // enumerate reflection data
-                {
-                    // create the default object
-                    T temp;
-
-                    // enumerate the fields in the structure
-                    info->EnumerateInstance<T>(&temp);
-                }
+                // populate reflection information
+                Composite::Create< StructureT >( name, baseName, accept, info );
 
                 return info;
             }

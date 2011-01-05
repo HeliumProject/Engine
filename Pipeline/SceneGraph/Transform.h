@@ -17,7 +17,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( Transform, HierarchyNode );
-            static void EnumerateClass( Reflect::Compositor<Transform>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

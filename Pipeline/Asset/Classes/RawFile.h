@@ -21,7 +21,7 @@ namespace Helium
 
 			REFLECT_DECLARE_CLASS( RawFile, AssetClass );
 
-			static void EnumerateClass( Reflect::Compositor<RawFile>& comp );
+			static void AcceptCompositeVisitor( Reflect::Composite& comp );
 		};
 
 		typedef Helium::SmartPtr< RawFile > RawFilePtr;

@@ -499,6 +499,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             bool serialize = true;
 
             // check for equality
+#ifdef REFLECT_REFACTOR
             if ( serialize && field->m_Default.ReferencesObject() )
             {
                 bool force = (field->m_Flags & FieldFlags::Force) != 0;
@@ -507,6 +508,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
                     serialize = false;
                 }
             }
+#endif
 
             // don't write empty containers
             if ( serialize && e->HasType( Reflect::GetType<ContainerData>() ) )

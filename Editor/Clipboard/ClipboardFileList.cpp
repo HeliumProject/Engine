@@ -7,7 +7,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_CLASS( ClipboardFileList );
 
-void ClipboardFileList::EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp )
+void ClipboardFileList::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &ClipboardFileList::m_Files, "m_Files" );
     comp.AddField( &ClipboardFileList::m_IsDirty, "m_IsDirty", Reflect::FieldFlags::Discard );

@@ -33,7 +33,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS(EntityManifest, AssetManifest);
 
-            static void EnumerateClass( Reflect::Compositor<EntityManifest>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };
 
         typedef Helium::StrongPtr<EntityManifest> EntityManifestPtr;

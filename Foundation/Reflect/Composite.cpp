@@ -10,8 +10,10 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 Composite::Composite()
-: m_Enumerator (NULL)
-, m_Enumerated (false)
+: m_Base( NULL )
+, m_FirstDerived( NULL )
+, m_NextSibling( NULL )
+, m_Accept( NULL )
 {
 
 }
@@ -42,7 +44,44 @@ void Composite::Report() const
 
 void Composite::Unregister() const
 {
-    m_Base->m_Derived.Remove( this );
+    m_Base->RemoveDerived( this );
+}
+
+void Composite::AddDerived( const Composite* derived ) const
+{
+    const Composite* last = m_FirstDerived;
+
+    while ( last && last->m_NextSibling )
+    {
+        last = last->m_NextSibling;
+    }
+
+    if ( last )
+    {
+        last->m_NextSibling = derived;
+    }
+    else
+    {
+        m_FirstDerived = derived;
+    }
+}
+
+void Composite::RemoveDerived( const Composite* derived ) const
+{
+    if ( m_Base->m_FirstDerived == derived )
+    {
+        m_Base->m_FirstDerived = m_NextSibling;
+    }
+    else
+    {
+        for ( const Composite* sibling = m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
+        {
+            if ( sibling->m_NextSibling == derived )
+            {
+                sibling->m_NextSibling = m_NextSibling;
+            }
+        }
+    }
 }
 
 uint32_t Composite::GetBaseFieldCount() const
@@ -61,7 +100,7 @@ uint32_t Composite::GetBaseFieldCount() const
     return count;
 }
 
-Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags)
+Reflect::Field* Composite::AddField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
 {
     tstring convertedName;
     {
@@ -78,25 +117,10 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
 
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
-
     return field;
 }
 
-Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags)
+Reflect::ElementField* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
     tstring convertedName;
     {
@@ -114,25 +138,10 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     field->m_Type = type;
     m_Fields.push_back( field );
 
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
-
     return field;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags)
+Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
 {
     tstring convertedName;
     {
@@ -151,21 +160,6 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
     field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
     field->m_DataClass = dataClass;
     m_Fields.push_back( field );
-
-    DataPtr def = field->CreateData( &instance );
-    if (def.ReferencesObject())
-    {
-        field->m_Default = field->CreateData();
-
-        try
-        {
-            field->m_Default->Set( def );
-        }
-        catch (Reflect::Exception&)
-        {
-            field->m_Default = NULL;
-        }
-    }
 
     return field;
 }

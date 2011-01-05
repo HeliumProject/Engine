@@ -87,7 +87,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_ABSTRACT( SceneNode, Component::ComponentCollection );
-            static void EnumerateClass( Reflect::Compositor<SceneNode>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

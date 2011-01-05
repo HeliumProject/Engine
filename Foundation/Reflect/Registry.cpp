@@ -232,6 +232,9 @@ void Reflect::Cleanup()
         // free our casting memory
         Data::Cleanup();
 
+        // free basic types
+        g_Registry->m_InitializerStack.Cleanup();
+
         // delete registry
         delete g_Registry;
         g_Registry = NULL;

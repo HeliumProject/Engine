@@ -20,7 +20,8 @@ Composite::Composite()
 
 Composite::~Composite()
 {
-
+    HELIUM_ASSERT( m_FirstDerived == NULL );
+    HELIUM_ASSERT( m_NextSibling == NULL );
 }
 
 void Composite::Report() const
@@ -44,7 +45,10 @@ void Composite::Report() const
 
 void Composite::Unregister() const
 {
-    m_Base->RemoveDerived( this );
+    if ( m_Base )
+    {
+        m_Base->RemoveDerived( this );
+    }
 }
 
 void Composite::AddDerived( const Composite* derived ) const
@@ -68,17 +72,19 @@ void Composite::AddDerived( const Composite* derived ) const
 
 void Composite::RemoveDerived( const Composite* derived ) const
 {
-    if ( m_Base->m_FirstDerived == derived )
+    if ( m_FirstDerived == derived )
     {
-        m_Base->m_FirstDerived = m_NextSibling;
+        m_FirstDerived = derived->m_NextSibling;
     }
     else
     {
-        for ( const Composite* sibling = m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
+        for ( const Composite* sibling = m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
         {
             if ( sibling->m_NextSibling == derived )
             {
-                sibling->m_NextSibling = m_NextSibling;
+                sibling->m_NextSibling = sibling->m_NextSibling ? sibling->m_NextSibling->m_NextSibling : NULL;
+                derived->m_NextSibling = NULL;
+                break;
             }
         }
     }

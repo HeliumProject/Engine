@@ -2,6 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
+#include "Platform/Utility.h"
 
 namespace Helium
 {
@@ -40,7 +41,7 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( WIN32 ) && defined ( _M_IX86 )
+#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov eax,DWORD PTR [val];
             _asm mov ebx,DWORD PTR [val+4];
             _asm bswap eax;
@@ -48,7 +49,7 @@ namespace Helium
             _asm mov DWORD PTR [val+4],eax;
             _asm mov DWORD PTR [val],ebx;
 #else
-            HELIUM_BREAK();
+            ReverseByteOrder( &val, &val, sizeof( val ) );
 #endif
         }
 
@@ -94,12 +95,12 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( WIN32 ) && defined ( _M_IX86 )
+#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov eax,val;
             _asm bswap eax;
             _asm mov val,eax;
 #else
-            HELIUM_BREAK();
+            ReverseByteOrder( &val, &val, sizeof( val ) );
 #endif
         }
 
@@ -145,12 +146,12 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( WIN32 ) && defined ( _M_IX86 )
+#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov ax,val;
             _asm xchg al,ah;
             _asm mov val,ax;
 #else
-            HELIUM_BREAK();
+            ReverseByteOrder( &val, &val, sizeof( val ) );
 #endif
         }
 
@@ -180,22 +181,10 @@ namespace Helium
     template<class T>
     inline void Swizzle(T& val, bool swizzle = true)
     {
-        // if you hit this, we're trying to swizzle something and we don't know how
-        HELIUM_ASSERT( !swizzle );
-    }
-
-    template<> inline void Swizzle<bool>(bool& val, bool swizzle)
-    {
-
-    }
-
-    template<> inline void Swizzle<uint8_t>(uint8_t& val, bool swizzle)
-    {
-
-    }
-    template<> inline void Swizzle<int8_t>(int8_t& val, bool swizzle)
-    {
-
+        if ( sizeof( T ) > 1 && swizzle )
+        {
+            ReverseByteOrder( &val, &val, sizeof( T ) );
+        }
     }
 
     template<> inline void Swizzle<uint16_t>(uint16_t& val, bool swizzle)

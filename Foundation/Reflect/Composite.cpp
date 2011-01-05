@@ -115,7 +115,7 @@ Reflect::Field* Composite::AddField( const std::string& name, const uint32_t off
     }
 
     Field* field = Field::Create( this );
-    field->SetName( convertedName );
+    field->m_Name = convertedName;
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
@@ -135,7 +135,7 @@ Reflect::ElementField* Composite::AddElementField( const std::string& name, cons
     }
 
     ElementField* field = ElementField::Create( this );
-    field->SetName( convertedName );
+    field->m_Name = convertedName;
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;
@@ -159,7 +159,7 @@ Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& na
     HELIUM_ASSERT(enumeration != NULL);
 
     EnumerationField* field = EnumerationField::Create( this, enumeration );
-    field->SetName( convertedName );
+    field->m_Name = convertedName;
     field->m_Size = size;
     field->m_Offset = offset;
     field->m_Flags = flags;

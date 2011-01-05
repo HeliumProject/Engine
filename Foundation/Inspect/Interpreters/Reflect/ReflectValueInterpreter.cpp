@@ -114,9 +114,10 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         label = CreateControl<Label>();
 
         tstring temp;
-        if ( !field->GetProperty( TXT( "UIName" ), temp ) )
+        field->GetProperty( TXT( "UIName" ), temp );
+        if ( temp.empty() )
         {
-            bool converted = Helium::ConvertString( field->m_UIName, temp );
+            bool converted = Helium::ConvertString( field->m_Name, temp );
             HELIUM_ASSERT( converted );
         }
 

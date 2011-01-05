@@ -111,23 +111,6 @@ bool Field::SetDefaultValue(Element* instance) const
     return false;
 }
 
-void Field::SetName(const tstring& name)
-{
-    m_Name = name;
-
-    if ( m_UIName.empty() )
-    {
-        if (m_Name.substr(0, 2) == TXT("m_") )
-        {
-            m_UIName = m_Name.substr(2);
-        }
-        else
-        {
-            m_UIName = m_Name;
-        }
-    }
-}
-
 ElementField::ElementField(const Composite* type)
 : Field ( type )
 , m_Type ( Reflect::GetType<Reflect::Element>() )

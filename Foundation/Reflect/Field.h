@@ -50,12 +50,8 @@ namespace Helium
             // sets the default value of this field in the passed object
             bool SetDefaultValue(Element* instance) const;
 
-            // set the name (and UI name if its not set)
-            void SetName(const tstring& name);
-
             const Composite*        m_Composite;    // the type we are a field of
             tstring                 m_Name;         // name of this field
-            tstring                 m_UIName;       // friendly name
             uint32_t                m_Size;         // the size of this field
             uintptr_t               m_Offset;       // the offset to the field
             uint32_t                m_Flags;        // flags for special behavior

@@ -113,8 +113,15 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     ContainerPtr container = CreateControl<Container>();
 
     tstring temp;
-    bool converted = Helium::ConvertString( field->m_UIName, temp );
+    field->GetProperty( TXT( "UIName" ), temp );
+    if ( temp.empty() )
+    {
+        bool converted = Helium::ConvertString( field->m_Name, temp );
+        HELIUM_ASSERT( converted );
+    }
+
     container->a_Name.Set( temp );
+
     parent->AddChild(container);
 
     // create the serializers

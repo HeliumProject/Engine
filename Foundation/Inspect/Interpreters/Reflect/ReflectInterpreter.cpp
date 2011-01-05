@@ -258,8 +258,12 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                             ContainerPtr childContainer = CreateControl<Container>();
 
                             tstring temp;
-                            bool converted = Helium::ConvertString( field->m_UIName, temp );
-                            HELIUM_ASSERT( converted );
+                            field->GetProperty( TXT( "UIName" ), temp );
+                            if ( temp.empty() )
+                            {
+                                bool converted = Helium::ConvertString( field->m_Name, temp );
+                                HELIUM_ASSERT( converted );
+                            }
 
                             childContainer->a_Name.Set( temp );
 

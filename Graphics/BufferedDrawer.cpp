@@ -1,13 +1,15 @@
 #include "GraphicsPch.h"
 #include "Graphics/BufferedDrawer.h"
 
+#include "Platform/Math/Simd/Matrix44.h"
+#include "Foundation/StringConverter.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/RPixelShader.h"
 #include "Rendering/RRenderCommandProxy.h"
 #include "Rendering/RVertexBuffer.h"
 #include "Rendering/RVertexShader.h"
-#include "Graphics/RenderResourceManager.h"
+#include "Graphics/Font.h"
 #include "Graphics/Shader.h"
 
 using namespace Lunar;
@@ -256,6 +258,143 @@ void BufferedDrawer::DrawTexturedMesh(
     pDrawCall->spTexture = pTexture;
 }
 
+/// Draw text at a specific world transform.
+///
+/// @param[in] rTransform  World transform at which to start the text.
+/// @param[in] rText       Text to draw.
+/// @param[in] rColor      Color to blend with the text.
+/// @param[in] size        Identifier of the font size to use.
+void BufferedDrawer::DrawText(
+    const Simd::Matrix44& rTransform,
+    const String& rText,
+    const Color& rColor,
+    RenderResourceManager::EDebugFontSize size )
+{
+    HELIUM_ASSERT(
+        static_cast< size_t >( size ) < static_cast< size_t >( RenderResourceManager::DEBUG_FONT_SIZE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    // Get the font to use for rendering.
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    Font* pFont = rRenderResourceManager.GetDebugFont( size );
+    if( !pFont )
+    {
+        return;
+    }
+
+    // Convert the text to wide characters if necessary.
+#if HELIUM_UNICODE
+    const String& wideText = rText;
+#else
+    String wideText;
+    StringConverter< char, wchar_t >::Convert( wideText, rText );
+#endif
+
+    // Begin rendering the text (remember to check for surrogate pairs for UTF-16 text).
+    float32_t penX = 0.0f;
+
+    bool bHaveSurrogate = false;
+    uint32_t highSurrogate = 0;
+
+    const uint16_t quadIndices[] = { 0, 1, 2, 0, 2, 3 };
+
+    float32_t invTextureWidth = 1.0f / static_cast< float32_t >( pFont->GetTextureSheetWidth() );
+    float32_t invTextureHeight = 1.0f / static_cast< float32_t >( pFont->GetTextureSheetHeight() );
+
+    size_t characterCount = wideText.GetSize();
+    for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+    {
+        uint32_t character = wideText[ characterIndex ];
+        if( !bHaveSurrogate )
+        {
+            if( character >= 0xd800 && character < 0xe000 )
+            {
+                if( character < 0xdc00 )
+                {
+                    bHaveSurrogate = true;
+                    highSurrogate = character;
+                }
+
+                continue;
+            }
+        }
+        else
+        {
+            bHaveSurrogate = false;
+
+            if( character < 0xdc00 || character >= 0xe000 )
+            {
+                continue;
+            }
+
+            character = ( ( ( highSurrogate - 0xd800 ) << 10 ) | ( character - 0xdc00 ) ) + 0x10000;
+        }
+
+        const Font::Character* pCharacter = pFont->FindCharacter( character );
+        if( !pCharacter )
+        {
+            continue;
+        }
+
+        RTexture2d* pTexture = pFont->GetTextureSheet( pCharacter->texture );
+        if( !pTexture )
+        {
+            continue;
+        }
+
+        float32_t imageWidthFloat = static_cast< float32_t >( pCharacter->imageWidth );
+        float32_t imageHeightFloat = static_cast< float32_t >( pCharacter->imageHeight );
+
+        float32_t cornerMinX = Floor( penX + 0.5f ) + static_cast< float32_t >( pCharacter->bearingX >> 6 );
+        float32_t cornerMinY = static_cast< float32_t >( pCharacter->bearingY >> 6 );
+        float32_t cornerMaxX = cornerMinX + imageWidthFloat;
+        float32_t cornerMaxY = cornerMinY - imageHeightFloat;
+
+        Simd::Vector3 corners[] =
+        {
+            Simd::Vector3( cornerMinX, cornerMinY, 0.0f ),
+            Simd::Vector3( cornerMaxX, cornerMinY, 0.0f ),
+            Simd::Vector3( cornerMaxX, cornerMaxY, 0.0f ),
+            Simd::Vector3( cornerMinX, cornerMaxY, 0.0f )
+        };
+
+        rTransform.TransformPoint( corners[ 0 ], corners[ 0 ] );
+        rTransform.TransformPoint( corners[ 1 ], corners[ 1 ] );
+        rTransform.TransformPoint( corners[ 2 ], corners[ 2 ] );
+        rTransform.TransformPoint( corners[ 3 ], corners[ 3 ] );
+
+        float32_t texCoordMinX = static_cast< float32_t >( pCharacter->imageX );
+        float32_t texCoordMinY = static_cast< float32_t >( pCharacter->imageY );
+        float32_t texCoordMaxX = texCoordMinX + imageWidthFloat;
+        float32_t texCoordMaxY = texCoordMinY + imageHeightFloat;
+
+        texCoordMinX *= invTextureWidth;
+        texCoordMinY *= invTextureHeight;
+        texCoordMaxX *= invTextureWidth;
+        texCoordMaxY *= invTextureHeight;
+
+        const SimpleTexturedVertex vertices[] =
+        {
+            SimpleTexturedVertex( corners[ 0 ], Simd::Vector2( texCoordMinX, texCoordMinY ), rColor ),
+            SimpleTexturedVertex( corners[ 1 ], Simd::Vector2( texCoordMaxX, texCoordMinY ), rColor ),
+            SimpleTexturedVertex( corners[ 2 ], Simd::Vector2( texCoordMaxX, texCoordMaxY ), rColor ),
+            SimpleTexturedVertex( corners[ 3 ], Simd::Vector2( texCoordMinX, texCoordMaxY ), rColor )
+        };
+
+        DrawTexturedMesh( vertices, 4, quadIndices, 2, pTexture );
+
+        penX += Font::Fixed26x6ToFloat32( pCharacter->advance );
+    }
+}
+
 /// Push buffered draw command data into vertex and index buffers for rendering.
 ///
 /// This must be called prior to calling Draw().  EndDrawing() should be called when rendering is complete.  No new draw
@@ -406,7 +545,7 @@ void BufferedDrawer::BeginDrawing()
         MemoryCopy(
             pMappedVertexBuffer,
             m_texturedVertices.GetData(),
-            texturedVertexCount * sizeof( SimpleVertex ) );
+            texturedVertexCount * sizeof( SimpleTexturedVertex ) );
         rResourceSet.spTexturedVertexBuffer->Unmap();
 
         void* pMappedIndexBuffer = rResourceSet.spTexturedIndexBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD );

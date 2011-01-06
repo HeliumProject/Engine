@@ -294,6 +294,106 @@ namespace Helium
 #endif
     }
 
+    /// Round a floating-point value down to the largest integral value less than or equal to it.
+    ///
+    /// @param[in] value  Floating-point value.
+    ///
+    /// @return  Largest integral floating-point value less than or equal to the given value.
+    ///
+    /// @see Ceil()
+    float32_t Floor( float32_t value )
+    {
+        return floorf( value );
+    }
+
+    /// Round a floating-point value down to the largest integral value less than or equal to it.
+    ///
+    /// @param[in] value  Floating-point value.
+    ///
+    /// @return  Largest integral floating-point value less than or equal to the given value.
+    ///
+    /// @see Ceil()
+    float64_t Floor( float64_t value )
+    {
+        return floor( value );
+    }
+
+    /// Round a floating-point value up to the smallest integral value greater than or equal to it.
+    ///
+    /// @param[in] value  Floating-point value.
+    ///
+    /// @return  Smallest integral floating-point value greater than or equal to the given value.
+    ///
+    /// @see Floor()
+    float32_t Ceil( float32_t value )
+    {
+        return ceilf( value );
+    }
+
+    /// Round a floating-point value up to the smallest integral value greater than or equal to it.
+    ///
+    /// @param[in] value  Floating-point value.
+    ///
+    /// @return  Smallest integral floating-point value greater than or equal to the given value.
+    ///
+    /// @see Floor()
+    float64_t Ceil( float64_t value )
+    {
+        return ceil( value );
+    }
+
+    /// Compute the remainder of a floating-point division operation.
+    ///
+    /// @param[in] x  Dividend of the operation.
+    /// @param[in] y  Divisor of the operation.
+    ///
+    /// @return  The remainder of the first parameter divided by the second, with the same sign as the first parameter.
+    ///
+    /// @see Modf()
+    float32_t Fmod( float32_t x, float32_t y )
+    {
+        return fmodf( x, y );
+    }
+
+    /// Compute the remainder of a floating-point division operation.
+    ///
+    /// @param[in] x  Dividend of the operation.
+    /// @param[in] y  Divisor of the operation.
+    ///
+    /// @return  The remainder of the first parameter divided by the second, with the same sign as the first parameter.
+    ///
+    /// @see Modf()
+    float64_t Fmod( float64_t x, float64_t y )
+    {
+        return fmod( x, y );
+    }
+
+    /// Separate the integer and fractional parts of a floating-point value.
+    ///
+    /// @param[in]  value     Floating-point value.
+    /// @param[out] rInteger  Integer component of the given floating-point value, with the same sign as that value.
+    ///
+    /// @return  Fractional component of the given floating-point value, with the same sign as that value.
+    ///
+    /// @see Fmod()
+    float32_t Modf( float32_t value, float32_t& rInteger )
+    {
+        return modff( value, &rInteger );
+    }
+
+    /// Separate the integer and fractional parts of a floating-point value.
+    ///
+    /// @param[in]  value     Floating-point value.
+    /// @param[out] rInteger  Integer component of the given floating-point value, with the same sign as that value.
+    ///
+    /// @return  Fractional component of the given floating-point value, with the same sign as that value.
+    ///
+    /// @see Fmod()
+    float64_t Modf( float64_t value, float64_t& rInteger )
+    {
+        return modf( value, &rInteger );
+    }
+
     /// Compute the sine of an angle.
     ///
     /// @param[in] radians  Angle, in radians.

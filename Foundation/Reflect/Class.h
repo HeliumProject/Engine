@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Reflect/Composite.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Registry.h"
 
 #include "Platform/String.h"

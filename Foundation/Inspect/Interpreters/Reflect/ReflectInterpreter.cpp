@@ -88,11 +88,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
         bases.pop();
 
         // for each field in the type
-        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = (*itr);
+            const Field* field = &*itr;
 
             bool noFlags = ( field->m_Flags == 0 && includeFlags == 0xFFFFFFFF );
             bool doInclude = ( field->m_Flags & includeFlags ) != 0;
@@ -194,7 +194,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                     std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
                     for ( ; elementItr != elementEnd; ++elementItr )
                     {
-                        uintptr_t fieldAddress = (uintptr_t)(*elementItr) + (*itr)->m_Offset;
+                        uintptr_t fieldAddress = (uintptr_t)(*elementItr) + itr->m_Offset;
 
                         Element* element = *((ElementPtr*)(fieldAddress));
 
@@ -249,7 +249,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
                     if ( instances.size() == 1 )
                     {
-                        uintptr_t fieldAddress = (uintptr_t)(instances.front()) + (*itr)->m_Offset;
+                        uintptr_t fieldAddress = (uintptr_t)(instances.front()) + itr->m_Offset;
 
                         std::vector< ElementPtr >* elements = (std::vector< ElementPtr >*)fieldAddress;
 
@@ -258,8 +258,12 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                             ContainerPtr childContainer = CreateControl<Container>();
 
                             tstring temp;
-                            bool converted = Helium::ConvertString( field->m_UIName, temp );
-                            HELIUM_ASSERT( converted );
+                            field->GetProperty( TXT( "UIName" ), temp );
+                            if ( temp.empty() )
+                            {
+                                bool converted = Helium::ConvertString( field->m_Name, temp );
+                                HELIUM_ASSERT( converted );
+                            }
 
                             childContainer->a_Name.Set( temp );
 

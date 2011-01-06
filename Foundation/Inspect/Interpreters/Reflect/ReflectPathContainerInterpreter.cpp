@@ -41,8 +41,18 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
 
     LabelPtr label = CreateControl< Label >();
     labelContainer->AddChild( label );
-    label->BindText( field->m_UIName );
+
+    tstring temp;
+    field->GetProperty( TXT( "UIName" ), temp );
+    if ( temp.empty() )
+    {
+        bool converted = Helium::ConvertString( field->m_Name, temp );
+        HELIUM_ASSERT( converted );
+    }
+
+    label->BindText( temp );
     label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
+
     // only allow modification if we've only got one backing list
     label->a_IsEnabled.Set( instances.size() == 1 );
 

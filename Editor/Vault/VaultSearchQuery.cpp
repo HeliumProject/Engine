@@ -62,9 +62,9 @@ REFLECT_DEFINE_ENUMERATION( SearchType );
 REFLECT_DEFINE_CLASS( VaultSearchQuery );
 void VaultSearchQuery::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::EnumerationField* enumSearchType = comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, "m_SearchType" );
-    Reflect::Field* fieldQueryString = comp.AddField( &VaultSearchQuery::m_QueryString, "m_QueryString" );
-    Reflect::Field* fieldQueryPath = comp.AddField( &VaultSearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
+    comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, "m_SearchType" );
+    comp.AddField( &VaultSearchQuery::m_QueryString, "m_QueryString" );
+    comp.AddField( &VaultSearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

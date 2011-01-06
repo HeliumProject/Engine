@@ -3,11 +3,127 @@
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
+
+Field::Field()
+: m_Composite( NULL )
+, m_Flags( 0 )
+, m_Index( -1 )
+, m_Type( NULL )
+, m_DataClass( NULL )
+, m_Offset( -1 )
+{
+
+}
+
+DataPtr Field::CreateData(Element* instance) const
+{
+    DataPtr ser;
+
+    if ( m_DataClass != NULL )
+    {
+        ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
+
+        if (object.ReferencesObject())
+        {
+            ser = AssertCast<Data>(object);
+        }
+    }
+
+    if ( ser.ReferencesObject() )
+    {
+        if ( instance )
+        {
+            ser->ConnectField( instance, this );
+        }
+
+        const Class* classType = ReflectionCast< Class >( m_Type );
+        if ( classType )
+        {
+            PointerData* pointerData = ObjectCast<PointerData>( ser );
+            if ( pointerData )
+            {
+                pointerData->m_Type = m_Type;
+            }
+            else
+            {
+                ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+                if ( containerData )
+                {
+                    containerData->m_Type = m_Type;
+                }
+            }
+        }
+    }
+
+    return ser;
+}
+
+bool Field::HasDefaultValue(Element* instance) const
+{
+#ifdef REFLECT_REFACTOR
+    // if we don't have a default value, we can never be at the default value
+    if (!m_Default.ReferencesObject())
+    {
+        return false;
+    }
+
+    // get a serializer
+    DataPtr serializer = CreateData();
+
+    if (serializer.ReferencesObject())
+    {
+        // set data pointer
+        serializer->ConnectField(instance, this);
+
+        // return equality
+        bool result = m_Default->Equals(serializer);
+
+        // disconnect
+        serializer->Disconnect();
+
+        // result
+        return result;
+    }
+#endif
+
+    return false;
+}
+
+bool Field::SetDefaultValue(Element* instance) const
+{
+#ifdef REFLECT_REFACTOR
+    // if we don't have a default value, we can never be at the default value
+    if (!m_Default.ReferencesObject())
+    {
+        return false;
+    }
+
+    // get a serializer
+    DataPtr serializer = CreateData();
+
+    if (serializer.ReferencesObject())
+    {
+        // set data pointer
+        serializer->ConnectField(instance, this);
+
+        // copy the data
+        serializer->Set(m_Default);
+
+        // disconnect
+        serializer->Disconnect();
+
+        return true;
+    }
+#endif
+
+    return false;
+}
 
 Composite::Composite()
 : m_Base( NULL )
@@ -29,12 +145,12 @@ void Composite::Report() const
     Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, *m_Name, Crc32( *m_Name ) );
 
     uint32_t computedSize = 0;
-    std::vector< ConstFieldPtr >::const_iterator itr = m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = m_Fields.end();
+    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        computedSize += (*itr)->m_Size;
-        Log::Debug( TXT( "  Index: %3d, Size %4d, Name: `%s`\n" ), (*itr)->m_Index, (*itr)->m_Size, (*itr)->m_Name.c_str() );
+        computedSize += itr->m_Size;
+        Log::Debug( TXT( "  Index: %3d, Size %4d, Name: `%s`\n" ), itr->m_Index, itr->m_Size, itr->m_Name.c_str() );
     }
 
     if (computedSize != m_Size)
@@ -96,9 +212,9 @@ uint32_t Composite::GetBaseFieldCount() const
 
     for ( const Composite* base = m_Base; base; base = base->m_Base )
     {
-        if ( m_Base->m_Fields.size() )
+        if ( m_Base->m_Fields.GetSize() )
         {
-            count = m_Base->m_Fields.back()->m_Index + 1;
+            count = m_Base->m_Fields.GetLast().m_Index + 1;
             break;
         }
     }
@@ -114,19 +230,20 @@ Reflect::Field* Composite::AddField( const std::string& name, const uint32_t off
         HELIUM_ASSERT( converted );
     }
 
-    Field* field = Field::Create( this );
-    field->SetName( convertedName );
-    field->m_Size = size;
-    field->m_Offset = offset;
-    field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
-    field->m_DataClass = dataClass;
-    m_Fields.push_back( field );
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = convertedName;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_DataClass = dataClass;
+    m_Fields.Add( field );
 
-    return field;
+    return &m_Fields.GetLast();
 }
 
-Reflect::ElementField* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
+Reflect::Field* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
     tstring convertedName;
     {
@@ -134,20 +251,21 @@ Reflect::ElementField* Composite::AddElementField( const std::string& name, cons
         HELIUM_ASSERT( converted );
     }
 
-    ElementField* field = ElementField::Create( this );
-    field->SetName( convertedName );
-    field->m_Size = size;
-    field->m_Offset = offset;
-    field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
-    field->m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
-    field->m_Type = type;
-    m_Fields.push_back( field );
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = convertedName;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_Type = type;
+    field.m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
+    m_Fields.Add( field );
 
-    return field;
+    return &m_Fields.GetLast();
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
+Reflect::Field* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
 {
     tstring convertedName;
     {
@@ -158,16 +276,18 @@ Reflect::EnumerationField* Composite::AddEnumerationField( const std::string& na
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
     HELIUM_ASSERT(enumeration != NULL);
 
-    EnumerationField* field = EnumerationField::Create( this, enumeration );
-    field->SetName( convertedName );
-    field->m_Size = size;
-    field->m_Offset = offset;
-    field->m_Flags = flags;
-    field->m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.size();
-    field->m_DataClass = dataClass;
-    m_Fields.push_back( field );
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = convertedName;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_Type = enumeration;
+    field.m_DataClass = dataClass;
+    m_Fields.Add( field );
 
-    return field;
+    return &m_Fields.GetLast();
 }
 
 bool Composite::HasType(const Type* type) const
@@ -187,13 +307,13 @@ const Field* Composite::FindFieldByName(uint32_t crc) const
 {
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            if ( Crc32( (*itr)->m_Name.c_str() ) == crc )
+            if ( Crc32( itr->m_Name.c_str() ) == crc )
             {
-                return *itr;
+                return &*itr;
             }
         }
     }
@@ -205,9 +325,9 @@ const Field* Composite::FindFieldByIndex(uint32_t index) const
 {
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        if ( !current->m_Fields.empty() && index >= current->m_Fields.front()->m_Index && index <= current->m_Fields.front()->m_Index )
+        if ( current->m_Fields.GetSize() && index >= current->m_Fields.GetFirst().m_Index && index <= current->m_Fields.GetFirst().m_Index )
         {
-            return current->m_Fields[ index - current->m_Fields.front()->m_Index ];
+            return &current->m_Fields[ index - current->m_Fields.GetFirst().m_Index ];
         }
     }
 
@@ -219,15 +339,15 @@ const Field* Composite::FindFieldByOffset(uint32_t offset) const
 #pragma TODO("Implement binary search")
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        if ( !current->m_Fields.empty() && offset >= current->m_Fields.front()->m_Offset && offset <= current->m_Fields.front()->m_Offset )
+        if ( current->m_Fields.GetSize() && offset >= current->m_Fields.GetFirst().m_Offset && offset <= current->m_Fields.GetFirst().m_Offset )
         {
-            std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
-            std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+            DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+            DynArray< Field >::ConstIterator end = current->m_Fields.End();
             for ( ; itr != end; ++itr )
             {
-                if ( (*itr)->m_Offset == offset )
+                if ( itr->m_Offset == offset )
                 {
-                    return *itr;
+                    return &*itr;
                 }
             }
         }
@@ -264,11 +384,11 @@ bool Composite::Equals(const Element* a, const Element* b)
     }
     else
     {
-        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = type->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = (*itr);
+            const Field* field = &*itr;
 
             // create serializers
             DataPtr aData = field->CreateData();
@@ -310,11 +430,11 @@ void Composite::Visit(Element* element, Visitor& visitor)
     const Class* type = element->GetClass();
 
     {
-        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = type->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = (*itr);
+            const Field* field = &*itr;
 
             if (!visitor.VisitField(element, field))
             {
@@ -388,11 +508,11 @@ void Composite::Copy( const Element* src, Element* dest )
     }
     else
     {
-        std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = type->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = (*itr);
+            const Field* field = &*itr;
 
             // create serializers
             DataPtr lhs = field->CreateData();

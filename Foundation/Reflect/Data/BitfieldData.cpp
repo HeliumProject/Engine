@@ -1,6 +1,7 @@
 #include "Foundation/Reflect/Data/BitfieldData.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 

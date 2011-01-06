@@ -4,6 +4,7 @@
 
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/VertexTypes.h"
+#include "Graphics/RenderResourceManager.h"
 
 namespace Lunar
 {
@@ -41,6 +42,10 @@ namespace Lunar
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
             uint32_t triangleCount, RTexture2d* pTexture );
+
+        void DrawText(
+            const Simd::Matrix44& rTransform, const String& rText, const Color& rColor = Color( 0xffffffff ),
+            RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
         //@}
 
         /// @name Rendering

@@ -36,9 +36,9 @@ void ShaderAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
     comp.AddField( &ShaderAsset::m_IncandescentMapEnabled, "m_IncandescentMapEnabled" );
     comp.AddField( &ShaderAsset::m_IncandescentMapScaling, "m_IncandescentMapScaling" );
 
-    Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided" );
+    comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided" );
 
-    Reflect::EnumerationField* enumWrapModeU = comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU" );
-    Reflect::EnumerationField* enumWrapModeV = comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV" );
-    Reflect::EnumerationField* enumAlphaMode = comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode" );
+    comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU" );
+    comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV" );
+    comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode" );
 }

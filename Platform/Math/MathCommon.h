@@ -101,6 +101,16 @@ namespace Helium
 
     inline size_t Log2( uint32_t value );
     inline size_t Log2( uint64_t value );
+
+    inline float32_t Floor( float32_t value );
+    inline float64_t Floor( float64_t value );
+    inline float32_t Ceil( float32_t value );
+    inline float64_t Ceil( float64_t value );
+
+    inline float32_t Fmod( float32_t x, float32_t y );
+    inline float64_t Fmod( float64_t x, float64_t y );
+    inline float32_t Modf( float32_t value, float32_t& rInteger );
+    inline float64_t Modf( float64_t value, float64_t& rInteger );
     //@}
 
     /// @defgroup mathtrig Trigonometric Functions

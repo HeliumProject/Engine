@@ -21,7 +21,7 @@ namespace Helium
             SEEK_ORIGIN_FIRST   =  0,
             SEEK_ORIGIN_INVALID = -1,
 
-            SeekOrigins::SEEK_ORIGIN_CURRENT,  ///< Seek relative to the current location.
+            SEEK_ORIGIN_CURRENT,  ///< Seek relative to the current location.
             SEEK_ORIGIN_BEGIN,    ///< Seek relative to the beginning of the stream.
             SEEK_ORIGIN_END,      ///< Seek relative to the end of the stream.
 

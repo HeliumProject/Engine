@@ -1,5 +1,7 @@
 #include "ReflectValueInterpreter.h"
 
+#include "Foundation/Reflect/Enumeration.h"
+
 #include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Script.h"

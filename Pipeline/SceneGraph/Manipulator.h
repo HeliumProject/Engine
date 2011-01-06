@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Inspect/DataBinding.h"
 
 #include "Pipeline/API.h"

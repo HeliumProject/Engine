@@ -3,10 +3,10 @@
 #include <typeinfo>
 
 #include "Foundation/Reflect/Type.h"
-#include "Foundation/Reflect/Field.h"
 #include "Foundation/Reflect/Visitor.h"
 #include "Foundation/Automation/Attribute.h"
 #include "Foundation/Container/Set.h"
+#include "Foundation/Container/DynArray.h"
 
 //
 //  Composite Binary format:
@@ -30,11 +30,49 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Field;
         class Composite;
-
         typedef void (*AcceptVisitor)( Composite& );
 
+        namespace FieldFlags
+        {
+            enum Enum
+            {
+                Discard     = 1 << 0,       // disposable fields are not serialized
+                Force       = 1 << 1,       // forced fields are always serialized
+                Share       = 1 << 2,       // shared fields are not cloned or compared deeply
+                Hide        = 1 << 3,       // hidden fields are not inherently visible in UI
+                ReadOnly    = 1 << 4,       // read-only fields cannot be edited in the UI inherently
+            };
+        }
+
+        //
+        // Field (an element of a composite)
+        //
+
+        class FOUNDATION_API Field : public PropertyCollection
+        {
+        public:
+            Field();
+
+            // creates a suitable serializer for this field in the passed object
+            DataPtr CreateData(Element* instance = NULL) const;
+
+            // checks to see if the default value matches the value of this field in the passed object
+            bool HasDefaultValue(Element* instance) const;
+
+            // sets the default value of this field in the passed object
+            bool SetDefaultValue(Element* instance) const;
+
+            const Composite*        m_Composite;    // the type we are a field of
+            tstring                 m_Name;         // name of this field
+            uint32_t                m_Size;         // the size of this field
+            uintptr_t               m_Offset;       // the offset to the field
+            uint32_t                m_Flags;        // flags for special behavior
+            uint32_t                m_Index;        // the unique id of this field
+            const Type*             m_Type;         // the type of this field (NULL for POD types)
+            const Class*            m_DataClass;    // type id of the serializer to use
+            CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)
+        };
 
         //
         // Composite (struct or class)
@@ -48,7 +86,7 @@ namespace Helium
             const Composite*                        m_Base;                 // the base type name
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
-            std::vector< ConstFieldPtr >            m_Fields;               // fields in this composite
+            DynArray< Field >                       m_Fields;               // fields in this composite
             AcceptVisitor                           m_Accept;
 
         protected:

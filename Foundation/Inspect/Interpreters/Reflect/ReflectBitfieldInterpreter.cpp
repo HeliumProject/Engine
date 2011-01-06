@@ -1,11 +1,10 @@
 #include "ReflectBitfieldInterpreter.h"
 
+#include "Foundation/Reflect/Enumeration.h"
+
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/DataBinding.h"
-
-#include "Foundation/Reflect/Field.h"
-#include "Foundation/Reflect/Enumeration.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

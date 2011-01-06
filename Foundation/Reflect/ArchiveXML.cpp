@@ -231,11 +231,11 @@ void ArchiveXML::SerializeFields(const ElementPtr& element)
     const Class* type = element->GetClass();
     HELIUM_ASSERT(type != NULL);
 
-    std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        SerializeField(element, *itr);
+        SerializeField(element, &*itr);
     }
 }
 

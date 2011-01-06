@@ -17,6 +17,7 @@
 
 namespace Lunar
 {
+    HELIUM_DECLARE_PTR( Font );
     HELIUM_DECLARE_PTR( ShaderVariant );
 
     L_DECLARE_RPTR( RRasterizerState );
@@ -109,6 +110,23 @@ namespace Lunar
             TEXTURE_FILTER_LAST = TEXTURE_FILTER_MAX - 1
         };
 
+        /// Debug font sizes.
+        enum EDebugFontSize
+        {
+            DEBUG_FONT_SIZE_FIRST   =  0,
+            DEBUG_FONT_SIZE_INVALID = -1,
+
+            /// Small (10 pt) debug font size.
+            DEBUG_FONT_SIZE_SMALL,
+            /// Medium (12 pt) debug font size.
+            DEBUG_FONT_SIZE_MEDIUM,
+            /// Large (14 pt) debug font size.
+            DEBUG_FONT_SIZE_LARGE,
+
+            DEBUG_FONT_SIZE_MAX,
+            DEBUG_FONT_SIZE_LAST = DEBUG_FONT_SIZE_MAX - 1
+        };
+
         /// @name State Initialization
         //@{
         void Initialize();
@@ -143,6 +161,8 @@ namespace Lunar
         ShaderVariant* GetSimpleWorldSpacePixelShader() const;
         ShaderVariant* GetSimpleScreenSpaceVertexShader() const;
         ShaderVariant* GetSimpleScreenSpacePixelShader() const;
+
+        Font* GetDebugFont( EDebugFontSize size ) const;
 
         inline GraphicsConfig::EShadowMode GetShadowMode() const;
         inline uint32_t GetShadowDepthTextureUsableSize() const;
@@ -188,6 +208,9 @@ namespace Lunar
         ShaderVariantPtr m_spSimpleScreenSpaceVertexShader;
         /// Simple screen-space primitive pixel shader.
         ShaderVariantPtr m_spSimpleScreenSpacePixelShader;
+
+        /// Debug fonts.
+        FontPtr m_debugFonts[ DEBUG_FONT_SIZE_MAX ];
 
         /// Effective shadow mode in use (accounting for whether a shadow buffer was allocated, etc.).
         GraphicsConfig::EShadowMode m_shadowMode;

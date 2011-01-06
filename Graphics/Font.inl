@@ -197,6 +197,31 @@ const Lunar::Font::Character* Lunar::Font::FindCharacter( uint32_t codePoint ) c
     return NULL;
 }
 
+/// Get the number of texture sheets in this font.
+///
+/// @return  Texture sheet count.
+///
+/// @see GetTextureSheet()
+uint8_t Lunar::Font::GetTextureSheetCount() const
+{
+    return m_textureCount;
+}
+
+/// Retrieve the resource for the texture sheet associated with the specified index.
+///
+/// @param[in] index  Texture sheet index.
+///
+/// @return  Pointer to the texture sheet resource associated with the given index.
+///
+/// @see GetTextureSheetCount()
+Lunar::RTexture2d* Lunar::Font::GetTextureSheet( uint8_t index ) const
+{
+    HELIUM_ASSERT( index < m_textureCount );
+    HELIUM_ASSERT( m_pspTextures );
+
+    return m_pspTextures[ index ];
+}
+
 /// Convert a 26.6 fixed-point value to a 32-bit floating-point value.
 ///
 /// @param[in] value  26.6 fixed-point value.

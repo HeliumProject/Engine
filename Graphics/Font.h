@@ -131,6 +131,12 @@ namespace Lunar
         inline const Character* FindCharacter( uint32_t codePoint ) const;
         //@}
 
+        /// @name Texture Sheet Access
+        //@{
+        inline uint8_t GetTextureSheetCount() const;
+        inline RTexture2d* GetTextureSheet( uint8_t index ) const;
+        //@}
+
         /// @name Static Utility Functions
         //@{
         inline static float32_t Fixed26x6ToFloat32( int32_t value );

@@ -79,7 +79,7 @@ project "freetype"
 	configuration "windows"
 		files
 		{
-			"Dependencies/freetype/builds/win32/vc2008/ftdebug.c",
+			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
 
 project "LiteSQL"

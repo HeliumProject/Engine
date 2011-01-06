@@ -10,7 +10,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( Influence );
 
-void Influence::EnumerateClass( Reflect::Compositor<Influence>& comp )
+void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &Influence::m_Objects,           "m_Objects" );
     comp.AddField( &Influence::m_Weights,           "m_Weights" );
@@ -18,7 +18,7 @@ void Influence::EnumerateClass( Reflect::Compositor<Influence>& comp )
 
 REFLECT_DEFINE_CLASS( Skin );
 
-void Skin::EnumerateClass( Reflect::Compositor<Skin>& comp )
+void Skin::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &Skin::m_MeshID,                 "m_MeshID" );
     comp.AddField( &Skin::m_Influences,             "m_Influences" );

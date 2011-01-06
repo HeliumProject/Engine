@@ -20,7 +20,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNode );
 
-void HierarchyNode::EnumerateClass( Reflect::Compositor<HierarchyNode>& comp )
+void HierarchyNode::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
 

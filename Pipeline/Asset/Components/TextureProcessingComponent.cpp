@@ -6,7 +6,7 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( TextureDataFormat );
 REFLECT_DEFINE_CLASS( TextureProcessingComponent );
 
-void TextureProcessingComponent::EnumerateClass( Reflect::Compositor< TextureProcessingComponent >& comp )
+void TextureProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
   comp.AddField( &TextureProcessingComponent::m_MaxTextureResolution, "m_MaxTextureResolution" );
   comp.AddEnumerationField( &TextureProcessingComponent::m_TextureDataFormat, "m_TextureDataFormat" );

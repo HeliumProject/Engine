@@ -23,7 +23,7 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_CLASS(EntityInstance);
 
-void EntityInstance::EnumerateClass( Reflect::Compositor< EntityInstance >& comp )
+void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &EntityInstance::m_Path,         "m_Path" );
     comp.AddField( &EntityInstance::m_ShowPointer,  "m_ShowPointer" );

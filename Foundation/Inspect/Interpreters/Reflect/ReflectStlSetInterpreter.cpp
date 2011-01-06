@@ -33,7 +33,16 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
     // create the container
     ContainerPtr container = CreateControl< Container >();
     parent->AddChild( container );
-    container->a_Name.Set( field->m_UIName );
+
+    tstring temp;
+    field->GetProperty( TXT( "UIName" ), temp );
+    if ( temp.empty() )
+    {
+        bool converted = Helium::ConvertString( field->m_Name, temp );
+        HELIUM_ASSERT( converted );
+    }
+
+    container->a_Name.Set( temp );
 
     // create the serializers
     std::vector< Reflect::Element* >::const_iterator itr = instances.begin();

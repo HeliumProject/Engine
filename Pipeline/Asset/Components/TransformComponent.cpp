@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( TransformComponent );
 
-void TransformComponent::EnumerateClass( Reflect::Compositor< TransformComponent >& comp )
+void TransformComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     Reflect::Field* fieldTranslation = comp.AddField( &TransformComponent::m_Translation, "m_Translation" );
     Reflect::Field* fieldRotation = comp.AddField( &TransformComponent::m_Rotation, "m_Rotation" );

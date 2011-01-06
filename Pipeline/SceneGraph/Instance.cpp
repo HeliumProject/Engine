@@ -12,7 +12,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT(Instance);
 
-void Instance::EnumerateClass( Reflect::Compositor<Instance>& comp )
+void Instance::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &Instance::m_Solid,                  "m_Solid" );
     comp.AddField( &Instance::m_SolidOverride,          "m_SolidOverride" );

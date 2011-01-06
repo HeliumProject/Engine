@@ -44,25 +44,20 @@ namespace Helium
                 Class,
                 ObjectType,
                 GameObjectType,
-                Field,
-                ElementField,
-                EnumerationField,
             };
         }
         typedef ReflectionTypes::ReflectionType ReflectionType;
 
-
         //
-        // This lets us safely cast between reflection class pointers
+        // A block of string-based properties
         //
 
-        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase< ReflectionInfo >
+        class FOUNDATION_API PropertyCollection
         {
-        public:
-            REFLECTION_BASE(ReflectionTypes::Invalid);
-
+        protected:
             mutable std::map< tstring, tstring > m_Properties;
 
+        public:
             template<class T>
             inline void SetProperty( const tstring& key, const T& value ) const
             {
@@ -121,7 +116,17 @@ namespace Helium
                 static tstring empty;
                 return empty;
             }
-        }; 
+        };
+
+        //
+        // This lets us safely cast between reflection class pointers
+        //
+
+        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase< ReflectionInfo >, public PropertyCollection
+        {
+        public:
+            REFLECTION_BASE(ReflectionTypes::Invalid);
+        };
 
         template<typename T>
         T* ReflectionCast(ReflectionInfo* info)

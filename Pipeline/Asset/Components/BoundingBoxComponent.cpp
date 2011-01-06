@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_CLASS( BoundingBoxComponent );
 
-void BoundingBoxComponent::EnumerateClass( Reflect::Compositor< BoundingBoxComponent >& comp )
+void BoundingBoxComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
   comp.AddField( &BoundingBoxComponent::m_Extents, "m_Extents" );
   comp.AddField( &BoundingBoxComponent::m_Offset, "m_Offset" );

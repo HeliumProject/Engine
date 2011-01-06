@@ -15,7 +15,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( ClipboardFileList, ReflectClipboardData );
-            static void EnumerateClass( Reflect::Compositor<ClipboardFileList>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ClipboardFileList();
             virtual ~ClipboardFileList();

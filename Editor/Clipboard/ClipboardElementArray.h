@@ -17,7 +17,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( ClipboardElementArray, ReflectClipboardData );
-            static void EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ClipboardElementArray();
             virtual ~ClipboardElementArray();

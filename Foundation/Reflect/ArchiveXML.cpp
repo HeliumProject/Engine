@@ -231,11 +231,11 @@ void ArchiveXML::SerializeFields(const ElementPtr& element)
     const Class* type = element->GetClass();
     HELIUM_ASSERT(type != NULL);
 
-    std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        SerializeField(element, *itr);
+        SerializeField(element, &*itr);
     }
 }
 
@@ -273,6 +273,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
         bool serialize = true;
 
         // check for equality
+#ifdef REFLECT_REFACTOR
         if ( serialize && field->m_Default.ReferencesObject() )
         {
             bool force = (field->m_Flags & FieldFlags::Force) != 0;
@@ -281,6 +282,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
                 serialize = false;
             }
         }
+#endif
 
         // don't write empty containers
         if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )

@@ -3,6 +3,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Reflect/ObjectType.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/DOM.h"
@@ -231,6 +232,9 @@ void Reflect::Cleanup()
     {
         // free our casting memory
         Data::Cleanup();
+
+        // free basic types
+        g_Registry->m_InitializerStack.Cleanup();
 
         // delete registry
         delete g_Registry;

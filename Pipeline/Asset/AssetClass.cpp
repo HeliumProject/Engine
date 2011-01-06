@@ -23,7 +23,7 @@ tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
-void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
+void AssetClass::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &AssetClass::m_Description,  "m_Description" );
     comp.AddField( &AssetClass::m_Tags,         "m_Tags" );

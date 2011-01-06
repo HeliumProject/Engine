@@ -34,7 +34,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( Volume, Instance );
-            static void EnumerateClass( Reflect::Compositor<Volume>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

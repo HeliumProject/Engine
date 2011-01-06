@@ -465,11 +465,11 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
         const Composite* current = bases.top();
         bases.pop();
 
-        std::vector< ConstFieldPtr >::const_iterator itr = current->m_Fields.begin();
-        std::vector< ConstFieldPtr >::const_iterator end = current->m_Fields.end();
+        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            const Field* field = *itr;
+            const Field* field = &*itr;
 
             // don't write no write fields
             if ( field->m_Flags & FieldFlags::Discard )
@@ -499,6 +499,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             bool serialize = true;
 
             // check for equality
+#ifdef REFLECT_REFACTOR
             if ( serialize && field->m_Default.ReferencesObject() )
             {
                 bool force = (field->m_Flags & FieldFlags::Force) != 0;
@@ -507,6 +508,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
                     serialize = false;
                 }
             }
+#endif
 
             // don't write empty containers
             if ( serialize && e->HasType( Reflect::GetType<ContainerData>() ) )

@@ -1,11 +1,10 @@
 #include "ReflectBitfieldInterpreter.h"
 
+#include "Foundation/Reflect/Enumeration.h"
+
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/DataBinding.h"
-
-#include "Foundation/Reflect/Field.h"
-#include "Foundation/Reflect/Enumeration.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -107,14 +106,19 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         return;
     }
 
-    const EnumerationField* enumField = static_cast< const EnumerationField* >( field );
-
     // create the container
     ContainerPtr container = CreateControl<Container>();
 
     tstring temp;
-    bool converted = Helium::ConvertString( field->m_UIName, temp );
+    field->GetProperty( TXT( "UIName" ), temp );
+    if ( temp.empty() )
+    {
+        bool converted = Helium::ConvertString( field->m_Name, temp );
+        HELIUM_ASSERT( converted );
+    }
+
     container->a_Name.Set( temp );
+
     parent->AddChild(container);
 
     // create the serializers
@@ -128,12 +132,19 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     }
 
     tstringstream outStream;
-    *field->m_Default >> outStream;
+#ifdef REFLECT_REFACTOR
+    if ( field->m_Default )
+    {
+        *field->m_Default >> outStream;
+    }
+#endif
+
+    const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 
     // build the child gui elements
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
-    M_StrEnumerationElement::const_iterator enumItr = enumField->m_Enumeration->m_ElementsByLabel.begin();
-    M_StrEnumerationElement::const_iterator enumEnd = enumField->m_Enumeration->m_ElementsByLabel.end();
+    M_StrEnumerationElement::const_iterator enumItr = enumeration->m_ElementsByLabel.begin();
+    M_StrEnumerationElement::const_iterator enumEnd = enumeration->m_ElementsByLabel.end();
     for ( ; enumItr != enumEnd; ++enumItr )
     {
         ContainerPtr row = CreateControl< Container >();

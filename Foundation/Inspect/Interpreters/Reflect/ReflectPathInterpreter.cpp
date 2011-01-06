@@ -126,9 +126,14 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     if (!label.ReferencesObject())
     {
         label = CreateControl< Label >();
+
         tstring temp;
-        bool converted = Helium::ConvertString( field->m_UIName, temp );
-        HELIUM_ASSERT( converted );
+        field->GetProperty( TXT( "UIName" ), temp );
+        if ( temp.empty() )
+        {
+            bool converted = Helium::ConvertString( field->m_Name, temp );
+            HELIUM_ASSERT( converted );
+        }
 
         label->BindText( temp );
         label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
@@ -186,6 +191,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
+#ifdef REFLECT_REFACTOR
     if (field->m_Default.ReferencesObject())
     {
         tstringstream outStream;
@@ -196,6 +202,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         HELIUM_ASSERT( converted );
         container->a_Default.Set( temp );
     }
+#endif
 
     //
     // Close

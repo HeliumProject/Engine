@@ -72,14 +72,14 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void EnumerateClass( Reflect::Compositor<CameraSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &CameraSettings::m_CameraMode, "Camera Mode" );
-                Reflect::EnumerationField* enumShadingMode = comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "Shading Mode" );
-                Reflect::Field* fieldWireframeOnMesh = comp.AddField( &CameraSettings::m_WireframeOnMesh, "Wireframe On Mesh" );
-                Reflect::Field* fieldWireframeOnShaded = comp.AddField( &CameraSettings::m_WireframeOnShaded, "Wireframe On Shaded" );
-                Reflect::Field* fieldViewFrustumCulling = comp.AddField( &CameraSettings::m_ViewFrustumCulling, "View Frustum Culling" );
-                Reflect::Field* fieldBackFaceCulling = comp.AddField( &CameraSettings::m_BackFaceCulling, "Backface Culling" );
+                comp.AddEnumerationField( &CameraSettings::m_CameraMode, "Camera Mode" );
+                comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "Shading Mode" );
+                comp.AddField( &CameraSettings::m_WireframeOnMesh, "Wireframe On Mesh" );
+                comp.AddField( &CameraSettings::m_WireframeOnShaded, "Wireframe On Shaded" );
+                comp.AddField( &CameraSettings::m_ViewFrustumCulling, "View Frustum Culling" );
+                comp.AddField( &CameraSettings::m_BackFaceCulling, "Backface Culling" );
             }
         };
 

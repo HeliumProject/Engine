@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_CLASS( ClipboardElementArray );
 
-void ClipboardElementArray::EnumerateClass( Reflect::Compositor<ClipboardElementArray>& comp )
+void ClipboardElementArray::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
     comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );

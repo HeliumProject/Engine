@@ -33,11 +33,16 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     parent->AddChild( labelContainer );
     LabelPtr label = CreateControl< Label >();
     label->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
-
     labelContainer->AddChild( label );
+
     tstring temp;
-    bool converted = Helium::ConvertString( field->m_UIName, temp );
-    HELIUM_ASSERT( converted );
+    field->GetProperty( TXT( "UIName" ), temp );
+    if ( temp.empty() )
+    {
+        bool converted = Helium::ConvertString( field->m_Name, temp );
+        HELIUM_ASSERT( converted );
+    }
+
     label->BindText( temp );
 
     // create the list view
@@ -99,12 +104,14 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-    if (field->m_Default.ReferencesObject())
+#ifdef REFLECT_REFACTOR
+    if (field->m_Default)
     {
         tstringstream outStream;
         *field->m_Default >> outStream;
         list->a_Default.Set( outStream.str() );
     }
+#endif
 }
 
 ButtonPtr ReflectStlVectorInterpreter::AddAddButton( List* list )

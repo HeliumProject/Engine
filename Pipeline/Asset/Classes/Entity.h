@@ -18,7 +18,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS(Entity, AssetClass);
 
-            static void EnumerateClass( Reflect::Compositor<Entity>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             Entity()

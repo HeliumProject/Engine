@@ -85,7 +85,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_CLASS( Texture, AssetClass );
 
-            static void EnumerateClass( Reflect::Compositor< Texture >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:
             Texture()

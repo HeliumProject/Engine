@@ -267,6 +267,12 @@ bool App::OnInit()
 
     GetFrame()->Show();
 
+    if ( GetSettingsManager()->GetSettings< GeneralSettings >()->GetLoadLastOpenedProjectOnStartup() )
+    {
+        const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+        GetFrame()->OpenProject( *mruPaths.rbegin() );
+    }
+
     return true;
 }
 

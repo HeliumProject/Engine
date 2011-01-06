@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_ABSTRACT( ReflectClipboardData );
 
-void ReflectClipboardData::EnumerateClass( Reflect::Compositor<ReflectClipboardData>& comp )
+void ReflectClipboardData::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 }
 

@@ -47,7 +47,7 @@ namespace Helium
         void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
     public:
-        static void EnumerateClass( Reflect::Compositor< This >& comp )
+        static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
             comp.AddField( &This::a_Path, "Path", Reflect::FieldFlags::Discard );
             comp.AddField( &This::m_Paths, "m_Paths" );

@@ -1,5 +1,6 @@
 boost       : 1.41.0
 Expat       : 2.01
+freetype    : 2.4.4
 LiteSQL     : 0.3.8
 lua         : 5.1.4
 MySQL       : 6.0.2

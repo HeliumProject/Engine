@@ -222,6 +222,7 @@ Helium.DoDefaultLunarProjectSettings = function()
 		links
 		{
 			"Expat",
+			"freetype",
 			"nvtt",
 			"png",
 			"zlib",

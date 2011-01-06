@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Pipeline/SceneGraph/PropertiesGenerator.h"
+#include "Pipeline/Settings.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
@@ -35,7 +35,6 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
     m_CurrentSetting = NULL;
     m_SettingInfo.clear();
 
-#pragma TODO("Automate this")
     M_Settings settings = settingsManager->GetSettingsMap();
 
     wxListBox* propertiesListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 130 /* 207 */, -1 ) );
@@ -50,6 +49,14 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
     Inspect::V_Control canvasControls;
     for ( M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
     {
+        Settings* settings = Reflect::ObjectCast< Settings >( (*itr).second );
+
+        // skip settings that we don't want the user to see
+        if ( settings && !settings->m_UserVisible )
+        {
+            continue;
+        }
+
         Reflect::ElementPtr clone = (*itr).second->Clone();
         clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
@@ -76,18 +83,15 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         }
 
         int index = propertiesListBox->Append( uiName.c_str() );
-        m_SettingInfo.insert( std::make_pair( index, new SettingInfo( (*itr).second, clone, canvas ) ) );
+        Reflect::ElementPtr source = Reflect::AssertCast< Reflect::Element >( (*itr).second );
+        m_SettingInfo.insert( std::make_pair( index, new SettingInfo( source, clone, canvas ) ) );
     }
 
     wxButton* restoreDefaults = new wxButton( this, wxID_ANY, wxT( "Restore Defaults" ), wxDefaultPosition, wxDefaultSize, 0 );
     restoreDefaults->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SettingsDialog::OnRestoreDefaults ), NULL, this );
 
-    wxButton* apply = new wxButton( this, wxID_ANY, wxT( "Apply" ), wxDefaultPosition, wxDefaultSize, 0 );
-    apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SettingsDialog::OnApply ), NULL, this );
-
     wxBoxSizer* propertiesButtonSizer = new wxBoxSizer( wxHORIZONTAL );
     propertiesButtonSizer->Add( restoreDefaults, 0, 0, 0 );
-    propertiesButtonSizer->Add( apply, 0, wxLEFT, 5 );
 
     m_SettingSizer->Add( 0, 6, 0 );
     m_SettingSizer->Add( propertiesButtonSizer, 0, wxALIGN_RIGHT, 0 );
@@ -145,6 +149,13 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
 
 void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
 {
+
+    wxMessageDialog dialog( this, wxT( "Are you sure you want to reset these settings to the default values?" ), wxT( "Confirm Default Settings" ), wxYES_NO );
+    if ( dialog.ShowModal() == wxID_NO )
+    {
+        return;
+    }
+
     if ( !m_CurrentSetting )
     {
         return;

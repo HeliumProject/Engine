@@ -3,15 +3,16 @@
 #include "VaultMenuIDs.h"
 #include "VaultSearchQuery.h"
 
-#include "Foundation/TUID.h"
+#include "Pipeline/Settings.h"
+
 #include "Foundation/Container/OrderedSet.h"
-#include "Editor/WindowSettings.h"
+#include "Editor/Settings/WindowSettings.h"
 
 namespace Helium
 {
     namespace Editor
     {
-        class VaultSettings : public Reflect::Element
+        class VaultSettings : public Settings
         {
         public:
             REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Element );
@@ -22,7 +23,6 @@ namespace Helium
         public:
             VaultViewMode         m_VaultViewMode;
             uint32_t                   m_ThumbnailSize;
-            //WindowSettingsPtr     m_WindowSettings;
 
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
@@ -33,7 +33,6 @@ namespace Helium
                     Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, "Thumbnail Size" );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
                 }
-                //comp.AddField( &VaultSettings::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );
             }
         };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 
 #include "Foundation/Reflect/Element.h"
 #include "Pipeline/SceneGraph/CameraSettings.h"
@@ -53,10 +54,10 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API ViewportSettings : public Reflect::Element
+        class PIPELINE_API ViewportSettings : public Settings
         {
         public: 
-            REFLECT_DECLARE_CLASS( ViewportSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( ViewportSettings, Settings );
 
             ViewportSettings(); 
 
@@ -66,7 +67,7 @@ namespace Helium
 
             CameraMode           m_CameraMode; 
             GeometryMode         m_GeometryMode; 
-            V_CameraSettings  m_CameraPrefs; // do not use m_CameraMode as an index!
+            V_CameraSettings     m_CameraPrefs; // do not use m_CameraMode as an index!
 
             bool                 m_Highlighting; 
             bool                 m_AxesVisible; 

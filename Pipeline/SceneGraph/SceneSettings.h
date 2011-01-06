@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 #include "Pipeline/SceneGraph/Manipulator.h"
 #include "Pipeline/SceneGraph/TranslateManipulator.h"
 
@@ -8,10 +9,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PIPELINE_API SceneSettings : public Reflect::Element
+        class PIPELINE_API SceneSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( SceneSettings, Settings );
 
             SceneSettings();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Editor/API.h"
+#include "Pipeline/Settings.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
@@ -10,13 +11,13 @@ namespace Helium
 {
     namespace Editor
     {
-        class WindowSettings;
+        class WindowSettings;         
         typedef Helium::StrongPtr< WindowSettings > WindowSettingsPtr;
 
-        class WindowSettings : public Reflect::Element
+        class WindowSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( WindowSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( WindowSettings, Settings );
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 

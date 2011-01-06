@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
@@ -28,10 +29,10 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API GridSettings : public Reflect::Element
+        class PIPELINE_API GridSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( GridSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( GridSettings, Settings );
 
             GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,

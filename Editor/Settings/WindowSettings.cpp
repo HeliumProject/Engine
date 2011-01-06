@@ -23,7 +23,6 @@ WindowSettings::WindowSettings( wxPoint pos, wxSize size )
 , m_Width( size.x )
 , m_Height( size.y )
 {
-    m_UserVisible = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

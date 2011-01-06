@@ -52,7 +52,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         Settings* settings = Reflect::ObjectCast< Settings >( (*itr).second );
 
         // skip settings that we don't want the user to see
-        if ( settings && !settings->m_UserVisible )
+        if ( settings && !settings->UserVisible() )
         {
             continue;
         }
@@ -167,22 +167,15 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-    int tries = 10;
-    bool changed = false;
-    while ( ( tries-- > 0 ) && ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) ) )
+    if ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) )
     {
-        changed = true;
         defaultElement->CopyTo( m_CurrentSetting->m_Clone );
         m_CurrentSetting->m_Clone->RaiseChanged();
-    }
-
-    if ( changed )
-    {
         m_CurrentSetting->m_Canvas->Read();
     }
 }
 
-void SettingsDialog::OnApply( wxCommandEvent& args )
+void SettingsDialog::OnOk( wxCommandEvent& args )
 {
     if ( !m_CurrentSetting )
     {
@@ -196,10 +189,7 @@ void SettingsDialog::OnApply( wxCommandEvent& args )
 
     m_CurrentSetting->m_Clone->CopyTo( m_CurrentSetting->m_Source );
     m_CurrentSetting->m_Source->RaiseChanged();
-}
 
-void SettingsDialog::OnOk( wxCommandEvent& args )
-{
     EndModal( wxID_OK );
 }
 

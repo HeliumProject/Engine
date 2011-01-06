@@ -38,7 +38,6 @@ namespace Helium
 
         private:
             void OnRestoreDefaults( wxCommandEvent& args );
-            void OnApply( wxCommandEvent& args );
             void OnOk( wxCommandEvent& args );
             void OnCancel( wxCommandEvent& args );
             void OnSettingsChanged( wxCommandEvent& args );

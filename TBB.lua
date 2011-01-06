@@ -5,7 +5,7 @@ Helium.BuildTBB = function( tbb )
 	local cwd = os.getcwd()
 
 	if os.get() == "windows" then
-		local make = "make.exe "
+		local make = cwd .. "\\Utilities\\Win32\\make.exe "
 
 		if not os.getenv("VCINSTALLDIR") then
 			print("VCINSTALLDIR is not detected in your environment")
@@ -35,7 +35,7 @@ Helium.CleanTBB = function( tbb )
 	local files = {}
 	
 	if os.get() == "windows" then
-		local make = "make.exe "
+		local make = cwd .. "\\Utilities\\Win32\\make.exe "
 
 		if not os.getenv("VCINSTALLDIR") then
 			print("VCINSTALLDIR is not detected in your environment")

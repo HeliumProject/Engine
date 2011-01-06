@@ -71,7 +71,6 @@ namespace Helium
             uint32_t                m_Index;        // the unique id of this field
             const Type*             m_Type;         // the type of this field (NULL for POD types)
             const Class*            m_DataClass;    // type id of the serializer to use
-            CreateObjectFunc        m_Creator;      // function to create a new instance for this field (optional)
         };
 
         //

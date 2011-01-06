@@ -17,7 +17,6 @@ Field::Field()
 , m_Type( NULL )
 , m_DataClass( NULL )
 , m_Offset( -1 )
-, m_Creator( NULL )
 {
 
 }
@@ -232,6 +231,7 @@ Reflect::Field* Composite::AddField( const std::string& name, const uint32_t off
     }
 
     Field field;
+    field.m_Composite = this;
     field.m_Name = convertedName;
     field.m_Size = size;
     field.m_Offset = offset;
@@ -252,6 +252,7 @@ Reflect::Field* Composite::AddElementField( const std::string& name, const uint3
     }
 
     Field field;
+    field.m_Composite = this;
     field.m_Name = convertedName;
     field.m_Size = size;
     field.m_Offset = offset;
@@ -276,6 +277,7 @@ Reflect::Field* Composite::AddEnumerationField( const std::string& name, const u
     HELIUM_ASSERT(enumeration != NULL);
 
     Field field;
+    field.m_Composite = this;
     field.m_Name = convertedName;
     field.m_Size = size;
     field.m_Offset = offset;

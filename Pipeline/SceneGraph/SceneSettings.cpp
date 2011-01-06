@@ -22,6 +22,7 @@ SceneSettings::SceneSettings()
 , m_ScaleManipulatorGridSnap( false )
 , m_ScaleManipulatorDistance( 1.0f )
 {
+    m_UserVisible = false;
 }
 
 float32_t SceneSettings::ScaleManipulatorSize() const

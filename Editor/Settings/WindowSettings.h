@@ -21,6 +21,11 @@ namespace Helium
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
+
             void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
             void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
 

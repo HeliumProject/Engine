@@ -10,7 +10,6 @@ namespace Helium
     {
     public:
         Settings()
-            : m_UserVisible( true )
         {
         }
 
@@ -18,11 +17,12 @@ namespace Helium
         {
         }
 
-        REFLECT_DECLARE_CLASS( Settings, Reflect::Element );
-        static void AcceptCompositeVisitor( Reflect::Composite& comp );
+        virtual bool UserVisible()
+        {
+            return true;
+        }
 
-    public:
-        bool m_UserVisible;
+        REFLECT_DECLARE_CLASS( Settings, Reflect::Element );
     };
 
     typedef Helium::StrongPtr< Settings > SettingsPtr;

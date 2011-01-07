@@ -75,12 +75,12 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
     // All imports should default to the master root
     m_ImportRoot = m_Root.Ptr();
 
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove selection listener
     m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );

@@ -23,10 +23,10 @@
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Editor/ArtProvider.h"
 #include "Editor/Settings/EditorSettings.h"
-#include "Editor/SettingsDialog.h"
+#include "Editor/Dialogs/SettingsDialog.h"
 #include "Editor/Settings/WindowSettings.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 #include "Editor/Clipboard/ClipboardDataObject.h"

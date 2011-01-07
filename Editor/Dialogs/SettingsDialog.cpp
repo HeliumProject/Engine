@@ -52,13 +52,13 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         Settings* settings = Reflect::ObjectCast< Settings >( (*itr).second );
 
         // skip settings that we don't want the user to see
-        if ( settings && !settings->m_UserVisible )
+        if ( settings && !settings->UserVisible() )
         {
             continue;
         }
 
         Reflect::ElementPtr clone = (*itr).second->Clone();
-        clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        clone->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
         Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
         Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas();
@@ -141,7 +141,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
 
     for ( M_SettingInfo::iterator itr = m_SettingInfo.begin(), end = m_SettingInfo.end(); itr != end; ++itr )
     {
-        itr->second->m_Clone->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        itr->second->m_Clone->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
     }
 
     return result;
@@ -167,22 +167,15 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-    int tries = 10;
-    bool changed = false;
-    while ( ( tries-- > 0 ) && ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) ) )
+    if ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) )
     {
-        changed = true;
         defaultElement->CopyTo( m_CurrentSetting->m_Clone );
         m_CurrentSetting->m_Clone->RaiseChanged();
-    }
-
-    if ( changed )
-    {
         m_CurrentSetting->m_Canvas->Read();
     }
 }
 
-void SettingsDialog::OnApply( wxCommandEvent& args )
+void SettingsDialog::OnOk( wxCommandEvent& args )
 {
     if ( !m_CurrentSetting )
     {
@@ -196,10 +189,7 @@ void SettingsDialog::OnApply( wxCommandEvent& args )
 
     m_CurrentSetting->m_Clone->CopyTo( m_CurrentSetting->m_Source );
     m_CurrentSetting->m_Source->RaiseChanged();
-}
 
-void SettingsDialog::OnOk( wxCommandEvent& args )
-{
     EndModal( wxID_OK );
 }
 

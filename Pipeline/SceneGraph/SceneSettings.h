@@ -16,6 +16,11 @@ namespace Helium
 
             SceneSettings();
 
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
+
             float32_t ScaleManipulatorSize() const;
             bool ScaleManipulatorGridSnap() const;
             float32_t ScaleManipulatorDistance() const;

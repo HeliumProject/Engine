@@ -61,6 +61,11 @@ namespace Helium
 
             ViewportSettings(); 
 
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
+
             ViewColorMode GetColorMode() const;
             void SetColorMode( ViewColorMode mode );
             const Reflect::Field* ColorModeField() const;

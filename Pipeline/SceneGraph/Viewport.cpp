@@ -318,7 +318,7 @@ void Viewport::InitWidgets()
 
     m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid (m_ResourceTracker);
 
-    m_SettingsManager->GetSettings< GridSettings >()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
+    m_SettingsManager->GetSettings< GridSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 
     OnGridSettingsChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 

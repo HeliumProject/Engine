@@ -6,7 +6,7 @@
 #include "EditorIDs.h"
 
 #include "Editor/App.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

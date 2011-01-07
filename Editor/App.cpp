@@ -33,7 +33,7 @@
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
 #include "Editor/Perforce/Perforce.h"
-#include "Editor/PerforceWaitDialog.h"
+#include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 
 //#include "Editor/Commands/BuildCommand.h"

@@ -8,7 +8,7 @@
 #include "Pipeline/Project.h"
 
 #include "Editor/EditorGenerated.h"
-#include "Editor/FileDropTarget.h"
+#include "Editor/DragDrop/FileDropTarget.h"
 
 namespace Helium
 {

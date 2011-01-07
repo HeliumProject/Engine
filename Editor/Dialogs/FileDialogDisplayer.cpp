@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "FileDialogDisplayer.h"
 
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Editor/Dialogs/YesNoAllDialog.h"
 
 using namespace Helium;

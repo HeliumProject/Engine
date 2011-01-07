@@ -2,7 +2,7 @@
 
 #include "Editor/Inspect/Widget.h"
 
-#include "Editor/ColorPicker.h"
+#include "Editor/Controls/ColorPicker.h"
 #include "Editor/SimpleConfig.h"
 
 namespace Helium

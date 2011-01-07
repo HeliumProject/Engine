@@ -7,7 +7,7 @@
 
 #include "Editor/App.h"
 #include "Editor/Controls/MenuButton.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/MainFrame.h"
 

@@ -133,8 +133,8 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &This::m_Name, "Name" );
-                comp.AddField( &This::m_Value, "Value" );
+                comp.AddField( &This::m_Name, TXT( "Name" ) );
+                comp.AddField( &This::m_Value, TXT( "Value" ) );
             }
         };
 
@@ -262,7 +262,7 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &This::m_Children, "Children" );
+                comp.AddField( &This::m_Children, TXT( "Children" ) );
             }
         };
 

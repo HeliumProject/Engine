@@ -19,9 +19,9 @@ GeneralSettings::GeneralSettings()
 
 void GeneralSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &GeneralSettings::m_MRUProjects, "m_MRUProjects", Reflect::FieldFlags::Hide );
+    comp.AddField( &GeneralSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
 
-    Reflect::Field* field = comp.AddField( &GeneralSettings::m_LoadLastOpenedProjectOnStartup, "m_LoadLastOpenedProjectOnStartup" );
+    Reflect::Field* field = comp.AddField( &GeneralSettings::m_LoadLastOpenedProjectOnStartup, TXT( "m_LoadLastOpenedProjectOnStartup" ) );
     field->SetProperty( TXT( "UIName"), TXT( "Load Last Opened Project On Startup" ) );
     field->SetProperty( TXT( "HelpText"), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
 }

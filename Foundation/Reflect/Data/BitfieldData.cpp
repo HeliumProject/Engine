@@ -32,7 +32,7 @@ void BitfieldData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -49,7 +49,7 @@ void BitfieldData::Serialize(Archive& archive) const
                 std::vector< tstring > strs;
                 if (!m_Enumeration->GetBitfieldStrings(m_Data.Get(), strs))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
 
                 uint32_t count = (uint32_t)strs.size();
@@ -85,7 +85,7 @@ void BitfieldData::Deserialize(Archive& archive)
             xml.GetStream() >> buf;
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(buf, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), *m_Enumeration->m_Name, buf );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_Name, buf );
             }
             else
             {
@@ -125,7 +125,7 @@ void BitfieldData::Deserialize(Archive& archive)
 
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(strs, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), *m_Enumeration->m_Name, str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_Name, str.c_str() );
             }
             else
             {

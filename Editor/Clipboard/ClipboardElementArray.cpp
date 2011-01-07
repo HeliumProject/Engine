@@ -8,14 +8,14 @@ REFLECT_DEFINE_CLASS( ClipboardElementArray );
 
 void ClipboardElementArray::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
-    comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );
+    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
+    comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );
 }
 
 ClipboardElementArray::ClipboardElementArray()
 {
     // By default, all items added to this array should derive from Reflect::Element
-    bool converted = Helium::ConvertString( *Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -29,7 +29,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // 
 const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 {
-    return Reflect::Registry::GetInstance()->GetClass( Name( m_CommonBaseClass.c_str() ) );
+    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 // 
 void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
 {
-    bool converted = Helium::ConvertString( *type->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( type->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 

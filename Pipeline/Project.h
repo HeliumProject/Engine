@@ -49,8 +49,8 @@ namespace Helium
     public:
         static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
-            comp.AddField( &This::a_Path, "Path", Reflect::FieldFlags::Discard );
-            comp.AddField( &This::m_Paths, "m_Paths" );
+            comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
+            comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
         }
     };
 

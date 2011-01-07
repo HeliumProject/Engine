@@ -85,10 +85,10 @@ namespace Helium
             uint32_t m_Version;
 
             // The nesting stack of parsing state
-            std::stack<ParsingStatePtr> m_StateStack;
+            std::stack< ParsingStatePtr > m_StateStack;
 
             // The current name of the serializing field
-            std::stack<tstring> m_FieldNames;
+            std::stack< const tchar_t* > m_FieldNames;
 
             // The current collection of components
             std::vector< ElementPtr > m_Components;

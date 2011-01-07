@@ -64,7 +64,7 @@ namespace Helium
     public:
         static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
-            comp.AddField( &SettingsManager::m_SettingsMap, "m_SettingsMap", Reflect::FieldFlags::Hide );
+            comp.AddField( &SettingsManager::m_SettingsMap, TXT( "m_SettingsMap" ), Reflect::FieldFlags::Hide );
         }
     };
 

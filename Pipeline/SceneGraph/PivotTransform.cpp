@@ -14,13 +14,13 @@ REFLECT_DEFINE_CLASS( PivotTransform );
 
 void PivotTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( (Vector3 PivotTransform::*)&PivotTransform::m_Shear, "m_Shear" );
-    comp.AddField( &PivotTransform::m_ScalePivot,                       "m_ScalePivot" );
-    comp.AddField( &PivotTransform::m_ScalePivotTranslate,              "m_ScalePivotTranslate" );
-    comp.AddField( &PivotTransform::m_RotatePivot,                      "m_RotatePivot" );
-    comp.AddField( &PivotTransform::m_RotatePivotTranslate,             "m_RotatePivotTranslate" );
-    comp.AddField( &PivotTransform::m_TranslatePivot,                   "m_TranslatePivot" );
-    comp.AddField( &PivotTransform::m_SnapPivots,                       "m_SnapPivots" );
+    comp.AddField( (Vector3 PivotTransform::*)&PivotTransform::m_Shear, TXT( "m_Shear" ) );
+    comp.AddField( &PivotTransform::m_ScalePivot,                       TXT( "m_ScalePivot" ) );
+    comp.AddField( &PivotTransform::m_ScalePivotTranslate,              TXT( "m_ScalePivotTranslate" ) );
+    comp.AddField( &PivotTransform::m_RotatePivot,                      TXT( "m_RotatePivot" ) );
+    comp.AddField( &PivotTransform::m_RotatePivotTranslate,             TXT( "m_RotatePivotTranslate" ) );
+    comp.AddField( &PivotTransform::m_TranslatePivot,                   TXT( "m_TranslatePivot" ) );
+    comp.AddField( &PivotTransform::m_SnapPivots,                       TXT( "m_SnapPivots" ) );
 }
 
 void PivotTransform::InitializeType()

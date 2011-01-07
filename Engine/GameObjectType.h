@@ -10,10 +10,11 @@
 #define LUNAR_ENGINE_GAME_OBJECT_TYPE_H
 
 #include "Engine/Engine.h"
-#include "Foundation/Reflect/ObjectType.h"
 
+#include "Platform/String.h"
 #include "Foundation/Name.h"
 #include "Foundation/Container/HashMap.h"
+#include "Foundation/Reflect/ObjectType.h"
 #include "Foundation/Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"
 
@@ -119,6 +120,9 @@ namespace Lunar
         //@}
 
     private:
+        /// Cached from the narrow pointer in Type
+        mutable Name m_cachedName;
+
         /// Default template object for this type.
         GameObjectPtr m_spTemplate;
 

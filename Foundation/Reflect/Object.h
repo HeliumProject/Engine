@@ -4,7 +4,6 @@
 #include "Platform/Assert.h"
 #include "Platform/Utility.h"
 
-#include "Foundation/Name.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Reflect/API.h"
@@ -101,7 +100,7 @@ namespace Helium
             virtual const Reflect::Class* GetClass() const;
 
             // Create class data block for this type
-            static Reflect::Class* CreateClass( Name name );
+            static Reflect::Class* CreateClass( const tchar_t* name );
 
             // Enumerates member data (stub)
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
@@ -163,7 +162,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), *base->GetClass()->m_Name, *GetClass<DerivedT>()->m_Name );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
             }
 
             return DangerousCast<DerivedT>( base );
@@ -174,7 +173,7 @@ namespace Helium
         {
             if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
             {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), *base->GetClass()->m_Name, *GetClass<DerivedT>()->m_Name );
+                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
             }
 
             return ConstDangerousCast<DerivedT>( base );

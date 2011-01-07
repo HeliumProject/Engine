@@ -348,7 +348,7 @@ void ArchiveBinary::Write()
 void ArchiveBinary::Serialize(const ElementPtr& element)
 {
     // write the crc of the class of object (used to factory allocate an instance when reading)
-    uint32_t classCrc = Helium::Crc32( *element->GetClass()->m_Name );
+    uint32_t classCrc = Helium::Crc32( element->GetClass()->m_Name );
     m_Stream->Write(&classCrc); 
 
     // stub out the length we are about to write
@@ -357,7 +357,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug( TXT( "Serializing %s\n" ), *element->GetClass()->m_Name );
+    Log::Debug( TXT( "Serializing %s\n" ), element->GetClass()->m_Name );
     m_Indent.Push();
 #endif
 
@@ -489,7 +489,7 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             if (!data.ReferencesObject())
             {
                 // this should never happen, the type id in the rtti data is bogus
-                throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), field->m_Name.c_str() );
+                throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
             }
 
             // set data pointer
@@ -526,12 +526,12 @@ void ArchiveBinary::SerializeFields( const ElementPtr& element )
             {
                 PreSerialize(element, field);
 
-                uint32_t fieldNameCrc = Crc32( field->m_Name.c_str() );
+                uint32_t fieldNameCrc = Crc32( field->m_Name );
                 m_Stream->Write(&fieldNameCrc); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Get(stdout);
-                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name.c_str(), *field->m_DataClass->m_Name);
+                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
                 m_Indent.Push();
 #endif
 
@@ -591,7 +591,7 @@ ElementPtr ArchiveBinary::Allocate()
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
             //  2 - a type was not found because its type library is not registered
-            Log::Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), type ? *type->m_Name : TXT("Unknown"), length);
+            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
 #pragma TODO("Support blind data")
         }
     }
@@ -618,7 +618,7 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
     {
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), *element->GetClass()->m_Name, element->GetType());
+        Log::Debug(TXT("Deserializing %s\n"), element->GetClass()->m_Name, element->GetType());
         m_Indent.Push();
 #endif
 
@@ -736,7 +736,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing field %s\n"), field->m_Name.c_str());
+        Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
         m_Indent.Push();
 #endif
 
@@ -750,7 +750,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             if (!latent_data.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Unknown data for field '%s'" ), field->m_Name.c_str() );
+                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s" ), field->m_Name );
 #pragma TODO("Support blind data")
             }
 
@@ -782,7 +782,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
                 if (!current_data.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), field->m_Name.c_str() );
+                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
                 }
 
                 // process into temporary memory
@@ -815,7 +815,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             }
             catch (Reflect::LogisticException& ex)
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), *type->m_Name, field->m_Name.c_str(), ex.What());
+                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_Name, field->m_Name, ex.What());
             }
         }
 
@@ -824,7 +824,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             // attempt processing
             if (!element->ProcessComponent(component, field->m_Name))
             {
-                Log::Debug( TXT( "%s did not process %s, discarding\n" ), *element->GetClass()->m_Name, *component->GetClass()->m_Name );
+                Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_Name, component->GetClass()->m_Name );
             }
         }
 

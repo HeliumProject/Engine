@@ -9,7 +9,8 @@ using namespace Helium::Reflect;
 Helium::Mutex g_TypeMutex;
 
 Type::Type()
-: m_Size( 0 )
+: m_Name( NULL )
+, m_Size( 0 )
 {
 
 }

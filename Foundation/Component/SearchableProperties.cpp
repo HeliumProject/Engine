@@ -6,7 +6,7 @@ REFLECT_DEFINE_ABSTRACT( SearchableProperties );
 
 void SearchableProperties::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &SearchableProperties::m_StringProperties, "m_StringProperties" );
+    comp.AddField( &SearchableProperties::m_StringProperties, TXT( "m_StringProperties" ) );
 }
 
 SearchableProperties::SearchableProperties()

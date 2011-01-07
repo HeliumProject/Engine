@@ -377,6 +377,33 @@ typedef uint64_t uint_fast64_t;
 
 //@}
 
+/// @defgroup stringprintf Char/String "printf" Formatting Macros
+/// These allow portable usage of fixed-sized characters in formatting strings for printf() and similar statements.
+//@{
+
+#define PRItc "c"
+#define PRIts "s"
+#define PRIc "hc"
+#define PRIs "hs"
+#define PRIlc "lc"
+#define PRIls "ls"
+
+#define WPRItc L"c"
+#define WPRIts L"s"
+#define WPRIc L"hc"
+#define WPRIs L"hs"
+#define WPRIlc L"lc"
+#define WPRIls L"ls"
+
+#define TPRItc TXT( "c" )
+#define TPRIts TXT( "s" )
+#define TPRIc TXT( "hc" )
+#define TPRIs TXT( "hs" )
+#define TPRIlc TXT( "lc" )
+#define TPRIls TXT( "ls" )
+
+//@}
+
 #else  // HELIUM_CC_MSC
 
 // Use inttypes.h where available; we simply try to provide relevant type definitions for platforms that don't provide

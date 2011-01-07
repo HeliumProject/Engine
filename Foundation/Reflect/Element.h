@@ -65,7 +65,7 @@ namespace Helium
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent(ElementPtr element, const tstring& fieldName);
+            virtual bool                ProcessComponent(ElementPtr element, const tchar_t* fieldName);
 
 
             //

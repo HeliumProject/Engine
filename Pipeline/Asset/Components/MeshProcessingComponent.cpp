@@ -8,9 +8,9 @@ REFLECT_DEFINE_CLASS( MeshProcessingComponent );
 
 void MeshProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &MeshProcessingComponent::a_ScalingFactor, "a_ScalingFactor" );
-    comp.AddEnumerationField( &MeshProcessingComponent::a_MeshCompressionFactor, "a_MeshCompressionFactor" );
-    comp.AddField( &MeshProcessingComponent::a_FlipWinding, "a_FlipWinding" );
+    comp.AddField( &MeshProcessingComponent::a_ScalingFactor, TXT( "a_ScalingFactor" ) );
+    comp.AddEnumerationField( &MeshProcessingComponent::a_MeshCompressionFactor, TXT( "a_MeshCompressionFactor" ) );
+    comp.AddField( &MeshProcessingComponent::a_FlipWinding, TXT( "a_FlipWinding" ) );
 }
 
 Component::ComponentUsage MeshProcessingComponent::GetComponentUsage() const

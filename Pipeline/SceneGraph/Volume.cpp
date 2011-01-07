@@ -19,8 +19,8 @@ REFLECT_DEFINE_CLASS( Volume );
 
 void Volume::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddEnumerationField( &Volume::m_Shape, "m_Shape" );
-    comp.AddField( &Volume::m_ShowPointer,      "m_ShowPointer" );
+    comp.AddEnumerationField( &Volume::m_Shape, TXT( "m_Shape" ) );
+    comp.AddField( &Volume::m_ShowPointer,      TXT( "m_ShowPointer" ) );
 }
 
 void Volume::InitializeType()

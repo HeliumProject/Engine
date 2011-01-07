@@ -25,10 +25,10 @@ REFLECT_DEFINE_CLASS(EntityInstance);
 
 void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &EntityInstance::m_Path,         "m_Path" );
-    comp.AddField( &EntityInstance::m_ShowPointer,  "m_ShowPointer" );
-    comp.AddField( &EntityInstance::m_ShowBounds,   "m_ShowBounds" );
-    comp.AddField( &EntityInstance::m_ShowGeometry, "m_ShowGeometry" );
+    comp.AddField( &EntityInstance::m_Path,         TXT( "m_Path" ) );
+    comp.AddField( &EntityInstance::m_ShowPointer,  TXT( "m_ShowPointer" ) );
+    comp.AddField( &EntityInstance::m_ShowBounds,   TXT( "m_ShowBounds" ) );
+    comp.AddField( &EntityInstance::m_ShowGeometry, TXT( "m_ShowGeometry" ) );
 }
 
 void EntityInstance::InitializeType()

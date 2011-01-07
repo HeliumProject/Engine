@@ -204,10 +204,10 @@ const Reflect::Class* Object::GetClass() const
     return Reflect::GetClass<Object>();
 }
 
-Reflect::Class* Object::CreateClass( Name name )
+Reflect::Class* Object::CreateClass( const tchar_t* name )
 {
     HELIUM_ASSERT( s_Class == NULL );
-    Reflect::Class* type = Class::Create<Object>( name, NULL_NAME );
+    Reflect::Class* type = Class::Create<Object>( name, NULL );
     s_Type = s_Class = type;
     return type;
 }

@@ -27,7 +27,7 @@ bool Element::IsCompact() const
     return false;
 }
 
-bool Element::ProcessComponent(ElementPtr element, const tstring& fieldName)
+bool Element::ProcessComponent(ElementPtr element, const tchar_t* fieldName)
 {
     return false; // incurs data loss
 }

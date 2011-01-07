@@ -20,18 +20,18 @@ REFLECT_DEFINE_CLASS( Mesh );
 
 void Mesh::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Mesh::m_Positions,                  "m_Positions" );
-    comp.AddField( &Mesh::m_Normals,                    "m_Normals" );
-    comp.AddField( &Mesh::m_Colors,                     "m_Colors" );
-    comp.AddField( &Mesh::m_BaseUVs,                    "m_BaseUVs" );
+    comp.AddField( &Mesh::m_Positions,                  TXT( "m_Positions" ) );
+    comp.AddField( &Mesh::m_Normals,                    TXT( "m_Normals" ) );
+    comp.AddField( &Mesh::m_Colors,                     TXT( "m_Colors" ) );
+    comp.AddField( &Mesh::m_BaseUVs,                    TXT( "m_BaseUVs" ) );
 
-    comp.AddField( &Mesh::m_WireframeVertexIndices,     "m_WireframeVertexIndices" );
-    comp.AddField( &Mesh::m_TriangleVertexIndices,      "m_TriangleVertexIndices" );
-    comp.AddField( &Mesh::m_PolygonIndices,             "m_PolygonIndices" );
-    comp.AddField( &Mesh::m_ShaderIndices,              "m_ShaderIndices" );
+    comp.AddField( &Mesh::m_WireframeVertexIndices,     TXT( "m_WireframeVertexIndices" ) );
+    comp.AddField( &Mesh::m_TriangleVertexIndices,      TXT( "m_TriangleVertexIndices" ) );
+    comp.AddField( &Mesh::m_PolygonIndices,             TXT( "m_PolygonIndices" ) );
+    comp.AddField( &Mesh::m_ShaderIndices,              TXT( "m_ShaderIndices" ) );
 
-    comp.AddField( &Mesh::m_ShaderIDs,                  "m_ShaderIDs" );
-    comp.AddField( &Mesh::m_ShaderTriangleCounts,       "m_ShaderTriangleCounts" );
+    comp.AddField( &Mesh::m_ShaderIDs,                  TXT( "m_ShaderIDs" ) );
+    comp.AddField( &Mesh::m_ShaderTriangleCounts,       TXT( "m_ShaderTriangleCounts" ) );
 }
 
 void Mesh::InitializeType()

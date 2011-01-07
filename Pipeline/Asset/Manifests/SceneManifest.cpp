@@ -7,5 +7,5 @@ REFLECT_DEFINE_CLASS(SceneManifest);
 
 void SceneManifest::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldAssets = comp.AddField( &SceneManifest::m_Assets, "m_Assets" );
+    comp.AddField( &SceneManifest::m_Assets, TXT( "m_Assets" ) );
 }

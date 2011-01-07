@@ -3,7 +3,6 @@
 #include "Platform/Types.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Name.h"
 #include "Foundation/Memory.h"
 #include "Foundation/Checksum/Crc32.h"
 #include "Foundation/Container/SortedMap.h"
@@ -64,25 +63,25 @@ namespace Helium
             void UnregisterType( const Type* type );
 
             // give a type an alias (for legacy considerations)
-            void AliasType( const Type* type, Name alias );
-            void UnaliasType( const Type* type, Name alias );
+            void AliasType( const Type* type, const tchar_t* alias );
+            void UnaliasType( const Type* type, const tchar_t* alias );
 
             // type lookup
             const Type* GetType( uint32_t crc ) const;
-            inline const Type* GetType( Name name ) const;
+            inline const Type* GetType( const tchar_t* name ) const;
 
             // class lookup
             const Class* GetClass( uint32_t crc ) const;
-            inline const Class* GetClass( Name name ) const;
+            inline const Class* GetClass( const tchar_t* name ) const;
 
             // enumeration lookup
             inline const Enumeration* GetEnumeration( uint32_t crc ) const;
-            inline const Enumeration* GetEnumeration( Name name ) const;
+            inline const Enumeration* GetEnumeration( const tchar_t* name ) const;
 
             // create instances of classes
             ObjectPtr CreateInstance( const Class* type ) const;
             ObjectPtr CreateInstance( uint32_t crc ) const;
-            inline ObjectPtr CreateInstance( Name name ) const;
+            inline ObjectPtr CreateInstance( const tchar_t* name ) const;
 
             template<class T>
             Helium::SmartPtr< T > CreateInstance()
@@ -130,7 +129,7 @@ namespace Helium
         typedef void (*UnregisterFunc)();
 
         template< class T >
-        inline UnregisterFunc RegisterClassType( Name name )
+        inline UnregisterFunc RegisterClassType( const tchar_t* name )
         {
             // create the type information and register it with the registry
             if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( name ) ) )
@@ -143,12 +142,6 @@ namespace Helium
             return NULL;
         }
 
-        template< class T >
-        inline UnregisterFunc RegisterClassType( const tchar_t* name )
-        {
-            return RegisterClassType< T >( Name( name ) );
-        }
-
         template<class T>
         inline void UnregisterClassType()
         {
@@ -159,7 +152,7 @@ namespace Helium
         typedef void EnumerateEnumFunc( Reflect::Enumeration& info );
 
         template< class T >
-        inline UnregisterFunc RegisterEnumType( Name name )
+        inline UnregisterFunc RegisterEnumType( const tchar_t* name )
         {
             Reflect::Enumeration* enumeration = T::CreateEnumeration( name );
 
@@ -172,12 +165,6 @@ namespace Helium
 
             // there was a problem
             return NULL;
-        }
-
-        template< class T >
-        inline UnregisterFunc RegisterEnumType( const tchar_t* name )
-        {
-            return RegisterEnumType< T >( Name( name ) );
         }
 
         template<class T>

@@ -166,7 +166,7 @@ namespace Helium
 
         public:
             // migrate legacy attributes
-            virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) HELIUM_OVERRIDE;
+            virtual bool ProcessComponent(Reflect::ElementPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
 
             // setup changed callback
             virtual void PreSerialize() HELIUM_OVERRIDE;

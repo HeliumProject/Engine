@@ -32,10 +32,10 @@ D3DMATERIAL9 Curve::s_HullMaterial;
 
 void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.AddField(            &Curve::m_Closed,               "m_Closed" );
-  comp.AddEnumerationField( &Curve::m_Type,                 "m_Type" );
-  comp.AddEnumerationField( &Curve::m_ControlPointLabel,    "m_ControlPointLabel" );
-  comp.AddField(            &Curve::m_Resolution,           "m_Resolution" );
+  comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
+  comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
+  comp.AddEnumerationField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
+  comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
 }
 
 class SelectionDataObject : public Inspect::ClientData

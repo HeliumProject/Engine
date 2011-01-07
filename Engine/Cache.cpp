@@ -11,6 +11,7 @@
 #include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
+#include "Foundation/StringConverter.h"
 #include "Foundation/AsyncLoader.h"
 
 using namespace Lunar;

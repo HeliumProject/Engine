@@ -302,7 +302,7 @@ void BufferedDrawer::DrawText(
 #if HELIUM_UNICODE
     const String& wideText = rText;
 #else
-    String wideText;
+    WideString wideText;
     StringConverter< char, wchar_t >::Convert( wideText, rText );
 #endif
 

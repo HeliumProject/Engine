@@ -35,7 +35,7 @@ void ElementStlVectorData::Clear()
 
 bool ElementStlVectorData::Set(const Data* src, uint32_t flags)
 {
-    const ElementStlVectorData* rhs = ConstObjectCast<ElementStlVectorData>(src);
+    const ElementStlVectorData* rhs = ObjectCast<ElementStlVectorData>(src);
     if (!rhs)
     {
         return false;
@@ -62,7 +62,7 @@ bool ElementStlVectorData::Set(const Data* src, uint32_t flags)
 
 bool ElementStlVectorData::Equals(const Data* s) const
 {
-    const ElementStlVectorData* rhs = ConstObjectCast<ElementStlVectorData>(s);
+    const ElementStlVectorData* rhs = ObjectCast<ElementStlVectorData>(s);
     if (!rhs)
     {
         return false;

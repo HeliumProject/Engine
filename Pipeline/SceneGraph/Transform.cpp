@@ -359,14 +359,14 @@ void Transform::Render( RenderVisitor* render )
 
 void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }

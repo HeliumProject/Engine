@@ -34,7 +34,7 @@ inline DerivedT* Helium::Reflect::DangerousCast(Reflect::Object* base)
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::ConstDangerousCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::DangerousCast(const Reflect::Object* base)
 {
     return static_cast<const DerivedT*>(base);
 }
@@ -55,14 +55,14 @@ inline DerivedT* Helium::Reflect::AssertCast( Reflect::Object* base )
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::ConstAssertCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::AssertCast(const Reflect::Object* base)
 {
     if ( base != NULL )
     {
         HELIUM_ASSERT( base->HasType( GetClass<DerivedT>() ) );
     }
 
-    return ConstDangerousCast<DerivedT>( base );
+    return DangerousCast<DerivedT>( base );
 }
 
 //
@@ -81,14 +81,14 @@ inline DerivedT* Helium::Reflect::TryCast(Reflect::Object* base)
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::ConstTryCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::TryCast(const Reflect::Object* base)
 {
     if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
     {
         throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
     }
 
-    return ConstDangerousCast<DerivedT>( base );
+    return DangerousCast<DerivedT>( base );
 }
 
 //
@@ -109,11 +109,11 @@ inline DerivedT* Helium::Reflect::ObjectCast(Reflect::Object* base)
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::ConstObjectCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::ObjectCast(const Reflect::Object* base)
 {
     if ( base != NULL && base->HasType( GetClass<DerivedT>() ) )
     {
-        return ConstDangerousCast<DerivedT>( base );
+        return DangerousCast<DerivedT>( base );
     }
     else
     {

@@ -151,9 +151,9 @@ void Volume::Render( RenderVisitor* render )
 
 void Volume::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Volume* volume = Reflect::ConstAssertCast<Volume>( object );
+    const Volume* volume = Reflect::AssertCast<Volume>( object );
 
-    const VolumeType* type = Reflect::ConstAssertCast<VolumeType>( volume->GetNodeType() );
+    const VolumeType* type = Reflect::AssertCast<VolumeType>( volume->GetNodeType() );
 
     volume->SetMaterial( type->GetMaterial() );
 
@@ -163,9 +163,9 @@ void Volume::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneN
 
 void Volume::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Volume* volume = Reflect::ConstAssertCast<Volume>( object );
+    const Volume* volume = Reflect::AssertCast<Volume>( object );
 
-    const VolumeType* type = Reflect::ConstAssertCast<VolumeType>( volume->GetNodeType() );
+    const VolumeType* type = Reflect::AssertCast<VolumeType>( volume->GetNodeType() );
 
     volume->SetMaterial( type->GetMaterial() );
 

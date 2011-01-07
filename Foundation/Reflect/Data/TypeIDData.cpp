@@ -27,7 +27,7 @@ void TypeIDData::ConnectData(Helium::HybridPtr<void> data)
 
 bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
 {
-    const TypeIDData* rhs = Reflect::ConstObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
     if (!rhs)
     {
         return false;
@@ -40,7 +40,7 @@ bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
 
 bool TypeIDData::Equals(const Reflect::Data* s) const
 {
-    const TypeIDData* rhs = Reflect::ConstObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
     if (!rhs)
     {
         return false;

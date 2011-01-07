@@ -113,7 +113,7 @@ namespace Helium
             void ComponentChanged( const Reflect::ElementChangeArgs& args )
             {
                 // call into the virtual prototype in case it gets overridden in a derived class
-                ComponentChanged( Reflect::ConstAssertCast<ComponentBase>(args.m_Element) );
+                ComponentChanged( Reflect::AssertCast<ComponentBase>(args.m_Element) );
             }
 
 

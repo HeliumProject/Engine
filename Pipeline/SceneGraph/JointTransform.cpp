@@ -87,9 +87,9 @@ void JointTransform::Render( RenderVisitor* render )
 
 void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
-    const JointTransform* joint = Reflect::ConstAssertCast<JointTransform>( node );
+    const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
 
     joint->SetMaterial( g_JointTransformMaterial );
 
@@ -99,9 +99,9 @@ void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const
 
 void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
-    const JointTransform* joint = Reflect::ConstAssertCast<JointTransform>( node );
+    const JointTransform* joint = Reflect::AssertCast<JointTransform>( node );
 
     joint->SetMaterial( g_JointTransformMaterial );
 

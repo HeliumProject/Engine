@@ -302,7 +302,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Da
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlMapDataT* rhs = ConstObjectCast<StlMapDataT>(src);
+    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(src);
     if (!rhs)
     {
         return false;
@@ -316,7 +316,7 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Data* s) const
 {
-    const StlMapDataT* rhs = ConstObjectCast<StlMapDataT>(s);
+    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(s);
     if (!rhs)
     {
         return false;

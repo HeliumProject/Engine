@@ -25,7 +25,7 @@ void PointerData::ConnectData(Helium::HybridPtr<void> data)
 
 bool PointerData::Set(const Reflect::Data* s, uint32_t flags)
 {
-    const PointerData* rhs = Reflect::ConstObjectCast<PointerData>(s);
+    const PointerData* rhs = Reflect::ObjectCast<PointerData>(s);
     if (!rhs)
     {
         return false;
@@ -45,7 +45,7 @@ bool PointerData::Set(const Reflect::Data* s, uint32_t flags)
 
 bool PointerData::Equals(const Reflect::Data* s) const
 {
-    const PointerData* rhs = Reflect::ConstObjectCast<PointerData>(s);
+    const PointerData* rhs = Reflect::ObjectCast<PointerData>(s);
     if (!rhs)
     {
         return false;

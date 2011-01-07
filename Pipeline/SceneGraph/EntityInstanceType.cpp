@@ -97,7 +97,7 @@ void EntityInstanceType::PopulateManifest(Asset::SceneManifest* manifest) const
     for ( ; setItr != setEnd; ++setItr )
     {
         const SceneGraph::InstanceSet* set = setItr->second;
-        const SceneGraph::EntitySet* entitySet = Reflect::ConstObjectCast<SceneGraph::EntitySet>( set );
+        const SceneGraph::EntitySet* entitySet = Reflect::ObjectCast<SceneGraph::EntitySet>( set );
 
         // if our set is a class set, insert the class id into the manifest
         if (entitySet)

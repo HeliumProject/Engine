@@ -2803,10 +2803,10 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
-                const SceneGraph::EntityInstanceType* entity = Reflect::ConstObjectCast< SceneGraph::EntityInstanceType >( type );
+                const SceneGraph::EntityInstanceType* entity = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( type );
 
                 // if this is an instance, then we need to check if it has code classes
-                const SceneGraph::InstanceType* instance = Reflect::ConstObjectCast< SceneGraph::InstanceType >( type );
+                const SceneGraph::InstanceType* instance = Reflect::ObjectCast< SceneGraph::InstanceType >( type );
 
                 if (entity)
                 {

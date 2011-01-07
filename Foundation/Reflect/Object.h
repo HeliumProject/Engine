@@ -118,7 +118,7 @@ namespace Helium
         inline DerivedT* DangerousCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstDangerousCast(const Reflect::Object* base);
+        inline const DerivedT* DangerousCast(const Reflect::Object* base);
 
         //
         // AssertCast type checks in debug and asserts if failure, does no type checking in release
@@ -128,7 +128,7 @@ namespace Helium
         inline DerivedT* AssertCast( Reflect::Object* base );
 
         template<class DerivedT>
-        inline const DerivedT* ConstAssertCast(const Reflect::Object* base);
+        inline const DerivedT* AssertCast(const Reflect::Object* base);
 
         //
         // TryCast type checks and throws if failure
@@ -138,7 +138,7 @@ namespace Helium
         inline DerivedT* TryCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstTryCast(const Reflect::Object* base);
+        inline const DerivedT* TryCast(const Reflect::Object* base);
 
         //
         // ObjectCast always type checks and returns null if failure
@@ -148,7 +148,7 @@ namespace Helium
         inline DerivedT* ObjectCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstObjectCast(const Reflect::Object* base);
+        inline const DerivedT* ObjectCast(const Reflect::Object* base);
     }
 }
 

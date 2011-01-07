@@ -206,7 +206,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     {
         if (src->HasType( Reflect::GetType<StlVectorData>() ) && dest->HasType( Reflect::GetType<StlVectorData>() ))
         {
-            const StlVectorData* srcArray = ConstDangerousCast<StlVectorData>( src );
+            const StlVectorData* srcArray = DangerousCast<StlVectorData>( src );
             StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
 
             if (CastSupported( srcArray->GetItemClass(), destArray->GetItemClass() ))
@@ -223,7 +223,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->HasType( Reflect::GetType<StlSetData>() ) && dest->HasType( Reflect::GetType<StlSetData>() ))
         {
-            const StlSetData* srcSet = ConstDangerousCast<StlSetData>( src );
+            const StlSetData* srcSet = DangerousCast<StlSetData>( src );
             StlSetData* destSet = DangerousCast<StlSetData>( dest );
 
             if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
@@ -249,7 +249,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->HasType( Reflect::GetType<StlMapData>() ) && dest->HasType( Reflect::GetType<StlMapData>() ))
         {
-            const StlMapData* srcMap = ConstDangerousCast<StlMapData>( src );
+            const StlMapData* srcMap = DangerousCast<StlMapData>( src );
             StlMapData* destMap = DangerousCast<StlMapData>( dest );
 
             if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
@@ -276,7 +276,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->HasType( Reflect::GetType<ElementStlMapData>() ) && dest->HasType( Reflect::GetType<ElementStlMapData>() ))
         {
-            const ElementStlMapData* srcElementMap = ConstDangerousCast<ElementStlMapData>( src );
+            const ElementStlMapData* srcElementMap = DangerousCast<ElementStlMapData>( src );
             ElementStlMapData* destElementMap = DangerousCast<ElementStlMapData>( dest );
 
             if (CastSupported( srcElementMap->GetKeyClass(), destElementMap->GetKeyClass() ))

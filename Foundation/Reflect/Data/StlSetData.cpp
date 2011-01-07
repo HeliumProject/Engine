@@ -140,7 +140,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(src);
+    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(src);
     if (!rhs)
     {
         return false;
@@ -154,7 +154,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Equals(const Data* s) const
 {
-    const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(s);
+    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(s);
     if (!rhs)
     {
         return false;

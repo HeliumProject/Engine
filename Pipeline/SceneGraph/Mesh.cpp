@@ -393,7 +393,7 @@ void Mesh::Render( RenderVisitor* render )
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )
 {
-    const Mesh* mesh = Reflect::ConstAssertCast< Mesh > ( object );
+    const Mesh* mesh = Reflect::AssertCast< Mesh > ( object );
 
     const Resource* indices = mesh->m_Indices;
     const Resource* vertices = mesh->m_Vertices;
@@ -427,8 +427,8 @@ void Mesh::SetupNormalWire( IDirect3DDevice9* device )
 
 void Mesh::DrawNormalWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const HierarchyNode* node = Reflect::ConstAssertCast<HierarchyNode>( object );
-    const Mesh* mesh = Reflect::ConstAssertCast<Mesh>( node );
+    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
+    const Mesh* mesh = Reflect::AssertCast<Mesh>( node );
 
     const IndexResource* indices = mesh->m_Indices;
     const VertexResource* vertices = mesh->m_Vertices;
@@ -499,8 +499,8 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 {
     SCENE_GRAPH_RENDER_SCOPE_TIMER( ("") );
 
-    const HierarchyNode* node = Reflect::ConstAssertCast<HierarchyNode>( object );
-    const Mesh* mesh = Reflect::ConstAssertCast<Mesh>( node );
+    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
+    const Mesh* mesh = Reflect::AssertCast<Mesh>( node );
 
     const IndexResource* indices = mesh->m_Indices;
     const VertexResource* vertices = mesh->m_Vertices;

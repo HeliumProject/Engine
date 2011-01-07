@@ -110,128 +110,46 @@ namespace Helium
             static const Class* s_Class;
         };
 
-
         //
         // DangerousCast does not type checking
         //
 
         template<class DerivedT>
-        inline DerivedT* DangerousCast(Reflect::Object* base)
-        {
-            return static_cast<DerivedT*>(base);
-        }
+        inline DerivedT* DangerousCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstDangerousCast(const Reflect::Object* base)
-        {
-            return static_cast<const DerivedT*>(base);
-        }
+        inline const DerivedT* ConstDangerousCast(const Reflect::Object* base);
 
         //
         // AssertCast type checks in debug and asserts if failure, does no type checking in release
         //
 
         template<class DerivedT>
-        inline DerivedT* AssertCast( Reflect::Object* base )
-        {
-            if ( base != NULL )
-            {
-                HELIUM_ASSERT( base->HasType( GetClass<DerivedT>() ) );
-            }
-
-            return DangerousCast<DerivedT>( base );
-        }
+        inline DerivedT* AssertCast( Reflect::Object* base );
 
         template<class DerivedT>
-        inline const DerivedT* ConstAssertCast(const Reflect::Object* base)
-        {
-            if ( base != NULL )
-            {
-                HELIUM_ASSERT( base->HasType( GetClass<DerivedT>() ) );
-            }
-
-            return ConstDangerousCast<DerivedT>( base );
-        }
+        inline const DerivedT* ConstAssertCast(const Reflect::Object* base);
 
         //
         // TryCast type checks and throws if failure
         //
 
         template<class DerivedT>
-        inline DerivedT* TryCast(Reflect::Object* base)
-        {
-            if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
-            {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
-            }
-
-            return DangerousCast<DerivedT>( base );
-        }
+        inline DerivedT* TryCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstTryCast(const Reflect::Object* base)
-        {
-            if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
-            {
-                throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
-            }
-
-            return ConstDangerousCast<DerivedT>( base );
-        }
+        inline const DerivedT* ConstTryCast(const Reflect::Object* base);
 
         //
         // ObjectCast always type checks and returns null if failure
         //
 
         template<class DerivedT>
-        inline DerivedT* ObjectCast(Reflect::Object* base)
-        {
-            if ( base != NULL && base->HasType( GetClass<DerivedT>() ) )
-            {
-                return DangerousCast<DerivedT>( base );
-            }
-            else
-            {
-                return NULL;
-            }
-        }
+        inline DerivedT* ObjectCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ConstObjectCast(const Reflect::Object* base)
-        {
-            if ( base != NULL && base->HasType( GetClass<DerivedT>() ) )
-            {
-                return ConstDangerousCast<DerivedT>( base );
-            }
-            else
-            {
-                return NULL;
-            }
-        }
-
-        /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
-        /// object.
-        ///
-        /// @param[in] pObject  Object about to be destroyed.
-        ///
-        /// @see Destroy()
-        void ObjectRefCountSupport::PreDestroy( Object* pObject )
-        {
-            HELIUM_ASSERT( pObject );
-
-            pObject->PreDestroy();
-        }
-
-        /// Destroy an object after the final strong reference to it has been cleared.
-        ///
-        /// @param[in] pObject  Object to destroy.
-        ///
-        /// @see PreDestroy()
-        void ObjectRefCountSupport::Destroy( Object* pObject )
-        {
-            HELIUM_ASSERT( pObject );
-
-            pObject->Destroy();
-        }
+        inline const DerivedT* ConstObjectCast(const Reflect::Object* base);
     }
 }
+
+#include "Foundation/Reflect/Object.inl"

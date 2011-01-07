@@ -22,12 +22,6 @@ namespace Helium
         class Class;
         class Structure;
 
-        class Archive;
-        namespace ArchiveTypes
-        {
-            enum ArchiveType;
-        }
-
         //
         // Event delegate to support getting notified if this element changes
         //
@@ -64,7 +58,7 @@ namespace Helium
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent(ElementPtr element, const tchar_t* fieldName);
+            virtual bool                ProcessComponent( ElementPtr element, const tchar_t* fieldName );
 
 
             //
@@ -73,8 +67,8 @@ namespace Helium
 
         public:
             // Serialize to a particular data target, just works on this
-            void                        ToXML(tstring& xml) const;
-            void                        ToBinary(std::iostream& stream) const;
+            void                        ToXML( tstring& xml ) const;
+            void                        ToBinary( std::iostream& stream ) const;
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
@@ -90,13 +84,13 @@ namespace Helium
 
         public:
             // Visitor introspection support, should never ever change an object (but the visitor may)
-            virtual void                Accept(Visitor& visitor);
+            virtual void                Accept( Visitor& visitor );
 
             // Do comparison logic against other object, checks type and field data
-            virtual bool                Equals(const ElementPtr& rhs) const;
+            virtual bool                Equals( const ElementPtr& rhs ) const;
 
             // Deep copy this object into the specified object.
-            virtual void                CopyTo(const ElementPtr& destination);
+            virtual void                CopyTo( const ElementPtr& destination );
 
             // Deep copy this object into a new object, this is not const because derived classes may need to do work before cloning
             virtual ElementPtr          Clone();
@@ -115,7 +109,7 @@ namespace Helium
             }
 
             template< class FieldT >
-            void FieldChanged(FieldT* fieldAddress) const
+            void FieldChanged( FieldT* fieldAddress ) const
             {
                 // the offset of the field is the address of the field minus the address of this element instance
                 uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);

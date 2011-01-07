@@ -1,3 +1,5 @@
+#include "Precompile.h"
+
 /*
 Copyright (c) 2007 Andre de Leiradella
 

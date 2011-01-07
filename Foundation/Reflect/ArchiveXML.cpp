@@ -23,7 +23,7 @@ const uint32_t ArchiveXML::CURRENT_VERSION                               = 4;
 ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
-, m_Target( &m_Spool )
+, m_Target( &m_Objects )
 {
     m_Parser = XML_ParserCreate( NULL );
 
@@ -39,7 +39,7 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 ArchiveXML::ArchiveXML()
 : Archive( TXT( "" ) )
 , m_Version( CURRENT_VERSION )
-, m_Target( &m_Spool )
+, m_Target( &m_Objects )
 {
     m_Parser = XML_ParserCreate( NULL );
 
@@ -162,7 +162,7 @@ void ArchiveXML::Write()
     *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
 
     // serialize main file elements
-    Serialize(m_Spool, ArchiveFlags::Status);
+    Serialize(m_Objects, ArchiveFlags::Status);
 
     *m_Stream << TXT( "</Reflect>\n" );
 
@@ -695,8 +695,8 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass 
     archive.m_Stream = new Reflect::TCharStream(&strStream, false); 
     archive.Read();
 
-    std::vector< ElementPtr >::iterator itr = archive.m_Spool.begin();
-    std::vector< ElementPtr >::iterator end = archive.m_Spool.end();
+    std::vector< ElementPtr >::iterator itr = archive.m_Objects.begin();
+    std::vector< ElementPtr >::iterator end = archive.m_Objects.end();
     for ( ; itr != end; ++itr )
     {
         if ((*itr)->HasType(searchClass))
@@ -714,7 +714,7 @@ void ArchiveXML::ToString( const std::vector< ElementPtr >& elements, tstring& x
     tstringstream strStream;
 
     archive.m_Stream = new Reflect::TCharStream( &strStream, false ); 
-    archive.m_Spool  = elements;
+    archive.m_Objects  = elements;
     archive.Write();
 
     xml = strStream.str();
@@ -729,5 +729,5 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ElementPtr >& elem
     archive.m_Stream = new Reflect::TCharStream( &strStream, false );
     archive.Read();
 
-    elements = archive.m_Spool;
+    elements = archive.m_Objects;
 }

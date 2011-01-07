@@ -188,7 +188,7 @@ namespace Helium
             ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
-            std::vector< ElementPtr > m_Spool;
+            std::vector< ElementPtr > m_Objects;
 
             // The mode
             ArchiveMode m_Mode;

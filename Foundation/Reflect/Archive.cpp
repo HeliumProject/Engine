@@ -168,13 +168,13 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
 
 void Archive::Put( const ElementPtr& element )
 {
-    m_Spool.push_back( element );
+    m_Objects.push_back( element );
 }
 
 void Archive::Put( const std::vector< ElementPtr >& elements )
 {
-    m_Spool.reserve( m_Spool.size() + elements.size() );
-    m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
+    m_Objects.reserve( m_Objects.size() + elements.size() );
+    m_Objects.insert( m_Objects.end(), elements.begin(), elements.end() );
 }
 
 ElementPtr Archive::Get( const Class* searchClass )
@@ -242,7 +242,7 @@ void Archive::Get( std::vector< ElementPtr >& elements )
         }
     }
 
-    elements = m_Spool;
+    elements = m_Objects;
 }
 
 ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )

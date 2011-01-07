@@ -21,14 +21,6 @@ using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 using namespace Helium::Reflect;
 
-namespace Helium
-{
-    namespace Reflect
-    {
-        FOUNDATION_API extern bool g_OverrideCRC;
-    }
-}
-
 const char* RebuildCommand::m_RebuildStrings[REBUILD_CODE_COUNT] = 
 {
     "Success",
@@ -60,7 +52,6 @@ bool RebuildCommand::Initialize( tstring& error )
 {
     bool result = true;
 
-    result &= AddOption( new FlagOption( &Reflect::g_OverrideCRC, TXT( "crc" ), TXT( "override crc" ) ), error );
     result &= AddOption( new FlagOption( &m_RCS, TXT( "rcs" ), TXT( "user rcs" ) ), error );
     result &= AddOption( new FlagOption( &m_XML, TXT( "xml" ), TXT( "" ) ), error );
     result &= AddOption( new FlagOption( &m_Binary, TXT( "binary" ), TXT( "" ) ), error );

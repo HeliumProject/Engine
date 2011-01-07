@@ -26,7 +26,7 @@ ComponentCollection::ComponentCollection( const ComponentPtr& component )
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     m_Modified = true;
 }
 
@@ -43,7 +43,7 @@ ComponentCollection::~ComponentCollection()
 
     for( ; attrItr != attrEnd; ++attrItr )
     {
-        attrItr->second->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+        attrItr->second->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     }
 }
 
@@ -140,7 +140,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     component->SetCollection( this );
 
     // Start caring about change to the component
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Raise event
     m_Modified = true;
@@ -167,7 +167,7 @@ bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
     ComponentCollectionChanged args ( this, component ); 
 
     // Stop caring about changes to the component
-    component->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Remove component and reset collection pointer
     m_Components.erase( found );
@@ -317,7 +317,7 @@ void ComponentCollection::PostDeserialize()
     for ( ; itr != end; ++itr )
     {
         itr->second->SetCollection( this );
-        itr->second->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        itr->second->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
     }
 }
 

@@ -58,7 +58,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         }
 
         Reflect::ElementPtr clone = (*itr).second->Clone();
-        clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        clone->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
         Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
         Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas();
@@ -141,7 +141,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
 
     for ( M_SettingInfo::iterator itr = m_SettingInfo.begin(), end = m_SettingInfo.end(); itr != end; ++itr )
     {
-        itr->second->m_Clone->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        itr->second->m_Clone->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
     }
 
     return result;

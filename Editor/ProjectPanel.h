@@ -26,6 +26,8 @@ namespace Helium
             void SetActive( const Path& path, bool active );
 
         protected:
+            void GeneralSettingsChanged( const Reflect::ElementChangeArgs& args );
+
             void PopulateOpenProjectListItems();
             void OnRecentProjectButtonClick( wxCommandEvent& event );
             virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;

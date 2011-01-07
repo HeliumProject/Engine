@@ -18,8 +18,8 @@ namespace Helium
             std::vector< tstring >& GetMRUProjects();
             void SetMRUProjects( MRU< tstring >* mru );
 
-            bool GetLoadLastOpenedProjectOnStartup() const;
-            void SetLoadLastOpenedProjectOnStartup( bool value );
+            bool GetReopenLastProjectOnStartup() const;
+            void SetReopenLastProjectOnStartup( bool value );
 
             bool GetShowFileExtensionsInProjectView() const;
             void SetShowFileExtensionsInProjectView( bool value );
@@ -30,7 +30,7 @@ namespace Helium
         private:
             std::vector< tstring > m_MRUProjects;
             
-            bool m_LoadLastOpenedProjectOnStartup;
+            bool m_ReopenLastProjectOnStartup;
             bool m_ShowFileExtensionsInProjectView;
         };
 

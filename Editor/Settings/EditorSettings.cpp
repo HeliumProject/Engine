@@ -13,7 +13,7 @@ using namespace Helium::Editor;
 REFLECT_DEFINE_CLASS( GeneralSettings );
 
 GeneralSettings::GeneralSettings()
-: m_LoadLastOpenedProjectOnStartup( true )
+: m_ReopenLastProjectOnStartup( true )
 , m_ShowFileExtensionsInProjectView( false )
 {
 }
@@ -22,8 +22,8 @@ void GeneralSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddField( &GeneralSettings::m_MRUProjects, "m_MRUProjects", Reflect::FieldFlags::Hide );
 
-    Reflect::Field* field = comp.AddField( &GeneralSettings::m_LoadLastOpenedProjectOnStartup, "m_LoadLastOpenedProjectOnStartup" );
-    field->SetProperty( TXT( "UIName"), TXT( "Load Last Opened Project On Startup" ) );
+    Reflect::Field* field = comp.AddField( &GeneralSettings::m_ReopenLastProjectOnStartup, "m_ReopenLastProjectOnStartup" );
+    field->SetProperty( TXT( "UIName"), TXT( "Reopen Last Project On Startup" ) );
     field->SetProperty( TXT( "HelpText"), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
 
     field = comp.AddField( &GeneralSettings::m_ShowFileExtensionsInProjectView, "m_ShowFileExtensionsInProjectView" );
@@ -41,14 +41,14 @@ void GeneralSettings::SetMRUProjects( MRU< tstring >* mru )
     mru->ToVector( m_MRUProjects );
 }
 
-bool GeneralSettings::GetLoadLastOpenedProjectOnStartup() const
+bool GeneralSettings::GetReopenLastProjectOnStartup() const
 {
-    return m_LoadLastOpenedProjectOnStartup;
+    return m_ReopenLastProjectOnStartup;
 }
 
-void GeneralSettings::SetLoadLastOpenedProjectOnStartup( bool value )
+void GeneralSettings::SetReopenLastProjectOnStartup( bool value )
 {
-    m_LoadLastOpenedProjectOnStartup = value;
+    m_ReopenLastProjectOnStartup = value;
 }
 
 bool GeneralSettings::GetShowFileExtensionsInProjectView() const

@@ -4,7 +4,7 @@
 #include "Pipeline/Settings.h"
 
 #include "Foundation/Math/Color3.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
@@ -56,7 +56,7 @@ namespace Helium
             const Color3& GetMinorColor();
 
         private:
-            void OnChanged( const Reflect::ElementChangeArgs& args );
+            void OnChanged( const Reflect::ObjectChangeArgs& args );
 
             static float32_t GetConversionFactor( GridUnit units );
             static float32_t ConvertUnits( float32_t sourceValue, GridUnit sourceUnits, GridUnit destinationUnits );

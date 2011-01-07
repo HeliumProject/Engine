@@ -29,9 +29,9 @@ namespace Helium
         typedef Helium::StrongPtr<Object> ObjectPtr;
         typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
-        class Element;
-        typedef Helium::StrongPtr<Element> ElementPtr;
-        typedef Helium::StrongPtr<const Element> ConstElementPtr;
+        class Object;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
         class Data;
         typedef Helium::StrongPtr<Data> DataPtr;

@@ -53,7 +53,7 @@ namespace Helium
             //  in such cases.  Currently we don't provide support for containers of non-cloneable fields.
             //
 
-            static ElementPtr Clone(Element* element);
+            static ObjectPtr Clone(Object* element);
         };
 
         typedef Helium::SmartPtr< Class > ClassPtr;

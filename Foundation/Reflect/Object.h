@@ -4,7 +4,10 @@
 #include "Platform/Assert.h"
 #include "Platform/Utility.h"
 
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Automation/Attribute.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Reflect/API.h"
 #include "Foundation/Reflect/Exceptions.h"
@@ -64,8 +67,34 @@ namespace Helium
         // Reflect::Object is a reference counted and type checked abstract base class
         //
 
+        class Field;
+        class Class;
+        class Structure;
+
+        //
+        // Event delegate to support getting notified if this element changes
+        //
+
+        struct ObjectChangeArgs
+        {
+            const Object* m_Object;
+            const Field* m_Field;
+
+            ObjectChangeArgs( const Object* element, const Field* field = NULL )
+                : m_Object( element )
+                , m_Field( field )
+            {
+            }
+        };
+        typedef Helium::Signature< const ObjectChangeArgs&, Helium::AtomicRefCountBase > ObjectChangeSignature;
+
+
+        //
+        // Reflect::Object is the abstract base class of a serializable unit
+        //
         class FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
+        protected:
             HELIUM_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );
 
         protected:
@@ -91,12 +120,14 @@ namespace Helium
             //
 
             // Returns the type id for this instance
+            static const Type* s_Type;
             virtual const Reflect::Type* GetType() const;
 
             // Deduces type membership for this instance
             virtual bool HasType( const Reflect::Type* type ) const;
 
             // Retrieves the reflection data for this instance
+            static const Class* s_Class;
             virtual const Reflect::Class* GetClass() const;
 
             // Create class data block for this type
@@ -105,9 +136,88 @@ namespace Helium
             // Enumerates member data (stub)
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
+            //
+            // Serialization
+            //
+
+            // Specifies if the value is directly between the start and end name
+            virtual bool                IsCompact() const;
+
+            // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
+            virtual bool                ProcessComponent( ObjectPtr element, const tchar_t* fieldName );
+
+            // Serialize to a particular data target, just works on this
+            void                        ToXML( tstring& xml ) const;
+            void                        ToBinary( std::iostream& stream ) const;
+            void                        ToFile( const Path& path ) const;
+
+            // Callbacks are executed at the appropriate time by the archive and cloning APIs
+            virtual void                PreSerialize() { }
+            virtual void                PostSerialize() { }
+            virtual void                PreDeserialize() { }
+            virtual void                PostDeserialize() { }
+
+            //
+            // Introspection
+            //
+
+            // Visitor introspection support, should never ever change an object (but the visitor may)
+            virtual void                Accept( Visitor& visitor );
+
+            // Do comparison logic against other object, checks type and field data
+            virtual bool                Equals( const ObjectPtr& rhs ) const;
+
+            // Deep copy this object into the specified object.
+            virtual void                CopyTo( const ObjectPtr& destination );
+
+            // Deep copy this object into a new object, this is not const because derived classes may need to do work before cloning
+            virtual ObjectPtr           Clone();
+
+
+            //
+            // Mutation
+            //
+
         public:
-            static const Type* s_Type;
-            static const Class* s_Class;
+            mutable ObjectChangeSignature::Event e_Changed;
+
+            virtual void RaiseChanged( const Field* field = NULL ) const
+            {
+                e_Changed.Raise( ObjectChangeArgs( this, field ) );
+            }
+
+            template< class FieldT >
+            void FieldChanged( FieldT* fieldAddress ) const
+            {
+                // the offset of the field is the address of the field minus the address of this element instance
+                uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
+
+                // find the field in our reflection information
+                const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );
+
+                // your field address probably doesn't point to the field in this instance,
+                //  or your field is not exposed to Reflect, add it in your Composite function
+                HELIUM_ASSERT( field );
+
+                // notify listeners that this field changed
+                RaiseChanged( field );
+            }
+            
+            template< class ObjectT, class FieldT >
+            void ChangeField( FieldT ObjectT::* field, const FieldT& newValue )
+            {
+                // set the field via pointer-to-member on the deduced templated type (!)
+                this->*field = newValue;
+
+                // find the field in our reflection information
+                const Reflect::Field* field = GetClass()->FindField( field );
+
+                // your field is not exposed to Reflect, add it in your Composite function
+                HELIUM_ASSERT( field );
+
+                // notify listeners that this field changed
+                RaiseChanged( field );
+            }
         };
 
         //

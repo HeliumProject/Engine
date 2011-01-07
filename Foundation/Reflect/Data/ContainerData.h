@@ -24,14 +24,14 @@ namespace Helium
 
         typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;
 
-        class FOUNDATION_API ElementContainerData : public ContainerData
+        class FOUNDATION_API ObjectContainerData : public ContainerData
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( ElementContainerData, ContainerData );
+            REFLECT_DECLARE_ABSTRACT( ObjectContainerData, ContainerData );
 
             const Type* m_Type;
 
-            ElementContainerData();
+            ObjectContainerData();
         };
 
         typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;

@@ -9,10 +9,10 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Base class for any data that can be stored on the clipboard.
         // 
-        class ReflectClipboardData HELIUM_ABSTRACT : public Reflect::Element
+        class ReflectClipboardData HELIUM_ABSTRACT : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Element );
+            REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ReflectClipboardData();

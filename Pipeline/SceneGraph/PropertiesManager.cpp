@@ -223,7 +223,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 
                         // copy the shared list into the new shared map
                         Helium::StdInsert<M_ElementsByType>::Result inserted = 
-                            newCommonElements.insert(M_ElementsByType::value_type( currentItr->first, std::vector<Reflect::Element*> () ));
+                            newCommonElements.insert(M_ElementsByType::value_type( currentItr->first, std::vector<Reflect::Object*> () ));
 
                         // add this current element's instance to the new shared list
                         inserted.first->second.push_back(currentItr->second);

@@ -12,7 +12,7 @@ namespace Helium
         typedef std::vector< Transform* > V_TransformDumbPtr;
 
         // Influence stores the object ID indices and weights of transforms that influence or deform a vertex
-        class PIPELINE_API Influence : public Reflect::Element
+        class PIPELINE_API Influence : public Reflect::Object
         {
         public:
             // The object ID indices of the transforms that influence this vertex
@@ -21,7 +21,7 @@ namespace Helium
             // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
             std::vector< float32_t > m_Weights;
 
-            REFLECT_DECLARE_CLASS(Influence, Reflect::Element);
+            REFLECT_DECLARE_CLASS(Influence, Reflect::Object);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };

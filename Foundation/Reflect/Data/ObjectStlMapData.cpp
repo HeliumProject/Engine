@@ -1,26 +1,26 @@
-#include "Foundation/Reflect/Data/ElementStlMapData.h"
+#include "Foundation/Reflect/Data/ObjectStlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_ABSTRACT( ElementStlMapData );
+REFLECT_DEFINE_ABSTRACT( ObjectStlMapData );
 
 template < class KeyT >
-SimpleElementStlMapData<KeyT>::SimpleElementStlMapData()
+SimpleObjectStlMapData<KeyT>::SimpleObjectStlMapData()
 {
 
 }
 
 template < class KeyT >
-SimpleElementStlMapData<KeyT>::~SimpleElementStlMapData()
+SimpleObjectStlMapData<KeyT>::~SimpleObjectStlMapData()
 {
 
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleObjectStlMapData<KeyT>::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
@@ -28,25 +28,25 @@ void SimpleElementStlMapData<KeyT>::ConnectData(Helium::HybridPtr<void> data)
 }
 
 template < class KeyT >
-size_t SimpleElementStlMapData<KeyT>::GetSize() const
+size_t SimpleObjectStlMapData<KeyT>::GetSize() const
 {
     return m_Data->size();
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::Clear()
+void SimpleObjectStlMapData<KeyT>::Clear()
 {
     return m_Data->clear();
 }
 
 template < class KeyT >
-const Class* SimpleElementStlMapData<KeyT>::GetKeyClass() const
+const Class* SimpleObjectStlMapData<KeyT>::GetKeyClass() const
 {
     return Reflect::GetDataClass<KeyT>();
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::GetItems(V_ValueType& items)
+void SimpleObjectStlMapData<KeyT>::GetItems(V_ValueType& items)
 {
     items.resize(m_Data->size());
     DataType::iterator itr = m_Data->begin();
@@ -59,7 +59,7 @@ void SimpleElementStlMapData<KeyT>::GetItems(V_ValueType& items)
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::GetItems(V_ConstValueType& items) const
+void SimpleObjectStlMapData<KeyT>::GetItems(V_ConstValueType& items) const
 {
     items.resize(m_Data->size());
     DataType::const_iterator itr = m_Data->begin();
@@ -72,7 +72,7 @@ void SimpleElementStlMapData<KeyT>::GetItems(V_ConstValueType& items) const
 }
 
 template < class KeyT >
-ElementPtr* SimpleElementStlMapData<KeyT>::GetItem(const Data* key)
+ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(const Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -87,7 +87,7 @@ ElementPtr* SimpleElementStlMapData<KeyT>::GetItem(const Data* key)
 }
 
 template < class KeyT >
-const ElementPtr* SimpleElementStlMapData<KeyT>::GetItem(const Data* key) const
+const ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(const Data* key) const
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -102,17 +102,17 @@ const ElementPtr* SimpleElementStlMapData<KeyT>::GetItem(const Data* key) const
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::SetItem(const Data* key, const Element* value)
+void SimpleObjectStlMapData<KeyT>::SetItem(const Data* key, const Object* value)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
 
 #pragma TODO( "Fix const correctness." )
-    (m_Data.Ref())[keyValue] = const_cast< Element* >( value );
+    (m_Data.Ref())[keyValue] = const_cast< Object* >( value );
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::RemoveItem(const Data* key)
+void SimpleObjectStlMapData<KeyT>::RemoveItem(const Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -121,9 +121,9 @@ void SimpleElementStlMapData<KeyT>::RemoveItem(const Data* key)
 }
 
 template < class KeyT >
-bool SimpleElementStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
+bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 {
-    const ElementStlMapDataT* rhs = ObjectCast<ElementStlMapDataT>(src);
+    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(src);
     if (!rhs)
     {
         return false;
@@ -149,9 +149,9 @@ bool SimpleElementStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class KeyT >
-bool SimpleElementStlMapData<KeyT>::Equals(const Data* s) const
+bool SimpleObjectStlMapData<KeyT>::Equals(const Data* s) const
 {
-    const ElementStlMapDataT* rhs = ObjectCast<ElementStlMapDataT>(s);
+    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(s);
     if (!rhs)
     {
         return false;
@@ -183,9 +183,9 @@ bool SimpleElementStlMapData<KeyT>::Equals(const Data* s) const
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::Serialize(Archive& archive) const
+void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     components.resize(m_Data->size() * 2);
 
     {
@@ -198,7 +198,7 @@ void SimpleElementStlMapData<KeyT>::Serialize(Archive& archive) const
                 continue;
             }
 
-            ElementPtr elem;
+            ObjectPtr elem;
             archive.GetCache().Create( Reflect::GetDataClass<KeyT>(), elem );
 
             Data* ser = AssertCast<Data>(elem.Ptr());
@@ -212,8 +212,8 @@ void SimpleElementStlMapData<KeyT>::Serialize(Archive& archive) const
     archive.Serialize(components);
 
     {
-        std::vector< ElementPtr >::iterator itr = components.begin();
-        std::vector< ElementPtr >::iterator end = components.end();
+        std::vector< ObjectPtr >::iterator itr = components.begin();
+        std::vector< ObjectPtr >::iterator end = components.end();
         for ( ; itr != end; ++itr )
         {
             Data* ser = AssertCast<Data>(*itr);
@@ -225,9 +225,9 @@ void SimpleElementStlMapData<KeyT>::Serialize(Archive& archive) const
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::Deserialize(Archive& archive)
+void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
@@ -238,12 +238,12 @@ void SimpleElementStlMapData<KeyT>::Deserialize(Archive& archive)
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         Data* key = ObjectCast<Data>(*itr);
-        Element* value = *(++itr);
+        Object* value = *(++itr);
         if ( key && value )
         {
             KeyT k;
@@ -254,7 +254,7 @@ void SimpleElementStlMapData<KeyT>::Deserialize(Archive& archive)
 }
 
 template < class KeyT >
-void SimpleElementStlMapData<KeyT>::Accept(Visitor& visitor)
+void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
 {
     DataType::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
     DataType::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
@@ -274,20 +274,20 @@ void SimpleElementStlMapData<KeyT>::Accept(Visitor& visitor)
     }
 }
 
-template SimpleElementStlMapData<TypeID>;
-template SimpleElementStlMapData<std::string>;
-template SimpleElementStlMapData<uint32_t>;
-template SimpleElementStlMapData<int32_t>;
-template SimpleElementStlMapData<uint64_t>;
-template SimpleElementStlMapData<int64_t>;
-template SimpleElementStlMapData<Helium::GUID>;
-template SimpleElementStlMapData<Helium::TUID>;
+template SimpleObjectStlMapData<TypeID>;
+template SimpleObjectStlMapData<std::string>;
+template SimpleObjectStlMapData<uint32_t>;
+template SimpleObjectStlMapData<int32_t>;
+template SimpleObjectStlMapData<uint64_t>;
+template SimpleObjectStlMapData<int64_t>;
+template SimpleObjectStlMapData<Helium::GUID>;
+template SimpleObjectStlMapData<Helium::TUID>;
 
-REFLECT_DEFINE_CLASS(TypeIDElementStlMapData);
-REFLECT_DEFINE_CLASS(StlStringElementStlMapData);
-REFLECT_DEFINE_CLASS(UInt32ElementStlMapData);
-REFLECT_DEFINE_CLASS(Int32ElementStlMapData);
-REFLECT_DEFINE_CLASS(UInt64ElementStlMapData);
-REFLECT_DEFINE_CLASS(Int64ElementStlMapData);
-REFLECT_DEFINE_CLASS(GUIDElementStlMapData);
-REFLECT_DEFINE_CLASS(TUIDElementStlMapData);
+REFLECT_DEFINE_CLASS(TypeIDObjectStlMapData);
+REFLECT_DEFINE_CLASS(StlStringObjectStlMapData);
+REFLECT_DEFINE_CLASS(UInt32ObjectStlMapData);
+REFLECT_DEFINE_CLASS(Int32ObjectStlMapData);
+REFLECT_DEFINE_CLASS(UInt64ObjectStlMapData);
+REFLECT_DEFINE_CLASS(Int64ObjectStlMapData);
+REFLECT_DEFINE_CLASS(GUIDObjectStlMapData);
+REFLECT_DEFINE_CLASS(TUIDObjectStlMapData);

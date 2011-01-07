@@ -329,7 +329,7 @@ template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive) const
 {
     int i = 0;
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     components.resize( m_Data->size() * 2 );
 
     {
@@ -337,8 +337,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ElementPtr keyElem;
-            ElementPtr dataElem;
+            ObjectPtr keyElem;
+            ObjectPtr dataElem;
 
             // query cache for a serializer of this type
             archive.GetCache().Create( Reflect::GetClass<KeyClassT>(), keyElem );
@@ -362,8 +362,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
 
     archive.Serialize(components);
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         // downcast to serializer type
@@ -380,7 +380,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive& archive)
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     archive.Deserialize(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
@@ -391,8 +391,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         KeyClassT* key = ObjectCast<KeyClassT>( *itr );

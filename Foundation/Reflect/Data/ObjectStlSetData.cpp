@@ -1,41 +1,41 @@
-#include "Foundation/Reflect/Data/ElementStlSetData.h"
+#include "Foundation/Reflect/Data/ObjectStlSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ElementStlSetData);
+REFLECT_DEFINE_CLASS(ObjectStlSetData);
 
-ElementStlSetData::ElementStlSetData()
+ObjectStlSetData::ObjectStlSetData()
 {
 
 }
 
-ElementStlSetData::~ElementStlSetData()
+ObjectStlSetData::~ObjectStlSetData()
 {
 
 }
 
-void ElementStlSetData::ConnectData(Helium::HybridPtr<void> data)
+void ObjectStlSetData::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-size_t ElementStlSetData::GetSize() const
+size_t ObjectStlSetData::GetSize() const
 {
     return m_Data->size();
 }
 
-void ElementStlSetData::Clear()
+void ObjectStlSetData::Clear()
 {
     return m_Data->clear();
 }
 
-bool ElementStlSetData::Set(const Data* src, uint32_t flags)
+bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 {
-    const ElementStlSetData* rhs = ObjectCast<ElementStlSetData>(src);
+    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(src);
     if (!rhs)
     {
         return false;
@@ -60,9 +60,9 @@ bool ElementStlSetData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ElementStlSetData::Equals(const Data* s) const
+bool ObjectStlSetData::Equals(const Data* s) const
 {
-    const ElementStlSetData* rhs = ObjectCast<ElementStlSetData>(s);
+    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(s);
     if (!rhs)
     {
         return false;
@@ -93,9 +93,9 @@ bool ElementStlSetData::Equals(const Data* s) const
     return true;
 }
 
-void ElementStlSetData::Serialize(Archive& archive) const
+void ObjectStlSetData::Serialize(Archive& archive) const
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
 
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -112,23 +112,23 @@ void ElementStlSetData::Serialize(Archive& archive) const
     archive.Serialize(components);
 }
 
-void ElementStlSetData::Deserialize(Archive& archive)
+void ObjectStlSetData::Deserialize(Archive& archive)
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     archive.Deserialize(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    std::vector< ElementPtr >::const_iterator itr = components.begin();
-    std::vector< ElementPtr >::const_iterator end = components.end();
+    std::vector< ObjectPtr >::const_iterator itr = components.begin();
+    std::vector< ObjectPtr >::const_iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         m_Data->insert(*itr);
     }
 }
 
-void ElementStlSetData::Accept(Visitor& visitor)
+void ObjectStlSetData::Accept(Visitor& visitor)
 {
     DataType::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
     DataType::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();

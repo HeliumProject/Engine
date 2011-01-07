@@ -75,12 +75,12 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
     // All imports should default to the master root
     m_ImportRoot = m_Root.Ptr();
 
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove selection listener
     m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
@@ -223,7 +223,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     // read data
     m_Progress = 0;
-    std::vector< Reflect::ElementPtr > elements;
+    std::vector< Reflect::ObjectPtr > elements;
 
     bool success = true;
 
@@ -279,7 +279,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, Sce
 
     // read data
     m_Progress = 0;
-    std::vector< Reflect::ElementPtr > elements;
+    std::vector< Reflect::ObjectPtr > elements;
 
     bool success = true;
 
@@ -348,7 +348,7 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -373,8 +373,8 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     V_SceneNodeSmartPtr createdNodes;
     createdNodes.reserve( elements.size() );
     {
-        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
-        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
+        std::vector< Reflect::ObjectPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             command->Push( ImportSceneNode( *itr, createdNodes, action, importFlags, importReflectType ) );
@@ -543,7 +543,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     return command;
 }
 
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_Name.c_str()) );
 
@@ -626,7 +626,7 @@ void Scene::ArchiveStatus( const Reflect::StatusInfo& info )
             break;
         }
 
-    case Reflect::ArchiveStates::ElementProcessed:
+    case Reflect::ArchiveStates::ObjectProcessed:
         {
             if (info.m_Progress > m_Progress)
             {
@@ -669,7 +669,7 @@ void Scene::ArchiveException( const Reflect::ExceptionInfo& info )
 #pragma TODO( "Sub default assets?" )
 }
 
-bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
+bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     bool result = true;
 
@@ -767,7 +767,7 @@ bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportAr
     return result;
 }
 
-void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -820,7 +820,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
     }
 }
 
-void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -890,7 +890,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    std::vector< Reflect::ElementPtr > spool;
+    std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
 
     if (result)
@@ -951,7 +951,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    std::vector< Reflect::ElementPtr > spool;
+    std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
 
     if ( result && !spool.empty() )
@@ -3072,7 +3072,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
     }
 }
 
-void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void Scene::ViewPreferencesChanged( const Reflect::ObjectChangeArgs& args )
 {
     if ( args.m_Field == m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->ColorModeField() )
     {

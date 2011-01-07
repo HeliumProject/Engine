@@ -55,13 +55,13 @@ namespace Helium
             Field();
 
             // creates a suitable serializer for this field in the passed object
-            DataPtr CreateData(Element* instance = NULL) const;
+            DataPtr CreateData(Object* instance = NULL) const;
 
             // checks to see if the default value matches the value of this field in the passed object
-            bool HasDefaultValue(Element* instance) const;
+            bool HasDefaultValue(Object* instance) const;
 
             // sets the default value of this field in the passed object
-            bool SetDefaultValue(Element* instance) const;
+            bool SetDefaultValue(Object* instance) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field
@@ -168,7 +168,7 @@ namespace Helium
 
             // concrete field population functions, called from template functions below with deducted data
             Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
-            Reflect::Field* AddElementField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
+            Reflect::Field* AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
             Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
@@ -205,20 +205,20 @@ namespace Helium
             //  aware field pointers (since their pointer values would be used by the comparison operator).
             //
 
-            static bool Equals(const Element* a, const Element* b);
+            static bool Equals(const Object* a, const Object* b);
 
             //
             // Visits fields recursively, used to interactively traverse structures
             //
 
-            static void Visit (Element* element, Visitor& visitor);
+            static void Visit (Object* element, Visitor& visitor);
 
             // 
             // Copies data from one element to another by finding a common base class and cloning all of the
             //  fields from the source element into the destination element.
             // 
 
-            static void Copy( const Element* src, Element* dest );
+            static void Copy( const Object* src, Object* dest );
 
 
             //
@@ -253,99 +253,99 @@ namespace Helium
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( StrongPtr< ElementT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ElementT>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ElementT>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( std::vector< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::vector< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlVectorData>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::vector< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlVectorData>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( std::set< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlSetData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::set< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlSetData>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlSetData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::set< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlSetData>(),
+                    Reflect::GetType<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class KeyT, class ElementT >
-            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class KeyT, class ObjectT >
+            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField( 
+                return AddObjectField( 
                     name, 
                     GetOffset(field), 
-                    sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
-                    Reflect::GetType<ElementT>(), 
+                    sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
+                    Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
+                    Reflect::GetType<ObjectT>(), 
                     flags );
             }
 
-            template < class CompositeT, class KeyT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class KeyT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField( 
+                return AddObjectField( 
                     name, 
                     GetOffset(field), 
-                    sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
-                    Reflect::GetType<ElementT>(), 
+                    sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
+                    Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
+                    Reflect::GetType<ObjectT>(), 
                     flags );
             }
 

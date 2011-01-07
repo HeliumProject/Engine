@@ -17,7 +17,7 @@ ReflectColorInterpreter::ReflectColorInterpreter( Container* container )
 
 }
 
-void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
+void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent )
 {
     ContainerPtr container = CreateControl< Container >();
     parent->AddChild( container );
@@ -44,8 +44,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
     if ( color3 || color4 )
     {
         std::vector<Data*> ser;
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
             DataPtr s;
@@ -103,8 +103,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_HelpText.Set( TXT( "Sets the alpha value for the color." ) );
 
                 std::vector<Data*> alphaSer;
-                std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-                std::vector<Reflect::Element*>::const_iterator end = instances.end();
+                std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+                std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr s = new UInt8Data ();
@@ -140,8 +140,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_HelpText.Set( TXT( "Adjusts the HDR value of the color." ) );
 
                 std::vector<Data*> intensitySer;
-                std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-                std::vector<Reflect::Element*>::const_iterator end = instances.end();
+                std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+                std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr s = new Float32Data();

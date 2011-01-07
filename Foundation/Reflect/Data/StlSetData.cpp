@@ -167,7 +167,7 @@ template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 {
     int i = 0;
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     components.resize( m_Data->size() );
 
     {
@@ -175,7 +175,7 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ElementPtr dataElem;
+            ObjectPtr dataElem;
 
             // query cache for a serializer of this type
             archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
@@ -193,8 +193,8 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 
     archive.Serialize(components);
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         // downcast to serializer type
@@ -211,14 +211,14 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     archive.Deserialize(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         DataClassT* data = ObjectCast<DataClassT>(*itr);

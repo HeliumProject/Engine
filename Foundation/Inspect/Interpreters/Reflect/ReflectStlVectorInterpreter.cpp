@@ -21,7 +21,7 @@ ReflectStlVectorInterpreter::ReflectStlVectorInterpreter (Container* labelContai
 
 }
 
-void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     if (field->m_Flags & FieldFlags::Hide)
     {
@@ -86,8 +86,8 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     }
 
     // create the serializers
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+    std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+    std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();

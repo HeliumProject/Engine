@@ -212,7 +212,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if (input == output && (m_Verify && !m_XML && !m_Binary))
     {
-        std::vector< ElementPtr > elements;
+        std::vector< ObjectPtr > elements;
 
         if ( Helium::IsDebuggerPresent() )
         {
@@ -245,7 +245,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     // Read input
     //
 
-    std::vector< ElementPtr > spool;
+    std::vector< ObjectPtr > spool;
 
     if ( Helium::IsDebuggerPresent() )
     {
@@ -331,7 +331,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     {
         if ( Helium::IsDebuggerPresent() )
         {
-            std::vector< ElementPtr > duplicates;
+            std::vector< ObjectPtr > duplicates;
             Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
             archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
             archive->Get( duplicates );
@@ -340,7 +340,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         {
             try
             {
-                std::vector< ElementPtr > duplicates;
+                std::vector< ObjectPtr > duplicates;
                 Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
                 archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
                 archive->Get( duplicates );

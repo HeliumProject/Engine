@@ -318,9 +318,9 @@ void Viewport::InitWidgets()
 
     m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid (m_ResourceTracker);
 
-    m_SettingsManager->GetSettings< GridSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
+    m_SettingsManager->GetSettings< GridSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 
-    OnGridSettingsChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
+    OnGridSettingsChanged( Reflect::ObjectChangeArgs( NULL, NULL ) );
 
     m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new SceneGraph::PrimitiveRings (m_ResourceTracker);
     m_GlobalPrimitives[GlobalPrimitives::StandardRings]->Update();
@@ -1086,7 +1086,7 @@ void Viewport::CameraMoved( const SceneGraph::CameraMovedArgs& args )
     m_CameraMoved.Raise( args );  
 }
 
-void Viewport::OnGridSettingsChanged( const Reflect::ElementChangeArgs& args )
+void Viewport::OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args )
 {
     GridSettings* gridSettings = m_SettingsManager->GetSettings< GridSettings >();
     SceneGraph::PrimitiveGrid* grid = (SceneGraph::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];

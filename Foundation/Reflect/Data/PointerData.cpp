@@ -68,7 +68,7 @@ bool PointerData::Equals(const Reflect::Data* s) const
 
 void PointerData::Accept(Reflect::Visitor& visitor)
 {
-    if (!visitor.VisitPointer(*(Reflect::ElementPtr*)(m_Data.Ptr())))
+    if (!visitor.VisitPointer(*(Reflect::ObjectPtr*)(m_Data.Ptr())))
     {
         return;
     }

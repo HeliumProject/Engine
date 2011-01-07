@@ -91,7 +91,7 @@ ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 
 }
 
-void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     // If you hit this, you are misusing this interpreter
     HELIUM_ASSERT( field->m_DataClass == Reflect::GetType<Reflect::BitfieldData>() );
@@ -122,8 +122,8 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     parent->AddChild(container);
 
     // create the serializers
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+    std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+    std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();

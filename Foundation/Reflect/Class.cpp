@@ -1,5 +1,5 @@
 #include "Class.h"
-#include "Element.h"
+#include "Object.h"
 #include "Registry.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
@@ -42,14 +42,14 @@ Class* Class::Create()
     return new Class();
 }
 
-ElementPtr Class::Clone(Element* element)
+ObjectPtr Class::Clone(Object* element)
 {
     if (!element)
     {
         return NULL;
     }
 
-    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance( element->GetClass()) );
+    ObjectPtr clone = AssertCast<Object>( Registry::GetInstance()->CreateInstance( element->GetClass()) );
 
     element->PreSerialize();
 

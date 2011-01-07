@@ -210,7 +210,7 @@ namespace Helium
             virtual void LoadFinished();
 
             // copy this asset and its attributes into the destination
-            virtual void CopyTo(const Reflect::ElementPtr& destination) HELIUM_OVERRIDE;
+            virtual void CopyTo(const Reflect::ObjectPtr& destination) HELIUM_OVERRIDE;
         };
     }
 }

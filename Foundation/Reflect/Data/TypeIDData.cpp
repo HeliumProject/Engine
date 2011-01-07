@@ -88,7 +88,7 @@ void TypeIDData::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             tstring str;
             str.resize( (size_t)size );
             xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);

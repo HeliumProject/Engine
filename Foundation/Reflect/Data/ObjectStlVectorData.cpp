@@ -1,41 +1,41 @@
-#include "Foundation/Reflect/Data/ElementStlVectorData.h"
+#include "Foundation/Reflect/Data/ObjectStlVectorData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ElementStlVectorData);
+REFLECT_DEFINE_CLASS(ObjectStlVectorData);
 
-ElementStlVectorData::ElementStlVectorData()
+ObjectStlVectorData::ObjectStlVectorData()
 {
 
 }
 
-ElementStlVectorData::~ElementStlVectorData()
+ObjectStlVectorData::~ObjectStlVectorData()
 {
 
 }
 
-void ElementStlVectorData::ConnectData(Helium::HybridPtr<void> data)
+void ObjectStlVectorData::ConnectData(Helium::HybridPtr<void> data)
 {
     __super::ConnectData( data );
 
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-size_t ElementStlVectorData::GetSize() const 
+size_t ObjectStlVectorData::GetSize() const 
 { 
     return m_Data->size(); 
 }
 
-void ElementStlVectorData::Clear()
+void ObjectStlVectorData::Clear()
 { 
     return m_Data->clear(); 
 }
 
-bool ElementStlVectorData::Set(const Data* src, uint32_t flags)
+bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 {
-    const ElementStlVectorData* rhs = ObjectCast<ElementStlVectorData>(src);
+    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(src);
     if (!rhs)
     {
         return false;
@@ -43,8 +43,8 @@ bool ElementStlVectorData::Set(const Data* src, uint32_t flags)
 
     m_Data->resize(rhs->m_Data->size());
 
-    std::vector< ElementPtr >::const_iterator itr = rhs->m_Data->begin();
-    std::vector< ElementPtr >::const_iterator end = rhs->m_Data->end();
+    std::vector< ObjectPtr >::const_iterator itr = rhs->m_Data->begin();
+    std::vector< ObjectPtr >::const_iterator end = rhs->m_Data->end();
     for ( int index = 0; itr != end; ++itr )
     {
         if (flags & DataFlags::Shallow)
@@ -60,9 +60,9 @@ bool ElementStlVectorData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ElementStlVectorData::Equals(const Data* s) const
+bool ObjectStlVectorData::Equals(const Data* s) const
 {
-    const ElementStlVectorData* rhs = ObjectCast<ElementStlVectorData>(s);
+    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(s);
     if (!rhs)
     {
         return false;
@@ -73,10 +73,10 @@ bool ElementStlVectorData::Equals(const Data* s) const
         return false;
     }
 
-    std::vector< ElementPtr >::const_iterator itrLHS = m_Data->begin();
-    std::vector< ElementPtr >::const_iterator endLHS = m_Data->end();
-    std::vector< ElementPtr >::const_iterator itrRHS = rhs->m_Data->begin();
-    std::vector< ElementPtr >::const_iterator endRHS = rhs->m_Data->end();
+    std::vector< ObjectPtr >::const_iterator itrLHS = m_Data->begin();
+    std::vector< ObjectPtr >::const_iterator endLHS = m_Data->end();
+    std::vector< ObjectPtr >::const_iterator itrRHS = rhs->m_Data->begin();
+    std::vector< ObjectPtr >::const_iterator endRHS = rhs->m_Data->end();
     for ( ; itrLHS != endLHS && itrRHS != endRHS; ++itrLHS, ++itrRHS )
     {
         if ((*itrLHS) == (*itrRHS))
@@ -93,12 +93,12 @@ bool ElementStlVectorData::Equals(const Data* s) const
     return true;
 }
 
-void ElementStlVectorData::Serialize(Archive& archive) const
+void ObjectStlVectorData::Serialize(Archive& archive) const
 {
     archive.Serialize(m_Data.Get());
 }
 
-void ElementStlVectorData::Deserialize(Archive& archive)
+void ObjectStlVectorData::Deserialize(Archive& archive)
 {
     // if we are referring to a real field, clear its contents
     m_Data->clear();
@@ -106,10 +106,10 @@ void ElementStlVectorData::Deserialize(Archive& archive)
     archive.Deserialize(m_Data.Ref());
 }
 
-void ElementStlVectorData::Accept(Visitor& visitor)
+void ObjectStlVectorData::Accept(Visitor& visitor)
 {
-    std::vector< ElementPtr >::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
-    std::vector< ElementPtr >::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
+    std::vector< ObjectPtr >::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
+    std::vector< ObjectPtr >::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
     for ( ; itr != end; ++itr )
     {
         if (!itr->ReferencesObject())

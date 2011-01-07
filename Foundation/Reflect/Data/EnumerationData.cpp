@@ -33,7 +33,7 @@ void EnumerationData::ConnectData(Helium::HybridPtr<void> data)
     }
 }
 
-void EnumerationData::ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField)
+void EnumerationData::ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 
@@ -189,7 +189,7 @@ tistream& EnumerationData::operator<< (tistream& stream)
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Element* element = (Element*)m_Instance;
+            Object* element = (Object*)m_Instance;
             element->RaiseChanged( m_Field );
         }
     }

@@ -1,7 +1,7 @@
 #include "Foundation/Reflect/Composite.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -22,7 +22,7 @@ Field::Field()
 
 }
 
-DataPtr Field::CreateData(Element* instance) const
+DataPtr Field::CreateData(Object* instance) const
 {
     DataPtr ser;
 
@@ -53,7 +53,7 @@ DataPtr Field::CreateData(Element* instance) const
             }
             else
             {
-                ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( ser );
                 if ( containerData )
                 {
                     containerData->m_Type = m_Type;
@@ -65,7 +65,7 @@ DataPtr Field::CreateData(Element* instance) const
     return ser;
 }
 
-bool Field::HasDefaultValue(Element* instance) const
+bool Field::HasDefaultValue(Object* instance) const
 {
 #ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
@@ -96,7 +96,7 @@ bool Field::HasDefaultValue(Element* instance) const
     return false;
 }
 
-bool Field::SetDefaultValue(Element* instance) const
+bool Field::SetDefaultValue(Object* instance) const
 {
 #ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
@@ -238,7 +238,7 @@ Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset,
     return &m_Fields.GetLast();
 }
 
-Reflect::Field* Composite::AddElementField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
+Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
     Field field;
     field.m_Composite = this;
@@ -339,7 +339,7 @@ const Field* Composite::FindFieldByOffset(uint32_t offset) const
     return NULL;
 }
 
-bool Composite::Equals(const Element* a, const Element* b)
+bool Composite::Equals(const Object* a, const Object* b)
 {
     if (a == b)
     {
@@ -398,14 +398,14 @@ bool Composite::Equals(const Element* a, const Element* b)
     return true;
 }
 
-void Composite::Visit(Element* element, Visitor& visitor)
+void Composite::Visit(Object* element, Visitor& visitor)
 {
     if (!element)
     {
         return;
     }
 
-    if (!visitor.VisitElement(element))
+    if (!visitor.VisitObject(element))
     {
         return;
     }
@@ -435,7 +435,7 @@ void Composite::Visit(Element* element, Visitor& visitor)
     }
 }
 
-void Composite::Copy( const Element* src, Element* dest )
+void Composite::Copy( const Object* src, Object* dest )
 {
     if ( src == dest )
     {
@@ -472,7 +472,7 @@ void Composite::Copy( const Element* src, Element* dest )
 
         if ( !type )
         {
-            // This should be impossible... at the very least, Element is a common base class for both pointers.
+            // This should be impossible... at the very least, Object is a common base class for both pointers.
             // This exeception means there's a bug in this function.
             throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), srcType->m_Name, destType->m_Name );
         }

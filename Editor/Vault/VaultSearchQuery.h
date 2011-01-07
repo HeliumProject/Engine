@@ -4,7 +4,7 @@
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
@@ -41,7 +41,7 @@ namespace Helium
         typedef std::vector< VaultSearchQueryPtr > V_VaultSearchQuery;
         typedef Helium::OrderedSet< Helium::SmartPtrComparator< VaultSearchQuery > > OS_VaultSearchQuery;
 
-        class VaultSearchQuery : public Reflect::Element
+        class VaultSearchQuery : public Reflect::Object
         {
         public:
             VaultSearchQuery();
@@ -66,7 +66,7 @@ namespace Helium
             static bool ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query = NULL );
 
         public:
-            REFLECT_DECLARE_CLASS( VaultSearchQuery, Reflect::Element );
+            REFLECT_DECLARE_CLASS( VaultSearchQuery, Reflect::Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             virtual void PostDeserialize() HELIUM_OVERRIDE; 
 

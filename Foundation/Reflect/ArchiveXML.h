@@ -35,10 +35,10 @@ namespace Helium
                 const Field* m_Field;
 
                 // the item being processed
-                ElementPtr m_Element;
+                ObjectPtr m_Object;
 
                 // The collected components
-                std::vector< ElementPtr > m_Components;
+                std::vector< ObjectPtr > m_Components;
 
                 // flags, as specified below
                 unsigned int m_Flags;
@@ -91,10 +91,10 @@ namespace Helium
             std::stack< const tchar_t* > m_FieldNames;
 
             // The current collection of components
-            std::vector< ElementPtr > m_Components;
+            std::vector< ObjectPtr > m_Components;
 
             // The container to decode elements to
-            std::vector< ElementPtr >* m_Target;
+            std::vector< ObjectPtr >* m_Target;
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             ~ArchiveXML();
@@ -135,22 +135,22 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize(const ElementPtr& element);
-            virtual void Serialize(const std::vector< ElementPtr >& elements, uint32_t flags = 0);
+            virtual void Serialize(const ObjectPtr& element);
+            virtual void Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags = 0);
 
         protected:
             // Helpers
-            void SerializeFields(const ElementPtr& element);
-            void SerializeField(const ElementPtr& element, const Field* field);
+            void SerializeFields(const ObjectPtr& element);
+            void SerializeField(const ObjectPtr& element, const Field* field);
 
-            // <Element> and </Element>
-            void SerializeHeader(const ElementPtr& element);
-            void SerializeFooter(const ElementPtr& element);
+            // <Object> and </Object>
+            void SerializeHeader(const ObjectPtr& element);
+            void SerializeFooter(const ObjectPtr& element);
 
         public:
             // For handling components
-            virtual void Deserialize(ElementPtr& element);
-            virtual void Deserialize(std::vector< ElementPtr >& elements, uint32_t flags = 0);
+            virtual void Deserialize(ObjectPtr& element);
+            virtual void Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags = 0);
 
         private:
             static void StartElementHandler(void *pUserData, const tchar_t* pszName, const tchar_t **papszAttrs)
@@ -182,12 +182,12 @@ namespace Helium
 
         public:
             // Reading and writing single element from string data
-            static void       ToString( const ElementPtr& element, tstring& xml );
-            static ElementPtr FromString( const tstring& xml, const Class* searchClass = NULL );
+            static void       ToString( const ObjectPtr& element, tstring& xml );
+            static ObjectPtr FromString( const tstring& xml, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements from string data
-            static void       ToString( const std::vector< ElementPtr >& elements, tstring& xml );
-            static void       FromString( const tstring& xml, std::vector< ElementPtr >& elements );
+            static void       ToString( const std::vector< ObjectPtr >& elements, tstring& xml );
+            static void       FromString( const tstring& xml, std::vector< ObjectPtr >& elements );
         };
     }
 }

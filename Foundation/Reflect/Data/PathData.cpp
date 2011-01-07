@@ -82,7 +82,7 @@ void PathData::Deserialize( Archive& archive )
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             tstring buf;
-            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             buf.resize( (size_t)size );
             xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
             m_Data.Ref().Set( buf );
@@ -125,7 +125,7 @@ tistream& PathData::operator<<( tistream& stream )
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Element* element = (Element*)m_Instance;
+            Object* element = (Object*)m_Instance;
             element->RaiseChanged( m_Field );
         }
     }

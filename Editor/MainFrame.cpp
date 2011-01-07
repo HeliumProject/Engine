@@ -1441,7 +1441,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-            std::vector< Reflect::ElementPtr > elements;
+            std::vector< Reflect::ObjectPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
@@ -2140,11 +2140,11 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
 
-        std::vector< Reflect::ElementPtr > elements;
+        std::vector< Reflect::ObjectPtr > elements;
         Reflect::ArchiveXML::FromString( xml, elements );
 
-        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
-        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
+        std::vector< Reflect::ObjectPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );

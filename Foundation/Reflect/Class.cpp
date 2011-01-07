@@ -10,7 +10,7 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 template<>
-Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creator )
+Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
 {
     Class* info = Class::Create();
 
@@ -21,7 +21,7 @@ Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creat
     HELIUM_ASSERT( creator == NULL );
 
     // object should have no base class
-    HELIUM_ASSERT( baseName.IsEmpty() );
+    HELIUM_ASSERT( baseName == NULL );
 
     return info;
 }

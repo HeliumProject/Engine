@@ -26,13 +26,14 @@
 #include "Editor/ArtProvider.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/ProjectViewModel.h"
-#include "Editor/EditorSettings.h"
-#include "Editor/WindowSettings.h"
+#include "Pipeline/Settings.h"
+#include "Editor/Settings/EditorSettings.h"
+#include "Editor/Settings/WindowSettings.h"
 
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
 #include "Editor/Perforce/Perforce.h"
-#include "Editor/PerforceWaitDialog.h"
+#include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 
 //#include "Editor/Commands/BuildCommand.h"
@@ -266,6 +267,12 @@ bool App::OnInit()
     }
 
     GetFrame()->Show();
+
+    if ( GetSettingsManager()->GetSettings< GeneralSettings >()->GetReopenLastProjectOnStartup() )
+    {
+        const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+        GetFrame()->OpenProject( *mruPaths.rbegin() );
+    }
 
     return true;
 }

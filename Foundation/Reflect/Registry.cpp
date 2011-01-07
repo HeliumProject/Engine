@@ -3,6 +3,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Reflect/ObjectType.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/DOM.h"
@@ -52,15 +53,15 @@ struct CaseInsensitiveCompare
 template< class T >
 struct CaseInsensitiveNameCompare
 {
-    Name value;
+    const tchar_t* value;
 
-    CaseInsensitiveNameCompare( Name name )
+    CaseInsensitiveNameCompare( const tchar_t* name )
         : value( name )
     {
 
     }
 
-    bool operator()( const KeyValue< Name, T >& rhs )
+    bool operator()( const KeyValue< const tchar_t*, T >& rhs )
     {
         return _tcsicmp( *rhs.First(), *value ) == 0;
     }
@@ -207,10 +208,10 @@ void Reflect::Initialize()
         //
 
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Version>( TXT( "Version" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentNode>( TXT("DocumentNode") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentAttribute>( TXT("DocumentAttribute") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentElement>( TXT("DocumentElement") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Document>( TXT("Document") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentNode>( TXT( "DocumentNode") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentAttribute>( TXT( "DocumentAttribute") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentElement>( TXT( "DocumentElement") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Document>( TXT( "Document") ) );
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -231,6 +232,9 @@ void Reflect::Cleanup()
     {
         // free our casting memory
         Data::Cleanup();
+
+        // free basic types
+        g_Registry->m_InitializerStack.Cleanup();
 
         // delete registry
         delete g_Registry;
@@ -280,11 +284,11 @@ bool Registry::RegisterType(Type* type)
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *type->m_Name );
+    uint32_t crc = Crc32( type->m_Name );
     Insert< M_HashToType >::Result result = m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
     if ( !result.Second() )
     {
-        Log::Error( TXT( "Re-registration of type '%s', could be ambigouous crc: 0x%08x\n" ), *type->m_Name, crc );
+        Log::Error( TXT( "Re-registration of type %s, could be ambigouous crc: 0x%08x\n" ), type->m_Name, crc );
         HELIUM_BREAK();
         return false;
     }
@@ -299,23 +303,23 @@ void Registry::UnregisterType(const Type* type)
 
     type->Unregister();
 
-    uint32_t crc = Crc32( *type->m_Name );
+    uint32_t crc = Crc32( type->m_Name );
     m_TypesByHash.Remove( crc );
 }
 
-void Registry::AliasType( const Type* type, Name alias )
+void Registry::AliasType( const Type* type, const tchar_t* alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *alias );
+    uint32_t crc = Crc32( alias );
     m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
 }
 
-void Registry::UnaliasType( const Type* type, Name alias )
+void Registry::UnaliasType( const Type* type, const tchar_t* alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *alias );
+    uint32_t crc = Crc32( alias );
     M_HashToType::Iterator found = m_TypesByHash.Find( crc );
     if ( found != m_TypesByHash.End() && found->Second() == type )
     {

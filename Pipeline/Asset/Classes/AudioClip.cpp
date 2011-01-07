@@ -6,11 +6,11 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AudioClipMode );
 REFLECT_DEFINE_CLASS( AudioClip );
 
-void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
+void AudioClip::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.wav;*.mp3;*.ogg" );
+    comp.SetProperty( AssetProperties::FileFilter, TXT( "*.wav;*.mp3;*.ogg" ) );
 
-    comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
+    comp.AddEnumerationField( &AudioClip::m_Mode, TXT( "m_Mode" ) );
 }
 
 void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
@@ -21,7 +21,7 @@ void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* proper
         tstring mode;
         if ( modeEnum->GetElementLabel( (uint32_t)m_Mode, mode ) )
         {
-            properties->Insert( *modeEnum->m_Name, mode );
+            properties->Insert( modeEnum->m_Name, mode );
         }
     }
 

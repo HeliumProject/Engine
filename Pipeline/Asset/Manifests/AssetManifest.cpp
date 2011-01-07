@@ -5,8 +5,8 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_ABSTRACT(AssetManifest);
 
-void AssetManifest::EnumerateClass( Reflect::Compositor<AssetManifest>& comp )
+void AssetManifest::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  Reflect::Field* fieldBoundingBoxMin = comp.AddField( &AssetManifest::m_BoundingBoxMin, "m_BoundingBoxMin" );
-  Reflect::Field* fieldBoundingBoxMax = comp.AddField( &AssetManifest::m_BoundingBoxMax, "m_BoundingBoxMax" );
+    comp.AddField( &AssetManifest::m_BoundingBoxMin, TXT( "m_BoundingBoxMin" ) );
+    comp.AddField( &AssetManifest::m_BoundingBoxMax, TXT( "m_BoundingBoxMax" ) );
 }

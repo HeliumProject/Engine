@@ -2,7 +2,10 @@
 
 #include "ProjectViewModel.h"
 
+#include "Editor/App.h"
 #include "Editor/FileIconsTable.h"
+#include "Editor/Settings/EditorSettings.h"
+
 #include "Foundation/Flags.h"
 #include "Foundation/String/Units.h"
 
@@ -84,7 +87,14 @@ tstring ProjectViewModelNode::GetName() const
     }
     else
     {
-        return m_Path.Basename();
+        if ( wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->GetShowFileExtensionsInProjectView() )
+        {
+            return m_Path.Filename();
+        }
+        else
+        {
+            return m_Path.Basename();
+        }
     }
 }
 

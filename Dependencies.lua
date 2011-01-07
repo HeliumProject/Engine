@@ -16,6 +16,72 @@ project "Expat"
 		"Dependencies/Expat/*.c",
 	}
 
+project "freetype"
+	uuid "53C96BED-38E8-4A1f-81E0-45D09AFD33EB"
+	kind "StaticLib"
+	language "C"
+	defines
+	{
+		"_LIB",
+		"FT2_BUILD_LIBRARY",
+	}
+	includedirs
+	{
+		"Dependencies/freetype/include",
+	}
+	files
+	{
+		"Dependencies/freetype/src/autofit/autofit.c",
+		"Dependencies/freetype/src/bdf/bdf.c",
+		"Dependencies/freetype/src/cff/cff.c",
+		"Dependencies/freetype/src/base/ftbase.c",
+		"Dependencies/freetype/src/base/ftbitmap.c",
+		"Dependencies/freetype/src/cache/ftcache.c",
+		"Dependencies/freetype/src/base/ftfstype.c",
+		"Dependencies/freetype/src/base/ftgasp.c",
+		"Dependencies/freetype/src/base/ftglyph.c",
+		"Dependencies/freetype/src/gzip/ftgzip.c",
+		"Dependencies/freetype/src/base/ftinit.c",
+		"Dependencies/freetype/src/lzw/ftlzw.c",
+		"Dependencies/freetype/src/base/ftstroke.c",
+		"Dependencies/freetype/src/base/ftsystem.c",
+		"Dependencies/freetype/src/smooth/smooth.c",
+		"Dependencies/freetype/src/base/ftbbox.c",
+		"Dependencies/freetype/src/base/ftmm.c",
+		"Dependencies/freetype/src/base/ftpfr.c",
+		"Dependencies/freetype/src/base/ftsynth.c",
+		"Dependencies/freetype/src/base/fttype1.c",
+		"Dependencies/freetype/src/base/ftwinfnt.c",
+		"Dependencies/freetype/src/base/ftxf86.c",
+		"Dependencies/freetype/src/base/ftlcdfil.c",
+		"Dependencies/freetype/src/base/ftgxval.c",
+		"Dependencies/freetype/src/base/ftotval.c",
+		"Dependencies/freetype/src/base/ftpatent.c",
+		"Dependencies/freetype/src/pcf/pcf.c",
+		"Dependencies/freetype/src/pfr/pfr.c",
+		"Dependencies/freetype/src/psaux/psaux.c",
+		"Dependencies/freetype/src/pshinter/pshinter.c",
+		"Dependencies/freetype/src/psnames/psmodule.c",
+		"Dependencies/freetype/src/raster/raster.c",
+		"Dependencies/freetype/src/sfnt/sfnt.c",
+		"Dependencies/freetype/src/truetype/truetype.c",
+		"Dependencies/freetype/src/type1/type1.c",
+		"Dependencies/freetype/src/cid/type1cid.c",
+		"Dependencies/freetype/src/type42/type42.c",
+		"Dependencies/freetype/src/winfonts/winfnt.c",
+		"Dependencies/freetype/include/ft2build.h",
+		"Dependencies/freetype/include/freetype/config/ftconfig.h",
+		"Dependencies/freetype/include/freetype/config/ftheader.h",
+		"Dependencies/freetype/include/freetype/config/ftmodule.h",
+		"Dependencies/freetype/include/freetype/config/ftoption.h",
+		"Dependencies/freetype/include/freetype/config/ftstdlib.h",
+	}
+	configuration "windows"
+		files
+		{
+			"Dependencies/freetype/builds/win32/ftdebug.c",
+		}
+
 project "LiteSQL"
 	uuid "6D880828-B2BC-4FB5-A8E2-75FBE177349A"
 	kind "StaticLib"

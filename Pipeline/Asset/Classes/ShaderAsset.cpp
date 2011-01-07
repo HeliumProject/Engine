@@ -11,34 +11,34 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AlphaType );
 REFLECT_DEFINE_CLASS( ShaderAsset );
 
-void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
+void ShaderAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
+    comp.SetProperty( AssetProperties::FileFilter, TXT( "*.shader.*" ) );
 
-    comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath" );
-    comp.AddField( &ShaderAsset::m_NormalMapPath, "m_NormalMapPath" );
-    comp.AddField( &ShaderAsset::m_GPIMapPath, "m_GPIMapPath" );
+    comp.AddField( &ShaderAsset::m_ColorMapPath, TXT( "m_ColorMapPath" ) );
+    comp.AddField( &ShaderAsset::m_NormalMapPath, TXT( "m_NormalMapPath" ) );
+    comp.AddField( &ShaderAsset::m_GPIMapPath, TXT( "m_GPIMapPath" ) );
 
-    comp.AddField( &ShaderAsset::m_EnableColorMapTint, "m_EnableColorMapTint" );
-    comp.AddField( &ShaderAsset::m_ColorMapTint, "m_ColorMapTint" );
+    comp.AddField( &ShaderAsset::m_EnableColorMapTint, TXT( "m_EnableColorMapTint" ) );
+    comp.AddField( &ShaderAsset::m_ColorMapTint, TXT( "m_ColorMapTint" ) );
 
-    comp.AddField( &ShaderAsset::m_NormalMapScaling, "m_NormalMapScaling" );
+    comp.AddField( &ShaderAsset::m_NormalMapScaling, TXT( "m_NormalMapScaling" ) );
 
-    comp.AddField( &ShaderAsset::m_GlossMapEnabled, "m_GlossMapEnabled" );
-    comp.AddField( &ShaderAsset::m_GlossMapScaling, "m_GlossMapScaling" );
-    comp.AddField( &ShaderAsset::m_GlossMapTint, "m_GlossMapTint" );
-    comp.AddField( &ShaderAsset::m_GlossMapDirtiness, "m_GlossMapDirtiness" );
-    comp.AddField( &ShaderAsset::m_SpecularPower, "m_SpecularPower" );
+    comp.AddField( &ShaderAsset::m_GlossMapEnabled, TXT( "m_GlossMapEnabled" ) );
+    comp.AddField( &ShaderAsset::m_GlossMapScaling, TXT( "m_GlossMapScaling" ) );
+    comp.AddField( &ShaderAsset::m_GlossMapTint, TXT( "m_GlossMapTint" ) );
+    comp.AddField( &ShaderAsset::m_GlossMapDirtiness, TXT( "m_GlossMapDirtiness" ) );
+    comp.AddField( &ShaderAsset::m_SpecularPower, TXT( "m_SpecularPower" ) );
 
-    comp.AddField( &ShaderAsset::m_ParallaxMapEnabled, "m_ParallaxMapEnabled" );
-    comp.AddField( &ShaderAsset::m_ParallaxMapScaling, "m_ParallaxMapScaling" );
+    comp.AddField( &ShaderAsset::m_ParallaxMapEnabled, TXT( "m_ParallaxMapEnabled" ) );
+    comp.AddField( &ShaderAsset::m_ParallaxMapScaling, TXT( "m_ParallaxMapScaling" ) );
 
-    comp.AddField( &ShaderAsset::m_IncandescentMapEnabled, "m_IncandescentMapEnabled" );
-    comp.AddField( &ShaderAsset::m_IncandescentMapScaling, "m_IncandescentMapScaling" );
+    comp.AddField( &ShaderAsset::m_IncandescentMapEnabled, TXT( "m_IncandescentMapEnabled" ) );
+    comp.AddField( &ShaderAsset::m_IncandescentMapScaling, TXT( "m_IncandescentMapScaling" ) );
 
-    Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided" );
+    comp.AddField( &ShaderAsset::m_DoubleSided, TXT( "m_DoubleSided" ) );
 
-    Reflect::EnumerationField* enumWrapModeU = comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU" );
-    Reflect::EnumerationField* enumWrapModeV = comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV" );
-    Reflect::EnumerationField* enumAlphaMode = comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode" );
+    comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, TXT( "m_WrapModeU" ) );
+    comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, TXT( "m_WrapModeV" ) );
+    comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, TXT( "m_AlphaMode" ) );
 }

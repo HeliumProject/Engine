@@ -12,7 +12,12 @@ namespace Lunar
     /// @return  Type name.
     Name GameObjectType::GetName() const
     {
-        return m_Name;
+        if ( m_cachedName.IsEmpty() )
+        {
+            m_cachedName.Set( m_Name );
+        }
+
+        return m_cachedName;
     }
 
     /// Get the parent of this type, cast to a GameObjectType.

@@ -88,7 +88,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( ShaderAsset, AssetClass );
 
-            static void EnumerateClass( Reflect::Compositor<ShaderAsset>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };
 
         typedef Helium::StrongPtr< ShaderAsset > ShaderAssetPtr;

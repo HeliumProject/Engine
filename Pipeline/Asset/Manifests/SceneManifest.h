@@ -17,7 +17,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
 
-            static void EnumerateClass( Reflect::Compositor<SceneManifest>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };
 
         typedef Helium::StrongPtr<SceneManifest> SceneManifestPtr;

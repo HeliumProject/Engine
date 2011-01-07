@@ -11,9 +11,9 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(ComponentCollection)
 
-void ComponentCollection::EnumerateClass( Reflect::Compositor<ComponentCollection>& comp )
+void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, "m_Components" );
+    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }
 
 ComponentCollection::ComponentCollection()
@@ -26,7 +26,7 @@ ComponentCollection::ComponentCollection( const ComponentPtr& component )
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     m_Modified = true;
 }
 
@@ -43,7 +43,7 @@ ComponentCollection::~ComponentCollection()
 
     for( ; attrItr != attrEnd; ++attrItr )
     {
-        attrItr->second->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+        attrItr->second->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     }
 }
 
@@ -126,7 +126,13 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error )
         {
-            *error = tstring( TXT( "Component '" ) ) + *component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + *GetClass()->m_Name + TXT( "': " ) + errorMessage;
+            tstring componentName;
+            Helium::ConvertString( component->GetClass()->m_Name, componentName );
+
+            tstring collectionName;
+            Helium::ConvertString( GetClass()->m_Name, collectionName );
+
+            *error = tstring( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
         }
         
         return false;
@@ -140,7 +146,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     component->SetCollection( this );
 
     // Start caring about change to the component
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Raise event
     m_Modified = true;
@@ -167,7 +173,7 @@ bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
     ComponentCollectionChanged args ( this, component ); 
 
     // Stop caring about changes to the component
-    component->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Remove component and reset collection pointer
     m_Components.erase( found );
@@ -193,7 +199,9 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
     {
-        error = tstring( TXT( "The component '" ) )+ *component->GetClass()->m_Name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
+        tstring name;
+        Helium::ConvertString( component->GetClass()->m_Name, name );
+        error = tstring( TXT( "The component '" ) )+ name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
         return false;
     }
 
@@ -269,9 +277,9 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
-bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fieldName)
+bool ComponentCollection::ProcessComponent(ElementPtr element, const tchar_t* fieldName)
 {
-    if ( fieldName == TXT( "m_Components" ) )
+    if ( !_tcscmp( fieldName, TXT( "m_Components" ) ) )
     {
         V_Component attributes;
         Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ElementPtr >&)attributes );
@@ -317,7 +325,7 @@ void ComponentCollection::PostDeserialize()
     for ( ; itr != end; ++itr )
     {
         itr->second->SetCollection( this );
-        itr->second->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        itr->second->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
     }
 }
 
@@ -343,15 +351,11 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
-                const Set< const Composite* >& derived = attrib->GetClass()->m_Base->m_Derived;
-                Set< const Composite* >::ConstIterator derivedItr = derived.Begin();
-                Set< const Composite* >::ConstIterator derivedEnd = derived.End();
-                for ( ; derivedItr != derivedEnd; ++derivedItr )
+                for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    const Reflect::Composite* currentType = *derivedItr;
-                    if ( currentType != attrib->GetType() )
+                    if ( sibling != attrib->GetType() )
                     {
-                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( currentType ) ) );
+                        destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
                             if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )

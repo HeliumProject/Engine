@@ -15,7 +15,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( SceneGraph::PivotTransform, SceneGraph::Transform );
-            static void EnumerateClass( Reflect::Compositor<PivotTransform>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

@@ -9,10 +9,10 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS(Version);
 
-void Version::EnumerateClass( Reflect::Compositor<Version>& comp )
+void Version::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Version::m_Source, "m_Source" );
-    comp.AddField( &Version::m_SourceVersion, "m_SourceVersion" );
+    comp.AddField( &Version::m_Source, TXT( "m_Source" ) );
+    comp.AddField( &Version::m_SourceVersion, TXT( "m_SourceVersion" ) );
 }
 
 Reflect::Version::Version()

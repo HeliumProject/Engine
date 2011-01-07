@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Widget.h"
 
-#include "Editor/FileDropTarget.h"
+#include "Editor/DragDrop/FileDropTarget.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

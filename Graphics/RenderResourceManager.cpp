@@ -16,6 +16,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RSamplerState.h"
 #include "Rendering/RVertexDescription.h"
+#include "Graphics/Font.h"
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/Shader.h"
 
@@ -255,7 +256,7 @@ void RenderResourceManager::Initialize()
     PostConfigUpdate();
 
     // Attempt to load the depth-only pre-pass shader.
-    // XXX TMC: Migrate to a more data-driven solution.
+#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
     GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
@@ -346,6 +347,29 @@ void RenderResourceManager::Initialize()
             }
         }
     }
+
+    // Attempt to load the debug fonts.
+#pragma TODO( "XXX TMC: Migrate to a more data-driven solution." )
+    GameObjectPath fontPath;
+    GameObjectPtr spFont;
+
+    HELIUM_VERIFY( fontPath.Set(
+        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
+    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = DynamicCast< Font >( spFont.Get() );
+    spFont.Release();
+
+    HELIUM_VERIFY( fontPath.Set(
+        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
+    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = DynamicCast< Font >( spFont.Get() );
+    spFont.Release();
+
+    HELIUM_VERIFY( fontPath.Set(
+        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
+    HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
+    m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = DynamicCast< Font >( spFont.Get() );
+    spFont.Release();
 }
 
 /// Release all state references.
@@ -353,6 +377,11 @@ void RenderResourceManager::Initialize()
 /// @see Initialize(), PostConfigUpdate()
 void RenderResourceManager::Shutdown()
 {
+    for( size_t sizeIndex = 0; sizeIndex < HELIUM_ARRAY_COUNT( m_debugFonts ); ++sizeIndex )
+    {
+        m_debugFonts[ sizeIndex ].Release();
+    }
+
     m_spSimpleWorldSpacePixelShader.Release();
     m_spSimpleWorldSpaceVertexShader.Release();
     m_spSimpleScreenSpacePixelShader.Release();
@@ -712,6 +741,18 @@ ShaderVariant* RenderResourceManager::GetSimpleScreenSpaceVertexShader() const
 ShaderVariant* RenderResourceManager::GetSimpleScreenSpacePixelShader() const
 {
     return m_spSimpleScreenSpacePixelShader;
+}
+
+/// Get the debug text font resource of the specified size.
+///
+/// @param[in] size  Debug text font size identifier.
+///
+/// @return  Pointer to the debug text font of the specified size.
+Font* RenderResourceManager::GetDebugFont( EDebugFontSize size ) const
+{
+    HELIUM_ASSERT( static_cast< size_t >( size ) < HELIUM_ARRAY_COUNT( m_debugFonts ) );
+
+    return m_debugFonts[ size ];
 }
 
 /// Get the singleton RenderResourceManager instance, creating it if necessary.

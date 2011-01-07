@@ -6,9 +6,9 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_ABSTRACT(ComponentBase)
 
-void ComponentBase::EnumerateClass( Reflect::Compositor<ComponentBase>& comp )
+void ComponentBase::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_IsEnabled, "m_IsEnabled" );
+    Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_IsEnabled, TXT( "m_IsEnabled" ) );
 }
 
 ComponentBase::ComponentBase()
@@ -32,7 +32,7 @@ void ComponentBase::SetCollection(ComponentCollection* collection)
 {
     if ( m_Collection && collection && m_Collection != collection )
     {
-        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), *GetClass()->m_Name, *collection->GetClass()->m_Name, *m_Collection->GetClass()->m_Name );
+        throw Helium::Exception ( TXT( "Cannot add attribute '%s' to collection '%s', it is already the member of another collection '%s'" ), GetClass()->m_Name, collection->GetClass()->m_Name, m_Collection->GetClass()->m_Name );
     }
 
     m_Collection = collection;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/Reflect/Composite.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Registry.h"
 
 #include "Platform/String.h"
@@ -32,63 +33,16 @@ namespace Helium
             // protect external allocation to keep inlined code in this dll
             static Class* Create();
 
-            template<class T>
-            static Class* Create( Name name, Name baseName, CreateObjectFunc creator = NULL )
+            template< class ClassT >
+            static Class* Create( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
-                info->m_Size = sizeof(T);
-                info->m_Name = name;
+                // populate reflection information
+                Composite::Create< ClassT >( name, baseName, &ClassT::AcceptCompositeVisitor, info );
+
+                // setup factory function
                 info->m_Creator = creator;
-
-                // lookup base class
-                info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );
-
-                // if you hit this break your base class is not registered yet!
-                HELIUM_ASSERT( info->m_Base );
-
-                // populate base classes' derived class list (unregister will remove it)
-                info->m_Base->m_Derived.Insert( info );
-
-                // the static enumerate function for this particular class' fields
-                CompositeEnumerator enumerator = (CompositeEnumerator)&T::EnumerateClass;
-
-                // c++ can give us the address of base class static functions,
-                //  so check each base class to see if this is really a base class enumerate function
-                bool baseEnumerator = false;
-                {
-                    const Reflect::Composite* base = info->m_Base;
-                    while ( !baseEnumerator && base )
-                    {
-                        if (base)
-                        {
-                            baseEnumerator = base->m_Enumerator && base->m_Enumerator == enumerator;
-                            base = base->m_Base;
-                        }
-                        else
-                        {
-                            HELIUM_BREAK(); // if you hit this break your base class is not registered yet!
-                            baseName.Clear();
-                        }
-                    }
-                }
-
-                // if our enumerate function isn't one from a base class
-                if ( !baseEnumerator )
-                {
-                    // the enumerator function will populate our field data
-                    info->m_Enumerator = enumerator;
-                }
-
-                // enumerate reflection data, but only if we are concrete (instantiatable)
-                if (info->m_Creator)
-                {
-                    // create the default object
-                    Helium::StrongPtr<T> temp( (T*)(info->m_Creator()) );
-
-                    // enumerate the fields in the class
-                    info->EnumerateInstance<T>(*temp);
-                }
 
                 return info;
             }
@@ -106,6 +60,6 @@ namespace Helium
         typedef Helium::SmartPtr< const Class > ConstClassPtr;
 
         template<>
-        Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creator );
+        Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator );
     }
 }

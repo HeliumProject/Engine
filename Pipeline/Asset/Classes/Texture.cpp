@@ -8,10 +8,10 @@ REFLECT_DEFINE_ENUMERATION( Asset::TextureFilter );
 REFLECT_DEFINE_ENUMERATION( Asset::TextureCoordinateWrapMode );
 REFLECT_DEFINE_CLASS( Texture );
 
-void Texture::EnumerateClass( Reflect::Compositor< Texture >& comp )
+void Texture::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.tga;*.png;*.jpg;*.bmp" );
+    comp.SetProperty( AssetProperties::FileFilter, TXT( "*.tga;*.png;*.jpg;*.bmp" ) );
 
-    comp.AddEnumerationField( &Texture::m_WrapModeU, "m_WrapModeU" );
-    comp.AddEnumerationField( &Texture::m_WrapModeV, "m_WrapModeV" );
+    comp.AddEnumerationField( &Texture::m_WrapModeU, TXT( "m_WrapModeU" ) );
+    comp.AddEnumerationField( &Texture::m_WrapModeV, TXT( "m_WrapModeV" ) );
 }

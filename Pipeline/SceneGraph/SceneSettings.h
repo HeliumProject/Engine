@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 #include "Pipeline/SceneGraph/Manipulator.h"
 #include "Pipeline/SceneGraph/TranslateManipulator.h"
 
@@ -8,12 +9,17 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PIPELINE_API SceneSettings : public Reflect::Element
+        class PIPELINE_API SceneSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( SceneSettings, Settings );
 
             SceneSettings();
+
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
 
             float32_t ScaleManipulatorSize() const;
             bool ScaleManipulatorGridSnap() const;
@@ -47,22 +53,22 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void EnumerateClass( Reflect::Compositor<SceneSettings>& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &SceneSettings::m_ScaleManipulatorSize, "Scale Manipulator Size" );
-                comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, "Scale Manipulator Grid Snapping" );
-                comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, "Scale Manipulator Distance" );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorSize, TXT( "Scale Manipulator Size" ) );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, TXT( "Scale Manipulator Grid Snapping" ) );
+                comp.AddField( &SceneSettings::m_ScaleManipulatorDistance, TXT( "Scale Manipulator Distance" ) );
 
-                comp.AddField( &SceneSettings::m_RotateManipulatorSize, "Rotate Manipulator Size" );
-                comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, "Rotate Manipulator Axis Snapping" );
-                comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, "Rotate Manipulator Snap Degrees" );
-                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, "Rotate Manipulator Space" );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSize, TXT( "Rotate Manipulator Size" ) );
+                comp.AddField( &SceneSettings::m_RotateManipulatorAxisSnap, TXT( "Rotate Manipulator Axis Snapping" ) );
+                comp.AddField( &SceneSettings::m_RotateManipulatorSnapDegrees, TXT( "Rotate Manipulator Snap Degrees" ) );
+                comp.AddEnumerationField( &SceneSettings::m_RotateManipulatorSpace, TXT( "Rotate Manipulator Space" ) );
 
-                comp.AddField( &SceneSettings::m_TranslateManipulatorSize, "Translate Manipulator Size" );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, "Translate Manipulator Space" );
-                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, "Translate Manipulator Snapping Mode" );
-                comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, "Translate Manipulator Distance" );
-                comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, "Translate Manipulator Live Objects Only" );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorSize, TXT( "Translate Manipulator Size" ) );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSpace, TXT( "Translate Manipulator Space" ) );
+                comp.AddEnumerationField( &SceneSettings::m_TranslateManipulatorSnappingMode, TXT( "Translate Manipulator Snapping Mode" ) );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorDistance, TXT( "Translate Manipulator Distance" ) );
+                comp.AddField( &SceneSettings::m_TranslateManipulatorLiveObjectsOnly, TXT( "Translate Manipulator Live Objects Only" ) );
             }
         };
         typedef Helium::SmartPtr< SceneSettings > SceneSettingsPtr;

@@ -6,9 +6,9 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_CLASS( ClipboardDataWrapper );
 
-void ClipboardDataWrapper::EnumerateClass( Reflect::Compositor<ClipboardDataWrapper>& comp )
+void ClipboardDataWrapper::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &ClipboardDataWrapper::m_Data, "m_Data" );
+    comp.AddField( &ClipboardDataWrapper::m_Data, TXT( "m_Data" ) );
 }
 
 ClipboardDataWrapper::ClipboardDataWrapper()

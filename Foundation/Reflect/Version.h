@@ -10,7 +10,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( Version, Element );
-            static void EnumerateClass( Reflect::Compositor<Version>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             Version ();
             Version(const tchar_t* source, const tchar_t* sourceVersion);

@@ -6,11 +6,11 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AnimationClipMode );
 REFLECT_DEFINE_CLASS( AnimationClip );
 
-void AnimationClip::EnumerateClass( Reflect::Compositor< AnimationClip >& comp )
+void AnimationClip::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.fbx;" );
+    comp.SetProperty( AssetProperties::FileFilter, TXT( "*.fbx;" ) );
 
-    comp.AddField( &AnimationClip::m_Compressed, "m_Compressed" );
-    comp.AddField( &AnimationClip::m_SampleRate, "m_SampleRate" );
-    comp.AddEnumerationField( &AnimationClip::m_Mode, "m_Mode" );
+    comp.AddField( &AnimationClip::m_Compressed, TXT( "m_Compressed" ) );
+    comp.AddField( &AnimationClip::m_SampleRate, TXT( "m_SampleRate" ) );
+    comp.AddEnumerationField( &AnimationClip::m_Mode, TXT( "m_Mode" ) );
 }

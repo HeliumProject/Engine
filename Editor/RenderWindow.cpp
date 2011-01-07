@@ -2,7 +2,7 @@
 #include "RenderWindow.h"
 
 #include "Foundation/Math/Utils.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Pipeline/Render/RBObjectLoader.h"
 #include "Pipeline/SceneGraph/Camera.h"
 #include "Editor/Input.h"

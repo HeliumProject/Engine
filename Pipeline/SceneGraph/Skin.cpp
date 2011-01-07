@@ -10,26 +10,26 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_CLASS( Influence );
 
-void Influence::EnumerateClass( Reflect::Compositor<Influence>& comp )
+void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Influence::m_Objects,           "m_Objects" );
-    comp.AddField( &Influence::m_Weights,           "m_Weights" );
+    comp.AddField( &Influence::m_Objects,           TXT( "m_Objects" ) );
+    comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
 
 REFLECT_DEFINE_CLASS( Skin );
 
-void Skin::EnumerateClass( Reflect::Compositor<Skin>& comp )
+void Skin::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Skin::m_MeshID,                 "m_MeshID" );
-    comp.AddField( &Skin::m_Influences,             "m_Influences" );
-    comp.AddField( &Skin::m_InfluenceObjectIDs,     "m_InfluenceObjectIDs" );
-    comp.AddField( &Skin::m_InfluenceIndices,       "m_InfluenceIndices" );
+    comp.AddField( &Skin::m_MeshID,                 TXT( "m_MeshID" ) );
+    comp.AddField( &Skin::m_Influences,             TXT( "m_Influences" ) );
+    comp.AddField( &Skin::m_InfluenceObjectIDs,     TXT( "m_InfluenceObjectIDs" ) );
+    comp.AddField( &Skin::m_InfluenceIndices,       TXT( "m_InfluenceIndices" ) );
 }
 
 void Skin::InitializeType()
 {
-    Reflect::RegisterClassType< Influence >( TXT("SceneGraph::Influence") );
-    Reflect::RegisterClassType< Skin >( TXT("SceneGraph::Skin") );
+    Reflect::RegisterClassType< Influence >( TXT( "SceneGraph::Influence" ) );
+    Reflect::RegisterClassType< Skin >( TXT( "SceneGraph::Skin" ) );
 }
 
 void Skin::CleanupType()

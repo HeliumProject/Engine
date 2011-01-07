@@ -4,9 +4,7 @@
 #include <hash_map>
 
 #include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/Name.h"
-
-#include "API.h"
+#include "Foundation/Reflect/API.h"
 
 namespace Helium
 {

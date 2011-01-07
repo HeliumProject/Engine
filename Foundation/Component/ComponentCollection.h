@@ -34,7 +34,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Element);
-            static void EnumerateClass( Reflect::Compositor<ComponentCollection>& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ComponentCollection();
             ComponentCollection( const ComponentPtr& attr );
@@ -166,7 +166,7 @@ namespace Helium
 
         public:
             // migrate legacy attributes
-            virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) HELIUM_OVERRIDE;
+            virtual bool ProcessComponent(Reflect::ElementPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
 
             // setup changed callback
             virtual void PreSerialize() HELIUM_OVERRIDE;

@@ -1,5 +1,6 @@
 #include "Platform/File.h"
 
+#include "Platform/Types.h"
 #include "Platform/Assert.h"
 #include "Platform/Windows/Windows.h"
 
@@ -35,7 +36,7 @@ Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate
     }
 
     Handle handle = InvalidHandleValue;
-#ifdef HELIUM_UNICODE
+#ifdef UNICODE
     handle = CreateFileW(
 #else
     handle = CreateFileA(

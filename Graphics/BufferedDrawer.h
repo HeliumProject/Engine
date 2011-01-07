@@ -4,6 +4,7 @@
 
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/VertexTypes.h"
+#include "Graphics/RenderResourceManager.h"
 
 namespace Lunar
 {
@@ -41,6 +42,10 @@ namespace Lunar
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
             uint32_t triangleCount, RTexture2d* pTexture );
+
+        void DrawText(
+            const Simd::Matrix44& rTransform, const String& rText, const Color& rColor = Color( 0xffffffff ),
+            RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
         //@}
 
         /// @name Rendering
@@ -80,31 +85,45 @@ namespace Lunar
             /// Index buffer for untextured primitive rendering.
             RIndexBufferPtr spUntexturedIndexBuffer;
 
-            /// Vertex buffer for textured primitive rendering.
-            RVertexBufferPtr spTexturedVertexBuffer;
-            /// Index buffer for textured primitive rendering.
-            RIndexBufferPtr spTexturedIndexBuffer;
+            /// Vertex buffer for primitive rendering with blending of each texture channel with the vertex colors.
+            RVertexBufferPtr spTextureBlendVertexBuffer;
+            /// Index buffer for primitive rendering with blending of each texture channel with the vertex colors.
+            RIndexBufferPtr spTextureBlendIndexBuffer;
+
+            /// Vertex buffer for primitive rendering with blending of the texture color with the vertex alpha.
+            RVertexBufferPtr spTextureAlphaVertexBuffer;
+            /// Index buffer for primitive rendering with blending of the texture color with the vertex alpha.
+            RIndexBufferPtr spTextureAlphaIndexBuffer;
 
             /// Maximum number of vertices in the untextured primitive vertex buffer.
             uint32_t untexturedVertexBufferSize;
             /// Maximum number if indices in the untextured primitive index buffer.
             uint32_t untexturedIndexBufferSize;
 
-            /// Maximum number of vertices in the textured primitive vertex buffer.
-            uint32_t texturedVertexBufferSize;
-            /// Maximum number of indices in the textured primitive vertex buffer.
-            uint32_t texturedIndexBufferSize;
+            /// Maximum number of vertices in the blended texture primitive vertex buffer.
+            uint32_t textureBlendVertexBufferSize;
+            /// Maximum number of indices in the blended texture primitive vertex buffer.
+            uint32_t textureBlendIndexBufferSize;
+
+            /// Maximum number of vertices in the alpha texture primitive vertex buffer.
+            uint32_t textureAlphaVertexBufferSize;
+            /// Maximum number of indices in the alpha texture primitive vertex buffer.
+            uint32_t textureAlphaIndexBufferSize;
         };
 
         /// Untextured draw call vertices.
         DynArray< SimpleVertex > m_untexturedVertices;
-        /// Textured draw call vertices.
-        DynArray< SimpleTexturedVertex > m_texturedVertices;
+        /// Vertices for draw calls that blend each texture channel with the vertex color.
+        DynArray< SimpleTexturedVertex > m_textureBlendVertices;
+        /// Vertices for draw calls that blend the texture color (red channel) with the vertex alpha.
+        DynArray< SimpleTexturedVertex > m_textureAlphaVertices;
 
         /// Untextured draw call indices.
         DynArray< uint16_t > m_untexturedIndices;
-        /// Textured draw call indices.
-        DynArray< uint16_t > m_texturedIndices;
+        /// Indices for draw calls that blend each texture channel with the vertex color.
+        DynArray< uint16_t > m_textureBlendIndices;
+        /// Indices for draw calls that blend the texture color (red channel) with the vertex alpha.
+        DynArray< uint16_t > m_textureAlphaIndices;
 
         /// Line list draw call data.
         DynArray< UntexturedDrawCall > m_lineDrawCalls;
@@ -114,6 +133,8 @@ namespace Lunar
         DynArray< UntexturedDrawCall > m_solidMeshDrawCalls;
         /// Textured mesh draw call data.
         DynArray< TexturedDrawCall > m_texturedMeshDrawCalls;
+        /// Text draw call data.
+        DynArray< TexturedDrawCall > m_textDrawCalls;
 
         /// Rendering resource data.
         ResourceSet m_resourceSets[ 2 ];

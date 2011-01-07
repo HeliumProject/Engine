@@ -28,12 +28,12 @@ GridSettings::GridSettings( const tstring& version,
 , m_MajorColor( majorColor )
 , m_MinorColor( minorColor )
 {
-  AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
+  e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
 GridSettings::~GridSettings()
 {
-  RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
+  e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
 void GridSettings::PostDeserialize()

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
@@ -11,7 +12,7 @@ namespace Helium
     struct SettingsManagerLoadedArgs {};
     typedef Helium::Signature< const SettingsManagerLoadedArgs& > SettingsManagerLoadedSignature;
 
-    typedef std::map< Reflect::TypeID, Reflect::ElementPtr > M_Settings;
+    typedef std::map< Reflect::TypeID, SettingsPtr > M_Settings;
 
     class PIPELINE_API SettingsManager : public Reflect::Element
     {
@@ -61,9 +62,9 @@ namespace Helium
         M_Settings m_SettingsMap;
 
     public:
-        static void EnumerateClass( Reflect::Compositor< SettingsManager >& comp )
+        static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
-            comp.AddField( &SettingsManager::m_SettingsMap, "m_SettingsMap" );
+            comp.AddField( &SettingsManager::m_SettingsMap, TXT( "m_SettingsMap" ), Reflect::FieldFlags::Hide );
         }
     };
 

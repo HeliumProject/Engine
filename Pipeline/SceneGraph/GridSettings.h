@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
+#include "Pipeline/Settings.h"
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Reflect/Element.h"
@@ -28,10 +29,10 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API GridSettings : public Reflect::Element
+        class PIPELINE_API GridSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( GridSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( GridSettings, Settings );
 
             GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,
@@ -72,16 +73,16 @@ namespace Helium
             Color3 m_MinorColor;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< GridSettings >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddEnumerationField( &GridSettings::m_Units, "Units" );
-                comp.AddField( &GridSettings::m_Width, "Width" );
-                comp.AddField( &GridSettings::m_Length, "Length" );
-                comp.AddField( &GridSettings::m_MajorStep, "Major Step" );
-                comp.AddField( &GridSettings::m_MinorStep, "Minor Step" );
-                comp.AddField( &GridSettings::m_AxisColor, "Axis Color" );
-                comp.AddField( &GridSettings::m_MajorColor, "Major Color" );
-                comp.AddField( &GridSettings::m_MinorColor, "Minor Color" );
+                comp.AddEnumerationField( &GridSettings::m_Units, TXT( "Units" ) );
+                comp.AddField( &GridSettings::m_Width, TXT( "Width" ) );
+                comp.AddField( &GridSettings::m_Length, TXT( "Length" ) );
+                comp.AddField( &GridSettings::m_MajorStep, TXT( "Major Step" ) );
+                comp.AddField( &GridSettings::m_MinorStep, TXT( "Minor Step" ) );
+                comp.AddField( &GridSettings::m_AxisColor, TXT( "Axis Color" ) );
+                comp.AddField( &GridSettings::m_MajorColor, TXT( "Major Color" ) );
+                comp.AddField( &GridSettings::m_MinorColor, TXT( "Minor Color" ) );
             }
         };
 

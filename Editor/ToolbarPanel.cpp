@@ -6,7 +6,7 @@
 #include "EditorIDs.h"
 
 #include "Editor/App.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 
 #include "Editor/Controls/Drawer/DrawerPanel.h"
 

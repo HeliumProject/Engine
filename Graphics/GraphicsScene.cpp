@@ -1131,6 +1131,7 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 
     RRasterizerState* pRasterizerStateDefault = rRenderResourceManager.GetRasterizerState(
         RenderResourceManager::RASTERIZER_STATE_DEFAULT );
+    RBlendState* pBlendStateOpaque = rRenderResourceManager.GetBlendState( RenderResourceManager::BLEND_STATE_OPAQUE );
     RDepthStencilState* pDepthStateDefault = rRenderResourceManager.GetDepthStencilState(
         RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
     RDepthStencilState* pDepthStateNone = rRenderResourceManager.GetDepthStencilState(
@@ -1184,9 +1185,6 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
             pDrawer->Draw();
         }
     }
-
-    // Set the default rasterizer state, as the rasterizer state may have been altered by BufferedDrawer::Draw().
-    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
     spCommandProxy->EndScene();
@@ -1204,6 +1202,8 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 
     spCommandProxy->BeginScene();
 
+    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+    spCommandProxy->SetBlendState( pBlendStateOpaque );
     spCommandProxy->SetDepthStencilState( pDepthStateNone, 0 );
     spCommandProxy->SetSamplerStates( 0, 1, &pSamplerStatePointClamp );
 

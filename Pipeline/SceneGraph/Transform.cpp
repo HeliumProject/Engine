@@ -26,15 +26,15 @@ struct ScaleColorInfo
     float32_t m_ScaleMax;
 };
 
-void Transform::EnumerateClass( Reflect::Compositor<Transform>& comp )
+void Transform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( (Vector3 Transform::*)&Transform::m_Scale,   "m_Scale" );
-    comp.AddField( (Vector3 Transform::*)&Transform::m_Rotate,  "m_Rotate" );
-    comp.AddField( &Transform::m_Translate,                     "m_Translate" );
+    comp.AddField( (Vector3 Transform::*)&Transform::m_Scale,   TXT( "m_Scale" ) );
+    comp.AddField( (Vector3 Transform::*)&Transform::m_Rotate,  TXT( "m_Rotate" ) );
+    comp.AddField( &Transform::m_Translate,                     TXT( "m_Translate" ) );
 
-    comp.AddField( &Transform::m_ObjectTransform,               "m_ObjectTransform" );
-    comp.AddField( &Transform::m_GlobalTransform,               "m_GlobalTransform" );
-    comp.AddField( &Transform::m_InheritTransform,              "m_InheritTransform" );
+    comp.AddField( &Transform::m_ObjectTransform,               TXT( "m_ObjectTransform" ) );
+    comp.AddField( &Transform::m_GlobalTransform,               TXT( "m_GlobalTransform" ) );
+    comp.AddField( &Transform::m_InheritTransform,              TXT( "m_InheritTransform" ) );
 }
 
 void Transform::InitializeType()

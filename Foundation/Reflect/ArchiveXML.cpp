@@ -196,7 +196,7 @@ void ArchiveXML::Serialize(const ElementPtr& element)
 
 void ArchiveXML::Serialize(const std::vector< ElementPtr >& elements, uint32_t flags)
 {
-    m_FieldNames.push( tstring () );
+    m_FieldNames.push( NULL );
 
     std::vector< ElementPtr >::const_iterator itr = elements.begin();
     std::vector< ElementPtr >::const_iterator end = elements.end();
@@ -231,11 +231,11 @@ void ArchiveXML::SerializeFields(const ElementPtr& element)
     const Class* type = element->GetClass();
     HELIUM_ASSERT(type != NULL);
 
-    std::vector< ConstFieldPtr >::const_iterator itr = type->m_Fields.begin();
-    std::vector< ConstFieldPtr >::const_iterator end = type->m_Fields.end();
+    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        SerializeField(element, *itr);
+        SerializeField(element, &*itr);
     }
 }
 
@@ -248,7 +248,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     }
 
     // set current field name
-    m_FieldNames.push(field->m_Name);
+    m_FieldNames.push( field->m_Name );
 
     // construct serialization object
     ElementPtr e;
@@ -262,7 +262,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     if (!serializer.ReferencesObject())
     {
         // this should never happen, the type id in the rtti data is bogus
-        throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), field->m_Name.c_str() );
+        throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
     }
     else
     {
@@ -273,6 +273,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
         bool serialize = true;
 
         // check for equality
+#ifdef REFLECT_REFACTOR
         if ( serialize && field->m_Default.ReferencesObject() )
         {
             bool force = (field->m_Flags & FieldFlags::Force) != 0;
@@ -281,6 +282,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
                 serialize = false;
             }
         }
+#endif
 
         // don't write empty containers
         if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )
@@ -323,10 +325,13 @@ void ArchiveXML::SerializeHeader(const ElementPtr& element)
     // Field name
     //
 
-    if (!m_FieldNames.empty() && !m_FieldNames.top().empty())
+    if ( !m_FieldNames.empty() && m_FieldNames.top() )
     {
+        tstring name;
+        Helium::ConvertString( m_FieldNames.top(), name );
+
         // our link back to the field we are nested in
-        *m_Stream << TXT( " Name=\"" ) << m_FieldNames.top() << TXT( "\"" );
+        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
     }
 
     //
@@ -473,7 +478,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             }
 
             // we have found a fieldinfo into our parent's definition
-            if (newState->m_Field != NULL)
+            if ( newState->m_Field != NULL )
             {
                 // this is our new element
                 ElementPtr element = NULL;
@@ -505,7 +510,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Try and get a creator for a new element to store the data
     //
 
-    if (!newState->m_Element.ReferencesObject())
+    if ( !newState->m_Element.ReferencesObject() )
     {
         //
         // Attempt creation of element via name
@@ -639,9 +644,9 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     ElementPtr container = parentState->m_Element;
 
                     // we are a component, so send us up to be processed by container
-                    if (container && !container->ProcessComponent(topState->m_Element, topState->m_Field->m_Name))
+                    if ( container && !container->ProcessComponent(topState->m_Element, topState->m_Field ? topState->m_Field->m_Name : NULL ) )
                     {
-                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), *container->GetClass()->m_Name, *topState->m_Element->GetClass()->m_Name );
+                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_Name, topState->m_Element->GetClass()->m_Name );
                     }
                 }
             }

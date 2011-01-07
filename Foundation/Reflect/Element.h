@@ -37,11 +37,10 @@ namespace Helium
             const Element* m_Element;
             const Field* m_Field;
 
-            ElementChangeArgs(const Element* element, const Field* field)
-                : m_Element (element)
-                , m_Field (field)
+            ElementChangeArgs( const Element* element, const Field* field = NULL )
+                : m_Element( element )
+                , m_Field( field )
             {
-
             }
         };
         typedef Helium::Signature< const ElementChangeArgs&, Helium::AtomicRefCountBase > ElementChangeSignature;
@@ -59,13 +58,13 @@ namespace Helium
 
         public:
             // Reflection prototypes
-            static void                 EnumerateClass( Reflect::Compositor<Element>& comp );
+            static void                 AcceptCompositeVisitor( Reflect::Composite& comp );
 
             // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent(ElementPtr element, const tstring& fieldName);
+            virtual bool                ProcessComponent(ElementPtr element, const tchar_t* fieldName);
 
 
             //
@@ -107,22 +106,12 @@ namespace Helium
             // Mutation
             //
 
-        private:
-            mutable ElementChangeSignature::Event m_Changed;
         public:
-            void AddChangedListener(const ElementChangeSignature::Delegate& d) const
-            {
-                m_Changed.Add(d);
-            }
-            
-            void RemoveChangedListener(const ElementChangeSignature::Delegate& d) const
-            {
-                m_Changed.Remove(d);
-            }
+            mutable ElementChangeSignature::Event e_Changed;
 
-            virtual void RaiseChanged(const Field* field = NULL) const
+            virtual void RaiseChanged( const Field* field = NULL ) const
             {
-                m_Changed.Raise( ElementChangeArgs (this, field) );
+                e_Changed.Raise( ElementChangeArgs( this, field ) );
             }
 
             template< class FieldT >

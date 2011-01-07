@@ -25,6 +25,7 @@ includedirs
 	".",
 	"Dependencies/boost",
 	"Dependencies/Expat",
+	"Dependencies/freetype/include",
 	"Dependencies/nvtt/src",
 	"Dependencies/png",
 	"Dependencies/tbb/include",

@@ -1,6 +1,7 @@
 #include "Foundation/Reflect/Data/EnumerationData.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
@@ -36,10 +37,7 @@ void EnumerationData::ConnectField(Helium::HybridPtr<Element> instance, const Fi
 {
     __super::ConnectField(instance, field, offsetInField);
 
-    const EnumerationField* enumField = ReflectionCast<EnumerationField>(field);
-    HELIUM_ASSERT( enumField );
-
-    m_Enumeration = enumField->m_Enumeration;
+    m_Enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 }
 
 bool EnumerationData::Set(const Data* src, uint32_t flags)
@@ -81,7 +79,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -100,7 +98,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -129,7 +127,7 @@ void EnumerationData::Deserialize(Archive& archive)
             {
                 if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, buf.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, buf.c_str() );
                 }
                 else
                 {
@@ -147,7 +145,7 @@ void EnumerationData::Deserialize(Archive& archive)
             binary.GetStream().ReadString( str );
             if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, str.c_str() );
             }
             else
             {

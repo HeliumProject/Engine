@@ -6,17 +6,15 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( TextureDataFormat );
 REFLECT_DEFINE_CLASS( TextureProcessingComponent );
 
-void TextureProcessingComponent::EnumerateClass( Reflect::Compositor< TextureProcessingComponent >& comp )
+void TextureProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.AddField( &TextureProcessingComponent::m_MaxTextureResolution, "m_MaxTextureResolution" );
-  comp.AddEnumerationField( &TextureProcessingComponent::m_TextureDataFormat, "m_TextureDataFormat" );
-  comp.AddField( &TextureProcessingComponent::m_GenerateMipMaps, "m_GenerateMipMaps" );
-  comp.AddField( &TextureProcessingComponent::m_GenerateBumpMap, "m_GenerateBumpMap" );
+  comp.AddField( &TextureProcessingComponent::m_MaxTextureResolution, TXT( "m_MaxTextureResolution" ) );
+  comp.AddEnumerationField( &TextureProcessingComponent::m_TextureDataFormat, TXT( "m_TextureDataFormat" ) );
+  comp.AddField( &TextureProcessingComponent::m_GenerateMipMaps, TXT( "m_GenerateMipMaps" ) );
+  comp.AddField( &TextureProcessingComponent::m_GenerateBumpMap, TXT( "m_GenerateBumpMap" ) );
 }
 
 Component::ComponentUsage TextureProcessingComponent::GetComponentUsage() const
 {
     return Component::ComponentUsages::Class;
 }
-
-

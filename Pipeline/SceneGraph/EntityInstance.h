@@ -28,7 +28,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_CLASS( EntityInstance, Instance );
-            static void EnumerateClass( Reflect::Compositor< EntityInstance >& comp );
+            static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

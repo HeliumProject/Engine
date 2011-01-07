@@ -27,6 +27,6 @@ namespace Helium
         
     public:
         REFLECT_DECLARE_ABSTRACT( SearchableProperties, Reflect::Element );
-        static void EnumerateClass( Reflect::Compositor< SearchableProperties >& comp );
+        static void AcceptCompositeVisitor( Reflect::Composite& comp );
     };
 }

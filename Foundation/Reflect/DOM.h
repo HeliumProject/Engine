@@ -84,7 +84,7 @@ namespace Helium
             DocumentNode*       m_Previous;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
 
             }
@@ -131,10 +131,10 @@ namespace Helium
             tstring m_Value;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &This::m_Name, "Name" );
-                comp.AddField( &This::m_Value, "Value" );
+                comp.AddField( &This::m_Name, TXT( "Name" ) );
+                comp.AddField( &This::m_Value, TXT( "Value" ) );
             }
         };
 
@@ -260,9 +260,9 @@ namespace Helium
             DocumentHierarchyChangedSignature::Event    m_ChildRemoved;
 
         public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &This::m_Children, "Children" );
+                comp.AddField( &This::m_Children, TXT( "Children" ) );
             }
         };
 
@@ -277,7 +277,7 @@ namespace Helium
             }
 
         public:
-            static void EnumerateClass( Reflect::Compositor< This >& comp )
+            static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
 
             }

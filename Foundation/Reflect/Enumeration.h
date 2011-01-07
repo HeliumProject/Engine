@@ -57,7 +57,7 @@ namespace Helium
             static Enumeration* Create();
 
             template<class T>
-            static Enumeration* Create( Name name )
+            static Enumeration* Create( const tchar_t* name )
             {
                 Enumeration* info = Enumeration::Create();
 

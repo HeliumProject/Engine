@@ -20,9 +20,9 @@ REFLECT_DEFINE_CLASS(Light);
 
 D3DMATERIAL9 Light::s_Material;
 
-void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
+void Light::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Light::m_Color, "m_Color" );
+    comp.AddField( &Light::m_Color, TXT( "m_Color" ) );
 }
 
 void Light::InitializeType()

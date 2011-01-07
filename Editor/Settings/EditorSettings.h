@@ -21,12 +21,17 @@ namespace Helium
             bool GetLoadLastOpenedProjectOnStartup() const;
             void SetLoadLastOpenedProjectOnStartup( bool value );
 
+            bool GetShowFileExtensionsInProjectView() const;
+            void SetShowFileExtensionsInProjectView( bool value );
+
             REFLECT_DECLARE_CLASS( GeneralSettings, Settings );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         private:
             std::vector< tstring > m_MRUProjects;
+            
             bool m_LoadLastOpenedProjectOnStartup;
+            bool m_ShowFileExtensionsInProjectView;
         };
 
         typedef Helium::StrongPtr< GeneralSettings > GeneralSettingsPtr;

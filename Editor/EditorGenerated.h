@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version May  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/intl.h>
 
 class wxBitmapToggleButton;
+namespace Helium{ namespace Editor{ class DrawerPanel; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class ListResultsView; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
@@ -42,6 +43,7 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
 #include <wx/srchctrl.h>
+#include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -359,6 +361,7 @@ namespace Helium
 			
 			public:
 				wxSearchCtrl* m_VaultSearchBox;
+				Helium::Editor::DrawerPanel* m_DrawerPanel;
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
@@ -463,6 +466,25 @@ namespace Helium
 				
 				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
 				~ViewPanelGenerated();
+			
+		};
+		
+		///////////////////////////////////////////////////////////////////////////////
+		/// Class TestPanelGenerated
+		///////////////////////////////////////////////////////////////////////////////
+		class TestPanelGenerated : public wxPanel 
+		{
+			private:
+			
+			protected:
+				wxStaticText* m_staticText14;
+				wxCheckBox* m_checkBox1;
+				wxTextCtrl* m_textCtrl7;
+			
+			public:
+				
+				TestPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				~TestPanelGenerated();
 			
 		};
 		

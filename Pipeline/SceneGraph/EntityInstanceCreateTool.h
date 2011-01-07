@@ -13,6 +13,8 @@ namespace Helium
         class EntityRowInfo
         {
         public:
+#pragma TODO ("Rachel WIP - Canvas Strip clean up")
+            // get rid of m_OriginalValue and m_Name
             tstring m_OriginalValue;
             tstring m_Name;
             Helium::Path m_ClassPath;

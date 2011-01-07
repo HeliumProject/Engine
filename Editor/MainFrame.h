@@ -83,7 +83,6 @@ namespace Helium
             }
 
 
-
         private:
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.

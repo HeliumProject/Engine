@@ -108,7 +108,6 @@ public:
     SceneGraph::SceneNode* m_Nodes;
 };
 
-
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_SettingsManager( settingsManager )

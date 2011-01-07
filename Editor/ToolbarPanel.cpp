@@ -8,6 +8,8 @@
 #include "Editor/App.h"
 #include "Editor/FileDialog.h"
 
+#include "Editor/Controls/Drawer/DrawerPanel.h"
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
@@ -21,6 +23,17 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     m_ToolPropertiesCanvas.SetPanel( m_ToolsPropertiesPanel );
 
     SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
+
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // Tool Bar Drawers
+    //m_TestPanelGenerated = new TestPanelGenerated( m_DrawerPanel );
+    //m_TestPanelGenerated->Hide();
+    //m_TestDrawer = new Drawer( m_DrawerPanel, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
+    //m_DrawerPanel->AddDrawer( m_TestDrawer );
+    //m_FrameManager.AddPane( m_TestPanelGenerated, m_TestDrawerPane );
+    //m_ExcludeFromPanelsMenu.insert( m_TestDrawerPane.name );
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {

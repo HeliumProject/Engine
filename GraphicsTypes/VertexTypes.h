@@ -72,6 +72,33 @@ namespace Lunar
         //@}
     };
 
+    /// Vertex with position values specified as 2D screen coordinates.
+    struct LUNAR_GRAPHICS_TYPES_API ScreenVertex
+    {
+        /// Position.
+        float32_t position[ 2 ];
+        /// Packed color (see Color class for more information).
+        uint32_t color;
+        /// Texture coordinates.
+        Float16 texCoords[ 2 ];
+
+        /// @name Construction/Destruction
+        //@{
+        inline ScreenVertex();
+        inline ScreenVertex(
+            float32_t positionX, float32_t positionY, Float16 texCoordU, Float16 texCoordV,
+            uint32_t packedColor = 0xffffffff );
+        inline ScreenVertex(
+            const Simd::Vector2& rPosition, const Simd::Vector2& rTexCoords,
+            const Color& rColor = Color( 0xffffffff ) );
+        //@}
+
+        /// @name Serialization
+        //@{
+        inline void Serialize( Serializer& s );
+        //@}
+    };
+
     /// Basic static mesh vertex type.
     template< size_t TexCoordSetCount >
     struct StaticMeshVertex

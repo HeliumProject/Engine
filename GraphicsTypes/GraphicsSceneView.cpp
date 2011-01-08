@@ -8,6 +8,8 @@
 #include "GraphicsTypesPch.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
+#include "Rendering/Renderer.h"
+#include "Rendering/RConstantBuffer.h"
 #include "Rendering/RRenderContext.h"
 #include "Rendering/RSurface.h"
 
@@ -22,25 +24,25 @@ const float32_t GraphicsSceneView::DEFAULT_SHADOW_FADE_DISTANCE = 1000.0f;
 
 /// Constructor.
 GraphicsSceneView::GraphicsSceneView()
-: m_viewMatrix( Simd::Matrix44::IDENTITY )
-, m_projectionMatrix( Simd::Matrix44::IDENTITY )
-, m_inverseViewMatrix( Simd::Matrix44::IDENTITY )
-, m_inverseViewProjectionMatrix( Simd::Matrix44::IDENTITY )
-, m_origin( 0.0f )
-, m_forward( 0.0f, 0.0f, 1.0f )
-, m_up( 0.0f, 1.0f, 0.0f )
-, m_clearColor( 0 )
-, m_viewportX( 0 )
-, m_viewportY( 0 )
-, m_viewportWidth( 0 )
-, m_viewportHeight( 0 )
-, m_horizontalFov( DEFAULT_HORIZONTAL_FOV )
-, m_aspectRatio( DEFAULT_ASPECT_RATIO )
-, m_nearClip( DEFAULT_NEAR_CLIP )
-, m_farClip( DEFAULT_FAR_CLIP )
-, m_shadowCutoffDistance( DEFAULT_SHADOW_CUTOFF_DISTANCE )
-, m_shadowFadeDistance( DEFAULT_SHADOW_FADE_DISTANCE )
-, m_bDirtyView( true )
+    : m_viewMatrix( Simd::Matrix44::IDENTITY )
+    , m_projectionMatrix( Simd::Matrix44::IDENTITY )
+    , m_inverseViewMatrix( Simd::Matrix44::IDENTITY )
+    , m_inverseViewProjectionMatrix( Simd::Matrix44::IDENTITY )
+    , m_origin( 0.0f )
+    , m_forward( 0.0f, 0.0f, 1.0f )
+    , m_up( 0.0f, 1.0f, 0.0f )
+    , m_clearColor( 0 )
+    , m_viewportX( 0 )
+    , m_viewportY( 0 )
+    , m_viewportWidth( 0 )
+    , m_viewportHeight( 0 )
+    , m_horizontalFov( DEFAULT_HORIZONTAL_FOV )
+    , m_aspectRatio( DEFAULT_ASPECT_RATIO )
+    , m_nearClip( DEFAULT_NEAR_CLIP )
+    , m_farClip( DEFAULT_FAR_CLIP )
+    , m_shadowCutoffDistance( DEFAULT_SHADOW_CUTOFF_DISTANCE )
+    , m_shadowFadeDistance( DEFAULT_SHADOW_FADE_DISTANCE )
+    , m_bDirtyView( true )
 {
     MemoryZero( &m_frustum, sizeof( m_frustum ) );
 }
@@ -69,6 +71,11 @@ void GraphicsSceneView::SetDepthStencilSurface( RSurface* pSurface )
 
 /// Set the viewport dimensions for this view to use.
 ///
+/// Setting the viewport will also initialize a constant buffer to use for scaling and offsetting pixel coordinates for
+/// screen-space rendering.  Note that if the viewport settings do not change, the constant buffer will not be altered.
+/// Additionally, setting the viewport to either a width or height of zero will cause no constant buffer to be allocated
+/// (any existing constant buffer will be released).
+///
 /// @param[in] x       Horizontal pixel coordinate of the upper-left viewport corner.
 /// @param[in] y       Vertical pixel coordinate of the upper-left viewport corner.
 /// @param[in] width   Viewport width, in pixels.
@@ -80,8 +87,53 @@ void GraphicsSceneView::SetViewport( uint32_t x, uint32_t y, uint32_t width, uin
 {
     m_viewportX = x;
     m_viewportY = y;
-    m_viewportWidth = width;
-    m_viewportHeight = height;
+
+    if( m_viewportWidth != width || m_viewportHeight != height )
+    {
+        m_viewportWidth = width;
+        m_viewportHeight = height;
+
+        if( ( width | height ) == 0 )
+        {
+            m_spScreenSpaceVertexConstantBuffer.Release();
+        }
+        else
+        {
+            Renderer* pRenderer = Renderer::GetStaticInstance();
+            HELIUM_ASSERT( pRenderer || !m_spScreenSpaceVertexConstantBuffer );
+            if( pRenderer )
+            {
+                float32_t invWidth = 1.0f / static_cast< float32_t >( width );
+                float32_t invHeight = 1.0f / static_cast< float32_t >( height );
+
+                float32_t positionScaleOffset[ 4 ] =
+                {
+                    2.0f * invWidth,
+                    -2.0f * invHeight,
+                    -1.0f - invWidth,
+                    1.0f + invHeight,
+                };
+
+                if( !m_spScreenSpaceVertexConstantBuffer )
+                {
+                    m_spScreenSpaceVertexConstantBuffer = pRenderer->CreateConstantBuffer(
+                        sizeof( float32_t ) * 4,
+                        RENDERER_BUFFER_USAGE_STATIC,
+                        positionScaleOffset );
+                    HELIUM_ASSERT( m_spScreenSpaceVertexConstantBuffer );
+                }
+                else
+                {
+                    pRenderer->Flush();
+
+                    void* pMappedBuffer = m_spScreenSpaceVertexConstantBuffer->Map();
+                    HELIUM_ASSERT( pMappedBuffer );
+                    MemoryCopy( pMappedBuffer, positionScaleOffset, sizeof( float32_t ) * 4 );
+                    m_spScreenSpaceVertexConstantBuffer->Unmap();
+                }
+            }
+        }
+    }
 }
 
 /// Set the color to which the viewport color buffer should be filled at the start of each frame.

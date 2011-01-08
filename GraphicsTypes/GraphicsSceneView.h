@@ -18,6 +18,7 @@
 
 namespace Lunar
 {
+    L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RRenderContext );
     L_DECLARE_RPTR( RSurface );
 
@@ -91,6 +92,8 @@ namespace Lunar
 
         inline const Simd::Frustum& GetFrustum() const;
 
+        inline RConstantBuffer* GetScreenSpaceVertexConstantBuffer() const;
+
         inline float32_t GetShadowCutoffDistance() const;
         inline float32_t GetShadowFadeDistance() const;
         //@}
@@ -122,6 +125,10 @@ namespace Lunar
         RRenderContextPtr m_spRenderContext;
         /// Depth-stencil surface for this view.
         RSurfacePtr m_spDepthStencilSurface;
+
+        /// Constant buffer specifying scale and offset values to apply to pixel coordinates during screen-space
+        /// rendering.
+        RConstantBufferPtr m_spScreenSpaceVertexConstantBuffer;
 
         /// Horizontal pixel coordinate of the upper-left corner of this view.
         uint32_t m_viewportX;

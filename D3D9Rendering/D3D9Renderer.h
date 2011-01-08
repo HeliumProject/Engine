@@ -134,6 +134,8 @@ namespace Lunar
         //@{
         RRenderCommandProxy* GetImmediateCommandProxy();
         RRenderCommandProxy* CreateDeferredCommandProxy();
+
+        void Flush();
         //@}
 
         /// @name Data Access

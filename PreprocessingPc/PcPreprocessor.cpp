@@ -797,7 +797,7 @@ bool PcPreprocessor::FillShaderReflectionData(
                 constantDesc.Rows == 1 )
             {
                 rConstantInfo.usedSize = static_cast< uint16_t >( constantDesc.Columns * sizeof( float32_t ) );
-                HELIUM_ASSERT( rConstantInfo.usedSize < rConstantInfo.size );
+                HELIUM_ASSERT( rConstantInfo.usedSize <= rConstantInfo.size );
             }
             else
             {

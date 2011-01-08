@@ -131,6 +131,8 @@ namespace Lunar
         //@{
         virtual RRenderCommandProxy* GetImmediateCommandProxy() = 0;
         virtual RRenderCommandProxy* CreateDeferredCommandProxy() = 0;
+
+        virtual void Flush() = 0;
         //@}
 
         /// @name Static Access

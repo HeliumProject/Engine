@@ -6,7 +6,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Registry.h"
@@ -55,7 +55,7 @@ void Archive::PreSerialize()
     e_Status.Raise( info );
 }
 
-void Archive::PostSerialize(std::vector< ElementPtr >& append)
+void Archive::PostSerialize(std::vector< ObjectPtr >& append)
 {
     StatusInfo info( *this, ArchiveStates::ArchiveComplete );
     info.m_Progress = m_Progress = 100;
@@ -78,7 +78,7 @@ void Archive::PreDeserialize()
     e_Status.Raise( info );
 }
 
-void Archive::PostDeserialize(std::vector< ElementPtr >& append)
+void Archive::PostDeserialize(std::vector< ObjectPtr >& append)
 {
     StatusInfo info( *this, ArchiveStates::ArchiveComplete );
     info.m_Progress = m_Progress = 100;
@@ -89,7 +89,7 @@ void Archive::PostDeserialize(std::vector< ElementPtr >& append)
     e_Status.Raise( info );
 }
 
-void Archive::PreSerialize(const ElementPtr& element, const Field* field)
+void Archive::PreSerialize(const ObjectPtr& element, const Field* field)
 {
     V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
     V_ArchiveVisitor::const_iterator end = m_Visitors.end();
@@ -101,12 +101,12 @@ void Archive::PreSerialize(const ElementPtr& element, const Field* field)
         }
         else
         {
-            (*itr)->VisitElement(element);
+            (*itr)->VisitObject(element);
         }
     }
 }
 
-void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
+void Archive::PostDeserialize(const ObjectPtr& element, const Field* field)
 {
     V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
     V_ArchiveVisitor::const_iterator end = m_Visitors.end();
@@ -118,12 +118,12 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
         }
         else
         {
-            (*itr)->VisitElement(element);
+            (*itr)->VisitObject(element);
         }
     }
 }
 
-bool Archive::TryElementCallback( Element* element, ElementCallback callback )
+bool Archive::TryObjectCallback( Object* element, ObjectCallback callback )
 {
     if ( Helium::IsDebuggerPresent() )
     {
@@ -166,32 +166,32 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
 
 #pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
 
-void Archive::Put( const ElementPtr& element )
+void Archive::Put( const ObjectPtr& element )
 {
-    m_Spool.push_back( element );
+    m_Objects.push_back( element );
 }
 
-void Archive::Put( const std::vector< ElementPtr >& elements )
+void Archive::Put( const std::vector< ObjectPtr >& elements )
 {
-    m_Spool.reserve( m_Spool.size() + elements.size() );
-    m_Spool.insert( m_Spool.end(), elements.begin(), elements.end() );
+    m_Objects.reserve( m_Objects.size() + elements.size() );
+    m_Objects.insert( m_Objects.end(), elements.begin(), elements.end() );
 }
 
-ElementPtr Archive::Get( const Class* searchClass )
+ObjectPtr Archive::Get( const Class* searchClass )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-    std::vector< ElementPtr > elements;
+    std::vector< ObjectPtr > elements;
     Get( elements );
 
     if ( searchClass == NULL )
     {
-        searchClass = Reflect::GetClass< Element >();
+        searchClass = Reflect::GetClass< Object >();
     }
 
-    ElementPtr result = NULL;
-    std::vector< ElementPtr >::iterator itr = elements.begin();
-    std::vector< ElementPtr >::iterator end = elements.end();
+    ObjectPtr result = NULL;
+    std::vector< ObjectPtr >::iterator itr = elements.begin();
+    std::vector< ObjectPtr >::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
         if ( (*itr)->HasType( searchClass ) )
@@ -203,7 +203,7 @@ ElementPtr Archive::Get( const Class* searchClass )
     return NULL;
 }
 
-void Archive::Get( std::vector< ElementPtr >& elements )
+void Archive::Get( std::vector< ObjectPtr >& elements )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
@@ -242,7 +242,7 @@ void Archive::Get( std::vector< ElementPtr >& elements )
         }
     }
 
-    elements = m_Spool;
+    elements = m_Objects;
 }
 
 ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )
@@ -268,14 +268,14 @@ ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteO
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ElementPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
-    std::vector< ElementPtr > elements;
+    std::vector< ObjectPtr > elements;
     elements.push_back( element );
     return ToArchive( path, elements, archiveType, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const std::vector< ElementPtr >& elements, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( elements.size() > 0 );

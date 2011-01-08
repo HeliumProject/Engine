@@ -338,33 +338,15 @@ void Path::Split( tstring& directory, tstring& filename, tstring& extension ) co
 
 tstring Path::Basename() const
 {
-    size_t slash = m_Path.rfind( s_InternalPathSeparator );
-    if ( slash != tstring::npos )
+    tstring basename = Filename();
+    size_t pos = basename.rfind( TXT( '.' ) );
+
+    if ( pos != tstring::npos )
     {
-        size_t pos = m_Path.rfind( TXT( '.' ) );
-        if ( pos != tstring::npos && pos > slash + 1 )
-        {
-            return m_Path.substr( slash + 1, pos - ( slash + 1 ) );
-        }
-        else
-        {
-            return m_Path.substr( slash + 1 );
-        }
-    }
-    else if ( slash == m_Path.length() ) // it's a directory
-    {
-        slash = m_Path.rfind( s_InternalPathSeparator, m_Path.length() - 1 );
-        if ( slash != tstring::npos )
-        {
-            return m_Path.substr( slash + 1 );
-        }
-        else
-        {
-            return m_Path;
-        }
+        return basename.substr( 0, pos );
     }
 
-    return m_Path;
+    return basename;
 }
 
 tstring Path::Filename() const

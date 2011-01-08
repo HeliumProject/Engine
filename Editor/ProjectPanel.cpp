@@ -7,7 +7,7 @@
 
 #include "Editor/App.h"
 #include "Editor/Controls/MenuButton.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/MainFrame.h"
 
@@ -90,6 +90,8 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     //m_DropTarget->AddDragLeaveListener( FileDragLeaveSignature::Delegate( this, &ProjectPanel::DragLeave ) );
     m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     m_DataViewCtrl->GetMainWindow()->SetDropTarget( m_DropTarget );
+
+    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
 ProjectPanel::~ProjectPanel()
@@ -109,6 +111,8 @@ ProjectPanel::~ProjectPanel()
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 
     Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+
+    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
 void ProjectPanel::OpenProject( Project* project, const Document* document )
@@ -197,6 +201,11 @@ void ProjectPanel::SetActive( const Path& path, bool active )
     {
         m_Model->SetActive( path, active );
     }
+}
+
+void ProjectPanel::GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args )
+{
+    Refresh();
 }
 
 void ProjectPanel::OnContextMenu( wxContextMenuEvent& event )

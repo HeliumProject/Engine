@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
@@ -54,10 +54,10 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API CameraSettings : public Reflect::Element
+        class PIPELINE_API CameraSettings : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Object );
 
             CameraSettings(); 
 
@@ -74,12 +74,12 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddEnumerationField( &CameraSettings::m_CameraMode, "Camera Mode" );
-                comp.AddEnumerationField( &CameraSettings::m_ShadingMode, "Shading Mode" );
-                comp.AddField( &CameraSettings::m_WireframeOnMesh, "Wireframe On Mesh" );
-                comp.AddField( &CameraSettings::m_WireframeOnShaded, "Wireframe On Shaded" );
-                comp.AddField( &CameraSettings::m_ViewFrustumCulling, "View Frustum Culling" );
-                comp.AddField( &CameraSettings::m_BackFaceCulling, "Backface Culling" );
+                comp.AddEnumerationField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
+                comp.AddEnumerationField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );
+                comp.AddField( &CameraSettings::m_WireframeOnMesh, TXT( "Wireframe On Mesh" ) );
+                comp.AddField( &CameraSettings::m_WireframeOnShaded, TXT( "Wireframe On Shaded" ) );
+                comp.AddField( &CameraSettings::m_ViewFrustumCulling, TXT( "View Frustum Culling" ) );
+                comp.AddField( &CameraSettings::m_BackFaceCulling, TXT( "Backface Culling" ) );
             }
         };
 

@@ -22,7 +22,7 @@ PathContainerInterpreter::PathContainerInterpreter (Container* labelContainer)
 {
 }
 
-void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     m_List = NULL;
 
@@ -161,8 +161,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     buttonContainer->a_IsEnabled.Set( instances.size() == 1 );
 
     // create the serializers
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+    std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+    std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();

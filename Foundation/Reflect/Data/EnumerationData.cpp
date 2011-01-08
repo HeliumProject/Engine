@@ -33,7 +33,7 @@ void EnumerationData::ConnectData(Helium::HybridPtr<void> data)
     }
 }
 
-void EnumerationData::ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField)
+void EnumerationData::ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 
@@ -79,7 +79,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -98,7 +98,7 @@ void EnumerationData::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), *m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -127,7 +127,7 @@ void EnumerationData::Deserialize(Archive& archive)
             {
                 if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, buf.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, buf.c_str() );
                 }
                 else
                 {
@@ -145,7 +145,7 @@ void EnumerationData::Deserialize(Archive& archive)
             binary.GetStream().ReadString( str );
             if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), *m_Enumeration->m_Name, str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, str.c_str() );
             }
             else
             {
@@ -189,7 +189,7 @@ tistream& EnumerationData::operator<< (tistream& stream)
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Element* element = (Element*)m_Instance;
+            Object* element = (Object*)m_Instance;
             element->RaiseChanged( m_Field );
         }
     }

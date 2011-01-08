@@ -6,7 +6,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( DocumentNode );
 REFLECT_DEFINE_CLASS( DocumentAttribute );
-REFLECT_DEFINE_CLASS( DocumentElement );
+REFLECT_DEFINE_CLASS( DocumentObject );
 REFLECT_DEFINE_CLASS( Document );
 
 void DocumentNode::SetDocument( Document* document )
@@ -14,7 +14,7 @@ void DocumentNode::SetDocument( Document* document )
     m_Document = document;
 }
 
-void DocumentNode::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
+void DocumentNode::Initialize( Document* document, DocumentObject* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
 {
     if ( this != document )
     {
@@ -37,31 +37,31 @@ void DocumentNode::Initialize( Document* document, DocumentElement* parent, Docu
     }
 }
 
-void DocumentElement::SetDocument( Document* document )
+void DocumentObject::SetDocument( Document* document )
 {
     if ( m_Document != document )
     {
         if ( m_Document )
         {
-            m_Document->ChildAdding().RemoveMethod( m_Document, &DocumentElement::RaiseChildAdding );
-            m_Document->ChildAdded().RemoveMethod( m_Document, &DocumentElement::RaiseChildAdded );
-            m_Document->ChildRemoving().RemoveMethod( m_Document, &DocumentElement::RaiseChildRemoving );
-            m_Document->ChildRemoved().RemoveMethod( m_Document, &DocumentElement::RaiseChildRemoved );
+            m_Document->ChildAdding().RemoveMethod( m_Document, &DocumentObject::RaiseChildAdding );
+            m_Document->ChildAdded().RemoveMethod( m_Document, &DocumentObject::RaiseChildAdded );
+            m_Document->ChildRemoving().RemoveMethod( m_Document, &DocumentObject::RaiseChildRemoving );
+            m_Document->ChildRemoved().RemoveMethod( m_Document, &DocumentObject::RaiseChildRemoved );
         }
 
         Base::SetDocument( document );
 
         if ( m_Document )
         {
-            m_Document->ChildAdding().AddMethod( m_Document, &DocumentElement::RaiseChildAdding );
-            m_Document->ChildAdded().AddMethod( m_Document, &DocumentElement::RaiseChildAdded );
-            m_Document->ChildRemoving().AddMethod( m_Document, &DocumentElement::RaiseChildRemoving );
-            m_Document->ChildRemoved().AddMethod( m_Document, &DocumentElement::RaiseChildRemoved );
+            m_Document->ChildAdding().AddMethod( m_Document, &DocumentObject::RaiseChildAdding );
+            m_Document->ChildAdded().AddMethod( m_Document, &DocumentObject::RaiseChildAdded );
+            m_Document->ChildRemoving().AddMethod( m_Document, &DocumentObject::RaiseChildRemoving );
+            m_Document->ChildRemoved().AddMethod( m_Document, &DocumentObject::RaiseChildRemoved );
         }
     }
 }
 
-void DocumentElement::Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
+void DocumentObject::Initialize( Document* document, DocumentObject* parent, DocumentNode* nextSibling, DocumentNode* previousSibling )
 {
     Base::Initialize( document, parent, nextSibling, previousSibling );
 
@@ -93,11 +93,11 @@ void DocumentElement::Initialize( Document* document, DocumentElement* parent, D
     }
 }
 
-void DocumentElement::AddChild( DocumentNodePtr node )
+void DocumentObject::AddChild( DocumentNodePtr node )
 {
     if ( std::find( m_Children.begin(), m_Children.end(), node ) == m_Children.end() )
     {
-        DocumentElement* parent = node->GetParent();
+        DocumentObject* parent = node->GetParent();
 
         DocumentHierarchyChangingArgs args ( node, parent, this );
         m_ChildAdding.Raise( args );
@@ -123,13 +123,13 @@ void DocumentElement::AddChild( DocumentNodePtr node )
     }
 }
 
-void DocumentElement::RemoveChild( DocumentNodePtr node )
+void DocumentObject::RemoveChild( DocumentNodePtr node )
 {
     size_t size = m_Children.size();
     std::remove( m_Children.begin(), m_Children.end(), node );
     if ( m_Children.size() < size )
     {
-        DocumentElement* parent = node->GetParent();
+        DocumentObject* parent = node->GetParent();
 
         DocumentHierarchyChangingArgs args ( node, parent, NULL );
         m_ChildRemoving.Raise( args );

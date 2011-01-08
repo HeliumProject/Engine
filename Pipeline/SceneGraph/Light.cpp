@@ -22,7 +22,7 @@ D3DMATERIAL9 Light::s_Material;
 
 void Light::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &Light::m_Color, "m_Color" );
+    comp.AddField( &Light::m_Color, TXT( "m_Color" ) );
 }
 
 void Light::InitializeType()
@@ -105,9 +105,9 @@ void Light::Render( RenderVisitor* render )
 
 void Light::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Light* light = Reflect::ConstAssertCast<Light>( object );
+    const Light* light = Reflect::AssertCast<Light>( object );
 
-    const InstanceType* type = Reflect::ConstAssertCast<InstanceType>( light->GetNodeType() );
+    const InstanceType* type = Reflect::AssertCast<InstanceType>( light->GetNodeType() );
 
     light->SetMaterial( type->GetMaterial() );
 

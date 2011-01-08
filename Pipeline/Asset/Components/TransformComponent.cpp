@@ -7,9 +7,9 @@ REFLECT_DEFINE_CLASS( TransformComponent );
 
 void TransformComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldTranslation = comp.AddField( &TransformComponent::m_Translation, "m_Translation" );
-    Reflect::Field* fieldRotation = comp.AddField( &TransformComponent::m_Rotation, "m_Rotation" );
-    Reflect::Field* fieldScale = comp.AddField( &TransformComponent::m_Scale, "m_Scale" );
+    comp.AddField( &TransformComponent::m_Translation, TXT( "m_Translation" ) );
+    comp.AddField( &TransformComponent::m_Rotation, TXT( "m_Rotation" ) );
+    comp.AddField( &TransformComponent::m_Scale, TXT( "m_Scale" ) );
 }
 
 Component::ComponentUsage TransformComponent::GetComponentUsage() const

@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {
-    class PIPELINE_API Settings : public Reflect::Element
+    class PIPELINE_API Settings : public Reflect::Object
     {
     public:
         Settings()
-            : m_UserVisible( true )
         {
         }
 
@@ -18,11 +17,12 @@ namespace Helium
         {
         }
 
-        REFLECT_DECLARE_CLASS( Settings, Reflect::Element );
-        static void AcceptCompositeVisitor( Reflect::Composite& comp );
+        virtual bool UserVisible()
+        {
+            return true;
+        }
 
-    public:
-        bool m_UserVisible;
+        REFLECT_DECLARE_CLASS( Settings, Reflect::Object );
     };
 
     typedef Helium::StrongPtr< Settings > SettingsPtr;

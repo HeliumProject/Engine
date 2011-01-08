@@ -15,7 +15,7 @@ namespace Helium
         class VaultSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( VaultSettings, Reflect::Object );
 
             VaultSettings( VaultViewMode viewVaultMode = VaultViewMode::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();
@@ -27,10 +27,10 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, "Vault View Mode" );
+                comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, TXT( "Vault View Mode" ) );
 
                 {
-                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, "Thumbnail Size" );
+                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, TXT( "Thumbnail Size" ) );
                     field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
                 }
             }

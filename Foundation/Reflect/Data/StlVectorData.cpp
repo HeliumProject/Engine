@@ -197,7 +197,7 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
 template < class T >
 bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 {
-    const SimpleStlVectorData<T>* rhs = ConstObjectCast<SimpleStlVectorData<T>>(src);
+    const SimpleStlVectorData<T>* rhs = ObjectCast<SimpleStlVectorData<T>>(src);
     if (!rhs)
     {
         return false;
@@ -211,7 +211,7 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 template < class T >
 bool SimpleStlVectorData<T>::Equals(const Data* s) const
 {
-    const SimpleStlVectorData<T>* rhs = ConstObjectCast<SimpleStlVectorData<T>>(s);
+    const SimpleStlVectorData<T>* rhs = ObjectCast<SimpleStlVectorData<T>>(s);
     if (!rhs)
     {
         return false;

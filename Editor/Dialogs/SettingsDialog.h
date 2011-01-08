@@ -4,7 +4,7 @@
 
 #include "Pipeline/SettingsManager.h"
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Inspect/Interpreter.h"
 
 #include "Editor/API.h"
@@ -18,10 +18,10 @@ namespace Helium
         class SettingInfo : public Helium::RefCountBase< SettingInfo >
         {
         public:
-            SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Editor::TreeCanvasPtr& canvas );
+            SettingInfo( Reflect::ObjectPtr& source, Reflect::ObjectPtr& clone, Editor::TreeCanvasPtr& canvas );
 
-            Reflect::ElementPtr   m_Source;
-            Reflect::ElementPtr   m_Clone;
+            Reflect::ObjectPtr   m_Source;
+            Reflect::ObjectPtr   m_Clone;
             Editor::TreeCanvasPtr m_Canvas;
         };
 
@@ -38,11 +38,10 @@ namespace Helium
 
         private:
             void OnRestoreDefaults( wxCommandEvent& args );
-            void OnApply( wxCommandEvent& args );
             void OnOk( wxCommandEvent& args );
             void OnCancel( wxCommandEvent& args );
             void OnSettingsChanged( wxCommandEvent& args );
-            void OnRefreshElements( const Reflect::ElementChangeArgs& args );
+            void OnRefreshElements( const Reflect::ObjectChangeArgs& args );
 
             void SelectCanvas( SettingInfo* settingInfo );
 

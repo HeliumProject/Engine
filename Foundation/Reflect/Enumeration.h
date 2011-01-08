@@ -31,9 +31,9 @@ namespace Helium
         };
 
         typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
-        typedef std::vector<EnumerationElementPtr>                    V_EnumerationElement; // order of declaration
-        typedef stdext::hash_map<tstring, EnumerationElementPtr>      M_StrEnumerationElement; // sorted by name
-        typedef stdext::hash_map<int32_t, EnumerationElementPtr>          M_ValueEnumerationElement; // sorted by value
+        typedef std::vector<EnumerationElementPtr>                  V_EnumerationElement; // order of declaration
+        typedef stdext::hash_map<tstring, EnumerationElementPtr>    M_StrEnumerationElement; // sorted by name
+        typedef stdext::hash_map<int32_t, EnumerationElementPtr>    M_ValueEnumerationElement; // sorted by value
 
         class FOUNDATION_API Enumeration;
         typedef Helium::SmartPtr<Enumeration> EnumerationPtr;
@@ -57,7 +57,7 @@ namespace Helium
             static Enumeration* Create();
 
             template<class T>
-            static Enumeration* Create( Name name )
+            static Enumeration* Create( const tchar_t* name )
             {
                 Enumeration* info = Enumeration::Create();
 

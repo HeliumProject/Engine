@@ -8,14 +8,14 @@ REFLECT_DEFINE_CLASS( ClipboardElementArray );
 
 void ClipboardElementArray::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, "m_CommonBaseClass" );
-    comp.AddField( &ClipboardElementArray::m_Elements, "m_Elements" );
+    comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
+    comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );
 }
 
 ClipboardElementArray::ClipboardElementArray()
 {
-    // By default, all items added to this array should derive from Reflect::Element
-    bool converted = Helium::ConvertString( *Reflect::GetClass< Reflect::Element >()->m_Name, m_CommonBaseClass );
+    // By default, all items added to this array should derive from Reflect::Object
+    bool converted = Helium::ConvertString( Reflect::GetClass< Reflect::Object >()->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -29,7 +29,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // 
 const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 {
-    return Reflect::Registry::GetInstance()->GetClass( Name( m_CommonBaseClass.c_str() ) );
+    return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ const Reflect::Class* ClipboardElementArray::GetCommonBaseClass() const
 // 
 void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
 {
-    bool converted = Helium::ConvertString( *type->m_Name, m_CommonBaseClass );
+    bool converted = Helium::ConvertString( type->m_Name, m_CommonBaseClass );
     HELIUM_ASSERT( converted );
 }
 
@@ -45,7 +45,7 @@ void ClipboardElementArray::SetCommonBaseTypeID( const Reflect::Type* type )
 // Attempts to add the specified item to this array.  Returns false if the item
 // is not allowed to be added.
 // 
-bool ClipboardElementArray::Add( const Reflect::ElementPtr& item )
+bool ClipboardElementArray::Add( const Reflect::ObjectPtr& item )
 {
     if ( CanAdd( item ) )
     {
@@ -63,14 +63,14 @@ bool ClipboardElementArray::Add( const Reflect::ElementPtr& item )
 // 
 bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 {
-    const ClipboardElementArray* collection = Reflect::ConstObjectCast< ClipboardElementArray >( source );
+    const ClipboardElementArray* collection = Reflect::ObjectCast< ClipboardElementArray >( source );
     if ( !collection )
     {
         return false;
     }
 
     size_t originalSize = m_Elements.size();
-    for each ( const Reflect::ElementPtr& item in collection->m_Elements )
+    for each ( const Reflect::ObjectPtr& item in collection->m_Elements )
     {
         if ( !Add( item ) )
         {
@@ -87,7 +87,7 @@ bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 // determined by checking to make sure that the item derived from the common
 // base class that was specified earlier.
 // 
-bool ClipboardElementArray::CanAdd( const Reflect::ElementPtr& item ) const
+bool ClipboardElementArray::CanAdd( const Reflect::ObjectPtr& item ) const
 {
     if ( !item.ReferencesObject() )
     {

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API Version : public Element
+        class FOUNDATION_API Version : public Object
         {
         public:
-            REFLECT_DECLARE_CLASS( Version, Element );
+            REFLECT_DECLARE_CLASS( Version, Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             Version ();

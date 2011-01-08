@@ -7,7 +7,8 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/StripCanvas.h"
 
-#include <wx/tglbtn.h>
+#include "Editor/Controls/Drawer/Drawer.h"
+
 
 namespace Helium
 {
@@ -46,10 +47,13 @@ namespace Helium
         private:
             std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 
-            CommandQueue                m_CommandQueue;
-            StripCanvas                 m_ToolPropertiesCanvas;
-            SceneGraph::PropertiesGenerator   m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
-            SceneGraph::PropertiesManager     m_ToolPropertiesManager;
+            CommandQueue m_CommandQueue;
+            StripCanvas m_ToolPropertiesCanvas;
+            SceneGraph::PropertiesGenerator m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
+            SceneGraph::PropertiesManager m_ToolPropertiesManager;
+
+            TestPanelGenerated* m_TestPanelGenerated;
+            Drawer* m_TestDrawer;
         };
     }
 }

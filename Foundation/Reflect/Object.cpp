@@ -1,7 +1,13 @@
 #include "Foundation/Reflect/Object.h"
+
+#include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Class.h"
-#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include <malloc.h>
 
@@ -204,10 +210,10 @@ const Reflect::Class* Object::GetClass() const
     return Reflect::GetClass<Object>();
 }
 
-Reflect::Class* Object::CreateClass( Name name )
+Reflect::Class* Object::CreateClass( const tchar_t* name )
 {
     HELIUM_ASSERT( s_Class == NULL );
-    Reflect::Class* type = Class::Create<Object>( name, NULL_NAME );
+    Reflect::Class* type = Class::Create<Object>( name, NULL );
     s_Type = s_Class = type;
     return type;
 }
@@ -215,4 +221,58 @@ Reflect::Class* Object::CreateClass( Name name )
 void Object::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 
+}
+
+bool Object::IsCompact() const
+{
+    return false;
+}
+
+bool Object::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
+{
+    return false; // incurs data loss
+}
+
+void Object::ToXML(tstring& xml) const
+{
+#pragma TODO( "Fix const correctness." )
+    ArchiveXML::ToString( const_cast< Object* >( this ), xml );
+}
+
+void Object::ToBinary(std::iostream& stream) const
+{
+#pragma TODO( "Fix const correctness." )
+    ArchiveBinary::ToStream( const_cast< Object* >( this ), stream );
+}
+
+void Object::ToFile( const Path& path ) const
+{
+    ArchivePtr archive = GetArchive( path );
+#pragma TODO( "Fix const correctness." )
+    archive->Put( const_cast< Object* >( this ) );
+    archive->Close();
+}
+
+void Object::Accept(Visitor& visitor)
+{
+    Composite::Visit(this, visitor);
+}
+
+bool Object::Equals(const ObjectPtr& rhs) const
+{
+    return Composite::Equals(this, rhs);
+}
+
+void Object::CopyTo(const ObjectPtr& destination)
+{
+    Composite::Copy( this, destination );
+}
+
+ObjectPtr Object::Clone()
+{
+    ObjectPtr clone;
+
+    clone = Class::Clone( this );
+
+    return clone;
 }

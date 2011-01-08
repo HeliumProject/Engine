@@ -11,7 +11,7 @@ namespace Helium
         public:
             ReflectBitfieldInterpreter( Container* container );
 
-            virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) HELIUM_OVERRIDE;
+            virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Object*>& instances, Container* parent ) HELIUM_OVERRIDE;
         };
 
         typedef Helium::SmartPtr<ReflectBitfieldInterpreter> ReflectBitfieldInterpreterPtr;

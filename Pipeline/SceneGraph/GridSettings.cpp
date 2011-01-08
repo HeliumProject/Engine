@@ -28,12 +28,12 @@ GridSettings::GridSettings( const tstring& version,
 , m_MajorColor( majorColor )
 , m_MinorColor( minorColor )
 {
-  AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
+  e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
 GridSettings::~GridSettings()
 {
-  RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
+  e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &GridSettings::OnChanged ) );
 }
 
 void GridSettings::PostDeserialize()
@@ -76,7 +76,7 @@ const Color3& GridSettings::GetMinorColor()
   return m_MinorColor;
 }
 
-void GridSettings::OnChanged( const Reflect::ElementChangeArgs& args )
+void GridSettings::OnChanged( const Reflect::ObjectChangeArgs& args )
 {
   if ( m_Units == m_PreviousUnits )
   {

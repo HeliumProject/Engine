@@ -23,7 +23,7 @@ ReflectStlSetInterpreter::ReflectStlSetInterpreter( Container* container )
 ///////////////////////////////////////////////////////////////////////////////
 // Creates UI for the field variable specified.
 // 
-void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
+void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, const std::vector<Reflect::Object*>& instances, Container* parent )
 {
     if ( field->m_Flags & Reflect::FieldFlags::Hide )
     {
@@ -45,8 +45,8 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
     container->a_Name.Set( temp );
 
     // create the serializers
-    std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
-    std::vector< Reflect::Element* >::const_iterator end = instances.end();
+    std::vector< Reflect::Object* >::const_iterator itr = instances.begin();
+    std::vector< Reflect::Object* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         Reflect::DataPtr ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataClass ) );

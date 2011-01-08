@@ -5,11 +5,7 @@
 #include <stdarg.h>
 #include <wx/msgdlg.h>
 
-extern "C"
-{
-	#include "Editor/Graph/expr.h"
-}
-
+#include "Editor/Graph/expr.h"
 #include "Editor/Graph/Debug.h"
 #include "Editor/Graph/Base64Encode.h"
 

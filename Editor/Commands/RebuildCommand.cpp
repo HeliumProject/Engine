@@ -21,14 +21,6 @@ using namespace Helium::Editor;
 using namespace Helium::CommandLine;
 using namespace Helium::Reflect;
 
-namespace Helium
-{
-    namespace Reflect
-    {
-        FOUNDATION_API extern bool g_OverrideCRC;
-    }
-}
-
 const char* RebuildCommand::m_RebuildStrings[REBUILD_CODE_COUNT] = 
 {
     "Success",
@@ -60,7 +52,6 @@ bool RebuildCommand::Initialize( tstring& error )
 {
     bool result = true;
 
-    result &= AddOption( new FlagOption( &Reflect::g_OverrideCRC, TXT( "crc" ), TXT( "override crc" ) ), error );
     result &= AddOption( new FlagOption( &m_RCS, TXT( "rcs" ), TXT( "user rcs" ) ), error );
     result &= AddOption( new FlagOption( &m_XML, TXT( "xml" ), TXT( "" ) ), error );
     result &= AddOption( new FlagOption( &m_Binary, TXT( "binary" ), TXT( "" ) ), error );
@@ -221,7 +212,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if (input == output && (m_Verify && !m_XML && !m_Binary))
     {
-        std::vector< ElementPtr > elements;
+        std::vector< ObjectPtr > elements;
 
         if ( Helium::IsDebuggerPresent() )
         {
@@ -254,7 +245,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     // Read input
     //
 
-    std::vector< ElementPtr > spool;
+    std::vector< ObjectPtr > spool;
 
     if ( Helium::IsDebuggerPresent() )
     {
@@ -340,7 +331,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     {
         if ( Helium::IsDebuggerPresent() )
         {
-            std::vector< ElementPtr > duplicates;
+            std::vector< ObjectPtr > duplicates;
             Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
             archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
             archive->Get( duplicates );
@@ -349,7 +340,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         {
             try
             {
-                std::vector< ElementPtr > duplicates;
+                std::vector< ObjectPtr > duplicates;
                 Reflect::ArchivePtr archive = Reflect::GetArchive( absolute );
                 archive->e_Status.AddMethod( this, &RebuildCommand::ArchiveStatus );
                 archive->Get( duplicates );

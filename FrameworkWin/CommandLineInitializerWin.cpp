@@ -82,7 +82,9 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< St
         {
             LPWSTR pArgument = ppArguments[ argumentIndex ];
             HELIUM_ASSERT( pArgument );
-            HELIUM_VERIFY( rArguments.New( pArgument ) );
+            String* pConvertedArgument = rArguments.New();
+            HELIUM_ASSERT( pConvertedArgument );
+            StringConverter< wchar_t, tchar_t >::Convert( *pConvertedArgument, pArgument );
         }
     }
 

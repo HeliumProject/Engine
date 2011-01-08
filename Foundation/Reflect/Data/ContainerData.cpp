@@ -11,9 +11,9 @@ ContainerData::ContainerData()
 
 }
 
-REFLECT_DEFINE_ABSTRACT( ElementContainerData )
+REFLECT_DEFINE_ABSTRACT( ObjectContainerData )
 
-ElementContainerData::ElementContainerData()
+ObjectContainerData::ObjectContainerData()
 : m_Type ( NULL )
 {
 

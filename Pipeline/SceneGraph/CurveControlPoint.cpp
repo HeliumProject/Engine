@@ -11,7 +11,7 @@ REFLECT_DEFINE_CLASS( CurveControlPoint );
 
 void CurveControlPoint::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &CurveControlPoint::m_Position, "m_Position" );
+    comp.AddField( &CurveControlPoint::m_Position, TXT( "m_Position" ) );
 }
 
 void CurveControlPoint::InitializeType()

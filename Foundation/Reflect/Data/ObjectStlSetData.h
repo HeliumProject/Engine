@@ -10,16 +10,16 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ElementStlSetData : public ContainerData
+        class FOUNDATION_API ObjectStlSetData : public ContainerData
         {
         public:
-            typedef std::set<ElementPtr> DataType;
+            typedef std::set<ObjectPtr> DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( ElementStlSetData, ContainerData )
+            REFLECT_DECLARE_CLASS( ObjectStlSetData, ContainerData )
 
-            ElementStlSetData();
-            virtual ~ElementStlSetData();
+            ObjectStlSetData();
+            virtual ~ObjectStlSetData();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 

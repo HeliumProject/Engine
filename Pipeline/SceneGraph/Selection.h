@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Foundation/Automation/Event.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Undo/PropertyCommand.h"
 
 #include "Pipeline/API.h"

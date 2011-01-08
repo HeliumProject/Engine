@@ -206,7 +206,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     {
         if (src->HasType( Reflect::GetType<StlVectorData>() ) && dest->HasType( Reflect::GetType<StlVectorData>() ))
         {
-            const StlVectorData* srcArray = ConstDangerousCast<StlVectorData>( src );
+            const StlVectorData* srcArray = DangerousCast<StlVectorData>( src );
             StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
 
             if (CastSupported( srcArray->GetItemClass(), destArray->GetItemClass() ))
@@ -223,7 +223,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->HasType( Reflect::GetType<StlSetData>() ) && dest->HasType( Reflect::GetType<StlSetData>() ))
         {
-            const StlSetData* srcSet = ConstDangerousCast<StlSetData>( src );
+            const StlSetData* srcSet = DangerousCast<StlSetData>( src );
             StlSetData* destSet = DangerousCast<StlSetData>( dest );
 
             if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
@@ -249,7 +249,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->HasType( Reflect::GetType<StlMapData>() ) && dest->HasType( Reflect::GetType<StlMapData>() ))
         {
-            const StlMapData* srcMap = ConstDangerousCast<StlMapData>( src );
+            const StlMapData* srcMap = DangerousCast<StlMapData>( src );
             StlMapData* destMap = DangerousCast<StlMapData>( dest );
 
             if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
@@ -274,26 +274,26 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<ElementStlMapData>() ) && dest->HasType( Reflect::GetType<ElementStlMapData>() ))
+        else if (src->HasType( Reflect::GetType<ObjectStlMapData>() ) && dest->HasType( Reflect::GetType<ObjectStlMapData>() ))
         {
-            const ElementStlMapData* srcElementMap = ConstDangerousCast<ElementStlMapData>( src );
-            ElementStlMapData* destElementMap = DangerousCast<ElementStlMapData>( dest );
+            const ObjectStlMapData* srcObjectMap = DangerousCast<ObjectStlMapData>( src );
+            ObjectStlMapData* destObjectMap = DangerousCast<ObjectStlMapData>( dest );
 
-            if (CastSupported( srcElementMap->GetKeyClass(), destElementMap->GetKeyClass() ))
+            if (CastSupported( srcObjectMap->GetKeyClass(), destObjectMap->GetKeyClass() ))
             {
-                ElementStlMapData::V_ConstValueType data;
-                srcElementMap->GetItems( data );
+                ObjectStlMapData::V_ConstValueType data;
+                srcObjectMap->GetItems( data );
 
-                destElementMap->Clear();
+                destObjectMap->Clear();
 
-                ElementStlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                ElementStlMapData::V_ConstValueType::const_iterator end = data.end();
+                ObjectStlMapData::V_ConstValueType::const_iterator itr = data.begin();
+                ObjectStlMapData::V_ConstValueType::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
-                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destElementMap->GetKeyClass() ) );
+                    DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destObjectMap->GetKeyClass() ) );
                     if (Data::CastValue( itr->first, key ))
                     {
-                        destElementMap->SetItem( key, flags & DataFlags::Shallow ? itr->second->Ptr() : (*itr->second)->Clone() );
+                        destObjectMap->SetItem( key, flags & DataFlags::Shallow ? itr->second->Ptr() : (*itr->second)->Clone() );
                     }
                 }
 

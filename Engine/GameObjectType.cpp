@@ -115,7 +115,7 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
     // Create the type object and store its parameters.
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
-    pType->m_Name = name;
+    pType->m_cachedName = name;
     pType->m_BaseType = pParent;
     pType->m_spTemplate = pTemplate;
     pType->m_flags = flags;

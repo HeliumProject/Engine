@@ -16,15 +16,15 @@ REFLECT_DEFINE_ABSTRACT( SceneNode );
 
 void SceneNode::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &SceneNode::m_ID,            "m_ID",             Reflect::FieldFlags::ReadOnly );
-    comp.AddField( &SceneNode::m_DefaultName,   "m_DefaultName",    Reflect::FieldFlags::Hide );
-    comp.AddField( &SceneNode::m_GivenName,     "m_GivenName",      Reflect::FieldFlags::Hide );
-    comp.AddField( &SceneNode::m_UseGivenName,  "m_UseGivenName",   Reflect::FieldFlags::Hide );
+    comp.AddField( &SceneNode::m_ID,            TXT( "m_ID" ),             Reflect::FieldFlags::ReadOnly );
+    comp.AddField( &SceneNode::m_DefaultName,   TXT( "m_DefaultName" ),    Reflect::FieldFlags::Hide );
+    comp.AddField( &SceneNode::m_GivenName,     TXT( "m_GivenName" ),      Reflect::FieldFlags::Hide );
+    comp.AddField( &SceneNode::m_UseGivenName,  TXT( "m_UseGivenName" ),   Reflect::FieldFlags::Hide );
 }
 
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::SceneNode >( TXT("SceneGraph::SceneNode") );
+    Reflect::RegisterClassType< SceneGraph::SceneNode >( TXT( "SceneGraph::SceneNode" ) );
 
     PropertiesGenerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
@@ -66,7 +66,8 @@ void SceneNode::SetID( const TUID& id )
 
 tstring SceneNode::GenerateName() const
 {
-    tstring name = *GetClass()->m_Name;
+    tstring name;
+    ConvertString( GetClass()->m_Name, name );
     name[0] = tolower( name[0] );
     name += TXT( "1" );
     return name;
@@ -375,7 +376,9 @@ int32_t SceneNode::GetImageIndex() const
 
 tstring SceneNode::GetApplicationTypeName() const
 {
-    return *GetClass()->m_Name;
+    tstring name;
+    ConvertString( GetClass()->m_Name, name );
+    return name;
 }
 
 SceneNodeTypePtr SceneNode::CreateNodeType( SceneGraph::Scene* scene ) const
@@ -413,12 +416,12 @@ void SceneNode::Execute(bool interactively)
 
 #pragma TODO("Remove this constness")
 
-void SceneNode::GetState( Reflect::ElementPtr& state ) const
+void SceneNode::GetState( Reflect::ObjectPtr& state ) const
 {
     state = const_cast<SceneNode*>(this)->Clone();
 }
 
-void SceneNode::SetState( const Reflect::ElementPtr& state )
+void SceneNode::SetState( const Reflect::ObjectPtr& state )
 {
     if ( !state->Equals( this ) )
     {
@@ -428,14 +431,14 @@ void SceneNode::SetState( const Reflect::ElementPtr& state )
     }
 }
 
-Undo::CommandPtr SceneNode::SnapShot( Reflect::Element* newState )
+Undo::CommandPtr SceneNode::SnapShot( Reflect::Object* newState )
 {
     if ( newState == NULL )
     {
-        return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
+        return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
     }
 
-    return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ElementPtr( newState ) );
+    return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ObjectPtr( newState ) );
 }
 
 bool SceneNode::IsSelectable() const

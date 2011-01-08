@@ -16,7 +16,7 @@ REFLECT_DEFINE_CLASS( Locator );
 
 void Locator::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* field = comp.AddEnumerationField( &Locator::m_Shape, "m_Shape" );
+    Reflect::Field* field = comp.AddEnumerationField( &Locator::m_Shape, TXT( "m_Shape" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );
 }
 
@@ -124,9 +124,9 @@ void Locator::Render( RenderVisitor* render )
 
 void Locator::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Locator* locator = Reflect::ConstAssertCast<Locator>( object );
+    const Locator* locator = Reflect::AssertCast<Locator>( object );
 
-    const LocatorType* type = Reflect::ConstAssertCast<LocatorType>( locator->GetNodeType() );
+    const LocatorType* type = Reflect::AssertCast<LocatorType>( locator->GetNodeType() );
 
     locator->SetMaterial( type->GetMaterial() );
 

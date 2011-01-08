@@ -321,7 +321,8 @@ bool FbxSupport::LoadMesh(
 #if HELIUM_UNICODE
     KFBX_WIDECHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
 #else
-    KFBX_ANSICHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
+    char* pConvertedFilePath = NULL;
+    KFBX_ANSI_to_UTF8( *rSourceFilePath, pConvertedFilePath );
 #endif
     if( !pConvertedFilePath )
     {
@@ -415,7 +416,8 @@ bool FbxSupport::LoadAnimation(
 #if HELIUM_UNICODE
     KFBX_WIDECHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
 #else
-    KFBX_ANSICHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
+    char* pConvertedFilePath = NULL;
+    KFBX_ANSI_to_UTF8( *rSourceFilePath, pConvertedFilePath );
 #endif
     if( !pConvertedFilePath )
     {

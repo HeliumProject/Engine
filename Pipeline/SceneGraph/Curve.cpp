@@ -32,10 +32,10 @@ D3DMATERIAL9 Curve::s_HullMaterial;
 
 void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.AddField(            &Curve::m_Closed,               "m_Closed" );
-  comp.AddEnumerationField( &Curve::m_Type,                 "m_Type" );
-  comp.AddEnumerationField( &Curve::m_ControlPointLabel,    "m_ControlPointLabel" );
-  comp.AddField(            &Curve::m_Resolution,           "m_Resolution" );
+  comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
+  comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
+  comp.AddEnumerationField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
+  comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
 }
 
 class SelectionDataObject : public Inspect::ClientData
@@ -776,8 +776,8 @@ void Curve::Render( RenderVisitor* render )
 
 void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const HierarchyNode* node = Reflect::ConstAssertCast<HierarchyNode>( object );
-    const Curve* curve = Reflect::ConstAssertCast< Curve > ( node );
+    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
+    const Curve* curve = Reflect::AssertCast< Curve > ( node );
 
     const VertexResource* vertices = curve->m_Vertices;
 

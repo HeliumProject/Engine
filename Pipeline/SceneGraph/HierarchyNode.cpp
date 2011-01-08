@@ -22,14 +22,14 @@ REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNode );
 
 void HierarchyNode::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &HierarchyNode::m_ParentID, "m_ParentID" );
+    comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 
     {
-        Reflect::Field* field = comp.AddField( &HierarchyNode::m_Hidden, "m_Hidden" );
+        Reflect::Field* field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
         field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
     }
 
-    comp.AddField( &HierarchyNode::m_Live, "m_Live" );
+    comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
 }
 
 void HierarchyNode::InitializeType()

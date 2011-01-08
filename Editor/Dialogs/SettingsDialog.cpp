@@ -11,7 +11,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-SettingInfo::SettingInfo( Reflect::ElementPtr& source, Reflect::ElementPtr& clone, Editor::TreeCanvasPtr& canvas )
+SettingInfo::SettingInfo( Reflect::ObjectPtr& source, Reflect::ObjectPtr& clone, Editor::TreeCanvasPtr& canvas )
 : m_Source( source )
 , m_Clone( clone )
 , m_Canvas( canvas )
@@ -52,13 +52,13 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         Settings* settings = Reflect::ObjectCast< Settings >( (*itr).second );
 
         // skip settings that we don't want the user to see
-        if ( settings && !settings->m_UserVisible )
+        if ( settings && !settings->UserVisible() )
         {
             continue;
         }
 
-        Reflect::ElementPtr clone = (*itr).second->Clone();
-        clone->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        Reflect::ObjectPtr clone = (*itr).second->Clone();
+        clone->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
 
         Helium::TreeWndCtrl* treeWndCtrl = new Helium::TreeWndCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle | wxALWAYS_SHOW_SB | wxCLIP_CHILDREN | wxNO_BORDER, wxPanelNameStr, wxTR_HIDE_ROOT );
         Editor::TreeCanvasPtr canvas = new Editor::TreeCanvas();
@@ -69,7 +69,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         m_SettingSizer->Show( treeWndCtrl, false );
 
         Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
-        std::vector< Reflect::Element* > elems;
+        std::vector< Reflect::Object* > elems;
         elems.push_back( clone );
         interpreter->Interpret( elems );
         m_Interpreters.push_back( interpreter );
@@ -83,7 +83,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
         }
 
         int index = propertiesListBox->Append( uiName.c_str() );
-        Reflect::ElementPtr source = Reflect::AssertCast< Reflect::Element >( (*itr).second );
+        Reflect::ObjectPtr source = Reflect::AssertCast< Reflect::Object >( (*itr).second );
         m_SettingInfo.insert( std::make_pair( index, new SettingInfo( source, clone, canvas ) ) );
     }
 
@@ -141,7 +141,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
 
     for ( M_SettingInfo::iterator itr = m_SettingInfo.begin(), end = m_SettingInfo.end(); itr != end; ++itr )
     {
-        itr->second->m_Clone->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
+        itr->second->m_Clone->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &SettingsDialog::OnRefreshElements ) );
     }
 
     return result;
@@ -161,28 +161,21 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-    Reflect::ElementPtr defaultElement = Reflect::ObjectCast<Reflect::Element>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetClass() ) );
+    Reflect::ObjectPtr defaultElement = Reflect::ObjectCast<Reflect::Object>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetClass() ) );
     if ( !defaultElement )
     {
         return;
     }
 
-    int tries = 10;
-    bool changed = false;
-    while ( ( tries-- > 0 ) && ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) ) )
+    if ( !defaultElement->Equals( m_CurrentSetting->m_Clone ) )
     {
-        changed = true;
         defaultElement->CopyTo( m_CurrentSetting->m_Clone );
         m_CurrentSetting->m_Clone->RaiseChanged();
-    }
-
-    if ( changed )
-    {
         m_CurrentSetting->m_Canvas->Read();
     }
 }
 
-void SettingsDialog::OnApply( wxCommandEvent& args )
+void SettingsDialog::OnOk( wxCommandEvent& args )
 {
     if ( !m_CurrentSetting )
     {
@@ -196,10 +189,7 @@ void SettingsDialog::OnApply( wxCommandEvent& args )
 
     m_CurrentSetting->m_Clone->CopyTo( m_CurrentSetting->m_Source );
     m_CurrentSetting->m_Source->RaiseChanged();
-}
 
-void SettingsDialog::OnOk( wxCommandEvent& args )
-{
     EndModal( wxID_OK );
 }
 
@@ -221,7 +211,7 @@ void SettingsDialog::OnSettingsChanged( wxCommandEvent& args )
     SelectCanvas( newSettingInfo );
 }
 
-void SettingsDialog::OnRefreshElements( const Reflect::ElementChangeArgs& args )
+void SettingsDialog::OnRefreshElements( const Reflect::ObjectChangeArgs& args )
 {
     if ( m_CurrentSetting )
     {

@@ -27,7 +27,7 @@ void TypeIDData::ConnectData(Helium::HybridPtr<void> data)
 
 bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
 {
-    const TypeIDData* rhs = Reflect::ConstObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
     if (!rhs)
     {
         return false;
@@ -40,7 +40,7 @@ bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
 
 bool TypeIDData::Equals(const Reflect::Data* s) const
 {
-    const TypeIDData* rhs = Reflect::ConstObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
     if (!rhs)
     {
         return false;
@@ -71,7 +71,7 @@ void TypeIDData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            uint32_t crc = type ? Crc32( *type->m_Name ) : BeginCrc32();
+            uint32_t crc = type ? Crc32( type->m_Name ) : BeginCrc32();
             binary.GetStream().Write(&crc); 
             break;
         }
@@ -88,11 +88,11 @@ void TypeIDData::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             tstring str;
             str.resize( (size_t)size );
             xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
-            type = Reflect::Registry::GetInstance()->GetType( Name( str.c_str() ) );
+            type = Reflect::Registry::GetInstance()->GetType( str.c_str() );
             break;
         }
 

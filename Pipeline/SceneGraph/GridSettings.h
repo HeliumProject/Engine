@@ -4,7 +4,7 @@
 #include "Pipeline/Settings.h"
 
 #include "Foundation/Math/Color3.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
@@ -56,7 +56,7 @@ namespace Helium
             const Color3& GetMinorColor();
 
         private:
-            void OnChanged( const Reflect::ElementChangeArgs& args );
+            void OnChanged( const Reflect::ObjectChangeArgs& args );
 
             static float32_t GetConversionFactor( GridUnit units );
             static float32_t ConvertUnits( float32_t sourceValue, GridUnit sourceUnits, GridUnit destinationUnits );
@@ -75,14 +75,14 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddEnumerationField( &GridSettings::m_Units, "Units" );
-                comp.AddField( &GridSettings::m_Width, "Width" );
-                comp.AddField( &GridSettings::m_Length, "Length" );
-                comp.AddField( &GridSettings::m_MajorStep, "Major Step" );
-                comp.AddField( &GridSettings::m_MinorStep, "Minor Step" );
-                comp.AddField( &GridSettings::m_AxisColor, "Axis Color" );
-                comp.AddField( &GridSettings::m_MajorColor, "Major Color" );
-                comp.AddField( &GridSettings::m_MinorColor, "Minor Color" );
+                comp.AddEnumerationField( &GridSettings::m_Units, TXT( "Units" ) );
+                comp.AddField( &GridSettings::m_Width, TXT( "Width" ) );
+                comp.AddField( &GridSettings::m_Length, TXT( "Length" ) );
+                comp.AddField( &GridSettings::m_MajorStep, TXT( "Major Step" ) );
+                comp.AddField( &GridSettings::m_MinorStep, TXT( "Minor Step" ) );
+                comp.AddField( &GridSettings::m_AxisColor, TXT( "Axis Color" ) );
+                comp.AddField( &GridSettings::m_MajorColor, TXT( "Major Color" ) );
+                comp.AddField( &GridSettings::m_MinorColor, TXT( "Minor Color" ) );
             }
         };
 

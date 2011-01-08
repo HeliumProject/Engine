@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/HybridPtr.h"
 #include "Foundation/SmartBuffer/BasicBuffer.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Archive.h"
 
 namespace Helium
@@ -24,12 +24,12 @@ namespace Helium
         typedef DataFlags::DataFlag DataFlag;
 
         //
-        // A Data is an Element that knows how to read/write data
+        // A Data is an Object that knows how to read/write data
         //  from any kind of support Archive type (XML and Binary), given
         //  an address in memory to serialize/deserialize data to/from
         //
 
-        class FOUNDATION_API Data : public Element
+        class FOUNDATION_API Data : public Object
         {
         protected:
             // derived classes will use this
@@ -113,13 +113,13 @@ namespace Helium
             };
 
             // the instance we are processing, if any
-            Helium::HybridPtr<Element> m_Instance;
+            Helium::HybridPtr<Object> m_Instance;
 
             // the field we are processing, if any
             const Field* m_Field;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Data, Element );
+            REFLECT_DECLARE_ABSTRACT( Data, Object );
 
             // instance init and cleanup
             Data();
@@ -137,12 +137,12 @@ namespace Helium
             // connect to some address
             virtual void ConnectData(Helium::HybridPtr<void> data)
             {
-                m_Instance = (Element*)NULL;
+                m_Instance = (Object*)NULL;
                 m_Field = NULL;
             }
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField = 0)
+            virtual void ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField = 0)
             {
                 ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
 
@@ -201,7 +201,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(T& value, Element* instance, const Field* field)
+            static DataPtr Bind(T& value, Object* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -216,7 +216,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(const T& value, const Element* instance, const Field* field)
+            static DataPtr Bind(const T& value, const Object* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -445,7 +445,7 @@ namespace Helium
                 // Notify interested listeners that the data has changed.
                 if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
                 {
-                    Element* element = (Element*)( ser->m_Instance );
+                    Object* element = (Object*)( ser->m_Instance );
                     element->RaiseChanged( ser->m_Field );
                 }
             }

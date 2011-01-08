@@ -14,10 +14,10 @@ REFLECT_DEFINE_ABSTRACT( Layer );
 
 void Layer::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.AddField( &Layer::m_Visible,     "m_Visible" );
-  comp.AddField( &Layer::m_Selectable,  "m_Selectable" );
-  comp.AddField( &Layer::m_Members,     "m_Members" );
-  comp.AddField( &Layer::m_Color,       "m_Color" );
+  comp.AddField( &Layer::m_Visible,     TXT( "m_Visible" ) );
+  comp.AddField( &Layer::m_Selectable,  TXT( "m_Selectable" ) );
+  comp.AddField( &Layer::m_Members,     TXT( "m_Members" ) );
+  comp.AddField( &Layer::m_Color,       TXT( "m_Color" ) );
 }
 
 void Layer::InitializeType()

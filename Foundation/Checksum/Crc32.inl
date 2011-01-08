@@ -29,10 +29,26 @@ uint32_t Helium::Crc32( const void* pData, size_t byteCount )
 /// @return  CRC-32 hash value for the block of data.
 ///
 /// @see BeginCrc32(), UpdateCrc32(), FinishCrc32()
-uint32_t Helium::Crc32( const tchar_t* pString )
+uint32_t Helium::Crc32( const char* pString )
 {
     uint32_t crc = BeginCrc32();
-    crc = UpdateCrc32( crc, pString, StringLength( pString ) * sizeof( tchar_t ) );
+    crc = UpdateCrc32( crc, pString, StringLength( pString ) * sizeof( char ) );
+    crc = FinishCrc32( crc );
+
+    return crc;
+}
+
+/// Calculate a CRC-32 value for a string.
+///
+/// @param[in] pString    String for which to compute the CRC.
+///
+/// @return  CRC-32 hash value for the block of data.
+///
+/// @see BeginCrc32(), UpdateCrc32(), FinishCrc32()
+uint32_t Helium::Crc32( const wchar_t* pString )
+{
+    uint32_t crc = BeginCrc32();
+    crc = UpdateCrc32( crc, pString, StringLength( pString ) * sizeof( wchar_t ) );
     crc = FinishCrc32( crc );
 
     return crc;

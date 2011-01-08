@@ -53,15 +53,15 @@ struct CaseInsensitiveCompare
 template< class T >
 struct CaseInsensitiveNameCompare
 {
-    Name value;
+    const tchar_t* value;
 
-    CaseInsensitiveNameCompare( Name name )
+    CaseInsensitiveNameCompare( const tchar_t* name )
         : value( name )
     {
 
     }
 
-    bool operator()( const KeyValue< Name, T >& rhs )
+    bool operator()( const KeyValue< const tchar_t*, T >& rhs )
     {
         return _tcsicmp( *rhs.First(), *value ) == 0;
     }
@@ -87,14 +87,13 @@ void Reflect::Initialize()
     {
         g_Registry = new Registry();
 
-        // Bases
+        // Base
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Object>( TXT( "Object" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Element>( TXT( "Element" ) ) );
 
-        // Datas
+        // Data
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Data>( TXT( "Data" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ContainerData>( TXT( "Container" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementContainerData>( TXT( "ElementContainer" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectContainerData>( TXT( "ObjectContainer" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDData>( TXT( "TypeID" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PointerData>( TXT( "Pointer" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<EnumerationData>( TXT( "Enumeration" ) ) );
@@ -185,17 +184,17 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDUInt32StlMapData>( TXT( "TUIDUInt32StlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDMatrix4StlMapData>( TXT( "TUIDMatrix4StlMap" ) ) );
 
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementStlVectorData>( TXT( "ElementStlVector" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementStlSetData>( TXT( "ElementStlSet" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ElementStlMapData>( TXT( "ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDElementStlMapData>( TXT( "TypeIDElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringElementStlMapData>( TXT( "StlStringElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ElementStlMapData>( TXT( "UInt32ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32ElementStlMapData>( TXT( "Int32ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64ElementStlMapData>( TXT( "UInt64ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ElementStlMapData>( TXT( "Int64ElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDElementStlMapData>( TXT( "GUIDElementStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDElementStlMapData>( TXT( "TUIDElementStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlVectorData>( TXT( "ObjectStlVector" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlSetData>( TXT( "ObjectStlSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlMapData>( TXT( "ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDObjectStlMapData>( TXT( "TypeIDObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringObjectStlMapData>( TXT( "StlStringObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ObjectStlMapData>( TXT( "UInt32ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32ObjectStlMapData>( TXT( "Int32ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64ObjectStlMapData>( TXT( "UInt64ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectStlMapData>( TXT( "Int64ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectStlMapData>( TXT( "GUIDObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectStlMapData>( TXT( "TUIDObjectStlMap" ) ) );
 
         //
         // Build Casting Table
@@ -204,14 +203,14 @@ void Reflect::Initialize()
         Data::Initialize();
 
         //
-        // Register Elements
+        // Register Objects
         //
 
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Version>( TXT( "Version" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentNode>( TXT("DocumentNode") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentAttribute>( TXT("DocumentAttribute") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentElement>( TXT("DocumentElement") ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Document>( TXT("Document") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentNode>( TXT( "DocumentNode") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentAttribute>( TXT( "DocumentAttribute") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DocumentObject>( TXT( "DocumentObject") ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Document>( TXT( "Document") ) );
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -284,11 +283,11 @@ bool Registry::RegisterType(Type* type)
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *type->m_Name );
+    uint32_t crc = Crc32( type->m_Name );
     Insert< M_HashToType >::Result result = m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
     if ( !result.Second() )
     {
-        Log::Error( TXT( "Re-registration of type '%s', could be ambigouous crc: 0x%08x\n" ), *type->m_Name, crc );
+        Log::Error( TXT( "Re-registration of type %s, could be ambigouous crc: 0x%08x\n" ), type->m_Name, crc );
         HELIUM_BREAK();
         return false;
     }
@@ -303,23 +302,23 @@ void Registry::UnregisterType(const Type* type)
 
     type->Unregister();
 
-    uint32_t crc = Crc32( *type->m_Name );
+    uint32_t crc = Crc32( type->m_Name );
     m_TypesByHash.Remove( crc );
 }
 
-void Registry::AliasType( const Type* type, Name alias )
+void Registry::AliasType( const Type* type, const tchar_t* alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *alias );
+    uint32_t crc = Crc32( alias );
     m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
 }
 
-void Registry::UnaliasType( const Type* type, Name alias )
+void Registry::UnaliasType( const Type* type, const tchar_t* alias )
 {
     HELIUM_ASSERT( IsMainThread() );
 
-    uint32_t crc = Crc32( *alias );
+    uint32_t crc = Crc32( alias );
     M_HashToType::Iterator found = m_TypesByHash.Find( crc );
     if ( found != m_TypesByHash.End() && found->Second() == type )
     {

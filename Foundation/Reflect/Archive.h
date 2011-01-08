@@ -37,7 +37,7 @@ namespace Helium
                 Starting,
                 PreProcessing,
                 ArchiveStarting,
-                ElementProcessed,
+                ObjectProcessed,
                 ArchiveComplete,
                 PostProcessing,
                 Complete,
@@ -75,21 +75,21 @@ namespace Helium
         }
         typedef ExceptionActions::ExceptionAction ExceptionAction;
 
-        typedef void (Element::*ElementCallback)();
+        typedef void (Object::*ObjectCallback)();
 
         struct ExceptionInfo
         {
             const Archive& m_Archive;
 
-            Element* m_Element;
-            ElementCallback m_Callback;
+            Object* m_Object;
+            ObjectCallback m_Callback;
             const Helium::Exception& m_Exception;
 
             mutable ExceptionAction m_Action;
 
-            ExceptionInfo( const Archive& archive, Element* element, ElementCallback callback, const Helium::Exception& exception )
+            ExceptionInfo( const Archive& archive, Object* element, ObjectCallback callback, const Helium::Exception& exception )
                 : m_Archive ( archive )
-                , m_Element ( element )
+                , m_Object ( element )
                 , m_Callback ( callback )
                 , m_Exception ( exception )
                 , m_Action ( ExceptionActions::Unknown )
@@ -134,12 +134,12 @@ namespace Helium
         class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase< ArchiveVisitor >
         {
         public:
-            virtual void VisitElement(Element* element)
+            virtual void VisitObject(Object* element)
             {
                 // called for each element object we serialize to the file
             }
 
-            virtual void VisitField(Element* element, const Field* field)
+            virtual void VisitField(Object* element, const Field* field)
             {
                 // called for each field we serialize to the file (pointer or data...)
             }
@@ -188,7 +188,7 @@ namespace Helium
             ByteOrder m_ByteOrder;
 
             // The array of elements that we've found
-            std::vector< ElementPtr > m_Spool;
+            std::vector< ObjectPtr > m_Objects;
 
             // The mode
             ArchiveMode m_Mode;
@@ -252,10 +252,10 @@ namespace Helium
             // Serialization
             //
         public:
-            virtual void Serialize( const ElementPtr& element ) = 0;
-            virtual void Serialize( const std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( ElementPtr& element ) = 0;
-            virtual void Deserialize( std::vector< ElementPtr >& elements, uint32_t flags = 0 ) = 0;
+            virtual void Serialize( const ObjectPtr& element ) = 0;
+            virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
+            virtual void Deserialize( ObjectPtr& element ) = 0;
+            virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
 
             //
             // Event API
@@ -271,33 +271,33 @@ namespace Helium
 
             // Archive-level processing (visitor setup and append generation)
             void PreSerialize();
-            void PostSerialize( std::vector< ElementPtr >& append );
+            void PostSerialize( std::vector< ObjectPtr >& append );
 
             // Archive-level processing (visitor setup and append processing)
             void PreDeserialize();
-            void PostDeserialize( std::vector< ElementPtr >& append );
+            void PostDeserialize( std::vector< ObjectPtr >& append );
 
             // Instance-level processing (visit calls and type tracking)
-            void PreSerialize( const ElementPtr& element, const Field* field = NULL );
-            void PostDeserialize( const ElementPtr& element, const Field* field = NULL );
+            void PreSerialize( const ObjectPtr& element, const Field* field = NULL );
+            void PostDeserialize( const ObjectPtr& element, const Field* field = NULL );
 
             // Shared code for doing per-element pre and post serialize work with exception handling
-            bool TryElementCallback( Element* element, ElementCallback callback );
+            bool TryObjectCallback( Object* element, ObjectCallback callback );
 
             //
             // Get elements from the file
             //
 
-            void Put( const ElementPtr& element );
-            void Put( const std::vector< ElementPtr >& elements );
+            void Put( const ObjectPtr& element );
+            void Put( const std::vector< ObjectPtr >& elements );
 
-            ElementPtr Get( const Class* searchClass = NULL );
-            void Get( std::vector< ElementPtr >& elements );
+            ObjectPtr Get( const Class* searchClass = NULL );
+            void Get( std::vector< ObjectPtr >& elements );
 
             template <class T>
             Helium::StrongPtr<T> Get()
             {
-                ElementPtr found = Get( Reflect::GetClass<T>() );
+                ObjectPtr found = Get( Reflect::GetClass<T>() );
 
                 if (found.ReferencesObject())
                 {
@@ -313,11 +313,11 @@ namespace Helium
             template< class T >
             void Get( std::vector< Helium::StrongPtr<T> >& elements )
             {
-                std::vector< ElementPtr > archiveElements;
-                Get( archiveElements );
+                std::vector< ObjectPtr > archiveObjects;
+                Get( archiveObjects );
 
-                std::vector< ElementPtr >::iterator itor = archiveElements.begin();
-                std::vector< ElementPtr >::iterator end = archiveElements.end();
+                std::vector< ObjectPtr >::iterator itor = archiveObjects.begin();
+                std::vector< ObjectPtr >::iterator end = archiveObjects.end();
 
                 for( ; itor != end; ++itor )
                 {
@@ -334,8 +334,8 @@ namespace Helium
         // Get parser for a file
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ElementPtr element, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ElementPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
         Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )

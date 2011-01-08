@@ -19,14 +19,14 @@ ReflectInterpreter::ReflectInterpreter (Container* container)
 
 }
 
-void ReflectInterpreter::Interpret(const std::vector<Reflect::Element*>& instances, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
+void ReflectInterpreter::Interpret(const std::vector<Reflect::Object*>& instances, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
 {
     m_Instances = instances;
 
     InterpretType(instances, m_Container, includeFlags, excludeFlags, expandPanel);
 }
 
-void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
+void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& instances, Container* parent, int32_t includeFlags, int32_t excludeFlags, bool expandPanel)
 {
     const Composite* composite = instances[0]->GetClass();
 
@@ -188,15 +188,15 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                         continue; 
                     }        
 
-                    std::vector<Reflect::Element*> fieldInstances;
+                    std::vector<Reflect::Object*> fieldInstances;
 
-                    std::vector<Reflect::Element*>::const_iterator elementItr = instances.begin();
-                    std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
+                    std::vector<Reflect::Object*>::const_iterator elementItr = instances.begin();
+                    std::vector<Reflect::Object*>::const_iterator elementEnd = instances.end();
                     for ( ; elementItr != elementEnd; ++elementItr )
                     {
                         uintptr_t fieldAddress = (uintptr_t)(*elementItr) + itr->m_Offset;
 
-                        Element* element = *((ElementPtr*)(fieldAddress));
+                        Object* element = *((ObjectPtr*)(fieldAddress));
 
                         if ( element )
                         {
@@ -220,7 +220,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                 ReflectFieldInterpreterPtr fieldInterpreter;
 
                 for ( const Reflect::Class* type = field->m_DataClass;
-                    type != Reflect::GetClass<Reflect::Element>() && !fieldInterpreter;
+                    type != Reflect::GetClass<Reflect::Object>() && !fieldInterpreter;
                     type = Reflect::ReflectionCast< const Class >( type->m_Base ) )
                 {
                     fieldInterpreter = ReflectFieldInterpreterFactory::Create( type, field->m_Flags, m_Container );
@@ -239,8 +239,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                 // ElementArray support
                 //
 
-    #pragma TODO("Move this out to an interpreter")
-                if (field->m_DataClass == Reflect::GetType<ElementStlVectorData>())
+#pragma TODO("Move this out to an interpreter")
+                if (field->m_DataClass == Reflect::GetType<ObjectStlVectorData>())
                 {
                     if (hidden)
                     {
@@ -251,7 +251,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
                     {
                         uintptr_t fieldAddress = (uintptr_t)(instances.front()) + itr->m_Offset;
 
-                        std::vector< ElementPtr >* elements = (std::vector< ElementPtr >*)fieldAddress;
+                        std::vector< ObjectPtr >* elements = (std::vector< ObjectPtr >*)fieldAddress;
 
                         if ( elements->size() > 0 )
                         {
@@ -267,11 +267,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
                             childContainer->a_Name.Set( temp );
 
-                            std::vector< ElementPtr >::const_iterator elementItr = elements->begin();
-                            std::vector< ElementPtr >::const_iterator elementEnd = elements->end();
+                            std::vector< ObjectPtr >::const_iterator elementItr = elements->begin();
+                            std::vector< ObjectPtr >::const_iterator elementEnd = elements->end();
                             for ( ; elementItr != elementEnd; ++elementItr )
                             {
-                                std::vector<Reflect::Element*> childInstances;
+                                std::vector<Reflect::Object*> childInstances;
                                 childInstances.push_back(*elementItr);
                                 InterpretType(childInstances, childContainer);
                             }

@@ -9,7 +9,7 @@ namespace Helium
         class FOUNDATION_API PointerData : public Reflect::Data
         {
         public:
-            typedef ElementPtr DataType;
+            typedef ObjectPtr DataType;
             Data::Pointer<DataType> m_Data;
             const Type* m_Type;
 

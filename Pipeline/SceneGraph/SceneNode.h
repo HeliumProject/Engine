@@ -3,7 +3,7 @@
 #include <hash_map>
 
 #include "Foundation/Component/ComponentCollection.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Undo/Command.h"
 
 #include "Pipeline/API.h"
@@ -318,13 +318,13 @@ namespace Helium
             //
 
             // Retrieve serialzed data for this object into the parameter
-            void GetState( Reflect::ElementPtr& state ) const;
+            void GetState( Reflect::ObjectPtr& state ) const;
 
             // Restore serialized data from the element for this object
-            void SetState( const Reflect::ElementPtr& state );
+            void SetState( const Reflect::ObjectPtr& state );
 
             // Get undo command for this object's state (uses GetState/SetState above)
-            virtual Undo::CommandPtr SnapShot( Reflect::Element* newState = NULL );
+            virtual Undo::CommandPtr SnapShot( Reflect::Object* newState = NULL );
 
             //
             // Selected state

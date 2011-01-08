@@ -464,7 +464,7 @@ namespace Helium
             }
 
         protected:
-            void OnGridSettingsChanged( const Reflect::ElementChangeArgs& args );
+            void OnGridSettingsChanged( const Reflect::ObjectChangeArgs& args );
 
         private:
             HWND                    m_Window;

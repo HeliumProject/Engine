@@ -24,7 +24,7 @@
 #include "Editor/MRU/MenuMRU.h"
 #include "Editor/TreeMonitor.h"
 #include "Editor/MessageDisplayer.h"
-#include "Editor/FileDialogDisplayer.h"
+#include "Editor/Dialogs/FileDialogDisplayer.h"
 
 #include "Editor/Inspect/TreeCanvas.h"
 #include "Editor/Inspect/StripCanvas.h"
@@ -81,7 +81,6 @@ namespace Helium
             {
                 return &m_DocumentManager;
             }
-
 
 
         private:

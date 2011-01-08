@@ -34,7 +34,7 @@ namespace Helium
             static Class* Create();
 
             template< class ClassT >
-            static Class* Create( Name name, Name baseName, CreateObjectFunc creator = NULL )
+            static Class* Create( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator = NULL )
             {
                 Class* info = Class::Create();
 
@@ -53,13 +53,13 @@ namespace Helium
             //  in such cases.  Currently we don't provide support for containers of non-cloneable fields.
             //
 
-            static ElementPtr Clone(Element* element);
+            static ObjectPtr Clone(Object* element);
         };
 
         typedef Helium::SmartPtr< Class > ClassPtr;
         typedef Helium::SmartPtr< const Class > ConstClassPtr;
 
         template<>
-        Class* Class::Create< Object >( Name name, Name baseName, CreateObjectFunc creator );
+        Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator );
     }
 }

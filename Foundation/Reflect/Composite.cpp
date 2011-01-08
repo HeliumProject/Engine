@@ -1,7 +1,7 @@
 #include "Foundation/Reflect/Composite.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -12,6 +12,7 @@ using namespace Helium::Reflect;
 
 Field::Field()
 : m_Composite( NULL )
+, m_Name( NULL )
 , m_Flags( 0 )
 , m_Index( -1 )
 , m_Type( NULL )
@@ -21,7 +22,7 @@ Field::Field()
 
 }
 
-DataPtr Field::CreateData(Element* instance) const
+DataPtr Field::CreateData(Object* instance) const
 {
     DataPtr ser;
 
@@ -52,7 +53,7 @@ DataPtr Field::CreateData(Element* instance) const
             }
             else
             {
-                ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( ser );
                 if ( containerData )
                 {
                     containerData->m_Type = m_Type;
@@ -64,7 +65,7 @@ DataPtr Field::CreateData(Element* instance) const
     return ser;
 }
 
-bool Field::HasDefaultValue(Element* instance) const
+bool Field::HasDefaultValue(Object* instance) const
 {
 #ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
@@ -95,7 +96,7 @@ bool Field::HasDefaultValue(Element* instance) const
     return false;
 }
 
-bool Field::SetDefaultValue(Element* instance) const
+bool Field::SetDefaultValue(Object* instance) const
 {
 #ifdef REFLECT_REFACTOR
     // if we don't have a default value, we can never be at the default value
@@ -142,7 +143,7 @@ Composite::~Composite()
 
 void Composite::Report() const
 {
-    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, *m_Name, Crc32( *m_Name ) );
+    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, m_Name, Crc32( m_Name ) );
 
     uint32_t computedSize = 0;
     DynArray< Field >::ConstIterator itr = m_Fields.Begin();
@@ -150,7 +151,7 @@ void Composite::Report() const
     for ( ; itr != end; ++itr )
     {
         computedSize += itr->m_Size;
-        Log::Debug( TXT( "  Index: %3d, Size %4d, Name: `%s`\n" ), itr->m_Index, itr->m_Size, itr->m_Name.c_str() );
+        Log::Debug( TXT( "  Index: %3d, Size %4d, Name: %s\n" ), itr->m_Index, itr->m_Size, itr->m_Name );
     }
 
     if (computedSize != m_Size)
@@ -222,17 +223,11 @@ uint32_t Composite::GetBaseFieldCount() const
     return count;
 }
 
-Reflect::Field* Composite::AddField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
+Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
 {
-    tstring convertedName;
-    {
-        bool converted = Helium::ConvertString( name, convertedName );
-        HELIUM_ASSERT( converted );
-    }
-
     Field field;
     field.m_Composite = this;
-    field.m_Name = convertedName;
+    field.m_Name = name;
     field.m_Size = size;
     field.m_Offset = offset;
     field.m_Flags = flags;
@@ -243,17 +238,11 @@ Reflect::Field* Composite::AddField( const std::string& name, const uint32_t off
     return &m_Fields.GetLast();
 }
 
-Reflect::Field* Composite::AddElementField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
+Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
-    tstring convertedName;
-    {
-        bool converted = Helium::ConvertString( name, convertedName );
-        HELIUM_ASSERT( converted );
-    }
-
     Field field;
     field.m_Composite = this;
-    field.m_Name = convertedName;
+    field.m_Name = name;
     field.m_Size = size;
     field.m_Offset = offset;
     field.m_Flags = flags;
@@ -265,20 +254,14 @@ Reflect::Field* Composite::AddElementField( const std::string& name, const uint3
     return &m_Fields.GetLast();
 }
 
-Reflect::Field* Composite::AddEnumerationField( const std::string& name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
+Reflect::Field* Composite::AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
 {
-    tstring convertedName;
-    {
-        bool converted = Helium::ConvertString( name, convertedName );
-        HELIUM_ASSERT( converted );
-    }
-
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
     HELIUM_ASSERT(enumeration != NULL);
 
     Field field;
     field.m_Composite = this;
-    field.m_Name = convertedName;
+    field.m_Name = name;
     field.m_Size = size;
     field.m_Offset = offset;
     field.m_Flags = flags;
@@ -311,7 +294,7 @@ const Field* Composite::FindFieldByName(uint32_t crc) const
         DynArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
-            if ( Crc32( itr->m_Name.c_str() ) == crc )
+            if ( Crc32( itr->m_Name ) == crc )
             {
                 return &*itr;
             }
@@ -356,7 +339,7 @@ const Field* Composite::FindFieldByOffset(uint32_t offset) const
     return NULL;
 }
 
-bool Composite::Equals(const Element* a, const Element* b)
+bool Composite::Equals(const Object* a, const Object* b)
 {
     if (a == b)
     {
@@ -415,14 +398,14 @@ bool Composite::Equals(const Element* a, const Element* b)
     return true;
 }
 
-void Composite::Visit(Element* element, Visitor& visitor)
+void Composite::Visit(Object* element, Visitor& visitor)
 {
     if (!element)
     {
         return;
     }
 
-    if (!visitor.VisitElement(element))
+    if (!visitor.VisitObject(element))
     {
         return;
     }
@@ -452,11 +435,11 @@ void Composite::Visit(Element* element, Visitor& visitor)
     }
 }
 
-void Composite::Copy( const Element* src, Element* dest )
+void Composite::Copy( const Object* src, Object* dest )
 {
     if ( src == dest )
     {
-        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), *src->GetClass()->m_Name );
+        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), src->GetClass()->m_Name );
     }
 
     // 
@@ -489,9 +472,9 @@ void Composite::Copy( const Element* src, Element* dest )
 
         if ( !type )
         {
-            // This should be impossible... at the very least, Element is a common base class for both pointers.
+            // This should be impossible... at the very least, Object is a common base class for both pointers.
             // This exeception means there's a bug in this function.
-            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), *srcType->m_Name, *destType->m_Name );
+            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), srcType->m_Name, destType->m_Name );
         }
     }
 

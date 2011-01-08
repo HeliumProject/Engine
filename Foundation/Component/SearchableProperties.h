@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class FOUNDATION_API SearchableProperties : public Reflect::Element
+    class FOUNDATION_API SearchableProperties : public Reflect::Object
     {
     public:
         std::multimap< tstring, tstring > m_StringProperties;
@@ -26,7 +26,7 @@ namespace Helium
         //void Erase( const tstring& propName );
         
     public:
-        REFLECT_DECLARE_ABSTRACT( SearchableProperties, Reflect::Element );
+        REFLECT_DECLARE_ABSTRACT( SearchableProperties, Reflect::Object );
         static void AcceptCompositeVisitor( Reflect::Composite& comp );
     };
 }

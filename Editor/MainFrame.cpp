@@ -23,10 +23,10 @@
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
-#include "Editor/FileDialog.h"
+#include "Editor/Dialogs/FileDialog.h"
 #include "Editor/ArtProvider.h"
 #include "Editor/Settings/EditorSettings.h"
-#include "Editor/SettingsDialog.h"
+#include "Editor/Dialogs/SettingsDialog.h"
 #include "Editor/Settings/WindowSettings.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 #include "Editor/Clipboard/ClipboardDataObject.h"
@@ -107,7 +107,6 @@ public:
     const SceneGraph::InstanceSet* m_InstanceSet;
     SceneGraph::SceneNode* m_Nodes;
 };
-
 
 MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
@@ -1442,7 +1441,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-            std::vector< Reflect::ElementPtr > elements;
+            std::vector< Reflect::ObjectPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
@@ -2141,11 +2140,11 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
 
-        std::vector< Reflect::ElementPtr > elements;
+        std::vector< Reflect::ObjectPtr > elements;
         Reflect::ArchiveXML::FromString( xml, elements );
 
-        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
-        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
+        std::vector< Reflect::ObjectPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );
@@ -2804,10 +2803,10 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
-                const SceneGraph::EntityInstanceType* entity = Reflect::ConstObjectCast< SceneGraph::EntityInstanceType >( type );
+                const SceneGraph::EntityInstanceType* entity = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( type );
 
                 // if this is an instance, then we need to check if it has code classes
-                const SceneGraph::InstanceType* instance = Reflect::ConstObjectCast< SceneGraph::InstanceType >( type );
+                const SceneGraph::InstanceType* instance = Reflect::ObjectCast< SceneGraph::InstanceType >( type );
 
                 if (entity)
                 {

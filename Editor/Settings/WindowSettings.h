@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 #include "Pipeline/Settings.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 class wxAuiManager;
@@ -20,6 +20,11 @@ namespace Helium
             REFLECT_DECLARE_CLASS( WindowSettings, Settings );
 
             WindowSettings( wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
+
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
 
             void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
             void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
@@ -65,12 +70,12 @@ namespace Helium
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddField( &WindowSettings::m_DockingState, "Docking State" );
-                comp.AddField( &WindowSettings::m_IsMaximized, "Maximized" );
-                comp.AddField( &WindowSettings::m_PosX, "X Position" );
-                comp.AddField( &WindowSettings::m_PosY, "Y Position" );
-                comp.AddField( &WindowSettings::m_Width, "Width" );
-                comp.AddField( &WindowSettings::m_Height, "Height" );
+                comp.AddField( &WindowSettings::m_DockingState, TXT( "Docking State" ) );
+                comp.AddField( &WindowSettings::m_IsMaximized, TXT( "Maximized" ) );
+                comp.AddField( &WindowSettings::m_PosX, TXT( "X Position" ) );
+                comp.AddField( &WindowSettings::m_PosY, TXT( "Y Position" ) );
+                comp.AddField( &WindowSettings::m_Width, TXT( "Width" ) );
+                comp.AddField( &WindowSettings::m_Height, TXT( "Height" ) );
             }
         };
     }

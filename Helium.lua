@@ -341,8 +341,10 @@ project "Editor"
 		"Editor/**.cpp",
 		"Editor/Editor.rc",
 	}
---	pchheader( "Precompile.h" )
---	pchsource( "Precompile.cpp" )
+
+    pchheader( "Precompile.h" )
+    pchsource( "Editor/Precompile.cpp" )
+
 	includedirs
 	{
 		"Editor",

@@ -13,7 +13,7 @@ REFLECT_DEFINE_CLASS(ComponentCollection)
 
 void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, "m_Components" );
+    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }
 
 ComponentCollection::ComponentCollection()
@@ -26,7 +26,7 @@ ComponentCollection::ComponentCollection( const ComponentPtr& component )
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     m_Modified = true;
 }
 
@@ -43,7 +43,7 @@ ComponentCollection::~ComponentCollection()
 
     for( ; attrItr != attrEnd; ++attrItr )
     {
-        attrItr->second->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+        attrItr->second->e_Changed.Remove( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     }
 }
 
@@ -126,7 +126,13 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     {
         if ( error )
         {
-            *error = tstring( TXT( "Component '" ) ) + *component->GetClass()->m_Name + TXT( "' is not valid for collection '" ) + *GetClass()->m_Name + TXT( "': " ) + errorMessage;
+            tstring componentName;
+            Helium::ConvertString( component->GetClass()->m_Name, componentName );
+
+            tstring collectionName;
+            Helium::ConvertString( GetClass()->m_Name, collectionName );
+
+            *error = tstring( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
         }
         
         return false;
@@ -140,7 +146,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     component->SetCollection( this );
 
     // Start caring about change to the component
-    component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Raise event
     m_Modified = true;
@@ -167,7 +173,7 @@ bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
     ComponentCollectionChanged args ( this, component ); 
 
     // Stop caring about changes to the component
-    component->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Remove( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Remove component and reset collection pointer
     m_Components.erase( found );
@@ -193,7 +199,9 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstr
     // Check for duplicates.
     if ( ContainsComponent( component->GetSlot() ) )
     {
-        error = tstring( TXT( "The component '" ) )+ *component->GetClass()->m_Name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
+        tstring name;
+        Helium::ConvertString( component->GetClass()->m_Name, name );
+        error = tstring( TXT( "The component '" ) )+ name + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
         return false;
     }
 
@@ -269,12 +277,12 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
-bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fieldName)
+bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
 {
-    if ( fieldName == TXT( "m_Components" ) )
+    if ( !_tcscmp( fieldName, TXT( "m_Components" ) ) )
     {
         V_Component attributes;
-        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ElementPtr >&)attributes );
+        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ObjectPtr >&)attributes );
 
         for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
             itr != end;
@@ -317,11 +325,11 @@ void ComponentCollection::PostDeserialize()
     for ( ; itr != end; ++itr )
     {
         itr->second->SetCollection( this );
-        itr->second->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
     }
 }
 
-void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
+void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
 {
     __super::CopyTo( destination );
 

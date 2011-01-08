@@ -18,8 +18,6 @@ ViewportSettings::ViewportSettings()
 , m_BoundsVisible (false)
 , m_StatisticsVisible (false)
 {
-    m_UserVisible = false;
-
     for(int i = 0; i < CameraMode::Count; ++i)
     {
         m_CameraPrefs.push_back( new CameraSettings() ); 

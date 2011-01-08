@@ -10,16 +10,16 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ElementStlVectorData : public ContainerData
+        class FOUNDATION_API ObjectStlVectorData : public ContainerData
         {
         public:
-            typedef std::vector< ElementPtr > DataType;
+            typedef std::vector< ObjectPtr > DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( ElementStlVectorData, ContainerData )
+            REFLECT_DECLARE_CLASS( ObjectStlVectorData, ContainerData )
 
-                ElementStlVectorData();
-            virtual ~ElementStlVectorData();
+                ObjectStlVectorData();
+            virtual ~ObjectStlVectorData();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
@@ -34,6 +34,6 @@ namespace Helium
 
             virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
         };
-        typedef Helium::SmartPtr< ElementStlVectorData > ElementStlVectorDataPtr;
+        typedef Helium::SmartPtr< ObjectStlVectorData > ObjectStlVectorDataPtr;
     }
 }

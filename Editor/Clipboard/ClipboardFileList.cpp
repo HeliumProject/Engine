@@ -9,8 +9,8 @@ REFLECT_DEFINE_CLASS( ClipboardFileList );
 
 void ClipboardFileList::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &ClipboardFileList::m_Files, "m_Files" );
-    comp.AddField( &ClipboardFileList::m_IsDirty, "m_IsDirty", Reflect::FieldFlags::Discard );
+    comp.AddField( &ClipboardFileList::m_Files, TXT( "m_Files" ) );
+    comp.AddField( &ClipboardFileList::m_IsDirty, TXT( "m_IsDirty" ), Reflect::FieldFlags::Discard );
 }
 
 ClipboardFileList::ClipboardFileList()

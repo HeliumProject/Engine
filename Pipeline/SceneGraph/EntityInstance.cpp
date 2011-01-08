@@ -25,10 +25,10 @@ REFLECT_DEFINE_CLASS(EntityInstance);
 
 void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &EntityInstance::m_Path,         "m_Path" );
-    comp.AddField( &EntityInstance::m_ShowPointer,  "m_ShowPointer" );
-    comp.AddField( &EntityInstance::m_ShowBounds,   "m_ShowBounds" );
-    comp.AddField( &EntityInstance::m_ShowGeometry, "m_ShowGeometry" );
+    comp.AddField( &EntityInstance::m_Path,         TXT( "m_Path" ) );
+    comp.AddField( &EntityInstance::m_ShowPointer,  TXT( "m_ShowPointer" ) );
+    comp.AddField( &EntityInstance::m_ShowBounds,   TXT( "m_ShowBounds" ) );
+    comp.AddField( &EntityInstance::m_ShowGeometry, TXT( "m_ShowGeometry" ) );
 }
 
 void EntityInstance::InitializeType()
@@ -473,9 +473,9 @@ void EntityInstance::Render( RenderVisitor* render )
 
 void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
+    const EntityInstance* entity = Reflect::AssertCast<EntityInstance>( object );
 
-    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -485,9 +485,9 @@ void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, cons
 
 void EntityInstance::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
+    const EntityInstance* entity = Reflect::AssertCast<EntityInstance>( object );
 
-    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     const EntitySet* classSet = entity->GetClassSet();
 

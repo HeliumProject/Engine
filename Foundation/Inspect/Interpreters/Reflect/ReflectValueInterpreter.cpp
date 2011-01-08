@@ -20,7 +20,7 @@ ReflectValueInterpreter::ReflectValueInterpreter (Container* container)
 
 }
 
-void ReflectValueInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectValueInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     if (field->m_Flags & FieldFlags::Hide)
     {
@@ -136,8 +136,8 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     std::vector<Data*> ser;
 
     {
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
             DataPtr s = field->CreateData();

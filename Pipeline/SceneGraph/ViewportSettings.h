@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Settings.h"
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Pipeline/SceneGraph/CameraSettings.h"
 
 namespace Helium
@@ -61,6 +61,11 @@ namespace Helium
 
             ViewportSettings(); 
 
+            virtual bool UserVisible() HELIUM_OVERRIDE
+            {
+                return false;
+            }
+
             ViewColorMode GetColorMode() const;
             void SetColorMode( ViewColorMode mode );
             const Reflect::Field* ColorModeField() const;
@@ -81,16 +86,16 @@ namespace Helium
         public:
             static void AcceptCompositeVisitor( Reflect::Composite& comp )
             {
-                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, "Camera Mode" );
-                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, "Geometry Mode" );
-                comp.AddField( &ViewportSettings::m_CameraPrefs, "Camera Preferences" );
-                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, "Coloring Mode" );
+                comp.AddEnumerationField( &ViewportSettings::m_CameraMode, TXT( "Camera Mode" ) );
+                comp.AddEnumerationField( &ViewportSettings::m_GeometryMode, TXT( "Geometry Mode" ) );
+                comp.AddField( &ViewportSettings::m_CameraPrefs, TXT( "Camera Preferences" ) );
+                comp.AddEnumerationField( &ViewportSettings::m_ColorMode, TXT( "Coloring Mode" ) );
 
-                comp.AddField( &ViewportSettings::m_Highlighting, "Highlighting" );
-                comp.AddField( &ViewportSettings::m_AxesVisible, "Draw Axes" );
-                comp.AddField( &ViewportSettings::m_GridVisible, "Draw Grid" );
-                comp.AddField( &ViewportSettings::m_BoundsVisible, "Draw Bounding Boxes" );
-                comp.AddField( &ViewportSettings::m_StatisticsVisible, "Draw Statistics" );
+                comp.AddField( &ViewportSettings::m_Highlighting, TXT( "Highlighting" ) );
+                comp.AddField( &ViewportSettings::m_AxesVisible, TXT( "Draw Axes" ) );
+                comp.AddField( &ViewportSettings::m_GridVisible, TXT( "Draw Grid" ) );
+                comp.AddField( &ViewportSettings::m_BoundsVisible, TXT( "Draw Bounding Boxes" ) );
+                comp.AddField( &ViewportSettings::m_StatisticsVisible, TXT( "Draw Statistics" ) );
             }
         }; 
 

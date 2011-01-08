@@ -5,7 +5,6 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
-#include "Foundation/Name.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
@@ -30,7 +29,7 @@ namespace Helium
             virtual ~Type();
 
         public:
-            Name                            m_Name;         // the name of this type in the codebase
+            const tchar_t*                  m_Name;         // the name of this type in the codebase
             uint32_t                        m_Size;         // the size of the object in bytes
 
             virtual void Report() const;

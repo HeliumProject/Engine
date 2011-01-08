@@ -4,31 +4,29 @@
 #include <hash_map>
 
 #include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/Name.h"
-
-#include "API.h"
+#include "Foundation/Reflect/API.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API Element;
-        typedef Helium::StrongPtr<Element> ElementPtr;
-        typedef std::stack<ElementPtr> S_Element;
-        typedef stdext::hash_map<const Type*, S_Element> H_Element;
+        class FOUNDATION_API Object;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef std::stack<ObjectPtr> S_Object;
+        typedef stdext::hash_map<const Type*, S_Object> H_Object;
 
         class Cache
         {
         protected:
             // hash_map of stacks (the free list)
-            H_Element m_Elements;
+            H_Object m_Objects;
 
         public:
             // creator
-            bool Create( const Class* type, ElementPtr& element );
+            bool Create( const Class* type, ObjectPtr& element );
 
             // push into free list
-            void Free( ElementPtr element );
+            void Free( ObjectPtr element );
         };
     }
 }

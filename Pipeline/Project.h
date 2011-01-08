@@ -7,10 +7,10 @@
 
 namespace Helium
 {
-    class PIPELINE_API Project : public Reflect::Element
+    class PIPELINE_API Project : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_CLASS( Project, Reflect::Element );
+        REFLECT_DECLARE_CLASS( Project, Reflect::Object );
 
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
@@ -49,8 +49,8 @@ namespace Helium
     public:
         static void AcceptCompositeVisitor( Reflect::Composite& comp )
         {
-            comp.AddField( &This::a_Path, "Path", Reflect::FieldFlags::Discard );
-            comp.AddField( &This::m_Paths, "m_Paths" );
+            comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
+            comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
         }
     };
 

@@ -28,7 +28,7 @@ namespace Helium
             static Structure* Create();
 
             template< class StructureT >
-            static Structure* Create( Name name, Name baseName, AcceptVisitor accept )
+            static Structure* Create( const tchar_t* name, const tchar_t* baseName, AcceptVisitor accept )
             {
                 Structure* info = Structure::Create();
 

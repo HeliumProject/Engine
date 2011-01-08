@@ -28,13 +28,13 @@ struct ScaleColorInfo
 
 void Transform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( (Vector3 Transform::*)&Transform::m_Scale,   "m_Scale" );
-    comp.AddField( (Vector3 Transform::*)&Transform::m_Rotate,  "m_Rotate" );
-    comp.AddField( &Transform::m_Translate,                     "m_Translate" );
+    comp.AddField( (Vector3 Transform::*)&Transform::m_Scale,   TXT( "m_Scale" ) );
+    comp.AddField( (Vector3 Transform::*)&Transform::m_Rotate,  TXT( "m_Rotate" ) );
+    comp.AddField( &Transform::m_Translate,                     TXT( "m_Translate" ) );
 
-    comp.AddField( &Transform::m_ObjectTransform,               "m_ObjectTransform" );
-    comp.AddField( &Transform::m_GlobalTransform,               "m_GlobalTransform" );
-    comp.AddField( &Transform::m_InheritTransform,              "m_InheritTransform" );
+    comp.AddField( &Transform::m_ObjectTransform,               TXT( "m_ObjectTransform" ) );
+    comp.AddField( &Transform::m_GlobalTransform,               TXT( "m_GlobalTransform" ) );
+    comp.AddField( &Transform::m_InheritTransform,              TXT( "m_InheritTransform" ) );
 }
 
 void Transform::InitializeType()
@@ -359,14 +359,14 @@ void Transform::Render( RenderVisitor* render )
 
 void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const SceneGraph::HierarchyNode* node = Reflect::ConstAssertCast<SceneGraph::HierarchyNode>( object );
+    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
 
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }

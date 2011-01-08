@@ -29,9 +29,9 @@ namespace Helium
         typedef Helium::StrongPtr<Object> ObjectPtr;
         typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
-        class Element;
-        typedef Helium::StrongPtr<Element> ElementPtr;
-        typedef Helium::StrongPtr<const Element> ConstElementPtr;
+        class Object;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
         class Data;
         typedef Helium::StrongPtr<Data> DataPtr;
@@ -73,7 +73,7 @@ typedef __Class This; \
 virtual const Helium::Reflect::Type* GetType() const HELIUM_OVERRIDE; \
 virtual bool HasType(const Reflect::Type* id) const HELIUM_OVERRIDE; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
-static Helium::Reflect::Class* CreateClass( Name name ); \
+static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
 static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Class* s_Class;
 
@@ -94,7 +94,7 @@ const Helium::Reflect::Class* __Class::GetClass() const \
     return s_Class; \
 } \
 \
-Helium::Reflect::Class* __Class::CreateClass( Helium::Name name ) \
+Helium::Reflect::Class* __Class::CreateClass( const tchar_t* name ) \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
@@ -114,13 +114,13 @@ __Enumeration( const __Enumeration& e ) : m_Value( e.m_Value ) {} \
 __Enumeration( const Enum& e ) : m_Value( e ) {} \
 __Enumeration( intptr_t e ) : m_Value( (Enum)e ) {} \
 operator intptr_t() const { return (size_t)m_Value; } \
-static Helium::Reflect::Enumeration* CreateEnumeration( Name name ); \
+static Helium::Reflect::Enumeration* CreateEnumeration( const tchar_t* name ); \
 static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Enumeration* s_Enumeration;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_ENUMERATION( __Enumeration ) \
-Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( Helium::Name name ) \
+Helium::Reflect::Enumeration* __Enumeration::CreateEnumeration( const tchar_t* name ) \
 { \
     HELIUM_ASSERT( s_Enumeration == NULL ); \
     Reflect::Enumeration* type = Reflect::Enumeration::Create<__Enumeration>( name ); \

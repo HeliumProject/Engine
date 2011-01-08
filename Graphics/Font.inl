@@ -52,6 +52,14 @@ Lunar::Font::ECompression Lunar::Font::GetTextureCompression() const
     return m_textureCompression;
 }
 
+/// Get whether this font should be rendered with antialiased edges.
+///
+/// @return  True if antialiasing should be used to smooth font edges, false if not.
+bool Lunar::Font::GetAntialiased() const
+{
+    return m_bAntialiased;
+}
+
 /// Get the maximum ascender height of this font in pixels, as a 26.6 fixed-point value.
 ///
 /// @return  Maximum ascender height from the baseline, in pixels.

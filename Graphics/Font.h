@@ -165,6 +165,8 @@ namespace Lunar
 
         inline ECompression GetTextureCompression() const;
 
+        inline bool GetAntialiased() const;
+
         inline int32_t GetAscenderFixed() const;
         inline int32_t GetDescenderFixed() const;
         inline int32_t GetHeightFixed() const;
@@ -242,6 +244,9 @@ namespace Lunar
         size_t* m_pTextureLoadIds;
         /// Number of texture sheets.
         uint8_t m_textureCount;
+
+        /// True if this font should use anti-aliasing to smooth edges, false if not.
+        bool m_bAntialiased;
 
         /// @name Text Processing Support, Private
         //@{

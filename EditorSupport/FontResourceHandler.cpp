@@ -279,6 +279,7 @@ bool FontResourceHandler::CacheResource(
 
     // Build the texture sheets for our glyphs.
     Font::ECompression textureCompression = pFont->GetTextureCompression();
+    bool bAntialiased = pFont->GetAntialiased();
 
     DynArray< DynArray< uint8_t > > textureSheets;
     DynArray< Font::Character > characters;
@@ -286,6 +287,12 @@ bool FontResourceHandler::CacheResource(
     uint16_t penX = 1;
     uint16_t penY = 1;
     uint16_t lineHeight = 0;
+
+    FT_Int32 glyphLoadFlags = FT_LOAD_RENDER;
+    if( !bAntialiased )
+    {
+        glyphLoadFlags |= FT_LOAD_TARGET_MONO;
+    }
 
     for( uint_fast32_t codePoint = 0; codePoint <= UNICODE_CODE_POINT_MAX; ++codePoint )
     {
@@ -297,7 +304,7 @@ bool FontResourceHandler::CacheResource(
         }
 
         // Load and render the glyph for the current character.
-        HELIUM_VERIFY( FT_Load_Glyph( pFace, characterIndex, FT_LOAD_RENDER ) == 0 );
+        HELIUM_VERIFY( FT_Load_Glyph( pFace, characterIndex, glyphLoadFlags ) == 0 );
 
         FT_GlyphSlot pGlyph = pFace->glyph;
         HELIUM_ASSERT( pGlyph );
@@ -342,11 +349,55 @@ bool FontResourceHandler::CacheResource(
         uint8_t* pTexturePixel =
             pTextureBuffer + static_cast< size_t >( penY ) * static_cast< size_t >( textureSheetWidth ) + penX;
 
-        for( uint_fast32_t rowIndex = 0; rowIndex < glyphRowCount; ++rowIndex )
+        if( bAntialiased )
         {
-            MemoryCopy( pTexturePixel, pGlyphBuffer, glyphWidth );
-            pGlyphBuffer += glyphPitch;
-            pTexturePixel += textureSheetWidth;
+            // Anti-aliased fonts are rendered as 8-bit grayscale images, so just copy the data as-is.
+            for( uint_fast32_t rowIndex = 0; rowIndex < glyphRowCount; ++rowIndex )
+            {
+                MemoryCopy( pTexturePixel, pGlyphBuffer, glyphWidth );
+                pGlyphBuffer += glyphPitch;
+                pTexturePixel += textureSheetWidth;
+            }
+        }
+        else
+        {
+            // Fonts without anti-aliasing are rendered as 1-bit monochrome images, so we need to manually convert each
+            // row to 8-bit grayscale.
+            for( uint_fast32_t rowIndex = 0; rowIndex < glyphRowCount; ++rowIndex )
+            {
+                const uint8_t* pGlyphPixelBlock = pGlyphBuffer;
+                pGlyphBuffer += glyphPitch;
+
+                uint8_t* pCurrentTexturePixel = pTexturePixel;
+                pTexturePixel += textureSheetWidth;
+
+                uint_fast32_t remainingPixelCount = glyphWidth;
+                while( remainingPixelCount >= 8 )
+                {
+                    remainingPixelCount -= 8;
+
+                    uint8_t pixelBlock = *pGlyphPixelBlock;
+                    ++pGlyphPixelBlock;
+
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 7 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 6 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 5 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 4 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 3 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 2 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 1 ) ) ? 255 : 0 );
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & ( 1 << 0 ) ) ? 255 : 0 );
+                }
+
+                uint8_t pixelBlock = *pGlyphPixelBlock;
+                uint8_t mask = ( 1 << 7 );
+                while( remainingPixelCount != 0 )
+                {
+                    *( pCurrentTexturePixel++ ) = ( ( pixelBlock & mask ) ? 255 : 0 );
+                    mask >>= 1;
+                    --remainingPixelCount;
+                }
+            }
         }
 
         // Store the character information in our character array.

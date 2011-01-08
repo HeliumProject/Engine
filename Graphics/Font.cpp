@@ -24,6 +24,7 @@ Font::Font()
     , m_pspTextures( NULL )
     , m_pTextureLoadIds( NULL )
     , m_textureCount( 0 )
+    , m_bAntialiased( true )
 {
 }
 
@@ -45,6 +46,7 @@ void Font::Serialize( Serializer& s )
     s << L_TAGGED( m_textureSheetWidth );
     s << L_TAGGED( m_textureSheetHeight );
     s << L_TAGGED( m_textureCompression );
+    s << L_TAGGED( m_bAntialiased );
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()

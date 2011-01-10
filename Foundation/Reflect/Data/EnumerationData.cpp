@@ -33,7 +33,7 @@ void EnumerationData::ConnectData(Helium::HybridPtr<void> data)
     }
 }
 
-void EnumerationData::ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField)
+void EnumerationData::ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 
@@ -54,14 +54,14 @@ bool EnumerationData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool EnumerationData::Equals(const Data* s) const
+bool EnumerationData::Equals(const Object* object) const
 {
-    if (GetType() != s->GetType())
+    const EnumerationData* rhs = ObjectCast< EnumerationData >( object );
+    
+    if (!rhs)
     {
         return false;
     }
-
-    const EnumerationData* rhs = static_cast<const EnumerationData*>(s);
 
     return rhs->m_Data.Get() == m_Data.Get();
 }
@@ -189,8 +189,8 @@ tistream& EnumerationData::operator<< (tistream& stream)
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* element = (Object*)m_Instance;
-            element->RaiseChanged( m_Field );
+            Object* object = (Object*)m_Instance.Mutable();
+            object->RaiseChanged( m_Field );
         }
     }
 

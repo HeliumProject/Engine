@@ -6,10 +6,6 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Field;
-        class Structure;
-
-
         //
         // Structure (struct or class)
         //
@@ -18,6 +14,8 @@ namespace Helium
         {
         public:
             REFLECTION_TYPE( ReflectionTypes::Structure );
+
+            const void* m_Default;  // the default instance of this structure (constructor-initialized)
 
         protected:
             Structure();
@@ -37,6 +35,9 @@ namespace Helium
 
                 return info;
             }
+
+            // Overloaded functions from Composite
+            virtual const void* GetDefaultInstance() const HELIUM_OVERRIDE;
         };
     }
 }

@@ -289,7 +289,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
                 //
 
                 const Reflect::Class* type = field->m_DataClass;
-                if ( !type->HasType( Reflect::GetType<Reflect::ContainerData>() ) )
+                if ( !type->IsType( Reflect::GetType<Reflect::ContainerData>() ) )
                 {
                     fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
                     fieldInterpreter->InterpretField( field, instances, container );

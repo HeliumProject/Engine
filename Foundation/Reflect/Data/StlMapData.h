@@ -60,7 +60,7 @@ namespace Helium
             virtual void RemoveItem(const Data* key) HELIUM_OVERRIDE;
 
             virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Data* s) const HELIUM_OVERRIDE;
+            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;

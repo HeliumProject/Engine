@@ -127,7 +127,7 @@ void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
             std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
             for ( ; itr != end; ++itr )
             {
-                // for each array in the selection set (the objects the array serializer is connected to)
+                // for each array in the selection set (the objects the array data is connected to)
                 std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
                 std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )

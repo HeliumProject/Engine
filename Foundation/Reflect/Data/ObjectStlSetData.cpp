@@ -60,9 +60,9 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlSetData::Equals(const Data* s) const
+bool ObjectStlSetData::Equals(const Object* object) const
 {
-    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(s);
+    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(object);
     if (!rhs)
     {
         return false;

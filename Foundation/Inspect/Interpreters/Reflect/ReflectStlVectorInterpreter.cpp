@@ -104,14 +104,13 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default)
+    DataPtr default = field->CreateDefault();
+    if (default)
     {
         tstringstream outStream;
-        *field->m_Default >> outStream;
+        *default >> outStream;
         list->a_Default.Set( outStream.str() );
     }
-#endif
 }
 
 ButtonPtr ReflectStlVectorInterpreter::AddAddButton( List* list )
@@ -185,7 +184,7 @@ void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
             std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
             for ( ; itr != end; ++itr )
             {
-                // for each array in the selection set (the objects the array serializer is connected to)
+                // for each array in the selection set (the objects the array data is connected to)
                 std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
                 std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )
@@ -213,7 +212,7 @@ void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
         std::set< size_t > selectedItemIndices = list->a_SelectedItemIndices.Get();
         if ( !selectedItemIndices.empty() )
         {
-            // for each array in the selection set (the objects the array serializer is connected to)
+            // for each array in the selection set (the objects the array data is connected to)
             std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
             std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )
@@ -240,7 +239,7 @@ void ReflectStlVectorInterpreter::OnMoveDown( const ButtonClickedArgs& args )
         std::set< size_t > selectedItemIndices = list->a_SelectedItemIndices.Get();
         if ( !selectedItemIndices.empty() )
         {
-            // for each array in the selection set (the objects the array serializer is connected to)
+            // for each array in the selection set (the objects the array data is connected to)
             std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
             std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )

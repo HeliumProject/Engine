@@ -11,11 +11,11 @@ FindByTypeVisitor::FindByTypeVisitor(const Reflect::Type* type, std::vector< Obj
 
 }
 
-bool FindByTypeVisitor::VisitObject(Object* element)
+bool FindByTypeVisitor::VisitObject(Object* object)
 {
-    if (element->HasType(m_Type))
+    if (object->HasType(m_Type))
     {
-        m_Found.push_back(element);
+        m_Found.push_back(object);
     }
 
     return true;
@@ -28,15 +28,15 @@ FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< const Reflect::Type* 
 
 }
 
-bool FindByTypeSetVisitor::VisitObject(Object* element)
+bool FindByTypeSetVisitor::VisitObject(Object* object)
 {
     std::set< const Reflect::Type* >::const_iterator itr = m_Types.begin();
     std::set< const Reflect::Type* >::const_iterator end = m_Types.end();
     for ( ; itr != end; ++itr )
     {
-        if (element->HasType(*itr))
+        if (object->HasType(*itr))
         {
-            m_Found.push_back(element);
+            m_Found.push_back(object);
             break;
         }
     }

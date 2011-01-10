@@ -173,7 +173,7 @@ namespace Helium
             virtual void PostDeserialize() HELIUM_OVERRIDE;
 
             // copy all attributes from one collection to another
-            virtual void CopyTo(const Reflect::ObjectPtr& destination) HELIUM_OVERRIDE;
+            virtual void CopyTo( Reflect::Object* object ) HELIUM_OVERRIDE;
 
             // helper function for CopyTo
             bool CopyComponentTo( ComponentCollection& destCollection, const ComponentPtr& destAttrib, const ComponentPtr& srcAttrib );

@@ -1557,7 +1557,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
         {
             const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
-            if ( nodeType->GetInstanceClass()->HasType( Reflect::GetType< SceneGraph::Layer >() ) )
+            if ( nodeType->GetInstanceClass()->IsType( Reflect::GetType< SceneGraph::Layer >() ) )
             {
                 // Now that we have the layer node type, iterate over all the layer instances and
                 // add them to the layer grid UI.

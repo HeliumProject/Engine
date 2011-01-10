@@ -187,15 +187,14 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         addButton->Bind( data );
     }
 
-#ifdef REFLECT_REFACTOR
     // setup the default value
-    if ( field->m_Default )
+    DataPtr default = field->CreateDefault();
+    if ( default )
     {
         tstringstream outStream;
-        *field->m_Default >> outStream;
+        *default >> outStream;
         list->a_Default.Set( outStream.str() );
     }
-#endif
 }
 
 void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )

@@ -42,24 +42,7 @@ Class* Class::Create()
     return new Class();
 }
 
-ObjectPtr Class::Clone(Object* element)
+const void* Class::GetDefaultInstance() const
 {
-    if (!element)
-    {
-        return NULL;
-    }
-
-    ObjectPtr clone = AssertCast<Object>( Registry::GetInstance()->CreateInstance( element->GetClass()) );
-
-    element->PreSerialize();
-
-    clone->PreDeserialize();
-
-    Class::Copy( element, clone );
-
-    clone->PostDeserialize();
-
-    element->PostSerialize();
-
-    return clone;
+    return m_Default;
 }

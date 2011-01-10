@@ -43,9 +43,9 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template <class T>
-bool SimpleData<T>::Equals(const Data* s) const
+bool SimpleData<T>::Equals(const Object* object) const
 {
-    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(s);
+    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(object);
     if (!rhs)
     {
         return false;
@@ -125,8 +125,8 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
     if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
     {
-        Object* element = (Object*)m_Instance;
-        element->RaiseChanged( m_Field );
+        Object* object = (Object*)m_Instance.Mutable();
+        object->RaiseChanged( m_Field );
     }
 
     return stream;

@@ -87,9 +87,9 @@ namespace Helium
 
             mutable ExceptionAction m_Action;
 
-            ExceptionInfo( const Archive& archive, Object* element, ObjectCallback callback, const Helium::Exception& exception )
+            ExceptionInfo( const Archive& archive, Object* object, ObjectCallback callback, const Helium::Exception& exception )
                 : m_Archive ( archive )
-                , m_Object ( element )
+                , m_Object ( object )
                 , m_Callback ( callback )
                 , m_Exception ( exception )
                 , m_Action ( ExceptionActions::Unknown )
@@ -134,12 +134,12 @@ namespace Helium
         class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase< ArchiveVisitor >
         {
         public:
-            virtual void VisitObject(Object* element)
+            virtual void VisitObject(Object* object)
             {
-                // called for each element object we serialize to the file
+                // called for each object object we serialize to the file
             }
 
-            virtual void VisitField(Object* element, const Field* field)
+            virtual void VisitField(void* instance, const Field* field)
             {
                 // called for each field we serialize to the file (pointer or data...)
             }
@@ -252,9 +252,9 @@ namespace Helium
             // Serialization
             //
         public:
-            virtual void Serialize( const ObjectPtr& element ) = 0;
+            virtual void Serialize( Object* object ) = 0;
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( ObjectPtr& element ) = 0;
+            virtual void Deserialize( ObjectPtr& object ) = 0;
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
 
             //
@@ -278,17 +278,17 @@ namespace Helium
             void PostDeserialize( std::vector< ObjectPtr >& append );
 
             // Instance-level processing (visit calls and type tracking)
-            void PreSerialize( const ObjectPtr& element, const Field* field = NULL );
-            void PostDeserialize( const ObjectPtr& element, const Field* field = NULL );
+            void PreSerialize( Object* object, const Field* field = NULL );
+            void PostDeserialize( Object* object, const Field* field = NULL );
 
-            // Shared code for doing per-element pre and post serialize work with exception handling
-            bool TryObjectCallback( Object* element, ObjectCallback callback );
+            // Shared code for doing per-object pre and post serialize work with exception handling
+            bool TryObjectCallback( Object* object, ObjectCallback callback );
 
             //
             // Get elements from the file
             //
 
-            void Put( const ObjectPtr& element );
+            void Put( Object* object );
             void Put( const std::vector< ObjectPtr >& elements );
 
             ObjectPtr Get( const Class* searchClass = NULL );
@@ -334,7 +334,7 @@ namespace Helium
         // Get parser for a file
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
         FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>

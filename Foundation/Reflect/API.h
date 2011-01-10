@@ -134,20 +134,20 @@ const Helium::Reflect::Enumeration* __Enumeration::s_Enumeration = NULL;
 // User Macros
 //
 
-// declares an HELIUM_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
+// declares an HELIUM_ABSTRACT object (an object that either A: cannot be instantiated or B: is never actually serialized)
 #define REFLECT_DECLARE_ABSTRACT(__Class, __Base) \
     _REFLECT_DECLARE_CLASS(__Class, __Base)
 
-// defines the HELIUM_ABSTRACT element class
+// defines the HELIUM_ABSTRACT object class
 #define REFLECT_DEFINE_ABSTRACT(__Class) \
     _REFLECT_DEFINE_CLASS(__Class, NULL)
 
-// declares a full element with creator
+// declares a full object with creator
 #define REFLECT_DECLARE_CLASS(__Class, __Base) \
     _REFLECT_DECLARE_CLASS(__Class, __Base) \
     _REFLECT_DECLARE_CREATOR(__Class)
 
-// defines a full element
+// defines a full object
 #define REFLECT_DEFINE_CLASS(__Class) \
     _REFLECT_DEFINE_CLASS(__Class, &__Class::CreateObject)
 

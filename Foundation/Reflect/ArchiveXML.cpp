@@ -170,28 +170,28 @@ void ArchiveXML::Write()
     e_Status.Raise( info );
 }
 
-void ArchiveXML::Serialize(const ObjectPtr& element)
+void ArchiveXML::Serialize(Object* object)
 {
-    PreSerialize(element);
+    PreSerialize(object);
 
-    element->PreSerialize();
+    object->PreSerialize();
 
-    SerializeHeader(element);
+    SerializeHeader(object);
 
-    if (element->HasType(Reflect::GetType<Data>()))
+    if (object->HasType(Reflect::GetType<Data>()))
     {
-        Data* s = DangerousCast<Data>(element);
+        Data* s = DangerousCast<Data>(object);
 
         s->Serialize(*this);
     }
     else
     {
-        SerializeFields(element);
+        SerializeFields(object);
     }
 
-    SerializeFooter(element);
+    SerializeFooter(object);
 
-    element->PostSerialize();
+    object->PostSerialize();
 }
 
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
@@ -222,24 +222,24 @@ void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t fl
     m_FieldNames.pop();
 }
 
-void ArchiveXML::SerializeFields(const ObjectPtr& element)
+void ArchiveXML::SerializeFields(Object* object)
 {
     //
     // Serialize fields
     //
 
-    const Class* type = element->GetClass();
+    const Class* type = object->GetClass();
     HELIUM_ASSERT(type != NULL);
 
     DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
     DynArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        SerializeField(element, &*itr);
+        SerializeField(object, &*itr);
     }
 }
 
-void ArchiveXML::SerializeField(const ObjectPtr& element, const Field* field)
+void ArchiveXML::SerializeField(Object* object, const Field* field)
 {
     // don't write no write fields
     if ( field->m_Flags & FieldFlags::Discard )
@@ -256,10 +256,10 @@ void ArchiveXML::SerializeField(const ObjectPtr& element, const Field* field)
 
     HELIUM_ASSERT( e.ReferencesObject() );
 
-    // downcast serializer
-    DataPtr serializer = ObjectCast<Data>(e);
+    // downcast data
+    DataPtr data = ObjectCast<Data>(e);
 
-    if (!serializer.ReferencesObject())
+    if (!data.ReferencesObject())
     {
         // this should never happen, the type id in the rtti data is bogus
         throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
@@ -267,22 +267,21 @@ void ArchiveXML::SerializeField(const ObjectPtr& element, const Field* field)
     else
     {
         // set data pointer
-        serializer->ConnectField(element.Ptr(), field);
+        data->ConnectField(object, field);
 
         // bool for test results
         bool serialize = true;
 
         // check for equality
-#ifdef REFLECT_REFACTOR
-        if ( serialize && field->m_Default.ReferencesObject() )
+        DataPtr default = field->CreateData( object );
+        if ( serialize && default.ReferencesObject() )
         {
             bool force = (field->m_Flags & FieldFlags::Force) != 0;
-            if (!force && field->m_Default->Equals(serializer))
+            if (!force && default->Equals(data))
             {
                 serialize = false;
             }
         }
-#endif
 
         // don't write empty containers
         if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )
@@ -298,20 +297,20 @@ void ArchiveXML::SerializeField(const ObjectPtr& element, const Field* field)
         // last chance to not write, call through virtual API
         if (serialize)
         {
-            PreSerialize(element, field);
+            PreSerialize(object, field);
 
             // process
-            Serialize( serializer );
+            Serialize( data );
         }
 
         // disconnect
-        serializer->Disconnect();
+        data->Disconnect();
     }
 
     m_FieldNames.pop();
 }
 
-void ArchiveXML::SerializeHeader(const ObjectPtr& element)
+void ArchiveXML::SerializeHeader(Object* object)
 {
     //
     // Start header
@@ -319,7 +318,7 @@ void ArchiveXML::SerializeHeader(const ObjectPtr& element)
 
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
-    *m_Stream << TXT( "<Object Type=\"" ) << element->GetClass()->m_Name << TXT( "\"" );
+    *m_Stream << TXT( "<Object Type=\"" ) << object->GetClass()->m_Name << TXT( "\"" );
 
     //
     // Field name
@@ -338,7 +337,7 @@ void ArchiveXML::SerializeHeader(const ObjectPtr& element)
     // End header
     //
 
-    if ( element->IsCompact() )
+    if ( object->IsCompact() )
     {
         *m_Stream << TXT( ">" );
     }
@@ -348,9 +347,9 @@ void ArchiveXML::SerializeHeader(const ObjectPtr& element)
     }
 }
 
-void ArchiveXML::SerializeFooter(const ObjectPtr& element)
+void ArchiveXML::SerializeFooter(Object* object)
 {
-    if ( !element->IsCompact() )
+    if ( !object->IsCompact() )
     {
         m_Indent.Get(*m_Stream);
     }
@@ -360,18 +359,18 @@ void ArchiveXML::SerializeFooter(const ObjectPtr& element)
     m_Indent.Pop();
 }
 
-void ArchiveXML::Deserialize(ObjectPtr& element)
+void ArchiveXML::Deserialize(ObjectPtr& object)
 {
     if (m_Components.size() == 1)
     {
-        element = m_Components.front();
+        object = m_Components.front();
         m_Components.clear();
     }
     else
     {
         // xml doesn't work this way
         HELIUM_BREAK();
-        throw Reflect::LogisticException( TXT( "Internal Error: Missing element" ) );
+        throw Reflect::LogisticException( TXT( "Internal Error: Missing object" ) );
     }
 }
 
@@ -417,7 +416,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     }
 
     //
-    // Find element type
+    // Find object type
     //
 
     tstring elementType;
@@ -437,7 +436,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     if ( elementType.empty() )
     {
         HELIUM_BREAK();
-        throw Reflect::DataFormatException( TXT( "Unable to find element type attribute" ) );
+        throw Reflect::DataFormatException( TXT( "Unable to find object type attribute" ) );
     }
 
     // 
@@ -449,12 +448,12 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     //
     // First pass at creation:
-    //  Check parent for a serializer matching this element... handles serializers and field elements
+    //  Check parent for a data matching this object... handles serializers and field elements
     //
 
     if ( topState && topState->m_Object )
     {
-        // pointer to the parent element below which we are nested
+        // pointer to the parent object below which we are nested
         ObjectPtr parentObject = topState->m_Object;
 
         // retrieve the type information for our parent structure
@@ -480,26 +479,26 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             // we have found a fieldinfo into our parent's definition
             if ( newState->m_Field != NULL )
             {
-                // this is our new element
-                ObjectPtr element = NULL;
+                // this is our new object
+                ObjectPtr object = NULL;
 
                 // create the object
-                m_Cache.Create(newState->m_Field->m_DataClass, element);
+                m_Cache.Create(newState->m_Field->m_DataClass, object);
 
-                // if we are a serializer
-                if (element->HasType(Reflect::GetType<Data>()))
+                // if we are a data
+                if (object->HasType(Reflect::GetType<Data>()))
                 {
-                    // connect the current instance to the serializer
-                    DangerousCast<Data>(element)->ConnectField(parentObject.Ptr(), newState->m_Field);
+                    // connect the current instance to the data
+                    DangerousCast<Data>(object)->ConnectField(parentObject.Ptr(), newState->m_Field);
                 }
 
-                if (element.ReferencesObject())
+                if (object.ReferencesObject())
                 {
                     // flag this as a field
                     newState->SetFlag( ParsingState::kField, true );
 
-                    // use this element to Parse with
-                    newState->m_Object = element;
+                    // use this object to Parse with
+                    newState->m_Object = object;
                 }
             }
         }
@@ -507,13 +506,13 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     //
     // Second pass at creation:
-    //  Try and get a creator for a new element to store the data
+    //  Try and get a creator for a new object to store the data
     //
 
     if ( !newState->m_Object.ReferencesObject() )
     {
         //
-        // Attempt creation of element via name
+        // Attempt creation of object via name
         //
 
         const Class* type = Reflect::Registry::GetInstance()->GetClass( Crc32( elementType.c_str() ) );
@@ -525,7 +524,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         if ( !newState->m_Object.ReferencesObject() )
         {
-            Log::Debug( TXT( "Unable to create element with name: %s\n" ), elementType);
+            Log::Debug( TXT( "Unable to create object with name: %s\n" ), elementType);
         }
     }
 
@@ -577,7 +576,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         return;
     }
 
-    // this should never happen, an element just ended
+    // this should never happen, an object just ended
     HELIUM_ASSERT( !m_StateStack.empty() );
     ParsingStatePtr topState = m_StateStack.top();
 
@@ -595,14 +594,14 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         // do Data logic
         if ( topState->m_Object->HasType(Reflect::GetType<Data>()) && !topState->m_Buffer.empty())
         {
-            Data* serializer = DangerousCast<Data>(topState->m_Object);
+            Data* data = DangerousCast<Data>(topState->m_Object);
 
             tstringstream stream (topState->m_Buffer);
 
             ArchiveXML xml;
             xml.m_Stream = new Reflect::TCharStream(&stream, false);
             xml.m_Components = topState->m_Components;
-            serializer->Deserialize(xml);
+            data->Deserialize(xml);
         }
 
         // do callbacks
@@ -618,20 +617,20 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         {
             PostDeserialize( topState->m_Object );
 
-            // are we nested within another element?
+            // are we nested within another object?
             ParsingStatePtr parentState = m_StateStack.empty() ? NULL : m_StateStack.top();
 
             // if we are we should see if it's being processed and perhaps be added as a component
             if ( parentState != NULL )
             {
-                // see if we should process this element as a as a field, or as a component
+                // see if we should process this object as a as a field, or as a component
                 if ( topState->GetFlag( ParsingState::kField ) )
                 {
-                    DataPtr serializer = ObjectCast<Data>(topState->m_Object);
-                    if ( serializer.ReferencesObject() )
+                    DataPtr data = ObjectCast<Data>(topState->m_Object);
+                    if ( data.ReferencesObject() )
                     {
-                        // disconnect our serializer for neatness
-                        serializer->Disconnect();
+                        // disconnect our data for neatness
+                        data->Disconnect();
 
                         // send it back to the free store
                         m_Cache.Free(topState->m_Object);
@@ -653,7 +652,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         }
     }
 
-    // if this is a top level element push the result into the target (even if its null)
+    // if this is a top level object push the result into the target (even if its null)
     if ( !m_StateStack.empty() )
     {
         ParsingStatePtr parentState = m_StateStack.top();
@@ -673,10 +672,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     }
 }
 
-void ArchiveXML::ToString(const ObjectPtr& element, tstring& xml )
+void ArchiveXML::ToString(Object* object, tstring& xml )
 {
     std::vector< ObjectPtr > elements(1);
-    elements[0] = element;
+    elements[0] = object;
     return ToString( elements, xml );
 }
 

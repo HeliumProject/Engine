@@ -132,12 +132,11 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     }
 
     tstringstream outStream;
-#ifdef REFLECT_REFACTOR
-    if ( field->m_Default )
+    DataPtr default = field->CreateDefault();
+    if ( default )
     {
-        *field->m_Default >> outStream;
+        *default >> outStream;
     }
-#endif
 
     const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 

@@ -72,7 +72,7 @@ namespace Helium
         class Structure;
 
         //
-        // Event delegate to support getting notified if this element changes
+        // Event delegate to support getting notified if this object changes
         //
 
         struct ObjectChangeArgs
@@ -80,8 +80,8 @@ namespace Helium
             const Object* m_Object;
             const Field* m_Field;
 
-            ObjectChangeArgs( const Object* element, const Field* field = NULL )
-                : m_Object( element )
+            ObjectChangeArgs( const Object* object, const Field* field = NULL )
+                : m_Object( object )
                 , m_Field( field )
             {
             }
@@ -144,7 +144,7 @@ namespace Helium
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent( ObjectPtr element, const tchar_t* fieldName );
+            virtual bool                ProcessComponent( ObjectPtr object, const tchar_t* fieldName );
 
             // Serialize to a particular data target, just works on this
             void                        ToXML( tstring& xml ) const;
@@ -161,16 +161,16 @@ namespace Helium
             // Introspection
             //
 
-            // Visitor introspection support, should never ever change an object (but the visitor may)
+            // Visits fields recursively, used to interactively traverse structures
             virtual void                Accept( Visitor& visitor );
 
             // Do comparison logic against other object, checks type and field data
-            virtual bool                Equals( const ObjectPtr& rhs ) const;
+            virtual bool                Equals( const Object* object ) const;
 
-            // Deep copy this object into the specified object.
-            virtual void                CopyTo( const ObjectPtr& destination );
+            // Copy this object's data into another object isntance
+            virtual void                CopyTo( Object* object );
 
-            // Deep copy this object into a new object, this is not const because derived classes may need to do work before cloning
+            // Copy this object's data into a new instance
             virtual ObjectPtr           Clone();
 
 
@@ -189,7 +189,7 @@ namespace Helium
             template< class FieldT >
             void FieldChanged( FieldT* fieldAddress ) const
             {
-                // the offset of the field is the address of the field minus the address of this element instance
+                // the offset of the field is the address of the field minus the address of this object instance
                 uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
 
                 // find the field in our reflection information

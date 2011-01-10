@@ -209,9 +209,9 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Equals(const Data* s) const
+bool SimpleStlVectorData<T>::Equals(const Object* object) const
 {
-    const SimpleStlVectorData<T>* rhs = ObjectCast<SimpleStlVectorData<T>>(s);
+    const SimpleStlVectorData<T>* rhs = ObjectCast< SimpleStlVectorData<T> >(object);
     if (!rhs)
     {
         return false;

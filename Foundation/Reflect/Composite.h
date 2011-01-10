@@ -14,7 +14,7 @@
 //  struct Field
 //  {
 //      int32_t name;               // string pool index of the name of this field
-//      int32_t serializer_id;      // string pool index of the name of the serializer type
+//      int32_t serializer_id;      // string pool index of the name of the data type
 //  };
 //
 //  struct Composite
@@ -46,7 +46,7 @@ namespace Helium
         }
 
         //
-        // Field (an element of a composite)
+        // Field (an object of a composite)
         //
 
         class FOUNDATION_API Field : public PropertyCollection
@@ -54,14 +54,21 @@ namespace Helium
         public:
             Field();
 
-            // creates a suitable serializer for this field in the passed object
-            DataPtr CreateData(Object* instance = NULL) const;
+            // creates a suitable data for this field
+            DataPtr CreateData() const;
+
+            // allocate and connect to an instance
+            DataPtr CreateData(void* instance) const;
+            DataPtr CreateData(const void* instance) const;
+
+            // allocate and connect to the default;
+            DataPtr CreateDefault() const;
 
             // checks to see if the default value matches the value of this field in the passed object
-            bool HasDefaultValue(Object* instance) const;
+            bool HasDefaultValue(void* instance) const;
 
             // sets the default value of this field in the passed object
-            bool SetDefaultValue(Object* instance) const;
+            bool SetDefaultValue(void* instance) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field
@@ -70,7 +77,7 @@ namespace Helium
             uint32_t                m_Flags;        // flags for special behavior
             uint32_t                m_Index;        // the unique id of this field
             const Type*             m_Type;         // the type of this field (NULL for POD types)
-            const Class*            m_DataClass;    // type id of the serializer to use
+            const Class*            m_DataClass;    // type id of the data to use
         };
 
         //
@@ -93,14 +100,6 @@ namespace Helium
             virtual ~Composite();
 
         public:
-            // overload from Type
-            virtual void Report() const HELIUM_OVERRIDE;
-            virtual void Unregister() const HELIUM_OVERRIDE;
-
-            //
-            // Populate composite information
-            //
-
             template< class CompositeT >
             static void Create( const tchar_t* name, const tchar_t* baseName, AcceptVisitor accept, Composite* info )
             {
@@ -153,32 +152,43 @@ namespace Helium
                 }
             }
 
-            //
-            // Derived list managment
-            //
+            // Overloaded functions from Type
+            virtual void Report() const HELIUM_OVERRIDE;
+            virtual void Unregister() const HELIUM_OVERRIDE;
+
+            // Inheritance Hierarchy
+            bool IsType(const Type* type) const;
             void AddDerived( const Composite* derived ) const;
             void RemoveDerived( const Composite* derived ) const;
 
-            //
-            // Add fields to the composite
-            //
-
-            // computes the number of fields in all our base classes (the base index for our fields)
-            uint32_t GetBaseFieldCount() const;
-
-            // concrete field population functions, called from template functions below with deducted data
-            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
-            Reflect::Field* AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
-            Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
+            // Instance access
+            virtual const void* GetDefaultInstance() const = 0;
 
             //
-            // Test for type of this or it base classes
+            // Equals compares all reflect-aware data, this is only really safe for data types, since
+            //  users could add non-reflect aware fields that would not be used in the comparison.
+            //  We could possibly use the default comparison operator (if the compiler generates one)
+            //  to affirm that non-reflect aware fields are equals, but this would not work for non-reflect
+            //  aware field pointers (since their pointer values would be used by the comparison operator).
             //
 
-            bool HasType(const Type* type) const;
+            bool Equals( const void* a, const void* b ) const;
 
             //
-            // Find a field by name
+            // Visits fields recursively, used to interactively traverse structures
+            //
+
+            void Visit( void* instance, Visitor& visitor ) const;
+
+            // 
+            // Copies data from one instance to another by finding a common base class and cloning all of the
+            //  fields from the source object into the destination object.
+            // 
+
+            void Copy( const void* source, void* destination ) const;
+
+            //
+            // Find a field in this composite
             //
 
             const Field* FindFieldByName(uint32_t crc) const;
@@ -198,28 +208,16 @@ namespace Helium
             }
 
             //
-            // Equals compares all reflect-aware data, this is only really safe for serializer types, since
-            //  users could add non-reflect aware fields that would not be used in the comparison.
-            //  We could possibly use the default comparison operator (if the compiler generates one)
-            //  to affirm that non-reflect aware fields are equals, but this would not work for non-reflect
-            //  aware field pointers (since their pointer values would be used by the comparison operator).
+            // Add fields to the composite
             //
 
-            static bool Equals(const Object* a, const Object* b);
+            // computes the number of fields in all our base classes (the base index for our fields)
+            uint32_t GetBaseFieldCount() const;
 
-            //
-            // Visits fields recursively, used to interactively traverse structures
-            //
-
-            static void Visit (Object* element, Visitor& visitor);
-
-            // 
-            // Copies data from one element to another by finding a common base class and cloning all of the
-            //  fields from the source element into the destination element.
-            // 
-
-            static void Copy( const Object* src, Object* dest );
-
+            // concrete field population functions, called from template functions below with deducted data
+            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
+            Reflect::Field* AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
+            Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
             // Reflection Generation Functions

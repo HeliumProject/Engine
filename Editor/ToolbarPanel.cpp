@@ -26,12 +26,10 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // Tool Bar Drawers
-    //m_TestPanelGenerated = new TestPanelGenerated( m_DrawerPanel );
-    //m_TestPanelGenerated->Hide();
-    //m_TestDrawer = new Drawer( m_DrawerPanel, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
-    //m_DrawerPanel->AddDrawer( m_TestDrawer );
-    //m_FrameManager.AddPane( m_TestPanelGenerated, m_TestDrawerPane );
-    //m_ExcludeFromPanelsMenu.insert( m_TestDrawerPane.name );
+    m_TestPanelGenerated = new TestPanelGenerated( m_DrawerPanel );
+    m_TestPanelGenerated->Hide();
+    m_TestDrawer = new Drawer( m_DrawerPanel, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
+    m_DrawerPanel->AddDrawer( m_TestDrawer );
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 

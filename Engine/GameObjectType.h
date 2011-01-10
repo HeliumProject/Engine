@@ -14,7 +14,7 @@
 #include "Platform/String.h"
 #include "Foundation/Name.h"
 #include "Foundation/Container/HashMap.h"
-#include "Foundation/Reflect/ObjectType.h"
+#include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"
 
@@ -24,7 +24,7 @@ namespace Lunar
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
     /// Run-time type information for GameObject classes.
-    class LUNAR_ENGINE_API GameObjectType : public Reflect::ObjectType
+    class LUNAR_ENGINE_API GameObjectType : public Reflect::Class
     {
     public:
         REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType );
@@ -91,7 +91,7 @@ namespace Lunar
         /// @name Data Access
         //@{
         inline Name GetName() const;
-        inline GameObjectType* GetBaseType() const;
+        inline const GameObjectType* GetBaseType() const;
         inline GameObject* GetTemplate() const;
 
         inline uint32_t GetFlags() const;
@@ -108,7 +108,7 @@ namespace Lunar
         static void SetTypePackage( Package* pPackage );
 
         static GameObjectType* Create(
-            Name name, Package* pTypePackage, GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
+            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
         static void Unregister( GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );

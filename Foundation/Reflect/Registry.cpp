@@ -2,7 +2,6 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h"
-#include "Foundation/Reflect/ObjectType.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Version.h"

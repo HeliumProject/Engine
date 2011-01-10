@@ -24,17 +24,17 @@ namespace Lunar
     ///
     /// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
     ///          "GameObject" type itself).
-    GameObjectType* GameObjectType::GetBaseType() const
+    const GameObjectType* GameObjectType::GetBaseType() const
     {
-        Reflect::ObjectType* pBaseType = m_BaseType;
-#pragma TODO( "Restore m_BaseType validity checking once Reflect::Object and GameObject type checking are integrated." )
+        const Reflect::Composite* pBase = m_Base;
+#pragma TODO( "Restore m_Base validity checking once Reflect::Object and GameObject type checking are integrated." )
 #if 1
-        HELIUM_ASSERT( !pBaseType || pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
-        return static_cast< GameObjectType* >( pBaseType );
+        HELIUM_ASSERT( !pBase || pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
+        return static_cast< const GameObjectType* >( pBase );
 #else
-        HELIUM_ASSERT( pBaseType );
-        return ( pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
-                 ? static_cast< GameObjectType* >( pBaseType )
+        HELIUM_ASSERT( pBase );
+        return ( pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
+                 ? static_cast< const GameObjectType* >( pBase )
                  : NULL );
 #endif
     }

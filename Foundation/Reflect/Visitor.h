@@ -13,7 +13,7 @@ namespace Helium
         class Structure;
         class Field;
 
-        class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >
+        class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >, NonCopyable
         {
         public:
             virtual bool VisitObject(Object* object)
@@ -21,7 +21,7 @@ namespace Helium
                 return true;
             }
 
-            virtual bool VisitPointer(ObjectPtr& pointer)
+            virtual bool VisitPointer(ObjectPtr& /*pointer*/)
             {
                 return true;
             }

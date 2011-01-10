@@ -32,6 +32,9 @@ namespace Lunar
         /// Type lookup hash map.
         typedef HashMap< Name, GameObjectTypePtr > LookupMap;
 
+        /// Static type release callback.
+        typedef void ( RELEASE_STATIC_TYPE_CALLBACK )();
+
         /// General type flags.
         enum EFlag
         {
@@ -108,8 +111,9 @@ namespace Lunar
         static void SetTypePackage( Package* pPackage );
 
         static GameObjectType* Create(
-            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
-        static void Unregister( GameObjectType* pType );
+            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
+            RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
+        static void Unregister( const GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );
 
@@ -120,11 +124,13 @@ namespace Lunar
         //@}
 
     private:
-        /// Cached from the narrow pointer in Type
+        /// Cached from the null-terminated name string in Type.
         mutable Name m_cachedName;
-
         /// Default template object for this type.
-        GameObjectPtr m_spTemplate;
+        mutable GameObjectPtr m_spTemplate;
+
+        /// Static type release callback.
+        RELEASE_STATIC_TYPE_CALLBACK* m_pReleaseStaticTypeCallback;
 
         /// Type flags.
         uint32_t m_flags;

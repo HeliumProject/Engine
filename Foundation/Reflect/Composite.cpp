@@ -253,25 +253,16 @@ bool Composite::IsType(const Type* type) const
 
 void Composite::AddDerived( const Composite* derived ) const
 {
-    const Composite* last = m_FirstDerived;
+    HELIUM_ASSERT( derived );
 
-    while ( last && last->m_NextSibling )
-    {
-        last = last->m_NextSibling;
-    }
-
-    if ( last )
-    {
-        last->m_NextSibling = derived;
-    }
-    else
-    {
-        m_FirstDerived = derived;
-    }
+    derived->m_NextSibling = m_FirstDerived;
+    m_FirstDerived = derived;
 }
 
 void Composite::RemoveDerived( const Composite* derived ) const
 {
+    HELIUM_ASSERT( derived );
+
     if ( m_FirstDerived == derived )
     {
         m_FirstDerived = derived->m_NextSibling;
@@ -282,12 +273,13 @@ void Composite::RemoveDerived( const Composite* derived ) const
         {
             if ( sibling->m_NextSibling == derived )
             {
-                sibling->m_NextSibling = sibling->m_NextSibling ? sibling->m_NextSibling->m_NextSibling : NULL;
-                derived->m_NextSibling = NULL;
+                sibling->m_NextSibling = derived->m_NextSibling;
                 break;
             }
         }
     }
+
+    derived->m_NextSibling = NULL;
 }
 
 bool Composite::Equals(const void* a, const void* b) const

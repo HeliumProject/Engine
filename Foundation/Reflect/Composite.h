@@ -30,6 +30,8 @@ namespace Helium
 {
     namespace Reflect
     {
+        class ObjectCache;
+
         class Composite;
         typedef void (*AcceptVisitor)( Composite& );
 
@@ -69,6 +71,9 @@ namespace Helium
 
             // sets the default value of this field in the passed object
             bool SetDefaultValue(void* instance) const;
+
+            // determine if this field should be serialized
+            DataPtr ShouldSerialize(const void* instance, ObjectCache* cache = NULL) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field

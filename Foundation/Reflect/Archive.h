@@ -7,18 +7,18 @@
 #include <vector>
 #include <stack>
 
-#include "API.h"
-#include "Cache.h"
-#include "Class.h"
-#include "Exceptions.h"
-#include "ArchiveStream.h" 
-
 #include "Platform/Assert.h"
-#include "Foundation/Automation/Event.h"
+
 #include "Foundation/Log.h" 
 #include "Foundation/File/Path.h"
-
+#include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/SmartPtr.h"
+
+#include "Foundation/Reflect/API.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Exceptions.h"
+#include "Foundation/Reflect/ArchiveStream.h" 
+#include "Foundation/Reflect/ObjectCache.h"
 
 namespace Helium
 {
@@ -194,7 +194,7 @@ namespace Helium
             ArchiveMode m_Mode;
 
             // The cache of data objects
-            Cache m_Cache;
+            ObjectCache m_Cache;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;
@@ -218,7 +218,7 @@ namespace Helium
             }
 
             // Cache access
-            Cache& GetCache()
+            ObjectCache& GetCache()
             {
                 return m_Cache;
             }

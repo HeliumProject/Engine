@@ -323,60 +323,10 @@ void ArchiveBinary::SerializeFields( Object* object )
         {
             const Field* field = &*itr;
 
-            // don't write no write fields
-            if ( field->m_Flags & FieldFlags::Discard )
+            // check to see if we should serialize (will return non-null if we are gtg)
+            DataPtr data = field->ShouldSerialize( object, &m_Cache );
+            if ( data )
             {
-                continue;
-            }
-
-            // construct serialization object
-            ObjectPtr e;
-            m_Cache.Create( field->m_DataClass, e );
-
-            HELIUM_ASSERT( e.ReferencesObject() );
-
-            // downcast data
-            DataPtr data = ObjectCast<Data>(e);
-
-            if (!data.ReferencesObject())
-            {
-                // this should never happen, the type id in the rtti data is bogus
-                throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
-            }
-
-            // set data pointer
-            data->ConnectField(object, field);
-
-            // bool for test results
-            bool serialize = true;
-
-            // check for equality
-            DataPtr default = field->CreateData( object );
-            if ( serialize && default.ReferencesObject() )
-            {
-                bool force = (field->m_Flags & FieldFlags::Force) != 0;
-                if (!force && default->Equals(data))
-                {
-                    serialize = false;
-                }
-            }
-
-            // don't write empty containers
-            if ( serialize && e->HasType( Reflect::GetType<ContainerData>() ) )
-            {
-                ContainerDataPtr container = DangerousCast<ContainerData>(e);
-
-                if ( container->GetSize() == 0 )
-                {
-                    serialize = false;
-                }
-            }
-
-            // last chance to not write, call through virtual API
-            if (serialize)
-            {
-                PreSerialize(object, field);
-
                 uint32_t fieldNameCrc = Crc32( field->m_Name );
                 m_Stream->Write(&fieldNameCrc); 
 
@@ -386,8 +336,9 @@ void ArchiveBinary::SerializeFields( Object* object )
                 m_Indent.Push();
 #endif
 
-                // process
+                PreSerialize( object, field );
                 Serialize( data );
+                data->Disconnect();
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Pop();
@@ -397,9 +348,6 @@ void ArchiveBinary::SerializeFields( Object* object )
                 HELIUM_ASSERT(m_FieldStack.size() > 0);
                 m_FieldStack.top().m_Count++;
             }
-
-            // disconnect
-            data->Disconnect();
         }
     }
 

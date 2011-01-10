@@ -156,6 +156,11 @@ namespace Helium
                 ConnectData( Helium::HybridPtr<void> () );
             }
 
+            virtual bool ShouldSerialize()
+            {
+                return true;
+            }
+
 
             //
             // Specializations

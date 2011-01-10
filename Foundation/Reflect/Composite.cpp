@@ -2,6 +2,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/ObjectCache.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -149,6 +150,50 @@ bool Field::SetDefaultValue(void* instance) const
     }
 
     return false;
+}
+
+DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
+{
+    // never write discard fields
+    if ( m_Flags & FieldFlags::Discard )
+    {
+        return NULL;
+    }
+
+    ObjectPtr object;
+
+    if ( cache )
+    {
+        cache->Create( m_DataClass, object );
+    }
+    else
+    {
+        object = Registry::GetInstance()->CreateInstance( m_DataClass );
+    }
+
+    DataPtr data = TryCast< Data >( object );
+    data->ConnectField( instance, this );
+
+    // always write force fields
+    if ( m_Flags & FieldFlags::Force )
+    {
+        return data;
+    }
+
+    // check for empty/null/invalid state
+    if ( !data->ShouldSerialize() )
+    {
+        return NULL;
+    }
+
+    // don't write field at the default value
+    DataPtr default = CreateDefault();
+    if ( default.ReferencesObject() && default->Equals(data) )
+    {
+        return NULL;
+    }
+
+    return data;
 }
 
 Composite::Composite()

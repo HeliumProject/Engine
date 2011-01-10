@@ -15,7 +15,7 @@ namespace Helium
         typedef std::stack<ObjectPtr> S_Object;
         typedef stdext::hash_map<const Type*, S_Object> H_Object;
 
-        class Cache
+        class ObjectCache
         {
         protected:
             // hash_map of stacks (the free list)

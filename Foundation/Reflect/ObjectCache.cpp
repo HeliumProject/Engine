@@ -1,7 +1,8 @@
-#include "Cache.h"
-#include "Foundation/Reflect/Data/Data.h"
-#include "Registry.h"
+#include "Foundation/Reflect/ObjectCache.h"
+
 #include "Foundation/Container/Insert.h"
+#include "Foundation/Reflect/Data/Data.h"
+#include "Foundation/Reflect/Registry.h"
 
 #include <memory>
 
@@ -30,7 +31,7 @@ static void CreateInstance( const Class* type, ObjectPtr& object )
 #endif
 }
 
-bool Cache::Create( const Class* type, ObjectPtr& object )
+bool ObjectCache::Create( const Class* type, ObjectPtr& object )
 {
 #ifdef REFLECT_DISABLE_CACHING
     ::CreateInstance(type, object);
@@ -71,7 +72,7 @@ bool Cache::Create( const Class* type, ObjectPtr& object )
 #endif
 }
 
-void Cache::Free(ObjectPtr object)
+void ObjectCache::Free(ObjectPtr object)
 {
     if (!object->HasType(Reflect::GetType<Data>()))
     {

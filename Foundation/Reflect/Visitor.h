@@ -16,7 +16,7 @@ namespace Helium
         class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >, NonCopyable
         {
         public:
-            virtual bool VisitObject(Object* object)
+            virtual bool VisitObject(Object* /*object*/)
             {
                 return true;
             }
@@ -26,7 +26,7 @@ namespace Helium
                 return true;
             }
 
-            virtual bool VisitField(void* instance, const Field* field)
+            virtual bool VisitField(void* /*instance*/, const Field* /*field*/)
             {
                 return true; 
             }

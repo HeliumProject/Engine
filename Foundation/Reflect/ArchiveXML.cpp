@@ -241,73 +241,17 @@ void ArchiveXML::SerializeFields(Object* object)
 
 void ArchiveXML::SerializeField(Object* object, const Field* field)
 {
-    // don't write no write fields
-    if ( field->m_Flags & FieldFlags::Discard )
+    DataPtr data = field->ShouldSerialize( object, &m_Cache );
+    if ( data )
     {
-        return;
-    }
+        m_FieldNames.push( field->m_Name );
 
-    // set current field name
-    m_FieldNames.push( field->m_Name );
-
-    // construct serialization object
-    ObjectPtr e;
-    m_Cache.Create( field->m_DataClass, e );
-
-    HELIUM_ASSERT( e.ReferencesObject() );
-
-    // downcast data
-    DataPtr data = ObjectCast<Data>(e);
-
-    if (!data.ReferencesObject())
-    {
-        // this should never happen, the type id in the rtti data is bogus
-        throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
-    }
-    else
-    {
-        // set data pointer
-        data->ConnectField(object, field);
-
-        // bool for test results
-        bool serialize = true;
-
-        // check for equality
-        DataPtr default = field->CreateData( object );
-        if ( serialize && default.ReferencesObject() )
-        {
-            bool force = (field->m_Flags & FieldFlags::Force) != 0;
-            if (!force && default->Equals(data))
-            {
-                serialize = false;
-            }
-        }
-
-        // don't write empty containers
-        if ( serialize &&  e->HasType( Reflect::GetType<ContainerData>() ) )
-        {
-            ContainerDataPtr container = DangerousCast<ContainerData>(e);
-
-            if ( container->GetSize() == 0 )
-            {
-                serialize = false;
-            }
-        }
-
-        // last chance to not write, call through virtual API
-        if (serialize)
-        {
-            PreSerialize(object, field);
-
-            // process
-            Serialize( data );
-        }
-
-        // disconnect
+        PreSerialize( object, field );
+        Serialize( data );
         data->Disconnect();
-    }
 
-    m_FieldNames.pop();
+        m_FieldNames.pop();
+    }
 }
 
 void ArchiveXML::SerializeHeader(Object* object)

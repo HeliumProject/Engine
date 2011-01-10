@@ -18,6 +18,8 @@ namespace Helium
 
             ContainerData();
 
+            virtual bool ShouldSerialize() HELIUM_OVERRIDE;
+
             virtual size_t GetSize() const = 0;
             virtual void Clear() = 0;
         };

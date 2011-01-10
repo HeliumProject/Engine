@@ -149,9 +149,9 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class KeyT >
-bool SimpleObjectStlMapData<KeyT>::Equals(const Data* s) const
+bool SimpleObjectStlMapData<KeyT>::Equals(const Object* object) const
 {
-    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(s);
+    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>( object );
     if (!rhs)
     {
         return false;

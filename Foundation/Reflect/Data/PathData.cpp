@@ -37,14 +37,14 @@ bool PathData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool PathData::Equals( const Data* s ) const
+bool PathData::Equals( const Object* object ) const
 {
-    if ( GetType() != s->GetType() )
+    const PathData* rhs = ObjectCast< PathData >( object );
+
+    if ( !rhs )
     {
         return false;
     }
-
-    const PathData* rhs = static_cast< const PathData* >( s );
 
     return rhs->m_Data.Get() == m_Data.Get();
 }
@@ -125,8 +125,8 @@ tistream& PathData::operator<<( tistream& stream )
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* element = (Object*)m_Instance;
-            element->RaiseChanged( m_Field );
+            Object* object = (Object*)m_Instance.Mutable();
+            object->RaiseChanged( m_Field );
         }
     }
 

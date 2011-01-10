@@ -442,14 +442,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
                 
-                DataChangingArgs args ( this, serializer );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Data::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( data, newValue );
                     Extract< T >( tstringstream ( newValue ), m_Data );
                     m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
@@ -508,14 +508,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
 
-                DataChangingArgs args ( this, serializer );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Data::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( data, newValue );
                     std::vector<T*>::iterator itr = m_Data.begin();
                     std::vector<T*>::iterator end = m_Data.end();
                     for ( ; itr != end; ++itr )
@@ -540,13 +540,13 @@ namespace Helium
                     std::vector< tstring >::const_iterator end = values.end();
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
-                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
-                        DataChangingArgs args ( this, serializer );
+                        Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
+                        DataChangingArgs args ( this, data );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             tstring newValue;
-                            Reflect::Data::GetValue< tstring >( serializer, newValue );
+                            Reflect::Data::GetValue< tstring >( data, newValue );
                             Extract<T>( tstringstream ( newValue ), m_Data[ index ] );
                             result = true;
                         }
@@ -664,14 +664,14 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
-                DataChangingArgs args ( this, serializer );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( s ) );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T value;
                     tstring newValue;
-                    Reflect::Data::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( data, newValue );
                     Extract< T >( tstringstream( newValue ), &value );
                     m_Property->Set( value );
                     m_Changed.RaiseWithEmitter( this, emitter );
@@ -719,13 +719,13 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
-                DataChangingArgs args ( this, serializer );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< tstring >( s ) );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     tstring newValue;
-                    Reflect::Data::GetValue< tstring >( serializer, newValue );
+                    Reflect::Data::GetValue< tstring >( data, newValue );
                     T value;
                     std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator itr = m_Properties.begin();
                     std::vector< Helium::SmartPtr< Helium::Property<T> > >::iterator end = m_Properties.end();
@@ -752,14 +752,14 @@ namespace Helium
                     std::vector< tstring >::const_iterator end = s.end();
                     for ( size_t index = 0; itr != end; ++itr, ++index )
                     {
-                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
-                        DataChangingArgs args ( this, serializer );
+                        Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
+                        DataChangingArgs args ( this, data );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             T value;
                             tstring newValue;
-                            Reflect::Data::GetValue< tstring >( serializer, newValue );
+                            Reflect::Data::GetValue< tstring >( data, newValue );
                             Extract<T>( tstringstream ( newValue ), &value );
                             m_Properties[ index ]->Set(value);
                             result = true;
@@ -847,7 +847,7 @@ namespace Helium
 
 
         // 
-        // Base class for all serializer data types
+        // Base class for all data data types
         // 
 
         template< class T >
@@ -883,13 +883,13 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
-                DataChangingArgs args ( this, serializer );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T newValue;
-                    Reflect::Data::GetValue< T >( serializer, newValue );
+                    Reflect::Data::GetValue< T >( data, newValue );
                     m_Property->Set( newValue );
                     m_Changed.RaiseWithEmitter( this, emitter );
                     result = true;
@@ -938,13 +938,13 @@ namespace Helium
             {
                 bool result = false;
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
-                DataChangingArgs args ( this, serializer );
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( value ) );
+                DataChangingArgs args ( this, data );
                 m_Changing.Raise( args );
                 if ( !args.m_Veto )
                 {
                     T newValue;
-                    Data::GetValue< T >( serializer, newValue );
+                    Data::GetValue< T >( data, newValue );
                     std::vector< Reflect::DataPtr >::iterator itr = m_Datas.begin();
                     std::vector< Reflect::DataPtr >::iterator end = m_Datas.end();
                     for ( ; itr != end; ++itr )
@@ -969,13 +969,13 @@ namespace Helium
                     std::vector< Reflect::DataPtr >::const_iterator end = values.end();
                     for ( size_t index=0; itr != end; ++itr, ++index )
                     {
-                        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
-                        DataChangingArgs args ( this, serializer );
+                        Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create( *itr ) );
+                        DataChangingArgs args ( this, data );
                         m_Changing.Raise( args );
                         if ( !args.m_Veto )
                         {
                             T newValue;
-                            Data::GetValue< T >( serializer, newValue );
+                            Data::GetValue< T >( data, newValue );
                             m_Datas[ index ]->SetValue( newValue );
                             result = true;
                         }

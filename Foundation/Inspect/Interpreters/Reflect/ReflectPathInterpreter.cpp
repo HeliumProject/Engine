@@ -191,18 +191,17 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default.ReferencesObject())
+    DataPtr default = field->CreateDefault();
+    if (default.ReferencesObject())
     {
         tstringstream outStream;
-        *field->m_Default >> outStream;
+        *default >> outStream;
 
         tstring temp;
         bool converted = Helium::ConvertString( outStream.str().c_str(), temp );
         HELIUM_ASSERT( converted );
         container->a_Default.Set( temp );
     }
-#endif
 
     //
     // Close

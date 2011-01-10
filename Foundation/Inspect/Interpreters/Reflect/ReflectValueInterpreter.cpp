@@ -161,14 +161,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Set default
     //
 
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default.ReferencesObject())
+    DataPtr default = field->CreateDefault();
+    if (default.ReferencesObject())
     {
         tstringstream outStream;
-        *field->m_Default >> outStream;
+        *default >> outStream;
         container->a_Default.Set( outStream.str() );
     }
-#endif
 
     //
     // Close

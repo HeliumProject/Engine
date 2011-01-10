@@ -84,7 +84,7 @@ namespace Helium
         BasicBufferPtr CreateBasic( uint32_t type = 0xffffffff, bool track = true );
 
         void AddBuffer( const SmartBufferPtr& buffer );
-        void AddBuffers( const BufferSerializer& serializer );
+        void AddBuffers( const BufferSerializer& data );
 
     public:
         uint32_t ComputeSize() const;

@@ -89,7 +89,7 @@ void Archive::PostDeserialize(std::vector< ObjectPtr >& append)
     e_Status.Raise( info );
 }
 
-void Archive::PreSerialize(const ObjectPtr& element, const Field* field)
+void Archive::PreSerialize(Object* object, const Field* field)
 {
     V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
     V_ArchiveVisitor::const_iterator end = m_Visitors.end();
@@ -97,16 +97,16 @@ void Archive::PreSerialize(const ObjectPtr& element, const Field* field)
     {
         if (field)
         {
-            (*itr)->VisitField(element, field);
+            (*itr)->VisitField(object, field);
         }
         else
         {
-            (*itr)->VisitObject(element);
+            (*itr)->VisitObject(object);
         }
     }
 }
 
-void Archive::PostDeserialize(const ObjectPtr& element, const Field* field)
+void Archive::PostDeserialize(Object* object, const Field* field)
 {
     V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
     V_ArchiveVisitor::const_iterator end = m_Visitors.end();
@@ -114,30 +114,30 @@ void Archive::PostDeserialize(const ObjectPtr& element, const Field* field)
     {
         if (field)
         {
-            (*itr)->VisitField(element, field);
+            (*itr)->VisitField(object, field);
         }
         else
         {
-            (*itr)->VisitObject(element);
+            (*itr)->VisitObject(object);
         }
     }
 }
 
-bool Archive::TryObjectCallback( Object* element, ObjectCallback callback )
+bool Archive::TryObjectCallback( Object* object, ObjectCallback callback )
 {
     if ( Helium::IsDebuggerPresent() )
     {
-        (element->*callback)();
+        (object->*callback)();
     }
     else
     {
         try
         {
-            (element->*callback)();
+            (object->*callback)();
         }
         catch ( const Helium::Exception& exception )
         {
-            ExceptionInfo info( *this, element, callback, exception );
+            ExceptionInfo info( *this, object, callback, exception );
 
             d_Exception.Invoke( info );
 
@@ -166,9 +166,9 @@ bool Archive::TryObjectCallback( Object* element, ObjectCallback callback )
 
 #pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
 
-void Archive::Put( const ObjectPtr& element )
+void Archive::Put( Object* object )
 {
-    m_Objects.push_back( element );
+    m_Objects.push_back( object );
 }
 
 void Archive::Put( const std::vector< ObjectPtr >& elements )
@@ -268,10 +268,10 @@ ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteO
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     std::vector< ObjectPtr > elements;
-    elements.push_back( element );
+    elements.push_back( object );
     return ToArchive( path, elements, archiveType, error, byteOrder );
 }
 

@@ -228,7 +228,7 @@ bool Object::IsCompact() const
     return false;
 }
 
-bool Object::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
+bool Object::ProcessComponent(ObjectPtr object, const tchar_t* fieldName)
 {
     return false; // incurs data loss
 }
@@ -253,26 +253,81 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
-void Object::Accept(Visitor& visitor)
+void Object::Accept( Visitor& visitor )
 {
-    Composite::Visit(this, visitor);
+    if ( !visitor.VisitObject( this ) )
+    {
+        return;
+    }
+
+    const Class* type = GetClass();
+
+    type->Visit( this, visitor );
 }
 
-bool Object::Equals(const ObjectPtr& rhs) const
+bool Object::Equals( const Object* object ) const
 {
-    return Composite::Equals(this, rhs);
+    const Class* type = GetClass();
+
+    return type->Equals( this, object );
 }
 
-void Object::CopyTo(const ObjectPtr& destination)
+void Object::CopyTo( Object* object )
 {
-    Composite::Copy( this, destination );
+    if ( this != object )
+    {
+        // 
+        // Find common base class
+        //
+
+        // This is the common base class type
+        const Class* type = NULL; 
+        const Class* thisType = this->GetClass();
+        const Class* objectType = object->GetClass();
+
+        // Simplest case: the types are the same
+        if ( thisType == objectType )
+        {
+            type = thisType;
+        }
+        else
+        {
+            // Types are not the same, we have to search...
+            // Iterate up inheritance of this, and look check to see if object HasType for each one
+            Reflect::Registry* registry = Reflect::Registry::GetInstance();
+            for ( const Composite* base = thisType; base && !type; base = base->m_Base )
+            {
+                if ( object->HasType( base ) )
+                {
+                    // We found the match (which breaks out of this loop)
+                    type = ReflectionCast<const Class>( base );
+                }
+            }
+
+            if ( !type )
+            {
+                // This should be impossible... at the very least, Object is a common base class for both pointers.
+                // This exeception means there's a bug in this function.
+                throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), thisType->m_Name, objectType->m_Name );
+            }
+        }
+
+        type->Copy( this, object );
+    }
 }
 
 ObjectPtr Object::Clone()
 {
-    ObjectPtr clone;
+    ObjectPtr clone = Registry::GetInstance()->CreateInstance( GetClass() );
 
-    clone = Class::Clone( this );
+    PreSerialize();
+    clone->PreDeserialize();
+
+    const Class* type = GetClass();
+    type->Copy( this, clone );
+
+    clone->PostDeserialize();
+    PostSerialize();
 
     return clone;
 }

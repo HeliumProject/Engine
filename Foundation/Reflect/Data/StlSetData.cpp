@@ -152,9 +152,9 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Equals(const Data* s) const
+bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
 {
-    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(s);
+    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(object);
     if (!rhs)
     {
         return false;
@@ -177,10 +177,10 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         {
             ObjectPtr dataElem;
 
-            // query cache for a serializer of this type
+            // query cache for a data of this type
             archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
 
-            // downcast to serializer type
+            // downcast to data type
             DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
 
             // connect to our map data memory address
@@ -197,13 +197,13 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to serializer type
+        // downcast to data type
         Data* ser = DangerousCast<Data>(*itr);
 
         // disconnect from memory
         ser->Disconnect();
 
-        // restore serializer to the cache
+        // restore data to the cache
         archive.GetCache().Free( ser );
     }
 }

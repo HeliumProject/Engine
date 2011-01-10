@@ -60,9 +60,9 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlVectorData::Equals(const Data* s) const
+bool ObjectStlVectorData::Equals(const Object* object) const
 {
-    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(s);
+    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(object);
     if (!rhs)
     {
         return false;

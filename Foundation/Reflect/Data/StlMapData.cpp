@@ -9,7 +9,7 @@ REFLECT_DEFINE_ABSTRACT(StlMapData)
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-// str should contain a string with map element separated by the specified delimiters argument.
+// str should contain a string with map object separated by the specified delimiters argument.
 // str will be parsed into key-value pairs and each pair will be inserted into tokens.
 template< typename TKey, typename TVal >
 inline void Tokenize( const tstring& str, std::map< TKey, TVal >& tokens, const tstring& delimiters )
@@ -314,9 +314,9 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Data* s) const
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object* object) const
 {
-    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(s);
+    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(object);
     if (!rhs)
     {
         return false;
@@ -340,11 +340,11 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
             ObjectPtr keyElem;
             ObjectPtr dataElem;
 
-            // query cache for a serializer of this type
+            // query cache for a data of this type
             archive.GetCache().Create( Reflect::GetClass<KeyClassT>(), keyElem );
             archive.GetCache().Create( Reflect::GetClass<ValueClassT>(), dataElem );
 
-            // downcast to serializer type
+            // downcast to data type
             KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
             ValueClassT* dataSer = DangerousCast<ValueClassT>(dataElem);
 
@@ -366,13 +366,13 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to serializer type
+        // downcast to data type
         Data* ser = DangerousCast<Data>(*itr);
 
         // disconnect from memory
         ser->Disconnect();
 
-        // restore serializer to the cache
+        // restore data to the cache
         archive.GetCache().Free( ser );
     }
 }

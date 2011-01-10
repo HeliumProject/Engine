@@ -41,7 +41,7 @@ namespace Helium
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
 
             virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Data* s) const HELIUM_OVERRIDE;
+            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
 
             virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const HELIUM_OVERRIDE;
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;

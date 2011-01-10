@@ -23,10 +23,10 @@ namespace Helium
 
         public:
             // creator
-            bool Create( const Class* type, ObjectPtr& element );
+            bool Create( const Class* type, ObjectPtr& object );
 
             // push into free list
-            void Free( ObjectPtr element );
+            void Free( ObjectPtr object );
         };
     }
 }

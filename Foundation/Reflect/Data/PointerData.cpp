@@ -23,15 +23,15 @@ void PointerData::ConnectData(Helium::HybridPtr<void> data)
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-bool PointerData::Set(const Reflect::Data* s, uint32_t flags)
+bool PointerData::Set(const Data* s, uint32_t flags)
 {
-    const PointerData* rhs = Reflect::ObjectCast<PointerData>(s);
+    const PointerData* rhs = ObjectCast<PointerData>(s);
     if (!rhs)
     {
         return false;
     }
 
-    if (flags & Reflect::DataFlags::Shallow)
+    if (flags & DataFlags::Shallow)
     {
         m_Data.Set( rhs->m_Data.Get() );
     }
@@ -43,9 +43,10 @@ bool PointerData::Set(const Reflect::Data* s, uint32_t flags)
     return true;
 }
 
-bool PointerData::Equals(const Reflect::Data* s) const
+bool PointerData::Equals(const Object* object) const
 {
-    const PointerData* rhs = Reflect::ObjectCast<PointerData>(s);
+    const PointerData* rhs = ObjectCast<PointerData>(object);
+    
     if (!rhs)
     {
         return false;
@@ -66,9 +67,9 @@ bool PointerData::Equals(const Reflect::Data* s) const
     return m_Data.Get()->Equals( rhs->m_Data.Get() );
 }
 
-void PointerData::Accept(Reflect::Visitor& visitor)
+void PointerData::Accept(Visitor& visitor)
 {
-    if (!visitor.VisitPointer(*(Reflect::ObjectPtr*)(m_Data.Ptr())))
+    if (!visitor.VisitPointer(*(ObjectPtr*)(m_Data.Ptr())))
     {
         return;
     }

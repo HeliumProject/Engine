@@ -16,7 +16,7 @@ namespace Helium
         class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >
         {
         public:
-            virtual bool VisitObject(Object* element)
+            virtual bool VisitObject(Object* object)
             {
                 return true;
             }
@@ -26,7 +26,7 @@ namespace Helium
                 return true;
             }
 
-            virtual bool VisitField(Object* element, const Field* field)
+            virtual bool VisitField(void* instance, const Field* field)
             {
                 return true; 
             }
@@ -43,7 +43,7 @@ namespace Helium
 
             FindByTypeVisitor(const Reflect::Type* type, std::vector< ObjectPtr >& found);
 
-            virtual bool VisitObject(Object* element) HELIUM_OVERRIDE;
+            virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
 
         class FOUNDATION_API FindByTypeSetVisitor : public Visitor
@@ -55,7 +55,7 @@ namespace Helium
 
             FindByTypeSetVisitor(const std::set< const Reflect::Type* >& types, std::vector< ObjectPtr >& found);
 
-            virtual bool VisitObject(Object* element) HELIUM_OVERRIDE;
+            virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
     }
 }

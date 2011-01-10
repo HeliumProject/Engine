@@ -10,19 +10,19 @@
 //  
 //    struct Data
 //    {
-//      int32_t type;           // string pool index of the name of the serializer
+//      int32_t type;           // string pool index of the name of the data
 //      byte[] data;            // serialized data
 //    };
 //  
 //    struct Field
 //    {
 //      int32_t field_id;       // latent type field index (id)
-//      Data ser;               // serializer instance data
+//      Data ser;               // data instance data
 //    };
 //  
 //    struct Object
 //    {
-//      int32_t type;           // string pool index of the name of the element
+//      int32_t type;           // string pool index of the name of the object
 //      int32_t field_count;    // number of serialized fields
 //      Field[] fields;         // field instance data
 //      int32_t term;           // -1
@@ -31,7 +31,7 @@
 //    struct ObjectArray
 //    {
 //      int32_t count;          // count of contained elements
-//      Object[] elements;     // element instance data
+//      Object[] objects;       // object instance data
 //      int32_t term;           // -1
 //    };
 //  
@@ -127,29 +127,29 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize( const ObjectPtr& element );
+            virtual void Serialize( Object* object );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
-            void SerializeFields( const ObjectPtr& element );
+            void SerializeFields( Object* object );
 
         private:
-            // pulls an element from the head of the stream
+            // pulls an object from the head of the stream
             ObjectPtr Allocate();
 
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
-            virtual void Deserialize( ObjectPtr& element );
+            virtual void Deserialize( ObjectPtr& object );
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
-            void DeserializeFields( const ObjectPtr& element );
+            void DeserializeFields( Object* object );
 
         public:
-            // Reading and writing single element via binary
-            static void       ToStream( const ObjectPtr& element, std::iostream& stream );
+            // Reading and writing single object via binary
+            static void       ToStream( Object* object, std::iostream& stream );
             static ObjectPtr FromStream( std::iostream& stream, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements via binary

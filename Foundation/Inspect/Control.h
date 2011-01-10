@@ -400,27 +400,27 @@ namespace Helium
         }
 
         template<class T>
-        inline bool Control::WriteTypedData(const T& val, const typename DataBindingTemplate<T>::Ptr& data, bool preview)
+        inline bool Control::WriteTypedData(const T& val, const typename DataBindingTemplate<T>::Ptr& dataBinding, bool preview)
         {
-            if (data)
+            if (dataBinding)
             {
                 T currentValue;
-                data->Get( currentValue );
+                dataBinding->Get( currentValue );
                 if ( val == currentValue )
                 {
                     return true;
                 }
 
-                Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create<T>() );
-                serializer->ConnectData( const_cast< T* >( &val ) );
-                if ( !PreWrite( serializer, preview ) )
+                Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create<T>() );
+                data->ConnectData( const_cast< T* >( &val ) );
+                if ( !PreWrite( data, preview ) )
                 {
                     Read();
                     return false;
                 }
 
                 m_IsWriting = true;
-                bool result = data->Set( val );
+                bool result = dataBinding->Set( val );
                 m_IsWriting = false;
 
                 if (result)

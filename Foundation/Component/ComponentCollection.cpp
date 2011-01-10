@@ -329,15 +329,15 @@ void ComponentCollection::PostDeserialize()
     }
 }
 
-void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
+void ComponentCollection::CopyTo(Reflect::Object* object)
 {
-    __super::CopyTo( destination );
+    __super::CopyTo( object );
 
-    ComponentCollection* destCollection = Reflect::ObjectCast< ComponentCollection >( destination );
-    if ( destCollection )
+    ComponentCollection* collection = Reflect::ObjectCast< ComponentCollection >( object );
+    if ( collection )
     {
         // Remove all attributes, we're going to bring them over manually
-        destCollection->Clear(); 
+        collection->Clear(); 
 
         // For each component in this component collection
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
@@ -348,7 +348,7 @@ void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
             // Create a new copy of the component and try to add it to the destination
             const ComponentPtr& attrib = attrItr->second;
             ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetClass() ) );
-            if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
+            if ( !CopyComponentTo( *collection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
                 for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
@@ -358,7 +358,7 @@ void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
                         destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
-                            if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )
+                            if ( CopyComponentTo( *collection, destAttrib, attrib ) )
                             {
                                 break;
                             }

@@ -197,10 +197,10 @@ void ArchiveBinary::Write()
     e_Status.Raise( info );
 }
 
-void ArchiveBinary::Serialize(const ObjectPtr& element)
+void ArchiveBinary::Serialize(Object* object)
 {
     // write the crc of the class of object (used to factory allocate an instance when reading)
-    uint32_t classCrc = Helium::Crc32( element->GetClass()->m_Name );
+    uint32_t classCrc = Helium::Crc32( object->GetClass()->m_Name );
     m_Stream->Write(&classCrc); 
 
     // stub out the length we are about to write
@@ -209,17 +209,17 @@ void ArchiveBinary::Serialize(const ObjectPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug( TXT( "Serializing %s\n" ), element->GetClass()->m_Name );
+    Log::Debug( TXT( "Serializing %s\n" ), object->GetClass()->m_Name );
     m_Indent.Push();
 #endif
 
-    PreSerialize(element);
+    PreSerialize(object);
 
-    element->PreSerialize();
+    object->PreSerialize();
 
-    if (element->HasType(Reflect::GetType<Data>()))
+    if (object->HasType(Reflect::GetType<Data>()))
     {
-        Data* s = DangerousCast<Data>(element);
+        Data* s = DangerousCast<Data>(object);
 
         s->Serialize(*this);
     }
@@ -234,8 +234,8 @@ void ArchiveBinary::Serialize(const ObjectPtr& element)
             // stub out the number of fields we are about to write
             m_Stream->Write(&m_FieldStack.top().m_Count);
 
-            // serialize each field of the element
-            SerializeFields(element);
+            // serialize each field of the object
+            SerializeFields(object);
 
             // seek back and write our count
             m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
@@ -244,7 +244,7 @@ void ArchiveBinary::Serialize(const ObjectPtr& element)
         m_FieldStack.pop();
     }
 
-    element->PostSerialize();
+    object->PostSerialize();
 
     // compute amound written
     uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
@@ -302,9 +302,9 @@ void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t
     m_Stream->Write(&terminator); 
 }
 
-void ArchiveBinary::SerializeFields( const ObjectPtr& element )
+void ArchiveBinary::SerializeFields( Object* object )
 {
-    const Composite* composite = element->GetClass();
+    const Composite* composite = object->GetClass();
 
     std::stack< const Composite* > bases;
     for ( const Composite* current = composite; current != NULL; current = current->m_Base )
@@ -345,22 +345,21 @@ void ArchiveBinary::SerializeFields( const ObjectPtr& element )
             }
 
             // set data pointer
-            data->ConnectField(element.Ptr(), field);
+            data->ConnectField(object, field);
 
             // bool for test results
             bool serialize = true;
 
             // check for equality
-#ifdef REFLECT_REFACTOR
-            if ( serialize && field->m_Default.ReferencesObject() )
+            DataPtr default = field->CreateData( object );
+            if ( serialize && default.ReferencesObject() )
             {
                 bool force = (field->m_Flags & FieldFlags::Force) != 0;
-                if (!force && field->m_Default->Equals(data))
+                if (!force && default->Equals(data))
                 {
                     serialize = false;
                 }
             }
-#endif
 
             // don't write empty containers
             if ( serialize && e->HasType( Reflect::GetType<ContainerData>() ) )
@@ -376,7 +375,7 @@ void ArchiveBinary::SerializeFields( const ObjectPtr& element )
             // last chance to not write, call through virtual API
             if (serialize)
             {
-                PreSerialize(element, field);
+                PreSerialize(object, field);
 
                 uint32_t fieldNameCrc = Crc32( field->m_Name );
                 m_Stream->Write(&fieldNameCrc); 
@@ -410,7 +409,7 @@ void ArchiveBinary::SerializeFields( const ObjectPtr& element )
 
 ObjectPtr ArchiveBinary::Allocate()
 {
-    ObjectPtr element;
+    ObjectPtr object;
 
     // read type string
     uint32_t typeCrc = Helium::BeginCrc32();
@@ -431,11 +430,11 @@ ObjectPtr ArchiveBinary::Allocate()
         if (type)
         {
             // allocate instance by name
-            m_Cache.Create( type, element );
+            m_Cache.Create( type, object );
         }
 
         // if we failed
-        if (!element.ReferencesObject())
+        if (!object.ReferencesObject())
         {
             // skip it, but account for already reading the length from the stream
             m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
@@ -448,53 +447,53 @@ ObjectPtr ArchiveBinary::Allocate()
         }
     }
 
-    return element;
+    return object;
 }
 
-void ArchiveBinary::Deserialize(ObjectPtr& element)
+void ArchiveBinary::Deserialize(ObjectPtr& object)
 {
     //
     // If we don't have an object allocated for deserialization, pull one from the stream
     //
 
-    if (!element.ReferencesObject())
+    if (!object.ReferencesObject())
     {
-        element = Allocate();
+        object = Allocate();
     }
 
     //
     // We should now have an instance (unless data was skipped)
     //
 
-    if (element.ReferencesObject())
+    if (object.ReferencesObject())
     {
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), element->GetClass()->m_Name, element->GetType());
+        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name, object->GetType());
         m_Indent.Push();
 #endif
 
-        element->PreDeserialize();
+        object->PreDeserialize();
 
-        if (element->HasType(Reflect::GetType<Data>()))
+        if (object->HasType(Reflect::GetType<Data>()))
         {
-            Data* s = DangerousCast<Data>(element);
+            Data* s = DangerousCast<Data>(object);
 
             s->Deserialize(*this);
         }
         else
         {
-            DeserializeFields(element);
+            DeserializeFields(object);
         }
 
-        if ( !TryObjectCallback( element, &Object::PostDeserialize ) )
+        if ( !TryObjectCallback( object, &Object::PostDeserialize ) )
         {
-            element = NULL; // discard the object
+            object = NULL; // discard the object
         }
 
-        if ( element )
+        if ( object )
         {
-            PostDeserialize(element);
+            PostDeserialize(object);
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -520,12 +519,12 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
     {
         for (int i=0; i<element_count && !m_Abort; i++)
         {
-            ObjectPtr element;
-            Deserialize(element);
+            ObjectPtr object;
+            Deserialize(object);
 
-            if (element.ReferencesObject())
+            if (object.ReferencesObject())
             {
-                if ( element->HasType( m_SearchClass ) )
+                if ( object->HasType( m_SearchClass ) )
                 {
                     m_Skip = true;
                 }
@@ -542,9 +541,9 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
                 }
             }
 
-            if (element.ReferencesObject() || flags & ArchiveFlags::Sparse)
+            if (object.ReferencesObject() || flags & ArchiveFlags::Sparse)
             {
-                elements.push_back( element );
+                elements.push_back( object );
             }
         }
     }
@@ -559,7 +558,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
         m_Stream->Read(&terminator);
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException( TXT( "Unterminated element array block" ) );
+            throw Reflect::DataFormatException( TXT( "Unterminated object array block" ) );
         }
     }
 
@@ -571,7 +570,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
     }
 }
 
-void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
+void ArchiveBinary::DeserializeFields(Object* object)
 {
     int32_t fieldCount = -1;
     m_Stream->Read(&fieldCount); 
@@ -581,7 +580,7 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
         uint32_t fieldNameCrc = BeginCrc32();
         m_Stream->Read( &fieldNameCrc );
 
-        const Class* type = element->GetClass();
+        const Class* type = object->GetClass();
         HELIUM_ASSERT( type );
         const Field* field = type->FindFieldByName(fieldNameCrc);
         HELIUM_ASSERT( field );
@@ -597,7 +596,7 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
 
         if ( field )
         {
-            // pull and element and downcast to data
+            // pull and object and downcast to data
             DataPtr latent_data = ObjectCast<Data>( Allocate() );
             if (!latent_data.ReferencesObject())
             {
@@ -610,13 +609,13 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
             if ( field->m_DataClass == field->m_DataClass )
             {
                 // set data pointer
-                latent_data->ConnectField( element.Ptr(), field );
+                latent_data->ConnectField( object, field );
 
                 // process natively
                 Deserialize( (ObjectPtr&)latent_data );
 
                 // post process
-                PostDeserialize( element, field );
+                PostDeserialize( object, field );
 
                 // disconnect
                 latent_data->Disconnect();
@@ -638,7 +637,7 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
                 }
 
                 // process into temporary memory
-                current_data->ConnectField(element.Ptr(), field);
+                current_data->ConnectField(object, field);
 
                 // process natively
                 Deserialize( (ObjectPtr&)latent_data );
@@ -652,7 +651,7 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
                 else
                 {
                     // post process
-                    PostDeserialize( element, field );
+                    PostDeserialize( object, field );
                 }
 
                 // disconnect
@@ -674,9 +673,9 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
         if ( component.ReferencesObject() )
         {
             // attempt processing
-            if (!element->ProcessComponent(component, field->m_Name))
+            if (!object->ProcessComponent(component, field->m_Name))
             {
-                Log::Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_Name, component->GetClass()->m_Name );
+                Log::Debug( TXT( "%s did not process %s, discarding\n" ), object->GetClass()->m_Name, component->GetClass()->m_Name );
             }
         }
 
@@ -693,10 +692,10 @@ void ArchiveBinary::DeserializeFields(const ObjectPtr& element)
     }
 }
 
-void ArchiveBinary::ToStream( const ObjectPtr& element, std::iostream& stream )
+void ArchiveBinary::ToStream( Object* object, std::iostream& stream )
 {
     std::vector< ObjectPtr > elements(1);
-    elements[0] = element;
+    elements[0] = object;
     ToStream( elements, stream );
 }
 

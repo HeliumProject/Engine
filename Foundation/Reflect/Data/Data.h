@@ -113,7 +113,7 @@ namespace Helium
             };
 
             // the instance we are processing, if any
-            Helium::HybridPtr<Object> m_Instance;
+            Helium::HybridPtr<void> m_Instance;
 
             // the field we are processing, if any
             const Field* m_Field;
@@ -142,9 +142,9 @@ namespace Helium
             }
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField = 0)
+            virtual void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0)
             {
-                ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
+                ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State()) ); 
 
                 m_Instance = instance; 
                 m_Field = field; 
@@ -201,7 +201,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(T& value, Object* instance, const Field* field)
+            static DataPtr Bind(T& value, void* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -216,7 +216,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(const T& value, const Object* instance, const Field* field)
+            static DataPtr Bind(const T& value, const void* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -249,10 +249,10 @@ namespace Helium
             // check to see if a cast is supported
             static bool CastSupported(const Class* srcType, const Class* destType);
 
-            // convert value data from one serializer to another
+            // convert value data from one data to another
             static bool CastValue(const Data* src, Data* dest, uint32_t flags = 0);
 
-            // copies value data from one serializer to another
+            // copies value data from one data to another
             virtual bool Set(const Data* src, uint32_t flags = 0) = 0;
 
             // assign
@@ -266,9 +266,6 @@ namespace Helium
                 Set(&rhs);
                 return *this;
             }
-
-            // equality of connected data
-            virtual bool Equals(const Data* src) const = 0;
 
             // equality
             bool operator==(const Data* rhs) const
@@ -367,7 +364,7 @@ namespace Helium
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 
-            // sanity check our element type
+            // sanity check our object type
             if ( ser->HasType( dataClass ) )
             {
                 // get internal data pointer
@@ -380,10 +377,10 @@ namespace Helium
             }
             else
             {
-                // create a temporary serializer of the value type
+                // create a temporary data of the value type
                 DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
-                // connect the temp serializer to the temp value
+                // connect the temp data to the temp value
                 T tempValue; temp->ConnectData( &tempValue );
 
                 // cast into the temp value
@@ -414,7 +411,7 @@ namespace Helium
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 
-            // sanity check our element type
+            // sanity check our object type
             if ( ser->HasType( dataClass ) )
             {
                 // get internal data pointer
@@ -427,13 +424,13 @@ namespace Helium
             }
             else
             {
-                // create a temporary serializer of the value type
+                // create a temporary data of the value type
                 DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
-                // connect the temp serializer to the temp value
+                // connect the temp data to the temp value
                 temp->ConnectData( &value );
 
-                // cast into the serializer
+                // cast into the data
                 if (Data::CastValue( ser, temp ))
                 {
                     result = true;
@@ -445,8 +442,8 @@ namespace Helium
                 // Notify interested listeners that the data has changed.
                 if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
                 {
-                    Object* element = (Object*)( ser->m_Instance );
-                    element->RaiseChanged( ser->m_Field );
+                    Object* object = (Object*)ser->m_Instance.Mutable();
+                    object->RaiseChanged( ser->m_Field );
                 }
             }
 

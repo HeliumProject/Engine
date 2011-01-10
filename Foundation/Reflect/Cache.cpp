@@ -20,22 +20,20 @@ static int g_HitCount = 0;
 static int g_MissCount = 0;
 #endif
 
-static void CreateInstance( const Class* type, ObjectPtr& element )
+static void CreateInstance( const Class* type, ObjectPtr& object )
 {
-    ObjectPtr object = Registry::GetInstance()->CreateInstance(type);
+    object = Registry::GetInstance()->CreateInstance(type);
     HELIUM_ASSERT( object.ReferencesObject() );
 
-    element = AssertCast<Object>( object );
-
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-    Log::Print("Cache miss %d on type '%s', name '%s', id '%d'\n", ++g_MissCount, type->m_Name, element->GetClass()->m_Name, type);
+    Log::Print("Cache miss %d on type '%s', name '%s', id '%d'\n", ++g_MissCount, type->m_Name, object->GetClass()->m_Name, type);
 #endif
 }
 
-bool Cache::Create( const Class* type, ObjectPtr& element )
+bool Cache::Create( const Class* type, ObjectPtr& object )
 {
 #ifdef REFLECT_DISABLE_CACHING
-    ::CreateInstance(type, element);
+    ::CreateInstance(type, object);
 
     return true;
 #else
@@ -43,7 +41,7 @@ bool Cache::Create( const Class* type, ObjectPtr& element )
 
     if (found == m_Objects.end())
     {
-        ::CreateInstance(type, element);
+        ::CreateInstance(type, object);
 
         return true;
     }
@@ -53,7 +51,7 @@ bool Cache::Create( const Class* type, ObjectPtr& element )
 
         if (stack.size() == 0)
         {
-            ::CreateInstance(type, element);
+            ::CreateInstance(type, object);
         }
         else
         {
@@ -61,10 +59,10 @@ bool Cache::Create( const Class* type, ObjectPtr& element )
 
             stack.pop();
 
-            element = top;
+            object = top;
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-            Log::Print("Cache hit %d on type '%s', name '%s', id '%d'\n", ++g_HitCount, type->m_Name, element->GetClass()->m_Name, type);
+            Log::Print("Cache hit %d on type '%s', name '%s', id '%d'\n", ++g_HitCount, type->m_Name, object->GetClass()->m_Name, type);
 #endif
         }
 
@@ -73,22 +71,22 @@ bool Cache::Create( const Class* type, ObjectPtr& element )
 #endif
 }
 
-void Cache::Free(ObjectPtr element)
+void Cache::Free(ObjectPtr object)
 {
-    if (!element->HasType(Reflect::GetType<Data>()))
+    if (!object->HasType(Reflect::GetType<Data>()))
     {
         return;
     }
 
-    H_Object::iterator found = m_Objects.find(element->GetType());
+    H_Object::iterator found = m_Objects.find(object->GetType());
 
     if (found == m_Objects.end())
     {
         S_Object stack;
 
-        stack.push(element);
+        stack.push(object);
 
-        StdInsert<H_Object>::Result result = m_Objects.insert(H_Object::value_type (element->GetType(), stack));
+        StdInsert<H_Object>::Result result = m_Objects.insert(H_Object::value_type (object->GetType(), stack));
 
         HELIUM_ASSERT( result.second );
     }
@@ -96,6 +94,6 @@ void Cache::Free(ObjectPtr element)
     {
         S_Object& stack (found->second);
 
-        stack.push(element);
+        stack.push(object);
     }
 }

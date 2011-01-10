@@ -135,21 +135,21 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize(const ObjectPtr& element);
+            virtual void Serialize(Object* object);
             virtual void Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags = 0);
 
         protected:
             // Helpers
-            void SerializeFields(const ObjectPtr& element);
-            void SerializeField(const ObjectPtr& element, const Field* field);
+            void SerializeFields(Object* object);
+            void SerializeField(Object* object, const Field* field);
 
             // <Object> and </Object>
-            void SerializeHeader(const ObjectPtr& element);
-            void SerializeFooter(const ObjectPtr& element);
+            void SerializeHeader(Object* object);
+            void SerializeFooter(Object* object);
 
         public:
             // For handling components
-            virtual void Deserialize(ObjectPtr& element);
+            virtual void Deserialize(ObjectPtr& object);
             virtual void Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags = 0);
 
         private:
@@ -171,18 +171,18 @@ namespace Helium
                 archive->OnCharacterData(pszData, nLength);
             }
 
-            // Called on <element>
+            // Called on <object>
             void OnStartElement(const tchar_t *pszName, const tchar_t **papszAttrs);
 
-            // Called between <element> and </element>
+            // Called between <object> and </object>
             void OnCharacterData(const tchar_t *pszData, int nLength);
 
-            // Called after </element>
+            // Called after </object>
             void OnEndElement(const tchar_t *pszName);
 
         public:
-            // Reading and writing single element from string data
-            static void       ToString( const ObjectPtr& element, tstring& xml );
+            // Reading and writing single object from string data
+            static void       ToString( Object* object, tstring& xml );
             static ObjectPtr FromString( const tstring& xml, const Class* searchClass = NULL );
 
             // Reading and writing multiple elements from string data

@@ -18,7 +18,8 @@ GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
 
 /// Constructor.
 GameObjectType::GameObjectType()
-: m_flags( 0 )
+    : m_pReleaseStaticTypeCallback( NULL )
+    , m_flags( 0 )
 {
 }
 
@@ -71,11 +72,18 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags )
+GameObjectType* GameObjectType::Create(
+    Name name,
+    Package* pTypePackage,
+    const GameObjectType* pParent,
+    GameObject* pTemplate,
+    RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback,
+    uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
     HELIUM_ASSERT( pTypePackage );
     HELIUM_ASSERT( pTemplate );
+    HELIUM_ASSERT( pReleaseStaticTypeCallback );
 
     // Set up the template object name, and set this object as its parent.
     if( !pTemplate->SetOwner( pTypePackage ) )
@@ -119,7 +127,13 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const 
     pType->m_Name = *name;
     pType->m_Base = pParent;
     pType->m_spTemplate = pTemplate;
+    pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;
+
+    if( pParent )
+    {
+        pParent->AddDerived( pType );
+    }
 
     // Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
     // at least one type registered before any sub-threads are spawned.
@@ -144,13 +158,31 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const 
 
 /// Unregister a type.
 ///
+/// Note that this should only be called by the static type release functions (i.e. Entity::ReleaseStaticType()).
+///
 /// @param[in] pType  Type to unregister.  References to the parent type and the type template will be released as well.
 ///
 /// @see Register()
-void GameObjectType::Unregister( GameObjectType* pType )
+void GameObjectType::Unregister( const GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
+    // Unregister all child types first.
+    const Composite* pDerived = pType->m_FirstDerived;
+    while( pDerived )
+    {
+        HELIUM_ASSERT( pDerived->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
+        const GameObjectType* pDerivedGameObjectType = static_cast< const GameObjectType* >( pDerived );
+        const Composite* pNextDerived = pDerived->m_NextSibling;
+
+        RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticType = pDerivedGameObjectType->m_pReleaseStaticTypeCallback;
+        HELIUM_ASSERT( pReleaseStaticType );
+        pReleaseStaticType();
+
+        pDerived = pNextDerived;
+    }
+
+    // Remove this type from all type registries.
     Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
     HELIUM_ASSERT( pRegistry );
     pRegistry->UnregisterType( pType );

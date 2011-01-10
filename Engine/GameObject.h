@@ -122,6 +122,7 @@
                 pTypePackage, \
                 pParentType, \
                 pTemplate, \
+                TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
             HELIUM_ASSERT( sm_pStaticType ); \
         } \

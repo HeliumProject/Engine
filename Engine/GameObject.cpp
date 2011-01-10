@@ -1161,10 +1161,22 @@ GameObjectType* GameObject::InitStaticType()
         pPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        sm_pStaticType = GameObjectType::Create( nameObject, pEnginePackage, NULL, pObjectTemplate, GameObjectType::FLAG_ABSTRACT );
+        sm_pStaticType = GameObjectType::Create(
+            nameObject,
+            pEnginePackage,
+            NULL,
+            pObjectTemplate,
+            GameObject::ReleaseStaticType,
+            GameObjectType::FLAG_ABSTRACT );
         HELIUM_ASSERT( sm_pStaticType );
 
-        GameObjectType* pPackageType = GameObjectType::Create( namePackage, pEnginePackage, sm_pStaticType, pPackageTemplate, 0 );
+        GameObjectType* pPackageType = GameObjectType::Create(
+            namePackage,
+            pEnginePackage,
+            sm_pStaticType,
+            pPackageTemplate,
+            Package::ReleaseStaticType,
+            0 );
         HELIUM_ASSERT( pPackageType );
 
         // Force initialization of Package so it can report its static type information.

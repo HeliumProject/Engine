@@ -199,12 +199,13 @@ void Composite::RemoveDerived( const Composite* derived ) const
         {
             if ( sibling->m_NextSibling == derived )
             {
-                sibling->m_NextSibling = sibling->m_NextSibling ? sibling->m_NextSibling->m_NextSibling : NULL;
-                derived->m_NextSibling = NULL;
+                sibling->m_NextSibling = derived->m_NextSibling;
                 break;
             }
         }
     }
+
+    derived->m_NextSibling = NULL;
 }
 
 uint32_t Composite::GetBaseFieldCount() const

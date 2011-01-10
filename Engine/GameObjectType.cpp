@@ -71,7 +71,7 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameObjectType* pParent, GameObject* pTemplate, uint32_t flags )
+GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
     HELIUM_ASSERT( pTypePackage );
@@ -116,7 +116,7 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
     pType->m_cachedName = name;
-    pType->m_BaseType = pParent;
+    pType->m_Base = pParent;
     pType->m_spTemplate = pTemplate;
     pType->m_flags = flags;
 
@@ -150,15 +150,14 @@ void GameObjectType::Unregister( GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
-    pType->m_BaseType.Release();
+    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
+    HELIUM_ASSERT( pRegistry );
+    pRegistry->UnregisterType( pType );
+
     pType->m_spTemplate.Release();
 
     HELIUM_ASSERT( sm_pLookupMap );
     HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );
-
-    Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
-    HELIUM_ASSERT( pRegistry );
-    pRegistry->UnregisterType( pType );
 }
 
 /// Look up a type by name.

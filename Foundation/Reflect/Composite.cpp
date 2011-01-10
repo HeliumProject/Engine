@@ -170,25 +170,16 @@ void Composite::Unregister() const
 
 void Composite::AddDerived( const Composite* derived ) const
 {
-    const Composite* last = m_FirstDerived;
+    HELIUM_ASSERT( derived );
 
-    while ( last && last->m_NextSibling )
-    {
-        last = last->m_NextSibling;
-    }
-
-    if ( last )
-    {
-        last->m_NextSibling = derived;
-    }
-    else
-    {
-        m_FirstDerived = derived;
-    }
+    derived->m_NextSibling = m_FirstDerived;
+    m_FirstDerived = derived;
 }
 
 void Composite::RemoveDerived( const Composite* derived ) const
 {
+    HELIUM_ASSERT( derived );
+
     if ( m_FirstDerived == derived )
     {
         m_FirstDerived = derived->m_NextSibling;

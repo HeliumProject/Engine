@@ -49,7 +49,7 @@ bool World::Initialize()
     HELIUM_ASSERT( IsInvalid( m_mainSceneViewId ) );
 
     // Create the main graphics scene.
-    GameObjectType* pSceneType = GraphicsScene::GetStaticType();
+    const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
     GraphicsScene* pGraphicsScene = GameObject::Create< GraphicsScene >( pSceneType->GetName(), this );
     HELIUM_ASSERT( pGraphicsScene );
@@ -189,14 +189,14 @@ void World::PreDestroy()
 ///
 /// @see DestroyEntity()
 Entity* World::CreateEntity(
-                            Layer* pLayer,
-                            GameObjectType* pType,
-                            const Simd::Vector3& rPosition,
-                            const Simd::Quat& rRotation,
-                            const Simd::Vector3& rScale,
-                            Entity* pTemplate,
-                            Name name,
-                            bool bAssignInstanceIndex )
+    Layer* pLayer,
+    const GameObjectType* pType,
+    const Simd::Vector3& rPosition,
+    const Simd::Quat& rRotation,
+    const Simd::Vector3& rScale,
+    Entity* pTemplate,
+    Name name,
+    bool bAssignInstanceIndex )
 {
     // Make sure the destination layer is valid.
     HELIUM_ASSERT( pLayer );

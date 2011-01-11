@@ -29,7 +29,7 @@ MaterialResourceHandler::~MaterialResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* MaterialResourceHandler::GetResourceType() const
+const GameObjectType* MaterialResourceHandler::GetResourceType() const
 {
     return Material::GetStaticType();
 }

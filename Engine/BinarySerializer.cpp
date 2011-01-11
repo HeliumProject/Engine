@@ -47,7 +47,7 @@ bool BinarySerializer::Serialize( GameObject* pObject )
     BeginSerialize( true );
 
     // Serialize the object type reference.
-    GameObjectType* pType = pObject->GetGameObjectType();
+    const GameObjectType* pType = pObject->GetGameObjectType();
     HELIUM_ASSERT( pType );
     uint32_t typeIndex = ResolveTypeDependency( pType->GetName() );
     HELIUM_ASSERT( IsValid( typeIndex ) );
@@ -266,7 +266,7 @@ void BinarySerializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void BinarySerializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void BinarySerializer::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     if( ShouldSerializeCurrentProperty() )
     {

@@ -1542,7 +1542,7 @@ void XmlPackageLoader::TickPreload()
         if( pBestHandler )
         {
             // File extension matches a supported source asset type, so add it to the object list.
-            GameObjectType* pResourceType = pBestHandler->GetResourceType();
+            const GameObjectType* pResourceType = pBestHandler->GetResourceType();
             HELIUM_ASSERT( pResourceType );
 
             HELIUM_TRACE(
@@ -1699,7 +1699,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        GameObjectType* pExistingType = pObject->GetGameObjectType();
+        const GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -2200,7 +2200,9 @@ void XmlPackageLoader::Deserializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void XmlPackageLoader::Deserializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void XmlPackageLoader::Deserializer::SerializeObjectReference(
+    const GameObjectType* /*pType*/,
+    GameObjectPtr& rspObject )
 {
     ReadValue(
         rspObject,

@@ -126,7 +126,7 @@ GameObjectType* GameObjectType::Create(
     pType->m_cachedName = name;
     pType->m_Name = *name;
     pType->m_Base = pParent;
-    pType->m_spTemplate = pTemplate;
+    pType->m_Template = pTemplate;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;
 
@@ -186,8 +186,6 @@ void GameObjectType::Unregister( const GameObjectType* pType )
     Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
     HELIUM_ASSERT( pRegistry );
     pRegistry->UnregisterType( pType );
-
-    pType->m_spTemplate.Release();
 
     HELIUM_ASSERT( sm_pLookupMap );
     HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );

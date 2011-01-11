@@ -25,7 +25,7 @@ ResourceHandler::~ResourceHandler()
 /// Get the type of resource associated with this handler.
 ///
 /// @return  Resource type.
-GameObjectType* ResourceHandler::GetResourceType() const
+const GameObjectType* ResourceHandler::GetResourceType() const
 {
     return NULL;
 }
@@ -66,13 +66,13 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
 {
     rResourceHandlers.Resize( 0 );
 
-    GameObjectType* pResourceHandlerType = GetStaticType();
+    const GameObjectType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
     GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
     for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        GameObjectType& rType = *typeIterator;
+        const GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )
         {
             ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );
@@ -87,17 +87,17 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
 /// @param[in] pType  Resource type.
 ///
 /// @return  Resource handler for the given type if found, null if no resource handler was found.
-ResourceHandler* ResourceHandler::FindResourceHandlerForType( GameObjectType* pType )
+ResourceHandler* ResourceHandler::FindResourceHandlerForType( const GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
-    GameObjectType* pResourceHandlerType = GetStaticType();
+    const GameObjectType* pResourceHandlerType = GetStaticType();
     HELIUM_ASSERT( pResourceHandlerType );
 
     GameObjectType::ConstIterator typeEnd = GameObjectType::GetTypeEnd();
     for( GameObjectType::ConstIterator typeIterator = GameObjectType::GetTypeBegin(); typeIterator != typeEnd; ++typeIterator )
     {
-        GameObjectType& rType = *typeIterator;
+        const GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsSubtypeOf( pResourceHandlerType ) )
         {
             ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );

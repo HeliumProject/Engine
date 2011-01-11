@@ -54,7 +54,7 @@ namespace Lunar
 
         Name GetDefaultWorldName() const;
 
-        World* CreateDefaultWorld( GameObjectType* pType = World::GetStaticType() );
+        World* CreateDefaultWorld( const GameObjectType* pType = World::GetStaticType() );
         //@}
 
         /// @name Updating

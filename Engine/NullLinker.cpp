@@ -133,7 +133,7 @@ void NullLinker::SerializeWideString( WideString& /*rValue*/ )
 }
 
 /// @name Serializer::SerializeObjectReference()
-void NullLinker::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void NullLinker::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     rspObject.ClearLinkIndex();
 }

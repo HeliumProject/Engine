@@ -16,7 +16,7 @@
 
 using namespace Lunar;
 
-GameObjectType* GameObject::sm_pStaticType = NULL;
+const GameObjectType* GameObject::sm_pStaticType = NULL;
 GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
@@ -273,7 +273,7 @@ GameObject* GameObject::GetTemplate() const
     GameObject* pTemplate = m_spTemplate;
     if( !pTemplate )
     {
-        GameObjectType* pType = GetGameObjectType();
+        const GameObjectType* pType = GetGameObjectType();
         HELIUM_ASSERT( pType );
         pTemplate = pType->GetTemplate();
         HELIUM_ASSERT( pTemplate );
@@ -514,7 +514,7 @@ void GameObject::Destroy()
 /// Get the type of this object.
 ///
 /// @return  GameObject type.
-GameObjectType* GameObject::GetGameObjectType() const
+const GameObjectType* GameObject::GetGameObjectType() const
 {
     return GameObject::GetStaticType();
 }
@@ -608,7 +608,7 @@ bool GameObject::IsTransient() const
             return true;
         }
 
-        GameObjectType* pType = pObject->GetGameObjectType();
+        const GameObjectType* pType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pType );
         if( pType->GetFlags() & GameObjectType::FLAG_TRANSIENT )
         {
@@ -674,7 +674,7 @@ void GameObject::InPlaceDestroy()
 ///
 /// @see Create()
 GameObject* GameObject::CreateObject(
-    GameObjectType* pType,
+    const GameObjectType* pType,
     Name name,
     GameObject* pOwner,
     GameObject* pTemplate,
@@ -1125,7 +1125,7 @@ void GameObject::Shutdown()
 /// Initialize the static type information for the "GameObject" class.
 ///
 /// @return  Static "GameObject" type.
-GameObjectType* GameObject::InitStaticType()
+const GameObjectType* GameObject::InitStaticType()
 {
     if( !sm_pStaticType )
     {
@@ -1201,7 +1201,7 @@ void GameObject::ReleaseStaticType()
 /// Get the static "GameObject" type.
 ///
 /// @return  Static "GameObject" type.
-GameObjectType* GameObject::GetStaticType()
+const GameObjectType* GameObject::GetStaticType()
 {
     HELIUM_ASSERT( sm_pStaticType );
     return sm_pStaticType;

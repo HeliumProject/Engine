@@ -255,7 +255,7 @@ namespace Lunar
     template< typename T >
     T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
     {
-        GameObjectType* pType = T::GetStaticType();
+        const GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
         GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
@@ -274,7 +274,7 @@ namespace Lunar
         GameObject* pObject = FindObject( path );
         if( pObject )
         {
-            GameObjectType* pType = T::GetStaticType();
+            const GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
             if( !pObject->IsA( pType ) )
             {

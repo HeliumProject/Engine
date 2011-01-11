@@ -25,14 +25,20 @@
 /// @param[in] CLASS  Class for which to declare the strong pointer type.
 ///
 /// @see HELIUM_DECLARE_WPTR()
-#define HELIUM_DECLARE_PTR( CLASS ) class CLASS; typedef Helium::StrongPtr< CLASS > CLASS##Ptr;
+#define HELIUM_DECLARE_PTR( CLASS ) \
+    class CLASS; \
+    typedef Helium::StrongPtr< CLASS > CLASS##Ptr; \
+    typedef Helium::StrongPtr< const CLASS > Const##CLASS##Ptr;
 
 /// Forward declare a weak pointer type.
 ///
 /// @param[in] CLASS  Class for which to declare the weak pointer type.
 ///
 /// @see HELIUM_DECLARE_PTR()
-#define HELIUM_DECLARE_WPTR( CLASS ) class CLASS; typedef Helium::WeakPtr< CLASS > CLASS##WPtr;
+#define HELIUM_DECLARE_WPTR( CLASS ) \
+    class CLASS; \
+    typedef Helium::WeakPtr< CLASS > CLASS##WPtr; \
+    typedef Helium::WeakPtr< const CLASS > Const##CLASS##WPtr;
 
 namespace Helium
 {

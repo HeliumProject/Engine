@@ -787,7 +787,7 @@ void GameObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
 }
 
 /// @name Serializer::SerializeObjectReference()
-void GameObjectLoader::Linker::SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject )
+void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
 {
     HELIUM_ASSERT( pType );
 

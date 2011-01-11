@@ -24,7 +24,7 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual GameObjectType* GetResourceType() const;
+        virtual const GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(

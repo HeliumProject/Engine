@@ -59,8 +59,8 @@ namespace Lunar
 
             /// @name Overloaded Operators
             //@{
-            inline GameObjectType& operator*() const;
-            inline GameObjectType* operator->() const;
+            inline const GameObjectType& operator*() const;
+            inline const GameObjectType* operator->() const;
 
             inline ConstIterator& operator++();
             inline ConstIterator operator++( int );
@@ -110,7 +110,7 @@ namespace Lunar
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static GameObjectType* Create(
+        static const GameObjectType* Create(
             Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
             RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
         static void Unregister( const GameObjectType* pType );
@@ -126,8 +126,6 @@ namespace Lunar
     private:
         /// Cached from the null-terminated name string in Type.
         mutable Name m_cachedName;
-        /// Default template object for this type.
-        mutable GameObjectPtr m_spTemplate;
 
         /// Static type release callback.
         RELEASE_STATIC_TYPE_CALLBACK* m_pReleaseStaticTypeCallback;

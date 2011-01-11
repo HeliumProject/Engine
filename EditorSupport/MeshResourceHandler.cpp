@@ -38,7 +38,7 @@ MeshResourceHandler::~MeshResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* MeshResourceHandler::GetResourceType() const
+const GameObjectType* MeshResourceHandler::GetResourceType() const
 {
     return Mesh::GetStaticType();
 }

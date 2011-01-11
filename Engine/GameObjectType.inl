@@ -27,16 +27,10 @@ namespace Lunar
     const GameObjectType* GameObjectType::GetBaseType() const
     {
         const Reflect::Composite* pBase = m_Base;
-#pragma TODO( "Restore m_Base validity checking once Reflect::Object and GameObject type checking are integrated." )
-#if 1
-        HELIUM_ASSERT( !pBase || pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
-        return static_cast< const GameObjectType* >( pBase );
-#else
         HELIUM_ASSERT( pBase );
         return ( pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
                  ? static_cast< const GameObjectType* >( pBase )
                  : NULL );
-#endif
     }
 
     /// Get the default template object for this type.

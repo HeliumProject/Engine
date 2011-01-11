@@ -120,12 +120,20 @@ const GameObjectType* GameObjectType::Create(
         return false;
     }
 
+    // If the parent type is null, default to Reflect::Object, as the type should be deriving from it directly.
+    const Reflect::Class* pBaseClass = pParent;
+    if( !pBaseClass )
+    {
+        pBaseClass = Reflect::Object::s_Class;
+        HELIUM_ASSERT( pBaseClass );
+    }
+
     // Create the type object and store its parameters.
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
     pType->m_cachedName = name;
     pType->m_Name = *name;
-    pType->m_Base = pParent;
+    pType->m_Base = pBaseClass;
     pType->m_Default = pTemplate;
     pType->m_Template = pTemplate;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;

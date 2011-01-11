@@ -239,6 +239,8 @@ void ArchiveXML::SerializeField(Object* object, const Field* field)
         PreSerialize( object, field );
         Serialize( data );
         data->Disconnect();
+        
+        // might be useful to cache the data object here
 
         m_FieldNames.pop();
     }
@@ -560,8 +562,9 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     DataPtr data = ObjectCast<Data>(topState->m_Object);
                     if ( data.ReferencesObject() )
                     {
-                        // disconnect our data for neatness
                         data->Disconnect();
+                        
+                        // might be useful to cache the data object here
                     }
 
                     PostDeserialize( parentState->m_Object, topState->m_Field );

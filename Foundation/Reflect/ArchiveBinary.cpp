@@ -333,6 +333,8 @@ void ArchiveBinary::SerializeFields( Object* object )
                 PreSerialize( object, field );
                 Serialize( data );
                 data->Disconnect();
+                
+                // might be useful to cache the data object here
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Pop();

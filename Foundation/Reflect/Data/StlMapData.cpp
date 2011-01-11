@@ -362,11 +362,10 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to data type
-        Data* ser = DangerousCast<Data>(*itr);
-
-        // disconnect from memory
+        Data* ser = AssertCast<Data>(*itr);
         ser->Disconnect();
+
+        // might be useful to cache the data object here
     }
 }
 

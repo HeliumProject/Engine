@@ -218,6 +218,8 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
             Data* ser = AssertCast<Data>(*itr);
             ser->Disconnect();
             ++itr;
+
+            // might be useful to cache the data object here
         }
     }
 }

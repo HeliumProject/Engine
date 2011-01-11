@@ -194,11 +194,10 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to data type
         Data* ser = DangerousCast<Data>(*itr);
-
-        // disconnect from memory
         ser->Disconnect();
+
+        // might be useful to cache the data object here
     }
 }
 

@@ -28,6 +28,7 @@
 /// @param[in] TYPE    GameObject type.
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
+        REFLECT_DECLARE_CLASS( TYPE, PARENT ) \
     private: \
         static const Lunar::GameObjectType* sm_pStaticType; \
         static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
@@ -46,6 +47,8 @@
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
+    REFLECT_DEFINE_CLASS( TYPE ) \
+    \
     const Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
     Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
     \
@@ -81,6 +84,7 @@
         { \
             Lunar::GameObjectType::Unregister( sm_pStaticType ); \
             sm_pStaticType = NULL; \
+            s_Class = NULL; \
         } \
         \
         sm_spStaticTypeTemplate.Release(); \
@@ -125,6 +129,7 @@
                 TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
             HELIUM_ASSERT( sm_pStaticType ); \
+            s_Class = sm_pStaticType; \
         } \
         \
         return sm_pStaticType; \
@@ -147,6 +152,8 @@ namespace Lunar
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
     {
+        REFLECT_DECLARE_CLASS( GameObject, Reflect::Object )
+
     public:
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
@@ -223,7 +230,6 @@ namespace Lunar
         /// @name RTTI
         //@{
         virtual const GameObjectType* GetGameObjectType() const;
-        bool IsA( const GameObjectType* pType ) const;
         inline bool IsInstanceOf( const GameObjectType* pType ) const;
         //@}
 

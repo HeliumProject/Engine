@@ -239,7 +239,7 @@ void DirectDeserializer::SerializeObjectReference( const GameObjectType* pType, 
         return;
     }
 
-    HELIUM_ASSERT( !pObject || pObject->IsA( pType ) );
+    HELIUM_ASSERT( !pObject || pObject->IsClass( pType ) );
     rspObject = pObject;
 }
 

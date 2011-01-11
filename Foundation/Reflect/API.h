@@ -63,7 +63,7 @@ namespace Helium
 // declares creator for constructable types
 #define _REFLECT_DECLARE_CREATOR( __Class ) \
 public: \
-static Reflect::Object* CreateObject() { return new __Class; }
+static Helium::Reflect::Object* CreateObject() { return new __Class; }
 
 // declares type checking functions
 #define _REFLECT_DECLARE_CLASS( __Class, __Base ) \
@@ -85,7 +85,7 @@ Helium::Reflect::Class* __Class::CreateClass( const tchar_t* name ) \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
-    Reflect::Class* type = Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
+    Helium::Reflect::Class* type = Helium::Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
     s_Class = type; \
     return type; \
 } \

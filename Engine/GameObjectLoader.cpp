@@ -814,7 +814,7 @@ void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* p
     GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
     if( pObject )
     {
-        if( !pObject->IsA( pType ) )
+        if( !pObject->IsClass( pType ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,

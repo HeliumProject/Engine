@@ -16,6 +16,8 @@
 
 using namespace Lunar;
 
+REFLECT_DEFINE_CLASS( GameObject )
+
 const GameObjectType* GameObject::sm_pStaticType = NULL;
 GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
@@ -28,12 +30,12 @@ DynArray< uint8_t > GameObject::sm_serializationBuffer;
 
 /// Constructor.
 GameObject::GameObject()
-: m_name( NULL_NAME )
-, m_instanceIndex( Invalid< uint32_t >() )
-, m_id( Invalid< uint32_t >() )
-, m_flags( 0 )
-, m_path( NULL_NAME )
-, m_pCustomDestroyCallback( NULL )
+    : m_name( NULL_NAME )
+    , m_instanceIndex( Invalid< uint32_t >() )
+    , m_id( Invalid< uint32_t >() )
+    , m_flags( 0 )
+    , m_path( NULL_NAME )
+    , m_pCustomDestroyCallback( NULL )
 {
 }
 
@@ -517,21 +519,6 @@ void GameObject::Destroy()
 const GameObjectType* GameObject::GetGameObjectType() const
 {
     return GameObject::GetStaticType();
-}
-
-/// Get whether this object is an instance of the specified type or one of its subtypes.
-///
-/// @param[in] pType  Type against which to test.
-///
-/// @return  True if this is an instance of the given type or one of its subtypes, false if not.
-///
-/// @see GetGameObjectType(), IsInstanceOf()
-bool GameObject::IsA( const GameObjectType* pType ) const
-{
-    const GameObjectType* pThisType = GetGameObjectType();
-    HELIUM_ASSERT( pThisType );
-
-    return pThisType->IsSubtypeOf( pType );
 }
 
 /// Serialize this object.
@@ -1169,6 +1156,7 @@ const GameObjectType* GameObject::InitStaticType()
             GameObject::ReleaseStaticType,
             GameObjectType::FLAG_ABSTRACT );
         HELIUM_ASSERT( sm_pStaticType );
+        s_Class = sm_pStaticType;
 
         const GameObjectType* pPackageType = GameObjectType::Create(
             namePackage,
@@ -1193,6 +1181,7 @@ void GameObject::ReleaseStaticType()
     {
         GameObjectType::Unregister( sm_pStaticType );
         sm_pStaticType = NULL;
+        s_Class = NULL;
     }
 
     sm_spStaticTypeTemplate.Release();

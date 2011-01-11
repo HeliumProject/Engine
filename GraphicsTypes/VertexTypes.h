@@ -28,14 +28,15 @@ namespace Lunar
     {
         /// Position.
         float32_t position[ 3 ];
-        /// Packed color (see Color class for more information).
-        uint32_t color;
+        /// Color.
+        uint8_t color[ 4 ];
 
         /// @name Construction/Destruction
         //@{
         inline SimpleVertex();
         inline SimpleVertex(
-            float32_t positionX, float32_t positionY, float32_t positionZ, uint32_t packedColor = 0xffffffff );
+            float32_t positionX, float32_t positionY, float32_t positionZ, uint8_t colorRed = 0xff,
+            uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
         inline SimpleVertex( const Simd::Vector3& rPosition, const Color& rColor = Color( 0xffffffff ) );
         //@}
 
@@ -50,8 +51,8 @@ namespace Lunar
     {
         /// Position.
         float32_t position[ 3 ];
-        /// Packed color (see Color class for more information).
-        uint32_t color;
+        /// Color.
+        uint8_t color[ 4 ];
         /// Texture coordinates.
         Float16 texCoords[ 2 ];
 
@@ -60,7 +61,7 @@ namespace Lunar
         inline SimpleTexturedVertex();
         inline SimpleTexturedVertex(
             float32_t positionX, float32_t positionY, float32_t positionZ, Float16 texCoordU, Float16 texCoordV,
-            uint32_t packedColor = 0xffffffff );
+            uint8_t colorRed = 0xff, uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
         inline SimpleTexturedVertex(
             const Simd::Vector3& rPosition, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
@@ -77,8 +78,8 @@ namespace Lunar
     {
         /// Position.
         float32_t position[ 2 ];
-        /// Packed color (see Color class for more information).
-        uint32_t color;
+        /// Color.
+        uint8_t color[ 4 ];
         /// Texture coordinates.
         Float16 texCoords[ 2 ];
 
@@ -86,8 +87,8 @@ namespace Lunar
         //@{
         inline ScreenVertex();
         inline ScreenVertex(
-            float32_t positionX, float32_t positionY, Float16 texCoordU, Float16 texCoordV,
-            uint32_t packedColor = 0xffffffff );
+            float32_t positionX, float32_t positionY, Float16 texCoordU, Float16 texCoordV, uint8_t colorRed = 0xff,
+            uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
         inline ScreenVertex(
             const Simd::Vector2& rPosition, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
@@ -109,8 +110,8 @@ namespace Lunar
         uint8_t normal[ 4 ];
         /// Tangent.
         uint8_t tangent[ 4 ];
-        /// Packed color (see Color class for more information).
-        uint32_t color;
+        /// Color.
+        uint8_t color[ 4 ];
         /// Texture coordinates.
         Float16 texCoords[ TexCoordSetCount ][ 2 ];
 

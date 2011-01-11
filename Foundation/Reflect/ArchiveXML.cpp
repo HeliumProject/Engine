@@ -111,9 +111,6 @@ void ArchiveXML::Read()
         throw Reflect::StreamException( TXT( "Input stream is empty" ) );
     }
 
-    // setup visitors
-    PreDeserialize();
-
     // while there is data, parse buffer
     long step = 0;
     const unsigned bufferSizeInBytes = 4096;
@@ -149,9 +146,6 @@ void ArchiveXML::Write()
 
     StatusInfo info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
-
-    // setup visitors
-    PreSerialize();
 
 #ifdef UNICODE
     uint16_t feff = 0xfeff;

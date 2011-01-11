@@ -85,9 +85,6 @@ void ArchiveBinary::Read()
         throw Reflect::StreamException( TXT( "Input stream is empty" ) );
     }
 
-    // setup visitors
-    PreDeserialize();
-
     // read byte order
     ByteOrder byteOrder = Helium::PlatformByteOrder;
     uint16_t byteOrderMarker = 0;
@@ -159,9 +156,6 @@ void ArchiveBinary::Write()
 
     StatusInfo info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
-
-    // setup visitors
-    PreSerialize();
 
     // write BOM
     uint16_t feff = 0xfeff;

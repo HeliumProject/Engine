@@ -174,38 +174,9 @@ namespace Helium
 
         class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
+        protected:
             friend class RefCountBase< Archive >;
 
-        protected:
-
-            // The number of bytes Parsed so far
-            unsigned m_Progress;
-
-            // The file we are working with
-            Path m_Path;
-
-            // The byte order
-            ByteOrder m_ByteOrder;
-
-            // The array of elements that we've found
-            std::vector< ObjectPtr > m_Objects;
-
-            // The mode
-            ArchiveMode m_Mode;
-
-            // The cache of data objects
-            ObjectCache m_Cache;
-
-            // The visitors to use
-            V_ArchiveVisitor m_Visitors;
-
-            // The type to serach for
-            const Class* m_SearchClass;
-
-            // The abort status
-            bool m_Abort;
-
-        protected:
             Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
             virtual ~Archive();
@@ -251,7 +222,7 @@ namespace Helium
             //
             // Serialization
             //
-        public:
+
             virtual void Serialize( Object* object ) = 0;
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
             virtual void Deserialize( ObjectPtr& object ) = 0;
@@ -260,22 +231,13 @@ namespace Helium
             //
             // Event API
             //
-        public:
+
             StatusSignature::Event e_Status;
             ExceptionSignature::Delegate d_Exception;
 
             //
             // Serialization
             //
-        public:
-
-            // Archive-level processing (visitor setup and append generation)
-            void PreSerialize();
-            void PostSerialize( std::vector< ObjectPtr >& append );
-
-            // Archive-level processing (visitor setup and append processing)
-            void PreDeserialize();
-            void PostDeserialize( std::vector< ObjectPtr >& append );
 
             // Instance-level processing (visit calls and type tracking)
             void PreSerialize( Object* object, const Field* field = NULL );
@@ -294,6 +256,7 @@ namespace Helium
             ObjectPtr Get( const Class* searchClass = NULL );
             void Get( std::vector< ObjectPtr >& elements );
 
+            // Get a single object of the specified type in the archive
             template <class T>
             Helium::StrongPtr<T> Get()
             {
@@ -309,7 +272,7 @@ namespace Helium
                 }
             }
 
-            // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
+            // Get all objects of the specified type in the archive
             template< class T >
             void Get( std::vector< Helium::StrongPtr<T> >& elements )
             {
@@ -327,6 +290,34 @@ namespace Helium
                     }
                 }
             }
+
+        protected:
+            // The number of bytes Parsed so far
+            unsigned m_Progress;
+
+            // The file we are working with
+            Path m_Path;
+
+            // The byte order
+            ByteOrder m_ByteOrder;
+
+            // The array of elements that we've found
+            std::vector< ObjectPtr > m_Objects;
+
+            // The mode
+            ArchiveMode m_Mode;
+
+            // The cache of data objects
+            ObjectCache m_Cache;
+
+            // The visitors to use
+            V_ArchiveVisitor m_Visitors;
+
+            // The type to serach for
+            const Class* m_SearchClass;
+
+            // The abort status
+            bool m_Abort;
         };
 
         typedef Helium::SmartPtr< Archive > ArchivePtr;

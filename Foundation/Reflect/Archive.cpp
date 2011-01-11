@@ -43,52 +43,6 @@ Archive::~Archive()
 {
 }
 
-void Archive::PreSerialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for serialization, no one used it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostSerialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
-void Archive::PreDeserialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for deserialization, no one was using it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostDeserialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
 void Archive::PreSerialize(Object* object, const Field* field)
 {
     V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();

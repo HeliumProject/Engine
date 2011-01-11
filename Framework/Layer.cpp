@@ -136,7 +136,7 @@ Entity* Layer::CreateEntity(
         return NULL;
     }
 
-    bool bIsEntityType = pType->IsSubtypeOf( Entity::GetStaticType() );
+    bool bIsEntityType = pType->IsType( Entity::GetStaticType() );
     HELIUM_ASSERT( bIsEntityType );
     if( !bIsEntityType )
     {

@@ -100,11 +100,6 @@ namespace Lunar
         inline uint32_t GetFlags() const;
         //@}
 
-        /// @name Type Information
-        //@{
-        bool IsSubtypeOf( const GameObjectType* pType ) const;
-        //@}
-
         /// @name Static Type Registration
         //@{
         inline static Package* GetTypePackage();

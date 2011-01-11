@@ -141,7 +141,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
         return NULL;
     }
 
-    bool bIsWorldType = pType->IsSubtypeOf( World::GetStaticType() );
+    bool bIsWorldType = pType->IsType( World::GetStaticType() );
     HELIUM_ASSERT( bIsWorldType );
     if( !bIsWorldType )
     {

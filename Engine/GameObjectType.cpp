@@ -28,24 +28,6 @@ GameObjectType::~GameObjectType()
 {
 }
 
-/// Get whether this type is a subtype of the given type.
-///
-/// @param[in] pType  Type against which to check.
-bool GameObjectType::IsSubtypeOf( const GameObjectType* pType ) const
-{
-    HELIUM_ASSERT( pType );
-
-    for( const GameObjectType* pThisType = this; pThisType != NULL; pThisType = pThisType->GetBaseType() )
-    {
-        if( pThisType == pType )
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 /// Set the package in which all template object packages are stored.
 ///
 /// @param[in] pPackage  Main type package.

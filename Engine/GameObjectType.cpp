@@ -116,8 +116,8 @@ const GameObjectType* GameObjectType::Create(
     pType->m_Name = *name;
     pType->m_Size = static_cast< uint32_t >( pTemplate->GetInstanceSize() );
     pType->m_Base = pBaseClass;
-    pType->m_Default = pTemplate;
     pType->m_Template = pTemplate;
+    pType->m_TemplateObject = pTemplate;
     pType->m_cachedName = name;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;

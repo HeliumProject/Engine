@@ -238,7 +238,7 @@ void Composite::Unregister() const
     }
 }
 
-bool Composite::IsType(const Type* type) const
+bool Composite::IsType(const Composite* type) const
 {
     for ( const Composite* base = this; base; base = base->m_Base )
     {
@@ -357,7 +357,7 @@ void Composite::Copy( const void* source, void* destination ) const
     if ( source != destination )
     {
 #pragma TODO("This should be inside a virtual function (like CopyTo) instead of a type check conditional")
-        if ( IsType( GetType<Data>() ) )
+        if ( IsType( GetClass<Data>() ) )
         {
             const Data* data = static_cast<const Data*>(source);
             Data* cln = static_cast<Data*>(destination);

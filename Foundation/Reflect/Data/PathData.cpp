@@ -25,7 +25,7 @@ void PathData::ConnectData( Helium::HybridPtr< void > data )
 
 bool PathData::Set( const Data* src, uint32_t flags )
 {
-    if ( GetType() != src->GetType() )
+    if ( GetClass() != src->GetClass() )
     {
         return false;
     }

@@ -181,7 +181,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
                 // Pointer support
                 //
 
-                if (field->m_DataClass == Reflect::GetType<Reflect::PointerData>())
+                if (field->m_DataClass == Reflect::GetClass<Reflect::PointerData>())
                 {
                     if (hidden)
                     {
@@ -240,7 +240,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
                 //
 
 #pragma TODO("Move this out to an interpreter")
-                if (field->m_DataClass == Reflect::GetType<ObjectStlVectorData>())
+                if (field->m_DataClass == Reflect::GetClass<ObjectStlVectorData>())
                 {
                     if (hidden)
                     {
@@ -289,7 +289,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
                 //
 
                 const Reflect::Class* type = field->m_DataClass;
-                if ( !type->IsType( Reflect::GetType<Reflect::ContainerData>() ) )
+                if ( !type->IsType( Reflect::GetClass<Reflect::ContainerData>() ) )
                 {
                     fieldInterpreter = CreateInterpreter< ReflectValueInterpreter >( m_Container );
                     fieldInterpreter->InterpretField( field, instances, container );

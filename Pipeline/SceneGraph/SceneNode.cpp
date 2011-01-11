@@ -490,7 +490,7 @@ tstring SceneNode::GetMembership() const
     for ( ; itr != end; ++itr )
     {
         SceneGraph::SceneNode* node = *itr;
-        if ( node->HasType( Reflect::GetType<SceneGraph::Layer>() ) )
+        if ( node->IsClass( Reflect::GetClass<SceneGraph::Layer>() ) )
         {
             SceneGraph::Layer* layer = Reflect::DangerousCast< SceneGraph::Layer >( node );
             if ( layer->GetOwner()->GetNodes().find( layer->GetID() ) != layer->GetOwner()->GetNodes().end() )

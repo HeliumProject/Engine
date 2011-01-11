@@ -94,9 +94,9 @@ ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     // If you hit this, you are misusing this interpreter
-    HELIUM_ASSERT( field->m_DataClass == Reflect::GetType<Reflect::BitfieldData>() );
+    HELIUM_ASSERT( field->m_DataClass == Reflect::GetClass<Reflect::BitfieldData>() );
 
-    if ( field->m_DataClass != Reflect::GetType<Reflect::BitfieldData>() )
+    if ( field->m_DataClass != Reflect::GetClass<Reflect::BitfieldData>() )
     {
         return;
     }

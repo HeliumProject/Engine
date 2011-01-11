@@ -99,7 +99,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
 void ReflectStlSetInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -115,7 +115,7 @@ void ReflectStlSetInterpreter::OnAdd( const ButtonClickedArgs& args )
 void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );

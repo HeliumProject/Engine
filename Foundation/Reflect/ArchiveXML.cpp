@@ -178,7 +178,7 @@ void ArchiveXML::Serialize(Object* object)
 
     SerializeHeader(object);
 
-    if (object->HasType(Reflect::GetType<Data>()))
+    if (object->IsClass(Reflect::GetClass<Data>()))
     {
         Data* s = DangerousCast<Data>(object);
 
@@ -430,7 +430,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 m_Cache.Create(newState->m_Field->m_DataClass, object);
 
                 // if we are a data
-                if (object->HasType(Reflect::GetType<Data>()))
+                if (object->IsClass(Reflect::GetClass<Data>()))
                 {
                     // connect the current instance to the data
                     DangerousCast<Data>(object)->ConnectField(parentObject.Ptr(), newState->m_Field);
@@ -536,7 +536,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     if ( topState->m_Object )
     {
         // do Data logic
-        if ( topState->m_Object->HasType(Reflect::GetType<Data>()) && !topState->m_Buffer.empty())
+        if ( topState->m_Object->IsClass(Reflect::GetClass<Data>()) && !topState->m_Buffer.empty())
         {
             Data* data = DangerousCast<Data>(topState->m_Object);
 
@@ -642,7 +642,7 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
     std::vector< ObjectPtr >::iterator end = archive.m_Objects.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchClass))
+        if ((*itr)->IsClass(searchClass))
         {
             return *itr;
         }

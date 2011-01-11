@@ -37,11 +37,11 @@ namespace Helium
         class FOUNDATION_API FindByTypeVisitor : public Visitor
         {
         public:
-            const Reflect::Type* m_Type;
+            const Reflect::Class* m_Class;
 
             std::vector< ObjectPtr >& m_Found;
 
-            FindByTypeVisitor(const Reflect::Type* type, std::vector< ObjectPtr >& found);
+            FindByTypeVisitor(const Reflect::Class* type, std::vector< ObjectPtr >& found);
 
             virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
@@ -49,11 +49,11 @@ namespace Helium
         class FOUNDATION_API FindByTypeSetVisitor : public Visitor
         {
         public:
-            const std::set< const Reflect::Type* >& m_Types;
+            const std::set< const Reflect::Class* >& m_Classes;
 
             std::vector< ObjectPtr >& m_Found;
 
-            FindByTypeSetVisitor(const std::set< const Reflect::Type* >& types, std::vector< ObjectPtr >& found);
+            FindByTypeSetVisitor(const std::set< const Reflect::Class* >& classes, std::vector< ObjectPtr >& found);
 
             virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };

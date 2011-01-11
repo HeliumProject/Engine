@@ -13,7 +13,7 @@ namespace Helium
         class FOUNDATION_API Object;
         typedef Helium::StrongPtr<Object> ObjectPtr;
         typedef std::stack<ObjectPtr> S_Object;
-        typedef stdext::hash_map<const Type*, S_Object> H_Object;
+        typedef stdext::hash_map<const Class*, S_Object> H_Object;
 
         class ObjectCache
         {

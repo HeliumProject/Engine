@@ -42,7 +42,7 @@ void EnumerationData::ConnectField(Helium::HybridPtr<void> instance, const Field
 
 bool EnumerationData::Set(const Data* src, uint32_t flags)
 {
-    if (GetType() != src->GetType())
+    if (GetClass() != src->GetClass())
     {
         return false;
     }

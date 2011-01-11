@@ -194,7 +194,7 @@ ObjectPtr Archive::Get( const Class* searchClass )
     std::vector< ObjectPtr >::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
-        if ( (*itr)->HasType( searchClass ) )
+        if ( (*itr)->IsClass( searchClass ) )
         {
             return *itr;
         }

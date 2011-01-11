@@ -217,7 +217,7 @@ void ArchiveBinary::Serialize(Object* object)
 
     object->PreSerialize();
 
-    if (object->HasType(Reflect::GetType<Data>()))
+    if (object->IsClass(Reflect::GetClass<Data>()))
     {
         Data* s = DangerousCast<Data>(object);
 
@@ -417,13 +417,13 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
     {
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name, object->GetType());
+        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
         m_Indent.Push();
 #endif
 
         object->PreDeserialize();
 
-        if (object->HasType(Reflect::GetType<Data>()))
+        if (object->IsClass(Reflect::GetClass<Data>()))
         {
             Data* s = DangerousCast<Data>(object);
 
@@ -472,7 +472,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
 
             if (object.ReferencesObject())
             {
-                if ( object->HasType( m_SearchClass ) )
+                if ( object->IsClass( m_SearchClass ) )
                 {
                     m_Skip = true;
                 }
@@ -666,7 +666,7 @@ ObjectPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* searchC
     std::vector< ObjectPtr >::iterator end = archive.m_Objects.end();
     for ( ; itr != end; ++itr )
     {
-        if ((*itr)->HasType(searchClass))
+        if ((*itr)->IsClass(searchClass))
         {
             return *itr;
         }

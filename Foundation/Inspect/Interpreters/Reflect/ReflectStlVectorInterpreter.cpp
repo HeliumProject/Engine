@@ -160,7 +160,7 @@ ButtonPtr ReflectStlVectorInterpreter::AddMoveDownButton( List* list )
 void ReflectStlVectorInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -172,7 +172,7 @@ void ReflectStlVectorInterpreter::OnAdd( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -205,7 +205,7 @@ void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -232,7 +232,7 @@ void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );

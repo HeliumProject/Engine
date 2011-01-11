@@ -561,7 +561,7 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Sc
 
     if ( action == ImportActions::Import )
     {
-        if ( element->HasType( importReflectType ) )
+        if ( element->IsClass( importReflectType ) )
         {
             SceneNode* node = Reflect::DangerousCast< SceneNode >( element );
 
@@ -775,7 +775,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
         // Don't export a node if it has already been exported
         if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
         {
-            if ( node->HasType( Reflect::GetType< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
+            if ( node->IsClass( Reflect::GetClass< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
             {
                 // If we are exporting a transform node, but we are not maintaining the hierarchy,
                 // we would still like to maintain the object's global position.  So, we create
@@ -800,7 +800,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
                     bool skipAncestor = false;
 
                     // Check to see if the ancestor is a hierarchy node
-                    if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+                    if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
                     {
                         SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
                         if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
@@ -1176,7 +1176,7 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
 
     // insert it into the types for its bases
     const Reflect::Class* type = nodeType->GetInstanceClass();
-    for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
+    for ( ; type != Reflect::GetClass<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
     {
         Helium::StdInsert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
@@ -1201,7 +1201,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
         m_NodeTypesByType.erase( typeSet );
 
         const Reflect::Class* type = nodeType->GetInstanceClass();
-        for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
+        for ( ; type != Reflect::GetClass<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
         {
             HMS_InstanceClassToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type );
 
@@ -1333,7 +1333,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Hierarchy check") );
-        if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
 
@@ -1407,7 +1407,7 @@ void Scene::Create()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = valType.second;
-        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
         {
             SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
             h->Create();
@@ -1426,7 +1426,7 @@ void Scene::Delete()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = dependNodeType.second;
-        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
         {
             SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
 
@@ -2630,7 +2630,7 @@ Undo::CommandPtr Scene::UngroupSelected()
         // If the item is a group (pivot transform)
         SceneGraph::SceneNode* sceneNode = Reflect::ObjectCast< SceneGraph::SceneNode >( *itr );
 
-        if ( sceneNode && sceneNode->GetType() == Reflect::GetType<SceneGraph::PivotTransform>() )
+        if ( sceneNode && sceneNode->GetClass() == Reflect::GetClass<SceneGraph::PivotTransform>() )
         {
             SceneGraph::PivotTransform* group = Reflect::AssertCast< SceneGraph::PivotTransform >( sceneNode );
 

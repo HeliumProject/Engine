@@ -48,7 +48,7 @@ inline DerivedT* Helium::Reflect::AssertCast( Reflect::Object* base )
 {
     if ( base != NULL )
     {
-        HELIUM_ASSERT( base->HasType( GetClass<DerivedT>() ) );
+        HELIUM_ASSERT( base->IsClass( GetClass<DerivedT>() ) );
     }
 
     return DangerousCast<DerivedT>( base );
@@ -59,7 +59,7 @@ inline const DerivedT* Helium::Reflect::AssertCast(const Reflect::Object* base)
 {
     if ( base != NULL )
     {
-        HELIUM_ASSERT( base->HasType( GetClass<DerivedT>() ) );
+        HELIUM_ASSERT( base->IsClass( GetClass<DerivedT>() ) );
     }
 
     return DangerousCast<DerivedT>( base );
@@ -72,7 +72,7 @@ inline const DerivedT* Helium::Reflect::AssertCast(const Reflect::Object* base)
 template<class DerivedT>
 inline DerivedT* Helium::Reflect::TryCast(Reflect::Object* base)
 {
-    if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
+    if ( base != NULL && !base->IsClass( GetClass<DerivedT>() ) )
     {
         throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
     }
@@ -83,7 +83,7 @@ inline DerivedT* Helium::Reflect::TryCast(Reflect::Object* base)
 template<class DerivedT>
 inline const DerivedT* Helium::Reflect::TryCast(const Reflect::Object* base)
 {
-    if ( base != NULL && !base->HasType( GetClass<DerivedT>() ) )
+    if ( base != NULL && !base->IsClass( GetClass<DerivedT>() ) )
     {
         throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
     }
@@ -98,7 +98,7 @@ inline const DerivedT* Helium::Reflect::TryCast(const Reflect::Object* base)
 template<class DerivedT>
 inline DerivedT* Helium::Reflect::ObjectCast(Reflect::Object* base)
 {
-    if ( base != NULL && base->HasType( GetClass<DerivedT>() ) )
+    if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {
         return DangerousCast<DerivedT>( base );
     }
@@ -111,7 +111,7 @@ inline DerivedT* Helium::Reflect::ObjectCast(Reflect::Object* base)
 template<class DerivedT>
 inline const DerivedT* Helium::Reflect::ObjectCast(const Reflect::Object* base)
 {
-    if ( base != NULL && base->HasType( GetClass<DerivedT>() ) )
+    if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {
         return DangerousCast<DerivedT>( base );
     }

@@ -318,7 +318,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy ancestral dependency connections
     for each (SceneGraph::SceneNode* ancestor in GetAncestors())
     {
-        if ( ancestor->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( ancestor->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -329,7 +329,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy descendant dependency connections
     for each (SceneGraph::SceneNode* descendant in GetDescendants())
     {
-        if ( descendant->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( descendant->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -402,7 +402,7 @@ void HierarchyNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
 {
     __super::DisconnectDescendant(descendant);
 
-    if (descendant->HasType(Reflect::GetType<SceneGraph::HierarchyNode>()))
+    if (descendant->IsClass(Reflect::GetClass<SceneGraph::HierarchyNode>()))
     {
         SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
 
@@ -437,7 +437,7 @@ void HierarchyNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 {
     __super::ConnectDescendant(descendant);
 
-    if (descendant->HasType(Reflect::GetType<SceneGraph::HierarchyNode>()))
+    if (descendant->IsClass(Reflect::GetClass<SceneGraph::HierarchyNode>()))
     {
         SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
 
@@ -501,7 +501,7 @@ void HierarchyNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 {
     __super::ConnectAncestor( ancestor );
 
-    if ( ancestor->HasType( Reflect::GetType< SceneGraph::Layer >() ) )
+    if ( ancestor->IsClass( Reflect::GetClass< SceneGraph::Layer >() ) )
     {
         m_LayerColor = Reflect::ObjectCast< SceneGraph::Layer >( ancestor );
     }

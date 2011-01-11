@@ -35,7 +35,6 @@ struct ObjectRefCountSupport::StaticData
 
 ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
-const Type* Object::s_Type = NULL;
 const Class* Object::s_Class = NULL;
 
 /// Retrieve a reference count proxy from the global pool.
@@ -195,26 +194,24 @@ void Object::Destroy()
     delete this;
 }
 
-const Reflect::Type* Object::GetType() const
-{
-    return Reflect::GetType<Object>();
-}
-
-bool Object::HasType( const Reflect::Type* type ) const
-{
-    return type == Reflect::GetType<Object>();
-}
-
 const Reflect::Class* Object::GetClass() const
 {
     return Reflect::GetClass<Object>();
+}
+
+bool Object::IsClass( const Reflect::Class* type ) const
+{
+    const Class* thisType = GetClass();
+    HELIUM_ASSERT( thisType );
+
+    return thisType->IsType( type );
 }
 
 Reflect::Class* Object::CreateClass( const tchar_t* name )
 {
     HELIUM_ASSERT( s_Class == NULL );
     Reflect::Class* type = Class::Create<Object>( name, NULL );
-    s_Type = s_Class = type;
+    s_Class = type;
     return type;
 }
 
@@ -295,9 +292,9 @@ void Object::CopyTo( Object* object )
             // Types are not the same, we have to search...
             // Iterate up inheritance of this, and look check to see if object HasType for each one
             Reflect::Registry* registry = Reflect::Registry::GetInstance();
-            for ( const Composite* base = thisType; base && !type; base = base->m_Base )
+            for ( const Class* base = thisType; base && !type; base = static_cast< const Class* >( base->m_Base ) )
             {
-                if ( object->HasType( base ) )
+                if ( object->IsClass( base ) )
                 {
                     // We found the match (which breaks out of this loop)
                     type = ReflectionCast<const Class>( base );

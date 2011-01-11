@@ -74,12 +74,12 @@ bool ObjectCache::Create( const Class* type, ObjectPtr& object )
 
 void ObjectCache::Free(ObjectPtr object)
 {
-    if (!object->HasType(Reflect::GetType<Data>()))
+    if (!object->IsClass(Reflect::GetClass<Data>()))
     {
         return;
     }
 
-    H_Object::iterator found = m_Objects.find(object->GetType());
+    H_Object::iterator found = m_Objects.find(object->GetClass());
 
     if (found == m_Objects.end())
     {
@@ -87,7 +87,7 @@ void ObjectCache::Free(ObjectPtr object)
 
         stack.push(object);
 
-        StdInsert<H_Object>::Result result = m_Objects.insert(H_Object::value_type (object->GetType(), stack));
+        StdInsert<H_Object>::Result result = m_Objects.insert(H_Object::value_type (object->GetClass(), stack));
 
         HELIUM_ASSERT( result.second );
     }

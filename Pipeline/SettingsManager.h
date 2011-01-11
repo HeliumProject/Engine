@@ -35,7 +35,7 @@ namespace Helium
         template< class Type >
         Type* GetSettings()
         {
-            M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetType< Type >() );
+            M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetClass< Type >() );
             if ( itr != m_SettingsMap.end() )
             {
                 return Reflect::TryCast< Type >( (*itr).second );
@@ -46,7 +46,7 @@ namespace Helium
                 Type* newSettings = Reflect::ObjectCast< Type >( Reflect::GetClass< Type >()->m_Creator() );
                 HELIUM_ASSERT( newSettings );
 
-                m_SettingsMap[ Reflect::GetType< Type >() ] = newSettings;
+                m_SettingsMap[ Reflect::GetClass< Type >() ] = newSettings;
                 return newSettings;
             }
         }

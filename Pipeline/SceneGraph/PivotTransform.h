@@ -27,7 +27,7 @@ namespace Helium
 
             virtual bool IsGroup()
             {
-                return GetType() == Reflect::GetType<SceneGraph::PivotTransform>();
+                return GetClass() == Reflect::GetClass<SceneGraph::PivotTransform>();
             }
 
             //

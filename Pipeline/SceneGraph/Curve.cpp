@@ -324,7 +324,7 @@ uint32_t Curve::GetNumberControlPoints() const
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
-        if ( ( *childItr )->HasType( Reflect::GetType< CurveControlPoint >() ) )
+        if ( ( *childItr )->IsClass( Reflect::GetClass< CurveControlPoint >() ) )
         {
             ++count;
         }

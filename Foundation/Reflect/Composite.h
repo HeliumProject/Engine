@@ -162,7 +162,7 @@ namespace Helium
             virtual void Unregister() const HELIUM_OVERRIDE;
 
             // Inheritance Hierarchy
-            bool IsType(const Type* type) const;
+            bool IsType(const Composite* type) const;
             void AddDerived( const Composite* derived ) const;
             void RemoveDerived( const Composite* derived ) const;
 
@@ -264,7 +264,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -276,7 +276,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -288,7 +288,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ObjectT > >),
                     Reflect::GetClass<Reflect::ObjectStlVectorData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -300,7 +300,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ObjectT > >),
                     Reflect::GetClass<Reflect::ObjectStlVectorData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -312,7 +312,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ObjectT > >),
                     Reflect::GetClass<Reflect::ObjectStlSetData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -324,7 +324,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ObjectT > >),
                     Reflect::GetClass<Reflect::ObjectStlSetData>(),
-                    Reflect::GetType<ObjectT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
@@ -336,7 +336,7 @@ namespace Helium
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
                     Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
-                    Reflect::GetType<ObjectT>(), 
+                    Reflect::GetClass<ObjectT>(), 
                     flags );
             }
 
@@ -348,7 +348,7 @@ namespace Helium
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
                     Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
-                    Reflect::GetType<ObjectT>(), 
+                    Reflect::GetClass<ObjectT>(), 
                     flags );
             }
 

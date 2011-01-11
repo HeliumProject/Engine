@@ -28,7 +28,7 @@ void StripCanvasWidget::CreateWindow( wxWindow* parent )
         Inspect::V_Control::const_iterator end = m_ContainerControl->GetChildren().end();
         for ( ; itr != end; ++itr )
         {
-            if ( !(*itr)->HasType( Reflect::GetType< Inspect::Container >() ) )
+            if ( !(*itr)->IsClass( Reflect::GetClass< Inspect::Container >() ) )
             {
                 childrenAreContainers = false;
                 break;

@@ -94,5 +94,5 @@ bool ClipboardElementArray::CanAdd( const Reflect::ObjectPtr& item ) const
         return false;
     }
 
-    return item->HasType( GetCommonBaseClass() );
+    return item->IsClass( GetCommonBaseClass() );
 }

@@ -95,7 +95,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
-        while ( type && ( type != Reflect::GetType< ComponentBase >() ) )
+        while ( type && ( type != Reflect::GetClass< ComponentBase >() ) )
         {
             // See if the base class has a slot in this collection.
             found = m_Components.find( type );
@@ -353,7 +353,7 @@ void ComponentCollection::CopyTo(Reflect::Object* object)
                 // Component could not be added to the destination collection, check sibling classes
                 for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    if ( sibling != attrib->GetType() )
+                    if ( sibling != attrib->GetClass() )
                     {
                         destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )

@@ -119,16 +119,12 @@ namespace Helium
             // Type id
             //
 
-            // Returns the type id for this instance
-            static const Type* s_Type;
-            virtual const Reflect::Type* GetType() const;
-
-            // Deduces type membership for this instance
-            virtual bool HasType( const Reflect::Type* type ) const;
-
             // Retrieves the reflection data for this instance
             static const Class* s_Class;
             virtual const Reflect::Class* GetClass() const;
+
+            // Deduces type membership for this instance
+            bool IsClass( const Reflect::Class* type ) const;
 
             // Create class data block for this type
             static Reflect::Class* CreateClass( const tchar_t* name );

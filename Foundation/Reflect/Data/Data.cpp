@@ -189,7 +189,7 @@ bool Data::CastSupported(const Class* srcType, const Class* destType)
 bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
 {
     // if the types are a match, just do set value
-    if (dest->HasType(src->GetType()) || src->HasType(dest->GetType()))
+    if (dest->IsClass(src->GetClass()) || src->IsClass(dest->GetClass()))
     {
         return dest->Set(src);
     }
@@ -202,9 +202,9 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     }
 
     // check to see if we can do a container cast, casting the data within the container
-    if (src->HasType( Reflect::GetType<ContainerData>()) && dest->HasType( Reflect::GetType<ContainerData>() ))
+    if (src->IsClass( Reflect::GetClass<ContainerData>()) && dest->IsClass( Reflect::GetClass<ContainerData>() ))
     {
-        if (src->HasType( Reflect::GetType<StlVectorData>() ) && dest->HasType( Reflect::GetType<StlVectorData>() ))
+        if (src->IsClass( Reflect::GetClass<StlVectorData>() ) && dest->IsClass( Reflect::GetClass<StlVectorData>() ))
         {
             const StlVectorData* srcArray = DangerousCast<StlVectorData>( src );
             StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
@@ -221,7 +221,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<StlSetData>() ) && dest->HasType( Reflect::GetType<StlSetData>() ))
+        else if (src->IsClass( Reflect::GetClass<StlSetData>() ) && dest->IsClass( Reflect::GetClass<StlSetData>() ))
         {
             const StlSetData* srcSet = DangerousCast<StlSetData>( src );
             StlSetData* destSet = DangerousCast<StlSetData>( dest );
@@ -247,7 +247,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<StlMapData>() ) && dest->HasType( Reflect::GetType<StlMapData>() ))
+        else if (src->IsClass( Reflect::GetClass<StlMapData>() ) && dest->IsClass( Reflect::GetClass<StlMapData>() ))
         {
             const StlMapData* srcMap = DangerousCast<StlMapData>( src );
             StlMapData* destMap = DangerousCast<StlMapData>( dest );
@@ -274,7 +274,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<ObjectStlMapData>() ) && dest->HasType( Reflect::GetType<ObjectStlMapData>() ))
+        else if (src->IsClass( Reflect::GetClass<ObjectStlMapData>() ) && dest->IsClass( Reflect::GetClass<ObjectStlMapData>() ))
         {
             const ObjectStlMapData* srcObjectMap = DangerousCast<ObjectStlMapData>( src );
             ObjectStlMapData* destObjectMap = DangerousCast<ObjectStlMapData>( dest );

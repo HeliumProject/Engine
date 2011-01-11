@@ -16,12 +16,12 @@ static inline const Helium::Reflect::Class* Helium::Reflect::GetDataClass<Name::
 template<> \
 static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* data ) \
 { \
-    return data && data->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.Ptr() : NULL; \
 } \
 template<> \
 static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* data ) \
 { \
-    return data && data->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.Ptr() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"

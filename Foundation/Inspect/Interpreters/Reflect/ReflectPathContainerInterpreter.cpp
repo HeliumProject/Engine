@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isVector = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
-    bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
+    bool isVector = ( field->m_DataClass == Reflect::GetClass<PathStlVectorData>() );
+    bool isSet = ( field->m_DataClass == Reflect::GetClass<PathStlSetData>() );
     bool isContainer = isVector || isSet;
 
     // create the label
@@ -223,7 +223,7 @@ void PathContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
@@ -243,7 +243,7 @@ void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 

@@ -70,25 +70,12 @@ static Reflect::Object* CreateObject() { return new __Class; }
 public: \
 typedef __Base Base; \
 typedef __Class This; \
-virtual const Helium::Reflect::Type* GetType() const HELIUM_OVERRIDE; \
-virtual bool HasType(const Reflect::Type* id) const HELIUM_OVERRIDE; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
 static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
-static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Class* s_Class;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_CLASS( __Class, __Creator ) \
-const Helium::Reflect::Type* __Class::GetType() const \
-{ \
-    return s_Class; \
-} \
-\
-bool __Class::HasType(const Helium::Reflect::Type* type) const \
-{ \
-    return s_Class == type || __Class::Base::HasType(type); \
-} \
-\
 const Helium::Reflect::Class* __Class::GetClass() const \
 { \
     return s_Class; \
@@ -99,10 +86,9 @@ Helium::Reflect::Class* __Class::CreateClass( const tchar_t* name ) \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
     Reflect::Class* type = Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
-    s_Type = s_Class = type; \
+    s_Class = type; \
     return type; \
 } \
-const Helium::Reflect::Type* __Class::s_Type = NULL; \
 const Helium::Reflect::Class* __Class::s_Class = NULL;
 
 // declares type checking functions

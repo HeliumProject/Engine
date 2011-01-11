@@ -1557,7 +1557,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
         {
             const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
-            if ( nodeType->GetInstanceClass()->IsType( Reflect::GetType< SceneGraph::Layer >() ) )
+            if ( nodeType->GetInstanceClass()->IsType( Reflect::GetClass< SceneGraph::Layer >() ) )
             {
                 // Now that we have the layer node type, iterate over all the layer instances and
                 // add them to the layer grid UI.
@@ -1577,7 +1577,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
                 //End batching
                 m_LayersPanel->EndBatch();
             } 
-            else if ( nodeType->HasType( Reflect::GetType< SceneGraph::HierarchyNodeType >() ) )
+            else if ( nodeType->IsClass( Reflect::GetClass< SceneGraph::HierarchyNodeType >() ) )
             {
                 // Hierarchy node types need to be added to the object grid UI.
                 SceneGraph::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< SceneGraph::HierarchyNodeType >( nodeTypeItr->second );
@@ -1701,15 +1701,15 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             {
                 if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
                 {
-                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::ScaleManipulator >() )
+                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::ScaleManipulator >() )
                     {
                         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::RotateManipulator >() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::RotateManipulator >() )
                     {
                         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::TranslateManipulator >() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::TranslateManipulator >() )
                     {
                         SceneGraph::TranslateManipulator* manipulator = Reflect::AssertCast< SceneGraph::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
 
@@ -1831,7 +1831,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     int32_t selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
-        if ( args.m_NewTool->HasType( Reflect::GetType< SceneGraph::TransformManipulator >() ) )
+        if ( args.m_NewTool->IsClass( Reflect::GetClass< SceneGraph::TransformManipulator >() ) )
         {
             SceneGraph::TransformManipulator* manipulator = Reflect::DangerousCast< SceneGraph::TransformManipulator >( args.m_NewTool );
             switch ( manipulator->GetMode() )
@@ -1861,27 +1861,27 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
             }
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::EntityInstanceCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsEntityCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::VolumeCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::VolumeCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsVolumeCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::LocatorCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsLocatorCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::DuplicateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::DuplicateTool >() )
         {
             selectedTool = EventIds::ID_ToolsDuplicate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::CurveCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::CurveEditTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveEdit;
         }
@@ -1995,7 +1995,7 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
     for ( ; itr != end; ++itr )
     {
         SceneGraph::SceneNode* sceneNode = itr->second;
-        if ( sceneNode->HasType( Reflect::GetType< SceneGraph::HierarchyNode >() ) )
+        if ( sceneNode->IsClass( Reflect::GetClass< SceneGraph::HierarchyNode >() ) )
         {
             selection.Append( sceneNode );
         }

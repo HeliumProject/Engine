@@ -370,7 +370,7 @@ namespace Helium
             HELIUM_ASSERT( dataClass != NULL );
 
             // sanity check our object type
-            if ( ser->HasType( dataClass ) )
+            if ( ser->IsClass( dataClass ) )
             {
                 // get internal data pointer
                 const T* data = GetData<T>( ser );
@@ -417,7 +417,7 @@ namespace Helium
             HELIUM_ASSERT( dataClass != NULL );
 
             // sanity check our object type
-            if ( ser->HasType( dataClass ) )
+            if ( ser->IsClass( dataClass ) )
             {
                 // get internal data pointer
                 T* data = GetData<T>( ser );

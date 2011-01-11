@@ -45,7 +45,7 @@ const std::set< tstring >& ClipboardFileList::GetFilePaths() const
 // 
 bool ClipboardFileList::Merge( const ReflectClipboardData* source )
 {
-    if ( !source->HasType( Reflect::GetType< ClipboardFileList >() ) )
+    if ( !source->IsClass( Reflect::GetClass< ClipboardFileList >() ) )
     {
         return false;
     }

@@ -45,7 +45,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     if (!result)
     {
-        if ( field->m_DataClass == Reflect::GetType<EnumerationData>() )
+        if ( field->m_DataClass == Reflect::GetClass<EnumerationData>() )
         {
             ChoicePtr choice = CreateControl<Choice>();
 
@@ -75,7 +75,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         }
         else
         {
-            if ( field->m_DataClass == Reflect::GetType<BoolData>() )
+            if ( field->m_DataClass == Reflect::GetClass<BoolData>() )
             {
                 CheckBoxPtr checkBox = CreateControl<CheckBox>();
                 checkBox->a_IsReadOnly.Set( readOnly );
@@ -142,7 +142,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         {
             DataPtr s = field->CreateData();
 
-            if (!s->HasType(Reflect::GetType<ContainerData>()))
+            if (!s->IsClass(Reflect::GetClass<ContainerData>()))
             {
                 s->ConnectField(*itr, field);
 

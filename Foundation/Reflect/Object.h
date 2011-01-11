@@ -140,10 +140,10 @@ namespace Helium
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
-            virtual void                PreSerialize();
-            virtual void                PostSerialize();
-            virtual void                PreDeserialize();
-            virtual void                PostDeserialize();
+            virtual void                PreSerialize( const Reflect::Field* field );
+            virtual void                PostSerialize( const Reflect::Field* field );
+            virtual void                PreDeserialize( const Reflect::Field* field );
+            virtual void                PostDeserialize( const Reflect::Field* field );
 
             //
             // Utilities

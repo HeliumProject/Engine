@@ -302,30 +302,36 @@ bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fie
     return __super::ProcessComponent(element, fieldName);
 }
 
-void ComponentCollection::PreSerialize()
+void ComponentCollection::PreSerialize( const Reflect::Field* field )
 {
-    __super::PreSerialize();
+    __super::PreSerialize( field );
 
-    // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
-    HELIUM_ASSERT( m_Components.find( NULL ) == m_Components.end() ); 
+    if ( field == NULL )
+    {
+        // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
+        HELIUM_ASSERT( m_Components.find( NULL ) == m_Components.end() ); 
 
-    // this *must* be junk
-    m_Components.erase( Reflect::TypeID( NULL ) );
+        // this *must* be junk
+        m_Components.erase( Reflect::TypeID( NULL ) );
+    }
 }
 
-void ComponentCollection::PostDeserialize()
+void ComponentCollection::PostDeserialize( const Reflect::Field* field )
 {
-    __super::PostDeserialize();
+    __super::PostDeserialize( field );
 
-    // this *must* be junk
-    m_Components.erase( Reflect::TypeID( NULL ) );
-
-    M_Component::const_iterator itr = m_Components.begin();
-    M_Component::const_iterator end = m_Components.end();
-    for ( ; itr != end; ++itr )
+    if ( field == NULL )
     {
-        itr->second->SetCollection( this );
-        itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        // this *must* be junk
+        m_Components.erase( Reflect::TypeID( NULL ) );
+
+        M_Component::const_iterator itr = m_Components.begin();
+        M_Component::const_iterator end = m_Components.end();
+        for ( ; itr != end; ++itr )
+        {
+            itr->second->SetCollection( this );
+            itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        }
     }
 }
 

@@ -250,19 +250,19 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
-void Object::PreSerialize()
+void Object::PreSerialize( const Reflect::Field* field )
 {
 }
 
-void Object::PostSerialize()
+void Object::PostSerialize( const Reflect::Field* field )
 {
 }
 
-void Object::PreDeserialize()
+void Object::PreDeserialize( const Reflect::Field* field )
 {
 }
 
-void Object::PostDeserialize()
+void Object::PostDeserialize( const Reflect::Field* field )
 {
 }
 
@@ -333,14 +333,14 @@ ObjectPtr Object::Clone()
 {
     ObjectPtr clone = Registry::GetInstance()->CreateInstance( GetClass() );
 
-    PreSerialize();
-    clone->PreDeserialize();
+    PreSerialize( NULL );
+    clone->PreDeserialize( NULL );
 
     const Class* type = GetClass();
     type->Copy( this, clone );
 
-    clone->PostDeserialize();
-    PostSerialize();
+    clone->PostDeserialize( NULL );
+    PostSerialize( NULL );
 
     return clone;
 }

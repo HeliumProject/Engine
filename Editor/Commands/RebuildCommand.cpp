@@ -358,9 +358,9 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     return REBUILD_SUCCESS;
 }
 
-void RebuildCommand::ArchiveStatus( const Reflect::StatusInfo& info )
+void RebuildCommand::ArchiveStatus( const Reflect::ArchiveStatus& info )
 {
-    switch ( info.m_ArchiveState )
+    switch ( info.m_State )
     {
     case Reflect::ArchiveStates::Starting:
         {

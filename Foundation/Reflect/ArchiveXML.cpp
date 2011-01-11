@@ -95,7 +95,7 @@ void ArchiveXML::Read()
 {
     REFLECT_SCOPE_TIMER(( "Reflect - XML Read" ));
 
-    StatusInfo info( *this, ArchiveStates::Starting );
+    ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
 
     m_Abort = false;
@@ -132,11 +132,11 @@ void ArchiveXML::Read()
         }
     }
 
-    info.m_ArchiveState = ArchiveStates::ObjectProcessed;
+    info.m_State = ArchiveStates::ObjectProcessed;
     info.m_Progress = 100;
     e_Status.Raise( info );
 
-    info.m_ArchiveState = ArchiveStates::Complete;
+    info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
 }
 
@@ -144,7 +144,7 @@ void ArchiveXML::Write()
 {
     REFLECT_SCOPE_TIMER(( "Reflect - XML Write" ));
 
-    StatusInfo info( *this, ArchiveStates::Starting );
+    ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
 
 #ifdef UNICODE
@@ -160,15 +160,13 @@ void ArchiveXML::Write()
 
     *m_Stream << TXT( "</Reflect>\n\0" );
 
-    info.m_ArchiveState = ArchiveStates::Complete;
+    info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
 }
 
 void ArchiveXML::Serialize(Object* object)
 {
-    PreSerialize(object);
-
-    object->PreSerialize();
+    object->PreSerialize( NULL );
 
     SerializeHeader(object);
 
@@ -185,7 +183,7 @@ void ArchiveXML::Serialize(Object* object)
 
     SerializeFooter(object);
 
-    object->PostSerialize();
+    object->PostSerialize( NULL );
 }
 
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
@@ -200,7 +198,7 @@ void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t fl
 
         if ( flags & ArchiveFlags::Status )
         {
-            StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
             info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
             e_Status.Raise( info );
         }
@@ -208,7 +206,7 @@ void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t fl
 
     if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = 100;
         e_Status.Raise( info );
     }
@@ -236,11 +234,12 @@ void ArchiveXML::SerializeField(Object* object, const Field* field)
     {
         m_FieldNames.push( field->m_Name );
 
-        PreSerialize( object, field );
+        object->PreSerialize( field );
         Serialize( data );
-        data->Disconnect();
-        
+        object->PostSerialize( field );
+
         // might be useful to cache the data object here
+        data->Disconnect();
 
         m_FieldNames.pop();
     }
@@ -467,7 +466,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     if (newState->m_Object)
     {
-        newState->m_Object->PreDeserialize();
+        newState->m_Object->PreDeserialize( NULL );
     }
 
     //
@@ -524,34 +523,35 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
     if ( topState->m_Object )
     {
-        // do Data logic
+        // are we nested within another object?
+        ParsingStatePtr parentState = m_StateStack.empty() ? NULL : m_StateStack.top();
+
+        // do callbacks
+        if ( parentState != NULL )
+        {
+            parentState->m_Object->PreDeserialize( topState->m_Field );
+        }
+
+        // do data logic
         if ( topState->m_Object->IsClass(Reflect::GetClass<Data>()) && !topState->m_Buffer.empty())
         {
             Data* data = DangerousCast<Data>(topState->m_Object);
 
-            tstringstream stream (topState->m_Buffer);
-
             ArchiveXML xml;
+            tstringstream stream (topState->m_Buffer);
             xml.m_Stream = new Reflect::TCharStream(&stream, false);
             xml.m_Components = topState->m_Components;
+
             data->Deserialize(xml);
         }
 
         // do callbacks
         if ( topState->m_Object )
         {
-            if ( !TryObjectCallback( topState->m_Object, &Object::PostDeserialize ) )
+            if ( !TryObjectCallback( topState->m_Object, &Object::PostDeserialize, NULL ) )
             {
                 topState->m_Object = NULL; // discard the object
             }
-        }
-
-        if ( topState->m_Object )
-        {
-            PostDeserialize( topState->m_Object );
-
-            // are we nested within another object?
-            ParsingStatePtr parentState = m_StateStack.empty() ? NULL : m_StateStack.top();
 
             // if we are we should see if it's being processed and perhaps be added as a component
             if ( parentState != NULL )
@@ -567,7 +567,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                         // might be useful to cache the data object here
                     }
 
-                    PostDeserialize( parentState->m_Object, topState->m_Field );
+                    parentState->m_Object->PostDeserialize( topState->m_Field );
                 }
                 else
                 {
@@ -595,7 +595,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Object );
 
-        StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = m_Progress;
         e_Status.Raise( info );
 

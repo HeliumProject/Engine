@@ -611,9 +611,9 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Sc
     return NULL;
 }
 
-void Scene::ArchiveStatus( const Reflect::StatusInfo& info )
+void Scene::ArchiveStatus( const Reflect::ArchiveStatus& info )
 {
-    switch (info.m_ArchiveState)
+    switch (info.m_State)
     {
     case Reflect::ArchiveStates::ArchiveStarting:
         {
@@ -664,7 +664,7 @@ void Scene::ArchiveStatus( const Reflect::StatusInfo& info )
     }
 }
 
-void Scene::ArchiveException( const Reflect::ExceptionInfo& info )
+void Scene::ArchiveException( const Reflect::ArchiveExceptionInfo& info )
 {
 #pragma TODO( "Sub default assets?" )
 }

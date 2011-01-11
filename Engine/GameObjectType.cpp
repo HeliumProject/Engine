@@ -126,6 +126,7 @@ const GameObjectType* GameObjectType::Create(
     pType->m_cachedName = name;
     pType->m_Name = *name;
     pType->m_Base = pParent;
+    pType->m_Default = pTemplate;
     pType->m_Template = pTemplate;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;

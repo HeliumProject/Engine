@@ -2,7 +2,6 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/ObjectCache.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -111,7 +110,7 @@ DataPtr Field::CreateTemplateData() const
     return CreateData( m_Composite->m_Template );
 }
 
-DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
+DataPtr Field::ShouldSerialize( const void* instance ) const
 {
     // never write discard fields
     if ( m_Flags & FieldFlags::Discard )
@@ -119,17 +118,7 @@ DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
         return NULL;
     }
 
-    ObjectPtr object;
-
-    if ( cache )
-    {
-        cache->Create( m_DataClass, object );
-    }
-    else
-    {
-        object = Registry::GetInstance()->CreateInstance( m_DataClass );
-    }
-
+    ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
     DataPtr data = TryCast< Data >( object );
     data->ConnectField( instance, this );
 

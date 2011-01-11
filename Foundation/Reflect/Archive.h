@@ -18,7 +18,6 @@
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Exceptions.h"
 #include "Foundation/Reflect/ArchiveStream.h" 
-#include "Foundation/Reflect/ObjectCache.h"
 
 namespace Helium
 {
@@ -98,7 +97,6 @@ namespace Helium
         };
         typedef Helium::Signature< const ExceptionInfo& > ExceptionSignature;
 
-
         //
         // Types
         //
@@ -125,7 +123,6 @@ namespace Helium
         }
 
         typedef ArchiveModes::ArchiveMode ArchiveMode;
-
 
         //
         // Event Delegates
@@ -182,16 +179,9 @@ namespace Helium
             virtual ~Archive();
 
         public:
-            // File access
             const Helium::Path& GetPath() const
             {
                 return m_Path;
-            }
-
-            // Cache access
-            ObjectCache& GetCache()
-            {
-                return m_Cache;
             }
 
             ArchiveMode GetMode() const
@@ -199,7 +189,6 @@ namespace Helium
                 return m_Mode;
             }
 
-            // Get the type of this archive
             virtual ArchiveType GetType() const
             {
                 return ArchiveTypes::Base;
@@ -306,9 +295,6 @@ namespace Helium
 
             // The mode
             ArchiveMode m_Mode;
-
-            // The cache of data objects
-            ObjectCache m_Cache;
 
             // The visitors to use
             V_ArchiveVisitor m_Visitors;

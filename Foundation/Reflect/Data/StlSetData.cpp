@@ -175,10 +175,7 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ObjectPtr dataElem;
-
-            // query cache for a data of this type
-            archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<DataClassT>() );
 
             // downcast to data type
             DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
@@ -202,9 +199,6 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 
         // disconnect from memory
         ser->Disconnect();
-
-        // restore data to the cache
-        archive.GetCache().Free( ser );
     }
 }
 

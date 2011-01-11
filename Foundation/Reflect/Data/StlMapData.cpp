@@ -337,12 +337,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ObjectPtr keyElem;
-            ObjectPtr dataElem;
-
-            // query cache for a data of this type
-            archive.GetCache().Create( Reflect::GetClass<KeyClassT>(), keyElem );
-            archive.GetCache().Create( Reflect::GetClass<ValueClassT>(), dataElem );
+            ObjectPtr keyElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<KeyClassT>() );
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
 
             // downcast to data type
             KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
@@ -371,9 +367,6 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
 
         // disconnect from memory
         ser->Disconnect();
-
-        // restore data to the cache
-        archive.GetCache().Free( ser );
     }
 }
 

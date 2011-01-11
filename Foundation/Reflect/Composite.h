@@ -30,8 +30,6 @@ namespace Helium
 {
     namespace Reflect
     {
-        class ObjectCache;
-
         class Composite;
         typedef void (*AcceptVisitor)( Composite& );
 
@@ -67,7 +65,7 @@ namespace Helium
             DataPtr CreateTemplateData() const;
 
             // determine if this field should be serialized
-            DataPtr ShouldSerialize(const void* instance, ObjectCache* cache = NULL) const;
+            DataPtr ShouldSerialize(const void* instance) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field

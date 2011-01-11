@@ -218,10 +218,6 @@ void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t fl
 
 void ArchiveXML::SerializeFields(Object* object)
 {
-    //
-    // Serialize fields
-    //
-
     const Class* type = object->GetClass();
     HELIUM_ASSERT(type != NULL);
 
@@ -235,7 +231,7 @@ void ArchiveXML::SerializeFields(Object* object)
 
 void ArchiveXML::SerializeField(Object* object, const Field* field)
 {
-    DataPtr data = field->ShouldSerialize( object, &m_Cache );
+    DataPtr data = field->ShouldSerialize( object );
     if ( data )
     {
         m_FieldNames.push( field->m_Name );
@@ -243,7 +239,6 @@ void ArchiveXML::SerializeField(Object* object, const Field* field)
         PreSerialize( object, field );
         Serialize( data );
         data->Disconnect();
-        m_Cache.Free( data );
 
         m_FieldNames.pop();
     }
@@ -419,10 +414,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             if ( newState->m_Field != NULL )
             {
                 // this is our new object
-                ObjectPtr object = NULL;
-
-                // create the object
-                m_Cache.Create(newState->m_Field->m_DataClass, object);
+                ObjectPtr object = Registry::GetInstance()->CreateInstance( newState->m_Field->m_DataClass );
 
                 // if we are a data
                 if (object->IsClass(Reflect::GetClass<Data>()))
@@ -458,7 +450,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         if ( type )
         {
-            m_Cache.Create( type, newState->m_Object );
+            newState->m_Object = Registry::GetInstance()->CreateInstance( type );
         }
 
         if ( !newState->m_Object.ReferencesObject() )
@@ -570,9 +562,6 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     {
                         // disconnect our data for neatness
                         data->Disconnect();
-
-                        // send it back to the free store
-                        m_Cache.Free(topState->m_Object);
                     }
 
                     PostDeserialize( parentState->m_Object, topState->m_Field );

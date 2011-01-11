@@ -318,7 +318,7 @@ void ArchiveBinary::SerializeFields( Object* object )
             const Field* field = &*itr;
 
             // check to see if we should serialize (will return non-null if we are gtg)
-            DataPtr data = field->ShouldSerialize( object, &m_Cache );
+            DataPtr data = field->ShouldSerialize( object );
             if ( data )
             {
                 uint32_t fieldNameCrc = Crc32( field->m_Name );
@@ -333,7 +333,6 @@ void ArchiveBinary::SerializeFields( Object* object )
                 PreSerialize( object, field );
                 Serialize( data );
                 data->Disconnect();
-                m_Cache.Free( data );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Pop();
@@ -373,7 +372,7 @@ ObjectPtr ArchiveBinary::Allocate()
         if (type)
         {
             // allocate instance by name
-            m_Cache.Create( type, object );
+            object = Registry::GetInstance()->CreateInstance( type );
         }
 
         // if we failed
@@ -568,8 +567,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 REFLECT_SCOPE_TIMER(("Casting"));
 
                 // construct current serialization object
-                ObjectPtr current_element;
-                m_Cache.Create( field->m_DataClass, current_element );
+                ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
                 // downcast to data
                 DataPtr current_data = ObjectCast<Data>(current_element);

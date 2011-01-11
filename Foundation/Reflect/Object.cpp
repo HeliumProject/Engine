@@ -250,6 +250,22 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
+void Object::PreSerialize()
+{
+}
+
+void Object::PostSerialize()
+{
+}
+
+void Object::PreDeserialize()
+{
+}
+
+void Object::PostDeserialize()
+{
+}
+
 void Object::Accept( Visitor& visitor )
 {
     if ( !visitor.VisitObject( this ) )
@@ -327,4 +343,9 @@ ObjectPtr Object::Clone()
     PostSerialize();
 
     return clone;
+}
+
+void Object::RaiseChanged( const Field* field ) const
+{
+    e_Changed.Raise( ObjectChangeArgs( this, field ) );
 }

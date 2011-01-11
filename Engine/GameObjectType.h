@@ -110,7 +110,7 @@ namespace Lunar
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static GameObjectType* Create(
+        static const GameObjectType* Create(
             Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
             RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
         static void Unregister( const GameObjectType* pType );

@@ -1170,7 +1170,7 @@ const GameObjectType* GameObject::InitStaticType()
             GameObjectType::FLAG_ABSTRACT );
         HELIUM_ASSERT( sm_pStaticType );
 
-        GameObjectType* pPackageType = GameObjectType::Create(
+        const GameObjectType* pPackageType = GameObjectType::Create(
             namePackage,
             pEnginePackage,
             sm_pStaticType,

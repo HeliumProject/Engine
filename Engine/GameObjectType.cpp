@@ -72,7 +72,7 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-GameObjectType* GameObjectType::Create(
+const GameObjectType* GameObjectType::Create(
     Name name,
     Package* pTypePackage,
     const GameObjectType* pParent,

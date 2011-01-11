@@ -1404,7 +1404,10 @@ bool FbxSupport::BuildMeshFromScene(
                 255.0f ) );
             vertex.normal[ 3 ] = 0;
 
-            vertex.color = 0xffffffff;
+            vertex.color[ 0 ] = 0xff;
+            vertex.color[ 1 ] = 0xff;
+            vertex.color[ 2 ] = 0xff;
+            vertex.color[ 3 ] = 0xff;
             if( pVertexColorLayer )
             {
                 KFbxColor color( 1.0, 1.0, 1.0, 1.0 );
@@ -1415,7 +1418,10 @@ bool FbxSupport::BuildMeshFromScene(
                     static_cast< float32_t >( color.mGreen ),
                     static_cast< float32_t >( color.mBlue ),
                     static_cast< float32_t >( color.mAlpha ) );
-                vertex.color = packedColor.GetArgb();
+                vertex.color[ 0 ] = packedColor.GetR();
+                vertex.color[ 1 ] = packedColor.GetG();
+                vertex.color[ 2 ] = packedColor.GetB();
+                vertex.color[ 3 ] = packedColor.GetA();
             }
 
             vertex.texCoords[ 0 ][ 0 ].packed = 0;

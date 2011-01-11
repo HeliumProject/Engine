@@ -14,16 +14,29 @@ namespace Lunar
 
     /// Constructor.
     ///
-    /// @param[in] positionX    Vertex position x-coordinate.
-    /// @param[in] positionY    Vertex position y-coordinate.
-    /// @param[in] positionZ    Vertex position z-coordinate.
-    /// @param[in] packedColor  Packed vertex color value.
-    SimpleVertex::SimpleVertex( float32_t positionX, float32_t positionY, float32_t positionZ, uint32_t packedColor )
+    /// @param[in] positionX   Vertex position x-coordinate.
+    /// @param[in] positionY   Vertex position y-coordinate.
+    /// @param[in] positionZ   Vertex position z-coordinate.
+    /// @param[in] colorRed    Red component value of the vertex color.
+    /// @param[in] colorGreen  Green component value of the vertex color.
+    /// @param[in] colorBlue   Blue component value of the vertex color.
+    /// @param[in] colorAlpha  Alpha component value of the vertex color.
+    SimpleVertex::SimpleVertex(
+        float32_t positionX,
+        float32_t positionY,
+        float32_t positionZ,
+        uint8_t colorRed,
+        uint8_t colorGreen,
+        uint8_t colorBlue,
+        uint8_t colorAlpha )
     {
         position[ 0 ] = positionX;
         position[ 1 ] = positionY;
         position[ 2 ] = positionZ;
-        color = packedColor;
+        color[ 0 ] = colorRed;
+        color[ 1 ] = colorGreen;
+        color[ 2 ] = colorBlue;
+        color[ 3 ] = colorAlpha;
     }
 
     /// Constructor.
@@ -35,7 +48,10 @@ namespace Lunar
         position[ 0 ] = rPosition.GetElement( 0 );
         position[ 1 ] = rPosition.GetElement( 1 );
         position[ 2 ] = rPosition.GetElement( 2 );
-        color = rColor.GetArgb();
+        color[ 0 ] = rColor.GetR();
+        color[ 1 ] = rColor.GetG();
+        color[ 2 ] = rColor.GetB();
+        color[ 3 ] = rColor.GetA();
     }
 
     /// Serialize this vertex.
@@ -44,7 +60,7 @@ namespace Lunar
     void SimpleVertex::Serialize( Serializer& s )
     {
         s << Serializer::WrapArray( position );
-        s << color;
+        s << Serializer::WrapArray( color );
     }
 
     /// Constructor.
@@ -54,24 +70,33 @@ namespace Lunar
 
     /// Constructor.
     ///
-    /// @param[in] positionX    Vertex position x-coordinate.
-    /// @param[in] positionY    Vertex position y-coordinate.
-    /// @param[in] positionZ    Vertex position z-coordinate.
-    /// @param[in] texCoordU    Vertex texture u-coordinate.
-    /// @param[in] texCoordV    Vertex texture v-coordinate.
-    /// @param[in] packedColor  Packed vertex color value.
+    /// @param[in] positionX   Vertex position x-coordinate.
+    /// @param[in] positionY   Vertex position y-coordinate.
+    /// @param[in] positionZ   Vertex position z-coordinate.
+    /// @param[in] texCoordU   Vertex texture u-coordinate.
+    /// @param[in] texCoordV   Vertex texture v-coordinate.
+    /// @param[in] colorRed    Red component value of the vertex color.
+    /// @param[in] colorGreen  Green component value of the vertex color.
+    /// @param[in] colorBlue   Blue component value of the vertex color.
+    /// @param[in] colorAlpha  Alpha component value of the vertex color.
     SimpleTexturedVertex::SimpleTexturedVertex(
         float32_t positionX,
         float32_t positionY,
         float32_t positionZ,
         Float16 texCoordU,
         Float16 texCoordV,
-        uint32_t packedColor )
+        uint8_t colorRed,
+        uint8_t colorGreen,
+        uint8_t colorBlue,
+        uint8_t colorAlpha )
     {
         position[ 0 ] = positionX;
         position[ 1 ] = positionY;
         position[ 2 ] = positionZ;
-        color = packedColor;
+        color[ 0 ] = colorRed;
+        color[ 1 ] = colorGreen;
+        color[ 2 ] = colorBlue;
+        color[ 3 ] = colorAlpha;
         texCoords[ 0 ] = texCoordU;
         texCoords[ 1 ] = texCoordV;
     }
@@ -89,7 +114,10 @@ namespace Lunar
         position[ 0 ] = rPosition.GetElement( 0 );
         position[ 1 ] = rPosition.GetElement( 1 );
         position[ 2 ] = rPosition.GetElement( 2 );
-        color = rColor.GetArgb();
+        color[ 0 ] = rColor.GetR();
+        color[ 1 ] = rColor.GetG();
+        color[ 2 ] = rColor.GetB();
+        color[ 3 ] = rColor.GetA();
 
         Float32 floatPacker;
         floatPacker.value = rTexCoords.GetElement( 0 );
@@ -104,7 +132,7 @@ namespace Lunar
     void SimpleTexturedVertex::Serialize( Serializer& s )
     {
         s << Serializer::WrapArray( position );
-        s << color;
+        s << Serializer::WrapArray( color );
         s << Serializer::WrapArray( texCoords );
     }
 
@@ -115,21 +143,30 @@ namespace Lunar
 
     /// Constructor.
     ///
-    /// @param[in] positionX    Vertex position x-coordinate.
-    /// @param[in] positionY    Vertex position y-coordinate.
-    /// @param[in] texCoordU    Vertex texture u-coordinate.
-    /// @param[in] texCoordV    Vertex texture v-coordinate.
-    /// @param[in] packedColor  Packed vertex color value.
+    /// @param[in] positionX   Vertex position x-coordinate.
+    /// @param[in] positionY   Vertex position y-coordinate.
+    /// @param[in] texCoordU   Vertex texture u-coordinate.
+    /// @param[in] texCoordV   Vertex texture v-coordinate.
+    /// @param[in] colorRed    Red component value of the vertex color.
+    /// @param[in] colorGreen  Green component value of the vertex color.
+    /// @param[in] colorBlue   Blue component value of the vertex color.
+    /// @param[in] colorAlpha  Alpha component value of the vertex color.
     ScreenVertex::ScreenVertex(
         float32_t positionX,
         float32_t positionY,
         Float16 texCoordU,
         Float16 texCoordV,
-        uint32_t packedColor )
+        uint8_t colorRed,
+        uint8_t colorGreen,
+        uint8_t colorBlue,
+        uint8_t colorAlpha )
     {
         position[ 0 ] = positionX;
         position[ 1 ] = positionY;
-        color = packedColor;
+        color[ 0 ] = colorRed;
+        color[ 1 ] = colorGreen;
+        color[ 2 ] = colorBlue;
+        color[ 3 ] = colorAlpha;
         texCoords[ 0 ] = texCoordU;
         texCoords[ 1 ] = texCoordV;
     }
@@ -143,7 +180,10 @@ namespace Lunar
     {
         position[ 0 ] = rPosition.GetElement( 0 );
         position[ 1 ] = rPosition.GetElement( 1 );
-        color = rColor.GetArgb();
+        color[ 0 ] = rColor.GetR();
+        color[ 1 ] = rColor.GetG();
+        color[ 2 ] = rColor.GetB();
+        color[ 3 ] = rColor.GetA();
 
         Float32 floatPacker;
         floatPacker.value = rTexCoords.GetElement( 0 );
@@ -158,7 +198,7 @@ namespace Lunar
     void ScreenVertex::Serialize( Serializer& s )
     {
         s << Serializer::WrapArray( position );
-        s << color;
+        s << Serializer::WrapArray( color );
         s << Serializer::WrapArray( texCoords );
     }
 
@@ -171,7 +211,7 @@ namespace Lunar
         s << Serializer::WrapArray( position );
         s << Serializer::WrapArray( normal );
         s << Serializer::WrapArray( tangent );
-        s << color;
+        s << Serializer::WrapArray( color );
 
         for( size_t texCoordSetIndex = 0; texCoordSetIndex < HELIUM_ARRAY_COUNT( texCoords ); ++texCoordSetIndex )
         {

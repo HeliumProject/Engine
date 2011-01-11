@@ -703,28 +703,40 @@ void BufferedDrawer::BeginDrawing()
 
                     pScreenVertices->position[ 0 ] = cornerMinX;
                     pScreenVertices->position[ 1 ] = cornerMinY;
-                    pScreenVertices->color = color.GetArgb();
+                    pScreenVertices->color[ 0 ] = color.GetR();
+                    pScreenVertices->color[ 1 ] = color.GetG();
+                    pScreenVertices->color[ 2 ] = color.GetB();
+                    pScreenVertices->color[ 3 ] = color.GetA();
                     pScreenVertices->texCoords[ 0 ] = texCoordMinX;
                     pScreenVertices->texCoords[ 1 ] = texCoordMinY;
                     ++pScreenVertices;
 
                     pScreenVertices->position[ 0 ] = cornerMaxX;
                     pScreenVertices->position[ 1 ] = cornerMinY;
-                    pScreenVertices->color = color.GetArgb();
+                    pScreenVertices->color[ 0 ] = color.GetR();
+                    pScreenVertices->color[ 1 ] = color.GetG();
+                    pScreenVertices->color[ 2 ] = color.GetB();
+                    pScreenVertices->color[ 3 ] = color.GetA();
                     pScreenVertices->texCoords[ 0 ] = texCoordMaxX;
                     pScreenVertices->texCoords[ 1 ] = texCoordMinY;
                     ++pScreenVertices;
 
                     pScreenVertices->position[ 0 ] = cornerMaxX;
                     pScreenVertices->position[ 1 ] = cornerMaxY;
-                    pScreenVertices->color = color.GetArgb();
+                    pScreenVertices->color[ 0 ] = color.GetR();
+                    pScreenVertices->color[ 1 ] = color.GetG();
+                    pScreenVertices->color[ 2 ] = color.GetB();
+                    pScreenVertices->color[ 3 ] = color.GetA();
                     pScreenVertices->texCoords[ 0 ] = texCoordMaxX;
                     pScreenVertices->texCoords[ 1 ] = texCoordMaxY;
                     ++pScreenVertices;
 
                     pScreenVertices->position[ 0 ] = cornerMinX;
                     pScreenVertices->position[ 1 ] = cornerMaxY;
-                    pScreenVertices->color = color.GetArgb();
+                    pScreenVertices->color[ 0 ] = color.GetR();
+                    pScreenVertices->color[ 1 ] = color.GetG();
+                    pScreenVertices->color[ 2 ] = color.GetB();
+                    pScreenVertices->color[ 3 ] = color.GetA();
                     pScreenVertices->texCoords[ 0 ] = texCoordMinX;
                     pScreenVertices->texCoords[ 1 ] = texCoordMaxY;
                     ++pScreenVertices;

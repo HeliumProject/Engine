@@ -2,7 +2,7 @@
 
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Version.h"
 
 using namespace Helium;

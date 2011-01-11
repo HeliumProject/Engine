@@ -26,7 +26,7 @@ ComponentCollection::ComponentCollection( const ComponentPtr& component )
     HELIUM_ASSERT( component->GetSlot() != NULL );
 
     m_Components.insert( M_Component::value_type( component->GetSlot(), component ) );
-    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     m_Modified = true;
 }
 
@@ -43,7 +43,7 @@ ComponentCollection::~ComponentCollection()
 
     for( ; attrItr != attrEnd; ++attrItr )
     {
-        attrItr->second->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+        attrItr->second->e_Changed.Remove( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
     }
 }
 
@@ -95,7 +95,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
-        while ( type && ( type != Reflect::GetType< ComponentBase >() ) )
+        while ( type && ( type != Reflect::GetClass< ComponentBase >() ) )
         {
             // See if the base class has a slot in this collection.
             found = m_Components.find( type );
@@ -146,7 +146,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
     component->SetCollection( this );
 
     // Start caring about change to the component
-    component->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Raise event
     m_Modified = true;
@@ -173,7 +173,7 @@ bool ComponentCollection::RemoveComponent( const Reflect::Class* slotClass )
     ComponentCollectionChanged args ( this, component ); 
 
     // Stop caring about changes to the component
-    component->e_Changed.Remove( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
+    component->e_Changed.Remove( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
     // Remove component and reset collection pointer
     m_Components.erase( found );
@@ -277,12 +277,12 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
-bool ComponentCollection::ProcessComponent(ElementPtr element, const tchar_t* fieldName)
+bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
 {
     if ( !_tcscmp( fieldName, TXT( "m_Components" ) ) )
     {
         V_Component attributes;
-        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ElementPtr >&)attributes );
+        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ObjectPtr >&)attributes );
 
         for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
             itr != end;
@@ -325,19 +325,19 @@ void ComponentCollection::PostDeserialize()
     for ( ; itr != end; ++itr )
     {
         itr->second->SetCollection( this );
-        itr->second->e_Changed.Add( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
     }
 }
 
-void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
+void ComponentCollection::CopyTo(Reflect::Object* object)
 {
-    __super::CopyTo( destination );
+    __super::CopyTo( object );
 
-    ComponentCollection* destCollection = Reflect::ObjectCast< ComponentCollection >( destination );
-    if ( destCollection )
+    ComponentCollection* collection = Reflect::ObjectCast< ComponentCollection >( object );
+    if ( collection )
     {
         // Remove all attributes, we're going to bring them over manually
-        destCollection->Clear(); 
+        collection->Clear(); 
 
         // For each component in this component collection
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
@@ -348,17 +348,17 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
             // Create a new copy of the component and try to add it to the destination
             const ComponentPtr& attrib = attrItr->second;
             ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetClass() ) );
-            if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
+            if ( !CopyComponentTo( *collection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
                 for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    if ( sibling != attrib->GetType() )
+                    if ( sibling != attrib->GetClass() )
                     {
                         destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
-                            if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )
+                            if ( CopyComponentTo( *collection, destAttrib, attrib ) )
                             {
                                 break;
                             }

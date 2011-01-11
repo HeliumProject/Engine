@@ -1,7 +1,13 @@
 #include "Foundation/Reflect/Object.h"
+
+#include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Class.h"
-#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include <malloc.h>
 
@@ -29,7 +35,6 @@ struct ObjectRefCountSupport::StaticData
 
 ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
-const Type* Object::s_Type = NULL;
 const Class* Object::s_Class = NULL;
 
 /// Retrieve a reference count proxy from the global pool.
@@ -189,30 +194,137 @@ void Object::Destroy()
     delete this;
 }
 
-const Reflect::Type* Object::GetType() const
-{
-    return Reflect::GetType<Object>();
-}
-
-bool Object::HasType( const Reflect::Type* type ) const
-{
-    return type == Reflect::GetType<Object>();
-}
-
 const Reflect::Class* Object::GetClass() const
 {
     return Reflect::GetClass<Object>();
+}
+
+bool Object::IsClass( const Reflect::Class* type ) const
+{
+    const Class* thisType = GetClass();
+    HELIUM_ASSERT( thisType );
+
+    return thisType->IsType( type );
 }
 
 Reflect::Class* Object::CreateClass( const tchar_t* name )
 {
     HELIUM_ASSERT( s_Class == NULL );
     Reflect::Class* type = Class::Create<Object>( name, NULL );
-    s_Type = s_Class = type;
+    s_Class = type;
     return type;
 }
 
 void Object::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 
+}
+
+bool Object::IsCompact() const
+{
+    return false;
+}
+
+bool Object::ProcessComponent(ObjectPtr object, const tchar_t* fieldName)
+{
+    return false; // incurs data loss
+}
+
+void Object::ToXML(tstring& xml) const
+{
+#pragma TODO( "Fix const correctness." )
+    ArchiveXML::ToString( const_cast< Object* >( this ), xml );
+}
+
+void Object::ToBinary(std::iostream& stream) const
+{
+#pragma TODO( "Fix const correctness." )
+    ArchiveBinary::ToStream( const_cast< Object* >( this ), stream );
+}
+
+void Object::ToFile( const Path& path ) const
+{
+    ArchivePtr archive = GetArchive( path );
+#pragma TODO( "Fix const correctness." )
+    archive->Put( const_cast< Object* >( this ) );
+    archive->Close();
+}
+
+void Object::Accept( Visitor& visitor )
+{
+    if ( !visitor.VisitObject( this ) )
+    {
+        return;
+    }
+
+    const Class* type = GetClass();
+
+    type->Visit( this, visitor );
+}
+
+bool Object::Equals( const Object* object ) const
+{
+    const Class* type = GetClass();
+
+    return type->Equals( this, object );
+}
+
+void Object::CopyTo( Object* object )
+{
+    if ( this != object )
+    {
+        // 
+        // Find common base class
+        //
+
+        // This is the common base class type
+        const Class* type = NULL; 
+        const Class* thisType = this->GetClass();
+        const Class* objectType = object->GetClass();
+
+        // Simplest case: the types are the same
+        if ( thisType == objectType )
+        {
+            type = thisType;
+        }
+        else
+        {
+            // Types are not the same, we have to search...
+            // Iterate up inheritance of this, and look check to see if object HasType for each one
+            Reflect::Registry* registry = Reflect::Registry::GetInstance();
+            for ( const Class* base = thisType; base && !type; base = static_cast< const Class* >( base->m_Base ) )
+            {
+                if ( object->IsClass( base ) )
+                {
+                    // We found the match (which breaks out of this loop)
+                    type = ReflectionCast<const Class>( base );
+                }
+            }
+
+            if ( !type )
+            {
+                // This should be impossible... at the very least, Object is a common base class for both pointers.
+                // This exeception means there's a bug in this function.
+                throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), thisType->m_Name, objectType->m_Name );
+            }
+        }
+
+        type->Copy( this, object );
+    }
+}
+
+ObjectPtr Object::Clone()
+{
+    ObjectPtr clone = Registry::GetInstance()->CreateInstance( GetClass() );
+
+    PreSerialize();
+    clone->PreDeserialize();
+
+    const Class* type = GetClass();
+    type->Copy( this, clone );
+
+    clone->PostDeserialize();
+    PostSerialize();
+
+    return clone;
 }

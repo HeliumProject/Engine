@@ -14,11 +14,11 @@ namespace Helium
         public:
             ReflectInterpreter (Container* container);
 
-            void Interpret(const std::vector<Reflect::Element*>& instances, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
-            void InterpretType(const std::vector<Reflect::Element*>& instances, Container* parent, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
+            void Interpret(const std::vector<Reflect::Object*>& instances, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
+            void InterpretType(const std::vector<Reflect::Object*>& instances, Container* parent, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0, bool expandPanel = true);
 
         private:
-            std::vector<Reflect::Element*> m_Instances;
+            std::vector<Reflect::Object*> m_Instances;
             std::vector<Reflect::DataPtr> m_Datas;
             V_ReflectFieldInterpreter m_Interpreters;
         };

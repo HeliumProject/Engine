@@ -4,7 +4,7 @@
 #include "Platform/Assert.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 
 #include "Editor/API.h"
 

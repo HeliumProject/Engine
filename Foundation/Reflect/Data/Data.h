@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/HybridPtr.h"
 #include "Foundation/SmartBuffer/BasicBuffer.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Archive.h"
 
 namespace Helium
@@ -24,12 +24,12 @@ namespace Helium
         typedef DataFlags::DataFlag DataFlag;
 
         //
-        // A Data is an Element that knows how to read/write data
+        // A Data is an Object that knows how to read/write data
         //  from any kind of support Archive type (XML and Binary), given
         //  an address in memory to serialize/deserialize data to/from
         //
 
-        class FOUNDATION_API Data : public Element
+        class FOUNDATION_API Data : public Object
         {
         protected:
             // derived classes will use this
@@ -113,13 +113,13 @@ namespace Helium
             };
 
             // the instance we are processing, if any
-            Helium::HybridPtr<Element> m_Instance;
+            Helium::HybridPtr<void> m_Instance;
 
             // the field we are processing, if any
             const Field* m_Field;
 
         public:
-            REFLECT_DECLARE_ABSTRACT( Data, Element );
+            REFLECT_DECLARE_ABSTRACT( Data, Object );
 
             // instance init and cleanup
             Data();
@@ -137,14 +137,14 @@ namespace Helium
             // connect to some address
             virtual void ConnectData(Helium::HybridPtr<void> data)
             {
-                m_Instance = (Element*)NULL;
+                m_Instance = (Object*)NULL;
                 m_Field = NULL;
             }
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<Element> instance, const Field* field, uintptr_t offsetInField = 0)
+            virtual void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0)
             {
-                ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
+                ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State()) ); 
 
                 m_Instance = instance; 
                 m_Field = field; 
@@ -154,6 +154,11 @@ namespace Helium
             void Disconnect()
             {
                 ConnectData( Helium::HybridPtr<void> () );
+            }
+
+            virtual bool ShouldSerialize()
+            {
+                return true;
             }
 
 
@@ -201,7 +206,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(T& value, Element* instance, const Field* field)
+            static DataPtr Bind(T& value, void* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -216,7 +221,7 @@ namespace Helium
             }
 
             template <class T>
-            static DataPtr Bind(const T& value, const Element* instance, const Field* field)
+            static DataPtr Bind(const T& value, const void* instance, const Field* field)
             {
                 DataPtr ser = Create<T>();
 
@@ -249,10 +254,10 @@ namespace Helium
             // check to see if a cast is supported
             static bool CastSupported(const Class* srcType, const Class* destType);
 
-            // convert value data from one serializer to another
+            // convert value data from one data to another
             static bool CastValue(const Data* src, Data* dest, uint32_t flags = 0);
 
-            // copies value data from one serializer to another
+            // copies value data from one data to another
             virtual bool Set(const Data* src, uint32_t flags = 0) = 0;
 
             // assign
@@ -266,9 +271,6 @@ namespace Helium
                 Set(&rhs);
                 return *this;
             }
-
-            // equality of connected data
-            virtual bool Equals(const Data* src) const = 0;
 
             // equality
             bool operator==(const Data* rhs) const
@@ -367,8 +369,8 @@ namespace Helium
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 
-            // sanity check our element type
-            if ( ser->HasType( dataClass ) )
+            // sanity check our object type
+            if ( ser->IsClass( dataClass ) )
             {
                 // get internal data pointer
                 const T* data = GetData<T>( ser );
@@ -380,10 +382,10 @@ namespace Helium
             }
             else
             {
-                // create a temporary serializer of the value type
+                // create a temporary data of the value type
                 DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
-                // connect the temp serializer to the temp value
+                // connect the temp data to the temp value
                 T tempValue; temp->ConnectData( &tempValue );
 
                 // cast into the temp value
@@ -414,8 +416,8 @@ namespace Helium
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 
-            // sanity check our element type
-            if ( ser->HasType( dataClass ) )
+            // sanity check our object type
+            if ( ser->IsClass( dataClass ) )
             {
                 // get internal data pointer
                 T* data = GetData<T>( ser );
@@ -427,13 +429,13 @@ namespace Helium
             }
             else
             {
-                // create a temporary serializer of the value type
+                // create a temporary data of the value type
                 DataPtr temp = AssertCast<Data>( Registry::GetInstance()->CreateInstance( dataClass ) );
 
-                // connect the temp serializer to the temp value
+                // connect the temp data to the temp value
                 temp->ConnectData( &value );
 
-                // cast into the serializer
+                // cast into the data
                 if (Data::CastValue( ser, temp ))
                 {
                     result = true;
@@ -445,8 +447,8 @@ namespace Helium
                 // Notify interested listeners that the data has changed.
                 if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
                 {
-                    Element* element = (Element*)( ser->m_Instance );
-                    element->RaiseChanged( ser->m_Field );
+                    Object* object = (Object*)ser->m_Instance.Mutable();
+                    object->RaiseChanged( ser->m_Field );
                 }
             }
 

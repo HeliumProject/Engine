@@ -29,9 +29,9 @@ namespace Helium
         typedef Helium::StrongPtr<Object> ObjectPtr;
         typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
-        class Element;
-        typedef Helium::StrongPtr<Element> ElementPtr;
-        typedef Helium::StrongPtr<const Element> ConstElementPtr;
+        class Object;
+        typedef Helium::StrongPtr<Object> ObjectPtr;
+        typedef Helium::StrongPtr<const Object> ConstObjectPtr;
 
         class Data;
         typedef Helium::StrongPtr<Data> DataPtr;
@@ -63,32 +63,19 @@ namespace Helium
 // declares creator for constructable types
 #define _REFLECT_DECLARE_CREATOR( __Class ) \
 public: \
-static Reflect::Object* CreateObject() { return new __Class; }
+static Helium::Reflect::Object* CreateObject() { return new __Class; }
 
 // declares type checking functions
 #define _REFLECT_DECLARE_CLASS( __Class, __Base ) \
 public: \
 typedef __Base Base; \
 typedef __Class This; \
-virtual const Helium::Reflect::Type* GetType() const HELIUM_OVERRIDE; \
-virtual bool HasType(const Reflect::Type* id) const HELIUM_OVERRIDE; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
 static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
-static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Class* s_Class;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_CLASS( __Class, __Creator ) \
-const Helium::Reflect::Type* __Class::GetType() const \
-{ \
-    return s_Class; \
-} \
-\
-bool __Class::HasType(const Helium::Reflect::Type* type) const \
-{ \
-    return s_Class == type || __Class::Base::HasType(type); \
-} \
-\
 const Helium::Reflect::Class* __Class::GetClass() const \
 { \
     return s_Class; \
@@ -98,11 +85,10 @@ Helium::Reflect::Class* __Class::CreateClass( const tchar_t* name ) \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( __Class::Base::s_Class != NULL ); \
-    Reflect::Class* type = Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
-    s_Type = s_Class = type; \
+    Helium::Reflect::Class* type = Helium::Reflect::Class::Create<__Class>(name, __Class::Base::s_Class->m_Name, __Creator); \
+    s_Class = type; \
     return type; \
 } \
-const Helium::Reflect::Type* __Class::s_Type = NULL; \
 const Helium::Reflect::Class* __Class::s_Class = NULL;
 
 // declares type checking functions
@@ -134,20 +120,20 @@ const Helium::Reflect::Enumeration* __Enumeration::s_Enumeration = NULL;
 // User Macros
 //
 
-// declares an HELIUM_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
+// declares an HELIUM_ABSTRACT object (an object that either A: cannot be instantiated or B: is never actually serialized)
 #define REFLECT_DECLARE_ABSTRACT(__Class, __Base) \
     _REFLECT_DECLARE_CLASS(__Class, __Base)
 
-// defines the HELIUM_ABSTRACT element class
+// defines the HELIUM_ABSTRACT object class
 #define REFLECT_DEFINE_ABSTRACT(__Class) \
     _REFLECT_DEFINE_CLASS(__Class, NULL)
 
-// declares a full element with creator
+// declares a full object with creator
 #define REFLECT_DECLARE_CLASS(__Class, __Base) \
     _REFLECT_DECLARE_CLASS(__Class, __Base) \
     _REFLECT_DECLARE_CREATOR(__Class)
 
-// defines a full element
+// defines a full object
 #define REFLECT_DEFINE_CLASS(__Class) \
     _REFLECT_DEFINE_CLASS(__Class, &__Class::CreateObject)
 

@@ -26,7 +26,7 @@ namespace Helium
             void SetActive( const Path& path, bool active );
 
         protected:
-            void GeneralSettingsChanged( const Reflect::ElementChangeArgs& args );
+            void GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args );
 
             void PopulateOpenProjectListItems();
             void OnRecentProjectButtonClick( wxCommandEvent& event );

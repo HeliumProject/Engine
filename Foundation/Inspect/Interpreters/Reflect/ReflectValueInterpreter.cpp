@@ -20,7 +20,7 @@ ReflectValueInterpreter::ReflectValueInterpreter (Container* container)
 
 }
 
-void ReflectValueInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectValueInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     if (field->m_Flags & FieldFlags::Hide)
     {
@@ -45,7 +45,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     if (!result)
     {
-        if ( field->m_DataClass == Reflect::GetType<EnumerationData>() )
+        if ( field->m_DataClass == Reflect::GetClass<EnumerationData>() )
         {
             ChoicePtr choice = CreateControl<Choice>();
 
@@ -75,7 +75,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
         }
         else
         {
-            if ( field->m_DataClass == Reflect::GetType<BoolData>() )
+            if ( field->m_DataClass == Reflect::GetClass<BoolData>() )
             {
                 CheckBoxPtr checkBox = CreateControl<CheckBox>();
                 checkBox->a_IsReadOnly.Set( readOnly );
@@ -136,13 +136,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     std::vector<Data*> ser;
 
     {
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
             DataPtr s = field->CreateData();
 
-            if (!s->HasType(Reflect::GetType<ContainerData>()))
+            if (!s->IsClass(Reflect::GetClass<ContainerData>()))
             {
                 s->ConnectField(*itr, field);
 
@@ -161,14 +161,13 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Set default
     //
 
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default.ReferencesObject())
+    DataPtr templateData = field->CreateTemplateData();
+    if (templateData.ReferencesObject())
     {
-        tstringstream outStream;
-        *field->m_Default >> outStream;
-        container->a_Default.Set( outStream.str() );
+        tstringstream templateStream;
+        *templateData >> templateStream;
+        container->a_Default.Set( templateStream.str() );
     }
-#endif
 
     //
     // Close

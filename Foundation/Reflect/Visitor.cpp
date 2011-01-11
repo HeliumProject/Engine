@@ -4,39 +4,39 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-FindByTypeVisitor::FindByTypeVisitor(const Reflect::Type* type, std::vector< ElementPtr >& found)
-: m_Type( type )
+FindByTypeVisitor::FindByTypeVisitor(const Reflect::Class* type, std::vector< ObjectPtr >& found)
+: m_Class( type )
 , m_Found( found )
 {
 
 }
 
-bool FindByTypeVisitor::VisitElement(Element* element)
+bool FindByTypeVisitor::VisitObject(Object* object)
 {
-    if (element->HasType(m_Type))
+    if (object->IsClass(m_Class))
     {
-        m_Found.push_back(element);
+        m_Found.push_back(object);
     }
 
     return true;
 }
 
-FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< const Reflect::Type* >& types, std::vector< ElementPtr >& found)
-: m_Types( types )
+FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< const Reflect::Class* >& classes, std::vector< ObjectPtr >& found)
+: m_Classes( classes )
 , m_Found( found )
 {
 
 }
 
-bool FindByTypeSetVisitor::VisitElement(Element* element)
+bool FindByTypeSetVisitor::VisitObject(Object* object)
 {
-    std::set< const Reflect::Type* >::const_iterator itr = m_Types.begin();
-    std::set< const Reflect::Type* >::const_iterator end = m_Types.end();
+    std::set< const Reflect::Class* >::const_iterator itr = m_Classes.begin();
+    std::set< const Reflect::Class* >::const_iterator end = m_Classes.end();
     for ( ; itr != end; ++itr )
     {
-        if (element->HasType(*itr))
+        if (object->IsClass(*itr))
         {
-            m_Found.push_back(element);
+            m_Found.push_back(object);
             break;
         }
     }

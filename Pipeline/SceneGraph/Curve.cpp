@@ -324,7 +324,7 @@ uint32_t Curve::GetNumberControlPoints() const
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
-        if ( ( *childItr )->HasType( Reflect::GetType< CurveControlPoint >() ) )
+        if ( ( *childItr )->IsClass( Reflect::GetClass< CurveControlPoint >() ) )
         {
             ++count;
         }
@@ -776,8 +776,8 @@ void Curve::Render( RenderVisitor* render )
 
 void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const HierarchyNode* node = Reflect::ConstAssertCast<HierarchyNode>( object );
-    const Curve* curve = Reflect::ConstAssertCast< Curve > ( node );
+    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
+    const Curve* curve = Reflect::AssertCast< Curve > ( node );
 
     const VertexResource* vertices = curve->m_Vertices;
 

@@ -109,13 +109,13 @@ void Layer::BindPackage( Package* pPackage )
 ///
 /// @see DestroyEntity()
 Entity* Layer::CreateEntity(
-                            GameObjectType* pType,
-                            const Simd::Vector3& rPosition,
-                            const Simd::Quat& rRotation,
-                            const Simd::Vector3& rScale,
-                            Entity* pTemplate,
-                            Name name,
-                            bool bAssignInstanceIndex )
+    const GameObjectType* pType,
+    const Simd::Vector3& rPosition,
+    const Simd::Quat& rRotation,
+    const Simd::Vector3& rScale,
+    Entity* pTemplate,
+    Name name,
+    bool bAssignInstanceIndex )
 {
     HELIUM_ASSERT( m_spPackage );
     if( !m_spPackage )
@@ -136,7 +136,7 @@ Entity* Layer::CreateEntity(
         return NULL;
     }
 
-    bool bIsEntityType = pType->IsSubtypeOf( Entity::GetStaticType() );
+    bool bIsEntityType = pType->IsType( Entity::GetStaticType() );
     HELIUM_ASSERT( bIsEntityType );
     if( !bIsEntityType )
     {

@@ -31,7 +31,7 @@ void SimpleData<T>::ConnectData(Helium::HybridPtr<void> data)
 template <class T>
 bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 {
-    const SimpleDataT* rhs = ConstObjectCast<SimpleDataT>(src);
+    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(src);
     if (!rhs)
     {
         return false;
@@ -43,9 +43,9 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template <class T>
-bool SimpleData<T>::Equals(const Data* s) const
+bool SimpleData<T>::Equals(const Object* object) const
 {
-    const SimpleDataT* rhs = ConstObjectCast<SimpleDataT>(s);
+    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(object);
     if (!rhs)
     {
         return false;
@@ -125,8 +125,8 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
     if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
     {
-        Element* element = (Element*)m_Instance;
-        element->RaiseChanged( m_Field );
+        Object* object = (Object*)m_Instance.Mutable();
+        object->RaiseChanged( m_Field );
     }
 
     return stream;
@@ -170,7 +170,7 @@ void StlStringData::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             m_Data->resize( (size_t)size );
             xml.GetStream().ReadBuffer(const_cast<tchar_t*>(m_Data->c_str()), size);
             break;

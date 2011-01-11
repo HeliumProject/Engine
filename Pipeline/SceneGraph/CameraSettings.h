@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
@@ -54,10 +54,10 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API CameraSettings : public Reflect::Element
+        class PIPELINE_API CameraSettings : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Element );
+            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Object );
 
             CameraSettings(); 
 

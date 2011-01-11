@@ -30,10 +30,10 @@ namespace Helium
 
         typedef Helium::Signature< const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
-        class FOUNDATION_API ComponentCollection : public Reflect::Element
+        class FOUNDATION_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Element);
+            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ComponentCollection();
@@ -110,10 +110,10 @@ namespace Helium
 
         protected:
             // this is a callback called by elements being changed by procedurally generated UI (EditorProperties)
-            void ComponentChanged( const Reflect::ElementChangeArgs& args )
+            void ComponentChanged( const Reflect::ObjectChangeArgs& args )
             {
                 // call into the virtual prototype in case it gets overridden in a derived class
-                ComponentChanged( Reflect::ConstAssertCast<ComponentBase>(args.m_Element) );
+                ComponentChanged( Reflect::AssertCast<ComponentBase>(args.m_Object) );
             }
 
 
@@ -166,14 +166,14 @@ namespace Helium
 
         public:
             // migrate legacy attributes
-            virtual bool ProcessComponent(Reflect::ElementPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
+            virtual bool ProcessComponent(Reflect::ObjectPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
 
             // setup changed callback
             virtual void PreSerialize() HELIUM_OVERRIDE;
             virtual void PostDeserialize() HELIUM_OVERRIDE;
 
             // copy all attributes from one collection to another
-            virtual void CopyTo(const Reflect::ElementPtr& destination) HELIUM_OVERRIDE;
+            virtual void CopyTo( Reflect::Object* object ) HELIUM_OVERRIDE;
 
             // helper function for CopyTo
             bool CopyComponentTo( ComponentCollection& destCollection, const ComponentPtr& destAttrib, const ComponentPtr& srcAttrib );

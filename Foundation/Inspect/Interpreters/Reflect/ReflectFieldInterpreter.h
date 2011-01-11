@@ -14,10 +14,10 @@ namespace Helium
         public:
             ReflectFieldInterpreter (Container* container);
 
-            virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent) = 0;
+            virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Object*>& instances, Container* parent) = 0;
 
         protected:
-            std::vector<Reflect::Element*> m_Instances;
+            std::vector<Reflect::Object*> m_Instances;
             std::vector<Reflect::DataPtr> m_Datas;
         };
 

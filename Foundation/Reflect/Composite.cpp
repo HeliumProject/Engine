@@ -1,7 +1,8 @@
 #include "Foundation/Reflect/Composite.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/ObjectCache.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -22,9 +23,9 @@ Field::Field()
 
 }
 
-DataPtr Field::CreateData(Element* instance) const
+DataPtr Field::CreateData() const
 {
-    DataPtr ser;
+    DataPtr data;
 
     if ( m_DataClass != NULL )
     {
@@ -32,28 +33,35 @@ DataPtr Field::CreateData(Element* instance) const
 
         if (object.ReferencesObject())
         {
-            ser = AssertCast<Data>(object);
+            data = AssertCast<Data>(object);
         }
     }
 
-    if ( ser.ReferencesObject() )
+    return data;
+}
+
+DataPtr Field::CreateData(void* instance) const
+{
+    DataPtr data = CreateData();
+
+    if ( data.ReferencesObject() )
     {
         if ( instance )
         {
-            ser->ConnectField( instance, this );
+            data->ConnectField( instance, this );
         }
 
         const Class* classType = ReflectionCast< Class >( m_Type );
         if ( classType )
         {
-            PointerData* pointerData = ObjectCast<PointerData>( ser );
+            PointerData* pointerData = ObjectCast<PointerData>( data );
             if ( pointerData )
             {
                 pointerData->m_Type = m_Type;
             }
             else
             {
-                ElementContainerData* containerData = ObjectCast<ElementContainerData>( ser );
+                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( data );
                 if ( containerData )
                 {
                     containerData->m_Type = m_Type;
@@ -62,68 +70,89 @@ DataPtr Field::CreateData(Element* instance) const
         }
     }
 
-    return ser;
+    return data;
 }
 
-bool Field::HasDefaultValue(Element* instance) const
+DataPtr Field::CreateData(const void* instance) const
 {
-#ifdef REFLECT_REFACTOR
-    // if we don't have a default value, we can never be at the default value
-    if (!m_Default.ReferencesObject())
+    DataPtr data = CreateData();
+
+    if ( data.ReferencesObject() )
     {
-        return false;
+        if ( instance )
+        {
+            data->ConnectField( instance, this );
+        }
+
+        const Class* classType = ReflectionCast< Class >( m_Type );
+        if ( classType )
+        {
+            PointerData* pointerData = ObjectCast<PointerData>( data );
+            if ( pointerData )
+            {
+                pointerData->m_Type = m_Type;
+            }
+            else
+            {
+                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( data );
+                if ( containerData )
+                {
+                    containerData->m_Type = m_Type;
+                }
+            }
+        }
     }
 
-    // get a serializer
-    DataPtr serializer = CreateData();
-
-    if (serializer.ReferencesObject())
-    {
-        // set data pointer
-        serializer->ConnectField(instance, this);
-
-        // return equality
-        bool result = m_Default->Equals(serializer);
-
-        // disconnect
-        serializer->Disconnect();
-
-        // result
-        return result;
-    }
-#endif
-
-    return false;
+    return data;
 }
 
-bool Field::SetDefaultValue(Element* instance) const
+DataPtr Field::CreateTemplateData() const
 {
-#ifdef REFLECT_REFACTOR
-    // if we don't have a default value, we can never be at the default value
-    if (!m_Default.ReferencesObject())
+    return CreateData( m_Composite->m_Template );
+}
+
+DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
+{
+    // never write discard fields
+    if ( m_Flags & FieldFlags::Discard )
     {
-        return false;
+        return NULL;
     }
 
-    // get a serializer
-    DataPtr serializer = CreateData();
+    ObjectPtr object;
 
-    if (serializer.ReferencesObject())
+    if ( cache )
     {
-        // set data pointer
-        serializer->ConnectField(instance, this);
-
-        // copy the data
-        serializer->Set(m_Default);
-
-        // disconnect
-        serializer->Disconnect();
-
-        return true;
+        cache->Create( m_DataClass, object );
     }
-#endif
+    else
+    {
+        object = Registry::GetInstance()->CreateInstance( m_DataClass );
+    }
 
-    return false;
+    DataPtr data = TryCast< Data >( object );
+    data->ConnectField( instance, this );
+
+    // always write force fields
+    if ( m_Flags & FieldFlags::Force )
+    {
+        return data;
+    }
+
+    // check for empty/null/invalid state
+    if ( !data->ShouldSerialize() )
+    {
+        return NULL;
+    }
+
+    // don't write field at the default value
+    DataPtr templateData = CreateTemplateData();
+    if ( templateData.ReferencesObject() && templateData->Equals(data) )
+    {
+        return NULL;
+    }
+
+    return data;
 }
 
 Composite::Composite()
@@ -131,6 +160,7 @@ Composite::Composite()
 , m_FirstDerived( NULL )
 , m_NextSibling( NULL )
 , m_Accept( NULL )
+, m_Template( NULL )
 {
 
 }
@@ -168,112 +198,7 @@ void Composite::Unregister() const
     }
 }
 
-void Composite::AddDerived( const Composite* derived ) const
-{
-    const Composite* last = m_FirstDerived;
-
-    while ( last && last->m_NextSibling )
-    {
-        last = last->m_NextSibling;
-    }
-
-    if ( last )
-    {
-        last->m_NextSibling = derived;
-    }
-    else
-    {
-        m_FirstDerived = derived;
-    }
-}
-
-void Composite::RemoveDerived( const Composite* derived ) const
-{
-    if ( m_FirstDerived == derived )
-    {
-        m_FirstDerived = derived->m_NextSibling;
-    }
-    else
-    {
-        for ( const Composite* sibling = m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
-        {
-            if ( sibling->m_NextSibling == derived )
-            {
-                sibling->m_NextSibling = sibling->m_NextSibling ? sibling->m_NextSibling->m_NextSibling : NULL;
-                derived->m_NextSibling = NULL;
-                break;
-            }
-        }
-    }
-}
-
-uint32_t Composite::GetBaseFieldCount() const
-{
-    uint32_t count = 0;
-
-    for ( const Composite* base = m_Base; base; base = base->m_Base )
-    {
-        if ( m_Base->m_Fields.GetSize() )
-        {
-            count = m_Base->m_Fields.GetLast().m_Index + 1;
-            break;
-        }
-    }
-
-    return count;
-}
-
-Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
-{
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_DataClass = dataClass;
-    m_Fields.Add( field );
-
-    return &m_Fields.GetLast();
-}
-
-Reflect::Field* Composite::AddElementField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
-{
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_Type = type;
-    field.m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
-    m_Fields.Add( field );
-
-    return &m_Fields.GetLast();
-}
-
-Reflect::Field* Composite::AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
-{
-    // if you hit this, then you need to make sure you register your enums before you register elements that use them
-    HELIUM_ASSERT(enumeration != NULL);
-
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_Type = enumeration;
-    field.m_DataClass = dataClass;
-    m_Fields.Add( field );
-
-    return &m_Fields.GetLast();
-}
-
-bool Composite::HasType(const Type* type) const
+bool Composite::IsType(const Composite* type) const
 {
     for ( const Composite* base = this; base; base = base->m_Base )
     {
@@ -284,6 +209,148 @@ bool Composite::HasType(const Type* type) const
     }
 
     return false;
+}
+
+void Composite::AddDerived( const Composite* derived ) const
+{
+    HELIUM_ASSERT( derived );
+
+    derived->m_NextSibling = m_FirstDerived;
+    m_FirstDerived = derived;
+}
+
+void Composite::RemoveDerived( const Composite* derived ) const
+{
+    HELIUM_ASSERT( derived );
+
+    if ( m_FirstDerived == derived )
+    {
+        m_FirstDerived = derived->m_NextSibling;
+    }
+    else
+    {
+        for ( const Composite* sibling = m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
+        {
+            if ( sibling->m_NextSibling == derived )
+            {
+                sibling->m_NextSibling = derived->m_NextSibling;
+                break;
+            }
+        }
+    }
+
+    derived->m_NextSibling = NULL;
+}
+
+bool Composite::Equals(const void* a, const void* b) const
+{
+    if (a == b)
+    {
+        return true;
+    }
+
+    if (!a || !b)
+    {
+        return false;
+    }
+
+    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = m_Fields.End();
+    for ( ; itr != end; ++itr )
+    {
+        const Field* field = &*itr;
+
+        // create serializers
+        DataPtr aData = field->CreateData();
+        DataPtr bData = field->CreateData();
+
+        // connnect
+        aData->ConnectField(a, field);
+        bData->ConnectField(b, field);
+
+        bool serializersEqual = aData->Equals( bData );
+
+        // disconnect
+        aData->Disconnect();
+        bData->Disconnect();
+
+        // If the serialziers aren't equal, the elements can't be equal
+        if ( !serializersEqual )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void Composite::Visit(void* instance, Visitor& visitor) const
+{
+    if (!instance)
+    {
+        return;
+    }
+
+    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = m_Fields.End();
+    for ( ; itr != end; ++itr )
+    {
+        const Field* field = &*itr;
+
+        if ( !visitor.VisitField( instance, field ) )
+        {
+            continue;
+        }
+
+        DataPtr data = field->CreateData();
+
+        data->ConnectField( instance, field );
+
+        data->Accept( visitor );
+
+        data->Disconnect();
+    }
+}
+
+void Composite::Copy( const void* source, void* destination ) const
+{
+    if ( source != destination )
+    {
+#pragma TODO("This should be inside a virtual function (like CopyTo) instead of a type check conditional")
+        if ( IsType( GetClass<Data>() ) )
+        {
+            const Data* data = static_cast<const Data*>(source);
+            Data* cln = static_cast<Data*>(destination);
+            cln->Set(data);
+        }
+        else
+        {
+            DynArray< Field >::ConstIterator itr = m_Fields.Begin();
+            DynArray< Field >::ConstIterator end = m_Fields.End();
+            for ( ; itr != end; ++itr )
+            {
+                const Field* field = &*itr;
+
+                // create serializers
+                DataPtr lhs = field->CreateData();
+                DataPtr rhs = field->CreateData();
+
+                // connnect
+                lhs->ConnectField(destination, field);
+                rhs->ConnectField(source, field);
+
+                // for normal data types, run overloaded assignement operator via data's vtable
+                // for reference container types, this deep copies containers (which is bad for 
+                //  non-cloneable (FieldFlags::Share) reference containers)
+                bool result = lhs->Set(rhs, field->m_Flags & FieldFlags::Share ? DataFlags::Shallow : 0);
+                HELIUM_ASSERT(result);
+
+                // disconnect
+                lhs->Disconnect();
+                rhs->Disconnect();
+            }
+        }
+    }
 }
 
 const Field* Composite::FindFieldByName(uint32_t crc) const
@@ -339,181 +406,68 @@ const Field* Composite::FindFieldByOffset(uint32_t offset) const
     return NULL;
 }
 
-bool Composite::Equals(const Element* a, const Element* b)
+uint32_t Composite::GetBaseFieldCount() const
 {
-    if (a == b)
-    {
-        return true;
-    }
+    uint32_t count = 0;
 
-    if (!a || !b)
+    for ( const Composite* base = m_Base; base; base = base->m_Base )
     {
-        return false;
-    }
-
-    const Class* type = a->GetClass();
-
-    if ( type != b->GetClass() )
-    {
-        return false;
-    }
-
-    if (a->HasType(Reflect::GetType<Data>()))
-    {
-        const Data* aData = static_cast<const Data*>(a);
-        const Data* bData = static_cast<const Data*>(b);
-
-        return aData->Equals(bData);
-    }
-    else
-    {
-        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = type->m_Fields.End();
-        for ( ; itr != end; ++itr )
+        if ( m_Base->m_Fields.GetSize() )
         {
-            const Field* field = &*itr;
-
-            // create serializers
-            DataPtr aData = field->CreateData();
-            DataPtr bData = field->CreateData();
-
-            // connnect
-            aData->ConnectField(a, field);
-            bData->ConnectField(b, field);
-
-            bool serializersEqual = aData->Equals( bData );
-
-            // disconnect
-            aData->Disconnect();
-            bData->Disconnect();
-
-            // If the serialziers aren't equal, the elements can't be equal
-            if ( !serializersEqual )
-            {
-                return false;
-            }
+            count = m_Base->m_Fields.GetLast().m_Index + 1;
+            break;
         }
     }
 
-    return true;
+    return count;
 }
 
-void Composite::Visit(Element* element, Visitor& visitor)
+Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
 {
-    if (!element)
-    {
-        return;
-    }
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = name;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_DataClass = dataClass;
+    m_Fields.Add( field );
 
-    if (!visitor.VisitElement(element))
-    {
-        return;
-    }
-
-    const Class* type = element->GetClass();
-
-    {
-        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = type->m_Fields.End();
-        for ( ; itr != end; ++itr )
-        {
-            const Field* field = &*itr;
-
-            if (!visitor.VisitField(element, field))
-            {
-                continue;
-            }
-
-            DataPtr serializer = field->CreateData();
-
-            serializer->ConnectField( element, field );
-
-            serializer->Accept( visitor );
-
-            serializer->Disconnect();
-        }
-    }
+    return &m_Fields.GetLast();
 }
 
-void Composite::Copy( const Element* src, Element* dest )
+Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
-    if ( src == dest )
-    {
-        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), src->GetClass()->m_Name );
-    }
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = name;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_Type = type;
+    field.m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
+    m_Fields.Add( field );
 
-    // 
-    // Find common base class
-    // 
+    return &m_Fields.GetLast();
+}
 
-    // This is the common base class type
-    const Class* type = NULL; 
-    const Class* srcType = src->GetClass();
-    const Class* destType = dest->GetClass();
+Reflect::Field* Composite::AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
+{
+    // if you hit this, then you need to make sure you register your enums before you register elements that use them
+    HELIUM_ASSERT(enumeration != NULL);
 
-    // Simplest case: the types are the same
-    if ( srcType == destType )
-    {
-        type = srcType;
-    }
-    else
-    {
-        // Types are not the same, we have to search...
-        // Iterate up inheritance of src, and look check to see if dest HasType for each one
-        Reflect::Registry* registry = Reflect::Registry::GetInstance();
-        for ( const Composite* base = srcType; base && !type; base = base->m_Base )
-        {
-            if ( dest->HasType( base ) )
-            {
-                // We found the match (which breaks out of this loop)
-                type = ReflectionCast<const Class>( base );
-            }
-        }
+    Field field;
+    field.m_Composite = this;
+    field.m_Name = name;
+    field.m_Size = size;
+    field.m_Offset = offset;
+    field.m_Flags = flags;
+    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
+    field.m_Type = enumeration;
+    field.m_DataClass = dataClass;
+    m_Fields.Add( field );
 
-        if ( !type )
-        {
-            // This should be impossible... at the very least, Element is a common base class for both pointers.
-            // This exeception means there's a bug in this function.
-            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), srcType->m_Name, destType->m_Name );
-        }
-    }
-
-    // 
-    // Carry out the copy operation
-    // 
-
-    if (src->HasType(Reflect::GetType<Data>()))
-    {
-        const Data* ser = static_cast<const Data*>(src);
-        Data* cln = static_cast<Data*>(dest);
-
-        cln->Set(ser);
-    }
-    else
-    {
-        DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = type->m_Fields.End();
-        for ( ; itr != end; ++itr )
-        {
-            const Field* field = &*itr;
-
-            // create serializers
-            DataPtr lhs = field->CreateData();
-            DataPtr rhs = field->CreateData();
-
-            // connnect
-            lhs->ConnectField(dest, field);
-            rhs->ConnectField(src, field);
-
-            // for normal data types, run overloaded assignement operator via serializer's vtable
-            // for reference container types, this deep copies containers (which is bad for 
-            //  non-cloneable (FieldFlags::Share) reference containers)
-            bool result = lhs->Set(rhs, field->m_Flags & FieldFlags::Share ? DataFlags::Shallow : 0);
-            HELIUM_ASSERT(result);
-
-            // disconnect
-            lhs->Disconnect();
-            rhs->Disconnect();
-        }
-    }
+    return &m_Fields.GetLast();
 }

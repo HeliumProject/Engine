@@ -14,7 +14,7 @@ L_IMPLEMENT_OBJECT_NOINITTYPE( Package, Engine );
 
 /// Constructor.
 Package::Package()
-: m_pLoader( NULL )
+    : m_pLoader( NULL )
 {
     // Set the package flag by default.
     SetFlags( FLAG_PACKAGE );
@@ -28,7 +28,7 @@ Package::~Package()
 /// Initialize the static type information for the "Package" class.
 ///
 /// @return  Static "Package" type.
-GameObjectType* Package::InitStaticType()
+const GameObjectType* Package::InitStaticType()
 {
     if( !sm_pStaticType )
     {
@@ -38,6 +38,7 @@ GameObjectType* Package::InitStaticType()
 
         sm_pStaticType = GameObjectType::Find( Name( TXT( "Package" ) ) );
         HELIUM_ASSERT( sm_pStaticType );
+        s_Class = sm_pStaticType;
 
         sm_spStaticTypeTemplate = static_cast< Package* >( sm_pStaticType->GetTemplate() );
         HELIUM_ASSERT( sm_spStaticTypeTemplate );

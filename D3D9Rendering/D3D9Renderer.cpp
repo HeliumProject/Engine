@@ -33,6 +33,8 @@
 
 namespace Lunar
 {
+    L_DECLARE_RPTR( RFence );
+
     L_DECLARE_RPTR( D3D9RasterizerState );
     L_DECLARE_RPTR( D3D9BlendState );
     L_DECLARE_RPTR( D3D9DepthStencilState );
@@ -655,14 +657,16 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "D3D9Renderer::CreateIndexBuffer(): Index buffers can only be created with static or dynamic " )
-            TXT( "usage semantics.\n" ) ) );
+              TXT( "usage semantics.\n" ) ) );
 
         return NULL;
     }
 
-    DWORD d3dUsage = ( usage == RENDERER_BUFFER_USAGE_DYNAMIC ? D3DUSAGE_DYNAMIC : 0 );
+    bool bDynamic = ( usage == RENDERER_BUFFER_USAGE_DYNAMIC );
+
+    DWORD d3dUsage = ( bDynamic ? D3DUSAGE_DYNAMIC : 0 );
     D3DFORMAT d3dFormat = ( format == RENDERER_INDEX_FORMAT_UINT32 ? D3DFMT_INDEX32 : D3DFMT_INDEX16 );
-    D3DPOOL pool = ( m_bExDevice || usage == RENDERER_BUFFER_USAGE_DYNAMIC ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED );
+    D3DPOOL pool = ( m_bExDevice || bDynamic ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED );
 
     IDirect3DIndexBuffer9* pD3DBuffer = NULL;
     HRESULT result = m_pD3DDevice->CreateIndexBuffer(
@@ -685,7 +689,11 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
     if( pData )
     {
         void* pDestination = NULL;
-        L_D3D9_VERIFY( pD3DBuffer->Lock( 0, static_cast< UINT >( size ), &pDestination, D3DLOCK_DISCARD ) );
+        L_D3D9_VERIFY( pD3DBuffer->Lock(
+            0,
+            static_cast< UINT >( size ),
+            &pDestination,
+            ( bDynamic ? D3DLOCK_DISCARD : 0 ) ) );
         HELIUM_ASSERT( pDestination );
         MemoryCopy( pDestination, pData, size );
         L_D3D9_VERIFY( pD3DBuffer->Unlock() );
@@ -992,7 +1000,7 @@ RFence* D3D9Renderer::CreateFence()
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "D3D9Renderer::CreateFence(): Failed to create Direct3D event query instance (error code: " )
-            TXT( "0x%x).\n" ) ),
+              TXT( "0x%x).\n" ) ),
             createResult );
 
         return NULL;
@@ -1064,6 +1072,14 @@ RRenderCommandProxy* D3D9Renderer::CreateDeferredCommandProxy()
     HELIUM_ASSERT( pCommandProxy );
 
     return pCommandProxy;
+}
+
+/// @copydoc Renderer::Flush()
+void D3D9Renderer::Flush()
+{
+    RFencePtr spFence = CreateFence();
+    HELIUM_ASSERT( spFence );
+    SyncFence( spFence );
 }
 
 /// Acquire a dynamic texture for use as a temporary staging area for mapped static texture loads from the pool if

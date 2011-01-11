@@ -42,7 +42,6 @@ namespace Helium
                 Composite,
                 Structure,
                 Class,
-                ObjectType,
                 GameObjectType,
             };
         }

@@ -22,7 +22,7 @@ PathContainerInterpreter::PathContainerInterpreter (Container* labelContainer)
 {
 }
 
-void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void PathContainerInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     m_List = NULL;
 
@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isVector = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
-    bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
+    bool isVector = ( field->m_DataClass == Reflect::GetClass<PathStlVectorData>() );
+    bool isSet = ( field->m_DataClass == Reflect::GetClass<PathStlSetData>() );
     bool isContainer = isVector || isSet;
 
     // create the label
@@ -161,8 +161,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     buttonContainer->a_IsEnabled.Set( instances.size() == 1 );
 
     // create the serializers
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+    std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+    std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();
@@ -187,15 +187,14 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         addButton->Bind( data );
     }
 
-#ifdef REFLECT_REFACTOR
     // setup the default value
-    if ( field->m_Default )
+    DataPtr templateData = field->CreateTemplateData();
+    if ( templateData )
     {
-        tstringstream outStream;
-        *field->m_Default >> outStream;
-        list->a_Default.Set( outStream.str() );
+        tstringstream templateStream;
+        *templateData >> templateStream;
+        list->a_Default.Set( templateStream.str() );
     }
-#endif
 }
 
 void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
@@ -224,7 +223,7 @@ void PathContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
@@ -244,7 +243,7 @@ void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 

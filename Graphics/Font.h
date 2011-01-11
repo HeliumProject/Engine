@@ -3,6 +3,7 @@
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
+#include "Foundation/StringConverter.h"
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 
@@ -74,6 +75,61 @@ namespace Lunar
             //@}
         };
 
+        /// Base template type for handling conversions to wide-character strings as needed for ProcessText().
+        template< typename CharType >
+        class ProcessTextConverter
+        {
+        };
+
+        /// Single-byte to wide-character string conversion support for ProcessText().
+        template<>
+        class LUNAR_GRAPHICS_API ProcessTextConverter< char >
+        {
+        public:
+            /// Maximum length for converted strings.
+            static const size_t STRING_LENGTH_MAX = 1024;
+
+            /// @name Construction/Destruction
+            //@{
+            inline ProcessTextConverter( const char* pString, size_t length );
+            //@}
+
+            /// @name Data Access
+            //@{
+            inline const wchar_t* GetString() const;
+            inline size_t GetLength() const;
+            //@}
+
+        private:
+            /// Converted string.
+            wchar_t m_string[ STRING_LENGTH_MAX ];
+            /// Cached string length.
+            size_t m_length;
+        };
+
+        /// Wide-character to wide-character (dummy) string conversion support for ProcessText().
+        template<>
+        class LUNAR_GRAPHICS_API ProcessTextConverter< wchar_t >
+        {
+        public:
+            /// @name Construction/Destruction
+            //@{
+            inline ProcessTextConverter( const wchar_t* pString, size_t length );
+            //@}
+
+            /// @name Data Access
+            //@{
+            inline const wchar_t* GetString() const;
+            inline size_t GetLength() const;
+            //@}
+
+        private:
+            /// Cached string pointer.
+            const wchar_t* m_pString;
+            /// Cached string length.
+            size_t m_length;
+        };
+
         /// @name Construction/Destruction
         //@{
         Font();
@@ -109,6 +165,8 @@ namespace Lunar
 
         inline ECompression GetTextureCompression() const;
 
+        inline bool GetAntialiased() const;
+
         inline int32_t GetAscenderFixed() const;
         inline int32_t GetDescenderFixed() const;
         inline int32_t GetHeightFixed() const;
@@ -127,6 +185,7 @@ namespace Lunar
         //@{
         inline uint32_t GetCharacterCount() const;
         inline const Character& GetCharacter( uint32_t index ) const;
+        inline uint32_t GetCharacterIndex( const Character* pCharacter ) const;
 
         inline const Character* FindCharacter( uint32_t codePoint ) const;
         //@}
@@ -135,6 +194,14 @@ namespace Lunar
         //@{
         inline uint8_t GetTextureSheetCount() const;
         inline RTexture2d* GetTextureSheet( uint8_t index ) const;
+        //@}
+
+        /// @name Text Processing Support
+        //@{
+        template< typename GlyphHandler, typename CharType > void ProcessText(
+            const CharType* pString, GlyphHandler& rGlyphHandler ) const;
+        template< typename GlyphHandler, typename CharType, typename Allocator > void ProcessText(
+            const StringBase< CharType, Allocator >& rString, GlyphHandler& rGlyphHandler ) const;
         //@}
 
         /// @name Static Utility Functions
@@ -177,6 +244,15 @@ namespace Lunar
         size_t* m_pTextureLoadIds;
         /// Number of texture sheets.
         uint8_t m_textureCount;
+
+        /// True if this font should use anti-aliasing to smooth edges, false if not.
+        bool m_bAntialiased;
+
+        /// @name Text Processing Support, Private
+        //@{
+        template< typename GlyphHandler, typename CharType > void ProcessText(
+            const CharType* pString, size_t characterCount, GlyphHandler& rGlyphHandler ) const;
+        //@}
     };
 }
 

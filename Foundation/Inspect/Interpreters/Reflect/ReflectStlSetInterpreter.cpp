@@ -23,7 +23,7 @@ ReflectStlSetInterpreter::ReflectStlSetInterpreter( Container* container )
 ///////////////////////////////////////////////////////////////////////////////
 // Creates UI for the field variable specified.
 // 
-void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
+void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, const std::vector<Reflect::Object*>& instances, Container* parent )
 {
     if ( field->m_Flags & Reflect::FieldFlags::Hide )
     {
@@ -45,8 +45,8 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
     container->a_Name.Set( temp );
 
     // create the serializers
-    std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
-    std::vector< Reflect::Element* >::const_iterator end = instances.end();
+    std::vector< Reflect::Object* >::const_iterator itr = instances.begin();
+    std::vector< Reflect::Object* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         Reflect::DataPtr ser = Reflect::AssertCast< Reflect::Data >( Reflect::Registry::GetInstance()->CreateInstance( field->m_DataClass ) );
@@ -99,7 +99,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
 void ReflectStlSetInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -115,7 +115,7 @@ void ReflectStlSetInterpreter::OnAdd( const ButtonClickedArgs& args )
 void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -127,7 +127,7 @@ void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
             std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
             for ( ; itr != end; ++itr )
             {
-                // for each array in the selection set (the objects the array serializer is connected to)
+                // for each array in the selection set (the objects the array data is connected to)
                 std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
                 std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )

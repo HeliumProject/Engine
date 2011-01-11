@@ -24,19 +24,13 @@ namespace Lunar
     ///
     /// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
     ///          "GameObject" type itself).
-    GameObjectType* GameObjectType::GetBaseType() const
+    const GameObjectType* GameObjectType::GetBaseType() const
     {
-        Reflect::ObjectType* pBaseType = m_BaseType;
-#pragma TODO( "Restore m_BaseType validity checking once Reflect::Object and GameObject type checking are integrated." )
-#if 1
-        HELIUM_ASSERT( !pBaseType || pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
-        return static_cast< GameObjectType* >( pBaseType );
-#else
-        HELIUM_ASSERT( pBaseType );
-        return ( pBaseType->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
-                 ? static_cast< GameObjectType* >( pBaseType )
+        const Reflect::Composite* pBase = m_Base;
+        HELIUM_ASSERT( pBase );
+        return ( pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
+                 ? static_cast< const GameObjectType* >( pBase )
                  : NULL );
-#endif
     }
 
     /// Get the default template object for this type.
@@ -44,7 +38,7 @@ namespace Lunar
     /// @return  Type template object.
     GameObject* GameObjectType::GetTemplate() const
     {
-        return m_spTemplate;
+        return const_cast< GameObject* >( static_cast< const GameObject* >( m_Template ) );
     }
 
     /// Get the flags associated with this type.
@@ -83,7 +77,7 @@ namespace Lunar
     /// Get the type referenced by this iterator.
     ///
     /// @return  Reference to the referenced type.
-    GameObjectType& GameObjectType::ConstIterator::operator*() const
+    const GameObjectType& GameObjectType::ConstIterator::operator*() const
     {
         GameObjectType* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );
@@ -94,7 +88,7 @@ namespace Lunar
     /// Get the type referenced by this iterator.
     ///
     /// @return  Pointer to the referenced type.
-    GameObjectType* GameObjectType::ConstIterator::operator->() const
+    const GameObjectType* GameObjectType::ConstIterator::operator->() const
     {
         GameObjectType* pType = m_iterator->Second();
         HELIUM_ASSERT( pType );

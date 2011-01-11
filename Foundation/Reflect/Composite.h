@@ -14,7 +14,7 @@
 //  struct Field
 //  {
 //      int32_t name;               // string pool index of the name of this field
-//      int32_t serializer_id;      // string pool index of the name of the serializer type
+//      int32_t serializer_id;      // string pool index of the name of the data type
 //  };
 //
 //  struct Composite
@@ -30,6 +30,8 @@ namespace Helium
 {
     namespace Reflect
     {
+        class ObjectCache;
+
         class Composite;
         typedef void (*AcceptVisitor)( Composite& );
 
@@ -46,7 +48,7 @@ namespace Helium
         }
 
         //
-        // Field (an element of a composite)
+        // Field (an object of a composite)
         //
 
         class FOUNDATION_API Field : public PropertyCollection
@@ -54,14 +56,18 @@ namespace Helium
         public:
             Field();
 
-            // creates a suitable serializer for this field in the passed object
-            DataPtr CreateData(Element* instance = NULL) const;
+            // creates a suitable data for this field
+            DataPtr CreateData() const;
 
-            // checks to see if the default value matches the value of this field in the passed object
-            bool HasDefaultValue(Element* instance) const;
+            // allocate and connect to an instance
+            DataPtr CreateData(void* instance) const;
+            DataPtr CreateData(const void* instance) const;
 
-            // sets the default value of this field in the passed object
-            bool SetDefaultValue(Element* instance) const;
+            // allocate and connect to the default
+            DataPtr CreateTemplateData() const;
+
+            // determine if this field should be serialized
+            DataPtr ShouldSerialize(const void* instance, ObjectCache* cache = NULL) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field
@@ -70,7 +76,7 @@ namespace Helium
             uint32_t                m_Flags;        // flags for special behavior
             uint32_t                m_Index;        // the unique id of this field
             const Type*             m_Type;         // the type of this field (NULL for POD types)
-            const Class*            m_DataClass;    // type id of the serializer to use
+            const Class*            m_DataClass;    // type id of the data to use
         };
 
         //
@@ -86,21 +92,14 @@ namespace Helium
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
             DynArray< Field >                       m_Fields;               // fields in this composite
-            AcceptVisitor                           m_Accept;
+            AcceptVisitor                           m_Accept;               // function to populate this structure
+            const void*                             m_Template;             // default template instance
 
         protected:
             Composite();
             virtual ~Composite();
 
         public:
-            // overload from Type
-            virtual void Report() const HELIUM_OVERRIDE;
-            virtual void Unregister() const HELIUM_OVERRIDE;
-
-            //
-            // Populate composite information
-            //
-
             template< class CompositeT >
             static void Create( const tchar_t* name, const tchar_t* baseName, AcceptVisitor accept, Composite* info )
             {
@@ -153,32 +152,40 @@ namespace Helium
                 }
             }
 
-            //
-            // Derived list managment
-            //
+            // Overloaded functions from Type
+            virtual void Report() const HELIUM_OVERRIDE;
+            virtual void Unregister() const HELIUM_OVERRIDE;
+
+            // Inheritance Hierarchy
+            bool IsType(const Composite* type) const;
             void AddDerived( const Composite* derived ) const;
             void RemoveDerived( const Composite* derived ) const;
 
             //
-            // Add fields to the composite
+            // Equals compares all reflect-aware data, this is only really safe for data types, since
+            //  users could add non-reflect aware fields that would not be used in the comparison.
+            //  We could possibly use the default comparison operator (if the compiler generates one)
+            //  to affirm that non-reflect aware fields are equals, but this would not work for non-reflect
+            //  aware field pointers (since their pointer values would be used by the comparison operator).
             //
 
-            // computes the number of fields in all our base classes (the base index for our fields)
-            uint32_t GetBaseFieldCount() const;
-
-            // concrete field population functions, called from template functions below with deducted data
-            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
-            Reflect::Field* AddElementField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
-            Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
+            bool Equals( const void* a, const void* b ) const;
 
             //
-            // Test for type of this or it base classes
+            // Visits fields recursively, used to interactively traverse structures
             //
 
-            bool HasType(const Type* type) const;
+            void Visit( void* instance, Visitor& visitor ) const;
+
+            // 
+            // Copies data from one instance to another by finding a common base class and cloning all of the
+            //  fields from the source object into the destination object.
+            // 
+
+            void Copy( const void* source, void* destination ) const;
 
             //
-            // Find a field by name
+            // Find a field in this composite
             //
 
             const Field* FindFieldByName(uint32_t crc) const;
@@ -198,28 +205,16 @@ namespace Helium
             }
 
             //
-            // Equals compares all reflect-aware data, this is only really safe for serializer types, since
-            //  users could add non-reflect aware fields that would not be used in the comparison.
-            //  We could possibly use the default comparison operator (if the compiler generates one)
-            //  to affirm that non-reflect aware fields are equals, but this would not work for non-reflect
-            //  aware field pointers (since their pointer values would be used by the comparison operator).
+            // Add fields to the composite
             //
 
-            static bool Equals(const Element* a, const Element* b);
+            // computes the number of fields in all our base classes (the base index for our fields)
+            uint32_t GetBaseFieldCount() const;
 
-            //
-            // Visits fields recursively, used to interactively traverse structures
-            //
-
-            static void Visit (Element* element, Visitor& visitor);
-
-            // 
-            // Copies data from one element to another by finding a common base class and cloning all of the
-            //  fields from the source element into the destination element.
-            // 
-
-            static void Copy( const Element* src, Element* dest );
-
+            // concrete field population functions, called from template functions below with deducted data
+            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
+            Reflect::Field* AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
+            Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
 
             //
             // Reflection Generation Functions
@@ -253,99 +248,99 @@ namespace Helium
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( StrongPtr< ElementT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ElementT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
                     Reflect::GetClass<Reflect::PointerData>(),
-                    Reflect::GetType<ElementT>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( std::vector< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::vector< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlVectorData>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::vector< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlVectorData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::vector< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlVectorData>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( std::set< StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlSetData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::set< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlSetData>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField(
+                return AddObjectField(
                     name,
                     GetOffset(field),
-                    sizeof(std::set< StrongPtr< ElementT > >),
-                    Reflect::GetClass<Reflect::ElementStlSetData>(),
-                    Reflect::GetType<ElementT>(),
+                    sizeof(std::set< StrongPtr< ObjectT > >),
+                    Reflect::GetClass<Reflect::ObjectStlSetData>(),
+                    Reflect::GetClass<ObjectT>(),
                     flags );
             }
 
-            template < class CompositeT, class KeyT, class ElementT >
-            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ElementT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class KeyT, class ObjectT >
+            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField( 
+                return AddObjectField( 
                     name, 
                     GetOffset(field), 
-                    sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
-                    Reflect::GetType<ElementT>(), 
+                    sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
+                    Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
+                    Reflect::GetClass<ObjectT>(), 
                     flags );
             }
 
-            template < class CompositeT, class KeyT, class ElementT >
-            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ElementT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            template < class CompositeT, class KeyT, class ObjectT >
+            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddElementField( 
+                return AddObjectField( 
                     name, 
                     GetOffset(field), 
-                    sizeof(std::map< KeyT, StrongPtr< ElementT > >), 
-                    Reflect::GetClass<Reflect::SimpleElementStlMapData< KeyT > >(), 
-                    Reflect::GetType<ElementT>(), 
+                    sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
+                    Reflect::GetClass<Reflect::SimpleObjectStlMapData< KeyT > >(), 
+                    Reflect::GetClass<ObjectT>(), 
                     flags );
             }
 

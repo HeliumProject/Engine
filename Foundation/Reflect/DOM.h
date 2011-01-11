@@ -5,7 +5,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/File/Path.h"
 
@@ -21,13 +21,13 @@ namespace Helium
         class DocumentAttribute;
         typedef Helium::StrongPtr< DocumentAttribute > DocumentAttributePtr;
 
-        class DocumentElement;
-        typedef Helium::StrongPtr< DocumentElement > DocumentElementPtr;
+        class DocumentObject;
+        typedef Helium::StrongPtr< DocumentObject > DocumentObjectPtr;
 
-        class FOUNDATION_API DocumentNode : public Reflect::Element
+        class FOUNDATION_API DocumentNode : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( DocumentNode, Element );
+            REFLECT_DECLARE_ABSTRACT( DocumentNode, Object );
 
             DocumentNode()
                 : m_Document( NULL )
@@ -45,12 +45,12 @@ namespace Helium
 
             virtual void SetDocument( Document* document );
 
-            DocumentElement* GetParent() const
+            DocumentObject* GetParent() const
             {
                 return m_Parent;
             }
 
-            void SetParent( DocumentElement* node )
+            void SetParent( DocumentObject* node )
             {
                 m_Parent = node;
             }
@@ -75,11 +75,11 @@ namespace Helium
                 m_Previous = node;
             }
 
-            virtual void Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL );
+            virtual void Initialize( Document* document, DocumentObject* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL );
 
         protected:
             Document*           m_Document;
-            DocumentElement*    m_Parent;
+            DocumentObject*    m_Parent;
             DocumentNode*       m_Next;
             DocumentNode*       m_Previous;
 
@@ -140,7 +140,7 @@ namespace Helium
 
         struct DocumentHierarchyChangeArgs
         {
-            DocumentHierarchyChangeArgs( DocumentNode* node, DocumentElement* oldParent, DocumentElement* newParent )
+            DocumentHierarchyChangeArgs( DocumentNode* node, DocumentObject* oldParent, DocumentObject* newParent )
                 : m_Node( node )
                 , m_OldParent( oldParent )
                 , m_NewParent( newParent )
@@ -149,13 +149,13 @@ namespace Helium
             }
 
             DocumentNode*       m_Node;
-            DocumentElement*    m_OldParent;
-            DocumentElement*    m_NewParent;
+            DocumentObject*    m_OldParent;
+            DocumentObject*    m_NewParent;
         };
 
         struct DocumentHierarchyChangingArgs : public DocumentHierarchyChangeArgs
         {
-            DocumentHierarchyChangingArgs( DocumentNode* node, DocumentElement* oldParent, DocumentElement* newParent )
+            DocumentHierarchyChangingArgs( DocumentNode* node, DocumentObject* oldParent, DocumentObject* newParent )
                 : DocumentHierarchyChangeArgs( node, oldParent, newParent )
                 , m_Veto( false )
             {
@@ -168,12 +168,12 @@ namespace Helium
         typedef Helium::Signature< const DocumentHierarchyChangingArgs& > DocumentHierarchyChangingSignature;
         typedef Helium::Signature< const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
 
-        class FOUNDATION_API DocumentElement : public DocumentNode
+        class FOUNDATION_API DocumentObject : public DocumentNode
         {
         public:
-            REFLECT_DECLARE_CLASS( DocumentElement, DocumentNode );
+            REFLECT_DECLARE_CLASS( DocumentObject, DocumentNode );
 
-            DocumentElement()
+            DocumentObject()
             {
 
             }
@@ -193,7 +193,7 @@ namespace Helium
             template< class T >
             void FindChildren( std::vector< Helium::SmartPtr< T > >& children )
             {
-                for ( std::vector< DocumentElementPtr >::const_iterator itr = m_Children.begin()
+                for ( std::vector< DocumentObjectPtr >::const_iterator itr = m_Children.begin()
                     , end = m_Children.end()
                     ; itr != end
                     ; ++itr )
@@ -206,7 +206,7 @@ namespace Helium
                 }
             }
 
-            virtual void Initialize( Document* document, DocumentElement* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL ) HELIUM_OVERRIDE;
+            virtual void Initialize( Document* document, DocumentObject* parent, DocumentNode* nextSibling = NULL, DocumentNode* previousSibling = NULL ) HELIUM_OVERRIDE;
 
             virtual void AddChild( DocumentNodePtr node );
 
@@ -266,10 +266,10 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API Document : public DocumentElement
+        class FOUNDATION_API Document : public DocumentObject
         {
         public:
-            REFLECT_DECLARE_CLASS( Document, DocumentElement );
+            REFLECT_DECLARE_CLASS( Document, DocumentObject );
 
             void Initialize()
             {

@@ -3,7 +3,7 @@
 #include "ReflectClipboardData.h"
 
 #include "Foundation/Reflect/Data/SimpleData.h"
-#include "Foundation/Reflect/Data/ElementStlVectorData.h"
+#include "Foundation/Reflect/Data/ObjectStlVectorData.h"
 
 namespace Helium
 {
@@ -24,15 +24,15 @@ namespace Helium
 
             const Reflect::Class* GetCommonBaseClass() const;
             void SetCommonBaseTypeID( const Reflect::Type* type );
-            bool Add( const Reflect::ElementPtr& item );
+            bool Add( const Reflect::ObjectPtr& item );
             virtual bool Merge( const ReflectClipboardData* source ) HELIUM_OVERRIDE;
 
         protected:
-            bool CanAdd( const Reflect::ElementPtr& item ) const;
+            bool CanAdd( const Reflect::ObjectPtr& item ) const;
 
         public:
             tstring m_CommonBaseClass;
-            std::vector< Reflect::ElementPtr > m_Elements;
+            std::vector< Reflect::ObjectPtr > m_Elements;
         };
         typedef Helium::SmartPtr< ClipboardElementArray > ClipboardElementArrayPtr;
     }

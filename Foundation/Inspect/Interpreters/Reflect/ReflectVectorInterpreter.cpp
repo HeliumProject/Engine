@@ -15,7 +15,7 @@ ReflectVectorInterpreter::ReflectVectorInterpreter (Container* container)
 
 }
 
-void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     if ( field->m_Flags & FieldFlags::Hide )
     {
@@ -44,11 +44,11 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
 
     // compute dimensions
     int dimensions = 2;
-    if ( field->m_DataClass == Reflect::GetType<Vector3Data>() )
+    if ( field->m_DataClass == Reflect::GetClass<Vector3Data>() )
     {
         dimensions += 1;
     }
-    if ( field->m_DataClass == Reflect::GetType<Vector4Data>() )
+    if ( field->m_DataClass == Reflect::GetClass<Vector4Data>() )
     {
         dimensions += 2;
     }
@@ -58,8 +58,8 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
     {
         // create the serializers
         std::vector<Reflect::Data*> data;
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
             DataPtr s = new Float32Data ();

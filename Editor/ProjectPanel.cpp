@@ -91,7 +91,7 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     m_DataViewCtrl->GetMainWindow()->SetDropTarget( m_DropTarget );
 
-    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
+    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
 ProjectPanel::~ProjectPanel()
@@ -112,7 +112,7 @@ ProjectPanel::~ProjectPanel()
 
     Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
 
-    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
+    wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
 void ProjectPanel::OpenProject( Project* project, const Document* document )
@@ -203,7 +203,7 @@ void ProjectPanel::SetActive( const Path& path, bool active )
     }
 }
 
-void ProjectPanel::GeneralSettingsChanged( const Reflect::ElementChangeArgs& args )
+void ProjectPanel::GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args )
 {
     Refresh();
 }

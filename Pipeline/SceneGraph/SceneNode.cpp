@@ -416,12 +416,12 @@ void SceneNode::Execute(bool interactively)
 
 #pragma TODO("Remove this constness")
 
-void SceneNode::GetState( Reflect::ElementPtr& state ) const
+void SceneNode::GetState( Reflect::ObjectPtr& state ) const
 {
     state = const_cast<SceneNode*>(this)->Clone();
 }
 
-void SceneNode::SetState( const Reflect::ElementPtr& state )
+void SceneNode::SetState( const Reflect::ObjectPtr& state )
 {
     if ( !state->Equals( this ) )
     {
@@ -431,14 +431,14 @@ void SceneNode::SetState( const Reflect::ElementPtr& state )
     }
 }
 
-Undo::CommandPtr SceneNode::SnapShot( Reflect::Element* newState )
+Undo::CommandPtr SceneNode::SnapShot( Reflect::Object* newState )
 {
     if ( newState == NULL )
     {
-        return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
+        return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
     }
 
-    return new Undo::PropertyCommand<Reflect::ElementPtr>( new Helium::MemberProperty<SceneNode, Reflect::ElementPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ElementPtr( newState ) );
+    return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ObjectPtr( newState ) );
 }
 
 bool SceneNode::IsSelectable() const
@@ -490,7 +490,7 @@ tstring SceneNode::GetMembership() const
     for ( ; itr != end; ++itr )
     {
         SceneGraph::SceneNode* node = *itr;
-        if ( node->HasType( Reflect::GetType<SceneGraph::Layer>() ) )
+        if ( node->IsClass( Reflect::GetClass<SceneGraph::Layer>() ) )
         {
             SceneGraph::Layer* layer = Reflect::DangerousCast< SceneGraph::Layer >( node );
             if ( layer->GetOwner()->GetNodes().find( layer->GetID() ) != layer->GetOwner()->GetNodes().end() )

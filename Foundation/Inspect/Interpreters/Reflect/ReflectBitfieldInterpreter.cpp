@@ -91,12 +91,12 @@ ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
 
 }
 
-void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent)
+void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent)
 {
     // If you hit this, you are misusing this interpreter
-    HELIUM_ASSERT( field->m_DataClass == Reflect::GetType<Reflect::BitfieldData>() );
+    HELIUM_ASSERT( field->m_DataClass == Reflect::GetClass<Reflect::BitfieldData>() );
 
-    if ( field->m_DataClass != Reflect::GetType<Reflect::BitfieldData>() )
+    if ( field->m_DataClass != Reflect::GetClass<Reflect::BitfieldData>() )
     {
         return;
     }
@@ -122,8 +122,8 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
     parent->AddChild(container);
 
     // create the serializers
-    std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-    std::vector<Reflect::Element*>::const_iterator end = instances.end();
+    std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+    std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
     {
         DataPtr s = field->CreateData();
@@ -131,13 +131,12 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         m_Datas.push_back(s);
     }
 
-    tstringstream outStream;
-#ifdef REFLECT_REFACTOR
-    if ( field->m_Default )
+    tstringstream templateStream;
+    DataPtr templateData = field->CreateTemplateData();
+    if ( templateData )
     {
-        *field->m_Default >> outStream;
+        *templateData >> templateStream;
     }
-#endif
 
     const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 
@@ -159,7 +158,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         checkbox->a_IsReadOnly.Set( readOnly );
         checkbox->a_HelpText.Set( enumItr->second->m_HelpText );
 #pragma TODO("Compute correct default value")
-        checkbox->a_Default.Set( outStream.str() );
+        checkbox->a_Default.Set( templateStream.str() );
         checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Data*>&)m_Datas ) );
         row->AddChild( checkbox );
     }

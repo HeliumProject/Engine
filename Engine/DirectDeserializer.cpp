@@ -223,7 +223,7 @@ void DirectDeserializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void DirectDeserializer::SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject )
+void DirectDeserializer::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
 {
     HELIUM_UNREF( pType );
 
@@ -239,7 +239,7 @@ void DirectDeserializer::SerializeObjectReference( GameObjectType* pType, GameOb
         return;
     }
 
-    HELIUM_ASSERT( !pObject || pObject->IsA( pType ) );
+    HELIUM_ASSERT( !pObject || pObject->IsClass( pType ) );
     rspObject = pObject;
 }
 

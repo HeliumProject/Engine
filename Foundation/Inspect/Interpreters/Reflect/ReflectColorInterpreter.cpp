@@ -17,7 +17,7 @@ ReflectColorInterpreter::ReflectColorInterpreter( Container* container )
 
 }
 
-void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Element*>& instances, Container* parent )
+void ReflectColorInterpreter::InterpretField( const Field* field, const std::vector<Reflect::Object*>& instances, Container* parent )
 {
     ContainerPtr container = CreateControl< Container >();
     parent->AddChild( container );
@@ -37,15 +37,15 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
     container->AddChild( label );
 
-    bool color3 = field->m_DataClass == Reflect::GetType<Color3Data>() || field->m_DataClass == Reflect::GetType<HDRColor3Data>();
-    bool color4 = field->m_DataClass == Reflect::GetType<Color4Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>();
+    bool color3 = field->m_DataClass == Reflect::GetClass<Color3Data>() || field->m_DataClass == Reflect::GetClass<HDRColor3Data>();
+    bool color4 = field->m_DataClass == Reflect::GetClass<Color4Data>() || field->m_DataClass == Reflect::GetClass<HDRColor4Data>();
     HELIUM_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
 
     if ( color3 || color4 )
     {
         std::vector<Data*> ser;
-        std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-        std::vector<Reflect::Element*>::const_iterator end = instances.end();
+        std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+        std::vector<Reflect::Object*>::const_iterator end = instances.end();
         for ( ; itr != end; ++itr )
         {
             DataPtr s;
@@ -103,8 +103,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_HelpText.Set( TXT( "Sets the alpha value for the color." ) );
 
                 std::vector<Data*> alphaSer;
-                std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-                std::vector<Reflect::Element*>::const_iterator end = instances.end();
+                std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+                std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr s = new UInt8Data ();
@@ -125,7 +125,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->Bind( data );
             }
 
-            if ( field->m_DataClass == Reflect::GetType<HDRColor3Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>() )
+            if ( field->m_DataClass == Reflect::GetClass<HDRColor3Data>() || field->m_DataClass == Reflect::GetClass<HDRColor4Data>() )
             {
                 SliderPtr slider = CreateControl<Slider>();
                 container->AddChild( slider );
@@ -140,8 +140,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->a_HelpText.Set( TXT( "Adjusts the HDR value of the color." ) );
 
                 std::vector<Data*> intensitySer;
-                std::vector<Reflect::Element*>::const_iterator itr = instances.begin();
-                std::vector<Reflect::Element*>::const_iterator end = instances.end();
+                std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
+                std::vector<Reflect::Object*>::const_iterator end = instances.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr s = new Float32Data();

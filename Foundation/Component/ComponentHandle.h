@@ -145,7 +145,7 @@ namespace Helium
             {
                 m_Collection = collection;
 
-                m_Component = Reflect::ConstObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
+                m_Component = Reflect::ObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
 
                 if ( ( !m_Component.ReferencesObject() || !m_Component->m_IsEnabled ) && useDefault )
                 {

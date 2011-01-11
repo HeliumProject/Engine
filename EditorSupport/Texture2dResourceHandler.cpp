@@ -39,7 +39,7 @@ Texture2dResourceHandler::~Texture2dResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* Texture2dResourceHandler::GetResourceType() const
+const GameObjectType* Texture2dResourceHandler::GetResourceType() const
 {
     return Texture2d::GetStaticType();
 }

@@ -14,14 +14,14 @@ static inline const Helium::Reflect::Class* Helium::Reflect::GetDataClass<Name::
     return Helium::Reflect::GetClass<Name>(); \
 } \
 template<> \
-static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* serializer ) \
+static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* data ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.Ptr() : NULL; \
 } \
 template<> \
-static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* serializer ) \
+static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* data ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.Ptr() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"
@@ -117,18 +117,18 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDMatrix4StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4StlMapData );
 
-#include "Foundation/Reflect/Data/ElementStlVectorData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::ElementStlVectorData );
+#include "Foundation/Reflect/Data/ObjectStlVectorData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectStlVectorData );
 
-#include "Foundation/Reflect/Data/ElementStlSetData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::ElementStlSetData );
+#include "Foundation/Reflect/Data/ObjectStlSetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectStlSetData );
 
-#include "Foundation/Reflect/Data/ElementStlMapData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDElementStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDElementStlMapData );
+#include "Foundation/Reflect/Data/ObjectStlMapData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectStlMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectStlMapData );

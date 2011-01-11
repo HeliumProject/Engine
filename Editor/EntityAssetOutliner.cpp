@@ -276,7 +276,7 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // 
 void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
+    if ( args.m_InstanceSet->IsClass( Reflect::GetClass< SceneGraph::EntitySet >() ) )
     {
         AddEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
     }
@@ -288,7 +288,7 @@ void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& ar
 // 
 void EntityAssetOutliner::SetRemoved( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
+    if ( args.m_InstanceSet->IsClass( Reflect::GetClass< SceneGraph::EntitySet >() ) )
     {
         RemoveEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
     }
@@ -317,7 +317,7 @@ void EntityAssetOutliner::EntityRemoved( const SceneGraph::InstanceSetChangeArgs
 // 
 void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
+    if ( args.m_NodeType->IsClass( Reflect::GetClass< SceneGraph::EntityInstanceType >() ) )
     {
         AddEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
@@ -329,7 +329,7 @@ void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs
 // 
 void EntityAssetOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
+    if ( args.m_NodeType->IsClass( Reflect::GetClass< SceneGraph::EntityInstanceType >() ) )
     {
         RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
     }
@@ -345,7 +345,7 @@ void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
     // If a valid Object was not found, or if the the object is not
     // an entity node, we won't allow it's name to be changed.
-    if ( !found || !found->HasType( Reflect::GetType< SceneGraph::EntityInstance >() ) )
+    if ( !found || !found->IsClass( Reflect::GetClass< SceneGraph::EntityInstance >() ) )
     {
         args.Veto();
     }

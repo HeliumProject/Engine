@@ -10,10 +10,10 @@ namespace Helium
         // Helper class to package the ReflectClipboardData format into a single
         // item that can be serialized and stored on the clipboard.
         // 
-        class ClipboardDataWrapper : public Reflect::Element
+        class ClipboardDataWrapper : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS( ClipboardDataWrapper, Reflect::Element );
+            REFLECT_DECLARE_CLASS( ClipboardDataWrapper, Reflect::Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ClipboardDataWrapper();

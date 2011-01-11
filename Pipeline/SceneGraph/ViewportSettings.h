@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Settings.h"
 
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Pipeline/SceneGraph/CameraSettings.h"
 
 namespace Helium

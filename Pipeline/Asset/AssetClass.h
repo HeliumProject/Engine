@@ -208,9 +208,6 @@ namespace Helium
 
             // callback when this AssetClass has finished loading off disk
             virtual void LoadFinished();
-
-            // copy this asset and its attributes into the destination
-            virtual void CopyTo(const Reflect::ElementPtr& destination) HELIUM_OVERRIDE;
         };
     }
 }

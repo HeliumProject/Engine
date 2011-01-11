@@ -147,6 +147,7 @@ namespace Lunar
         //@{
         RVertexDescription* GetSimpleVertexDescription() const;
         RVertexDescription* GetSimpleTexturedVertexDescription() const;
+        RVertexDescription* GetScreenVertexDescription() const;
         RVertexDescription* GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const;
         RVertexDescription* GetSkinnedMeshVertexDescription() const;
         //@}
@@ -161,6 +162,8 @@ namespace Lunar
         ShaderVariant* GetSimpleWorldSpacePixelShader() const;
         ShaderVariant* GetSimpleScreenSpaceVertexShader() const;
         ShaderVariant* GetSimpleScreenSpacePixelShader() const;
+        ShaderVariant* GetScreenTextVertexShader() const;
+        ShaderVariant* GetScreenTextPixelShader() const;
 
         Font* GetDebugFont( EDebugFontSize size ) const;
 
@@ -188,6 +191,8 @@ namespace Lunar
         RVertexDescriptionPtr m_spSimpleVertexDescription;
         /// Simple textured vertex description.
         RVertexDescriptionPtr m_spSimpleTexturedVertexDescription;
+        /// Screen-space vertex description.
+        RVertexDescriptionPtr m_spScreenVertexDescription;
         /// Static mesh vertex descriptions.
         RVertexDescriptionPtr m_staticMeshVertexDescriptions[ MESH_TEXTURE_COORDINATE_SET_COUNT_MAX ];
         /// Skinned mesh vertex description.
@@ -208,6 +213,10 @@ namespace Lunar
         ShaderVariantPtr m_spSimpleScreenSpaceVertexShader;
         /// Simple screen-space primitive pixel shader.
         ShaderVariantPtr m_spSimpleScreenSpacePixelShader;
+        /// Screen-space text vertex shader.
+        ShaderVariantPtr m_spScreenTextVertexShader;
+        /// Screen-space text pixel shader.
+        ShaderVariantPtr m_spScreenTextPixelShader;
 
         /// Debug fonts.
         FontPtr m_debugFonts[ DEBUG_FONT_SIZE_MAX ];

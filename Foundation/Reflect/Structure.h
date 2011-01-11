@@ -6,10 +6,6 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Field;
-        class Structure;
-
-
         //
         // Structure (struct or class)
         //
@@ -34,6 +30,8 @@ namespace Helium
 
                 // populate reflection information
                 Composite::Create< StructureT >( name, baseName, accept, info );
+
+                info->m_Template = new StructureT;
 
                 return info;
             }

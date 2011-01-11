@@ -75,12 +75,12 @@ Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
     // All imports should default to the master root
     m_ImportRoot = m_Root.Ptr();
 
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Remove( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove selection listener
     m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
@@ -223,7 +223,7 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
 
     // read data
     m_Progress = 0;
-    std::vector< Reflect::ElementPtr > elements;
+    std::vector< Reflect::ObjectPtr > elements;
 
     bool success = true;
 
@@ -279,7 +279,7 @@ Undo::CommandPtr Scene::ImportXML( const tstring& xml, uint32_t importFlags, Sce
 
     // read data
     m_Progress = 0;
-    std::vector< Reflect::ElementPtr > elements;
+    std::vector< Reflect::ObjectPtr > elements;
 
     bool success = true;
 
@@ -348,7 +348,7 @@ void Scene::Reset()
     }
 }
 
-Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -373,8 +373,8 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     V_SceneNodeSmartPtr createdNodes;
     createdNodes.reserve( elements.size() );
     {
-        std::vector< Reflect::ElementPtr >::const_iterator itr = elements.begin();
-        std::vector< Reflect::ElementPtr >::const_iterator end = elements.end();
+        std::vector< Reflect::ObjectPtr >::const_iterator itr = elements.begin();
+        std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
             command->Push( ImportSceneNode( *itr, createdNodes, action, importFlags, importReflectType ) );
@@ -543,7 +543,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ElementPtr >& el
     return command;
 }
 
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_Name.c_str()) );
 
@@ -561,7 +561,7 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
 
     if ( action == ImportActions::Import )
     {
-        if ( element->HasType( importReflectType ) )
+        if ( element->IsClass( importReflectType ) )
         {
             SceneNode* node = Reflect::DangerousCast< SceneNode >( element );
 
@@ -626,7 +626,7 @@ void Scene::ArchiveStatus( const Reflect::StatusInfo& info )
             break;
         }
 
-    case Reflect::ArchiveStates::ElementProcessed:
+    case Reflect::ArchiveStates::ObjectProcessed:
         {
             if (info.m_Progress > m_Progress)
             {
@@ -669,7 +669,7 @@ void Scene::ArchiveException( const Reflect::ExceptionInfo& info )
 #pragma TODO( "Sub default assets?" )
 }
 
-bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
+bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     bool result = true;
 
@@ -767,7 +767,7 @@ bool Scene::Export( std::vector< Reflect::ElementPtr >& elements, const ExportAr
     return result;
 }
 
-void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -775,7 +775,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
         // Don't export a node if it has already been exported
         if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
         {
-            if ( node->HasType( Reflect::GetType< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
+            if ( node->IsClass( Reflect::GetClass< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
             {
                 // If we are exporting a transform node, but we are not maintaining the hierarchy,
                 // we would still like to maintain the object's global position.  So, we create
@@ -800,7 +800,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
                     bool skipAncestor = false;
 
                     // Check to see if the ancestor is a hierarchy node
-                    if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+                    if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
                     {
                         SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
                         if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
@@ -820,7 +820,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
     }
 }
 
-void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ElementPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -890,7 +890,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    std::vector< Reflect::ElementPtr > spool;
+    std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
 
     if (result)
@@ -951,7 +951,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
-    std::vector< Reflect::ElementPtr > spool;
+    std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
 
     if ( result && !spool.empty() )
@@ -1176,7 +1176,7 @@ void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
 
     // insert it into the types for its bases
     const Reflect::Class* type = nodeType->GetInstanceClass();
-    for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
+    for ( ; type != Reflect::GetClass<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
     {
         Helium::StdInsert<HMS_InstanceClassToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_InstanceClassToSceneNodeTypeDumbPtr::value_type( type, S_SceneNodeTypeDumbPtr() ) );
         baseTypeSet.first->second.insert( nodeType );
@@ -1201,7 +1201,7 @@ void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
         m_NodeTypesByType.erase( typeSet );
 
         const Reflect::Class* type = nodeType->GetInstanceClass();
-        for ( ; type != Reflect::GetType<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
+        for ( ; type != Reflect::GetClass<SceneGraph::SceneNode>(); type = Reflect::ReflectionCast< const Reflect::Class >( type->m_Base ) )
         {
             HMS_InstanceClassToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type );
 
@@ -1333,7 +1333,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Hierarchy check") );
-        if ( node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
 
@@ -1407,7 +1407,7 @@ void Scene::Create()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = valType.second;
-        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
         {
             SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
             h->Create();
@@ -1426,7 +1426,7 @@ void Scene::Delete()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = dependNodeType.second;
-        if ( t->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
         {
             SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
 
@@ -2630,7 +2630,7 @@ Undo::CommandPtr Scene::UngroupSelected()
         // If the item is a group (pivot transform)
         SceneGraph::SceneNode* sceneNode = Reflect::ObjectCast< SceneGraph::SceneNode >( *itr );
 
-        if ( sceneNode && sceneNode->GetType() == Reflect::GetType<SceneGraph::PivotTransform>() )
+        if ( sceneNode && sceneNode->GetClass() == Reflect::GetClass<SceneGraph::PivotTransform>() )
         {
             SceneGraph::PivotTransform* group = Reflect::AssertCast< SceneGraph::PivotTransform >( sceneNode );
 
@@ -3072,7 +3072,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
     }
 }
 
-void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void Scene::ViewPreferencesChanged( const Reflect::ObjectChangeArgs& args )
 {
     if ( args.m_Field == m_View->GetSettingsManager()->GetSettings< ViewportSettings >()->ColorModeField() )
     {

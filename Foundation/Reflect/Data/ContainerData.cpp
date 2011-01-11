@@ -11,9 +11,14 @@ ContainerData::ContainerData()
 
 }
 
-REFLECT_DEFINE_ABSTRACT( ElementContainerData )
+bool ContainerData::ShouldSerialize()
+{
+    return Base::ShouldSerialize() && GetSize() > 0;
+}
 
-ElementContainerData::ElementContainerData()
+REFLECT_DEFINE_ABSTRACT( ObjectContainerData )
+
+ObjectContainerData::ObjectContainerData()
 : m_Type ( NULL )
 {
 

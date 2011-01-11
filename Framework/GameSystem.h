@@ -42,7 +42,7 @@ namespace Lunar
             MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
             ObjectLoaderInitialization& rObjectLoaderInitialization, ConfigInitialization& rConfigInitialization,
             WindowManagerInitialization& rWindowManagerInitialization,
-            RendererInitialization& rRendererInitialization, GameObjectType* pWorldType );
+            RendererInitialization& rRendererInitialization, const GameObjectType* pWorldType );
         virtual void Shutdown();
         //@}
 

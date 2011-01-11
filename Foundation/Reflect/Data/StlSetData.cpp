@@ -140,7 +140,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(src);
+    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(src);
     if (!rhs)
     {
         return false;
@@ -152,9 +152,9 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Equals(const Data* s) const
+bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
 {
-    const StlSetDataT* rhs = ConstObjectCast<StlSetDataT>(s);
+    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(object);
     if (!rhs)
     {
         return false;
@@ -167,7 +167,7 @@ template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 {
     int i = 0;
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     components.resize( m_Data->size() );
 
     {
@@ -175,12 +175,12 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ElementPtr dataElem;
+            ObjectPtr dataElem;
 
-            // query cache for a serializer of this type
+            // query cache for a data of this type
             archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
 
-            // downcast to serializer type
+            // downcast to data type
             DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
 
             // connect to our map data memory address
@@ -193,17 +193,17 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 
     archive.Serialize(components);
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to serializer type
+        // downcast to data type
         Data* ser = DangerousCast<Data>(*itr);
 
         // disconnect from memory
         ser->Disconnect();
 
-        // restore serializer to the cache
+        // restore data to the cache
         archive.GetCache().Free( ser );
     }
 }
@@ -211,14 +211,14 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
 {
-    std::vector< ElementPtr > components;
+    std::vector< ObjectPtr > components;
     archive.Deserialize(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    std::vector< ElementPtr >::iterator itr = components.begin();
-    std::vector< ElementPtr >::iterator end = components.end();
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
         DataClassT* data = ObjectCast<DataClassT>(*itr);

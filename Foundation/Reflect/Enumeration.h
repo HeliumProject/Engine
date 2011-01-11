@@ -15,10 +15,10 @@ namespace Helium
             friend class AtomicRefCountBase< EnumerationElement >;
 
         public:
-            uint32_t    m_Value;    // the value of the element
-            tstring     m_Name;     // the name of the element
-            tstring     m_Label;    // the label (friendly name) of the element
-            tstring     m_HelpText; // the help text for the element
+            uint32_t    m_Value;    // the value of the object
+            tstring     m_Name;     // the name of the object
+            tstring     m_Label;    // the label (friendly name) of the object
+            tstring     m_HelpText; // the help text for the object
 
         protected:
             // for where the friendly name (used for UI AND serialization) is not the real name
@@ -31,9 +31,9 @@ namespace Helium
         };
 
         typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
-        typedef std::vector<EnumerationElementPtr>                    V_EnumerationElement; // order of declaration
-        typedef stdext::hash_map<tstring, EnumerationElementPtr>      M_StrEnumerationElement; // sorted by name
-        typedef stdext::hash_map<int32_t, EnumerationElementPtr>          M_ValueEnumerationElement; // sorted by value
+        typedef std::vector<EnumerationElementPtr>                  V_EnumerationElement; // order of declaration
+        typedef stdext::hash_map<tstring, EnumerationElementPtr>    M_StrEnumerationElement; // sorted by name
+        typedef stdext::hash_map<int32_t, EnumerationElementPtr>    M_ValueEnumerationElement; // sorted by value
 
         class FOUNDATION_API Enumeration;
         typedef Helium::SmartPtr<Enumeration> EnumerationPtr;

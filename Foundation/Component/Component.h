@@ -3,7 +3,7 @@
 #include "Foundation/API.h" 
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Component/ComponentExceptions.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
@@ -53,10 +53,10 @@ namespace Helium
         // Abstract Base Class - Subclass this for structured attribute data you can add to a collection
         //
 
-        class FOUNDATION_API ComponentBase : public Reflect::Element
+        class FOUNDATION_API ComponentBase : public Reflect::Object
         {
         private:
-            REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Element );
+            REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         public:

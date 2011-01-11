@@ -28,7 +28,7 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* _DynamicCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
     {
-        return ( pObject && pObject->IsA( TargetType::GetStaticType() )
+        return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
                  ? static_cast< TargetType* >( pObject )
                  : NULL );
     }
@@ -54,7 +54,7 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* _StaticCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
     {
-        HELIUM_ASSERT( !pObject || pObject->IsA( TargetType::GetStaticType() ) );
+        HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
 
         return static_cast< TargetType* >( pObject );
     }
@@ -219,13 +219,13 @@ namespace Lunar
     ///
     /// @return  True if this is an instance of the given type, false if not.
     ///
-    /// @see GetGameObjectType(), IsA()
+    /// @see GetGameObjectType()
     bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
     {
         const GameObjectType* pThisType = GetGameObjectType();
         HELIUM_ASSERT( pThisType );
 
-        return( pThisType == pType );
+        return ( pThisType == pType );
     }
 
     /// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
@@ -255,7 +255,7 @@ namespace Lunar
     template< typename T >
     T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
     {
-        GameObjectType* pType = T::GetStaticType();
+        const GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
         GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
@@ -274,9 +274,9 @@ namespace Lunar
         GameObject* pObject = FindObject( path );
         if( pObject )
         {
-            GameObjectType* pType = T::GetStaticType();
+            const GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
-            if( !pObject->IsA( pType ) )
+            if( !pObject->IsClass( pType ) )
             {
                 pObject = NULL;
             }

@@ -60,7 +60,7 @@ bool TypesPanel::RemoveType( SceneGraph::HierarchyNodeType* type )
 //  callback from scene
 void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+    if ( args.m_NodeType->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
     {
         AddType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
     }
@@ -71,7 +71,7 @@ void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 //  callback from scene
 void TypesPanel::RemoveNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+    if ( args.m_NodeType->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
     {
         RemoveType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
     }

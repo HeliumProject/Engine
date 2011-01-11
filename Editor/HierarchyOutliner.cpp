@@ -277,7 +277,7 @@ void HierarchyOutliner::NodeAdded( const SceneGraph::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    if ( args.m_Node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+    if ( args.m_Node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
     {
         m_TreeCtrl->Freeze();
         bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
@@ -317,7 +317,7 @@ void HierarchyOutliner::NodeRemoved( const SceneGraph::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    if ( args.m_Node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+    if ( args.m_Node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
     {
         SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( args.m_Node );
         hierarchyNode->RemoveParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );

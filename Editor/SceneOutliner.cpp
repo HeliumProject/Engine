@@ -196,7 +196,7 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& 
     bool isVisible = true;
 
     // If the object is a dependency node, connect a name change listener
-    if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< SceneGraph::SceneNode >() ) )
+    if ( data->GetObject() && data->GetObject()->IsClass( Reflect::GetClass< SceneGraph::SceneNode >() ) )
     {
         SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( data->GetObject() );
         isVisible = node->IsVisible();
@@ -452,7 +452,7 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     {
         SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
         Reflect::Object* object = data->GetObject();
-        if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
+        if ( object->IsClass( Reflect::GetClass<SceneGraph::SceneNode>() ) )
         {
             SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
             const tstring newName = args.GetLabel().c_str();
@@ -573,7 +573,7 @@ void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
     // If the object is a dependency node, disconnect our listeners from it
     Reflect::Object* object = GetTreeItemData( args.GetItem() )->GetObject();
-    if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
+    if ( object->IsClass( Reflect::GetClass<SceneGraph::SceneNode>() ) )
     {
         SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
         node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );

@@ -270,20 +270,20 @@ bool Control::WriteStringData(const tstring& str, bool preview)
 
 bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool preview)
 {
-    StringDataBinding* data = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
-    if (data)
+    StringDataBinding* dataBinding = CastDataBinding<StringDataBinding, DataBindingTypes::String>( m_DataBinding );
+    if (dataBinding)
     {
         std::vector< tstring > currentValues;
-        data->GetAll( currentValues );
+        dataBinding->GetAll( currentValues );
 
         if ( strs == currentValues )
         {
             return true;
         }
 
-        Reflect::DataPtr serializer = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< std::vector< tstring > >() );
-        serializer->ConnectData( const_cast< std::vector< tstring >* >( &strs ) );
-        if ( !PreWrite( serializer, preview ) )
+        Reflect::DataPtr data = Reflect::AssertCast< Reflect::Data >( Reflect::Data::Create< std::vector< tstring > >() );
+        data->ConnectData( const_cast< std::vector< tstring >* >( &strs ) );
+        if ( !PreWrite( data, preview ) )
         {
             Read();
             return false;
@@ -291,7 +291,7 @@ bool Control::WriteAllStringData(const std::vector< tstring >& strs, bool previe
 
         m_IsWriting = true;
 
-        bool result = data->SetAll( strs );
+        bool result = dataBinding->SetAll( strs );
         m_IsWriting = false;
 
         if (result)

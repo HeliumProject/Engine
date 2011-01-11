@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 #include "Editor/MRU/MRU.h"
 #include "Pipeline/Settings.h"
-#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium

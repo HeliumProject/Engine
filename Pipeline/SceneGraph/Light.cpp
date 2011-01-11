@@ -105,9 +105,9 @@ void Light::Render( RenderVisitor* render )
 
 void Light::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const Light* light = Reflect::ConstAssertCast<Light>( object );
+    const Light* light = Reflect::AssertCast<Light>( object );
 
-    const InstanceType* type = Reflect::ConstAssertCast<InstanceType>( light->GetNodeType() );
+    const InstanceType* type = Reflect::AssertCast<InstanceType>( light->GetNodeType() );
 
     light->SetMaterial( type->GetMaterial() );
 

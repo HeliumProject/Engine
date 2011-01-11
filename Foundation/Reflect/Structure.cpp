@@ -10,7 +10,7 @@ Structure::Structure ()
 
 Structure::~Structure ()
 {
-
+    delete m_Template;
 }
 
 Structure* Structure::Create()

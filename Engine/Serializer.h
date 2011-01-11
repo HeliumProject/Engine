@@ -61,7 +61,7 @@
 /// @param[in] S  Serializer instance.
 #define L_SERIALIZE_SUPER( S ) \
     { \
-        GameObjectType* pSuperType = Super::GetStaticType(); \
+        const GameObjectType* pSuperType = Super::GetStaticType(); \
         HELIUM_ASSERT( pSuperType ); \
         ( S ).BeginPropertyGroup( *pSuperType->GetName() ); \
         Super::Serialize( S ); \
@@ -383,7 +383,7 @@ namespace Lunar
         virtual void SerializeWideName( WideName& rValue ) = 0;
         virtual void SerializeCharString( CharString& rValue ) = 0;
         virtual void SerializeWideString( WideString& rValue ) = 0;
-        virtual void SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject ) = 0;
+        virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject ) = 0;
 
         virtual void BeginStruct( EStructTag tag = STRUCT_TAG_INVALID );
         virtual void EndStruct();

@@ -473,9 +473,9 @@ void EntityInstance::Render( RenderVisitor* render )
 
 void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
+    const EntityInstance* entity = Reflect::AssertCast<EntityInstance>( object );
 
-    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -485,9 +485,9 @@ void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, cons
 
 void EntityInstance::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
-    const EntityInstance* entity = Reflect::ConstAssertCast<EntityInstance>( object );
+    const EntityInstance* entity = Reflect::AssertCast<EntityInstance>( object );
 
-    const EntityInstanceType* type = Reflect::ConstAssertCast<EntityInstanceType>( entity->GetNodeType() );
+    const EntityInstanceType* type = Reflect::AssertCast<EntityInstanceType>( entity->GetNodeType() );
 
     const EntitySet* classSet = entity->GetClassSet();
 

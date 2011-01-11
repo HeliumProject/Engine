@@ -255,6 +255,13 @@ Renderer::~Renderer()
 ///
 /// @see CreateImmediateCommandProxy()
 
+/// @fn void Renderer::Flush()
+/// Flush the renderer command buffer and block until all pending commands have been executed.
+///
+/// This should almost never be called during normal runtime, as doing so can incur significant performance penalties.
+/// It should only be reserved for cases where the normal application flow has already been interrupted (i.e. making
+/// sure resources that need to be updated during a window resize are no longer being used by the GPU).
+
 /// Get the global renderer instance.
 ///
 /// A renderer instance must be initialized first through the interface of one of the Renderer subclasses.

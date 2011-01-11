@@ -96,12 +96,12 @@ namespace Helium
             {
             }
 
-            virtual bool VisitField(Element* element, const Field* field) HELIUM_OVERRIDE
+            virtual bool VisitField(void* instance, const Field* field) HELIUM_OVERRIDE
             {
                 if ( field->m_DataClass == Reflect::GetClass< Reflect::PathData >() )
                 {
                     Helium::Path path;
-                    if ( Reflect::Data::GetValue( field->CreateData( element ), path ) )
+                    if ( Reflect::Data::GetValue( field->CreateData( instance ), path ) )
                     {
                         m_Dependencies.insert( path );
 
@@ -111,7 +111,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlVectorData >() )
                 {
-                    const Reflect::StlVectorData* arrayData = Reflect::ConstDangerousCast<Reflect::StlVectorData>( field->CreateData( element ) );
+                    const Reflect::StlVectorData* arrayData = Reflect::DangerousCast<Reflect::StlVectorData>( field->CreateData( instance ) );
                     if ( arrayData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)arrayData->GetSize() < 1 )
@@ -134,7 +134,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlMapData >() )
                 {
-                    const Reflect::StlMapData* mapData = Reflect::ConstDangerousCast<Reflect::StlMapData>( field->CreateData( element ) );
+                    const Reflect::StlMapData* mapData = Reflect::DangerousCast<Reflect::StlMapData>( field->CreateData( instance ) );
                     if ( mapData->GetValueClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)mapData->GetSize() < 1 )
@@ -162,7 +162,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlSetData >() )
                 {
-                    const Reflect::StlSetData* setData = Reflect::ConstDangerousCast<Reflect::StlSetData>( field->CreateData( element ) );
+                    const Reflect::StlSetData* setData = Reflect::DangerousCast<Reflect::StlSetData>( field->CreateData( instance ) );
                     if ( setData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)setData->GetSize() < 1 )
@@ -188,17 +188,17 @@ namespace Helium
                     }
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlVectorData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlVectorData >() )
                 {
-                    const Reflect::ElementStlVectorData* arrayData = Reflect::ConstDangerousCast< Reflect::ElementStlVectorData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlVectorData* arrayData = Reflect::DangerousCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
 
                     if ( (int)arrayData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const std::vector< Reflect::ElementPtr >& vals = arrayData->m_Data.Ref();
-                    for ( std::vector< Reflect::ElementPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                    const std::vector< Reflect::ObjectPtr >& vals = arrayData->m_Data.Ref();
+                    for ( std::vector< Reflect::ObjectPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
                     }
@@ -206,20 +206,20 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlMapData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlMapData >() )
                 {
-                    const Reflect::ElementStlMapData* mapData = Reflect::ConstDangerousCast< Reflect::ElementStlMapData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlMapData* mapData = Reflect::DangerousCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
 
                     if ( (int)mapData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    Reflect::ElementStlMapData::V_ConstValueType data;
+                    Reflect::ObjectStlMapData::V_ConstValueType data;
                     mapData->GetItems( data );
 
-                    Reflect::ElementStlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                    Reflect::ElementStlMapData::V_ConstValueType::const_iterator end = data.end();
+                    Reflect::ObjectStlMapData::V_ConstValueType::const_iterator itr = data.begin();
+                    Reflect::ObjectStlMapData::V_ConstValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
                         (*itr->second)->Accept( *this );
@@ -228,17 +228,17 @@ namespace Helium
                     return false;
                 }
                 //-----------------------------------------------
-                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ElementStlSetData >() )
+                else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlSetData >() )
                 {
-                    const Reflect::ElementStlSetData* setData = Reflect::ConstDangerousCast< Reflect::ElementStlSetData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlSetData* setData = Reflect::DangerousCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
 
                     if ( (int)setData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const Reflect::ElementStlSetData::DataType& vals = setData->m_Data.Ref();
-                    for ( Reflect::ElementStlSetData::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
+                    const Reflect::ObjectStlSetData::DataType& vals = setData->m_Data.Ref();
+                    for ( Reflect::ObjectStlSetData::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
                     }
@@ -338,11 +338,4 @@ bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, t
 void AssetClass::LoadFinished()
 {
 
-}
-
-void AssetClass::CopyTo(const Reflect::ElementPtr& destination) 
-{
-    // Restore the Asset Class ID after performing the copy
-    AssetClass* destinationAsset = Reflect::ObjectCast< AssetClass >( destination );
-    __super::CopyTo( destination );
 }

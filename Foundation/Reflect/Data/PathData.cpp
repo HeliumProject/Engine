@@ -25,7 +25,7 @@ void PathData::ConnectData( Helium::HybridPtr< void > data )
 
 bool PathData::Set( const Data* src, uint32_t flags )
 {
-    if ( GetType() != src->GetType() )
+    if ( GetClass() != src->GetClass() )
     {
         return false;
     }
@@ -37,14 +37,14 @@ bool PathData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool PathData::Equals( const Data* s ) const
+bool PathData::Equals( const Object* object ) const
 {
-    if ( GetType() != s->GetType() )
+    const PathData* rhs = ObjectCast< PathData >( object );
+
+    if ( !rhs )
     {
         return false;
     }
-
-    const PathData* rhs = static_cast< const PathData* >( s );
 
     return rhs->m_Data.Get() == m_Data.Get();
 }
@@ -82,7 +82,7 @@ void PathData::Deserialize( Archive& archive )
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             tstring buf;
-            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             buf.resize( (size_t)size );
             xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
             m_Data.Ref().Set( buf );
@@ -125,8 +125,8 @@ tistream& PathData::operator<<( tistream& stream )
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Element* element = (Element*)m_Instance;
-            element->RaiseChanged( m_Field );
+            Object* object = (Object*)m_Instance.Mutable();
+            object->RaiseChanged( m_Field );
         }
     }
 

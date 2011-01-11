@@ -164,7 +164,7 @@ void ArchiveXML::Write()
     // serialize main file elements
     Serialize(m_Spool, ArchiveFlags::Status);
 
-    *m_Stream << TXT( "</Reflect>\n" );
+    *m_Stream << TXT( "</Reflect>\n\0" );
 
     info.m_ArchiveState = ArchiveStates::Complete;
     e_Status.Raise( info );
@@ -691,7 +691,7 @@ ElementPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass 
     archive.m_SearchClass = searchClass;
 
     tstringstream strStream;
-    strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
+    strStream << xml;
     archive.m_Stream = new Reflect::TCharStream(&strStream, false); 
     archive.Read();
 
@@ -724,7 +724,7 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ElementPtr >& elem
 {
     ArchiveXML archive;
     tstringstream strStream;
-    strStream << TXT( "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\"" ) << ArchiveXML::CURRENT_VERSION << TXT( "\">" ) << xml << TXT( "</Reflect>" );
+    strStream << xml;
 
     archive.m_Stream = new Reflect::TCharStream( &strStream, false );
     archive.Read();

@@ -116,6 +116,7 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, GameOb
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
     pType->m_cachedName = name;
+    pType->m_Name = name.Get();
     pType->m_BaseType = pParent;
     pType->m_spTemplate = pTemplate;
     pType->m_flags = flags;

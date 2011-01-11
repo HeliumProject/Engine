@@ -15,8 +15,6 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::Structure );
 
-            const void* m_Default;  // the default instance of this structure (constructor-initialized)
-
         protected:
             Structure();
             virtual ~Structure();
@@ -33,11 +31,10 @@ namespace Helium
                 // populate reflection information
                 Composite::Create< StructureT >( name, baseName, accept, info );
 
+                info->m_Template = new StructureT;
+
                 return info;
             }
-
-            // Overloaded functions from Composite
-            virtual const void* GetDefaultInstance() const HELIUM_OVERRIDE;
         };
     }
 }

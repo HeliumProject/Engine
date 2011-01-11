@@ -249,6 +249,7 @@ void ArchiveXML::SerializeField(Object* object, const Field* field)
         PreSerialize( object, field );
         Serialize( data );
         data->Disconnect();
+        m_Cache.Free( data );
 
         m_FieldNames.pop();
     }

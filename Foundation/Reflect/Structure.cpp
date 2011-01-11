@@ -10,15 +10,10 @@ Structure::Structure ()
 
 Structure::~Structure ()
 {
-
+    delete m_Template;
 }
 
 Structure* Structure::Create()
 {
     return new Structure();
-}
-
-const void* Structure::GetDefaultInstance() const
-{
-    return m_Default;
 }

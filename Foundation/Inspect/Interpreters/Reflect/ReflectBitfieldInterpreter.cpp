@@ -131,11 +131,11 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         m_Datas.push_back(s);
     }
 
-    tstringstream outStream;
-    DataPtr default = field->CreateDefault();
-    if ( default )
+    tstringstream templateStream;
+    DataPtr templateData = field->CreateTemplateData();
+    if ( templateData )
     {
-        *default >> outStream;
+        *templateData >> templateStream;
     }
 
     const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
@@ -158,7 +158,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         checkbox->a_IsReadOnly.Set( readOnly );
         checkbox->a_HelpText.Set( enumItr->second->m_HelpText );
 #pragma TODO("Compute correct default value")
-        checkbox->a_Default.Set( outStream.str() );
+        checkbox->a_Default.Set( templateStream.str() );
         checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Data*>&)m_Datas ) );
         row->AddChild( checkbox );
     }

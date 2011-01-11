@@ -106,50 +106,9 @@ DataPtr Field::CreateData(const void* instance) const
     return data;
 }
 
-DataPtr Field::CreateDefault() const
+DataPtr Field::CreateTemplateData() const
 {
-    return CreateData( m_Composite->GetDefaultInstance() );
-}
-
-bool Field::HasDefaultValue(void* instance) const
-{
-    DataPtr target = CreateData( instance );
-    DataPtr default = CreateDefault();
-
-    if ( target && default )
-    {
-        // return equality
-        bool result = target->Equals( default );
-
-        // disconnect
-        target->Disconnect();
-        default->Disconnect();
-
-        // result
-        return result;
-    }
-
-    return false;
-}
-
-bool Field::SetDefaultValue(void* instance) const
-{
-    DataPtr target = CreateData( instance );
-    DataPtr default = CreateDefault();
-
-    if ( target && default )
-    {
-        // set value
-        target->Set( default );
-
-        // disconnect
-        target->Disconnect();
-        default->Disconnect();
-
-        return true;
-    }
-
-    return false;
+    return CreateData( m_Composite->m_Template );
 }
 
 DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
@@ -187,8 +146,8 @@ DataPtr Field::ShouldSerialize(const void* instance, ObjectCache* cache) const
     }
 
     // don't write field at the default value
-    DataPtr default = CreateDefault();
-    if ( default.ReferencesObject() && default->Equals(data) )
+    DataPtr templateData = CreateTemplateData();
+    if ( templateData.ReferencesObject() && templateData->Equals(data) )
     {
         return NULL;
     }
@@ -201,6 +160,7 @@ Composite::Composite()
 , m_FirstDerived( NULL )
 , m_NextSibling( NULL )
 , m_Accept( NULL )
+, m_Template( NULL )
 {
 
 }

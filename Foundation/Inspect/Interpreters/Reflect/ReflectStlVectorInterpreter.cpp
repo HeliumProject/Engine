@@ -104,12 +104,12 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-    DataPtr default = field->CreateDefault();
-    if (default)
+    DataPtr templateData = field->CreateTemplateData();
+    if (templateData)
     {
-        tstringstream outStream;
-        *default >> outStream;
-        list->a_Default.Set( outStream.str() );
+        tstringstream templateStream;
+        *templateData >> templateStream;
+        list->a_Default.Set( templateStream.str() );
     }
 }
 

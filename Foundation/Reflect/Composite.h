@@ -63,14 +63,8 @@ namespace Helium
             DataPtr CreateData(void* instance) const;
             DataPtr CreateData(const void* instance) const;
 
-            // allocate and connect to the default;
-            DataPtr CreateDefault() const;
-
-            // checks to see if the default value matches the value of this field in the passed object
-            bool HasDefaultValue(void* instance) const;
-
-            // sets the default value of this field in the passed object
-            bool SetDefaultValue(void* instance) const;
+            // allocate and connect to the default
+            DataPtr CreateTemplateData() const;
 
             // determine if this field should be serialized
             DataPtr ShouldSerialize(const void* instance, ObjectCache* cache = NULL) const;
@@ -98,7 +92,8 @@ namespace Helium
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
             DynArray< Field >                       m_Fields;               // fields in this composite
-            AcceptVisitor                           m_Accept;
+            AcceptVisitor                           m_Accept;               // function to populate this structure
+            const void*                             m_Template;             // default template instance
 
         protected:
             Composite();
@@ -165,9 +160,6 @@ namespace Helium
             bool IsType(const Composite* type) const;
             void AddDerived( const Composite* derived ) const;
             void RemoveDerived( const Composite* derived ) const;
-
-            // Instance access
-            virtual const void* GetDefaultInstance() const = 0;
 
             //
             // Equals compares all reflect-aware data, this is only really safe for data types, since

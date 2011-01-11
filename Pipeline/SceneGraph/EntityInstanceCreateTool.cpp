@@ -151,7 +151,7 @@ void EntityInstanceCreateTool::CreateProperties()
         m_Generator->PushContainer();
         {
             m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
-            m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.entity.*" ) );
+            m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.HeliumEntity" ) );
         }
         m_Generator->Pop();
 

@@ -86,7 +86,7 @@ namespace Helium
         {
             tchar_t msgBuffer[ERROR_STRING_BUF_SIZE];
 
-            _vsntprintf( msgBuffer, sizeof(msgBuffer), msgFormat, msgArgs );
+            _vsntprintf( msgBuffer, sizeof(msgBuffer) / sizeof( tchar_t ), msgFormat, msgArgs );
             msgBuffer[sizeof(msgBuffer) - 1] = 0; 
 
             m_Message = msgBuffer;

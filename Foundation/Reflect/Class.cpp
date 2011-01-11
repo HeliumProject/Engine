@@ -41,8 +41,3 @@ Class* Class::Create()
 {
     return new Class();
 }
-
-const void* Class::GetDefaultInstance() const
-{
-    return m_Default;
-}

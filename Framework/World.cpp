@@ -122,7 +122,6 @@ bool World::Initialize()
         pSceneView->SetDepthStencilSurface( spDepthStencilSurface );
         pSceneView->SetAspectRatio( aspectRatio );
         pSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
-        pSceneView->SetClearColor( Color( 0xffffffff ) );
     }
 
     return true;

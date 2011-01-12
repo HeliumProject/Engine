@@ -57,13 +57,13 @@ bool ConfigPc::SaveUserConfig()
         return false;
     }
 
-    size_t configObjectCount = pConfigPackage->GetChildCount();
-    for( size_t objectIndex = 0; objectIndex < configObjectCount; ++objectIndex )
+    for( GameObject* pConfigObject = pConfigPackage->GetFirstChild();
+         pConfigObject != NULL;
+         pConfigObject = pConfigObject->GetNextSibling() )
     {
-        GameObject* pObject = pConfigPackage->GetChild( objectIndex );
-        if( pObject && !pObject->IsPackage() )
+        if( !pConfigObject->IsPackage() )
         {
-            RecursiveSerializeObject( serializer, pObject );
+            RecursiveSerializeObject( serializer, pConfigObject );
         }
     }
 
@@ -85,11 +85,11 @@ void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject*
 
     rSerializer.Serialize( pObject );
 
-    size_t childCount = pObject->GetChildCount();
-    for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
+    for( GameObject* pChildObject = pObject->GetFirstChild();
+         pChildObject != NULL;
+         pChildObject = pChildObject->GetNextSibling() )
     {
-        GameObject* pChildObject = pObject->GetChild( childIndex );
-        if( pChildObject && !pChildObject->IsPackage() )
+        if( !pChildObject->IsPackage() )
         {
             RecursiveSerializeObject( rSerializer, pChildObject );
         }

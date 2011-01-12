@@ -51,16 +51,17 @@ bool World::Initialize()
     // Create the main graphics scene.
     const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
-    GraphicsScene* pGraphicsScene = GameObject::Create< GraphicsScene >( pSceneType->GetName(), this );
-    HELIUM_ASSERT( pGraphicsScene );
-    if( !pGraphicsScene )
+    bool bCreateResult = GameObject::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), this );
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
 
         return false;
     }
 
-    m_spGraphicsScene = pGraphicsScene;
+    GraphicsScene* pGraphicsScene = m_spGraphicsScene;
+    HELIUM_ASSERT( pGraphicsScene );
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     if( pRenderer )

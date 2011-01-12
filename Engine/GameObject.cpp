@@ -19,7 +19,7 @@ using namespace Lunar;
 REFLECT_DEFINE_CLASS( GameObject )
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
-DynArray< GameObjectWPtr > GameObject::sm_topLevelObjects;
+GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;
 
 GameObject::ChildNameInstanceIndexMap* GameObject::sm_pNameInstanceIndexMap = NULL;
 Pair< GameObjectPath, GameObject::NameInstanceIndexMap >* GameObject::sm_pEmptyNameInstanceIndexMap = NULL;
@@ -76,8 +76,8 @@ bool GameObject::Rename( const RenameParameters& rParameters )
             return false;
         }
 
-        HELIUM_ASSERT( m_children.IsEmpty() );
-        if( !m_children.IsEmpty() )
+        HELIUM_ASSERT( !m_wpFirstChild );
+        if( m_wpFirstChild )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -147,7 +147,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         ScopeWriteLock scopeLock( sm_objectListLock );
 
         // Get the list of children belonging to the new owner.
-        DynArray< GameObjectWPtr >& rOwnerChildren = ( pOwner ? pOwner->m_children : sm_topLevelObjects );
+        GameObjectWPtr& rwpOwnerFirstChild = ( pOwner ? pOwner->m_wpFirstChild : sm_wpFirstTopLevelObject );
 
         // Don't check for name clashes if we're clearing the object path name information.
         if( !name.IsEmpty() )
@@ -203,11 +203,9 @@ bool GameObject::Rename( const RenameParameters& rParameters )
             else
             {
                 // Check each child of the new owner for a name clash.
-                size_t ownerChildCount = rOwnerChildren.GetSize();
-                for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
+                for( GameObject* pChild = rwpOwnerFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
                 {
-                    GameObject* pChild = rOwnerChildren[ childIndex ];
-                    if( pChild && pChild->m_name == name && pChild->m_instanceIndex == instanceIndex )
+                    if( pChild->m_name == name && pChild->m_instanceIndex == instanceIndex )
                     {
                         HELIUM_TRACE(
                             TRACE_ERROR,
@@ -253,28 +251,38 @@ bool GameObject::Rename( const RenameParameters& rParameters )
 
         // If the owner of this object is changing, remove this object from its old owner's list and add it to the new
         // owner.
-        if( spOldOwner.Get() != pOwner )
+        if( spOldOwner.Get() != pOwner || ( m_name.IsEmpty() ? !name.IsEmpty() : name.IsEmpty() ) )
         {
             // Object should not be in any child object lists if its name is empty.
             if( !m_name.IsEmpty() )
             {
-                DynArray< GameObjectWPtr >& rOldOwnerChildren =
-                    ( spOldOwner ? spOldOwner->m_children : sm_topLevelObjects );
-                size_t ownerChildCount = rOldOwnerChildren.GetSize();
-                for( size_t childIndex = 0; childIndex < ownerChildCount; ++childIndex )
+                GameObjectWPtr& rwpOldOwnerFirstChild =
+                    ( spOldOwner ? spOldOwner->m_wpFirstChild : sm_wpFirstTopLevelObject );
+
+                GameObject* pPreviousChild = NULL;
+                GameObject* pChild = rwpOldOwnerFirstChild;
+                while( pChild )
                 {
-                    if( rOldOwnerChildren[ childIndex ].Get() == this )
+                    if( pChild == this )
                     {
-                        rOldOwnerChildren.RemoveSwap( childIndex );
+                        ( pPreviousChild ? pPreviousChild->m_wpNextSibling : rwpOldOwnerFirstChild ) = m_wpNextSibling;
+                        m_wpNextSibling.Release();
+
                         break;
                     }
+
+                    pPreviousChild = pChild;
+                    pChild = pChild->m_wpNextSibling;
                 }
             }
+
+            HELIUM_ASSERT( !m_wpNextSibling );
 
             // Only store the object in a child object list if it is being given a valid name.
             if( !name.IsEmpty() )
             {
-                rOwnerChildren.Push( this );
+                m_wpNextSibling = rwpOwnerFirstChild;
+                rwpOwnerFirstChild = this;
             }
         }
 
@@ -369,12 +377,12 @@ GameObject* GameObject::FindChild( Name name, uint32_t instanceIndex ) const
 /// @copydoc Object::PreDestroy()
 void GameObject::PreDestroy()
 {
+    HELIUM_VERIFY( Rename( RenameParameters() ) );
+
     if( IsValid( m_id ) )
     {
         UnregisterObject( this );
     }
-
-    HELIUM_VERIFY( Rename( RenameParameters() ) );
 
     SetFlags( GameObject::FLAG_PREDESTROYED );
 }
@@ -530,18 +538,23 @@ void GameObject::InPlaceDestroy()
 
 /// Create a new object.
 ///
-/// @param[in] pType                 Type of object to create.
-/// @param[in] name                  Object name.
-/// @param[in] pOwner                Object owner.
-/// @param[in] pTemplate             Optional override template object.  If null, the default template for the
-///                                  specified type will be used.
-/// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
-///                                  invalid.
+/// @param[out] rspObject             Pointer to the newly created object if object creation was successful.  Note that
+///                                   any object reference stored in this strong pointer prior to calling this function
+///                                   will always be cleared by this function, regardless of whether object creation is
+///                                   successful.
+/// @param[in]  pType                 Type of object to create.
+/// @param[in]  name                  Object name.
+/// @param[in]  pOwner                Object owner.
+/// @param[in]  pTemplate             Optional override template object.  If null, the default template for the
+///                                   specified type will be used.
+/// @param[in]  bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
+///                                   invalid.
 ///
-/// @return  Pointer to the newly created object.
+/// @return  True if object creation was successful, false if not.
 ///
 /// @see Create()
-GameObject* GameObject::CreateObject(
+bool GameObject::CreateObject(
+    GameObjectPtr& rspObject,
     const GameObjectType* pType,
     Name name,
     GameObject* pOwner,
@@ -549,6 +562,8 @@ GameObject* GameObject::CreateObject(
     bool bAssignInstanceIndex )
 {
     HELIUM_ASSERT( pType );
+
+    rspObject.Release();
 
     // Get the appropriate template object.
     GameObject* pObjectTemplate = pTemplate;
@@ -561,7 +576,7 @@ GameObject* GameObject::CreateObject(
                 TXT( "GameObject::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
                 *pType->GetName() );
 
-            return NULL;
+            return false;
         }
     }
     else
@@ -580,7 +595,7 @@ GameObject* GameObject::CreateObject(
             pType->GetName().Get() );
         HELIUM_ASSERT_FALSE();
 
-        return NULL;
+        return false;
     }
 
     // Allocate memory for and create the object.
@@ -591,6 +606,7 @@ GameObject* GameObject::CreateObject(
     HELIUM_ASSERT( pObjectMemory );
     GameObject* pObject = pObjectTemplate->InPlaceConstruct( pObjectMemory, StandardCustomDestroy );
     HELIUM_ASSERT( pObject == pObjectMemory );
+    rspObject = pObject;
 
     pObject->m_spTemplate = pTemplate;
 
@@ -602,6 +618,7 @@ GameObject* GameObject::CreateObject(
     DirectDeserializer templateDeserializer( sm_serializationBuffer );
     HELIUM_VERIFY( templateDeserializer.Serialize( pObject ) );
 
+    // Attempt to register the object and set its name.
     RenameParameters nameParameters;
     nameParameters.name = name;
     nameParameters.spOwner = pOwner;
@@ -610,16 +627,16 @@ GameObject* GameObject::CreateObject(
         nameParameters.instanceIndex = INSTANCE_INDEX_AUTO;
     }
 
-    if( !pObject->Rename( nameParameters ) || !RegisterObject( pObject ) )
+    if( !RegisterObject( pObject ) || !pObject->Rename( nameParameters ) )
     {
         HELIUM_ASSERT_FALSE();
-        pObject->InPlaceDestroy();
-        allocator.Free( pObjectMemory );
 
-        return NULL;
+        rspObject.Release();
+
+        return false;
     }
 
-    return pObject;
+    return true;
 }
 
 /// Find an object based on its path name.
@@ -690,13 +707,11 @@ GameObject* GameObject::FindChildOf( const GameObject* pObject, Name name, uint3
 
     ScopeReadLock scopeLock( sm_objectListLock );
 
-    const DynArray< GameObjectWPtr >& rChildren = ( pObject ? pObject->m_children : sm_topLevelObjects );
-
-    size_t childCount = rChildren.GetSize();
-    for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
+    for( GameObject* pChild = ( pObject ? pObject->m_wpFirstChild : sm_wpFirstTopLevelObject );
+         pChild != NULL;
+         pChild = pChild->m_wpNextSibling )
     {
-        GameObject* pChild = rChildren[ childIndex ];
-        if( pChild && pChild->GetName() == name && pChild->GetInstanceIndex() == instanceIndex )
+        if( pChild->GetName() == name && pChild->GetInstanceIndex() == instanceIndex )
         {
             return pChild;
         }
@@ -799,37 +814,9 @@ bool GameObject::RegisterObject( GameObject* pObject )
         return true;
     }
 
-    // Make sure the object has a name.
-    Name objectName = pObject->GetName();
-    if( objectName.IsEmpty() )
-    {
-        HELIUM_ASSERT_MSG_FALSE( TXT( "Cannot register an object with an empty name." ) );
-
-        return false;
-    }
-
-    // If the object is a top-level object, make sure its name doesn't clash with any existing top-level object
-    // names.
-    uint32_t objectInstanceIndex = pObject->GetInstanceIndex();
-
-    if( !pObject->GetOwner() )
-    {
-        size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
-        for( size_t objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
-        {
-            GameObject* pTopLevelObject = sm_topLevelObjects[ objectIndex ];
-            if( pTopLevelObject &&
-                pTopLevelObject->GetName() == objectName &&
-                pTopLevelObject->GetInstanceIndex() == objectInstanceIndex )
-            {
-                HELIUM_ASSERT_MSG_FALSE( TXT( "Cannot register top-level object due to name clash." ) );
-
-                return false;
-            }
-        }
-
-        sm_topLevelObjects.Add( GameObjectWPtr( pObject ) );
-    }
+    HELIUM_ASSERT( pObject->m_name.IsEmpty() );
+    HELIUM_ASSERT( !pObject->m_spOwner );
+    HELIUM_ASSERT( IsInvalid( pObject->m_instanceIndex ) );
 
     // Register the object.
     size_t objectId = sm_objects.Add( GameObjectWPtr( pObject ) );
@@ -866,24 +853,9 @@ void GameObject::UnregisterObject( GameObject* pObject )
     HELIUM_ASSERT( sm_objects.IsElementValid( objectId ) );
     HELIUM_ASSERT( sm_objects[ objectId ].HasObjectProxy( pObject ) );
 
-    // If the object is a top-level object, remove it from the top-level object list (note that objects without names
-    // will not be in the top-level object list).
-    if( !pObject->m_name.IsEmpty() && !pObject->m_spOwner )
-    {
-        size_t topLevelObjectCount = sm_topLevelObjects.GetSize();
-        size_t objectIndex;
-        for( objectIndex = 0; objectIndex < topLevelObjectCount; ++objectIndex )
-        {
-            if( sm_topLevelObjects[ objectIndex ].HasObjectProxy( pObject ) )
-            {
-                sm_topLevelObjects.RemoveSwap( objectIndex );
-
-                break;
-            }
-        }
-
-        HELIUM_ASSERT( objectIndex < topLevelObjectCount );
-    }
+    HELIUM_ASSERT( pObject->m_name.IsEmpty() );
+    HELIUM_ASSERT( !pObject->m_spOwner );
+    HELIUM_ASSERT( IsInvalid( pObject->m_instanceIndex ) );
 
     // Remove the object from the global list.
     sm_objects.Remove( objectId );
@@ -988,7 +960,7 @@ void GameObject::Shutdown()
 #endif  // !L_RELEASE
 
     sm_objects.Clear();
-    sm_topLevelObjects.Clear();
+    sm_wpFirstTopLevelObject.Release();
 
     delete sm_pNameInstanceIndexMap;
     sm_pNameInstanceIndexMap = NULL;
@@ -1020,8 +992,8 @@ const GameObjectType* GameObject::InitStaticType()
 
         Package* pTypesPackage = new Package();
         HELIUM_ASSERT( pTypesPackage );
-        HELIUM_VERIFY( pTypesPackage->Rename( nameParamsTypes ) );
         HELIUM_VERIFY( RegisterObject( pTypesPackage ) );
+        HELIUM_VERIFY( pTypesPackage->Rename( nameParamsTypes ) );
 
         GameObjectType::SetTypePackage( pTypesPackage );
 
@@ -1029,8 +1001,8 @@ const GameObjectType* GameObject::InitStaticType()
 
         Package* pEnginePackage = new Package();
         HELIUM_ASSERT( pEnginePackage );
-        HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
         HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
+        HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
 
         // Don't set up templates here; they're initialized during type registration.
         GameObjectPtr spObjectTemplate = new GameObject();
@@ -1111,14 +1083,9 @@ void GameObject::UpdatePath()
         m_instanceIndex ) );
 
     // Update the path of each child object.
-    size_t childCount = m_children.GetSize();
-    for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
+    for( GameObject* pChild = m_wpFirstChild; pChild != NULL; pChild = pChild->m_wpNextSibling )
     {
-        GameObject* pObject = m_children[ childIndex ];
-        if( pObject )
-        {
-            pObject->UpdatePath();
-        }
+        pChild->UpdatePath();
     }
 }
 

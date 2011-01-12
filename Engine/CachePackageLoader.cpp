@@ -616,9 +616,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     else
     {
         // Create the object.
-        pRequest->spObject = GameObject::CreateObject( pType, pCacheEntry->path.GetName(), pOwner, pTemplate );
-        pObject = pRequest->spObject;
-        if( !pObject )
+        if( !GameObject::CreateObject( pRequest->spObject, pType, pCacheEntry->path.GetName(), pOwner, pTemplate ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -632,6 +630,9 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             return true;
         }
+
+        pObject = pRequest->spObject;
+        HELIUM_ASSERT( pObject );
     }
 
     // Load the object properties.
@@ -707,8 +708,13 @@ void CachePackageLoader::ResolvePackage( GameObjectPtr& rspPackage, GameObjectPa
             HELIUM_ASSERT( spParent );
         }
 
-        rspPackage = GameObject::Create< Package >( packagePath.GetName(), spParent );
+        HELIUM_VERIFY( GameObject::CreateObject(
+            rspPackage,
+            Package::GetStaticType(),
+            packagePath.GetName(),
+            spParent ) );
         HELIUM_ASSERT( rspPackage );
+        HELIUM_ASSERT( rspPackage->IsClass( Package::GetStaticType() ) );
     }
 
     rspPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );

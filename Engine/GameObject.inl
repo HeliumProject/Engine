@@ -141,37 +141,24 @@ namespace Lunar
         return ( ( m_flags & flagMask ) == flagMask );
     }
 
-    /// Get the number of objects owned directly by this object.
+    /// Get the first object in the list of objects of which this object is the immediate parent.
     ///
-    /// @return  Number of owned objects.
+    /// @return  First object in the child object list.
     ///
-    /// @see GetChild(), GetChildren(), GetOwner()
-    size_t GameObject::GetChildCount() const
+    /// @see GetNextSibling()
+    const GameObjectWPtr& GameObject::GetFirstChild() const
     {
-        return m_children.GetSize();
+        return m_wpFirstChild;
     }
 
-    /// Get the child object associated with the specified index.
+    /// Get the next object in the list of objects who share the same parent as this object.
     ///
-    /// @param[in] index  Child object index (must be less than the value returned by GetChildCount()).
+    /// @return  Next sibling object in list of child objects for this object's parent.
     ///
-    /// @return  Child object.
-    ///
-    /// @see GetChildCount(), GetChildren(), GetOwner()
-    GameObject* GameObject::GetChild( size_t index ) const
+    /// @see GetFirstChild()
+    const GameObjectWPtr& GameObject::GetNextSibling() const
     {
-        HELIUM_ASSERT( index < m_children.GetSize() );
-        return m_children[ index ];
-    }
-
-    /// Get the array of objects owned directly by this container.
-    ///
-    /// @return  Child object array.
-    ///
-    /// @see GetChildCount(), GetChild(), GetOwner()
-    const DynArray< GameObjectWPtr >& GameObject::GetChildren() const
-    {
-        return m_children;
+        return m_wpNextSibling;
     }
 
     /// Get the full path name for this object.
@@ -242,25 +229,37 @@ namespace Lunar
 
     /// Create a new object.
     ///
-    /// @param[in] name                  Object name.
-    /// @param[in] pOwner                Object owner.
-    /// @param[in] pTemplate             Optional override template object.  If null, the default template for the
-    ///                                  object type will be used.
-    /// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
-    ///                                  invalid.
+    /// @param[out] rspObject             Pointer to the newly created object if object creation was successful.  Note
+    ///                                   that any object reference stored in this strong pointer prior to calling this
+    ///                                   function will always be cleared by this function, regardless of whether object
+    ///                                   creation is successful.
+    /// @param[in]  name                  Object name.
+    /// @param[in]  pOwner                Object owner.
+    /// @param[in]  pTemplate             Optional override template object.  If null, the default template for the
+    ///                                   object type will be used.
+    /// @param[in]  bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
+    ///                                   invalid.
     ///
-    /// @return  Pointer to the newly created object.
+    /// @return  True if object creation was successful, false if not.
     ///
     /// @see Create()
     template< typename T >
-    T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
+    bool GameObject::Create(
+        StrongPtr< T >& rspObject,
+        Name name,
+        GameObject* pOwner,
+        T* pTemplate,
+        bool bAssignInstanceIndex )
     {
         const GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
-        GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
+        GameObjectPtr spGameObject;
+        bool bResult = CreateObject( spGameObject, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
-        return static_cast< T* >( pObject );
+        rspObject = StaticCast< T >( spGameObject.Get() );
+
+        return bResult;
     }
 
     /// Find an object based on its path name, filtering by a specific type.

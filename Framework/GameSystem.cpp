@@ -283,10 +283,12 @@ bool GameSystem::Initialize(
         return false;
     }
 
-    PackagePtr spLayerPackage( GameObject::Create< Package >( Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
+    PackagePtr spLayerPackage;
+    HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
     HELIUM_ASSERT( spLayerPackage );
 
-    LayerPtr spLayer( GameObject::Create< Layer >( Name( TXT( "Layer" ) ), spLayerPackage ) );
+    LayerPtr spLayer;
+    HELIUM_VERIFY( GameObject::Create< Layer >( spLayer, Name( TXT( "Layer" ) ), spLayerPackage ) );
     HELIUM_ASSERT( spLayer );
     spLayer->BindPackage( spLayerPackage );
 

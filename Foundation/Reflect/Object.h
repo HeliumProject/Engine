@@ -22,6 +22,7 @@ namespace Helium
         class Structure;
         class Class;
         class Object;
+        class Data;
 
         //
         // ObjectRefCountSupport provides the support interface for managing reference counting data
@@ -140,10 +141,11 @@ namespace Helium
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
-            virtual void                PreSerialize( const Reflect::Field* field );
-            virtual void                PostSerialize( const Reflect::Field* field );
-            virtual void                PreDeserialize( const Reflect::Field* field );
-            virtual void                PostDeserialize( const Reflect::Field* field );
+            virtual StrongPtr< Data >   ShouldSerialize( const Field* field );
+            virtual void                PreSerialize( const Field* field );
+            virtual void                PostSerialize( const Field* field );
+            virtual void                PreDeserialize( const Field* field );
+            virtual void                PostDeserialize( const Field* field );
 
             //
             // Utilities

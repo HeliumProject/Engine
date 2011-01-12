@@ -250,6 +250,11 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
+DataPtr Object::ShouldSerialize( const Field* field )
+{
+    return field->ShouldSerialize( this );
+}
+
 void Object::PreSerialize( const Reflect::Field* field )
 {
 }

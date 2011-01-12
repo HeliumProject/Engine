@@ -316,7 +316,7 @@ void ArchiveBinary::SerializeFields( Object* object )
             const Field* field = &*itr;
 
             // check to see if we should serialize (will return non-null if we are gtg)
-            DataPtr data = field->ShouldSerialize( object );
+            DataPtr data = object->ShouldSerialize( field );
             if ( data )
             {
                 uint32_t fieldNameCrc = Crc32( field->m_Name );

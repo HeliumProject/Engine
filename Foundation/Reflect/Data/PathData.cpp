@@ -18,8 +18,6 @@ PathData::~PathData()
 
 void PathData::ConnectData( Helium::HybridPtr< void > data )
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
 }
 

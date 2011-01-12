@@ -43,117 +43,37 @@ Archive::~Archive()
 {
 }
 
-void Archive::PreSerialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for serialization, no one used it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostSerialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
-void Archive::PreDeserialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for deserialization, no one was using it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostDeserialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
-void Archive::PreSerialize(Object* object, const Field* field)
-{
-    V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-    V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-    for ( ; itr != end; ++itr )
-    {
-        if (field)
-        {
-            (*itr)->VisitField(object, field);
-        }
-        else
-        {
-            (*itr)->VisitObject(object);
-        }
-    }
-}
-
-void Archive::PostDeserialize(Object* object, const Field* field)
-{
-    V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-    V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-    for ( ; itr != end; ++itr )
-    {
-        if (field)
-        {
-            (*itr)->VisitField(object, field);
-        }
-        else
-        {
-            (*itr)->VisitObject(object);
-        }
-    }
-}
-
-bool Archive::TryObjectCallback( Object* object, ObjectCallback callback )
+bool Archive::TryObjectCallback( Object* object, ObjectCallback callback, const Field* field )
 {
     if ( Helium::IsDebuggerPresent() )
     {
-        (object->*callback)();
+        (object->*callback)( field );
     }
     else
     {
         try
         {
-            (object->*callback)();
+            (object->*callback)( field );
         }
         catch ( const Helium::Exception& exception )
         {
-            ExceptionInfo info( *this, object, callback, exception );
+            ArchiveExceptionInfo info( *this, object, callback, field, exception );
 
             d_Exception.Invoke( info );
 
             switch ( info.m_Action )
             {
-            case ExceptionActions::Unknown:
+            case ArchiveExceptionActions::Unknown:
                 {
                     throw;
                 }
 
-            case ExceptionActions::Accept:
+            case ArchiveExceptionActions::Accept:
                 {
                     return true;
                 }
 
-            case ExceptionActions::Reject:
+            case ArchiveExceptionActions::Reject:
                 {
                     return false;
                 }

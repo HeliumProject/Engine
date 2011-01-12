@@ -169,8 +169,8 @@ namespace Helium
             virtual bool ProcessComponent(Reflect::ObjectPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
 
             // setup changed callback
-            virtual void PreSerialize() HELIUM_OVERRIDE;
-            virtual void PostDeserialize() HELIUM_OVERRIDE;
+            virtual void PreSerialize( const Reflect::Field* field ) HELIUM_OVERRIDE;
+            virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE;
 
             // copy all attributes from one collection to another
             virtual void CopyTo( Reflect::Object* object ) HELIUM_OVERRIDE;

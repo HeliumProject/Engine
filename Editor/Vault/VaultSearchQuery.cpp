@@ -80,15 +80,18 @@ VaultSearchQuery::~VaultSearchQuery()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSearchQuery::PostDeserialize()
+void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
 {
-    __super::PostDeserialize();
+    __super::PostDeserialize( field );
 
-    tstring errors;
-    if ( !ParseQueryString( m_QueryString, errors, this ) )
+    if ( field == NULL )
     {
-        Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
-        return;
+        tstring errors;
+        if ( !ParseQueryString( m_QueryString, errors, this ) )
+        {
+            Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
+            return;
+        }
     }
 }
 

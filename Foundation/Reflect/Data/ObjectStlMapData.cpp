@@ -198,8 +198,7 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
                 continue;
             }
 
-            ObjectPtr elem;
-            archive.GetCache().Create( Reflect::GetDataClass<KeyT>(), elem );
+            ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass<KeyT>() );
 
             Data* ser = AssertCast<Data>(elem.Ptr());
             ser->ConnectData((void*)&(itr->first));
@@ -218,8 +217,9 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
         {
             Data* ser = AssertCast<Data>(*itr);
             ser->Disconnect();
-            archive.GetCache().Free(ser);
             ++itr;
+
+            // might be useful to cache the data object here
         }
     }
 }

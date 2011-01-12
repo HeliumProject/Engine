@@ -250,6 +250,22 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
+void Object::PreSerialize( const Reflect::Field* field )
+{
+}
+
+void Object::PostSerialize( const Reflect::Field* field )
+{
+}
+
+void Object::PreDeserialize( const Reflect::Field* field )
+{
+}
+
+void Object::PostDeserialize( const Reflect::Field* field )
+{
+}
+
 void Object::Accept( Visitor& visitor )
 {
     if ( !visitor.VisitObject( this ) )
@@ -317,14 +333,19 @@ ObjectPtr Object::Clone()
 {
     ObjectPtr clone = Registry::GetInstance()->CreateInstance( GetClass() );
 
-    PreSerialize();
-    clone->PreDeserialize();
+    PreSerialize( NULL );
+    clone->PreDeserialize( NULL );
 
     const Class* type = GetClass();
     type->Copy( this, clone );
 
-    clone->PostDeserialize();
-    PostSerialize();
+    clone->PostDeserialize( NULL );
+    PostSerialize( NULL );
 
     return clone;
+}
+
+void Object::RaiseChanged( const Field* field ) const
+{
+    e_Changed.Raise( ObjectChangeArgs( this, field ) );
 }

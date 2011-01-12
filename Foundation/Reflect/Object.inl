@@ -1,3 +1,36 @@
+template< class FieldT >
+void Helium::Reflect::Object::FieldChanged( FieldT* fieldAddress ) const
+{
+    // the offset of the field is the address of the field minus the address of this object instance
+    uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
+
+    // find the field in our reflection information
+    const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );
+
+    // your field address probably doesn't point to the field in this instance,
+    //  or your field is not exposed to Reflect, add it in your Composite function
+    HELIUM_ASSERT( field );
+
+    // notify listeners that this field changed
+    RaiseChanged( field );
+}
+
+template< class ObjectT, class FieldT >
+void Helium::Reflect::Object::ChangeField( FieldT ObjectT::* field, const FieldT& newValue )
+{
+    // set the field via pointer-to-member on the deduced templated type (!)
+    this->*field = newValue;
+
+    // find the field in our reflection information
+    const Reflect::Field* field = GetClass()->FindField( field );
+
+    // your field is not exposed to Reflect, add it in your Composite function
+    HELIUM_ASSERT( field );
+
+    // notify listeners that this field changed
+    RaiseChanged( field );
+}
+            
 /// Perform any pre-destruction work before clearing the last strong reference to an object and destroying the
 /// object.
 ///

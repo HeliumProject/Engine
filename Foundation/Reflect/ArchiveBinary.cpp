@@ -69,7 +69,7 @@ void ArchiveBinary::Read()
 {
     REFLECT_SCOPE_TIMER( ("Reflect - Binary Read") );
 
-    StatusInfo info( *this, ArchiveStates::Starting );
+    ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
 
     m_Abort = false;
@@ -84,9 +84,6 @@ void ArchiveBinary::Read()
     {
         throw Reflect::StreamException( TXT( "Input stream is empty" ) );
     }
-
-    // setup visitors
-    PreDeserialize();
 
     // read byte order
     ByteOrder byteOrder = Helium::PlatformByteOrder;
@@ -149,7 +146,7 @@ void ArchiveBinary::Read()
     // restore state, just in case someone wants to consume this after the fact
     m_SearchClass = searchClass;
 
-    info.m_ArchiveState = ArchiveStates::Complete;
+    info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
 }
 
@@ -157,11 +154,8 @@ void ArchiveBinary::Write()
 {
     REFLECT_SCOPE_TIMER( ("Reflect - Binary Write") );
 
-    StatusInfo info( *this, ArchiveStates::Starting );
+    ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
-
-    // setup visitors
-    PreSerialize();
 
     // write BOM
     uint16_t feff = 0xfeff;
@@ -193,7 +187,7 @@ void ArchiveBinary::Write()
     // do cleanup
     m_Stream->Flush();
 
-    info.m_ArchiveState = ArchiveStates::Complete;
+    info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
 }
 
@@ -213,9 +207,7 @@ void ArchiveBinary::Serialize(Object* object)
     m_Indent.Push();
 #endif
 
-    PreSerialize(object);
-
-    object->PreSerialize();
+    object->PreSerialize( NULL );
 
     if (object->IsClass(Reflect::GetClass<Data>()))
     {
@@ -244,7 +236,7 @@ void ArchiveBinary::Serialize(Object* object)
         m_FieldStack.pop();
     }
 
-    object->PostSerialize();
+    object->PostSerialize( NULL );
 
     // compute amound written
     uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
@@ -281,7 +273,7 @@ void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t
 
         if ( flags & ArchiveFlags::Status )
         {
-            StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
             info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
             e_Status.Raise( info );
         }
@@ -289,7 +281,7 @@ void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t
 
     if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = 100;
         e_Status.Raise( info );
     }
@@ -324,7 +316,7 @@ void ArchiveBinary::SerializeFields( Object* object )
             const Field* field = &*itr;
 
             // check to see if we should serialize (will return non-null if we are gtg)
-            DataPtr data = field->ShouldSerialize( object, &m_Cache );
+            DataPtr data = field->ShouldSerialize( object );
             if ( data )
             {
                 uint32_t fieldNameCrc = Crc32( field->m_Name );
@@ -336,10 +328,12 @@ void ArchiveBinary::SerializeFields( Object* object )
                 m_Indent.Push();
 #endif
 
-                PreSerialize( object, field );
+                object->PreSerialize( field );
                 Serialize( data );
-                data->Disconnect();
-                m_Cache.Free( data );
+                object->PostSerialize( field );
+
+                // might be useful to cache the data object here
+                data->Disconnect();               
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Pop();
@@ -379,7 +373,7 @@ ObjectPtr ArchiveBinary::Allocate()
         if (type)
         {
             // allocate instance by name
-            m_Cache.Create( type, object );
+            object = Registry::GetInstance()->CreateInstance( type );
         }
 
         // if we failed
@@ -422,7 +416,7 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
         m_Indent.Push();
 #endif
 
-        object->PreDeserialize();
+        object->PreDeserialize( NULL );
 
         if (object->IsClass(Reflect::GetClass<Data>()))
         {
@@ -435,14 +429,9 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
             DeserializeFields(object);
         }
 
-        if ( !TryObjectCallback( object, &Object::PostDeserialize ) )
+        if ( !TryObjectCallback( object, &Object::PostDeserialize, NULL ) )
         {
             object = NULL; // discard the object
-        }
-
-        if ( object )
-        {
-            PostDeserialize(object);
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -482,7 +471,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
                 {
                     uint32_t current = (uint32_t)m_Stream->TellRead();
 
-                    StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
                     info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
                     e_Status.Raise( info );
 
@@ -513,7 +502,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
 
     if ( flags & ArchiveFlags::Status )
     {
-        StatusInfo info( *this, ArchiveStates::ObjectProcessed );
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = 100;
         e_Status.Raise( info );
     }
@@ -561,10 +550,9 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 latent_data->ConnectField( object, field );
 
                 // process natively
+                object->PreDeserialize( field );
                 Deserialize( (ObjectPtr&)latent_data );
-
-                // post process
-                PostDeserialize( object, field );
+                object->PostDeserialize( field );
 
                 // disconnect
                 latent_data->Disconnect();
@@ -574,8 +562,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 REFLECT_SCOPE_TIMER(("Casting"));
 
                 // construct current serialization object
-                ObjectPtr current_element;
-                m_Cache.Create( field->m_DataClass, current_element );
+                ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
                 // downcast to data
                 DataPtr current_data = ObjectCast<Data>(current_element);
@@ -589,6 +576,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 current_data->ConnectField(object, field);
 
                 // process natively
+                object->PreDeserialize( field );
                 Deserialize( (ObjectPtr&)latent_data );
 
                 // attempt cast data into new definition
@@ -600,7 +588,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 else
                 {
                     // post process
-                    PostDeserialize( object, field );
+                    object->PostDeserialize( field );
                 }
 
                 // disconnect

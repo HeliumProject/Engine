@@ -16,14 +16,15 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Object;
         class Type;
+        class Field;
         class Composite;
+        class Structure;
         class Class;
+        class Object;
 
         //
-        // Reflect::ObjectRefCountSupport provides the support interface for managing reference counting data for
-        // Reflect::Object instances.
+        // ObjectRefCountSupport provides the support interface for managing reference counting data
         //
 
         class FOUNDATION_API ObjectRefCountSupport
@@ -62,15 +63,6 @@ namespace Helium
             static StaticData* sm_pStaticData;
         };
 
-
-        //
-        // Reflect::Object is a reference counted and type checked abstract base class
-        //
-
-        class Field;
-        class Class;
-        class Structure;
-
         //
         // Event delegate to support getting notified if this object changes
         //
@@ -88,10 +80,10 @@ namespace Helium
         };
         typedef Helium::Signature< const ObjectChangeArgs&, Helium::AtomicRefCountBase > ObjectChangeSignature;
 
+        //
+        // Object is the abstract base class of a serializable class
+        //
 
-        //
-        // Reflect::Object is the abstract base class of a serializable unit
-        //
         class FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
         protected:
@@ -116,7 +108,7 @@ namespace Helium
             virtual void Destroy();  // This should only be called by the reference counting system!
 
             //
-            // Type id
+            // Type checking
             //
 
             // Retrieves the reflection data for this instance
@@ -133,7 +125,7 @@ namespace Helium
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             //
-            // Serialization
+            // Persistence
             //
 
             // Specifies if the value is directly between the start and end name
@@ -148,13 +140,13 @@ namespace Helium
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
-            virtual void                PreSerialize() { }
-            virtual void                PostSerialize() { }
-            virtual void                PreDeserialize() { }
-            virtual void                PostDeserialize() { }
+            virtual void                PreSerialize( const Reflect::Field* field );
+            virtual void                PostSerialize( const Reflect::Field* field );
+            virtual void                PreDeserialize( const Reflect::Field* field );
+            virtual void                PostDeserialize( const Reflect::Field* field );
 
             //
-            // Introspection
+            // Utilities
             //
 
             // Visits fields recursively, used to interactively traverse structures
@@ -169,51 +161,23 @@ namespace Helium
             // Copy this object's data into a new instance
             virtual ObjectPtr           Clone();
 
-
             //
-            // Mutation
+            // Notification
             //
 
-        public:
+            // Event raised when an object is modified
             mutable ObjectChangeSignature::Event e_Changed;
 
-            virtual void RaiseChanged( const Field* field = NULL ) const
-            {
-                e_Changed.Raise( ObjectChangeArgs( this, field ) );
-            }
+            // Raise the modification event manually, null field mean ambiguous/multiple changes
+            virtual void RaiseChanged( const Field* field = NULL ) const;
 
+            // Notify a particular field was changed
             template< class FieldT >
-            void FieldChanged( FieldT* fieldAddress ) const
-            {
-                // the offset of the field is the address of the field minus the address of this object instance
-                uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
+            void FieldChanged( FieldT* fieldAddress ) const;
 
-                // find the field in our reflection information
-                const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );
-
-                // your field address probably doesn't point to the field in this instance,
-                //  or your field is not exposed to Reflect, add it in your Composite function
-                HELIUM_ASSERT( field );
-
-                // notify listeners that this field changed
-                RaiseChanged( field );
-            }
-            
+            // Modify and notify a field change
             template< class ObjectT, class FieldT >
-            void ChangeField( FieldT ObjectT::* field, const FieldT& newValue )
-            {
-                // set the field via pointer-to-member on the deduced templated type (!)
-                this->*field = newValue;
-
-                // find the field in our reflection information
-                const Reflect::Field* field = GetClass()->FindField( field );
-
-                // your field is not exposed to Reflect, add it in your Composite function
-                HELIUM_ASSERT( field );
-
-                // notify listeners that this field changed
-                RaiseChanged( field );
-            }
+            void ChangeField( FieldT ObjectT::* field, const FieldT& newValue );
         };
 
         //

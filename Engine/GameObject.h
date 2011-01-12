@@ -158,6 +158,9 @@ namespace Lunar
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
 
+        /// Reserved instance index value for auto-assigning an instance index during Rename() calls.
+        static const uint32_t INSTANCE_INDEX_AUTO = static_cast< uint32_t >( -2 );
+
         /// Object flags.
         enum EFlag
         {
@@ -184,6 +187,22 @@ namespace Lunar
             FLAG_PACKAGE          = 1 << 8
         };
 
+        /// Object rename parameters.
+        struct LUNAR_ENGINE_API RenameParameters
+        {
+            /// Object name.
+            Name name;
+            /// Owner.
+            GameObjectPtr spOwner;
+            /// Instance index (invalid index value for no instance index, INSTANCE_INDEX_AUTO to auto-assign).
+            uint32_t instanceIndex;
+
+            /// @name Construction/Destruction
+            //@{
+            inline RenameParameters();
+            //@}
+        };
+
         /// @name Construction/Destruction
         //@{
         GameObject();
@@ -193,10 +212,9 @@ namespace Lunar
         /// @name GameObject Interface
         //@{
         inline Name GetName() const;
-        bool SetName( Name name );
-
+        inline GameObject* GetOwner() const;
         inline uint32_t GetInstanceIndex() const;
-        bool SetInstanceIndex( uint32_t index );
+        bool Rename( const RenameParameters& rParameters );
 
         inline uint32_t GetId() const;
 
@@ -208,9 +226,6 @@ namespace Lunar
         uint32_t ToggleFlags( uint32_t flagMask );
 
         GameObject* GetTemplate() const;
-
-        inline GameObject* GetOwner() const;
-        bool SetOwner( GameObject* pOwner, bool bResetInstanceIndex = true );
 
         inline size_t GetChildCount() const;
         inline GameObject* GetChild( size_t index ) const;
@@ -333,8 +348,14 @@ namespace Lunar
         static SparseArray< GameObjectWPtr > sm_objects;
         /// Top-level object list.
         static DynArray< GameObjectWPtr > sm_topLevelObjects;
+
         /// Name instance lookup.
         static ChildNameInstanceIndexMap* sm_pNameInstanceIndexMap;
+        /// Empty object name instance map.
+        static Pair< GameObjectPath, NameInstanceIndexMap >* sm_pEmptyNameInstanceIndexMap;
+        /// Empty name instance index lookup set.
+        static Pair< Name, InstanceIndexSet >* sm_pEmptyInstanceIndexSet;
+
         /// Read-write lock for synchronizing access to the object lists.
         static ReadWriteLock sm_objectListLock;
 

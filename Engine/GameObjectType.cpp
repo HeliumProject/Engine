@@ -68,21 +68,14 @@ const GameObjectType* GameObjectType::Create(
     HELIUM_ASSERT( pReleaseStaticTypeCallback );
 
     // Set up the template object name, and set this object as its parent.
-    if( !pTemplate->SetOwner( pTypePackage ) )
+    GameObject::RenameParameters nameParameters;
+    nameParameters.name = name;
+    nameParameters.spOwner = pTypePackage;
+    if( !pTemplate->Rename( nameParameters ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
-            *name );
-
-        return false;
-    }
-
-    if( !pTemplate->SetName( name ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name.\n" ),
+            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
             *name );
 
         return false;

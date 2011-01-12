@@ -345,9 +345,6 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        void AddInstanceIndexTracking();
-        void RemoveInstanceIndexTracking();
-
         void UpdatePath();
         //@}
 

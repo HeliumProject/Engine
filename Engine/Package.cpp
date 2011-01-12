@@ -30,18 +30,17 @@ Package::~Package()
 /// @return  Static "Package" type.
 const GameObjectType* Package::InitStaticType()
 {
-    if( !sm_pStaticType )
+    if( !s_Class )
     {
         // Package type is registered manually during GameObject type initialization, so retrieve the type info from the
         // existing registered data.
         HELIUM_VERIFY( GameObject::InitStaticType() );
 
-        sm_pStaticType = GameObjectType::Find( Name( TXT( "Package" ) ) );
-        HELIUM_ASSERT( sm_pStaticType );
-        s_Class = sm_pStaticType;
+        s_Class = GameObjectType::Find( Name( TXT( "Package" ) ) );
+        HELIUM_ASSERT( s_Class );
     }
 
-    return sm_pStaticType;
+    return static_cast< const GameObjectType* >( s_Class );
 }
 
 /// Set the loader for this package.

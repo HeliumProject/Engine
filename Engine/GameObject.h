@@ -29,8 +29,6 @@
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
         REFLECT_DECLARE_CLASS( TYPE, PARENT ) \
-    private: \
-        static const Lunar::GameObjectType* sm_pStaticType; \
     public: \
         virtual const Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
@@ -46,8 +44,6 @@
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_CLASS( TYPE ) \
-    \
-    const Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
     \
     const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
@@ -77,18 +73,17 @@
     \
     void TYPE::ReleaseStaticType() \
     { \
-        if( sm_pStaticType ) \
+        if( s_Class ) \
         { \
-            Lunar::GameObjectType::Unregister( sm_pStaticType ); \
-            sm_pStaticType = NULL; \
+            Lunar::GameObjectType::Unregister( static_cast< const Lunar::GameObjectType* >( s_Class ) ); \
             s_Class = NULL; \
         } \
     } \
     \
     const Lunar::GameObjectType* TYPE::GetStaticType() \
     { \
-        HELIUM_ASSERT( sm_pStaticType ); \
-        return sm_pStaticType; \
+        HELIUM_ASSERT( s_Class ); \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -101,7 +96,7 @@
     \
     const Lunar::GameObjectType* TYPE::InitStaticType() \
     { \
-        if( !sm_pStaticType ) \
+        if( !s_Class ) \
         { \
             extern Lunar::Package* Get##MODULE##TypePackage(); \
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
@@ -113,18 +108,17 @@
             Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \
             HELIUM_ASSERT( spTemplate ); \
             \
-            sm_pStaticType = Lunar::GameObjectType::Create( \
+            s_Class = Lunar::GameObjectType::Create( \
                 Lunar::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
                 spTemplate, \
                 TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
-            HELIUM_ASSERT( sm_pStaticType ); \
-            s_Class = sm_pStaticType; \
+            HELIUM_ASSERT( s_Class ); \
         } \
         \
-        return sm_pStaticType; \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 //@}
@@ -330,9 +324,6 @@ namespace Lunar
         /// Custom callback for notifying that this object should be destroyed when its reference count drops to zero
         /// (provided for custom object allocation schemes).
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
-
-        /// Static "GameObject" type instance.
-        static const GameObjectType* sm_pStaticType;
 
         /// Global object list.
         static SparseArray< GameObjectWPtr > sm_objects;

@@ -21,24 +21,24 @@ namespace Helium
 
         /// Parent class type.
         typedef ConcurrentHashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key >
-            Super;
+            Base;
 
         /// Type for hash set keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for hash set entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for key hashing function.
-        typedef typename Super::HasherType HasherType;
+        typedef typename Base::HasherType HasherType;
         /// Type for testing two keys for equality.
-        typedef typename Super::KeyEqualType KeyEqualType;
+        typedef typename Base::KeyEqualType KeyEqualType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// Accessor type.
-        typedef typename Super::Accessor Accessor;
+        typedef typename Base::Accessor Accessor;
         /// Constant accessor type.
-        typedef typename Super::ConstAccessor ConstAccessor;
+        typedef typename Base::ConstAccessor ConstAccessor;
 
         /// @name Construction/Destruction
         //@{

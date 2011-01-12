@@ -32,7 +32,6 @@
     private: \
         static const Lunar::GameObjectType* sm_pStaticType; \
     public: \
-        typedef PARENT Super; \
         virtual const Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
         virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
@@ -108,7 +107,7 @@
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            const Lunar::GameObjectType* pParentType = Super::InitStaticType(); \
+            const Lunar::GameObjectType* pParentType = Base::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
             Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \

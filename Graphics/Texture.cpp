@@ -33,7 +33,7 @@ void Texture::PreDestroy()
 {
     m_spTexture.Release();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// @copydoc GameObject::Serialize()

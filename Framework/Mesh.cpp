@@ -66,7 +66,7 @@ void Mesh::PreDestroy()
     m_spVertexBuffer.Release();
     m_spIndexBuffer.Release();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// @copydoc GameObject::Serialize()

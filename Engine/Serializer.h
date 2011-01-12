@@ -61,10 +61,10 @@
 /// @param[in] S  Serializer instance.
 #define L_SERIALIZE_SUPER( S ) \
     { \
-        const GameObjectType* pSuperType = Super::GetStaticType(); \
+        const GameObjectType* pSuperType = Base::GetStaticType(); \
         HELIUM_ASSERT( pSuperType ); \
         ( S ).BeginPropertyGroup( *pSuperType->GetName() ); \
-        Super::Serialize( S ); \
+        Base::Serialize( S ); \
         ( S ).EndPropertyGroup(); \
     }
 

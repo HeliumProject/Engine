@@ -3,7 +3,7 @@
 /// @param[in] bucketCount  Number of buckets to allocate in the hash table.
 template< typename Key, typename Data, typename HashFunction, typename EqualKey, typename Allocator >
 Helium::ConcurrentHashMap< Key, Data, HashFunction, EqualKey, Allocator >::ConcurrentHashMap( size_t bucketCount )
-    : Super( bucketCount, HashFunction(), EqualKey() )
+    : Base( bucketCount, HashFunction(), EqualKey() )
 {
 }
 
@@ -13,7 +13,7 @@ Helium::ConcurrentHashMap< Key, Data, HashFunction, EqualKey, Allocator >::Concu
 template< typename Key, typename Data, typename HashFunction, typename EqualKey, typename Allocator >
 Helium::ConcurrentHashMap< Key, Data, HashFunction, EqualKey, Allocator >::ConcurrentHashMap(
     const ConcurrentHashMap& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -35,7 +35,7 @@ Helium::ConcurrentHashMap< Key, Data, HashFunction, EqualKey, Allocator >&
 {
     if( this != &rSource )
     {
-        Super::operator=( rSource );
+        Base::operator=( rSource );
     }
 
     return *this;

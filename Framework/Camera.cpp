@@ -39,7 +39,7 @@ void Camera::Serialize( Serializer& s )
 /// @copydoc Entity::Attach()
 void Camera::Attach()
 {
-    Super::Attach();
+    Base::Attach();
 
     // Update the scene view associated with this camera.
     if( IsValid( m_sceneViewId ) )
@@ -66,7 +66,7 @@ void Camera::Attach()
 /// @copydoc Entity::SetPosition()
 void Camera::SetPosition( const Simd::Vector3& rPosition )
 {
-    Super::SetPosition( rPosition );
+    Base::SetPosition( rPosition );
 
     DeferredReattach();
 }
@@ -74,7 +74,7 @@ void Camera::SetPosition( const Simd::Vector3& rPosition )
 /// @copydoc Entity::SetRotation()
 void Camera::SetRotation( const Simd::Quat& rRotation )
 {
-    Super::SetRotation( rRotation );
+    Base::SetRotation( rRotation );
 
     DeferredReattach();
 }

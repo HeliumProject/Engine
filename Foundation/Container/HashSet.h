@@ -20,24 +20,24 @@ namespace Helium
         static const size_t DEFAULT_BUCKET_COUNT = 37;
 
         /// Parent class type.
-        typedef HashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key > Super;
+        typedef HashTable< const Key, const Key, HashFunction, Identity< const Key >, EqualKey, Allocator, Key > Base;
 
         /// Type for hash set keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for hash set entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for key hashing function.
-        typedef typename Super::HasherType HasherType;
+        typedef typename Base::HasherType HasherType;
         /// Type for testing two keys for equality.
-        typedef typename Super::KeyEqualType KeyEqualType;
+        typedef typename Base::KeyEqualType KeyEqualType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// Iterator type.
-        typedef typename Super::Iterator Iterator;
+        typedef typename Base::Iterator Iterator;
         /// Constant iterator type.
-        typedef typename Super::ConstIterator ConstIterator;
+        typedef typename Base::ConstIterator ConstIterator;
 
         /// @name Construction/Destruction
         //@{

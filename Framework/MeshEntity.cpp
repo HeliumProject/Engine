@@ -42,7 +42,7 @@ void MeshEntity::Serialize( Serializer& s )
 /// @copydoc Entity::Attach()
 void MeshEntity::Attach()
 {
-    Super::Attach();
+    Base::Attach();
 
     HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
 
@@ -104,27 +104,27 @@ void MeshEntity::Detach()
         SetInvalid( m_graphicsSceneObjectId );
     }
 
-    Super::Detach();
+    Base::Detach();
 }
 
 /// @copydoc Entity::SetPosition()
 void MeshEntity::SetPosition( const Simd::Vector3& rPosition )
 {
-    Super::SetPosition( rPosition );
+    Base::SetPosition( rPosition );
     SetNeedsGraphicsSceneObjectUpdate( GraphicsSceneObject::UPDATE_TRANSFORM_ONLY );
 }
 
 /// @copydoc Entity::SetRotation()
 void MeshEntity::SetRotation( const Simd::Quat& rRotation )
 {
-    Super::SetRotation( rRotation );
+    Base::SetRotation( rRotation );
     SetNeedsGraphicsSceneObjectUpdate( GraphicsSceneObject::UPDATE_TRANSFORM_ONLY );
 }
 
 /// @copydoc Entity::SetScale()
 void MeshEntity::SetScale( const Simd::Vector3& rScale )
 {
-    Super::SetScale( rScale );
+    Base::SetScale( rScale );
     SetNeedsGraphicsSceneObjectUpdate( GraphicsSceneObject::UPDATE_TRANSFORM_ONLY );
 }
 

@@ -9,7 +9,7 @@ Helium::Set< Key, EqualKey, Allocator >::Set()
 /// @param[in] rSource  Source set from which to copy.
 template< typename Key, typename EqualKey, typename Allocator >
 Helium::Set< Key, EqualKey, Allocator >::Set( const Set& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -19,7 +19,7 @@ Helium::Set< Key, EqualKey, Allocator >::Set( const Set& rSource )
 template< typename Key, typename EqualKey, typename Allocator >
 template< typename OtherAllocator >
 Helium::Set< Key, EqualKey, Allocator >::Set( const Set< Key, EqualKey, OtherAllocator >& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -34,7 +34,7 @@ Helium::Set< Key, EqualKey, Allocator >::Set( const Set< Key, EqualKey, OtherAll
 template< typename Key, typename EqualKey, typename Allocator >
 Helium::Set< Key, EqualKey, Allocator >& Helium::Set< Key, EqualKey, Allocator >::operator=( const Set& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }
@@ -52,7 +52,7 @@ template< typename OtherAllocator >
 Helium::Set< Key, EqualKey, Allocator >& Helium::Set< Key, EqualKey, Allocator >::operator=(
     const Set< Key, EqualKey, OtherAllocator >& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }

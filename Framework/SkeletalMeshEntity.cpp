@@ -29,7 +29,7 @@ SkeletalMeshEntity::~SkeletalMeshEntity()
 /// @copydoc Entity::Attach()
 void SkeletalMeshEntity::Attach()
 {
-    Super::Attach();
+    Base::Attach();
 
 #if L_USE_GRANNY_ANIMATION
     m_grannyData.Attach( this );
@@ -43,7 +43,7 @@ void SkeletalMeshEntity::Detach()
     m_grannyData.Detach( this );
 #endif
 
-    Super::Detach();
+    Base::Detach();
 }
 
 /// @copydoc Entity::SynchronousUpdate()
@@ -122,7 +122,7 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
     HELIUM_ASSERT( pScene );
     HELIUM_ASSERT( pSceneObject );
 
-    Super::GraphicsSceneObjectUpdate( pData, pScene, pSceneObject );
+    Base::GraphicsSceneObjectUpdate( pData, pScene, pSceneObject );
 
     SkeletalMeshEntity* pThis = static_cast< SkeletalMeshEntity* >( pData );
 

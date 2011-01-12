@@ -1,6 +1,5 @@
 #include "Foundation/Reflect/Data/StlVectorData.h"
 
-#include "Foundation/Reflect/Compression.h" 
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -218,6 +217,66 @@ bool SimpleStlVectorData<T>::Equals(const Object* object) const
     return m_Data.Get() == rhs->m_Data.Get();
 }
 
+//
+// Stl specializes std::vector<bool> using bitfields...
+//  in general this isn't very efficient, but isn't used often
+//
+
+template < class T >
+void WriteVector( const std::vector< T >& v, Reflect::CharStream& stream )
+{
+    int32_t count = (int32_t)v.size();
+    stream.Write(&count); 
+
+    if (count > 0)
+    {
+        stream.WriteBuffer( (const void*)&(v.front()), sizeof(T) * count); 
+    }
+
+}
+
+template <>
+void WriteVector( const std::vector< bool >& v, Reflect::CharStream& stream )
+{
+    int32_t count = (int32_t)v.size();
+    stream.Write(&count); 
+
+    for ( std::vector< bool >::const_iterator itr = v.begin(), end = v.end(); itr != end; ++itr )
+    {
+        bool value = *itr;
+        stream.Write( &value ); 
+    }
+
+}
+
+template < class T >
+void ReadVector( std::vector< T >& v, Reflect::CharStream& stream )
+{
+    int32_t count = 0;
+    stream.Read(&count); 
+    v.resize(count);
+
+    if(count > 0)
+    {
+        stream.ReadBuffer( (void*)&(v.front()), sizeof(T) * count );
+    }
+}
+
+template <>
+void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
+{
+    int32_t count = 0;
+    stream.Read(&count); 
+    v.reserve(count);
+
+    while( --count > 0 )
+    {
+        bool value;
+        stream.Read( &value );
+        v.push_back( value );
+    }
+}
+
 template < class T >
 void SimpleStlVectorData<T>::Serialize(Archive& archive) const
 {
@@ -249,25 +308,7 @@ void SimpleStlVectorData<T>::Serialize(Archive& archive) const
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            int32_t count = (int32_t)m_Data->size();
-            binary.GetStream().Write(&count); 
-
-            if(count > 0)
-            {
-                // current offset in stream... 
-                int32_t offset       = (int32_t) binary.GetStream().TellWrite(); 
-                int32_t bytesWritten = 0; 
-                binary.GetStream().Write(&bytesWritten); 
-
-                const T& front = m_Data->front();
-                bytesWritten   = CompressToStream(binary.GetStream(), (const char*) &front, sizeof(T) * count); 
-
-                binary.GetStream().SeekWrite(offset, std::ios_base::beg); 
-                binary.GetStream().Write(&bytesWritten); 
-                binary.GetStream().SeekWrite(0, std::ios_base::end); 
-
-            }
+            WriteVector( m_Data.Ref(), binary.GetStream() );
             break;
         }
     }
@@ -305,26 +346,7 @@ void SimpleStlVectorData<T>::Deserialize(Archive& archive)
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            int32_t count = -1;
-            binary.GetStream().Read(&count); 
-
-            m_Data->resize(count);
-
-            if(count > 0)
-            {
-                // if we have array compression, decompress from the stream
-                // otherwise, read count * sizeof(T) bytes 
-                // 
-                ArchiveBinary* archiveBinary = static_cast<ArchiveBinary*>(&archive); 
-                int32_t inputBytes; 
-                binary.GetStream().Read(&inputBytes); 
-                int32_t bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
-                if(bytesInflated != sizeof(T) * count)
-                {
-                    throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
-                }
-            }
+            ReadVector( m_Data.Ref(), binary.GetStream() );
             break;
         }
     }

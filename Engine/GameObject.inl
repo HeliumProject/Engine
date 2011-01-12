@@ -63,17 +63,27 @@ namespace Lunar
     ///
     /// @return  Object name.
     ///
-    /// @see SetName()
+    /// @see GetOwner(), GetInstanceIndex(), Rename()
     Name GameObject::GetName() const
     {
         return m_name;
+    }
+
+    /// Get the owner of this object.
+    ///
+    /// @return  Object owner.
+    ///
+    /// @see GetName(), GetInstanceIndex(), Rename(), GetChildCount(), GetChild(), GetChildren()
+    GameObject* GameObject::GetOwner() const
+    {
+        return m_spOwner;
     }
 
     /// Get the instance index associated with this object.
     ///
     /// @return  Object instance index.
     ///
-    /// @see SetInstanceIndex()
+    /// @see GetName(), GetOwner(), Rename()
     uint32_t GameObject::GetInstanceIndex() const
     {
         return m_instanceIndex;
@@ -129,16 +139,6 @@ namespace Lunar
         HELIUM_ASSERT( flagMask != 0 );
 
         return ( ( m_flags & flagMask ) == flagMask );
-    }
-
-    /// Get the owner of this object.
-    ///
-    /// @return  Object owner.
-    ///
-    /// @see SetOwner(), GetChildCount(), GetChild(), GetChildren()
-    GameObject* GameObject::GetOwner() const
-    {
-        return m_spOwner;
     }
 
     /// Get the number of objects owned directly by this object.
@@ -283,6 +283,13 @@ namespace Lunar
         }
 
         return static_cast< T* >( pObject );
+    }
+
+    /// Constructor.
+    GameObject::RenameParameters::RenameParameters()
+        : name( NULL_NAME )
+        , instanceIndex( Invalid< uint32_t >() )
+    {
     }
 
     /// Cast an object to a given type if the object is of that type.

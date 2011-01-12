@@ -26,11 +26,10 @@ namespace Helium
 
             static void EnumerateEnum( Reflect::Enumeration& info )
             {
-                info.AddElement(CameraMode::Orbit,  TXT( "CameraMode::Orbit" ), TXT( "Orbit" ) ); 
-                info.AddElement(CameraMode::Front,  TXT( "CameraMode::Front" ), TXT( "Front" ) ); 
-                info.AddElement(CameraMode::Side,   TXT( "CameraMode::Side" ), TXT( "Side" ) ); 
-                info.AddElement(CameraMode::Top,    TXT( "CameraMode::Top" ), TXT( "Top" ) ); 
-                info.AddElement(CameraMode::Count,  TXT( "CameraMode::Count" ) ); 
+                info.AddElement(CameraMode::Orbit,  TXT( "Orbit" ) ); 
+                info.AddElement(CameraMode::Front,  TXT( "Front" ) ); 
+                info.AddElement(CameraMode::Side,   TXT( "Side" ) ); 
+                info.AddElement(CameraMode::Top,    TXT( "Top" ) ); 
             }
         };
 

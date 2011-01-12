@@ -62,7 +62,7 @@ namespace Helium
             DataPtr CreateData(const void* instance) const;
 
             // allocate and connect to the default
-            DataPtr CreateTemplateData() const;
+            DataPtr CreateDefaultData() const;
 
             // determine if this field should be serialized
             DataPtr ShouldSerialize(const void* instance) const;
@@ -85,13 +85,6 @@ namespace Helium
         {
         public:
             REFLECTION_TYPE( ReflectionTypes::Composite, Composite, Type );
-
-            const Composite*                        m_Base;                 // the base type name
-            mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
-            mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
-            DynArray< Field >                       m_Fields;               // fields in this composite
-            AcceptVisitor                           m_Accept;               // function to populate this structure
-            const void*                             m_Template;             // default template instance
 
         protected:
             Composite();
@@ -389,6 +382,14 @@ namespace Helium
                     Reflect::GetEnumeration<EnumT>(),
                     flags );
             }
+
+        public:
+            const Composite*                        m_Base;                 // the base type name
+            mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
+            mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
+            DynArray< Field >                       m_Fields;               // fields in this composite
+            AcceptVisitor                           m_Accept;               // function to populate this structure
+            const void*                             m_Default;             // default instance
         };
     }
 }

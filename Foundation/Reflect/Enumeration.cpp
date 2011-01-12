@@ -1,58 +1,20 @@
 #include "Enumeration.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
-EnumerationElement::EnumerationElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
+EnumerationElement::EnumerationElement()
+: m_Value( 0x0 )
+{
+
+}
+
+EnumerationElement::EnumerationElement( uint32_t value, const tstring& name, const tstring& helpText )
 : m_Value( value )
 , m_Name( name )
-, m_Label( label )
 , m_HelpText( helpText )
 {
-    if ( m_Label.empty() )
-    {
-        m_Label = m_Name;
-    }
-}
 
-EnumerationElement::~EnumerationElement()
-{
-
-}
-
-EnumerationElement* EnumerationElement::Create( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
-{
-    return new EnumerationElement( value, name, label, helpText );
-}
-
-bool Enumeration::Equals(const Enumeration* rhs) const
-{
-    if ( m_Name != rhs->m_Name )
-    {
-        return false;
-    }
-
-    if (m_Elements.size() != rhs->m_Elements.size())
-    {
-        return false;
-    }
-
-    V_EnumerationElement::const_iterator itrA = m_Elements.begin();
-    V_EnumerationElement::const_iterator endA = m_Elements.end();
-    V_EnumerationElement::const_iterator itrB = rhs->m_Elements.begin();
-    V_EnumerationElement::const_iterator endB = rhs->m_Elements.end();
-    for ( ; itrA != endA && itrB != endB; ++itrA, ++itrB )
-    {
-        if ((*itrA)->m_Name != (*itrB)->m_Name)
-            return false;
-
-        if ((*itrA)->m_Label != (*itrB)->m_Label)
-            return false;
-
-        if ((*itrA)->m_Value != (*itrB)->m_Value)
-            return false;
-    }
-
-    return true;
 }
 
 Enumeration::Enumeration()
@@ -65,56 +27,43 @@ Enumeration::~Enumeration()
 
 }
 
-Enumeration* Enumeration::Create()
+void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring& helpText )
 {
-    return new Enumeration();
+    EnumerationElement element ( value, name, helpText );
+
+    m_Elements.Add( element );
 }
 
-void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText )
+bool Enumeration::GetElementValue(const tstring& name, uint32_t& value) const
 {
-    HELIUM_ASSERT(m_ElementsByName.find(name) == m_ElementsByName.end());
-    HELIUM_ASSERT(m_ElementsByLabel.find( label.empty() ? name : label ) == m_ElementsByLabel.end());
-
-    EnumerationElementPtr elem = EnumerationElement::Create( value, name, label, helpText );
-
-    m_Elements.push_back(elem);
-    m_ElementsByName[ name ] = elem;
-    m_ElementsByLabel[ label.empty() ? name : label ] = elem;
-    m_ElementsByValue[ value ] = elem;
-}
-
-bool Enumeration::GetElementValue(const tstring& label, uint32_t& value) const
-{
-    M_StrEnumerationElement::const_iterator found = m_ElementsByLabel.find(label);
-
-    if (found != m_ElementsByLabel.end())
+    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    for ( ; itr != end; ++itr )
     {
-        value = found->second->m_Value;
-        return true;
-    }
-
-    found = m_ElementsByName.find(label);
-
-    if (found != m_ElementsByName.end())
-    {
-        value = found->second->m_Value;
-        return true;
+        if ( itr->m_Name == name )
+        {
+            value = itr->m_Value;
+            return true;
+        }
     }
 
     return false;
 }
 
-bool Enumeration::GetElementLabel(const uint32_t value, tstring& label) const
+bool Enumeration::GetElementLabel(const uint32_t value, tstring& name) const
 {
-    M_ValueEnumerationElement::const_iterator found = m_ElementsByValue.find(value);
-
-    if (found == m_ElementsByValue.end())
+    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    for ( ; itr != end; ++itr )
     {
-        return false;
+        if ( itr->m_Value == value )
+        {
+            name = itr->m_Name;
+            return true;
+        }
     }
 
-    label = found->second->m_Label;
-    return true;
+    return false;
 }
 
 bool Enumeration::GetBitfieldValue(const tstring& str, uint32_t& value) const
@@ -125,7 +74,7 @@ bool Enumeration::GetBitfieldValue(const tstring& str, uint32_t& value) const
         return false;
     }
 
-    static tchar_t tmp[1024];
+    tchar_t tmp[1024];
     _tcscpy( tmp, str.c_str() );
 
     std::vector< tstring > strs;
@@ -198,13 +147,13 @@ bool Enumeration::GetBitfieldString(const uint32_t value, tstring& str) const
 bool Enumeration::GetBitfieldStrings(const uint32_t value, std::vector< tstring >& strs) const
 {
     // search the map
-    V_EnumerationElement::const_iterator itr = m_Elements.begin();
-    V_EnumerationElement::const_iterator end = m_Elements.end();
+    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
-        if ( IsFlagSet( value, (*itr)->m_Value ) )
+        if ( IsFlagSet( value, itr->m_Value ) )
         {
-            strs.push_back((*itr)->m_Label);
+            strs.push_back( itr->m_Name );
         }
     }
 

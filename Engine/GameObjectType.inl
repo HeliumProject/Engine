@@ -38,7 +38,7 @@ namespace Lunar
     /// @return  Type template object.
     GameObject* GameObjectType::GetTemplate() const
     {
-        return const_cast< GameObject* >( static_cast< const GameObject* >( m_TemplateObject.Get() ) );
+        return const_cast< GameObject* >( static_cast< const GameObject* >( m_Default.Get() ) );
     }
 
     /// Get the flags associated with this type.

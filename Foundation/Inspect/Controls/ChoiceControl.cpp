@@ -18,7 +18,7 @@ Choice::Choice()
 
 bool Choice::Process(const tstring& key, const tstring& value)
 {
-    if (__super::Process(key, value))
+    if (Base::Process(key, value))
         return true;
 
     if (key == CHOICE_ATTR_ENUM)

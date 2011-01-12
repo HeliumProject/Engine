@@ -27,7 +27,7 @@ namespace Lunar
     class LUNAR_ENGINE_API GameObjectType : public Reflect::Class
     {
     public:
-        REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType );
+        REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType, GameObjectType, Reflect::Class );
 
         /// Type lookup hash map.
         typedef HashMap< Name, GameObjectTypePtr > LookupMap;

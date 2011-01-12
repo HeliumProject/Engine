@@ -75,7 +75,7 @@ int FileDialog::ShowModal()
 {
     // Clear out the file list, we're about to build it.
     m_Files.clear();
-    int result = __super::ShowModal();
+    int result = wxFileDialog::ShowModal();
 
     if ( result == wxID_OK )
     {
@@ -121,7 +121,7 @@ bool FileDialog::IsMultipleSelectionEnabled() const
 // 
 void FileDialog::GetPaths( wxArrayString& paths ) const
 {
-    __super::GetPaths( paths );
+    wxFileDialog::GetPaths( paths );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ void FileDialog::SetFilterIndex( const tstring& filter )
         }
     }
 
-    __super::SetFilterIndex( index );
+    wxFileDialog::SetFilterIndex( index );
 }
 
 
@@ -253,7 +253,7 @@ void FileDialog::UpdateFilter()
 
     // update the wxFileDialog wild card
     SetWildcard( filterStr.c_str() );
-    __super::SetFilterIndex( m_filterIndex );
+    wxFileDialog::SetFilterIndex( m_filterIndex );
 }
 
 

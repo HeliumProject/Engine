@@ -124,7 +124,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
     Layout();
     Centre();
 
-    int result = __super::ShowModal();
+    int result = wxDialog::ShowModal();
 
     if ( result == wxID_OK )
     {

@@ -129,38 +129,18 @@ namespace Helium
             static void Initialize();
             static void Cleanup();
 
-
             //
             // Connection
             //
 
-            // connect to some address
-            virtual void ConnectData(Helium::HybridPtr<void> data)
-            {
-                m_Instance = (Object*)NULL;
-                m_Field = NULL;
-            }
+            // set the address to interface with
+            virtual void ConnectData(Helium::HybridPtr<void> data) = 0;
 
             // connect to a field of an object
-            virtual void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0)
-            {
-                ConnectData( Helium::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State()) ); 
+            void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0);
 
-                m_Instance = instance; 
-                m_Field = field; 
-            }
-
-            // disconnect everything
-            void Disconnect()
-            {
-                ConnectData( Helium::HybridPtr<void> () );
-            }
-
-            virtual bool ShouldSerialize()
-            {
-                return true;
-            }
-
+            // reset all pointers
+            void Disconnect();
 
             //
             // Specializations
@@ -177,7 +157,6 @@ namespace Helium
             {
                 return NULL;
             }
-
 
             //
             // Creation templates
@@ -235,7 +214,6 @@ namespace Helium
                 return ser;
             }
 
-
             //
             // Value templates
             //
@@ -292,16 +270,15 @@ namespace Helium
                 return !Equals(&rhs);
             }
 
-
             //
             // Serialization
             //
 
+            // is this data worth serializing? (perhaps its an empty container?)
+            virtual bool ShouldSerialize();
+
             // data serialization (extract to smart buffer)
-            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
-            {
-                HELIUM_BREAK();
-            }
+            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const;
 
             // data serialization (extract to archive)
             virtual void Serialize(Archive& archive) const = 0;
@@ -310,30 +287,17 @@ namespace Helium
             virtual void Deserialize(Archive& archive) = 0;
 
             // text serialization (extract to text stream)
-            virtual tostream& operator>> (tostream& stream) const
-            { 
-                HELIUM_BREAK(); 
-                return stream; 
-            }
+            virtual tostream& operator>> (tostream& stream) const;
 
             // text deserialization (insert from text stream)
-            virtual tistream& operator<< (tistream& stream)
-            { 
-                HELIUM_BREAK(); 
-                return stream; 
-            }
-
+            virtual tistream& operator<< (tistream& stream);
 
             //
-            // Visit
+            // Visitor
             //
 
-            virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE
-            {
-                // by default, don't do anything as it will all have to be special cased in derived classes
-            }
+            virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
         };
-
 
         //
         // These are the global entry points for our virtual insert an extract functions
@@ -348,7 +312,6 @@ namespace Helium
         {
             return s << stream;
         }
-
 
         //
         // GetValue / SetValue templates

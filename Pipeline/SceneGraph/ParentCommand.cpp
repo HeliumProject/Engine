@@ -8,39 +8,39 @@ using namespace Helium::SceneGraph;
 
 ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodePtr& parent)
 {
-  m_Node = child;
-  m_NextParent = parent;
-  m_PreviousParent = child->GetParent();
+    m_Node = child;
+    m_NextParent = parent;
+    m_PreviousParent = child->GetParent();
 
-  m_Node->SetParent( m_NextParent.Ptr() );
+    m_Node->SetParent( m_NextParent.Ptr() );
 
-  SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( m_Node );
-  if ( transform )
-  {
-    Push( transform->ComputeObjectComponents() );
-  }
+    SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( m_Node );
+    if ( transform )
+    {
+        Push( transform->ComputeObjectComponents() );
+    }
 }
 
 void ParentCommand::Undo()
 {
-  Swap();
+    Swap();
 
-  __super::Undo();
+    Base::Undo();
 }
 
 void ParentCommand::Redo()
 {
-  Swap();
+    Swap();
 
-  __super::Redo();
+    Base::Redo();
 }
 
 void ParentCommand::Swap()
 {
-  // swap parents
-  HierarchyNodePtr n = m_NextParent;
-  m_NextParent = m_PreviousParent;
-  m_PreviousParent = n;
+    // swap parents
+    HierarchyNodePtr n = m_NextParent;
+    m_NextParent = m_PreviousParent;
+    m_PreviousParent = n;
 
-  m_Node->SetParent( m_NextParent.Ptr() );
+    m_Node->SetParent( m_NextParent.Ptr() );
 }

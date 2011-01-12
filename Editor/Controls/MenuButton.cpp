@@ -106,13 +106,13 @@ void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                 wxIMAGE_ALPHA_BLEND_COMPOSITE );
             
             wxBitmap newBitmap = wxBitmap( image );
-            __super::DoSetBitmap( newBitmap, which );
+            wxBitmapButton::DoSetBitmap( newBitmap, which );
 
             return;
         }
     }
    
-    __super::DoSetBitmap( bitmap, which );
+    wxBitmapButton::DoSetBitmap( bitmap, which );
 }
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )

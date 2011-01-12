@@ -81,7 +81,7 @@ namespace Helium
         //
 
         template <class T>
-        class PrimitiveTemplate : public SceneGraph::Primitive
+        class PrimitiveTemplate : public Primitive
         {
         protected:
             std::vector<T> m_Vertices;

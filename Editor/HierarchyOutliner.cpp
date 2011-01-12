@@ -141,7 +141,7 @@ SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id
 // 
 void HierarchyOutliner::Clear()
 {
-    __super::Clear();
+    SceneOutliner::Clear();
 
     m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
@@ -161,7 +161,7 @@ void HierarchyOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 // 
 void HierarchyOutliner::ConnectSceneListeners()
 {
-    __super::ConnectSceneListeners();
+    SceneOutliner::ConnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -176,7 +176,7 @@ void HierarchyOutliner::ConnectSceneListeners()
 // 
 void HierarchyOutliner::DisconnectSceneListeners()
 {
-    __super::DisconnectSceneListeners();
+    SceneOutliner::DisconnectSceneListeners();
 
     if ( m_CurrentScene )
     {

@@ -71,7 +71,7 @@ tstring Layer::GetApplicationTypeName() const
 // 
 void Layer::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     m_Descendants.clear();
 
@@ -171,7 +171,7 @@ bool Layer::ContainsMember( SceneGraph::SceneNode* node ) const
 
 void Layer::ConnectDescendant( SceneGraph::SceneNode* descendant )
 {
-    __super::ConnectDescendant( descendant );
+    Base::ConnectDescendant( descendant );
 
     HELIUM_ASSERT( m_Members.find( descendant->GetID() ) == m_Members.end() );
     m_Members.insert( descendant->GetID() );
@@ -179,7 +179,7 @@ void Layer::ConnectDescendant( SceneGraph::SceneNode* descendant )
 
 void Layer::DisconnectDescendant( SceneGraph::SceneNode* descendant )
 {
-    __super::DisconnectDescendant( descendant );
+    Base::DisconnectDescendant( descendant );
 
     HELIUM_ASSERT( m_Members.find( descendant->GetID() ) != m_Members.end() );
     m_Members.erase( descendant->GetID() );
@@ -191,7 +191,7 @@ void Layer::DisconnectDescendant( SceneGraph::SceneNode* descendant )
 void Layer::Insert(Graph* g, V_SceneNodeDumbPtr& insertedNodes )
 {
     // Let the base class put the layer back into the graph
-    __super::Insert( g, insertedNodes );
+    Base::Insert( g, insertedNodes );
 
     // Fetch the persistent data, dereference each object and add it back
     // as a member of the layer.
@@ -230,7 +230,7 @@ void Layer::Prune( V_SceneNodeDumbPtr& prunedNodes )
 
     m_Members = members;
 
-    __super::Prune( prunedNodes );
+    Base::Prune( prunedNodes );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ bool Layer::ValidatePanel(const tstring& name)
         return false;
     }
 
-    return __super::ValidatePanel(name);
+    return Base::ValidatePanel(name);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

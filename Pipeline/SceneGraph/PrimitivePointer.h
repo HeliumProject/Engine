@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitivePointer : public SceneGraph::PrimitiveTemplate<Position>
+        class PrimitivePointer : public PrimitiveTemplate<Position>
         {
         public:
+            typedef PrimitiveTemplate<Position> Base;
+
             PrimitivePointer(ResourceTracker* tracker);
 
             virtual void Update() HELIUM_OVERRIDE;

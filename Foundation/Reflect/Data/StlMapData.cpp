@@ -205,8 +205,6 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Clear()
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 

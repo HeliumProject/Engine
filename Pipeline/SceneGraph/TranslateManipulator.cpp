@@ -584,7 +584,7 @@ bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
         }
     }
 
-    if (!__super::MouseDown(e))
+    if (!Base::MouseDown(e))
     {
         return false;
     }
@@ -605,7 +605,7 @@ bool TranslateManipulator::MouseDown( const MouseButtonInput& e )
 
 void TranslateManipulator::MouseMove( const MouseMoveInput& e )
 {
-    __super::MouseMove(e);
+    Base::MouseMove(e);
 
     TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
 
@@ -1186,7 +1186,7 @@ void TranslateManipulator::KeyPress( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyPress( e );
+        Base::KeyPress( e );
         break;
     }
 }
@@ -1198,7 +1198,7 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
 #pragma TODO( "Track ctrl up/down for replacement of wxIsCtrlDown above" )
     if ( e.IsCtrlDown() || e.IsAltDown() || e.IsMetaDown() || e.IsShiftDown() )
     {
-        __super::KeyDown( e );
+        Base::KeyDown( e );
         return;
     }
 
@@ -1221,7 +1221,7 @@ void TranslateManipulator::KeyDown( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyDown( e );
+        Base::KeyDown( e );
         break;
     }
 
@@ -1252,7 +1252,7 @@ void TranslateManipulator::KeyUp( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyUp( e );
+        Base::KeyUp( e );
         break;
     }
 
@@ -1271,7 +1271,7 @@ void TranslateManipulator::KeyUp( const KeyboardInput& e )
 
 void TranslateManipulator::CreateProperties()
 {
-    __super::CreateProperties();
+    Base::CreateProperties();
 
     m_Generator->PushContainer( TXT( "Translate" ) );
     {

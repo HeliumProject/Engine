@@ -74,7 +74,7 @@ bool Instance::ValidatePanel(const tstring& name)
     if ( name == TXT( "Instance" ) )
         return true;
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -11,7 +11,7 @@ using namespace Helium::Reflect;
 REFLECT_DEFINE_ABSTRACT( Data )
 
 Data::Data()
-: m_Field (NULL)
+: m_Field( NULL )
 {
 
 }
@@ -168,6 +168,20 @@ void Data::Cleanup()
     }
 }
 
+void Data::ConnectField( Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField )
+{
+    m_Instance = instance;
+    m_Field = field;
+    ConnectData( Helium::HybridPtr<void>( m_Instance.Address() + m_Field->m_Offset + offsetInField, m_Instance.State()) ); 
+}
+
+void Data::Disconnect()
+{
+    m_Instance = (Object*)NULL;
+    m_Field = NULL;
+    ConnectData( Helium::HybridPtr<void> () );
+}
+
 bool Data::CastSupported(const Class* srcType, const Class* destType)
 {
     if (srcType == destType)
@@ -303,4 +317,31 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     }
 
     return false;
+}
+
+bool Data::ShouldSerialize()
+{
+    return true;
+}
+
+void Data::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
+{
+    HELIUM_BREAK();
+}
+
+tostream& Data::operator>> (tostream& stream) const
+{ 
+    HELIUM_BREAK(); 
+    return stream; 
+}
+
+tistream& Data::operator<< (tistream& stream)
+{ 
+    HELIUM_BREAK(); 
+    return stream; 
+}
+
+void Data::Accept(Visitor& visitor)
+{
+    // by default, don't do anything as it will all have to be special cased in derived classes
 }

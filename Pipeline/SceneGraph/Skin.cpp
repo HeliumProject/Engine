@@ -48,7 +48,7 @@ Skin::~Skin()
 
 void Skin::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     m_Mesh = Reflect::ObjectCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
 
@@ -237,7 +237,7 @@ void Skin::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix)

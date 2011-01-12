@@ -25,17 +25,5 @@ namespace Helium
         };
 
         typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;
-
-        class FOUNDATION_API ObjectContainerData : public ContainerData
-        {
-        public:
-            REFLECT_DECLARE_ABSTRACT( ObjectContainerData, ContainerData );
-
-            const Type* m_Type;
-
-            ObjectContainerData();
-        };
-
-        typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;
     }
 }

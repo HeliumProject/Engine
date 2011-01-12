@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveLocator : public SceneGraph::PrimitiveTemplate<Position>
+        class PrimitiveLocator : public PrimitiveTemplate<Position>
         {
         public:
+            typedef PrimitiveTemplate<Position> Base;
+
             float m_Length;
 
         public:

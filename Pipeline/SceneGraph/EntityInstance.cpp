@@ -66,7 +66,7 @@ EntityInstance::~EntityInstance()
 
 void EntityInstance::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     CheckSets();
 }
@@ -89,13 +89,13 @@ bool EntityInstance::ValidatePersistent( const Component::ComponentPtr& attr ) c
         }
     }
 
-    return __super::ValidatePersistent(attr);
+    return Base::ValidatePersistent(attr);
 }
 
 const ComponentPtr& EntityInstance::GetComponent(const Reflect::Class* type) const
 {
     // try to get the attribute from the Entity
-    const ComponentPtr &instAttr = __super::GetComponent( type );
+    const ComponentPtr &instAttr = Base::GetComponent( type );
 
     if ( instAttr )
     {
@@ -150,7 +150,7 @@ bool EntityInstance::SetComponent( const ComponentPtr& attr, bool validate, tstr
         }
     }
 
-    return __super::SetComponent( attr, validate, error );
+    return Base::SetComponent( attr, validate, error );
 }
 
 tstring EntityInstance::GenerateName() const
@@ -161,7 +161,7 @@ tstring EntityInstance::GenerateName() const
 
     if (name.empty())
     {
-        name = __super::GenerateName();
+        name = Base::GenerateName();
     }
     else
     {
@@ -370,7 +370,7 @@ void EntityInstance::PopulateManifest( Asset::SceneManifest* manifest ) const
 
 void EntityInstance::Evaluate(GraphDirection direction)
 {
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 
     switch (direction)
     {
@@ -467,7 +467,7 @@ void EntityInstance::Render( RenderVisitor* render )
         }
     }
 
-    // don't call __super here, it will draw big ass axes
+    // don't call Base here, it will draw big ass axes
     HierarchyNode::Render( render );
 }
 
@@ -569,7 +569,7 @@ bool EntityInstance::ValidatePanel(const tstring& name)
     if ( name == TXT( "Instance" ) )
         return false;
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

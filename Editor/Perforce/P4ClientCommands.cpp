@@ -41,7 +41,7 @@ void SyncCommand::HandleError( Error* error )
     // Otherwise, let the base class handle it
     if ( !error->IsWarning() || error->GetGeneric() != EV_EMPTY )
     {
-        __super::HandleError( error );
+        Command::HandleError( error );
     }
 }
 

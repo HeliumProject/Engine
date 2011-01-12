@@ -174,7 +174,7 @@ SortTreeCtrl* NodeTypeOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id 
 // 
 void NodeTypeOutliner::Clear()
 {
-    __super::Clear();
+    SceneOutliner::Clear();
 
     m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
@@ -193,7 +193,7 @@ void NodeTypeOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 // 
 void NodeTypeOutliner::ConnectSceneListeners()
 {
-    __super::ConnectSceneListeners();
+    SceneOutliner::ConnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -234,7 +234,7 @@ void NodeTypeOutliner::DisconnectSceneListeners()
         m_CurrentScene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate ( this, &NodeTypeOutliner::NodeTypeRemoved ) );
     }
 
-    __super::DisconnectSceneListeners();
+    SceneOutliner::DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

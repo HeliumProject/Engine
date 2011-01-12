@@ -49,24 +49,6 @@ DataPtr Field::CreateData(void* instance) const
         {
             data->ConnectField( instance, this );
         }
-
-        const Class* classType = ReflectionCast< Class >( m_Type );
-        if ( classType )
-        {
-            PointerData* pointerData = ObjectCast<PointerData>( data );
-            if ( pointerData )
-            {
-                pointerData->m_Type = m_Type;
-            }
-            else
-            {
-                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( data );
-                if ( containerData )
-                {
-                    containerData->m_Type = m_Type;
-                }
-            }
-        }
     }
 
     return data;
@@ -81,24 +63,6 @@ DataPtr Field::CreateData(const void* instance) const
         if ( instance )
         {
             data->ConnectField( instance, this );
-        }
-
-        const Class* classType = ReflectionCast< Class >( m_Type );
-        if ( classType )
-        {
-            PointerData* pointerData = ObjectCast<PointerData>( data );
-            if ( pointerData )
-            {
-                pointerData->m_Type = m_Type;
-            }
-            else
-            {
-                ObjectContainerData* containerData = ObjectCast<ObjectContainerData>( data );
-                if ( containerData )
-                {
-                    containerData->m_Type = m_Type;
-                }
-            }
         }
     }
 

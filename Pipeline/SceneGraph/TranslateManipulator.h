@@ -38,7 +38,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API TranslateManipulator : public SceneGraph::TransformManipulator
+        class PIPELINE_API TranslateManipulator : public TransformManipulator
         {
         private:
             SettingsManager* m_SettingsManager;

@@ -21,6 +21,17 @@ BitfieldData::~BitfieldData()
 
 void BitfieldData::Serialize(Archive& archive) const
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:
@@ -28,11 +39,11 @@ void BitfieldData::Serialize(Archive& archive) const
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             tstring str;
-            if (m_Enumeration)
+            if (enumeration)
             {
-                if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
+                if (!enumeration->GetBitfieldString(m_Data.Get(), str))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -44,12 +55,12 @@ void BitfieldData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            if (m_Enumeration)
+            if (enumeration)
             {
                 std::vector< tstring > strs;
-                if (!m_Enumeration->GetBitfieldStrings(m_Data.Get(), strs))
+                if (!enumeration->GetBitfieldStrings(m_Data.Get(), strs))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
 
                 uint32_t count = (uint32_t)strs.size();
@@ -67,7 +78,7 @@ void BitfieldData::Serialize(Archive& archive) const
         }
     }
 
-    if (m_Enumeration == NULL)
+    if (enumeration == NULL)
     {
         throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
@@ -75,6 +86,17 @@ void BitfieldData::Serialize(Archive& archive) const
 
 void BitfieldData::Deserialize(Archive& archive)
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:
@@ -83,9 +105,9 @@ void BitfieldData::Deserialize(Archive& archive)
 
             tstring buf;
             xml.GetStream() >> buf;
-            if (m_Enumeration && !m_Enumeration->GetBitfieldValue(buf, m_Data.Ref()))
+            if (enumeration && !enumeration->GetBitfieldValue(buf, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_Name, buf );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), enumeration->m_Name, buf );
             }
             else
             {
@@ -123,9 +145,9 @@ void BitfieldData::Deserialize(Archive& archive)
                 str += *itr;
             }
 
-            if (m_Enumeration && !m_Enumeration->GetBitfieldValue(strs, m_Data.Ref()))
+            if (enumeration && !enumeration->GetBitfieldValue(strs, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_Name, str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), enumeration->m_Name, str.c_str() );
             }
             else
             {
@@ -136,7 +158,7 @@ void BitfieldData::Deserialize(Archive& archive)
         }
     }
 
-    if (m_Enumeration == NULL)
+    if (enumeration == NULL)
     {
         throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
@@ -144,8 +166,19 @@ void BitfieldData::Deserialize(Archive& archive)
 
 tostream& BitfieldData::operator>> (tostream& stream) const
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     tstring str;
-    if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
+    if ( enumeration && !enumeration->GetBitfieldString(m_Data.Get(), str) )
     {
         // something is amiss, we should be guaranteed serialization of enum elements
         HELIUM_BREAK();
@@ -158,9 +191,24 @@ tostream& BitfieldData::operator>> (tostream& stream) const
 
 tistream& BitfieldData::operator<< (tistream& stream)
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     tstring buf;
     stream >> buf;
-    m_Enumeration->GetBitfieldValue(buf, m_Data.Ref());
+
+    if ( enumeration )
+    {
+        enumeration->GetBitfieldValue(buf, m_Data.Ref());
+    }
 
     return stream;
 }

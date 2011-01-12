@@ -5,8 +5,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_CLASS( PointerData );
 
-PointerData::PointerData ()
-: m_Type( NULL )
+PointerData::PointerData()
 {
 
 }
@@ -18,8 +17,6 @@ PointerData::~PointerData()
 
 void PointerData::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 

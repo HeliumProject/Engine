@@ -56,7 +56,7 @@ wxDragResult DropSource::DoDragDrop( int flags )
     timer.Start( s_RaiseTimeMilliseconds, wxTIMER_CONTINUOUS );
   }
 
-  wxDragResult result = __super::DoDragDrop( flags );
+  wxDragResult result = wxDropSource::DoDragDrop( flags );
   timer.Stop();
   return result;
 }

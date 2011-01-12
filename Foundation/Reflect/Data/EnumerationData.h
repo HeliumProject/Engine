@@ -11,7 +11,6 @@ namespace Helium
         public:
             typedef uint32_t DataType;
             Data::Pointer<DataType> m_Data;
-            const Enumeration* m_Enumeration;
             tstring m_String;
 
             REFLECT_DECLARE_CLASS( EnumerationData, Data )
@@ -22,7 +21,6 @@ namespace Helium
             virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
-            virtual void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0) HELIUM_OVERRIDE;
 
             virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;

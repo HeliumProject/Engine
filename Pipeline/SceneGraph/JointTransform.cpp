@@ -48,7 +48,7 @@ JointTransform::~JointTransform()
 
 void JointTransform::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
     m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
@@ -81,7 +81,7 @@ void JointTransform::Render( RenderVisitor* render )
         entry->m_Draw = &JointTransform::DrawNormal;
     }
 
-    // don't call __super here, it will draw big ass axes
+    // don't call Base here, it will draw big ass axes
     SceneGraph::HierarchyNode::Render( render );
 }
 

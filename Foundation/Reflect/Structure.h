@@ -13,7 +13,7 @@ namespace Helium
         class FOUNDATION_API Structure : public Composite
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Structure );
+            REFLECTION_TYPE( ReflectionTypes::Structure, Structure, Composite );
 
         protected:
             Structure();

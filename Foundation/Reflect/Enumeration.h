@@ -41,7 +41,7 @@ namespace Helium
         class FOUNDATION_API Enumeration : public Type
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Enumeration );
+            REFLECTION_TYPE( ReflectionTypes::Enumeration, Enumeration, Type );
 
             V_EnumerationElement         m_Elements;        // the elements of this enum
             M_StrEnumerationElement      m_ElementsByName;  // the elements by name

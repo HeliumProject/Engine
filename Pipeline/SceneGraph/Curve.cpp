@@ -95,7 +95,7 @@ tstring Curve::GetApplicationTypeName() const
 
 void Curve::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
@@ -495,7 +495,7 @@ float32_t Curve::DistanceToCurve( const Vector3& point ) const
 
 void Curve::Create()
 {
-    __super::Create();
+    Base::Create();
 
     m_Vertices->Create();
     m_Locator->Create();
@@ -504,7 +504,7 @@ void Curve::Create()
 
 void Curve::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     // If the curve is added back, it's control points might not be added yet,
     // so we need to zero the element count and it will be recalculated in 
@@ -588,7 +588,7 @@ Undo::CommandPtr Curve::CenterTransform()
 {
     Undo::BatchCommandPtr batch = new Undo::BatchCommand();
 
-    batch->Push( __super::CenterTransform() );
+    batch->Push( Base::CenterTransform() );
 
     if ( GetNumberControlPoints() == 0 )
     {
@@ -760,7 +760,7 @@ void Curve::Evaluate( GraphDirection direction )
     m_Vertices->SetElementCount( controlCount + pointCount );
     m_Vertices->Update();
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Curve::Render( RenderVisitor* render )
@@ -771,7 +771,7 @@ void Curve::Render( RenderVisitor* render )
     entry->m_Center = m_ObjectBounds.Center();
     entry->m_Draw = &Curve::Draw;
 
-    __super::Render( render );
+    Base::Render( render );
 }
 
 void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
@@ -1042,7 +1042,7 @@ bool Curve::ValidatePanel( const tstring& name )
         return true;
     }
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 void Curve::CreatePanel( CreatePanelArgs& args )

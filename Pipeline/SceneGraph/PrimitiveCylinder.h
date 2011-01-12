@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCylinder : public SceneGraph::PrimitiveRadius
+        class PrimitiveCylinder : public PrimitiveRadius
         {
         public:
+            typedef PrimitiveRadius Base;
+
             float m_Length;
             int m_LengthSteps;
 

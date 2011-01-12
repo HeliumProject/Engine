@@ -22,5 +22,5 @@ bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstrin
         return true;
     }
 
-    return __super::ValidateCompatible( attr, error );
+    return Base::ValidateCompatible( attr, error );
 }

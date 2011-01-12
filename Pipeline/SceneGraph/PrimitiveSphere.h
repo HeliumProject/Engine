@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveSphere : public SceneGraph::PrimitiveRadius
+        class PrimitiveSphere : public PrimitiveRadius
         {
         private:
+            typedef PrimitiveRadius Base;
+
             mutable int32_t m_WireVertCount;
             mutable int32_t m_PolyVertCount;
 

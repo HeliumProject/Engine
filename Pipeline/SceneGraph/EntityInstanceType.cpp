@@ -46,12 +46,12 @@ EntityInstanceType::~EntityInstanceType()
 
 void EntityInstanceType::Reset()
 {
-    __super::Reset();
+    Base::Reset();
 }
 
 void EntityInstanceType::Create()
 {
-    __super::Create();
+    Base::Create();
 
     M_InstanceSetSmartPtr::const_iterator itr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
@@ -67,7 +67,7 @@ void EntityInstanceType::Create()
 
 void EntityInstanceType::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     M_InstanceSetSmartPtr::const_iterator itr = m_Sets.begin();
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
@@ -83,7 +83,7 @@ void EntityInstanceType::Delete()
 
 void EntityInstanceType::AddInstance(SceneNodePtr n)
 {
-    __super::AddInstance( n );
+    Base::AddInstance( n );
 
     EntityInstance* entityInstance = Reflect::AssertCast< EntityInstance >( n );
     entityInstance->CheckSets();
@@ -106,5 +106,5 @@ void EntityInstanceType::PopulateManifest(Asset::SceneManifest* manifest) const
         }
     }
 
-    __super::PopulateManifest( manifest );
+    Base::PopulateManifest( manifest );
 }

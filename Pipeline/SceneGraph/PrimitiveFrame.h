@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveFrame : public SceneGraph::PrimitiveTemplate<TransformedColored>
+        class PrimitiveFrame : public PrimitiveTemplate<TransformedColored>
         {
         public:
+            typedef PrimitiveTemplate<TransformedColored> Base;
+
             Point m_Start;
             Point m_End;
 

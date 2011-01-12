@@ -80,7 +80,7 @@ void Volume::SetShape( int shape )
 
 void Volume::Evaluate(GraphDirection direction)
 {
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 
     switch (direction)
     {
@@ -145,7 +145,7 @@ void Volume::Render( RenderVisitor* render )
         }
     }
 
-    // don't call __super here, it will draw big ass axes
+    // don't call Base here, it will draw big ass axes
     HierarchyNode::Render( render );
 }
 
@@ -206,7 +206,7 @@ bool Volume::ValidatePanel(const tstring& name)
         return true;
     }
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 void Volume::CreatePanel( CreatePanelArgs& args )

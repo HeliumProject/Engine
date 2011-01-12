@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveGrid : public SceneGraph::PrimitiveTemplate<PositionColored>
+        class PrimitiveGrid : public PrimitiveTemplate<PositionColored>
         {
         public:
+            typedef PrimitiveTemplate<PositionColored> Base;
+
             int m_Width;
             int m_Length;
             int m_AxisColor;

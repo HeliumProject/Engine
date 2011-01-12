@@ -81,8 +81,6 @@ SimpleStlVectorData<T>::~SimpleStlVectorData()
 template < class T >
 void SimpleStlVectorData<T>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 

@@ -84,7 +84,7 @@ namespace Helium
         class FOUNDATION_API Composite : public Type
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Composite );
+            REFLECTION_TYPE( ReflectionTypes::Composite, Composite, Type );
 
             const Composite*                        m_Base;                 // the base type name
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects

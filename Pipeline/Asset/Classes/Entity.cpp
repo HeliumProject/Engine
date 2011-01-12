@@ -18,5 +18,5 @@ void Entity::AcceptCompositeVisitor( Reflect::Composite& comp )
 
 void Entity::GatherSearchableProperties( Helium::SearchableProperties* properties ) const
 {
-    __super::GatherSearchableProperties( properties );
+    Base::GatherSearchableProperties( properties );
 }

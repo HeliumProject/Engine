@@ -439,7 +439,7 @@ bool RotateManipulator::MouseDown( const MouseButtonInput& e )
         }
     }
 
-    if (!__super::MouseDown(e))
+    if (!Base::MouseDown(e))
     {
         return false;
     }
@@ -460,14 +460,14 @@ bool RotateManipulator::MouseDown( const MouseButtonInput& e )
 
 void RotateManipulator::MouseUp( const MouseButtonInput& e )
 {
-    __super::MouseUp(e);
+    Base::MouseUp(e);
 
     m_Type = RotationTypes::None;
 }
 
 void RotateManipulator::MouseMove( const MouseMoveInput& e )
 {
-    __super::MouseMove(e);
+    Base::MouseMove(e);
 
     RotateManipulatorAdapter* primary = PrimaryObject<RotateManipulatorAdapter>();
 
@@ -762,7 +762,7 @@ bool RotateManipulator::ClosestSphericalIntersection(Line line, Vector3 spherePo
 
 void RotateManipulator::CreateProperties()
 {
-    __super::CreateProperties();
+    Base::CreateProperties();
 
     m_Generator->PushContainer( TXT( "Rotate" ) );
     {

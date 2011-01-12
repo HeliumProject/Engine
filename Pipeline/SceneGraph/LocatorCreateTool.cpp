@@ -100,7 +100,7 @@ void LocatorCreateTool::CreateProperties()
     }
     m_Generator->Pop();
 
-    __super::CreateProperties();
+    Base::CreateProperties();
 }
 
 int LocatorCreateTool::GetLocatorShape() const

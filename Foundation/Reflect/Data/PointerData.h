@@ -11,7 +11,6 @@ namespace Helium
         public:
             typedef ObjectPtr DataType;
             Data::Pointer<DataType> m_Data;
-            const Type* m_Type;
 
             REFLECT_DECLARE_CLASS( PointerData, Data );
 

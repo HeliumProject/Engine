@@ -26,5 +26,5 @@ ManifestVersion::ManifestVersion(const tchar_t* source, const tchar_t* sourceVer
 
 bool ManifestVersion::IsCurrent()
 {
-    return __super::IsCurrent() && m_ManifestVersion == MANIFEST_VERSION;
+    return Base::IsCurrent() && m_ManifestVersion == MANIFEST_VERSION;
 }

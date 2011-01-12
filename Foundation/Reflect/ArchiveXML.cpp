@@ -229,7 +229,7 @@ void ArchiveXML::SerializeFields(Object* object)
 
 void ArchiveXML::SerializeField(Object* object, const Field* field)
 {
-    DataPtr data = field->ShouldSerialize( object );
+    DataPtr data = object->ShouldSerialize( field );
     if ( data )
     {
         m_FieldNames.push( field->m_Name );

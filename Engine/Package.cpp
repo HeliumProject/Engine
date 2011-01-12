@@ -39,9 +39,6 @@ const GameObjectType* Package::InitStaticType()
         sm_pStaticType = GameObjectType::Find( Name( TXT( "Package" ) ) );
         HELIUM_ASSERT( sm_pStaticType );
         s_Class = sm_pStaticType;
-
-        sm_spStaticTypeTemplate = static_cast< Package* >( sm_pStaticType->GetTemplate() );
-        HELIUM_ASSERT( sm_spStaticTypeTemplate );
     }
 
     return sm_pStaticType;

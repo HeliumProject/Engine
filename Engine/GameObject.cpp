@@ -19,7 +19,6 @@ using namespace Lunar;
 REFLECT_DEFINE_CLASS( GameObject )
 
 const GameObjectType* GameObject::sm_pStaticType = NULL;
-GameObjectPtr GameObject::sm_spStaticTypeTemplate;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 DynArray< GameObjectWPtr > GameObject::sm_topLevelObjects;
@@ -1036,22 +1035,22 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
 
         // Don't set up templates here; they're initialized during type registration.
-        GameObject* pObjectTemplate = new GameObject();
-        HELIUM_ASSERT( pObjectTemplate );
+        GameObjectPtr spObjectTemplate = new GameObject();
+        HELIUM_ASSERT( spObjectTemplate );
 
-        Package* pPackageTemplate = new Package();
-        HELIUM_ASSERT( pPackageTemplate );
+        PackagePtr spPackageTemplate = new Package();
+        HELIUM_ASSERT( spPackageTemplate );
 
         // Package flag is set automatically by the Package constructor, but it shouldn't be set for the Package
         // type template.
-        pPackageTemplate->ClearFlags( FLAG_PACKAGE );
+        spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
         sm_pStaticType = GameObjectType::Create(
             nameObject,
             pEnginePackage,
             NULL,
-            pObjectTemplate,
+            spObjectTemplate,
             GameObject::ReleaseStaticType,
             GameObjectType::FLAG_ABSTRACT );
         HELIUM_ASSERT( sm_pStaticType );
@@ -1061,7 +1060,7 @@ const GameObjectType* GameObject::InitStaticType()
             namePackage,
             pEnginePackage,
             sm_pStaticType,
-            pPackageTemplate,
+            spPackageTemplate,
             Package::ReleaseStaticType,
             0 );
         HELIUM_ASSERT( pPackageType );
@@ -1082,8 +1081,6 @@ void GameObject::ReleaseStaticType()
         sm_pStaticType = NULL;
         s_Class = NULL;
     }
-
-    sm_spStaticTypeTemplate.Release();
 }
 
 /// Get the static "GameObject" type.

@@ -31,7 +31,6 @@
         REFLECT_DECLARE_CLASS( TYPE, PARENT ) \
     private: \
         static const Lunar::GameObjectType* sm_pStaticType; \
-        static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
     public: \
         typedef PARENT Super; \
         virtual const Lunar::GameObjectType* GetGameObjectType() const; \
@@ -50,7 +49,6 @@
     REFLECT_DEFINE_CLASS( TYPE ) \
     \
     const Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
-    Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
     \
     const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
@@ -86,8 +84,6 @@
             sm_pStaticType = NULL; \
             s_Class = NULL; \
         } \
-        \
-        sm_spStaticTypeTemplate.Release(); \
     } \
     \
     const Lunar::GameObjectType* TYPE::GetStaticType() \
@@ -108,8 +104,6 @@
     { \
         if( !sm_pStaticType ) \
         { \
-            HELIUM_ASSERT( !sm_spStaticTypeTemplate ); \
-            \
             extern Lunar::Package* Get##MODULE##TypePackage(); \
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
@@ -117,15 +111,14 @@
             const Lunar::GameObjectType* pParentType = Super::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
-            TYPE* pTemplate = new TYPE; \
-            HELIUM_ASSERT( pTemplate ); \
-            sm_spStaticTypeTemplate = pTemplate; \
+            Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \
+            HELIUM_ASSERT( spTemplate ); \
             \
             sm_pStaticType = Lunar::GameObjectType::Create( \
                 Lunar::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
-                pTemplate, \
+                spTemplate, \
                 TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
             HELIUM_ASSERT( sm_pStaticType ); \
@@ -341,8 +334,6 @@ namespace Lunar
 
         /// Static "GameObject" type instance.
         static const GameObjectType* sm_pStaticType;
-        /// Static "GameObject" template instance.
-        static GameObjectPtr sm_spStaticTypeTemplate;
 
         /// Global object list.
         static SparseArray< GameObjectWPtr > sm_objects;

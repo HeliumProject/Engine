@@ -13,7 +13,7 @@ using namespace Helium::Inspect;
 class MultiBitfieldStringFormatter : public MultiStringFormatter<Data>
 {
 public:
-    MultiBitfieldStringFormatter( Reflect::EnumerationElement* element, const std::vector<Data*>& data )
+    MultiBitfieldStringFormatter( const Reflect::EnumerationElement* element, const std::vector<Data*>& data )
         : MultiStringFormatter<Data>( data, false )
         , m_EnumerationElement( element )
     {
@@ -82,7 +82,7 @@ public:
     }
 
 private:
-    Reflect::EnumerationElement* m_EnumerationElement;
+    const Reflect::EnumerationElement* m_EnumerationElement;
 };
 
 ReflectBitfieldInterpreter::ReflectBitfieldInterpreter (Container* container)
@@ -131,35 +131,35 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
         m_Datas.push_back(s);
     }
 
-    tstringstream templateStream;
-    DataPtr templateData = field->CreateTemplateData();
-    if ( templateData )
+    tstringstream defaultStream;
+    DataPtr defaultData = field->CreateDefaultData();
+    if ( defaultData )
     {
-        *templateData >> templateStream;
+        *defaultData >> defaultStream;
     }
 
     const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 
     // build the child gui elements
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
-    M_StrEnumerationElement::const_iterator enumItr = enumeration->m_ElementsByLabel.begin();
-    M_StrEnumerationElement::const_iterator enumEnd = enumeration->m_ElementsByLabel.end();
+    DynArray< Reflect::EnumerationElement >::ConstIterator enumItr = enumeration->m_Elements.Begin();
+    DynArray< Reflect::EnumerationElement >::ConstIterator enumEnd = enumeration->m_Elements.End();
     for ( ; enumItr != enumEnd; ++enumItr )
     {
         ContainerPtr row = CreateControl< Container >();
         container->AddChild( row );
 
         LabelPtr label = CreateControl< Label >();
-        label->a_HelpText.Set( enumItr->second->m_HelpText );
-        label->BindText( enumItr->first );
+        label->a_HelpText.Set( enumItr->m_HelpText );
+        label->BindText( enumItr->m_Name );
         row->AddChild( label );
 
         CheckBoxPtr checkbox = CreateControl< CheckBox >();
         checkbox->a_IsReadOnly.Set( readOnly );
-        checkbox->a_HelpText.Set( enumItr->second->m_HelpText );
+        checkbox->a_HelpText.Set( enumItr->m_HelpText );
 #pragma TODO("Compute correct default value")
-        checkbox->a_Default.Set( templateStream.str() );
-        checkbox->Bind( new MultiBitfieldStringFormatter ( enumItr->second, (std::vector<Reflect::Data*>&)m_Datas ) );
+        checkbox->a_Default.Set( defaultStream.str() );
+        checkbox->Bind( new MultiBitfieldStringFormatter ( &*enumItr, (std::vector<Reflect::Data*>&)m_Datas ) );
         row->AddChild( checkbox );
     }
 }

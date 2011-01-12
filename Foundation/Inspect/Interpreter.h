@@ -11,10 +11,6 @@ namespace Helium
 {
     namespace Inspect
     {
-        //
-        // Event Args
-        //
-
         struct PopulateItem
         {
             PopulateItem(const tstring& key, const tstring& data)
@@ -33,7 +29,7 @@ namespace Helium
         {
             PopulateLinkArgs(uint32_t type) : m_Type (type) {}
 
-            uint32_t             m_Type;
+            uint32_t        m_Type;
             V_PopulateItem  m_Items;
         };
         typedef Helium::Signature< PopulateLinkArgs&> PopulateLinkSignature;
@@ -176,8 +172,8 @@ namespace Helium
                 Choice* control = AddChoice<T>( property );
 
                 std::vector< ChoiceItem > items;
-                Reflect::V_EnumerationElement::const_iterator itr = enumInfo->m_Elements.begin();
-                Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
+                Reflect::DynArray< EnumerationElement >::ConstIterator itr = enumInfo->m_Elements.begin();
+                Reflect::DynArray< EnumerationElement >::ConstIterator end = enumInfo->m_Elements.end();
                 for ( ; itr != end; ++itr )
                 {
                     std::ostringstream str;

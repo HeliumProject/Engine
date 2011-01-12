@@ -188,12 +188,12 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     }
 
     // setup the default value
-    DataPtr templateData = field->CreateTemplateData();
-    if ( templateData )
+    DataPtr defaultData = field->CreateDefaultData();
+    if ( defaultData )
     {
-        tstringstream templateStream;
-        *templateData >> templateStream;
-        list->a_Default.Set( templateStream.str() );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        list->a_Default.Set( defaultStream.str() );
     }
 }
 

@@ -191,12 +191,12 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
-    DataPtr templateData = field->CreateTemplateData();
-    if (templateData.ReferencesObject())
+    DataPtr defaultData = field->CreateDefaultData();
+    if (defaultData.ReferencesObject())
     {
-        tstringstream templateStream;
-        *templateData >> templateStream;
-        container->a_Default.Set( templateStream.str() );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        container->a_Default.Set( defaultStream.str() );
     }
 
     //

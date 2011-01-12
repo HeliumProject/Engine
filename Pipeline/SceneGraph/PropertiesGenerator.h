@@ -203,13 +203,13 @@ namespace Helium
                 Inspect::ChoicePtr control = AddChoice<T, D, G, S>( selection, getter, setter );
 
                 std::vector< Inspect::ChoiceItem > items;
-                Reflect::V_EnumerationElement::const_iterator itr = enumInfo->m_Elements.begin();
-                Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
+                DynArray< Reflect::EnumerationElement >::ConstIterator itr = enumInfo->m_Elements.Begin();
+                DynArray< Reflect::EnumerationElement >::ConstIterator end = enumInfo->m_Elements.End();
                 for ( ; itr != end; ++itr )
                 {
                     tostringstream str;
-                    str << (*itr)->m_Value;
-                    items.push_back( Inspect::ChoiceItem ( (*itr)->m_Label, str.str() ) );
+                    str << itr->m_Value;
+                    items.push_back( Inspect::ChoiceItem ( itr->m_Name, str.str() ) );
                 }
                 control->a_Items.Set(items);
                 control->a_IsDropDown.Set(true);

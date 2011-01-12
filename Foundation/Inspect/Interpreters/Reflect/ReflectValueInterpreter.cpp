@@ -52,18 +52,16 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
             const Reflect::Enumeration* enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 
             std::vector< ChoiceItem > items;
-            items.resize( enumeration->m_Elements.size() );
+            items.resize( enumeration->m_Elements.GetSize() );
 
-            V_EnumerationElement::const_iterator itr = enumeration->m_Elements.begin();
-            V_EnumerationElement::const_iterator end = enumeration->m_Elements.end();
+            DynArray< EnumerationElement >::ConstIterator itr = enumeration->m_Elements.Begin();
+            DynArray< EnumerationElement >::ConstIterator end = enumeration->m_Elements.End();
             for ( size_t index=0; itr != end; ++itr, ++index )
             {
                 ChoiceItem& item = items[index];
-                bool converted = Helium::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
-                HELIUM_ASSERT( converted );
 
-                converted = Helium::ConvertString( (*itr)->m_Label.c_str(), item.m_Data );
-                HELIUM_ASSERT( converted );
+                item.m_Key = itr->m_Name;
+                item.m_Data = itr->m_Name;
             }
 
             choice->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
@@ -161,12 +159,12 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
     // Set default
     //
 
-    DataPtr templateData = field->CreateTemplateData();
-    if (templateData.ReferencesObject())
+    DataPtr defaultData = field->CreateDefaultData();
+    if (defaultData.ReferencesObject())
     {
-        tstringstream templateStream;
-        *templateData >> templateStream;
-        container->a_Default.Set( templateStream.str() );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        container->a_Default.Set( defaultStream.str() );
     }
 
     //

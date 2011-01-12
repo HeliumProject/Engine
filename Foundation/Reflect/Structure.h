@@ -31,7 +31,7 @@ namespace Helium
                 // populate reflection information
                 Composite::Create< StructureT >( name, baseName, accept, info );
 
-                info->m_Template = new StructureT;
+                info->m_Default = new StructureT;
 
                 return info;
             }

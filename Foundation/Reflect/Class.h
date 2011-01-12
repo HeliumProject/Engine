@@ -19,9 +19,6 @@ namespace Helium
         public:
             REFLECTION_TYPE( ReflectionTypes::Class, Class, Composite );
 
-            CreateObjectFunc        m_Creator;          // factory function for creating instances of this class
-            StrongPtr<const Object> m_TemplateObject;   // the template for this class (by default, the default instance)
-
         protected:
             Class();
             virtual ~Class();
@@ -44,11 +41,15 @@ namespace Helium
                 // create the default instance
                 if ( info->m_Creator )
                 {
-                    info->m_Template = info->m_TemplateObject = info->m_Creator();
+                    info->Composite::m_Default = info->m_Default = info->m_Creator();
                 }
 
                 return info;
             }
+
+        public:
+            CreateObjectFunc        m_Creator;  // factory function for creating instances of this class
+            StrongPtr<const Object> m_Default;  // the template for this class (by default, the default instance)
         };
 
         typedef Helium::SmartPtr< Class > ClassPtr;

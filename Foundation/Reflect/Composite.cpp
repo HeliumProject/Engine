@@ -69,9 +69,9 @@ DataPtr Field::CreateData(const void* instance) const
     return data;
 }
 
-DataPtr Field::CreateTemplateData() const
+DataPtr Field::CreateDefaultData() const
 {
-    return CreateData( m_Composite->m_Template );
+    return CreateData( m_Composite->m_Default );
 }
 
 DataPtr Field::ShouldSerialize( const void* instance ) const
@@ -99,8 +99,8 @@ DataPtr Field::ShouldSerialize( const void* instance ) const
     }
 
     // don't write field at the default value
-    DataPtr templateData = CreateTemplateData();
-    if ( templateData.ReferencesObject() && templateData->Equals(data) )
+    DataPtr defaultData = CreateDefaultData();
+    if ( defaultData.ReferencesObject() && defaultData->Equals(data) )
     {
         return NULL;
     }
@@ -113,7 +113,7 @@ Composite::Composite()
 , m_FirstDerived( NULL )
 , m_NextSibling( NULL )
 , m_Accept( NULL )
-, m_Template( NULL )
+, m_Default( NULL )
 {
 
 }

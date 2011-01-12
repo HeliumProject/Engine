@@ -2582,6 +2582,7 @@ Undo::CommandPtr Scene::GroupSelected()
 
     // Create the new group
     SceneGraph::PivotTransform* group = new SceneGraph::PivotTransform();
+    group->SetOwner( this );
     group->Initialize();
 
     // Get a decent name

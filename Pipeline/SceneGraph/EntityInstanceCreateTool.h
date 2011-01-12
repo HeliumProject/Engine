@@ -25,7 +25,7 @@ namespace Helium
 
         typedef std::vector< EntityRowInfo > V_EntityRowInfo;
 
-        class PIPELINE_API EntityInstanceCreateTool : public SceneGraph::CreateTool
+        class PIPELINE_API EntityInstanceCreateTool : public CreateTool
         {
         public:
             Helium::Path m_ClassPath;

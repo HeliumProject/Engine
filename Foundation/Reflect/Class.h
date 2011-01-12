@@ -17,7 +17,7 @@ namespace Helium
         class FOUNDATION_API Class : public Composite
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Class );
+            REFLECTION_TYPE( ReflectionTypes::Class, Class, Composite );
 
             CreateObjectFunc        m_Creator;          // factory function for creating instances of this class
             StrongPtr<const Object> m_TemplateObject;   // the template for this class (by default, the default instance)

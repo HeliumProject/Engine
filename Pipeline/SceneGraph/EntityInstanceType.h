@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PIPELINE_API EntityInstanceType : public SceneGraph::InstanceType
+        class PIPELINE_API EntityInstanceType : public InstanceType
         {
         private:
             // materials

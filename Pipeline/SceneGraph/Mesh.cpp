@@ -82,7 +82,7 @@ tstring Mesh::GetApplicationTypeName() const
 
 void Mesh::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     //
     // Dereference Shaders
@@ -154,7 +154,7 @@ void Mesh::Initialize()
 
 void Mesh::Create()
 {
-    __super::Create();
+    Base::Create();
 
     if (m_IsInitialized)
     {
@@ -165,7 +165,7 @@ void Mesh::Create()
 
 void Mesh::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     if (m_IsInitialized)
     {
@@ -262,7 +262,7 @@ void Mesh::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Mesh::Render( RenderVisitor* render )
@@ -388,7 +388,7 @@ void Mesh::Render( RenderVisitor* render )
         }
     }
 
-    __super::Render( render );
+    Base::Render( render );
 }
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )

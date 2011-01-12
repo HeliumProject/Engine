@@ -27,7 +27,7 @@ namespace Helium
         };
         typedef Helium::Signature< const EntitySetChangeArgs& > EntitySetChangeSignature;
 
-        class PIPELINE_API EntitySet : public SceneGraph::InstanceSet
+        class PIPELINE_API EntitySet : public InstanceSet
         {
         protected:
             Helium::Path m_AssetPath;

@@ -295,7 +295,7 @@ int App::OnExit()
 
     wxImage::CleanUpHandlers();
 
-    return __super::OnExit();
+    return wxApp::OnExit();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

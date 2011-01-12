@@ -51,7 +51,7 @@ VolumeType::~VolumeType()
 
 void VolumeType::Create()
 {
-    __super::Create();
+    Base::Create();
 
     m_Cube->Create();
     m_Cylinder->Create();
@@ -61,7 +61,7 @@ void VolumeType::Create()
 
 void VolumeType::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     m_Cube->Delete();
     m_Cylinder->Delete();

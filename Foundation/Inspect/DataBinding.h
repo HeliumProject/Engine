@@ -10,28 +10,29 @@
 
 #include <iomanip>
 
-#define INSPECT_BASE(__Type)                                  \
-  public:                                                     \
-    virtual int GetType () const                              \
-    {                                                         \
-      return __Type;                                          \
-    }                                                         \
-                                                              \
-    virtual bool HasType (int id) const                       \
-    {                                                         \
-      return __Type == id;                                    \
+#define INSPECT_BASE(__ID, __Type) \
+  public: \
+    typedef __Type This; \
+    virtual int GetType() const \
+    { \
+      return __ID; \
+    } \
+    virtual bool HasType(int id) const \
+    { \
+      return __ID == id; \
     }
 
-#define INSPECT_TYPE(__Type)                                  \
-  public:                                                     \
-    virtual int GetType () const                              \
-    {                                                         \
-      return __Type;                                          \
-    }                                                         \
-                                                              \
-    virtual bool HasType (int id) const                       \
-    {                                                         \
-      return __Type == id || __super::HasType(id);            \
+#define INSPECT_TYPE(__ID, __Type, __Base) \
+  public: \
+    typedef __Type This; \
+    typedef __Base Base; \
+    virtual int GetType() const \
+    { \
+      return __ID; \
+    } \
+    virtual bool HasType(int id) const \
+    { \
+      return __ID == id || Base::HasType(id); \
     }
 
 namespace Helium
@@ -208,7 +209,7 @@ namespace Helium
             {
                 Custom,
                 String,
-                Data,
+                Typed,
             };
         }
 
@@ -221,7 +222,7 @@ namespace Helium
         class DataBinding : public Helium::RefCountBase< DataBinding >
         {
         public:
-            INSPECT_BASE( DataBindingTypes::Custom );
+            INSPECT_BASE( DataBindingTypes::Custom, DataBinding );
 
             DataBinding()
                 : m_Significant(true)
@@ -401,7 +402,7 @@ namespace Helium
         class StringDataBinding : public DataBindingTemplate< tstring >
         {
         public:
-            INSPECT_TYPE( DataBindingTypes::String );
+            INSPECT_TYPE( DataBindingTypes::String, StringDataBinding, DataBinding );
         };
         typedef Helium::SmartPtr< StringDataBinding > StringDataPtr;
 
@@ -851,30 +852,30 @@ namespace Helium
         // 
 
         template< class T >
-        class DataDataBinding : public DataBindingTemplate< T >
+        class TypedDataBinding : public DataBindingTemplate< T >
         {
         public:
-            INSPECT_TYPE( DataBindingTypes::Data );
+            INSPECT_TYPE( DataBindingTypes::Typed, TypedDataBinding, DataBinding );
         };
 
         //
-        // DataPropertyFormatter handles conversion between a property of T and string
+        // TypedPropertyFormatter handles conversion between a property of T and string
         //
 
         template< class T >
-        class DataPropertyFormatter : public DataDataBinding< T >
+        class TypedPropertyFormatter : public TypedDataBinding< T >
         {
         protected:
             Helium::SmartPtr< Helium::Property< T > > m_Property;
 
         public:
-            DataPropertyFormatter(const Helium::SmartPtr< Helium::Property< T > >& property)
+            TypedPropertyFormatter(const Helium::SmartPtr< Helium::Property< T > >& property)
                 : m_Property(property)
             {
 
             }
 
-            virtual ~DataPropertyFormatter()
+            virtual ~TypedPropertyFormatter()
             {
 
             }
@@ -910,7 +911,7 @@ namespace Helium
         //
 
         template< class T >
-        class MultiDataFormatter : public DataDataBinding< T >
+        class MultiDataFormatter : public TypedDataBinding< T >
         {
         protected:
             std::vector< Reflect::DataPtr > m_Datas;

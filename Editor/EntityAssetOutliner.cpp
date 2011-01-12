@@ -225,7 +225,7 @@ SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID 
 // 
 void EntityAssetOutliner::Clear()
 {
-    __super::Clear();
+    SceneOutliner::Clear();
 
     m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
@@ -244,7 +244,7 @@ void EntityAssetOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 // 
 void EntityAssetOutliner::ConnectSceneListeners()
 {
-    __super::ConnectSceneListeners();
+    SceneOutliner::ConnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -267,7 +267,7 @@ void EntityAssetOutliner::DisconnectSceneListeners()
         m_CurrentScene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
     }
 
-    __super::DisconnectSceneListeners();
+    SceneOutliner::DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

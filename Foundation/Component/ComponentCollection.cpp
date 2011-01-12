@@ -299,12 +299,12 @@ bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fie
         return true;
     }
 
-    return __super::ProcessComponent(element, fieldName);
+    return Base::ProcessComponent(element, fieldName);
 }
 
 void ComponentCollection::PreSerialize( const Reflect::Field* field )
 {
-    __super::PreSerialize( field );
+    Base::PreSerialize( field );
 
     if ( field == NULL )
     {
@@ -318,7 +318,7 @@ void ComponentCollection::PreSerialize( const Reflect::Field* field )
 
 void ComponentCollection::PostDeserialize( const Reflect::Field* field )
 {
-    __super::PostDeserialize( field );
+    Base::PostDeserialize( field );
 
     if ( field == NULL )
     {
@@ -337,7 +337,7 @@ void ComponentCollection::PostDeserialize( const Reflect::Field* field )
 
 void ComponentCollection::CopyTo(Reflect::Object* object)
 {
-    __super::CopyTo( object );
+    Base::CopyTo( object );
 
     ComponentCollection* collection = Reflect::ObjectCast< ComponentCollection >( object );
     if ( collection )

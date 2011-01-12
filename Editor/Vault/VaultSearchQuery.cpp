@@ -82,7 +82,7 @@ VaultSearchQuery::~VaultSearchQuery()
 ///////////////////////////////////////////////////////////////////////////////
 void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
 {
-    __super::PostDeserialize( field );
+    Base::PostDeserialize( field );
 
     if ( field == NULL )
     {

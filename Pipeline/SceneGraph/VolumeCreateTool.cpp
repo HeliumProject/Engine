@@ -113,7 +113,7 @@ void VolumeCreateTool::CreateProperties()
     }
     m_Generator->Pop();
 
-    __super::CreateProperties();
+    Base::CreateProperties();
 }
 
 int VolumeCreateTool::GetVolumeShape() const

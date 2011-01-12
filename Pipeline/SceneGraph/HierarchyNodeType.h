@@ -19,7 +19,7 @@ namespace Helium
         typedef Helium::SmartPtr< PickHit > PickHitPtr;
         typedef std::vector< PickHitPtr > V_PickHitSmartPtr;
 
-        class PIPELINE_API HierarchyNodeType : public SceneGraph::SceneNodeType
+        class PIPELINE_API HierarchyNodeType : public SceneNodeType
         {
         protected:
             // members

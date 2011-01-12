@@ -30,7 +30,7 @@ int PerforceSubmitDialog::ShowModal()
 {
   int result = wxID_CANCEL;
 
-  result = __super::ShowModal();
+  result = wxDialog::ShowModal();
 
   return result;
 }
@@ -40,7 +40,7 @@ void PerforceSubmitDialog::EndModal( int retCode )
 {
   m_Panel->CommitChanges();
 
-  __super::EndModal( retCode );
+  wxDialog::EndModal( retCode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

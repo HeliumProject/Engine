@@ -21,7 +21,7 @@ bool FileDialogButton::Process(const tstring& key, const tstring& value)
     }
     else
     {
-        wasHandled = __super::Process( key, value );
+        wasHandled = Base::Process( key, value );
     }
 
     return wasHandled;

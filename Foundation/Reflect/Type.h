@@ -22,7 +22,7 @@ namespace Helium
         class FOUNDATION_API Type HELIUM_ABSTRACT : public ReflectionInfo
         {
         public:
-            REFLECTION_BASE( ReflectionTypes::Type );
+            REFLECTION_BASE( ReflectionTypes::Type, Type );
 
         protected:
             Type();

@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveRings : public SceneGraph::PrimitiveTemplate<Position>
+        class PrimitiveRings : public PrimitiveTemplate<Position>
         {
         public:
+            typedef PrimitiveTemplate<Position> Base;
+
             float32_t m_Radius;
             uint32_t m_Steps;
 

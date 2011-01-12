@@ -75,7 +75,7 @@ void AssetClass::GatherSearchableProperties( Helium::SearchableProperties* prope
         properties->Insert( TXT( "AssetTag" ), (*itr) );
     }
 
-    __super::GatherSearchableProperties( properties );
+    Base::GatherSearchableProperties( properties );
 }
 
 namespace Helium
@@ -258,24 +258,24 @@ void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
     AssetDependencyVisitor assetDepVisitor( fileReferences );
     this->Accept( assetDepVisitor );
 
-    //__super::GetFileReferences( fileReferences );
+    //Base::GetFileReferences( fileReferences );
 
     fileReferences.insert( m_ContentPath );
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* component )
 {
-    __super::ComponentChanged( component );
+    Base::ComponentChanged( component );
 }
 
 bool AssetClass::SetComponent( const Component::ComponentPtr& component, bool validate, tstring* error )
 {
-    return __super::SetComponent( component, validate, error );
+    return Base::SetComponent( component, validate, error );
 }
 
 bool AssetClass::RemoveComponent( const Reflect::Class* type )
 {
-    return __super::RemoveComponent( type );
+    return Base::RemoveComponent( type );
 }
 
 void AssetClass::ConnectDocument( Document* document )
@@ -332,7 +332,7 @@ bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, t
         return false;
     }
 
-    return __super::ValidateCompatible( component, error );
+    return Base::ValidateCompatible( component, error );
 }
 
 void AssetClass::LoadFinished()

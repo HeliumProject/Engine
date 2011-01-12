@@ -54,7 +54,7 @@ bool TreeWndCtrlSpacer::Layout()
     SetSize( size );
     SetMinSize( size );
 
-    return __super::Layout();
+    return wxPanel::Layout();
 }
 
 void TreeWndCtrlSpacer::SetNumColumns(unsigned int numColumns)

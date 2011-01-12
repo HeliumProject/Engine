@@ -54,7 +54,7 @@ int FileTreeCtrl::OnCompareItems( const wxTreeItemId& lhsItem, const wxTreeItemI
     }
     else
     {
-        return __super::OnCompareItems( lhsItem, rhsItem );
+        return SortTreeCtrl::OnCompareItems( lhsItem, rhsItem );
     }
 }
 

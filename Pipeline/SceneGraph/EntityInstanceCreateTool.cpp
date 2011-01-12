@@ -183,7 +183,7 @@ void EntityInstanceCreateTool::CreateProperties()
         AddEntityAsset( *itr );
     }
 
-    __super::CreateProperties();
+    Base::CreateProperties();
 }
 
 tstring EntityInstanceCreateTool::GetEntityAsset() const

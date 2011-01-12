@@ -60,11 +60,11 @@ wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Directio
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Required HELIUM_OVERRIDE to prevent function hiding.
+// Required override to prevent function hiding.
 // 
 bool ClipboardDataObject::SetData( size_t size, const void* buf ) 
 { 
-    return __super::SetData( size, buf ); 
+    return wxCustomDataObject::SetData( size, buf ); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
     if ( format == GetFormat() )
     {
         // Editor clipboard format
-        result = __super::SetData( format, len, buf );
+        result = wxCustomDataObject::SetData( format, len, buf );
     }
     else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
     {

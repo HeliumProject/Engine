@@ -115,7 +115,7 @@ bool FileDropTarget::TestExtension( const tchar_t* testExt )
 //        }
 //    }
 //
-//    return __super::OnEnter( x, y, def );
+//    return wxFileDropTarget::OnEnter( x, y, def );
 //}
 
 ///////////////////////////////////////////////////////////////////////////////

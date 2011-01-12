@@ -18,6 +18,9 @@ namespace Helium
         // 
         class PIPELINE_API SwitchSceneCommand : public Undo::PropertyCommand< SceneGraph::Scene* >
         {
+        public:
+            typedef Undo::PropertyCommand< SceneGraph::Scene* > Base;
+
         private:
             SceneGraph::SceneManager* m_SceneManager;
             SceneGraph::Scene* m_OldScene;

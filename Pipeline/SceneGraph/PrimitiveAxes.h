@@ -8,8 +8,11 @@ namespace Helium
 
     namespace SceneGraph
     {
-        class PrimitiveAxes : public SceneGraph::PrimitiveTemplate<PositionColored>
+        class PrimitiveAxes : public PrimitiveTemplate<PositionColored>
         {
+        public:
+            typedef PrimitiveTemplate<PositionColored> Base;
+
         private:
             uint32_t m_ColorX;
             uint32_t m_ColorY;

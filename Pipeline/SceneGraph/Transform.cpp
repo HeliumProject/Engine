@@ -63,7 +63,7 @@ Transform::~Transform()
 
 void Transform::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     SceneGraph::PrimitiveAxes* axes = static_cast< SceneGraph::PrimitiveAxes* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
     m_ObjectBounds.minimum = Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
@@ -333,7 +333,7 @@ void Transform::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Transform::Render( RenderVisitor* render )
@@ -354,7 +354,7 @@ void Transform::Render( RenderVisitor* render )
     }
 #endif
 
-    __super::Render( render );
+    Base::Render( render );
 }
 
 void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
@@ -431,7 +431,7 @@ bool Transform::ValidatePanel(const tstring& name)
         return true;
     }
 
-    return __super::ValidatePanel(name);
+    return Base::ValidatePanel(name);
 }
 
 void Transform::CreatePanel(CreatePanelArgs& args)

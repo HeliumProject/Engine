@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PIPELINE_API VolumeCreateTool : public SceneGraph::CreateTool
+        class PIPELINE_API VolumeCreateTool : public CreateTool
         {
         public:
             static VolumeShape s_Shape;

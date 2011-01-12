@@ -304,7 +304,7 @@ namespace Helium
         public:
             size_t operator( )( const tstring& str ) const
             {
-                return __super::operator()( str );
+                return stdext::hash_compare< tstring >::operator()( str );
             }
 
             bool operator( )( const tstring& str1, const tstring& str2 ) const

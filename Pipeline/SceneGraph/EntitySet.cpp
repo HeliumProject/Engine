@@ -146,12 +146,12 @@ void EntitySet::AddInstance(SceneGraph::Instance* i)
     // set class link (must be done before calling base class)
     Reflect::AssertCast<SceneGraph::EntityInstance>(i)->SetClassSet(this);
 
-    __super::AddInstance(i);
+    Base::AddInstance(i);
 }
 
 void EntitySet::RemoveInstance(SceneGraph::Instance* i)
 {
-    __super::RemoveInstance(i);
+    Base::RemoveInstance(i);
 
     // remove class link (must be done after calling base class)
     Reflect::AssertCast<SceneGraph::EntityInstance>(i)->SetClassSet(NULL);

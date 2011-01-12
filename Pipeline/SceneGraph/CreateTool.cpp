@@ -662,7 +662,7 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
         }
     }
 
-    return __super::MouseDown( e );
+    return Base::MouseDown( e );
 }
 
 void CreateTool::MouseMove( const MouseMoveInput& e )
@@ -703,7 +703,7 @@ void CreateTool::MouseMove( const MouseMoveInput& e )
     // render
     m_Scene->Execute(true);
 
-    __super::MouseMove(e);
+    Base::MouseMove(e);
 }
 
 void CreateTool::MouseUp( const MouseButtonInput& e )
@@ -713,7 +713,7 @@ void CreateTool::MouseUp( const MouseButtonInput& e )
         m_PaintTimer.Stop();
     }
 
-    __super::MouseUp(e);
+    Base::MouseUp(e);
 }
 
 void CreateTool::KeyPress( const KeyboardInput& e )
@@ -736,7 +736,7 @@ void CreateTool::KeyPress( const KeyboardInput& e )
 
 void CreateTool::CreateProperties()
 {
-    __super::CreateProperties();
+    Base::CreateProperties();
 
     Place(Matrix4::Identity);
 

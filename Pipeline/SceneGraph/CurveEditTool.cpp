@@ -143,7 +143,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
         m_Scene->Execute( false );
     }
 
-    return success || __super::MouseDown( e );
+    return success || Base::MouseDown( e );
 }
 
 void CurveEditTool::MouseUp( const MouseButtonInput& e )
@@ -155,7 +155,7 @@ void CurveEditTool::MouseUp( const MouseButtonInput& e )
 
     m_AllowSelection = true;
 
-    __super::MouseUp( e );
+    Base::MouseUp( e );
 }
 
 void CurveEditTool::MouseMove( const MouseMoveInput& e )
@@ -174,7 +174,7 @@ void CurveEditTool::MouseMove( const MouseMoveInput& e )
         }
     }
 
-    __super::MouseMove( e );
+    Base::MouseMove( e );
 }
 
 void CurveEditTool::KeyPress( const KeyboardInput& e )
@@ -236,7 +236,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
         m_Scene->GetSelection().SetItems( selection );
     }
 
-    __super::KeyPress( e );
+    Base::KeyPress( e );
 }
 
 void CurveEditTool::KeyDown( const KeyboardInput& e )
@@ -258,7 +258,7 @@ void CurveEditTool::KeyDown( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyDown( e );
+        Base::KeyDown( e );
         break;
     }
 
@@ -281,7 +281,7 @@ void CurveEditTool::KeyUp( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyUp( e );
+        Base::KeyUp( e );
         break;
     }
 
@@ -360,7 +360,7 @@ void CurveEditTool::Evaluate()
         m_ControlPointManipulator->Evaluate();
     }
 
-    __super::Evaluate();
+    Base::Evaluate();
 }
 
 void CurveEditTool::Draw( DrawArgs* args )
@@ -370,7 +370,7 @@ void CurveEditTool::Draw( DrawArgs* args )
         m_ControlPointManipulator->Draw( args );
     }
 
-    __super::Draw( args );
+    Base::Draw( args );
 }
 
 void CurveEditTool::CreateProperties()

@@ -392,7 +392,7 @@ bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
         }
     }
 
-    if (!__super::MouseDown(e))
+    if (!Base::MouseDown(e))
     {
         return false;
     }
@@ -413,7 +413,7 @@ bool ScaleManipulator::MouseDown( const MouseButtonInput& e )
 
 void ScaleManipulator::MouseMove( const MouseMoveInput& e )
 {
-    __super::MouseMove(e);
+    Base::MouseMove(e);
 
     ScaleManipulatorAdapter* primary = PrimaryObject<ScaleManipulatorAdapter>();
 
@@ -634,7 +634,7 @@ void ScaleManipulator::MouseMove( const MouseMoveInput& e )
 
 void ScaleManipulator::CreateProperties()
 {
-    __super::CreateProperties();
+    Base::CreateProperties();
 
     m_Generator->PushContainer( TXT( "Scale" ) );
     {

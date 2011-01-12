@@ -25,5 +25,5 @@ void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* proper
         }
     }
 
-    __super::GatherSearchableProperties( properties );
+    Base::GatherSearchableProperties( properties );
 }

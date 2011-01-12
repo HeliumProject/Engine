@@ -13,17 +13,17 @@ namespace Helium
     {
     public:
         /// Parent class type.
-        typedef RbTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key > Super;
+        typedef RbTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key > Base;
 
         /// Type for set keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for set entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for comparing two keys.
-        typedef typename Super::KeyCompareType KeyCompareType;
+        typedef typename Base::KeyCompareType KeyCompareType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// @name Construction/Destruction
         //@{

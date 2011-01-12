@@ -33,7 +33,7 @@ template< typename Key, typename CompareKey, typename Allocator >
 Helium::SortedSet< Key, CompareKey, Allocator >& Helium::SortedSet< Key, CompareKey, Allocator >::operator=(
     const SortedSet& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }
@@ -48,7 +48,7 @@ template< typename OtherAllocator >
 Helium::SortedSet< Key, CompareKey, Allocator >& Helium::SortedSet< Key, CompareKey, Allocator >::operator=(
     const SortedSet< Key, CompareKey, OtherAllocator >& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }

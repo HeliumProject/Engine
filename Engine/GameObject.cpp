@@ -18,9 +18,6 @@ using namespace Lunar;
 
 REFLECT_DEFINE_CLASS( GameObject )
 
-const GameObjectType* GameObject::sm_pStaticType = NULL;
-GameObjectPtr GameObject::sm_spStaticTypeTemplate;
-
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 DynArray< GameObjectWPtr > GameObject::sm_topLevelObjects;
 
@@ -1010,7 +1007,7 @@ void GameObject::Shutdown()
 /// @return  Static "GameObject" type.
 const GameObjectType* GameObject::InitStaticType()
 {
-    if( !sm_pStaticType )
+    if( !s_Class )
     {
         // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
         // package, its type, etc.), we will create and register all the dependencies here manually as well.
@@ -1036,32 +1033,31 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
 
         // Don't set up templates here; they're initialized during type registration.
-        GameObject* pObjectTemplate = new GameObject();
-        HELIUM_ASSERT( pObjectTemplate );
+        GameObjectPtr spObjectTemplate = new GameObject();
+        HELIUM_ASSERT( spObjectTemplate );
 
-        Package* pPackageTemplate = new Package();
-        HELIUM_ASSERT( pPackageTemplate );
+        PackagePtr spPackageTemplate = new Package();
+        HELIUM_ASSERT( spPackageTemplate );
 
         // Package flag is set automatically by the Package constructor, but it shouldn't be set for the Package
         // type template.
-        pPackageTemplate->ClearFlags( FLAG_PACKAGE );
+        spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        sm_pStaticType = GameObjectType::Create(
+        s_Class = GameObjectType::Create(
             nameObject,
             pEnginePackage,
             NULL,
-            pObjectTemplate,
+            spObjectTemplate,
             GameObject::ReleaseStaticType,
             GameObjectType::FLAG_ABSTRACT );
-        HELIUM_ASSERT( sm_pStaticType );
-        s_Class = sm_pStaticType;
+        HELIUM_ASSERT( s_Class );
 
         const GameObjectType* pPackageType = GameObjectType::Create(
             namePackage,
             pEnginePackage,
-            sm_pStaticType,
-            pPackageTemplate,
+            static_cast< const GameObjectType* >( s_Class ),
+            spPackageTemplate,
             Package::ReleaseStaticType,
             0 );
         HELIUM_ASSERT( pPackageType );
@@ -1070,20 +1066,17 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( Package::InitStaticType() );
     }
 
-    return sm_pStaticType;
+    return static_cast< const GameObjectType* >( s_Class );
 }
 
 /// Release static type information for this class.
 void GameObject::ReleaseStaticType()
 {
-    if( sm_pStaticType )
+    if( s_Class )
     {
-        GameObjectType::Unregister( sm_pStaticType );
-        sm_pStaticType = NULL;
+        GameObjectType::Unregister( static_cast< const GameObjectType* >( s_Class ) );
         s_Class = NULL;
     }
-
-    sm_spStaticTypeTemplate.Release();
 }
 
 /// Get the static "GameObject" type.
@@ -1091,8 +1084,8 @@ void GameObject::ReleaseStaticType()
 /// @return  Static "GameObject" type.
 const GameObjectType* GameObject::GetStaticType()
 {
-    HELIUM_ASSERT( sm_pStaticType );
-    return sm_pStaticType;
+    HELIUM_ASSERT( s_Class );
+    return static_cast< const GameObjectType* >( s_Class );
 }
 
 /// Set the custom destruction callback for this object.
@@ -1103,71 +1096,6 @@ const GameObjectType* GameObject::GetStaticType()
 void GameObject::SetCustomDestroyCallback( CUSTOM_DESTROY_CALLBACK* pDestroyCallback )
 {
     m_pCustomDestroyCallback = pDestroyCallback;
-}
-
-/// Register tracking information for the instance index associated with this object.
-///
-/// @see RemoveInstanceIndexTracking()
-void GameObject::AddInstanceIndexTracking()
-{
-    if( IsInvalid( m_instanceIndex ) )
-    {
-        return;
-    }
-
-    GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
-
-    Pair< GameObjectPath, NameInstanceIndexMap > childMapEntry;
-    childMapEntry.First() = ownerPath;
-
-    Pair< Name, InstanceIndexSet > indexSetEntry;
-    indexSetEntry.First() = m_name;
-
-    ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
-
-    ChildNameInstanceIndexMap::Accessor childMapAccessor;
-    rNameInstanceIndexMap.Insert( childMapAccessor, childMapEntry );
-
-    NameInstanceIndexMap::Accessor nameMapAccessor;
-    childMapAccessor->Second().Insert( nameMapAccessor, indexSetEntry );
-
-    InstanceIndexSet::Accessor indexSetAccessor;
-    HELIUM_VERIFY( nameMapAccessor->Second().Insert( indexSetAccessor, m_instanceIndex ) );
-}
-
-/// Remove the tracking information for the instance index associated with this object.
-///
-/// @see AddInstanceIndexTracking()
-void GameObject::RemoveInstanceIndexTracking()
-{
-    if( IsInvalid( m_instanceIndex ) )
-    {
-        return;
-    }
-
-    GameObjectPath ownerPath = ( m_spOwner ? m_spOwner->GetPath() : GameObjectPath( NULL_NAME ) );
-
-    ChildNameInstanceIndexMap& rNameInstanceIndexMap = GetNameInstanceIndexMap();
-
-    ChildNameInstanceIndexMap::Accessor childMapAccessor;
-    HELIUM_VERIFY( rNameInstanceIndexMap.Find( childMapAccessor, ownerPath ) );
-
-    NameInstanceIndexMap& rNameMap = childMapAccessor->Second();
-    NameInstanceIndexMap::Accessor nameMapAccessor;
-    HELIUM_VERIFY( rNameMap.Find( nameMapAccessor, m_name ) );
-
-    InstanceIndexSet& rIndexSet = nameMapAccessor->Second();
-    HELIUM_VERIFY( rIndexSet.Remove( m_instanceIndex ) );
-    /*
-    if( rIndexSet.IsEmpty() )
-    {
-    HELIUM_VERIFY( rNameMap.Remove( nameMapAccessor ) );
-    if( rNameMap.IsEmpty() )
-    {
-    HELIUM_VERIFY( rNameInstanceIndexMap.Remove( childMapAccessor ) );
-    }
-    }
-    */
 }
 
 /// Update the stored path for this object.

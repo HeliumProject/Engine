@@ -59,12 +59,12 @@
 /// Serialize the parent class properties within a group named after the class.
 ///
 /// @param[in] S  Serializer instance.
-#define L_SERIALIZE_SUPER( S ) \
+#define L_SERIALIZE_BASE( S ) \
     { \
-        const GameObjectType* pSuperType = Super::GetStaticType(); \
-        HELIUM_ASSERT( pSuperType ); \
-        ( S ).BeginPropertyGroup( *pSuperType->GetName() ); \
-        Super::Serialize( S ); \
+        const GameObjectType* pBaseType = Base::GetStaticType(); \
+        HELIUM_ASSERT( pBaseType ); \
+        ( S ).BeginPropertyGroup( *pBaseType->GetName() ); \
+        Base::Serialize( S ); \
         ( S ).EndPropertyGroup(); \
     }
 

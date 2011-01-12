@@ -168,7 +168,7 @@ void World::PreDestroy()
 {
     Shutdown();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// Create an entity in this world.

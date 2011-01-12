@@ -30,26 +30,26 @@ namespace Helium
         typedef ConcurrentHashTable<
             KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
-                Super;
+                Base;
 
         /// Type for hash map keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for hash map data.
         typedef Data DataType;
         /// Type for hash map entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for key hashing function.
-        typedef typename Super::HasherType HasherType;
+        typedef typename Base::HasherType HasherType;
         /// Type for testing two keys for equality.
-        typedef typename Super::KeyEqualType KeyEqualType;
+        typedef typename Base::KeyEqualType KeyEqualType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// Accessor type.
-        typedef typename Super::Accessor Accessor;
+        typedef typename Base::Accessor Accessor;
         /// Constant accessor type.
-        typedef typename Super::ConstAccessor ConstAccessor;
+        typedef typename Base::ConstAccessor ConstAccessor;
 
         /// @name Construction/Destruction
         //@{

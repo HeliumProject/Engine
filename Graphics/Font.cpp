@@ -39,7 +39,7 @@ Font::~Font()
 /// @copydoc GameObject::Serialize()
 void Font::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_pointSize );
     s << L_TAGGED( m_dpi );

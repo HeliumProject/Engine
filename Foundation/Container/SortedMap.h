@@ -14,19 +14,19 @@ namespace Helium
     public:
         /// Parent class type.
         typedef RbTree< KeyValue< Key, Data >, Key, SelectKey< KeyValue< Key, Data > >, CompareKey, Allocator, Pair< Key, Data > >
-            Super;
+            Base;
 
         /// Type for map keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for map data.
         typedef Data DataType;
         /// Type for map entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for comparing two keys.
-        typedef typename Super::KeyCompareType KeyCompareType;
+        typedef typename Base::KeyCompareType KeyCompareType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// @name Construction/Destruction
         //@{

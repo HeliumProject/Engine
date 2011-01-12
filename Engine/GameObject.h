@@ -29,11 +29,7 @@
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
         REFLECT_DECLARE_CLASS( TYPE, PARENT ) \
-    private: \
-        static const Lunar::GameObjectType* sm_pStaticType; \
-        static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
     public: \
-        typedef PARENT Super; \
         virtual const Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
         virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
@@ -48,9 +44,6 @@
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_CLASS( TYPE ) \
-    \
-    const Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
-    Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
     \
     const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
@@ -80,20 +73,17 @@
     \
     void TYPE::ReleaseStaticType() \
     { \
-        if( sm_pStaticType ) \
+        if( s_Class ) \
         { \
-            Lunar::GameObjectType::Unregister( sm_pStaticType ); \
-            sm_pStaticType = NULL; \
+            Lunar::GameObjectType::Unregister( static_cast< const Lunar::GameObjectType* >( s_Class ) ); \
             s_Class = NULL; \
         } \
-        \
-        sm_spStaticTypeTemplate.Release(); \
     } \
     \
     const Lunar::GameObjectType* TYPE::GetStaticType() \
     { \
-        HELIUM_ASSERT( sm_pStaticType ); \
-        return sm_pStaticType; \
+        HELIUM_ASSERT( s_Class ); \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -106,33 +96,29 @@
     \
     const Lunar::GameObjectType* TYPE::InitStaticType() \
     { \
-        if( !sm_pStaticType ) \
+        if( !s_Class ) \
         { \
-            HELIUM_ASSERT( !sm_spStaticTypeTemplate ); \
-            \
             extern Lunar::Package* Get##MODULE##TypePackage(); \
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            const Lunar::GameObjectType* pParentType = Super::InitStaticType(); \
+            const Lunar::GameObjectType* pParentType = Base::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
-            TYPE* pTemplate = new TYPE; \
-            HELIUM_ASSERT( pTemplate ); \
-            sm_spStaticTypeTemplate = pTemplate; \
+            Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \
+            HELIUM_ASSERT( spTemplate ); \
             \
-            sm_pStaticType = Lunar::GameObjectType::Create( \
+            s_Class = Lunar::GameObjectType::Create( \
                 Lunar::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
-                pTemplate, \
+                spTemplate, \
                 TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
-            HELIUM_ASSERT( sm_pStaticType ); \
-            s_Class = sm_pStaticType; \
+            HELIUM_ASSERT( s_Class ); \
         } \
         \
-        return sm_pStaticType; \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 //@}
@@ -339,11 +325,6 @@ namespace Lunar
         /// (provided for custom object allocation schemes).
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
 
-        /// Static "GameObject" type instance.
-        static const GameObjectType* sm_pStaticType;
-        /// Static "GameObject" template instance.
-        static GameObjectPtr sm_spStaticTypeTemplate;
-
         /// Global object list.
         static SparseArray< GameObjectWPtr > sm_objects;
         /// Top-level object list.
@@ -364,9 +345,6 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        void AddInstanceIndexTracking();
-        void RemoveInstanceIndexTracking();
-
         void UpdatePath();
         //@}
 

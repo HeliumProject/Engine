@@ -115,9 +115,6 @@ namespace Helium
         /// Buffer capacity.
         size_t m_capacity;
 
-        /// Allocator instance.
-        Allocator m_allocator;
-
         /// @name Private Utility Functions
         //@{
         size_t GetGrowCapacity( size_t desiredCount ) const;

@@ -1782,17 +1782,7 @@ bool FbxSupport::BuildAnimationFromScene(
     // information, use the default timeline settings for the scene.
     const KFbxGlobalSettings& rGlobalSettings = pScene->GetGlobalSettings();
 
-    KTimeSpan timeSpan;
-    KFbxTakeInfo* pTakeInfo = pScene->GetTakeInfo( pAnimStack->GetName() );
-    if( pTakeInfo )
-    {
-        timeSpan = pTakeInfo->mLocalTimeSpan;
-    }
-    else
-    {
-        rGlobalSettings.GetTimelineDefaultTimeSpan( timeSpan );
-    }
-
+    KTimeSpan timeSpan = pAnimStack->GetLocalTimeSpan();
     KTime startTime = timeSpan.GetStart();
     KTime duration = timeSpan.GetDuration();
 

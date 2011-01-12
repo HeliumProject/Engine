@@ -30,7 +30,7 @@ Animation::~Animation()
 /// @copydoc GameObject::Serialize()
 void Animation::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
 #if L_USE_GRANNY_ANIMATION
     m_grannyData.Serialize( s );

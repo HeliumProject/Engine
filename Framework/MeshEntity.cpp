@@ -33,7 +33,7 @@ MeshEntity::~MeshEntity()
 /// @copydoc GameObject::Serialize()
 void MeshEntity::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_spMesh );
     s << L_TAGGED_DYNARRAY( m_overrideMaterials );

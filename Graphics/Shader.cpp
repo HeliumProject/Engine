@@ -103,7 +103,7 @@ Shader::~Shader()
 /// @copydoc GameObject::Serialize()
 void Shader::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_bPrecacheAllVariants );
 }

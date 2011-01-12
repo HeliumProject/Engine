@@ -59,7 +59,7 @@ void SkeletalMeshEntity::SynchronousUpdate( float32_t deltaSeconds )
 /// @copydoc GameObject::Serialize()
 void SkeletalMeshEntity::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_spAnimation );
 }

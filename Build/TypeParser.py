@@ -112,6 +112,7 @@ sourceFormatString2Engine = \
         HELIUM_ASSERT( pPackageObject->IsPackage() );
 
         pPackage = Lunar::StaticCast< Lunar::Package >( pPackageObject );
+        sp{MODULE}TypePackage = pPackage;
 '''
 
 sourceFormatString2Default = \
@@ -119,13 +120,16 @@ sourceFormatString2Default = \
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        pPackage = Lunar::GameObject::Create< Lunar::Package >( Lunar::Name( TXT( "{MODULE}" ) ), pTypesPackageObject );
+        HELIUM_VERIFY( Lunar::GameObject::Create< Lunar::Package >(
+            sp{MODULE}TypePackage,
+            Lunar::Name( TXT( "{MODULE}" ) ),
+            pTypesPackageObject ) );
+        pPackage = sp{MODULE}TypePackage;
         HELIUM_ASSERT( pPackage );
 '''
 
 sourceFormatString3 = \
-'''        sp{MODULE}TypePackage = pPackage;
-    }}
+'''    }}
 
     return pPackage;
 }}

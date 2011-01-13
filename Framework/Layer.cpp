@@ -153,18 +153,13 @@ Entity* Layer::CreateEntity(
         name = pType->GetName();
     }
 
-    EntityPtr spEntity( StaticCast< Entity >( GameObject::CreateObject(
-        pType,
-        name,
-        m_spPackage,
-        pTemplate,
-        bAssignInstanceIndex ) ) );
-    if( !spEntity )
+    GameObjectPtr spObject;
+    if( !GameObject::CreateObject( spObject, pType, name, m_spPackage, pTemplate, bAssignInstanceIndex ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "Layer::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in layer package \"%s\" " )
-            TXT( "(template: %s; assign instance index: %s).\n" ) ),
+              TXT( "(template: %s; assign instance index: %s).\n" ) ),
             *name,
             *pType->GetName(),
             *m_spPackage->GetPath().ToString(),
@@ -174,15 +169,18 @@ Entity* Layer::CreateEntity(
         return NULL;
     }
 
-    spEntity->SetPosition( rPosition );
-    spEntity->SetRotation( rRotation );
-    spEntity->SetScale( rScale );
+    Entity* pEntity = StaticCast< Entity >( spObject.Get() );
+    HELIUM_ASSERT( pEntity );
 
-    size_t layerIndex = m_entities.Push( spEntity );
+    pEntity->SetPosition( rPosition );
+    pEntity->SetRotation( rRotation );
+    pEntity->SetScale( rScale );
+
+    size_t layerIndex = m_entities.Push( pEntity );
     HELIUM_ASSERT( IsValid( layerIndex ) );
-    spEntity->SetLayerInfo( this, layerIndex );
+    pEntity->SetLayerInfo( this, layerIndex );
 
-    return spEntity;
+    return pEntity;
 }
 
 /// Destroy an entity in this layer.
@@ -287,10 +285,9 @@ void Layer::AddPackageEntities()
     }
 
     // Add package entities.
-    size_t childCount = pPackage->GetChildCount();
-    for( size_t childIndex = 0; childIndex < childCount; ++childIndex )
+    for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
     {
-        EntityPtr spEntity( DynamicCast< Entity >( pPackage->GetChild( childIndex ) ) );
+        EntityPtr spEntity( DynamicCast< Entity >( pChild ) );
         if( spEntity )
         {
             HELIUM_ASSERT( spEntity->GetLayer().Get() == NULL );

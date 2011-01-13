@@ -523,15 +523,18 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
     pLoadRequest->spVariant.Set( StaticCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
     if( !pLoadRequest->spVariant )
     {
-        pLoadRequest->spVariant = GameObject::Create< ShaderVariant >( variantName, pShader );
-        if( !pLoadRequest->spVariant )
+        if( !GameObject::Create< ShaderVariant >( pLoadRequest->spVariant, variantName, pShader ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 ( TXT( "ShaderVariantResourceHandler::BeginLoadVariant(): Failed to create shader variant object " )
-                TXT( "\"%s:%s\".\n" ) ),
+                  TXT( "\"%s:%s\".\n" ) ),
                 *pShader->GetPath().ToString(),
                 *variantName );
+        }
+        else
+        {
+            HELIUM_ASSERT( pLoadRequest->spVariant );
         }
     }
 

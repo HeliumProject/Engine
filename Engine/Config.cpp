@@ -229,14 +229,18 @@ bool Config::TryFinishLoad()
             const GameObjectType* pConfigObjectType = pDefaultConfigObject->GetGameObjectType();
             HELIUM_ASSERT( pConfigObjectType );
 
-            GameObjectPtr spUserConfigObject( GameObject::CreateObject(
+            GameObjectPtr spUserConfigObject;
+            bool bCreateResult = GameObject::CreateObject(
+                spUserConfigObject,
                 pConfigObjectType,
                 objectName,
                 m_spUserConfigPackage,
-                pDefaultConfigObject ) );
-            HELIUM_ASSERT( spUserConfigObject );
-            if( spUserConfigObject )
+                pDefaultConfigObject );
+            HELIUM_ASSERT( bCreateResult );
+            if( bCreateResult )
             {
+                HELIUM_ASSERT( spUserConfigObject );
+
                 HELIUM_TRACE(
                     TRACE_INFO,
                     TXT( "Config: Created user configuration object \"%s\".\n" ),

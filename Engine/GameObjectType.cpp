@@ -67,6 +67,17 @@ const GameObjectType* GameObjectType::Create(
     HELIUM_ASSERT( pTemplate );
     HELIUM_ASSERT( pReleaseStaticTypeCallback );
 
+    // Register the template object with the object system.
+    if( !GameObject::RegisterObject( pTemplate ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObjectType::Initialize(): Failed to register type \"%s\" template object.\n" ),
+            *name );
+
+        return false;
+    }
+
     // Set up the template object name, and set this object as its parent.
     GameObject::RenameParameters nameParameters;
     nameParameters.name = name;
@@ -78,22 +89,13 @@ const GameObjectType* GameObjectType::Create(
             TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
             *name );
 
+        GameObject::UnregisterObject( pTemplate );
+
         return false;
     }
 
     // Flag the object as the default template object for the type being created.
     pTemplate->SetFlags( GameObject::FLAG_DEFAULT_TEMPLATE );
-
-    // Register the template object with the object system.
-    if( !GameObject::RegisterObject( pTemplate ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "GameObjectType::Initialize(): Failed to register type \"%s\" template object.\n" ),
-            *name );
-
-        return false;
-    }
 
     // If the parent type is null, default to Reflect::Object, as the type should be deriving from it directly.
     const Reflect::Class* pBaseClass = pParent;

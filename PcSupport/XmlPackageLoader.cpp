@@ -1447,7 +1447,7 @@ void XmlPackageLoader::TickPreload()
     if( !pPackage )
     {
         HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
-        m_spPackage = GameObject::Create< Package >( m_packagePath.GetName(), spParentPackage );
+        HELIUM_VERIFY( GameObject::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
         pPackage = m_spPackage;
         HELIUM_ASSERT( pPackage );
         pPackage->SetLoader( this );
@@ -1722,9 +1722,13 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     else
     {
         // Create the object.
-        pRequest->spObject = GameObject::CreateObject( pType, rObjectData.objectPath.GetName(), pOwner, pTemplate );
-        pObject = pRequest->spObject;
-        if( !pObject )
+        bool bCreateResult = GameObject::CreateObject(
+            pRequest->spObject,
+            pType,
+            rObjectData.objectPath.GetName(),
+            pOwner,
+            pTemplate );
+        if( !bCreateResult )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -1735,6 +1739,9 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             return true;
         }
+
+        pObject = pRequest->spObject;
+        HELIUM_ASSERT( pObject );
     }
 
     // Load the object properties.

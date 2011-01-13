@@ -38,7 +38,8 @@
         static void ReleaseStaticType(); \
         static const Lunar::GameObjectType* GetStaticType();
 
-/// Utility macro for implementing standard GameObject-class variables and functions, without implementing InitStaticType().
+/// Utility macro for implementing standard GameObject-class variables and functions, without implementing
+/// InitStaticType().
 ///
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
@@ -213,9 +214,8 @@ namespace Lunar
 
         GameObject* GetTemplate() const;
 
-        inline size_t GetChildCount() const;
-        inline GameObject* GetChild( size_t index ) const;
-        inline const DynArray< GameObjectWPtr >& GetChildren() const;
+        inline const GameObjectWPtr& GetFirstChild() const;
+        inline const GameObjectWPtr& GetNextSibling() const;
         GameObject* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
 
         inline GameObjectPath GetPath() const;
@@ -261,11 +261,12 @@ namespace Lunar
 
         /// @name GameObject Management
         //@{
-        static GameObject* CreateObject(
-            const GameObjectType* pType, Name name, GameObject* pOwner, GameObject* pTemplate = NULL,
+        static bool CreateObject(
+            GameObjectPtr& rspObject, const GameObjectType* pType, Name name, GameObject* pOwner,
+            GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
+        template< typename T > static bool Create(
+            StrongPtr< T >& rspObject, Name name, GameObject* pOwner, T* pTemplate = NULL,
             bool bAssignInstanceIndex = false );
-        template< typename T > static T* Create(
-            Name name, GameObject* pOwner, T* pTemplate = NULL, bool bAssignInstanceIndex = false );
 
         static GameObject* FindObject( GameObjectPath path );
         template< typename T > static T* Find( GameObjectPath path );
@@ -315,8 +316,10 @@ namespace Lunar
 
         /// Object owner.
         GameObjectPtr m_spOwner;
-        /// Object children.
-        DynArray< GameObjectWPtr > m_children;
+        /// First child object.
+        GameObjectWPtr m_wpFirstChild;
+        /// Next sibling object.
+        GameObjectWPtr m_wpNextSibling;
 
         /// Full object path name.
         GameObjectPath m_path;
@@ -327,8 +330,8 @@ namespace Lunar
 
         /// Global object list.
         static SparseArray< GameObjectWPtr > sm_objects;
-        /// Top-level object list.
-        static DynArray< GameObjectWPtr > sm_topLevelObjects;
+        /// First object in the list of top-level objects.
+        static GameObjectWPtr sm_wpFirstTopLevelObject;
 
         /// Name instance lookup.
         static ChildNameInstanceIndexMap* sm_pNameInstanceIndexMap;

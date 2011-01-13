@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 
 namespace Lunar
@@ -35,5 +38,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H

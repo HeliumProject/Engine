@@ -11,6 +11,8 @@
 
 #include "EditorSupport/EditorSupport.h"
 
+#if L_EDITOR
+
 namespace Helium
 {
     class Stream;
@@ -30,5 +32,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_PNG_IMAGE_LOADER_H

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 
 #include "Graphics/Font.h"
@@ -50,3 +53,5 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR

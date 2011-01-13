@@ -1025,14 +1025,13 @@ const GameObjectType* GameObject::InitStaticType()
             GameObjectType::FLAG_ABSTRACT );
         HELIUM_ASSERT( s_Class );
 
-        const GameObjectType* pPackageType = GameObjectType::Create(
+        HELIUM_VERIFY( GameObjectType::Create(
             namePackage,
             pEnginePackage,
             static_cast< const GameObjectType* >( s_Class ),
             spPackageTemplate,
             Package::ReleaseStaticType,
-            0 );
-        HELIUM_ASSERT( pPackageType );
+            0 ) );
 
         // Force initialization of Package so it can report its static type information.
         HELIUM_VERIFY( Package::InitStaticType() );

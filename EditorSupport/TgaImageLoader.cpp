@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/TgaImageLoader.h"
 
 #include "Foundation/Stream/ByteSwappingStream.h"
@@ -738,3 +741,5 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
 
     return true;
 }
+
+#endif  // L_EDITOR

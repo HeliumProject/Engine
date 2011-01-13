@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/Image.h"
 
 #include "Rendering/Color.h"
@@ -1079,3 +1082,5 @@ bool Image::Format::Validate() const
 
     return true;
 }
+
+#endif  // L_EDITOR

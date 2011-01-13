@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -817,3 +820,5 @@ bool ShaderVariantResourceHandler::LoadRequestEquals::operator()(
     return ( pRequest0->userOptionIndex == pRequest1->userOptionIndex &&
         pRequest0->shaderType == pRequest1->shaderType );
 }
+
+#endif  // L_EDITOR

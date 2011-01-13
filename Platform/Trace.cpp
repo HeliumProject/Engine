@@ -1,6 +1,8 @@
 //#include "CorePch.h"
 #include "Platform/Trace.h"
 
+#if HELIUM_ENABLE_TRACE
+
 #include "Platform/Debug.h"
 #include "Platform/Memory.h"
 
@@ -158,3 +160,5 @@ const tchar_t* Helium::Trace::GetLevelString( ETraceLevel level )
 
     return TXT( "[?] " );
 }
+
+#endif  // HELIUM_ENABLE_TRACE

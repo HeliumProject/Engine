@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/EditorObjectLoader.h"
 
 #include "Foundation/File/File.h"
@@ -214,3 +217,5 @@ void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pO
         CacheObject( pObject, true );
     }
 }
+
+#endif  // L_EDITOR

@@ -1,4 +1,7 @@
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "Foundation/File/File.h"
@@ -638,3 +641,5 @@ void FontResourceHandler::CompressTexture(
     HELIUM_ASSERT( rMipLevels.GetSize() == 1 );
     *pOutputSheet = rMipLevels[ 0 ];
 }
+
+#endif  // L_EDITOR

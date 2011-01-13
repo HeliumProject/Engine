@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/Texture2dResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -342,3 +345,5 @@ bool Texture2dResourceHandler::CacheResource(
 
     return true;
 }
+
+#endif  // L_EDITOR

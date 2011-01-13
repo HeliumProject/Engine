@@ -209,11 +209,10 @@ void ArchiveBinary::Serialize(Object* object)
 
     object->PreSerialize( NULL );
 
-    if (object->IsClass(Reflect::GetClass<Data>()))
+    Data* data = SafeCast< Data >( object );
+    if ( data )
     {
-        Data* s = DangerousCast<Data>(object);
-
-        s->Serialize(*this);
+        data->Serialize(*this);
     }
     else
     {
@@ -418,11 +417,11 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
 
         object->PreDeserialize( NULL );
 
-        if (object->IsClass(Reflect::GetClass<Data>()))
-        {
-            Data* s = DangerousCast<Data>(object);
+        Data* data = SafeCast<Data>(object);
 
-            s->Deserialize(*this);
+        if ( data )
+        {
+            data->Deserialize(*this);
         }
         else
         {

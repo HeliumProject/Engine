@@ -339,8 +339,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
             ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
 
             // downcast to data type
-            KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
-            ValueClassT* dataSer = DangerousCast<ValueClassT>(dataElem);
+            KeyClassT* keySer = AssertCast<KeyClassT>(keyElem);
+            ValueClassT* dataSer = AssertCast<ValueClassT>(dataElem);
 
             // connect to our map key memory address
             keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));

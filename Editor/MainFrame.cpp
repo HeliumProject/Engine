@@ -1831,9 +1831,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     int32_t selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
-        if ( args.m_NewTool->IsClass( Reflect::GetClass< SceneGraph::TransformManipulator >() ) )
+        SceneGraph::TransformManipulator* manipulator = Reflect::SafeCast< SceneGraph::TransformManipulator >( args.m_NewTool );
+        if ( manipulator )
         {
-            SceneGraph::TransformManipulator* manipulator = Reflect::DangerousCast< SceneGraph::TransformManipulator >( args.m_NewTool );
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:

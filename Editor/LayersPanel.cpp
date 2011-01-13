@@ -807,9 +807,10 @@ void LayersPanel::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 void LayersPanel::NodeAdded( const NodeChangeArgs& args )
 {
-    if ( args.m_Node->IsClass( Reflect::GetClass<Layer>() ) )
+    Layer* layer = Reflect::SafeCast< Layer >( args.m_Node );
+    if ( layer )
     {
-        AddLayer( Reflect::DangerousCast< Layer >( args.m_Node ) );
+        AddLayer( layer );
     }
 }
 
@@ -819,8 +820,9 @@ void LayersPanel::NodeAdded( const NodeChangeArgs& args )
 // 
 void LayersPanel::NodeRemoved( const NodeChangeArgs& args )
 {
-    if ( args.m_Node->IsClass( Reflect::GetClass<Layer>() ) )
+    Layer* layer = Reflect::SafeCast< Layer >( args.m_Node );
+    if ( layer )
     {
-        RemoveLayer( Reflect::DangerousCast< Layer >( args.m_Node ) );
+        RemoveLayer( layer );
     }
 }

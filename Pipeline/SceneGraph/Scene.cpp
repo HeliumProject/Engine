@@ -563,25 +563,27 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Sc
     {
         if ( element->IsClass( importReflectType ) )
         {
-            SceneNode* node = Reflect::DangerousCast< SceneNode >( element );
-
-            if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
+            SceneNode* node = Reflect::SafeCast< SceneNode >( element );
+            if ( node )
             {
-                HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->GetID() );
-                if ( find != m_Nodes.end() )
+                if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
                 {
-                    SceneGraph::SceneNode* dependNode = find->second;
-                    element->CopyTo( dependNode );
-                    dependNode->Dirty();
-                }    
-            }
-            else
-            {
-                // Always generate a new ID when importing and not merging
-                TUID id( TUID::Generate() );
-                m_RemappedIDs.insert( HM_TUID::value_type( node->GetID(), id ) );
-                node->SetID( id );
-                convertNode = true;
+                    HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->GetID() );
+                    if ( find != m_Nodes.end() )
+                    {
+                        SceneGraph::SceneNode* dependNode = find->second;
+                        element->CopyTo( dependNode );
+                        dependNode->Dirty();
+                    }    
+                }
+                else
+                {
+                    // Always generate a new ID when importing and not merging
+                    TUID id( TUID::Generate() );
+                    m_RemappedIDs.insert( HM_TUID::value_type( node->GetID(), id ) );
+                    node->SetID( id );
+                    convertNode = true;
+                }
             }
         }
     }
@@ -775,13 +777,13 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
         // Don't export a node if it has already been exported
         if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
         {
-            if ( node->IsClass( Reflect::GetClass< SceneGraph::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
+            SceneGraph::Transform* transformNode = Reflect::SafeCast< SceneGraph::Transform >( node );
+            if ( transformNode && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
             {
                 // If we are exporting a transform node, but we are not maintaining the hierarchy,
                 // we would still like to maintain the object's global position.  So, we create
                 // reparent the node under the root (which maintains the node's position) and
                 // store that command so that it can be undone after export completes.
-                SceneGraph::Transform* transformNode = Reflect::DangerousCast< SceneGraph::Transform >( node );
                 changes->Push( new ParentCommand( transformNode, GetRoot() ) );
             }
 
@@ -799,10 +801,9 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
 
                     bool skipAncestor = false;
 
-                    // Check to see if the ancestor is a hierarchy node
-                    if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
+                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
+                    if ( hierarchyNode )
                     {
-                        SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
                         if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
                         {
                             // Hierarchy is exported separately, so ignore this ancestor if it is a parent of this node
@@ -1333,14 +1334,11 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
 
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Hierarchy check") );
-        if ( node->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
-        {
-            SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( node );
 
-            if (hierarchyNode->GetParent() == NULL)
-            {
-                hierarchyNode->SetParent(m_Root);
-            }
+        SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
+        if ( hierarchyNode && hierarchyNode->GetParent() == NULL )
+        {
+            hierarchyNode->SetParent(m_Root);
         }
     }
 
@@ -1407,9 +1405,9 @@ void Scene::Create()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = valType.second;
-        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
+        SceneGraph::HierarchyNodeType* h = Reflect::SafeCast< SceneGraph::HierarchyNodeType >( t );
+        if ( h )
         {
-            SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
             h->Create();
         }
     }
@@ -1426,10 +1424,9 @@ void Scene::Delete()
     for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
     {
         const SceneNodeTypePtr& t = dependNodeType.second;
-        if ( t->IsClass( Reflect::GetClass<SceneGraph::HierarchyNodeType>() ) )
+        SceneGraph::HierarchyNodeType* h = Reflect::SafeCast< SceneGraph::HierarchyNodeType >( t );
+        if ( h )
         {
-            SceneGraph::HierarchyNodeType* h = Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( t );
-
             h->Delete();
         }
     }

@@ -183,16 +183,6 @@ namespace Helium
         };
 
         //
-        // DangerousCast does not type checking
-        //
-
-        template<class DerivedT>
-        inline DerivedT* DangerousCast(Reflect::Object* base);
-
-        template<class DerivedT>
-        inline const DerivedT* DangerousCast(const Reflect::Object* base);
-
-        //
         // AssertCast type checks in debug and asserts if failure, does no type checking in release
         //
 

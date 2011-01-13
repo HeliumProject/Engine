@@ -402,10 +402,9 @@ void HierarchyNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
 {
     Base::DisconnectDescendant(descendant);
 
-    if (descendant->IsClass(Reflect::GetClass<SceneGraph::HierarchyNode>()))
+    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+    if ( child )
     {
-        SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
-
         // sanity check that the parent is really set to this
         HELIUM_ASSERT( child->GetParent() == this );
 
@@ -437,10 +436,9 @@ void HierarchyNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 {
     Base::ConnectDescendant(descendant);
 
-    if (descendant->IsClass(Reflect::GetClass<SceneGraph::HierarchyNode>()))
+    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+    if ( child )
     {
-        SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
-
         // sanity check that the parent is really set to this
         HELIUM_ASSERT( child->GetParent() == this );
 

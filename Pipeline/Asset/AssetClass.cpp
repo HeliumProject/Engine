@@ -111,7 +111,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlVectorData >() )
                 {
-                    const Reflect::StlVectorData* arrayData = Reflect::DangerousCast<Reflect::StlVectorData>( field->CreateData( instance ) );
+                    const Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>( field->CreateData( instance ) );
                     if ( arrayData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)arrayData->GetSize() < 1 )
@@ -134,7 +134,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlMapData >() )
                 {
-                    const Reflect::StlMapData* mapData = Reflect::DangerousCast<Reflect::StlMapData>( field->CreateData( instance ) );
+                    const Reflect::StlMapData* mapData = Reflect::AssertCast<Reflect::StlMapData>( field->CreateData( instance ) );
                     if ( mapData->GetValueClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)mapData->GetSize() < 1 )
@@ -162,7 +162,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlSetData >() )
                 {
-                    const Reflect::StlSetData* setData = Reflect::DangerousCast<Reflect::StlSetData>( field->CreateData( instance ) );
+                    const Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>( field->CreateData( instance ) );
                     if ( setData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)setData->GetSize() < 1 )
@@ -190,7 +190,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlVectorData >() )
                 {
-                    const Reflect::ObjectStlVectorData* arrayData = Reflect::DangerousCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
+                    const Reflect::ObjectStlVectorData* arrayData = Reflect::AssertCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
 
                     if ( (int)arrayData->GetSize() < 1 )
                     {
@@ -208,7 +208,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlMapData >() )
                 {
-                    const Reflect::ObjectStlMapData* mapData = Reflect::DangerousCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
+                    const Reflect::ObjectStlMapData* mapData = Reflect::AssertCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
 
                     if ( (int)mapData->GetSize() < 1 )
                     {
@@ -230,7 +230,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlSetData >() )
                 {
-                    const Reflect::ObjectStlSetData* setData = Reflect::DangerousCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
+                    const Reflect::ObjectStlSetData* setData = Reflect::AssertCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
 
                     if ( (int)setData->GetSize() < 1 )
                     {

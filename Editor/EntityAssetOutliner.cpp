@@ -276,9 +276,10 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // 
 void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->IsClass( Reflect::GetClass< SceneGraph::EntitySet >() ) )
+    EntitySet* entitySet = Reflect::SafeCast< SceneGraph::EntitySet >( args.m_InstanceSet );
+    if ( entitySet )
     {
-        AddEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
+        AddEntitySet( entitySet );
     }
 }
 
@@ -288,9 +289,10 @@ void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& ar
 // 
 void EntityAssetOutliner::SetRemoved( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->IsClass( Reflect::GetClass< SceneGraph::EntitySet >() ) )
+    EntitySet* entitySet = Reflect::SafeCast< SceneGraph::EntitySet >( args.m_InstanceSet );
+    if ( entitySet )
     {
-        RemoveEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
+        RemoveEntitySet( entitySet );
     }
 }
 
@@ -317,9 +319,10 @@ void EntityAssetOutliner::EntityRemoved( const SceneGraph::InstanceSetChangeArgs
 // 
 void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->IsClass( Reflect::GetClass< SceneGraph::EntityInstanceType >() ) )
+    EntityInstanceType* entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( args.m_NodeType );
+    if ( entityType )
     {
-        AddEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
+        AddEntityType( entityType );
     }
 }
 
@@ -329,9 +332,10 @@ void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs
 // 
 void EntityAssetOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->IsClass( Reflect::GetClass< SceneGraph::EntityInstanceType >() ) )
+    EntityInstanceType* entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( args.m_NodeType );
+    if ( entityType )
     {
-        RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
+        RemoveEntityType( entityType );
     }
 }
 

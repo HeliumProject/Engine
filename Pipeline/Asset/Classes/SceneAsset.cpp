@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS( SceneAsset );
+REFLECT_DEFINE_OBJECT( SceneAsset );
 
 void SceneAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

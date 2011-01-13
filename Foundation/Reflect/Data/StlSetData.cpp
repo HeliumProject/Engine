@@ -262,9 +262,9 @@ template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
-REFLECT_DEFINE_CLASS( StlStringStlSetData );
-REFLECT_DEFINE_CLASS( UInt32StlSetData );
-REFLECT_DEFINE_CLASS( UInt64StlSetData );
-REFLECT_DEFINE_CLASS( GUIDStlSetData );
-REFLECT_DEFINE_CLASS( TUIDStlSetData );
-REFLECT_DEFINE_CLASS( PathStlSetData );
+REFLECT_DEFINE_OBJECT( StlStringStlSetData );
+REFLECT_DEFINE_OBJECT( UInt32StlSetData );
+REFLECT_DEFINE_OBJECT( UInt64StlSetData );
+REFLECT_DEFINE_OBJECT( GUIDStlSetData );
+REFLECT_DEFINE_OBJECT( TUIDStlSetData );
+REFLECT_DEFINE_OBJECT( PathStlSetData );

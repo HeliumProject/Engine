@@ -6,7 +6,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS( PathData );
+REFLECT_DEFINE_OBJECT( PathData );
 
 PathData::PathData()
 {

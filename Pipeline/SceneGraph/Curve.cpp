@@ -25,7 +25,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( CurveType );
 REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
-REFLECT_DEFINE_CLASS( Curve );
+REFLECT_DEFINE_OBJECT( Curve );
 
 D3DMATERIAL9 Curve::s_Material;
 D3DMATERIAL9 Curve::s_HullMaterial;

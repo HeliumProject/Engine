@@ -9,7 +9,7 @@ using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ComponentCollection)
+REFLECT_DEFINE_OBJECT(ComponentCollection)
 
 void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

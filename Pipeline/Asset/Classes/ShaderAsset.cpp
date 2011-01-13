@@ -9,7 +9,7 @@ using namespace Helium;
 using namespace Helium::Asset;
 
 REFLECT_DEFINE_ENUMERATION( AlphaType );
-REFLECT_DEFINE_CLASS( ShaderAsset );
+REFLECT_DEFINE_OBJECT( ShaderAsset );
 
 void ShaderAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

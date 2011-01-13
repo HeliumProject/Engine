@@ -17,7 +17,7 @@ namespace Helium
     class PIPELINE_API SettingsManager : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_CLASS( SettingsManager, Reflect::Object );
+        REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );
 
         SettingsManager()
         {

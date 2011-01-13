@@ -15,7 +15,7 @@ namespace Helium
         class PIPELINE_API Light : public Instance
         {
         public:
-            REFLECT_DECLARE_CLASS( Light, Instance );
+            REFLECT_DECLARE_OBJECT( Light, Instance );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

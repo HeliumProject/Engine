@@ -10,7 +10,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( PivotTransform );
+REFLECT_DEFINE_OBJECT( PivotTransform );
 
 void PivotTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

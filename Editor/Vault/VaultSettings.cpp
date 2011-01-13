@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( VaultSettings );
+REFLECT_DEFINE_OBJECT( VaultSettings );
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultSettings::VaultSettings( VaultViewMode viewVaultMode, uint32_t thumbnailSize )

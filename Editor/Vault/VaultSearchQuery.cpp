@@ -59,7 +59,7 @@ const tchar_t* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" )
 
 ///////////////////////////////////////////////////////////////////////////////
 REFLECT_DEFINE_ENUMERATION( SearchType );
-REFLECT_DEFINE_CLASS( VaultSearchQuery );
+REFLECT_DEFINE_OBJECT( VaultSearchQuery );
 void VaultSearchQuery::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, TXT( "m_SearchType" ) );

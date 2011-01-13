@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( CurveControlPoint );
+REFLECT_DEFINE_OBJECT( CurveControlPoint );
 
 void CurveControlPoint::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

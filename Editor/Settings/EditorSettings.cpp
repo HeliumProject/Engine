@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 ///////////////////////////////////////////////////////////////////////////////
 // GeneralSettings
 //
-REFLECT_DEFINE_CLASS( GeneralSettings );
+REFLECT_DEFINE_OBJECT( GeneralSettings );
 
 GeneralSettings::GeneralSettings()
 : m_ReopenLastProjectOnStartup( true )

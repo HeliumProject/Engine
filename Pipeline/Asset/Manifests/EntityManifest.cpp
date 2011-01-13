@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS(EntityManifest);
+REFLECT_DEFINE_OBJECT(EntityManifest);
 
 void EntityManifest::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

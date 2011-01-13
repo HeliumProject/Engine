@@ -39,7 +39,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
 
             typedef SimpleObjectStlMapData<KeyT> ObjectStlMapDataT;
-            REFLECT_DECLARE_CLASS( ObjectStlMapDataT, ObjectStlMapData )
+            REFLECT_DECLARE_OBJECT( ObjectStlMapDataT, ObjectStlMapData )
 
                 SimpleObjectStlMapData();
             virtual ~SimpleObjectStlMapData();

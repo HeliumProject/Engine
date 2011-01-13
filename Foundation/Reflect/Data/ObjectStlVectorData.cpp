@@ -4,7 +4,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ObjectStlVectorData);
+REFLECT_DEFINE_OBJECT(ObjectStlVectorData);
 
 ObjectStlVectorData::ObjectStlVectorData()
 {

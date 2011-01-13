@@ -58,7 +58,7 @@ namespace Helium
         class Curve : public PivotTransform
         {
         public:
-            REFLECT_DECLARE_CLASS( Curve, PivotTransform );
+            REFLECT_DECLARE_OBJECT( Curve, PivotTransform );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

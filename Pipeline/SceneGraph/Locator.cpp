@@ -12,7 +12,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( LocatorShape );
-REFLECT_DEFINE_CLASS( Locator );
+REFLECT_DEFINE_OBJECT( Locator );
 
 void Locator::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

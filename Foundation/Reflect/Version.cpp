@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(Version);
+REFLECT_DEFINE_OBJECT(Version);
 
 void Version::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

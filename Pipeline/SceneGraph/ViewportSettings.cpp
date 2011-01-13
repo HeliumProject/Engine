@@ -6,7 +6,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( GeometryMode );
 REFLECT_DEFINE_ENUMERATION( ViewColorMode );
-REFLECT_DEFINE_CLASS( ViewportSettings );
+REFLECT_DEFINE_OBJECT( ViewportSettings );
 
 ViewportSettings::ViewportSettings()
 : m_CameraMode (CameraMode::Orbit)

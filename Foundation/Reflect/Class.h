@@ -10,6 +10,9 @@ namespace Helium
 {
     namespace Reflect
     {
+        // function type for creating object instances
+        typedef Object* (*CreateObjectFunc)();
+
         //
         // Class (struct or class)
         //

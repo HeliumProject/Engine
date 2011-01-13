@@ -214,4 +214,52 @@ namespace Helium
     }
 }
 
+// declares creator for constructable types
+#define _REFLECT_DECLARE_CREATOR( OBJECT ) \
+public: \
+static Helium::Reflect::Object* CreateObject() { return new OBJECT; }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+public: \
+typedef BASE Base; \
+typedef OBJECT This; \
+virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
+static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
+static const Helium::Reflect::Class* s_Class;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_OBJECT( OBJECT, CREATOR ) \
+const Helium::Reflect::Class* OBJECT::GetClass() const \
+{ \
+    return s_Class; \
+} \
+\
+Helium::Reflect::Class* OBJECT::CreateClass( const tchar_t* name ) \
+{ \
+    HELIUM_ASSERT( s_Class == NULL ); \
+    HELIUM_ASSERT( OBJECT::Base::s_Class != NULL ); \
+    Helium::Reflect::Class* type = Helium::Reflect::Class::Create<OBJECT>(name, OBJECT::Base::s_Class->m_Name, CREATOR); \
+    s_Class = type; \
+    return type; \
+} \
+const Helium::Reflect::Class* OBJECT::s_Class = NULL;
+
+// declares an abstract object (an object that either A: cannot be instantiated or B: is never actually serialized)
+#define REFLECT_DECLARE_ABSTRACT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_OBJECT( OBJECT, BASE )
+
+// defines the abstract object class
+#define REFLECT_DEFINE_ABSTRACT( OBJECT ) \
+    _REFLECT_DEFINE_OBJECT( OBJECT, NULL )
+
+// declares a concrete object with creator
+#define REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_CREATOR( OBJECT)
+
+// defines a concrete object
+#define REFLECT_DEFINE_OBJECT( OBJECT ) \
+    _REFLECT_DEFINE_OBJECT( OBJECT, &OBJECT::CreateObject )
+
 #include "Foundation/Reflect/Object.inl"

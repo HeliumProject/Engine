@@ -7,7 +7,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(BitfieldData);
+REFLECT_DEFINE_OBJECT(BitfieldData);
 
 BitfieldData::BitfieldData ()
 {

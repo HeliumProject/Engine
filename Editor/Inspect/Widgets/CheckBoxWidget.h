@@ -33,7 +33,7 @@ namespace Helium
         class CheckBoxWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( CheckBoxWidget, Widget );
+            REFLECT_DECLARE_OBJECT( CheckBoxWidget, Widget );
 
             CheckBoxWidget()
                 : m_CheckBoxControl( NULL )

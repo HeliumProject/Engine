@@ -10,7 +10,7 @@ namespace Helium
     class PIPELINE_API Project : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_CLASS( Project, Reflect::Object );
+        REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
 
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();

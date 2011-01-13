@@ -63,7 +63,7 @@ namespace Helium
         class Mesh : public PivotTransform
         {
         public:
-            REFLECT_DECLARE_CLASS( Mesh, PivotTransform );
+            REFLECT_DECLARE_OBJECT( Mesh, PivotTransform );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

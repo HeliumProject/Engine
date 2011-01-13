@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( ClipboardDataWrapper );
+REFLECT_DEFINE_OBJECT( ClipboardDataWrapper );
 
 void ClipboardDataWrapper::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

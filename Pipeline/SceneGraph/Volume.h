@@ -33,7 +33,7 @@ namespace Helium
         class Volume : public Instance
         {
         public:
-            REFLECT_DECLARE_CLASS( Volume, Instance );
+            REFLECT_DECLARE_OBJECT( Volume, Instance );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

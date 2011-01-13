@@ -19,7 +19,7 @@ namespace Helium
             tstring m_ManifestVersion;
             static const tchar_t* MANIFEST_VERSION;
 
-            REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
+            REFLECT_DECLARE_OBJECT(ManifestVersion, Reflect::Version);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

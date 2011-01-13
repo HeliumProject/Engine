@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Choice );
+REFLECT_DEFINE_OBJECT( Inspect::Choice );
 
 Choice::Choice()
 : a_Highlight( false )

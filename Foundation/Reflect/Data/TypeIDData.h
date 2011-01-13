@@ -12,7 +12,7 @@ namespace Helium
             typedef TypeID DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( TypeIDData, Data );
+            REFLECT_DECLARE_OBJECT( TypeIDData, Data );
 
             TypeIDData();
             ~TypeIDData();

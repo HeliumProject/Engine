@@ -13,7 +13,7 @@ FileDialogButtonWindow::FileDialogButtonWindow( wxWindow* parent, FileDialogButt
 {
 }
 
-REFLECT_DEFINE_CLASS( FileDialogButtonWidget );
+REFLECT_DEFINE_OBJECT( FileDialogButtonWidget );
 
 FileDialogButtonWidget::FileDialogButtonWidget( Inspect::FileDialogButton* button )
 {

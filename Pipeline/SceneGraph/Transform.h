@@ -16,7 +16,7 @@ namespace Helium
         class PIPELINE_API Transform : public HierarchyNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Transform, HierarchyNode );
+            REFLECT_DECLARE_OBJECT( Transform, HierarchyNode );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

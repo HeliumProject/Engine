@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 D3DMATERIAL9 Mesh::s_WireMaterial;
 D3DMATERIAL9 Mesh::s_FillMaterial;
 
-REFLECT_DEFINE_CLASS( Mesh );
+REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 

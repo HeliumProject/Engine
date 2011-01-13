@@ -16,7 +16,7 @@ namespace Helium
             typedef std::set<ObjectPtr> DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( ObjectStlSetData, ContainerData )
+            REFLECT_DECLARE_OBJECT( ObjectStlSetData, ContainerData )
 
             ObjectStlSetData();
             virtual ~ObjectStlSetData();

@@ -40,7 +40,7 @@ namespace Helium
 
         public:
 
-            REFLECT_DECLARE_CLASS( MeshProcessingComponent, Component::ComponentBase );
+            REFLECT_DECLARE_OBJECT( MeshProcessingComponent, Component::ComponentBase );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

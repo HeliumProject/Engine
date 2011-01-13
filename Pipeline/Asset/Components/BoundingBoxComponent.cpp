@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS( BoundingBoxComponent );
+REFLECT_DEFINE_OBJECT( BoundingBoxComponent );
 
 void BoundingBoxComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

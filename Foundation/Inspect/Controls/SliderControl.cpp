@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Slider );
+REFLECT_DEFINE_OBJECT( Inspect::Slider );
 
 Slider::Slider()
 : a_Min( 0.0f )

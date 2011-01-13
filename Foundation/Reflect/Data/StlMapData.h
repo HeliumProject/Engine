@@ -40,7 +40,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
 
             typedef SimpleStlMapData< KeyT, KeyClassT, ValueT, ValueClassT > StlMapDataT;
-            REFLECT_DECLARE_CLASS( StlMapDataT, StlMapData );
+            REFLECT_DECLARE_OBJECT( StlMapDataT, StlMapData );
 
             SimpleStlMapData();
             virtual ~SimpleStlMapData();

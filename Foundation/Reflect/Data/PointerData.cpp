@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS( PointerData );
+REFLECT_DEFINE_OBJECT( PointerData );
 
 PointerData::PointerData()
 {

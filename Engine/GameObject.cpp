@@ -16,7 +16,7 @@
 
 using namespace Lunar;
 
-REFLECT_DEFINE_CLASS( GameObject )
+REFLECT_DEFINE_OBJECT( GameObject )
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;

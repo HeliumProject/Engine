@@ -15,7 +15,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( VolumeShape );
-REFLECT_DEFINE_CLASS( Volume );
+REFLECT_DEFINE_OBJECT( Volume );
 
 void Volume::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

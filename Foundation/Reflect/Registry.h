@@ -99,14 +99,6 @@ namespace Helium
         //
 
         template<class T>
-        inline const Type* GetType()
-        {
-            const Type* type = T::s_Type;
-            HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            return type;
-        }
-
-        template<class T>
         inline const Class* GetClass()
         {
             const Class* type = T::s_Class;

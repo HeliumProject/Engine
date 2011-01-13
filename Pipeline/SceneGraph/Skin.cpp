@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( Influence );
+REFLECT_DEFINE_OBJECT( Influence );
 
 void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -16,7 +16,7 @@ void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
 
-REFLECT_DEFINE_CLASS( Skin );
+REFLECT_DEFINE_OBJECT( Skin );
 
 void Skin::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

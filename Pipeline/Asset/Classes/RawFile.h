@@ -19,7 +19,7 @@ namespace Helium
 			{
 			}
 
-			REFLECT_DECLARE_CLASS( RawFile, AssetClass );
+			REFLECT_DECLARE_OBJECT( RawFile, AssetClass );
 
 			static void AcceptCompositeVisitor( Reflect::Composite& comp );
 		};

@@ -4,7 +4,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ObjectStlSetData);
+REFLECT_DEFINE_OBJECT(ObjectStlSetData);
 
 ObjectStlSetData::ObjectStlSetData()
 {

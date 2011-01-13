@@ -4,7 +4,7 @@ using namespace Helium;
 using namespace Helium::Asset;
 
 REFLECT_DEFINE_ENUMERATION( AnimationClipMode );
-REFLECT_DEFINE_CLASS( AnimationClip );
+REFLECT_DEFINE_OBJECT( AnimationClip );
 
 void AnimationClip::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

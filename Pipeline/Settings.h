@@ -22,7 +22,7 @@ namespace Helium
             return true;
         }
 
-        REFLECT_DECLARE_CLASS( Settings, Reflect::Object );
+        REFLECT_DECLARE_OBJECT( Settings, Reflect::Object );
     };
 
     typedef Helium::StrongPtr< Settings > SettingsPtr;

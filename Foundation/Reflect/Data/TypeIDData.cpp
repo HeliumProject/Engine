@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS( TypeIDData );
+REFLECT_DEFINE_OBJECT( TypeIDData );
 
 TypeIDData::TypeIDData()
 {

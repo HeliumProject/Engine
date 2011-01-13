@@ -83,7 +83,7 @@ namespace Helium
             TextureCoordinateWrapMode   m_WrapModeV;
 
         public:
-            REFLECT_DECLARE_CLASS( Texture, AssetClass );
+            REFLECT_DECLARE_OBJECT( Texture, AssetClass );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

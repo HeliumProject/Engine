@@ -10,7 +10,7 @@ namespace Helium
         class FOUNDATION_API CheckBox : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( CheckBox, Control );
+            REFLECT_DECLARE_OBJECT( CheckBox, Control );
 
             CheckBox();
 

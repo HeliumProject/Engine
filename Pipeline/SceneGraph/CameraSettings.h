@@ -56,7 +56,7 @@ namespace Helium
         class PIPELINE_API CameraSettings : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS( CameraSettings, Reflect::Object );
+            REFLECT_DECLARE_OBJECT( CameraSettings, Reflect::Object );
 
             CameraSettings(); 
 

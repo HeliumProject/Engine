@@ -63,7 +63,7 @@ bool AnimationResourceHandler::CacheResource(
     HELIUM_ASSERT( pResource );
 
 #if L_USE_GRANNY_ANIMATION
-    Animation* pAnimation = StaticCast< Animation >( pResource );
+    Animation* pAnimation = Reflect::AssertCast< Animation >( pResource );
 
     bool bCacheResult = Granny::CacheAnimationResourceData(
         pObjectPreprocessor,

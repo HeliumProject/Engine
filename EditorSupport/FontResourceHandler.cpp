@@ -112,7 +112,7 @@ bool FontResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    Font* pFont = StaticCast< Font >( pResource );
+    Font* pFont = Reflect::AssertCast< Font >( pResource );
 
     // Load the font into memory ourselves in order to make sure we properly support Unicode file names.
     FileStream* pFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );

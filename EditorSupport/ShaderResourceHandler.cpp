@@ -58,7 +58,7 @@ bool ShaderResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    const Shader* pShader = StaticCast< const Shader >( pResource );
+    const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
     GameObjectPath shaderPath = pShader->GetPath();
 
     HELIUM_TRACE( TRACE_INFO, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );

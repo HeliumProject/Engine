@@ -188,7 +188,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
         return NULL;
     }
 
-    WorldPtr spDefaultWorld( StaticCast< World >( spDefaultWorldObject.Get() ) );
+    WorldPtr spDefaultWorld( Reflect::AssertCast< World >( spDefaultWorldObject.Get() ) );
     HELIUM_ASSERT( spDefaultWorld );
 
     m_worlds.Push( spDefaultWorld );

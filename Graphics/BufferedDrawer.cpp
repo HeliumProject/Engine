@@ -853,7 +853,7 @@ void BufferedDrawer::DrawWorldElements()
         return;
     }
 
-    Shader* pShader = StaticCast< Shader >( pVertexShaderVariant->GetOwner() );
+    Shader* pShader = Reflect::AssertCast< Shader >( pVertexShaderVariant->GetOwner() );
     HELIUM_ASSERT( pShader );
 
     const Shader::Options& rSystemOptions = pShader->GetSystemOptions();

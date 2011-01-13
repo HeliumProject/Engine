@@ -658,7 +658,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     else if( !pObject->IsDefaultTemplate() )
     {
         // Load persistent resource data.
-        Resource* pResource = DynamicCast< Resource >( pObject );
+        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
         if( pResource )
         {
             deserializer.Prepare(

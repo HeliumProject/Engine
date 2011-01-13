@@ -43,7 +43,7 @@ bool MaterialResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    Material* pMaterial = StaticCast< Material >( pResource );
+    Material* pMaterial = Reflect::AssertCast< Material >( pResource );
     Shader* pShader = pMaterial->GetShader();
 
     // Compute the shader variant indices from the user options selected in the material, as the array of indices in

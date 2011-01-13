@@ -285,7 +285,7 @@ void RenderResourceManager::Initialize()
     GameObjectPtr spPrePassShader;
     HELIUM_VERIFY( pObjectLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
 
-    Shader* pPrePassShader = DynamicCast< Shader >( spPrePassShader.Get() );
+    Shader* pPrePassShader = Reflect::SafeCast< Shader >( spPrePassShader.Get() );
     HELIUM_ASSERT( pPrePassShader );
     if( pPrePassShader )
     {
@@ -311,7 +311,7 @@ void RenderResourceManager::Initialize()
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = DynamicCast< Shader >( spShader.Get() );
+    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
     if( pShader )
     {
@@ -341,7 +341,7 @@ void RenderResourceManager::Initialize()
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = DynamicCast< Shader >( spShader.Get() );
+    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
     if( pShader )
     {
@@ -371,7 +371,7 @@ void RenderResourceManager::Initialize()
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
-    pShader = DynamicCast< Shader >( spShader.Get() );
+    pShader = Reflect::SafeCast< Shader >( spShader.Get() );
     HELIUM_ASSERT( pShader );
     if( pShader )
     {
@@ -404,19 +404,19 @@ void RenderResourceManager::Initialize()
     HELIUM_VERIFY( fontPath.Set(
         L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = DynamicCast< Font >( spFont.Get() );
+    m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
         L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = DynamicCast< Font >( spFont.Get() );
+    m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
         L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
-    m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = DynamicCast< Font >( spFont.Get() );
+    m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 }
 

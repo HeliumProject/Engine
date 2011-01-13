@@ -280,7 +280,7 @@ bool Shader::TryFinishLoadVariant( size_t loadId, ShaderVariantPtr& rspVariant )
     bool bFinished = pObjectLoader->TryFinishLoad( loadId, spObject );
     if( bFinished )
     {
-        rspVariant = StaticCast< ShaderVariant >( spObject.Get() );
+        rspVariant = Reflect::AssertCast< ShaderVariant >( spObject.Get() );
     }
 
     return bFinished;

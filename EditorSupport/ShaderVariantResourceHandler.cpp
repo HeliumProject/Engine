@@ -58,7 +58,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    ShaderVariant* pVariant = StaticCast< ShaderVariant >( pResource );
+    ShaderVariant* pVariant = Reflect::AssertCast< ShaderVariant >( pResource );
 
     // Parse the shader type and user option index from the variant name.
     Name variantName = pVariant->GetName();
@@ -123,7 +123,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     }
 
     // Get the parent shader.
-    Shader* pShader = StaticCast< Shader >( pVariant->GetOwner() );
+    Shader* pShader = Reflect::AssertCast< Shader >( pVariant->GetOwner() );
     HELIUM_ASSERT( pShader );
     HELIUM_ASSERT( pShader->GetAnyFlagSet( GameObject::FLAG_PRECACHED ) );
 
@@ -520,7 +520,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
     Name variantName( variantNameString );
     variantNameString.Clear();
 
-    pLoadRequest->spVariant.Set( StaticCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
+    pLoadRequest->spVariant.Set( Reflect::AssertCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
     if( !pLoadRequest->spVariant )
     {
         if( !GameObject::Create< ShaderVariant >( pLoadRequest->spVariant, variantName, pShader ) )
@@ -552,7 +552,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 
         HELIUM_ASSERT( pPackageObject );
 
-        PackageLoader* pPackageLoader = StaticCast< Package >( pPackageObject )->GetLoader();
+        PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
         HELIUM_ASSERT( pPackageLoader );
         HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
 

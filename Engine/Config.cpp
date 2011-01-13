@@ -103,7 +103,7 @@ bool Config::TryFinishLoad()
                 return false;
             }
 
-            m_spDefaultConfigPackage = StaticCast< Package >( spPackage.Get() );
+            m_spDefaultConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
             HELIUM_ASSERT( m_spDefaultConfigPackage );
 
             SetInvalid( m_objectLoadIds[ 0 ] );
@@ -120,7 +120,7 @@ bool Config::TryFinishLoad()
                 return false;
             }
 
-            m_spUserConfigPackage = StaticCast< Package >( spPackage.Get() );
+            m_spUserConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
             HELIUM_ASSERT( m_spUserConfigPackage );
 
             SetInvalid( m_objectLoadIds[ 1 ] );

@@ -250,7 +250,7 @@ namespace Lunar
     Shader* ShaderVariant::GetShader() const
     {
         GameObject* pOwner = GetOwner();
-        Shader* pShader = StaticCast< Shader >( pOwner );
+        Shader* pShader = Reflect::AssertCast< Shader >( pOwner );
 
         return pShader;
     }

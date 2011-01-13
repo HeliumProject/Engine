@@ -64,7 +64,7 @@ bool Texture2dResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    Texture2d* pTexture = StaticCast< Texture2d >( pResource );
+    Texture2d* pTexture = Reflect::AssertCast< Texture2d >( pResource );
 
     // Load the source texture data.
     FileStream* pSourceFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );

@@ -72,7 +72,7 @@ int Locator::GetShape() const
 
 void Locator::SetShape( int shape )
 {
-    m_Shape = static_cast< LocatorShape > (shape);
+    m_Shape = static_cast< LocatorShape::Enum >( shape );
 }
 
 void Locator::Evaluate(GraphDirection direction)

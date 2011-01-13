@@ -1383,7 +1383,7 @@ int TranslateManipulator::GetSpace() const
 
 void TranslateManipulator::SetSpace(int space)
 {
-    m_Space = (ManipulatorSpace)space;
+    m_Space = static_cast< ManipulatorSpace::Enum >( space );
 
     TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
 

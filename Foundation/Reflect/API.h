@@ -98,8 +98,7 @@ Enum m_Value; \
 __Enumeration() : m_Value() {} \
 __Enumeration( const __Enumeration& e ) : m_Value( e.m_Value ) {} \
 __Enumeration( const Enum& e ) : m_Value( e ) {} \
-__Enumeration( intptr_t e ) : m_Value( (Enum)e ) {} \
-operator intptr_t() const { return (size_t)m_Value; } \
+operator const Enum&() const { return m_Value; } \
 static Helium::Reflect::Enumeration* CreateEnumeration( const tchar_t* name ); \
 static const Helium::Reflect::Type* s_Type; \
 static const Helium::Reflect::Enumeration* s_Enumeration;

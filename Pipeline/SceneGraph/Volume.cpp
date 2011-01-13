@@ -75,7 +75,7 @@ int Volume::GetShape() const
 
 void Volume::SetShape( int shape )
 {
-    m_Shape = static_cast< VolumeShape > (shape);
+    m_Shape = static_cast< VolumeShape::Enum >( shape );
 }
 
 void Volume::Evaluate(GraphDirection direction)

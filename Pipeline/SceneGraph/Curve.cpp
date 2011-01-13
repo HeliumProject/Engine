@@ -128,7 +128,7 @@ int Curve::GetCurveType() const
 
 void Curve::SetCurveType( int value )
 {
-    m_Type = (CurveType)value;
+    m_Type = static_cast< CurveType::Enum >( value );
 
     Dirty();
 }
@@ -164,7 +164,8 @@ int Curve::GetControlPointLabel() const
 
 void Curve::SetControlPointLabel( int value )
 {
-    m_ControlPointLabel = (ControlPointLabel)value;
+    m_ControlPointLabel = static_cast< ControlPointLabel::Enum >( value );
+
     Dirty();
 }
 

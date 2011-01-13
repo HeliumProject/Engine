@@ -440,7 +440,7 @@ Undo::CommandPtr PivotTransform::CenterTransform()
     {
         SceneGraph::HierarchyNode* n = *itr;
 
-        SceneGraph::Transform* t = Reflect::ObjectCast<SceneGraph::Transform>( n );
+        SceneGraph::Transform* t = Reflect::SafeCast<SceneGraph::Transform>( n );
 
         if (!t)
         {

@@ -350,7 +350,7 @@ void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_
             HM_SceneNodeDumbPtr layerMembers;
 
             // If it's a layer
-            SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( *selItr );
+            SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( *selItr );
             if ( layer )
             {
                 // Iterate over the layer's members (descendants)

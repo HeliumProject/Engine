@@ -48,7 +48,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
         V_Control::const_iterator end = scriptOutput->GetChildren().end();
         for( ; itr != end; ++itr )
         {
-            Label* label = Reflect::ObjectCast<Label>( *itr );
+            Label* label = Reflect::SafeCast<Label>( *itr );
             if (label)
             {
                 label->ReadStringData( labelText );

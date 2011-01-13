@@ -92,7 +92,7 @@ void Mesh::Initialize()
     V_TUID::const_iterator end = m_ShaderIDs.end();
     for ( ; itr != end; ++itr )
     {
-        Shader* shader = Reflect::ObjectCast< Shader >( m_Owner->FindNode( *itr ) );
+        Shader* shader = Reflect::SafeCast< Shader >( m_Owner->FindNode( *itr ) );
 
         if ( shader )
         {

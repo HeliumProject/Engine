@@ -106,7 +106,7 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
 
             if ( (*itr)->GetHitObject() != m_Instance )
             {
-                SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+                SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
 
                 if ( s_ObjectSnap )
                 {

@@ -33,7 +33,7 @@ void ObjectStlSetData::Clear()
 
 bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(src);
+    const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(src);
     if (!rhs)
     {
         return false;
@@ -60,7 +60,7 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 
 bool ObjectStlSetData::Equals(const Object* object) const
 {
-    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(object);
+    const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(object);
     if (!rhs)
     {
         return false;

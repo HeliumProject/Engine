@@ -50,7 +50,7 @@ void Skin::Initialize()
 {
     Base::Initialize();
 
-    m_Mesh = Reflect::ObjectCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
+    m_Mesh = Reflect::SafeCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
 
     if ( m_Mesh )
     {
@@ -63,7 +63,7 @@ void Skin::Initialize()
         for ( ; infItr != infEnd; ++infItr )
         {
             SceneNode* obj = m_Owner->FindNode( *infItr );
-            Transform* transform = Reflect::ObjectCast< Transform >( obj );
+            Transform* transform = Reflect::SafeCast< Transform >( obj );
             HELIUM_ASSERT( transform );
             if ( transform )
             {

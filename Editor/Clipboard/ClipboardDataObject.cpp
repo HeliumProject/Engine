@@ -117,7 +117,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
         tstring dataString = (const tchar_t*)GetData();
 #pragma TODO( "GetData seems to return a pointer to a string that isn't properly terminated, so we have to do this crap.  If you know how to fix this, I imagine the solution is better than what I've put here and you should do it." )
         dataString.resize( GetSize() / sizeof( tchar_t ) );
-        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetClass< ClipboardDataWrapper >() ) );
+        ClipboardDataWrapperPtr wrapper = Reflect::SafeCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( dataString, Reflect::GetClass< ClipboardDataWrapper >() ) );
         if ( wrapper.ReferencesObject() )
         {
             data = wrapper->m_Data;

@@ -29,7 +29,7 @@ DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* gene
 {
     if (!m_Scene->GetSelection().GetItems().Empty())
     {
-        m_Source = Reflect::ObjectCast<SceneGraph::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
+        m_Source = Reflect::SafeCast<SceneGraph::Transform>( *m_Scene->GetSelection().GetItems().Begin() );
     }
 }
 
@@ -42,7 +42,7 @@ SceneGraph::TransformPtr DuplicateTool::CreateNode()
 {
     if (m_Source)
     {
-        return Reflect::ObjectCast<SceneGraph::Transform>( m_Source->Duplicate() );
+        return Reflect::SafeCast<SceneGraph::Transform>( m_Source->Duplicate() );
     }
     else
     {

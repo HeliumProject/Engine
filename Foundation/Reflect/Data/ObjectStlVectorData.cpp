@@ -33,7 +33,7 @@ void ObjectStlVectorData::Clear()
 
 bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(src);
+    const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(src);
     if (!rhs)
     {
         return false;
@@ -60,7 +60,7 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 
 bool ObjectStlVectorData::Equals(const Object* object) const
 {
-    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(object);
+    const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(object);
     if (!rhs)
     {
         return false;

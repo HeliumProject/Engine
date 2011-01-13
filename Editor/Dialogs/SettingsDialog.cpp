@@ -49,7 +49,7 @@ int SettingsDialog::ShowModal( SettingsManager* settingsManager )
     Inspect::V_Control canvasControls;
     for ( M_Settings::iterator itr = settings.begin(), end = settings.end(); itr != end; ++itr )
     {
-        Settings* settings = Reflect::ObjectCast< Settings >( (*itr).second );
+        Settings* settings = Reflect::SafeCast< Settings >( (*itr).second );
 
         // skip settings that we don't want the user to see
         if ( settings && !settings->UserVisible() )
@@ -161,7 +161,7 @@ void SettingsDialog::OnRestoreDefaults( wxCommandEvent& args )
         return;
     }
 
-    Reflect::ObjectPtr defaultElement = Reflect::ObjectCast<Reflect::Object>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetClass() ) );
+    Reflect::ObjectPtr defaultElement = Reflect::SafeCast<Reflect::Object>( Reflect::Registry::GetInstance()->CreateInstance( m_CurrentSetting->m_Clone->GetClass() ) );
     if ( !defaultElement )
     {
         return;

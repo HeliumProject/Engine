@@ -121,7 +121,7 @@ void SimpleObjectStlMapData<KeyT>::RemoveItem(const Data* key)
 template < class KeyT >
 bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(src);
+    const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>(src);
     if (!rhs)
     {
         return false;
@@ -149,7 +149,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 template < class KeyT >
 bool SimpleObjectStlMapData<KeyT>::Equals(const Object* object) const
 {
-    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>( object );
+    const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>( object );
     if (!rhs)
     {
         return false;
@@ -240,7 +240,7 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        Data* key = ObjectCast<Data>(*itr);
+        Data* key = SafeCast<Data>(*itr);
         Object* value = *(++itr);
         if ( key && value )
         {

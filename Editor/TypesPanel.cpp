@@ -124,7 +124,7 @@ void TypesPanel::SelectabilityChanged( const GridRowChangeArgs& args )
             OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
-                SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
+                SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( *itr );
 
                 if (!node || node->GetNodeType() != nodeType)
                 {

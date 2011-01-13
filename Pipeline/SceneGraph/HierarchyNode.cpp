@@ -503,7 +503,7 @@ void HierarchyNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 
     if ( ancestor->IsClass( Reflect::GetClass< SceneGraph::Layer >() ) )
     {
-        m_LayerColor = Reflect::ObjectCast< SceneGraph::Layer >( ancestor );
+        m_LayerColor = Reflect::SafeCast< SceneGraph::Layer >( ancestor );
     }
 }
 
@@ -520,7 +520,7 @@ void HierarchyNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
         {
             SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-            SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+            SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
             if ( layer )
             {
                 m_LayerColor = layer;
@@ -536,7 +536,7 @@ SceneGraph::Transform* HierarchyNode::GetTransform()
 
     while (node.ReferencesObject())
     {
-        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( node );
+        SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( node );
 
         if (transform != NULL)
         {
@@ -596,7 +596,7 @@ bool HierarchyNode::ComputeVisibility() const
     {
         SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
         if ( layer )
         {
             isVisible &= layer->IsVisible();
@@ -621,7 +621,7 @@ bool HierarchyNode::ComputeSelectability() const
     {
         SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
         if ( layer )
         {
             isSelectable &= layer->IsSelectable();

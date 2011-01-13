@@ -221,7 +221,7 @@ namespace Helium
 
                 if (found.ReferencesObject())
                 {
-                    return ObjectCast<T>( found );
+                    return SafeCast<T>( found );
                 }
                 else
                 {

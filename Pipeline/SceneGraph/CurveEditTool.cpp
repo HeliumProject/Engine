@@ -67,7 +67,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
             for ( V_PickHitSmartPtr::const_iterator itr = sorted.begin(), end = sorted.end(); itr != end; ++itr )
             {
-                if ( curve = Reflect::ObjectCast<Curve>( (*itr)->GetHitObject() ) )
+                if ( curve = Reflect::SafeCast<Curve>( (*itr)->GetHitObject() ) )
                 {
                     break;
                 }
@@ -195,14 +195,14 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
             return;
         }
 
-        CurveControlPoint* point = Reflect::ObjectCast<CurveControlPoint>( selection.Front() );
+        CurveControlPoint* point = Reflect::SafeCast<CurveControlPoint>( selection.Front() );
 
         if ( !point )
         {
             return;
         }
 
-        Curve* curve = Reflect::ObjectCast<Curve>( point->GetParent() );
+        Curve* curve = Reflect::SafeCast<Curve>( point->GetParent() );
 
         if ( !curve )
         {
@@ -299,7 +299,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
     OS_SceneNodeDumbPtr::Iterator end = items.End();
     for( ; itr != end; ++itr )
     {
-        CurveControlPoint* p = Reflect::ObjectCast<CurveControlPoint>( *itr );
+        CurveControlPoint* p = Reflect::SafeCast<CurveControlPoint>( *itr );
 
         if ( !p )
         {
@@ -336,7 +336,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
         OS_SceneNodeDumbPtr::Iterator end = items.End();
         for( ; itr != end; ++itr )
         {
-            Curve* c = Reflect::ObjectCast<Curve>( *itr );
+            Curve* c = Reflect::SafeCast<Curve>( *itr );
 
             if ( !c )
             {
@@ -446,7 +446,7 @@ void CurveEditTool::StoreSelectedCurves()
     OS_SceneNodeDumbPtr::Iterator selection_end = m_Scene->GetSelection().GetItems().End();
     for ( ; selection_itr != selection_end; ++selection_itr )
     {
-        Curve* curve = Reflect::ObjectCast<Curve>( *selection_itr );
+        Curve* curve = Reflect::SafeCast<Curve>( *selection_itr );
         if ( curve )
         {
             m_SelectedCurves.Append( curve );

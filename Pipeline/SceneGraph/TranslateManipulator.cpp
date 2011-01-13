@@ -649,7 +649,7 @@ void TranslateManipulator::MouseMove( const MouseMoveInput& e )
                 V_PickHitSmartPtr::const_iterator end = sorted.end();
                 for ( ; itr != end; ++itr )
                 {
-                    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+                    SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
 
                     // don't use the object we are moving
                     if ( node && node == primary->GetNode() && !primary->AllowSelfSnap() )

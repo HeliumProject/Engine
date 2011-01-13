@@ -60,7 +60,7 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.End();
     for ( ; itr != end; ++itr )
     {
-        SceneGraph::VolumePtr volume = Reflect::ObjectCast< Volume >( *itr );
+        SceneGraph::VolumePtr volume = Reflect::SafeCast< Volume >( *itr );
         if ( !volume )
         {
             allVolumes = false;

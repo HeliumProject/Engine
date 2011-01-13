@@ -22,7 +22,7 @@ void PointerData::ConnectData(Helium::HybridPtr<void> data)
 
 bool PointerData::Set(const Data* s, uint32_t flags)
 {
-    const PointerData* rhs = ObjectCast<PointerData>(s);
+    const PointerData* rhs = SafeCast<PointerData>(s);
     if (!rhs)
     {
         return false;
@@ -42,7 +42,7 @@ bool PointerData::Set(const Data* s, uint32_t flags)
 
 bool PointerData::Equals(const Object* object) const
 {
-    const PointerData* rhs = ObjectCast<PointerData>(object);
+    const PointerData* rhs = SafeCast<PointerData>(object);
     
     if (!rhs)
     {

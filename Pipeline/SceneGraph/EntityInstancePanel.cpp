@@ -146,11 +146,11 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
     OS_SceneNodeDumbPtr::Iterator selectionEnd = m_Selection.End();
     for (; selectionIter != selectionEnd; ++selectionIter )
     {
-        EntityInstance* entity = Reflect::ObjectCast< EntityInstance >( *selectionIter );
+        EntityInstance* entity = Reflect::SafeCast< EntityInstance >( *selectionIter );
 
         if ( !scene )
         {
-            SceneNode* node = Reflect::ObjectCast< SceneNode >( *selectionIter );
+            SceneNode* node = Reflect::SafeCast< SceneNode >( *selectionIter );
             scene = node->GetOwner();
         }
 
@@ -182,7 +182,7 @@ void EntityPanel::OnEntityAssetRefresh( const Inspect::ButtonClickedArgs& args )
 
     while( itr != end )
     {
-        EntitySet* entClassSet = ObjectCast< EntitySet >( *itr );
+        EntitySet* entClassSet = SafeCast< EntitySet >( *itr );
 
         if( entClassSet )
         {
@@ -205,7 +205,7 @@ void EntityPanel::OnEntityAssetEditAsset( const Inspect::ButtonClickedArgs& args
     OS_SceneNodeDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
     {
-        EntityInstance* entity = Reflect::ObjectCast< EntityInstance >( *selectionIter );
+        EntityInstance* entity = Reflect::SafeCast< EntityInstance >( *selectionIter );
         if ( entity )
         {
             tstring fileToEdit = entity->GetEntityPath();

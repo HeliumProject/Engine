@@ -83,7 +83,7 @@ DataPtr Field::ShouldSerialize( const void* instance ) const
     }
 
     ObjectPtr object = Registry::GetInstance()->CreateInstance( m_DataClass );
-    DataPtr data = TryCast< Data >( object );
+    DataPtr data = ThrowCast< Data >( object );
     data->ConnectField( instance, this );
 
     // always write force fields

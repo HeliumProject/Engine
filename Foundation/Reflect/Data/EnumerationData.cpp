@@ -40,7 +40,7 @@ bool EnumerationData::Set(const Data* src, uint32_t flags)
 
 bool EnumerationData::Equals(const Object* object) const
 {
-    const EnumerationData* rhs = ObjectCast< EnumerationData >( object );
+    const EnumerationData* rhs = SafeCast< EnumerationData >( object );
     
     if (!rhs)
     {

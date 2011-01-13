@@ -493,7 +493,7 @@ void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
         if ( !m_TreeCtrl->IsSelected( item ) )
         {
             SceneOutlinerItemData* data = GetTreeItemData( item );
-            SceneNode* node = Reflect::ObjectCast<SceneNode>( data->GetObject() );
+            SceneNode* node = Reflect::SafeCast<SceneNode>( data->GetObject() );
             if ( node )
             {
                 if ( !node->IsSelectable() )
@@ -524,7 +524,7 @@ void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
             SceneOutlinerItemData* itemData = GetTreeItemData( selections[i] );
             if ( itemData )
             {
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( itemData->GetObject() );
+                SceneNode* node = Reflect::SafeCast<SceneNode>( itemData->GetObject() );
                 if ( node )
                 {
                     nodes.Append( node );

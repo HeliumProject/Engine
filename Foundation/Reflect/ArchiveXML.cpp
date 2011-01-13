@@ -559,7 +559,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                 // see if we should process this object as a as a field, or as a component
                 if ( topState->GetFlag( ParsingState::kField ) )
                 {
-                    DataPtr data = ObjectCast<Data>(topState->m_Object);
+                    DataPtr data = SafeCast<Data>(topState->m_Object);
                     if ( data.ReferencesObject() )
                     {
                         data->Disconnect();

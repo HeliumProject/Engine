@@ -921,7 +921,7 @@ void GameObject::Shutdown()
             RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
             HELIUM_ASSERT( pProxy );
 
-            GameObject* pGameObject = Reflect::ObjectCast< GameObject >( pProxy->GetObject() );
+            GameObject* pGameObject = Reflect::SafeCast< GameObject >( pProxy->GetObject() );
             if( pGameObject )
             {
                 ++activeGameObjectCount;
@@ -941,7 +941,7 @@ void GameObject::Shutdown()
             RefCountProxy< Reflect::Object >* pProxy = *refCountProxyAccessor;
             HELIUM_ASSERT( pProxy );
 
-            GameObject* pGameObject = Reflect::ObjectCast< GameObject >( pProxy->GetObject() );
+            GameObject* pGameObject = Reflect::SafeCast< GameObject >( pProxy->GetObject() );
             if( pGameObject )
             {
                 HELIUM_TRACE(

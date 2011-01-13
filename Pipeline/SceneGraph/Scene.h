@@ -528,7 +528,7 @@ namespace Helium
             template< class T >
             T* Get( const Helium::TUID &uid ) const
             {
-                return Reflect::ObjectCast< T >( Get( uid ) );
+                return Reflect::SafeCast< T >( Get( uid ) );
             }
 
             template< class T >
@@ -555,7 +555,7 @@ namespace Helium
                 HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for( ; itor != end; ++itor )
                 {
-                    T* contentObject = Reflect::ObjectCast<T>( itor->second->GetPackage() );
+                    T* contentObject = Reflect::SafeCast<T>( itor->second->GetPackage() );
 
                     if (contentObject == NULL)
                     {

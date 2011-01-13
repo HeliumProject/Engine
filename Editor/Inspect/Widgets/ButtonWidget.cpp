@@ -35,7 +35,7 @@ void ButtonWindow::SetIcon( const tstring& icon )
         m_Button = NULL;
     }
 
-    Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
+    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetIcon( (wxArtID)buttonControl->a_Icon.Get().c_str() ) );
 
@@ -55,7 +55,7 @@ void ButtonWindow::SetLabel( const tstring& label )
         m_Button = NULL;
     }
 
-    Inspect::Button* buttonControl = Reflect::ObjectCast< Inspect::Button >( m_ButtonWidget->GetControl() );
+    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
     HELIUM_ASSERT( buttonControl );
     m_Button = new wxButton( this, wxID_ANY, buttonControl->a_Label.Get().c_str() );
 

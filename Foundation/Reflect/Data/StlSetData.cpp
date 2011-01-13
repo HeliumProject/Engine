@@ -138,7 +138,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(src);
+    const StlSetDataT* rhs = SafeCast<StlSetDataT>(src);
     if (!rhs)
     {
         return false;
@@ -152,7 +152,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
 {
-    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(object);
+    const StlSetDataT* rhs = SafeCast<StlSetDataT>(object);
     if (!rhs)
     {
         return false;
@@ -212,7 +212,7 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        DataClassT* data = ObjectCast<DataClassT>(*itr);
+        DataClassT* data = SafeCast<DataClassT>(*itr);
         if (!data)
         {
             throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );

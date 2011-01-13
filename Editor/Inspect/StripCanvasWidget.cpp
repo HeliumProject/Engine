@@ -59,7 +59,7 @@ void StripCanvasWidget::CreateWindow( wxWindow* parent )
     {
         Inspect::Control* c = *itr;
 
-        Inspect::Label* label = Reflect::ObjectCast< Inspect::Label >( c );
+        Inspect::Label* label = Reflect::SafeCast< Inspect::Label >( c );
         if ( label )
         {
             label->a_Ellipsize.Set( false );

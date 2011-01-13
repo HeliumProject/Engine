@@ -99,11 +99,11 @@ inline const DerivedT* Helium::Reflect::AssertCast(const Reflect::Object* base)
 }
 
 //
-// TryCast type checks and throws if failure
+// ThrowCast type checks and throws if failure
 //
 
 template<class DerivedT>
-inline DerivedT* Helium::Reflect::TryCast(Reflect::Object* base)
+inline DerivedT* Helium::Reflect::ThrowCast(Reflect::Object* base)
 {
     if ( base != NULL && !base->IsClass( GetClass<DerivedT>() ) )
     {
@@ -114,7 +114,7 @@ inline DerivedT* Helium::Reflect::TryCast(Reflect::Object* base)
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::TryCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::ThrowCast(const Reflect::Object* base)
 {
     if ( base != NULL && !base->IsClass( GetClass<DerivedT>() ) )
     {
@@ -125,11 +125,11 @@ inline const DerivedT* Helium::Reflect::TryCast(const Reflect::Object* base)
 }
 
 //
-// ObjectCast always type checks and returns null if failure
+// SafeCast always type checks and returns null if failure
 //
 
 template<class DerivedT>
-inline DerivedT* Helium::Reflect::ObjectCast(Reflect::Object* base)
+inline DerivedT* Helium::Reflect::SafeCast(Reflect::Object* base)
 {
     if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {
@@ -142,7 +142,7 @@ inline DerivedT* Helium::Reflect::ObjectCast(Reflect::Object* base)
 }
 
 template<class DerivedT>
-inline const DerivedT* Helium::Reflect::ObjectCast(const Reflect::Object* base)
+inline const DerivedT* Helium::Reflect::SafeCast(const Reflect::Object* base)
 {
     if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {

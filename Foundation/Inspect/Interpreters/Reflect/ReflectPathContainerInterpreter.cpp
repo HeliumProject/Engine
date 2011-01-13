@@ -169,8 +169,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
 
         if ( instances.size() == 1 )
         {
-            m_PathVector = Reflect::ObjectCast< Reflect::PathStlVectorData >( s );
-            m_PathSet = Reflect::ObjectCast< Reflect::PathStlSetData >( s );
+            m_PathVector = Reflect::SafeCast< Reflect::PathStlVectorData >( s );
+            m_PathSet = Reflect::SafeCast< Reflect::PathStlSetData >( s );
             HELIUM_ASSERT( ( m_PathVector || m_PathSet ) && !( m_PathVector && m_PathSet ) );
         }
 

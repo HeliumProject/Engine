@@ -339,7 +339,7 @@ void ComponentCollection::CopyTo(Reflect::Object* object)
 {
     Base::CopyTo( object );
 
-    ComponentCollection* collection = Reflect::ObjectCast< ComponentCollection >( object );
+    ComponentCollection* collection = Reflect::SafeCast< ComponentCollection >( object );
     if ( collection )
     {
         // Remove all attributes, we're going to bring them over manually

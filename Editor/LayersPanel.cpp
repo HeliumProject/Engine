@@ -280,7 +280,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
         {
             // ensure that we are not trying to add one layer to another layer
             {
-                Layer* layerTest = Reflect::ObjectCast< Layer >( *nodeItr );
+                Layer* layerTest = Reflect::SafeCast< Layer >( *nodeItr );
                 if( layerTest )
                 {
                     continue;
@@ -294,7 +294,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
                 continue;
             }
 
-            SceneNode* node = Reflect::ObjectCast< SceneNode >( *nodeItr );
+            SceneNode* node = Reflect::SafeCast< SceneNode >( *nodeItr );
             if ( node )
             {
                 // For each row that is highlighted...
@@ -421,7 +421,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
             //If the element is a supported type
             if( *itr )
             {
-                SceneNode* node = Reflect::ObjectCast< SceneNode >( *itr );
+                SceneNode* node = Reflect::SafeCast< SceneNode >( *itr );
                 if ( node )
                 {
                     batch->Push( new DependencyCommand( DependencyCommand::Connect, layer, node ) );
@@ -607,7 +607,7 @@ void LayersPanel::SelectionChanged( const SelectionChangeArgs& args )
         OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
         for ( ; itr != end; ++itr )
         {
-            Layer* lunaLayer = Reflect::ObjectCast< Layer >( *itr );
+            Layer* lunaLayer = Reflect::SafeCast< Layer >( *itr );
             if ( lunaLayer )
             {
                 HELIUM_ASSERT( m_Layers.find( lunaLayer->GetName() ) != m_Layers.end() );
@@ -733,7 +733,7 @@ void LayersPanel::LayerSelectableChanged( const GridRowChangeArgs& args )
             OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( *itr );
+                SceneNode* node = Reflect::SafeCast<SceneNode>( *itr );
 
                 if (!node || !layer->ContainsMember( node ))
                 {

@@ -198,7 +198,7 @@ namespace Helium
                     ; itr != end
                     ; ++itr )
                 {
-                    T* item = Reflect::ObjectCast< T >( *itr );
+                    T* item = Reflect::SafeCast< T >( *itr );
                     if ( item )
                     {
                         children.push_back( item );                    

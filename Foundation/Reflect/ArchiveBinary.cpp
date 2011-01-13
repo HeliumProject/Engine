@@ -535,7 +535,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
         if ( field )
         {
             // pull and object and downcast to data
-            DataPtr latent_data = ObjectCast<Data>( Allocate() );
+            DataPtr latent_data = SafeCast<Data>( Allocate() );
             if (!latent_data.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
@@ -565,7 +565,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
                 // downcast to data
-                DataPtr current_data = ObjectCast<Data>(current_element);
+                DataPtr current_data = SafeCast<Data>(current_element);
                 if (!current_data.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus

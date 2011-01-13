@@ -29,7 +29,7 @@ void SimpleData<T>::ConnectData(Helium::HybridPtr<void> data)
 template <class T>
 bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 {
-    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(src);
+    const SimpleDataT* rhs = SafeCast<SimpleDataT>(src);
     if (!rhs)
     {
         return false;
@@ -43,7 +43,7 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 template <class T>
 bool SimpleData<T>::Equals(const Object* object) const
 {
-    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(object);
+    const SimpleDataT* rhs = SafeCast<SimpleDataT>(object);
     if (!rhs)
     {
         return false;

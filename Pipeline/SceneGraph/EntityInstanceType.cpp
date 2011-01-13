@@ -57,7 +57,7 @@ void EntityInstanceType::Create()
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )
     {
-        SceneGraph::EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet > (itr->second);
+        SceneGraph::EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet > (itr->second);
         if (set)
         {
             set->Create();
@@ -73,7 +73,7 @@ void EntityInstanceType::Delete()
     M_InstanceSetSmartPtr::const_iterator end = m_Sets.end();
     for ( ; itr != end; ++itr )
     {
-        SceneGraph::EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet > (itr->second);
+        SceneGraph::EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet > (itr->second);
         if (set)
         {
             set->Delete();
@@ -97,7 +97,7 @@ void EntityInstanceType::PopulateManifest(Asset::SceneManifest* manifest) const
     for ( ; setItr != setEnd; ++setItr )
     {
         const SceneGraph::InstanceSet* set = setItr->second;
-        const SceneGraph::EntitySet* entitySet = Reflect::ObjectCast<SceneGraph::EntitySet>( set );
+        const SceneGraph::EntitySet* entitySet = Reflect::SafeCast<SceneGraph::EntitySet>( set );
 
         // if our set is a class set, insert the class id into the manifest
         if (entitySet)

@@ -37,7 +37,7 @@ bool PathData::Set( const Data* src, uint32_t flags )
 
 bool PathData::Equals( const Object* object ) const
 {
-    const PathData* rhs = ObjectCast< PathData >( object );
+    const PathData* rhs = SafeCast< PathData >( object );
 
     if ( !rhs )
     {

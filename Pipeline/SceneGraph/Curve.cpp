@@ -101,7 +101,7 @@ void Curve::Initialize()
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( point )
         {
             point->AddParentChangingListener( ParentChangingSignature::Delegate( this, &Curve::ChildChangingParents ) );
@@ -180,7 +180,7 @@ int Curve::ClosestControlPoint( PickVisitor* pick )
     OS_HierarchyNodeDumbPtr::Iterator end = GetChildren().End();
     for ( uint32_t i = 0; itr != end; ++itr, ++i )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *itr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *itr );
         if ( point )
         {
             if ( pick->PickPoint( point->GetPosition(), FLT_MAX ) )
@@ -222,7 +222,7 @@ bool Curve::ClosestControlPoints( PickVisitor* pick, std::pair<uint32_t, uint32_
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( uint32_t index = 0; childItr != childEnd; ++childItr )
     {
-        current = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        current = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( current )
         {
             currentIndex = index;
@@ -341,7 +341,7 @@ CurveControlPoint* Curve::GetControlPointByIndex( uint32_t index )
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( uint32_t i = 0; childItr != childEnd; ++childItr )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( point )
         {
             if ( i == index )
@@ -364,7 +364,7 @@ int32_t Curve::GetIndexForControlPoint( CurveControlPoint* pc )
     OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( uint32_t i = 0; childItr != childEnd; ++childItr )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( point )
         {
             if ( point == pc )
@@ -385,7 +385,7 @@ Undo::CommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
     OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
     for ( uint32_t i = 0; childItr != childEnd; ++childItr )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( point )
         {
             if ( i == index )
@@ -408,7 +408,7 @@ Undo::CommandPtr Curve::InsertControlPointAtIndex( uint32_t index, CurveControlP
     OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
     for ( uint32_t i = 0; childItr != childEnd; ++childItr )
     {
-        CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+        CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
         if ( point )
         {
             if ( i == index )
@@ -541,7 +541,7 @@ void Curve::Populate( PopulateArgs* args )
                 OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
                 for ( ; childItr != childEnd; ++childItr )
                 {
-                    CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+                    CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
                     if ( point )
                     {
                         if ( !firstPoint )
@@ -615,7 +615,7 @@ Undo::CommandPtr Curve::CenterTransform()
         OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
         for ( ; childItr != childEnd; ++childItr )
         {
-            CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+            CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
             if ( point )
             {
                 ++controlPointCount;
@@ -643,7 +643,7 @@ Undo::CommandPtr Curve::CenterTransform()
         OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
         for ( ; childItr != childEnd; ++childItr )
         {
-            CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+            CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
             if ( point )
             {
                 Vector3 p = point->GetPosition();
@@ -674,7 +674,7 @@ Undo::CommandPtr Curve::CenterTransform()
     {
         HierarchyNode* n = *itr;
 
-        Transform* t = Reflect::ObjectCast<Transform>( n );
+        Transform* t = Reflect::SafeCast<Transform>( n );
 
         if ( !t )
         {
@@ -714,7 +714,7 @@ void Curve::Evaluate( GraphDirection direction )
         OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
         for ( ; childItr != childEnd; ++childItr )
         {
-            CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+            CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
             if ( point )
             {
                 points.push_back( point->GetPosition() );
@@ -903,7 +903,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
             OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
-                CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+                CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
                 if ( point )
                 {
                     if ( point->IsSelected() )
@@ -960,7 +960,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
             OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
-                CurveControlPoint* point = Reflect::ObjectCast< CurveControlPoint >( *childItr );
+                CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
                 if ( point )
                 {
                     if ( point->IsHighlighted() )
@@ -1123,7 +1123,7 @@ void Curve::OnReverseControlPoints( const Inspect::ButtonClickedArgs& args )
         OS_SceneNodeDumbPtr::Iterator selEnd  = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
-            Curve* curve = Reflect::ObjectCast< Curve >( *selItr );
+            Curve* curve = Reflect::SafeCast< Curve >( *selItr );
             if ( curve )
             {
                 scene = curve->GetOwner();

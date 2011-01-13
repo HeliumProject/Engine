@@ -50,7 +50,7 @@ void EntityAssetOutliner::AddEntityTypes()
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
             for ( ; typeItr != typeEnd; ++typeItr )
             {
-                entityType = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( typeItr->second );
+                entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( typeItr->second );
                 if ( entityType )
                 {
                     AddEntityType( entityType );
@@ -75,7 +75,7 @@ void EntityAssetOutliner::AddEntityType( SceneGraph::EntityInstanceType* entityT
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             AddEntitySet( set );
@@ -98,7 +98,7 @@ void EntityAssetOutliner::RemoveEntityType( SceneGraph::EntityInstanceType* enti
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             RemoveEntitySet( set );

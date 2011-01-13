@@ -59,7 +59,7 @@ namespace Helium
             template <class T>
             Helium::StrongPtr<T> GetComponent() const
             {
-                return Reflect::ObjectCast<T>( GetComponent( Reflect::GetClass<T>() ) );
+                return Reflect::SafeCast<T>( GetComponent( Reflect::GetClass<T>() ) );
             }
 
             // template helper function for removing by type... 

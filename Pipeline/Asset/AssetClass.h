@@ -63,7 +63,7 @@ namespace Helium
             template <class T>
             static Helium::StrongPtr<T> LoadAssetClass( const Path& path )
             {
-                return Reflect::TryCast<T>( LoadAssetClass( path ) );
+                return Reflect::ThrowCast<T>( LoadAssetClass( path ) );
             }
 
         public:

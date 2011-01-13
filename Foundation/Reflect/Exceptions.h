@@ -16,7 +16,7 @@ namespace Helium
         };
 
         //
-        // For TryCast<>, etc...
+        // For ThrowCast<>, etc...
         //
 
         class CastException : public Reflect::Exception

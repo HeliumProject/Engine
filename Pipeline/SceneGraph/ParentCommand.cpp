@@ -14,7 +14,7 @@ ParentCommand::ParentCommand(const HierarchyNodePtr& child, const HierarchyNodeP
 
     m_Node->SetParent( m_NextParent.Ptr() );
 
-    SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( m_Node );
+    SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( m_Node );
     if ( transform )
     {
         Push( transform->ComputeObjectComponents() );

@@ -18,7 +18,7 @@ namespace Helium
 
             REFLECT_DECLARE_CLASS( ObjectStlVectorData, ContainerData )
 
-                ObjectStlVectorData();
+            ObjectStlVectorData();
             virtual ~ObjectStlVectorData();
 
             virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;

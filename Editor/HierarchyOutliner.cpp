@@ -237,7 +237,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
         const OS_SceneNodeDumbPtr::Iterator selEnd = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
-            SceneGraph::HierarchyNode* hNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *selItr );
+            SceneGraph::HierarchyNode* hNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
             if ( hNode )
             {
                 batch->Push( new ParentCommand( hNode, newParent ) );

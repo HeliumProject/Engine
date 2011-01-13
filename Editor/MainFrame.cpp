@@ -604,7 +604,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
     std::set< tstring > supportedExtensions;
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
-    ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
         for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
@@ -647,7 +647,7 @@ void MainFrame::Drop( const Editor::DragArgs& args )
 
     if ( ValidateDrag( args ) )
     {
-        ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+        ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
         if ( fileList )
         {
             for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
@@ -2017,7 +2017,7 @@ static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_Sc
     OS_SceneNodeDumbPtr::Iterator selEnd = oldSelection.End();
     for ( ; selItr != selEnd && !found; ++selItr )
     {
-        SceneGraph::HierarchyNode* current = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *selItr );
+        SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
         if ( current )
         {
             if ( current == node )
@@ -2147,7 +2147,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
         std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
-            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );
+            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::SafeCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
                 m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
@@ -2606,7 +2606,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
     V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
     for ( ; itr != end; ++itr )
     {
-        SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
+        SceneNode* node = Reflect::SafeCast<SceneNode>((*itr)->GetHitObject());
         if (node)
         {
             // add it to the new persistent list
@@ -2631,7 +2631,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
                 if( node->IsSelectable() )
                 {
-                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( node );
+                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
                     if ( hierarchyNode )
                     {
                         m_OrderedContextItems.push_back( hierarchyNode );
@@ -2803,10 +2803,10 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
-                const SceneGraph::EntityInstanceType* entity = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( type );
+                const SceneGraph::EntityInstanceType* entity = Reflect::SafeCast< SceneGraph::EntityInstanceType >( type );
 
                 // if this is an instance, then we need to check if it has code classes
-                const SceneGraph::InstanceType* instance = Reflect::ObjectCast< SceneGraph::InstanceType >( type );
+                const SceneGraph::InstanceType* instance = Reflect::SafeCast< SceneGraph::InstanceType >( type );
 
                 if (entity)
                 {
@@ -2834,7 +2834,7 @@ void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* enti
         M_InstanceSetSmartPtr::const_iterator end = sets.end();
         for( ;itr != end; ++itr )
         {
-            const SceneGraph::EntitySet* art = Reflect::ObjectCast< SceneGraph::EntitySet >( itr->second );
+            const SceneGraph::EntitySet* art = Reflect::SafeCast< SceneGraph::EntitySet >( itr->second );
             if (art && art->GetEntity() && !art->GetEntity()->GetSourcePath().empty())
             {
                 ContextCallbackData* data = new ContextCallbackData;

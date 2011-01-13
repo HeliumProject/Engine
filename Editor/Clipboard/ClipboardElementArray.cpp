@@ -63,7 +63,7 @@ bool ClipboardElementArray::Add( const Reflect::ObjectPtr& item )
 // 
 bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 {
-    const ClipboardElementArray* collection = Reflect::ObjectCast< ClipboardElementArray >( source );
+    const ClipboardElementArray* collection = Reflect::SafeCast< ClipboardElementArray >( source );
     if ( !collection )
     {
         return false;

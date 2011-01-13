@@ -115,7 +115,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         V_Control::const_iterator end = container->GetChildren().end();
         for( ; itr != end; ++itr )
         {
-            Label* label = Reflect::ObjectCast<Label>( *itr );
+            Label* label = Reflect::SafeCast<Label>( *itr );
             if (label)
             {
                 break;

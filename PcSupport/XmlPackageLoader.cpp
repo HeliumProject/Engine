@@ -1772,7 +1772,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // loading any existing persistent resource data stored in the object cache.
     if( !pObject->IsDefaultTemplate() )
     {
-        Resource* pResource = DynamicCast< Resource >( pObject );
+        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
         if( pResource )
         {
             Name objectCacheName = pObjectLoader->GetCacheName();
@@ -1825,7 +1825,7 @@ bool XmlPackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest )
     HELIUM_ASSERT( pRequest );
     HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED ) );
 
-    Resource* pResource = StaticCast< Resource >( pRequest->spObject.Get() );
+    Resource* pResource = Reflect::AssertCast< Resource >( pRequest->spObject.Get() );
     HELIUM_ASSERT( pResource );
 
     // Wait for the cached data load to complete.

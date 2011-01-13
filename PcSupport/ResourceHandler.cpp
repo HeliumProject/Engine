@@ -75,7 +75,7 @@ void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rRes
         const GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsType( pResourceHandlerType ) )
         {
-            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );
+            ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );
             rResourceHandlers.Push( pHandler );
         }
@@ -100,7 +100,7 @@ ResourceHandler* ResourceHandler::FindResourceHandlerForType( const GameObjectTy
         const GameObjectType& rType = *typeIterator;
         if( &rType != pResourceHandlerType && rType.IsType( pResourceHandlerType ) )
         {
-            ResourceHandler* pHandler = StaticCast< ResourceHandler >( rType.GetTemplate() );
+            ResourceHandler* pHandler = Reflect::AssertCast< ResourceHandler >( rType.GetTemplate() );
             HELIUM_ASSERT( pHandler );
             if( pHandler->GetResourceType() == pType )
             {

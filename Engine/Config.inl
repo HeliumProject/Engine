@@ -70,7 +70,7 @@ namespace Lunar
         GameObject* pObject = m_configObjects[ index ];
         HELIUM_ASSERT( pObject );
 
-        return StaticCast< T >( pObject );
+        return Reflect::AssertCast< T >( pObject );
     }
 
     /// Get the configuration object with the given name.
@@ -91,7 +91,7 @@ namespace Lunar
 
             if( pObject->GetName() == name )
             {
-                return StaticCast< T >( pObject );
+                return Reflect::AssertCast< T >( pObject );
             }
         }
 

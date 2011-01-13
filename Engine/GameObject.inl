@@ -257,7 +257,7 @@ namespace Lunar
         GameObjectPtr spGameObject;
         bool bResult = CreateObject( spGameObject, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
-        rspObject = StaticCast< T >( spGameObject.Get() );
+        rspObject = Reflect::AssertCast< T >( spGameObject.Get() );
 
         return bResult;
     }

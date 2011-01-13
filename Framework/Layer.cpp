@@ -169,7 +169,7 @@ Entity* Layer::CreateEntity(
         return NULL;
     }
 
-    Entity* pEntity = StaticCast< Entity >( spObject.Get() );
+    Entity* pEntity = Reflect::AssertCast< Entity >( spObject.Get() );
     HELIUM_ASSERT( pEntity );
 
     pEntity->SetPosition( rPosition );
@@ -287,7 +287,7 @@ void Layer::AddPackageEntities()
     // Add package entities.
     for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
     {
-        EntityPtr spEntity( DynamicCast< Entity >( pChild ) );
+        EntityPtr spEntity( Reflect::SafeCast< Entity >( pChild ) );
         if( spEntity )
         {
             HELIUM_ASSERT( spEntity->GetLayer().Get() == NULL );

@@ -111,7 +111,7 @@ sourceFormatString2Engine = \
         HELIUM_ASSERT( pPackageObject );
         HELIUM_ASSERT( pPackageObject->IsPackage() );
 
-        pPackage = Lunar::StaticCast< Lunar::Package >( pPackageObject );
+        pPackage = Helium::Reflect::AssertCast< Lunar::Package >( pPackageObject );
         sp{MODULE}TypePackage = pPackage;
 '''
 

@@ -57,10 +57,14 @@ bool BinarySerializer::Serialize( GameObject* pObject )
     uint32_t templateIndex;
     SetInvalid( templateIndex );
 
-    GameObject* pTemplate = pObject->GetTemplate();
-    HELIUM_ASSERT( pTemplate );
-    templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
-    HELIUM_ASSERT( IsValid( templateIndex ) );
+    if( !pObject->IsDefaultTemplate() )
+    {
+        GameObject* pTemplate = pObject->GetTemplate();
+        HELIUM_ASSERT( pTemplate );
+        templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
+        HELIUM_ASSERT( IsValid( templateIndex ) );
+    }
+
     m_pPropertyStream->Write( &templateIndex, sizeof( templateIndex ), 1 );
 
     // Serialize the object owner.

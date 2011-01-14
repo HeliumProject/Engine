@@ -56,7 +56,7 @@ WXLRESULT ListView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     m_SelectionDirty = false;
   }
 
-  WXLRESULT result = __super::MSWWindowProc( nMsg, wParam, lParam );
+  WXLRESULT result = wxListView::MSWWindowProc( nMsg, wParam, lParam );
 
   // The base class implementation handles the mouse down event and updates
   // the selection.  If the selection has changed, notify interested listeners.
@@ -357,7 +357,7 @@ bool SortableListView::SortItems( long whichColumn )
     if ( IsSortingEnabled() )
     {
         SortData data( this, whichColumn );
-        wasSorted = __super::SortItems( &LazyMapCompareFunction, wxIntPtr( &data ) );
+        wasSorted = wxListView::SortItems( &LazyMapCompareFunction, wxIntPtr( &data ) );
     }
     return wasSorted;
 }

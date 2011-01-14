@@ -6,10 +6,6 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Field;
-        class Structure;
-
-
         //
         // Structure (struct or class)
         //
@@ -17,7 +13,7 @@ namespace Helium
         class FOUNDATION_API Structure : public Composite
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Structure );
+            REFLECTION_TYPE( ReflectionTypes::Structure, Structure, Composite );
 
         protected:
             Structure();
@@ -34,6 +30,8 @@ namespace Helium
 
                 // populate reflection information
                 Composite::Create< StructureT >( name, baseName, accept, info );
+
+                info->m_Default = new StructureT;
 
                 return info;
             }

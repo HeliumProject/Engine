@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( CurveControlPoint );
+REFLECT_DEFINE_OBJECT( CurveControlPoint );
 
 void CurveControlPoint::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -114,7 +114,7 @@ bool CurveControlPoint::ValidatePanel( const tstring& name )
         return true;
     }
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 void CurveControlPoint::CreatePanel( CreatePanelArgs& args )
@@ -139,7 +139,7 @@ bool CurveControlPoint::Pick( PickVisitor* pick )
 
 void CurveControlPoint::Evaluate( GraphDirection direction )
 {
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 
     switch (direction)
     {

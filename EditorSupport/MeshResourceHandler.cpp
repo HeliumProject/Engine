@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/MeshResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
@@ -38,7 +41,7 @@ MeshResourceHandler::~MeshResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* MeshResourceHandler::GetResourceType() const
+const GameObjectType* MeshResourceHandler::GetResourceType() const
 {
     return Mesh::GetStaticType();
 }
@@ -291,3 +294,5 @@ bool MeshResourceHandler::CacheResource(
 
     return true;
 }
+
+#endif  // L_EDITOR

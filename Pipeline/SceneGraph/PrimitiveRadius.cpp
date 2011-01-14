@@ -7,13 +7,13 @@ using namespace Helium::SceneGraph;
 PrimitiveRadius::PrimitiveRadius(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)
 {
-  SetElementType( ElementTypes::Position );
+    SetElementType( ElementTypes::Position );
 
-  m_Radius = 1.0f;
-  m_RadiusSteps = 36;
+    m_Radius = 1.0f;
+    m_RadiusSteps = 36;
 }
 
 void PrimitiveRadius::Update()
 {
-  __super::Update();
+    Base::Update();
 }

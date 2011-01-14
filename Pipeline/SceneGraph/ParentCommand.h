@@ -14,6 +14,9 @@ namespace Helium
 
         class PIPELINE_API ParentCommand : public Undo::BatchCommand
         {
+        public:
+            typedef Undo::BatchCommand Base;
+
         private:
             HierarchyNodePtr m_Node;
             HierarchyNodePtr m_NextParent;

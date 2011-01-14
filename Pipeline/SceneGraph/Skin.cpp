@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( Influence );
+REFLECT_DEFINE_OBJECT( Influence );
 
 void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -16,7 +16,7 @@ void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
 
-REFLECT_DEFINE_CLASS( Skin );
+REFLECT_DEFINE_OBJECT( Skin );
 
 void Skin::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -48,9 +48,9 @@ Skin::~Skin()
 
 void Skin::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
-    m_Mesh = Reflect::ObjectCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
+    m_Mesh = Reflect::SafeCast< Mesh > ( m_Owner->FindNode( m_MeshID ) );
 
     if ( m_Mesh )
     {
@@ -63,7 +63,7 @@ void Skin::Initialize()
         for ( ; infItr != infEnd; ++infItr )
         {
             SceneNode* obj = m_Owner->FindNode( *infItr );
-            Transform* transform = Reflect::ObjectCast< Transform >( obj );
+            Transform* transform = Reflect::SafeCast< Transform >( obj );
             HELIUM_ASSERT( transform );
             if ( transform )
             {
@@ -237,7 +237,7 @@ void Skin::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Skin::BlendMatrix(const Transform* transform, const Influence* influence, Matrix4& matrix)

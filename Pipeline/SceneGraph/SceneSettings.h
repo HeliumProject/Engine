@@ -12,7 +12,7 @@ namespace Helium
         class PIPELINE_API SceneSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneSettings, Settings );
+            REFLECT_DECLARE_OBJECT( SceneSettings, Settings );
 
             SceneSettings();
 

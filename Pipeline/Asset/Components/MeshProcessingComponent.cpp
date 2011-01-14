@@ -4,7 +4,7 @@ using namespace Helium;
 using namespace Helium::Asset;
 
 REFLECT_DEFINE_ENUMERATION( MeshCompressionFactor );
-REFLECT_DEFINE_CLASS( MeshProcessingComponent );
+REFLECT_DEFINE_OBJECT( MeshProcessingComponent );
 
 void MeshProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

@@ -4,4 +4,4 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS( SettingsManager );
+REFLECT_DEFINE_OBJECT( SettingsManager );

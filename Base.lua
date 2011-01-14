@@ -26,7 +26,11 @@ Helium.Publish = function( files )
 		-- do the file copy
 		local linkCommand = "mklink /h \"" .. destination .. "\" \"" .. path .. "\""
 		local result = os.execute( linkCommand )
-
+		if result ~= 0 then
+		  linkCommand = "Utilities\\Win32\\linkd \"" .. destination .. "\" \"" .. path .. "\""
+		  result = os.execute( linkCommand )
+    end
+    
 		-- the files were copied, complete this entry
 		if result == 0 then
 			files[ i ] = nil

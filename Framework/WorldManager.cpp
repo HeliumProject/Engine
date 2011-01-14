@@ -49,9 +49,9 @@ bool WorldManager::Initialize()
     GameObjectPath worldPackagePath = GetWorldPackagePath();
     HELIUM_ASSERT( !worldPackagePath.IsEmpty() );
     HELIUM_ASSERT( worldPackagePath.GetParent().IsEmpty() );
-    m_spWorldPackage = GameObject::Create< Package >( worldPackagePath.GetName(), NULL );
-    HELIUM_ASSERT( m_spWorldPackage );
-    if( !m_spWorldPackage )
+    bool bCreateResult = GameObject::Create< Package >( m_spWorldPackage, worldPackagePath.GetName(), NULL );
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
@@ -60,6 +60,8 @@ bool WorldManager::Initialize()
 
         return false;
     }
+
+    HELIUM_ASSERT( m_spWorldPackage );
 
     // Reset frame timings.
     m_actualFrameTickCount = 0;
@@ -131,7 +133,7 @@ Name WorldManager::GetDefaultWorldName() const
 /// @param[in] pType  World type.
 ///
 /// @return  Default world instance.
-World* WorldManager::CreateDefaultWorld( GameObjectType* pType )
+World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
     if( !pType )
@@ -141,7 +143,7 @@ World* WorldManager::CreateDefaultWorld( GameObjectType* pType )
         return NULL;
     }
 
-    bool bIsWorldType = pType->IsSubtypeOf( World::GetStaticType() );
+    bool bIsWorldType = pType->IsType( World::GetStaticType() );
     HELIUM_ASSERT( bIsWorldType );
     if( !bIsWorldType )
     {
@@ -169,9 +171,14 @@ World* WorldManager::CreateDefaultWorld( GameObjectType* pType )
         return NULL;
     }
 
-    GameObjectPtr spDefaultWorldObject( GameObject::CreateObject( pType, GetDefaultWorldName(), m_spWorldPackage ) );
-    HELIUM_ASSERT( spDefaultWorldObject );
-    if( !spDefaultWorldObject )
+    GameObjectPtr spDefaultWorldObject;
+    bool bCreateResult = GameObject::CreateObject(
+        spDefaultWorldObject,
+        pType,
+        GetDefaultWorldName(),
+        m_spWorldPackage );
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
@@ -181,7 +188,7 @@ World* WorldManager::CreateDefaultWorld( GameObjectType* pType )
         return NULL;
     }
 
-    WorldPtr spDefaultWorld( StaticCast< World >( spDefaultWorldObject.Get() ) );
+    WorldPtr spDefaultWorld( Reflect::AssertCast< World >( spDefaultWorldObject.Get() ) );
     HELIUM_ASSERT( spDefaultWorld );
 
     m_worlds.Push( spDefaultWorld );

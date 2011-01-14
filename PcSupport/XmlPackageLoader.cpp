@@ -1447,7 +1447,7 @@ void XmlPackageLoader::TickPreload()
     if( !pPackage )
     {
         HELIUM_ASSERT( spParentPackage ? !m_packagePath.GetParent().IsEmpty() : m_packagePath.GetParent().IsEmpty() );
-        m_spPackage = GameObject::Create< Package >( m_packagePath.GetName(), spParentPackage );
+        HELIUM_VERIFY( GameObject::Create< Package >( m_spPackage, m_packagePath.GetName(), spParentPackage ) );
         pPackage = m_spPackage;
         HELIUM_ASSERT( pPackage );
         pPackage->SetLoader( this );
@@ -1542,7 +1542,7 @@ void XmlPackageLoader::TickPreload()
         if( pBestHandler )
         {
             // File extension matches a supported source asset type, so add it to the object list.
-            GameObjectType* pResourceType = pBestHandler->GetResourceType();
+            const GameObjectType* pResourceType = pBestHandler->GetResourceType();
             HELIUM_ASSERT( pResourceType );
 
             HELIUM_TRACE(
@@ -1699,7 +1699,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        GameObjectType* pExistingType = pObject->GetGameObjectType();
+        const GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -1722,9 +1722,13 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     else
     {
         // Create the object.
-        pRequest->spObject = GameObject::CreateObject( pType, rObjectData.objectPath.GetName(), pOwner, pTemplate );
-        pObject = pRequest->spObject;
-        if( !pObject )
+        bool bCreateResult = GameObject::CreateObject(
+            pRequest->spObject,
+            pType,
+            rObjectData.objectPath.GetName(),
+            pOwner,
+            pTemplate );
+        if( !bCreateResult )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -1735,6 +1739,9 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             return true;
         }
+
+        pObject = pRequest->spObject;
+        HELIUM_ASSERT( pObject );
     }
 
     // Load the object properties.
@@ -1765,7 +1772,7 @@ bool XmlPackageLoader::TickDeserialize( LoadRequest* pRequest )
     // loading any existing persistent resource data stored in the object cache.
     if( !pObject->IsDefaultTemplate() )
     {
-        Resource* pResource = DynamicCast< Resource >( pObject );
+        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
         if( pResource )
         {
             Name objectCacheName = pObjectLoader->GetCacheName();
@@ -1818,7 +1825,7 @@ bool XmlPackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest )
     HELIUM_ASSERT( pRequest );
     HELIUM_ASSERT( !( pRequest->flags & LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED ) );
 
-    Resource* pResource = StaticCast< Resource >( pRequest->spObject.Get() );
+    Resource* pResource = Reflect::AssertCast< Resource >( pRequest->spObject.Get() );
     HELIUM_ASSERT( pResource );
 
     // Wait for the cached data load to complete.
@@ -2200,7 +2207,9 @@ void XmlPackageLoader::Deserializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void XmlPackageLoader::Deserializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void XmlPackageLoader::Deserializer::SerializeObjectReference(
+    const GameObjectType* /*pType*/,
+    GameObjectPtr& rspObject )
 {
     ReadValue(
         rspObject,

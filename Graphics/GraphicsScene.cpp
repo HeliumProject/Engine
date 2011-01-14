@@ -88,9 +88,6 @@ void GraphicsScene::Update()
         return;
     }
 
-    Renderer* pRenderer = Renderer::GetStaticInstance();
-    HELIUM_ASSERT( pRenderer );
-
     // Prepare the array of inverse view/projection matrices for each view's shadow depth pass.
     if( m_shadowViewInverseViewProjectionMatrices.GetSize() < sceneViewCount )
     {

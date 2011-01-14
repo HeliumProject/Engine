@@ -49,18 +49,19 @@ bool World::Initialize()
     HELIUM_ASSERT( IsInvalid( m_mainSceneViewId ) );
 
     // Create the main graphics scene.
-    GameObjectType* pSceneType = GraphicsScene::GetStaticType();
+    const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
-    GraphicsScene* pGraphicsScene = GameObject::Create< GraphicsScene >( pSceneType->GetName(), this );
-    HELIUM_ASSERT( pGraphicsScene );
-    if( !pGraphicsScene )
+    bool bCreateResult = GameObject::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), this );
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
 
         return false;
     }
 
-    m_spGraphicsScene = pGraphicsScene;
+    GraphicsScene* pGraphicsScene = m_spGraphicsScene;
+    HELIUM_ASSERT( pGraphicsScene );
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     if( pRenderer )
@@ -122,7 +123,6 @@ bool World::Initialize()
         pSceneView->SetDepthStencilSurface( spDepthStencilSurface );
         pSceneView->SetAspectRatio( aspectRatio );
         pSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
-        pSceneView->SetClearColor( Color( 0xffffffff ) );
     }
 
     return true;
@@ -169,7 +169,7 @@ void World::PreDestroy()
 {
     Shutdown();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// Create an entity in this world.
@@ -189,14 +189,14 @@ void World::PreDestroy()
 ///
 /// @see DestroyEntity()
 Entity* World::CreateEntity(
-                            Layer* pLayer,
-                            GameObjectType* pType,
-                            const Simd::Vector3& rPosition,
-                            const Simd::Quat& rRotation,
-                            const Simd::Vector3& rScale,
-                            Entity* pTemplate,
-                            Name name,
-                            bool bAssignInstanceIndex )
+    Layer* pLayer,
+    const GameObjectType* pType,
+    const Simd::Vector3& rPosition,
+    const Simd::Quat& rRotation,
+    const Simd::Vector3& rScale,
+    Entity* pTemplate,
+    Name name,
+    bool bAssignInstanceIndex )
 {
     // Make sure the destination layer is valid.
     HELIUM_ASSERT( pLayer );

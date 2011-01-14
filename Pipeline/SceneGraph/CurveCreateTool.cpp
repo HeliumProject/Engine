@@ -106,7 +106,7 @@ void CurveCreateTool::PickPosition(int x, int y, Vector3 &position)
 
             if ( (*itr)->GetHitObject() != m_Instance )
             {
-                SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+                SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
 
                 if ( s_ObjectSnap )
                 {
@@ -216,7 +216,7 @@ bool CurveCreateTool::MouseDown( const MouseButtonInput& e )
         m_Scene->Execute( true );
     }
 
-    return __super::MouseDown( e );
+    return Base::MouseDown( e );
 }
 
 void CurveCreateTool::MouseMove( const MouseMoveInput& e )
@@ -239,7 +239,7 @@ void CurveCreateTool::MouseMove( const MouseMoveInput& e )
         }
     }
 
-    __super::MouseMove( e );
+    Base::MouseMove( e );
 } 
 
 void CurveCreateTool::KeyPress( const KeyboardInput& e )
@@ -255,7 +255,7 @@ void CurveCreateTool::KeyPress( const KeyboardInput& e )
         }
     }
 
-    __super::KeyPress( e );
+    Base::KeyPress( e );
 }
 
 void CurveCreateTool::CreateProperties()

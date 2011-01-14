@@ -33,7 +33,7 @@ GraphicsConfig::~GraphicsConfig()
 /// @copydoc GameObject::Serialize()
 void GraphicsConfig::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_width );
     s << L_TAGGED( m_height );

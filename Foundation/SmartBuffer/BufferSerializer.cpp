@@ -38,7 +38,7 @@ BasicBufferPtr BufferSerializer::CreateBasic( uint32_t type, bool track )
     // we don't track anonymous buffers because they could be empty or not pointed to from a non-anonymous buffer
     //  however, we do allow non-anonymous buffers to not be tracked in case they were allocated but not written to
     //  take, for instance some code that may or may not write data to a non-anonymous buffer, it could choose not
-    //  to have the buffer be tracked in the serializer, and it would be discarded if it was not pointed to
+    //  to have the buffer be tracked in the data, and it would be discarded if it was not pointed to
     if ( type != 0xffffffff && track )
     {
         AddBuffer( return_val );
@@ -52,10 +52,10 @@ void BufferSerializer::AddBuffer( const SmartBufferPtr& buffer )
     m_Buffers.Append( buffer );
 }
 
-void BufferSerializer::AddBuffers( const BufferSerializer& serializer )
+void BufferSerializer::AddBuffers( const BufferSerializer& data )
 {
-    S_SmartBufferPtr::Iterator itr = serializer.begin();
-    S_SmartBufferPtr::Iterator end = serializer.end();
+    S_SmartBufferPtr::Iterator itr = data.begin();
+    S_SmartBufferPtr::Iterator end = data.end();
     for ( ; itr != end; ++itr )
     {
         AddBuffer( *itr );

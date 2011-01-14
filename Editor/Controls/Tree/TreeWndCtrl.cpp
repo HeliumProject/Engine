@@ -138,15 +138,15 @@ bool TreeWndCtrl::Layout()
         if ( m_root != TreeWndCtrlItemIdInvalid )
             AddNodeToLayout(sizer, m_root);
 
-        // need to call this before calling __super::Layout, as it does some adjustment of the sizer's settings
+        // need to call this before calling wxScrolledWindow::Layout, as it does some adjustment of the sizer's settings
         AdjustTreeScrollbars();
-        returnVal = __super::Layout();
+        returnVal = wxScrolledWindow::Layout();
         Thaw();
         m_dirty = false;
     }
     else
     {
-        returnVal =  __super::Layout();
+        returnVal = wxScrolledWindow::Layout();
     }
 
     return returnVal;

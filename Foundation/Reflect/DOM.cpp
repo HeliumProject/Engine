@@ -5,9 +5,9 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( DocumentNode );
-REFLECT_DEFINE_CLASS( DocumentAttribute );
-REFLECT_DEFINE_CLASS( DocumentObject );
-REFLECT_DEFINE_CLASS( Document );
+REFLECT_DEFINE_OBJECT( DocumentAttribute );
+REFLECT_DEFINE_OBJECT( DocumentObject );
+REFLECT_DEFINE_OBJECT( Document );
 
 void DocumentNode::SetDocument( Document* document )
 {

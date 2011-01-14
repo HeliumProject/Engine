@@ -4,7 +4,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ObjectStlVectorData);
+REFLECT_DEFINE_OBJECT(ObjectStlVectorData);
 
 ObjectStlVectorData::ObjectStlVectorData()
 {
@@ -18,8 +18,6 @@ ObjectStlVectorData::~ObjectStlVectorData()
 
 void ObjectStlVectorData::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -35,7 +33,7 @@ void ObjectStlVectorData::Clear()
 
 bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(src);
+    const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(src);
     if (!rhs)
     {
         return false;
@@ -60,9 +58,9 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlVectorData::Equals(const Data* s) const
+bool ObjectStlVectorData::Equals(const Object* object) const
 {
-    const ObjectStlVectorData* rhs = ObjectCast<ObjectStlVectorData>(s);
+    const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(object);
     if (!rhs)
     {
         return false;

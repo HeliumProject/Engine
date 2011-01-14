@@ -479,8 +479,8 @@ bool PcPreprocessor::FillShaderReflectionData(
                     HELIUM_TRACE(
                         TRACE_ERROR,
                         ( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant \"%s\" of constant buffer " )
-                        TXT( "\"%s\" offset exceeds the maximum supported range (offset: %u; max: %" ) TPRIuSZ
-                        TXT( ").\n" ) ),
+                          TXT( "\"%s\" offset exceeds the maximum supported range (offset: %u; max: %" ) TPRIuSZ
+                          TXT( ").\n" ) ),
                         *rConstantInfo.name,
                         *rBufferInfo.name,
                         variableOffset,
@@ -492,13 +492,13 @@ bool PcPreprocessor::FillShaderReflectionData(
                 }
 
                 UINT variableSize = variableDesc.Size;
-                if( variableOffset > UINT16_MAX )
+                if( variableSize > UINT16_MAX )
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
                         ( TXT( "PcPreprocessor::FillShaderReflectionData(): Constant \"%s\" of constant buffer " )
-                        TXT( "\"%s\" exceeds the maximum supported size (size: %u; max: %" ) TPRIuSZ
-                        TXT( ").\n" ) ),
+                          TXT( "\"%s\" exceeds the maximum supported size (size: %u; max: %" ) TPRIuSZ
+                          TXT( ").\n" ) ),
                         *rConstantInfo.name,
                         *rBufferInfo.name,
                         variableSize,
@@ -509,9 +509,9 @@ bool PcPreprocessor::FillShaderReflectionData(
                     return false;
                 }
 
-                rConstantInfo.offset = static_cast< uint16_t >( variableDesc.StartOffset );
-                rConstantInfo.size = static_cast< uint16_t >( variableDesc.Size );
-                rConstantInfo.usedSize = static_cast< uint16_t >( variableDesc.Size );
+                rConstantInfo.offset = static_cast< uint16_t >( variableOffset );
+                rConstantInfo.size = static_cast< uint16_t >( variableSize );
+                rConstantInfo.usedSize = static_cast< uint16_t >( variableSize );
             }
         }
 

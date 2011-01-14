@@ -11,6 +11,8 @@
 
 #include "EditorSupport/EditorSupport.h"
 
+#if L_EDITOR
+
 #include <nvtt/nvtt.h>
 
 namespace Lunar
@@ -50,5 +52,7 @@ namespace Lunar
 }
 
 #include "EditorSupport/MemoryTextureOutputHandler.inl"
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H

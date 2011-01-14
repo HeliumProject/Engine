@@ -604,7 +604,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
     std::set< tstring > supportedExtensions;
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
-    ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
         for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
@@ -647,7 +647,7 @@ void MainFrame::Drop( const Editor::DragArgs& args )
 
     if ( ValidateDrag( args ) )
     {
-        ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+        ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
         if ( fileList )
         {
             for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
@@ -1325,7 +1325,7 @@ void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->SetColorMode( ( ViewColorMode::Enum )( newColorModeItr->second ) );
     }
 }
 
@@ -1557,7 +1557,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
         {
             const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
-            if ( nodeType->GetInstanceClass()->HasType( Reflect::GetType< SceneGraph::Layer >() ) )
+            if ( nodeType->GetInstanceClass()->IsType( Reflect::GetClass< SceneGraph::Layer >() ) )
             {
                 // Now that we have the layer node type, iterate over all the layer instances and
                 // add them to the layer grid UI.
@@ -1577,7 +1577,7 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
                 //End batching
                 m_LayersPanel->EndBatch();
             } 
-            else if ( nodeType->HasType( Reflect::GetType< SceneGraph::HierarchyNodeType >() ) )
+            else if ( nodeType->IsClass( Reflect::GetClass< SceneGraph::HierarchyNodeType >() ) )
             {
                 // Hierarchy node types need to be added to the object grid UI.
                 SceneGraph::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< SceneGraph::HierarchyNodeType >( nodeTypeItr->second );
@@ -1701,15 +1701,15 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             {
                 if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
                 {
-                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::ScaleManipulator >() )
+                    if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::ScaleManipulator >() )
                     {
                         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::RotateManipulator >() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::RotateManipulator >() )
                     {
                         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
                     }
-                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType< SceneGraph::TranslateManipulator >() )
+                    else if ( m_SceneManager.GetCurrentScene()->GetTool()->GetClass() == Reflect::GetClass< SceneGraph::TranslateManipulator >() )
                     {
                         SceneGraph::TranslateManipulator* manipulator = Reflect::AssertCast< SceneGraph::TranslateManipulator >(m_SceneManager.GetCurrentScene()->GetTool());
 
@@ -1831,9 +1831,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     int32_t selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
-        if ( args.m_NewTool->HasType( Reflect::GetType< SceneGraph::TransformManipulator >() ) )
+        SceneGraph::TransformManipulator* manipulator = Reflect::SafeCast< SceneGraph::TransformManipulator >( args.m_NewTool );
+        if ( manipulator )
         {
-            SceneGraph::TransformManipulator* manipulator = Reflect::DangerousCast< SceneGraph::TransformManipulator >( args.m_NewTool );
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:
@@ -1861,27 +1861,27 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
             }
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::EntityInstanceCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsEntityCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::VolumeCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::VolumeCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsVolumeCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::LocatorCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsLocatorCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::DuplicateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::DuplicateTool >() )
         {
             selectedTool = EventIds::ID_ToolsDuplicate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::CurveCreateTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveCreate;
         }
-        else if ( args.m_NewTool->GetType() == Reflect::GetType< SceneGraph::CurveEditTool >() )
+        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
         {
             selectedTool = EventIds::ID_ToolsCurveEdit;
         }
@@ -1995,7 +1995,7 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
     for ( ; itr != end; ++itr )
     {
         SceneGraph::SceneNode* sceneNode = itr->second;
-        if ( sceneNode->HasType( Reflect::GetType< SceneGraph::HierarchyNode >() ) )
+        if ( sceneNode->IsClass( Reflect::GetClass< SceneGraph::HierarchyNode >() ) )
         {
             selection.Append( sceneNode );
         }
@@ -2017,7 +2017,7 @@ static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_Sc
     OS_SceneNodeDumbPtr::Iterator selEnd = oldSelection.End();
     for ( ; selItr != selEnd && !found; ++selItr )
     {
-        SceneGraph::HierarchyNode* current = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *selItr );
+        SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
         if ( current )
         {
             if ( current == node )
@@ -2147,7 +2147,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
         std::vector< Reflect::ObjectPtr >::const_iterator end = elements.end();
         for ( ; itr != end; ++itr )
         {
-            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::ObjectCast< Reflect::Matrix4StlVectorData >( *itr );
+            Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::SafeCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
                 m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
@@ -2606,7 +2606,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
     V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
     for ( ; itr != end; ++itr )
     {
-        SceneNode* node = Reflect::ObjectCast<SceneNode>((*itr)->GetHitObject());
+        SceneNode* node = Reflect::SafeCast<SceneNode>((*itr)->GetHitObject());
         if (node)
         {
             // add it to the new persistent list
@@ -2631,7 +2631,7 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 
                 if( node->IsSelectable() )
                 {
-                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( node );
+                    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( node );
                     if ( hierarchyNode )
                     {
                         m_OrderedContextItems.push_back( hierarchyNode );
@@ -2803,10 +2803,10 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
-                const SceneGraph::EntityInstanceType* entity = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( type );
+                const SceneGraph::EntityInstanceType* entity = Reflect::SafeCast< SceneGraph::EntityInstanceType >( type );
 
                 // if this is an instance, then we need to check if it has code classes
-                const SceneGraph::InstanceType* instance = Reflect::ObjectCast< SceneGraph::InstanceType >( type );
+                const SceneGraph::InstanceType* instance = Reflect::SafeCast< SceneGraph::InstanceType >( type );
 
                 if (entity)
                 {
@@ -2834,7 +2834,7 @@ void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* enti
         M_InstanceSetSmartPtr::const_iterator end = sets.end();
         for( ;itr != end; ++itr )
         {
-            const SceneGraph::EntitySet* art = Reflect::ObjectCast< SceneGraph::EntitySet >( itr->second );
+            const SceneGraph::EntitySet* art = Reflect::SafeCast< SceneGraph::EntitySet >( itr->second );
             if (art && art->GetEntity() && !art->GetEntity()->GetSourcePath().empty())
             {
                 ContextCallbackData* data = new ContextCallbackData;

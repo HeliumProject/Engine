@@ -31,8 +31,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         return;
     }
 
-    bool isVector = ( field->m_DataClass == Reflect::GetType<PathStlVectorData>() );
-    bool isSet = ( field->m_DataClass == Reflect::GetType<PathStlSetData>() );
+    bool isVector = ( field->m_DataClass == Reflect::GetClass<PathStlVectorData>() );
+    bool isSet = ( field->m_DataClass == Reflect::GetClass<PathStlSetData>() );
     bool isContainer = isVector || isSet;
 
     // create the label
@@ -169,8 +169,8 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
 
         if ( instances.size() == 1 )
         {
-            m_PathVector = Reflect::ObjectCast< Reflect::PathStlVectorData >( s );
-            m_PathSet = Reflect::ObjectCast< Reflect::PathStlSetData >( s );
+            m_PathVector = Reflect::SafeCast< Reflect::PathStlVectorData >( s );
+            m_PathSet = Reflect::SafeCast< Reflect::PathStlSetData >( s );
             HELIUM_ASSERT( ( m_PathVector || m_PathSet ) && !( m_PathVector && m_PathSet ) );
         }
 
@@ -187,15 +187,14 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         addButton->Bind( data );
     }
 
-#ifdef REFLECT_REFACTOR
     // setup the default value
-    if ( field->m_Default )
+    DataPtr defaultData = field->CreateDefaultData();
+    if ( defaultData )
     {
-        tstringstream outStream;
-        *field->m_Default >> outStream;
-        list->a_Default.Set( outStream.str() );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        list->a_Default.Set( defaultStream.str() );
     }
-#endif
 }
 
 void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
@@ -224,7 +223,7 @@ void PathContainerInterpreter::OnAddFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
@@ -244,7 +243,7 @@ void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
 
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataFilter>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientDataFilter>() ) )
     {
         ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 

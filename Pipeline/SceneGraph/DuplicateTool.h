@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PIPELINE_API DuplicateTool : public SceneGraph::CreateTool
+        class PIPELINE_API DuplicateTool : public CreateTool
         {
         public:
             REFLECT_DECLARE_ABSTRACT(SceneGraph::DuplicateTool, SceneGraph::CreateTool);

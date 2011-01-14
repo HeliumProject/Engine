@@ -27,7 +27,7 @@ namespace Helium
         class ButtonWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( ButtonWidget, Widget );
+            REFLECT_DECLARE_OBJECT( ButtonWidget, Widget );
 
             ButtonWidget()
                 : m_ButtonControl( NULL )

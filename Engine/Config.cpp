@@ -103,7 +103,7 @@ bool Config::TryFinishLoad()
                 return false;
             }
 
-            m_spDefaultConfigPackage = StaticCast< Package >( spPackage.Get() );
+            m_spDefaultConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
             HELIUM_ASSERT( m_spDefaultConfigPackage );
 
             SetInvalid( m_objectLoadIds[ 0 ] );
@@ -120,7 +120,7 @@ bool Config::TryFinishLoad()
                 return false;
             }
 
-            m_spUserConfigPackage = StaticCast< Package >( spPackage.Get() );
+            m_spUserConfigPackage = Reflect::AssertCast< Package >( spPackage.Get() );
             HELIUM_ASSERT( m_spUserConfigPackage );
 
             SetInvalid( m_objectLoadIds[ 1 ] );
@@ -226,17 +226,21 @@ bool Config::TryFinishLoad()
 
         if( userObjectIndex >= userConfigObjectCount )
         {
-            GameObjectType* pConfigObjectType = pDefaultConfigObject->GetGameObjectType();
+            const GameObjectType* pConfigObjectType = pDefaultConfigObject->GetGameObjectType();
             HELIUM_ASSERT( pConfigObjectType );
 
-            GameObjectPtr spUserConfigObject( GameObject::CreateObject(
+            GameObjectPtr spUserConfigObject;
+            bool bCreateResult = GameObject::CreateObject(
+                spUserConfigObject,
                 pConfigObjectType,
                 objectName,
                 m_spUserConfigPackage,
-                pDefaultConfigObject ) );
-            HELIUM_ASSERT( spUserConfigObject );
-            if( spUserConfigObject )
+                pDefaultConfigObject );
+            HELIUM_ASSERT( bCreateResult );
+            if( bCreateResult )
             {
+                HELIUM_ASSERT( spUserConfigObject );
+
                 HELIUM_TRACE(
                     TRACE_INFO,
                     TXT( "Config: Created user configuration object \"%s\".\n" ),

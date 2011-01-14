@@ -4,7 +4,7 @@ using namespace Helium;
 using namespace Helium::Asset;
 
 REFLECT_DEFINE_ENUMERATION( AudioClipMode );
-REFLECT_DEFINE_CLASS( AudioClip );
+REFLECT_DEFINE_OBJECT( AudioClip );
 
 void AudioClip::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -25,5 +25,5 @@ void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* proper
         }
     }
 
-    __super::GatherSearchableProperties( properties );
+    Base::GatherSearchableProperties( properties );
 }

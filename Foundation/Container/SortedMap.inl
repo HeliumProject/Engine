@@ -33,7 +33,7 @@ template< typename Key, typename Data, typename CompareKey, typename Allocator >
 Helium::SortedMap< Key, Data, CompareKey, Allocator >& Helium::SortedMap< Key, Data, CompareKey, Allocator >::operator=(
     const SortedMap& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }
@@ -48,7 +48,7 @@ template< typename OtherAllocator >
 Helium::SortedMap< Key, Data, CompareKey, Allocator >& Helium::SortedMap< Key, Data, CompareKey, Allocator >::operator=(
     const SortedMap< Key, Data, CompareKey, OtherAllocator >& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }

@@ -20,7 +20,7 @@ namespace Helium
         class LabelWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( LabelWidget, Widget );
+            REFLECT_DECLARE_OBJECT( LabelWidget, Widget );
 
             LabelWidget()
                 : m_LabelControl( NULL )

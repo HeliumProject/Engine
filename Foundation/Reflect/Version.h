@@ -9,7 +9,7 @@ namespace Helium
         class FOUNDATION_API Version : public Object
         {
         public:
-            REFLECT_DECLARE_CLASS( Version, Object );
+            REFLECT_DECLARE_OBJECT( Version, Object );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             Version ();

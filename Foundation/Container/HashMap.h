@@ -27,26 +27,26 @@ namespace Helium
         typedef HashTable<
             KeyValue< Key, Data >, Key, HashFunction, SelectKey< KeyValue< Key, Data > >, EqualKey, Allocator,
             Pair< Key, Data > >
-                Super;
+                Base;
 
         /// Type for hash map keys.
-        typedef typename Super::KeyType KeyType;
+        typedef typename Base::KeyType KeyType;
         /// Type for hash map data.
         typedef Data DataType;
         /// Type for hash map entries.
-        typedef typename Super::ValueType ValueType;
+        typedef typename Base::ValueType ValueType;
 
         /// Type for key hashing function.
-        typedef typename Super::HasherType HasherType;
+        typedef typename Base::HasherType HasherType;
         /// Type for testing two keys for equality.
-        typedef typename Super::KeyEqualType KeyEqualType;
+        typedef typename Base::KeyEqualType KeyEqualType;
         /// Allocator type.
-        typedef typename Super::AllocatorType AllocatorType;
+        typedef typename Base::AllocatorType AllocatorType;
 
         /// Iterator type.
-        typedef typename Super::Iterator Iterator;
+        typedef typename Base::Iterator Iterator;
         /// Constant iterator type.
-        typedef typename Super::ConstIterator ConstIterator;
+        typedef typename Base::ConstIterator ConstIterator;
 
         /// @name Construction/Destruction
         //@{

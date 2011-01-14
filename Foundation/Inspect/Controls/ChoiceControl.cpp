@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Choice );
+REFLECT_DEFINE_OBJECT( Inspect::Choice );
 
 Choice::Choice()
 : a_Highlight( false )
@@ -18,7 +18,7 @@ Choice::Choice()
 
 bool Choice::Process(const tstring& key, const tstring& value)
 {
-    if (__super::Process(key, value))
+    if (Base::Process(key, value))
         return true;
 
     if (key == CHOICE_ATTR_ENUM)

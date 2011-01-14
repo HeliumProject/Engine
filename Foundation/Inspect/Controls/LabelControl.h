@@ -12,7 +12,7 @@ namespace Helium
         class FOUNDATION_API Label : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( Label, Control );
+            REFLECT_DECLARE_OBJECT( Label, Control );
 
             Label();
 

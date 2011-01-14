@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 
 namespace Lunar
@@ -28,12 +31,14 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual GameObjectType* GetResourceType() const;
+        virtual const GameObjectType* GetResourceType() const;
 
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H

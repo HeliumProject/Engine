@@ -104,14 +104,13 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
     list->Bind( data );
 
     // setup the default value
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default)
+    DataPtr defaultData = field->CreateDefaultData();
+    if (defaultData)
     {
-        tstringstream outStream;
-        *field->m_Default >> outStream;
-        list->a_Default.Set( outStream.str() );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        list->a_Default.Set( defaultStream.str() );
     }
-#endif
 }
 
 ButtonPtr ReflectStlVectorInterpreter::AddAddButton( List* list )
@@ -161,7 +160,7 @@ ButtonPtr ReflectStlVectorInterpreter::AddMoveDownButton( List* list )
 void ReflectStlVectorInterpreter::OnAdd( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -173,7 +172,7 @@ void ReflectStlVectorInterpreter::OnAdd( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
@@ -185,7 +184,7 @@ void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
             std::set< size_t >::const_reverse_iterator end = selectedItemIndices.rend();
             for ( ; itr != end; ++itr )
             {
-                // for each array in the selection set (the objects the array serializer is connected to)
+                // for each array in the selection set (the objects the array data is connected to)
                 std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
                 std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
                 for ( ; serItr != serEnd; ++serItr )
@@ -206,14 +205,14 @@ void ReflectStlVectorInterpreter::OnRemove( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
         std::set< size_t > selectedItemIndices = list->a_SelectedItemIndices.Get();
         if ( !selectedItemIndices.empty() )
         {
-            // for each array in the selection set (the objects the array serializer is connected to)
+            // for each array in the selection set (the objects the array data is connected to)
             std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
             std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )
@@ -233,14 +232,14 @@ void ReflectStlVectorInterpreter::OnMoveUp( const ButtonClickedArgs& args )
 void ReflectStlVectorInterpreter::OnMoveDown( const ButtonClickedArgs& args )
 {
     Reflect::ObjectPtr clientData = args.m_Control->GetClientData();
-    if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientData>() ) )
+    if ( clientData.ReferencesObject() && clientData->IsClass( Reflect::GetClass<ClientData>() ) )
     {
         ClientData* data = static_cast< ClientData* >( clientData.Ptr() );
         List* list = static_cast< List* >( data->GetControl() );
         std::set< size_t > selectedItemIndices = list->a_SelectedItemIndices.Get();
         if ( !selectedItemIndices.empty() )
         {
-            // for each array in the selection set (the objects the array serializer is connected to)
+            // for each array in the selection set (the objects the array data is connected to)
             std::vector< DataPtr >::const_iterator serItr = m_Datas.begin();
             std::vector< DataPtr >::const_iterator serEnd = m_Datas.end();
             for ( ; serItr != serEnd; ++serItr )

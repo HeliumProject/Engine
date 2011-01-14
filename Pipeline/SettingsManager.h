@@ -17,7 +17,7 @@ namespace Helium
     class PIPELINE_API SettingsManager : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_CLASS( SettingsManager, Reflect::Object );
+        REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );
 
         SettingsManager()
         {
@@ -35,18 +35,18 @@ namespace Helium
         template< class Type >
         Type* GetSettings()
         {
-            M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetType< Type >() );
+            M_Settings::const_iterator itr = m_SettingsMap.find( Reflect::GetClass< Type >() );
             if ( itr != m_SettingsMap.end() )
             {
-                return Reflect::TryCast< Type >( (*itr).second );
+                return Reflect::ThrowCast< Type >( (*itr).second );
             }
             else
             {
                 // if we haven't seen this type of settings object before, just new one up
-                Type* newSettings = Reflect::ObjectCast< Type >( Reflect::GetClass< Type >()->m_Creator() );
+                Type* newSettings = Reflect::SafeCast< Type >( Reflect::GetClass< Type >()->m_Creator() );
                 HELIUM_ASSERT( newSettings );
 
-                m_SettingsMap[ Reflect::GetType< Type >() ] = newSettings;
+                m_SettingsMap[ Reflect::GetClass< Type >() ] = newSettings;
                 return newSettings;
             }
         }

@@ -2,7 +2,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS( Project );
+REFLECT_DEFINE_OBJECT( Project );
 
 Project::Project( const Path& path )
 {

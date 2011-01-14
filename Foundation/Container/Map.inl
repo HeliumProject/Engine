@@ -9,7 +9,7 @@ Helium::Map< Key, Data, EqualKey, Allocator >::Map()
 /// @param[in] rSource  Source map from which to copy.
 template< typename Key, typename Data, typename EqualKey, typename Allocator >
 Helium::Map< Key, Data, EqualKey, Allocator >::Map( const Map& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -19,7 +19,7 @@ Helium::Map< Key, Data, EqualKey, Allocator >::Map( const Map& rSource )
 template< typename Key, typename Data, typename EqualKey, typename Allocator >
 template< typename OtherAllocator >
 Helium::Map< Key, Data, EqualKey, Allocator >::Map( const Map< Key, Data, EqualKey, OtherAllocator >& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -35,7 +35,7 @@ template< typename Key, typename Data, typename EqualKey, typename Allocator >
 Helium::Map< Key, Data, EqualKey, Allocator >& Helium::Map< Key, Data, EqualKey, Allocator >::operator=(
     const Map& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }
@@ -53,7 +53,7 @@ template< typename OtherAllocator >
 Helium::Map< Key, Data, EqualKey, Allocator >& Helium::Map< Key, Data, EqualKey, Allocator >::operator=(
     const Map< Key, Data, EqualKey, OtherAllocator >& rSource )
 {
-    Super::operator=( rSource );
+    Base::operator=( rSource );
 
     return *this;
 }

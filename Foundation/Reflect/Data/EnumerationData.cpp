@@ -7,10 +7,9 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(EnumerationData);
+REFLECT_DEFINE_OBJECT(EnumerationData);
 
 EnumerationData::EnumerationData ()
-: m_Enumeration( NULL )
 {
 
 }
@@ -22,27 +21,12 @@ EnumerationData::~EnumerationData()
 
 void EnumerationData::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
-
-    if ( data.Address() == NULL )
-    {
-        // Disconnect case
-        m_Enumeration = NULL;
-    }
-}
-
-void EnumerationData::ConnectField(Helium::HybridPtr<Object> instance, const Field* field, uintptr_t offsetInField)
-{
-    __super::ConnectField(instance, field, offsetInField);
-
-    m_Enumeration = Reflect::ReflectionCast< Enumeration >( field->m_Type );
 }
 
 bool EnumerationData::Set(const Data* src, uint32_t flags)
 {
-    if (GetType() != src->GetType())
+    if (GetClass() != src->GetClass())
     {
         return false;
     }
@@ -54,20 +38,31 @@ bool EnumerationData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool EnumerationData::Equals(const Data* s) const
+bool EnumerationData::Equals(const Object* object) const
 {
-    if (GetType() != s->GetType())
+    const EnumerationData* rhs = SafeCast< EnumerationData >( object );
+    
+    if (!rhs)
     {
         return false;
     }
-
-    const EnumerationData* rhs = static_cast<const EnumerationData*>(s);
 
     return rhs->m_Data.Get() == m_Data.Get();
 }
 
 void EnumerationData::Serialize(Archive& archive) const
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:
@@ -75,11 +70,11 @@ void EnumerationData::Serialize(Archive& archive) const
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             tstring label;
-            if (m_Enumeration)
+            if (enumeration)
             {
-                if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+                if (!enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -94,11 +89,11 @@ void EnumerationData::Serialize(Archive& archive) const
 
             tstring label;
 
-            if (m_Enumeration)
+            if (enumeration)
             {
-                if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+                if (!enumeration->GetElementLabel(m_Data.Get(), label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), m_Enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
             }
 
@@ -107,7 +102,7 @@ void EnumerationData::Serialize(Archive& archive) const
         }
     }
 
-    if (m_Enumeration == NULL)
+    if (enumeration == NULL)
     {
         throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
@@ -115,6 +110,17 @@ void EnumerationData::Serialize(Archive& archive) const
 
 void EnumerationData::Deserialize(Archive& archive)
 {
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:
@@ -125,9 +131,9 @@ void EnumerationData::Deserialize(Archive& archive)
             xml.GetStream() >> buf;
             if (!buf.empty())
             {
-                if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
+                if (enumeration && !enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, buf.c_str() );
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), enumeration->m_Name, buf.c_str() );
                 }
                 else
                 {
@@ -143,9 +149,9 @@ void EnumerationData::Deserialize(Archive& archive)
 
             tstring str;
             binary.GetStream().ReadString( str );
-            if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
+            if (enumeration && !enumeration->GetElementValue(str, m_Data.Ref()))
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_Name, str.c_str() );
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), enumeration->m_Name, str.c_str() );
             }
             else
             {
@@ -156,7 +162,7 @@ void EnumerationData::Deserialize(Archive& archive)
         }
     }
 
-    if (m_Enumeration == NULL)
+    if (enumeration == NULL)
     {
         throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
@@ -164,10 +170,19 @@ void EnumerationData::Deserialize(Archive& archive)
 
 tostream& EnumerationData::operator>> (tostream& stream) const
 {
-    bool set = false;
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
+    {
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
 
     tstring label;
-    if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+    if (enumeration && !enumeration->GetElementLabel(m_Data.Get(), label))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
         HELIUM_BREAK();
@@ -183,14 +198,25 @@ tistream& EnumerationData::operator<< (tistream& stream)
     tstring buf;
     stream >> buf;
 
-    if (!buf.empty())
+    const Enumeration* enumeration = NULL;
+    
+    if ( m_Field )
     {
-        m_Enumeration->GetElementValue(buf, m_Data.Ref());
+        enumeration = ReflectionCast< Enumeration >( m_Field->m_Type );
+    }
+    else
+    {
+        HELIUM_BREAK(); // not really supported yet
+    }
+
+    if ( !buf.empty() && enumeration )
+    {
+        enumeration->GetElementValue(buf, m_Data.Ref());
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* element = (Object*)m_Instance;
-            element->RaiseChanged( m_Field );
+            Object* object = (Object*)m_Instance.Mutable();
+            object->RaiseChanged( m_Field );
         }
     }
 

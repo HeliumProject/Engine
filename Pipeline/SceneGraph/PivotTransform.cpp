@@ -10,7 +10,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( PivotTransform );
+REFLECT_DEFINE_OBJECT( PivotTransform );
 
 void PivotTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -217,7 +217,7 @@ Matrix4 PivotTransform::GetScaleComponent() const
     Matrix4 sh( m_Shear );
     Matrix4 sp( m_ScalePivot + m_ScalePivotTranslate );
 
-    return spi * __super::GetScaleComponent() * sh * sp;
+    return spi * Base::GetScaleComponent() * sh * sp;
 }
 
 Matrix4 PivotTransform::GetRotateComponent() const
@@ -225,12 +225,12 @@ Matrix4 PivotTransform::GetRotateComponent() const
     Matrix4 rpi( m_RotatePivot * -1.0f );
     Matrix4 rp( m_RotatePivot + m_RotatePivotTranslate );
 
-    return rpi * __super::GetRotateComponent() * rp;
+    return rpi * Base::GetRotateComponent() * rp;
 }
 
 Matrix4 PivotTransform::GetTranslateComponent() const
 {
-    return __super::GetTranslateComponent();
+    return Base::GetTranslateComponent();
 }
 
 Undo::CommandPtr PivotTransform::ResetTransform()
@@ -239,7 +239,7 @@ Undo::CommandPtr PivotTransform::ResetTransform()
     Undo::CommandPtr command = SnapShot();
 
     // disregard the base class' command, its not complete
-    __super::ResetTransform ();
+    Base::ResetTransform ();
 
     m_Shear = Shear::Identity;
 
@@ -407,7 +407,7 @@ Undo::CommandPtr PivotTransform::CenterTransform()
 {
     Undo::BatchCommandPtr batch = new Undo::BatchCommand();
 
-    batch->Push( __super::CenterTransform() );
+    batch->Push( Base::CenterTransform() );
 
     // if we are not a group or we don't have children then don't bother
     if (!IsGroup() || m_Children.Empty())
@@ -440,7 +440,7 @@ Undo::CommandPtr PivotTransform::CenterTransform()
     {
         SceneGraph::HierarchyNode* n = *itr;
 
-        SceneGraph::Transform* t = Reflect::ObjectCast<SceneGraph::Transform>( n );
+        SceneGraph::Transform* t = Reflect::SafeCast<SceneGraph::Transform>( n );
 
         if (!t)
         {
@@ -462,7 +462,7 @@ bool PivotTransform::ValidatePanel(const tstring& name)
         return true;
     }
 
-    return __super::ValidatePanel(name);
+    return Base::ValidatePanel(name);
 }
 
 void PivotTransform::CreatePanel(CreatePanelArgs& args)

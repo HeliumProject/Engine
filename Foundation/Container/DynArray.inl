@@ -183,7 +183,7 @@ template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::Clear()
 {
     ArrayInPlaceDestroy( m_pBuffer, m_size );
-    m_allocator.Free( m_pBuffer );
+    Allocator().Free( m_pBuffer );
     m_pBuffer = NULL;
     m_size = 0;
     m_capacity = 0;
@@ -331,7 +331,7 @@ void Helium::DynArray< T, Allocator >::Insert( size_t index, const T& rValue, si
         ArrayUninitializedFill( pNewBuffer + index, rValue, count );
         ArrayUninitializedCopy( pNewBuffer + index + count, m_pBuffer + index, m_size - index );
 
-        m_allocator.Free( m_pBuffer );
+        Allocator().Free( m_pBuffer );
 
         m_pBuffer = pNewBuffer;
         m_capacity = newCapacity;
@@ -379,7 +379,7 @@ void Helium::DynArray< T, Allocator >::InsertArray( size_t index, const T* pValu
         ArrayUninitializedCopy( pNewBuffer + index, pValues, count );
         ArrayUninitializedCopy( pNewBuffer + index + count, m_pBuffer + index, m_size - index );
 
-        m_allocator.Free( m_pBuffer );
+        Allocator().Free( m_pBuffer );
 
         m_pBuffer = pNewBuffer;
         m_capacity = newCapacity;
@@ -717,7 +717,7 @@ template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::Finalize()
 {
     ArrayInPlaceDestroy( m_pBuffer, m_size );
-    m_allocator.Free( m_pBuffer );
+    Allocator().Free( m_pBuffer );
 }
 
 /// Assignment operator implementation.
@@ -767,7 +767,7 @@ T* Helium::DynArray< T, Allocator >::Allocate( size_t count )
 template< typename T, typename Allocator >
 T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const boost::true_type& /*rNeedsAlignment*/ )
 {
-    return static_cast< T* >( m_allocator.AllocateAligned( boost::alignment_of< T >::value, sizeof( T ) * count ) );
+    return static_cast< T* >( Allocator().AllocateAligned( boost::alignment_of< T >::value, sizeof( T ) * count ) );
 }
 
 /// Allocate() implementation for types that can use the default alignment.
@@ -781,7 +781,7 @@ T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const boost::true_t
 template< typename T, typename Allocator >
 T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const boost::false_type& /*rNeedsAlignment*/ )
 {
-    return static_cast< T* >( m_allocator.Allocate( sizeof( T ) * count ) );
+    return static_cast< T* >( Allocator().Allocate( sizeof( T ) * count ) );
 }
 
 /// Reallocate memory for the specified number of elements, accounting for non-standard alignment requirements.
@@ -813,16 +813,18 @@ T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count )
 template< typename T, typename Allocator >
 T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count, const boost::true_type& /*rNeedsAlignment*/ )
 {
-    size_t existingSize = m_allocator.GetMemorySize( pMemory );
+    Allocator allocator;
+
+    size_t existingSize = allocator.GetMemorySize( pMemory );
     size_t newSize = sizeof( T ) * count;
     if( existingSize != newSize )
     {
-        T* pNewMemory = static_cast< T* >( m_allocator.AllocateAligned(
+        T* pNewMemory = static_cast< T* >( allocator.AllocateAligned(
             boost::alignment_of< T >::value,
             newSize ) );
         HELIUM_ASSERT( pNewMemory || newSize == 0 );
         MemoryCopy( pNewMemory, pMemory, Min( existingSize, newSize ) );
-        m_allocator.Free( pMemory );
+        allocator.Free( pMemory );
         pMemory = pNewMemory;
     }
 
@@ -844,7 +846,7 @@ T* Helium::DynArray< T, Allocator >::Reallocate(
     size_t count,
     const boost::false_type& /*rNeedsAlignment*/ )
 {
-    return static_cast< T* >( m_allocator.Reallocate( pMemory, sizeof( T ) * count ) );
+    return static_cast< T* >( Allocator().Reallocate( pMemory, sizeof( T ) * count ) );
 }
 
 /// Resize an array of elements.
@@ -924,7 +926,7 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
         }
 
         ArrayInPlaceDestroy( pMemory, elementCount );
-        m_allocator.Free( pMemory );
+        Allocator().Free( pMemory );
     }
 
     return pNewMemory;

@@ -27,7 +27,7 @@ namespace Helium
         class FOUNDATION_API Container : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( Container, Control );
+            REFLECT_DECLARE_OBJECT( Container, Control );
 
             Container();
             ~Container();

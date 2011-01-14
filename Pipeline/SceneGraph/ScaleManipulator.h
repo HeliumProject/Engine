@@ -11,7 +11,7 @@ namespace Helium
         class PrimitiveAxes;
         class PrimitiveCube;
 
-        class PIPELINE_API ScaleManipulator : public SceneGraph::TransformManipulator
+        class PIPELINE_API ScaleManipulator : public TransformManipulator
         {
         private:
             // UI

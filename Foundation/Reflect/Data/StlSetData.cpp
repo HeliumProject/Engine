@@ -78,8 +78,6 @@ SimpleStlSetData<DataT, DataClassT>::~SimpleStlSetData()
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -140,7 +138,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 template < class DataT, class DataClassT >
 bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(src);
+    const StlSetDataT* rhs = SafeCast<StlSetDataT>(src);
     if (!rhs)
     {
         return false;
@@ -152,9 +150,9 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Equals(const Data* s) const
+bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
 {
-    const StlSetDataT* rhs = ObjectCast<StlSetDataT>(s);
+    const StlSetDataT* rhs = SafeCast<StlSetDataT>(object);
     if (!rhs)
     {
         return false;
@@ -175,13 +173,10 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ObjectPtr dataElem;
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<DataClassT>() );
 
-            // query cache for a serializer of this type
-            archive.GetCache().Create( Reflect::GetClass<DataClassT>(), dataElem );
-
-            // downcast to serializer type
-            DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
+            // downcast to data type
+            DataClassT* dataSer = AssertCast<DataClassT>(dataElem);
 
             // connect to our map data memory address
             dataSer->ConnectData(const_cast<DataT*>(&(*itr)));
@@ -197,14 +192,10 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to serializer type
-        Data* ser = DangerousCast<Data>(*itr);
-
-        // disconnect from memory
+        Data* ser = AssertCast<Data>(*itr);
         ser->Disconnect();
 
-        // restore serializer to the cache
-        archive.GetCache().Free( ser );
+        // might be useful to cache the data object here
     }
 }
 
@@ -221,7 +212,7 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        DataClassT* data = ObjectCast<DataClassT>(*itr);
+        DataClassT* data = SafeCast<DataClassT>(*itr);
         if (!data)
         {
             throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
@@ -271,9 +262,9 @@ template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
-REFLECT_DEFINE_CLASS( StlStringStlSetData );
-REFLECT_DEFINE_CLASS( UInt32StlSetData );
-REFLECT_DEFINE_CLASS( UInt64StlSetData );
-REFLECT_DEFINE_CLASS( GUIDStlSetData );
-REFLECT_DEFINE_CLASS( TUIDStlSetData );
-REFLECT_DEFINE_CLASS( PathStlSetData );
+REFLECT_DEFINE_OBJECT( StlStringStlSetData );
+REFLECT_DEFINE_OBJECT( UInt32StlSetData );
+REFLECT_DEFINE_OBJECT( UInt64StlSetData );
+REFLECT_DEFINE_OBJECT( GUIDStlSetData );
+REFLECT_DEFINE_OBJECT( TUIDStlSetData );
+REFLECT_DEFINE_OBJECT( PathStlSetData );

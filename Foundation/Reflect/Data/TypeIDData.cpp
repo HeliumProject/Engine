@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS( TypeIDData );
+REFLECT_DEFINE_OBJECT( TypeIDData );
 
 TypeIDData::TypeIDData()
 {
@@ -20,14 +20,12 @@ TypeIDData::~TypeIDData()
 
 void TypeIDData::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
-bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
+bool TypeIDData::Set(const Data* s, uint32_t flags)
 {
-    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = SafeCast<TypeIDData>(s);
     if (!rhs)
     {
         return false;
@@ -38,9 +36,9 @@ bool TypeIDData::Set(const Reflect::Data* s, uint32_t flags)
     return true;
 }
 
-bool TypeIDData::Equals(const Reflect::Data* s) const
+bool TypeIDData::Equals(const Object* object) const
 {
-    const TypeIDData* rhs = Reflect::ObjectCast<TypeIDData>(s);
+    const TypeIDData* rhs = SafeCast<TypeIDData>(object);
     if (!rhs)
     {
         return false;
@@ -51,7 +49,7 @@ bool TypeIDData::Equals(const Reflect::Data* s) const
 
 void TypeIDData::Serialize(Archive& archive) const
 {
-    const Reflect::Type* type = m_Data.Get();
+    const Type* type = m_Data.Get();
 
     switch (archive.GetType())
     {
@@ -80,7 +78,7 @@ void TypeIDData::Serialize(Archive& archive) const
 
 void TypeIDData::Deserialize(Archive& archive)
 {
-    const Reflect::Type* type = NULL;
+    const Type* type = NULL;
 
     switch (archive.GetType())
     {
@@ -92,7 +90,7 @@ void TypeIDData::Deserialize(Archive& archive)
             tstring str;
             str.resize( (size_t)size );
             xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
-            type = Reflect::Registry::GetInstance()->GetType( str.c_str() );
+            type = Registry::GetInstance()->GetType( str.c_str() );
             break;
         }
 
@@ -102,7 +100,7 @@ void TypeIDData::Deserialize(Archive& archive)
 
             uint32_t crc;
             binary.GetStream().Read(&crc);
-            type = Reflect::Registry::GetInstance()->GetType( crc );
+            type = Registry::GetInstance()->GetType( crc );
             break;
         }
     }

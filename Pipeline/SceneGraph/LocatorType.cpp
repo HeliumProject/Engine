@@ -41,7 +41,7 @@ LocatorType::~LocatorType()
 
 void LocatorType::Create()
 {
-    __super::Create();
+    Base::Create();
 
     m_Locator->Create();
     m_Cube->Create();
@@ -49,7 +49,7 @@ void LocatorType::Create()
 
 void LocatorType::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     m_Locator->Delete();
     m_Cube->Delete();

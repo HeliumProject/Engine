@@ -195,10 +195,9 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& 
 
     bool isVisible = true;
 
-    // If the object is a dependency node, connect a name change listener
-    if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< SceneGraph::SceneNode >() ) )
+    SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( data->GetObject() );
+    if ( node )
     {
-        SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( data->GetObject() );
         isVisible = node->IsVisible();
         node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
         node->AddVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
@@ -452,9 +451,9 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     {
         SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
         Reflect::Object* object = data->GetObject();
-        if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
+        SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
+        if ( node )
         {
-            SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
             const tstring newName = args.GetLabel().c_str();
             if ( node->GetName() != newName )
             {
@@ -493,7 +492,7 @@ void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
         if ( !m_TreeCtrl->IsSelected( item ) )
         {
             SceneOutlinerItemData* data = GetTreeItemData( item );
-            SceneNode* node = Reflect::ObjectCast<SceneNode>( data->GetObject() );
+            SceneNode* node = Reflect::SafeCast<SceneNode>( data->GetObject() );
             if ( node )
             {
                 if ( !node->IsSelectable() )
@@ -524,7 +523,7 @@ void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
             SceneOutlinerItemData* itemData = GetTreeItemData( selections[i] );
             if ( itemData )
             {
-                SceneNode* node = Reflect::ObjectCast<SceneNode>( itemData->GetObject() );
+                SceneNode* node = Reflect::SafeCast<SceneNode>( itemData->GetObject() );
                 if ( node )
                 {
                     nodes.Append( node );
@@ -573,9 +572,9 @@ void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
     // If the object is a dependency node, disconnect our listeners from it
     Reflect::Object* object = GetTreeItemData( args.GetItem() )->GetObject();
-    if ( object->HasType( Reflect::GetType<SceneGraph::SceneNode>() ) )
+    SceneGraph::SceneNode* node = Reflect::SafeCast< SceneGraph::SceneNode >( object );
+    if ( node )
     {
-        SceneGraph::SceneNode* node = Reflect::DangerousCast< SceneGraph::SceneNode >( object );
         node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
         node->RemoveVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
     }

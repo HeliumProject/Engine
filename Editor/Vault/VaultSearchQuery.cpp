@@ -59,7 +59,7 @@ const tchar_t* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" )
 
 ///////////////////////////////////////////////////////////////////////////////
 REFLECT_DEFINE_ENUMERATION( SearchType );
-REFLECT_DEFINE_CLASS( VaultSearchQuery );
+REFLECT_DEFINE_OBJECT( VaultSearchQuery );
 void VaultSearchQuery::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
     comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, TXT( "m_SearchType" ) );
@@ -80,15 +80,18 @@ VaultSearchQuery::~VaultSearchQuery()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void VaultSearchQuery::PostDeserialize()
+void VaultSearchQuery::PostDeserialize( const Reflect::Field* field )
 {
-    __super::PostDeserialize();
+    Base::PostDeserialize( field );
 
-    tstring errors;
-    if ( !ParseQueryString( m_QueryString, errors, this ) )
+    if ( field == NULL )
     {
-        Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
-        return;
+        tstring errors;
+        if ( !ParseQueryString( m_QueryString, errors, this ) )
+        {
+            Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
+            return;
+        }
     }
 }
 

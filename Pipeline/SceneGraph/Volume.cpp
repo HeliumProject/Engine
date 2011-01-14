@@ -15,7 +15,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( VolumeShape );
-REFLECT_DEFINE_CLASS( Volume );
+REFLECT_DEFINE_OBJECT( Volume );
 
 void Volume::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -75,12 +75,12 @@ int Volume::GetShape() const
 
 void Volume::SetShape( int shape )
 {
-    m_Shape = static_cast< VolumeShape > (shape);
+    m_Shape = static_cast< VolumeShape::Enum >( shape );
 }
 
 void Volume::Evaluate(GraphDirection direction)
 {
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 
     switch (direction)
     {
@@ -145,7 +145,7 @@ void Volume::Render( RenderVisitor* render )
         }
     }
 
-    // don't call __super here, it will draw big ass axes
+    // don't call Base here, it will draw big ass axes
     HierarchyNode::Render( render );
 }
 
@@ -206,7 +206,7 @@ bool Volume::ValidatePanel(const tstring& name)
         return true;
     }
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 void Volume::CreatePanel( CreatePanelArgs& args )

@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Button );
+REFLECT_DEFINE_OBJECT( Inspect::Button );
 
 Button::Button()
 {

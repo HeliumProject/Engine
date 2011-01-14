@@ -9,7 +9,7 @@ using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ComponentCollection)
+REFLECT_DEFINE_OBJECT(ComponentCollection)
 
 void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -95,7 +95,7 @@ const ComponentPtr& ComponentCollection::GetComponent(const Reflect::Class* slot
 
         // While we have base class type information, and we haven't hit the Component
         // base class, keep iterating.
-        while ( type && ( type != Reflect::GetType< ComponentBase >() ) )
+        while ( type && ( type != Reflect::GetClass< ComponentBase >() ) )
         {
             // See if the base class has a slot in this collection.
             found = m_Components.find( type );
@@ -299,45 +299,51 @@ bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fie
         return true;
     }
 
-    return __super::ProcessComponent(element, fieldName);
+    return Base::ProcessComponent(element, fieldName);
 }
 
-void ComponentCollection::PreSerialize()
+void ComponentCollection::PreSerialize( const Reflect::Field* field )
 {
-    __super::PreSerialize();
+    Base::PreSerialize( field );
 
-    // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
-    HELIUM_ASSERT( m_Components.find( NULL ) == m_Components.end() ); 
-
-    // this *must* be junk
-    m_Components.erase( Reflect::TypeID( NULL ) );
-}
-
-void ComponentCollection::PostDeserialize()
-{
-    __super::PostDeserialize();
-
-    // this *must* be junk
-    m_Components.erase( Reflect::TypeID( NULL ) );
-
-    M_Component::const_iterator itr = m_Components.begin();
-    M_Component::const_iterator end = m_Components.end();
-    for ( ; itr != end; ++itr )
+    if ( field == NULL )
     {
-        itr->second->SetCollection( this );
-        itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
+        HELIUM_ASSERT( m_Components.find( NULL ) == m_Components.end() ); 
+
+        // this *must* be junk
+        m_Components.erase( Reflect::TypeID( NULL ) );
     }
 }
 
-void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
+void ComponentCollection::PostDeserialize( const Reflect::Field* field )
 {
-    __super::CopyTo( destination );
+    Base::PostDeserialize( field );
 
-    ComponentCollection* destCollection = Reflect::ObjectCast< ComponentCollection >( destination );
-    if ( destCollection )
+    if ( field == NULL )
+    {
+        // this *must* be junk
+        m_Components.erase( Reflect::TypeID( NULL ) );
+
+        M_Component::const_iterator itr = m_Components.begin();
+        M_Component::const_iterator end = m_Components.end();
+        for ( ; itr != end; ++itr )
+        {
+            itr->second->SetCollection( this );
+            itr->second->e_Changed.Add( ObjectChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ObjectChangeArgs& )> (this, &ComponentCollection::ComponentChanged));
+        }
+    }
+}
+
+void ComponentCollection::CopyTo(Reflect::Object* object)
+{
+    Base::CopyTo( object );
+
+    ComponentCollection* collection = Reflect::SafeCast< ComponentCollection >( object );
+    if ( collection )
     {
         // Remove all attributes, we're going to bring them over manually
-        destCollection->Clear(); 
+        collection->Clear(); 
 
         // For each component in this component collection
         Reflect::Registry* registry = Reflect::Registry::GetInstance();
@@ -348,17 +354,17 @@ void ComponentCollection::CopyTo(const Reflect::ObjectPtr& destination)
             // Create a new copy of the component and try to add it to the destination
             const ComponentPtr& attrib = attrItr->second;
             ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetClass() ) );
-            if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
+            if ( !CopyComponentTo( *collection, destAttrib, attrib ) )
             {
                 // Component could not be added to the destination collection, check sibling classes
                 for ( const Composite* sibling = attrib->GetClass()->m_Base->m_FirstDerived; sibling; sibling = sibling->m_NextSibling )
                 {
-                    if ( sibling != attrib->GetType() )
+                    if ( sibling != attrib->GetClass() )
                     {
                         destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( Reflect::ReflectionCast< const Class >( sibling ) ) );
                         if ( destAttrib.ReferencesObject() )
                         {
-                            if ( CopyComponentTo( *destCollection, destAttrib, attrib ) )
+                            if ( CopyComponentTo( *collection, destAttrib, attrib ) )
                             {
                                 break;
                             }

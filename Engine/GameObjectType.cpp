@@ -18,31 +18,14 @@ GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
 
 /// Constructor.
 GameObjectType::GameObjectType()
-: m_flags( 0 )
+    : m_pReleaseStaticTypeCallback( NULL )
+    , m_flags( 0 )
 {
 }
 
 /// Destructor.
 GameObjectType::~GameObjectType()
 {
-}
-
-/// Get whether this type is a subtype of the given type.
-///
-/// @param[in] pType  Type against which to check.
-bool GameObjectType::IsSubtypeOf( const GameObjectType* pType ) const
-{
-    HELIUM_ASSERT( pType );
-
-    for( const GameObjectType* pThisType = this; pThisType != NULL; pThisType = pThisType->GetBaseType() )
-    {
-        if( pThisType == pType )
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /// Set the package in which all template object packages are stored.
@@ -71,35 +54,18 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags )
+const GameObjectType* GameObjectType::Create(
+    Name name,
+    Package* pTypePackage,
+    const GameObjectType* pParent,
+    GameObject* pTemplate,
+    RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback,
+    uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
     HELIUM_ASSERT( pTypePackage );
     HELIUM_ASSERT( pTemplate );
-
-    // Set up the template object name, and set this object as its parent.
-    if( !pTemplate->SetOwner( pTypePackage ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object owner.\n" ),
-            *name );
-
-        return false;
-    }
-
-    if( !pTemplate->SetName( name ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name.\n" ),
-            *name );
-
-        return false;
-    }
-
-    // Flag the object as the default template object for the type being created.
-    pTemplate->SetFlags( GameObject::FLAG_DEFAULT_TEMPLATE );
+    HELIUM_ASSERT( pReleaseStaticTypeCallback );
 
     // Register the template object with the object system.
     if( !GameObject::RegisterObject( pTemplate ) )
@@ -112,14 +78,48 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const 
         return false;
     }
 
+    // Set up the template object name, and set this object as its parent.
+    GameObject::RenameParameters nameParameters;
+    nameParameters.name = name;
+    nameParameters.spOwner = pTypePackage;
+    if( !pTemplate->Rename( nameParameters ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
+            *name );
+
+        GameObject::UnregisterObject( pTemplate );
+
+        return false;
+    }
+
+    // Flag the object as the default template object for the type being created.
+    pTemplate->SetFlags( GameObject::FLAG_DEFAULT_TEMPLATE );
+
+    // If the parent type is null, default to Reflect::Object, as the type should be deriving from it directly.
+    const Reflect::Class* pBaseClass = pParent;
+    if( !pBaseClass )
+    {
+        pBaseClass = Reflect::Object::s_Class;
+        HELIUM_ASSERT( pBaseClass );
+    }
+
     // Create the type object and store its parameters.
     GameObjectType* pType = new GameObjectType;
     HELIUM_ASSERT( pType );
-    pType->m_cachedName = name;
     pType->m_Name = *name;
-    pType->m_Base = pParent;
-    pType->m_spTemplate = pTemplate;
+    pType->m_Size = static_cast< uint32_t >( pTemplate->GetInstanceSize() );
+    pType->m_Base = pBaseClass;
+    pType->Composite::m_Default = pType->m_Default = pTemplate;
+    pType->m_cachedName = name;
+    pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;
+
+    if( pParent )
+    {
+        pParent->AddDerived( pType );
+    }
 
     // Lazily initialize the lookup map.  Note that this is not inherently thread-safe, but there should always be
     // at least one type registered before any sub-threads are spawned.
@@ -144,18 +144,34 @@ GameObjectType* GameObjectType::Create( Name name, Package* pTypePackage, const 
 
 /// Unregister a type.
 ///
+/// Note that this should only be called by the static type release functions (i.e. Entity::ReleaseStaticType()).
+///
 /// @param[in] pType  Type to unregister.  References to the parent type and the type template will be released as well.
 ///
 /// @see Register()
-void GameObjectType::Unregister( GameObjectType* pType )
+void GameObjectType::Unregister( const GameObjectType* pType )
 {
     HELIUM_ASSERT( pType );
 
+    // Unregister all child types first.
+    const Composite* pDerived = pType->m_FirstDerived;
+    while( pDerived )
+    {
+        HELIUM_ASSERT( pDerived->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType );
+        const GameObjectType* pDerivedGameObjectType = static_cast< const GameObjectType* >( pDerived );
+        const Composite* pNextDerived = pDerived->m_NextSibling;
+
+        RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticType = pDerivedGameObjectType->m_pReleaseStaticTypeCallback;
+        HELIUM_ASSERT( pReleaseStaticType );
+        pReleaseStaticType();
+
+        pDerived = pNextDerived;
+    }
+
+    // Remove this type from all type registries.
     Reflect::Registry* pRegistry = Reflect::Registry::GetInstance();
     HELIUM_ASSERT( pRegistry );
     pRegistry->UnregisterType( pType );
-
-    pType->m_spTemplate.Release();
 
     HELIUM_ASSERT( sm_pLookupMap );
     HELIUM_VERIFY( sm_pLookupMap->Remove( pType->GetName() ) );

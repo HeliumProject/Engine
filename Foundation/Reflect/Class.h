@@ -1,18 +1,17 @@
 #pragma once
 
+#include "Platform/String.h"
+
 #include "Foundation/Reflect/Composite.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Reflect/Registry.h"
-
-#include "Platform/String.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class Field;
-        class Class;
-
+        // function type for creating object instances
+        typedef Object* (*CreateObjectFunc)();
 
         //
         // Class (struct or class)
@@ -21,9 +20,7 @@ namespace Helium
         class FOUNDATION_API Class : public Composite
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Class );
-
-            CreateObjectFunc      m_Creator;             // factory function for creating instances of this class
+            REFLECTION_TYPE( ReflectionTypes::Class, Class, Composite );
 
         protected:
             Class();
@@ -44,16 +41,18 @@ namespace Helium
                 // setup factory function
                 info->m_Creator = creator;
 
+                // create the default instance
+                if ( info->m_Creator )
+                {
+                    info->Composite::m_Default = info->m_Default = info->m_Creator();
+                }
+
                 return info;
             }
 
-            //
-            // Clone makes a deep copy of the passed object, you can use FieldFlags::Share to flag fields
-            //  to not be used when doing the traversal for deep copy cloning.  Just the reference will be copied
-            //  in such cases.  Currently we don't provide support for containers of non-cloneable fields.
-            //
-
-            static ObjectPtr Clone(Object* element);
+        public:
+            CreateObjectFunc        m_Creator;  // factory function for creating instances of this class
+            StrongPtr<const Object> m_Default;  // the template for this class (by default, the default instance)
         };
 
         typedef Helium::SmartPtr< Class > ClassPtr;

@@ -131,6 +131,6 @@ void SortTreeCtrl::SortChildren( const wxTreeItemId& item )
 {
     if ( IsSortingEnabled() )
     {
-        __super::SortChildren( item );
+        wxTreeCtrl::SortChildren( item );
     }
 }

@@ -16,7 +16,7 @@ namespace Helium
         private:
 
         public:
-            REFLECT_DECLARE_CLASS(Entity, AssetClass);
+            REFLECT_DECLARE_OBJECT(Entity, AssetClass);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

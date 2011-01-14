@@ -92,7 +92,7 @@ wxDragResult DropTarget::OnEnter( wxCoord x, wxCoord y, wxDragResult def )
         m_DragEnter.Raise( DragArgs( x, y, static_cast< ClipboardDataObject* >( GetDataObject() ), def ) );
     }
 
-    return __super::OnEnter( x, y, def );
+    return wxDropTarget::OnEnter( x, y, def );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

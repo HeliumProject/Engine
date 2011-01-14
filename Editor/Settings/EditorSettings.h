@@ -24,7 +24,7 @@ namespace Helium
             bool GetShowFileExtensionsInProjectView() const;
             void SetShowFileExtensionsInProjectView( bool value );
 
-            REFLECT_DECLARE_CLASS( GeneralSettings, Settings );
+            REFLECT_DECLARE_OBJECT( GeneralSettings, Settings );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         private:

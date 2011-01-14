@@ -27,10 +27,13 @@ namespace Lunar
     class LUNAR_ENGINE_API GameObjectType : public Reflect::Class
     {
     public:
-        REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType );
+        REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType, GameObjectType, Reflect::Class );
 
         /// Type lookup hash map.
         typedef HashMap< Name, GameObjectTypePtr > LookupMap;
+
+        /// Static type release callback.
+        typedef void ( RELEASE_STATIC_TYPE_CALLBACK )();
 
         /// General type flags.
         enum EFlag
@@ -56,8 +59,8 @@ namespace Lunar
 
             /// @name Overloaded Operators
             //@{
-            inline GameObjectType& operator*() const;
-            inline GameObjectType* operator->() const;
+            inline const GameObjectType& operator*() const;
+            inline const GameObjectType* operator->() const;
 
             inline ConstIterator& operator++();
             inline ConstIterator operator++( int );
@@ -97,19 +100,15 @@ namespace Lunar
         inline uint32_t GetFlags() const;
         //@}
 
-        /// @name Type Information
-        //@{
-        bool IsSubtypeOf( const GameObjectType* pType ) const;
-        //@}
-
         /// @name Static Type Registration
         //@{
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static GameObjectType* Create(
-            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
-        static void Unregister( GameObjectType* pType );
+        static const GameObjectType* Create(
+            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
+            RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
+        static void Unregister( const GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );
 
@@ -120,11 +119,11 @@ namespace Lunar
         //@}
 
     private:
-        /// Cached from the narrow pointer in Type
+        /// Cached from the null-terminated name string in Type.
         mutable Name m_cachedName;
 
-        /// Default template object for this type.
-        GameObjectPtr m_spTemplate;
+        /// Static type release callback.
+        RELEASE_STATIC_TYPE_CALLBACK* m_pReleaseStaticTypeCallback;
 
         /// Type flags.
         uint32_t m_flags;

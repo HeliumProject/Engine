@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -44,7 +47,7 @@ ShaderVariantResourceHandler::~ShaderVariantResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* ShaderVariantResourceHandler::GetResourceType() const
+const GameObjectType* ShaderVariantResourceHandler::GetResourceType() const
 {
     return ShaderVariant::GetStaticType();
 }
@@ -58,7 +61,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    ShaderVariant* pVariant = StaticCast< ShaderVariant >( pResource );
+    ShaderVariant* pVariant = Reflect::AssertCast< ShaderVariant >( pResource );
 
     // Parse the shader type and user option index from the variant name.
     Name variantName = pVariant->GetName();
@@ -123,7 +126,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     }
 
     // Get the parent shader.
-    Shader* pShader = StaticCast< Shader >( pVariant->GetOwner() );
+    Shader* pShader = Reflect::AssertCast< Shader >( pVariant->GetOwner() );
     HELIUM_ASSERT( pShader );
     HELIUM_ASSERT( pShader->GetAnyFlagSet( GameObject::FLAG_PRECACHED ) );
 
@@ -520,18 +523,21 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
     Name variantName( variantNameString );
     variantNameString.Clear();
 
-    pLoadRequest->spVariant.Set( StaticCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
+    pLoadRequest->spVariant.Set( Reflect::AssertCast< ShaderVariant >( pShader->FindChild( variantName ) ) );
     if( !pLoadRequest->spVariant )
     {
-        pLoadRequest->spVariant = GameObject::Create< ShaderVariant >( variantName, pShader );
-        if( !pLoadRequest->spVariant )
+        if( !GameObject::Create< ShaderVariant >( pLoadRequest->spVariant, variantName, pShader ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 ( TXT( "ShaderVariantResourceHandler::BeginLoadVariant(): Failed to create shader variant object " )
-                TXT( "\"%s:%s\".\n" ) ),
+                  TXT( "\"%s:%s\".\n" ) ),
                 *pShader->GetPath().ToString(),
                 *variantName );
+        }
+        else
+        {
+            HELIUM_ASSERT( pLoadRequest->spVariant );
         }
     }
 
@@ -549,7 +555,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
 
         HELIUM_ASSERT( pPackageObject );
 
-        PackageLoader* pPackageLoader = StaticCast< Package >( pPackageObject )->GetLoader();
+        PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
         HELIUM_ASSERT( pPackageLoader );
         HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
 
@@ -814,3 +820,5 @@ bool ShaderVariantResourceHandler::LoadRequestEquals::operator()(
     return ( pRequest0->userOptionIndex == pRequest1->userOptionIndex &&
         pRequest0->shaderType == pRequest1->shaderType );
 }
+
+#endif  // L_EDITOR

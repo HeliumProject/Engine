@@ -15,7 +15,7 @@ namespace Helium
         public:
             std::set< Helium::Path > m_Assets;
 
-            REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
+            REFLECT_DECLARE_OBJECT(SceneManifest, AssetManifest);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };

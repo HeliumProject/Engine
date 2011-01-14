@@ -15,7 +15,7 @@ using namespace Helium::SceneGraph;
 
 static D3DMATERIAL9 g_JointTransformMaterial;
 
-REFLECT_DEFINE_CLASS( JointTransform );
+REFLECT_DEFINE_OBJECT( JointTransform );
 
 void JointTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -48,7 +48,7 @@ JointTransform::~JointTransform()
 
 void JointTransform::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     SceneGraph::PrimitiveRings* rings = static_cast< SceneGraph::PrimitiveRings* >( m_Owner->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
     m_ObjectBounds.minimum = Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
@@ -81,7 +81,7 @@ void JointTransform::Render( RenderVisitor* render )
         entry->m_Draw = &JointTransform::DrawNormal;
     }
 
-    // don't call __super here, it will draw big ass axes
+    // don't call Base here, it will draw big ass axes
     SceneGraph::HierarchyNode::Render( render );
 }
 

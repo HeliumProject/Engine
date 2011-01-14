@@ -67,7 +67,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
 
             for ( V_PickHitSmartPtr::const_iterator itr = sorted.begin(), end = sorted.end(); itr != end; ++itr )
             {
-                if ( curve = Reflect::ObjectCast<Curve>( (*itr)->GetHitObject() ) )
+                if ( curve = Reflect::SafeCast<Curve>( (*itr)->GetHitObject() ) )
                 {
                     break;
                 }
@@ -143,7 +143,7 @@ bool CurveEditTool::MouseDown( const MouseButtonInput& e )
         m_Scene->Execute( false );
     }
 
-    return success || __super::MouseDown( e );
+    return success || Base::MouseDown( e );
 }
 
 void CurveEditTool::MouseUp( const MouseButtonInput& e )
@@ -155,7 +155,7 @@ void CurveEditTool::MouseUp( const MouseButtonInput& e )
 
     m_AllowSelection = true;
 
-    __super::MouseUp( e );
+    Base::MouseUp( e );
 }
 
 void CurveEditTool::MouseMove( const MouseMoveInput& e )
@@ -174,7 +174,7 @@ void CurveEditTool::MouseMove( const MouseMoveInput& e )
         }
     }
 
-    __super::MouseMove( e );
+    Base::MouseMove( e );
 }
 
 void CurveEditTool::KeyPress( const KeyboardInput& e )
@@ -195,14 +195,14 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
             return;
         }
 
-        CurveControlPoint* point = Reflect::ObjectCast<CurveControlPoint>( selection.Front() );
+        CurveControlPoint* point = Reflect::SafeCast<CurveControlPoint>( selection.Front() );
 
         if ( !point )
         {
             return;
         }
 
-        Curve* curve = Reflect::ObjectCast<Curve>( point->GetParent() );
+        Curve* curve = Reflect::SafeCast<Curve>( point->GetParent() );
 
         if ( !curve )
         {
@@ -236,7 +236,7 @@ void CurveEditTool::KeyPress( const KeyboardInput& e )
         m_Scene->GetSelection().SetItems( selection );
     }
 
-    __super::KeyPress( e );
+    Base::KeyPress( e );
 }
 
 void CurveEditTool::KeyDown( const KeyboardInput& e )
@@ -258,7 +258,7 @@ void CurveEditTool::KeyDown( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyDown( e );
+        Base::KeyDown( e );
         break;
     }
 
@@ -281,7 +281,7 @@ void CurveEditTool::KeyUp( const KeyboardInput& e )
         break;
 
     default:
-        __super::KeyUp( e );
+        Base::KeyUp( e );
         break;
     }
 
@@ -299,7 +299,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
     OS_SceneNodeDumbPtr::Iterator end = items.End();
     for( ; itr != end; ++itr )
     {
-        CurveControlPoint* p = Reflect::ObjectCast<CurveControlPoint>( *itr );
+        CurveControlPoint* p = Reflect::SafeCast<CurveControlPoint>( *itr );
 
         if ( !p )
         {
@@ -336,7 +336,7 @@ bool CurveEditTool::ValidateSelection( OS_SceneNodeDumbPtr& items )
         OS_SceneNodeDumbPtr::Iterator end = items.End();
         for( ; itr != end; ++itr )
         {
-            Curve* c = Reflect::ObjectCast<Curve>( *itr );
+            Curve* c = Reflect::SafeCast<Curve>( *itr );
 
             if ( !c )
             {
@@ -360,7 +360,7 @@ void CurveEditTool::Evaluate()
         m_ControlPointManipulator->Evaluate();
     }
 
-    __super::Evaluate();
+    Base::Evaluate();
 }
 
 void CurveEditTool::Draw( DrawArgs* args )
@@ -370,7 +370,7 @@ void CurveEditTool::Draw( DrawArgs* args )
         m_ControlPointManipulator->Draw( args );
     }
 
-    __super::Draw( args );
+    Base::Draw( args );
 }
 
 void CurveEditTool::CreateProperties()
@@ -446,7 +446,7 @@ void CurveEditTool::StoreSelectedCurves()
     OS_SceneNodeDumbPtr::Iterator selection_end = m_Scene->GetSelection().GetItems().End();
     for ( ; selection_itr != selection_end; ++selection_itr )
     {
-        Curve* curve = Reflect::ObjectCast<Curve>( *selection_itr );
+        Curve* curve = Reflect::SafeCast<Curve>( *selection_itr );
         if ( curve )
         {
             m_SelectedCurves.Append( curve );

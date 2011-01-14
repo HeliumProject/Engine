@@ -28,7 +28,7 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* _DynamicCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
     {
-        return ( pObject && pObject->IsA( TargetType::GetStaticType() )
+        return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
                  ? static_cast< TargetType* >( pObject )
                  : NULL );
     }
@@ -54,7 +54,7 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* _StaticCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
     {
-        HELIUM_ASSERT( !pObject || pObject->IsA( TargetType::GetStaticType() ) );
+        HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
 
         return static_cast< TargetType* >( pObject );
     }
@@ -63,17 +63,27 @@ namespace Lunar
     ///
     /// @return  Object name.
     ///
-    /// @see SetName()
+    /// @see GetOwner(), GetInstanceIndex(), Rename()
     Name GameObject::GetName() const
     {
         return m_name;
+    }
+
+    /// Get the owner of this object.
+    ///
+    /// @return  Object owner.
+    ///
+    /// @see GetName(), GetInstanceIndex(), Rename(), GetChildCount(), GetChild(), GetChildren()
+    GameObject* GameObject::GetOwner() const
+    {
+        return m_spOwner;
     }
 
     /// Get the instance index associated with this object.
     ///
     /// @return  Object instance index.
     ///
-    /// @see SetInstanceIndex()
+    /// @see GetName(), GetOwner(), Rename()
     uint32_t GameObject::GetInstanceIndex() const
     {
         return m_instanceIndex;
@@ -131,47 +141,24 @@ namespace Lunar
         return ( ( m_flags & flagMask ) == flagMask );
     }
 
-    /// Get the owner of this object.
+    /// Get the first object in the list of objects of which this object is the immediate parent.
     ///
-    /// @return  Object owner.
+    /// @return  First object in the child object list.
     ///
-    /// @see SetOwner(), GetChildCount(), GetChild(), GetChildren()
-    GameObject* GameObject::GetOwner() const
+    /// @see GetNextSibling()
+    const GameObjectWPtr& GameObject::GetFirstChild() const
     {
-        return m_spOwner;
+        return m_wpFirstChild;
     }
 
-    /// Get the number of objects owned directly by this object.
+    /// Get the next object in the list of objects who share the same parent as this object.
     ///
-    /// @return  Number of owned objects.
+    /// @return  Next sibling object in list of child objects for this object's parent.
     ///
-    /// @see GetChild(), GetChildren(), GetOwner()
-    size_t GameObject::GetChildCount() const
+    /// @see GetFirstChild()
+    const GameObjectWPtr& GameObject::GetNextSibling() const
     {
-        return m_children.GetSize();
-    }
-
-    /// Get the child object associated with the specified index.
-    ///
-    /// @param[in] index  Child object index (must be less than the value returned by GetChildCount()).
-    ///
-    /// @return  Child object.
-    ///
-    /// @see GetChildCount(), GetChildren(), GetOwner()
-    GameObject* GameObject::GetChild( size_t index ) const
-    {
-        HELIUM_ASSERT( index < m_children.GetSize() );
-        return m_children[ index ];
-    }
-
-    /// Get the array of objects owned directly by this container.
-    ///
-    /// @return  Child object array.
-    ///
-    /// @see GetChildCount(), GetChild(), GetOwner()
-    const DynArray< GameObjectWPtr >& GameObject::GetChildren() const
-    {
-        return m_children;
+        return m_wpNextSibling;
     }
 
     /// Get the full path name for this object.
@@ -219,13 +206,13 @@ namespace Lunar
     ///
     /// @return  True if this is an instance of the given type, false if not.
     ///
-    /// @see GetGameObjectType(), IsA()
+    /// @see GetGameObjectType()
     bool GameObject::IsInstanceOf( const GameObjectType* pType ) const
     {
         const GameObjectType* pThisType = GetGameObjectType();
         HELIUM_ASSERT( pThisType );
 
-        return( pThisType == pType );
+        return ( pThisType == pType );
     }
 
     /// Call FinalizeLoad() on this object and set the FLAG_LOADED flag if it is not set.
@@ -242,25 +229,37 @@ namespace Lunar
 
     /// Create a new object.
     ///
-    /// @param[in] name                  Object name.
-    /// @param[in] pOwner                Object owner.
-    /// @param[in] pTemplate             Optional override template object.  If null, the default template for the
-    ///                                  object type will be used.
-    /// @param[in] bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
-    ///                                  invalid.
+    /// @param[out] rspObject             Pointer to the newly created object if object creation was successful.  Note
+    ///                                   that any object reference stored in this strong pointer prior to calling this
+    ///                                   function will always be cleared by this function, regardless of whether object
+    ///                                   creation is successful.
+    /// @param[in]  name                  Object name.
+    /// @param[in]  pOwner                Object owner.
+    /// @param[in]  pTemplate             Optional override template object.  If null, the default template for the
+    ///                                   object type will be used.
+    /// @param[in]  bAssignInstanceIndex  True to assign an instance index to the object, false to leave the index
+    ///                                   invalid.
     ///
-    /// @return  Pointer to the newly created object.
+    /// @return  True if object creation was successful, false if not.
     ///
     /// @see Create()
     template< typename T >
-    T* GameObject::Create( Name name, GameObject* pOwner, T* pTemplate, bool bAssignInstanceIndex )
+    bool GameObject::Create(
+        StrongPtr< T >& rspObject,
+        Name name,
+        GameObject* pOwner,
+        T* pTemplate,
+        bool bAssignInstanceIndex )
     {
-        GameObjectType* pType = T::GetStaticType();
+        const GameObjectType* pType = T::GetStaticType();
         HELIUM_ASSERT( pType );
 
-        GameObject* pObject = CreateObject( pType, name, pOwner, pTemplate, bAssignInstanceIndex );
+        GameObjectPtr spGameObject;
+        bool bResult = CreateObject( spGameObject, pType, name, pOwner, pTemplate, bAssignInstanceIndex );
 
-        return static_cast< T* >( pObject );
+        rspObject = Reflect::AssertCast< T >( spGameObject.Get() );
+
+        return bResult;
     }
 
     /// Find an object based on its path name, filtering by a specific type.
@@ -274,15 +273,22 @@ namespace Lunar
         GameObject* pObject = FindObject( path );
         if( pObject )
         {
-            GameObjectType* pType = T::GetStaticType();
+            const GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
-            if( !pObject->IsA( pType ) )
+            if( !pObject->IsClass( pType ) )
             {
                 pObject = NULL;
             }
         }
 
         return static_cast< T* >( pObject );
+    }
+
+    /// Constructor.
+    GameObject::RenameParameters::RenameParameters()
+        : name( NULL_NAME )
+        , instanceIndex( Invalid< uint32_t >() )
+    {
     }
 
     /// Cast an object to a given type if the object is of that type.

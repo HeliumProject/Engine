@@ -27,7 +27,7 @@ namespace Helium
         class PIPELINE_API EntityInstance : public Instance
         {
         public:
-            REFLECT_DECLARE_CLASS( EntityInstance, Instance );
+            REFLECT_DECLARE_OBJECT( EntityInstance, Instance );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

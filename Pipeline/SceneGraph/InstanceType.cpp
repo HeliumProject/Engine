@@ -46,14 +46,14 @@ InstanceType::~InstanceType()
 
 void InstanceType::Create()
 {
-    __super::Create();
+    Base::Create();
 
     m_Pointer->Create();
 }
 
 void InstanceType::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     m_Pointer->Delete();
 }

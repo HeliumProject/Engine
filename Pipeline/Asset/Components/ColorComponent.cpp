@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS( ColorComponent );
+REFLECT_DEFINE_OBJECT( ColorComponent );
 
 void ColorComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

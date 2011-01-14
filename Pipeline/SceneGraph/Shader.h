@@ -19,7 +19,7 @@ namespace Helium
         class Shader : public SceneNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Shader, SceneNode );
+            REFLECT_DECLARE_OBJECT( Shader, SceneNode );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

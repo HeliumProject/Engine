@@ -44,7 +44,7 @@ int PerforceWaitDialog::ShowModal( Perforce::WaitInterface* waitInterface )
     PerforceWaitTimer timer ( this, waitInterface );
 
     timer.Start( 100 );
-    int result = __super::ShowModal();
+    int result = wxDialog::ShowModal();
     timer.Stop();
 
     return result;

@@ -12,7 +12,7 @@ namespace Helium
         class JointTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_CLASS( JointTransform, Transform );
+            REFLECT_DECLARE_OBJECT( JointTransform, Transform );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

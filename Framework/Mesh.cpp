@@ -66,13 +66,13 @@ void Mesh::PreDestroy()
     m_spVertexBuffer.Release();
     m_spIndexBuffer.Release();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// @copydoc GameObject::Serialize()
 void Mesh::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED_DYNARRAY( m_materials );
 }

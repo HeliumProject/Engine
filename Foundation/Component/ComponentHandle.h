@@ -77,7 +77,7 @@ namespace Helium
                 : ComponentHandle ( collection )
             {
                 // downcast attribute from the collection, if it exists
-                Helium::SmartPtr<ComponentType> attr = Reflect::ObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
+                Helium::SmartPtr<ComponentType> attr = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
 
                 // if it exists
                 if (attr.ReferencesObject())
@@ -86,18 +86,18 @@ namespace Helium
                     if ( attr->GetCollection() && attr->GetCollection() != collection )
                     {
                         // clone the attribute from the other collection for use in this collection
-                        m_Component = Reflect::TryCast<ComponentType>( attr->Clone() );
+                        m_Component = Reflect::ThrowCast<ComponentType>( attr->Clone() );
                     }
                     else
                     {
                         // no need to type check again in release
-                        m_Component = Reflect::TryCast<ComponentType>( attr );
+                        m_Component = Reflect::ThrowCast<ComponentType>( attr );
                     }
                 }
                 else
                 {
                     // no existing attribute, create a new one
-                    m_Component = Reflect::TryCast<ComponentType>( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetType<ComponentType>() ) );
+                    m_Component = Reflect::ThrowCast<ComponentType>( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetType<ComponentType>() ) );
                 }
 
                 // ensure its part of the collection
@@ -145,7 +145,7 @@ namespace Helium
             {
                 m_Collection = collection;
 
-                m_Component = Reflect::ObjectCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
+                m_Component = Reflect::SafeCast<ComponentType>( m_Collection->GetComponent( Reflect::GetType<ComponentType>() ) );
 
                 if ( ( !m_Component.ReferencesObject() || !m_Component->m_IsEnabled ) && useDefault )
                 {

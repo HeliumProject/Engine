@@ -57,7 +57,7 @@ namespace Helium
         class PIPELINE_API ViewportSettings : public Settings
         {
         public: 
-            REFLECT_DECLARE_CLASS( ViewportSettings, Settings );
+            REFLECT_DECLARE_OBJECT( ViewportSettings, Settings );
 
             ViewportSettings(); 
 

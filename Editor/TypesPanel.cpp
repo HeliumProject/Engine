@@ -60,9 +60,10 @@ bool TypesPanel::RemoveType( SceneGraph::HierarchyNodeType* type )
 //  callback from scene
 void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+    HierarchyNodeType* type = Reflect::SafeCast< SceneGraph::HierarchyNodeType >( args.m_NodeType );
+    if ( type )
     {
-        AddType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
+        AddType( type );
     }
 }
 
@@ -71,9 +72,10 @@ void TypesPanel::AddNodeType( const NodeTypeExistenceArgs& args )
 //  callback from scene
 void TypesPanel::RemoveNodeType( const NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType<SceneGraph::HierarchyNodeType>() ) )
+    HierarchyNodeType* type = Reflect::SafeCast< SceneGraph::HierarchyNodeType >( args.m_NodeType );
+    if ( type )
     {
-        RemoveType( Reflect::DangerousCast< SceneGraph::HierarchyNodeType >( args.m_NodeType ) );
+        RemoveType( type );
     }
 }
 
@@ -124,7 +126,7 @@ void TypesPanel::SelectabilityChanged( const GridRowChangeArgs& args )
             OS_SceneNodeDumbPtr::Iterator end = selection.End();
             for ( ; itr != end; ++itr )
             {
-                SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( *itr );
+                SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( *itr );
 
                 if (!node || node->GetNodeType() != nodeType)
                 {

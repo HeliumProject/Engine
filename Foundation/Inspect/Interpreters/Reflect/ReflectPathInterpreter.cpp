@@ -37,7 +37,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     ContainerPtr container = CreateControl<Container>();
     groups.push_back( container );
 
-    bool pathField = field->m_DataClass == Reflect::GetType< PathData >();
+    bool pathField = field->m_DataClass == Reflect::GetClass< PathData >();
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
     DataChangingSignature::Delegate changingDelegate;
@@ -53,7 +53,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (!result)
     {
-        if ( pathField || field->m_DataClass == Reflect::GetType<StlStringData>() )
+        if ( pathField || field->m_DataClass == Reflect::GetClass<StlStringData>() )
         {
             ContainerPtr valueContainer = CreateControl<Container>();
             ValuePtr value = CreateControl< Value >();
@@ -115,7 +115,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         V_Control::const_iterator end = container->GetChildren().end();
         for( ; itr != end; ++itr )
         {
-            Label* label = Reflect::ObjectCast<Label>( *itr );
+            Label* label = Reflect::SafeCast<Label>( *itr );
             if (label)
             {
                 break;
@@ -154,7 +154,7 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
         {
             DataPtr s = field->CreateData();
 
-            if (s->HasType(Reflect::GetType<ContainerData>()))
+            if (s->IsClass(Reflect::GetClass<ContainerData>()))
             {
                 return;
             }
@@ -191,18 +191,13 @@ void PathInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Set default
     //
 
-#ifdef REFLECT_REFACTOR
-    if (field->m_Default.ReferencesObject())
+    DataPtr defaultData = field->CreateDefaultData();
+    if (defaultData.ReferencesObject())
     {
-        tstringstream outStream;
-        *field->m_Default >> outStream;
-
-        tstring temp;
-        bool converted = Helium::ConvertString( outStream.str().c_str(), temp );
-        HELIUM_ASSERT( converted );
-        container->a_Default.Set( temp );
+        tstringstream defaultStream;
+        *defaultData >> defaultStream;
+        container->a_Default.Set( defaultStream.str() );
     }
-#endif
 
     //
     // Close

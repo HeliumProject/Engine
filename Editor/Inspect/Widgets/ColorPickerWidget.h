@@ -64,7 +64,7 @@ namespace Helium
         class ColorPickerWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( ColorPickerWidget, Widget );
+            REFLECT_DECLARE_OBJECT( ColorPickerWidget, Widget );
 
             ColorPickerWidget()
                 : m_ColorPickerControl( NULL )

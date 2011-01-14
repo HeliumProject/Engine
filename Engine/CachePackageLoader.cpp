@@ -348,6 +348,7 @@ bool CachePackageLoader::TryFinishLoadObject(
     pRequest->spType.Release();
     pRequest->spTemplate.Release();
     pRequest->spOwner.Release();
+    pRequest->typeLinkTable.Resize( 0 );
 
     HELIUM_ASSERT( pObject || pRequest->pEntry );
     HELIUM_TRACE(
@@ -590,7 +591,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     // If we already had an existing object, make sure the type and template match.
     if( pObject )
     {
-        GameObjectType* pExistingType = pObject->GetGameObjectType();
+        const GameObjectType* pExistingType = pObject->GetGameObjectType();
         HELIUM_ASSERT( pExistingType );
         if( pExistingType != pType )
         {
@@ -616,9 +617,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     else
     {
         // Create the object.
-        pRequest->spObject = GameObject::CreateObject( pType, pCacheEntry->path.GetName(), pOwner, pTemplate );
-        pObject = pRequest->spObject;
-        if( !pObject )
+        if( !GameObject::CreateObject( pRequest->spObject, pType, pCacheEntry->path.GetName(), pOwner, pTemplate ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -632,6 +631,9 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
 
             return true;
         }
+
+        pObject = pRequest->spObject;
+        HELIUM_ASSERT( pObject );
     }
 
     // Load the object properties.
@@ -657,7 +659,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     else if( !pObject->IsDefaultTemplate() )
     {
         // Load persistent resource data.
-        Resource* pResource = DynamicCast< Resource >( pObject );
+        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
         if( pResource )
         {
             deserializer.Prepare(
@@ -707,8 +709,13 @@ void CachePackageLoader::ResolvePackage( GameObjectPtr& rspPackage, GameObjectPa
             HELIUM_ASSERT( spParent );
         }
 
-        rspPackage = GameObject::Create< Package >( packagePath.GetName(), spParent );
+        HELIUM_VERIFY( GameObject::CreateObject(
+            rspPackage,
+            Package::GetStaticType(),
+            packagePath.GetName(),
+            spParent ) );
         HELIUM_ASSERT( rspPackage );
+        HELIUM_ASSERT( rspPackage->IsClass( Package::GetStaticType() ) );
     }
 
     rspPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );

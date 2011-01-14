@@ -2,64 +2,36 @@
 
 #include <hash_map>
 
-#include "Type.h"
-
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Container/DynArray.h"
+#include "Foundation/Reflect/Type.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API EnumerationElement : public Helium::AtomicRefCountBase< EnumerationElement >
+        class FOUNDATION_API EnumerationElement
         {
-            friend class AtomicRefCountBase< EnumerationElement >;
-
         public:
-            uint32_t    m_Value;    // the value of the element
-            tstring     m_Name;     // the name of the element
-            tstring     m_Label;    // the label (friendly name) of the element
-            tstring     m_HelpText; // the help text for the element
+            EnumerationElement();
+            EnumerationElement( uint32_t value, const tstring& name, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
 
-        protected:
-            // for where the friendly name (used for UI AND serialization) is not the real name
-            EnumerationElement( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
-            virtual ~EnumerationElement();
-
-        public:
-            // protect external allocation to keep inlined code in this dll
-            static EnumerationElement* Create( uint32_t value, const tstring& name, const tstring& label, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
+            uint32_t    m_Value;    // the value of the object
+            tstring     m_Name;     // the name of the object
+            tstring     m_HelpText; // the help text for the object
         };
-
-        typedef Helium::SmartPtr<EnumerationElement> EnumerationElementPtr;
-        typedef std::vector<EnumerationElementPtr>                  V_EnumerationElement; // order of declaration
-        typedef stdext::hash_map<tstring, EnumerationElementPtr>    M_StrEnumerationElement; // sorted by name
-        typedef stdext::hash_map<int32_t, EnumerationElementPtr>    M_ValueEnumerationElement; // sorted by value
-
-        class FOUNDATION_API Enumeration;
-        typedef Helium::SmartPtr<Enumeration> EnumerationPtr;
 
         class FOUNDATION_API Enumeration : public Type
         {
         public:
-            REFLECTION_TYPE( ReflectionTypes::Enumeration );
+            REFLECTION_TYPE( ReflectionTypes::Enumeration, Enumeration, Type );
 
-            V_EnumerationElement         m_Elements;        // the elements of this enum
-            M_StrEnumerationElement      m_ElementsByName;  // the elements by name
-            M_StrEnumerationElement      m_ElementsByLabel; // the elements by name
-            M_ValueEnumerationElement    m_ElementsByValue; // the elements by value
-
-        protected:
             Enumeration();
-            virtual ~Enumeration();
-
-        public:
-            // protect external allocation to keep inlined code in this dll
-            static Enumeration* Create();
+            ~Enumeration();
 
             template<class T>
             static Enumeration* Create( const tchar_t* name )
             {
-                Enumeration* info = Enumeration::Create();
+                Enumeration* info = new Enumeration();
 
                 info->m_Size = sizeof(T);
                 info->m_Name = name;
@@ -69,24 +41,10 @@ namespace Helium
                 return info;
             }
 
-            //
-            // Equality check
-            //
+            void AddElement(uint32_t value, const tstring& name, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
 
-            bool Equals(const Enumeration* rhs) const;
-
-            //
-            // Element data
-            //
-
-            void AddElement(uint32_t value, const tstring& name, const tstring& label = TXT(""), const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
-
-            bool GetElementValue(const tstring& label, uint32_t& value) const;
-            bool GetElementLabel(const uint32_t value, tstring& label) const;
-
-            //
-            // Support for using 'enum' as a bitfield
-            //
+            bool GetElementValue(const tstring& name, uint32_t& value) const;
+            bool GetElementLabel(const uint32_t value, tstring& name) const;
 
             bool GetBitfieldValue(const tstring& str, uint32_t& value) const;
             bool GetBitfieldValue(const std::vector< tstring >& strs, uint32_t& value) const;
@@ -103,6 +61,39 @@ namespace Helium
             {
                 value |= flags;
             }
+
+        public:
+            DynArray< EnumerationElement >  m_Elements;
         };
     }
 }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
+public: \
+Enum m_Value; \
+ENUMERATION() : m_Value() {} \
+ENUMERATION( const ENUMERATION& e ) : m_Value( e.m_Value ) {} \
+ENUMERATION( const Enum& e ) : m_Value( e ) {} \
+operator const Enum&() const { return m_Value; } \
+static Helium::Reflect::Enumeration* CreateEnumeration( const tchar_t* name ); \
+static const Helium::Reflect::Enumeration* s_Enumeration;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
+Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration( const tchar_t* name ) \
+{ \
+    HELIUM_ASSERT( s_Enumeration == NULL ); \
+    Reflect::Enumeration* type = Reflect::Enumeration::Create< ENUMERATION >( name ); \
+    s_Enumeration = type; \
+    return type; \
+} \
+const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL;
+
+// declares an enumeration
+#define REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
+    _REFLECT_DECLARE_ENUMERATION( ENUMERATION )
+
+// defines an enumeration
+#define REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
+    _REFLECT_DEFINE_ENUMERATION( ENUMERATION )

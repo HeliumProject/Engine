@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( ClipboardElementArray );
+REFLECT_DEFINE_OBJECT( ClipboardElementArray );
 
 void ClipboardElementArray::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -63,7 +63,7 @@ bool ClipboardElementArray::Add( const Reflect::ObjectPtr& item )
 // 
 bool ClipboardElementArray::Merge( const ReflectClipboardData* source )
 {
-    const ClipboardElementArray* collection = Reflect::ObjectCast< ClipboardElementArray >( source );
+    const ClipboardElementArray* collection = Reflect::SafeCast< ClipboardElementArray >( source );
     if ( !collection )
     {
         return false;
@@ -94,5 +94,5 @@ bool ClipboardElementArray::CanAdd( const Reflect::ObjectPtr& item ) const
         return false;
     }
 
-    return item->HasType( GetCommonBaseClass() );
+    return item->IsClass( GetCommonBaseClass() );
 }

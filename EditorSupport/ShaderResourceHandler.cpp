@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/ShaderResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -33,7 +36,7 @@ ShaderResourceHandler::~ShaderResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* ShaderResourceHandler::GetResourceType() const
+const GameObjectType* ShaderResourceHandler::GetResourceType() const
 {
     return Shader::GetStaticType();
 }
@@ -58,7 +61,7 @@ bool ShaderResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    const Shader* pShader = StaticCast< const Shader >( pResource );
+    const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
     GameObjectPath shaderPath = pShader->GetPath();
 
     HELIUM_TRACE( TRACE_INFO, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
@@ -385,3 +388,5 @@ bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, cons
 
     return false;
 }
+
+#endif  // L_EDITOR

@@ -11,7 +11,7 @@ namespace Helium
         class CurveControlPoint : public HierarchyNode
         {
         public:
-            REFLECT_DECLARE_CLASS( CurveControlPoint, HierarchyNode );
+            REFLECT_DECLARE_OBJECT( CurveControlPoint, HierarchyNode );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

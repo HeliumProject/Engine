@@ -1,6 +1,5 @@
 #include "Foundation/Reflect/Data/StlVectorData.h"
 
-#include "Foundation/Reflect/Compression.h" 
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
@@ -81,8 +80,6 @@ SimpleStlVectorData<T>::~SimpleStlVectorData()
 template < class T >
 void SimpleStlVectorData<T>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -197,7 +194,7 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
 template < class T >
 bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 {
-    const SimpleStlVectorData<T>* rhs = ObjectCast<SimpleStlVectorData<T>>(src);
+    const SimpleStlVectorData<T>* rhs = SafeCast<SimpleStlVectorData<T>>(src);
     if (!rhs)
     {
         return false;
@@ -209,15 +206,75 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Equals(const Data* s) const
+bool SimpleStlVectorData<T>::Equals(const Object* object) const
 {
-    const SimpleStlVectorData<T>* rhs = ObjectCast<SimpleStlVectorData<T>>(s);
+    const SimpleStlVectorData<T>* rhs = SafeCast< SimpleStlVectorData<T> >(object);
     if (!rhs)
     {
         return false;
     }
 
     return m_Data.Get() == rhs->m_Data.Get();
+}
+
+//
+// Stl specializes std::vector<bool> using bitfields...
+//  in general this isn't very efficient, but isn't used often
+//
+
+template < class T >
+void WriteVector( const std::vector< T >& v, Reflect::CharStream& stream )
+{
+    int32_t count = (int32_t)v.size();
+    stream.Write(&count); 
+
+    if (count > 0)
+    {
+        stream.WriteBuffer( (const void*)&(v.front()), sizeof(T) * count); 
+    }
+
+}
+
+template <>
+void WriteVector( const std::vector< bool >& v, Reflect::CharStream& stream )
+{
+    int32_t count = (int32_t)v.size();
+    stream.Write(&count); 
+
+    for ( std::vector< bool >::const_iterator itr = v.begin(), end = v.end(); itr != end; ++itr )
+    {
+        bool value = *itr;
+        stream.Write( &value ); 
+    }
+
+}
+
+template < class T >
+void ReadVector( std::vector< T >& v, Reflect::CharStream& stream )
+{
+    int32_t count = 0;
+    stream.Read(&count); 
+    v.resize(count);
+
+    if(count > 0)
+    {
+        stream.ReadBuffer( (void*)&(v.front()), sizeof(T) * count );
+    }
+}
+
+template <>
+void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
+{
+    int32_t count = 0;
+    stream.Read(&count); 
+    v.reserve(count);
+
+    while( --count > 0 )
+    {
+        bool value;
+        stream.Read( &value );
+        v.push_back( value );
+    }
 }
 
 template < class T >
@@ -251,25 +308,7 @@ void SimpleStlVectorData<T>::Serialize(Archive& archive) const
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            int32_t count = (int32_t)m_Data->size();
-            binary.GetStream().Write(&count); 
-
-            if(count > 0)
-            {
-                // current offset in stream... 
-                int32_t offset       = (int32_t) binary.GetStream().TellWrite(); 
-                int32_t bytesWritten = 0; 
-                binary.GetStream().Write(&bytesWritten); 
-
-                const T& front = m_Data->front();
-                bytesWritten   = CompressToStream(binary.GetStream(), (const char*) &front, sizeof(T) * count); 
-
-                binary.GetStream().SeekWrite(offset, std::ios_base::beg); 
-                binary.GetStream().Write(&bytesWritten); 
-                binary.GetStream().SeekWrite(0, std::ios_base::end); 
-
-            }
+            WriteVector( m_Data.Ref(), binary.GetStream() );
             break;
         }
     }
@@ -307,26 +346,7 @@ void SimpleStlVectorData<T>::Deserialize(Archive& archive)
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            int32_t count = -1;
-            binary.GetStream().Read(&count); 
-
-            m_Data->resize(count);
-
-            if(count > 0)
-            {
-                // if we have array compression, decompress from the stream
-                // otherwise, read count * sizeof(T) bytes 
-                // 
-                ArchiveBinary* archiveBinary = static_cast<ArchiveBinary*>(&archive); 
-                int32_t inputBytes; 
-                binary.GetStream().Read(&inputBytes); 
-                int32_t bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
-                if(bytesInflated != sizeof(T) * count)
-                {
-                    throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
-                }
-            }
+            ReadVector( m_Data.Ref(), binary.GetStream() );
             break;
         }
     }
@@ -548,29 +568,29 @@ template SimpleStlVectorData<Color4>;
 template SimpleStlVectorData<HDRColor3>;
 template SimpleStlVectorData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StlStringStlVectorData);
-REFLECT_DEFINE_CLASS(BoolStlVectorData);
-REFLECT_DEFINE_CLASS(UInt8StlVectorData);
-REFLECT_DEFINE_CLASS(Int8StlVectorData);
-REFLECT_DEFINE_CLASS(UInt16StlVectorData);
-REFLECT_DEFINE_CLASS(Int16StlVectorData);
-REFLECT_DEFINE_CLASS(UInt32StlVectorData);
-REFLECT_DEFINE_CLASS(Int32StlVectorData);
-REFLECT_DEFINE_CLASS(UInt64StlVectorData);
-REFLECT_DEFINE_CLASS(Int64StlVectorData);
-REFLECT_DEFINE_CLASS(Float32StlVectorData);
-REFLECT_DEFINE_CLASS(Float64StlVectorData);
-REFLECT_DEFINE_CLASS(GUIDStlVectorData);
-REFLECT_DEFINE_CLASS(TUIDStlVectorData);
-REFLECT_DEFINE_CLASS( PathStlVectorData );
+REFLECT_DEFINE_OBJECT(StlStringStlVectorData);
+REFLECT_DEFINE_OBJECT(BoolStlVectorData);
+REFLECT_DEFINE_OBJECT(UInt8StlVectorData);
+REFLECT_DEFINE_OBJECT(Int8StlVectorData);
+REFLECT_DEFINE_OBJECT(UInt16StlVectorData);
+REFLECT_DEFINE_OBJECT(Int16StlVectorData);
+REFLECT_DEFINE_OBJECT(UInt32StlVectorData);
+REFLECT_DEFINE_OBJECT(Int32StlVectorData);
+REFLECT_DEFINE_OBJECT(UInt64StlVectorData);
+REFLECT_DEFINE_OBJECT(Int64StlVectorData);
+REFLECT_DEFINE_OBJECT(Float32StlVectorData);
+REFLECT_DEFINE_OBJECT(Float64StlVectorData);
+REFLECT_DEFINE_OBJECT(GUIDStlVectorData);
+REFLECT_DEFINE_OBJECT(TUIDStlVectorData);
+REFLECT_DEFINE_OBJECT( PathStlVectorData );
 
-REFLECT_DEFINE_CLASS(Vector2StlVectorData);
-REFLECT_DEFINE_CLASS(Vector3StlVectorData);
-REFLECT_DEFINE_CLASS(Vector4StlVectorData);
-REFLECT_DEFINE_CLASS(Matrix3StlVectorData);
-REFLECT_DEFINE_CLASS(Matrix4StlVectorData);
+REFLECT_DEFINE_OBJECT(Vector2StlVectorData);
+REFLECT_DEFINE_OBJECT(Vector3StlVectorData);
+REFLECT_DEFINE_OBJECT(Vector4StlVectorData);
+REFLECT_DEFINE_OBJECT(Matrix3StlVectorData);
+REFLECT_DEFINE_OBJECT(Matrix4StlVectorData);
 
-REFLECT_DEFINE_CLASS(Color3StlVectorData);
-REFLECT_DEFINE_CLASS(Color4StlVectorData);
-REFLECT_DEFINE_CLASS(HDRColor3StlVectorData);
-REFLECT_DEFINE_CLASS(HDRColor4StlVectorData);
+REFLECT_DEFINE_OBJECT(Color3StlVectorData);
+REFLECT_DEFINE_OBJECT(Color4StlVectorData);
+REFLECT_DEFINE_OBJECT(HDRColor3StlVectorData);
+REFLECT_DEFINE_OBJECT(HDRColor4StlVectorData);

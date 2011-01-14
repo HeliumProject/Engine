@@ -63,7 +63,7 @@ namespace Helium
             template <class T>
             static Helium::StrongPtr<T> LoadAssetClass( const Path& path )
             {
-                return Reflect::TryCast<T>( LoadAssetClass( path ) );
+                return Reflect::ThrowCast<T>( LoadAssetClass( path ) );
             }
 
         public:
@@ -208,9 +208,6 @@ namespace Helium
 
             // callback when this AssetClass has finished loading off disk
             virtual void LoadFinished();
-
-            // copy this asset and its attributes into the destination
-            virtual void CopyTo(const Reflect::ObjectPtr& destination) HELIUM_OVERRIDE;
         };
     }
 }

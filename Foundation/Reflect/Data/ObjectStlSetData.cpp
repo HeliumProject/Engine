@@ -4,7 +4,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(ObjectStlSetData);
+REFLECT_DEFINE_OBJECT(ObjectStlSetData);
 
 ObjectStlSetData::ObjectStlSetData()
 {
@@ -18,8 +18,6 @@ ObjectStlSetData::~ObjectStlSetData()
 
 void ObjectStlSetData::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -35,7 +33,7 @@ void ObjectStlSetData::Clear()
 
 bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(src);
+    const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(src);
     if (!rhs)
     {
         return false;
@@ -60,9 +58,9 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlSetData::Equals(const Data* s) const
+bool ObjectStlSetData::Equals(const Object* object) const
 {
-    const ObjectStlSetData* rhs = ObjectCast<ObjectStlSetData>(s);
+    const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(object);
     if (!rhs)
     {
         return false;

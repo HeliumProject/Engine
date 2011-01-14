@@ -8,7 +8,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS( SceneAsset );
+REFLECT_DEFINE_OBJECT( SceneAsset );
 
 void SceneAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -17,10 +17,10 @@ void SceneAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
 
 bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const
 {
-    if ( attr->HasType( Reflect::GetType<DependenciesComponent>() ) )
+    if ( attr->IsClass( Reflect::GetClass<DependenciesComponent>() ) )
     {
         return true;
     }
 
-    return __super::ValidateCompatible( attr, error );
+    return Base::ValidateCompatible( attr, error );
 }

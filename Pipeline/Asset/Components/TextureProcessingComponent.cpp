@@ -4,7 +4,7 @@ using namespace Helium;
 using namespace Helium::Asset;
 
 REFLECT_DEFINE_ENUMERATION( TextureDataFormat );
-REFLECT_DEFINE_CLASS( TextureProcessingComponent );
+REFLECT_DEFINE_OBJECT( TextureProcessingComponent );
 
 void TextureProcessingComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

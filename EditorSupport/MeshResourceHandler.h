@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_MESH_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 
 #include "Framework/Mesh.h"
@@ -32,7 +35,7 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual GameObjectType* GetResourceType() const;
+        virtual const GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(
@@ -44,5 +47,7 @@ namespace Lunar
         FbxSupport& m_rFbxSupport;
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_MESH_RESOURCE_HANDLER_H

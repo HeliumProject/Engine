@@ -11,6 +11,8 @@
 
 #include "EditorSupport/EditorSupport.h"
 
+#if L_EDITOR
+
 namespace Lunar
 {
     class Color;
@@ -174,5 +176,7 @@ namespace Lunar
 }
 
 #include "EditorSupport/Image.inl"
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_IMAGE_H

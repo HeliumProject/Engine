@@ -14,14 +14,14 @@ static inline const Helium::Reflect::Class* Helium::Reflect::GetDataClass<Name::
     return Helium::Reflect::GetClass<Name>(); \
 } \
 template<> \
-static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* serializer ) \
+static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* data ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.Ptr() : NULL; \
 } \
 template<> \
-static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* serializer ) \
+static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* data ) \
 { \
-    return serializer && serializer->GetType() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.Ptr() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"

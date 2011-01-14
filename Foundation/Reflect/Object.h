@@ -16,14 +16,16 @@ namespace Helium
 {
     namespace Reflect
     {
-        class Object;
         class Type;
+        class Field;
         class Composite;
+        class Structure;
         class Class;
+        class Object;
+        class Data;
 
         //
-        // Reflect::ObjectRefCountSupport provides the support interface for managing reference counting data for
-        // Reflect::Object instances.
+        // ObjectRefCountSupport provides the support interface for managing reference counting data
         //
 
         class FOUNDATION_API ObjectRefCountSupport
@@ -62,17 +64,8 @@ namespace Helium
             static StaticData* sm_pStaticData;
         };
 
-
         //
-        // Reflect::Object is a reference counted and type checked abstract base class
-        //
-
-        class Field;
-        class Class;
-        class Structure;
-
-        //
-        // Event delegate to support getting notified if this element changes
+        // Event delegate to support getting notified if this object changes
         //
 
         struct ObjectChangeArgs
@@ -80,18 +73,18 @@ namespace Helium
             const Object* m_Object;
             const Field* m_Field;
 
-            ObjectChangeArgs( const Object* element, const Field* field = NULL )
-                : m_Object( element )
+            ObjectChangeArgs( const Object* object, const Field* field = NULL )
+                : m_Object( object )
                 , m_Field( field )
             {
             }
         };
         typedef Helium::Signature< const ObjectChangeArgs&, Helium::AtomicRefCountBase > ObjectChangeSignature;
 
+        //
+        // Object is the abstract base class of a serializable class
+        //
 
-        //
-        // Reflect::Object is the abstract base class of a serializable unit
-        //
         class FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
         protected:
@@ -116,19 +109,15 @@ namespace Helium
             virtual void Destroy();  // This should only be called by the reference counting system!
 
             //
-            // Type id
+            // Type checking
             //
-
-            // Returns the type id for this instance
-            static const Type* s_Type;
-            virtual const Reflect::Type* GetType() const;
-
-            // Deduces type membership for this instance
-            virtual bool HasType( const Reflect::Type* type ) const;
 
             // Retrieves the reflection data for this instance
             static const Class* s_Class;
             virtual const Reflect::Class* GetClass() const;
+
+            // Deduces type membership for this instance
+            bool IsClass( const Reflect::Class* type ) const;
 
             // Create class data block for this type
             static Reflect::Class* CreateClass( const tchar_t* name );
@@ -137,14 +126,14 @@ namespace Helium
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             //
-            // Serialization
+            // Persistence
             //
 
             // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;
 
             // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent( ObjectPtr element, const tchar_t* fieldName );
+            virtual bool                ProcessComponent( ObjectPtr object, const tchar_t* fieldName );
 
             // Serialize to a particular data target, just works on this
             void                        ToXML( tstring& xml ) const;
@@ -152,83 +141,46 @@ namespace Helium
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
-            virtual void                PreSerialize() { }
-            virtual void                PostSerialize() { }
-            virtual void                PreDeserialize() { }
-            virtual void                PostDeserialize() { }
+            virtual StrongPtr< Data >   ShouldSerialize( const Field* field );
+            virtual void                PreSerialize( const Field* field );
+            virtual void                PostSerialize( const Field* field );
+            virtual void                PreDeserialize( const Field* field );
+            virtual void                PostDeserialize( const Field* field );
 
             //
-            // Introspection
+            // Utilities
             //
 
-            // Visitor introspection support, should never ever change an object (but the visitor may)
+            // Visits fields recursively, used to interactively traverse structures
             virtual void                Accept( Visitor& visitor );
 
             // Do comparison logic against other object, checks type and field data
-            virtual bool                Equals( const ObjectPtr& rhs ) const;
+            virtual bool                Equals( const Object* object ) const;
 
-            // Deep copy this object into the specified object.
-            virtual void                CopyTo( const ObjectPtr& destination );
+            // Copy this object's data into another object isntance
+            virtual void                CopyTo( Object* object );
 
-            // Deep copy this object into a new object, this is not const because derived classes may need to do work before cloning
+            // Copy this object's data into a new instance
             virtual ObjectPtr           Clone();
 
-
             //
-            // Mutation
+            // Notification
             //
 
-        public:
+            // Event raised when an object is modified
             mutable ObjectChangeSignature::Event e_Changed;
 
-            virtual void RaiseChanged( const Field* field = NULL ) const
-            {
-                e_Changed.Raise( ObjectChangeArgs( this, field ) );
-            }
+            // Raise the modification event manually, null field mean ambiguous/multiple changes
+            virtual void RaiseChanged( const Field* field = NULL ) const;
 
+            // Notify a particular field was changed
             template< class FieldT >
-            void FieldChanged( FieldT* fieldAddress ) const
-            {
-                // the offset of the field is the address of the field minus the address of this element instance
-                uintptr_t fieldOffset = ((uint32_t)fieldAddress - (uint32_t)this);
+            void FieldChanged( FieldT* fieldAddress ) const;
 
-                // find the field in our reflection information
-                const Reflect::Field* field = GetClass()->FindFieldByOffset( fieldOffset );
-
-                // your field address probably doesn't point to the field in this instance,
-                //  or your field is not exposed to Reflect, add it in your Composite function
-                HELIUM_ASSERT( field );
-
-                // notify listeners that this field changed
-                RaiseChanged( field );
-            }
-            
+            // Modify and notify a field change
             template< class ObjectT, class FieldT >
-            void ChangeField( FieldT ObjectT::* field, const FieldT& newValue )
-            {
-                // set the field via pointer-to-member on the deduced templated type (!)
-                this->*field = newValue;
-
-                // find the field in our reflection information
-                const Reflect::Field* field = GetClass()->FindField( field );
-
-                // your field is not exposed to Reflect, add it in your Composite function
-                HELIUM_ASSERT( field );
-
-                // notify listeners that this field changed
-                RaiseChanged( field );
-            }
+            void ChangeField( FieldT ObjectT::* field, const FieldT& newValue );
         };
-
-        //
-        // DangerousCast does not type checking
-        //
-
-        template<class DerivedT>
-        inline DerivedT* DangerousCast(Reflect::Object* base);
-
-        template<class DerivedT>
-        inline const DerivedT* DangerousCast(const Reflect::Object* base);
 
         //
         // AssertCast type checks in debug and asserts if failure, does no type checking in release
@@ -241,25 +193,73 @@ namespace Helium
         inline const DerivedT* AssertCast(const Reflect::Object* base);
 
         //
-        // TryCast type checks and throws if failure
+        // ThrowCast type checks and throws if failure
         //
 
         template<class DerivedT>
-        inline DerivedT* TryCast(Reflect::Object* base);
+        inline DerivedT* ThrowCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* TryCast(const Reflect::Object* base);
+        inline const DerivedT* ThrowCast(const Reflect::Object* base);
 
         //
-        // ObjectCast always type checks and returns null if failure
+        // SafeCast always type checks and returns null if failure
         //
 
         template<class DerivedT>
-        inline DerivedT* ObjectCast(Reflect::Object* base);
+        inline DerivedT* SafeCast(Reflect::Object* base);
 
         template<class DerivedT>
-        inline const DerivedT* ObjectCast(const Reflect::Object* base);
+        inline const DerivedT* SafeCast(const Reflect::Object* base);
     }
 }
+
+// declares creator for constructable types
+#define _REFLECT_DECLARE_CREATOR( OBJECT ) \
+public: \
+static Helium::Reflect::Object* CreateObject() { return new OBJECT; }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+public: \
+typedef BASE Base; \
+typedef OBJECT This; \
+virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
+static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
+static const Helium::Reflect::Class* s_Class;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_OBJECT( OBJECT, CREATOR ) \
+const Helium::Reflect::Class* OBJECT::GetClass() const \
+{ \
+    return s_Class; \
+} \
+\
+Helium::Reflect::Class* OBJECT::CreateClass( const tchar_t* name ) \
+{ \
+    HELIUM_ASSERT( s_Class == NULL ); \
+    HELIUM_ASSERT( OBJECT::Base::s_Class != NULL ); \
+    Helium::Reflect::Class* type = Helium::Reflect::Class::Create<OBJECT>(name, OBJECT::Base::s_Class->m_Name, CREATOR); \
+    s_Class = type; \
+    return type; \
+} \
+const Helium::Reflect::Class* OBJECT::s_Class = NULL;
+
+// declares an abstract object (an object that either A: cannot be instantiated or B: is never actually serialized)
+#define REFLECT_DECLARE_ABSTRACT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_OBJECT( OBJECT, BASE )
+
+// defines the abstract object class
+#define REFLECT_DEFINE_ABSTRACT( OBJECT ) \
+    _REFLECT_DEFINE_OBJECT( OBJECT, NULL )
+
+// declares a concrete object with creator
+#define REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
+    _REFLECT_DECLARE_CREATOR( OBJECT)
+
+// defines a concrete object
+#define REFLECT_DEFINE_OBJECT( OBJECT ) \
+    _REFLECT_DEFINE_OBJECT( OBJECT, &OBJECT::CreateObject )
 
 #include "Foundation/Reflect/Object.inl"

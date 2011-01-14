@@ -7,101 +7,32 @@
 #include <vector>
 #include <stack>
 
-#include "API.h"
-#include "Cache.h"
-#include "Class.h"
-#include "Exceptions.h"
-#include "ArchiveStream.h" 
-
 #include "Platform/Assert.h"
-#include "Foundation/Automation/Event.h"
+
 #include "Foundation/Log.h" 
 #include "Foundation/File/Path.h"
-
+#include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/SmartPtr.h"
+
+#include "Foundation/Reflect/API.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Exceptions.h"
+#include "Foundation/Reflect/ArchiveStream.h" 
 
 namespace Helium
 {
     namespace Reflect
     {
-        //
-        // Client processing helper
-        //
+        class Archive;
 
-        class FOUNDATION_API Archive;
-
-        namespace ArchiveStates
+        namespace ArchiveFlags
         {
-            enum ArchiveState
+            enum ArchiveFlag
             {
-                Starting,
-                PreProcessing,
-                ArchiveStarting,
-                ObjectProcessed,
-                ArchiveComplete,
-                PostProcessing,
-                Complete,
-                Publishing,
+                Status  = 1 << 0, // Display status reporting
+                Sparse  = 1 << 1, // Allow sparse array populations for failed objects
             };
         }
-        typedef ArchiveStates::ArchiveState ArchiveState;
-
-        struct StatusInfo
-        {
-            const Archive& m_Archive;
-            ArchiveState m_ArchiveState;
-            int m_Progress;
-            mutable bool m_Abort;
-            tstring m_Info;
-
-            StatusInfo( const Archive& archive, const ArchiveState& state )
-                : m_Archive( archive )
-                , m_ArchiveState( state )
-                , m_Progress ( 0 )
-                , m_Abort ( false )
-            {
-            }
-        };
-        typedef Helium::Signature< const StatusInfo& > StatusSignature;
-
-        namespace ExceptionActions
-        {
-            enum ExceptionAction
-            {
-                Unknown,
-                Accept,
-                Reject,
-            };
-        }
-        typedef ExceptionActions::ExceptionAction ExceptionAction;
-
-        typedef void (Object::*ObjectCallback)();
-
-        struct ExceptionInfo
-        {
-            const Archive& m_Archive;
-
-            Object* m_Object;
-            ObjectCallback m_Callback;
-            const Helium::Exception& m_Exception;
-
-            mutable ExceptionAction m_Action;
-
-            ExceptionInfo( const Archive& archive, Object* element, ObjectCallback callback, const Helium::Exception& exception )
-                : m_Archive ( archive )
-                , m_Object ( element )
-                , m_Callback ( callback )
-                , m_Exception ( exception )
-                , m_Action ( ExceptionActions::Unknown )
-            {
-            }
-        };
-        typedef Helium::Signature< const ExceptionInfo& > ExceptionSignature;
-
-
-        //
-        // Types
-        //
 
         namespace ArchiveTypes
         {
@@ -126,101 +57,103 @@ namespace Helium
 
         typedef ArchiveModes::ArchiveMode ArchiveMode;
 
-
         //
-        // Event Delegates
+        // Status reporting
         //
 
-        class FOUNDATION_API ArchiveVisitor : public Helium::AtomicRefCountBase< ArchiveVisitor >
+        namespace ArchiveStates
         {
-        public:
-            virtual void VisitObject(Object* element)
+            enum ArchiveState
             {
-                // called for each element object we serialize to the file
+                Starting,
+                PreProcessing,
+                ArchiveStarting,
+                ObjectProcessed,
+                ArchiveComplete,
+                PostProcessing,
+                Complete,
+                Publishing,
+            };
+        }
+        typedef ArchiveStates::ArchiveState ArchiveState;
+
+        struct ArchiveStatus
+        {
+            ArchiveStatus( const Archive& archive, const ArchiveState& state )
+                : m_Archive( archive )
+                , m_State( state )
+                , m_Progress ( 0 )
+                , m_Abort ( false )
+            {
             }
 
-            virtual void VisitField(Object* element, const Field* field)
-            {
-                // called for each field we serialize to the file (pointer or data...)
-            }
+            const Archive&  m_Archive;
+            ArchiveState    m_State;
+            int             m_Progress;
+            tstring         m_Info;
+
+            // flag this if you want to give up
+            mutable bool    m_Abort;
         };
-        typedef Helium::SmartPtr<ArchiveVisitor> ArchiveVisitorPtr;
-        typedef std::vector<ArchiveVisitorPtr> V_ArchiveVisitor;
-
-        namespace FileOperations
-        {
-            enum FileOperation
-            {
-                PreRead,
-                PostRead,
-                PreWrite,
-                PostWrite,
-            };
-        }
-        typedef FileOperations::FileOperation FileOperation;
+        typedef Helium::Signature< const ArchiveStatus& > ArchiveStatusSignature;
 
         //
-        // Archive Base Class
+        // Exception handling
         //
 
-        namespace ArchiveFlags
+        namespace ArchiveExceptionActions
         {
-            enum ArchiveFlag
+            enum ArchiveExceptionAction
             {
-                Status  = 1 << 0, // Display status reporting
-                Sparse  = 1 << 1, // Allow sparse array populations for failed objects
+                Unknown,
+                Accept,
+                Reject,
             };
         }
+        typedef ArchiveExceptionActions::ArchiveExceptionAction ArchiveExceptionAction;
+
+        typedef void (Object::*ObjectCallback)( const Field* field );
+
+        struct ArchiveExceptionInfo
+        {
+            ArchiveExceptionInfo( const Archive& archive, Object* object, ObjectCallback callback, const Field* field, const Helium::Exception& exception )
+                : m_Archive ( archive )
+                , m_Object ( object )
+                , m_Callback ( callback )
+                , m_Field( field )
+                , m_Exception ( exception )
+                , m_Action ( ArchiveExceptionActions::Unknown )
+            {
+            }
+
+            const Archive&                  m_Archive;
+            Object*                         m_Object;
+            ObjectCallback                  m_Callback;
+            const Field*                    m_Field;
+            const Helium::Exception&        m_Exception;
+
+            // set this to say what you want to happen
+            mutable ArchiveExceptionAction  m_Action;
+        };
+        typedef Helium::Signature< const ArchiveExceptionInfo& > ArchiveExceptionSignature;
+
+        //
+        // Archive base class
+        //
 
         class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
+        protected:
             friend class RefCountBase< Archive >;
 
-        protected:
-
-            // The number of bytes Parsed so far
-            unsigned m_Progress;
-
-            // The file we are working with
-            Path m_Path;
-
-            // The byte order
-            ByteOrder m_ByteOrder;
-
-            // The array of elements that we've found
-            std::vector< ObjectPtr > m_Objects;
-
-            // The mode
-            ArchiveMode m_Mode;
-
-            // The cache of data objects
-            Cache m_Cache;
-
-            // The visitors to use
-            V_ArchiveVisitor m_Visitors;
-
-            // The type to serach for
-            const Class* m_SearchClass;
-
-            // The abort status
-            bool m_Abort;
-
-        protected:
             Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
             virtual ~Archive();
 
         public:
-            // File access
             const Helium::Path& GetPath() const
             {
                 return m_Path;
-            }
-
-            // Cache access
-            Cache& GetCache()
-            {
-                return m_Cache;
             }
 
             ArchiveMode GetMode() const
@@ -228,7 +161,6 @@ namespace Helium
                 return m_Mode;
             }
 
-            // Get the type of this archive
             virtual ArchiveType GetType() const
             {
                 return ArchiveTypes::Base;
@@ -251,49 +183,37 @@ namespace Helium
             //
             // Serialization
             //
-        public:
-            virtual void Serialize( const ObjectPtr& element ) = 0;
+
+            virtual void Serialize( Object* object ) = 0;
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( ObjectPtr& element ) = 0;
+            virtual void Deserialize( ObjectPtr& object ) = 0;
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
 
             //
             // Event API
             //
-        public:
-            StatusSignature::Event e_Status;
-            ExceptionSignature::Delegate d_Exception;
+
+            ArchiveStatusSignature::Event e_Status;
+            ArchiveExceptionSignature::Delegate d_Exception;
 
             //
             // Serialization
             //
-        public:
 
-            // Archive-level processing (visitor setup and append generation)
-            void PreSerialize();
-            void PostSerialize( std::vector< ObjectPtr >& append );
-
-            // Archive-level processing (visitor setup and append processing)
-            void PreDeserialize();
-            void PostDeserialize( std::vector< ObjectPtr >& append );
-
-            // Instance-level processing (visit calls and type tracking)
-            void PreSerialize( const ObjectPtr& element, const Field* field = NULL );
-            void PostDeserialize( const ObjectPtr& element, const Field* field = NULL );
-
-            // Shared code for doing per-element pre and post serialize work with exception handling
-            bool TryObjectCallback( Object* element, ObjectCallback callback );
+            // Shared code for doing per-object pre and post serialize work with exception handling
+            bool TryObjectCallback( Object* object, ObjectCallback callback, const Field* field );
 
             //
             // Get elements from the file
             //
 
-            void Put( const ObjectPtr& element );
+            void Put( Object* object );
             void Put( const std::vector< ObjectPtr >& elements );
 
             ObjectPtr Get( const Class* searchClass = NULL );
             void Get( std::vector< ObjectPtr >& elements );
 
+            // Get a single object of the specified type in the archive
             template <class T>
             Helium::StrongPtr<T> Get()
             {
@@ -301,7 +221,7 @@ namespace Helium
 
                 if (found.ReferencesObject())
                 {
-                    return ObjectCast<T>( found );
+                    return SafeCast<T>( found );
                 }
                 else
                 {
@@ -309,24 +229,46 @@ namespace Helium
                 }
             }
 
-            // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
+            // Get all objects of the specified type in the archive
             template< class T >
             void Get( std::vector< Helium::StrongPtr<T> >& elements )
             {
                 std::vector< ObjectPtr > archiveObjects;
                 Get( archiveObjects );
 
-                std::vector< ObjectPtr >::iterator itor = archiveObjects.begin();
+                std::vector< ObjectPtr >::iterator itr = archiveObjects.begin();
                 std::vector< ObjectPtr >::iterator end = archiveObjects.end();
-
-                for( ; itor != end; ++itor )
+                for( ; itr != end; ++itr )
                 {
-                    if( (*itor)->HasType( Reflect::GetType<T>() ) ) 
+                    T* casted = Reflect::SafeCast< T >( *itr )
+                    if( casted ) 
                     {
-                        elements.push_back( Reflect::DangerousCast< T >( *itor )  );
+                        elements.push_back( casted );
                     }
                 }
             }
+
+        protected:
+            // The number of bytes Parsed so far
+            unsigned m_Progress;
+
+            // The file we are working with
+            Path m_Path;
+
+            // The byte order
+            ByteOrder m_ByteOrder;
+
+            // The array of elements that we've found
+            std::vector< ObjectPtr > m_Objects;
+
+            // The mode
+            ArchiveMode m_Mode;
+
+            // The type to serach for
+            const Class* m_SearchClass;
+
+            // The abort status
+            bool m_Abort;
         };
 
         typedef Helium::SmartPtr< Archive > ArchivePtr;
@@ -334,7 +276,7 @@ namespace Helium
         // Get parser for a file
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
         FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>

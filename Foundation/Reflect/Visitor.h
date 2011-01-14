@@ -16,7 +16,7 @@ namespace Helium
         class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >, NonCopyable
         {
         public:
-            virtual bool VisitObject(Object* /*element*/)
+            virtual bool VisitObject(Object* /*object*/)
             {
                 return true;
             }
@@ -26,7 +26,7 @@ namespace Helium
                 return true;
             }
 
-            virtual bool VisitField(Object* /*element*/, const Field* /*field*/)
+            virtual bool VisitField(void* /*instance*/, const Field* /*field*/)
             {
                 return true; 
             }
@@ -37,25 +37,25 @@ namespace Helium
         class FOUNDATION_API FindByTypeVisitor : public Visitor
         {
         public:
-            const Reflect::Type* m_Type;
+            const Reflect::Class* m_Class;
 
             std::vector< ObjectPtr >& m_Found;
 
-            FindByTypeVisitor(const Reflect::Type* type, std::vector< ObjectPtr >& found);
+            FindByTypeVisitor(const Reflect::Class* type, std::vector< ObjectPtr >& found);
 
-            virtual bool VisitObject(Object* element) HELIUM_OVERRIDE;
+            virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
 
         class FOUNDATION_API FindByTypeSetVisitor : public Visitor
         {
         public:
-            const std::set< const Reflect::Type* >& m_Types;
+            const std::set< const Reflect::Class* >& m_Classes;
 
             std::vector< ObjectPtr >& m_Found;
 
-            FindByTypeSetVisitor(const std::set< const Reflect::Type* >& types, std::vector< ObjectPtr >& found);
+            FindByTypeSetVisitor(const std::set< const Reflect::Class* >& classes, std::vector< ObjectPtr >& found);
 
-            virtual bool VisitObject(Object* element) HELIUM_OVERRIDE;
+            virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
     }
 }

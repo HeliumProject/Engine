@@ -50,7 +50,7 @@ void EntityAssetOutliner::AddEntityTypes()
             HM_StrToSceneNodeTypeSmartPtr::const_iterator typeEnd = m_CurrentScene->GetNodeTypesByName().end();
             for ( ; typeItr != typeEnd; ++typeItr )
             {
-                entityType = Reflect::ObjectCast< SceneGraph::EntityInstanceType >( typeItr->second );
+                entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( typeItr->second );
                 if ( entityType )
                 {
                     AddEntityType( entityType );
@@ -75,7 +75,7 @@ void EntityAssetOutliner::AddEntityType( SceneGraph::EntityInstanceType* entityT
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             AddEntitySet( set );
@@ -98,7 +98,7 @@ void EntityAssetOutliner::RemoveEntityType( SceneGraph::EntityInstanceType* enti
     M_InstanceSetSmartPtr::const_iterator classEnd = entityType->GetSets().end();
     for ( ; classItr != classEnd; ++classItr )
     {
-        EntitySet* set = Reflect::ObjectCast< SceneGraph::EntitySet >( classItr->second );
+        EntitySet* set = Reflect::SafeCast< SceneGraph::EntitySet >( classItr->second );
         if (set)
         {
             RemoveEntitySet( set );
@@ -225,7 +225,7 @@ SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID 
 // 
 void EntityAssetOutliner::Clear()
 {
-    __super::Clear();
+    SceneOutliner::Clear();
 
     m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
@@ -244,7 +244,7 @@ void EntityAssetOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 // 
 void EntityAssetOutliner::ConnectSceneListeners()
 {
-    __super::ConnectSceneListeners();
+    SceneOutliner::ConnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -267,7 +267,7 @@ void EntityAssetOutliner::DisconnectSceneListeners()
         m_CurrentScene->e_NodeTypeDeleted.Remove( NodeTypeExistenceSignature::Delegate ( this, &EntityAssetOutliner::NodeTypeRemoved ) );
     }
 
-    __super::DisconnectSceneListeners();
+    SceneOutliner::DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,9 +276,10 @@ void EntityAssetOutliner::DisconnectSceneListeners()
 // 
 void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
+    EntitySet* entitySet = Reflect::SafeCast< SceneGraph::EntitySet >( args.m_InstanceSet );
+    if ( entitySet )
     {
-        AddEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
+        AddEntitySet( entitySet );
     }
 }
 
@@ -288,9 +289,10 @@ void EntityAssetOutliner::SetAdded( const SceneGraph::InstanceTypeChangeArgs& ar
 // 
 void EntityAssetOutliner::SetRemoved( const SceneGraph::InstanceTypeChangeArgs& args )
 {
-    if ( args.m_InstanceSet->HasType( Reflect::GetType< SceneGraph::EntitySet >() ) )
+    EntitySet* entitySet = Reflect::SafeCast< SceneGraph::EntitySet >( args.m_InstanceSet );
+    if ( entitySet )
     {
-        RemoveEntitySet( Reflect::DangerousCast< SceneGraph::EntitySet >( args.m_InstanceSet ) );
+        RemoveEntitySet( entitySet );
     }
 }
 
@@ -317,9 +319,10 @@ void EntityAssetOutliner::EntityRemoved( const SceneGraph::InstanceSetChangeArgs
 // 
 void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
+    EntityInstanceType* entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( args.m_NodeType );
+    if ( entityType )
     {
-        AddEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
+        AddEntityType( entityType );
     }
 }
 
@@ -329,9 +332,10 @@ void EntityAssetOutliner::NodeTypeAdded( const SceneGraph::NodeTypeExistenceArgs
 // 
 void EntityAssetOutliner::NodeTypeRemoved( const SceneGraph::NodeTypeExistenceArgs& args )
 {
-    if ( args.m_NodeType->HasType( Reflect::GetType< SceneGraph::EntityInstanceType >() ) )
+    EntityInstanceType* entityType = Reflect::SafeCast< SceneGraph::EntityInstanceType >( args.m_NodeType );
+    if ( entityType )
     {
-        RemoveEntityType( Reflect::DangerousCast< SceneGraph::EntityInstanceType >( args.m_NodeType ) );
+        RemoveEntityType( entityType );
     }
 }
 
@@ -345,7 +349,7 @@ void EntityAssetOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 
     // If a valid Object was not found, or if the the object is not
     // an entity node, we won't allow it's name to be changed.
-    if ( !found || !found->HasType( Reflect::GetType< SceneGraph::EntityInstance >() ) )
+    if ( !found || !found->IsClass( Reflect::GetClass< SceneGraph::EntityInstance >() ) )
     {
         args.Veto();
     }

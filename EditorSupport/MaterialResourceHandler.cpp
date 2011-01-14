@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/MaterialResourceHandler.h"
 
 #include "Engine/BinaryDeserializer.h"
@@ -29,7 +32,7 @@ MaterialResourceHandler::~MaterialResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* MaterialResourceHandler::GetResourceType() const
+const GameObjectType* MaterialResourceHandler::GetResourceType() const
 {
     return Material::GetStaticType();
 }
@@ -43,7 +46,7 @@ bool MaterialResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    Material* pMaterial = StaticCast< Material >( pResource );
+    Material* pMaterial = Reflect::AssertCast< Material >( pResource );
     Shader* pShader = pMaterial->GetShader();
 
     // Compute the shader variant indices from the user options selected in the material, as the array of indices in
@@ -285,3 +288,5 @@ bool MaterialResourceHandler::CacheResource(
 
     return true;
 }
+
+#endif  // L_EDITOR

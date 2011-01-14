@@ -326,7 +326,7 @@ void RBShaderLoader::SetWrapUV( TextureSettings* settings, uint32_t wrapU, uint3
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void RBShaderLoader::SetFilter( TextureSettings* settings, uint32_t filter )
 {
-    settings->m_Filter = TextureFilterMode( (Asset::TextureFilter) filter );
+    settings->m_Filter = TextureFilterMode( static_cast< Asset::TextureFilter::Enum >( filter ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,16 +335,16 @@ void RBShaderLoader::SetColorFormat( TextureSettings* settings, uint32_t colorFo
     switch ( mode )
     {
     case Texture::SAMPLER_GPI_MAP:
-        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( static_cast< Asset::TextureFormat::Enum >( colorFormat ) );
         break;
 
     case Texture::SAMPLER_NORMAL_MAP:
-        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( static_cast< Asset::TextureFormat::Enum >( colorFormat ) );
         break;
 
     case Texture::SAMPLER_BASE_MAP:
     default:
-        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( static_cast< Asset::TextureFormat::Enum >( colorFormat ) );
         break;
     }
 }
@@ -361,7 +361,7 @@ void RBShaderLoader::UpdateShaderClass(ShaderManager* db, const tchar_t* shaderF
     RenderShader* sh = db->ResolveShader( shaderHandle );
     HELIUM_ASSERT( sh );
 
-    SetShaderClassAlpha( sh, (Asset::AlphaType) alphaMode );
+    SetShaderClassAlpha( sh, static_cast< Asset::AlphaType::Enum >( alphaMode ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

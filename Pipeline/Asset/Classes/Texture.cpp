@@ -6,7 +6,7 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( Asset::TextureFormat );
 REFLECT_DEFINE_ENUMERATION( Asset::TextureFilter );
 REFLECT_DEFINE_ENUMERATION( Asset::TextureCoordinateWrapMode );
-REFLECT_DEFINE_CLASS( Texture );
+REFLECT_DEFINE_OBJECT( Texture );
 
 void Texture::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

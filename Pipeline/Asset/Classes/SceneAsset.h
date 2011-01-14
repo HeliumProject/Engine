@@ -14,7 +14,7 @@ namespace Helium
         class PIPELINE_API SceneAsset : public AssetClass
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneAsset, AssetClass );
+            REFLECT_DECLARE_OBJECT( SceneAsset, AssetClass );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const HELIUM_OVERRIDE;

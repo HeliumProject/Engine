@@ -23,15 +23,13 @@ SimpleData<T>::~SimpleData()
 template <class T>
 void SimpleData<T>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template <class T>
 bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 {
-    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(src);
+    const SimpleDataT* rhs = SafeCast<SimpleDataT>(src);
     if (!rhs)
     {
         return false;
@@ -43,9 +41,9 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template <class T>
-bool SimpleData<T>::Equals(const Data* s) const
+bool SimpleData<T>::Equals(const Object* object) const
 {
-    const SimpleDataT* rhs = ObjectCast<SimpleDataT>(s);
+    const SimpleDataT* rhs = SafeCast<SimpleDataT>(object);
     if (!rhs)
     {
         return false;
@@ -125,8 +123,8 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
     if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
     {
-        Object* element = (Object*)m_Instance;
-        element->RaiseChanged( m_Field );
+        Object* object = (Object*)m_Instance.Mutable();
+        object->RaiseChanged( m_Field );
     }
 
     return stream;
@@ -369,28 +367,28 @@ template SimpleData<HDRColor3>;
 template SimpleData<Color4>;
 template SimpleData<HDRColor4>;
 
-REFLECT_DEFINE_CLASS(StlStringData);
-REFLECT_DEFINE_CLASS(BoolData);
-REFLECT_DEFINE_CLASS(UInt8Data);
-REFLECT_DEFINE_CLASS(Int8Data);
-REFLECT_DEFINE_CLASS(UInt16Data);
-REFLECT_DEFINE_CLASS(Int16Data);
-REFLECT_DEFINE_CLASS(UInt32Data);
-REFLECT_DEFINE_CLASS(Int32Data);
-REFLECT_DEFINE_CLASS(UInt64Data);
-REFLECT_DEFINE_CLASS(Int64Data);
-REFLECT_DEFINE_CLASS(Float32Data);
-REFLECT_DEFINE_CLASS(Float64Data);
-REFLECT_DEFINE_CLASS(GUIDData);
-REFLECT_DEFINE_CLASS(TUIDData);
+REFLECT_DEFINE_OBJECT(StlStringData);
+REFLECT_DEFINE_OBJECT(BoolData);
+REFLECT_DEFINE_OBJECT(UInt8Data);
+REFLECT_DEFINE_OBJECT(Int8Data);
+REFLECT_DEFINE_OBJECT(UInt16Data);
+REFLECT_DEFINE_OBJECT(Int16Data);
+REFLECT_DEFINE_OBJECT(UInt32Data);
+REFLECT_DEFINE_OBJECT(Int32Data);
+REFLECT_DEFINE_OBJECT(UInt64Data);
+REFLECT_DEFINE_OBJECT(Int64Data);
+REFLECT_DEFINE_OBJECT(Float32Data);
+REFLECT_DEFINE_OBJECT(Float64Data);
+REFLECT_DEFINE_OBJECT(GUIDData);
+REFLECT_DEFINE_OBJECT(TUIDData);
 
-REFLECT_DEFINE_CLASS(Vector2Data);
-REFLECT_DEFINE_CLASS(Vector3Data);
-REFLECT_DEFINE_CLASS(Vector4Data);
-REFLECT_DEFINE_CLASS(Matrix3Data);
-REFLECT_DEFINE_CLASS(Matrix4Data);
+REFLECT_DEFINE_OBJECT(Vector2Data);
+REFLECT_DEFINE_OBJECT(Vector3Data);
+REFLECT_DEFINE_OBJECT(Vector4Data);
+REFLECT_DEFINE_OBJECT(Matrix3Data);
+REFLECT_DEFINE_OBJECT(Matrix4Data);
 
-REFLECT_DEFINE_CLASS(Color3Data);
-REFLECT_DEFINE_CLASS(Color4Data);
-REFLECT_DEFINE_CLASS(HDRColor3Data);
-REFLECT_DEFINE_CLASS(HDRColor4Data);
+REFLECT_DEFINE_OBJECT(Color3Data);
+REFLECT_DEFINE_OBJECT(Color4Data);
+REFLECT_DEFINE_OBJECT(HDRColor3Data);
+REFLECT_DEFINE_OBJECT(HDRColor4Data);

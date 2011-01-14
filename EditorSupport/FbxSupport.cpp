@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/FbxSupport.h"
 
 #include "Platform/Math/Simd/Vector2.h"
@@ -1404,7 +1407,10 @@ bool FbxSupport::BuildMeshFromScene(
                 255.0f ) );
             vertex.normal[ 3 ] = 0;
 
-            vertex.color = 0xffffffff;
+            vertex.color[ 0 ] = 0xff;
+            vertex.color[ 1 ] = 0xff;
+            vertex.color[ 2 ] = 0xff;
+            vertex.color[ 3 ] = 0xff;
             if( pVertexColorLayer )
             {
                 KFbxColor color( 1.0, 1.0, 1.0, 1.0 );
@@ -1415,7 +1421,10 @@ bool FbxSupport::BuildMeshFromScene(
                     static_cast< float32_t >( color.mGreen ),
                     static_cast< float32_t >( color.mBlue ),
                     static_cast< float32_t >( color.mAlpha ) );
-                vertex.color = packedColor.GetArgb();
+                vertex.color[ 0 ] = packedColor.GetR();
+                vertex.color[ 1 ] = packedColor.GetG();
+                vertex.color[ 2 ] = packedColor.GetB();
+                vertex.color[ 3 ] = packedColor.GetA();
             }
 
             vertex.texCoords[ 0 ][ 0 ].packed = 0;
@@ -1776,17 +1785,7 @@ bool FbxSupport::BuildAnimationFromScene(
     // information, use the default timeline settings for the scene.
     const KFbxGlobalSettings& rGlobalSettings = pScene->GetGlobalSettings();
 
-    KTimeSpan timeSpan;
-    KFbxTakeInfo* pTakeInfo = pScene->GetTakeInfo( pAnimStack->GetName() );
-    if( pTakeInfo )
-    {
-        timeSpan = pTakeInfo->mLocalTimeSpan;
-    }
-    else
-    {
-        rGlobalSettings.GetTimelineDefaultTimeSpan( timeSpan );
-    }
-
+    KTimeSpan timeSpan = pAnimStack->GetLocalTimeSpan();
     KTime startTime = timeSpan.GetStart();
     KTime duration = timeSpan.GetDuration();
 
@@ -1927,3 +1926,5 @@ const char* FbxSupport::StripNamespace( const char* pString )
 
     return pString;
 }
+
+#endif  // L_EDITOR

@@ -14,7 +14,7 @@ LabelWindow::LabelWindow( wxWindow* parent, LabelWidget* labelWidget, bool ellip
 
 }
 
-REFLECT_DEFINE_CLASS( LabelWidget );
+REFLECT_DEFINE_OBJECT( LabelWidget );
 
 LabelWidget::LabelWidget( Inspect::Label* label )
 : m_LabelControl( label )

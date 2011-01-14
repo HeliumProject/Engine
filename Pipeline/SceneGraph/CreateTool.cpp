@@ -152,7 +152,7 @@ bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Vector3& t, V
         V_PickHitSmartPtr::const_iterator end = sorted.end();
         for ( ; itr != end; ++itr )
         {
-            SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
+            SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*itr)->GetHitObject() );
 
             // don't snap against what we are placing
             if ( node == m_Instance )
@@ -460,7 +460,7 @@ void CreateTool::FinalizeOrientation(Matrix4& position, const Vector3& t, const 
 
 bool CreateTool::ValidPosition( const AlignedBox& bounds, const Vector3& translation, float minDistance )
 {
-    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
+    SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( m_Instance );
 
     FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Frustum( bounds ) );
     m_Scene->Pick( &frustumPick );
@@ -469,7 +469,7 @@ bool CreateTool::ValidPosition( const AlignedBox& bounds, const Vector3& transla
     V_PickHitSmartPtr::const_iterator resultsEnd = frustumPick.GetHits().end();
     for ( ; resultsItr != resultsEnd; ++resultsItr )
     {
-        SceneGraph::HierarchyNode* currentNode = Reflect::ObjectCast<SceneGraph::HierarchyNode>( (*resultsItr)->GetHitObject() );
+        SceneGraph::HierarchyNode* currentNode = Reflect::SafeCast<SceneGraph::HierarchyNode>( (*resultsItr)->GetHitObject() );
         if ( !currentNode->IsTransient() && ( s_PaintPreventAnyOverlap || node->IsSimilar( currentNode ) ) )
         {
             const SceneGraph::Transform* transform = currentNode->GetTransform();
@@ -492,7 +492,7 @@ bool CreateTool::ValidPosition( const AlignedBox& bounds, const Vector3& transla
 
 void CreateTool::CalculateInstanceRadiusAndBounds( float32_t& instanceRadius, AlignedBox& bounds )
 {
-    SceneGraph::HierarchyNode* node = Reflect::ObjectCast<SceneGraph::HierarchyNode>( m_Instance );
+    SceneGraph::HierarchyNode* node = Reflect::SafeCast<SceneGraph::HierarchyNode>( m_Instance );
     bounds = node->GetObjectBounds();
 
     Vector3 boundVector = bounds.maximum - bounds.minimum;
@@ -662,7 +662,7 @@ bool CreateTool::MouseDown( const MouseButtonInput& e )
         }
     }
 
-    return __super::MouseDown( e );
+    return Base::MouseDown( e );
 }
 
 void CreateTool::MouseMove( const MouseMoveInput& e )
@@ -703,7 +703,7 @@ void CreateTool::MouseMove( const MouseMoveInput& e )
     // render
     m_Scene->Execute(true);
 
-    __super::MouseMove(e);
+    Base::MouseMove(e);
 }
 
 void CreateTool::MouseUp( const MouseButtonInput& e )
@@ -713,7 +713,7 @@ void CreateTool::MouseUp( const MouseButtonInput& e )
         m_PaintTimer.Stop();
     }
 
-    __super::MouseUp(e);
+    Base::MouseUp(e);
 }
 
 void CreateTool::KeyPress( const KeyboardInput& e )
@@ -736,7 +736,7 @@ void CreateTool::KeyPress( const KeyboardInput& e )
 
 void CreateTool::CreateProperties()
 {
-    __super::CreateProperties();
+    Base::CreateProperties();
 
     Place(Matrix4::Identity);
 

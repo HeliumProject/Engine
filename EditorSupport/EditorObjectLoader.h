@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "Engine/GameObjectLoader.h"
 
 #include "PcSupport/XmlPackageLoaderMap.h"
@@ -52,5 +55,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H

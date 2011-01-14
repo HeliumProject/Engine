@@ -6,9 +6,11 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCapsule : public SceneGraph::PrimitiveTemplate<Position>
+        class PrimitiveCapsule : public PrimitiveTemplate<Position>
         {
         private:
+            typedef PrimitiveTemplate<Position> Base;
+
             mutable int32_t m_WireVertCount;
             mutable int32_t m_PolyVertCount;
             mutable int32_t m_CapVertCount;

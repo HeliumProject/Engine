@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/EditorObjectLoader.h"
 
 #include "Foundation/File/File.h"
@@ -75,7 +78,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
 
     HELIUM_ASSERT( pPackageObject );
 
-    PackageLoader* pPackageLoader = StaticCast< Package >( pPackageObject )->GetLoader();
+    PackageLoader* pPackageLoader = Reflect::AssertCast< Package >( pPackageObject )->GetLoader();
     HELIUM_ASSERT( pPackageLoader );
     HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
 
@@ -83,7 +86,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
 
     if( !pObject->IsDefaultTemplate() )
     {
-        Resource* pResource = DynamicCast< Resource >( pObject );
+        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
         if( pResource )
         {
             GameObjectPath baseResourcePath = pResource->GetPath();
@@ -192,7 +195,7 @@ void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pP
     }
 
     // We only need to do precache handling for resources, so skip non-resource types.
-    Resource* pResource = DynamicCast< Resource >( pObject );
+    Resource* pResource = Reflect::SafeCast< Resource >( pObject );
     if( !pResource )
     {
         return;
@@ -214,3 +217,5 @@ void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pO
         CacheObject( pObject, true );
     }
 }
+
+#endif  // L_EDITOR

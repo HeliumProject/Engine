@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::FileDialogButton );
+REFLECT_DEFINE_OBJECT( Inspect::FileDialogButton );
 
 bool FileDialogButton::Process(const tstring& key, const tstring& value)
 {
@@ -21,7 +21,7 @@ bool FileDialogButton::Process(const tstring& key, const tstring& value)
     }
     else
     {
-        wasHandled = __super::Process( key, value );
+        wasHandled = Base::Process( key, value );
     }
 
     return wasHandled;

@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Container );
+REFLECT_DEFINE_OBJECT( Inspect::Container );
 
 Container::Container()
 : m_Hints( ContainerHint::Default )

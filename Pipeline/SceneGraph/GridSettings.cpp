@@ -7,7 +7,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( GridUnit );
-REFLECT_DEFINE_CLASS( GridSettings );
+REFLECT_DEFINE_OBJECT( GridSettings );
 
 GridSettings::GridSettings( const tstring& version,
                                   GridUnit units,

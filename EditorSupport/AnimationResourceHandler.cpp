@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/AnimationResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
@@ -37,7 +40,7 @@ AnimationResourceHandler::~AnimationResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* AnimationResourceHandler::GetResourceType() const
+const GameObjectType* AnimationResourceHandler::GetResourceType() const
 {
     return Animation::GetStaticType();
 }
@@ -63,7 +66,7 @@ bool AnimationResourceHandler::CacheResource(
     HELIUM_ASSERT( pResource );
 
 #if L_USE_GRANNY_ANIMATION
-    Animation* pAnimation = StaticCast< Animation >( pResource );
+    Animation* pAnimation = Reflect::AssertCast< Animation >( pResource );
 
     bool bCacheResult = Granny::CacheAnimationResourceData(
         pObjectPreprocessor,
@@ -88,3 +91,5 @@ bool AnimationResourceHandler::CacheResource(
     return true;
 #endif
 }
+
+#endif  // L_EDITOR

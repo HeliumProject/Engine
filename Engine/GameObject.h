@@ -28,28 +28,25 @@
 /// @param[in] TYPE    GameObject type.
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
-    private: \
-        static Lunar::GameObjectType* sm_pStaticType; \
-        static Lunar::StrongPtr< TYPE > sm_spStaticTypeTemplate; \
+        REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
-        typedef PARENT Super; \
-        virtual Lunar::GameObjectType* GetGameObjectType() const; \
+        virtual const Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
         virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
-        static Lunar::GameObjectType* InitStaticType(); \
+        static const Lunar::GameObjectType* InitStaticType(); \
         static void ReleaseStaticType(); \
-        static Lunar::GameObjectType* GetStaticType();
+        static const Lunar::GameObjectType* GetStaticType();
 
-/// Utility macro for implementing standard GameObject-class variables and functions, without implementing InitStaticType().
+/// Utility macro for implementing standard GameObject-class variables and functions, without implementing
+/// InitStaticType().
 ///
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
-    Lunar::GameObjectType* TYPE::sm_pStaticType = NULL; \
-    Lunar::StrongPtr< TYPE > TYPE::sm_spStaticTypeTemplate; \
+    REFLECT_DEFINE_OBJECT( TYPE ) \
     \
-    Lunar::GameObjectType* TYPE::GetGameObjectType() const \
+    const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
         return TYPE::GetStaticType(); \
     } \
@@ -77,19 +74,17 @@
     \
     void TYPE::ReleaseStaticType() \
     { \
-        if( sm_pStaticType ) \
+        if( s_Class ) \
         { \
-            Lunar::GameObjectType::Unregister( sm_pStaticType ); \
-            sm_pStaticType = NULL; \
+            Lunar::GameObjectType::Unregister( static_cast< const Lunar::GameObjectType* >( s_Class ) ); \
+            s_Class = NULL; \
         } \
-        \
-        sm_spStaticTypeTemplate.Release(); \
     } \
     \
-    Lunar::GameObjectType* TYPE::GetStaticType() \
+    const Lunar::GameObjectType* TYPE::GetStaticType() \
     { \
-        HELIUM_ASSERT( sm_pStaticType ); \
-        return sm_pStaticType; \
+        HELIUM_ASSERT( s_Class ); \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -100,33 +95,31 @@
 #define L_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
     L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     \
-    Lunar::GameObjectType* TYPE::InitStaticType() \
+    const Lunar::GameObjectType* TYPE::InitStaticType() \
     { \
-        if( !sm_pStaticType ) \
+        if( !s_Class ) \
         { \
-            HELIUM_ASSERT( !sm_spStaticTypeTemplate ); \
-            \
             extern Lunar::Package* Get##MODULE##TypePackage(); \
             Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            Lunar::GameObjectType* pParentType = Super::InitStaticType(); \
+            const Lunar::GameObjectType* pParentType = Base::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
-            TYPE* pTemplate = new TYPE; \
-            HELIUM_ASSERT( pTemplate ); \
-            sm_spStaticTypeTemplate = pTemplate; \
+            Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \
+            HELIUM_ASSERT( spTemplate ); \
             \
-            sm_pStaticType = Lunar::GameObjectType::Create( \
+            s_Class = Lunar::GameObjectType::Create( \
                 Lunar::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
-                pTemplate, \
+                spTemplate, \
+                TYPE::ReleaseStaticType, \
                 TYPE_FLAGS ); \
-            HELIUM_ASSERT( sm_pStaticType ); \
+            HELIUM_ASSERT( s_Class ); \
         } \
         \
-        return sm_pStaticType; \
+        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
     }
 
 //@}
@@ -146,9 +139,14 @@ namespace Lunar
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
     {
+        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object )
+
     public:
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
+
+        /// Reserved instance index value for auto-assigning an instance index during Rename() calls.
+        static const uint32_t INSTANCE_INDEX_AUTO = static_cast< uint32_t >( -2 );
 
         /// Object flags.
         enum EFlag
@@ -176,6 +174,22 @@ namespace Lunar
             FLAG_PACKAGE          = 1 << 8
         };
 
+        /// Object rename parameters.
+        struct LUNAR_ENGINE_API RenameParameters
+        {
+            /// Object name.
+            Name name;
+            /// Owner.
+            GameObjectPtr spOwner;
+            /// Instance index (invalid index value for no instance index, INSTANCE_INDEX_AUTO to auto-assign).
+            uint32_t instanceIndex;
+
+            /// @name Construction/Destruction
+            //@{
+            inline RenameParameters();
+            //@}
+        };
+
         /// @name Construction/Destruction
         //@{
         GameObject();
@@ -185,10 +199,9 @@ namespace Lunar
         /// @name GameObject Interface
         //@{
         inline Name GetName() const;
-        bool SetName( Name name );
-
+        inline GameObject* GetOwner() const;
         inline uint32_t GetInstanceIndex() const;
-        bool SetInstanceIndex( uint32_t index );
+        bool Rename( const RenameParameters& rParameters );
 
         inline uint32_t GetId() const;
 
@@ -201,12 +214,8 @@ namespace Lunar
 
         GameObject* GetTemplate() const;
 
-        inline GameObject* GetOwner() const;
-        bool SetOwner( GameObject* pOwner, bool bResetInstanceIndex = true );
-
-        inline size_t GetChildCount() const;
-        inline GameObject* GetChild( size_t index ) const;
-        inline const DynArray< GameObjectWPtr >& GetChildren() const;
+        inline const GameObjectWPtr& GetFirstChild() const;
+        inline const GameObjectWPtr& GetNextSibling() const;
         GameObject* FindChild( Name name, uint32_t instanceIndex = Invalid< uint32_t >() ) const;
 
         inline GameObjectPath GetPath() const;
@@ -221,8 +230,7 @@ namespace Lunar
 
         /// @name RTTI
         //@{
-        virtual GameObjectType* GetGameObjectType() const;
-        bool IsA( const GameObjectType* pType ) const;
+        virtual const GameObjectType* GetGameObjectType() const;
         inline bool IsInstanceOf( const GameObjectType* pType ) const;
         //@}
 
@@ -253,10 +261,12 @@ namespace Lunar
 
         /// @name GameObject Management
         //@{
-        static GameObject* CreateObject(
-            GameObjectType* pType, Name name, GameObject* pOwner, GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
-        template< typename T > static T* Create(
-            Name name, GameObject* pOwner, T* pTemplate = NULL, bool bAssignInstanceIndex = false );
+        static bool CreateObject(
+            GameObjectPtr& rspObject, const GameObjectType* pType, Name name, GameObject* pOwner,
+            GameObject* pTemplate = NULL, bool bAssignInstanceIndex = false );
+        template< typename T > static bool Create(
+            StrongPtr< T >& rspObject, Name name, GameObject* pOwner, T* pTemplate = NULL,
+            bool bAssignInstanceIndex = false );
 
         static GameObject* FindObject( GameObjectPath path );
         template< typename T > static T* Find( GameObjectPath path );
@@ -274,9 +284,9 @@ namespace Lunar
 
         /// @name Static Interface
         //@{
-        static GameObjectType* InitStaticType();
+        static const GameObjectType* InitStaticType();
         static void ReleaseStaticType();
-        static GameObjectType* GetStaticType();
+        static const GameObjectType* GetStaticType();
         //@}
 
     protected:
@@ -306,8 +316,10 @@ namespace Lunar
 
         /// Object owner.
         GameObjectPtr m_spOwner;
-        /// Object children.
-        DynArray< GameObjectWPtr > m_children;
+        /// First child object.
+        GameObjectWPtr m_wpFirstChild;
+        /// Next sibling object.
+        GameObjectWPtr m_wpNextSibling;
 
         /// Full object path name.
         GameObjectPath m_path;
@@ -316,17 +328,18 @@ namespace Lunar
         /// (provided for custom object allocation schemes).
         CUSTOM_DESTROY_CALLBACK* m_pCustomDestroyCallback;
 
-        /// Static "GameObject" type instance.
-        static GameObjectType* sm_pStaticType;
-        /// Static "GameObject" template instance.
-        static GameObjectPtr sm_spStaticTypeTemplate;
-
         /// Global object list.
         static SparseArray< GameObjectWPtr > sm_objects;
-        /// Top-level object list.
-        static DynArray< GameObjectWPtr > sm_topLevelObjects;
+        /// First object in the list of top-level objects.
+        static GameObjectWPtr sm_wpFirstTopLevelObject;
+
         /// Name instance lookup.
         static ChildNameInstanceIndexMap* sm_pNameInstanceIndexMap;
+        /// Empty object name instance map.
+        static Pair< GameObjectPath, NameInstanceIndexMap >* sm_pEmptyNameInstanceIndexMap;
+        /// Empty name instance index lookup set.
+        static Pair< Name, InstanceIndexSet >* sm_pEmptyInstanceIndexSet;
+
         /// Read-write lock for synchronizing access to the object lists.
         static ReadWriteLock sm_objectListLock;
 
@@ -335,9 +348,6 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        void AddInstanceIndexTracking();
-        void RemoveInstanceIndexTracking();
-
         void UpdatePath();
         //@}
 

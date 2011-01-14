@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/Texture2dResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -39,7 +42,7 @@ Texture2dResourceHandler::~Texture2dResourceHandler()
 }
 
 /// @copydoc ResourceHandler::GetResourceType()
-GameObjectType* Texture2dResourceHandler::GetResourceType() const
+const GameObjectType* Texture2dResourceHandler::GetResourceType() const
 {
     return Texture2d::GetStaticType();
 }
@@ -64,7 +67,7 @@ bool Texture2dResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-    Texture2d* pTexture = StaticCast< Texture2d >( pResource );
+    Texture2d* pTexture = Reflect::AssertCast< Texture2d >( pResource );
 
     // Load the source texture data.
     FileStream* pSourceFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );
@@ -342,3 +345,5 @@ bool Texture2dResourceHandler::CacheResource(
 
     return true;
 }
+
+#endif  // L_EDITOR

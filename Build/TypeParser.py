@@ -111,7 +111,8 @@ sourceFormatString2Engine = \
         HELIUM_ASSERT( pPackageObject );
         HELIUM_ASSERT( pPackageObject->IsPackage() );
 
-        pPackage = Lunar::StaticCast< Lunar::Package >( pPackageObject );
+        pPackage = Helium::Reflect::AssertCast< Lunar::Package >( pPackageObject );
+        sp{MODULE}TypePackage = pPackage;
 '''
 
 sourceFormatString2Default = \
@@ -119,13 +120,16 @@ sourceFormatString2Default = \
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        pPackage = Lunar::GameObject::Create< Lunar::Package >( Lunar::Name( TXT( "{MODULE}" ) ), pTypesPackageObject );
+        HELIUM_VERIFY( Lunar::GameObject::Create< Lunar::Package >(
+            sp{MODULE}TypePackage,
+            Lunar::Name( TXT( "{MODULE}" ) ),
+            pTypesPackageObject ) );
+        pPackage = sp{MODULE}TypePackage;
         HELIUM_ASSERT( pPackage );
 '''
 
 sourceFormatString3 = \
-'''        sp{MODULE}TypePackage = pPackage;
-    }}
+'''    }}
 
     return pPackage;
 }}
@@ -225,7 +229,23 @@ for module in includeDirListing:
         currentBraceLevel = 0
         bInComment = False
 
+        bInEditorBlock = False
+        editorBlockIfLevel = 0
+
         for entryLine in entryLines:
+            # Check for preprocessor #if/#ifdef/#ifndef statements.
+            if not bInComment:
+                if bInEditorBlock:
+                    if entryLine.startswith( '#if' ):
+                        editorBlockIfLevel += 1
+                    elif entryLine.startswith( '#endif' ):
+                        if editorBlockIfLevel == 0:
+                            bInEditorBlock = False
+                        else:
+                            editorBlockIfLevel -= 1
+                elif entryLine.startswith( '#if L_EDITOR' ):
+                    bInEditorBlock = True
+
             # Strip out comment blocks.
             stripStartIndex = 0
             while stripStartIndex < len( entryLine ):
@@ -293,7 +313,7 @@ for module in includeDirListing:
                 elif objectDeclResult != None:
                     classPath = '::'.join( scopeNames )
                     if classPath != None and classPath != '':
-                        classPathNames += [ classPath ]
+                        classPathNames += [ ( classPath, bInEditorBlock ) ]
                         includeFiles.add( module + '/' + entry )
 
                     stripEndIndex = objectDeclResult.end()
@@ -318,7 +338,10 @@ for module in includeDirListing:
         continue
 
     print( '[I] Found ', classPathCount, ' GameObject-based class(es) in ', module, '.', sep = '' )
-    for classPath in classPathNames:
+    for ( classPath, bInEditorBlock ) in classPathNames:
+        if bInEditorBlock:
+            classPath = classPath + ' (editor-only)'
+
         print( '[I] -', classPath )
 
     print( '[I] Generating type registration.' )
@@ -347,16 +370,40 @@ for module in includeDirListing:
         MODULE_TOKEN = moduleToken,
         API_TOKEN_PREFIX = apiTokenPrefix )
 
-    for classPath in classPathNames:
+    bWasInEditorBlock = False
+    for ( classPath, bInEditorBlock ) in classPathNames:
+        if bInEditorBlock:
+            if not bWasInEditorBlock:
+                typeRegFileContents += '#if L_EDITOR\n'
+        elif bWasInEditorBlock:
+            typeRegFileContents += '#endif\n'
+
+        bWasInEditorBlock = bInEditorBlock
+
         typeRegFileContents += typeRegLineFormatString.format( CLASS_PATH = classPath )
+
+    if bWasInEditorBlock:
+        typeRegFileContents += '#endif\n'
 
     typeRegFileContents += sourceFormatString4.format(
         MODULE = module,
         MODULE_TOKEN = moduleToken,
         API_TOKEN_PREFIX = apiTokenPrefix )
 
-    for classPath in classPathNames:
+    bWasInEditorBlock = False
+    for ( classPath, bInEditorBlock ) in classPathNames:
+        if bInEditorBlock:
+            if not bWasInEditorBlock:
+                typeRegFileContents += '#if L_EDITOR\n'
+        elif bWasInEditorBlock:
+            typeRegFileContents += '#endif\n'
+
+        bWasInEditorBlock = bInEditorBlock
+
         typeRegFileContents += typeUnregLineFormatString.format( CLASS_PATH = classPath )
+
+    if bWasInEditorBlock:
+        typeRegFileContents += '#endif\n'
 
     typeRegFileContents += sourceFormatString5.format( MODULE = module )
 

@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 D3DMATERIAL9 Mesh::s_WireMaterial;
 D3DMATERIAL9 Mesh::s_FillMaterial;
 
-REFLECT_DEFINE_CLASS( Mesh );
+REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 
@@ -82,7 +82,7 @@ tstring Mesh::GetApplicationTypeName() const
 
 void Mesh::Initialize()
 {
-    __super::Initialize();
+    Base::Initialize();
 
     //
     // Dereference Shaders
@@ -92,7 +92,7 @@ void Mesh::Initialize()
     V_TUID::const_iterator end = m_ShaderIDs.end();
     for ( ; itr != end; ++itr )
     {
-        Shader* shader = Reflect::ObjectCast< Shader >( m_Owner->FindNode( *itr ) );
+        Shader* shader = Reflect::SafeCast< Shader >( m_Owner->FindNode( *itr ) );
 
         if ( shader )
         {
@@ -154,7 +154,7 @@ void Mesh::Initialize()
 
 void Mesh::Create()
 {
-    __super::Create();
+    Base::Create();
 
     if (m_IsInitialized)
     {
@@ -165,7 +165,7 @@ void Mesh::Create()
 
 void Mesh::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     if (m_IsInitialized)
     {
@@ -262,7 +262,7 @@ void Mesh::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 void Mesh::Render( RenderVisitor* render )
@@ -388,7 +388,7 @@ void Mesh::Render( RenderVisitor* render )
         }
     }
 
-    __super::Render( render );
+    Base::Render( render );
 }
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )

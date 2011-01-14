@@ -6,10 +6,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCircle : public SceneGraph::PrimitiveRadius
+        class PrimitiveCircle : public PrimitiveRadius
         {
-
         public:
+            typedef PrimitiveRadius Base;
 
             bool m_HackyRotateFlag;
 

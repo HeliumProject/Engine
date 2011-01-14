@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::List );
+REFLECT_DEFINE_OBJECT( Inspect::List );
 
 List::List()
 : a_IsSorted( false )

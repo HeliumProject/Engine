@@ -3,7 +3,7 @@
 /// @param[in] bucketCount  Number of buckets to allocate in the hash table.
 template< typename Key, typename HashFunction, typename EqualKey, typename Allocator >
 Helium::HashSet< Key, HashFunction, EqualKey, Allocator >::HashSet( size_t bucketCount )
-    : Super( bucketCount, HashFunction(), EqualKey() )
+    : Base( bucketCount, HashFunction(), EqualKey() )
 {
 }
 
@@ -12,7 +12,7 @@ Helium::HashSet< Key, HashFunction, EqualKey, Allocator >::HashSet( size_t bucke
 /// @param[in] rSource  Source hash set from which to copy.
 template< typename Key, typename HashFunction, typename EqualKey, typename Allocator >
 Helium::HashSet< Key, HashFunction, EqualKey, Allocator >::HashSet( const HashSet& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -23,7 +23,7 @@ template< typename Key, typename HashFunction, typename EqualKey, typename Alloc
 template< typename OtherAllocator >
 Helium::HashSet< Key, HashFunction, EqualKey, Allocator >::HashSet(
     const HashSet< Key, HashFunction, EqualKey, OtherAllocator >& rSource )
-    : Super( rSource )
+    : Base( rSource )
 {
 }
 
@@ -44,7 +44,7 @@ Helium::HashSet< Key, HashFunction, EqualKey, Allocator >&
 {
     if( this != &rSource )
     {
-        Super::operator=( rSource );
+        Base::operator=( rSource );
     }
 
     return *this;
@@ -63,7 +63,7 @@ Helium::HashSet< Key, HashFunction, EqualKey, Allocator >&
 {
     if( this != &rSource )
     {
-        Super::operator=( rSource );
+        Base::operator=( rSource );
     }
 
     return *this;

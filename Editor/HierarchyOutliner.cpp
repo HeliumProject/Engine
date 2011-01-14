@@ -141,7 +141,7 @@ SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id
 // 
 void HierarchyOutliner::Clear()
 {
-    __super::Clear();
+    SceneOutliner::Clear();
 
     m_TreeCtrl->DeleteChildren( m_InvisibleRoot );
 }
@@ -161,7 +161,7 @@ void HierarchyOutliner::CurrentSceneChanged( SceneGraph::Scene* oldScene )
 // 
 void HierarchyOutliner::ConnectSceneListeners()
 {
-    __super::ConnectSceneListeners();
+    SceneOutliner::ConnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -176,7 +176,7 @@ void HierarchyOutliner::ConnectSceneListeners()
 // 
 void HierarchyOutliner::DisconnectSceneListeners()
 {
-    __super::DisconnectSceneListeners();
+    SceneOutliner::DisconnectSceneListeners();
 
     if ( m_CurrentScene )
     {
@@ -237,7 +237,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
         const OS_SceneNodeDumbPtr::Iterator selEnd = selection.End();
         for ( ; selItr != selEnd; ++selItr )
         {
-            SceneGraph::HierarchyNode* hNode = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *selItr );
+            SceneGraph::HierarchyNode* hNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
             if ( hNode )
             {
                 batch->Push( new ParentCommand( hNode, newParent ) );
@@ -277,13 +277,13 @@ void HierarchyOutliner::NodeAdded( const SceneGraph::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    if ( args.m_Node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( args.m_Node );
+    if ( hierarchyNode )
     {
         m_TreeCtrl->Freeze();
         bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
         m_TreeCtrl->DisableSorting();
 
-        SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( args.m_Node );
         AddHierarchyNode( hierarchyNode );
 
         m_TreeCtrl->EnableSorting( isSortingEnabled );
@@ -317,9 +317,9 @@ void HierarchyOutliner::NodeRemoved( const SceneGraph::NodeChangeArgs& args )
 {
     EDITOR_SCOPE_TIMER( ("") );
 
-    if ( args.m_Node->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+    SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast< SceneGraph::HierarchyNode >( args.m_Node );
+    if ( hierarchyNode )
     {
-        SceneGraph::HierarchyNode* hierarchyNode = Reflect::DangerousCast< SceneGraph::HierarchyNode >( args.m_Node );
         hierarchyNode->RemoveParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
     }
 

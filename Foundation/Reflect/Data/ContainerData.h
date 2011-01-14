@@ -18,20 +18,10 @@ namespace Helium
 
             ContainerData();
 
+            virtual bool ShouldSerialize() HELIUM_OVERRIDE;
+
             virtual size_t GetSize() const = 0;
             virtual void Clear() = 0;
-        };
-
-        typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;
-
-        class FOUNDATION_API ObjectContainerData : public ContainerData
-        {
-        public:
-            REFLECT_DECLARE_ABSTRACT( ObjectContainerData, ContainerData );
-
-            const Type* m_Type;
-
-            ObjectContainerData();
         };
 
         typedef Helium::StrongPtr<ContainerData> ContainerDataPtr;

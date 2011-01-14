@@ -33,7 +33,7 @@ namespace Helium
         class FOUNDATION_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
+            REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ComponentCollection();
@@ -59,7 +59,7 @@ namespace Helium
             template <class T>
             Helium::StrongPtr<T> GetComponent() const
             {
-                return Reflect::ObjectCast<T>( GetComponent( Reflect::GetClass<T>() ) );
+                return Reflect::SafeCast<T>( GetComponent( Reflect::GetClass<T>() ) );
             }
 
             // template helper function for removing by type... 
@@ -169,11 +169,11 @@ namespace Helium
             virtual bool ProcessComponent(Reflect::ObjectPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
 
             // setup changed callback
-            virtual void PreSerialize() HELIUM_OVERRIDE;
-            virtual void PostDeserialize() HELIUM_OVERRIDE;
+            virtual void PreSerialize( const Reflect::Field* field ) HELIUM_OVERRIDE;
+            virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE;
 
             // copy all attributes from one collection to another
-            virtual void CopyTo(const Reflect::ObjectPtr& destination) HELIUM_OVERRIDE;
+            virtual void CopyTo( Reflect::Object* object ) HELIUM_OVERRIDE;
 
             // helper function for CopyTo
             bool CopyComponentTo( ComponentCollection& destCollection, const ComponentPtr& destAttrib, const ComponentPtr& srcAttrib );

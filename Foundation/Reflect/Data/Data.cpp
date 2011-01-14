@@ -11,7 +11,7 @@ using namespace Helium::Reflect;
 REFLECT_DEFINE_ABSTRACT( Data )
 
 Data::Data()
-: m_Field (NULL)
+: m_Field( NULL )
 {
 
 }
@@ -168,6 +168,20 @@ void Data::Cleanup()
     }
 }
 
+void Data::ConnectField( Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField )
+{
+    m_Instance = instance;
+    m_Field = field;
+    ConnectData( Helium::HybridPtr<void>( m_Instance.Address() + m_Field->m_Offset + offsetInField, m_Instance.State()) ); 
+}
+
+void Data::Disconnect()
+{
+    m_Instance = (Object*)NULL;
+    m_Field = NULL;
+    ConnectData( Helium::HybridPtr<void> () );
+}
+
 bool Data::CastSupported(const Class* srcType, const Class* destType)
 {
     if (srcType == destType)
@@ -189,7 +203,7 @@ bool Data::CastSupported(const Class* srcType, const Class* destType)
 bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
 {
     // if the types are a match, just do set value
-    if (dest->HasType(src->GetType()) || src->HasType(dest->GetType()))
+    if (dest->IsClass(src->GetClass()) || src->IsClass(dest->GetClass()))
     {
         return dest->Set(src);
     }
@@ -202,13 +216,12 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     }
 
     // check to see if we can do a container cast, casting the data within the container
-    if (src->HasType( Reflect::GetType<ContainerData>()) && dest->HasType( Reflect::GetType<ContainerData>() ))
+    if (src->IsClass( Reflect::GetClass<ContainerData>()) && dest->IsClass( Reflect::GetClass<ContainerData>() ))
     {
-        if (src->HasType( Reflect::GetType<StlVectorData>() ) && dest->HasType( Reflect::GetType<StlVectorData>() ))
+        const StlVectorData* srcArray = AssertCast<StlVectorData>( src );
+        StlVectorData* destArray = AssertCast<StlVectorData>( dest );
+        if ( srcArray && destArray )
         {
-            const StlVectorData* srcArray = DangerousCast<StlVectorData>( src );
-            StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
-
             if (CastSupported( srcArray->GetItemClass(), destArray->GetItemClass() ))
             {
                 destArray->SetSize( srcArray->GetSize() );
@@ -221,11 +234,10 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<StlSetData>() ) && dest->HasType( Reflect::GetType<StlSetData>() ))
+        else if (src->IsClass( Reflect::GetClass<StlSetData>() ) && dest->IsClass( Reflect::GetClass<StlSetData>() ))
         {
-            const StlSetData* srcSet = DangerousCast<StlSetData>( src );
-            StlSetData* destSet = DangerousCast<StlSetData>( dest );
-
+            const StlSetData* srcSet = AssertCast<StlSetData>( src );
+            StlSetData* destSet = AssertCast<StlSetData>( dest );
             if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
             {
                 std::vector< ConstDataPtr > data;
@@ -247,11 +259,10 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<StlMapData>() ) && dest->HasType( Reflect::GetType<StlMapData>() ))
+        else if (src->IsClass( Reflect::GetClass<StlMapData>() ) && dest->IsClass( Reflect::GetClass<StlMapData>() ))
         {
-            const StlMapData* srcMap = DangerousCast<StlMapData>( src );
-            StlMapData* destMap = DangerousCast<StlMapData>( dest );
-
+            const StlMapData* srcMap = AssertCast<StlMapData>( src );
+            StlMapData* destMap = AssertCast<StlMapData>( dest );
             if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
             {
                 StlMapData::V_ConstValueType data;
@@ -274,11 +285,10 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
                 return true;
             }
         }
-        else if (src->HasType( Reflect::GetType<ObjectStlMapData>() ) && dest->HasType( Reflect::GetType<ObjectStlMapData>() ))
+        else if (src->IsClass( Reflect::GetClass<ObjectStlMapData>() ) && dest->IsClass( Reflect::GetClass<ObjectStlMapData>() ))
         {
-            const ObjectStlMapData* srcObjectMap = DangerousCast<ObjectStlMapData>( src );
-            ObjectStlMapData* destObjectMap = DangerousCast<ObjectStlMapData>( dest );
-
+            const ObjectStlMapData* srcObjectMap = AssertCast<ObjectStlMapData>( src );
+            ObjectStlMapData* destObjectMap = AssertCast<ObjectStlMapData>( dest );
             if (CastSupported( srcObjectMap->GetKeyClass(), destObjectMap->GetKeyClass() ))
             {
                 ObjectStlMapData::V_ConstValueType data;
@@ -303,4 +313,31 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     }
 
     return false;
+}
+
+bool Data::ShouldSerialize()
+{
+    return true;
+}
+
+void Data::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
+{
+    HELIUM_BREAK();
+}
+
+tostream& Data::operator>> (tostream& stream) const
+{ 
+    HELIUM_BREAK(); 
+    return stream; 
+}
+
+tistream& Data::operator<< (tistream& stream)
+{ 
+    HELIUM_BREAK(); 
+    return stream; 
+}
+
+void Data::Accept(Visitor& visitor)
+{
+    // by default, don't do anything as it will all have to be special cased in derived classes
 }

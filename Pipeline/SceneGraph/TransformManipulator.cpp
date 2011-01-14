@@ -66,7 +66,7 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
     OS_SceneNodeDumbPtr::Iterator end = args.m_Selection.End();
     for ( ; itr != end; ++itr )
     {
-        SceneGraph::HierarchyNode* h = Reflect::ObjectCast< SceneGraph::HierarchyNode >( *itr );
+        SceneGraph::HierarchyNode* h = Reflect::SafeCast< SceneGraph::HierarchyNode >( *itr );
         if ( h )
         {
             h->ConnectManipulator(this);

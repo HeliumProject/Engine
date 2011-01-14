@@ -103,7 +103,7 @@ Shader::~Shader()
 /// @copydoc GameObject::Serialize()
 void Shader::Serialize( Serializer& s )
 {
-    L_SERIALIZE_SUPER( s );
+    L_SERIALIZE_BASE( s );
 
     s << L_TAGGED( m_bPrecacheAllVariants );
 }
@@ -111,7 +111,7 @@ void Shader::Serialize( Serializer& s )
 /// @copydoc GameObject::FinalizeLoad()
 void Shader::FinalizeLoad()
 {
-    Super::FinalizeLoad();
+    Base::FinalizeLoad();
 
     // Cache the number of user variants for each shader type.  Note that we don't need to create variants for the
     // default type template.
@@ -137,7 +137,7 @@ void Shader::FinalizeLoad()
 /// @copydoc GameObject::PostSave()
 void Shader::PostSave()
 {
-    Super::PostSave();
+    Base::PostSave();
 
     // Precache all shader variants if flagged to do so and the load process has been overridden by the shader
     // variant resource handler.
@@ -280,7 +280,7 @@ bool Shader::TryFinishLoadVariant( size_t loadId, ShaderVariantPtr& rspVariant )
     bool bFinished = pObjectLoader->TryFinishLoad( loadId, spObject );
     if( bFinished )
     {
-        rspVariant = StaticCast< ShaderVariant >( spObject.Get() );
+        rspVariant = Reflect::AssertCast< ShaderVariant >( spObject.Get() );
     }
 
     return bFinished;
@@ -704,7 +704,7 @@ void ShaderVariant::PreDestroy()
 
     m_renderResources.Clear();
 
-    Super::PreDestroy();
+    Base::PreDestroy();
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()

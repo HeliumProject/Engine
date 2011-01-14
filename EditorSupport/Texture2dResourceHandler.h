@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 #include "Foundation/File/Path.h"
 
@@ -29,7 +32,7 @@ namespace Lunar
 
         /// @name Resource Handling Support
         //@{
-        virtual GameObjectType* GetResourceType() const;
+        virtual const GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
         virtual bool CacheResource(
@@ -37,5 +40,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H

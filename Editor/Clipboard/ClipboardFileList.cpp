@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( ClipboardFileList );
+REFLECT_DEFINE_OBJECT( ClipboardFileList );
 
 void ClipboardFileList::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -45,7 +45,7 @@ const std::set< tstring >& ClipboardFileList::GetFilePaths() const
 // 
 bool ClipboardFileList::Merge( const ReflectClipboardData* source )
 {
-    if ( !source->HasType( Reflect::GetType< ClipboardFileList >() ) )
+    if ( !source->IsClass( Reflect::GetClass< ClipboardFileList >() ) )
     {
         return false;
     }

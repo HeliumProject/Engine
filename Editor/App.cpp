@@ -273,7 +273,11 @@ bool App::OnInit()
         const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
         if ( !mruPaths.empty() )
         {
-            GetFrame()->OpenProject( *mruPaths.rbegin() );
+            Path projectPath( *mruPaths.rbegin() );
+            if ( projectPath.Exists() )
+            {
+                GetFrame()->OpenProject( *mruPaths.rbegin() );
+            }
         }
     }
 
@@ -291,7 +295,7 @@ int App::OnExit()
 
     wxImage::CleanUpHandlers();
 
-    return __super::OnExit();
+    return wxApp::OnExit();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

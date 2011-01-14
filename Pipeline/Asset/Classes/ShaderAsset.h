@@ -86,7 +86,7 @@ namespace Helium
             {
             }
 
-            REFLECT_DECLARE_CLASS( ShaderAsset, AssetClass );
+            REFLECT_DECLARE_OBJECT( ShaderAsset, AssetClass );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };

@@ -9,7 +9,7 @@ REFLECT_DEFINE_ABSTRACT(StlMapData)
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-// str should contain a string with map element separated by the specified delimiters argument.
+// str should contain a string with map object separated by the specified delimiters argument.
 // str will be parsed into key-value pairs and each pair will be inserted into tokens.
 template< typename TKey, typename TVal >
 inline void Tokenize( const tstring& str, std::map< TKey, TVal >& tokens, const tstring& delimiters )
@@ -205,8 +205,6 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Clear()
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -302,7 +300,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Da
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src, uint32_t flags)
 {
-    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(src);
+    const StlMapDataT* rhs = SafeCast<StlMapDataT>(src);
     if (!rhs)
     {
         return false;
@@ -314,9 +312,9 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Data* s) const
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object* object) const
 {
-    const StlMapDataT* rhs = ObjectCast<StlMapDataT>(s);
+    const StlMapDataT* rhs = SafeCast<StlMapDataT>(object);
     if (!rhs)
     {
         return false;
@@ -337,16 +335,12 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
         DataType::const_iterator end = m_Data->end();
         for ( ; itr != end; ++itr )
         {
-            ObjectPtr keyElem;
-            ObjectPtr dataElem;
+            ObjectPtr keyElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<KeyClassT>() );
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
 
-            // query cache for a serializer of this type
-            archive.GetCache().Create( Reflect::GetClass<KeyClassT>(), keyElem );
-            archive.GetCache().Create( Reflect::GetClass<ValueClassT>(), dataElem );
-
-            // downcast to serializer type
-            KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
-            ValueClassT* dataSer = DangerousCast<ValueClassT>(dataElem);
+            // downcast to data type
+            KeyClassT* keySer = AssertCast<KeyClassT>(keyElem);
+            ValueClassT* dataSer = AssertCast<ValueClassT>(dataElem);
 
             // connect to our map key memory address
             keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
@@ -366,14 +360,10 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        // downcast to serializer type
-        Data* ser = DangerousCast<Data>(*itr);
-
-        // disconnect from memory
+        Data* ser = AssertCast<Data>(*itr);
         ser->Disconnect();
 
-        // restore serializer to the cache
-        archive.GetCache().Free( ser );
+        // might be useful to cache the data object here
     }
 }
 
@@ -395,8 +385,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        KeyClassT* key = ObjectCast<KeyClassT>( *itr );
-        ValueClassT* value = ObjectCast<ValueClassT>( *(++itr) );
+        KeyClassT* key = SafeCast<KeyClassT>( *itr );
+        ValueClassT* value = SafeCast<ValueClassT>( *(++itr) );
 
         if (key && value)
         {
@@ -463,27 +453,27 @@ template SimpleStlMapData<Helium::GUID, GUIDData, Matrix4, Matrix4Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, UInt32Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, Matrix4, Matrix4Data>;
 
-REFLECT_DEFINE_CLASS(StlStringStlStringStlMapData);
-REFLECT_DEFINE_CLASS(StlStringBoolStlMapData);
-REFLECT_DEFINE_CLASS(StlStringUInt32StlMapData);
-REFLECT_DEFINE_CLASS(StlStringInt32StlMapData);
+REFLECT_DEFINE_OBJECT(StlStringStlStringStlMapData);
+REFLECT_DEFINE_OBJECT(StlStringBoolStlMapData);
+REFLECT_DEFINE_OBJECT(StlStringUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(StlStringInt32StlMapData);
 
-REFLECT_DEFINE_CLASS(UInt32StringStlMapData);
-REFLECT_DEFINE_CLASS(UInt32UInt32StlMapData);
-REFLECT_DEFINE_CLASS(UInt32Int32StlMapData);
-REFLECT_DEFINE_CLASS(UInt32UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32StringStlMapData);
+REFLECT_DEFINE_OBJECT(UInt32UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32Int32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(Int32StringStlMapData);
-REFLECT_DEFINE_CLASS(Int32UInt32StlMapData);
-REFLECT_DEFINE_CLASS(Int32Int32StlMapData);
-REFLECT_DEFINE_CLASS(Int32UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(Int32StringStlMapData);
+REFLECT_DEFINE_OBJECT(Int32UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(Int32Int32StlMapData);
+REFLECT_DEFINE_OBJECT(Int32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(UInt64StringStlMapData);
-REFLECT_DEFINE_CLASS(UInt64UInt32StlMapData);
-REFLECT_DEFINE_CLASS(UInt64UInt64StlMapData);
-REFLECT_DEFINE_CLASS(UInt64Matrix4StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64StringStlMapData);
+REFLECT_DEFINE_OBJECT(UInt64UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64Matrix4StlMapData);
 
-REFLECT_DEFINE_CLASS(GUIDUInt32StlMapData);
-REFLECT_DEFINE_CLASS(GUIDMatrix4StlMapData);
-REFLECT_DEFINE_CLASS(TUIDUInt32StlMapData);
-REFLECT_DEFINE_CLASS(TUIDMatrix4StlMapData);
+REFLECT_DEFINE_OBJECT(GUIDUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(GUIDMatrix4StlMapData);
+REFLECT_DEFINE_OBJECT(TUIDUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(TUIDMatrix4StlMapData);

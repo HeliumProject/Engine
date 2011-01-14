@@ -16,7 +16,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( Canvas );
+REFLECT_DEFINE_OBJECT( Canvas );
 
 Canvas::Canvas()
 : m_Window( NULL )
@@ -103,7 +103,7 @@ void Canvas::UnrealizeControl( Inspect::Control* control )
 
     if ( this != control )
     {
-        Inspect::Container* container = Reflect::ObjectCast< Inspect::Container >( control );
+        Inspect::Container* container = Reflect::SafeCast< Inspect::Container >( control );
         if ( container )
         {
             for ( Inspect::V_Control::const_iterator itr = container->GetChildren().begin(), end = container->GetChildren().end(); itr != end; ++itr )

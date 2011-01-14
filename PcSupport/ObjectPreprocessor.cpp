@@ -70,9 +70,9 @@ void ObjectPreprocessor::SetPlatformPreprocessor( Cache::EPlatform platform, Pla
 ///
 /// @return  True if object caching was successful, false if not.
 bool ObjectPreprocessor::CacheObject(
-                                     GameObject* pObject,
-                                     int64_t timestamp,
-                                     bool bEvictPlatformPreprocessedResourceData )
+    GameObject* pObject,
+    int64_t timestamp,
+    bool bEvictPlatformPreprocessedResourceData )
 {
 #if L_EDITOR
 
@@ -89,7 +89,7 @@ bool ObjectPreprocessor::CacheObject(
 
     // Only worry about resource data caching if the object is a Resource type that's not the default template
     // object for its specific type.
-    Resource* pResource = ( !pObject->IsDefaultTemplate() ? DynamicCast< Resource >( pObject ) : NULL );
+    Resource* pResource = ( !pObject->IsDefaultTemplate() ? Reflect::SafeCast< Resource >( pObject ) : NULL );
 
     CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
@@ -306,7 +306,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
     GameObject* pTestTemplate = pResource->GetTemplate();
     while( pTestTemplate && !pTestTemplate->IsDefaultTemplate() )
     {
-        pTemplateResource = StaticCast< Resource >( pTestTemplate );
+        pTemplateResource = Reflect::AssertCast< Resource >( pTestTemplate );
         pTestTemplate = pTemplateResource->GetTemplate();
     }
 
@@ -837,7 +837,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     }
 
     // Locate a resource handler for the resource type.
-    GameObjectType* pResourceType = pResource->GetGameObjectType();
+    const GameObjectType* pResourceType = pResource->GetGameObjectType();
     HELIUM_ASSERT( pResourceType );
     ResourceHandler* pResourceHandler = ResourceHandler::FindResourceHandlerForType( pResourceType );
     if( !pResourceHandler )

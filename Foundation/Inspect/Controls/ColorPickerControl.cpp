@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::ColorPicker );
+REFLECT_DEFINE_OBJECT( Inspect::ColorPicker );
 
 ColorPicker::ColorPicker()
 : a_Highlight( false )

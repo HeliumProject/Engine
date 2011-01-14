@@ -22,8 +22,6 @@ SimpleObjectStlMapData<KeyT>::~SimpleObjectStlMapData()
 template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::ConnectData(Helium::HybridPtr<void> data)
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
@@ -123,7 +121,7 @@ void SimpleObjectStlMapData<KeyT>::RemoveItem(const Data* key)
 template < class KeyT >
 bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 {
-    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(src);
+    const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>(src);
     if (!rhs)
     {
         return false;
@@ -149,9 +147,9 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class KeyT >
-bool SimpleObjectStlMapData<KeyT>::Equals(const Data* s) const
+bool SimpleObjectStlMapData<KeyT>::Equals(const Object* object) const
 {
-    const ObjectStlMapDataT* rhs = ObjectCast<ObjectStlMapDataT>(s);
+    const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>( object );
     if (!rhs)
     {
         return false;
@@ -198,8 +196,7 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
                 continue;
             }
 
-            ObjectPtr elem;
-            archive.GetCache().Create( Reflect::GetDataClass<KeyT>(), elem );
+            ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass<KeyT>() );
 
             Data* ser = AssertCast<Data>(elem.Ptr());
             ser->ConnectData((void*)&(itr->first));
@@ -218,8 +215,9 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
         {
             Data* ser = AssertCast<Data>(*itr);
             ser->Disconnect();
-            archive.GetCache().Free(ser);
             ++itr;
+
+            // might be useful to cache the data object here
         }
     }
 }
@@ -242,7 +240,7 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        Data* key = ObjectCast<Data>(*itr);
+        Data* key = SafeCast<Data>(*itr);
         Object* value = *(++itr);
         if ( key && value )
         {
@@ -283,11 +281,11 @@ template SimpleObjectStlMapData<int64_t>;
 template SimpleObjectStlMapData<Helium::GUID>;
 template SimpleObjectStlMapData<Helium::TUID>;
 
-REFLECT_DEFINE_CLASS(TypeIDObjectStlMapData);
-REFLECT_DEFINE_CLASS(StlStringObjectStlMapData);
-REFLECT_DEFINE_CLASS(UInt32ObjectStlMapData);
-REFLECT_DEFINE_CLASS(Int32ObjectStlMapData);
-REFLECT_DEFINE_CLASS(UInt64ObjectStlMapData);
-REFLECT_DEFINE_CLASS(Int64ObjectStlMapData);
-REFLECT_DEFINE_CLASS(GUIDObjectStlMapData);
-REFLECT_DEFINE_CLASS(TUIDObjectStlMapData);
+REFLECT_DEFINE_OBJECT(TypeIDObjectStlMapData);
+REFLECT_DEFINE_OBJECT(StlStringObjectStlMapData);
+REFLECT_DEFINE_OBJECT(UInt32ObjectStlMapData);
+REFLECT_DEFINE_OBJECT(Int32ObjectStlMapData);
+REFLECT_DEFINE_OBJECT(UInt64ObjectStlMapData);
+REFLECT_DEFINE_OBJECT(Int64ObjectStlMapData);
+REFLECT_DEFINE_OBJECT(GUIDObjectStlMapData);
+REFLECT_DEFINE_OBJECT(TUIDObjectStlMapData);

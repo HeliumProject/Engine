@@ -92,7 +92,7 @@ void HierarchyNode::SetTransient( bool isTransient )
 {
     if ( isTransient != IsTransient() )
     {
-        __super::SetTransient( isTransient );
+        Base::SetTransient( isTransient );
 
         OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
         OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
@@ -155,7 +155,7 @@ void HierarchyNode::SetSelected( bool value )
 {
     if ( value != IsSelected() )
     {
-        __super::SetSelected( value );
+        Base::SetSelected( value );
 
         SetReactive( value );
     }
@@ -190,7 +190,7 @@ void HierarchyNode::SetReactive( bool value )
 
 void HierarchyNode::SetName( const tstring& value )
 {
-    __super::SetName( value );
+    Base::SetName( value );
 
     // reset path b/c our name changed
     m_Path = TXT( "" );
@@ -318,7 +318,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy ancestral dependency connections
     for each (SceneGraph::SceneNode* ancestor in GetAncestors())
     {
-        if ( ancestor->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( ancestor->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -329,7 +329,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
     // copy descendant dependency connections
     for each (SceneGraph::SceneNode* descendant in GetDescendants())
     {
-        if ( descendant->HasType( Reflect::GetType<SceneGraph::HierarchyNode>() ) )
+        if ( descendant->IsClass( Reflect::GetClass<SceneGraph::HierarchyNode>() ) )
         {
             continue;
         }
@@ -400,12 +400,11 @@ void HierarchyNode::RemoveChild(SceneGraph::HierarchyNode* c)
 
 void HierarchyNode::DisconnectDescendant(SceneGraph::SceneNode* descendant) 
 {
-    __super::DisconnectDescendant(descendant);
+    Base::DisconnectDescendant(descendant);
 
-    if (descendant->HasType(Reflect::GetType<SceneGraph::HierarchyNode>()))
+    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+    if ( child )
     {
-        SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
-
         // sanity check that the parent is really set to this
         HELIUM_ASSERT( child->GetParent() == this );
 
@@ -435,12 +434,11 @@ void HierarchyNode::DisconnectDescendant(SceneGraph::SceneNode* descendant)
 
 void HierarchyNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 {
-    __super::ConnectDescendant(descendant);
+    Base::ConnectDescendant(descendant);
 
-    if (descendant->HasType(Reflect::GetType<SceneGraph::HierarchyNode>()))
+    SceneGraph::HierarchyNode* child = Reflect::SafeCast< SceneGraph::HierarchyNode >( descendant );
+    if ( child )
     {
-        SceneGraph::HierarchyNode* child = Reflect::DangerousCast<SceneGraph::HierarchyNode>(descendant);
-
         // sanity check that the parent is really set to this
         HELIUM_ASSERT( child->GetParent() == this );
 
@@ -499,17 +497,17 @@ void HierarchyNode::ConnectDescendant(SceneGraph::SceneNode* descendant)
 
 void HierarchyNode::ConnectAncestor( SceneGraph::SceneNode* ancestor )
 {
-    __super::ConnectAncestor( ancestor );
+    Base::ConnectAncestor( ancestor );
 
-    if ( ancestor->HasType( Reflect::GetType< SceneGraph::Layer >() ) )
+    if ( ancestor->IsClass( Reflect::GetClass< SceneGraph::Layer >() ) )
     {
-        m_LayerColor = Reflect::ObjectCast< SceneGraph::Layer >( ancestor );
+        m_LayerColor = Reflect::SafeCast< SceneGraph::Layer >( ancestor );
     }
 }
 
 void HierarchyNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
 {
-    __super::DisconnectAncestor( ancestor );
+    Base::DisconnectAncestor( ancestor );
 
     if ( ancestor == m_LayerColor )
     {
@@ -520,7 +518,7 @@ void HierarchyNode::DisconnectAncestor( SceneGraph::SceneNode* ancestor )
         {
             SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-            SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+            SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
             if ( layer )
             {
                 m_LayerColor = layer;
@@ -536,7 +534,7 @@ SceneGraph::Transform* HierarchyNode::GetTransform()
 
     while (node.ReferencesObject())
     {
-        SceneGraph::Transform* transform = Reflect::ObjectCast< SceneGraph::Transform >( node );
+        SceneGraph::Transform* transform = Reflect::SafeCast< SceneGraph::Transform >( node );
 
         if (transform != NULL)
         {
@@ -556,7 +554,7 @@ const SceneGraph::Transform* HierarchyNode::GetTransform() const
 
 void HierarchyNode::Create()
 {
-    __super::Create();
+    Base::Create();
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
@@ -567,7 +565,7 @@ void HierarchyNode::Create()
 
 void HierarchyNode::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
     {
@@ -596,7 +594,7 @@ bool HierarchyNode::ComputeVisibility() const
     {
         SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
         if ( layer )
         {
             isVisible &= layer->IsVisible();
@@ -621,7 +619,7 @@ bool HierarchyNode::ComputeSelectability() const
     {
         SceneGraph::SceneNode* dependNode = (*ancestorItr);
 
-        SceneGraph::Layer* layer = Reflect::ObjectCast< SceneGraph::Layer >( dependNode );
+        SceneGraph::Layer* layer = Reflect::SafeCast< SceneGraph::Layer >( dependNode );
         if ( layer )
         {
             isSelectable &= layer->IsSelectable();
@@ -699,7 +697,7 @@ void HierarchyNode::Evaluate(GraphDirection direction)
         }
     }
 
-    __super::Evaluate(direction);
+    Base::Evaluate(direction);
 }
 
 bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
@@ -1041,7 +1039,7 @@ bool HierarchyNode::ValidatePanel(const tstring& name)
     if ( name == TXT( "Hierarchy" ) )
         return true;
 
-    return __super::ValidatePanel( name );
+    return Base::ValidatePanel( name );
 }
 
 void HierarchyNode::CreatePanel(CreatePanelArgs& args)

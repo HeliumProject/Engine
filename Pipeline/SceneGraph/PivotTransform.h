@@ -14,7 +14,7 @@ namespace Helium
         class PIPELINE_API PivotTransform : public Transform
         {
         public:
-            REFLECT_DECLARE_CLASS( SceneGraph::PivotTransform, SceneGraph::Transform );
+            REFLECT_DECLARE_OBJECT( SceneGraph::PivotTransform, SceneGraph::Transform );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
@@ -27,7 +27,7 @@ namespace Helium
 
             virtual bool IsGroup()
             {
-                return GetType() == Reflect::GetType<SceneGraph::PivotTransform>();
+                return GetClass() == Reflect::GetClass<SceneGraph::PivotTransform>();
             }
 
             //

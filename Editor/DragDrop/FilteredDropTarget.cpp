@@ -23,7 +23,7 @@ FilteredDropTarget::~FilteredDropTarget()
 
 bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
 {
-    ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( !fileList )
     {
         return false;
@@ -89,7 +89,7 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
         return;
     }
 
-    ClipboardFileListPtr fileList = Reflect::ObjectCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    ClipboardFileListPtr fileList = Reflect::SafeCast< ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( !fileList )
     {
         args.m_Result = args.m_Default;

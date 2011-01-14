@@ -65,7 +65,7 @@ void ValueWindow::OnKeyDown(wxKeyEvent& e)
     }
 }
 
-REFLECT_DEFINE_CLASS( ValueWidget );
+REFLECT_DEFINE_OBJECT( ValueWidget );
 
 ValueWidget::ValueWidget( Inspect::Value* value )
 : m_ValueControl( value )

@@ -43,117 +43,37 @@ Archive::~Archive()
 {
 }
 
-void Archive::PreSerialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for serialization, no one used it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostSerialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostSerializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
-void Archive::PreDeserialize()
-{
-    StatusInfo info( *this, ArchiveStates::PreProcessing );
-    e_Status.Raise( info );
-
-    // we used to raise an event here for deserialization, no one was using it
-
-    info.m_ArchiveState = ArchiveStates::ArchiveStarting;
-    info.m_Progress = m_Progress = 0;
-    e_Status.Raise( info );
-}
-
-void Archive::PostDeserialize(std::vector< ObjectPtr >& append)
-{
-    StatusInfo info( *this, ArchiveStates::ArchiveComplete );
-    info.m_Progress = m_Progress = 100;
-    e_Status.Raise( info );
-
-    PROFILE_SCOPE_ACCUM(g_PostDeserializeAccum); 
-    info.m_ArchiveState = ArchiveStates::PostProcessing;
-    e_Status.Raise( info );
-}
-
-void Archive::PreSerialize(const ObjectPtr& element, const Field* field)
-{
-    V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-    V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-    for ( ; itr != end; ++itr )
-    {
-        if (field)
-        {
-            (*itr)->VisitField(element, field);
-        }
-        else
-        {
-            (*itr)->VisitObject(element);
-        }
-    }
-}
-
-void Archive::PostDeserialize(const ObjectPtr& element, const Field* field)
-{
-    V_ArchiveVisitor::const_iterator itr = m_Visitors.begin();
-    V_ArchiveVisitor::const_iterator end = m_Visitors.end();
-    for ( ; itr != end; ++itr )
-    {
-        if (field)
-        {
-            (*itr)->VisitField(element, field);
-        }
-        else
-        {
-            (*itr)->VisitObject(element);
-        }
-    }
-}
-
-bool Archive::TryObjectCallback( Object* element, ObjectCallback callback )
+bool Archive::TryObjectCallback( Object* object, ObjectCallback callback, const Field* field )
 {
     if ( Helium::IsDebuggerPresent() )
     {
-        (element->*callback)();
+        (object->*callback)( field );
     }
     else
     {
         try
         {
-            (element->*callback)();
+            (object->*callback)( field );
         }
         catch ( const Helium::Exception& exception )
         {
-            ExceptionInfo info( *this, element, callback, exception );
+            ArchiveExceptionInfo info( *this, object, callback, field, exception );
 
             d_Exception.Invoke( info );
 
             switch ( info.m_Action )
             {
-            case ExceptionActions::Unknown:
+            case ArchiveExceptionActions::Unknown:
                 {
                     throw;
                 }
 
-            case ExceptionActions::Accept:
+            case ArchiveExceptionActions::Accept:
                 {
                     return true;
                 }
 
-            case ExceptionActions::Reject:
+            case ArchiveExceptionActions::Reject:
                 {
                     return false;
                 }
@@ -166,9 +86,9 @@ bool Archive::TryObjectCallback( Object* element, ObjectCallback callback )
 
 #pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
 
-void Archive::Put( const ObjectPtr& element )
+void Archive::Put( Object* object )
 {
-    m_Objects.push_back( element );
+    m_Objects.push_back( object );
 }
 
 void Archive::Put( const std::vector< ObjectPtr >& elements )
@@ -194,7 +114,7 @@ ObjectPtr Archive::Get( const Class* searchClass )
     std::vector< ObjectPtr >::iterator end = elements.end();
     for ( ; itr != end; ++itr )
     {
-        if ( (*itr)->HasType( searchClass ) )
+        if ( (*itr)->IsClass( searchClass ) )
         {
             return *itr;
         }
@@ -268,10 +188,10 @@ ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteO
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ObjectPtr element, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     std::vector< ObjectPtr > elements;
-    elements.push_back( element );
+    elements.push_back( object );
     return ToArchive( path, elements, archiveType, error, byteOrder );
 }
 

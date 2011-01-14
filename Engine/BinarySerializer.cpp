@@ -47,7 +47,7 @@ bool BinarySerializer::Serialize( GameObject* pObject )
     BeginSerialize( true );
 
     // Serialize the object type reference.
-    GameObjectType* pType = pObject->GetGameObjectType();
+    const GameObjectType* pType = pObject->GetGameObjectType();
     HELIUM_ASSERT( pType );
     uint32_t typeIndex = ResolveTypeDependency( pType->GetName() );
     HELIUM_ASSERT( IsValid( typeIndex ) );
@@ -57,10 +57,14 @@ bool BinarySerializer::Serialize( GameObject* pObject )
     uint32_t templateIndex;
     SetInvalid( templateIndex );
 
-    GameObject* pTemplate = pObject->GetTemplate();
-    HELIUM_ASSERT( pTemplate );
-    templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
-    HELIUM_ASSERT( IsValid( templateIndex ) );
+    if( !pObject->IsDefaultTemplate() )
+    {
+        GameObject* pTemplate = pObject->GetTemplate();
+        HELIUM_ASSERT( pTemplate );
+        templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
+        HELIUM_ASSERT( IsValid( templateIndex ) );
+    }
+
     m_pPropertyStream->Write( &templateIndex, sizeof( templateIndex ), 1 );
 
     // Serialize the object owner.
@@ -266,7 +270,7 @@ void BinarySerializer::SerializeWideString( WideString& rValue )
 }
 
 /// @copydoc Serializer::SerializeObjectReference()
-void BinarySerializer::SerializeObjectReference( GameObjectType* /*pType*/, GameObjectPtr& rspObject )
+void BinarySerializer::SerializeObjectReference( const GameObjectType* /*pType*/, GameObjectPtr& rspObject )
 {
     if( ShouldSerializeCurrentProperty() )
     {

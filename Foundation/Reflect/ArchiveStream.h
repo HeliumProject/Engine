@@ -198,7 +198,7 @@ namespace Helium
             template <typename PointerT>
             inline Stream& Read(PointerT* ptr)
             {
-                // amount to read must align with stream element size
+                // amount to read must align with stream object size
                 HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamPrimitiveT) == 0  );
                 return ReadBuffer( (StreamPrimitiveT*)ptr, sizeof(PointerT) / sizeof(StreamPrimitiveT) );
                 Swizzle( ptr, m_ByteOrder != Helium::PlatformByteOrder );
@@ -221,7 +221,7 @@ namespace Helium
             template <typename PointerT>
             inline Stream& Write(const PointerT* ptr)
             {
-                // amount to write must align with stream element size
+                // amount to write must align with stream object size
                 HELIUM_COMPILE_ASSERT( sizeof(PointerT) % sizeof(StreamPrimitiveT) == 0  );
                 PointerT temp = *ptr;
                 Swizzle( temp, m_ByteOrder != Helium::PlatformByteOrder );

@@ -6,7 +6,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS( PathData );
+REFLECT_DEFINE_OBJECT( PathData );
 
 PathData::PathData()
 {
@@ -18,14 +18,12 @@ PathData::~PathData()
 
 void PathData::ConnectData( Helium::HybridPtr< void > data )
 {
-    __super::ConnectData( data );
-
     m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
 }
 
 bool PathData::Set( const Data* src, uint32_t flags )
 {
-    if ( GetType() != src->GetType() )
+    if ( GetClass() != src->GetClass() )
     {
         return false;
     }
@@ -37,14 +35,14 @@ bool PathData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool PathData::Equals( const Data* s ) const
+bool PathData::Equals( const Object* object ) const
 {
-    if ( GetType() != s->GetType() )
+    const PathData* rhs = SafeCast< PathData >( object );
+
+    if ( !rhs )
     {
         return false;
     }
-
-    const PathData* rhs = static_cast< const PathData* >( s );
 
     return rhs->m_Data.Get() == m_Data.Get();
 }
@@ -125,8 +123,8 @@ tistream& PathData::operator<<( tistream& stream )
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* element = (Object*)m_Instance;
-            element->RaiseChanged( m_Field );
+            Object* object = (Object*)m_Instance.Mutable();
+            object->RaiseChanged( m_Field );
         }
     }
 

@@ -14,7 +14,7 @@ namespace Helium
         class StripCanvasWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( StripCanvasWidget, Widget );
+            REFLECT_DECLARE_OBJECT( StripCanvasWidget, Widget );
 
             StripCanvasWidget()
                 : m_ContainerControl( NULL )

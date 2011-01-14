@@ -37,8 +37,8 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
 
     container->AddChild( label );
 
-    bool color3 = field->m_DataClass == Reflect::GetType<Color3Data>() || field->m_DataClass == Reflect::GetType<HDRColor3Data>();
-    bool color4 = field->m_DataClass == Reflect::GetType<Color4Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>();
+    bool color3 = field->m_DataClass == Reflect::GetClass<Color3Data>() || field->m_DataClass == Reflect::GetClass<HDRColor3Data>();
+    bool color4 = field->m_DataClass == Reflect::GetClass<Color4Data>() || field->m_DataClass == Reflect::GetClass<HDRColor4Data>();
     HELIUM_ASSERT( !(color3 && color4) ); // we shouldn't ever have both!
 
     if ( color3 || color4 )
@@ -125,7 +125,7 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
                 value->Bind( data );
             }
 
-            if ( field->m_DataClass == Reflect::GetType<HDRColor3Data>() || field->m_DataClass == Reflect::GetType<HDRColor4Data>() )
+            if ( field->m_DataClass == Reflect::GetClass<HDRColor3Data>() || field->m_DataClass == Reflect::GetClass<HDRColor4Data>() )
             {
                 SliderPtr slider = CreateControl<Slider>();
                 container->AddChild( slider );

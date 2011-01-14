@@ -75,7 +75,7 @@ void AssetClass::GatherSearchableProperties( Helium::SearchableProperties* prope
         properties->Insert( TXT( "AssetTag" ), (*itr) );
     }
 
-    __super::GatherSearchableProperties( properties );
+    Base::GatherSearchableProperties( properties );
 }
 
 namespace Helium
@@ -96,12 +96,12 @@ namespace Helium
             {
             }
 
-            virtual bool VisitField(Object* element, const Field* field) HELIUM_OVERRIDE
+            virtual bool VisitField(void* instance, const Field* field) HELIUM_OVERRIDE
             {
                 if ( field->m_DataClass == Reflect::GetClass< Reflect::PathData >() )
                 {
                     Helium::Path path;
-                    if ( Reflect::Data::GetValue( field->CreateData( element ), path ) )
+                    if ( Reflect::Data::GetValue( field->CreateData( instance ), path ) )
                     {
                         m_Dependencies.insert( path );
 
@@ -111,7 +111,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlVectorData >() )
                 {
-                    const Reflect::StlVectorData* arrayData = Reflect::DangerousCast<Reflect::StlVectorData>( field->CreateData( element ) );
+                    const Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>( field->CreateData( instance ) );
                     if ( arrayData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)arrayData->GetSize() < 1 )
@@ -134,7 +134,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlMapData >() )
                 {
-                    const Reflect::StlMapData* mapData = Reflect::DangerousCast<Reflect::StlMapData>( field->CreateData( element ) );
+                    const Reflect::StlMapData* mapData = Reflect::AssertCast<Reflect::StlMapData>( field->CreateData( instance ) );
                     if ( mapData->GetValueClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)mapData->GetSize() < 1 )
@@ -162,7 +162,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlSetData >() )
                 {
-                    const Reflect::StlSetData* setData = Reflect::DangerousCast<Reflect::StlSetData>( field->CreateData( element ) );
+                    const Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>( field->CreateData( instance ) );
                     if ( setData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)setData->GetSize() < 1 )
@@ -190,7 +190,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlVectorData >() )
                 {
-                    const Reflect::ObjectStlVectorData* arrayData = Reflect::DangerousCast< Reflect::ObjectStlVectorData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlVectorData* arrayData = Reflect::AssertCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
 
                     if ( (int)arrayData->GetSize() < 1 )
                     {
@@ -208,7 +208,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlMapData >() )
                 {
-                    const Reflect::ObjectStlMapData* mapData = Reflect::DangerousCast< Reflect::ObjectStlMapData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlMapData* mapData = Reflect::AssertCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
 
                     if ( (int)mapData->GetSize() < 1 )
                     {
@@ -230,7 +230,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlSetData >() )
                 {
-                    const Reflect::ObjectStlSetData* setData = Reflect::DangerousCast< Reflect::ObjectStlSetData >( field->CreateData( element ) );
+                    const Reflect::ObjectStlSetData* setData = Reflect::AssertCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
 
                     if ( (int)setData->GetSize() < 1 )
                     {
@@ -258,24 +258,24 @@ void AssetClass::GetFileReferences( std::set< Helium::Path >& fileReferences )
     AssetDependencyVisitor assetDepVisitor( fileReferences );
     this->Accept( assetDepVisitor );
 
-    //__super::GetFileReferences( fileReferences );
+    //Base::GetFileReferences( fileReferences );
 
     fileReferences.insert( m_ContentPath );
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* component )
 {
-    __super::ComponentChanged( component );
+    Base::ComponentChanged( component );
 }
 
 bool AssetClass::SetComponent( const Component::ComponentPtr& component, bool validate, tstring* error )
 {
-    return __super::SetComponent( component, validate, error );
+    return Base::SetComponent( component, validate, error );
 }
 
 bool AssetClass::RemoveComponent( const Reflect::Class* type )
 {
-    return __super::RemoveComponent( type );
+    return Base::RemoveComponent( type );
 }
 
 void AssetClass::ConnectDocument( Document* document )
@@ -332,17 +332,10 @@ bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, t
         return false;
     }
 
-    return __super::ValidateCompatible( component, error );
+    return Base::ValidateCompatible( component, error );
 }
 
 void AssetClass::LoadFinished()
 {
 
-}
-
-void AssetClass::CopyTo(const Reflect::ObjectPtr& destination) 
-{
-    // Restore the Asset Class ID after performing the copy
-    AssetClass* destinationAsset = Reflect::ObjectCast< AssetClass >( destination );
-    __super::CopyTo( destination );
 }

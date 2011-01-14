@@ -304,7 +304,7 @@ namespace Helium
         public:
             size_t operator( )( const tstring& str ) const
             {
-                return __super::operator()( str );
+                return stdext::hash_compare< tstring >::operator()( str );
             }
 
             bool operator( )( const tstring& str1, const tstring& str2 ) const
@@ -528,7 +528,7 @@ namespace Helium
             template< class T >
             T* Get( const Helium::TUID &uid ) const
             {
-                return Reflect::ObjectCast< T >( Get( uid ) );
+                return Reflect::SafeCast< T >( Get( uid ) );
             }
 
             template< class T >
@@ -555,7 +555,7 @@ namespace Helium
                 HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for( ; itor != end; ++itor )
                 {
-                    T* contentObject = Reflect::ObjectCast<T>( itor->second->GetPackage() );
+                    T* contentObject = Reflect::SafeCast<T>( itor->second->GetPackage() );
 
                     if (contentObject == NULL)
                     {
@@ -633,8 +633,8 @@ namespace Helium
 
         public:
             // for status and error reporting from Reflect::Archive events
-            void ArchiveStatus( const Reflect::StatusInfo& info );
-            void ArchiveException( const Reflect::ExceptionInfo& info );
+            void ArchiveStatus( const Reflect::ArchiveStatus& info );
+            void ArchiveException( const Reflect::ArchiveExceptionInfo& info );
 
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)

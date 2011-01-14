@@ -11,7 +11,7 @@ using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
 
-REFLECT_DEFINE_CLASS( Shader );
+REFLECT_DEFINE_OBJECT( Shader );
 
 #pragma TODO("Data-hide public reflected fields")
 
@@ -65,7 +65,7 @@ tstring Shader::GetApplicationTypeName() const
 
 void Shader::Create()
 {
-    __super::Create();
+    Base::Create();
 
     if ( m_AssetPath.Exists() )
     {
@@ -77,7 +77,7 @@ void Shader::Create()
 
 void Shader::Delete()
 {
-    __super::Delete();
+    Base::Delete();
 
     if ( m_BaseTexture != NULL )
     {

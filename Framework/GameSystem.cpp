@@ -66,14 +66,14 @@ GameSystem::~GameSystem()
 /// @param[in] pWorldType                    Type of World to create for the main world.  If this is null, the
 ///                                          actual World type will be used.
 bool GameSystem::Initialize(
-                            CommandLineInitialization& rCommandLineInitialization,
-                            ObjectTypeRegistration& rObjectTypeRegistration,
-                            MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
-                            ObjectLoaderInitialization& rObjectLoaderInitialization,
-                            ConfigInitialization& rConfigInitialization,
-                            WindowManagerInitialization& rWindowManagerInitialization,
-                            RendererInitialization& rRendererInitialization,
-                            GameObjectType* pWorldType )
+    CommandLineInitialization& rCommandLineInitialization,
+    ObjectTypeRegistration& rObjectTypeRegistration,
+    MemoryHeapPreInitialization& rMemoryHeapPreInitialization,
+    ObjectLoaderInitialization& rObjectLoaderInitialization,
+    ConfigInitialization& rConfigInitialization,
+    WindowManagerInitialization& rWindowManagerInitialization,
+    RendererInitialization& rRendererInitialization,
+    const GameObjectType* pWorldType )
 {
     // Initialize the timer first of all, in case someone wants to use it.
     Timer::StaticInitialize();
@@ -283,10 +283,12 @@ bool GameSystem::Initialize(
         return false;
     }
 
-    PackagePtr spLayerPackage( GameObject::Create< Package >( Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
+    PackagePtr spLayerPackage;
+    HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
     HELIUM_ASSERT( spLayerPackage );
 
-    LayerPtr spLayer( GameObject::Create< Layer >( Name( TXT( "Layer" ) ), spLayerPackage ) );
+    LayerPtr spLayer;
+    HELIUM_VERIFY( GameObject::Create< Layer >( spLayer, Name( TXT( "Layer" ) ), spLayerPackage ) );
     HELIUM_ASSERT( spLayer );
     spLayer->BindPackage( spLayerPackage );
 

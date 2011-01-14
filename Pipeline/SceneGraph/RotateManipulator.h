@@ -23,7 +23,7 @@ namespace Helium
 
         typedef RotationTypes::RotationType RotationType;
 
-        class PIPELINE_API RotateManipulator : public SceneGraph::TransformManipulator
+        class PIPELINE_API RotateManipulator : public TransformManipulator
         {
         private:
             SettingsManager* m_SettingsManager;

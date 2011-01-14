@@ -662,6 +662,62 @@ const T& Helium::DynArray< T, Allocator >::operator[]( ptrdiff_t index ) const
     return m_pBuffer[ index ];
 }
 
+/// Equality comparison operator.
+///
+/// @param[in] rOther  Array with which to compare.
+///
+/// @return  True if this array and the given array have the same number of elements, each element matches, and the
+///          elements are in the same order; false if the arrays differ.
+///
+/// @see operator!=()
+template< typename T, typename Allocator >
+bool Helium::DynArray< T, Allocator >::operator==( const DynArray& rOther ) const
+{
+    return Equals( rOther );
+}
+
+/// Equality comparison operator.
+///
+/// @param[in] rOther  Array with which to compare.
+///
+/// @return  True if this array and the given array have the same number of elements, each element matches, and the
+///          elements are in the same order; false if the arrays differ.
+///
+/// @see operator!=()
+template< typename T, typename Allocator >
+template< typename OtherAllocator >
+bool Helium::DynArray< T, Allocator >::operator==( const DynArray< T, OtherAllocator >& rOther ) const
+{
+    return Equals( rOther );
+}
+
+/// Inequality comparison operator.
+///
+/// @param[in] rOther  Array with which to compare.
+///
+/// @return  True if this array and the given array differ, false if they match.
+///
+/// @see operator==()
+template< typename T, typename Allocator >
+bool Helium::DynArray< T, Allocator >::operator!=( const DynArray& rOther ) const
+{
+    return !Equals( rOther );
+}
+
+/// Inequality comparison operator.
+///
+/// @param[in] rOther  Array with which to compare.
+///
+/// @return  True if this array and the given array differ, false if they match.
+///
+/// @see operator==()
+template< typename T, typename Allocator >
+template< typename OtherAllocator >
+bool Helium::DynArray< T, Allocator >::operator!=( const DynArray< T, OtherAllocator >& rOther ) const
+{
+    return !Equals( rOther );
+}
+
 /// Get the capacity to which this array should grow if growing to support the desired number of elements.
 ///
 /// @param[in] desiredCount  Desired minimum capacity.
@@ -741,6 +797,35 @@ Helium::DynArray< T, Allocator >& Helium::DynArray< T, Allocator >::Assign(
     }
 
     return *this;
+}
+
+/// Test whether this array has the same elements (in the same order) as the given array.
+///
+/// @param[in] rOther  Array with which to compare.
+///
+/// @return  True if this array and the given array have the same number of elements, each element matches, and the
+///          elements are in the same order; false if the arrays differ.
+template< typename T, typename Allocator >
+template< typename OtherAllocator >
+bool Helium::DynArray< T, Allocator >::Equals( const DynArray< T, OtherAllocator >& rOther ) const
+{
+    size_t size = m_size;
+    if( size != rOther.m_size )
+    {
+        return false;
+    }
+
+    const T* pThisBuffer = m_pBuffer;
+    const T* pOtherBuffer = rOther.m_pBuffer;
+    for( size_t index = 0; index < size; ++index )
+    {
+        if( pThisBuffer[ index ] != pOtherBuffer[ index ] )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /// Allocate memory for the specified number of elements, accounting for non-standard alignment requirements.

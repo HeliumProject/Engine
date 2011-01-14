@@ -442,6 +442,8 @@ void StlStringStlVectorData::Serialize(Archive& archive) const
 template <>
 void StlStringStlVectorData::Deserialize(Archive& archive)
 {
+    m_Data->clear();
+
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:

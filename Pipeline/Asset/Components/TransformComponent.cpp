@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS( TransformComponent );
+REFLECT_DEFINE_OBJECT( TransformComponent );
 
 void TransformComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

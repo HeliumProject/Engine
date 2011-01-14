@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_CLASS( Graph );
+REFLECT_DEFINE_OBJECT( Graph );
 
 void Graph::InitializeType()
 {

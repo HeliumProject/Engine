@@ -31,7 +31,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
 
             typedef SimpleStlSetData<DataT, DataClassT> StlSetDataT;
-            REFLECT_DECLARE_CLASS( StlSetDataT, StlSetData )
+            REFLECT_DECLARE_OBJECT( StlSetDataT, StlSetData )
 
             SimpleStlSetData();
             virtual ~SimpleStlSetData();

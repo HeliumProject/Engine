@@ -29,7 +29,7 @@ namespace Helium
         class Locator : public Instance
         {
         public:
-            REFLECT_DECLARE_CLASS( Locator, Instance );
+            REFLECT_DECLARE_OBJECT( Locator, Instance );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

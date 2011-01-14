@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS(ManifestVersion)
+REFLECT_DEFINE_OBJECT(ManifestVersion)
 
 void ManifestVersion::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

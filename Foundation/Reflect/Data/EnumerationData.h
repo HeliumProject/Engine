@@ -13,7 +13,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
             tstring m_String;
 
-            REFLECT_DECLARE_CLASS( EnumerationData, Data )
+            REFLECT_DECLARE_OBJECT( EnumerationData, Data )
 
             EnumerationData ();
             ~EnumerationData();

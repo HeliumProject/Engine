@@ -14,7 +14,7 @@ namespace Helium
         class FOUNDATION_API ColorPicker : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( ColorPicker, Control );
+            REFLECT_DECLARE_OBJECT( ColorPicker, Control );
 
             ColorPicker();
 

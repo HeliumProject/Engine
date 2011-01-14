@@ -848,7 +848,7 @@ int RotateManipulator::GetSpace() const
 
 void RotateManipulator::SetSpace(int space)
 {
-    m_Space = (ManipulatorSpace)space;
+    m_Space = static_cast< ManipulatorSpace::Enum >( space );
 
     RotateManipulatorAdapter* primary = PrimaryObject<RotateManipulatorAdapter>();
 

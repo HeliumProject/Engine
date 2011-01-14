@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( WindowSettings );
+REFLECT_DEFINE_OBJECT( WindowSettings );
 
 // Statics
 const tchar_t* WindowSettings::s_Reset = TXT( "resetWin" );

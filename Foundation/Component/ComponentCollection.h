@@ -33,7 +33,7 @@ namespace Helium
         class FOUNDATION_API ComponentCollection : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Object);
+            REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
             ComponentCollection();

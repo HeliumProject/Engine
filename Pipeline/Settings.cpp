@@ -2,4 +2,4 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_CLASS( Settings );
+REFLECT_DEFINE_OBJECT( Settings );

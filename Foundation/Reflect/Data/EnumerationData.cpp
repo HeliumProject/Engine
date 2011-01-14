@@ -7,7 +7,7 @@
 
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_CLASS(EnumerationData);
+REFLECT_DEFINE_OBJECT(EnumerationData);
 
 EnumerationData::EnumerationData ()
 {

@@ -35,7 +35,7 @@ namespace Helium
         class ChoiceWidget : public Widget
         {
         public:
-            REFLECT_DECLARE_CLASS( ChoiceWidget, Widget );
+            REFLECT_DECLARE_OBJECT( ChoiceWidget, Widget );
 
             ChoiceWidget()
                 : m_ChoiceControl( NULL )

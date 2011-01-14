@@ -12,7 +12,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ENUMERATION( LocatorShape );
-REFLECT_DEFINE_CLASS( Locator );
+REFLECT_DEFINE_OBJECT( Locator );
 
 void Locator::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -72,7 +72,7 @@ int Locator::GetShape() const
 
 void Locator::SetShape( int shape )
 {
-    m_Shape = static_cast< LocatorShape > (shape);
+    m_Shape = static_cast< LocatorShape::Enum >( shape );
 }
 
 void Locator::Evaluate(GraphDirection direction)

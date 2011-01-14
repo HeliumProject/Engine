@@ -3,7 +3,7 @@
 using namespace Helium;
 using namespace Helium::Asset;
 
-REFLECT_DEFINE_CLASS(SceneManifest);
+REFLECT_DEFINE_OBJECT(SceneManifest);
 
 void SceneManifest::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

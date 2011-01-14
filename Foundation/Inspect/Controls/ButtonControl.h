@@ -28,7 +28,7 @@ namespace Helium
         class FOUNDATION_API Button : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( Button, Control );
+            REFLECT_DECLARE_OBJECT( Button, Control );
 
             Button();
 

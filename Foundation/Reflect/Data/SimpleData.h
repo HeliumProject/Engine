@@ -31,7 +31,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
 
             typedef SimpleData<DataType> SimpleDataT;
-            REFLECT_DECLARE_CLASS( SimpleDataT, Data );
+            REFLECT_DECLARE_OBJECT( SimpleDataT, Data );
 
             SimpleData ();
             ~SimpleData();

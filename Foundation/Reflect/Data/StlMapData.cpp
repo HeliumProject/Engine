@@ -339,8 +339,8 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
             ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
 
             // downcast to data type
-            KeyClassT* keySer = DangerousCast<KeyClassT>(keyElem);
-            ValueClassT* dataSer = DangerousCast<ValueClassT>(dataElem);
+            KeyClassT* keySer = AssertCast<KeyClassT>(keyElem);
+            ValueClassT* dataSer = AssertCast<ValueClassT>(dataElem);
 
             // connect to our map key memory address
             keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
@@ -453,27 +453,27 @@ template SimpleStlMapData<Helium::GUID, GUIDData, Matrix4, Matrix4Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, UInt32Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, Matrix4, Matrix4Data>;
 
-REFLECT_DEFINE_CLASS(StlStringStlStringStlMapData);
-REFLECT_DEFINE_CLASS(StlStringBoolStlMapData);
-REFLECT_DEFINE_CLASS(StlStringUInt32StlMapData);
-REFLECT_DEFINE_CLASS(StlStringInt32StlMapData);
+REFLECT_DEFINE_OBJECT(StlStringStlStringStlMapData);
+REFLECT_DEFINE_OBJECT(StlStringBoolStlMapData);
+REFLECT_DEFINE_OBJECT(StlStringUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(StlStringInt32StlMapData);
 
-REFLECT_DEFINE_CLASS(UInt32StringStlMapData);
-REFLECT_DEFINE_CLASS(UInt32UInt32StlMapData);
-REFLECT_DEFINE_CLASS(UInt32Int32StlMapData);
-REFLECT_DEFINE_CLASS(UInt32UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32StringStlMapData);
+REFLECT_DEFINE_OBJECT(UInt32UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32Int32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(Int32StringStlMapData);
-REFLECT_DEFINE_CLASS(Int32UInt32StlMapData);
-REFLECT_DEFINE_CLASS(Int32Int32StlMapData);
-REFLECT_DEFINE_CLASS(Int32UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(Int32StringStlMapData);
+REFLECT_DEFINE_OBJECT(Int32UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(Int32Int32StlMapData);
+REFLECT_DEFINE_OBJECT(Int32UInt64StlMapData);
 
-REFLECT_DEFINE_CLASS(UInt64StringStlMapData);
-REFLECT_DEFINE_CLASS(UInt64UInt32StlMapData);
-REFLECT_DEFINE_CLASS(UInt64UInt64StlMapData);
-REFLECT_DEFINE_CLASS(UInt64Matrix4StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64StringStlMapData);
+REFLECT_DEFINE_OBJECT(UInt64UInt32StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64UInt64StlMapData);
+REFLECT_DEFINE_OBJECT(UInt64Matrix4StlMapData);
 
-REFLECT_DEFINE_CLASS(GUIDUInt32StlMapData);
-REFLECT_DEFINE_CLASS(GUIDMatrix4StlMapData);
-REFLECT_DEFINE_CLASS(TUIDUInt32StlMapData);
-REFLECT_DEFINE_CLASS(TUIDMatrix4StlMapData);
+REFLECT_DEFINE_OBJECT(GUIDUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(GUIDMatrix4StlMapData);
+REFLECT_DEFINE_OBJECT(TUIDUInt32StlMapData);
+REFLECT_DEFINE_OBJECT(TUIDMatrix4StlMapData);

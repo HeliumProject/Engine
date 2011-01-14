@@ -170,11 +170,11 @@ void ArchiveXML::Serialize(Object* object)
 
     SerializeHeader(object);
 
-    if (object->IsClass(Reflect::GetClass<Data>()))
-    {
-        Data* s = DangerousCast<Data>(object);
+    Data* data = SafeCast<Data>(object);
 
-        s->Serialize(*this);
+    if ( data )
+    {
+        data->Serialize(*this);
     }
     else
     {
@@ -417,11 +417,12 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 // this is our new object
                 ObjectPtr object = Registry::GetInstance()->CreateInstance( newState->m_Field->m_DataClass );
 
-                // if we are a data
-                if (object->IsClass(Reflect::GetClass<Data>()))
+                Data* data = SafeCast<Data>(object);
+
+                if ( data )
                 {
                     // connect the current instance to the data
-                    DangerousCast<Data>(object)->ConnectField(parentObject.Ptr(), newState->m_Field);
+                    data->ConnectField(parentObject.Ptr(), newState->m_Field);
                 }
 
                 if (object.ReferencesObject())
@@ -532,11 +533,11 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
             parentState->m_Object->PreDeserialize( topState->m_Field );
         }
 
-        // do data logic
-        if ( topState->m_Object->IsClass(Reflect::GetClass<Data>()) && !topState->m_Buffer.empty())
-        {
-            Data* data = DangerousCast<Data>(topState->m_Object);
+        Data* data = SafeCast< Data >( topState->m_Object );
 
+        // do data logic
+        if ( data && !topState->m_Buffer.empty())
+        {
             ArchiveXML xml;
             tstringstream stream (topState->m_Buffer);
             xml.m_Stream = new Reflect::TCharStream(&stream, false);

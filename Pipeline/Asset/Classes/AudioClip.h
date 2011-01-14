@@ -35,7 +35,7 @@ namespace Helium
             AudioClipMode     m_Mode;
 
         public:
-            REFLECT_DECLARE_CLASS( AudioClip, AssetClass );
+            REFLECT_DECLARE_OBJECT( AudioClip, AssetClass );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

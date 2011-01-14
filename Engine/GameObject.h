@@ -28,7 +28,7 @@
 /// @param[in] TYPE    GameObject type.
 /// @param[in] PARENT  Parent object type.
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
-        REFLECT_DECLARE_CLASS( TYPE, PARENT ) \
+        REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
         virtual const Lunar::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
@@ -44,7 +44,7 @@
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
-    REFLECT_DEFINE_CLASS( TYPE ) \
+    REFLECT_DEFINE_OBJECT( TYPE ) \
     \
     const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
     { \
@@ -139,7 +139,7 @@ namespace Lunar
     /// Base class for the engine's game object system.
     class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
     {
-        REFLECT_DECLARE_CLASS( GameObject, Reflect::Object )
+        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object )
 
     public:
         /// Destruction callback type.

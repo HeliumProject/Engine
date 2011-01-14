@@ -93,7 +93,7 @@ namespace Helium
         class FOUNDATION_API DocumentAttribute : public DocumentNode
         {
         public:
-            REFLECT_DECLARE_CLASS( DocumentAttribute, DocumentNode );
+            REFLECT_DECLARE_OBJECT( DocumentAttribute, DocumentNode );
 
             virtual const tstring& GetName()
             {
@@ -171,7 +171,7 @@ namespace Helium
         class FOUNDATION_API DocumentObject : public DocumentNode
         {
         public:
-            REFLECT_DECLARE_CLASS( DocumentObject, DocumentNode );
+            REFLECT_DECLARE_OBJECT( DocumentObject, DocumentNode );
 
             DocumentObject()
             {
@@ -269,7 +269,7 @@ namespace Helium
         class FOUNDATION_API Document : public DocumentObject
         {
         public:
-            REFLECT_DECLARE_CLASS( Document, DocumentObject );
+            REFLECT_DECLARE_OBJECT( Document, DocumentObject );
 
             void Initialize()
             {

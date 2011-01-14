@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::Label );
+REFLECT_DEFINE_OBJECT( Inspect::Label );
 
 Label::Label()
 : a_Ellipsize( true )

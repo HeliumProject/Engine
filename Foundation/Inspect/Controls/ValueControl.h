@@ -25,7 +25,7 @@ namespace Helium
         class FOUNDATION_API Value : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( Value, Control );
+            REFLECT_DECLARE_OBJECT( Value, Control );
 
             Value();
 

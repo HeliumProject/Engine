@@ -207,7 +207,7 @@ void Viewport::SaveSettings(SceneGraph::ViewportSettings* prefs)
 
     for(int i = 0; i < CameraMode::Count; ++i)
     {
-        CameraMode mode = (CameraMode)i; 
+        CameraMode mode = static_cast< CameraMode::Enum >( i ); 
         CameraSettingsPtr cameraPrefs = new CameraSettings(); 
         cameraPrefs->m_CameraMode = mode;
         SceneGraph::Camera* camera = GetCameraForMode( mode ); 
@@ -237,17 +237,17 @@ void Viewport::SetCameraMode(CameraMode mode)
 
 void Viewport::NextCameraMode()
 {
-    SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraMode::Count));
+    SetCameraMode( static_cast< CameraMode::Enum >( ((m_CameraMode + 1) % CameraMode::Count)) );
 }
 
 void Viewport::PreviousCameraMode()
 {
-    SetCameraMode( (CameraMode)( ( m_CameraMode + ( CameraMode::Count - 1 ) ) % CameraMode::Count ) );
+    SetCameraMode( static_cast< CameraMode::Enum >( ((m_CameraMode + (CameraMode::Count-1)) % CameraMode::Count)) );
 }
 
 void Viewport::NextGeometryMode()
 {
-    SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryMode::Count));
+    SetGeometryMode( static_cast< GeometryMode::Enum >( ((m_GeometryMode + 1) % GeometryMode::Count)) );
 }
 
 void Viewport::SetTool(SceneGraph::Tool* tool)

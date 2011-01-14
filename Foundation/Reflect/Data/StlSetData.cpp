@@ -176,7 +176,7 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
             ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<DataClassT>() );
 
             // downcast to data type
-            DataClassT* dataSer = DangerousCast<DataClassT>(dataElem);
+            DataClassT* dataSer = AssertCast<DataClassT>(dataElem);
 
             // connect to our map data memory address
             dataSer->ConnectData(const_cast<DataT*>(&(*itr)));
@@ -192,7 +192,7 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
     std::vector< ObjectPtr >::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-        Data* ser = DangerousCast<Data>(*itr);
+        Data* ser = AssertCast<Data>(*itr);
         ser->Disconnect();
 
         // might be useful to cache the data object here
@@ -262,9 +262,9 @@ template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
-REFLECT_DEFINE_CLASS( StlStringStlSetData );
-REFLECT_DEFINE_CLASS( UInt32StlSetData );
-REFLECT_DEFINE_CLASS( UInt64StlSetData );
-REFLECT_DEFINE_CLASS( GUIDStlSetData );
-REFLECT_DEFINE_CLASS( TUIDStlSetData );
-REFLECT_DEFINE_CLASS( PathStlSetData );
+REFLECT_DEFINE_OBJECT( StlStringStlSetData );
+REFLECT_DEFINE_OBJECT( UInt32StlSetData );
+REFLECT_DEFINE_OBJECT( UInt64StlSetData );
+REFLECT_DEFINE_OBJECT( GUIDStlSetData );
+REFLECT_DEFINE_OBJECT( TUIDStlSetData );
+REFLECT_DEFINE_OBJECT( PathStlSetData );

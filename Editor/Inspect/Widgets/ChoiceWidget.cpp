@@ -50,7 +50,7 @@ void ChoiceWindow::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-REFLECT_DEFINE_CLASS( ChoiceWidget );
+REFLECT_DEFINE_OBJECT( ChoiceWidget );
 
 ChoiceWidget::ChoiceWidget( Inspect::Choice* choice )
 : m_ChoiceControl( choice )

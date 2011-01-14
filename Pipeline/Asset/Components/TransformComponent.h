@@ -16,7 +16,7 @@ namespace Helium
 
         public:
 
-            REFLECT_DECLARE_CLASS( TransformComponent, Component::ComponentBase );
+            REFLECT_DECLARE_OBJECT( TransformComponent, Component::ComponentBase );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

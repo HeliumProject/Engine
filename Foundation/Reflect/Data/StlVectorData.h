@@ -33,7 +33,7 @@ namespace Helium
             Data::Pointer<DataType> m_Data;
 
             typedef SimpleStlVectorData<T> StlVectorDataT;
-            REFLECT_DECLARE_CLASS( StlVectorDataT, StlVectorData )
+            REFLECT_DECLARE_OBJECT( StlVectorDataT, StlVectorData )
 
                 SimpleStlVectorData();
             virtual ~SimpleStlVectorData();

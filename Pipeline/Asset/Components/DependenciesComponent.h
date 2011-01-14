@@ -16,7 +16,7 @@ namespace Helium
             std::set< Helium::Path > m_Paths;
 
         public:
-            REFLECT_DECLARE_CLASS( DependenciesComponent, ComponentBase );
+            REFLECT_DECLARE_OBJECT( DependenciesComponent, ComponentBase );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

@@ -67,3 +67,33 @@ namespace Helium
         };
     }
 }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
+public: \
+Enum m_Value; \
+ENUMERATION() : m_Value() {} \
+ENUMERATION( const ENUMERATION& e ) : m_Value( e.m_Value ) {} \
+ENUMERATION( const Enum& e ) : m_Value( e ) {} \
+operator const Enum&() const { return m_Value; } \
+static Helium::Reflect::Enumeration* CreateEnumeration( const tchar_t* name ); \
+static const Helium::Reflect::Enumeration* s_Enumeration;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
+Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration( const tchar_t* name ) \
+{ \
+    HELIUM_ASSERT( s_Enumeration == NULL ); \
+    Reflect::Enumeration* type = Reflect::Enumeration::Create< ENUMERATION >( name ); \
+    s_Enumeration = type; \
+    return type; \
+} \
+const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL;
+
+// declares an enumeration
+#define REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
+    _REFLECT_DECLARE_ENUMERATION( ENUMERATION )
+
+// defines an enumeration
+#define REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
+    _REFLECT_DEFINE_ENUMERATION( ENUMERATION )

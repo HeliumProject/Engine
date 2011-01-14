@@ -14,7 +14,7 @@ namespace Helium
             typedef Helium::Path DataType;
             Data::Pointer< DataType > m_Data;
 
-            REFLECT_DECLARE_CLASS( PathData, Data );
+            REFLECT_DECLARE_OBJECT( PathData, Data );
 
             PathData();
             ~PathData();

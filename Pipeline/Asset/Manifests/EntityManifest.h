@@ -31,7 +31,7 @@ namespace Helium
 
             }
 
-            REFLECT_DECLARE_CLASS(EntityManifest, AssetManifest);
+            REFLECT_DECLARE_OBJECT(EntityManifest, AssetManifest);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };

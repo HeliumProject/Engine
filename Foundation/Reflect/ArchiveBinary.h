@@ -5,6 +5,9 @@
 
 #include "Foundation/File/Path.h"
 
+// enable verbose archive printing
+//#define REFLECT_ARCHIVE_VERBOSE
+
 //  
 //    Reflect Binary Format:
 //  

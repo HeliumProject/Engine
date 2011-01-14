@@ -26,7 +26,7 @@ void ColorPickerWindow::OnChanged( wxCommandEvent& )
     m_ColorPickerWidget->GetControl()->Write();
 }
 
-REFLECT_DEFINE_CLASS( ColorPickerWidget );
+REFLECT_DEFINE_OBJECT( ColorPickerWidget );
 
 ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* colorPicker )
 : m_ColorPickerControl( colorPicker )

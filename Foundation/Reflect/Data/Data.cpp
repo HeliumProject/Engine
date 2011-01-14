@@ -218,11 +218,10 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     // check to see if we can do a container cast, casting the data within the container
     if (src->IsClass( Reflect::GetClass<ContainerData>()) && dest->IsClass( Reflect::GetClass<ContainerData>() ))
     {
-        if (src->IsClass( Reflect::GetClass<StlVectorData>() ) && dest->IsClass( Reflect::GetClass<StlVectorData>() ))
+        const StlVectorData* srcArray = AssertCast<StlVectorData>( src );
+        StlVectorData* destArray = AssertCast<StlVectorData>( dest );
+        if ( srcArray && destArray )
         {
-            const StlVectorData* srcArray = DangerousCast<StlVectorData>( src );
-            StlVectorData* destArray = DangerousCast<StlVectorData>( dest );
-
             if (CastSupported( srcArray->GetItemClass(), destArray->GetItemClass() ))
             {
                 destArray->SetSize( srcArray->GetSize() );
@@ -237,9 +236,8 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<StlSetData>() ) && dest->IsClass( Reflect::GetClass<StlSetData>() ))
         {
-            const StlSetData* srcSet = DangerousCast<StlSetData>( src );
-            StlSetData* destSet = DangerousCast<StlSetData>( dest );
-
+            const StlSetData* srcSet = AssertCast<StlSetData>( src );
+            StlSetData* destSet = AssertCast<StlSetData>( dest );
             if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
             {
                 std::vector< ConstDataPtr > data;
@@ -263,9 +261,8 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<StlMapData>() ) && dest->IsClass( Reflect::GetClass<StlMapData>() ))
         {
-            const StlMapData* srcMap = DangerousCast<StlMapData>( src );
-            StlMapData* destMap = DangerousCast<StlMapData>( dest );
-
+            const StlMapData* srcMap = AssertCast<StlMapData>( src );
+            StlMapData* destMap = AssertCast<StlMapData>( dest );
             if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
             {
                 StlMapData::V_ConstValueType data;
@@ -290,9 +287,8 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<ObjectStlMapData>() ) && dest->IsClass( Reflect::GetClass<ObjectStlMapData>() ))
         {
-            const ObjectStlMapData* srcObjectMap = DangerousCast<ObjectStlMapData>( src );
-            ObjectStlMapData* destObjectMap = DangerousCast<ObjectStlMapData>( dest );
-
+            const ObjectStlMapData* srcObjectMap = AssertCast<ObjectStlMapData>( src );
+            ObjectStlMapData* destObjectMap = AssertCast<ObjectStlMapData>( dest );
             if (CastSupported( srcObjectMap->GetKeyClass(), destObjectMap->GetKeyClass() ))
             {
                 ObjectStlMapData::V_ConstValueType data;

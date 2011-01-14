@@ -13,7 +13,7 @@ namespace Helium
         class FOUNDATION_API Slider : public Control
         {
         public:
-            REFLECT_DECLARE_CLASS( Slider, Control );
+            REFLECT_DECLARE_OBJECT( Slider, Control );
 
             Slider();
 

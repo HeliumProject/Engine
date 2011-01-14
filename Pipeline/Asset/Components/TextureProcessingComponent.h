@@ -51,7 +51,7 @@ namespace Helium
 
         public:
 
-            REFLECT_DECLARE_CLASS( TextureProcessingComponent, Component::ComponentBase );
+            REFLECT_DECLARE_OBJECT( TextureProcessingComponent, Component::ComponentBase );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

@@ -7,7 +7,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-REFLECT_DEFINE_CLASS( TreeCanvas );
+REFLECT_DEFINE_OBJECT( TreeCanvas );
 
 const static int SCROLL_INCREMENT = 8;
 

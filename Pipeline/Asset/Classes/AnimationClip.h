@@ -37,7 +37,7 @@ namespace Helium
             AnimationClipMode   m_Mode;
 
         public:
-            REFLECT_DECLARE_CLASS( AnimationClip, AssetClass );
+            REFLECT_DECLARE_OBJECT( AnimationClip, AssetClass );
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 

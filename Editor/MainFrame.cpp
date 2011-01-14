@@ -1325,7 +1325,7 @@ void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >()->SetColorMode( ( ViewColorMode::Enum )( newColorModeItr->second ) );
     }
 }
 
@@ -1831,9 +1831,9 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
     int32_t selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
-        if ( args.m_NewTool->IsClass( Reflect::GetClass< SceneGraph::TransformManipulator >() ) )
+        SceneGraph::TransformManipulator* manipulator = Reflect::SafeCast< SceneGraph::TransformManipulator >( args.m_NewTool );
+        if ( manipulator )
         {
-            SceneGraph::TransformManipulator* manipulator = Reflect::DangerousCast< SceneGraph::TransformManipulator >( args.m_NewTool );
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:

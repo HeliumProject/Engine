@@ -32,7 +32,7 @@ namespace Helium
         class PIPELINE_API GridSettings : public Settings
         {
         public:
-            REFLECT_DECLARE_CLASS( GridSettings, Settings );
+            REFLECT_DECLARE_OBJECT( GridSettings, Settings );
 
             GridSettings( const tstring& version = TXT( "" ),
                 GridUnit units = GridUnit::Meters,

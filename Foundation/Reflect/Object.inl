@@ -57,22 +57,6 @@ void Helium::Reflect::ObjectRefCountSupport::Destroy( Object* pObject )
 }
 
 //
-// DangerousCast does not type checking
-//
-
-template<class DerivedT>
-inline DerivedT* Helium::Reflect::DangerousCast(Reflect::Object* base)
-{
-    return static_cast<DerivedT*>(base);
-}
-
-template<class DerivedT>
-inline const DerivedT* Helium::Reflect::DangerousCast(const Reflect::Object* base)
-{
-    return static_cast<const DerivedT*>(base);
-}
-
-//
 // AssertCast type checks in debug and asserts if failure, does no type checking in release
 //
 
@@ -84,7 +68,7 @@ inline DerivedT* Helium::Reflect::AssertCast( Reflect::Object* base )
         HELIUM_ASSERT( base->IsClass( GetClass<DerivedT>() ) );
     }
 
-    return DangerousCast<DerivedT>( base );
+    return static_cast< DerivedT* >( base );
 }
 
 template<class DerivedT>
@@ -95,7 +79,7 @@ inline const DerivedT* Helium::Reflect::AssertCast(const Reflect::Object* base)
         HELIUM_ASSERT( base->IsClass( GetClass<DerivedT>() ) );
     }
 
-    return DangerousCast<DerivedT>( base );
+    return static_cast< const DerivedT* >( base );
 }
 
 //
@@ -110,7 +94,7 @@ inline DerivedT* Helium::Reflect::ThrowCast(Reflect::Object* base)
         throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
     }
 
-    return DangerousCast<DerivedT>( base );
+    return static_cast< DerivedT* >( base );
 }
 
 template<class DerivedT>
@@ -121,7 +105,7 @@ inline const DerivedT* Helium::Reflect::ThrowCast(const Reflect::Object* base)
         throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_Name, GetClass<DerivedT>()->m_Name );
     }
 
-    return DangerousCast<DerivedT>( base );
+    return static_cast< const DerivedT* >( base );
 }
 
 //
@@ -133,7 +117,7 @@ inline DerivedT* Helium::Reflect::SafeCast(Reflect::Object* base)
 {
     if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {
-        return DangerousCast<DerivedT>( base );
+        return static_cast< DerivedT* >( base );
     }
     else
     {
@@ -146,7 +130,7 @@ inline const DerivedT* Helium::Reflect::SafeCast(const Reflect::Object* base)
 {
     if ( base != NULL && base->IsClass( GetClass<DerivedT>() ) )
     {
-        return DangerousCast<DerivedT>( base );
+        return static_cast< const DerivedT* >( base );
     }
     else
     {

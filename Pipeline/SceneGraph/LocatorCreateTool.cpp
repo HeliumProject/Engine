@@ -110,7 +110,7 @@ int LocatorCreateTool::GetLocatorShape() const
 
 void LocatorCreateTool::SetLocatorShape(int value)
 {
-    s_Shape = static_cast< LocatorShape > (value);
+    s_Shape = static_cast< LocatorShape::Enum >( value );
 
     Place(Matrix4::Identity);
 }

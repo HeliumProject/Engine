@@ -21,7 +21,7 @@ namespace Helium
             // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
             std::vector< float32_t > m_Weights;
 
-            REFLECT_DECLARE_CLASS(Influence, Reflect::Object);
+            REFLECT_DECLARE_OBJECT(Influence, Reflect::Object);
 
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
         };
@@ -32,7 +32,7 @@ namespace Helium
         class Skin : public SceneNode
         {
         public:
-            REFLECT_DECLARE_CLASS( Skin, SceneNode );
+            REFLECT_DECLARE_OBJECT( Skin, SceneNode );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

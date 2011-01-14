@@ -12,7 +12,7 @@ namespace Helium
             typedef ObjectPtr DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( PointerData, Data );
+            REFLECT_DECLARE_OBJECT( PointerData, Data );
 
             PointerData ();
             ~PointerData();

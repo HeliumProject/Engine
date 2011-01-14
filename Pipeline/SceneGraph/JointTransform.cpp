@@ -15,7 +15,7 @@ using namespace Helium::SceneGraph;
 
 static D3DMATERIAL9 g_JointTransformMaterial;
 
-REFLECT_DEFINE_CLASS( JointTransform );
+REFLECT_DEFINE_OBJECT( JointTransform );
 
 void JointTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

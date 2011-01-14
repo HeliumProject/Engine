@@ -4,7 +4,7 @@
 using namespace Helium;
 using namespace Helium::Inspect;
 
-REFLECT_DEFINE_CLASS( Inspect::CheckBox );
+REFLECT_DEFINE_OBJECT( Inspect::CheckBox );
 
 CheckBox::CheckBox()
 : a_Highlight( false )

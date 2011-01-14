@@ -236,14 +236,14 @@ namespace Helium
                 std::vector< ObjectPtr > archiveObjects;
                 Get( archiveObjects );
 
-                std::vector< ObjectPtr >::iterator itor = archiveObjects.begin();
+                std::vector< ObjectPtr >::iterator itr = archiveObjects.begin();
                 std::vector< ObjectPtr >::iterator end = archiveObjects.end();
-
-                for( ; itor != end; ++itor )
+                for( ; itr != end; ++itr )
                 {
-                    if( (*itor)->HasType( Reflect::GetType<T>() ) ) 
+                    T* casted = Reflect::SafeCast< T >( *itr )
+                    if( casted ) 
                     {
-                        elements.push_back( Reflect::DangerousCast< T >( *itor )  );
+                        elements.push_back( casted );
                     }
                 }
             }

@@ -16,7 +16,7 @@ namespace Helium
             typedef std::vector< ObjectPtr > DataType;
             Data::Pointer<DataType> m_Data;
 
-            REFLECT_DECLARE_CLASS( ObjectStlVectorData, ContainerData )
+            REFLECT_DECLARE_OBJECT( ObjectStlVectorData, ContainerData )
 
             ObjectStlVectorData();
             virtual ~ObjectStlVectorData();

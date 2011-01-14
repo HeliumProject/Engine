@@ -21,7 +21,7 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 using namespace Helium::Component;
 
-REFLECT_DEFINE_CLASS(EntityInstance);
+REFLECT_DEFINE_OBJECT(EntityInstance);
 
 void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
 {

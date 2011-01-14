@@ -9,7 +9,7 @@ namespace Helium
         class FOUNDATION_API BitfieldData : public EnumerationData
         {
         public:
-            REFLECT_DECLARE_CLASS( BitfieldData, EnumerationData )
+            REFLECT_DECLARE_OBJECT( BitfieldData, EnumerationData )
 
             BitfieldData ();
             ~BitfieldData();

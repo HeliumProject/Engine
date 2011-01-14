@@ -123,7 +123,7 @@ int VolumeCreateTool::GetVolumeShape() const
 
 void VolumeCreateTool::SetVolumeShape(int value)
 {
-    s_Shape = static_cast< VolumeShape > (value);
+    s_Shape = static_cast< VolumeShape::Enum > (value);
 
     Place(Matrix4::Identity);
 }

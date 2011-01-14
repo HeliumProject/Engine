@@ -9,10 +9,21 @@ namespace Helium
     {
         const static tchar_t CONTAINER_ATTR_NAME[] = TXT( "name" );
 
-        //
+        ///////////////////////////////////////////////////////////////////////
+        namespace ContainerHint
+        {
+            enum Hints
+            {
+                Advanced         = 1 << 0,
+            };
+
+            const uint32_t Default = 0;
+        }
+        typedef uint32_t ContainerHints;
+
+        ///////////////////////////////////////////////////////////////////////
         // Contains other controls and distributes layout logic
         //
-
         class FOUNDATION_API Container : public Control
         {
         public:
@@ -65,6 +76,10 @@ namespace Helium
                 path += TXT( "|" ) + a_Name.Get();
             }
 
+            ContainerHints GetHints() const;
+            void SetHints( const ContainerHints hints );
+            void AddHints( const ContainerHints hints );
+
             // recusively binds contained controls to data
             virtual void Bind(const DataBindingPtr& data) HELIUM_OVERRIDE;
 
@@ -97,6 +112,8 @@ namespace Helium
 
             // the path of the container
             mutable tstring m_Path;
+
+            ContainerHints m_Hints;
         };
 
         typedef Helium::StrongPtr<Container> ContainerPtr;

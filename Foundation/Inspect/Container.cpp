@@ -7,6 +7,7 @@ using namespace Helium::Inspect;
 REFLECT_DEFINE_CLASS( Inspect::Container );
 
 Container::Container()
+: m_Hints( ContainerHint::Default )
 {
     a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );
     a_IsReadOnly.Changed().AddMethod( this, &Container::IsReadOnlyChanged );
@@ -80,6 +81,21 @@ void Container::Clear()
         // do the remove work
         RemoveChild( m_Children.back() );
     }
+}
+
+ContainerHints Container::GetHints() const
+{
+    return m_Hints;
+}
+
+void Container::SetHints( const ContainerHints hints )
+{
+    m_Hints = hints;
+}
+
+void Container::AddHints( const ContainerHints hints )
+{
+    m_Hints |= hints;
 }
 
 void Container::Bind(const DataBindingPtr& data)

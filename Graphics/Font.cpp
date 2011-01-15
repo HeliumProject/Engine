@@ -6,6 +6,8 @@
 
 using namespace Lunar;
 
+L_DEFINE_ENUMERATION( Font::ECompression, LUNAR_GRAPHICS_API );
+
 L_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 
 /// Constructor.
@@ -76,7 +78,7 @@ bool Font::BeginPrecacheResourceData()
 
     // Allocate and begin loading texture resources.
     ERendererPixelFormat format =
-        ( m_textureCompression == COMPRESSION_COLOR_COMPRESSED ? RENDERER_PIXEL_FORMAT_BC1 : RENDERER_PIXEL_FORMAT_R8 );
+        ( m_textureCompression == ECompression::COLOR_COMPRESSED ? RENDERER_PIXEL_FORMAT_BC1 : RENDERER_PIXEL_FORMAT_R8 );
     size_t blockRowCount = PixelUtil::PixelToBlockRowCount( m_textureSheetHeight, format );
 
     uint16_t textureSheetWidth = Max< uint16_t >( m_textureSheetWidth, 1 );

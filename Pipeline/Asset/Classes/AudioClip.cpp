@@ -19,7 +19,7 @@ void AudioClip::GatherSearchableProperties( Helium::SearchableProperties* proper
     if ( modeEnum )
     {
         tstring mode;
-        if ( modeEnum->GetElementLabel( (uint32_t)m_Mode, mode ) )
+        if ( modeEnum->GetElementName( (uint32_t)m_Mode, mode ) )
         {
             properties->Insert( modeEnum->m_Name, mode );
         }

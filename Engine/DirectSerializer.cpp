@@ -125,6 +125,12 @@ void DirectSerializer::SerializeEnum( int32_t& rValue, uint32_t /*nameCount*/, c
     WriteValue( rValue );
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void DirectSerializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+    WriteValue( rValue );
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void DirectSerializer::SerializeCharName( CharName& rValue )
 {

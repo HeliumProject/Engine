@@ -54,6 +54,7 @@ namespace Lunar
         virtual void SerializeFloat64( float64_t& rValue );
         virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
         virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
+        virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
         virtual void SerializeCharName( CharName& rValue );
         virtual void SerializeWideName( WideName& rValue );
         virtual void SerializeCharString( CharString& rValue );
@@ -164,6 +165,25 @@ namespace Lunar
             uint32_t m_nameCount;
             /// Array of enumeration name strings.
             const tchar_t* const* m_ppNames;
+        };
+
+        /// Enumeration value writer.
+        class ReflectEnumFormatter
+        {
+        public:
+            /// @name Construction/Destruction
+            //@{
+            ReflectEnumFormatter( const Helium::Reflect::Enumeration* pEnumeration );
+            //@}
+
+            /// @name Overloaded Operators
+            //@{
+            void operator()( XmlSerializerBase& rSerializer, int32_t value ) const;
+            //@}
+
+        private:
+            /// Enumeration reflection information
+            const Helium::Reflect::Enumeration* m_enumeration;
         };
 
         /// Name value writer.

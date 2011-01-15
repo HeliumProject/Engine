@@ -604,7 +604,7 @@ void FontResourceHandler::CompressTexture(
 
     // If the output is to be uncompressed grayscale data, simply copy the data to the output texture, as it's already
     // uncompressed grayscale data.
-    if( compression == Font::COMPRESSION_GRAYSCALE_UNCOMPRESSED )
+    if( compression == Font::ECompression::GRAYSCALE_UNCOMPRESSED )
     {
         size_t pixelCount = static_cast< size_t >( textureWidth ) * static_cast< size_t >( textureHeight );
         pOutputSheet->AddArray( pGrayscaleData, pixelCount );

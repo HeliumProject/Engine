@@ -112,6 +112,11 @@ void NullLinker::SerializeEnum( int32_t& /*rValue*/, uint32_t /*nameCount*/, con
 {
 }
 
+/// @name Serializer::SerializeEnum()
+void NullLinker::SerializeEnum( int32_t& /*rValue*/, const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+}
+
 /// @name Serializer::SerializeCharName()
 void NullLinker::SerializeCharName( CharName& /*rValue*/ )
 {

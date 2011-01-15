@@ -766,6 +766,13 @@ void GameObjectLoader::Linker::SerializeEnum(
 {
 }
 
+/// @name Serializer::SerializeEnum()
+void GameObjectLoader::Linker::SerializeEnum(
+    int32_t& /*rValue*/,
+    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+}
+
 /// @name Serializer::SerializeCharName()
 void GameObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
 {

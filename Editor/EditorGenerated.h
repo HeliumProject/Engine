@@ -11,7 +11,6 @@
 #include <wx/intl.h>
 
 class wxBitmapToggleButton;
-namespace Helium{ namespace Editor{ class DrawerPanel; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class ListResultsView; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
@@ -361,7 +360,6 @@ namespace Helium
 			
 			public:
 				wxSearchCtrl* m_VaultSearchBox;
-				Helium::Editor::DrawerPanel* m_DrawerPanel;
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();

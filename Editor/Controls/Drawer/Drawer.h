@@ -34,22 +34,25 @@ namespace Helium
                 MouseOverToOpen     = 1 << 1,          // Drawers open when the button is moused over
             };
 
-            const uint32_t Default = ClickToOpen | MouseOverToOpen;
+            const uint32_t Default = ClickToOpen;
         }
         typedef uint32_t DrawerButtonStyle;
 
         /////////////////////////////////////////////////////////////////////////////
-        class Drawer : public wxEvtHandler
+        class Drawer : public wxPanel
         {
         public:
-            Drawer( wxWindow* parent, wxPanel* panel, const wxString& title, const wxBitmap& icon, const DrawerButtonStyle style = DrawerButtonStyles::Default );
+            Drawer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
             virtual ~Drawer();
 
-            const wxString& GetTitle() const;
-            const wxBitmap& GetIcon() const;
+            virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
+            void SetIcon( const tstring& icon );
 
             wxToggleButton* GetButton();
             int32_t GetButtonID() const;
+
+            wxPanel* GetPanel();
+            void SetPanel( wxPanel* panel );
 
             void SetAuiManager( wxAuiManager* auiManager );
 
@@ -77,13 +80,15 @@ namespace Helium
 
         private:
             wxWindow* m_Parent;
-            wxPanel* m_Panel;
-            wxString m_Title;
-            wxBitmap m_Icon;
-            DrawerButtonStyle m_Style;
 
+            wxString m_Icon;
+
+            wxSizer* m_ButtonSizer;
             wxToggleButton* m_Button;
+            DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
+
+            wxPanel* m_Panel;
 
             wxPoint m_FloatingPosition;
             

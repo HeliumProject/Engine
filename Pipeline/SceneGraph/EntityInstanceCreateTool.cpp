@@ -2,6 +2,7 @@
 #include "EntityInstanceCreateTool.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Inspect/Container.h"
 
 #include "Pipeline/SceneGraph/Mesh.h"
 #include "Pipeline/SceneGraph/Scene.h"
@@ -155,24 +156,29 @@ void EntityInstanceCreateTool::CreateProperties()
         }
         m_Generator->Pop();
 
-        m_Generator->PushContainer();
+        Inspect::Container* container = m_Generator->PushContainer();
+        container->SetUIHints( Inspect::UIHint::Popup );
         {
-            m_Generator->AddLabel( TXT( "Show Pointer" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetPointerVisible, &EntityInstanceCreateTool::SetPointerVisible) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Show Pointer" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetPointerVisible, &EntityInstanceCreateTool::SetPointerVisible) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Show Bounds" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetBoundsVisible, &EntityInstanceCreateTool::SetBoundsVisible) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Show Bounds" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetBoundsVisible, &EntityInstanceCreateTool::SetBoundsVisible) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Show Geometry" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Show Geometry" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, bool> (this, &EntityInstanceCreateTool::GetGeometryVisible, &EntityInstanceCreateTool::SetGeometryVisible) );
+            }
+            m_Generator->Pop();
         }
         m_Generator->Pop();
     }

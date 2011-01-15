@@ -8,7 +8,6 @@
 #include "Precompile.h"
 
 
-#include "Controls/Drawer/DrawerPanel.h"
 #include "Editor/Controls/MenuButton.h"
 #include "Editor/Vault/ListResultsView.h"
 #include "wx/tglbtn.h"
@@ -903,12 +902,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
 	
 	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_ToolsPropertiesPanel->Hide();
-	
 	bSizer26->Add( m_ToolsPropertiesPanel, 1, wxEXPAND | wxALL, 0 );
-	
-	m_DrawerPanel = new Helium::Editor::DrawerPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer26->Add( m_DrawerPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();

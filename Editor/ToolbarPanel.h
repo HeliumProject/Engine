@@ -26,7 +26,7 @@ namespace Helium
 
             wxPanel* GetToolsPropertiesPanel()
             {
-                return m_ToolsPropertiesPanel;
+                return (wxPanel*)m_ToolsPropertiesPanel;
             }
 
             StripCanvas& GetCanvas()
@@ -52,8 +52,8 @@ namespace Helium
             SceneGraph::PropertiesGenerator m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
             SceneGraph::PropertiesManager m_ToolPropertiesManager;
 
-            TestPanelGenerated* m_TestPanelGenerated;
-            Drawer* m_TestDrawer;
+            //TestPanelGenerated* m_TestPanelGenerated;
+            //Drawer* m_TestDrawer;
         };
     }
 }

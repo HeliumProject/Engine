@@ -28,19 +28,7 @@ void ButtonWindow::SetIcon( const tstring& icon )
 {
     HELIUM_ASSERT( m_Sizer );
 
-    if ( m_Button )
-    {
-        m_Sizer->Detach( m_Button );
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
-
-    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
-    HELIUM_ASSERT( buttonControl );
-    m_Button = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetIcon( (wxArtID)buttonControl->a_Icon.Get().c_str() ) );
-
-    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
-
+    m_Button->SetBitmap( wxArtProvider::GetIcon( (wxArtID)icon.c_str() ) );
     Layout();
 }
 
@@ -48,19 +36,7 @@ void ButtonWindow::SetLabel( const tstring& label )
 {
     HELIUM_ASSERT( m_Sizer );
 
-    if ( m_Button )
-    {
-        m_Sizer->Detach( m_Button );
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
-
-    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
-    HELIUM_ASSERT( buttonControl );
-    m_Button = new wxButton( this, wxID_ANY, buttonControl->a_Label.Get().c_str() );
-
-    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
-
+    m_Button->SetLabel( label );
     Layout();
 }
 

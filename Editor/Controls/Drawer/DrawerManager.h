@@ -8,11 +8,11 @@ namespace Helium
     {
         class MainFrame;
 
-        class DrawerPanel : public wxPanel
+        class DrawerManager
         {
         public:
-            DrawerPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
-            virtual ~DrawerPanel();
+            DrawerManager();
+            virtual ~DrawerManager();
 
             void SetAuiManager( wxAuiManager* auiManager );
             void AddDrawer( Drawer* drawer );

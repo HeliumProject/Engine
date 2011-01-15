@@ -8,7 +8,7 @@
 #include "Editor/App.h"
 #include "Editor/Dialogs/FileDialog.h"
 
-#include "Editor/Controls/Drawer/DrawerPanel.h"
+#include "Editor/Controls/Drawer/DrawerManager.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -26,10 +26,10 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // Tool Bar Drawers
-    m_TestPanelGenerated = new TestPanelGenerated( m_DrawerPanel );
-    m_TestPanelGenerated->Hide();
-    m_TestDrawer = new Drawer( m_DrawerPanel, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
-    m_DrawerPanel->AddDrawer( m_TestDrawer );
+    //m_TestPanelGenerated = new TestPanelGenerated( m_DrawerManager );
+    //m_TestPanelGenerated->Hide();
+    //m_TestDrawer = new Drawer( m_DrawerManager, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
+    //m_DrawerManager->AddDrawer( m_TestDrawer );
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 

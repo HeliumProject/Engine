@@ -11,31 +11,39 @@ static int s_PopupOffsetY = 0; // Pixel offset for top of popup window
 
 static int s_ButtonMouseOverDelayMilliseconds = 500;
 
-Drawer::Drawer( wxWindow* parent, wxPanel* panel, const wxString& title, const wxBitmap& icon, const DrawerButtonStyle style ) 
-: m_Parent( parent )
-, m_Panel( panel )
-, m_Title( title )
-, m_Icon( icon )
-, m_Style( style )
+Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
+: wxPanel( parent, id, pos, size, style )
+, m_Parent( parent )
+, m_Icon( wxART_MISSING_IMAGE )
+, m_ButtonSizer( NULL )
 , m_Button( NULL )
+, m_ButtonStyle( DrawerButtonStyles::Default )
 , m_FloatingPosition( wxDefaultPosition )
 , m_AuiManager( NULL )
 , m_PaneInfo( NULL )
 , m_DrawerWindow( NULL )
 {
+    m_ButtonSizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( m_ButtonSizer );
+
+    SetLabel( wxT( "TEMP" ) );
+
     // Set up the button
-    m_Button = new wxToggleButton( m_Parent, wxID_ANY, m_Title, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_Button = new wxToggleButton( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
     m_Button->SetValue( false );
     //m_Button->SetBitmap( m_Icon );
     //m_Button->SetMinSize( m_Button->GetBestSize() ); // this should only need to be called after changing the size (padding, margins, etc);
 
+    // Add the button to the sizer
+    m_ButtonSizer->Add( m_Button, 1, wxEXPAND | wxALL, 0 );
+
     // Connect listeners
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::ClickToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::ClickToOpen ) )
     {
         m_Button->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( Drawer::OnButtonClicked ), NULL, this );
     }
 
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::MouseOverToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
     {
         m_Button->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( Drawer::OnMouseEnterButton ), NULL, this );
         m_Button->Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveButton ), NULL, this );
@@ -48,12 +56,12 @@ Drawer::Drawer( wxWindow* parent, wxPanel* panel, const wxString& title, const w
 Drawer::~Drawer()
 {
     // Disconnect listeners
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::ClickToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::ClickToOpen ) )
     {
         m_Button->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( Drawer::OnButtonClicked ), NULL, this );
     }
 
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::MouseOverToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
     {
         m_Button->Disconnect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( Drawer::OnMouseEnterButton ), NULL, this );
         m_Button->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveButton ), NULL, this );
@@ -73,7 +81,7 @@ void Drawer::DestroyWindow()
 
     m_DrawerWindow->Hide();
 
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::MouseOverToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
     {
         m_Panel->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
     }
@@ -107,14 +115,28 @@ void Drawer::SetAuiManager( wxAuiManager* auiManager )
     m_AuiManager = auiManager;
 }
 
-const wxString& Drawer::GetTitle() const
+void Drawer::SetLabel( const wxString& label )
 {
-    return m_Title;
+    __super::SetLabel( label );
+
+    m_Button->SetLabel( GetLabel() );
+    if ( m_AuiManager && m_PaneInfo )
+    {
+        m_PaneInfo->Name( GetLabel() );
+    }
+
+    if ( m_DrawerWindow )
+    {
+        m_DrawerWindow->SetLabel( GetLabel() );
+    }
+
 }
 
-const wxBitmap& Drawer::GetIcon() const
+void Drawer::SetIcon( const tstring& icon )
 {
-    return m_Icon;
+    m_Icon = icon;
+    wxBitmap bitmap = wxArtProvider::GetIcon( (wxArtID)m_Icon );
+    //m_Button->SetBitmap( m_Icon );
 }
 
 wxToggleButton* Drawer::GetButton()
@@ -132,6 +154,25 @@ int32_t Drawer::GetButtonID() const
     return wxID_ANY;
 }
 
+wxPanel* Drawer::GetPanel()
+{
+    if ( !m_Panel )
+    {
+        m_Panel = new wxPanel( m_Parent, wxID_ANY );
+        
+        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+        m_Panel->SetSizer( sizer );
+    }
+    return m_Panel;
+}
+
+void Drawer::SetPanel( wxPanel* panel )
+{
+    HELIUM_ASSERT( !m_DrawerWindow );
+
+    m_Panel = panel;
+}
+
 void Drawer::Open()
 {
     e_Opening.Raise( DrawerEventArgs( this ) );
@@ -142,7 +183,7 @@ void Drawer::Open()
         {
             HELIUM_ASSERT( !m_PaneInfo );
             m_PaneInfo = new wxAuiPaneInfo();
-            m_PaneInfo->Name( m_Title ).Floatable( true ).Float().Dockable( false ).Show( false );
+            m_PaneInfo->Name( GetLabel() ).Floatable( true ).Float().Dockable( false ).Show( false );
 
             m_AuiManager->AddPane( m_Panel, *m_PaneInfo );
 
@@ -151,7 +192,7 @@ void Drawer::Open()
         }
         else
         {            
-            m_DrawerWindow = new wxFrame( m_Parent, wxID_ANY, m_Title, wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxTAB_TRAVERSAL );
+            m_DrawerWindow = new wxFrame( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxTAB_TRAVERSAL );
             m_DrawerWindow->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	        wxBoxSizer* frameSizer;
 	        frameSizer = new wxBoxSizer( wxVERTICAL );
@@ -171,7 +212,7 @@ void Drawer::Open()
     m_DrawerWindow->SetPosition( m_FloatingPosition );
     m_DrawerWindow->ShowWithEffect( wxSHOW_EFFECT_SLIDE_TO_BOTTOM, 100 );
     
-    if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::MouseOverToOpen ) )
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
     {
         m_Panel->Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
     }
@@ -194,7 +235,7 @@ void Drawer::Close()
     {
         m_DrawerWindow->HideWithEffect( wxSHOW_EFFECT_SLIDE_TO_TOP, 100 );
 
-        if ( HasFlags<DrawerButtonStyle>( m_Style, DrawerButtonStyles::MouseOverToOpen ) )
+        if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
         {
             m_Panel->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
         }

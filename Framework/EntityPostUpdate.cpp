@@ -23,8 +23,9 @@ void EntityPostUpdate::Run( JobContext* /*pContext*/ )
     HELIUM_ASSERT( pEntity );
     HELIUM_ASSERT( pEntity->NeedsAsynchronousUpdate() );
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+
+#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
 #endif
 

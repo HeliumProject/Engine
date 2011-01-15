@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/FbxSupport.h"
 
 #include "Platform/Math/Simd/Vector2.h"
@@ -1923,3 +1926,5 @@ const char* FbxSupport::StripNamespace( const char* pString )
 
     return pString;
 }
+
+#endif  // L_EDITOR

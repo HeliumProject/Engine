@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/PngImageLoader.h"
 
 #include "Foundation/Stream/Stream.h"
@@ -55,6 +58,10 @@ static void PngFree( png_structp /*pPng*/, png_voidp pMemory )
 /// @see PngWarning()
 static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
 {
+    HELIUM_UNREF( pMessage );
+
+#if HELIUM_ENABLE_TRACE
+
     HELIUM_ASSERT( pMessage );
 
 #if HELIUM_UNICODE
@@ -66,6 +73,8 @@ static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
 #endif
 
     HELIUM_TRACE( TRACE_ERROR, TXT( "libpng error: %s\n" ), pConvertedMessage );
+
+#endif  // HELIUM_ENABLE_TRACE
 }
 
 /// libpng warning callback.
@@ -327,3 +336,5 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
 
     return true;
 }
+
+#endif  // L_EDITOR

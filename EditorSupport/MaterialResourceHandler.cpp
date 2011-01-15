@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/MaterialResourceHandler.h"
 
 #include "Engine/BinaryDeserializer.h"
@@ -285,3 +288,5 @@ bool MaterialResourceHandler::CacheResource(
 
     return true;
 }
+
+#endif  // L_EDITOR

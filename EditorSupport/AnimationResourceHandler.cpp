@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/AnimationResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
@@ -88,3 +91,5 @@ bool AnimationResourceHandler::CacheResource(
     return true;
 #endif
 }
+
+#endif  // L_EDITOR

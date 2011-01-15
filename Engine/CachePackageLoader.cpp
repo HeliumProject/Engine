@@ -348,6 +348,7 @@ bool CachePackageLoader::TryFinishLoadObject(
     pRequest->spType.Release();
     pRequest->spTemplate.Release();
     pRequest->spOwner.Release();
+    pRequest->typeLinkTable.Resize( 0 );
 
     HELIUM_ASSERT( pObject || pRequest->pEntry );
     HELIUM_TRACE(

@@ -44,6 +44,7 @@ static int PhysicalMemoryFree( void* pMemory, size_t size )
     return( Helium::PhysicalMemory::Free( pMemory, size ) ? 0 : -1 );
 }
 
+#if HELIUM_ENABLE_TRACE
 /// Wrapper for re-routing printf() calls to the logging system.
 ///
 /// @param[in] pFormat  Format string.
@@ -87,6 +88,7 @@ static void PrintfWrapper( const char* pFormat, ... )
     va_end( argList );
 #endif
 }
+#endif  // HELIUM_ENABLE_TRACE
 
 #define MSPACES 1
 #define ONLY_MSPACES 1
@@ -128,7 +130,11 @@ static void PrintfWrapper( const char* pFormat, ... )
 #endif
 
 // Re-route printf() calls to the engine's logging system.
+#if HELIUM_ENABLE_TRACE
 #define printf( FORMAT, ... ) PrintfWrapper( FORMAT, __VA_ARGS__ )
+#else
+#define printf( FORMAT, ... )
+#endif
 
 #if USE_NEDMALLOC
 #define EXTSPEC static

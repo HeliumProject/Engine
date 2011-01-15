@@ -11,6 +11,8 @@
 
 #include "EditorSupport/EditorSupport.h"
 
+#if L_EDITOR
+
 #include "Platform/Math/Simd/Matrix44.h"
 #include "Platform/Math/Simd/Quat.h"
 #include "GraphicsTypes/VertexTypes.h"
@@ -209,5 +211,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H

@@ -10,6 +10,9 @@
 #define LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
+
+#if L_EDITOR
+
 #include "PcSupport/ResourceHandler.h"
 #include "Foundation/File/Path.h"
 
@@ -37,5 +40,7 @@ namespace Lunar
         //@}
     };
 }
+
+#endif  // L_EDITOR
 
 #endif  // LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H

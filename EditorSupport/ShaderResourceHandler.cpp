@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/ShaderResourceHandler.h"
 
 #include "Foundation/Stream/BufferedStream.h"
@@ -385,3 +388,5 @@ bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, cons
 
     return false;
 }
+
+#endif  // L_EDITOR

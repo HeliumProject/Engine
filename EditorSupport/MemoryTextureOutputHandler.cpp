@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/MemoryTextureOutputHandler.h"
 
 using namespace Lunar;
@@ -131,3 +134,5 @@ bool MemoryTextureOutputHandler::writeData( const void* pData, int size )
 
     return true;
 }
+
+#endif  // L_EDITOR

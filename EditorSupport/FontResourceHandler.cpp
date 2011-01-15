@@ -1,4 +1,7 @@
 #include "EditorSupportPch.h"
+
+#if L_EDITOR
+
 #include "EditorSupport/FontResourceHandler.h"
 
 #include "Foundation/File/File.h"
@@ -30,7 +33,18 @@ static void* FreeTypeAllocate( FT_Memory /*pMemory*/, long size )
 {
     DefaultAllocator allocator;
 
-    void* pBlock = allocator.Allocate( size );
+    // FreeType uses setjmp()/longjmp(), and because our SSE settings bleed into dependency projects, jmp_buf needs to
+    // be 16-byte aligned for backing up SSE register states.  To avoid misaligned jmp_buf instances, we align all
+    // allocations of 16 bytes or greater to 16-byte boundaries.
+    void* pBlock;
+    if( size < HELIUM_SIMD_SIZE )
+    {
+        pBlock = allocator.Allocate( size );
+    }
+    else
+    {
+        pBlock = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
+    }
 
     return pBlock;
 }
@@ -60,13 +74,53 @@ static void FreeTypeFree( FT_Memory /*pMemory*/, void* pBlock )
 /// @return  Pointer to the reallocated block of memory, or null if reallocation failed.
 ///
 /// @see FreeTypeAllocate(), FreeTypeFree()
-static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long /*currentSize*/, long newSize, void* pBlock )
+static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long newSize, void* pBlock )
 {
     DefaultAllocator allocator;
 
-    // Our allocators allow for null pointers to be passed to their reallocate functions, so we do not need to validate
-    // the block parameter.
-    pBlock = allocator.Reallocate( pBlock, newSize );
+    // We cannot call Reallocate() if either the old or new size requires SIMD alignment (see FreeTypeAllocate() for
+    // more information about why we need to align some allocations), so call Free()/Allocate()/AllocateAligned()
+    // instead as appropriate.
+    if( newSize < HELIUM_SIMD_SIZE )
+    {
+        if( currentSize < HELIUM_SIMD_SIZE )
+        {
+            // Our allocators allow for null pointers to be passed to their reallocate functions, so we do not need to
+            // validate the block parameter.
+            pBlock = allocator.Reallocate( pBlock, newSize );
+        }
+        else
+        {
+            void* pOldBlock = pBlock;
+
+            // Our allocators treat a realloc() with a size of zero as a free, so simulate that functionality here.
+            pBlock = NULL;
+            if( newSize )
+            {
+                pBlock = allocator.Allocate( newSize );
+                if( pBlock )
+                {
+                    HELIUM_ASSERT( newSize < currentSize );
+                    MemoryCopy( pBlock, pOldBlock, newSize );
+                }
+            }
+
+            allocator.Free( pOldBlock );
+        }
+    }
+    else
+    {
+        void* pOldBlock = pBlock;
+
+        // Note that newSize >= HELIUM_SIMD_SIZE, so we don't need to check for non-zero sizes here.
+        pBlock = allocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, newSize );
+        if( pBlock )
+        {
+            MemoryCopy( pBlock, pOldBlock, Min( currentSize, newSize ) );
+        }
+
+        allocator.Free( pOldBlock );
+    }
 
     return pBlock;
 }
@@ -638,3 +692,5 @@ void FontResourceHandler::CompressTexture(
     HELIUM_ASSERT( rMipLevels.GetSize() == 1 );
     *pOutputSheet = rMipLevels[ 0 ];
 }
+
+#endif  // L_EDITOR

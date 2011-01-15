@@ -188,10 +188,22 @@ void ArchiveXML::Serialize(Object* object)
 
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
 {
+    Serialize( elements.begin(), elements.end(), flags );
+}
+
+void ArchiveXML::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags )
+{
+    Serialize( elements.Begin(), elements.End(), flags );
+}
+
+template< typename ConstIteratorType >
+void ArchiveXML::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
+{
     m_FieldNames.push( NULL );
 
-    std::vector< ObjectPtr >::const_iterator itr = elements.begin();
-    std::vector< ObjectPtr >::const_iterator end = elements.end();
+    size_t size = static_cast< size_t >( end - begin );
+
+    ConstIteratorType itr = begin;
     for (int index = 0; itr != end; ++itr, ++index )
     {
         Serialize(*itr);
@@ -199,7 +211,7 @@ void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t fl
         if ( flags & ArchiveFlags::Status )
         {
             ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-            info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
+            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
             e_Status.Raise( info );
         }
     }
@@ -319,6 +331,27 @@ void ArchiveXML::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
         }
 
         elements = m_Components;
+
+        m_Components.clear();
+    }
+}
+
+void ArchiveXML::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
+{
+    elements.Clear();
+
+    if (!m_Components.empty())
+    {
+        if ( !(flags & ArchiveFlags::Sparse) )
+        {
+            m_Components.erase( std::remove( m_Components.begin(), m_Components.end(), ObjectPtr () ), m_Components.end() );
+        }
+
+        size_t size = m_Components.size();
+        for( size_t index = 0; index < size; ++index )
+        {
+            elements.Push( m_Components[ index ] );
+        }
 
         m_Components.clear();
     }

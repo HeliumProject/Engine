@@ -135,11 +135,13 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize(Object* object);
-            virtual void Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags = 0);
+            virtual void Serialize( Object* object );
+            virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
+            template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
             void SerializeFields(Object* object);
             void SerializeField(Object* object, const Field* field);
 
@@ -149,8 +151,9 @@ namespace Helium
 
         public:
             // For handling components
-            virtual void Deserialize(ObjectPtr& object);
-            virtual void Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags = 0);
+            virtual void Deserialize( ObjectPtr& object );
+            virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         private:
             static void StartElementHandler(void *pUserData, const tchar_t* pszName, const tchar_t **papszAttrs)

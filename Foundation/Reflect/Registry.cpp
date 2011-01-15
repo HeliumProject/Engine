@@ -182,9 +182,37 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDUInt32StlMapData>( TXT( "TUIDUInt32StlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDMatrix4StlMapData>( TXT( "TUIDMatrix4StlMap" ) ) );
 
+        // DynArrayData
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DynArrayData>( TXT( "DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringDynArrayData>( TXT( "StlStringDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BoolDynArrayData>( TXT( "BoolDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt8DynArrayData>( TXT( "UInt8DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int8DynArrayData>( TXT( "Int8DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt16DynArrayData>( TXT( "UInt16DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int16DynArrayData>( TXT( "Int16DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32DynArrayData>( TXT( "UInt32DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32DynArrayData>( TXT( "Int32DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64DynArrayData>( TXT( "UInt64DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64DynArrayData>( TXT( "Int64DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Float32DynArrayData>( TXT( "Float32DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Float64DynArrayData>( TXT( "Float64DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDDynArrayData>( TXT( "GUIDDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDDynArrayData>( TXT( "TUIDDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PathDynArrayData>( TXT( "PathDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector2DynArrayData>( TXT( "Vector2DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector3DynArrayData>( TXT( "Vector3DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Vector4DynArrayData>( TXT( "Vector4DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix3DynArrayData>( TXT( "Matrix3DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Matrix4DynArrayData>( TXT( "Matrix4DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color3DynArrayData>( TXT( "Color3DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color4DynArrayData>( TXT( "Color4DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3DynArrayData>( TXT( "HDRColor3DynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4DynArrayData>( TXT( "HDRColor4DynArray" ) ) );
+
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlVectorData>( TXT( "ObjectStlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlSetData>( TXT( "ObjectStlSet" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlMapData>( TXT( "ObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectDynArrayData>( TXT( "ObjectDynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDObjectStlMapData>( TXT( "TypeIDObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringObjectStlMapData>( TXT( "StlStringObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ObjectStlMapData>( TXT( "UInt32ObjectStlMap" ) ) );

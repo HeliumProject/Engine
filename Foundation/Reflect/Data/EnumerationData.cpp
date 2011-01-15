@@ -72,7 +72,7 @@ void EnumerationData::Serialize(Archive& archive) const
             tstring label;
             if (enumeration)
             {
-                if (!enumeration->GetElementLabel(m_Data.Get(), label))
+                if (!enumeration->GetElementName(m_Data.Get(), label))
                 {
                     throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
@@ -91,7 +91,7 @@ void EnumerationData::Serialize(Archive& archive) const
 
             if (enumeration)
             {
-                if (!enumeration->GetElementLabel(m_Data.Get(), label))
+                if (!enumeration->GetElementName(m_Data.Get(), label))
                 {
                     throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
                 }
@@ -182,7 +182,7 @@ tostream& EnumerationData::operator>> (tostream& stream) const
     }
 
     tstring label;
-    if (enumeration && !enumeration->GetElementLabel(m_Data.Get(), label))
+    if (enumeration && !enumeration->GetElementName(m_Data.Get(), label))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
         HELIUM_BREAK();

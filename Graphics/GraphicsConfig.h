@@ -20,9 +20,55 @@ namespace Lunar
 
     public:
         /// Texture filtering mode.
+        class ETextureFilter
+        {
+        public:
+            enum Enum
+            {
+                BILINEAR,
+                TRILINEAR,
+                ANISOTROPIC,
+            };
+
+            L_DECLARE_ENUMERATION( ETextureFilter, LUNAR_GRAPHICS_API );
+
+            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            {
+                info.AddElement( BILINEAR,      TXT( "BILINEAR" ) );
+                info.AddElement( TRILINEAR,     TXT( "TRILINEAR" ) );
+                info.AddElement( ANISOTROPIC,   TXT( "ANISOTROPIC" ) );
+            }
+        };
+
+        /// Shadow mode.
+        class EShadowMode
+        {
+        public:
+            enum Enum
+            {
+                INVALID = -1,
+                NONE,
+                SIMPLE,
+                PCF_DITHERED,
+                MAX,
+            };
+
+            L_DECLARE_ENUMERATION( EShadowMode, LUNAR_GRAPHICS_API );
+
+            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            {
+                info.AddElement( NONE,          TXT( "NONE" ) );
+                info.AddElement( SIMPLE,        TXT( "SIMPLE" ) );
+                info.AddElement( PCF_DITHERED,  TXT( "PCF_DITHERED" ) );
+            }
+        };
+
+        /*
+        /// Texture filtering mode.
         L_ENUM( ETextureFilter, TEXTURE_FILTER, ( BILINEAR ) ( TRILINEAR ) ( ANISOTROPIC ) );
         /// Shadow mode.
         L_ENUM( EShadowMode, SHADOW_MODE, ( NONE ) ( SIMPLE ) ( PCF_DITHERED ) );
+        */
 
         /// Default display width.
         static const uint32_t DEFAULT_WIDTH = 640;

@@ -219,6 +219,15 @@ void BinarySerializer::SerializeEnum( int32_t& rValue, uint32_t /*nameCount*/, c
     }
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void BinarySerializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+    if( ShouldSerializeCurrentProperty() )
+    {
+        m_pPropertyStream->Write( &rValue, sizeof( rValue ), 1 );
+    }
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void BinarySerializer::SerializeCharName( CharName& rValue )
 {

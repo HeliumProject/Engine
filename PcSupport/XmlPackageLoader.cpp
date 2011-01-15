@@ -2182,6 +2182,14 @@ void XmlPackageLoader::Deserializer::SerializeEnum(
     ReadValue( rValue, TXT( "enum" ), EnumParser( nameCount, ppNames ), NullDefaultHandler< int32_t >() );
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void XmlPackageLoader::Deserializer::SerializeEnum(
+    int32_t& /*rValue*/,
+    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+#pragma TODO("Reflect enumeration support")
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void XmlPackageLoader::Deserializer::SerializeCharName( CharName& rValue )
 {

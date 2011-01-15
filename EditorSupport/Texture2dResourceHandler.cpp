@@ -171,7 +171,7 @@ bool Texture2dResourceHandler::CacheResource(
 
     // Set up the input options for the texture compressor.
     Texture::ECompression compression = pTexture->GetCompression();
-    HELIUM_ASSERT( static_cast< size_t >( compression ) < static_cast< size_t >( Texture::COMPRESSION_MAX ) );
+    HELIUM_ASSERT( static_cast< size_t >( compression ) < static_cast< size_t >( Texture::ECompression::MAX ) );
 
     bool bIsNormalMap = Texture::IsNormalMapCompression( compression );
 
@@ -206,7 +206,7 @@ bool Texture2dResourceHandler::CacheResource(
 
     switch( compression )
     {
-    case Texture::COMPRESSION_NONE:
+    case Texture::ECompression::NONE:
         {
             outputFormat = nvtt::Format_RGBA;
 #if HELIUM_ENDIAN_LITTLE
@@ -219,7 +219,7 @@ bool Texture2dResourceHandler::CacheResource(
             break;
         }
 
-    case Texture::COMPRESSION_COLOR:
+    case Texture::ECompression::COLOR:
         {
             outputFormat = ( bIgnoreAlpha ? nvtt::Format_BC1 : nvtt::Format_BC1a );
             pixelFormat = ( bSrgb ? RENDERER_PIXEL_FORMAT_BC1_SRGB : RENDERER_PIXEL_FORMAT_BC1 );
@@ -227,7 +227,7 @@ bool Texture2dResourceHandler::CacheResource(
             break;
         }
 
-    case Texture::COMPRESSION_COLOR_SHARP_ALPHA:
+    case Texture::ECompression::COLOR_SHARP_ALPHA:
         {
             if( bIgnoreAlpha )
             {
@@ -243,7 +243,7 @@ bool Texture2dResourceHandler::CacheResource(
             break;
         }
 
-    case Texture::COMPRESSION_COLOR_SMOOTH_ALPHA:
+    case Texture::ECompression::COLOR_SMOOTH_ALPHA:
         {
             if( bIgnoreAlpha )
             {
@@ -259,7 +259,7 @@ bool Texture2dResourceHandler::CacheResource(
             break;
         }
 
-    case Texture::COMPRESSION_NORMAL_MAP:
+    case Texture::ECompression::NORMAL_MAP:
         {
             outputFormat = nvtt::Format_BC3n;
             pixelFormat = RENDERER_PIXEL_FORMAT_BC3;
@@ -267,7 +267,7 @@ bool Texture2dResourceHandler::CacheResource(
             break;
         }
 
-    case Texture::COMPRESSION_NORMAL_MAP_COMPACT:
+    case Texture::ECompression::NORMAL_MAP_COMPACT:
         {
             outputFormat = nvtt::Format_BC1;
             pixelFormat = RENDERER_PIXEL_FORMAT_BC1;

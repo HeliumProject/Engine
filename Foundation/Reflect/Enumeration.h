@@ -42,9 +42,10 @@ namespace Helium
             }
 
             void AddElement(uint32_t value, const tstring& name, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
+            bool IsValid(uint32_t value) const;
 
             bool GetElementValue(const tstring& name, uint32_t& value) const;
-            bool GetElementLabel(const uint32_t value, tstring& name) const;
+            bool GetElementName(const uint32_t value, tstring& name) const;
 
             bool GetBitfieldValue(const tstring& str, uint32_t& value) const;
             bool GetBitfieldValue(const std::vector< tstring >& strs, uint32_t& value) const;

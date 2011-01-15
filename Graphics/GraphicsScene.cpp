@@ -1292,7 +1292,7 @@ void GraphicsScene::DrawShadowDepthPass( uint_fast32_t viewIndex )
 
     // Check whether shadows are enabled.
     GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
-    if( shadowMode == GraphicsConfig::SHADOW_MODE_INVALID || shadowMode == GraphicsConfig::SHADOW_MODE_NONE )
+    if( shadowMode == GraphicsConfig::EShadowMode::INVALID || shadowMode == GraphicsConfig::EShadowMode::NONE )
     {
         return;
     }
@@ -1745,14 +1745,14 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
         { GetSkinningSysSelectName(), Name( NULL_NAME ) }
     };
 
-    BOOST_STATIC_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::SHADOW_MODE_MAX );
+    BOOST_STATIC_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
 
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
     GraphicsConfig::EShadowMode shadowMode = rRenderResourceManager.GetShadowMode();
-    if( static_cast< size_t >( shadowMode ) >= GraphicsConfig::SHADOW_MODE_MAX )
+    if( static_cast< size_t >( shadowMode ) >= GraphicsConfig::EShadowMode::MAX )
     {
-        shadowMode = GraphicsConfig::SHADOW_MODE_NONE;
+        shadowMode = GraphicsConfig::EShadowMode::NONE;
     }
 
     systemSelections[ 0 ].choice = shadowSelectOptions[ shadowMode ];

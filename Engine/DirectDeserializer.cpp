@@ -138,6 +138,12 @@ void DirectDeserializer::SerializeEnum( int32_t& rValue, uint32_t /*nameCount*/,
     ReadValue( rValue );
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void DirectDeserializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+{
+    ReadValue( rValue );
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void DirectDeserializer::SerializeCharName( CharName& rValue )
 {

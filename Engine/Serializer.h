@@ -13,6 +13,7 @@
 
 #include "Foundation/Name.h"
 #include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/Reflect/Enumeration.h"
 
 #include "boost/preprocessor/seq.hpp"
 
@@ -66,6 +67,18 @@
         ( S ).BeginPropertyGroup( *pBaseType->GetName() ); \
         Base::Serialize( S ); \
         ( S ).EndPropertyGroup(); \
+    }
+
+#define L_DECLARE_ENUMERATION( ENUMERATION, MODULE_API ) \
+REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
+    friend MODULE_API Lunar::Serializer& operator<<( Lunar::Serializer& s, ENUMERATION& rEnum );
+
+#define L_DEFINE_ENUMERATION( ENUMERATION, MODULE_API ) \
+REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
+    MODULE_API Lunar::Serializer& Lunar::operator<<( Lunar::Serializer& s, ENUMERATION& rEnum ) \
+    { \
+        s.SerializeEnum( reinterpret_cast< int32_t& >( rEnum ), ENUMERATION::s_Enumeration ); \
+        return s; \
     }
 
 /// Define a serializable enumerated type.
@@ -379,6 +392,7 @@ namespace Lunar
         virtual void SerializeFloat64( float64_t& rValue ) = 0;
         virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count ) = 0;
         virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames ) = 0;
+        virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration ) = 0;
         virtual void SerializeCharName( CharName& rValue ) = 0;
         virtual void SerializeWideName( WideName& rValue ) = 0;
         virtual void SerializeCharString( CharString& rValue ) = 0;

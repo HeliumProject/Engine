@@ -440,7 +440,7 @@ bool BuildCommand::RunAsBuildWorker( Dependencies::DependencyGraph& depGraph, bo
         {
             std::strstream stream ((char*)msg->GetData(), msg->GetSize());
 
-            AssetBuilder::BuildRequestPtr job = Reflect::SafeCast<AssetBuilder::BuildRequest> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::BuildRequest>()));
+            AssetBuilder::BuildRequestPtr job = Reflect::SafeCast<AssetBuilder::BuildRequest> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetClass<AssetBuilder::BuildRequest>()));
 
             if (!job.ReferencesObject())
             {

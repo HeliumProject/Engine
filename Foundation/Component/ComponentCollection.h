@@ -66,7 +66,7 @@ namespace Helium
             template <class T>
             void RemoveComponent()
             {
-                return RemoveComponent( Reflect::GetType<T>() ); 
+                return RemoveComponent( Reflect::GetClass<T>() ); 
             }
 
             // Set attribute into a slot.  If validate param is false, ValidateComponent

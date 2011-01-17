@@ -86,7 +86,7 @@ namespace Helium
             template<class T>
             Helium::SmartPtr< T > CreateInstance()
             {
-                return Reflect::AssertCast< T >( CreateInstance( Reflect::GetType< T >() ) );
+                return Reflect::AssertCast< T >( CreateInstance( Reflect::GetClass< T >() ) );
             }
 
         private:

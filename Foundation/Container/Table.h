@@ -71,6 +71,13 @@ namespace Helium
         Table& operator=( const Table& rSource );
         template< typename OtherAllocator > Table& operator=(
             const Table< Value, Key, ExtractKey, EqualKey, OtherAllocator, InternalValue >& rSource );
+
+        bool operator==( const Table& rOther ) const;
+        template< typename OtherAllocator > bool operator==(
+            const Table< Value, Key, ExtractKey, EqualKey, OtherAllocator, InternalValue >& rOther ) const;
+        bool operator!=( const Table& rOther ) const;
+        template< typename OtherAllocator > bool operator!=(
+            const Table< Value, Key, ExtractKey, EqualKey, OtherAllocator, InternalValue >& rOther ) const;
         //@}
 
     private:

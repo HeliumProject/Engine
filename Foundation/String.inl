@@ -1163,3 +1163,36 @@ void Helium::StringBase< CharType, Allocator >::Insert(
         }
     }
 }
+
+/// Write a string to the given output stream.
+///
+/// @param[in] rStream  Output stream.
+/// @param[in] rString  String to write.
+///
+/// @return  Reference to the given output stream.
+template< typename CharType, typename CharTypeTraits, typename Allocator >
+std::basic_ostream< CharType, CharTypeTraits >& Helium::operator<<(
+    std::basic_ostream< CharType, CharTypeTraits >& rStream,
+    const StringBase< CharType, Allocator >& rString )
+{
+    return ( rStream << *rString );
+}
+
+/// Read a string from the given input stream.
+///
+/// @param[in]  rStream  Input stream.
+/// @param[out] rString  Read string.
+///
+/// @return  Reference to the given input stream.
+template< typename CharType, typename CharTypeTraits, typename Allocator >
+std::basic_istream< CharType, CharTypeTraits >& Helium::operator>>(
+    std::basic_istream< CharType, CharTypeTraits >& rStream,
+    StringBase< CharType, Allocator >& rString )
+{
+    // Could definitely improve this...
+    std::basic_string< CharType, CharTypeTraits, std::allocator< char > > tempString;
+    rStream >> tempString;
+    rString = tempString.c_str();
+
+    return rStream;
+}

@@ -33,6 +33,7 @@ namespace Helium
         //@{
         bool operator<( const KeyValue& rOther ) const;
         bool operator==( const KeyValue& rOther ) const;
+        bool operator!=( const KeyValue& rOther ) const;
         //@}
 
     protected:

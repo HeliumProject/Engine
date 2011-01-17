@@ -82,7 +82,7 @@ bool ObjectDynArrayData::Equals( const Object* object ) const
         Object* objectLHS = *itrLHS;
         Object* objectRHS = *itrRHS;
 
-        if( objectLHS != objectRHS && objectLHS && objectRHS && !objectLHS->Equals( objectRHS ) )
+        if( objectLHS != objectRHS && ( !objectLHS || !objectRHS || !objectLHS->Equals( objectRHS ) ) )
         {
             return false;
         }

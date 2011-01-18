@@ -145,6 +145,12 @@ void Serializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
 /// @param[in]     nameCount  Number of valid enumeration values, and the size of the given name array.
 /// @param[in]     ppNames    Array of name strings for each valid enumeration value.
 
+/// @fn void Serializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration )
+/// Serialize an enumeration value.
+///
+/// @param[in,out] rValue       Enumeration value.
+/// @param[in]     pEnumeration Reflection information for the enum type.
+
 /// @fn void Serializer::SerializeCharName( CharName& rValue )
 /// Serialize an 8-bit character name.
 ///

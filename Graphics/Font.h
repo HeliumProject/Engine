@@ -17,12 +17,32 @@ namespace Lunar
         L_DECLARE_OBJECT( Font, Resource );
 
     public:
+
         /// Font texture sheet compression options.
-        L_ENUM(
-            ECompression,
-            COMPRESSION,
+        class ECompression
+        {
+        public:
+            enum Enum
+            {
+                GRAYSCALE_UNCOMPRESSED,
+                COLOR_COMPRESSED,
+            };
+
+            L_DECLARE_ENUMERATION( ECompression, LUNAR_GRAPHICS_API );
+
+            static void EnumerateEnum( Helium::Reflect::Enumeration& info )
+            {
+                info.AddElement( GRAYSCALE_UNCOMPRESSED,    TXT( "GRAYSCALE_UNCOMPRESSED" ) );
+                info.AddElement( COLOR_COMPRESSED,          TXT( "COLOR_COMPRESSED" ) );
+            }
+        };
+
+        /*
+        /// Font texture sheet compression options.
+        L_ENUM( ECompression, COMPRESSION,
             ( GRAYSCALE_UNCOMPRESSED )  // Grayscale only, no compression (8 bits per pixel).
             ( COLOR_COMPRESSED ) );     // Block compression (DXT1).
+        */
 
         /// Default texture point size.
         static const uint32_t DEFAULT_POINT_SIZE = 12;
@@ -35,7 +55,7 @@ namespace Lunar
         static const uint16_t DEFAULT_TEXTURE_SHEET_HEIGHT = 256;
 
         /// Default texture compression scheme.
-        static const ECompression_Value DEFAULT_TEXTURE_COMPRESSION = COMPRESSION_COLOR_COMPRESSED;
+        static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
         struct LUNAR_GRAPHICS_API Character

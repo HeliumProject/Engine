@@ -52,6 +52,6 @@ namespace Lunar
     /// @return  True if the compression scheme is a normal map compression scheme, false if not.
     bool Texture::IsNormalMapCompression( ECompression compression )
     {
-        return ( compression == COMPRESSION_NORMAL_MAP || compression == COMPRESSION_NORMAL_MAP_COMPACT );
+        return ( compression == ECompression::NORMAL_MAP || compression == ECompression::NORMAL_MAP_COMPACT );
     }
 }

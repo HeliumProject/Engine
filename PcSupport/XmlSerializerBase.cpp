@@ -190,6 +190,12 @@ void XmlSerializerBase::SerializeEnum( int32_t& rValue, uint32_t nameCount, cons
     WriteValue( rValue, TXT( "enum" ), EnumFormatter( nameCount, ppNames ) );
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void XmlSerializerBase::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration )
+{
+    WriteValue( rValue, TXT( "Enumeration" ), ReflectEnumFormatter( pEnumeration ) );
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void XmlSerializerBase::SerializeCharName( CharName& rValue )
 {
@@ -775,6 +781,34 @@ void XmlSerializerBase::EnumFormatter::operator()( XmlSerializerBase& rSerialize
     {
         valueString = m_ppNames[ value ];
     }
+
+    rSerializer.WriteStringAsUtf8(
+        &rSerializer.m_propertyStream,
+        valueString.GetData(),
+        valueString.GetSize(),
+        true );
+}
+
+/// Constructor.
+///
+/// @param[in] nameCount  Number of enumeration value names.
+/// @param[in] ppNames    Array of enumeration name strings.
+XmlSerializerBase::ReflectEnumFormatter::ReflectEnumFormatter( const Helium::Reflect::Enumeration* pEnumeration )
+: m_enumeration( pEnumeration )
+{
+    HELIUM_ASSERT( m_enumeration );
+}
+
+/// Write a value to the output stream.
+///
+/// @param[in] rSerializer  Reference to the XmlSerializerBase in use.
+/// @param[in] value        Value to write.
+void XmlSerializerBase::ReflectEnumFormatter::operator()( XmlSerializerBase& rSerializer, int32_t value ) const
+{
+    tstring string;
+    m_enumeration->GetElementName( value, string );
+
+    String valueString ( string.c_str() );
 
     rSerializer.WriteStringAsUtf8(
         &rSerializer.m_propertyStream,

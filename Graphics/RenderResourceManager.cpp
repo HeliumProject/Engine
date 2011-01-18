@@ -26,7 +26,7 @@ RenderResourceManager* RenderResourceManager::sm_pInstance = NULL;
 
 /// Constructor.
 RenderResourceManager::RenderResourceManager()
-: m_shadowMode( GraphicsConfig::SHADOW_MODE_INVALID )
+: m_shadowMode( GraphicsConfig::EShadowMode::INVALID )
 , m_shadowDepthTextureUsableSize( 0 )
 {
 }
@@ -526,22 +526,22 @@ void RenderResourceManager::PostConfigUpdate()
     samplerStateDesc.mipLodBias = 0;
     samplerStateDesc.maxAnisotropy = spGraphicsConfig->GetMaxAnisotropy();
 
-    GraphicsConfig::ETextureFilter_Value textureFiltering = spGraphicsConfig->GetTextureFiltering();
+    GraphicsConfig::ETextureFilter textureFiltering = spGraphicsConfig->GetTextureFiltering();
     switch( textureFiltering )
     {
-    case GraphicsConfig::TEXTURE_FILTER_TRILINEAR:
+    case GraphicsConfig::ETextureFilter::TRILINEAR:
         {
             samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_LINEAR;
             break;
         }
 
-    case GraphicsConfig::TEXTURE_FILTER_ANISOTROPIC:
+    case GraphicsConfig::ETextureFilter::ANISOTROPIC:
         {
             samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_ANISOTROPIC;
             break;
         }
 
-    case GraphicsConfig::TEXTURE_FILTER_BILINEAR:
+    case GraphicsConfig::ETextureFilter::BILINEAR:
     default:
         {
             samplerStateDesc.filter = RENDERER_TEXTURE_FILTER_MIN_LINEAR_MAG_LINEAR_MIP_POINT;
@@ -566,13 +566,13 @@ void RenderResourceManager::PostConfigUpdate()
     uint32_t bufferWidth = pRenderer->GetMainContextWidth();
     uint32_t bufferHeight = pRenderer->GetMainContextHeight();
 
-    GraphicsConfig::EShadowMode shadowMode = GraphicsConfig::SHADOW_MODE_NONE;
+    GraphicsConfig::EShadowMode shadowMode = GraphicsConfig::EShadowMode::NONE;
     uint32_t shadowBufferUsableSize = 0;
 
     if( pRenderer->SupportsAnyFeature( RENDERER_FEATURE_FLAG_DEPTH_TEXTURE ) )
     {
         shadowMode = spGraphicsConfig->GetShadowMode();
-        if( shadowMode != GraphicsConfig::SHADOW_MODE_INVALID && shadowMode != GraphicsConfig::SHADOW_MODE_NONE )
+        if( shadowMode != GraphicsConfig::EShadowMode::INVALID && shadowMode != GraphicsConfig::EShadowMode::NONE )
         {
             shadowBufferUsableSize = spGraphicsConfig->GetShadowBufferSize();
             if( shadowBufferUsableSize != 0 )
@@ -602,7 +602,7 @@ void RenderResourceManager::PostConfigUpdate()
                         bufferWidth,
                         bufferHeight );
 
-                    shadowMode = GraphicsConfig::SHADOW_MODE_NONE;
+                    shadowMode = GraphicsConfig::EShadowMode::NONE;
                     shadowBufferUsableSize = 0;
                 }
             }

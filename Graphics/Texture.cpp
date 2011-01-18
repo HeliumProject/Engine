@@ -12,11 +12,12 @@
 
 using namespace Lunar;
 
+L_DEFINE_ENUMERATION( Texture::ECompression, LUNAR_GRAPHICS_API );
 L_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Texture::Texture()
-: m_compression( COMPRESSION_COLOR_SMOOTH_ALPHA )
+: m_compression( ECompression::COLOR_SMOOTH_ALPHA )
 , m_bSrgb( true )
 , m_bCreateMipmaps( true )
 , m_bIgnoreAlpha( false )

@@ -34,6 +34,21 @@ void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring
     m_Elements.Add( element );
 }
 
+bool Enumeration::IsValid(uint32_t value) const
+{
+    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    for ( ; itr != end; ++itr )
+    {
+        if ( itr->m_Value == value )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Enumeration::GetElementValue(const tstring& name, uint32_t& value) const
 {
     DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
@@ -50,7 +65,7 @@ bool Enumeration::GetElementValue(const tstring& name, uint32_t& value) const
     return false;
 }
 
-bool Enumeration::GetElementLabel(const uint32_t value, tstring& name) const
+bool Enumeration::GetElementName(const uint32_t value, tstring& name) const
 {
     DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
     DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();

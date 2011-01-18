@@ -1,5 +1,29 @@
 Helium = {}
 
+os.capture = function( cmd, raw )
+    local f = assert( io.popen( cmd, 'r' ) )
+    local s = assert( f:read( '*a' ) )
+    f:close()
+    if raw then
+        return s
+    end
+    s = string.gsub(s, '^%s+', '')
+    s = string.gsub(s, '%s+$', '')
+    s = string.gsub(s, '[\n\r]+', ' ')
+    return s
+end
+
+Helium.GetSystemVersion = function()
+    local version = 'Unknown'
+	if os.get() == "windows" then
+        version = os.capture( "cmd /c ver" )
+	else
+        version = os.capture( "uname" )
+	end
+	
+	return version
+end
+
 Helium.Sleep = function( seconds )
 	if os.get() == "windows" then
 		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
@@ -19,17 +43,30 @@ Helium.Publish = function( files )
 		
 		-- cull existing files
 		if os.isfile( destination ) then
-			local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
+			local delCommand = ''
+			if ( os.get() == "windows" ) then
+                delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
+            else
+                delCommand = "rm \"" .. destination .. "\""
+            end
 			os.execute( delCommand )
 		end
 
 		-- do the file copy
-		local linkCommand = "mklink /h \"" .. destination .. "\" \"" .. path .. "\""
+		local linkCommand = ''
+		if ( os.get() == "windows" ) then
+            local versionString = Helium.GetSystemVersion()
+            
+            -- vista/windows 7
+            if ( string.find( versionString, "6\.%d+\.%d+" ) ) then
+                linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
+            else
+                linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
+            end
+		else
+            linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
+		end
 		local result = os.execute( linkCommand )
-		if result ~= 0 then
-		  linkCommand = "Utilities\\Win32\\linkd \"" .. destination .. "\" \"" .. path .. "\""
-		  result = os.execute( linkCommand )
-    end
     
 		-- the files were copied, complete this entry
 		if result == 0 then
@@ -48,7 +85,15 @@ Helium.Prebuild = function()
 		"python Build/JobDefParser.py JobDefinitions . .",
 		"python Build/TypeParser.py . .",
 	}
-
+    
+    local pythonPath = os.pathsearch( 'python', os.getenv( 'PATH' ) )
+    if pythonPath == nil then
+        pythonPath = os.pathsearch( 'python.exe', os.getenv( 'PATH' ) )
+        if pythonPath == nil then
+            error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
+        end
+    end
+        
 	local result = 0
 
 	for i, commandString in ipairs( commands ) do

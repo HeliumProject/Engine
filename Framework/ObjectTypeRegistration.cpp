@@ -7,6 +7,7 @@
 
 #include "FrameworkPch.h"
 #include "Framework/ObjectTypeRegistration.h"
+#include "Graphics/GraphicsEnumRegistration.h"
 
 // Type registration functions.
 extern void RegisterEngineTypes();
@@ -31,6 +32,7 @@ void ObjectTypeRegistration::Register()
 {
     RegisterEngineTypes();
     RegisterGraphicsTypes();
+    RegisterGraphicsEnums();
     RegisterFrameworkTypes();
 }
 
@@ -40,6 +42,7 @@ void ObjectTypeRegistration::Register()
 void ObjectTypeRegistration::Unregister()
 {
     UnregisterFrameworkTypes();
+    UnregisterGraphicsEnums();
     UnregisterGraphicsTypes();
     UnregisterEngineTypes();
 }

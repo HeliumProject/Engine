@@ -10,15 +10,17 @@
 
 using namespace Lunar;
 
+L_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, LUNAR_GRAPHICS_API );
+L_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, LUNAR_GRAPHICS_API );
 L_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
 
 /// Constructor.
 GraphicsConfig::GraphicsConfig()
 : m_width( DEFAULT_WIDTH )
 , m_height( DEFAULT_HEIGHT )
-, m_textureFiltering( TEXTURE_FILTER_TRILINEAR )
+, m_textureFiltering( ETextureFilter::TRILINEAR )
 , m_maxAnisotropy( 0 )
-, m_shadowMode( SHADOW_MODE_PCF_DITHERED )
+, m_shadowMode( EShadowMode::PCF_DITHERED )
 , m_shadowBufferSize( DEFAULT_SHADOW_BUFFER_SIZE )
 , m_bFullscreen( false )
 , m_bVsync( true )

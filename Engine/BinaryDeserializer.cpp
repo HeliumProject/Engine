@@ -210,6 +210,28 @@ void BinaryDeserializer::SerializeEnum( int32_t& rValue, uint32_t nameCount, con
     }
 }
 
+/// @copydoc Serializer::SerializeEnum()
+void BinaryDeserializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration )
+{
+    if( ShouldSerializeCurrentProperty() )
+    {
+        if( DeserializeValue( rValue ) )
+        {
+            if( rValue != -1 && !pEnumeration->IsValid( rValue ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    ( TXT( "BinaryDeserializer: Enum value %" ) TPRId32 TXT( " exceeds the maximum supported " )
+                    TXT( "range (%" ) TPRIu32 TXT( ").  Setting to invalid (-1).\n" ) ),
+                    rValue,
+                    pEnumeration->m_Elements.GetSize() );
+
+                rValue = -1;
+            }
+        }
+    }
+}
+
 /// @copydoc Serializer::SerializeCharName()
 void BinaryDeserializer::SerializeCharName( CharName& rValue )
 {

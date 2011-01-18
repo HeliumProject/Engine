@@ -69,9 +69,25 @@ namespace Helium
 
         size_t FindAny(
             const CharType* pCharacters, size_t startIndex = 0, size_t characterCount = Invalid< size_t >() ) const;
+        template< typename OtherAllocator > size_t FindAny(
+            const StringBase< CharType, OtherAllocator >& rCharacters, size_t startIndex = 0 ) const;
+
         size_t FindAnyReverse(
             const CharType* pCharacters, size_t startIndex = Invalid< size_t >(),
             size_t characterCount = Invalid< size_t >() ) const;
+        template< typename OtherAllocator > size_t FindAnyReverse(
+            const StringBase< CharType, OtherAllocator >& rCharacters, size_t startIndex = Invalid< size_t > ) const;
+
+        size_t FindNone(
+            const CharType* pCharacters, size_t startIndex = 0, size_t characterCount = Invalid< size_t >() ) const;
+        template< typename OtherAllocator > size_t FindNone(
+            const StringBase< CharType, OtherAllocator >& rCharacters, size_t startIndex = 0 ) const;
+
+        size_t FindNoneReverse(
+            const CharType* pCharacters, size_t startIndex = Invalid< size_t >(),
+            size_t characterCount = Invalid< size_t >() ) const;
+        template< typename OtherAllocator > size_t FindNoneReverse(
+            const StringBase< CharType, OtherAllocator >& rCharacters, size_t startIndex = Invalid< size_t > ) const;
 
         bool Contains( CharType character ) const;
         template< typename OtherAllocator > bool Contains(
@@ -153,18 +169,6 @@ namespace Helium
         void Insert( size_t index, const CharString& rString );
         //@}
 
-        /// @name Parsing
-        //@{
-        size_t FindAny(
-            const char* pCharacters, size_t startIndex = 0, size_t characterCount = Invalid< size_t >() ) const;
-        size_t FindAny( const CharString& rCharacters, size_t startIndex = Invalid< size_t >() ) const;
-
-        size_t FindAnyReverse(
-            const char* pCharacters, size_t startIndex = Invalid< size_t >(),
-            size_t characterCount = Invalid< size_t >() ) const;
-        size_t FindAnyReverse( const CharString& rCharacters, size_t startIndex = Invalid< size_t >() ) const;
-        //@}
-
         /// @name Overloaded Operators
         //@{
         CharString& operator=( char character );
@@ -203,18 +207,6 @@ namespace Helium
         void Insert( size_t index, wchar_t character, size_t count = 1 );
         void Insert( size_t index, const wchar_t* pString );
         void Insert( size_t index, const WideString& rString );
-        //@}
-
-        /// @name Parsing
-        //@{
-        size_t FindAny(
-            const wchar_t* pCharacters, size_t startIndex = 0, size_t characterCount = Invalid< size_t >() ) const;
-        size_t FindAny( const WideString& rCharacters, size_t startIndex = Invalid< size_t >() ) const;
-
-        size_t FindAnyReverse(
-            const wchar_t* pCharacters, size_t startIndex = Invalid< size_t >(),
-            size_t characterCount = Invalid< size_t >() ) const;
-        size_t FindAnyReverse( const WideString& rCharacters, size_t startIndex = Invalid< size_t >() ) const;
         //@}
 
         /// @name Overloaded Operators

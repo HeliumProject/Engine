@@ -268,6 +268,7 @@ tistream& SimpleSetData< KeyT, EqualKeyT, AllocatorT >::operator<<( tistream& st
 
     String str;
     std::streamsize size = stream.rdbuf()->in_avail();
+    str.Reserve( static_cast< size_t >( size ) );
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 

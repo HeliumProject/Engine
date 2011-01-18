@@ -12,25 +12,25 @@ REFLECT_DEFINE_ABSTRACT(MapData)
 // str should contain a string with map object separated by the specified delimiters argument.
 // str will be parsed into key-value pairs and each pair will be inserted into tokens.
 template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const tstring& str, Map< TKey, TVal, TEqualKey, TAllocator >& tokens, const tstring& delimiters )
+inline void Tokenize( const String& str, Map< TKey, TVal, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
-        tstringstream kStream( str.substr( lastPos, pos - lastPos ) );
+        tstringstream kStream( *str.Substring( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
 
-        if ( tstring::npos != pos || tstring::npos != lastPos )
+        if ( IsValid( pos ) || IsValid( lastPos ) )
         {
-            tstringstream vStream( str.substr( lastPos, pos - lastPos ) );
+            tstringstream vStream( *str.Substring( lastPos, pos - lastPos ) );
 
             // At this point, we have the key and value.  Build the map entry.
             // Note that the stream operator stops at spaces.
@@ -38,13 +38,13 @@ inline void Tokenize( const tstring& str, Map< TKey, TVal, TEqualKey, TAllocator
             kStream >> k;
             TVal v;
             vStream >> v;
-            tokens.Insert( Pair< TKey, TVal >( k, v ) );
+            tokens[ k ] = v;
 
             // Skip delimiters.  Note the "not_of"
-            lastPos = str.find_first_not_of( delimiters, pos );
+            lastPos = str.FindNone( delimiters, pos );
 
             // Find next "non-delimiter"
-            pos = str.find_first_of( delimiters, lastPos );
+            pos = str.FindAny( delimiters, lastPos );
         }
         else
         {
@@ -58,34 +58,34 @@ inline void Tokenize( const tstring& str, Map< TKey, TVal, TEqualKey, TAllocator
 // Partial specialization for strings as TVal, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const tstring& str, Map< TKey, tstring, TEqualKey, TAllocator >& tokens, const tstring& delimiters )
+inline void Tokenize( const String& str, Map< TKey, String, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
-        tstringstream kStream( str.substr( lastPos, pos - lastPos ) );
+        tstringstream kStream( *str.Substring( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
 
-        if ( tstring::npos != pos || tstring::npos != lastPos )
+        if ( IsValid( pos ) || IsValid( lastPos ) )
         {
             // At this point, we have the key and value.  Build the map entry.
             TKey k;
             kStream >> k;
-            tokens.Insert( Pair< TKey, TVal >( k, str.substr( lastPos, pos - lastPos ) ) );
+            str.Substring( tokens[ k ], lastPos, pos - lastPos );
 
             // Skip delimiters.  Note the "not_of"
-            lastPos = str.find_first_not_of( delimiters, pos );
+            lastPos = str.FindNone( delimiters, pos );
 
             // Find next "non-delimiter"
-            pos = str.find_first_of( delimiters, lastPos );
+            pos = str.FindAny( delimiters, lastPos );
         }
         else
         {
@@ -99,36 +99,37 @@ inline void Tokenize( const tstring& str, Map< TKey, tstring, TEqualKey, TAlloca
 // Partial specialization for strings as TKey, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const tstring& str, Map< tstring, TVal, TEqualKey, TAllocator >& tokens, const tstring& delimiters )
+inline void Tokenize( const String& str, Map< String, TVal, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
-        tstring key( str.substr( lastPos, pos - lastPos ) );
+        String key;
+        str.Substring( key, lastPos, pos - lastPos );
 
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
 
-        if ( tstring::npos != pos || tstring::npos != lastPos )
+        if ( IsValid( pos ) || IsValid( lastPos ) )
         {
-            tstringstream vStream( str.substr( lastPos, pos - lastPos ) );
+            tstringstream vStream( *str.Substring( lastPos, pos - lastPos ) );
 
             // At this point, we have the key and value.  Build the map entry.
             TVal v;
             vStream >> v;
-            tokens.Insert( Pair< TKey, TVal >( key, v ) );
+            tokens[ key ] = v;
 
             // Skip delimiters.  Note the "not_of"
-            lastPos = str.find_first_not_of( delimiters, pos );
+            lastPos = str.FindNone( delimiters, pos );
 
             // Find next "non-delimiter"
-            pos = str.find_first_of( delimiters, lastPos );
+            pos = str.FindAny( delimiters, lastPos );
         }
         else
         {
@@ -142,32 +143,33 @@ inline void Tokenize( const tstring& str, Map< tstring, TVal, TEqualKey, TAlloca
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const tstring& str, Map< tstring, tstring, TEqualKey, TAllocator >& tokens, const tstring& delimiters )
+inline void Tokenize( const String& str, Map< String, String, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
-        tstring key( str.substr( lastPos, pos - lastPos ) );
+        String key;
+        str.Substring( key, lastPos, pos - lastPos );
 
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
 
-        if ( tstring::npos != pos || tstring::npos != lastPos )
+        if ( IsValid( pos ) || IsValid( lastPos ) )
         {
             // At this point, we have the key and value.  Build the map entry.
-            tokens.Insert( Pair< tstring, tstring >( key, str.substr( lastPos, pos - lastPos ) ) );
+            str.Substring( tokens[ key ], lastPos, pos - lastPos );
 
             // Skip delimiters.  Note the "not_of"
-            lastPos = str.find_first_not_of( delimiters, pos );
+            lastPos = str.FindNone( delimiters, pos );
 
             // Find next "non-delimiter"
-            pos = str.find_first_of( delimiters, lastPos );
+            pos = str.FindAny( delimiters, lastPos );
         }
         else
         {
@@ -429,10 +431,11 @@ tistream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator<<( tist
 {
     m_Data->Clear();
 
-    tstring str;
+    String str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( (size_t) size);
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+    str.Reserve( static_cast< size_t >( size ) );
+    str.Resize( static_cast< size_t >( size ) );
+    stream.read( &str[ 0 ], size );
 
     Tokenize< KeyT, ValueT, EqualKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

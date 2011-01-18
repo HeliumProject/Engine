@@ -38,6 +38,21 @@ namespace Helium
         SortedSet& operator=( const SortedSet& rSource );
         template< typename OtherAllocator > SortedSet& operator=(
             const SortedSet< Key, CompareKey, OtherAllocator >& rSource );
+
+        bool operator==( const SortedSet& rOther ) const;
+        template< typename OtherAllocator > bool operator==(
+            const SortedSet< Key, CompareKey, OtherAllocator >& rOther ) const;
+
+        bool operator!=( const SortedSet& rOther ) const;
+        template< typename OtherAllocator > bool operator!=(
+            const SortedSet< Key, CompareKey, OtherAllocator >& rOther ) const;
+        //@}
+
+    private:
+        /// @name Private Utility Functions
+        //@{
+        template< typename OtherAllocator > bool Equals(
+            const SortedSet< Key, CompareKey, OtherAllocator >& rOther ) const;
         //@}
     };
 }

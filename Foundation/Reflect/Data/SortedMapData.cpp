@@ -325,7 +325,7 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return m_Data.Ref() == rhs->m_Data.Ref();
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >

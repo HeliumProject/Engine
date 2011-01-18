@@ -241,6 +241,15 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDUInt32MapData>( TXT( "TUIDUInt32Map" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDMatrix4MapData>( TXT( "TUIDMatrix4Map" ) ) );
 
+        // SortedSetData
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<SortedSetData>( TXT( "SortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringSortedSetData>( TXT( "StringSortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32SortedSetData>( TXT( "UInt32SortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64SortedSetData>( TXT( "UInt64SortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDSortedSetData>( TXT( "GUIDSortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDSortedSetData>( TXT( "TUIDSortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PathSortedSetData>( TXT( "PathSortedSet" ) ) );
+
         // SortedMapData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<SortedMapData>( TXT( "SortedMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStringSortedMapData>( TXT( "StringStringSortedMap" ) ) );
@@ -286,6 +295,16 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectMapData>( TXT( "Int64ObjectMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectMapData>( TXT( "GUIDObjectMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectMapData>( TXT( "TUIDObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectSortedSetData>( TXT( "ObjectSortedSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectSortedMapData>( TXT( "ObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDObjectSortedMapData>( TXT( "TypeIDObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringObjectSortedMapData>( TXT( "StringObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ObjectSortedMapData>( TXT( "UInt32ObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32ObjectSortedMapData>( TXT( "Int32ObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64ObjectSortedMapData>( TXT( "UInt64ObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectSortedMapData>( TXT( "Int64ObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectSortedMapData>( TXT( "GUIDObjectSortedMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectSortedMapData>( TXT( "TUIDObjectSortedMap" ) ) );
 
         //
         // Build Casting Table

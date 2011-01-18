@@ -44,6 +44,8 @@ namespace Helium
         public:
             Drawer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
             virtual ~Drawer();
+            
+            //virtual bool Destroy();
 
             virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
             void SetIcon( const tstring& icon );
@@ -89,9 +91,9 @@ namespace Helium
             wxTimer m_MouseHoverTimer;
 
             wxPanel* m_Panel;
-
             wxPoint m_FloatingPosition;
             
+            // Optional AuiManager
             wxAuiManager* m_AuiManager;
             wxAuiPaneInfo* m_PaneInfo;
 

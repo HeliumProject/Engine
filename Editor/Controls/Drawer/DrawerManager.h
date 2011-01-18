@@ -15,7 +15,10 @@ namespace Helium
             virtual ~DrawerManager();
 
             void SetAuiManager( wxAuiManager* auiManager );
+
             void AddDrawer( Drawer* drawer );
+            void RemoveDrawer( Drawer* drawer );
+            void RemoveAllDrawers();
 
             Drawer* GetCurrentDrawer() const;
 
@@ -23,7 +26,6 @@ namespace Helium
             void SetFixedSizeButtons( bool fixedSize );
 
         private:
-            void DestroyDrawers();
             Drawer* FindDrawer( int32_t drawerID );
 
             void OnDrawerOpening( const DrawerEventArgs& args );

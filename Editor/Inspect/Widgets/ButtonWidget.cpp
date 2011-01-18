@@ -13,10 +13,13 @@ ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
 , m_Button( NULL )
 , m_ButtonWidget( buttonWidget )
 {
+    m_Button = new wxButton( this, wxID_ANY );
+
     m_Sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( m_Sizer );
+    m_Sizer->Add( m_Button );
 
-    Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
+    m_Button->Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
 }
 
 void ButtonWindow::OnClicked( wxCommandEvent& )

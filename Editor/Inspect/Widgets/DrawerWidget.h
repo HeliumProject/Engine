@@ -1,8 +1,8 @@
-/*
 #pragma once
 
 #include "Foundation/Inspect/Container.h"
 #include "Editor/Controls/Drawer/Drawer.h"
+#include "Editor/Inspect/StripCanvas.h"
 #include "Editor/Inspect/Widget.h"
 
 namespace Helium
@@ -25,6 +25,8 @@ namespace Helium
 
             Drawer* GetDrawer() const;
 
+            StripCanvas& GetStripCanvas();
+
             void SetLabel( const tstring& label );
             void SetIcon( const tstring& icon );
 
@@ -33,10 +35,9 @@ namespace Helium
             void OnLabelChanged( const Attribute< tstring >::ChangeArgs& args );
 
             Inspect::Container* m_Container;
-            wxPanel* m_Panel;
             Drawer* m_Drawer;
+            StripCanvas m_StripCanvas;
         };
 
     }
 }
-*/

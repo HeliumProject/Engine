@@ -76,10 +76,19 @@ void Canvas::RealizeControl( Inspect::Control* control )
 
     if ( this != control )
     {
-        WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetClass() );
-        HELIUM_ASSERT( found != m_WidgetCreators.end() );
-        WidgetPtr widget = found->second( control );
-        HELIUM_ASSERT( widget );
+        WidgetPtr widget;
+
+        if ( control is container, and is PopUp )
+        {
+            WidgetPtr widget = new DrawerWidget
+        }
+        else
+        {
+            WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetClass() );
+            HELIUM_ASSERT( found != m_WidgetCreators.end() );
+            WidgetPtr widget = found->second( control );
+            HELIUM_ASSERT( widget );
+        }
 
         // associate the widget with the control
         control->SetWidget( widget );

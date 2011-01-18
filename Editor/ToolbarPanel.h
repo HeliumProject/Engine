@@ -7,7 +7,7 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/StripCanvas.h"
 
-#include "Editor/Controls/Drawer/Drawer.h"
+#include "Editor/Controls/Drawer/DrawerManager.h"
 
 
 namespace Helium
@@ -52,6 +52,7 @@ namespace Helium
             SceneGraph::PropertiesGenerator m_ToolPropertiesGenerator; // HEADS UP: do this one first in the constructor!
             SceneGraph::PropertiesManager m_ToolPropertiesManager;
 
+            DrawerManager m_DrawerManager;
             //TestPanelGenerated* m_TestPanelGenerated;
             //Drawer* m_TestDrawer;
         };

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "DrawerWidget.h"
-/*
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -17,11 +17,9 @@ void DrawerWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_Drawer );
 
-    m_Panel = new wxPanel( parent );
-    m_Panel->Hide();
-    m_Drawer = new Drawer( parent, m_Panel, wxT( "Drawer" ) );
+    m_Drawer = new Drawer( parent, wxID_ANY );
 
-    SetWindow( m_Drawer->GetButton() );
+    SetWindow( m_Drawer );
 
     // init state
     if ( !m_Container->a_Icon.Get().empty() )
@@ -35,8 +33,8 @@ void DrawerWidget::CreateWindow( wxWindow* parent )
 
     // init layout metrics
     wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_Drawer->GetButton()->SetSize( size );
-    m_Drawer->GetButton()->SetMinSize( size );
+    m_Drawer->SetSize( size );
+    m_Drawer->SetMinSize( size );
 
     // add listeners
     m_Container->a_Icon.Changed().AddMethod( this, &DrawerWidget::OnIconChanged );
@@ -56,14 +54,16 @@ void DrawerWidget::DestroyWindow()
     // destroy window
     delete m_Drawer;
     m_Drawer = NULL;
-
-    m_Panel->Destroy();
-    m_Panel = NULL;
 }
 
 Drawer* DrawerWidget::GetDrawer() const
 {
     return m_Drawer;
+}
+
+StripCanvas& DrawerWidget::GetStripCanvas()
+{
+    return m_StripCanvas;
 }
 
 void DrawerWidget::SetLabel( const tstring& label )
@@ -85,4 +85,3 @@ void DrawerWidget::OnIconChanged( const Attribute< tstring >::ChangeArgs& args )
 {
     SetIcon( args.m_NewValue );
 }
-*/

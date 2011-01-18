@@ -71,6 +71,7 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE { return true; }
 
             virtual void NameChanged( const Attribute<tstring>::ChangeArgs& text);
+            virtual void IconChanged( const Attribute<tstring>::ChangeArgs& icon );
 
         private:
             Inspect::Container*     m_ContainerControl;

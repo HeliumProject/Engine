@@ -26,8 +26,6 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
     m_ButtonSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( m_ButtonSizer );
 
-    SetLabel( wxT( "TEMP" ) );
-
     // Set up the button
     m_Button = new wxToggleButton( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
     m_Button->SetValue( false );
@@ -50,7 +48,9 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
         
         m_MouseHoverTimer.SetOwner( this );
         Connect( m_MouseHoverTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( Drawer::OnMouseHoverTimer ), NULL, this );
-    }    
+    }
+
+    Layout();
 }
 
 Drawer::~Drawer()
@@ -158,10 +158,12 @@ wxPanel* Drawer::GetPanel()
 {
     if ( !m_Panel )
     {
-        m_Panel = new wxPanel( m_Parent, wxID_ANY );
+        m_Panel = new wxPanel( this, wxID_ANY );
         
         wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
         m_Panel->SetSizer( sizer );
+
+        m_Panel->Hide();
     }
     return m_Panel;
 }

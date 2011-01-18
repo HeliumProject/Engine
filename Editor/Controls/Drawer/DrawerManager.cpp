@@ -15,7 +15,7 @@ DrawerManager::DrawerManager()
 
 DrawerManager::~DrawerManager()
 {
-    DestroyDrawers();
+    RemoveAllDrawers();
 }
 
 void DrawerManager::SetAuiManager( wxAuiManager* auiManager )
@@ -39,6 +39,42 @@ void DrawerManager::AddDrawer( Drawer* drawer )
     drawer->e_Closed.AddMethod( this, &DrawerManager::OnDrawerClosed );
 }
 
+void DrawerManager::RemoveDrawer( Drawer* drawer )
+{
+    // Close and detach from all drawers
+    M_DrawerButtonIDs::iterator foundDrawerItr = m_Drawers.find( drawer->GetButtonID() );
+    if ( foundDrawerItr != m_Drawers.end() )
+    {
+        Drawer* foundDrawer = foundDrawerItr->second;
+        
+        foundDrawer->e_Opening.RemoveMethod( this, &DrawerManager::OnDrawerOpening );
+        foundDrawer->e_Opened.RemoveMethod( this, &DrawerManager::OnDrawerOpened );
+        foundDrawer->e_Closed.RemoveMethod( this, &DrawerManager::OnDrawerClosed );
+
+        foundDrawer->Close();
+
+        m_Drawers.erase( foundDrawerItr );
+    }
+}
+
+void DrawerManager::RemoveAllDrawers()
+{
+    // Close and detach from all drawers
+    for ( M_DrawerButtonIDs::const_iterator drawerItr = m_Drawers.begin(), drawerEnd = m_Drawers.end(); drawerItr != drawerEnd; ++drawerItr )
+    {
+        Drawer* drawer = drawerItr->second;
+        
+        drawer->e_Opening.RemoveMethod( this, &DrawerManager::OnDrawerOpening );
+        drawer->e_Opened.RemoveMethod( this, &DrawerManager::OnDrawerOpened );
+        drawer->e_Closed.RemoveMethod( this, &DrawerManager::OnDrawerClosed );
+
+        drawer->Close();
+
+        //delete drawer;
+    }
+    m_Drawers.clear();
+}
+
 Drawer* DrawerManager::GetCurrentDrawer() const
 {
     return m_CurrentDrawer;
@@ -56,30 +92,12 @@ void DrawerManager::SetFixedSizeButtons( bool fixedSize )
         // TODO
         //m_IsFixedSizeButtons = fixedSize;
         //Freeze();
-        //DestroyDrawers();
+        //RemoveAllDrawers();
         //GetSizer()->Clear( true );
         //CreateDrawers();
         //Layout();
         //Thaw();
     }
-}
-
-void DrawerManager::DestroyDrawers()
-{
-    // Close and detach from all drawers
-    for ( M_DrawerButtonIDs::const_iterator drawerItr = m_Drawers.begin(), drawerEnd = m_Drawers.end(); drawerItr != drawerEnd; ++drawerItr )
-    {
-        Drawer* drawer = drawerItr->second;
-        
-        drawer->e_Opening.RemoveMethod( this, &DrawerManager::OnDrawerOpening );
-        drawer->e_Opened.RemoveMethod( this, &DrawerManager::OnDrawerOpened );
-        drawer->e_Closed.RemoveMethod( this, &DrawerManager::OnDrawerClosed );
-
-        drawer->Close();
-
-        //delete drawer;
-    }
-    m_Drawers.clear();
 }
 
 Drawer* DrawerManager::FindDrawer( int32_t drawerID )

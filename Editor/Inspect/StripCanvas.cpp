@@ -11,13 +11,29 @@ REFLECT_DEFINE_OBJECT( StripCanvas );
 
 StripCanvas::StripCanvas()
 : m_Panel( NULL )
+, m_DrawerManager( NULL )
 {
     SetWidgetCreator< StripCanvasWidget, Container >();
+}
+
+wxPanel* StripCanvas::GetPanel() const
+{
+    return m_Panel;
 }
 
 void StripCanvas::SetPanel( wxPanel* panel )
 {
     m_Panel = panel;
+}
+
+DrawerManager* StripCanvas::GetDrawerManager() const
+{
+    return m_DrawerManager;
+}
+
+void StripCanvas::SetDrawerManager( DrawerManager* drawerManager )
+{
+    m_DrawerManager = drawerManager;
 }
 
 void StripCanvas::Realize( Inspect::Canvas* canvas )

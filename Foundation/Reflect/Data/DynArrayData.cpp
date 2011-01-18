@@ -15,18 +15,18 @@ REFLECT_DEFINE_ABSTRACT( DynArrayData )
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 template< typename T, typename I >
-void Tokenize( const tstring& str, DynArray< T >& tokens, const tstring& delimiters )
+void Tokenize( const String& str, DynArray< T >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
     I temp;
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
         // Found a token, convert it to the proper type for our vector
-        tstringstream stream (str.substr( lastPos, pos - lastPos ));
+        tstringstream stream( *str.Substring( lastPos, pos - lastPos ) );
         stream >> temp; // NOTE: Stream operator stops at spaces!
         if ( !stream.fail() )
         {
@@ -38,30 +38,32 @@ void Tokenize( const tstring& str, DynArray< T >& tokens, const tstring& delimit
             HELIUM_BREAK();
         }
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
     }
 }
 
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize< tstring, tstring >( const tstring& str, DynArray< tstring >& tokens, const tstring& delimiters )
+inline void Tokenize< String, String >( const String& str, DynArray< String >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
-    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    size_t lastPos = str.FindNone( delimiters );
     // Find first "non-delimiter".
-    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
+    size_t pos     = str.FindAny( delimiters, lastPos );
 
-    while ( tstring::npos != pos || tstring::npos != lastPos )
+    while ( IsValid( pos ) || IsValid( lastPos ) )
     {
         // Add the token to the vector
-        tokens.Push( str.substr( lastPos, pos - lastPos ) );
+        String* element = tokens.New();
+        HELIUM_ASSERT( element );
+        str.Substring( *element, lastPos, pos - lastPos );
         // Skip delimiters.  Note the "not_of"
-        lastPos = str.find_first_not_of( delimiters, pos );
+        lastPos = str.FindNone( delimiters, pos );
         // Find next "non-delimiter"
-        pos = str.find_first_of( delimiters, lastPos );
+        pos = str.FindAny( delimiters, lastPos );
     }
 }
 
@@ -338,10 +340,11 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
-    tstring str;
+    String str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( static_cast< size_t >( size ) );
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+    str.Reserve( static_cast< size_t >( size ) );
+    str.Resize( static_cast< size_t >( size ) );
+    stream.read( &str[ 0 ], size );
 
     Tokenize< T, T >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
@@ -487,10 +490,11 @@ tistream& SimpleDynArrayData< uint8_t >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
-    tstring str;
+    String str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( static_cast< size_t >( size ) );
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+    str.Reserve( static_cast< size_t >( size ) );
+    str.Resize( static_cast< size_t >( size ) );
+    stream.read( &str[ 0 ], size );
 
     Tokenize< uint8_t, uint16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
@@ -502,10 +506,11 @@ tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
-    tstring str;
+    String str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( static_cast< size_t >( size ) );
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+    str.Reserve( static_cast< size_t >( size ) );
+    str.Resize( static_cast< size_t >( size ) );
+    stream.read( &str[ 0 ], size );
 
     Tokenize< int8_t, int16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 

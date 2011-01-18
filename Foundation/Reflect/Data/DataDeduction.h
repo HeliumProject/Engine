@@ -173,6 +173,14 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDMatrix4MapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32MapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4MapData );
 
+#include "Foundation/Reflect/Data/SortedSetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSortedSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32SortedSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64SortedSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDSortedSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDSortedSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathSortedSetData );
+
 #include "Foundation/Reflect/Data/SortedMapData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStringSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringBoolSortedMapData );

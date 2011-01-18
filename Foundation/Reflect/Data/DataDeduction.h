@@ -234,3 +234,16 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectMapData );
+
+#include "Foundation/Reflect/Data/ObjectSortedSetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectSortedSetData );
+
+#include "Foundation/Reflect/Data/ObjectSortedMapData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectSortedMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectSortedMapData );

@@ -7,6 +7,8 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/Endian.h"
+#include "Foundation/String.h"
+#include "Foundation/StringConverter.h"
 
 #ifdef UNICODE
 
@@ -277,11 +279,18 @@ namespace Helium
 #ifdef UNICODE
                         // read the bytes directly into the string
                         string.resize( length ); 
-                        ReadBuffer( &string[ 0 ], length * 2 ); 
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Read( &string[ index ] );
+                        }
 #else
                         std::wstring temp;
                         temp.resize( length );
-                        ReadBuffer( &temp[ 0 ], length * 2 ); 
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Read( &temp[ index ] );
+                        }
+
                         Helium::ConvertString( temp, string );
 #endif
                         break;
@@ -290,11 +299,195 @@ namespace Helium
                 return *this;
             }
 
+            template< typename Allocator >
+            inline Stream& ReadString( StringBase< char, Allocator >& string )
+            {
+                uint32_t length = 0;
+                Read( &length );
+
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+                        string.Reserve( length );
+                        string.Resize( length ); 
+                        string.Trim();
+
+                        ReadBuffer( &string[ 0 ], length ); 
+
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+                        WideString temp;
+                        temp.Reserve( length );
+                        temp.Resize( length );
+
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Read( &temp[ index ] );
+                        }
+
+                        StringConverter< wchar_t, char >::Convert( string, temp );
+
+                        break;
+                    }
+                }
+
+                return *this;
+            }
+
+            template< typename Allocator >
+            inline Stream& ReadString( StringBase< wchar_t, Allocator >& string )
+            {
+                uint32_t length = 0;
+                Read( &length );
+
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+                        CharString temp;
+                        temp.Reserve( length );
+                        temp.Resize( length );
+
+                        ReadBuffer( &temp[ 0 ], length ); 
+
+                        StringConverter< char, wchar_t >::Convert( string, temp );
+
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+                        string.Reserve( length );
+                        string.Resize( length ); 
+                        string.Trim();
+
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Read( &string[ index ] );
+                        }
+
+                        break;
+                    }
+                }
+
+                return *this;
+            }
+
             inline Stream& WriteString( const tstring& string )
             {
-                uint32_t length = (uint32_t)string.length();
-                Write( &length );
-                WriteBuffer( string.c_str(), length * sizeof(tchar_t) );
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+#ifdef UNICODE
+                        std::string temp;
+                        Helium::ConvertString( string, temp );
+
+                        uint32_t length = (uint32_t)temp.length();
+                        Write( &length );
+                        WriteBuffer( &temp[ 0 ], length ); 
+#else
+                        uint32_t length = (uint32_t)string.length();
+                        Write( &length );
+                        WriteBuffer( &string[ 0 ], length ); 
+#endif
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+#ifdef UNICODE
+                        uint32_t length = (uint32_t)string.length();
+                        Write( &length );
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Write( &string[ index ] );
+                        }
+#else
+                        std::wstring temp;
+                        Helium::ConvertString( string, temp );
+
+                        uint32_t length = (uint32_t)temp.length();
+                        Write( &length );
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Write( &temp[ index ] );
+                        }
+#endif
+                        break;
+                    }
+                }
+
+                return *this;
+            }
+
+            template< typename Allocator >
+            Stream& WriteString( const StringBase< char, Allocator >& string )
+            {
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+                        uint32_t length = (uint32_t)string.GetSize();
+                        Write( &length );
+                        WriteBuffer( &string[ 0 ], length ); 
+
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+                        WideString temp;
+                        StringConverter< char, wchar_t >::Convert( temp, string );
+
+                        uint32_t length = (uint32_t)temp.GetSize();
+                        Write( &length );
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Write( &temp[ index ] );
+                        }
+
+                        break;
+                    }
+                }
+
+                return *this;
+            }
+
+            template< typename Allocator >
+            Stream& WriteString( const StringBase< wchar_t, Allocator >& string )
+            {
+                switch ( m_CharacterEncoding )
+                {
+                case CharacterEncodings::ASCII:
+                    {
+                        CharString temp;
+                        StringConverter< wchar_t, char >::Convert( temp, string );
+
+                        uint32_t length = (uint32_t)temp.GetSize();
+                        Write( &length );
+                        WriteBuffer( &temp[ 0 ], length ); 
+
+                        break;
+                    }
+
+                case CharacterEncodings::UTF_16:
+                    {
+                        uint32_t length = (uint32_t)string.GetSize();
+                        Write( &length );
+                        for ( uint32_t index = 0; index < length; ++index )
+                        {
+                            Write( &string[ index ] );
+                        }
+
+                        break;
+                    }
+                }
+
                 return *this;
             }
 

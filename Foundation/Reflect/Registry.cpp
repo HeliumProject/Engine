@@ -184,7 +184,7 @@ void Reflect::Initialize()
 
         // DynArrayData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<DynArrayData>( TXT( "DynArray" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringDynArrayData>( TXT( "StlStringDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringDynArrayData>( TXT( "StringDynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<BoolDynArrayData>( TXT( "BoolDynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt8DynArrayData>( TXT( "UInt8DynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int8DynArrayData>( TXT( "Int8DynArray" ) ) );

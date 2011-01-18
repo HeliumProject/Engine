@@ -118,7 +118,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4StlMapData );
 
 #include "Foundation/Reflect/Data/DynArrayData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8DynArrayData );

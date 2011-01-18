@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Foundation/String.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/SimpleData.h"
 #include "Foundation/Reflect/Data/ContainerData.h"
@@ -63,7 +64,7 @@ namespace Helium
             virtual tistream& operator<<( tistream& stream ) HELIUM_OVERRIDE;
         };
 
-        typedef SimpleDynArrayData< tstring > StlStringDynArrayData;
+        typedef SimpleDynArrayData< String > StringDynArrayData;
         typedef SimpleDynArrayData< bool > BoolDynArrayData;
         typedef SimpleDynArrayData< uint8_t > UInt8DynArrayData;
         typedef SimpleDynArrayData< int8_t > Int8DynArrayData;

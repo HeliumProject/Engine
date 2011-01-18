@@ -43,6 +43,21 @@ namespace Helium
             const SortedMap< Key, Data, CompareKey, OtherAllocator >& rSource );
 
         Data& operator[]( const Key& rKey );
+
+        bool operator==( const SortedMap& rOther ) const;
+        template< typename OtherAllocator > bool operator==(
+            const SortedMap< Key, Data, CompareKey, OtherAllocator >& rOther ) const;
+
+        bool operator!=( const SortedMap& rOther ) const;
+        template< typename OtherAllocator > bool operator!=(
+            const SortedMap< Key, Data, CompareKey, OtherAllocator >& rOther ) const;
+        //@}
+
+    private:
+        /// @name Private Utility Functions
+        //@{
+        template< typename OtherAllocator > bool Equals(
+            const SortedMap< Key, Data, CompareKey, OtherAllocator >& rOther ) const;
         //@}
     };
 }

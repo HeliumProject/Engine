@@ -35,6 +35,9 @@
 #endif
 
 #if defined( _MSC_VER )
+# if ( _MSC_FULL_VER < 150030729 )
+#  error Helium requires at least VS2008 with SP1 applied to compile.  Please update your compiler.
+# endif
 # define HELIUM_CC_MSC 1
 #elif defined( __GNUC__ )
 # define HELIUM_CC_GCC 1

@@ -125,6 +125,10 @@ namespace Helium
         template< typename OtherAllocator > StringBase& operator=(
             const StringBase< CharType, OtherAllocator >& rSource );
 
+        bool operator<( const CharType* pString ) const;
+        template< typename OtherAllocator > bool operator<(
+            const StringBase< CharType, OtherAllocator >& rString ) const;
+
         bool operator==( const CharType* pString ) const;
         template< typename OtherAllocator > bool operator==(
             const StringBase< CharType, OtherAllocator >& rString ) const;

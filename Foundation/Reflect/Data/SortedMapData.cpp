@@ -1,18 +1,18 @@
-#include "Foundation/Reflect/Data/MapData.h"
+#include "Foundation/Reflect/Data/SortedMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_ABSTRACT( MapData )
+REFLECT_DEFINE_ABSTRACT( SortedMapData )
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 // str should contain a string with map object separated by the specified delimiters argument.
 // str will be parsed into key-value pairs and each pair will be inserted into tokens.
-template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const String& str, Map< TKey, TVal, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
+template< typename TKey, typename TVal, typename TCompareKey, typename TAllocator >
+inline void Tokenize( const String& str, SortedMap< TKey, TVal, TCompareKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -57,8 +57,8 @@ inline void Tokenize( const String& str, Map< TKey, TVal, TEqualKey, TAllocator 
 
 // Partial specialization for strings as TVal, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
-template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const String& str, Map< TKey, String, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
+template< typename TKey, typename TVal, typename TCompareKey, typename TAllocator >
+inline void Tokenize( const String& str, SortedMap< TKey, String, TCompareKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -98,8 +98,8 @@ inline void Tokenize( const String& str, Map< TKey, String, TEqualKey, TAllocato
 
 // Partial specialization for strings as TKey, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
-template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const String& str, Map< String, TVal, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
+template< typename TKey, typename TVal, typename TCompareKey, typename TAllocator >
+inline void Tokenize( const String& str, SortedMap< String, TVal, TCompareKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -142,8 +142,8 @@ inline void Tokenize( const String& str, Map< String, TVal, TEqualKey, TAllocato
 
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
-template< typename TKey, typename TVal, typename TEqualKey, typename TAllocator >
-inline void Tokenize( const String& str, Map< String, String, TEqualKey, TAllocator >& tokens, const tchar_t* delimiters )
+template< typename TKey, typename TVal, typename TCompareKey, typename TAllocator >
+inline void Tokenize( const String& str, SortedMap< String, String, TCompareKey, TAllocator >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -180,50 +180,50 @@ inline void Tokenize( const String& str, Map< String, String, TEqualKey, TAlloca
     }
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SimpleMapData()
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SimpleSortedMapData()
 {
 
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::~SimpleMapData()
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::~SimpleSortedMapData()
 {
 
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-size_t SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetSize() const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+size_t SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetSize() const
 {
     return m_Data->GetSize();
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Clear()
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Clear()
 {
     return m_Data->Clear();
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::ConnectData(Helium::HybridPtr<void> data)
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::ConnectData(Helium::HybridPtr<void> data)
 {
     m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-const Class* SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetKeyClass() const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+const Class* SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetKeyClass() const
 {
     return Reflect::GetDataClass< KeyT >();
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-const Class* SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetValueClass() const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+const Class* SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetValueClass() const
 {
     return Reflect::GetDataClass< ValueT >();
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ValueType& items )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItems( A_ValueType& items )
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -238,8 +238,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ValueType
     }
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -254,8 +254,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ConstValu
     }
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-DataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Data* key )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+DataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( const Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -269,8 +269,8 @@ DataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Dat
     return NULL;
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-ConstDataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Data* key ) const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+ConstDataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( const Data* key ) const
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -284,8 +284,8 @@ ConstDataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( cons
     return NULL;
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* key, const Data* value )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SetItem( const Data* key, const Data* value )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -293,8 +293,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* 
     Data::GetValue( value, m_Data.Ref()[ keyValue ] );
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::RemoveItem( const Data* key )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::RemoveItem( const Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -302,10 +302,10 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::RemoveItem( const Dat
     m_Data->Remove( keyValue );
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
 {
-    const MapDataT* rhs = SafeCast< MapDataT >( src );
+    const SortedMapDataT* rhs = SafeCast< SortedMapDataT >( src );
     if ( !rhs )
     {
         return false;
@@ -316,39 +316,20 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( const Data* src,
     return true;
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( const Object* object ) const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( const Object* object ) const
 {
-    const MapDataT* rhs = SafeCast< MapDataT >( object );
+    const SortedMapDataT* rhs = SafeCast< SortedMapDataT >( object );
     if ( !rhs )
     {
         return false;
     }
 
-    if ( m_Data->GetSize() != rhs->m_Data->GetSize() )
-    {
-        return false;
-    }
-
-    const DataType& rhsData = m_Data.Ref();
-
-    DataType::ConstIterator itrLHS = m_Data->Begin();
-    DataType::ConstIterator endLHS = m_Data->End();
-    DataType::ConstIterator endRHS = rhsData.End();
-    for ( ; itrLHS != endLHS; ++itrLHS )
-    {
-        DataType::ConstIterator itrRHS = rhsData.Find( itrLHS->First() );
-        if( itrRHS == endRHS || itrLHS->Second() != itrRHS->Second() )
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return m_Data.Get() == rhs->m_Data.Get();
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( Archive& archive ) const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Serialize( Archive& archive ) const
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );
@@ -390,8 +371,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( Archive& a
     }
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( Archive& archive )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Deserialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
     archive.Deserialize( components, ArchiveFlags::Sparse );
@@ -424,8 +405,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( Archive&
     }
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-tostream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator>>( tostream& stream ) const
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+tostream& SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::operator>>( tostream& stream ) const
 {
     DataType::ConstIterator itr = m_Data->Begin();
     DataType::ConstIterator end = m_Data->End();
@@ -442,8 +423,8 @@ tostream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator>>( tost
     return stream;
 }
 
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-tistream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator<<( tistream& stream )
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+tistream& SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
@@ -453,57 +434,57 @@ tistream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator<<( tist
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, ValueT, EqualKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, ValueT, CompareKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
 
     return stream;
 }  
 
-template SimpleMapData< String, String >;
-template SimpleMapData< String, bool >;
-template SimpleMapData< String, uint32_t >;
-template SimpleMapData< String, int32_t >;
+template SimpleSortedMapData< String, String >;
+template SimpleSortedMapData< String, bool >;
+template SimpleSortedMapData< String, uint32_t >;
+template SimpleSortedMapData< String, int32_t >;
 
-template SimpleMapData< uint32_t, String >;
-template SimpleMapData< uint32_t, uint32_t >;
-template SimpleMapData< uint32_t, int32_t >;
-template SimpleMapData< uint32_t, uint64_t >;
+template SimpleSortedMapData< uint32_t, String >;
+template SimpleSortedMapData< uint32_t, uint32_t >;
+template SimpleSortedMapData< uint32_t, int32_t >;
+template SimpleSortedMapData< uint32_t, uint64_t >;
 
-template SimpleMapData< int32_t, String >;
-template SimpleMapData< int32_t, uint32_t >;
-template SimpleMapData< int32_t, int32_t >;
-template SimpleMapData< int32_t, uint64_t >;
+template SimpleSortedMapData< int32_t, String >;
+template SimpleSortedMapData< int32_t, uint32_t >;
+template SimpleSortedMapData< int32_t, int32_t >;
+template SimpleSortedMapData< int32_t, uint64_t >;
 
-template SimpleMapData< uint64_t, String >;
-template SimpleMapData< uint64_t, uint32_t >;
-template SimpleMapData< uint64_t, uint64_t >;
-template SimpleMapData< uint64_t, Matrix4 >;
+template SimpleSortedMapData< uint64_t, String >;
+template SimpleSortedMapData< uint64_t, uint32_t >;
+template SimpleSortedMapData< uint64_t, uint64_t >;
+template SimpleSortedMapData< uint64_t, Matrix4 >;
 
-template SimpleMapData< Helium::GUID, uint32_t >;
-template SimpleMapData< Helium::GUID, Matrix4 >;
-template SimpleMapData< Helium::TUID, uint32_t >;
-template SimpleMapData< Helium::TUID, Matrix4 >;
+template SimpleSortedMapData< Helium::GUID, uint32_t >;
+template SimpleSortedMapData< Helium::GUID, Matrix4 >;
+template SimpleSortedMapData< Helium::TUID, uint32_t >;
+template SimpleSortedMapData< Helium::TUID, Matrix4 >;
 
-REFLECT_DEFINE_OBJECT( StringStringMapData );
-REFLECT_DEFINE_OBJECT( StringBoolMapData );
-REFLECT_DEFINE_OBJECT( StringUInt32MapData );
-REFLECT_DEFINE_OBJECT( StringInt32MapData );
+REFLECT_DEFINE_OBJECT( StringStringSortedMapData );
+REFLECT_DEFINE_OBJECT( StringBoolSortedMapData );
+REFLECT_DEFINE_OBJECT( StringUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( StringInt32SortedMapData );
 
-REFLECT_DEFINE_OBJECT( UInt32StringMapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt32MapData );
-REFLECT_DEFINE_OBJECT( UInt32Int32MapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt64MapData );
+REFLECT_DEFINE_OBJECT( UInt32StringSortedMapData );
+REFLECT_DEFINE_OBJECT( UInt32UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( UInt32Int32SortedMapData );
+REFLECT_DEFINE_OBJECT( UInt32UInt64SortedMapData );
 
-REFLECT_DEFINE_OBJECT( Int32StringMapData );
-REFLECT_DEFINE_OBJECT( Int32UInt32MapData );
-REFLECT_DEFINE_OBJECT( Int32Int32MapData );
-REFLECT_DEFINE_OBJECT( Int32UInt64MapData );
+REFLECT_DEFINE_OBJECT( Int32StringSortedMapData );
+REFLECT_DEFINE_OBJECT( Int32UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Int32Int32SortedMapData );
+REFLECT_DEFINE_OBJECT( Int32UInt64SortedMapData );
 
-REFLECT_DEFINE_OBJECT( UInt64StringMapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt32MapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt64MapData );
-REFLECT_DEFINE_OBJECT( UInt64Matrix4MapData );
+REFLECT_DEFINE_OBJECT( UInt64StringSortedMapData );
+REFLECT_DEFINE_OBJECT( UInt64UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( UInt64UInt64SortedMapData );
+REFLECT_DEFINE_OBJECT( UInt64Matrix4SortedMapData );
 
-REFLECT_DEFINE_OBJECT( GUIDUInt32MapData );
-REFLECT_DEFINE_OBJECT( GUIDMatrix4MapData );
-REFLECT_DEFINE_OBJECT( TUIDUInt32MapData );
-REFLECT_DEFINE_OBJECT( TUIDMatrix4MapData );
+REFLECT_DEFINE_OBJECT( GUIDUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( GUIDMatrix4SortedMapData );
+REFLECT_DEFINE_OBJECT( TUIDUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( TUIDMatrix4SortedMapData );

@@ -5,7 +5,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-REFLECT_DEFINE_ABSTRACT(MapData)
+REFLECT_DEFINE_ABSTRACT( MapData )
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
@@ -288,12 +288,9 @@ template< typename KeyT, typename ValueT, typename EqualKeyT, typename Allocator
 void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* key, const Data* value )
 {
     KeyT keyValue;
-    Data::GetValue(key, keyValue);
+    Data::GetValue( key, keyValue );
 
-    ValueT valueValue;
-    Data::GetValue(value, valueValue);
-
-    m_Data.Ref()[ keyValue ] = valueValue;
+    Data::GetValue( value, m_Data.Ref()[ keyValue ] );
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
@@ -328,7 +325,26 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( const Object*
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    if ( m_Data->GetSize() != rhs->m_Data->GetSize() )
+    {
+        return false;
+    }
+
+    const DataType& rhsData = m_Data.Ref();
+
+    DataType::ConstIterator itrLHS = m_Data->Begin();
+    DataType::ConstIterator endLHS = m_Data->End();
+    DataType::ConstIterator endRHS = rhsData.End();
+    for ( ; itrLHS != endLHS; ++itrLHS )
+    {
+        DataType::ConstIterator itrRHS = rhsData.Find( itrLHS->First() );
+        if( itrRHS == endRHS || itrLHS->Second() != itrRHS->Second() )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >

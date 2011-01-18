@@ -3,15 +3,19 @@
 
 #include "Platform/Thread.h"
 
-#include "Editor/Inspect/Widgets/LabelWidget.h"
-#include "Editor/Inspect/Widgets/ValueWidget.h"
-#include "Editor/Inspect/Widgets/SliderWidget.h"
+#include "Foundation/Flags.h"
+
+#include "Editor/Inspect/Widgets/ButtonWidget.h"
 #include "Editor/Inspect/Widgets/ChoiceWidget.h"
 #include "Editor/Inspect/Widgets/CheckBoxWidget.h"
 #include "Editor/Inspect/Widgets/ColorPickerWidget.h"
-#include "Editor/Inspect/Widgets/ListWidget.h"
-#include "Editor/Inspect/Widgets/ButtonWidget.h"
+#include "Editor/Inspect/Widgets/DrawerWidget.h"
 #include "Editor/Inspect/Widgets/FileDialogButtonWidget.h"
+#include "Editor/Inspect/Widgets/LabelWidget.h"
+#include "Editor/Inspect/Widgets/ListWidget.h"
+#include "Editor/Inspect/Widgets/SliderWidget.h"
+#include "Editor/Inspect/Widgets/ValueWidget.h"
+
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -20,6 +24,7 @@ REFLECT_DEFINE_OBJECT( Canvas );
 
 Canvas::Canvas()
 : m_Window( NULL )
+, m_DrawerManager( NULL )
 {
     SetWidgetCreator< LabelWidget, Inspect::Label >();
     SetWidgetCreator< ValueWidget, Inspect::Value >();
@@ -58,6 +63,16 @@ void Canvas::SetWindow( wxWindow* window )
     }
 }
 
+DrawerManager* Canvas::GetDrawerManager() const
+{
+    return m_DrawerManager;
+}
+
+void Canvas::SetDrawerManager( DrawerManager* drawerManager )
+{
+    m_DrawerManager = drawerManager;
+}
+
 void Canvas::OnShow(wxShowEvent& event)
 {
     e_Show.Raise( event.IsShown() );
@@ -78,17 +93,19 @@ void Canvas::RealizeControl( Inspect::Control* control )
     {
         WidgetPtr widget;
 
-        if ( control is container, and is PopUp )
+        if ( control->GetClass() == Reflect::GetClass< Container >()
+            && HasFlags<Inspect::UIHints>( Reflect::AssertCast< Container >( control )->GetUIHints(), Inspect::UIHint::Popup ) )
         {
-            WidgetPtr widget = new DrawerWidget
+            // Create a drawerWidget
+            widget = new DrawerWidget( Reflect::AssertCast< Container >( control ) );
         }
         else
         {
             WidgetCreators::const_iterator found = m_WidgetCreators.find( control->GetClass() );
             HELIUM_ASSERT( found != m_WidgetCreators.end() );
-            WidgetPtr widget = found->second( control );
-            HELIUM_ASSERT( widget );
+            widget = found->second( control );
         }
+        HELIUM_ASSERT( widget );
 
         // associate the widget with the control
         control->SetWidget( widget );
@@ -103,6 +120,12 @@ void Canvas::RealizeControl( Inspect::Control* control )
 
         // this will cause the widget to allocate its corresponding window (since it has the parent pointer)
         widget->CreateWindow( parentWindow );
+
+        DrawerWidget* drawerWidget = Reflect::SafeCast< DrawerWidget >( widget );
+        if ( drawerWidget &&  GetDrawerManager() )
+        {
+            GetDrawerManager()->AddDrawer( drawerWidget->GetDrawer() );
+        }
     }
 }
 
@@ -123,6 +146,12 @@ void Canvas::UnrealizeControl( Inspect::Control* control )
 
         Widget* widget = Reflect::AssertCast< Widget >( control->GetWidget() );
         HELIUM_ASSERT( widget );
+
+        DrawerWidget* drawerWidget = Reflect::SafeCast< DrawerWidget >( control->GetWidget() );
+        if ( drawerWidget &&  GetDrawerManager() )
+        {
+            GetDrawerManager()->RemoveDrawer( drawerWidget->GetDrawer() );
+        }
 
         widget->DestroyWindow();
         control->SetWidget( NULL );

@@ -24,8 +24,7 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE { return true; }
 
             Drawer* GetDrawer() const;
-
-            StripCanvas& GetStripCanvas();
+            Canvas* GetCanvas() const;
 
             void SetLabel( const tstring& label );
             void SetIcon( const tstring& icon );
@@ -34,7 +33,7 @@ namespace Helium
             void OnIconChanged( const Attribute< tstring >::ChangeArgs& args );
             void OnLabelChanged( const Attribute< tstring >::ChangeArgs& args );
 
-            Inspect::Container* m_Container;
+            Inspect::Container* m_ContainerControl;
             Drawer* m_Drawer;
             StripCanvas m_StripCanvas;
         };

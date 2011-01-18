@@ -9,9 +9,9 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_OBJECT( StripCanvas );
 
-StripCanvas::StripCanvas()
-: m_Panel( NULL )
-, m_DrawerManager( NULL )
+StripCanvas::StripCanvas( int orientation )
+: m_Orientation( orientation )
+, m_Panel( NULL )
 {
     SetWidgetCreator< StripCanvasWidget, Container >();
 }
@@ -26,27 +26,17 @@ void StripCanvas::SetPanel( wxPanel* panel )
     m_Panel = panel;
 }
 
-DrawerManager* StripCanvas::GetDrawerManager() const
-{
-    return m_DrawerManager;
-}
-
-void StripCanvas::SetDrawerManager( DrawerManager* drawerManager )
-{
-    m_DrawerManager = drawerManager;
-}
-
 void StripCanvas::Realize( Inspect::Canvas* canvas )
 {
     HELIUM_ASSERT( canvas == this || canvas == NULL );
 
-    StrongPtr< StripCanvasWidget > widget = new StripCanvasWidget( this );
+    StrongPtr< StripCanvasWidget > widget = new StripCanvasWidget( this, m_Orientation );
     widget->SetPanel( m_Panel );
     SetWidget( widget );
 
     int spacing = GetBorder();
 
-    wxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+    wxSizer* sizer = new wxBoxSizer( m_Orientation );
     m_Panel->SetSizer( sizer );
     sizer->AddSpacer( spacing );
 

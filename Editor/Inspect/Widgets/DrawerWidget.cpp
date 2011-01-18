@@ -7,38 +7,51 @@ using namespace Helium::Editor;
 REFLECT_DEFINE_OBJECT( DrawerWidget );
 
 DrawerWidget::DrawerWidget( Inspect::Container* container )
-: m_Container( container )
+: m_ContainerControl( container )
 , m_Drawer( NULL )
+, m_StripCanvas( wxVERTICAL )
 {
-    SetControl( container );
+    if ( m_ContainerControl )
+    {
+        // move children out of the container and into the new vertical strip canvas
+        for( Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
+        {
+            m_StripCanvas.AddChild( *itr );
+        }
+        //container->Clear();
+
+        SetControl( m_ContainerControl );
+    }
 }
 
 void DrawerWidget::CreateWindow( wxWindow* parent )
 {
     HELIUM_ASSERT( !m_Drawer );
 
-    m_Drawer = new Drawer( parent, wxID_ANY );
-
-    SetWindow( m_Drawer );
+    SetWindow( m_Drawer = new Drawer( parent, wxID_ANY ) );
 
     // init state
-    if ( !m_Container->a_Icon.Get().empty() )
+    if ( !m_ContainerControl->a_Icon.Get().empty() )
     {
-        m_Drawer->SetIcon( m_Container->a_Icon.Get() );
+        m_Drawer->SetIcon( m_ContainerControl->a_Icon.Get() );
     }
     else
     {
-        m_Drawer->SetLabel( m_Container->a_Name.Get() );
+        m_Drawer->SetLabel( m_ContainerControl->a_Name.Get() );
     }
 
     // init layout metrics
     wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_Drawer->SetSize( size );
-    m_Drawer->SetMinSize( size );
+    m_Drawer->GetButton()->SetSize( size );
+    m_Drawer->GetButton()->SetMinSize( size );
+
+    // Add the m_StripCanvas to the Drawer's panel
+    m_StripCanvas.SetPanel( m_Drawer->GetPanel() );
+    m_StripCanvas.Realize( NULL );
 
     // add listeners
-    m_Container->a_Icon.Changed().AddMethod( this, &DrawerWidget::OnIconChanged );
-    m_Container->a_Name.Changed().AddMethod( this, &DrawerWidget::OnLabelChanged );
+    m_ContainerControl->a_Icon.Changed().AddMethod( this, &DrawerWidget::OnIconChanged );
+    m_ContainerControl->a_Name.Changed().AddMethod( this, &DrawerWidget::OnLabelChanged );
 }
 
 void DrawerWidget::DestroyWindow()
@@ -48,8 +61,8 @@ void DrawerWidget::DestroyWindow()
     SetWindow( NULL );
 
     // remove listeners
-    m_Container->a_Icon.Changed().RemoveMethod( this, &DrawerWidget::OnIconChanged );
-    m_Container->a_Name.Changed().RemoveMethod( this, &DrawerWidget::OnLabelChanged );
+    m_ContainerControl->a_Icon.Changed().RemoveMethod( this, &DrawerWidget::OnIconChanged );
+    m_ContainerControl->a_Name.Changed().RemoveMethod( this, &DrawerWidget::OnLabelChanged );
 
     // destroy window
     delete m_Drawer;
@@ -61,9 +74,9 @@ Drawer* DrawerWidget::GetDrawer() const
     return m_Drawer;
 }
 
-StripCanvas& DrawerWidget::GetStripCanvas()
+Canvas* DrawerWidget::GetCanvas() const
 {
-    return m_StripCanvas;
+    return (Canvas*)&m_StripCanvas;
 }
 
 void DrawerWidget::SetLabel( const tstring& label )

@@ -2,7 +2,6 @@
 
 #include "Foundation/Inspect/Container.h"
 
-#include "Editor/Controls/Drawer/DrawerManager.h"
 #include "Editor/Inspect/Widget.h"
 
 namespace Helium
@@ -16,15 +15,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( StripCanvasWidget, Widget );
 
-            StripCanvasWidget()
-                : m_ContainerControl( NULL )
-                , m_ContainerWindow( NULL )
-                , m_StaticText( NULL )
-            {
-
-            }
-
-            StripCanvasWidget( Inspect::Container* container );
+            StripCanvasWidget( Inspect::Container* container  = NULL, int orientation = wxHORIZONTAL );
 
             wxPanel* GetPanel() const;
             void SetPanel( wxPanel* panel );
@@ -40,6 +31,7 @@ namespace Helium
 
         private:
             Inspect::Container* m_ContainerControl;
+            int32_t m_Orientation;
             wxPanel* m_ContainerWindow;
             wxStaticText* m_StaticText;
         };

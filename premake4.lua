@@ -2,6 +2,9 @@ require "Base"
 require "TBB"
 require "WxWidgets"
 
+-- Check prereqs
+Helium.CheckEnvironment()
+
 -- Check for FBX integration.
 haveFbx = os.isfile( "Integrations/FBX/FBX.lua" )
 if haveFbx then

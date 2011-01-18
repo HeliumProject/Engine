@@ -1,5 +1,7 @@
 Helium = {}
 
+Helium.RequiredCLVersion = 150030729
+
 os.capture = function( cmd, raw )
     local f = assert( io.popen( cmd, 'r' ) )
     local s = assert( f:read( '*a' ) )
@@ -30,6 +32,31 @@ Helium.Sleep = function( seconds )
 	else
 		os.execute("sleep " .. seconds)
 	end
+end
+
+Helium.CheckEnvironment = function()
+
+    local compilerPath = os.pathsearch( 'gcc', os.getenv( 'PATH' ) )
+    if compilerPath == nil then
+        compilerPath = os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) )
+        if compilerPath == nil then
+            error( "\n\nYou must have Visual Studio 2008 SP1 installed and be running in a VS2008 Command Prompt to compile Helium." )
+        else
+            compilerPath = "cl.exe"
+        end
+    end
+
+    local compilerVersionOutput = os.capture( "\"" .. compilerPath .. "\" 2>&1" )
+    
+    -- this is tuned for VS2008 now, need to handle GCC, etc.
+    local compilerVersion = ''
+    for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
+        compilerVersion = major .. minor .. build
+    end
+    
+    if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
+        error( "\n\nYou must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
+    end
 end
 
 Helium.Publish = function( files )

@@ -143,6 +143,14 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color4DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4DynArrayData );
 
+#include "Foundation/Reflect/Data/SetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32SetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64SetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathSetData );
+
 #include "Foundation/Reflect/Data/MapData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStringMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringBoolMapData );

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/String.h"
 #include "Foundation/Container/Map.h"
+#include "Foundation/String.h"
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/SimpleData.h"

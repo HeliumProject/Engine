@@ -209,6 +209,15 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3DynArrayData>( TXT( "HDRColor3DynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4DynArrayData>( TXT( "HDRColor4DynArray" ) ) );
 
+        // SetData
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<SetData>( TXT( "Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringSetData>( TXT( "StringSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32SetData>( TXT( "UInt32Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64SetData>( TXT( "UInt64Set" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDSetData>( TXT( "GUIDSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDSetData>( TXT( "TUIDSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<PathSetData>( TXT( "PathSet" ) ) );
+
         // MapData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<MapData>( TXT( "Map" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringStringMapData>( TXT( "StringStringMap" ) ) );

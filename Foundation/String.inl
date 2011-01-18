@@ -1240,6 +1240,71 @@ Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocat
     return *this;
 }
 
+/// Check whether this string should precede the given null-terminated C-style string based on character code values.
+///
+/// @param[in] pString  String with which to compare.  This can be null.
+///
+/// @return  True if this string should precede the given string, false if not.
+template< typename CharType, typename Allocator >
+bool Helium::StringBase< CharType, Allocator >::operator<( const CharType* pString ) const
+{
+    // No strings can precede empty strings.
+    if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
+    {
+        return false;
+    }
+
+    // Perform a character-by-character comparison.
+    size_t stringSize = GetSize();
+    for( size_t characterIndex = 0; characterIndex < stringSize; ++characterIndex )
+    {
+        CharType thisCharacter = m_buffer[ characterIndex ];
+        CharType otherCharacter = pString[ characterIndex ];
+        if( thisCharacter < otherCharacter )
+        {
+            return true;
+        }
+
+        if( otherCharacter < thisCharacter || otherCharacter == static_cast< CharType >( 0 ) )
+        {
+            return false;
+        }
+    }
+
+    return ( static_cast< CharType >( 0 ) < pString[ stringSize ] );
+}
+
+/// Check whether this string should precede the given string based on character code values.
+///
+/// @param[in] rString  String with which to compare.
+///
+/// @return  True if this string should precede the given string, false if not.
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+bool Helium::StringBase< CharType, Allocator >::operator<( const StringBase< CharType, OtherAllocator >& rString ) const
+{
+    size_t thisSize = GetSize();
+    size_t otherSize = rString.GetSize();
+
+    size_t testSize = Min( thisSize, otherSize );
+    for( size_t characterIndex = 0; characterIndex < testSize; ++characterIndex )
+    {
+        CharType thisCharacter = m_buffer[ characterIndex ];
+        CharType otherCharacter = rString.m_buffer[ characterIndex ];
+        if( thisCharacter < otherCharacter )
+        {
+            return true;
+        }
+
+        if( otherCharacter < thisCharacter )
+        {
+            return false;
+        }
+    }
+
+    return ( thisSize < otherSize );
+}
+
 /// Check whether the contents of this string match the contents of a given null-terminated C-style string.
 ///
 /// @param[in] pString  String with which to compare.  This can be null.
@@ -1253,7 +1318,7 @@ bool Helium::StringBase< CharType, Allocator >::operator==( const CharType* pStr
     // Check for empty string matches.
     if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
     {
-        return( bufferSize <= 1 );
+        return ( bufferSize <= 1 );
     }
 
     // Perform a character-by-character comparison.
@@ -1268,7 +1333,7 @@ bool Helium::StringBase< CharType, Allocator >::operator==( const CharType* pStr
     }
 
     // String should be null-terminated.
-    return( pString[ stringSize ] == static_cast< CharType >( 0 ) );
+    return ( pString[ stringSize ] == static_cast< CharType >( 0 ) );
 }
 
 /// Check whether the contents of this string match the contents of a given string.
@@ -1283,8 +1348,8 @@ bool Helium::StringBase< CharType, Allocator >::operator==(
 {
     size_t bufferSize = m_buffer.GetSize();
 
-    return( bufferSize == rString.m_buffer.GetSize() &&
-            MemoryCompare( m_buffer.GetData(), rString.m_buffer.GetData(), bufferSize * sizeof( CharType ) ) == 0 );
+    return ( bufferSize == rString.m_buffer.GetSize() &&
+             MemoryCompare( m_buffer.GetData(), rString.m_buffer.GetData(), bufferSize * sizeof( CharType ) ) == 0 );
 }
 
 /// Check whether the contents of this string do not match the contents of a given null-terminated C-style string.

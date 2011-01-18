@@ -244,8 +244,6 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlVectorData>( TXT( "ObjectStlVector" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlSetData>( TXT( "ObjectStlSet" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectStlMapData>( TXT( "ObjectStlMap" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectDynArrayData>( TXT( "ObjectDynArray" ) ) );
-        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectMapData>( TXT( "ObjectMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDObjectStlMapData>( TXT( "TypeIDObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlStringObjectStlMapData>( TXT( "StlStringObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ObjectStlMapData>( TXT( "UInt32ObjectStlMap" ) ) );
@@ -254,6 +252,17 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectStlMapData>( TXT( "Int64ObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectStlMapData>( TXT( "GUIDObjectStlMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectStlMapData>( TXT( "TUIDObjectStlMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectDynArrayData>( TXT( "ObjectDynArray" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectSetData>( TXT( "ObjectSet" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<ObjectMapData>( TXT( "ObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TypeIDObjectMapData>( TXT( "TypeIDObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StringObjectMapData>( TXT( "StringObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt32ObjectMapData>( TXT( "UInt32ObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int32ObjectMapData>( TXT( "Int32ObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<UInt64ObjectMapData>( TXT( "UInt64ObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectMapData>( TXT( "Int64ObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectMapData>( TXT( "GUIDObjectMap" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectMapData>( TXT( "TUIDObjectMap" ) ) );
 
         //
         // Build Casting Table

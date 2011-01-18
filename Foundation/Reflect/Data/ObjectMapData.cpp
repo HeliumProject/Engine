@@ -181,7 +181,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( const Object* o
 
         Object* objectLHS = itrLHS->Second();
         Object* objectRHS = itrRHS->Second();
-        if( objectLHS != objectRHS && ( !objectLHS && !objectRHS && !objectLHS->Equals( objectRHS ) ) )
+        if( objectLHS != objectRHS && ( !objectLHS || !objectRHS || !objectLHS->Equals( objectRHS ) ) )
         {
             return false;
         }

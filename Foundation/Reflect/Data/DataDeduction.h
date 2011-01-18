@@ -192,6 +192,9 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectStlMapData );
 #include "Foundation/Reflect/Data/ObjectDynArrayData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectDynArrayData );
 
+#include "Foundation/Reflect/Data/ObjectSetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectSetData );
+
 #include "Foundation/Reflect/Data/ObjectMapData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringObjectMapData );

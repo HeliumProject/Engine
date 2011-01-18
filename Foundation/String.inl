@@ -52,7 +52,7 @@ Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString, 
 ///
 /// @return  Number of character type elements in this string.
 ///
-/// @see GetCapacity(), IsEmpty()
+/// @see GetCapacity(), Resize(), IsEmpty()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::GetSize() const
 {
@@ -69,6 +69,33 @@ template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::IsEmpty() const
 {
     return( m_buffer.GetSize() <= 1 );
+}
+
+/// Resize this array, retaining any existing data that fits within the new size.
+///
+/// If the new size is smaller than the current size, no memory will be freed for the string buffer itself, and any
+/// existing string contents will be truncated.
+///
+/// If the new size is larger than the current capacity, the string memory will be reallocated according to the normal
+/// array growth rules.  This can be avoided by calling Reserve() to increase the capacity to an explicit value prior to
+/// calling this function.
+///
+/// @param[in] size  New array size.
+/// @param[in] fill  Character with which to fill new string elements if the new string size is larger than the current
+///                  capacity.
+///
+/// @see GetSize()
+template< typename CharType, typename Allocator >
+void Helium::StringBase< CharType, Allocator >::Resize( size_t size, CharType fill )
+{
+    size_t oldSize = m_buffer.GetSize();
+    m_buffer.Resize( size );
+
+    if( size > oldSize )
+    {
+        size_t newCharacterCount = size - oldSize;
+        ArraySet( m_buffer.GetData() + oldSize, fill, newCharacterCount );
+    }
 }
 
 /// Get the number of character type elements that can be held by this string without reallocating memory.

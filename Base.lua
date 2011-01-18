@@ -85,7 +85,15 @@ Helium.Prebuild = function()
 		"python Build/JobDefParser.py JobDefinitions . .",
 		"python Build/TypeParser.py . .",
 	}
-
+    
+    local pythonPath = os.pathsearch( 'python', os.getenv( 'PATH' ) )
+    if pythonPath == nil then
+        pythonPath = os.pathsearch( 'python.exe', os.getenv( 'PATH' ) )
+        if pythonPath == nil then
+            error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
+        end
+    end
+        
 	local result = 0
 
 	for i, commandString in ipairs( commands ) do

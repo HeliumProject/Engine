@@ -132,9 +132,11 @@ namespace Helium
             // Serialize
             virtual void Serialize( Object* object );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
+            template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
             void SerializeFields( Object* object );
 
         private:
@@ -145,9 +147,11 @@ namespace Helium
             // pulls from the stream, or deserializes into a freshly allocated instance
             virtual void Deserialize( ObjectPtr& object );
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             // Helpers
+            template< typename ArrayPusher > void Deserialize( ArrayPusher& push, uint32_t flags );
             void DeserializeFields( Object* object );
 
         public:

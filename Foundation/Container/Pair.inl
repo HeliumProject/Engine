@@ -73,10 +73,22 @@ bool Helium::KeyValue< T1, T2 >::operator<( const KeyValue& rOther ) const
 /// Equality comparison.
 ///
 /// @return  True if both elements in this object are equal to both elements in the given object, false otherwise.
+///
+/// @see operator!=()
 template< typename T1, typename T2 >
 bool Helium::KeyValue< T1, T2 >::operator==( const KeyValue& rOther ) const
 {
     return ( m_first == rOther.m_first && m_second == rOther.m_second );
+}
+
+/// Inequality comparison.
+///
+/// @return  True if both elements in this object are not equal to both elements in the given object, false if they are
+///          equal.
+template< typename T1, typename T2 >
+bool Helium::KeyValue< T1, T2 >::operator!=( const KeyValue& rOther ) const
+{
+    return ( m_first != rOther.m_first || m_second != rOther.m_second );
 }
 
 /// Constructor.

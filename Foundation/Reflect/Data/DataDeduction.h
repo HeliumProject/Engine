@@ -117,6 +117,62 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDMatrix4StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4StlMapData );
 
+#include "Foundation/Reflect/Data/DynArrayData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt16DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int16DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathDynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Vector2DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Vector3DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Vector4DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Matrix3DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Matrix4DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color3DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color4DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3DynArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4DynArrayData );
+
+#include "Foundation/Reflect/Data/SetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32SetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64SetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDSetData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathSetData );
+
+#include "Foundation/Reflect/Data/MapData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringStringMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringBoolMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringUInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32StringMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32UInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32Int32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32UInt64MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32StringMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32UInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32Int32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32UInt64MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StringMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt64MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64Matrix4MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDUInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDMatrix4MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32MapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4MapData );
+
 #include "Foundation/Reflect/Data/ObjectStlVectorData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectStlVectorData );
 
@@ -132,3 +188,19 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectStlMapData );
+
+#include "Foundation/Reflect/Data/ObjectDynArrayData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectDynArrayData );
+
+#include "Foundation/Reflect/Data/ObjectSetData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectSetData );
+
+#include "Foundation/Reflect/Data/ObjectMapData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TypeIDObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectMapData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectMapData );

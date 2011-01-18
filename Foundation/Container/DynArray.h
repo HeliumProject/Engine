@@ -105,6 +105,11 @@ namespace Helium
 
         T& operator[]( ptrdiff_t index );
         const T& operator[]( ptrdiff_t index ) const;
+
+        bool operator==( const DynArray& rOther ) const;
+        template< typename OtherAllocator > bool operator==( const DynArray< T, OtherAllocator >& rOther ) const;
+        bool operator!=( const DynArray& rOther ) const;
+        template< typename OtherAllocator > bool operator!=( const DynArray< T, OtherAllocator >& rOther ) const;
         //@}
 
     private:
@@ -124,6 +129,8 @@ namespace Helium
         void Finalize();
 
         template< typename OtherAllocator > DynArray& Assign( const DynArray< T, OtherAllocator >& rSource );
+
+        template< typename OtherAllocator > bool Equals( const DynArray< T, OtherAllocator >& rOther ) const;
 
         T* Allocate( size_t count );
         T* Allocate( size_t count, const boost::true_type& rNeedsAlignment );

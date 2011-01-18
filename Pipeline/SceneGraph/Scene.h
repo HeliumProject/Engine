@@ -538,7 +538,7 @@ namespace Helium
                 HM_SceneNodeDumbPtr::const_iterator end  = m_Nodes.end();
                 for( ; itor != end; ++itor )
                 {
-                    if( itor->second->HasType( Reflect::GetType< T >() ) )
+                    if( itor->second->HasType( Reflect::GetClass< T >() ) )
                     {
                         if ( !filterFunc || (*filterFunc)( itor->second ) )
                         {

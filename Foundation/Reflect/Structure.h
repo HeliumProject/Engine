@@ -38,3 +38,36 @@ namespace Helium
         };
     }
 }
+
+// declares type checking functions
+#define _REFLECT_DECLARE_STRUCTURE( STRUCTURE, BASE ) \
+public: \
+typedef BASE Base; \
+typedef OBJECT This; \
+static Helium::Reflect::Structure* CreateStructure( const tchar_t* name ); \
+static const Helium::Reflect::Structure* s_Structure;
+
+// defines the static type info vars
+#define _REFLECT_DEFINE_STRUCTURE( STRUCTURE ) \
+const Helium::Reflect::Structure* STRUCTURE::GetStructure() const \
+{ \
+    return s_Structure; \
+} \
+\
+Helium::Reflect::Structure* STRUCTURE::CreateStructure( const tchar_t* name ) \
+{ \
+    HELIUM_ASSERT( s_Structure == NULL ); \
+    HELIUM_ASSERT( STRUCTURE::Base::s_Structure != NULL ); \
+    Helium::Reflect::Structure* type = Helium::Reflect::Structure::Create<STRUCTURE>(name, STRUCTURE::Base::s_Structure->m_Name); \
+    s_Structure = type; \
+    return type; \
+} \
+const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL;
+
+// declares a concrete object with creator
+#define REFLECT_DECLARE_STRUCTURE( STRUCTURE, BASE ) \
+    _REFLECT_DECLARE_STRUCTURE( STRUCTURE, BASE )
+
+// defines a concrete object
+#define REFLECT_DEFINE_STRUCTURE( STRUCTURE ) \
+    _REFLECT_DEFINE_STRUCTURE( STRUCTURE, &STRUCTURE::CreateObject )

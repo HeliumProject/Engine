@@ -321,3 +321,59 @@ Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >&
 
     return *this;
 }
+
+/// Equality comparison operator.
+///
+/// @param[in] rOther  Table with which to compare.
+///
+/// @return  True if the contents of this table and the given table match, false if not.
+///
+/// @see operator!=()
+template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
+bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::operator==( const Table& rOther ) const
+{
+    return ( m_elements == rOther.m_elements );
+}
+
+/// Equality comparison operator.
+///
+/// @param[in] rOther  Table with which to compare.
+///
+/// @return  True if the contents of this table and the given table match, false if not.
+///
+/// @see operator!=()
+template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
+template< typename OtherAllocator >
+bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::operator==(
+    const Table< Value, Key, ExtractKey, EqualKey, OtherAllocator, InternalValue >& rOther ) const
+{
+    return ( m_elements == rOther.m_elements );
+}
+
+/// Inequality comparison operator.
+///
+/// @param[in] rOther  Table with which to compare.
+///
+/// @return  True if the contents of this table and the given table do not match, false if they do match.
+///
+/// @see operator==()
+template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
+bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=( const Table& rOther ) const
+{
+    return ( m_elements != rOther.m_elements );
+}
+
+/// Inequality comparison operator.
+///
+/// @param[in] rOther  Table with which to compare.
+///
+/// @return  True if the contents of this table and the given table do not match, false if they do match.
+///
+/// @see operator==()
+template< typename Value, typename Key, typename ExtractKey, typename EqualKey, typename Allocator, typename InternalValue >
+template< typename OtherAllocator >
+bool Helium::Table< Value, Key, ExtractKey, EqualKey, Allocator, InternalValue >::operator!=(
+    const Table< Value, Key, ExtractKey, EqualKey, OtherAllocator, InternalValue >& rOther ) const
+{
+    return ( m_elements != rOther.m_elements );
+}

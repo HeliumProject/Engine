@@ -14,6 +14,38 @@ using namespace Helium::Reflect;
 // version / feature management 
 const uint32_t ArchiveBinary::CURRENT_VERSION = 7;
 
+class StlVectorPusher : NonCopyable
+{
+public:
+    std::vector< ObjectPtr >& m_ObjectVector;
+
+    explicit StlVectorPusher( std::vector< ObjectPtr >& objectVector )
+        : m_ObjectVector( objectVector )
+    {
+    }
+
+    void operator()( const ObjectPtr& object )
+    {
+        m_ObjectVector.push_back( object );
+    }
+};
+
+class DynArrayPusher : NonCopyable
+{
+public:
+    DynArray< ObjectPtr >& m_ObjectArray;
+
+    explicit DynArrayPusher( DynArray< ObjectPtr >& objectArray )
+        : m_ObjectArray( objectArray )
+    {
+    }
+
+    void operator()( const ObjectPtr& object )
+    {
+        m_ObjectArray.Push( object );
+    }
+};
+
 //
 // Binary Archive implements our own custom serialization technique
 //
@@ -255,7 +287,18 @@ void ArchiveBinary::Serialize(Object* object)
 
 void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
 {
-    int32_t size = (int32_t)elements.size();
+    Serialize( elements.begin(), elements.end(), flags );
+}
+
+void ArchiveBinary::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags )
+{
+    Serialize( elements.Begin(), elements.End(), flags );
+}
+
+template< typename ConstIteratorType >
+void ArchiveBinary::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
+{
+    int32_t size = (int32_t)( end - begin );
     m_Stream->Write(&size); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -264,8 +307,7 @@ void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t
     m_Indent.Push();
 #endif
 
-    std::vector< ObjectPtr >::const_iterator itr = elements.begin();
-    std::vector< ObjectPtr >::const_iterator end = elements.end();
+    ConstIteratorType itr = begin;
     for (int index = 0; itr != end; ++itr, ++index )
     {
         Serialize(*itr);
@@ -273,7 +315,7 @@ void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t
         if ( flags & ArchiveFlags::Status )
         {
             ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-            info.m_Progress = (int)(((float)(index) / (float)elements.size()) * 100.0f);
+            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
             e_Status.Raise( info );
         }
     }
@@ -441,6 +483,17 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
 
 void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
 {
+    Deserialize( StlVectorPusher( elements ), flags );
+}
+
+void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
+{
+    Deserialize( DynArrayPusher( elements ), flags );
+}
+
+template< typename ArrayPusher >
+void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
+{
     uint32_t start_offset = (uint32_t)m_Stream->TellRead();
 
     int32_t element_count = -1;
@@ -480,7 +533,7 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t fla
 
             if (object.ReferencesObject() || flags & ArchiveFlags::Sparse)
             {
-                elements.push_back( object );
+                push( object );
             }
         }
     }

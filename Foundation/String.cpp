@@ -102,47 +102,6 @@ void CharString::Insert( size_t index, const CharString& rString )
     StringBase::Insert( index, rString );
 }
 
-/// @copydoc StringBase::FindAny()
-size_t CharString::FindAny( const char* pCharacters, size_t startIndex, size_t characterCount ) const
-{
-    return StringBase::FindAny( pCharacters, startIndex, characterCount );
-}
-
-/// Find the first instance of any of the characters in the given string, starting from the given offset.
-///
-/// @param[in] rCharacters  String containing the characters to locate.
-/// @param[in] startIndex   Index from which to start searching.
-///
-/// @return  Index of the first instance of any of the specified characters if found, or an invalid index if not
-///          found.
-///
-/// @see FindAnyReverse(), Find(), FindReverse()
-size_t CharString::FindAny( const CharString& rCharacters, size_t startIndex ) const
-{
-    return StringBase::FindAny( rCharacters.m_buffer.GetData(), startIndex, rCharacters.GetSize() );
-}
-
-/// @copydoc StringBase::FindAnyReverse()
-size_t CharString::FindAnyReverse( const char* pCharacters, size_t startIndex, size_t characterCount ) const
-{
-    return StringBase::FindAnyReverse( pCharacters, startIndex, characterCount );
-}
-
-/// Find the last instance of any of the characters in the given string, starting from the given offset and
-/// searching in reverse.
-///
-/// @param[in] rCharacters  String containing the characters to locate.
-/// @param[in] startIndex   Index from which to start searching.
-///
-/// @return  Index of the last instance of any of the specified characters if found, or an invalid index if not
-///          found.
-///
-/// @see FindAny(), Find(), FindReverse()
-size_t CharString::FindAnyReverse( const CharString& rCharacters, size_t startIndex ) const
-{
-    return StringBase::FindAnyReverse( rCharacters.m_buffer.GetData(), startIndex, rCharacters.GetSize() );
-}
-
 /// Set this string to a single character.
 ///
 /// This will always destroy the current string contents and allocate a fresh buffer whose capacity matches that
@@ -358,47 +317,6 @@ void WideString::Insert( size_t index, const wchar_t* pString )
 void WideString::Insert( size_t index, const WideString& rString )
 {
     StringBase::Insert( index, rString );
-}
-
-/// @copydoc StringBase::FindAny()
-size_t WideString::FindAny( const wchar_t* pCharacters, size_t startIndex, size_t characterCount ) const
-{
-    return StringBase::FindAny( pCharacters, startIndex, characterCount );
-}
-
-/// Find the first instance of any of the characters in the given string, starting from the given offset.
-///
-/// @param[in] rCharacters  String containing the characters to locate.
-/// @param[in] startIndex   Index from which to start searching.
-///
-/// @return  Index of the first instance of any of the specified characters if found, or an invalid index if not
-///          found.
-///
-/// @see FindAnyReverse(), Find(), FindReverse()
-size_t WideString::FindAny( const WideString& rCharacters, size_t startIndex ) const
-{
-    return StringBase::FindAny( rCharacters.m_buffer.GetData(), startIndex, rCharacters.GetSize() );
-}
-
-/// @copydoc StringBase::FindAnyReverse()
-size_t WideString::FindAnyReverse( const wchar_t* pCharacters, size_t startIndex, size_t characterCount ) const
-{
-    return StringBase::FindAnyReverse( pCharacters, startIndex, characterCount );
-}
-
-/// Find the last instance of any of the characters in the given string, starting from the given offset and
-/// searching in reverse.
-///
-/// @param[in] rCharacters  String containing the characters to locate.
-/// @param[in] startIndex   Index from which to start searching.
-///
-/// @return  Index of the last instance of any of the specified characters if found, or an invalid index if not
-///          found.
-///
-/// @see FindAny(), Find(), FindReverse()
-size_t WideString::FindAnyReverse( const WideString& rCharacters, size_t startIndex ) const
-{
-    return StringBase::FindAnyReverse( rCharacters.m_buffer.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Set this string to a single character.

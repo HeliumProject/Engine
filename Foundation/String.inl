@@ -52,7 +52,7 @@ Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString, 
 ///
 /// @return  Number of character type elements in this string.
 ///
-/// @see GetCapacity(), IsEmpty()
+/// @see GetCapacity(), Resize(), IsEmpty()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::GetSize() const
 {
@@ -69,6 +69,33 @@ template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::IsEmpty() const
 {
     return( m_buffer.GetSize() <= 1 );
+}
+
+/// Resize this array, retaining any existing data that fits within the new size.
+///
+/// If the new size is smaller than the current size, no memory will be freed for the string buffer itself, and any
+/// existing string contents will be truncated.
+///
+/// If the new size is larger than the current capacity, the string memory will be reallocated according to the normal
+/// array growth rules.  This can be avoided by calling Reserve() to increase the capacity to an explicit value prior to
+/// calling this function.
+///
+/// @param[in] size  New array size.
+/// @param[in] fill  Character with which to fill new string elements if the new string size is larger than the current
+///                  capacity.
+///
+/// @see GetSize()
+template< typename CharType, typename Allocator >
+void Helium::StringBase< CharType, Allocator >::Resize( size_t size, CharType fill )
+{
+    size_t oldSize = m_buffer.GetSize();
+    m_buffer.Resize( size );
+
+    if( size > oldSize )
+    {
+        size_t newCharacterCount = size - oldSize;
+        ArraySet( m_buffer.GetData() + oldSize, fill, newCharacterCount );
+    }
 }
 
 /// Get the number of character type elements that can be held by this string without reallocating memory.
@@ -459,7 +486,7 @@ void Helium::StringBase< CharType, Allocator >::Format( const CharType* pFormatS
 ///
 /// @return  Index of the first instance of the specified character if found, or an invalid index if not found.
 ///
-/// @see FindReverse(), FindAny(), FindAnyReverse()
+/// @see FindReverse(), FindAny(), FindAnyReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::Find( CharType character, size_t startIndex ) const
 {
@@ -478,12 +505,12 @@ size_t Helium::StringBase< CharType, Allocator >::Find( CharType character, size
 /// Find the last instance of the specified character, starting from the given offset and searching in reverse.
 ///
 /// @param[in] character   Character to locate.
-/// @param[in] startIndex  Index from which to start searching, or an invalid index to start searching from the end
-///                        of the string.
+/// @param[in] startIndex  Index from which to start searching, or an invalid index to start searching from the end of
+///                        the string.
 ///
 /// @return  Index of the last instance of the specified character if found, or an invalid index if not found.
 ///
-/// @see Find(), FindAny(), FindAnyReverse()
+/// @see Find(), FindAny(), FindAnyReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindReverse( CharType character, size_t startIndex ) const
 {
@@ -508,13 +535,12 @@ size_t Helium::StringBase< CharType, Allocator >::FindReverse( CharType characte
 ///
 /// @param[in] pCharacters     String containing the characters to locate.
 /// @param[in] startIndex      Index from which to start searching.
-/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check for
-///                            each character up to the first null terminator encountered (default behavior).
+/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check for each
+///                            character up to the first null terminator encountered (default behavior).
 ///
-/// @return  Index of the first instance of any of the specified characters if found, or an invalid index if not
-///          found.
+/// @return  Index of the first instance of any of the specified characters if found, or an invalid index if not found.
 ///
-/// @see FindAnyReverse(), Find(), FindReverse()
+/// @see FindAnyReverse(), Find(), FindReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAny(
     const CharType* pCharacters,
@@ -547,18 +573,34 @@ size_t Helium::StringBase< CharType, Allocator >::FindAny(
     return Invalid< size_t >();
 }
 
-/// Find the last instance of any of the characters in the given string, starting from the given offset and
-/// searching in reverse.
+/// Find the first instance of any of the characters in the given string, starting from the given offset.
+///
+/// @param[in] rCharacters  String containing the characters to locate.
+/// @param[in] startIndex   Index from which to start searching.
+///
+/// @return  Index of the first instance of any of the specified characters if found, or an invalid index if not found.
+///
+/// @see FindAnyReverse(), Find(), FindReverse(), FindNone(), FindNoneReverse()
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+size_t Helium::StringBase< CharType, Allocator >::FindAny(
+    const StringBase< CharType, OtherAllocator >& rCharacters,
+    size_t startIndex ) const
+{
+    return FindAny( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+}
+
+/// Find the last instance of any of the characters in the given string, starting from the given offset and searching in
+/// reverse.
 ///
 /// @param[in] pCharacters     String containing the characters to locate.
 /// @param[in] startIndex      Index from which to start searching.
-/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check for
-///                            each character up to the first null terminator encountered (default behavior).
+/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check for each
+///                            character up to the first null terminator encountered (default behavior).
 ///
-/// @return  Index of the last instance of any of the specified characters if found, or an invalid index if not
-///          found.
+/// @return  Index of the last instance of any of the specified characters if found, or an invalid index if not found.
 ///
-/// @see FindAny(), Find(), FindReverse()
+/// @see FindAny(), Find(), FindReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
     const CharType* pCharacters,
@@ -595,6 +637,164 @@ size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
     }
 
     return Invalid< size_t >();
+}
+
+/// Find the last instance of any of the characters in the given string, starting from the given offset and searching in
+/// reverse.
+///
+/// @param[in] rCharacters  String containing the characters to locate.
+/// @param[in] startIndex   Index from which to start searching.
+///
+/// @return  Index of the last instance of any of the specified characters if found, or an invalid index if not found.
+///
+/// @see FindAny(), Find(), FindReverse(), FindNone(), FindNoneReverse()
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
+    const StringBase< CharType, OtherAllocator >& rCharacters,
+    size_t startIndex ) const
+{
+    return FindAnyReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+}
+
+/// Find the first character not in a given set of characters, starting from the given offset.
+///
+/// @param[in] pCharacters     String containing the characters against which to check.
+/// @param[in] startIndex      Index from which to start searching.
+/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check against
+///                            each character up to the first null terminator encountered (default behavior).
+///
+/// @return  Index of the first character not contained in the given set if one was found, or an invalid index if not
+///          found.
+///
+/// @see FindNoneReverse(), Find(), FindReverse(), FindAny(), FindAnyReverse()
+template< typename CharType, typename Allocator >
+size_t Helium::StringBase< CharType, Allocator >::FindNone(
+    const CharType* pCharacters,
+    size_t startIndex,
+    size_t characterCount ) const
+{
+    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+
+    if( IsInvalid( characterCount ) )
+    {
+        characterCount = StringLength( pCharacters );
+    }
+
+    if( characterCount != 0 )
+    {
+        size_t size = GetSize();
+        for( size_t index = startIndex; index < size; ++index )
+        {
+            CharType testCharacter = m_buffer[ index ];
+            size_t characterIndex;
+            for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+            {
+                if( testCharacter == pCharacters[ characterIndex ] )
+                {
+                    break;
+                }
+            }
+
+            if( characterIndex >= characterCount )
+            {
+                return index;
+            }
+        }
+    }
+
+    return Invalid< size_t >();
+}
+
+/// Find the first character not in a given set of characters, starting from the given offset.
+///
+/// @param[in] rCharacters  String containing the characters against which to check.
+/// @param[in] startIndex   Index from which to start searching.
+///
+/// @return  Index of the first character not contained in the given set if one was found, or an invalid index if not
+///          found.
+///
+/// @see FindNoneReverse(), Find(), FindReverse(), FindAny(), FindAnyReverse()
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+size_t Helium::StringBase< CharType, Allocator >::FindNone(
+    const StringBase< CharType, OtherAllocator >& rCharacters,
+    size_t startIndex ) const
+{
+    return FindNone( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+}
+
+/// Find the last character not in a given set of characters, starting from the given offset and searching in reverse.
+///
+/// @param[in] pCharacters     String containing the characters against which to check.
+/// @param[in] startIndex      Index from which to start searching.
+/// @param[in] characterCount  Number of characters in the @c pCharacters string, or an invalid index to check against
+///                            each character up to the first null terminator encountered (default behavior).
+///
+/// @return  Index of the last character not contained in the given set if one was found, or an invalid index if not
+///          found.
+///
+/// @see FindNone(), Find(), FindReverse(), FindAny(), FindAnyReverse()
+template< typename CharType, typename Allocator >
+size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
+    const CharType* pCharacters,
+    size_t startIndex,
+    size_t characterCount ) const
+{
+    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+
+    if( IsInvalid( characterCount ) )
+    {
+        characterCount = StringLength( pCharacters );
+    }
+
+    if( characterCount != 0 )
+    {
+        size_t size = GetSize();
+        if( size != 0 )
+        {
+            size_t index = ( startIndex >= size ? size : startIndex + 1 );
+            while( index != 0 )
+            {
+                --index;
+
+                CharType testCharacter = m_buffer[ index ];
+                size_t characterIndex;
+                for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+                {
+                    if( testCharacter == pCharacters[ characterIndex ] )
+                    {
+                        break;
+                    }
+                }
+
+                if( characterIndex >= characterCount )
+                {
+                    return index;
+                }
+            }
+        }
+    }
+
+    return Invalid< size_t >();
+}
+
+/// Find the last character not in a given set of characters, starting from the given offset and searching in reverse.
+///
+/// @param[in] rCharacters  String containing the characters against which to check.
+/// @param[in] startIndex   Index from which to start searching.
+///
+/// @return  Index of the last character not contained in the given set if one was found, or an invalid index if not
+///          found.
+///
+/// @see FindNone(), Find(), FindReverse(), FindAny(), FindAnyReverse()
+template< typename CharType, typename Allocator >
+template< typename OtherAllocator >
+size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
+    const StringBase< CharType, OtherAllocator >& rCharacters,
+    size_t startIndex ) const
+{
+    return FindNoneReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Check whether this string contains a character.
@@ -1162,4 +1362,37 @@ void Helium::StringBase< CharType, Allocator >::Insert(
                 sizeof( CharType ) * otherBufferSize );
         }
     }
+}
+
+/// Write a string to the given output stream.
+///
+/// @param[in] rStream  Output stream.
+/// @param[in] rString  String to write.
+///
+/// @return  Reference to the given output stream.
+template< typename CharType, typename CharTypeTraits, typename Allocator >
+std::basic_ostream< CharType, CharTypeTraits >& Helium::operator<<(
+    std::basic_ostream< CharType, CharTypeTraits >& rStream,
+    const StringBase< CharType, Allocator >& rString )
+{
+    return ( rStream << *rString );
+}
+
+/// Read a string from the given input stream.
+///
+/// @param[in]  rStream  Input stream.
+/// @param[out] rString  Read string.
+///
+/// @return  Reference to the given input stream.
+template< typename CharType, typename CharTypeTraits, typename Allocator >
+std::basic_istream< CharType, CharTypeTraits >& Helium::operator>>(
+    std::basic_istream< CharType, CharTypeTraits >& rStream,
+    StringBase< CharType, Allocator >& rString )
+{
+    // Could definitely improve this...
+    std::basic_string< CharType, CharTypeTraits, std::allocator< char > > tempString;
+    rStream >> tempString;
+    rString = tempString.c_str();
+
+    return rStream;
 }

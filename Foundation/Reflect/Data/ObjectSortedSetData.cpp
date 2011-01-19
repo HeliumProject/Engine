@@ -107,11 +107,6 @@ void ObjectSortedSetData::Serialize( Archive& archive ) const
     DataType::ConstIterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        if ( !itr->ReferencesObject() )
-        {
-            continue;
-        }
-
         components.Push( *itr );
     }
 

@@ -41,17 +41,18 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 
     m_Data->resize(rhs->m_Data->size());
 
-    std::vector< ObjectPtr >::const_iterator itr = rhs->m_Data->begin();
-    std::vector< ObjectPtr >::const_iterator end = rhs->m_Data->end();
-    for ( int index = 0; itr != end; ++itr )
+    if (flags & DataFlags::Shallow)
     {
-        if (flags & DataFlags::Shallow)
+        m_Data.Ref() = rhs->m_Data.Ref();
+    }
+    else
+    {
+        std::vector< ObjectPtr >::const_iterator itr = rhs->m_Data->begin();
+        std::vector< ObjectPtr >::const_iterator end = rhs->m_Data->end();
+        for ( int index = 0; itr != end; ++itr )
         {
-            m_Data.Ref()[index++] = *itr;
-        }
-        else
-        {
-            m_Data.Ref()[index++] = (*itr)->Clone();
+            Object* object = *itr;
+            m_Data.Ref()[index++] = ( object ? object->Clone() : NULL );
         }
     }
 

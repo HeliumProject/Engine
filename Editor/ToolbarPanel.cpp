@@ -23,16 +23,7 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     m_ToolPropertiesCanvas.SetPanel( m_ToolsPropertiesPanel );
     m_ToolPropertiesCanvas.SetDrawerManager( &m_DrawerManager );
 
-    SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
-
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // Tool Bar Drawers
-    //m_TestPanelGenerated = new TestPanelGenerated( m_DrawerManager );
-    //m_TestPanelGenerated->Hide();
-    //m_TestDrawer = new Drawer( m_DrawerManager, m_TestPanelGenerated, wxT( "TestDrawer" ), wxArtProvider::GetBitmap( ArtIDs::Editor::Helium ) );
-    //m_DrawerManager->AddDrawer( m_TestDrawer );
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
+    //SetHelpText( TXT( "This is the Toolbar, it provides access to commonly used actions and tools." ) );
 
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {

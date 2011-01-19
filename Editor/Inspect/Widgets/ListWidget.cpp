@@ -28,9 +28,9 @@ void ListWidget::CreateWindow( wxWindow* parent )
     // add listeners
 
     // layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_Window->SetSize( size );
-    m_Window->SetMinSize( size );
+    //wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
+    //m_Window->SetSize( size );
+    //m_Window->SetMinSize( size );
 
     // update state of attributes that are not refreshed during Read()
 }

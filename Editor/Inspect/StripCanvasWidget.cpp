@@ -73,6 +73,8 @@ void StripCanvasWidget::CreateWindow( wxWindow* parent )
     m_ContainerWindow->SetHelpText( m_ContainerControl->a_HelpText.Get() );
 
     m_ContainerWindow->Thaw();
+
+    m_ContainerWindow->Layout();
 }
 
 void StripCanvasWidget::DestroyWindow()

@@ -40,14 +40,14 @@ void DrawerWidget::CreateWindow( wxWindow* parent )
         m_Drawer->SetLabel( m_ContainerControl->a_Name.Get() );
     }
 
-    // init layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_Drawer->GetButton()->SetSize( size );
-    m_Drawer->GetButton()->SetMinSize( size );
-
     // Add the m_StripCanvas to the Drawer's panel
     m_StripCanvas.SetPanel( m_Drawer->GetPanel() );
     m_StripCanvas.Realize( NULL );
+
+    wxSize drawerSize( m_Drawer->GetPanel()->GetBestSize() );
+    m_Drawer->GetPanel()->SetSize( drawerSize );
+    m_Drawer->GetPanel()->SetMinSize( drawerSize );
+    m_Drawer->GetPanel()->Layout();
 
     // add listeners
     m_ContainerControl->a_Icon.Changed().AddMethod( this, &DrawerWidget::OnIconChanged );

@@ -53,8 +53,6 @@ namespace Helium
             SceneGraph::PropertiesManager m_ToolPropertiesManager;
 
             DrawerManager m_DrawerManager;
-            //TestPanelGenerated* m_TestPanelGenerated;
-            //Drawer* m_TestDrawer;
         };
     }
 }

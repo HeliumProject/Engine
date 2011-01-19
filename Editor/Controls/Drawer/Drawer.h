@@ -2,6 +2,7 @@
 
 #include "Platform/Types.h"
 
+#include "Editor/ArtProvider.h"
 #include "Foundation/Automation/Event.h"
 
 #include <wx/tglbtn.h>
@@ -85,7 +86,6 @@ namespace Helium
 
             wxString m_Icon;
 
-            wxSizer* m_ButtonSizer;
             wxToggleButton* m_Button;
             DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
@@ -97,7 +97,7 @@ namespace Helium
             wxAuiManager* m_AuiManager;
             wxAuiPaneInfo* m_PaneInfo;
 
-            wxWindow* m_DrawerWindow;
+            wxWindow* m_CurrentFrame;
         };
     }
 }

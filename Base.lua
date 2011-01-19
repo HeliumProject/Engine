@@ -36,27 +36,48 @@ end
 
 Helium.CheckEnvironment = function()
 
-    local compilerPath = os.pathsearch( 'gcc', os.getenv( 'PATH' ) )
-    if compilerPath == nil then
-        compilerPath = os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) )
-        if compilerPath == nil then
-            error( "\n\nYou must have Visual Studio 2008 SP1 installed and be running in a VS2008 Command Prompt to compile Helium." )
-        else
-            compilerPath = "cl.exe"
+    print("\nChecking Environment...\n")
+
+    if os.get() == "windows" then
+    
+        local failed = 0
+        
+        if os.getenv( "VCINSTALLDIR" ) == nil then
+            print( " -> You must be running in a Visual Studio Command Prompt.")
+            failed = 1
+        end
+        
+        if not failed then
+            if os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) ) == nil then
+                print( " -> cl.exe was not found in your path.  Make sure you are using a Visual Studio 2008 SP1 Command Prompt." )
+                failed = 1
+            else
+                compilerPath = "cl.exe"
+            end
+
+            local compilerVersion = ''
+            local compilerVersionOutput = os.capture( "\"cl.exe\" 2>&1" )
+            for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
+                compilerVersion = major .. minor .. build
+            end
+            
+            if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
+                print( " -> You must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
+                failed = 1
+            end
+        end
+        
+        if os.getenv( "DXSDK_DIR" ) == nil then
+            print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
+            failed = 1
+        end
+        
+        if failed == 1 then
+            print( "\nCannot proceed until your environment is valid." )
+            os.exit( 1 )
         end
     end
 
-    local compilerVersionOutput = os.capture( "\"" .. compilerPath .. "\" 2>&1" )
-    
-    -- this is tuned for VS2008 now, need to handle GCC, etc.
-    local compilerVersion = ''
-    for major, minor, build in string.gmatch( compilerVersionOutput, "Version (%d+)\.(%d+)\.(%d+)" ) do
-        compilerVersion = major .. minor .. build
-    end
-    
-    if tonumber( compilerVersion ) < Helium.RequiredCLVersion then
-        error( "\n\nYou must have Visual Studio 2008 with SP1 applied to compile Helium.  Please update your compiler and tools." )
-    end
 end
 
 Helium.Publish = function( files )
@@ -82,14 +103,7 @@ Helium.Publish = function( files )
 		-- do the file copy
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
-            local versionString = Helium.GetSystemVersion()
-            
-            -- vista/windows 7
-            if ( string.find( versionString, "6\.%d+\.%d+" ) ) then
-                linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
-            else
-                linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
-            end
+            linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
 		else
             linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
 		end
@@ -102,6 +116,27 @@ Helium.Publish = function( files )
 			os.exit( 1 )
 		end						
 	end
+end
+
+Helium.PublishIcons = function( bin )
+
+    if os.get() == "windows" then
+        if string.find( os.getenv("PATH"), "x64" ) then
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Debug\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Intermediate\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Profile\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Release\\Icons\" *.png")
+        else
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Debug\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Intermediate\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Profile\\Icons\" *.png")
+            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Release\\Icons\" *.png")
+        end
+    else
+		print("Implement support for " .. os.get() .. " to Helium.PublishIcons()")
+		os.exit(1)
+    end
+
 end
 
 -- Pre-build script execution.

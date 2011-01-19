@@ -201,19 +201,13 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Arch
         DataType::ConstIterator end = m_Data->End();
         for ( ; itr != end; ++itr )
         {
-            Object* object = itr->Second();
-            if ( !object )
-            {
-                continue;
-            }
-
             ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass< KeyT >() );
 
             Data* ser = AssertCast< Data >( elem.Ptr() );
             ser->ConnectData( &itr->First() );
 
             HELIUM_VERIFY( components.New( ser ) );
-            HELIUM_VERIFY( components.New( object ) );
+            HELIUM_VERIFY( components.New( itr->Second() ) );
         }
     }
 
@@ -258,7 +252,7 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Ar
         Object* value = *itr;
         ++itr;
 
-        if ( key && value )
+        if ( key )  // The object value can be null, so don't check it here.
         {
             KeyT k;
             Data::GetValue( key, k );

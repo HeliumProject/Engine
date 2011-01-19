@@ -41,17 +41,18 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 
     int index = 0;
 
-    DataType::const_iterator itr = rhs->m_Data->begin();
-    DataType::const_iterator end = rhs->m_Data->end();
-    for ( ; itr != end; ++itr )
+    if (flags & DataFlags::Shallow)
     {
-        if (flags & DataFlags::Shallow)
+        m_Data.Ref() = rhs->m_Data.Ref();
+    }
+    else
+    {
+        DataType::const_iterator itr = rhs->m_Data->begin();
+        DataType::const_iterator end = rhs->m_Data->end();
+        for ( ; itr != end; ++itr )
         {
-            m_Data->insert(*itr);
-        }
-        else
-        {
-            m_Data->insert((*itr)->Clone());
+            Object* object = *itr;
+            m_Data->insert( object ? object->Clone() : NULL );
         }
     }
 
@@ -99,11 +100,6 @@ void ObjectStlSetData::Serialize(Archive& archive) const
     DataType::const_iterator end = m_Data->end();
     for ( ; itr != end; ++itr )
     {
-        if (!itr->ReferencesObject())
-        {
-            continue;
-        }
-
         components.push_back(*itr);
     }
 

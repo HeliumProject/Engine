@@ -226,7 +226,12 @@ void ArchiveBinary::Write()
 void ArchiveBinary::Serialize(Object* object)
 {
     // write the crc of the class of object (used to factory allocate an instance when reading)
-    uint32_t classCrc = Helium::Crc32( object->GetClass()->m_Name );
+    uint32_t classCrc = 0;
+    if ( object )
+    {
+        classCrc = Helium::Crc32( object->GetClass()->m_Name );
+    }
+
     m_Stream->Write(&classCrc); 
 
     // stub out the length we are about to write
@@ -239,35 +244,38 @@ void ArchiveBinary::Serialize(Object* object)
     m_Indent.Push();
 #endif
 
-    object->PreSerialize( NULL );
+    if ( object )
+    {
+        object->PreSerialize( NULL );
 
-    Data* data = SafeCast< Data >( object );
-    if ( data )
-    {
-        data->Serialize(*this);
-    }
-    else
-    {
-        // push a new struct on the stack
-        WriteFields data;
-        data.m_Count = 0;
-        data.m_CountOffset = m_Stream->TellWrite();
-        m_FieldStack.push(data);
+        Data* data = SafeCast< Data >( object );
+        if ( data )
         {
-            // stub out the number of fields we are about to write
-            m_Stream->Write(&m_FieldStack.top().m_Count);
-
-            // serialize each field of the object
-            SerializeFields(object);
-
-            // seek back and write our count
-            m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
-            m_Stream->Write(&m_FieldStack.top().m_Count); 
+            data->Serialize(*this);
         }
-        m_FieldStack.pop();
-    }
+        else
+        {
+            // push a new struct on the stack
+            WriteFields data;
+            data.m_Count = 0;
+            data.m_CountOffset = m_Stream->TellWrite();
+            m_FieldStack.push(data);
+            {
+                // stub out the number of fields we are about to write
+                m_Stream->Write(&m_FieldStack.top().m_Count);
 
-    object->PostSerialize( NULL );
+                // serialize each field of the object
+                SerializeFields(object);
+
+                // seek back and write our count
+                m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
+                m_Stream->Write(&m_FieldStack.top().m_Count); 
+            }
+            m_FieldStack.pop();
+        }
+
+        object->PostSerialize( NULL );
+    }
 
     // compute amound written
     uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
@@ -397,14 +405,20 @@ ObjectPtr ArchiveBinary::Allocate()
 
     // read type string
     uint32_t typeCrc = Helium::BeginCrc32();
-    m_Stream->Read(&typeCrc); 
-    const Class* type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+    m_Stream->Read(&typeCrc);
+
+    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
+    const Class* type = NULL;
+    if ( typeCrc != 0 )
+    {
+        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+    }
 
     // read length info if we have it
     uint32_t length = 0;
     m_Stream->Read(&length);
 
-    if (m_Skip)
+    if ( m_Skip || typeCrc == 0 )
     {
         // skip it, but account for already reading the length from the stream
         m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
@@ -531,10 +545,7 @@ void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
                 }
             }
 
-            if (object.ReferencesObject() || flags & ArchiveFlags::Sparse)
-            {
-                push( object );
-            }
+            push( object );
         }
     }
 

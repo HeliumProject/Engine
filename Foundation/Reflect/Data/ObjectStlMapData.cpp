@@ -129,17 +129,18 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 
     m_Data->clear();
 
-    DataType::const_iterator itr = rhs->m_Data->begin();
-    DataType::const_iterator end = rhs->m_Data->end();
-    for ( ; itr != end; ++itr )
+    if (flags & DataFlags::Shallow)
     {
-        if (flags & DataFlags::Shallow)
+        m_Data.Ref() = rhs->m_Data.Ref();
+    }
+    else
+    {
+        DataType::const_iterator itr = rhs->m_Data->begin();
+        DataType::const_iterator end = rhs->m_Data->end();
+        for ( ; itr != end; ++itr )
         {
-            m_Data.Ref()[itr->first] = itr->second;
-        }
-        else
-        {
-            m_Data.Ref()[itr->first] = itr->second->Clone();
+            Object* object = itr->second;
+            m_Data.Ref()[itr->first] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -191,11 +192,6 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
         DataType::const_iterator end = m_Data->end();
         for ( int i = 0; itr != end; ++itr )
         {
-            if (!itr->second.ReferencesObject())
-            {
-                continue;
-            }
-
             ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass<KeyT>() );
 
             Data* ser = AssertCast<Data>(elem.Ptr());
@@ -242,7 +238,7 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
     {
         Data* key = SafeCast<Data>(*itr);
         Object* value = *(++itr);
-        if ( key && value )
+        if ( key )  // The object value can be null, so don't check it here.
         {
             KeyT k;
             Data::GetValue( key, k );

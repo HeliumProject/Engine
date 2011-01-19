@@ -166,24 +166,35 @@ void ArchiveXML::Write()
 
 void ArchiveXML::Serialize(Object* object)
 {
-    object->PreSerialize( NULL );
+    if ( object )
+    {
+        object->PreSerialize( NULL );
+    }
 
+    // Always serialize a header, even with null object references.
     SerializeHeader(object);
 
-    Data* data = SafeCast<Data>(object);
-
-    if ( data )
+    if ( object )
     {
-        data->Serialize(*this);
-    }
-    else
-    {
-        SerializeFields(object);
+        Data* data = SafeCast<Data>(object);
+
+        if ( data )
+        {
+            data->Serialize(*this);
+        }
+        else
+        {
+            SerializeFields(object);
+        }
     }
 
+    // Always serialize a footer, even with null object references.
     SerializeFooter(object);
 
-    object->PostSerialize( NULL );
+    if ( object )
+    {
+        object->PostSerialize( NULL );
+    }
 }
 
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
@@ -265,7 +276,13 @@ void ArchiveXML::SerializeHeader(Object* object)
 
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
-    *m_Stream << TXT( "<Object Type=\"" ) << object->GetClass()->m_Name << TXT( "\"" );
+    *m_Stream << TXT( "<Object Type=\"" );
+    if ( object )
+    {
+        *m_Stream << object->GetClass()->m_Name;
+    }
+    
+    *m_Stream << TXT( "\"" );
 
     //
     // Field name
@@ -284,7 +301,7 @@ void ArchiveXML::SerializeHeader(Object* object)
     // End header
     //
 
-    if ( object->IsCompact() )
+    if ( !object || object->IsCompact() )
     {
         *m_Stream << TXT( ">" );
     }
@@ -296,7 +313,7 @@ void ArchiveXML::SerializeHeader(Object* object)
 
 void ArchiveXML::SerializeFooter(Object* object)
 {
-    if ( !object->IsCompact() )
+    if ( object && !object->IsCompact() )
     {
         m_Indent.Get(*m_Stream);
     }
@@ -348,6 +365,7 @@ void ArchiveXML::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
         }
 
         size_t size = m_Components.size();
+        elements.Reserve( size );
         for( size_t index = 0; index < size; ++index )
         {
             elements.Push( m_Components[ index ] );
@@ -388,20 +406,20 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //
 
     tstring elementType;
+    bool foundTypeAttribute = false;
 
-    if ( elementType.empty() )
+    for (int i=0; papszAttrs[i]; i+=2)
     {
-        for (int i=0; papszAttrs[i]; i+=2)
+        if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
         {
-            if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
-            {
-                bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], elementType );
-                HELIUM_ASSERT( converted );
-            }
+            foundTypeAttribute = true;
+
+            bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], elementType );
+            HELIUM_ASSERT( converted );
         }
     }
 
-    if ( elementType.empty() )
+    if ( !foundTypeAttribute )
     {
         HELIUM_BREAK();
         throw Reflect::DataFormatException( TXT( "Unable to find object type attribute" ) );
@@ -475,7 +493,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Try and get a creator for a new object to store the data
     //
 
-    if ( !newState->m_Object.ReferencesObject() )
+    if ( !newState->m_Object.ReferencesObject() && !elementType.empty() )
     {
         //
         // Attempt creation of object via name
@@ -624,7 +642,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
         parentState->m_Components.push_back(topState->m_Object);
     }
-    else if ( topState->m_Object.ReferencesObject() )
+    else
     {
         // we've reached the top of the processed stack, send off to client for processing
         m_Target->push_back( topState->m_Object );

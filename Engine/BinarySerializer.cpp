@@ -59,7 +59,7 @@ bool BinarySerializer::Serialize( GameObject* pObject )
 
     if( !pObject->IsDefaultTemplate() )
     {
-        GameObject* pTemplate = pObject->GetTemplate();
+        GameObject* pTemplate = Reflect::AssertCast< GameObject >( pObject->GetTemplate() );
         HELIUM_ASSERT( pTemplate );
         templateIndex = ResolveObjectDependency( pTemplate->GetPath() );
         HELIUM_ASSERT( IsValid( templateIndex ) );

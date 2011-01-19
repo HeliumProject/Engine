@@ -104,7 +104,7 @@ void XmlSerializer::PreSerialize( GameObject* pObject )
     HELIUM_ASSERT( pObject );
 
     // Serialize the object's template.
-    GameObject* pTemplate = pObject->GetTemplate();
+    GameObject* pTemplate = Reflect::AssertCast< GameObject >( pObject->GetTemplate() );
     HELIUM_ASSERT( pTemplate );
 
     m_templateSerializer.Serialize( pTemplate );

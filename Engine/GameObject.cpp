@@ -348,8 +348,8 @@ uint32_t GameObject::ToggleFlags( uint32_t flagMask )
 
 /// Get the template for this object.
 ///
-/// @return  GameObject template.
-GameObject* GameObject::GetTemplate() const
+/// @return  Object template.
+Reflect::ObjectPtr GameObject::GetTemplate() const
 {
     GameObject* pTemplate = m_spTemplate;
     if( !pTemplate )

@@ -250,6 +250,11 @@ void Object::ToFile( const Path& path ) const
     archive->Close();
 }
 
+ObjectPtr Object::GetTemplate() const
+{
+    return ObjectPtr();
+}
+
 DataPtr Object::ShouldSerialize( const Field* field )
 {
     return field->ShouldSerialize( this );

@@ -406,7 +406,7 @@ namespace Helium
                     Write( &temp[ index ] );
                 }
 #else
-                uint32_t length = (uint32_t)string.length();
+                uint32_t length = (uint32_t)string.GetSize();
                 Write( &length );
                 WriteBuffer( string.c_str(), length );
 #endif
@@ -418,7 +418,7 @@ namespace Helium
             Stream& WriteString( const StringBase< wchar_t, Allocator >& string )
             {
 #if UNICODE
-                uint32_t length = (uint32_t)string.length();
+                uint32_t length = (uint32_t)string.GetSize();
                 Write( &length );
                 for ( uint32_t index = 0; index < length; ++index )
                 {

@@ -54,8 +54,8 @@ if( $pull )
 }
 
 my $premake = 'premake4 vs2008';
-my $depends = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . " " . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" );
-my $compile = 'perl.exe ' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . " " . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" );
+my $depends = 'perl.exe "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" ) . '"';
+my $compile = 'perl.exe "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" ) . '"';
 
 if($config)
 {

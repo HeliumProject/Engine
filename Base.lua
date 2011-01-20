@@ -183,11 +183,18 @@ Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
 
-	platforms
-	{
-		"x32",
-		"x64",
-	}
+	if Helium.Build64Bit() then
+        platforms
+        {
+            "x32",
+       		"x64",
+       	}
+    else
+        platforms
+        {
+            "x32",
+        } 
+    end
 
 	configurations
 	{

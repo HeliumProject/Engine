@@ -303,11 +303,11 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 
     // Locate the source asset file of the source template resource and combine its timestamp with the object timestamp.
     Resource* pTemplateResource = pResource;
-    GameObject* pTestTemplate = pResource->GetTemplate();
+    GameObject* pTestTemplate = Reflect::AssertCast< GameObject >( pResource->GetTemplate() );
     while( pTestTemplate && !pTestTemplate->IsDefaultTemplate() )
     {
         pTemplateResource = Reflect::AssertCast< Resource >( pTestTemplate );
-        pTestTemplate = pTemplateResource->GetTemplate();
+        pTestTemplate = Reflect::AssertCast< GameObject >( pTemplateResource->GetTemplate() );
     }
 
     GameObjectPath parentPath = pTemplateResource->GetPath();

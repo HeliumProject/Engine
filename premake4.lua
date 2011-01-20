@@ -33,40 +33,29 @@ newoption
 }
 
 if _ACTION ~= "prebuild" then
-	local wx = "Dependencies/wxWidgets"
-	local tbb = "Dependencies/tbb"
 
 	if _ACTION ~= "clean" then
-		Helium.BuildWxWidgets( wx )
-		Helium.PublishWxWidgets( wx )
-		Helium.BuildTBB( tbb )
-		Helium.PublishTBB( tbb )
+        local bin = "Bin"
+
+		Helium.BuildWxWidgets()
+		Helium.PublishWxWidgets( bin )
+		Helium.BuildTBB()
+		Helium.PublishTBB( bin )
 
 		if haveFbx then
-			local fbx = "Integrations/FBX"
-			Helium.PublishFBX( fbx )
+			Helium.PublishFBX( bin )
 		end
 
 		if haveGranny then
-			local granny = "Integrations/Granny/granny_sdk"
-			Helium.PublishGranny( granny )
+			Helium.PublishGranny( bin )
 		end
 
-		if os.get() == "windows" then
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Debug\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Intermediate\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Profile\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x32\\Release\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Debug\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Intermediate\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Profile\\Icons\" *.png")
-			os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"Bin\\x64\\Release\\Icons\" *.png")
-		end
+        Helium.PublishIcons( bin )
 
 		Helium.Prebuild()
 	else
-		Helium.CleanWxWidgets( wx )
-		Helium.CleanTBB( tbb )
+		Helium.CleanWxWidgets()
+		Helium.CleanTBB()
 	end
 
 	solution "Dependencies"

@@ -212,7 +212,7 @@ namespace Lunar
         uint32_t ClearFlags( uint32_t flagMask );
         uint32_t ToggleFlags( uint32_t flagMask );
 
-        GameObject* GetTemplate() const;
+        Reflect::ObjectPtr GetTemplate() const;
 
         inline const GameObjectWPtr& GetFirstChild() const;
         inline const GameObjectWPtr& GetNextSibling() const;

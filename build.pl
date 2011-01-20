@@ -256,7 +256,7 @@ sub _DoBuild
         }
         else
         {
-          $commandLine = "\"$ENV{VSINSTALLDIR}\\Common7\\IDE\\devenv.com\" $solutionPath \/$command \"$g_Config|$buildArch\"";
+          $commandLine = "\"$ENV{VSINSTALLDIR}\\Common7\\IDE\\devenv.com\" \"$solutionPath\" \/$command \"$g_Config|$buildArch\"";
         }
 
         Console::Print( "\n o ${command}ing $solutionName...\n" );

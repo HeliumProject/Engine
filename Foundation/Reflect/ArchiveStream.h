@@ -379,81 +379,37 @@ namespace Helium
 
             inline Stream& WriteString( const tstring& string )
             {
-                switch ( m_CharacterEncoding )
+                uint32_t length = (uint32_t)string.length();
+                Write( &length );
+#ifdef UNICODE
+                for ( uint32_t index = 0; index < length; ++index )
                 {
-                case CharacterEncodings::ASCII:
-                    {
-#ifdef UNICODE
-                        std::string temp;
-                        Helium::ConvertString( string, temp );
-
-                        uint32_t length = (uint32_t)temp.length();
-                        Write( &length );
-                        WriteBuffer( &temp[ 0 ], length ); 
-#else
-                        uint32_t length = (uint32_t)string.length();
-                        Write( &length );
-                        WriteBuffer( &string[ 0 ], length ); 
-#endif
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-                    {
-#ifdef UNICODE
-                        uint32_t length = (uint32_t)string.length();
-                        Write( &length );
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Write( &string[ index ] );
-                        }
-#else
-                        std::wstring temp;
-                        Helium::ConvertString( string, temp );
-
-                        uint32_t length = (uint32_t)temp.length();
-                        Write( &length );
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Write( &temp[ index ] );
-                        }
-#endif
-                        break;
-                    }
+                    Write( &string[ index ] );
                 }
-
+#else
+                WriteBuffer( string.c_str(), length );
+#endif
                 return *this;
             }
 
             template< typename Allocator >
             Stream& WriteString( const StringBase< char, Allocator >& string )
             {
-                switch ( m_CharacterEncoding )
+#if UNICODE
+                WideString temp;
+                StringConverter< char, wchar_t >::Convert( temp, string );
+
+                uint32_t length = (uint32_t)temp.GetSize();
+                Write( &length );
+                for ( uint32_t index = 0; index < length; ++index )
                 {
-                case CharacterEncodings::ASCII:
-                    {
-                        uint32_t length = (uint32_t)string.GetSize();
-                        Write( &length );
-                        WriteBuffer( &string[ 0 ], length ); 
-
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-                    {
-                        WideString temp;
-                        StringConverter< char, wchar_t >::Convert( temp, string );
-
-                        uint32_t length = (uint32_t)temp.GetSize();
-                        Write( &length );
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Write( &temp[ index ] );
-                        }
-
-                        break;
-                    }
+                    Write( &temp[ index ] );
                 }
+#else
+                uint32_t length = (uint32_t)string.GetSize();
+                Write( &length );
+                WriteBuffer( string.c_str(), length );
+#endif
 
                 return *this;
             }
@@ -461,32 +417,21 @@ namespace Helium
             template< typename Allocator >
             Stream& WriteString( const StringBase< wchar_t, Allocator >& string )
             {
-                switch ( m_CharacterEncoding )
+#if UNICODE
+                uint32_t length = (uint32_t)string.GetSize();
+                Write( &length );
+                for ( uint32_t index = 0; index < length; ++index )
                 {
-                case CharacterEncodings::ASCII:
-                    {
-                        CharString temp;
-                        StringConverter< wchar_t, char >::Convert( temp, string );
-
-                        uint32_t length = (uint32_t)temp.GetSize();
-                        Write( &length );
-                        WriteBuffer( &temp[ 0 ], length ); 
-
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-                    {
-                        uint32_t length = (uint32_t)string.GetSize();
-                        Write( &length );
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Write( &string[ index ] );
-                        }
-
-                        break;
-                    }
+                    Write( &string[ index ] );
                 }
+#else
+                CharString temp;
+                StringConverter< wchar_t, char >::Convert( temp, string );
+
+                uint32_t length = (uint32_t)temp.GetSize();
+                Write( &length );
+                WriteBuffer( temp.c_str(), length );
+#endif
 
                 return *this;
             }

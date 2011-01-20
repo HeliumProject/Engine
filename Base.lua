@@ -26,6 +26,15 @@ Helium.GetSystemVersion = function()
 	return version
 end
 
+Helium.Build64Bit = function()
+    if os.get() == "windows" then
+        return string.find( os.getenv("PATH"), "x64" )
+    else
+		print("Implement support for " .. os.get() .. " to Helium.Build64Bit()")
+		os.exit(1)
+    end
+end
+
 Helium.Sleep = function( seconds )
 	if os.get() == "windows" then
 		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
@@ -121,16 +130,15 @@ end
 Helium.PublishIcons = function( bin )
 
     if os.get() == "windows" then
-        if string.find( os.getenv("PATH"), "x64" ) then
+        os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Debug\\Icons\" *.png")
+        os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Intermediate\\Icons\" *.png")
+        os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Profile\\Icons\" *.png")
+        os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Release\\Icons\" *.png")
+        if Helium.Build64Bit() then
             os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Debug\\Icons\" *.png")
             os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Intermediate\\Icons\" *.png")
             os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Profile\\Icons\" *.png")
             os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Release\\Icons\" *.png")
-        else
-            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Debug\\Icons\" *.png")
-            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Intermediate\\Icons\" *.png")
-            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Profile\\Icons\" *.png")
-            os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Release\\Icons\" *.png")
         end
     else
 		print("Implement support for " .. os.get() .. " to Helium.PublishIcons()")

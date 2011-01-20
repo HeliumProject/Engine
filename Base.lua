@@ -112,12 +112,17 @@ Helium.Publish = function( files )
 		-- do the file copy
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
-            linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
-		else
+            local versionString = Helium.GetSystemVersion()
+            if ( string.find( versionString, "6\.%d+\.%d+" ) ) then -- vista/windows 7
+                linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
+            else
+                linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
+            end
+   		else
             linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
 		end
 		local result = os.execute( linkCommand )
-    
+		
 		-- the files were copied, complete this entry
 		if result == 0 then
 			files[ i ] = nil

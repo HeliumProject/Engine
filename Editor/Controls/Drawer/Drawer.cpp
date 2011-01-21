@@ -3,6 +3,7 @@
 #include "Drawer.h"
 
 #include "Foundation/Flags.h"
+#include "Foundation/Log.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -10,6 +11,7 @@ using namespace Helium::Editor;
 static int s_PopupOffsetY = 0; // Pixel offset for top of popup window
 
 static int s_ButtonMouseOverDelayMilliseconds = 500;
+static int s_MouseLocationTimerFrequency = 100;
 
 Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : wxPanel( parent, id, pos, size, style )
@@ -45,6 +47,9 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
         
         m_MouseHoverTimer.SetOwner( this );
         Connect( m_MouseHoverTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( Drawer::OnMouseHoverTimer ), NULL, this );
+
+        m_MouseLocationTimer.SetOwner( this );
+        Connect( m_MouseLocationTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( Drawer::OnMouseLocationTimer ), NULL, this );
     }
 
     Layout();
@@ -63,6 +68,7 @@ Drawer::~Drawer()
         m_Button->Disconnect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( Drawer::OnMouseEnterButton ), NULL, this );
         m_Button->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveButton ), NULL, this );
         Disconnect( m_MouseHoverTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( Drawer::OnMouseHoverTimer ), NULL, this );
+        Disconnect( m_MouseLocationTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( Drawer::OnMouseLocationTimer ), NULL, this );
     }
 
     DestroyWindow();
@@ -80,7 +86,7 @@ void Drawer::DestroyWindow()
 
     if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
     {
-        m_Panel->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
+        m_MouseLocationTimer.Stop();
     }
 
     m_Panel->Reparent( m_Parent );
@@ -199,13 +205,17 @@ void Drawer::Open()
         {            
             m_CurrentFrame = new wxFrame( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxTAB_TRAVERSAL );
             m_CurrentFrame->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	        wxBoxSizer* frameSizer;
-	        frameSizer = new wxBoxSizer( wxVERTICAL );
-        	
-	        frameSizer->Add( m_Panel, 1, wxEXPAND, 0 );
+
+            wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
+	        frameSizer->Add( m_Panel, 1, wxEXPAND | wxALL, 0 );
         	
 	        m_CurrentFrame->SetSizer( frameSizer );
         }
+    }
+
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        m_MouseLocationTimer.Start( s_MouseLocationTimerFrequency );
     }
 
     m_Panel->Reparent( m_CurrentFrame );
@@ -220,11 +230,6 @@ void Drawer::Open()
     m_FloatingPosition = buttonRect.GetBottomLeft();
     m_CurrentFrame->SetPosition( m_FloatingPosition );
     m_CurrentFrame->ShowWithEffect( wxSHOW_EFFECT_SLIDE_TO_BOTTOM, 100 );
-    
-    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
-    {
-        m_Panel->Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
-    }
 
     if ( m_AuiManager )
     {
@@ -240,14 +245,15 @@ void Drawer::Close()
 {
     e_Closing.Raise( DrawerEventArgs( this ) );
     
+    if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        m_MouseLocationTimer.Stop();
+    }
+    
     if ( m_CurrentFrame )
     {
+        m_Panel->Hide();
         m_CurrentFrame->HideWithEffect( wxSHOW_EFFECT_SLIDE_TO_TOP, 100 );
-
-        if ( HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
-        {
-            m_Panel->Disconnect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( Drawer::OnMouseLeaveDrawer ), NULL, this );
-        }
 
         if ( m_AuiManager )
         {
@@ -265,8 +271,10 @@ bool Drawer::IsOpen() const
     return ( m_CurrentFrame && m_CurrentFrame->IsShown() );
 }
 
-void Drawer::OnMouseLeaveDrawer( wxMouseEvent& args )
+void Drawer::OnMouseLocationTimer( wxTimerEvent& args )
 {
+    args.Skip();
+
     if ( IsOpen() && !HasMouseFocus() )
     {
         Close();
@@ -296,11 +304,6 @@ void Drawer::OnMouseEnterButton( wxMouseEvent& args )
 void Drawer::OnMouseLeaveButton( wxMouseEvent& args )
 {
     args.Skip();
-
-    if ( IsOpen() && !HasMouseFocus() )
-    {
-        Close();
-    }
     m_MouseHoverTimer.Stop();
 }
 
@@ -326,5 +329,11 @@ bool Drawer::HasMouseFocus()
 
     wxPoint mousePos = ::wxGetMousePosition();
 
-    return ( buttonRect.Contains( mousePos ) || frameRect.Contains( mousePos ) );
+    static int callNumber = 0;
+    bool inButton = buttonRect.Contains( mousePos );
+    bool inDrawer = frameRect.Contains( mousePos );
+
+    Log::Print( TXT( "\n\nHasMouseFocus (%d):\n  inButton = %d\n  inDrawer = %d" ), callNumber++, inButton, inDrawer );
+
+    return ( inButton || inDrawer );
 }

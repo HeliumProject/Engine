@@ -70,13 +70,12 @@ namespace Helium
             mutable DrawerEventSignature::Event e_Closed;
 
         protected:
-            void OnMouseLeaveDrawer( wxMouseEvent& args );
-
             void OnButtonClicked( wxCommandEvent& args );
             void OnMouseEnterButton( wxMouseEvent& args );
             void OnMouseLeaveButton( wxMouseEvent& args );
 
             void OnMouseHoverTimer( wxTimerEvent& args );
+            void OnMouseLocationTimer( wxTimerEvent& args );
 
             bool HasMouseFocus();
             void DestroyWindow();
@@ -89,6 +88,7 @@ namespace Helium
             wxToggleButton* m_Button;
             DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
+            wxTimer m_MouseLocationTimer;
 
             wxPanel* m_Panel;
             wxPoint m_FloatingPosition;

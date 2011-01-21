@@ -755,7 +755,7 @@ project "TestApp"  -- DEPRECATED
 		"zlib",
 	}
 
-	Lunar.DoDefaultProjectSettings()
+	Helium.DoDefaultLunarProjectSettings()
 
 	configuration "windows"
 		links
@@ -872,7 +872,7 @@ project "ExampleMain"
 		"zlib",
 	}
 
-	Lunar.DoDefaultProjectSettings()
+	Helium.DoDefaultLunarProjectSettings()
 
 	configuration "windows"
 		links

@@ -698,6 +698,99 @@ project "TestJobs"  -- DEPRECATED
 			"EngineJobs",
 		}
 
+project "TestApp"  -- DEPRECATED
+	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
+
+	kind "WindowedApp"
+
+	files
+	{
+		"TestApp/Moon.ico",
+		"TestApp/resource.h",
+		"TestApp/stdafx.cpp",
+		"TestApp/stdafx.h",
+		"TestApp/TestApp.cpp",
+		"TestApp/TestApp.rc",
+		"TestApp/WindowProc.cpp",
+		"TestApp/WindowProc.h",
+	}
+
+	flags
+	{
+		"WinMain",
+	}
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"WinWindowing",
+		"D3D9Rendering",
+		"PcSupport",
+		"PreprocessingPc",
+		"EditorSupport",
+		"FrameworkWin",
+		"TestJobs",
+	}
+
+	pchheader( "stdafx.h" )
+	pchsource( "TestApp/stdafx.cpp" )
+
+	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
+	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
+	links
+	{
+		"Expat",
+		"freetype",
+		"nvtt",
+		"png",
+		"zlib",
+	}
+
+	Lunar.DoDefaultProjectSettings()
+
+	configuration "windows"
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"dxguid",
+			"d3dcompiler",
+			"wininet",
+			"dbghelp",
+		}
+	configuration { "windows", "x32" }
+		links
+		{
+			"fbxsdk_20113_1",
+		}
+	configuration { "windows", "x64" }
+		links
+		{
+			"fbxsdk_20113_1_amd64",
+		}
+	if haveGranny then
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
+
 project "ExampleGame"
 	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"
 

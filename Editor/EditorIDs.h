@@ -103,22 +103,6 @@ namespace Helium
                 ID_ViewDefaultShowPointer, 
                 ID_ViewDefaultShowBounds,
 
-                // start tools id region
-                ID_ToolsBegin,
-                ID_ToolsSelect = ID_ToolsBegin,
-                ID_ToolsTranslate,
-                ID_ToolsRotate,
-                ID_ToolsScale,
-                ID_ToolsDuplicate,
-                ID_ToolsLocatorCreate,
-                ID_ToolsVolumeCreate,
-                ID_ToolsEntityCreate,
-                ID_ToolsCurveCreate,
-                ID_ToolsCurveEdit,
-                ID_ToolsEnd,
-                ID_ToolsCount = ID_ToolsEnd - ID_ToolsBegin,
-                // end tools id region
-
                 // these aren't tools, just menu items on the tools menu
                 ID_ToolsScalePivot,
                 ID_ToolsRotatePivot,

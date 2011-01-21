@@ -26,7 +26,8 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
     SetSizer( sizer );
 
     // Set up the button
-    m_Button = new wxToggleButton( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_Button = new Button( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_Button->SetButtonOptions( ButtonOptions::Toggle );
     m_Button->SetValue( false );
 
     // Add the button to the sizer
@@ -142,7 +143,7 @@ void Drawer::SetIcon( const tstring& icon )
     Layout();
 }
 
-wxToggleButton* Drawer::GetButton()
+Button* Drawer::GetButton()
 {
     return m_Button;
 }
@@ -196,7 +197,7 @@ void Drawer::Open()
             //m_CurrentFrame->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( Drawer::OnCloseAuiPane ), NULL, this );
         }
         else
-        {            
+        {
             m_CurrentFrame = new wxFrame( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxTAB_TRAVERSAL );
             m_CurrentFrame->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	        wxBoxSizer* frameSizer;
@@ -231,7 +232,7 @@ void Drawer::Open()
         m_AuiManager->Update();
     }
 
-    m_Button->SetValue( true );
+    //m_Button->SetValue( true );
 
     e_Opened.Raise( DrawerEventArgs( this ) );
 }
@@ -255,7 +256,7 @@ void Drawer::Close()
         }
     }
 
-    m_Button->SetValue( false );
+    //m_Button->SetValue( false );
 
     e_Closed.Raise( DrawerEventArgs( this ) );
 }
@@ -263,55 +264,6 @@ void Drawer::Close()
 bool Drawer::IsOpen() const
 {    
     return ( m_CurrentFrame && m_CurrentFrame->IsShown() );
-}
-
-void Drawer::OnMouseLeaveDrawer( wxMouseEvent& args )
-{
-    if ( IsOpen() && !HasMouseFocus() )
-    {
-        Close();
-    } 
-}
-
-void Drawer::OnButtonClicked( wxCommandEvent& args )
-{
-    if ( IsOpen() )
-    {
-        Close();
-    }
-    else
-    {
-        // Open this drawer
-        Open();
-    }
-}
-
-void Drawer::OnMouseEnterButton( wxMouseEvent& args )
-{
-    args.Skip();
-
-    m_MouseHoverTimer.Start( s_ButtonMouseOverDelayMilliseconds, true );
-}
-
-void Drawer::OnMouseLeaveButton( wxMouseEvent& args )
-{
-    args.Skip();
-
-    if ( IsOpen() && !HasMouseFocus() )
-    {
-        Close();
-    }
-    m_MouseHoverTimer.Stop();
-}
-
-void Drawer::OnMouseHoverTimer( wxTimerEvent& args )
-{
-    args.Skip();
-
-    if ( !IsOpen() && HasMouseFocus() )
-    {
-        Open();
-    }
 }
 
 bool Drawer::HasMouseFocus()
@@ -327,4 +279,79 @@ bool Drawer::HasMouseFocus()
     wxPoint mousePos = ::wxGetMousePosition();
 
     return ( buttonRect.Contains( mousePos ) || frameRect.Contains( mousePos ) );
+}
+
+void Drawer::OnButtonClicked( wxCommandEvent& args )
+{
+    if ( IsOpen() )
+    {
+        Close();
+    }
+    else
+    {
+        // Open this drawer
+        Open();
+    }
+}
+
+void Drawer::OnMouseLeaveDrawer( wxMouseEvent& args )
+{
+    args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+
+    if ( IsOpen() && !HasMouseFocus() )
+    {
+        Close();
+    } 
+}
+
+void Drawer::OnMouseEnterButton( wxMouseEvent& args )
+{
+    args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+
+    m_MouseHoverTimer.Start( s_ButtonMouseOverDelayMilliseconds, true );
+}
+
+void Drawer::OnMouseLeaveButton( wxMouseEvent& args )
+{
+    args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+
+    if ( IsOpen() && !HasMouseFocus() )
+    {
+        Close();
+    }
+    m_MouseHoverTimer.Stop();
+}
+
+void Drawer::OnMouseHoverTimer( wxTimerEvent& args )
+{
+    args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+
+    if ( !IsOpen() && HasMouseFocus() )
+    {
+        Open();
+    }
 }

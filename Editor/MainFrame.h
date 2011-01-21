@@ -185,7 +185,7 @@ namespace Helium
 
             void CurrentSceneChanged( const SceneGraph::SceneChangeArgs& args );
             void CurrentSceneChanging( const SceneGraph::SceneChangeArgs& args );
-            void OnToolSelected(wxCommandEvent& event);
+            void OnToolSelected( wxCommandEvent& event );
             void PickWorld( SceneGraph::PickArgs& args );
             
             void ConnectDocument( Document* document );

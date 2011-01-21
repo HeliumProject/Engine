@@ -7,6 +7,7 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/StripCanvas.h"
 
+#include "Editor/Controls/Button.h"
 #include "Editor/Controls/Drawer/DrawerManager.h"
 
 
@@ -18,8 +19,6 @@ namespace Helium
         {
         public:
             ToolbarPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
-
-            void OnToggleToolButton( wxCommandEvent& );
 
             void ToggleTool( int32_t selectedTool );
             void EnableTools( const bool enable = true );
@@ -45,7 +44,7 @@ namespace Helium
             }
 
         private:
-            std::vector< wxBitmapToggleButton* > m_ToolsButtons;
+            std::vector< Button* > m_ToolsButtons;
 
             CommandQueue m_CommandQueue;
             StripCanvas m_ToolPropertiesCanvas;

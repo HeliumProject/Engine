@@ -34,7 +34,7 @@ namespace Helium
                 MouseOverToOpen     = 1 << 1,          // Drawers open when the button is moused over
             };
 
-            const uint32_t Default = ClickToOpen;
+            const uint32_t Default = ( ClickToOpen | MouseOverToOpen );
         }
         typedef uint32_t DrawerButtonStyle;
 
@@ -69,17 +69,14 @@ namespace Helium
             mutable DrawerEventSignature::Event e_Closed;
 
         protected:
-            bool HasMouseFocus();
-
             void OnButtonClicked( wxCommandEvent& args );
-
-            void OnMouseLeaveDrawer( wxMouseEvent& args );
-
             void OnMouseEnterButton( wxMouseEvent& args );
             void OnMouseLeaveButton( wxMouseEvent& args );
 
             void OnMouseHoverTimer( wxTimerEvent& args );
+            void OnMouseLocationTimer( wxTimerEvent& args );
 
+            bool HasMouseFocus();
             void DestroyWindow();
 
         private:
@@ -90,6 +87,7 @@ namespace Helium
             Button* m_Button;
             DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
+            wxTimer m_MouseLocationTimer;
 
             wxPanel* m_Panel;
             wxPoint m_FloatingPosition;

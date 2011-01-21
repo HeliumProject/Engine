@@ -13,13 +13,16 @@ DrawerWidget::DrawerWidget( Inspect::Container* container )
 {
     if ( m_ContainerControl )
     {
+        Inspect::V_Control controls = m_ContainerControl->ReleaseChildren();
+
         // move children out of the container and into the new vertical strip canvas
-        for( Inspect::V_Control::const_iterator itr = m_ContainerControl->GetChildren().begin(), end = m_ContainerControl->GetChildren().end(); itr != end; ++itr )
+        for( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
         {
             m_StripCanvas.AddChild( *itr );
         }
-        //container->Clear();
 
+        m_ContainerControl->AddChild( &m_StripCanvas );
+        
         SetControl( m_ContainerControl );
     }
 }

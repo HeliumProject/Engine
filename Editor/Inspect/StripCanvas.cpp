@@ -46,7 +46,7 @@ void StripCanvas::Realize( Inspect::Canvas* canvas )
     {
         Inspect::Control* c = *itr;
         c->Realize( this );
-        sizer->Add( Reflect::AssertCast< Widget >( c->GetWidget() )->GetWindow(), 0, 0 );
+        sizer->Add( Reflect::AssertCast< Widget >( c->GetWidget() )->GetWindow(), 0, wxALIGN_CENTER );
         sizer->AddSpacer( spacing );
     }
 

@@ -32,10 +32,10 @@ D3DMATERIAL9 Curve::s_HullMaterial;
 
 void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-  comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
-  comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
-  comp.AddEnumerationField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
-  comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
+    comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
+    comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
+    comp.AddEnumerationField( &Curve::m_ControlPointLabel,    TXT( "m_ControlPointLabel" ) );
+    comp.AddField(            &Curve::m_Resolution,           TXT( "m_Resolution" ) );
 }
 
 class SelectionDataObject : public Inspect::ClientData
@@ -1058,56 +1058,62 @@ void Curve::CreatePanel( CreatePanelArgs& args )
         }
         args.m_Generator->Pop();
 
-        args.m_Generator->PushContainer();
+        Inspect::Container* container = args.m_Generator->PushContainer( TXT( "Settings" ) );
+        container->SetUIHints( Inspect::UIHint::Popup );
         {
-            const tstring helpText = TXT( "Toggles labeling the control points in the 3d view." );
-            args.m_Generator->AddLabel( TXT( "Control Point Label" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::GetEnumeration<ControlPointLabel>(), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel )->a_HelpText.Set( helpText );
+            args.m_Generator->PushContainer();
+            {
+                const tstring helpText = TXT( "Toggles labeling the control points in the 3d view." );
+                args.m_Generator->AddLabel( TXT( "Control Point Label" ) )->a_HelpText.Set( helpText );
+                args.m_Generator->AddChoice<Curve, int>( args.m_Selection, Reflect::GetEnumeration<ControlPointLabel>(), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel )->a_HelpText.Set( helpText );
+            }
+            args.m_Generator->Pop();
+
+            args.m_Generator->PushContainer();
+            {
+                const tstring helpText = TXT( "Controls the resolution of the curve, higher resolution curves will be smoother." );
+                args.m_Generator->AddLabel( TXT( "Resolution" ) )->a_HelpText.Set( helpText );
+                Inspect::Slider* slider = args.m_Generator->AddSlider<Curve, uint32_t>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
+                slider->a_Min.Set( 1.0f );
+                slider->a_Max.Set( 20.0f );
+                slider->a_HelpText.Set( helpText );
+            }
+            args.m_Generator->Pop();
+
+            args.m_Generator->PushContainer();
+            {
+                const tstring helpText = TXT( "Creates a closed curve where the start and end points are the same." );
+                args.m_Generator->AddLabel( TXT( "Closed" ) )->a_HelpText.Set( helpText );
+                args.m_Generator->AddCheckBox<Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed )->a_HelpText.Set( helpText );
+            }
+            args.m_Generator->Pop();
+
+            args.m_Generator->PushContainer();
+            {
+                const tstring helpText = TXT( "Clicking this will reverse the control points in the selected curve." );
+                args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) )->a_HelpText.Set( helpText );
+                Inspect::Button* button = args.m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( &Curve::OnReverseControlPoints ) );
+                button->a_Icon.Set( TXT( "reverse" ) );
+                button->a_HelpText.Set( helpText );
+                button->SetClientData( new SelectionDataObject( args.m_Selection ) );
+            }
+            args.m_Generator->Pop();
+
+            args.m_Generator->PushContainer();
+            {
+                const tstring helpText = TXT( "This field displays the length of the currently selected curve." );
+                args.m_Generator->AddLabel( TXT( "Curve Length" ) )->a_HelpText.Set( helpText );
+
+                typedef float32_t ( Curve::*Getter )() const;
+                typedef void ( Curve::*Setter )( const float32_t& );
+                Inspect::Value* textBox = args.m_Generator->AddValue< Curve, float32_t, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
+                textBox->a_IsReadOnly.Set( true );
+                textBox->a_HelpText.Set( helpText );
+            }
+            args.m_Generator->Pop();
         }
         args.m_Generator->Pop();
 
-        args.m_Generator->PushContainer();
-        {
-            const tstring helpText = TXT( "Controls the resolution of the curve, higher resolution curves will be smoother." );
-            args.m_Generator->AddLabel( TXT( "Resolution" ) )->a_HelpText.Set( helpText );
-            Inspect::Slider* slider = args.m_Generator->AddSlider<Curve, uint32_t>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
-            slider->a_Min.Set( 1.0f );
-            slider->a_Max.Set( 20.0f );
-            slider->a_HelpText.Set( helpText );
-        }
-        args.m_Generator->Pop();
-
-        args.m_Generator->PushContainer();
-        {
-            const tstring helpText = TXT( "Creates a closed curve where the start and end points are the same." );
-            args.m_Generator->AddLabel( TXT( "Closed" ) )->a_HelpText.Set( helpText );
-            args.m_Generator->AddCheckBox<Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed )->a_HelpText.Set( helpText );
-        }
-        args.m_Generator->Pop();
-
-        args.m_Generator->PushContainer();
-        {
-            const tstring helpText = TXT( "Clicking this will reverse the control points in the selected curve." );
-            args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) )->a_HelpText.Set( helpText );
-            Inspect::Button* button = args.m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( &Curve::OnReverseControlPoints ) );
-            button->a_Icon.Set( TXT( "reverse" ) );
-            button->a_HelpText.Set( helpText );
-            button->SetClientData( new SelectionDataObject( args.m_Selection ) );
-        }
-        args.m_Generator->Pop();
-
-        args.m_Generator->PushContainer();
-        {
-            const tstring helpText = TXT( "This field displays the length of the currently selected curve." );
-            args.m_Generator->AddLabel( TXT( "Curve Length" ) )->a_HelpText.Set( helpText );
-
-            typedef float32_t ( Curve::*Getter )() const;
-            typedef void ( Curve::*Setter )( const float32_t& );
-            Inspect::Value* textBox = args.m_Generator->AddValue< Curve, float32_t, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
-            textBox->a_IsReadOnly.Set( true );
-            textBox->a_HelpText.Set( helpText );
-        }
-        args.m_Generator->Pop();
     }
     args.m_Generator->Pop();
 }

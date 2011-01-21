@@ -112,12 +112,17 @@ Helium.Publish = function( files )
 		-- do the file copy
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
-            linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
-		else
+            local versionString = Helium.GetSystemVersion()
+            if ( string.find( versionString, "6\.%d+\.%d+" ) ) then -- vista/windows 7
+                linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
+            else
+                linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
+            end
+   		else
             linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
 		end
 		local result = os.execute( linkCommand )
-    
+		
 		-- the files were copied, complete this entry
 		if result == 0 then
 			files[ i ] = nil
@@ -153,7 +158,8 @@ Helium.Prebuild = function()
 	local commands =
 	{
 		"python Build/JobDefParser.py JobDefinitions . .",
-		"python Build/TypeParser.py . .",
+		"python Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
+		"python Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
 	}
     
     local pythonPath = os.pathsearch( 'python', os.getenv( 'PATH' ) )
@@ -448,7 +454,7 @@ Helium.DoDefaultLunarProjectSettings = function()
 end
 
 -- Common settings for Lunar modules.
-Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleNameUpper )
+Helium.DoLunarModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
 	defines
 	{
@@ -457,11 +463,11 @@ Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleN
 
 	files
 	{
-		moduleName .. "/*",
+		baseDirectory .. "/" .. moduleName .. "/*",
 	}
 
 	pchheader( moduleName .. "Pch.h" )
-	pchsource( moduleName .. "/" .. moduleName .. "Pch.cpp" )
+	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
 
 	Helium.DoDefaultLunarProjectSettings()
 

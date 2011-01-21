@@ -141,6 +141,7 @@ namespace Helium
             void                        ToFile( const Path& path ) const;
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
+            virtual ObjectPtr           GetTemplate() const;
             virtual StrongPtr< Data >   ShouldSerialize( const Field* field );
             virtual void                PreSerialize( const Field* field );
             virtual void                PostSerialize( const Field* field );

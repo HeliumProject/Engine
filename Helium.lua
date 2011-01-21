@@ -440,7 +440,7 @@ project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Engine", "ENGINE" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Engine", "ENGINE" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -454,7 +454,7 @@ project "EngineJobs"
 	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
 
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "EngineJobs", "ENGINE_JOBS" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "EngineJobs", "ENGINE_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -468,7 +468,7 @@ project "EngineJobs"
 project "Windowing"
 	uuid "B68268DF-3942-432F-89B1-DBC82C21218E"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Windowing", "WINDOWING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Windowing", "WINDOWING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -483,7 +483,7 @@ project "Windowing"
 project "Rendering"
 	uuid "3F1BD209-272C-4833-AF8E-35C317F21452"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Rendering", "RENDERING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Rendering", "RENDERING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -498,7 +498,7 @@ project "Rendering"
 project "GraphicsTypes"
 	uuid "4A13A4F6-6860-4F52-A217-B0C3943E7025"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -514,7 +514,7 @@ project "GraphicsTypes"
 project "GraphicsJobs"
 	uuid "4D83346D-DCB2-40E6-AAF1-508341728E57"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -531,7 +531,7 @@ project "GraphicsJobs"
 project "Graphics"
 	uuid "3342921C-F6C7-4A81-A6FF-1C93373AF285"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Graphics", "GRAPHICS" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Graphics", "GRAPHICS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -549,7 +549,7 @@ project "Graphics"
 project "Framework"
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "Framework", "FRAMEWORK" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Framework", "FRAMEWORK" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -569,7 +569,7 @@ project "Framework"
 project "WinWindowing"
 	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "WinWindowing", "WIN_WINDOWING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "WinWindowing", "WIN_WINDOWING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -585,7 +585,7 @@ project "WinWindowing"
 project "D3D9Rendering"
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -601,7 +601,7 @@ project "D3D9Rendering"
 project "PcSupport"
 	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "PcSupport", "PC_SUPPORT" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "PcSupport", "PC_SUPPORT" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -617,7 +617,7 @@ project "PcSupport"
 project "PreprocessingPc"
 	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -637,7 +637,7 @@ project "PreprocessingPc"
 project "EditorSupport"
 	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -660,7 +660,7 @@ project "EditorSupport"
 project "FrameworkWin"
 	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -686,7 +686,7 @@ project "FrameworkWin"
 project "TestJobs"  -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
-	Helium.DoLunarModuleProjectSettings( "LUNAR", "TestJobs", "TEST_JOBS" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "TestJobs", "TEST_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -697,3 +697,213 @@ project "TestJobs"  -- DEPRECATED
 			"Engine",
 			"EngineJobs",
 		}
+
+project "TestApp"  -- DEPRECATED
+	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
+
+	kind "WindowedApp"
+
+	files
+	{
+		"TestApp/Moon.ico",
+		"TestApp/resource.h",
+		"TestApp/stdafx.cpp",
+		"TestApp/stdafx.h",
+		"TestApp/TestApp.cpp",
+		"TestApp/TestApp.rc",
+		"TestApp/WindowProc.cpp",
+		"TestApp/WindowProc.h",
+	}
+
+	flags
+	{
+		"WinMain",
+	}
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"WinWindowing",
+		"D3D9Rendering",
+		"PcSupport",
+		"PreprocessingPc",
+		"EditorSupport",
+		"FrameworkWin",
+		"TestJobs",
+	}
+
+	pchheader( "stdafx.h" )
+	pchsource( "TestApp/stdafx.cpp" )
+
+	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
+	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
+	links
+	{
+		"Expat",
+		"freetype",
+		"nvtt",
+		"png",
+		"zlib",
+	}
+
+	Helium.DoDefaultLunarProjectSettings()
+
+	configuration "windows"
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"dxguid",
+			"d3dcompiler",
+			"wininet",
+			"dbghelp",
+		}
+	configuration { "windows", "x32" }
+		links
+		{
+			"fbxsdk_20113_1",
+		}
+	configuration { "windows", "x64" }
+		links
+		{
+			"fbxsdk_20113_1_amd64",
+		}
+	if haveGranny then
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end
+
+project "ExampleGame"
+	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"
+
+	includedirs
+	{
+		"Example",
+	}
+
+	Helium.DoLunarModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
+
+	--configuration "SharedLib"
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"Framework",
+		}
+
+project "ExampleMain"
+	uuid "2FF096F2-B7D3-4009-A409-3C2C6B57B56E"
+
+	kind "WindowedApp"
+
+	files
+	{
+		"Example/ExampleMain/*",
+	}
+
+	flags
+	{
+		"WinMain",
+	}
+
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"WinWindowing",
+		"D3D9Rendering",
+		"PcSupport",
+		"PreprocessingPc",
+		"EditorSupport",
+		"FrameworkWin",
+		"ExampleGame",
+	}
+
+	includedirs
+	{
+		"Example",
+	}
+
+	pchheader( "ExampleMainPch.h" )
+	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
+
+	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
+	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
+	links
+	{
+		"Expat",
+		"freetype",
+		"nvtt",
+		"png",
+		"zlib",
+	}
+
+	Helium.DoDefaultLunarProjectSettings()
+
+	configuration "windows"
+		links
+		{
+			"d3d9",
+			"d3dx9",
+			"d3d11",
+			"dxguid",
+			"d3dcompiler",
+			"wininet",
+			"dbghelp",
+		}
+	configuration { "windows", "x32" }
+		links
+		{
+			"fbxsdk_20113_1",
+		}
+	configuration { "windows", "x64" }
+		links
+		{
+			"fbxsdk_20113_1_amd64",
+		}
+	if haveGranny then
+		configuration "x32"
+			links
+			{
+				"granny2",
+			}
+		configuration "x64"
+			links
+			{
+				"granny2_x64",
+			}
+	end

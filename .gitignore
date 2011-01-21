@@ -9,6 +9,7 @@
 *.REMOTE.*
 Bin/*
 Logs/*
+DataPC/
 Doc/html/
 */*Interface.cpp
 */*Interface.h

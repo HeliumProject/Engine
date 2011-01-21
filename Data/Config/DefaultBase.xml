@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <object name="GraphicsConfig" type="GraphicsConfig" template="">
+        <property name="m_width">640</property>
+        <property name="m_height">480</property>
+        <property name="m_textureFiltering">TEXTURE_FILTER_TRILINEAR</property>
+        <property name="m_maxAnisotropy">0</property>
+        <property name="m_bFullscreen">0</property>
+    </object>
+</package>

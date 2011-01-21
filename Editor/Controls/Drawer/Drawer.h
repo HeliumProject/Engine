@@ -3,9 +3,8 @@
 #include "Platform/Types.h"
 
 #include "Editor/ArtProvider.h"
+#include "Editor/Controls/Button.h"
 #include "Foundation/Automation/Event.h"
-
-#include <wx/tglbtn.h>
 
 namespace Helium
 {
@@ -51,7 +50,7 @@ namespace Helium
             virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
             void SetIcon( const tstring& icon );
 
-            wxToggleButton* GetButton();
+            Button* GetButton();
             int32_t GetButtonID() const;
 
             wxPanel* GetPanel();
@@ -85,7 +84,7 @@ namespace Helium
 
             wxString m_Icon;
 
-            wxToggleButton* m_Button;
+            Button* m_Button;
             DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
             wxTimer m_MouseLocationTimer;

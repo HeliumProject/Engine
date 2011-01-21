@@ -29,7 +29,8 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
     SetSizer( sizer );
 
     // Set up the button
-    m_Button = new wxToggleButton( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_Button = new Button( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_Button->SetButtonOptions( ButtonOptions::Toggle );
     m_Button->SetValue( false );
 
     // Add the button to the sizer
@@ -149,7 +150,7 @@ void Drawer::SetIcon( const tstring& icon )
     Layout();
 }
 
-wxToggleButton* Drawer::GetButton()
+Button* Drawer::GetButton()
 {
     return m_Button;
 }
@@ -203,10 +204,10 @@ void Drawer::Open()
             //m_CurrentFrame->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( Drawer::OnCloseAuiPane ), NULL, this );
         }
         else
-        {            
+        {
             m_CurrentFrame = new wxFrame( m_Parent, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxFRAME_FLOAT_ON_PARENT|wxFRAME_NO_TASKBAR|wxTAB_TRAVERSAL );
             m_CurrentFrame->SetSizeHints( wxDefaultSize, wxDefaultSize );
-
+        	
             wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
 	        frameSizer->Add( m_Panel, 1, wxEXPAND | wxALL, 0 );
         	
@@ -231,13 +232,13 @@ void Drawer::Open()
     m_FloatingPosition = buttonRect.GetBottomLeft();
     m_CurrentFrame->SetPosition( m_FloatingPosition );
     m_CurrentFrame->ShowWithEffect( wxSHOW_EFFECT_SLIDE_TO_BOTTOM, 100 );
-
+    
     if ( m_AuiManager )
     {
         m_AuiManager->Update();
     }
 
-    m_Button->SetValue( true );
+    //m_Button->SetValue( true );
 
     e_Opened.Raise( DrawerEventArgs( this ) );
 }
@@ -262,7 +263,7 @@ void Drawer::Close()
         }
     }
 
-    m_Button->SetValue( false );
+    //m_Button->SetValue( false );
 
     e_Closed.Raise( DrawerEventArgs( this ) );
 }
@@ -299,18 +300,37 @@ void Drawer::OnMouseEnterButton( wxMouseEvent& args )
 {
     args.Skip();
 
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+
     m_MouseHoverTimer.Start( s_ButtonMouseOverDelayMilliseconds, true );
 }
 
 void Drawer::OnMouseLeaveButton( wxMouseEvent& args )
 {
     args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
+    
     m_MouseHoverTimer.Stop();
 }
 
 void Drawer::OnMouseHoverTimer( wxTimerEvent& args )
 {
     args.Skip();
+
+    // early out of mouse events unless MouseOverToOpen option 
+    if ( !HasFlags<DrawerButtonStyle>( m_ButtonStyle, DrawerButtonStyles::MouseOverToOpen ) )
+    {
+        return;
+    }
 
     if ( !IsOpen() && HasMouseFocus() )
     {

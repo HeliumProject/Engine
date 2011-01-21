@@ -162,27 +162,27 @@ void ViewPanel::OnChar( wxKeyEvent& event )
         break;
 
     case WXK_UP:
-        wxGetApp().GetFrame()->GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
+        wxGetApp().GetFrame()->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
         event.Skip(false);
         break;
 
     case WXK_DOWN:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
         event.Skip(false);
         break;
 
     case WXK_RIGHT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
         event.Skip(false);
         break;
 
     case WXK_LEFT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
         event.Skip(false);
         break;
 
     case WXK_INSERT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
         event.Skip(false);
         break;
 
@@ -192,7 +192,7 @@ void ViewPanel::OnChar( wxKeyEvent& event )
         break;
 
     case WXK_ESCAPE:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED ) );
         event.Skip(false);
         break;
 

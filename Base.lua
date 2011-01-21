@@ -153,7 +153,8 @@ Helium.Prebuild = function()
 	local commands =
 	{
 		"python Build/JobDefParser.py JobDefinitions . .",
-		"python Build/TypeParser.py . .",
+		"python Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
+		"python Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
 	}
     
     local pythonPath = os.pathsearch( 'python', os.getenv( 'PATH' ) )
@@ -448,7 +449,7 @@ Helium.DoDefaultLunarProjectSettings = function()
 end
 
 -- Common settings for Lunar modules.
-Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleNameUpper )
+Helium.DoLunarModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
 	defines
 	{
@@ -457,11 +458,11 @@ Helium.DoLunarModuleProjectSettings = function( tokenPrefix, moduleName, moduleN
 
 	files
 	{
-		moduleName .. "/*",
+		baseDirectory .. "/" .. moduleName .. "/*",
 	}
 
 	pchheader( moduleName .. "Pch.h" )
-	pchsource( moduleName .. "/" .. moduleName .. "Pch.cpp" )
+	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
 
 	Helium.DoDefaultLunarProjectSettings()
 

@@ -11,13 +11,19 @@ import re
 import stat
 import string
 import datetime
+import getopt  # TODO: Eventually replace with argparse (requires Python 3.2).
 
 def PrintCommandLineUsage():
-    print( 'Usage:', os.path.basename( sys.argv[ 0 ] ), 'includePath sourcePath [moduleApiPrefix]', file = sys.stderr )
-    print( '    includePath      Base path of the "Include" file directory', file = sys.stderr )
-    print( '    sourcePath       Base path of the "Source" file directory', file = sys.stderr )
-    print( '    moduleApiPrefix  Prefix for module API preprocessor tokens', file = sys.stderr )
-    print( '                     (default: "LUNAR_"', file = sys.stderr )
+    print( 'Usage:', os.path.basename( sys.argv[ 0 ] ), '[OPTIONS] moduleName [moduleName ...]', file = sys.stderr )
+    print( '    moduleName  Base name of a module source directory', file = sys.stderr )
+    print( '', file = sys.stderr )
+    print( 'OPTIONS:', file = sys.stderr )
+    print( '    -i PATH, --includes=PATH    Search for module include directories within', file = sys.stderr )
+    print( '                                PATH instead of the current directory.', file = sys.stderr )
+    print( '    -s PATH, --sources=PATH     Search for module source directories within', file = sys.stderr )
+    print( '                                PATH instead of the current directory.', file = sys.stderr )
+    print( '    -p PREFIX, --prefix=PREFIX  Use PREFIX for module API preprocessor tokens', file = sys.stderr )
+    print( '                                (default: "LUNAR_"', file = sys.stderr )
 
 def ModuleToTokenName( moduleName ):
     lastCharacter = None
@@ -44,26 +50,62 @@ def ModuleToTokenName( moduleName ):
 
     return tokenName
 
-argc = len( sys.argv )
-if argc < 3:
+# Parse the command line options.
+try:
+    optionList, moduleList = getopt.getopt( sys.argv[ 1 : ], 'i:s:p:', [ 'includes=', 'sources=', 'prefix=' ] )
+except getopt.GetoptError as error:
+    print( str( error ), file = sys.stderr )
+    print( '', file = sys.stderr )
     PrintCommandLineUsage()
     sys.exit( 2 )
 
-# Get the source and include paths from the command line, as well as the (optional) API token prefix.
-includePath = sys.argv[ 1 ]
-sourcePath = sys.argv[ 2 ]
+if len( moduleList ) == 0:
+    print( 'Missing module listing.', file = sys.stderr )
+    print( '', file = sys.stderr )
+    PrintCommandLineUsage()
+    sys.exit( 2 )
 
+includePath = ''
+sourcePath = ''
 apiTokenPrefix = 'LUNAR_'
-if argc > 3:
-    apiTokenPrefix = sys.argv[ 3 ]
 
-# Parse each module in the include path.
+for option, value in optionList:
+    if option == '-i' or option == '--includes':
+        includePath = value
+    elif option == '-s' or option == '--sources':
+        sourcePath = value
+    elif option == '-p' or option == '--prefix':
+        apiTokenPrefix = value
+
+if includePath == '':
+    includePath = '.'
+
+if sourcePath == '':
+    sourcePath = '.'
+
 try:
-    includeDirListing = os.listdir( includePath )
-except:
-    print( '[E] Error reading the contents of "', includePath, '": ', sys.exc_info()[ 1 ], sep = '', file = sys.stderr )
+    pathStat = os.stat( includePath )
+except OSError as error:
+    print( 'Error validating include file path "' + includePath + '":', file = sys.stderr )
+    print( str( error ), file = sys.stderr )
     sys.exit( 1 )
 
+if not stat.S_ISDIR( pathStat.st_mode ):
+    print( 'Include file path "' + includePath + '" is not a directory.', file = sys.stderr )
+    sys.exit( 1 )
+
+try:
+    pathStat = os.stat( includePath )
+except OSError as error:
+    print( 'Error validating source file path "' + sourcePath + '":', file = sys.stderr )
+    print( str( error ), file = sys.stderr )
+    sys.exit( 1 )
+
+if not stat.S_ISDIR( pathStat.st_mode ):
+    print( 'Source file path "' + sourcePath + '" is not a directory.', file = sys.stderr )
+    sys.exit( 1 )
+
+# Parse each module specified.
 typeScopeRegExp = re.compile( r'\b(namespace|class\s+\w+_API|class)\s+(\w+)\b' )
 objectDeclRegExp = re.compile( r'\b(?<!#define )L_DECLARE_OBJECT\(\s*\w+\s*,\s*[\w:]+\s*\)' )
 
@@ -168,27 +210,46 @@ sourceFormatString5 = \
 
 currentYear = datetime.datetime.now().year
 
-for module in includeDirListing:
+for module in moduleList:
     # Skip the "Core" module.
     if module == 'Core':
         print( '[I] Skipping module "Core"...' )
         print()
         continue
 
-    modulePath = os.path.join( includePath, module )
+    # Make sure the directories for the specified module includes and sources
+    # exist and are valid directories.
+    moduleIncludePath = os.path.join( includePath, module )
+    try:
+        pathStat = os.stat( moduleIncludePath )
+    except OSError as error:
+        print( '[E] Error validating module include path "' + moduleIncludePath + '":', file = sys.stderr )
+        print( '[E]', str( error ), file = sys.stderr )
+        continue
 
-    # Skip non-directories.
-    pathStat = os.stat( modulePath )
     if not stat.S_ISDIR( pathStat.st_mode ):
+        print( '[E] Module include path "' + moduleIncludePath + '" is not a directory.', file = sys.stderr )
+        continue
+
+    moduleSourcePath = os.path.join( sourcePath, module )
+    try:
+        pathStat = os.stat( moduleSourcePath )
+    except OSError as error:
+        print( '[E] Error validating module source path "' + moduleSourcePath + '":', file = sys.stderr )
+        print( '[E]', str( error ), file = sys.stderr )
+        continue
+
+    if not stat.S_ISDIR( pathStat.st_mode ):
+        print( '[E] Module source path "' + moduleSourcePath + '" is not a directory.', file = sys.stderr )
         continue
 
     # Parse each include file in the current module for GameObject-based class declarations.
     print( '[I] Processing module "', module, '"', sep = '' )
     try:
-        moduleDirListing = os.listdir( modulePath )
+        moduleDirListing = os.listdir( moduleIncludePath )
     except:
         print(
-            '[E] Error reading the contents of "', modulePath, '": ', sys.exc_info()[ 1 ],
+            '[E] Error reading the contents of "', moduleIncludePath, '": ', sys.exc_info()[ 1 ],
             sep = '',
             file = sys.stderr )
         print()
@@ -202,7 +263,7 @@ for module in includeDirListing:
         if os.path.splitext( entry )[ 1 ] != '.h':
             continue
 
-        entryPath = os.path.join( modulePath, entry )
+        entryPath = os.path.join( moduleIncludePath, entry )
 
         # Skip directories (as if there should be a directory with a ".h" extension, but just in case...).
         pathStat = os.stat( entryPath )
@@ -407,7 +468,7 @@ for module in includeDirListing:
 
     typeRegFileContents += sourceFormatString5.format( MODULE = module )
 
-    typeRegSourcePath = os.path.join( sourcePath, module, typeRegSourceFile )
+    typeRegSourcePath = os.path.join( moduleSourcePath, typeRegSourceFile )
     bWriteFile = True
     try:
         typeRegFile = open( typeRegSourcePath, 'rt' )
@@ -442,5 +503,6 @@ for module in includeDirListing:
     print()
 
 print( '[I] Parsing complete.' )
+print( '' )
 
 sys.exit( 0 )

@@ -123,7 +123,7 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
         String subDirectory = AppInfo::GetName();
         if( subDirectory.IsEmpty() )
         {
-            subDirectory = TXT( "Lunar" );
+            subDirectory = TXT( "Helium" );
         }
 
         userDataDirectory.Set( prefsDir + TXT( "/" ) + subDirectory.GetData() );

@@ -35,7 +35,7 @@ namespace Helium
                 MouseOverToOpen     = 1 << 1,          // Drawers open when the button is moused over
             };
 
-            const uint32_t Default = ClickToOpen;
+            const uint32_t Default = ( ClickToOpen | MouseOverToOpen );
         }
         typedef uint32_t DrawerButtonStyle;
 

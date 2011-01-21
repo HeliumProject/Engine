@@ -42,21 +42,14 @@ namespace Helium
             inline V_Control ReleaseChildren()
             {
                 V_Control children = m_Children;
-
-                while ( !m_Children.empty() )
-                {
-                    RemoveChild( m_Children.front() );
-                }
-
-                m_Children.clear();
-
+                Clear();
                 return children;
             }
 
-            virtual void AddChild(Control* control);
-            virtual void InsertChild(int index, Control* control);
-            virtual void RemoveChild(Control* control);
-            virtual void Clear();
+            virtual void AddChild( Control* control );
+            virtual void InsertChild( int index, Control* control );
+            virtual void RemoveChild( Control* control, bool unrealize = true );
+            virtual void Clear( bool unrealizeChildren = true );
 
             const tstring& GetPath() const
             {

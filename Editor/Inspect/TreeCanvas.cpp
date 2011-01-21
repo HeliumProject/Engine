@@ -93,9 +93,9 @@ void TreeCanvas::Realize( Inspect::Canvas* canvas )
     m_TreeWndCtrl->Thaw();
 }
 
-void TreeCanvas::Clear()
+void TreeCanvas::Clear( bool unrealizeChildren )
 {
-    Base::Clear();
+    Base::Clear( unrealizeChildren );
 
     m_TreeWndCtrl->DeleteChildren( m_TreeWndCtrl->GetRootItem() );
 }

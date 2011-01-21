@@ -9,6 +9,7 @@
 *.REMOTE.*
 Bin/*
 Logs/*
+Doc/html/
 */*Interface.cpp
 */*Interface.h
 */*Interface.inl

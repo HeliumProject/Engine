@@ -280,162 +280,6 @@ project "Foundation"
 			"ws2_32",
 		}
 
-project "Pipeline"
-	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
-	language "C++"
-	defines
-	{
-		"PIPELINE_EXPORTS",
-		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
-	}
-	includedirs
-	{
-		"Dependencies/nvtt",
-		"Dependencies/nvtt/src",
-		"Dependencies/nvtt/src/nvtt/squish",
-		"Dependencies/tiff",
-		"Dependencies/tiff/libtiff",
-	}
-	files
-	{
-		"Pipeline/**.h",
-		"Pipeline/**.cpp",
-	}
-
-	configuration "windows"
-		includedirs
-		{
-			"Dependencies/nvtt/project/vc8",
-		}
-
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
-		kind "StaticLib"
-
-	--configuration "SharedLib"
-	configuration "Debug"
-		links
-		{
-			"Platform",
-			"Foundation",
-			"nvtt",
-			"tiff",
-			"d3d9",
-			"d3dx9",
-		}
-
-project "Editor"
-	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
-	kind "ConsoleApp"
-	language "C++"
-	defines
-	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
-	}
-	files
-	{
-		"Editor/**.h",
-		"Editor/**.c",
-		"Editor/**.cpp",
-		"Editor/Editor.rc",
-	}
-
-    pchheader( "Precompile.h" )
-    pchsource( "Editor/Precompile.cpp" )
-
-	includedirs
-	{
-		"Editor",
-		"Dependencies/wxWidgets/include",
-		"Dependencies/LiteSQL/include",
-		"Dependencies/p4api/include",
-		"Dependencies/lua/src",
-	}
-	links
-	{
-		"Platform",
-		"Foundation",
-		"Pipeline",
-		"Expat",
-		"zlib",
-		"LiteSQL",
-		"libclient",
-		"librpc",
-		"libsupp",
-		"lua",
-		"d3d9",
-		"d3dx9",
-		"ws2_32",
-	}
-	flags
-	{
-		"WinMain"
-	}
-
-	configuration "windows"
-		includedirs
-		{
-			"Dependencies/wxWidgets/include/msvc",
-		}
-		
-	-- per architecture
-	configuration { "windows", "x32" }
-		libdirs
-		{
-			"Dependencies/wxWidgets/lib/vc_dll",
-		}
-	configuration { "windows", "x64" }
-		libdirs
-		{
-			"Dependencies/wxWidgets/lib/vc_amd64_dll",
-		}
-		
-	-- per configuration
-	configuration { "windows", "Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29d"
-		}
-	configuration { "windows", "not Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29"
-		}
-	configuration { "windows", "Debug", "not no-unicode" }
-		links
-		{
-			"wxmsw29ud"
-		}
-	configuration { "windows", "not Debug", "not no-unicode" }
-		links
-		{
-			"wxmsw29u"
-		}
-		
-	-- per architecture, per configuration
-	configuration { "windows", "x32", "Debug" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/Win32/Debug",
-		}
-	configuration { "windows", "x32", "not Debug" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/Win32/Release",
-		}
-	configuration { "windows", "x64", "Debug" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/x64/Debug",
-		}
-	configuration { "windows", "x64", "not Debug" }
-		libdirs
-		{
-			"Dependencies/p4api/lib/x64/Release",
-		}
-
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
@@ -681,6 +525,188 @@ project "FrameworkWin"
 			"PcSupport",
 			"PreprocessingPc",
 			"EditorSupport",
+		}
+
+project "Pipeline"
+	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
+	language "C++"
+	defines
+	{
+		"PIPELINE_EXPORTS",
+		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
+	}
+	includedirs
+	{
+		"Dependencies/nvtt",
+		"Dependencies/nvtt/src",
+		"Dependencies/nvtt/src/nvtt/squish",
+		"Dependencies/tiff",
+		"Dependencies/tiff/libtiff",
+	}
+	files
+	{
+		"Pipeline/**.h",
+		"Pipeline/**.cpp",
+	}
+
+	configuration "windows"
+		includedirs
+		{
+			"Dependencies/nvtt/project/vc8",
+		}
+
+	configuration "Debug"
+		kind "SharedLib"
+
+	configuration "not Debug"
+		kind "StaticLib"
+
+	--configuration "SharedLib"
+	configuration "Debug"
+		links
+		{
+			"Platform",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"Framework",
+			"WinWindowing",
+			"D3D9Rendering",
+			"PcSupport",
+			"PreprocessingPc",
+			"EditorSupport",
+			"nvtt",
+			"tiff",
+			"d3d9",
+			"d3dx9",
+		}
+
+project "Editor"
+	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
+	kind "ConsoleApp"
+	language "C++"
+	defines
+	{
+		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
+	}
+	files
+	{
+		"Editor/**.h",
+		"Editor/**.c",
+		"Editor/**.cpp",
+		"Editor/Editor.rc",
+	}
+
+    pchheader( "Precompile.h" )
+    pchsource( "Editor/Precompile.cpp" )
+
+	includedirs
+	{
+		"Editor",
+		"Dependencies/wxWidgets/include",
+		"Dependencies/LiteSQL/include",
+		"Dependencies/p4api/include",
+		"Dependencies/lua/src",
+	}
+	links
+	{
+		"Platform",
+		"Foundation",
+		"Engine",
+		"EngineJobs",
+		"Windowing",
+		"Rendering",
+		"GraphicsTypes",
+		"GraphicsJobs",
+		"Graphics",
+		"Framework",
+		"WinWindowing",
+		"D3D9Rendering",
+		"PcSupport",
+		"PreprocessingPc",
+		"EditorSupport",
+		"Pipeline",
+		"Expat",
+		"zlib",
+		"LiteSQL",
+		"libclient",
+		"librpc",
+		"libsupp",
+		"lua",
+		"d3d9",
+		"d3dx9",
+		"ws2_32",
+	}
+	flags
+	{
+		"WinMain"
+	}
+
+	configuration "windows"
+		includedirs
+		{
+			"Dependencies/wxWidgets/include/msvc",
+		}
+		
+	-- per architecture
+	configuration { "windows", "x32" }
+		libdirs
+		{
+			"Dependencies/wxWidgets/lib/vc_dll",
+		}
+	configuration { "windows", "x64" }
+		libdirs
+		{
+			"Dependencies/wxWidgets/lib/vc_amd64_dll",
+		}
+		
+	-- per configuration
+	configuration { "windows", "Debug", "no-unicode" }
+		links
+		{
+			"wxmsw29d"
+		}
+	configuration { "windows", "not Debug", "no-unicode" }
+		links
+		{
+			"wxmsw29"
+		}
+	configuration { "windows", "Debug", "not no-unicode" }
+		links
+		{
+			"wxmsw29ud"
+		}
+	configuration { "windows", "not Debug", "not no-unicode" }
+		links
+		{
+			"wxmsw29u"
+		}
+		
+	-- per architecture, per configuration
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/Win32/Debug",
+		}
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/Win32/Release",
+		}
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/x64/Debug",
+		}
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/p4api/lib/x64/Release",
 		}
 
 project "TestJobs"  -- DEPRECATED

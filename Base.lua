@@ -274,6 +274,9 @@ Helium.DoDefaultSolutionSettings = function()
 			"_DEBUG",
 			"HELIUM_SHARED=1",
 			"TBB_USE_DEBUG=1",
+			"L_DEBUG=1",
+			"L_EDITOR=1",
+			"L_SHARED=1",
 		}
 		flags
 		{
@@ -285,6 +288,9 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"HELIUM_INTERMEDIATE=1",
 			"HELIUM_STATIC=1",
+			"L_INTERMEDIATE=1",
+			"L_EDITOR=1",
+			"L_STATIC=1",
 		}
 		flags
 		{
@@ -299,6 +305,8 @@ Helium.DoDefaultSolutionSettings = function()
 			"HELIUM_PROFILE=1",
 			"NDEBUG",
 			"HELIUM_STATIC=1",
+			"L_PROFILE=1",
+			"L_STATIC=1",
 		}
 		flags
 		{
@@ -313,6 +321,8 @@ Helium.DoDefaultSolutionSettings = function()
 			"HELIUM_RELEASE=1",
 			"NDEBUG",
 			"HELIUM_STATIC=1",
+			"L_RELEASE=1",
+			"L_STATIC=1",
 		}
 		flags
 		{
@@ -358,48 +368,6 @@ Helium.DoDefaultLunarProjectSettings = function()
 			"nvtt",
 			"png",
 			"zlib",
-		}
-
-	configuration "no-unicode"
-		defines
-		{
-			"L_UNICODE=0",
-		}
-
-	configuration "not no-unicode"
-		defines
-		{
-			"L_UNICODE=1",
-		}
-
-	configuration "Debug"
-		defines
-		{
-			"L_DEBUG=1",
-			"L_EDITOR=1",
-			"L_SHARED=1",
-		}
-
-	configuration "Intermediate"
-		defines
-		{
-			"L_INTERMEDIATE=1",
-			"L_EDITOR=1",
-			"L_STATIC=1",
-		}
-
-	configuration "Profile"
-		defines
-		{
-			"L_PROFILE=1",
-			"L_STATIC=1",
-		}
-
-	configuration "Release"
-		defines
-		{
-			"L_RELEASE=1",
-			"L_STATIC=1",
 		}
 
 	--configuration { "windows", "SharedLib or *App" }

@@ -3,7 +3,6 @@
 #include "Drawer.h"
 
 #include "Foundation/Flags.h"
-#include "Foundation/Log.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -350,11 +349,5 @@ bool Drawer::HasMouseFocus()
 
     wxPoint mousePos = ::wxGetMousePosition();
 
-    static int callNumber = 0;
-    bool inButton = buttonRect.Contains( mousePos );
-    bool inDrawer = frameRect.Contains( mousePos );
-
-    Log::Print( TXT( "\n\nHasMouseFocus (%d):\n  inButton = %d\n  inDrawer = %d" ), callNumber++, inButton, inDrawer );
-
-    return ( inButton || inDrawer );
+    return ( buttonRect.Contains( mousePos ) || frameRect.Contains( mousePos ) );
 }

@@ -506,7 +506,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     {
         Path jobDefParserPath;
         HELIUM_VERIFY( File::GetDataDirectory( jobDefParserPath ) );
-        jobDefParserPath += TXT( "..\\Helium\\Build\\JobDefParser.py" );
+        jobDefParserPath += TXT( "..\\Build\\JobDefParser.py" );
 
         bool bJobDefParserExists = jobDefParserPath.Exists();
         HELIUM_UNREF( bJobDefParserExists );

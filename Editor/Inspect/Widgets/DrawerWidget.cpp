@@ -6,25 +6,33 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_OBJECT( DrawerWidget );
 
+DrawerWidget::DrawerWidget()
+: m_ContainerControl( NULL )
+, m_Drawer( NULL )
+, m_StripCanvas( NULL )
+{
+}
+
 DrawerWidget::DrawerWidget( Inspect::Container* container )
 : m_ContainerControl( container )
 , m_Drawer( NULL )
-, m_StripCanvas( wxVERTICAL )
+, m_StripCanvas( NULL )
 {
-    if ( m_ContainerControl )
+    HELIUM_ASSERT( m_ContainerControl );
+
+    m_StripCanvas = new StripCanvas( wxVERTICAL );
+
+    Inspect::V_Control controls = m_ContainerControl->ReleaseChildren();
+
+    // move children out of the container and into the new vertical strip canvas
+    for( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
     {
-        Inspect::V_Control controls = m_ContainerControl->ReleaseChildren();
-
-        // move children out of the container and into the new vertical strip canvas
-        for( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
-        {
-            m_StripCanvas.AddChild( *itr );
-        }
-
-        m_ContainerControl->AddChild( &m_StripCanvas );
-        
-        SetControl( m_ContainerControl );
+        m_StripCanvas->AddChild( *itr );
     }
+
+    m_ContainerControl->AddChild( m_StripCanvas );
+
+    SetControl( m_ContainerControl );
 }
 
 void DrawerWidget::CreateWindow( wxWindow* parent )
@@ -44,8 +52,8 @@ void DrawerWidget::CreateWindow( wxWindow* parent )
     }
 
     // Add the m_StripCanvas to the Drawer's panel
-    m_StripCanvas.SetPanel( m_Drawer->GetPanel() );
-    m_StripCanvas.Realize( NULL );
+    m_StripCanvas->SetPanel( m_Drawer->GetPanel() );
+    m_StripCanvas->Realize( NULL );
 
     wxSize drawerSize( m_Drawer->GetPanel()->GetBestSize() );
     m_Drawer->GetPanel()->SetSize( drawerSize );
@@ -66,6 +74,10 @@ void DrawerWidget::DestroyWindow()
     // remove listeners
     m_ContainerControl->a_Icon.Changed().RemoveMethod( this, &DrawerWidget::OnIconChanged );
     m_ContainerControl->a_Name.Changed().RemoveMethod( this, &DrawerWidget::OnLabelChanged );
+
+    // we have to clear our StripCanvas before we delete our Drawer
+    m_StripCanvas->Clear();
+    // we do not delete the m_StripCanvas because it is now owned by m_ContainerControl
 
     // destroy window
     delete m_Drawer;

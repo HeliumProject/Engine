@@ -14,6 +14,7 @@ namespace Helium
             REFLECT_DECLARE_OBJECT( StripCanvas, Canvas );
 
             StripCanvas( int orientation = wxHORIZONTAL );
+            ~StripCanvas();
 
             wxPanel* GetPanel() const;
             void SetPanel( wxPanel* panel );

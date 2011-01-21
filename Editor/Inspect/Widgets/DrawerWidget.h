@@ -15,7 +15,8 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( DrawerWidget, Widget );
 
-            DrawerWidget( Inspect::Container* container = NULL );
+            DrawerWidget();
+            DrawerWidget( Inspect::Container* container );
 
             virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void DestroyWindow() HELIUM_OVERRIDE;
@@ -35,7 +36,7 @@ namespace Helium
 
             Inspect::Container* m_ContainerControl;
             Drawer* m_Drawer;
-            StripCanvas m_StripCanvas;
+            StripCanvas* m_StripCanvas;
         };
 
     }

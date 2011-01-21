@@ -18,6 +18,7 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
 , m_Parent( parent )
 , m_Icon( wxART_MISSING_IMAGE )
 , m_Button( NULL )
+, m_Panel( NULL )
 , m_ButtonStyle( DrawerButtonStyles::Default )
 , m_FloatingPosition( wxDefaultPosition )
 , m_AuiManager( NULL )

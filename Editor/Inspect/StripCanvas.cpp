@@ -16,6 +16,10 @@ StripCanvas::StripCanvas( int orientation )
     SetWidgetCreator< StripCanvasWidget, Container >();
 }
 
+StripCanvas::~StripCanvas()
+{
+}
+
 wxPanel* StripCanvas::GetPanel() const
 {
     return m_Panel;

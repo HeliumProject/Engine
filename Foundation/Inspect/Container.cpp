@@ -50,15 +50,12 @@ void Container::InsertChild(int index, Control* control)
     }
 }
 
-void Container::RemoveChild( Control* control, bool unrealize )
+void Container::RemoveChild( Control* control )
 {
     if ( control->GetParent() == this )
     {
-        if ( unrealize )
-        {
-            // unrealize the control
-            control->Unrealize();
-        }
+        // unrealize the control
+        control->Unrealize();
 
         // free the control from its parent
         control->SetParent( NULL );
@@ -77,12 +74,12 @@ void Container::RemoveChild( Control* control, bool unrealize )
     }
 }
 
-void Container::Clear( bool unrealizeChildren )
+void Container::Clear()
 {
     while (!m_Children.empty())
     {
         // do the remove work
-        RemoveChild( m_Children.back(), unrealizeChildren );
+        RemoveChild( m_Children.back() );
     }
 }
 

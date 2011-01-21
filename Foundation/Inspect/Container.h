@@ -41,6 +41,7 @@ namespace Helium
 
             inline V_Control ReleaseChildren()
             {
+                HELIUM_ASSERT( !this->IsRealized() );
                 V_Control children = m_Children;
                 Clear();
                 return children;
@@ -48,8 +49,8 @@ namespace Helium
 
             virtual void AddChild( Control* control );
             virtual void InsertChild( int index, Control* control );
-            virtual void RemoveChild( Control* control, bool unrealize = true );
-            virtual void Clear( bool unrealizeChildren = true );
+            virtual void RemoveChild( Control* control );
+            virtual void Clear();
 
             const tstring& GetPath() const
             {

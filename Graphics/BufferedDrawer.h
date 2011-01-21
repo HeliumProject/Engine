@@ -12,6 +12,7 @@ namespace Lunar
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RIndexBuffer );
     L_DECLARE_RPTR( RPixelShader );
+    L_DECLARE_RPTR( RRenderCommandProxy );
     L_DECLARE_RPTR( RTexture2d );
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RVertexDescription );
@@ -23,6 +24,21 @@ namespace Lunar
     public:
         /// Maximum number of characters to convert for rendered text strings (including null terminator).
         static const size_t TEXT_CHARACTER_COUNT_MAX = 1024;
+
+        /// Depth buffer modes.
+        enum EDepthMode
+        {
+            DEPTH_MODE_FIRST   =  0,
+            DEPTH_MODE_INVALID = -1,
+
+            /// Enable depth tests and writes.
+            DEPTH_MODE_ENABLED,
+            /// Disable depth tests and writes.
+            DEPTH_MODE_DISABLED,
+
+            DEPTH_MODE_MAX,
+            DEPTH_MODE_LAST = DEPTH_MODE_MAX - 1
+        };
 
         /// @name Construction/Destruction
         //@{
@@ -39,18 +55,22 @@ namespace Lunar
         /// @name Draw Call Generation
         //@{
         void DrawLines(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount );
+            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount,
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawWireMesh(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount );
+            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawSolidMesh(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount );
+            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
-            uint32_t triangleCount, RTexture2d* pTexture );
+            uint32_t triangleCount, RTexture2d* pTexture, EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, const Color& rColor = Color( 0xffffffff ),
-            RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
+            RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM,
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawScreenText(
             int32_t x, int32_t y, const String& rText, const Color& rColor = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
@@ -109,15 +129,10 @@ namespace Lunar
             /// Index buffer for untextured primitive rendering.
             RIndexBufferPtr spUntexturedIndexBuffer;
 
-            /// Vertex buffer for primitive rendering with blending of each texture channel with the vertex colors.
-            RVertexBufferPtr spTextureBlendVertexBuffer;
-            /// Index buffer for primitive rendering with blending of each texture channel with the vertex colors.
-            RIndexBufferPtr spTextureBlendIndexBuffer;
-
-            /// Vertex buffer for primitive rendering with blending of the texture color with the vertex alpha.
-            RVertexBufferPtr spTextureAlphaVertexBuffer;
-            /// Index buffer for primitive rendering with blending of the texture color with the vertex alpha.
-            RIndexBufferPtr spTextureAlphaIndexBuffer;
+            /// Vertex buffer for textured primitive rendering.
+            RVertexBufferPtr spTexturedVertexBuffer;
+            /// Index buffer for textured primitive rendering.
+            RIndexBufferPtr spTexturedIndexBuffer;
 
             /// Vertex buffer for screen-space text rendering.
             RVertexBufferPtr spScreenSpaceTextVertexBuffer;
@@ -127,18 +142,43 @@ namespace Lunar
             /// Maximum number if indices in the untextured primitive index buffer.
             uint32_t untexturedIndexBufferSize;
 
-            /// Maximum number of vertices in the blended texture primitive vertex buffer.
-            uint32_t textureBlendVertexBufferSize;
-            /// Maximum number of indices in the blended texture primitive vertex buffer.
-            uint32_t textureBlendIndexBufferSize;
-
-            /// Maximum number of vertices in the alpha texture primitive vertex buffer.
-            uint32_t textureAlphaVertexBufferSize;
-            /// Maximum number of indices in the alpha texture primitive vertex buffer.
-            uint32_t textureAlphaIndexBufferSize;
+            /// Maximum number of vertices in the textured primitive vertex buffer.
+            uint32_t texturedVertexBufferSize;
+            /// Maximum number of indices in the textured primitive index buffer.
+            uint32_t texturedIndexBufferSize;
 
             /// Maximum number of vertices in the screen-space text vertex buffer.
             uint32_t screenSpaceTextVertexBufferSize;
+        };
+
+        /// Rendering resources used for drawing world elements.
+        struct WorldElementResources
+        {
+            /// Render command proxy interface.
+            RRenderCommandProxyPtr spCommandProxy;
+
+            /// Untextured rendering vertex shader.
+            RVertexShaderPtr spUntexturedVertexShader;
+            /// Untextured rendering pixel shader.
+            RPixelShaderPtr spUntexturedPixelShader;
+
+            /// Vertex shader for textured rendering blended with the vertex color.
+            RVertexShaderPtr spTextureBlendVertexShader;
+            /// Pixel shader for textured rendering blended with the vertex color.
+            RPixelShaderPtr spTextureBlendPixelShader;
+
+            /// Vertex shader for textured rendering blending the vertex color with the texture alpha.
+            RVertexShaderPtr spTextureAlphaVertexShader;
+            /// Pixel shader for textured rendering blending the vertex color with the texture alpha.
+            RPixelShaderPtr spTextureAlphaPixelShader;
+
+            /// Cached reference to the vertex description for SimpleVertex.
+            RVertexDescriptionPtr spSimpleVertexDescription;
+            /// Cached reference to the vertex description for SimpleTexturedVertex;
+            RVertexDescriptionPtr spSimpleTexturedVertexDescription;
+
+            /// True if the transparent rendering blend state has been set.
+            bool bSetBlendState;
         };
 
         /// Glyph handler for rendering world-space text.
@@ -148,7 +188,8 @@ namespace Lunar
             /// @name Construction/Destruction
             //@{
             WorldSpaceTextGlyphHandler(
-                BufferedDrawer* pDrawer, Font* pFont, const Color& rColor, const Simd::Matrix44& rTransform );
+                BufferedDrawer* pDrawer, Font* pFont, const Color& rColor, EDepthMode depthMode,
+                const Simd::Matrix44& rTransform );
             //@}
 
             /// @name Overloaded Operators
@@ -165,6 +206,8 @@ namespace Lunar
             Font* m_pFont;
             /// Text color.
             Color m_color;
+            /// Mode in which to handle depth testing and writing.
+            EDepthMode m_depthMode;
 
             /// Cached indices to use for quad rendering.
             uint16_t m_quadIndices[ 6 ];
@@ -214,28 +257,24 @@ namespace Lunar
 
         /// Untextured draw call vertices.
         DynArray< SimpleVertex > m_untexturedVertices;
-        /// Vertices for draw calls that blend each texture channel with the vertex color.
-        DynArray< SimpleTexturedVertex > m_textureBlendVertices;
-        /// Vertices for draw calls that blend the texture color (red channel) with the vertex alpha.
-        DynArray< SimpleTexturedVertex > m_textureAlphaVertices;
+        /// Textured draw call vertices.
+        DynArray< SimpleTexturedVertex > m_texturedVertices;
 
         /// Untextured draw call indices.
         DynArray< uint16_t > m_untexturedIndices;
-        /// Indices for draw calls that blend each texture channel with the vertex color.
-        DynArray< uint16_t > m_textureBlendIndices;
-        /// Indices for draw calls that blend the texture color (red channel) with the vertex alpha.
-        DynArray< uint16_t > m_textureAlphaIndices;
+        /// Textured draw call indices.
+        DynArray< uint16_t > m_texturedIndices;
 
         /// Line list draw call data.
-        DynArray< UntexturedDrawCall > m_lineDrawCalls;
+        DynArray< UntexturedDrawCall > m_lineDrawCalls[ DEPTH_MODE_MAX ];
         /// Wireframe mesh draw call data
-        DynArray< UntexturedDrawCall > m_wireMeshDrawCalls;
+        DynArray< UntexturedDrawCall > m_wireMeshDrawCalls[ DEPTH_MODE_MAX ];
         /// Solid mesh draw call data.
-        DynArray< UntexturedDrawCall > m_solidMeshDrawCalls;
+        DynArray< UntexturedDrawCall > m_solidMeshDrawCalls[ DEPTH_MODE_MAX ];
         /// Textured mesh draw call data.
-        DynArray< TexturedDrawCall > m_texturedMeshDrawCalls;
+        DynArray< TexturedDrawCall > m_texturedMeshDrawCalls[ DEPTH_MODE_MAX ];
         /// World-space text draw call data.
-        DynArray< TexturedDrawCall > m_worldTextDrawCalls;
+        DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];
 
         /// Screen-space text draw call data.
         DynArray< TextDrawCall > m_screenTextDrawCalls;
@@ -253,5 +292,10 @@ namespace Lunar
         /// True if the buffered draw commands are in use for rendering (no new commands can be buffered), false if not
         /// (new commands can be buffered).
         bool m_bDrawing;
+
+        /// @name Rendering Utility Functions
+        //@{
+        void DrawDepthModeWorldElements( WorldElementResources& rWorldResources, EDepthMode depthMode );
+        //@}
     };
 }

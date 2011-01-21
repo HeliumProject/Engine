@@ -54,8 +54,8 @@ if( $pull )
 }
 
 my $premake = 'premake4 vs2008';
-my $depends = 'perl.exe "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" ) . '"';
-my $compile = 'perl.exe "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" ) . '"';
+my $depends = 'perl "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" ) . '"';
+my $compile = 'perl "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" ) . '"';
 
 if($config)
 {
@@ -87,7 +87,7 @@ sub _DoGit
 {
   my $args = shift;
   my $description = shift; 
-  my $command = "git $args && git submodule foreach --recursive \"git $args\"";
+  my $command = 'perl "' . File::Spec->catfile( dirname( $0 ), "gitr.pl" ) . '" "' . $args;
   _Do( $command, $description );
 
   if ( $result )

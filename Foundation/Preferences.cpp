@@ -11,7 +11,7 @@ bool Helium::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
         return false;
     }
 
-    prefDirectory += TXT( "/Helium/" );
+    prefDirectory += TXT( "/.Helium/" );
     
     preferencesDirectory.Set( prefDirectory );
     return true;

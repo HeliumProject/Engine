@@ -114,8 +114,8 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
     {
         bLocateRequested = true;
 
-        tstring prefsDir;
-        if( !Helium::GetPreferencesDirectory( prefsDir ) )
+        tstring gameDataDirectory;
+        if( !Helium::GetGameDataDirectory( gameDataDirectory ) )
         {
             return userDataDirectory;
         }
@@ -126,7 +126,7 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
             subDirectory = TXT( "Helium" );
         }
 
-        userDataDirectory.Set( prefsDir + TXT( "/" ) + subDirectory.GetData() );
+        userDataDirectory.Set( gameDataDirectory + TXT( "/" ) + subDirectory.GetData() );
         if( !userDataDirectory.MakePath() )
         {
             userDataDirectory.Clear();

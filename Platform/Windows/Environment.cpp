@@ -12,5 +12,10 @@ bool Helium::GetComputer( tstring& computername )
 
 bool Helium::GetPreferencesDirectory( tstring& preferencesDirectory )
 {
-    return Helium::GetEnvironmentVariable( TXT( "APPDATA" ), preferencesDirectory );
+    return Helium::GetEnvironmentVariable( TXT( "USERPROFILE" ), preferencesDirectory );
+}
+
+bool Helium::GetGameDataDirectory( tstring& gameDataDirectory )
+{
+    return Helium::GetEnvironmentVariable( TXT( "APPDATA" ), gameDataDirectory );
 }

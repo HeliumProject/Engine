@@ -28,14 +28,10 @@ bool Nocturnal::GetComputer( tstring& computername )
 
 bool Nocturnal::GetPreferencesDirectory( tstring& preferencesDirectory )
 {
-    tstring homedir;
-    if ( !Nocturnal::GetEnvironmentVariable( TXT( "HOME" ), homedir ) )
-    {
-        return false;
-    }
+    return Nocturnal::GetEnvironmentVariable( TXT( "HOME" ), preferencesDirectory ) );
+}
 
-    // this isn't great, but under posix there usually isn't a set preferences directory
-    preferencesDirectory = homedir + "/.preferences/";
-
-    return true;
+bool Nocturnal::GetGameDataDirectory( tstring& gameDataDirectory )
+{
+    return Nocturnal::GetEnvironmentVariable( TXT( "HOME" ), gameDataDirectory ) );
 }

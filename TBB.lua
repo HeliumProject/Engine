@@ -25,7 +25,7 @@ Helium.BuildTBB = function()
 		end
 
 		function CallMake( arch, cmd )
-			local path = os.getenv("TMP") .. os.tmpname() .. "bat";
+			local path = os.getenv("TMP") .. os.tmpname() .. ".bat";
 			print( "Creating temp bat file for make.exe: " .. path )
 
 			local bat = io.open( path, "w+")		
@@ -45,7 +45,7 @@ Helium.BuildTBB = function()
         result = CallMake( "x86", "tbb arch=ia32" )
         if result ~= 0 then os.exit( 1 ) end
         if Helium.Build64Bit() then
-            result = os.execute( "x86_amd64", "tbb arch=intel64" )
+            result = CallMake( "x86_amd64", "tbb arch=intel64" )
             if result ~= 0 then os.exit( 1 ) end
         end
 	else

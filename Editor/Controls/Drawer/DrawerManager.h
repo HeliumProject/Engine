@@ -8,14 +8,17 @@ namespace Helium
     {
         class MainFrame;
 
-        class DrawerPanel : public wxPanel
+        class DrawerManager
         {
         public:
-            DrawerPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
-            virtual ~DrawerPanel();
+            DrawerManager();
+            virtual ~DrawerManager();
 
             void SetAuiManager( wxAuiManager* auiManager );
+
             void AddDrawer( Drawer* drawer );
+            void RemoveDrawer( Drawer* drawer );
+            void RemoveAllDrawers();
 
             Drawer* GetCurrentDrawer() const;
 
@@ -23,7 +26,6 @@ namespace Helium
             void SetFixedSizeButtons( bool fixedSize );
 
         private:
-            void DestroyDrawers();
             Drawer* FindDrawer( int32_t drawerID );
 
             void OnDrawerOpening( const DrawerEventArgs& args );

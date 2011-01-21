@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Editor/Controls/Drawer/DrawerManager.h"
 #include "Editor/Inspect/Canvas.h"
 #include "Editor/Inspect/Widget.h"
-#include "Editor/Controls/Tree/TreeWndCtrl.h"
 
 namespace Helium
 {
@@ -13,19 +13,17 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( StripCanvas, Canvas );
 
-            // this is where tree-specific wx code happens
-            StripCanvas();
+            StripCanvas( int orientation = wxHORIZONTAL );
+            ~StripCanvas();
 
-            wxPanel* GetPanel()
-            {
-                return m_Panel;
-            }
+            wxPanel* GetPanel() const;
             void SetPanel( wxPanel* panel );
 
             virtual void Realize( Inspect::Canvas* canvas ) HELIUM_OVERRIDE;
 
         private:
-            wxPanel*    m_Panel;
+            wxPanel* m_Panel;
+            int32_t m_Orientation;
         };
 
         typedef Helium::SmartPtr< StripCanvas > StripCanvasPtr;

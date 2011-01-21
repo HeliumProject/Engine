@@ -2,6 +2,7 @@
 #include "EntityInstanceCreateTool.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Inspect/Container.h"
 
 #include "Pipeline/SceneGraph/Mesh.h"
 #include "Pipeline/SceneGraph/Scene.h"
@@ -117,41 +118,48 @@ void EntityInstanceCreateTool::CreateProperties()
 {
     m_Generator->PushContainer( TXT( "EntityInstance" ) );
     {
-        m_Generator->PushContainer();
+        Inspect::Container* container = m_Generator->PushContainer( TXT( "Entity List" ) );
+        container->SetUIHints( Inspect::UIHint::Popup );
         {
-            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
-            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
-            m_FileButtonAdd->a_Icon.Set( TXT( "ellipses_add" ) );
-
-            //Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
-            //modifyButton->a_HelpText.Set( TXT( "Modify" ) );
-            //modifyButton->a_Icon.Set( TXT( "percent" ) );
-
-            Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
-            normalizeButton->a_HelpText.Set( TXT( "Normalize" ) );
-            normalizeButton->a_Icon.Set( TXT( "normalize" ) );
-
-            Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
-            deleteButton->a_HelpText.Set( TXT( "Delete" ) );
-            deleteButton->a_Icon.Set( TXT( "actions/list-remove" ) );
-
-            Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
-            clearButton->a_HelpText.Set( TXT( "Clear" ) );
-            clearButton->a_Icon.Set( TXT( "delete" ) );
-
-            tstring filter;
-            if ( Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
+            m_Generator->PushContainer();
             {
-                m_FileButton->a_Filter.Set( filter );
-                m_FileButtonAdd->a_Filter.Set( filter );
-            }
-        }
-        m_Generator->Pop();
+                m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::SetEntityAsset ) );
+                m_FileButton->a_Icon.Set( TXT( "HELIUM_ART_ID_FILE" ) );
 
-        m_Generator->PushContainer();
-        {
-            m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
-            m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.HeliumEntity" ) );
+                m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring> (this, &EntityInstanceCreateTool::GetEntityAsset, &EntityInstanceCreateTool::AddEntityAsset ) );
+                m_FileButtonAdd->a_Icon.Set( TXT( "HELIUM_ART_ID_ACTION_FILE_ADD" ) );
+
+                //Inspect::Button* modifyButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnModify ) );
+                //modifyButton->a_HelpText.Set( TXT( "Modify" ) );
+                //modifyButton->a_Icon.Set( TXT( "percent" ) );
+
+                Inspect::Button* normalizeButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnNormalize ) );
+                normalizeButton->a_HelpText.Set( TXT( "Normalize" ) );
+                normalizeButton->a_Icon.Set( TXT( "normalize" ) );
+
+                Inspect::Button* deleteButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnDeleteClass ) );
+                deleteButton->a_HelpText.Set( TXT( "Delete" ) );
+                deleteButton->a_Icon.Set( TXT( "HELIUM_ART_ID_ACTION_DELETE" ) );
+
+                Inspect::Button*  clearButton = m_Generator->AddButton( Inspect::ButtonClickedSignature::Delegate( this, &EntityInstanceCreateTool::OnClear ) );
+                clearButton->a_HelpText.Set( TXT( "Clear" ) );
+                clearButton->a_Icon.Set( TXT( "delete" ) );
+
+                tstring filter;
+                if ( Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
+                {
+                    m_FileButton->a_Filter.Set( filter );
+                    m_FileButtonAdd->a_Filter.Set( filter );
+                }
+            }
+            m_Generator->Pop();
+
+            m_Generator->PushContainer();
+            {
+                m_RandomEntityList = m_Generator->AddList< tstring >( new Helium::MemberProperty<SceneGraph::EntityInstanceCreateTool, tstring > (this, &EntityInstanceCreateTool::GetRandomEntity, &EntityInstanceCreateTool::SetRandomEntity) );
+                m_RandomEntityList->SetProperty( TXT( "FileFilter" ), TXT( "*.HeliumEntity" ) );
+            }
+            m_Generator->Pop();
         }
         m_Generator->Pop();
 

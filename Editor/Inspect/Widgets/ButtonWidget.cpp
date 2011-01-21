@@ -13,10 +13,13 @@ ButtonWindow::ButtonWindow( wxWindow* parent, ButtonWidget* buttonWidget )
 , m_Button( NULL )
 , m_ButtonWidget( buttonWidget )
 {
+    m_Button = new wxButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+
     m_Sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( m_Sizer );
+    m_Sizer->Add( m_Button, 1, wxEXPAND | wxALL, 0 );
 
-    Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
+    m_Button->Connect( wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ButtonWindow::OnClicked ) );
 }
 
 void ButtonWindow::OnClicked( wxCommandEvent& )
@@ -28,18 +31,10 @@ void ButtonWindow::SetIcon( const tstring& icon )
 {
     HELIUM_ASSERT( m_Sizer );
 
-    if ( m_Button )
-    {
-        m_Sizer->Detach( m_Button );
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
-
-    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
-    HELIUM_ASSERT( buttonControl );
-    m_Button = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetIcon( (wxArtID)buttonControl->a_Icon.Get().c_str() ) );
-
-    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+    m_Button->SetBitmap( wxArtProvider::GetIcon( (wxArtID)icon.c_str(), wxART_OTHER, wxSize( 16, 16 ) ) );
+    wxSize buttonSize( m_Button->GetBestSize() );
+    m_Button->SetSize( buttonSize );
+    m_Button->SetMinSize( buttonSize );
 
     Layout();
 }
@@ -48,18 +43,10 @@ void ButtonWindow::SetLabel( const tstring& label )
 {
     HELIUM_ASSERT( m_Sizer );
 
-    if ( m_Button )
-    {
-        m_Sizer->Detach( m_Button );
-        m_Button->Destroy();
-        m_Button = NULL;
-    }
-
-    Inspect::Button* buttonControl = Reflect::SafeCast< Inspect::Button >( m_ButtonWidget->GetControl() );
-    HELIUM_ASSERT( buttonControl );
-    m_Button = new wxButton( this, wxID_ANY, buttonControl->a_Label.Get().c_str() );
-
-    m_Sizer->Insert( 0, m_Button, 0, wxALIGN_CENTER_VERTICAL );
+    m_Button->SetLabel( label );
+    wxSize buttonSize( m_Button->GetBestSize() );
+    m_Button->SetSize( buttonSize );
+    m_Button->SetMinSize( buttonSize );
 
     Layout();
 }
@@ -91,9 +78,12 @@ void ButtonWidget::CreateWindow( wxWindow* parent )
     }
 
     // init layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_ButtonWindow->SetSize( size );
-    m_ButtonWindow->SetMinSize( size );
+    //wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
+    //m_ButtonWindow->SetSize( size );
+    //m_ButtonWindow->SetMinSize( size );
+    //wxSize buttonSize( m_ButtonWindow->GetBestSize() );
+    //m_ButtonWindow->SetSize( buttonSize );
+    //m_ButtonWindow->SetMinSize( buttonSize );
 
     // add listeners
     m_ButtonControl->a_Icon.Changed().AddMethod( this, &ButtonWidget::OnIconChanged );

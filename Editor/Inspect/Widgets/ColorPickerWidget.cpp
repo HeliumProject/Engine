@@ -43,9 +43,9 @@ void ColorPickerWidget::CreateWindow( wxWindow* parent )
     SetWindow( m_ColorPickerWindow = new ColorPickerWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_ColorPickerWindow->SetSize( size );
-    m_ColorPickerWindow->SetMinSize( size );
+    //wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
+    //m_ColorPickerWindow->SetSize( size );
+    //m_ColorPickerWindow->SetMinSize( size );
 
     // add listeners
     m_ColorPickerControl->a_Highlight.Changed().AddMethod( this, &ColorPickerWidget::HighlightChanged );

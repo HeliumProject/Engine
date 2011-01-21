@@ -4,6 +4,8 @@
 
 #include "Editor/Inspect/Widget.h"
 
+#include "Editor/Controls/Drawer/DrawerManager.h"
+
 namespace Helium
 {
     namespace Editor
@@ -31,6 +33,9 @@ namespace Helium
             }
             void SetWindow( wxWindow* window );
 
+            DrawerManager* GetDrawerManager() const;
+            void SetDrawerManager( DrawerManager* drawerManager );
+
             // callbacks from the window
             virtual void OnShow(wxShowEvent&);
             virtual void OnClick(wxMouseEvent&);
@@ -47,8 +52,9 @@ namespace Helium
             }
 
         private:
-            wxWindow*       m_Window;
-            WidgetCreators  m_WidgetCreators;
+            wxWindow* m_Window;
+            WidgetCreators m_WidgetCreators;
+            DrawerManager* m_DrawerManager;
         };
     }
 }

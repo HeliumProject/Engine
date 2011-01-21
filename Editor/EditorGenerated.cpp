@@ -8,7 +8,7 @@
 #include "Precompile.h"
 
 
-#include "Controls/Drawer/DrawerPanel.h"
+#include "Editor/Controls/Button.h"
 #include "Editor/Controls/MenuButton.h"
 #include "Editor/Vault/ListResultsView.h"
 #include "wx/tglbtn.h"
@@ -766,78 +766,38 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer27;
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_SelectButton = new wxBitmapToggleButton( m_MainPanel, ID_Select, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_SelectButton->SetToolTip( _("Select") );
-	
-	m_SelectButton->SetToolTip( _("Select") );
-	
+	m_SelectButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_SelectButton, 0, wxALL, 2 );
 	
-	m_TranslateButton = new wxBitmapToggleButton( m_MainPanel, ID_Translate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_TranslateButton->SetToolTip( _("Translate") );
-	
-	m_TranslateButton->SetToolTip( _("Translate") );
-	
+	m_TranslateButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Translate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_TranslateButton, 0, wxALL, 2 );
 	
-	m_RotateButton = new wxBitmapToggleButton( m_MainPanel, ID_Rotate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_RotateButton->SetToolTip( _("Rotate") );
-	
-	m_RotateButton->SetToolTip( _("Rotate") );
-	
+	m_RotateButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_RotateButton, 0, wxALL, 2 );
 	
-	m_ScaleButton = new wxBitmapToggleButton( m_MainPanel, ID_Scale, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_ScaleButton->SetToolTip( _("Scale") );
-	
-	m_ScaleButton->SetToolTip( _("Scale") );
-	
+	m_ScaleButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Scale"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_ScaleButton, 0, wxALL, 2 );
 	
 	wxStaticLine* m_staticline16;
 	m_staticline16 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer27->Add( m_staticline16, 0, wxEXPAND | wxALL, 2 );
 	
-	m_DuplicateToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Duplicate, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_DuplicateToolButton->SetToolTip( _("Duplicate") );
-	
-	m_DuplicateToolButton->SetToolTip( _("Duplicate") );
-	
+	m_DuplicateToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Duplicate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_DuplicateToolButton, 0, wxALL, 2 );
 	
-	m_LocatorToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Locator, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_LocatorToolButton->SetToolTip( _("Locator") );
-	
-	m_LocatorToolButton->SetToolTip( _("Locator") );
-	
+	m_LocatorToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Locator"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_LocatorToolButton, 0, wxALL, 2 );
 	
-	m_VolumeToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Volume, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_VolumeToolButton->SetToolTip( _("Volume") );
-	
-	m_VolumeToolButton->SetToolTip( _("Volume") );
-	
+	m_VolumeToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Volumn"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_VolumeToolButton, 0, wxALL, 2 );
 	
-	m_EntityToolButton = new wxBitmapToggleButton( m_MainPanel, ID_Entity, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_EntityToolButton->SetToolTip( _("Entity") );
-	
-	m_EntityToolButton->SetToolTip( _("Entity") );
-	
+	m_EntityToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Entity"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_EntityToolButton, 0, wxALL, 2 );
 	
-	m_CurveToolLocator = new wxBitmapToggleButton( m_MainPanel, ID_Curve, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_CurveToolLocator->SetToolTip( _("Curve") );
-	
-	m_CurveToolLocator->SetToolTip( _("Curve") );
-	
+	m_CurveToolLocator = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Curve"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_CurveToolLocator, 0, wxALL, 2 );
 	
-	m_CurveEditToolButton = new wxBitmapToggleButton( m_MainPanel, ID_CurveEdit, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_CurveEditToolButton->SetToolTip( _("Edit Curve") );
-	
-	m_CurveEditToolButton->SetToolTip( _("Edit Curve") );
-	
+	m_CurveEditToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Edit Curve"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_CurveEditToolButton, 0, wxALL, 2 );
 	
 	wxStaticLine* m_staticline15;
@@ -849,31 +809,13 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_staticText10->Wrap( -1 );
 	bSizer27->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_PlayButton->Enable( false );
-	m_PlayButton->SetToolTip( _("Play") );
-	
-	m_PlayButton->Enable( false );
-	m_PlayButton->SetToolTip( _("Play") );
-	
+	m_PlayButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Play"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
 	
-	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_PauseButton->Enable( false );
-	m_PauseButton->SetToolTip( _("Pause") );
-	
-	m_PauseButton->Enable( false );
-	m_PauseButton->SetToolTip( _("Pause") );
-	
+	m_PauseButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Pause"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
 	
-	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_StopButton->Enable( false );
-	m_StopButton->SetToolTip( _("Stop") );
-	
-	m_StopButton->Enable( false );
-	m_StopButton->SetToolTip( _("Stop") );
-	
+	m_StopButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Stop"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
 	
 	
@@ -904,11 +846,6 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	bSizer26->Add( m_ToolsPropertiesPanel, 1, wxEXPAND | wxALL, 0 );
-	
-	m_DrawerPanel = new Helium::Editor::DrawerPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_DrawerPanel->Hide();
-	
-	bSizer26->Add( m_DrawerPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();

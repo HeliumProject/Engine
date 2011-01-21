@@ -2,9 +2,9 @@
 
 #include "Platform/Types.h"
 
+#include "Editor/ArtProvider.h"
+#include "Editor/Controls/Button.h"
 #include "Foundation/Automation/Event.h"
-
-#include <wx/tglbtn.h>
 
 namespace Helium
 {
@@ -34,22 +34,27 @@ namespace Helium
                 MouseOverToOpen     = 1 << 1,          // Drawers open when the button is moused over
             };
 
-            const uint32_t Default = ClickToOpen | MouseOverToOpen;
+            const uint32_t Default = ( ClickToOpen | MouseOverToOpen );
         }
         typedef uint32_t DrawerButtonStyle;
 
         /////////////////////////////////////////////////////////////////////////////
-        class Drawer : public wxEvtHandler
+        class Drawer : public wxPanel
         {
         public:
-            Drawer( wxWindow* parent, wxPanel* panel, const wxString& title, const wxBitmap& icon, const DrawerButtonStyle style = DrawerButtonStyles::Default );
+            Drawer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
             virtual ~Drawer();
+            
+            //virtual bool Destroy();
 
-            const wxString& GetTitle() const;
-            const wxBitmap& GetIcon() const;
+            virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
+            void SetIcon( const tstring& icon );
 
-            wxToggleButton* GetButton();
+            Button* GetButton();
             int32_t GetButtonID() const;
+
+            wxPanel* GetPanel();
+            void SetPanel( wxPanel* panel );
 
             void SetAuiManager( wxAuiManager* auiManager );
 
@@ -64,33 +69,34 @@ namespace Helium
             mutable DrawerEventSignature::Event e_Closed;
 
         protected:
-            void OnMouseLeaveDrawer( wxMouseEvent& args );
-
             void OnButtonClicked( wxCommandEvent& args );
             void OnMouseEnterButton( wxMouseEvent& args );
             void OnMouseLeaveButton( wxMouseEvent& args );
 
             void OnMouseHoverTimer( wxTimerEvent& args );
+            void OnMouseLocationTimer( wxTimerEvent& args );
 
             bool HasMouseFocus();
             void DestroyWindow();
 
         private:
             wxWindow* m_Parent;
-            wxPanel* m_Panel;
-            wxString m_Title;
-            wxBitmap m_Icon;
-            DrawerButtonStyle m_Style;
 
-            wxToggleButton* m_Button;
+            wxString m_Icon;
+
+            Button* m_Button;
+            DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
+            wxTimer m_MouseLocationTimer;
 
+            wxPanel* m_Panel;
             wxPoint m_FloatingPosition;
             
+            // Optional AuiManager
             wxAuiManager* m_AuiManager;
             wxAuiPaneInfo* m_PaneInfo;
 
-            wxWindow* m_DrawerWindow;
+            wxWindow* m_CurrentFrame;
         };
     }
 }

@@ -155,11 +155,13 @@ void TreeCanvasWidget::CreateWindow( wxWindow* parent )
     m_TreeWndCtrl->Thaw();
 
     m_ContainerControl->a_Name.Changed().AddMethod( this, &TreeCanvasWidget::NameChanged );
+    m_ContainerControl->a_Icon.Changed().AddMethod( this, &TreeCanvasWidget::IconChanged );
 }
 
 void TreeCanvasWidget::DestroyWindow()
 {
     m_ContainerControl->a_Name.Changed().RemoveMethod( this, &TreeCanvasWidget::NameChanged );
+    m_ContainerControl->a_Icon.Changed().RemoveMethod( this, &TreeCanvasWidget::IconChanged );
 
     if ( m_ItemData.GetId() != TreeWndCtrlItemIdInvalid )
     {
@@ -180,4 +182,8 @@ void TreeCanvasWidget::NameChanged( const Attribute<tstring>::ChangeArgs& text)
     {
         m_TreeWndCtrl->SetItemText( m_ItemData.GetId(), text.m_NewValue );
     }
+}
+
+void TreeCanvasWidget::IconChanged( const Attribute<tstring>::ChangeArgs& icon )
+{
 }

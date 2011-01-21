@@ -8,11 +8,24 @@ namespace Helium
     namespace Inspect
     {
         const static tchar_t CONTAINER_ATTR_NAME[] = TXT( "name" );
+        const static tchar_t CONTAINER_ATTR_ICON[] = TXT( "icon" );
 
-        //
+        ///////////////////////////////////////////////////////////////////////
+        namespace UIHint
+        {
+            enum UIHints
+            {
+                Advanced = 1 << 0,
+                Popup = 1 << 1,
+            };
+
+            const uint32_t Default = 0;
+        }
+        typedef uint32_t UIHints;
+
+        ///////////////////////////////////////////////////////////////////////
         // Contains other controls and distributes layout logic
         //
-
         class FOUNDATION_API Container : public Control
         {
         public:
@@ -28,21 +41,15 @@ namespace Helium
 
             inline V_Control ReleaseChildren()
             {
+                HELIUM_ASSERT( !this->IsRealized() );
                 V_Control children = m_Children;
-
-                while ( !m_Children.empty() )
-                {
-                    RemoveChild( m_Children.front() );
-                }
-
-                m_Children.clear();
-
+                Clear();
                 return children;
             }
 
-            virtual void AddChild(Control* control);
-            virtual void InsertChild(int index, Control* control);
-            virtual void RemoveChild(Control* control);
+            virtual void AddChild( Control* control );
+            virtual void InsertChild( int index, Control* control );
+            virtual void RemoveChild( Control* control );
             virtual void Clear();
 
             const tstring& GetPath() const
@@ -65,6 +72,9 @@ namespace Helium
                 path += TXT( "|" ) + a_Name.Get();
             }
 
+            UIHints GetUIHints() const;
+            void SetUIHints( const UIHints hints );
+
             // recusively binds contained controls to data
             virtual void Bind(const DataBindingPtr& data) HELIUM_OVERRIDE;
 
@@ -80,7 +90,8 @@ namespace Helium
             // updates the data based on the state of the UI
             virtual bool Write() HELIUM_OVERRIDE;
 
-            Attribute<tstring>                  a_Name;
+            Attribute< tstring > a_Name;
+            Attribute< tstring > a_Icon;
 
             mutable ControlSignature::Event     e_ControlAdded;
             mutable ControlSignature::Event     e_ControlRemoved;
@@ -97,6 +108,8 @@ namespace Helium
 
             // the path of the container
             mutable tstring m_Path;
+
+            UIHints m_UIHints;
         };
 
         typedef Helium::StrongPtr<Container> ContainerPtr;

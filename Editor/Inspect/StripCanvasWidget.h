@@ -2,7 +2,6 @@
 
 #include "Foundation/Inspect/Container.h"
 
-#include "Editor/Controls/Tree/TreeWndCtrl.h"
 #include "Editor/Inspect/Widget.h"
 
 namespace Helium
@@ -16,20 +15,10 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( StripCanvasWidget, Widget );
 
-            StripCanvasWidget()
-                : m_ContainerControl( NULL )
-                , m_ContainerWindow( NULL )
-                , m_StaticText( NULL )
-            {
+            StripCanvasWidget( Inspect::Container* container  = NULL, int orientation = wxHORIZONTAL );
 
-            }
-
-            StripCanvasWidget( Inspect::Container* container );
-
-            void SetPanel( wxPanel* panel )
-            {
-                SetWindow( m_ContainerWindow = panel );
-            }
+            wxPanel* GetPanel() const;
+            void SetPanel( wxPanel* panel );
 
             virtual void CreateWindow( wxWindow* parent ) HELIUM_OVERRIDE;
             virtual void DestroyWindow() HELIUM_OVERRIDE;
@@ -38,11 +27,13 @@ namespace Helium
             virtual bool Write() HELIUM_OVERRIDE { return true; }
 
             virtual void NameChanged( const Attribute<tstring>::ChangeArgs& text );
+            virtual void IconChanged( const Attribute<tstring>::ChangeArgs& icon );
 
         private:
-            Inspect::Container*     m_ContainerControl;
-            wxPanel*                m_ContainerWindow;
-            wxStaticText*           m_StaticText;
+            Inspect::Container* m_ContainerControl;
+            int32_t m_Orientation;
+            wxPanel* m_ContainerWindow;
+            wxStaticText* m_StaticText;
         };
     }
 }

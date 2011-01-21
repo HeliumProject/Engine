@@ -43,6 +43,7 @@
 #include "Editor/Clipboard/ClipboardDataWrapper.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 
+#include "Editor/Inspect/Widgets/DrawerWidget.h"
 #include "Editor/Inspect/Widgets/LabelWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 #include "Editor/Inspect/Widgets/SliderWidget.h"
@@ -222,6 +223,7 @@ bool App::OnInit()
 
     // inspect
     m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Widget >( TXT("Editor::Widget") ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::DrawerWidget >( TXT("Editor::DrawerWidget") ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Editor::LabelWidget >( TXT("Editor::LabelWidget") ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ValueWidget >( TXT("Editor::ValueWidget") ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< Editor::SliderWidget >( TXT("Editor::SliderWidget") ) );

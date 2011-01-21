@@ -40,9 +40,9 @@ void CheckBoxWidget::CreateWindow( wxWindow* parent )
     SetWindow( m_CheckBoxWindow = new CheckBoxWindow( parent, this ) );
 
     // init layout metrics
-    wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
-    m_CheckBoxWindow->SetSize( size );
-    m_CheckBoxWindow->SetMinSize( size );
+    //wxSize size( m_Control->GetCanvas()->GetDefaultSize( SingleAxes::X ), m_Control->GetCanvas()->GetDefaultSize( SingleAxes::Y ) );
+    //m_CheckBoxWindow->SetSize( size );
+    //m_CheckBoxWindow->SetMinSize( size );
 
     // add listeners
     m_CheckBoxControl->a_Highlight.Changed().AddMethod( this, &CheckBoxWidget::HighlightChanged );

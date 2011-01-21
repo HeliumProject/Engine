@@ -7,6 +7,7 @@ using namespace Helium::Inspect;
 REFLECT_DEFINE_OBJECT( Inspect::Container );
 
 Container::Container()
+: m_UIHints( UIHint::Default )
 {
     a_IsEnabled.Changed().AddMethod( this, &Container::IsEnabledChanged );
     a_IsReadOnly.Changed().AddMethod( this, &Container::IsReadOnlyChanged );
@@ -49,7 +50,7 @@ void Container::InsertChild(int index, Control* control)
     }
 }
 
-void Container::RemoveChild(Control* control)
+void Container::RemoveChild( Control* control )
 {
     if ( control->GetParent() == this )
     {
@@ -82,6 +83,16 @@ void Container::Clear()
     }
 }
 
+UIHints Container::GetUIHints() const
+{
+    return m_UIHints;
+}
+
+void Container::SetUIHints( const UIHints hints )
+{
+    m_UIHints = hints;
+}
+
 void Container::Bind(const DataBindingPtr& data)
 {
     Base::Bind( data );
@@ -104,6 +115,12 @@ bool Container::Process(const tstring& key, const tstring& value)
     if ( key == CONTAINER_ATTR_NAME )
     {
         a_Name.Set( value );
+        return true;
+    }
+
+    if ( key == CONTAINER_ATTR_ICON )
+    {
+        a_Icon.Set( value );
         return true;
     }
 

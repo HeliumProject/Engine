@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Editor/ArtProvider.h"
 #include "Editor/Inspect/Widget.h"
 
 namespace Helium
@@ -16,11 +17,11 @@ namespace Helium
             virtual void OnClicked( wxCommandEvent& );
 
             void SetIcon( const tstring& icon );
-            void SetLabel( const tstring& icon );
+            void SetLabel( const tstring& label );
 
         protected:
-            wxSizer*      m_Sizer;
-            wxButton*     m_Button;
+            wxSizer* m_Sizer;
+            wxButton* m_Button;
             ButtonWidget* m_ButtonWidget;
         };
 

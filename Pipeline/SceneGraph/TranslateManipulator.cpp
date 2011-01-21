@@ -1304,52 +1304,56 @@ void TranslateManipulator::CreateProperties()
         }
         m_Generator->Pop();
 
-        m_Generator->PushContainer();
+        m_Generator->PushContainer( TXT( "Snapping" ) )->SetUIHints( Inspect::UIHint::Popup );
         {
-            m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Surface Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Surface Snap" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Object Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Object Snap" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Vertex Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Vertex Snap" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Offset Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Offset Snap" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Grid Snap" ) );
-            m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
-        }
-        m_Generator->Pop();
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Grid Snap" ) );
+                m_Generator->AddCheckBox<bool>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
+            }
+            m_Generator->Pop();
 
-        m_Generator->PushContainer();
-        {
-            m_Generator->AddLabel( TXT( "Distance" ) );
-            m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
+            m_Generator->PushContainer();
+            {
+                m_Generator->AddLabel( TXT( "Distance" ) );
+                m_Generator->AddValue<float>( new Helium::MemberProperty<SceneGraph::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
+            }
+            m_Generator->Pop();
         }
         m_Generator->Pop();
     }

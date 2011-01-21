@@ -11,7 +11,7 @@
 #include <wx/intl.h>
 
 class wxBitmapToggleButton;
-namespace Helium{ namespace Editor{ class DrawerPanel; } }
+namespace Helium{ namespace Editor{ class Button; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class ListResultsView; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
@@ -322,34 +322,7 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_Select = 1000,
-					ID_Translate,
-					ID_Rotate,
-					ID_Scale,
-					ID_Duplicate,
-					ID_Locator,
-					ID_Volume,
-					ID_Entity,
-					ID_Curve,
-					ID_CurveEdit,
-				};
-				
 				wxPanel* m_MainPanel;
-				wxBitmapToggleButton* m_SelectButton;
-				wxBitmapToggleButton* m_TranslateButton;
-				wxBitmapToggleButton* m_RotateButton;
-				wxBitmapToggleButton* m_ScaleButton;
-				wxBitmapToggleButton* m_DuplicateToolButton;
-				wxBitmapToggleButton* m_LocatorToolButton;
-				wxBitmapToggleButton* m_VolumeToolButton;
-				wxBitmapToggleButton* m_EntityToolButton;
-				wxBitmapToggleButton* m_CurveToolLocator;
-				wxBitmapToggleButton* m_CurveEditToolButton;
-				wxBitmapButton* m_PlayButton;
-				wxBitmapButton* m_PauseButton;
-				wxBitmapButton* m_StopButton;
 				
 				
 				wxPanel* m_ToolsPropertiesPanel;
@@ -360,8 +333,20 @@ namespace Helium
 				
 			
 			public:
+				Helium::Editor::Button* m_SelectButton;
+				Helium::Editor::Button* m_TranslateButton;
+				Helium::Editor::Button* m_RotateButton;
+				Helium::Editor::Button* m_ScaleButton;
+				Helium::Editor::Button* m_DuplicateToolButton;
+				Helium::Editor::Button* m_LocatorToolButton;
+				Helium::Editor::Button* m_VolumeToolButton;
+				Helium::Editor::Button* m_EntityToolButton;
+				Helium::Editor::Button* m_CurveToolLocator;
+				Helium::Editor::Button* m_CurveEditToolButton;
+				Helium::Editor::Button* m_PlayButton;
+				Helium::Editor::Button* m_PauseButton;
+				Helium::Editor::Button* m_StopButton;
 				wxSearchCtrl* m_VaultSearchBox;
-				Helium::Editor::DrawerPanel* m_DrawerPanel;
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();

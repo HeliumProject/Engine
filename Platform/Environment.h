@@ -73,4 +73,5 @@ namespace Helium
     PLATFORM_API bool GetComputer( tstring& computername );
 
     PLATFORM_API bool GetPreferencesDirectory( tstring& preferencesDirectory );
+    PLATFORM_API bool GetGameDataDirectory( tstring& gameDataDirectory );
 }

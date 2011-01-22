@@ -87,7 +87,7 @@ tstring ProjectViewModelNode::GetName() const
     }
     else
     {
-        if ( wxGetApp().GetSettingsManager()->GetSettings< GeneralSettings >()->GetShowFileExtensionsInProjectView() )
+        if ( wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->GetShowFileExtensionsInProjectView() )
         {
             return m_Path.Filename();
         }

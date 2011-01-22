@@ -250,8 +250,8 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
 
     // settings
-    m_InitializerStack.Push( Reflect::RegisterClassType< GeneralSettings >( TXT( "Editor::GeneralSettings" ) ) );
-    Reflect::GetClass< GeneralSettings >()->SetProperty( TXT( "UIName" ), TXT( "General Settings" ) );
+    m_InitializerStack.Push( Reflect::RegisterClassType< EditorSettings >( TXT( "Editor::EditorSettings" ) ) );
+    Reflect::GetClass< EditorSettings >()->SetProperty( TXT( "UIName" ), TXT( "Editor Settings" ) );
 
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
     Reflect::GetClass< VaultSettings >()->SetProperty( TXT( "UIName" ), TXT( "Vault Settings" ) );
@@ -270,9 +270,9 @@ bool App::OnInit()
 
     GetFrame()->Show();
 
-    if ( GetSettingsManager()->GetSettings< GeneralSettings >()->GetReopenLastProjectOnStartup() )
+    if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )
     {
-        const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+        const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
         if ( !mruPaths.empty() )
         {
             Path projectPath( *mruPaths.rbegin() );
@@ -372,6 +372,7 @@ void App::LoadSettings()
 
     if ( settingsManager.ReferencesObject() )
     {
+        settingsManager->Clean();
         m_SettingsManager = settingsManager;
     }
     else
@@ -433,6 +434,7 @@ int Main ( int argc, const tchar_t** argv )
 
     bool disableTracker = false;
     success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
+
     //GetAppSettings()->UseTracker( disableTracker );
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );

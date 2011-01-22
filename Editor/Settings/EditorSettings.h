@@ -10,10 +10,10 @@ namespace Helium
 {
     namespace Editor
     {
-        class GeneralSettings : public Settings
+        class EditorSettings : public Settings
         {
         public:
-            GeneralSettings();
+            EditorSettings();
 
             std::vector< tstring >& GetMRUProjects();
             void SetMRUProjects( MRU< tstring >* mru );
@@ -24,7 +24,10 @@ namespace Helium
             bool GetShowFileExtensionsInProjectView() const;
             void SetShowFileExtensionsInProjectView( bool value );
 
-            REFLECT_DECLARE_OBJECT( GeneralSettings, Settings );
+            bool GetEnableAssetTracker() const;
+            void SetEnableAssetTracker( bool value );
+
+            REFLECT_DECLARE_OBJECT( EditorSettings, Settings );
             static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         private:
@@ -32,9 +35,10 @@ namespace Helium
             
             bool m_ReopenLastProjectOnStartup;
             bool m_ShowFileExtensionsInProjectView;
+            bool m_EnableAssetTracker;
         };
 
-        typedef Helium::StrongPtr< GeneralSettings > GeneralSettingsPtr;
+        typedef Helium::StrongPtr< EditorSettings > GeneralSettingsPtr;
 
     }
 }

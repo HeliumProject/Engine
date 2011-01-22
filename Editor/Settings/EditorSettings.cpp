@@ -8,55 +8,70 @@ using namespace Helium;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////
-// GeneralSettings
+// EditorSettings
 //
-REFLECT_DEFINE_OBJECT( GeneralSettings );
+REFLECT_DEFINE_OBJECT( EditorSettings );
 
-GeneralSettings::GeneralSettings()
+EditorSettings::EditorSettings()
 : m_ReopenLastProjectOnStartup( true )
 , m_ShowFileExtensionsInProjectView( false )
+, m_EnableAssetTracker( true )
 {
 }
 
-void GeneralSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
+void EditorSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-    comp.AddField( &GeneralSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
+    comp.AddField( &EditorSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
 
-    Reflect::Field* field = comp.AddField( &GeneralSettings::m_ReopenLastProjectOnStartup, TXT( "m_ReopenLastProjectOnStartup" ) );
+    Reflect::Field* field = comp.AddField( &EditorSettings::m_ReopenLastProjectOnStartup, TXT( "m_ReopenLastProjectOnStartup" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Reopen Last Project On Startup" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
 
-    field = comp.AddField( &GeneralSettings::m_ShowFileExtensionsInProjectView, TXT( "m_ShowFileExtensionsInProjectView" ) );
+    field = comp.AddField( &EditorSettings::m_ShowFileExtensionsInProjectView, TXT( "m_ShowFileExtensionsInProjectView" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Show File Extensions In Project View" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display the file extensions for files referenced in the project." ) );
+
+    field = comp.AddField( &EditorSettings::m_EnableAssetTracker, TXT( "m_EnableAssetTracker" ) );
+    field->SetProperty( TXT( "UIName" ), TXT( "Enable Asset Tracker" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will find and index assets that can be used in the currently loaded project.  This allows for fast searches through your asset library." ) );
 }
 
-std::vector< tstring >& GeneralSettings::GetMRUProjects()
+std::vector< tstring >& EditorSettings::GetMRUProjects()
 {
     return m_MRUProjects;
 }
 
-void GeneralSettings::SetMRUProjects( MRU< tstring >* mru )
+void EditorSettings::SetMRUProjects( MRU< tstring >* mru )
 {
     mru->ToVector( m_MRUProjects );
 }
 
-bool GeneralSettings::GetReopenLastProjectOnStartup() const
+bool EditorSettings::GetReopenLastProjectOnStartup() const
 {
     return m_ReopenLastProjectOnStartup;
 }
 
-void GeneralSettings::SetReopenLastProjectOnStartup( bool value )
+void EditorSettings::SetReopenLastProjectOnStartup( bool value )
 {
     m_ReopenLastProjectOnStartup = value;
 }
 
-bool GeneralSettings::GetShowFileExtensionsInProjectView() const
+bool EditorSettings::GetShowFileExtensionsInProjectView() const
 {
     return m_ShowFileExtensionsInProjectView;
 }
 
-void GeneralSettings::SetShowFileExtensionsInProjectView( bool value )
+void EditorSettings::SetShowFileExtensionsInProjectView( bool value )
 {
     m_ShowFileExtensionsInProjectView = value;
+}
+
+bool EditorSettings::GetEnableAssetTracker() const
+{
+    return m_EnableAssetTracker;
+}
+
+void EditorSettings::SetEnableAssetTracker( bool value )
+{
+    m_EnableAssetTracker = value;
 }

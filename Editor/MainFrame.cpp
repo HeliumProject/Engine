@@ -242,7 +242,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
 
     m_MenuMRU->AddItemSelectedListener( MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
 
-    const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->GetMRUProjects();
+    const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
     m_MenuMRU->FromVector( mruPaths );
 
     DropTarget* dropTarget = new DropTarget();
@@ -293,7 +293,7 @@ MainFrame::~MainFrame()
     }
 
     // Save preferences and MRU
-    wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
+    wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->SetFromWindow( this, &m_FrameManager );
     m_ViewPanel->GetViewCanvas()->GetViewport().SaveSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
@@ -367,7 +367,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
             m_Project->a_Path.Set( path );
 
             m_MenuMRU->Insert( path );
-            wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
+            wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
         }
         else
         {
@@ -401,7 +401,7 @@ void MainFrame::OpenProject( const Helium::Path& path )
     m_DocumentManager.e_DocumenClosed.AddMethod( m_Project.Ptr(), &Project::OnDocumenClosed );
 
     m_MenuMRU->Insert( path );
-    wxGetApp().GetSettingsManager()->GetSettings<GeneralSettings>()->SetMRUProjects( m_MenuMRU );
+    wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
     m_ProjectPanel->OpenProject( m_Project, document );
 

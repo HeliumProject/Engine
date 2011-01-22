@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <object name="TestBull.fbx" type="Mesh" template="">
+        <property name="m_materials">
+            <array>
+                <property>/Materials:TestBull</property>
+            </array>
+        </property>
+    </object>
+</package>

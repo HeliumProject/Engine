@@ -50,7 +50,7 @@
 #include "Framework/StaticMeshEntity.h"
 #include "Framework/World.h"
 #include "Framework/WorldManager.h"
-#include "D3D9Rendering/D3D9Renderer.h"
+#include "RenderingD3D9/D3D9Renderer.h"
 
 #if L_EDITOR
 #include "PcSupport/ObjectPreprocessor.h"

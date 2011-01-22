@@ -8,7 +8,7 @@
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/RendererInitializationWin.h"
 
-#include "D3D9Rendering/D3D9Renderer.h"
+#include "RenderingD3D9/D3D9Renderer.h"
 
 using namespace Lunar;
 

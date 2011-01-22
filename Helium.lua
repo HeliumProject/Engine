@@ -410,10 +410,10 @@ project "Framework"
 			"Graphics",
 		}
 
-project "WinWindowing"
+project "WindowingWin"
 	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "WinWindowing", "WIN_WINDOWING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "WindowingWin", "WINDOWING_WIN" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -426,10 +426,10 @@ project "WinWindowing"
 			"Windowing",
 		}
 
-project "D3D9Rendering"
+project "RenderingD3D9"
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "D3D9Rendering", "D3D9_RENDERING" )
+	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "RenderingD3D9", "RENDERING_D3D9" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -520,8 +520,8 @@ project "FrameworkWin"
 			"GraphicsJobs",
 			"Graphics",
 			"Framework",
-			"WinWindowing",
-			"D3D9Rendering",
+			"WindowingWin",
+			"RenderingD3D9",
 			"PcSupport",
 			"PreprocessingPc",
 			"EditorSupport",
@@ -575,8 +575,8 @@ project "Pipeline"
 			"GraphicsJobs",
 			"Graphics",
 			"Framework",
-			"WinWindowing",
-			"D3D9Rendering",
+			"WindowingWin",
+			"RenderingD3D9",
 			"PcSupport",
 			"PreprocessingPc",
 			"EditorSupport",
@@ -625,8 +625,8 @@ project "Editor"
 		"GraphicsJobs",
 		"Graphics",
 		"Framework",
-		"WinWindowing",
-		"D3D9Rendering",
+		"WindowingWin",
+		"RenderingD3D9",
 		"PcSupport",
 		"PreprocessingPc",
 		"EditorSupport",
@@ -758,8 +758,8 @@ project "TestApp"  -- DEPRECATED
 		"GraphicsJobs",
 		"Graphics",
 		"Framework",
-		"WinWindowing",
-		"D3D9Rendering",
+		"WindowingWin",
+		"RenderingD3D9",
 		"PcSupport",
 		"PreprocessingPc",
 		"EditorSupport",
@@ -870,8 +870,8 @@ project "ExampleMain"
 		"GraphicsJobs",
 		"Graphics",
 		"Framework",
-		"WinWindowing",
-		"D3D9Rendering",
+		"WindowingWin",
+		"RenderingD3D9",
 		"PcSupport",
 		"PreprocessingPc",
 		"EditorSupport",

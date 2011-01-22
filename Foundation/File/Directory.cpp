@@ -15,6 +15,9 @@ Directory::Directory()
 Directory::Directory( const Path& path, uint32_t flags )
 : m_Done( true )
 {
+    HELIUM_ASSERT( path.IsDirectory() );
+    HELIUM_ASSERT( *path.Get().rbegin() == TXT( '/' ) )
+
     Open( path, flags );
 }
 
@@ -57,6 +60,9 @@ void Directory::Reset()
 bool Directory::Open( const Path& path, uint32_t flags )
 {
     Close();
+
+    HELIUM_ASSERT( path.IsDirectory() );
+    HELIUM_ASSERT( *path.Get().rbegin() == TXT( '/' ) )
 
     m_Path = path;
     m_Handle.m_Path = m_Path.Get();
@@ -120,9 +126,7 @@ bool Directory::Find()
         }
         else
         {
-            absolutePath = m_Path.c_str();
-            absolutePath += TXT( "/" );
-            absolutePath += foundFile.m_Filename;
+            absolutePath = m_Path.Get() + foundFile.m_Filename;
 
             HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
             needStatPath = false;
@@ -156,9 +160,7 @@ bool Directory::Find()
             // add the path path to the fileName
             if ( needStatPath )
             {
-                absolutePath = m_Path.c_str();
-                absolutePath += TXT( "/" );
-                absolutePath += foundFile.m_Filename;
+                absolutePath = m_Path.Get() + foundFile.m_Filename;
 
                 HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
             }
@@ -169,6 +171,11 @@ bool Directory::Find()
             }
             else
             {
+                if ( foundFile.m_Stat.m_Mode & FileModeFlags::Directory )
+                {
+                    Path::GuaranteeSeparator( absolutePath );
+                }
+
                 m_Item.m_Path = absolutePath;
             }
 

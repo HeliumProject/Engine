@@ -7,6 +7,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/File/Directory.h"
 #include "Platform/Thread.h"
+#include "Pipeline/Project.h"
 
 namespace Helium
 {
@@ -18,8 +19,8 @@ namespace Helium
             Tracker();
             virtual ~Tracker();
 
-            void SetDirectory( const Helium::Path& directory );
-            const Helium::Directory& GetDirectory() const;
+            void SetProject( Project* project );
+            const Project* GetProject() const;
 
             void StartThread();
             void StopThread();
@@ -37,8 +38,8 @@ namespace Helium
             Helium::CallbackThread m_Thread;
             bool m_StopTracking;
 
-            TrackerDBGenerated m_TrackerDB;
-            Helium::Directory m_Directory;
+            TrackerDBGenerated* m_TrackerDB;
+            Project* m_Project;
 
             // Status update
             bool m_InitialIndexingCompleted;

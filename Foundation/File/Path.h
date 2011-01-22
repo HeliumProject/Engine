@@ -84,7 +84,7 @@ namespace Helium
         bool Exists() const;
         bool Stat( Helium::Stat& stat ) const;
         bool IsAbsolute() const;
-        bool IsUnder( const tstring& location );
+        bool IsUnder( const tstring& location ) const;
         bool IsFile() const;
         bool IsDirectory() const;
         bool Writable() const;

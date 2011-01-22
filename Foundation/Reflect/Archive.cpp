@@ -28,6 +28,7 @@ Archive::Archive( const Path& path, ByteOrder byteOrder )
 , m_Abort( false )
 , m_Mode( ArchiveModes::Read )
 {
+    HELIUM_ASSERT( !m_Path.empty() );
 }
 
 Archive::Archive()

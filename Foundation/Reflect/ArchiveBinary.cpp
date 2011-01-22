@@ -12,7 +12,7 @@ using namespace Helium;
 using namespace Helium::Reflect; 
 
 // version / feature management 
-const uint32_t ArchiveBinary::CURRENT_VERSION = 7;
+const uint32_t ArchiveBinary::CURRENT_VERSION = 8;
 
 class StlVectorPusher : NonCopyable
 {
@@ -114,7 +114,7 @@ void ArchiveBinary::Read()
     // fail on an empty input stream
     if ( m_Size == 0 )
     {
-        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
+        throw Reflect::StreamException( TXT( "Input stream is empty (%s)" ), m_Path.c_str() );
     }
 
     // read byte order
@@ -149,16 +149,17 @@ void ArchiveBinary::Read()
     characterEncoding = (CharacterEncoding)encodingByte;
     if ( characterEncoding != CharacterEncodings::ASCII && characterEncoding != CharacterEncodings::UTF_16 )
     {
-        throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), characterEncoding ); 
+        throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d (%s)\n" ), characterEncoding, m_Path.c_str() ); 
     }
     m_Stream->SetCharacterEncoding( characterEncoding );
 
     // read version
     m_Stream->Read(&m_Version);
 
-    if (m_Version > CURRENT_VERSION)
+#pragma TODO( "Decide what to do with regard to backwards/forwards compatibility." )
+    if (m_Version != CURRENT_VERSION)
     {
-        throw Reflect::StreamException( TXT( "Input stream version is higher than what is supported (input: %d, current: %d)\n" ), m_Version, CURRENT_VERSION); 
+        throw Reflect::StreamException( TXT( "Input stream version for '%s' is not what is currently supported (input: %d, current: %d)\n" ), m_Path.c_str(), m_Version, CURRENT_VERSION); 
     }
 
     // deserialize main file elements
@@ -559,7 +560,7 @@ void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
         m_Stream->Read(&terminator);
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException( TXT( "Unterminated object array block" ) );
+            throw Reflect::DataFormatException( TXT( "Unterminated object array block (%s)" ), m_Path.c_str() );
         }
     }
 
@@ -602,7 +603,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
             if (!latent_data.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s" ), field->m_Name );
+                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
 #pragma TODO("Support blind data")
             }
 
@@ -632,7 +633,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 if (!current_data.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s" ), field->m_Name );
+                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
                 }
 
                 // process into temporary memory
@@ -688,7 +689,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
     m_Stream->Read(&terminator); 
     if (terminator != -1)
     {
-        throw Reflect::DataFormatException( TXT( "Unterminated field array block" ) );
+        throw Reflect::DataFormatException( TXT( "Unterminated field array block (%s)" ), m_Path.c_str() );
     }
 }
 

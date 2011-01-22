@@ -63,6 +63,10 @@ namespace Helium
 
             void OpenProject( const Helium::Path& path );
             void CloseProject();
+            const ProjectPtr& GetProject()
+            {
+                return m_Project;
+            }
 
             Path NewSceneDialog();
 
@@ -100,6 +104,7 @@ namespace Helium
             VaultPanel*                 m_VaultPanel;
 
             ProjectPtr                  m_Project;
+
             MessageDisplayer            m_MessageDisplayer;
             FileDialogDisplayer         m_FileDialogDisplayer;
             DocumentManager             m_DocumentManager;

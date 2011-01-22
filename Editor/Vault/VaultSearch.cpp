@@ -3,6 +3,8 @@
 
 #include "VaultSearchResults.h"
 
+#include "Editor/App.h"
+
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/File/Directory.h"
@@ -327,7 +329,13 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 {
     SearchThreadEnter( searchID );
 
-    TrackerDBGenerated trackerDB( TXT( "sqlite3" ), TXT( "database=trackerDBGenerated.db" ) );
+    if ( !wxGetApp().GetFrame()->GetProject().ReferencesObject() )
+    {
+        return;
+    }
+
+    tstring dbSpec = tstring( TXT( "database=" ) ) + wxGetApp().GetFrame()->GetProject()->GetTrackerDB().Get();
+    TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
 
     // create tables, sequences and indexes
     trackerDB.verbose = true;
@@ -375,6 +383,8 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
         for ( std::vector<TrackedFile>::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
         {
             Helium::MutexScopeLock mutex (m_SearchResultsMutex);
+
+#pragma TODO( "Pass through some stats on a file, like if it's broken, etc." )
 
             Helium::Path path = itr->mPath.value();
             Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );

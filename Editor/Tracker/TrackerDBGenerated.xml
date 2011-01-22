@@ -6,6 +6,8 @@
 		<field name="mPath" type="string" />
         <field name="mSize" type="integer" />
         <field name="mLastModified" type="datetime" />
+        <field name="mToolsVersion" type="integer" />
+        <field name="mBroken" type="integer" />
     </object>
 	
 	<object name="TrackedProperty">

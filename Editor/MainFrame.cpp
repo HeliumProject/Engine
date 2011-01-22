@@ -410,12 +410,11 @@ void MainFrame::OpenProject( const Helium::Path& path )
         m_VaultPanel->SetDirectory( path );
     }
 
-#pragma TODO( "Turn tracker back on where there are assets to track" )
-    //wxGetApp().GetTracker()->SetDirectory( path );
-    //if ( !wxGetApp().GetTracker()->IsThreadRunning() )
-    //{
-    //    wxGetApp().GetTracker()->StartThread();
-    //}
+    wxGetApp().GetTracker()->SetProject( m_Project );
+    if ( !wxGetApp().GetTracker()->IsThreadRunning() )
+    {
+        wxGetApp().GetTracker()->StartThread();
+    }
 }
 
 void MainFrame::CloseProject()
@@ -424,7 +423,8 @@ void MainFrame::CloseProject()
     {
         m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-#pragma TODO( "Turn tracker off" )
+        wxGetApp().GetTracker()->StopThread();
+        wxGetApp().GetTracker()->SetProject( NULL );
 
         // this will release all our listeners which may get signalled with state changes during teardown
         m_SceneManager.SetCurrentScene( NULL );

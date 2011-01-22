@@ -29,6 +29,8 @@ namespace Helium
             return m_Paths;
         }
 
+        Path GetTrackerDB() const;
+
         void AddPath( const Path& path );
         void RemovePath( const Path& path );
 

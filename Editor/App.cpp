@@ -434,8 +434,10 @@ int Main ( int argc, const tchar_t** argv )
 
     bool disableTracker = false;
     success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
-
-    //GetAppSettings()->UseTracker( disableTracker );
+    if ( disableTracker )
+    {
+        wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->SetEnableAssetTracker( false );
+    }
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
     //success &= processor.AddOption( new FlagOption(  , Settings::s_ResetSettings, "resets all preferences for all of Editor" ), error );

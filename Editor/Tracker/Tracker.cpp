@@ -4,6 +4,8 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Component/SearchableProperties.h"
+#include "Foundation/String/Wildcard.h"
+#include "Foundation/Version.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -32,7 +34,7 @@ int Tracker::s_InitCount = 0;
 Helium::InitializerStack Tracker::s_InitializerStack;
 
 Tracker::Tracker()
-: m_TrackerDB(TXT("sqlite3"), TXT("database=trackerDBGenerated.db"))
+: m_TrackerDB( NULL )
 , m_StopTracking( false )
 , m_InitialIndexingCompleted( false )
 , m_IndexingFailed( false )
@@ -47,6 +49,13 @@ Tracker::Tracker()
 
 Tracker::~Tracker()
 {
+    if ( IsThreadRunning() )
+    {
+        StopThread();
+    }
+
+    delete m_TrackerDB;
+
     if ( --s_InitCount == 0 )
     {
         //s_InitializerStack.Cleanup();
@@ -54,7 +63,7 @@ Tracker::~Tracker()
     HELIUM_ASSERT( s_InitCount >= 0 );
 }
 
-void Tracker::SetDirectory( const Helium::Path& directory )
+void Tracker::SetProject( Project* project )
 {
     bool restartThread = false;
     if ( IsThreadRunning() )
@@ -63,22 +72,42 @@ void Tracker::SetDirectory( const Helium::Path& directory )
         StopThread();
     }
 
-    m_Directory = Helium::Directory( directory );
-
-    if ( restartThread )
+    if ( m_TrackerDB )
     {
-        StartThread();
+        delete m_TrackerDB;
+        m_TrackerDB = NULL;
+    }
+
+    m_Project = project;
+
+    if ( m_Project )
+    {
+        Path dbPath = m_Project->GetTrackerDB();
+
+        if ( !dbPath.MakePath() )
+        {
+            throw Helium::Exception( TXT( "Could not create database directory: %s" ), dbPath.Directory().c_str() );
+        }
+
+        tstring dbSpec = tstring( TXT( "database=" ) ) + dbPath.Get();
+        m_TrackerDB = new TrackerDBGenerated( TXT("sqlite3"), dbSpec.c_str() );
+
+        if ( restartThread )
+        {
+            StartThread();
+        }
     }
 }
 
-const Helium::Directory& Tracker::GetDirectory() const
+const Project* Tracker::GetProject() const
 {
-    return m_Directory;
+    return m_Project;
 }
 
 void Tracker::StartThread()
 {
     HELIUM_ASSERT( !IsThreadRunning() );
+    HELIUM_ASSERT( m_Project );
 
     m_StopTracking = false;
 
@@ -105,20 +134,23 @@ bool Tracker::IsThreadRunning()
 
 void Tracker::TrackEverything()
 {
+    HELIUM_ASSERT( m_TrackerDB );
+    HELIUM_ASSERT( m_Project );
+
     m_StopTracking = false;
     m_InitialIndexingCompleted = false;
     m_IndexingFailed = false;
 
     // create tables, sequences and indexes
-    m_TrackerDB.verbose = true;
+    m_TrackerDB->verbose = true;
 
     try
     {
-        m_TrackerDB.create();
+        m_TrackerDB->create();
     }
     catch( const litesql::SQLError& )
     {
-        m_TrackerDB.upgrade();
+        m_TrackerDB->upgrade();
     }
 
     std::set< Helium::Path > assetFiles;
@@ -130,7 +162,8 @@ void Tracker::TrackEverything()
         // find all the files in the project
         {
             SimpleTimer timer;
-            m_Directory.GetFiles( assetFiles, true );
+            Helium::Directory directory( m_Project->a_Path.Get().Directory() );
+            directory.GetFiles( assetFiles, true );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
         }
 
@@ -147,18 +180,27 @@ void Tracker::TrackEverything()
             Log::Listener listener ( ~Log::Streams::Error );
             ++m_CurrentProgress;
 
+            // see if the file has changed
+            // insert/update the file: path, timestamp, etc...
+            const Helium::Path& assetFilePath = (*assetFileItr);
+
+#pragma TODO( "Make a configurable list of places to ignore" )
+            // skip files in the meta directory
+            if ( assetFilePath.IsUnder( m_Project->a_Path.Get().Directory() + TXT( ".Helium/" ) ) )
+            {
+                continue;
+            }
+
+            TrackedFile assetTrackedFile( *m_TrackerDB );
+
             // start transaction
-            m_TrackerDB.begin();
+            m_TrackerDB->begin();
             try
             {
-                // see if the file has changed
-                // insert/update the file: path, timestamp, etc...
-                const Helium::Path& assetFilePath = (*assetFileItr);
-                TrackedFile assetTrackedFile( m_TrackerDB );
                 try
                 {
-                    assetTrackedFile = litesql::select<TrackedFile>( m_TrackerDB, TrackedFile::MPath == assetFilePath.Get() ).one();
-                    if ( assetFilePath.ChangedSince( assetTrackedFile.mLastModified.value().timeStamp() ) )
+                    assetTrackedFile = litesql::select<TrackedFile>( *m_TrackerDB, TrackedFile::MPath == assetFilePath.Get() ).one();
+                    if ( assetFilePath.ChangedSince( assetTrackedFile.mLastModified.value().timeStamp() ) || assetTrackedFile.mToolsVersion != HELIUM_VERSION_NUMBER )
                     {
                         assetTrackedFile.properties().del();
                         assetTrackedFile.fileReferences().del();
@@ -173,57 +215,71 @@ void Tracker::TrackEverything()
                     Log::Debug( TXT("Caught litesql::NotFound excption when selecting file from DB" ));
                 }
 
-                const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
-                if ( assetClass.ReferencesObject() )
+                if ( WildcardMatch( TXT( "Helium*" ), assetFilePath.Extension().c_str() ) )
                 {
-                    // get file's properties
-                    Helium::SearchableProperties fileProperties;
-                    assetClass->GatherSearchableProperties( &fileProperties );
-                    for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(),
-                        filePropertiesItrEnd = fileProperties.GetStringProperties().end();
-                        filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
+                    const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
+                    if ( assetClass.ReferencesObject() )
                     {
-                        //TrackedProperty
-                        TrackedProperty prop( m_TrackerDB );
-                        prop.mName = filePropertiesItr->first;
-                        prop.update();
+                        // get file's properties
+                        Helium::SearchableProperties fileProperties;
+                        assetClass->GatherSearchableProperties( &fileProperties );
+                        for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(),
+                            filePropertiesItrEnd = fileProperties.GetStringProperties().end();
+                            filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
+                        {
+                            //TrackedProperty
+                            TrackedProperty prop( *m_TrackerDB );
+                            prop.mName = filePropertiesItr->first;
+                            prop.update();
 
-                        assetTrackedFile.properties().link( prop, filePropertiesItr->second );
+                            assetTrackedFile.properties().link( prop, filePropertiesItr->second );
+                        }
+
+                        // get file's dependencies
+                        std::set< Helium::Path > fileReferences;
+                        assetClass->GetFileReferences( fileReferences );
+                        for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(),
+                            fileRefsItrEnd = fileReferences.end();
+                            fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
+                        {
+                            //   see if the file has changed
+                            const Helium::Path& fileRefPath = (*fileRefsItr);
+
+                            TrackedFile fileRefTrackedFile( *m_TrackerDB );
+                            fileRefTrackedFile.mPath = fileRefPath.Get();
+                            fileRefTrackedFile.update();
+
+                            assetTrackedFile.fileReferences().link( fileRefTrackedFile );
+                        }
                     }
-
-                    // get file's dependencies
-                    std::set< Helium::Path > fileReferences;
-                    assetClass->GetFileReferences( fileReferences );
-                    for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(),
-                        fileRefsItrEnd = fileReferences.end();
-                        fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
-                    {
-                        //   see if the file has changed
-                        const Helium::Path& fileRefPath = (*fileRefsItr);
-
-                        TrackedFile fileRefTrackedFile( m_TrackerDB );
-                        fileRefTrackedFile.mPath = fileRefPath.Get();
-                        fileRefTrackedFile.update();
-
-                        assetTrackedFile.fileReferences().link( fileRefTrackedFile );
-                    }
-
                 }
-                
-                // update LastModified
-                assetTrackedFile.mPath = assetFilePath.Get();
-                assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
-                assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
-                assetTrackedFile.update();
+
+                assetTrackedFile.mBroken = 0;
+            }
+            catch ( const Helium::Exception& e )
+            {
+                Log::Error( TXT( "Exception in Tracker thread: %s" ), e.What() );
+                assetTrackedFile.mBroken = 1;
             }
             catch ( ... )
             {
-                m_TrackerDB.rollback();
+                Log::Error( TXT( "Unknown exception in Tracker thread." ) );
+
+                m_TrackerDB->rollback();
+
+                // the consequences could never be the same here, rethrow
                 throw;
             }
 
+            // update LastModified
+            assetTrackedFile.mPath = assetFilePath.Get();
+            assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
+            assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
+            assetTrackedFile.mToolsVersion = HELIUM_VERSION_NUMBER;
+            assetTrackedFile.update();
+
             // commit transaction
-            m_TrackerDB.commit();
+            m_TrackerDB->commit();
         }
 
         if ( m_StopTracking )

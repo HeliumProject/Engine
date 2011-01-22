@@ -8,7 +8,7 @@
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/WindowManagerInitializationWin.h"
 
-#include "WinWindowing/WinWindowManager.h"
+#include "WindowingWin/WinWindowManager.h"
 
 using namespace Lunar;
 

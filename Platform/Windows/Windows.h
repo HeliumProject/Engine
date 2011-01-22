@@ -52,3 +52,4 @@
 
 #undef CreateDirectory
 #undef GetObject
+#undef GetEnvironmentVariable

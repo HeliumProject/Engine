@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <object name="TestBull_NM.png" type="Texture2d" template="">
+        <property name="m_compression">NORMAL_MAP</property>
+    </object>
+</package>

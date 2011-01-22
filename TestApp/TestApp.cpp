@@ -1130,8 +1130,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
         spLayer,
         Camera::GetStaticType(),
-        Simd::Vector3( 0.0f, 0.0f, -300.0f ),
-        Simd::Quat::IDENTITY,
+        Simd::Vector3( 0.0f, 200.0f, 750.0f ),
+        Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI ), 0.0f ),
         Simd::Vector3( 1.0f ),
         NULL,
         NULL_NAME,
@@ -1141,7 +1141,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     CameraPtr spSubCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
         spLayer,
         Camera::GetStaticType(),
-        Simd::Vector3( 300.0f, 0.0f, 0.0f ),
+        Simd::Vector3( 750.0f, 200.0f, 0.0f ),
         Simd::Quat( 0.0f, static_cast< float32_t >( -HELIUM_PI_2 ), 0.0f ),
         Simd::Vector3( 1.0f ),
         NULL,
@@ -1208,7 +1208,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     {
         GameObjectPath meshPath;
         HELIUM_VERIFY( meshPath.Set(
-            L_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) L_OBJECT_PATH_CHAR_STRING TXT( "Character.fbx" ) ) );
+            L_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
 
         GameObjectPtr spMeshObject;
         HELIUM_VERIFY( pObjectLoader->LoadObject( meshPath, spMeshObject ) );
@@ -1219,7 +1219,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         GameObjectPath animationPath;
         HELIUM_VERIFY( animationPath.Set(
-            L_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) L_OBJECT_PATH_CHAR_STRING TXT( "Character_anim.fbx" ) ) );
+            L_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
 
         GameObjectPtr spAnimationObject;
         HELIUM_VERIFY( pObjectLoader->LoadObject( animationPath, spAnimationObject ) );
@@ -1280,9 +1280,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         if( spMeshEntity )
         {
-            //Quat rotation( 0.0f, meshRotation, 0.0f );
-            Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-            //spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
+            Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
+            //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
+            spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
 
             meshRotation += 0.01f;
 

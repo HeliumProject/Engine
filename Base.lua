@@ -51,11 +51,16 @@ Helium.CheckEnvironment = function()
     
         local failed = 0
         
+        if os.pathsearch( 'Python.exe', os.getenv( 'PATH' ) ) == nil then
+            print( " -> Python was not found in your path.  Python is required for the 'prebuild' phase." )
+            failed = 1
+		end
+
         if os.getenv( "VCINSTALLDIR" ) == nil then
             print( " -> You must be running in a Visual Studio Command Prompt.")
             failed = 1
         end
-        
+
         if not failed then
             if os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) ) == nil then
                 print( " -> cl.exe was not found in your path.  Make sure you are using a Visual Studio 2008 SP1 Command Prompt." )

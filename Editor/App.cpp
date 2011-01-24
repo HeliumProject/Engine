@@ -4,22 +4,48 @@
 #include "Platform/Debug.h"
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
+#include "Platform/Trace.h"
+#include "Platform/Timer.h"
 #include "Platform/Windows/Console.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
 #include "Foundation/InitializerStack.h"
+#include "Foundation/AsyncLoader.h"
 #include "Foundation/Math/Utils.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/CommandLine/Processor.h"
 #include "Foundation/Document/Document.h"
+#include "Foundation/File/File.h"
 #include "Foundation/Inspect/Inspect.h"
 #include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
+#include "Foundation/Name.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Worker/Process.h"
+
+#include "Engine/CacheManager.h"
+#include "Engine/Config.h"
+#include "Engine/GameObjectType.h"
+#include "Engine/Package.h"
+#include "Engine/JobManager.h"
+
+#include "EngineJobs/EngineJobs.h"
+
+#include "GraphicsJobs/GraphicsJobs.h"
+
+#include "Graphics/GraphicsEnumRegistration.h"
+
+#include "PcSupport/ConfigPc.h"
+#include "PcSupport/ObjectPreprocessor.h"
+#include "PcSupport/PlatformPreprocessor.h"
+
+#include "PreprocessingPc/PcPreprocessor.h"
+
+#include "EditorSupport/EditorObjectLoader.h"
+#include "EditorSupport/FontResourceHandler.h"
 
 #include "Pipeline/CoreInit.h"
 
@@ -70,6 +96,19 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
+using namespace Lunar;
+
+extern void RegisterEngineTypes();
+extern void RegisterGraphicsTypes();
+extern void RegisterFrameworkTypes();
+extern void RegisterPcSupportTypes();
+extern void RegisterEditorSupportTypes();
+
+extern void UnregisterEngineTypes();
+extern void UnregisterGraphicsTypes();
+extern void UnregisterFrameworkTypes();
+extern void UnregisterPcSupportTypes();
+extern void UnregisterEditorSupportTypes();
 
 static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
@@ -185,6 +224,8 @@ bool App::OnInit()
 
     //parse.SetLogo( wxT( "Editor (c) 2010 - "HELIUM_APP_NAME"\n" ) );
 
+    Timer::StaticInitialize();
+
     // don't spend a lot of time updating idle events for windows that don't need it
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
@@ -212,9 +253,40 @@ bool App::OnInit()
     wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
     wxHelpProvider::Set( helpProvider );
 
+    // Make sure various module-specific heaps are initialized from the main thread before use.
+    InitEngineJobsDefaultHeap();
+    InitGraphicsJobsDefaultHeap();
+
+    // Register shutdown for general systems.
+    m_InitializerStack.Push( File::Shutdown );
+    m_InitializerStack.Push( CharName::Shutdown );
+    m_InitializerStack.Push( WideName::Shutdown );
+    m_InitializerStack.Push( GameObjectPath::Shutdown );
+
+    // Async I/O.
+    AsyncLoader& asyncLoader = AsyncLoader::GetStaticInstance();
+    HELIUM_VERIFY( asyncLoader.Initialize() );
+    m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
+
+    // GameObject cache management.
+    Path baseDirectory;
+    if ( !File::GetBaseDirectory( baseDirectory ) )
+    {
+        HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+        return false;
+    }
+
+    HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
+    m_InitializerStack.Push( CacheManager::DestroyStaticInstance );
+
+    // FreeType support.
+    HELIUM_VERIFY( FontResourceHandler::InitializeStaticLibrary() );
+    m_InitializerStack.Push( FontResourceHandler::DestroyStaticLibrary );
+
     // libs
     Editor::PerforceWaitDialog::Enable( true );
     m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+    m_InitializerStack.Push( Reflect::ObjectRefCountSupport::Shutdown );
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
@@ -261,6 +333,48 @@ bool App::OnInit()
 
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::ProjectMenuID >( TXT( "Editor::ProjectMenuID" ) ) );
 
+    // Engine type registration.
+    m_InitializerStack.Push( GameObject::Shutdown );
+    m_InitializerStack.Push( GameObjectType::Shutdown );
+    m_InitializerStack.Push( RegisterEngineTypes, UnregisterEngineTypes );
+    m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
+    m_InitializerStack.Push( RegisterGraphicsEnums, UnregisterGraphicsEnums );
+    m_InitializerStack.Push( RegisterFrameworkTypes, UnregisterFrameworkTypes );
+    m_InitializerStack.Push( RegisterPcSupportTypes, UnregisterPcSupportTypes );
+    m_InitializerStack.Push( RegisterEditorSupportTypes, UnregisterEditorSupportTypes );
+
+    // GameObject loader and preprocessor.
+    HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
+    m_InitializerStack.Push( EditorObjectLoader::DestroyStaticInstance );
+
+    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
+    HELIUM_ASSERT( pObjectLoader );
+
+    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
+    HELIUM_ASSERT( pObjectPreprocessor );
+    PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
+    HELIUM_ASSERT( pPlatformPreprocessor );
+    pObjectPreprocessor->SetPlatformPreprocessor( Cache::PLATFORM_PC, pPlatformPreprocessor );
+
+    m_InitializerStack.Push( ObjectPreprocessor::DestroyStaticInstance );
+
+    // Engine configuration.
+    Config& rConfig = Config::GetStaticInstance();
+    rConfig.BeginLoad();
+    while( !rConfig.TryFinishLoad() )
+    {
+        pObjectLoader->Tick();
+    }
+
+    m_InitializerStack.Push( Config::DestroyStaticInstance );
+
+    ConfigPc::SaveUserConfig();
+
+    // Job manager.
+    JobManager& rJobManager = JobManager::GetStaticInstance();
+    HELIUM_VERIFY( rJobManager.Initialize() );
+    m_InitializerStack.Push( JobManager::DestroyStaticInstance );
+
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -293,11 +407,18 @@ int App::OnExit()
 {
     SaveSettings();
 
+    m_SettingsManager.Release();
+
     m_InitializerStack.Cleanup();
 
     wxImage::CleanUpHandlers();
 
-    return wxApp::OnExit();
+    int result = wxApp::OnExit();
+
+    // Always clear out memory heaps last.
+    ThreadLocalStackAllocator::ReleaseMemoryHeap();
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

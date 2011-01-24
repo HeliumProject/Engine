@@ -1704,7 +1704,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     GameObjectType::Shutdown();
     GameObject::Shutdown();
 
-    AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
     Reflect::Cleanup();

@@ -28,6 +28,9 @@
 
 namespace Lunar
 {
+    HELIUM_DECLARE_PTR( GameObject );
+    HELIUM_DECLARE_PTR( Package );
+
     /// Configuration management.
     class LUNAR_ENGINE_API Config : NonCopyable
     {

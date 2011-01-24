@@ -285,7 +285,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data*
     ValueT valueValue;
     Data::GetValue(value, valueValue);
 
-    (m_Data.Ref())[keyValue] = valueValue;
+    (*m_Data)[keyValue] = valueValue;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -294,7 +294,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Da
     KeyT keyValue;
     Data::GetValue(key, keyValue);
 
-    (m_Data.Ref()).erase(keyValue);
+    m_Data->erase(keyValue);
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -306,7 +306,7 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -320,7 +320,7 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -390,7 +390,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive
 
         if (key && value)
         {
-            m_Data.Ref()[ key->m_Data.Get() ] = value->m_Data.Get();
+            (*m_Data)[ *key->m_Data ] = *value->m_Data;
         }
     }
 }
@@ -423,7 +423,7 @@ tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<< (ti
     str.resize( (size_t) size);
     stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, ValueT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

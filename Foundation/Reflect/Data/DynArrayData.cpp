@@ -198,7 +198,7 @@ bool SimpleDynArrayData< T >::Set( const Data* src, uint32_t flags )
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -212,7 +212,7 @@ bool SimpleDynArrayData< T >::Equals( const Object* object ) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template< class T >
@@ -233,7 +233,7 @@ void SimpleDynArrayData< T >::Serialize( Archive& archive ) const
                 xml.GetIndent().Get(xml.GetStream());
 
                 // write
-                xml.GetStream() << m_Data.Get()[i];
+                xml.GetStream() << (*m_Data)[i];
 
                 // newline
                 xml.GetStream() << "\n";
@@ -346,7 +346,7 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< T, T >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< T, T >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -376,7 +376,7 @@ void StringDynArrayData::Serialize( Archive& archive ) const
                 xml.GetIndent().Get(xml.GetStream());
 
                 // output the escape-code free character sequence between double qutoes
-                xml.GetStream() << TXT('\"') << *m_Data.Get()[i] << TXT('\"') << s_ContainerItemDelimiter;
+                xml.GetStream() << TXT('\"') << (*m_Data)[i] << TXT('\"') << s_ContainerItemDelimiter;
             }
 
             // end our CDATA escape section
@@ -496,7 +496,7 @@ tistream& SimpleDynArrayData< uint8_t >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< uint8_t, uint16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< uint8_t, uint16_t >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -512,7 +512,7 @@ tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< int8_t, int16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< int8_t, int16_t >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }

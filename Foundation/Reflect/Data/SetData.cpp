@@ -144,7 +144,7 @@ bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -163,7 +163,7 @@ bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Equals( const Object* object 
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -272,7 +272,7 @@ tistream& SimpleSetData< KeyT, EqualKeyT, AllocatorT >::operator<<( tistream& st
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, EqualKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, EqualKeyT, AllocatorT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

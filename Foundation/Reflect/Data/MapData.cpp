@@ -290,7 +290,7 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* 
     KeyT keyValue;
     Data::GetValue( key, keyValue );
 
-    Data::GetValue( value, m_Data.Ref()[ keyValue ] );
+    Data::GetValue( value, (*m_Data)[ keyValue ] );
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
@@ -311,7 +311,7 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( const Data* src,
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -330,7 +330,7 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( const Object*
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -419,7 +419,7 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( Archive&
         {
             KeyT k;
             Data::GetValue( key, k );
-            Data::GetValue( value, m_Data.Ref()[ k ] );
+            Data::GetValue( value, (*m_Data)[ k ] );
         }
     }
 }
@@ -453,7 +453,7 @@ tistream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator<<( tist
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, ValueT, EqualKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, ValueT, EqualKeyT, AllocatorT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

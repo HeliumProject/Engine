@@ -43,7 +43,7 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -52,7 +52,7 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
         for ( int index = 0; itr != end; ++itr )
         {
             Object* object = *itr;
-            m_Data.Ref()[index++] = ( object ? object->Clone() : NULL );
+            m_Data->at( index++ ) = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -94,7 +94,7 @@ bool ObjectStlVectorData::Equals(const Object* object) const
 
 void ObjectStlVectorData::Serialize(Archive& archive) const
 {
-    archive.Serialize(m_Data.Get());
+    archive.Serialize( *m_Data );
 }
 
 void ObjectStlVectorData::Deserialize(Archive& archive)
@@ -102,7 +102,7 @@ void ObjectStlVectorData::Deserialize(Archive& archive)
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    archive.Deserialize(m_Data.Ref());
+    archive.Deserialize( *m_Data );
 }
 
 void ObjectStlVectorData::Accept(Visitor& visitor)

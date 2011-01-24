@@ -111,7 +111,7 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::SetItem( const 
     Data::GetValue( key, keyValue );
 
 #pragma TODO( "Fix const correctness." )
-    m_Data.Ref()[ keyValue ] = const_cast< Object* >( value );
+    (*m_Data)[ keyValue ] = const_cast< Object* >( value );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -136,7 +136,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data
 
     if ( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -145,7 +145,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data
         for ( ; itr != end; ++itr )
         {
             Object* object = itr->Second();
-            m_Data.Ref()[ itr->First() ] = ( object ? object->Clone() : NULL );
+            (*m_Data)[ itr->First() ] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -166,7 +166,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( const O
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -256,7 +256,7 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Ar
         {
             KeyT k;
             Data::GetValue( key, k );
-            m_Data.Ref()[ k ] = value;
+            (*m_Data)[ k ] = value;
         }
     }
 }

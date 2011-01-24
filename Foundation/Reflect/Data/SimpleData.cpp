@@ -35,7 +35,7 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -49,7 +49,7 @@ bool SimpleData<T>::Equals(const Object* object) const
         return false;
     }
 
-    return rhs->m_Data.Get() == m_Data.Get();
+    return *rhs->m_Data == *m_Data;
 }
 
 template <class T>
@@ -61,7 +61,7 @@ void SimpleData<T>::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            xml.GetStream() << m_Data.Get();
+            xml.GetStream() << *m_Data;
             break;
         }
 
@@ -69,7 +69,8 @@ void SimpleData<T>::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Write(m_Data.Ptr()); 
+            const T* data = m_Data;
+            binary.GetStream().Write( data ); 
             break;
         }
     }
@@ -78,7 +79,7 @@ void SimpleData<T>::Serialize(Archive& archive) const
 template <class T>
 void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
 {
-    T val = m_Data.Get();
+    T val = *m_Data;
 
     Helium::Swizzle( val, buffer->GetByteOrder() != Helium::ByteOrders::LittleEndian );
 
@@ -88,7 +89,7 @@ void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_
 template <class T>
 tostream& SimpleData<T>::operator>> (tostream& stream) const
 {
-    stream << m_Data.Get();
+    stream << *m_Data;
 
     return stream;
 }
@@ -102,7 +103,7 @@ void SimpleData<T>::Deserialize(Archive& archive)
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
             
-            xml.GetStream() >> m_Data.Ref();
+            xml.GetStream() >> *m_Data;
             break;
         }
 
@@ -110,7 +111,8 @@ void SimpleData<T>::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Read(m_Data.Ptr()); 
+            T* data = m_Data;
+            binary.GetStream().Read( data ); 
             break;
         }
     }
@@ -119,7 +121,7 @@ void SimpleData<T>::Deserialize(Archive& archive)
 template <class T>
 tistream& SimpleData<T>::operator<< (tistream& stream)
 {
-    stream >> m_Data.Ref();
+    stream >> *m_Data;
 
     if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
     {
@@ -144,7 +146,7 @@ void StlStringData::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            xml.GetStream() << TXT( "<![CDATA[" ) << m_Data.Get() << TXT( "]]>" );
+            xml.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
             break;
         }
 
@@ -152,7 +154,7 @@ void StlStringData::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().WriteString( m_Data.Get() ); 
+            binary.GetStream().WriteString( *m_Data ); 
             break;
         }
     }
@@ -170,7 +172,7 @@ void StlStringData::Deserialize(Archive& archive)
 
             std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             m_Data->resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(m_Data->c_str()), size);
+            xml.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
             break;
         }
 
@@ -178,7 +180,7 @@ void StlStringData::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().ReadString( m_Data.Ref() );
+            binary.GetStream().ReadString( *m_Data );
             break;
         }
     }
@@ -187,7 +189,7 @@ void StlStringData::Deserialize(Archive& archive)
 template<>
 tostream& StlStringData::operator>> (tostream& stream) const
 {
-    stream << m_Data.Get();
+    stream << *m_Data;
 
     return stream;
 }
@@ -197,7 +199,7 @@ tistream& StlStringData::operator<< (tistream& stream)
 {
     std::streamsize size = stream.rdbuf()->in_avail();
     m_Data->resize( (size_t) size);
-    stream.read(const_cast<tchar_t*>(m_Data.Get().c_str()), size);
+    stream.read( const_cast<tchar_t*>( (*m_Data).c_str()), size );
 
     return stream;
 }
@@ -212,7 +214,7 @@ void UInt8Data::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            uint16_t tmp = m_Data.Get();
+            uint16_t tmp = *m_Data;
             xml.GetStream() << tmp;
             break;
         }
@@ -221,7 +223,8 @@ void UInt8Data::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Write(m_Data.Ptr()); 
+            const uint8_t* data = m_Data;
+            binary.GetStream().Write( data ); 
             break;
         }
     }
@@ -238,7 +241,7 @@ void UInt8Data::Deserialize(Archive& archive)
 
             uint16_t tmp;
             xml.GetStream() >> tmp;
-            m_Data.Set( (unsigned char)tmp );
+            *m_Data = (unsigned char)tmp;
             break;
         }
 
@@ -246,7 +249,8 @@ void UInt8Data::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Read(m_Data.Ptr()); 
+            const uint8_t* data = m_Data;
+            binary.GetStream().Read( data ); 
             break;
         }
     }
@@ -255,7 +259,7 @@ void UInt8Data::Deserialize(Archive& archive)
 template<>
 tostream& UInt8Data::operator>> (tostream& stream) const
 {
-    uint16_t val = m_Data.Get();
+    uint16_t val = *m_Data;
     stream << val;
 
     return stream;
@@ -266,7 +270,7 @@ tistream& UInt8Data::operator<< (tistream& stream)
 {
     uint16_t val;
     stream >> val;
-    m_Data.Set( (uint8_t)val );
+    *m_Data = (uint8_t)val;
 
     return stream;
 }
@@ -281,7 +285,7 @@ void Int8Data::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            int16_t tmp = m_Data.Get();
+            int16_t tmp = *m_Data;
             xml.GetStream() << tmp;
             break;
         }
@@ -290,7 +294,8 @@ void Int8Data::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Write(m_Data.Ptr()); 
+            const int8_t* data = m_Data;
+            binary.GetStream().Write( data ); 
             break;
         }
     }
@@ -307,7 +312,7 @@ void Int8Data::Deserialize(Archive& archive)
 
             int16_t tmp;
             xml.GetStream() >> tmp;
-            m_Data.Set( (char)tmp );
+            *m_Data = (char)tmp;
             break;
         }
 
@@ -315,7 +320,8 @@ void Int8Data::Deserialize(Archive& archive)
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            binary.GetStream().Read(m_Data.Ptr()); 
+            const int8_t* data = m_Data;
+            binary.GetStream().Read( data ); 
             break;
         }
     }
@@ -324,7 +330,7 @@ void Int8Data::Deserialize(Archive& archive)
 template<>
 tostream& Int8Data::operator>> (tostream& stream) const
 {
-    int16_t val = m_Data.Get();
+    int16_t val = *m_Data;
     stream << val;
 
     return stream;
@@ -335,7 +341,7 @@ tistream& Int8Data::operator<< (tistream& stream)
 {
     int16_t val;
     stream >> val;
-    m_Data.Set( (uint8_t)val );
+    *m_Data = (uint8_t)val;
 
     return stream;
 }

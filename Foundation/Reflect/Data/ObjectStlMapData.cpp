@@ -106,7 +106,7 @@ void SimpleObjectStlMapData<KeyT>::SetItem(const Data* key, const Object* value)
     Data::GetValue(key, keyValue);
 
 #pragma TODO( "Fix const correctness." )
-    (m_Data.Ref())[keyValue] = const_cast< Object* >( value );
+    (*m_Data)[keyValue] = const_cast< Object* >( value );
 }
 
 template < class KeyT >
@@ -115,7 +115,7 @@ void SimpleObjectStlMapData<KeyT>::RemoveItem(const Data* key)
     KeyT keyValue;
     Data::GetValue(key, keyValue);
 
-    (m_Data.Ref()).erase(keyValue);
+    (*m_Data).erase(keyValue);
 }
 
 template < class KeyT >
@@ -131,7 +131,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -140,7 +140,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
         for ( ; itr != end; ++itr )
         {
             Object* object = itr->second;
-            m_Data.Ref()[itr->first] = ( object ? object->Clone() : NULL );
+            (*m_Data)[itr->first] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -242,7 +242,7 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
         {
             KeyT k;
             Data::GetValue( key, k );
-            m_Data.Ref()[ k ] = value;
+            (*m_Data)[ k ] = value;
         }
     }
 }

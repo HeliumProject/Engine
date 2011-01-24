@@ -43,7 +43,7 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {

@@ -155,9 +155,9 @@ void SimpleStlVectorData<T>::MoveUp( std::set< size_t >& selectedIndices )
             continue;
         }
         
-        T temp = m_Data.Ref()[ (*itr) - 1 ];
-        m_Data.Ref()[ (*itr) - 1 ] = m_Data.Ref()[ (*itr) ];
-        m_Data.Ref()[ (*itr) ] = temp;
+        T temp = m_Data->at( (*itr) - 1 );
+        m_Data->at( (*itr) - 1 ) = m_Data->at( (*itr) );
+        m_Data->at( (*itr) ) = temp;
 
         newSelectedIndices.insert( *itr - 1 );
     }
@@ -181,9 +181,9 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
             continue;
         }
         
-        T temp = m_Data.Ref()[ (*itr) + 1 ];
-        m_Data.Ref()[ (*itr) + 1 ] = m_Data.Ref()[ (*itr) ];
-        m_Data.Ref()[ (*itr) ] = temp;
+        T temp = m_Data->at( (*itr) + 1 );
+        m_Data->at( (*itr) + 1 ) = m_Data->at( (*itr) );
+        m_Data->at( (*itr) ) = temp;
 
         newSelectedIndices.insert( *itr + 1 );
     }
@@ -200,7 +200,7 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -214,7 +214,7 @@ bool SimpleStlVectorData<T>::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 //
@@ -295,7 +295,7 @@ void SimpleStlVectorData<T>::Serialize(Archive& archive) const
                 xml.GetIndent().Get(xml.GetStream());
 
                 // write
-                xml.GetStream() << m_Data.Get()[i];
+                xml.GetStream() << m_Data->at( i );
 
                 // newline
                 xml.GetStream() << "\n";
@@ -308,7 +308,7 @@ void SimpleStlVectorData<T>::Serialize(Archive& archive) const
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-            WriteVector( m_Data.Ref(), binary.GetStream() );
+            WriteVector( *m_Data, binary.GetStream() );
             break;
         }
     }
@@ -346,7 +346,7 @@ void SimpleStlVectorData<T>::Deserialize(Archive& archive)
     case ArchiveTypes::Binary:
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-            ReadVector( m_Data.Ref(), binary.GetStream() );
+            ReadVector( *m_Data, binary.GetStream() );
             break;
         }
     }
@@ -380,7 +380,7 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<T, T>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -410,7 +410,7 @@ void StlStringStlVectorData::Serialize(Archive& archive) const
                 xml.GetIndent().Get(xml.GetStream());
 
                 // output the escape-code free character sequence between double qutoes
-                xml.GetStream() << TXT('\"') << m_Data.Get()[i].c_str() << TXT('\"') << s_ContainerItemDelimiter;
+                xml.GetStream() << TXT('\"') << m_Data->at( i ) << TXT('\"') << s_ContainerItemDelimiter;
             }
 
             // end our CDATA escape section
@@ -430,7 +430,7 @@ void StlStringStlVectorData::Serialize(Archive& archive) const
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                binary.GetStream().WriteString( m_Data.Get()[i] ); 
+                binary.GetStream().WriteString( m_Data->at( i ) ); 
             }
 
             break;
@@ -497,7 +497,7 @@ void StlStringStlVectorData::Deserialize(Archive& archive)
             m_Data->resize(count);
             for ( uint32_t i=0; i<count; i++ )
             {
-                binary.GetStream().ReadString( m_Data.Ref()[i] ); 
+                binary.GetStream().ReadString( m_Data->at( i ) ); 
             }
 
             break;
@@ -522,7 +522,7 @@ tistream& SimpleStlVectorData<uint8_t>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<uint8_t, uint16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<uint8_t, uint16_t>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -537,7 +537,7 @@ tistream& SimpleStlVectorData<int8_t>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<int8_t, int16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<int8_t, int16_t>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }

@@ -33,7 +33,7 @@ bool EnumerationData::Set(const Data* src, uint32_t flags)
 
     const EnumerationData* rhs = static_cast<const EnumerationData*>(src);
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -47,7 +47,7 @@ bool EnumerationData::Equals(const Object* object) const
         return false;
     }
 
-    return rhs->m_Data.Get() == m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 void EnumerationData::Serialize(Archive& archive) const
@@ -72,9 +72,9 @@ void EnumerationData::Serialize(Archive& archive) const
             tstring label;
             if (enumeration)
             {
-                if (!enumeration->GetElementName(m_Data.Get(), label))
+                if (!enumeration->GetElementName(*m_Data, label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, *m_Data );
                 }
             }
 
@@ -91,9 +91,9 @@ void EnumerationData::Serialize(Archive& archive) const
 
             if (enumeration)
             {
-                if (!enumeration->GetElementName(m_Data.Get(), label))
+                if (!enumeration->GetElementName(*m_Data, label))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize enumeration '%s', value %d" ), enumeration->m_Name, *m_Data );
                 }
             }
 
@@ -131,7 +131,7 @@ void EnumerationData::Deserialize(Archive& archive)
             xml.GetStream() >> buf;
             if (!buf.empty())
             {
-                if (enumeration && !enumeration->GetElementValue(buf, m_Data.Ref()))
+                if (enumeration && !enumeration->GetElementValue(buf, *m_Data))
                 {
                     Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), enumeration->m_Name, buf.c_str() );
                 }
@@ -149,7 +149,7 @@ void EnumerationData::Deserialize(Archive& archive)
 
             tstring str;
             binary.GetStream().ReadString( str );
-            if (enumeration && !enumeration->GetElementValue(str, m_Data.Ref()))
+            if (enumeration && !enumeration->GetElementValue(str, *m_Data))
             {
                 Log::Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), enumeration->m_Name, str.c_str() );
             }
@@ -182,7 +182,7 @@ tostream& EnumerationData::operator>> (tostream& stream) const
     }
 
     tstring label;
-    if (enumeration && !enumeration->GetElementName(m_Data.Get(), label))
+    if (enumeration && !enumeration->GetElementName(*m_Data, label))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
         HELIUM_BREAK();
@@ -211,7 +211,7 @@ tistream& EnumerationData::operator<< (tistream& stream)
 
     if ( !buf.empty() && enumeration )
     {
-        enumeration->GetElementValue(buf, m_Data.Ref());
+        enumeration->GetElementValue(buf, *m_Data);
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {

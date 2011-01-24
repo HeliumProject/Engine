@@ -42,7 +42,7 @@ bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
 
     if( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -93,7 +93,7 @@ bool ObjectDynArrayData::Equals( const Object* object ) const
 
 void ObjectDynArrayData::Serialize( Archive& archive ) const
 {
-    archive.Serialize( m_Data.Get() );
+    archive.Serialize( *m_Data );
 }
 
 void ObjectDynArrayData::Deserialize( Archive& archive )
@@ -101,7 +101,7 @@ void ObjectDynArrayData::Deserialize( Archive& archive )
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
 
-    archive.Deserialize( m_Data.Ref() );
+    archive.Deserialize( *m_Data );
 }
 
 void ObjectDynArrayData::Accept( Visitor& visitor )

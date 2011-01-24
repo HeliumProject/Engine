@@ -111,7 +111,7 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::SetItem( const Data* ke
     Data::GetValue( key, keyValue );
 
 #pragma TODO( "Fix const correctness." )
-    m_Data.Ref()[ keyValue ] = const_cast< Object* >( value );
+    (*m_Data)[ keyValue ] = const_cast< Object* >( value );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
@@ -136,7 +136,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, u
 
     if ( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -145,7 +145,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, u
         for ( ; itr != end; ++itr )
         {
             Object* object = itr->Second();
-            m_Data.Ref()[ itr->First() ] = ( object ? object->Clone() : NULL );
+            (*m_Data)[ itr->First() ] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -166,7 +166,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( const Object* o
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -256,7 +256,7 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( Archive& a
         {
             KeyT k;
             Data::GetValue( key, k );
-            m_Data.Ref()[ k ] = value;
+            (*m_Data)[ k ] = value;
         }
     }
 }

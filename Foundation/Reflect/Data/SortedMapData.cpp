@@ -290,7 +290,7 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SetItem( cons
     KeyT keyValue;
     Data::GetValue( key, keyValue );
 
-    Data::GetValue( value, m_Data.Ref()[ keyValue ] );
+    Data::GetValue( value, (*m_Data)[ keyValue ] );
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
@@ -311,7 +311,7 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Set( const Da
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -325,7 +325,7 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( const
         return false;
     }
 
-    return m_Data.Ref() == rhs->m_Data.Ref();
+    return *m_Data == *rhs->m_Data;
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
@@ -400,7 +400,7 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Deserialize( 
         {
             KeyT k;
             Data::GetValue( key, k );
-            Data::GetValue( value, m_Data.Ref()[ k ] );
+            Data::GetValue( value, (*m_Data)[ k ] );
         }
     }
 }
@@ -434,7 +434,7 @@ tistream& SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::operator
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, ValueT, CompareKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, ValueT, CompareKeyT, AllocatorT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

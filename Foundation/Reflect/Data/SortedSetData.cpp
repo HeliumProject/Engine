@@ -144,7 +144,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src,
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -158,7 +158,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( const Object*
         return false;
     }
 
-    return m_Data.Ref() == rhs->m_Data.Ref();
+    return *m_Data == *rhs->m_Data;
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -253,7 +253,7 @@ tistream& SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::operator<<( tist
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, CompareKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, CompareKeyT, AllocatorT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

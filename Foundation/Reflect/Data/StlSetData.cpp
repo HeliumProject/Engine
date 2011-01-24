@@ -144,7 +144,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -158,7 +158,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template < class DataT, class DataClassT >
@@ -218,7 +218,7 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
             throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
         }
 
-        m_Data->insert(data->m_Data.Get());
+        m_Data->insert( *data->m_Data );
     }
 }
 
@@ -250,7 +250,7 @@ tistream& SimpleStlSetData<DataT, DataClassT>::operator<< (tistream& stream)
     str.resize( (size_t) size);
     stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< DataT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  

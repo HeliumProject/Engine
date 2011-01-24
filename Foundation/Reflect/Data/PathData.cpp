@@ -30,7 +30,7 @@ bool PathData::Set( const Data* src, uint32_t flags )
 
     const PathData* rhs = static_cast< const PathData* >( src );
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -44,12 +44,12 @@ bool PathData::Equals( const Object* object ) const
         return false;
     }
 
-    return rhs->m_Data.Get() == m_Data.Get();
+    return *rhs->m_Data == *m_Data;
 }
 
 void PathData::Serialize( Archive& archive ) const
 {
-    const tstring& str = m_Data.Get().Get();
+    const tstring& str = m_Data->Get();
 
     switch ( archive.GetType() )
     {
@@ -83,7 +83,7 @@ void PathData::Deserialize( Archive& archive )
             std::streamsize size = xml.GetStream().ObjectsAvailable(); 
             buf.resize( (size_t)size );
             xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
-            m_Data.Ref().Set( buf );
+            m_Data->Set( buf );
             break;
         }
 
@@ -93,7 +93,7 @@ void PathData::Deserialize( Archive& archive )
 
             tstring str;
             binary.GetStream().ReadString( str );
-            m_Data.Ref().Set( str );
+            m_Data->Set( str );
             break;
         }
     }
@@ -101,7 +101,7 @@ void PathData::Deserialize( Archive& archive )
 
 tostream& PathData::operator>>( tostream& stream ) const
 {
-    tstring path = m_Data.Get().Get();
+    tstring path = m_Data->Get();
     tstring temp;
     bool converted = Helium::ConvertString( path, temp );
     HELIUM_ASSERT( converted );
@@ -119,7 +119,7 @@ tistream& PathData::operator<<( tistream& stream )
 
     if ( !str.empty() )
     {
-        m_Data.Ref().Set( str );
+        m_Data->Set( str );
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {

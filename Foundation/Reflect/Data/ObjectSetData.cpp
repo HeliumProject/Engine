@@ -41,7 +41,7 @@ bool ObjectSetData::Set( const Data* src, uint32_t flags )
 
     if ( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -70,7 +70,7 @@ bool ObjectSetData::Equals( const Object* object ) const
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();

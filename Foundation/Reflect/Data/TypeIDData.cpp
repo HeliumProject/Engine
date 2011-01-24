@@ -31,7 +31,7 @@ bool TypeIDData::Set(const Data* s, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
@@ -44,12 +44,12 @@ bool TypeIDData::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 void TypeIDData::Serialize(Archive& archive) const
 {
-    const Type* type = m_Data.Get();
+    const Type* type = *m_Data;
 
     switch (archive.GetType())
     {
@@ -107,6 +107,6 @@ void TypeIDData::Deserialize(Archive& archive)
 
     if ( type )
     {
-        m_Data.Set( type );
+        *m_Data = type;
     }
 }

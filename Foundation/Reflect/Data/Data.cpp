@@ -27,7 +27,7 @@ bool Cast(const Data* src, Data* dest)
     const SimpleData<srcT>* source = static_cast<const SimpleData<srcT>*>(src);
     SimpleData<destT>* destination = static_cast<SimpleData<destT>*>(dest);
 
-    return Helium::RangeCast( source->m_Data.Get(), destination->m_Data.Ref() );
+    return Helium::RangeCast( *source->m_Data, *destination->m_Data );
 }
 
 template<>
@@ -36,7 +36,7 @@ bool Cast<uint64_t, Helium::TUID>(const Data* src, Data* dest)
     const SimpleData<uint64_t>* source = static_cast<const SimpleData<uint64_t>*>(src);
     SimpleData<Helium::TUID>* destination = static_cast<SimpleData<Helium::TUID>*>(dest);
 
-    destination->m_Data.Set( source->m_Data.Get() );
+    *destination->m_Data = *source->m_Data;
 
     return true;
 }
@@ -47,7 +47,7 @@ bool Cast<Helium::TUID, uint64_t>(const Data* src, Data* dest)
     const SimpleData<Helium::TUID>* source = static_cast<const SimpleData<Helium::TUID>*>(src);
     SimpleData<uint64_t>* destination = static_cast<SimpleData<uint64_t>*>(dest);
 
-    destination->m_Data.Set( source->m_Data.Get() );
+    *destination->m_Data = *source->m_Data;
 
     return true;
 }
@@ -58,7 +58,7 @@ bool Cast<Helium::TUID, Helium::GUID>(const Data* src, Data* dest)
     const SimpleData<Helium::TUID>* source = static_cast<const SimpleData<Helium::TUID>*>(src);
     SimpleData<Helium::GUID>* destination = static_cast<SimpleData<Helium::GUID>*>(dest);
 
-    destination->m_Data.Ref().FromTUID( source->m_Data.Get() );
+    (*destination->m_Data).FromTUID( *source->m_Data );
 
     return true;
 }
@@ -69,7 +69,7 @@ bool Cast<Helium::GUID, Helium::TUID>(const Data* src, Data* dest)
     const SimpleData<Helium::GUID>* source = static_cast<const SimpleData<Helium::GUID>*>(src);
     SimpleData<Helium::TUID>* destination = static_cast<SimpleData<Helium::TUID>*>(dest);
 
-    destination->m_Data.Ref().FromGUID( source->m_Data.Get() );
+    (*destination->m_Data).FromGUID( *source->m_Data );
 
     return true;
 }

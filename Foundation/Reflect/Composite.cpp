@@ -375,23 +375,26 @@ uint32_t Composite::GetBaseFieldCount() const
     return count;
 }
 
-Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
+Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_DataClass = dataClass;
-    m_Fields.Add( field );
+    // deduction of the data class has failed, you must provide one yourself!
+    HELIUM_ASSERT( dataClass );
 
-    return &m_Fields.GetLast();
-}
+    if ( dataClass == Reflect::GetClass< PointerData >() )
+    {
+        const Class* classType = ReflectionCast< Class >( type );
 
-Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
-{
+        // if you hit this, then you need to make sure you register your class before you register fields that are pointers of that type
+        HELIUM_ASSERT( classType != NULL );
+    }
+    else if ( dataClass == Reflect::GetClass< EnumerationData >() || dataClass == Reflect::GetClass< BitfieldData >() )
+    {
+        const Enumeration* enumerationType = ReflectionCast< Enumeration >( type );
+
+        // if you hit this, then you need to make sure you register your enums before you register elements that use them
+        HELIUM_ASSERT( enumerationType != NULL );
+    }
+
     Field field;
     field.m_Composite = this;
     field.m_Name = name;
@@ -400,25 +403,6 @@ Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t o
     field.m_Flags = flags;
     field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
     field.m_Type = type;
-    field.m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
-    m_Fields.Add( field );
-
-    return &m_Fields.GetLast();
-}
-
-Reflect::Field* Composite::AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
-{
-    // if you hit this, then you need to make sure you register your enums before you register elements that use them
-    HELIUM_ASSERT(enumeration != NULL);
-
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_Type = enumeration;
     field.m_DataClass = dataClass;
     m_Fields.Add( field );
 

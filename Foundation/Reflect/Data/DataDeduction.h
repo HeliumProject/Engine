@@ -4,6 +4,7 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/Data.h"
 #include "Foundation/Reflect/Data/PointerData.h"
+#include "Foundation/Reflect/Data/AggregateData.h"
 #include "Foundation/Reflect/Data/EnumerationData.h"
 #include "Foundation/Reflect/Data/BitfieldData.h"
 
@@ -16,12 +17,12 @@ static inline const Helium::Reflect::Class* Helium::Reflect::GetDataClass<Name::
 template<> \
 static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* data ) \
 { \
-    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.operator->() : NULL; \
 } \
 template<> \
 static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* data ) \
 { \
-    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.Ptr() : NULL; \
+    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.operator->() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"

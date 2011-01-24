@@ -101,13 +101,16 @@ namespace Helium
                 info->m_Name = name;
 
                 // lookup base class
-                info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );
+                if ( baseName )
+                {
+                    info->m_Base = Reflect::Registry::GetInstance()->GetClass( baseName );
 
-                // if you hit this break your base class is not registered yet!
-                HELIUM_ASSERT( info->m_Base );
+                    // if you hit this break your base class is not registered yet!
+                    HELIUM_ASSERT( info->m_Base );
 
-                // populate base classes' derived class list (unregister will remove it)
-                info->m_Base->AddDerived( info );
+                    // populate base classes' derived class list (unregister will remove it)
+                    info->m_Base->AddDerived( info );
+                }
 
                 // c++ can give us the address of base class static functions,
                 //  so check each base class to see if this is really a base class enumerate function
@@ -203,9 +206,7 @@ namespace Helium
             uint32_t GetBaseFieldCount() const;
 
             // concrete field population functions, called from template functions below with deducted data
-            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags = 0 );
-            Reflect::Field* AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags = 0 );
-            Reflect::Field* AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags = 0 );
+            Reflect::Field* AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type = NULL, int32_t flags = 0 );
 
             //
             // Reflection Generation Functions
@@ -225,6 +226,7 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
+                    NULL,
                     flags );
             }
 
@@ -236,13 +238,14 @@ namespace Helium
                     GetOffset(field),
                     sizeof(FieldT),
                     dataClass ? dataClass : Reflect::GetDataClass<FieldT>(),
+                    NULL,
                     flags );
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
@@ -252,9 +255,9 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
@@ -264,9 +267,9 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ObjectT > >),
@@ -276,9 +279,9 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(std::vector< StrongPtr< ObjectT > >),
@@ -288,9 +291,9 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ObjectT > >),
@@ -300,9 +303,9 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(std::set< StrongPtr< ObjectT > >),
@@ -312,9 +315,9 @@ namespace Helium
             }
 
             template < class CompositeT, class KeyT, class ObjectT >
-            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField( 
+                return AddField( 
                     name, 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
@@ -324,9 +327,9 @@ namespace Helium
             }
 
             template < class CompositeT, class KeyT, class ObjectT >
-            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddObjectField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddObjectField( 
+                return AddField( 
                     name, 
                     GetOffset(field), 
                     sizeof(std::map< KeyT, StrongPtr< ObjectT > >), 
@@ -336,9 +339,33 @@ namespace Helium
             }
 
             template < class CompositeT, class FieldT >
+            inline Reflect::Field* AddStructureField( FieldT CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            {
+                return AddField(
+                    name,
+                    GetOffset(field),
+                    sizeof(FieldT),
+                    Reflect::GetClass<Reflect::StructureData>(),
+                    Reflect::GetStructure<FieldT>(),
+                    flags );
+            }
+
+            template < class CompositeT, class FieldT >
+            inline Reflect::Field* AddStructureField( Attribute< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            {
+                return AddField(
+                    name,
+                    GetOffset(field),
+                    sizeof(FieldT),
+                    Reflect::GetClass<Reflect::StructureData>(),
+                    Reflect::GetStructure<FieldT>(),
+                    flags );
+            }
+
+            template < class CompositeT, class FieldT >
             inline Reflect::Field* AddEnumerationField( FieldT CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddEnumerationField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
@@ -350,7 +377,7 @@ namespace Helium
             template < class CompositeT, class FieldT >
             inline Reflect::Field* AddEnumerationField( Attribute< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddEnumerationField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
@@ -362,7 +389,7 @@ namespace Helium
             template < class CompositeT, class EnumT, class FieldT >
             inline Reflect::Field* AddBitfieldField( FieldT CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddEnumerationField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
@@ -374,7 +401,7 @@ namespace Helium
             template < class CompositeT, class EnumT, class FieldT >
             inline Reflect::Field* AddBitfieldField( Attribute< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
-                return AddEnumerationField(
+                return AddField(
                     name,
                     GetOffset(field),
                     sizeof(FieldT),

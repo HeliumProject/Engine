@@ -41,9 +41,9 @@ void BitfieldData::Serialize(Archive& archive) const
             tstring str;
             if (enumeration)
             {
-                if (!enumeration->GetBitfieldString(m_Data.Get(), str))
+                if (!enumeration->GetBitfieldString( *m_Data, str ))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, *m_Data );
                 }
             }
 
@@ -58,9 +58,9 @@ void BitfieldData::Serialize(Archive& archive) const
             if (enumeration)
             {
                 std::vector< tstring > strs;
-                if (!enumeration->GetBitfieldStrings(m_Data.Get(), strs))
+                if (!enumeration->GetBitfieldStrings( *m_Data, strs ))
                 {
-                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), enumeration->m_Name, *m_Data );
                 }
 
                 uint32_t count = (uint32_t)strs.size();
@@ -105,7 +105,8 @@ void BitfieldData::Deserialize(Archive& archive)
 
             tstring buf;
             xml.GetStream() >> buf;
-            if (enumeration && !enumeration->GetBitfieldValue(buf, m_Data.Ref()))
+
+            if (enumeration && !enumeration->GetBitfieldValue(buf, *m_Data))
             {
                 Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), enumeration->m_Name, buf );
             }
@@ -145,7 +146,7 @@ void BitfieldData::Deserialize(Archive& archive)
                 str += *itr;
             }
 
-            if (enumeration && !enumeration->GetBitfieldValue(strs, m_Data.Ref()))
+            if (enumeration && !enumeration->GetBitfieldValue(strs, *m_Data))
             {
                 Log::Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), enumeration->m_Name, str.c_str() );
             }
@@ -178,7 +179,7 @@ tostream& BitfieldData::operator>> (tostream& stream) const
     }
 
     tstring str;
-    if ( enumeration && !enumeration->GetBitfieldString(m_Data.Get(), str) )
+    if ( enumeration && !enumeration->GetBitfieldString( *m_Data, str ) )
     {
         // something is amiss, we should be guaranteed serialization of enum elements
         HELIUM_BREAK();
@@ -207,7 +208,7 @@ tistream& BitfieldData::operator<< (tistream& stream)
 
     if ( enumeration )
     {
-        enumeration->GetBitfieldValue(buf, m_Data.Ref());
+        enumeration->GetBitfieldValue( buf, *m_Data );
     }
 
     return stream;

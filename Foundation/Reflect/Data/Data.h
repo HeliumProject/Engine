@@ -36,80 +36,69 @@ namespace Helium
             template<class T>
             class Pointer
             {
-            private:
-                // owned or borrowed data
-                Helium::HybridPtr<T> m_Target;
-
-                // owned data
-                T m_Primitive;
-
             public:
                 Pointer()
+                    : m_Owned( false )
                 {
-                    m_Target = &m_Primitive;
+
+                }
+
+                ~Pointer()
+                {
+                    Deallocate();
+                }
+
+                template<class DataT>
+                void Allocate()
+                {
+                    m_Target = new DataT;
+                    m_Owned = true;
+                }
+
+                void Deallocate()
+                {
+                    if ( m_Owned && m_Target )
+                    {
+                        delete m_Target;
+                        m_Target = static_cast< const T* >( NULL );
+                    }
                 }
 
                 void Connect(Helium::HybridPtr<T> pointer)
                 {
-                    if (pointer.Address())
-                    {
-                        m_Target = pointer;
-                    }
-                    else
-                    {
-                        m_Target = &m_Primitive;
-                    }
+                    Deallocate();
+                    m_Target = pointer;
+                    m_Owned = false;
                 }
 
                 void Disconnect()
                 {
-                    m_Target = &m_Primitive;
+                    Deallocate();
                 }
 
-                void Set(const T& val)
-                {
-                    *m_Target = val;
-                }
-
-                const T& Get() const
-                {
-                    return *m_Target;
-                }
-
-                const T* operator-> () const
+                const T* operator->() const
                 {
                     return m_Target;
                 }
 
-                T* operator-> ()
+                T* operator->()
                 {
                     return m_Target;
                 }
 
-                const T* Ptr() const
+                operator const T*() const
                 {
                     return m_Target;
                 }
 
-                T* Ptr()
+                operator T*()
                 {
                     return m_Target;
                 }
 
-                const T& Ref() const
-                {
-                    return *m_Target;
-                }
-
-                T& Ref()
-                {
-                    return *m_Target;
-                }
-
-                T Val() const
-                {
-                    return *m_Target;
-                }
+            private:
+                Helium::HybridPtr<T>    m_Target;
+                bool                    m_Owned;
             };
 
             // the instance we are processing, if any

@@ -3,7 +3,7 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
+
 #include "compatibility.hpp"
 #include "litesql/database.hpp"
 #include "litesql/cursor.hpp"
@@ -23,7 +23,7 @@ void Database::openDatabase() {
 void Database::storeSchemaItem(const SchemaItem& s) const {
     delete_(LITESQL_L("schema_"), 
             RawExpr(LITESQL_L("name_='") + s.name 
-                +  LITESQL_L("' and type_='") + s.type +  LITESQL_L("'")));
+                + LITESQL_L("' and type_='") + s.type + LITESQL_L("'")));
     Record values(3);
 
     values.push_back(s.name);
@@ -61,7 +61,7 @@ static ColumnDefinitions getFields(LITESQL_String schema) {
     int end = schema.find(LITESQL_L(")"));
     if (start == -1 || end == -1)
         return fields;
-    Split tmp(replace(schema.substr(start+1, end-start-1),  LITESQL_L(", "),  LITESQL_L(",")),  LITESQL_L(","));
+    Split tmp(replace(schema.substr(start+1, end-start-1), LITESQL_L(", "), LITESQL_L(",")), LITESQL_L(","));
     
     ColumnDefinition field_def;
     for (size_t i = 0; i < tmp.size(); i++) 
@@ -77,7 +77,7 @@ static ColumnDefinitions getFields(LITESQL_String schema) {
 
 bool Database::addColumn(const LITESQL_String & name,const ColumnDefinition & column_def) const 
 {
-  query(LITESQL_L("ALTER TABLE ") + name +  LITESQL_L(" ADD COLUMN ") + column_def.name + LITESQL_L(" ")+ column_def.type);
+  query(LITESQL_L("ALTER TABLE ") + name + LITESQL_L(" ADD COLUMN ") + column_def.name +LITESQL_L(" ")+ column_def.type);
   return true;
 }
 
@@ -109,8 +109,8 @@ void Database::upgradeTable(LITESQL_String name,
     }
 
     begin();
-    LITESQL_String bkp_name(name+ LITESQL_L("backup"));
-    query(LITESQL_L(" ALTER TABLE ") + name +  LITESQL_L(" RENAME TO ") + bkp_name); 
+    LITESQL_String bkp_name(name+LITESQL_L("backup"));
+    query(LITESQL_L(" ALTER TABLE ") + name + LITESQL_L(" RENAME TO ") + bkp_name); 
     for (ColumnDefinitions::iterator it = toAdd.begin();it!= toAdd.end();it++)
     {
       addColumn(bkp_name,*it);
@@ -137,7 +137,7 @@ void Database::upgradeTable(LITESQL_String name,
         cols.push_back(s);
     }
 
-    query(LITESQL_L(" INSERT INTO ") + name +  LITESQL_L(" SELECT ")+ cols.join(LITESQL_L(","))+ LITESQL_L(" FROM ") + bkp_name); 
+    query(LITESQL_L(" INSERT INTO ") + name + LITESQL_L(" SELECT ")+ cols.join(LITESQL_L(","))+LITESQL_L(" FROM ") + bkp_name); 
     query(LITESQL_L(" DROP TABLE ") + bkp_name); 
     commit();
 }
@@ -169,9 +169,9 @@ Database::Database(const LITESQL_String& backend, const LITESQL_String& conn)
         for (size_t i = 0; i < s.size(); i++) {
             try {
                 begin();
-                if (s[i].type ==  LITESQL_L("table"))
+                if (s[i].type == LITESQL_L("table"))
                     query(LITESQL_L("DROP TABLE ") + s[i].name);
-                else if (s[i].type ==  LITESQL_L("sequence"))
+                else if (s[i].type == LITESQL_L("sequence"))
                     query(LITESQL_L("DROP SEQUENCE ") + s[i].name);
                 commit();
             } catch (Except e) {
@@ -208,7 +208,7 @@ Database::Database(const LITESQL_String& backend, const LITESQL_String& conn)
                 storeSchemaItem(s[i]);
                 continue;
             }
-            if (s[i].type ==  LITESQL_L("table") && cs[items[s[i].name]].sql != s[i].sql) {
+            if (s[i].type == LITESQL_L("table") && cs[items[s[i].name]].sql != s[i].sql) {
                 upgradeTable(s[i].name, cs[items[s[i].name]].sql, s[i].sql);
                 storeSchemaItem(s[i]);
             }
@@ -224,34 +224,34 @@ Database::Database(const LITESQL_String& backend, const LITESQL_String& conn)
 
     void Database::insert(const LITESQL_String &table, const Record &r,
                           const Split& fields) const {
-        LITESQL_String command =  LITESQL_L("INSERT INTO ") + table;
+        LITESQL_String command = LITESQL_L("INSERT INTO ") + table;
         if (fields.size())
-            command +=  LITESQL_L(" (") + fields.join(LITESQL_L(",")) +  LITESQL_L(")");
-        command +=  LITESQL_L(" VALUES (");
+            command += LITESQL_L(" (") + fields.join(LITESQL_L(",")) + LITESQL_L(")");
+        command += LITESQL_L(" VALUES (");
         unsigned int i;
         for (i=0; i < r.size() -1; i++) {
-            command += escapeSQL(r[i]) +  LITESQL_L(",");
+            command += escapeSQL(r[i]) + LITESQL_L(",");
         }
-        command += escapeSQL(r[i]) +  LITESQL_L(")");
+        command += escapeSQL(r[i]) + LITESQL_L(")");
         query(command);
     }
     LITESQL_String Database::groupInsert(Record tables, Records fields, Records values, 
                      LITESQL_String sequence) const {
         if (verbose) {
-            LITESQL_cerr <<  LITESQL_L("groupInsert") << std::endl;
+            LITESQL_cerr << LITESQL_L("groupInsert") << std::endl;
             for (size_t i = 0; i < tables.size(); i++) {
-                LITESQL_cerr <<  LITESQL_L("\t") << tables[i] << std::endl;
-                LITESQL_cerr <<  LITESQL_L("\t\tfields : ") << Split::join(fields[i], LITESQL_L(",")) << std::endl;
-                LITESQL_cerr <<  LITESQL_L("\t\tvalues : ") << Split::join(values[i], LITESQL_L("|")) << std::endl;
+                LITESQL_cerr << LITESQL_L("\t") << tables[i] << std::endl;
+                LITESQL_cerr << LITESQL_L("\t\tfields : ") << Split::join(fields[i],LITESQL_L(",")) << std::endl;
+                LITESQL_cerr << LITESQL_L("\t\tvalues : ") << Split::join(values[i],LITESQL_L("|")) << std::endl;
             }
         }
         return backend->groupInsert(tables, fields, values, sequence);
     }
 
     void Database::delete_(const LITESQL_String& table, const Expr& e) const {
-        LITESQL_String where =  LITESQL_L("");
-        if (e.asString() !=  LITESQL_L("True"))
-            where =  LITESQL_L(" WHERE ") + e.asString();
+        LITESQL_String where = LITESQL_L("");
+        if (e.asString() != LITESQL_L("True"))
+            where = LITESQL_L(" WHERE ") + e.asString();
         query(LITESQL_L("DELETE FROM ") + table + where);
     }
 

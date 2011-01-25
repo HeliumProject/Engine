@@ -3,8 +3,8 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
 #include <cstdlib>
+#include "litesql_char.hpp"
 #include "compatibility.hpp"
 #include "litesql.hpp"
 #include "litesql/field.hpp"
@@ -72,7 +72,7 @@ double convert<int,double>(int value) {
 
 template <>
 bool convert<const LITESQL_String&, bool>(const LITESQL_String& value) {
-    return convert<const LITESQL_String&, int>(value);
+    return convert<const LITESQL_String&, int>(value) != 0;
 }
 template <>
 long long convert<const LITESQL_String&, long long>(const LITESQL_String& value) {
@@ -80,7 +80,7 @@ long long convert<const LITESQL_String&, long long>(const LITESQL_String& value)
 }
 template <>
 float convert<const LITESQL_String&, float>(const LITESQL_String& value) {
-    return strtof(value.c_str(), NULL);
+    return (float)_tcstod(value.c_str(), NULL);
 }
 template <>
 double convert<const LITESQL_String&, double>(const LITESQL_String& value) {
@@ -94,7 +94,7 @@ LITESQL_String convert<const LITESQL_String&, LITESQL_String>(const LITESQL_Stri
 
 
 
-const LITESQL_Char hexDigits[] =  LITESQL_L("0123456789abcdef");
+const LITESQL_Char hexDigits[] = LITESQL_L("0123456789abcdef");
 
 const Blob Blob::nil;
 
@@ -103,15 +103,15 @@ LITESQL_String Blob::toHex(void) const
   LITESQL_String result;
   if (!m_data) 
   {
-    result = LITESQL_L("NULL");  
+    result =LITESQL_L("NULL");  
   }
   else
   {
     result.reserve(m_length);
     for (size_t i = 0; i < m_length;i++)
     {
-      result.push_back(hexDigits[(m_data[i]&0xf0) >>4]);
-      result.push_back(hexDigits[m_data[i]&0x0f]);
+      result.push_back( hexDigits[(m_data[i]&0xf0) >>4]);
+      result.push_back( hexDigits[m_data[i]&0x0f]);
     }
   }
   return result;
@@ -121,43 +121,43 @@ int hex(LITESQL_Char c)
 {
   switch(c)
   {
-    case '0':
+    case LITESQL_L( '0' ):
       return 0;
-    case '1':
+    case LITESQL_L( '1' ):
       return 1;
-    case '2':
+    case LITESQL_L( '2' ):
       return 2;
-    case '3':
+    case LITESQL_L( '3' ):
       return 3;
-    case '4':
+    case LITESQL_L( '4' ):
       return 4;
-    case '5':
+    case LITESQL_L( '5' ):
       return 5;
-    case '6':
+    case LITESQL_L( '6' ):
       return 6;
-    case '7':
+    case LITESQL_L( '7' ):
       return 7;
-    case '8':
+    case LITESQL_L( '8' ):
       return 8;
-    case '9':
+    case LITESQL_L( '9' ):
       return 9;
-    case 'a':
-    case 'A':
+    case LITESQL_L( 'a' ):
+    case LITESQL_L( 'A' ):
       return 0xa;
-    case 'b':
-    case 'B':
+    case LITESQL_L( 'b' ):
+    case LITESQL_L( 'B' ):
       return 0xb;
-    case 'c':
-    case 'C':
+    case LITESQL_L( 'c' ):
+    case LITESQL_L( 'C' ):
       return 0xc;
-    case 'd':
-    case 'D':
+    case LITESQL_L( 'd' ):
+    case LITESQL_L( 'D' ):
       return 0xd;
-    case 'e':
-    case 'E':
+    case LITESQL_L( 'e' ):
+    case LITESQL_L( 'E' ):
       return 0xe;
-    case 'f':
-    case 'F':
+    case LITESQL_L( 'f' ):
+    case LITESQL_L( 'F' ):
       return 0xf;
     default:
       throw(LITESQL_L("invalid digit"));
@@ -194,8 +194,8 @@ void   Blob::data(const LITESQL_Char* pszData)
   {
     free(m_data);
   }
-  initWithData((u8_t*)pszData,
-		  pszData!=NULL ? _tcslen(pszData)+1 : 0);
+  initWithData( (u8_t*)pszData,
+		  pszData!=NULL ? _tcslen(pszData)+1 : 0 );
 }
 
 
@@ -242,7 +242,7 @@ LITESQL_String convert<const Blob&, LITESQL_String>(const Blob& value)
 {
   if (value.isNull())
   {
-    return  LITESQL_L("NULL");
+    return LITESQL_L("NULL");
   }
   else 
   {

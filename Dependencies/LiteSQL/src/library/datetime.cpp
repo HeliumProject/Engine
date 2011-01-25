@@ -3,7 +3,6 @@
  * The list of contributors at http://litesql.sf.net/
  *
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
 #include "litesql/datetime.hpp"
 #include "litesql/split.hpp"
 #include "compatibility.hpp"
@@ -117,12 +116,12 @@ Date& Date::setTimeStamp(time_t t) {
     return *this;
 }
 LITESQL_String Date::asString(LITESQL_String format) const {
-    if (format ==  LITESQL_L("%u")) {
+    if (format == LITESQL_L("%u")) {
         LITESQL_Char buf[32];
-        snprintf(buf, 32,  LITESQL_L("%lu"), value);
+        _sntprintf(buf, 32, LITESQL_L("%lu"), value);
         return buf;
     }
-    Split data(format,  LITESQL_L("%"));
+    Split data(format, LITESQL_L("%"));
     TimeStruct ts(value);
     LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
@@ -174,12 +173,12 @@ Time& Time::setSecs(int secs) {
     return *this;
 }
 LITESQL_String Time::asString(LITESQL_String format) const {
-    if (format ==  LITESQL_L("%u")) {
+    if (format == LITESQL_L("%u")) {
         LITESQL_Char buf[32];
-        snprintf(buf, 32,  LITESQL_L("%d"), value);
+        _sntprintf(buf, 32, LITESQL_L("%d"), value);
         return buf;
     }
-    Split data(format,  LITESQL_L("%"));
+    Split data(format, LITESQL_L("%"));
     LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
         LITESQL_String rest = data[i].substr(1, data[i].size());
@@ -189,21 +188,19 @@ LITESQL_String Time::asString(LITESQL_String format) const {
             break;
         case 'M':
             if (min() < 10)
-                res +=  LITESQL_L("0");
+                res += LITESQL_L("0");
             res += toString(min()) + rest;
             break;
         case 's':
             if (sec() < 10)
-                res +=  LITESQL_L("0");
+                res += LITESQL_L("0");
             res += toString(sec()) + rest;
         }
     }
     return res;
 }
 DateTime::DateTime(time_t t) {
-    value = t;
-    if (!value)
-        value = time(NULL);
+    value =  (t==0) ? time(NULL) : t;
 }
 int DateTime::hour() const {
     return TimeStruct(value).hour();
@@ -245,12 +242,12 @@ DateTime& DateTime::setSec(int s) {
     return *this;
 }
 LITESQL_String DateTime::asString(LITESQL_String format) const {
-    if (format ==  LITESQL_L("%u")) {
+    if (format == LITESQL_L("%u")) {
         LITESQL_Char buf[32];
-        snprintf(buf, 32,  LITESQL_L("%lu"), value);
+        _sntprintf(buf, 32, LITESQL_L("%lu"), value);
         return buf;
     }
-    Split data(format,  LITESQL_L("%"));
+    Split data(format, LITESQL_L("%"));
     TimeStruct ts(value);
     LITESQL_String res = data[0];
     for (size_t i = 1; i < data.size(); i++) {
@@ -270,12 +267,12 @@ LITESQL_String DateTime::asString(LITESQL_String format) const {
             break;
         case 'M':
             if (ts.min() < 10)
-                res +=  LITESQL_L("0");
+                res += LITESQL_L("0");
             res += toString(ts.min()) + rest;
             break;
         case 's':
             if (ts.sec() < 10)
-                res +=  LITESQL_L("0");
+                res += LITESQL_L("0");
             res += toString(ts.sec()) + rest;
             break;
         }

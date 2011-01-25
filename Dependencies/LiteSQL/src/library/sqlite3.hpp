@@ -30,17 +30,17 @@ public:
     class Cursor;
     class Result;
 
-    SQLite3(const LITESQL_String& database);
+    SQLite3(const string& database);
     virtual ~SQLite3();
 
     virtual bool supportsSequences() const;
-    virtual LITESQL_String getInsertID() const;
+    virtual string getInsertID() const;
     virtual void begin() const;
     virtual void commit() const;
     virtual void rollback() const;
     
-    Backend::Result* execute(const LITESQL_String& query) const;
-    Backend::Cursor* cursor(const LITESQL_String& query) const;
+    Backend::Result* execute(const string& query) const;
+    Backend::Cursor* cursor(const string& query) const;
 };
 }
 #endif

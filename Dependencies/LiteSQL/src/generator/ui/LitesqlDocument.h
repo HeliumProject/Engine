@@ -15,13 +15,13 @@ public:
   virtual ~LitesqlDocument(void);
 
   litesql::ObjectModel* GetModel();
-  void RemoveField(xml::Field* pField);
+  void RemoveField(xml::Field::counted_ptr pField);
 
 protected:
 
 #if wxUSE_STD_IOSTREAM
-  wxSTD LiteSQL_oStream& SaveObject(wxSTD LiteSQL_oStream& text_stream);
-  wxSTD LiteSQL_iStream& LoadObject(wxSTD LiteSQL_iStream& text_stream);
+  wxSTD LITESQL_oStream& SaveObject(wxSTD LITESQL_oStream& text_stream);
+  wxSTD LITESQL_iStream& LoadObject(wxSTD LITESQL_iStream& text_stream);
 #else
   wxOutputStream& SaveObject(wxOutputStream& stream);
   wxInputStream& LoadObject(wxInputStream& stream);
@@ -31,4 +31,4 @@ private:
   litesql::ObjectModel* m_pModel; 
 };
 
-#endif // #ifndef LITESQL_DOCUMENT_H
+#endif // #ifndef LITESQL_DOCUMENT_H

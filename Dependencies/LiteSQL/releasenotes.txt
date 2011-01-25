@@ -1,3 +1,11 @@
+Version 0.3.9
+#############
+- platform-specific build issues fixed
+- fix for xml-parser error on method params
+- made function parameters on runtime classe const
+- usable GUI-Tool (not all features of litesql are supported, 
+  ui design could be better, on OSX the gui is terrible layouted )  
+
 Version 0.3.8
 #############
 - added double as field type for higher precision calculation

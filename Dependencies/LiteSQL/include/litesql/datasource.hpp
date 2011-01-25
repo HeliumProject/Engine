@@ -8,7 +8,6 @@
  * selectObjectQuery<T> and DataSource<T> */
 #ifndef litesql_datasource_hpp
 #define litesql_datasource_hpp
-#include "litesql_char.hpp"
 #include <set>
 #include <string>
 #include "litesql/database.hpp"
@@ -66,7 +65,7 @@ public:
        cq.clearResults();
        cq.limit(0).offset(0);
        cq.result(LITESQL_L("count(*)"));
-       return _tstoi(db.query(cq)[0][0]);
+       return atoi(db.query(cq)[0][0]);
     }
     /** returns SelectQuery which selects objects */
     SelectQuery objectQuery() const {

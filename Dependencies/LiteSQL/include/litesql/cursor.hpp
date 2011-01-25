@@ -24,8 +24,6 @@ private:
     const Database& db;
     /** implementation of cursor */
     Backend::Cursor * cursor;
-    /** the result set iterated is through */
-    bool done;
     /** got data to access */
     bool dataReady;
     /** current record */
@@ -43,12 +41,12 @@ public:
     /** returns current record */
     T operator*();
     /** returns true if there are records left in the result set */
-    inline bool rowsLeft() { return !done; }
+    bool rowsLeft() { return dataReady; }
 };
 
 template <class T>
 Cursor<T>::Cursor(const Database& db_, Backend::Cursor * c)
-    : db(db_), cursor(c), done(false), dataReady(false) {
+    : db(db_), cursor(c), dataReady(true) {
     operator++();
 }
 template <class T>
@@ -57,33 +55,28 @@ Cursor<T>::~Cursor() {
 }
 template <class T>
 Cursor<T> & Cursor<T>::operator++() {
-    if (done)
-        return *this;
-    currentRow = cursor->fetchOne();
-    if (currentRow.size() == 0) {
-        done = true;
-        dataReady = false;
+    if (dataReady)
+    {
+      currentRow = cursor->fetchOne();
+      // if we get an empty Record for a row, 
+      // there are no data anymore
+      dataReady = !currentRow.empty();
     }
-    else
-        dataReady = true;
-        
     return *this;
 }
 
 template <class T>
 std::vector<T> Cursor<T>::dump() {
     std::vector<T> res;
-    for (;!done;operator++())
+    for (;dataReady;operator++())
         res.push_back(operator*());
     return res;
 }
+
 template <class T>
 T Cursor<T>::operator*() {
-    Record rec;
-
     if (!dataReady)
         throw NotFound();
-
     return T(db,currentRow);
 }
 

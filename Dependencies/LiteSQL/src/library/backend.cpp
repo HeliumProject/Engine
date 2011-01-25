@@ -3,8 +3,9 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
+
 #include <map>
+
 #include "compatibility.hpp"
 #include "litesql/backend.hpp"
 #include "litesql/string.hpp"
@@ -32,13 +33,13 @@ LITESQL_String Backend::groupInsert(Record tables, Records fields, Records value
                    const LITESQL_String& sequence) const {
     LITESQL_String id = values[0][0];
     
-    if (supportsSequences() && values[0][0] ==  LITESQL_L("NULL")) {
-      Result * r = execute(LITESQL_L("SELECT nextval('") + sequence +  LITESQL_L("');"));
+    if (supportsSequences() && values[0][0] == LITESQL_L("NULL")) {
+      Result * r = execute(LITESQL_L("SELECT nextval('") + sequence + LITESQL_L("');"));
       id = r->records()[0][0];
       delete r;
     } 
     for (int i = tables.size()-1; i >= 0; i--) {
-      LITESQL_String fieldString = Split::join(fields[i], LITESQL_L(","));
+      LITESQL_String fieldString = Split::join(fields[i],LITESQL_L(","));
         LITESQL_String valueString;
         if (!values[i].empty())
             values[i][0] = id;
@@ -46,10 +47,10 @@ LITESQL_String Backend::groupInsert(Record tables, Records fields, Records value
         for (size_t i2 = 0; i2 < valueSplit.size(); i2++)
             valueSplit[i2] = escapeSQL(valueSplit[i2]);
         valueString = valueSplit.join(LITESQL_L(","));
-        LITESQL_String query =  LITESQL_L("INSERT INTO ") + tables[i] +  LITESQL_L(" (") + fieldString
-            +  LITESQL_L(") VALUES (") + valueString +  LITESQL_L(");");
+        LITESQL_String query = LITESQL_L("INSERT INTO ") + tables[i] + LITESQL_L(" (") + fieldString
+            + LITESQL_L(") VALUES (") + valueString + LITESQL_L(");");
         delete execute(query);
-        if (!supportsSequences() && id ==  LITESQL_L("NULL")) 
+        if (!supportsSequences() && id == LITESQL_L("NULL")) 
             id = getInsertID();
         
     }
@@ -61,22 +62,22 @@ Backend* Backend::getBackend(const LITESQL_String & backendType,const LITESQL_St
   Backend* backend;
 
 #ifdef HAVE_LIBMYSQLCLIENT
-  if (backendType ==  LITESQL_L("mysql")) {
+  if (backendType == LITESQL_L("mysql")) {
     backend = new MySQL(connInfo);
   } else
 #endif
 #ifdef HAVE_LIBPQ
-    if (backendType ==  LITESQL_L("postgresql")) {
+    if (backendType == LITESQL_L("postgresql")) {
       backend = new PostgreSQL(connInfo);
     } else
 #endif
 #ifdef HAVE_ODBC
-      if (backendType ==  LITESQL_L("odbc")) {
+      if (backendType == LITESQL_L("odbc")) {
         backend = new ODBCBackend(connInfo);
       } else
 #endif
 #ifdef HAVE_LIBSQLITE3
-        if (backendType ==  LITESQL_L("sqlite3")) {
+        if (backendType == LITESQL_L("sqlite3")) {
           backend = new SQLite3(connInfo);
         } else
 #endif

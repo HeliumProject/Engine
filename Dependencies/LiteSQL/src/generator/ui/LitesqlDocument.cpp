@@ -1,5 +1,5 @@
 
-// For compilers that support precompilation, includes  LITESQL_L( "wx/wx.h" ).
+// For compilers that support precompilation, includes LITESQL_L("wx/wx.h").
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -45,9 +45,9 @@ ObjectModel* LitesqlDocument::GetModel()
   return m_pModel;
 }
 
-void LitesqlDocument::RemoveField(xml::Field* pField)
+void LitesqlDocument::RemoveField(xml::Field::counted_ptr pField)
 {
-  if ( (m_pModel!=NULL) && (pField!=NULL) ) 
+  if ( (m_pModel!=NULL) && (pField.get()!=NULL) ) 
   {
     if (m_pModel->remove(pField))  
     {
@@ -82,4 +82,4 @@ wxInputStream& LitesqlDocument::LoadObject(wxInputStream& stream)
   LITESQL_String fname (GetFilename().mb_str());
   m_pModel->loadFromFile(fname);
   return stream;
-}
+}

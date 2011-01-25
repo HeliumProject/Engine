@@ -1,7 +1,6 @@
-#include "litesql_char.hpp"
 #include "logger.hpp"
+#
 #include <iostream>
-#include <string>
 
 using namespace litesql; 
 

@@ -1,8 +1,5 @@
 #ifndef objectmodel_hpp
 #define objectmodel_hpp
-#include "litesql_char.hpp"
-#include <string>
-#include <vector>
 
 #include "xmlobjects.hpp"
 
@@ -10,18 +7,19 @@ namespace litesql {
 /** the litesql object model */ 
 class ObjectModel {
 public:
+   ObjectModel();
    virtual ~ObjectModel();
    /** load model from xml-file (uses a  specialized XmlParser) */
    bool loadFromFile(const LITESQL_String& filename);
 
-   bool remove(xml::Field* field);
-   bool remove(xml::Object* object);
-//   bool remove(xml::relation* relation);
+   bool remove(xml::Field::counted_ptr& field);
+  bool remove(xml::Method::counted_ptr& method);
+   bool remove(xml::ObjectPtr& object);
 
-   xml::Database db;   
-
-   std::vector<xml::Object* > objects;
-   std::vector<xml::Relation* > relations;
+   xml::Relation::sequence relations;
+   xml::ObjectSequence objects;
+   
+   xml::DatabasePtr db;   
 };
 
 const LITESQL_Char* toString(AT_field_type t);

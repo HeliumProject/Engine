@@ -1,7 +1,6 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
-#include "litesql_char.hpp"
-#include <string>
+
 #include "litesql/except.hpp"
 
 namespace litesql 

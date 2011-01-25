@@ -4,7 +4,6 @@
  * 
  * See LICENSE for copyright information. */
 //#include "compatibility.hpp"
-#include "litesql_char.hpp"
 #include "litesql/split.hpp"
 #include <string>
 #include <string.h>

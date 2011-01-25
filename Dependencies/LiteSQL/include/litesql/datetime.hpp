@@ -6,10 +6,10 @@
 
 #ifndef litesql_datetime_hpp
 #define litesql_datetime_hpp
-#include "litesql_char.hpp"
 /** \file datetime.hpp
     constains Date, Time and DateTime - classes */
 #include "field.hpp"
+#include <time.h>
 namespace litesql {
 /* holds struct tm */
 class TimeStruct {
@@ -52,7 +52,7 @@ public:
     Date& setMonth(int m);
     Date& setYear(int y);
     Date& setTimeStamp(time_t t);
-    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
+    LITESQL_String asString(LITESQL_String format=LITESQL_L("%u")) const;
 };
 /** holds time of day */
 class Time {
@@ -65,7 +65,7 @@ public:
     int min() const;
     int sec() const;
     int secs() const;
-    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
+    LITESQL_String asString(LITESQL_String format=LITESQL_L("%u")) const;
 
     Time& setHour(int d);
     Time& setMin(int m);
@@ -85,7 +85,7 @@ public:
     int sec() const;
     time_t timeStamp() const;
     TimeStruct timeStruct() const;
-    LITESQL_String asString(LITESQL_String format= LITESQL_L("%u")) const;
+    LITESQL_String asString(LITESQL_String format=LITESQL_L("%u")) const;
 
     DateTime& setDay(int d);
     DateTime& setMonth(int m);

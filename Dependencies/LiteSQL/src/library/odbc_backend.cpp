@@ -5,7 +5,6 @@
  * Few windows specific bugs fixed by Axel Schmidt.
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
 #include "compatibility.hpp"
 #include "odbc_backend.hpp"
 
@@ -83,13 +82,13 @@ ODBCBackend::Cursor::~Cursor() {
 }
 
 ODBCBackend::ODBCBackend(const LITESQL_String& connInfo) : /*db(NULL),*/ transaction(false) {
-    Split params(connInfo, LITESQL_L(";"));
+    Split params(connInfo,LITESQL_L(";"));
     LITESQL_String database;
     for (size_t i = 0; i < params.size(); i++) {
-        Split param(params[i],  LITESQL_L("="));
+        Split param(params[i], LITESQL_L("="));
         if (param.size() == 1)
             continue;
-        if (param[0] ==  LITESQL_L("database"))
+        if (param[0] == LITESQL_L("database"))
             database = param[1];
     }
     if (database.size() == 0)
@@ -133,7 +132,7 @@ ODBCBackend::Result * res = (ODBCBackend::Result*) r;
             res->flds.push_back(azColName[i]);
     Record rec; 
     for (int i = 0; i < argc; i++) 
-        rec.push_back(argv[i] ? argv[i] :  LITESQL_L("NULL"));   
+        rec.push_back(argv[i] ? argv[i] : LITESQL_L("NULL"));   
     res->recs.push_back(rec);
 */
    return 0;
@@ -141,7 +140,7 @@ ODBCBackend::Result * res = (ODBCBackend::Result*) r;
 void ODBCBackend::throwError(int status) const {
 /*
 LITESQL_String error = ODBCBackend_errmsg(db);
-    error = toString(status) +  LITESQL_L("=status code : ") + error;
+    error = toString(status) + LITESQL_L("=status code : ") + error;
 */
    switch(status) {
     //case SQLITE_ERROR: throw SQLError(error);
@@ -176,7 +175,7 @@ Backend::Cursor* ODBCBackend::cursor(LITESQL_String query) const {
         //                             &stmt, NULL);
 //if (status != SQLITE_OK || stmt == NULL) {
 //            LITESQL_String error = ODBCBackend_errmsg(db);
-//            error = toString(status) +  LITESQL_L("=status code : ") + error;
+//            error = toString(status) + LITESQL_L("=status code : ") + error;
 //            switch(status) {
 //            case SQLITE_BUSY: 
 //            case SQLITE_LOCKED: 
@@ -195,4 +194,4 @@ ODBCBackend::~ODBCBackend() {
     //    ODBCBackend_close(db);
 }
 
-#endif
+#endif

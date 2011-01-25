@@ -20,7 +20,7 @@ public:
   static const wxArrayString FIELDTYPES;
 
   
-  FieldTypeValidator (xml::Field *val = 0);
+  FieldTypeValidator (xml::Field::counted_ptr val = xml::Field::counted_ptr(NULL));
   FieldTypeValidator (const FieldTypeValidator& val);
 
   virtual wxObject *Clone() const;
@@ -32,7 +32,7 @@ public:
   virtual bool TransferFromWindow();
 
 private:
-  xml::Field *m_pField;
+  xml::Field::counted_ptr m_pField;
   wxString value; 
 };
 
@@ -42,7 +42,7 @@ class FieldValuesValidator : public wxValidator {
   DECLARE_DYNAMIC_CLASS(FieldValuesValidator)
 
 public:
-  FieldValuesValidator (xml::Field *val = 0);
+  FieldValuesValidator (xml::Field::counted_ptr val=xml::Field::counted_ptr(NULL));
   FieldValuesValidator (const FieldValuesValidator& val);
 
   virtual wxObject *Clone() const;
@@ -54,7 +54,7 @@ public:
   virtual bool TransferFromWindow();
 
 private:
-  xml::Field *m_pField;
+  xml::Field::counted_ptr m_pField;
 };
 
 class FieldIndexedValidator : public wxGenericValidator {
@@ -63,7 +63,7 @@ class FieldIndexedValidator : public wxGenericValidator {
 
 public:
   
-  FieldIndexedValidator (xml::Field *val = 0);
+  FieldIndexedValidator (xml::Field::counted_ptr val = xml::Field::counted_ptr(NULL));
   FieldIndexedValidator (const FieldIndexedValidator& val);
 
   virtual wxObject *Clone() const;
@@ -75,7 +75,7 @@ public:
   virtual bool TransferFromWindow();
 
 private:
-  xml::Field *m_pField;
+  xml::Field::counted_ptr m_pField;
   bool isIndexed; 
 };
 
@@ -85,7 +85,7 @@ class FieldUniqueValidator : public wxGenericValidator {
 
 public:
   
-  FieldUniqueValidator  (xml::Field *val = 0);
+  FieldUniqueValidator  (xml::Field::counted_ptr val = xml::Field::counted_ptr(NULL));
   FieldUniqueValidator  (const FieldUniqueValidator & val);
 
   virtual wxObject *Clone() const;
@@ -97,7 +97,7 @@ public:
   virtual bool TransferFromWindow();
 
 private:
-  xml::Field *m_pField;
+  xml::Field::counted_ptr m_pField;
   bool isUnique; 
 };
 
@@ -106,9 +106,9 @@ class LitesqlFieldPanel : public ui::FieldPanel
 {
 public:
 	/** Constructor */
-  LitesqlFieldPanel( wxWindow* parent , xml::Field* pField);
+  LitesqlFieldPanel( wxWindow* parent , xml::Field::counted_ptr pField);
 
-  xml::Field* GetField()          { return m_pField; }
+  xml::Field::counted_ptr GetField()          { return m_pField; }
 
 protected:
   void OnAddValue( wxCommandEvent& event );
@@ -118,7 +118,7 @@ private:
   LitesqlFieldPanel() : ui::FieldPanel(NULL) {};
   DECLARE_DYNAMIC_CLASS(LitesqlFieldPanel);
   
-  xml::Field* m_pField;
+  xml::Field::counted_ptr m_pField;
   
 };
 

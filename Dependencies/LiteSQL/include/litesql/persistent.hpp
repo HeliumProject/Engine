@@ -6,7 +6,7 @@
 
 #ifndef litesql_persistent_hpp
 #define litesql_persistent_hpp
-#include "litesql_char.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -38,19 +38,19 @@ protected:
                   Records& fieldRecs,
                   Records& values,
                   const LITESQL_String& sequence);
-    void update(Updates& updates); 
+    void update(const Updates& updates); 
     template <class T>
     void updateField(litesql::Persistent::Updates& updates, 
                      const LITESQL_String& table, 
                      litesql::Field<T> fld) {
         if (fld.modified()) {
-            updates[table].push_back(make_pair(fld.fieldType(), 
+            updates[table].push_back(std::make_pair(fld.fieldType(), 
                        litesql::convert<const T&, LITESQL_String>(fld.value())));
             fld.setModified(false);
         }
     }
-    void prepareUpdate(Updates& updates, LITESQL_String table);
-    void deleteFromTable(LITESQL_String table, LITESQL_String id);
+    void prepareUpdate(Updates& updates, const LITESQL_String& table);
+    void deleteFromTable(const LITESQL_String& table, const LITESQL_String& id);
     /** pointer to current Database Persistent is assigned to. 
         It is not a reference because Persistents must be assignable using
         operator= */
@@ -90,9 +90,10 @@ public:
     /** selectObjectQuery uses this to list tables used by Persistent 
         \param fdatas field information */
     static Split getTablesFromFieldTypes(const std::vector<FieldType> & fdatas);
+
     /** class adds own tables to tables 
         \param tables initially empty Split. Tables are inserted there */
-    virtual void getTables(Split & tables) const {  }
+//    virtual void getTables(Split & tables) const =0 ;
 };
 
 }

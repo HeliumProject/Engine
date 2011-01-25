@@ -2,7 +2,7 @@
 // C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO  LiteSQL_L( "NOT" ) EDIT THIS FILE!
+// PLEASE DO LITESQL_L("NOT") EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __ui__
@@ -22,12 +22,15 @@
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/checkbox.h>
-#include <wx/listbox.h>
+#include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/filepicker.h>
 #include <wx/checklst.h>
 #include <wx/gauge.h>
+#include <wx/treectrl.h>
+#include <wx/notebook.h>
+#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +74,7 @@ namespace ui
 			wxStaticText* lblUnique;
 			wxCheckBox* m_checkBoxUnique;
 			wxStaticText* lblValues;
-			wxListBox* m_listValues;
+			wxListCtrl* m_listValues;
 			wxStaticText* m_staticText20;
 			wxButton* m_btnAdd;
 			wxButton* m_btnRemove;
@@ -82,7 +85,7 @@ namespace ui
 			
 		
 		public:
-			FieldPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,302 ), long style = wxTAB_TRAVERSAL );
+			FieldPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 338,302 ), long style = wxTAB_TRAVERSAL );
 			~FieldPanel();
 		
 	};
@@ -189,6 +192,41 @@ namespace ui
 		
 	};
 	
+	///////////////////////////////////////////////////////////////////////////////
+	/// Class ModelTreePanel
+	///////////////////////////////////////////////////////////////////////////////
+	class ModelTreePanel : public wxPanel 
+	{
+		private:
+		
+		protected:
+			wxSplitterWindow* m_mainSplitter;
+			wxPanel* m_treePanel;
+			wxTreeCtrl* m_modelTreeCtrl;
+			wxPanel* m_detailPanel;
+			wxNotebook* m_detailNotebook;
+			
+			// Virtual event handlers, overide them in your derived class
+			virtual void OnTreeDeleteItem( wxTreeEvent& event ){ event.Skip(); }
+			virtual void OnTreeItemActivated( wxTreeEvent& event ){ event.Skip(); }
+			virtual void OnTreeItemGetTooltip( wxTreeEvent& event ){ event.Skip(); }
+			virtual void OnTreeItemMenu( wxTreeEvent& event ){ event.Skip(); }
+			virtual void OnTreeSelChanged( wxTreeEvent& event ){ event.Skip(); }
+			virtual void OnTreeSelChanging( wxTreeEvent& event ){ event.Skip(); }
+			
+		
+		public:
+			ModelTreePanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 642,547 ), long style = wxTAB_TRAVERSAL );
+			~ModelTreePanel();
+			void m_mainSplitterOnIdle( wxIdleEvent& )
+			{
+			m_mainSplitter->SetSashPosition( 0 );
+			m_mainSplitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( ModelTreePanel::m_mainSplitterOnIdle ), NULL, this );
+			}
+			
+		
+	};
+	
 } // namespace ui
 
-#endif //__ui__
+#endif //__ui__

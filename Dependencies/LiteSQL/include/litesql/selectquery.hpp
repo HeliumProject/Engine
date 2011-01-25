@@ -7,7 +7,7 @@
 
 #ifndef litesql_selectquery_hpp
 #define litesql_selectquery_hpp
-#include "litesql_char.hpp"
+
 #include "litesql/utils.hpp"
 #include "litesql/expr.hpp"
 /** \file selectquery.hpp
@@ -31,7 +31,7 @@ public:
     SelectQuery & offset(int value);
     SelectQuery & result(LITESQL_String r);
     SelectQuery & clearResults();
-    SelectQuery & source(LITESQL_String s, LITESQL_String alias= LITESQL_L(""));
+    SelectQuery & source(LITESQL_String s, LITESQL_String alias=LITESQL_L(""));
     SelectQuery & where(const Expr & w);
     SelectQuery & where(LITESQL_String w);
     SelectQuery & groupBy(LITESQL_String gb);

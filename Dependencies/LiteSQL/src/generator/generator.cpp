@@ -1,10 +1,71 @@
 #include "generator.hpp"
 #include "objectmodel.hpp"
-#include "litesql_char.hpp"
-//#include <fstream>
+#include "litesql-gen-cpp.hpp"
+#include "litesql-gen-ruby-activerecord.hpp"
+#include "litesql-gen-graphviz.hpp"
+
 
 using namespace litesql;
+using namespace xml;
 
+CodeGenerator::FactoryMap::FactoryMap()
+{
+  registerFactory(new CodeGenerator::Factory<CppGenerator>(CppGenerator::NAME));
+  
+  registerFactory(new CodeGenerator::Factory<RubyActiveRecordGenerator>(RubyActiveRecordGenerator::NAME));
+  registerFactory(new CodeGenerator::Factory<ActiveRecordClassGenerator>(ActiveRecordClassGenerator::NAME));
+  registerFactory(new CodeGenerator::Factory<RubyMigrationsGenerator>(RubyMigrationsGenerator::NAME));
+
+  registerFactory(new CodeGenerator::Factory<GraphvizGenerator>(GraphvizGenerator::NAME));
+
+}
+
+CodeGenerator::FactoryMap::~FactoryMap()
+{
+  for (iterator it  = begin();
+                it != end();
+                it++ )
+  {
+    delete it->second;
+  }
+}
+
+CodeGenerator::FactoryMap& CodeGenerator::getFactoryMap()
+{
+  static FactoryMap instance;
+  return instance;
+}
+
+bool CodeGenerator::registerFactory(AbstractFactory* pFactory)
+{
+  if (!pFactory)
+  {
+    return false;
+  }
+  else
+  {
+    getFactoryMap()[pFactory->getName()] = pFactory;  
+    return true;
+  }
+}
+
+CodeGenerator* CodeGenerator::create(const LITESQL_Char* target)
+{
+  FactoryMap::iterator it = getFactoryMap().find(target);
+  if (it != getFactoryMap().end() &&  it->second!=NULL)
+  {
+    return it->second->create();
+  }
+  else
+  {
+    return NULL;
+  }
+}
+
+
+CodeGenerator::CodeGenerator()
+{}
+  
 CodeGenerator::~CodeGenerator()
 {}
 
@@ -36,9 +97,9 @@ LITESQL_String CodeGenerator::getOutputFilename(const LITESQL_String& name) cons
 const LITESQL_Char* CodeGenerator::getTarget() const
 {return m_target;}
 
-bool CodeGenerator::generate(const std::vector<xml::Object* >& objects)
+bool CodeGenerator::generate(const xml::ObjectSequence& objects)
 {
-  for (std::vector<xml::Object* >::const_iterator it = objects.begin();
+  for (xml::ObjectSequence::const_iterator it = objects.begin();
     it != objects.end();
     it++)
   {
@@ -47,9 +108,9 @@ bool CodeGenerator::generate(const std::vector<xml::Object* >& objects)
   return true;
 }
 
-bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations)
+bool CodeGenerator::generate(const Relation::sequence& relations)
 {
-  for (std::vector<xml::Relation* >::const_iterator it = relations.begin();
+  for (Relation::sequence::const_iterator it = relations.begin();
     it != relations.end();
     it++)
   {
@@ -58,9 +119,9 @@ bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations)
   return true;
 }
 
-bool CodeGenerator::generate(const std::vector<xml::Object* >& objects,LITESQL_oStream& os,size_t indent)
+bool CodeGenerator::generate(const ObjectSequence& objects,LITESQL_oStream& os,size_t indent)
 {
-  for (std::vector<xml::Object* >::const_iterator it = objects.begin();
+  for (ObjectSequence::const_iterator it = objects.begin();
     it != objects.end();
     it++)
   {
@@ -69,9 +130,9 @@ bool CodeGenerator::generate(const std::vector<xml::Object* >& objects,LITESQL_o
   return true;
 }
 
-bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations,LITESQL_oStream& os,size_t indent)
+bool CodeGenerator::generate(const Relation::sequence& relations,LITESQL_oStream& os,size_t indent)
 {
-  for (std::vector<xml::Relation* >::const_iterator it = relations.begin();
+  for (Relation::sequence::const_iterator it = relations.begin();
     it != relations.end();
     it++)
   {

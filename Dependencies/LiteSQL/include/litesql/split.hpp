@@ -23,7 +23,7 @@ public:
     Split(std::vector<LITESQL_String> data) 
         : std::vector<LITESQL_String>(data) {}
     /** from LITESQL_String. Split to parts using delimeter */
-    Split(const LITESQL_String& s, const LITESQL_String& delim= LITESQL_L(" "));
+    Split(const LITESQL_String& s, const LITESQL_String& delim=LITESQL_L(" "));
 
     /** returns a part of strings 
      \param start starting index
@@ -34,7 +34,7 @@ public:
     /** returns strings joined with delimiter */
     LITESQL_String join(const LITESQL_String& delim) const;
 
-    static LITESQL_String join(const std::vector<LITESQL_String>& strings,const LITESQL_String& delim= LITESQL_L(" "));
+    static LITESQL_String join(const std::vector<LITESQL_String>& strings,const LITESQL_String& delim=LITESQL_L(" "));
     /** adds contents of another split to the end */
     Split & extend(const std::vector<LITESQL_String> & s);
 };

@@ -17,11 +17,11 @@ D3D9DynamicIndexBuffer::D3D9DynamicIndexBuffer( IDirect3DIndexBuffer9* pD3DBuffe
     HELIUM_ASSERT( bufferDesc.Usage == D3DUSAGE_DYNAMIC );
     HELIUM_ASSERT( bufferDesc.Pool == D3DPOOL_DEFAULT );
 
-    m_cachedData.size = bufferDesc.Size;
-    m_cachedData.bUse32BitIndices = ( bufferDesc.Format == D3DFMT_INDEX32 );
+    m_size = bufferDesc.Size;
+    m_bUse32BitIndices = ( bufferDesc.Format == D3DFMT_INDEX32 );
 
     // Make sure the buffer size is within the range supported for caching.
-    HELIUM_ASSERT( m_cachedData.size == bufferDesc.Size );
+    HELIUM_ASSERT( m_size == bufferDesc.Size );
 }
 
 /// Destructor.
@@ -29,7 +29,7 @@ D3D9DynamicIndexBuffer::~D3D9DynamicIndexBuffer()
 {
 }
 
-/// @copydoc RIndexBuffer::OnPreReset()
+/// @copydoc D3D9DeviceResetListener::OnPreReset()
 void D3D9DynamicIndexBuffer::OnPreReset()
 {
     HELIUM_ASSERT( m_pBuffer );
@@ -37,7 +37,7 @@ void D3D9DynamicIndexBuffer::OnPreReset()
     m_pBuffer = NULL;
 }
 
-/// @copydoc RIndexBuffer::OnPostReset()
+/// @copydoc D3D9DeviceResetListener::OnPostReset()
 void D3D9DynamicIndexBuffer::OnPostReset( D3D9Renderer* pRenderer )
 {
     HELIUM_ASSERT( pRenderer );
@@ -46,9 +46,9 @@ void D3D9DynamicIndexBuffer::OnPostReset( D3D9Renderer* pRenderer )
 
     HELIUM_ASSERT( !m_pBuffer );
     L_D3D9_VERIFY( pDevice->CreateIndexBuffer(
-        m_cachedData.size,
+        m_size,
         D3DUSAGE_DYNAMIC,
-        ( m_cachedData.bUse32BitIndices ? D3DFMT_INDEX32 : D3DFMT_INDEX16 ),
+        ( m_bUse32BitIndices ? D3DFMT_INDEX32 : D3DFMT_INDEX16 ),
         D3DPOOL_DEFAULT,
         &m_pBuffer,
         NULL ) );

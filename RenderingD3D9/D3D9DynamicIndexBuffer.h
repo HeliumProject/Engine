@@ -27,17 +27,10 @@ namespace Lunar
         //@}
 
     private:
-        /// Cached index buffer information.
-        struct CachedBufferData
-        {
-            /// Buffer size, in bytes.
-            uint32_t size : 31;
-            /// Non-zero if the buffer is using 32-bit indices, zero if 16-bit indices are being used.
-            uint32_t bUse32BitIndices : 1;
-        };
-
-        /// Cached index buffer information.
-        CachedBufferData m_cachedData;
+        /// Cached index buffer size, in bytes.
+        uint32_t m_size : 31;
+        /// Non-zero if the buffer is using 32-bit indices, zero if 16-bit indices are being used.
+        uint32_t m_bUse32BitIndices : 1;
 
         /// @name Construction/Destruction
         //@{

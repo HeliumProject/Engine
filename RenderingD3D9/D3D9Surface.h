@@ -27,9 +27,11 @@ namespace Lunar
         //@{
         inline IDirect3DSurface9* GetD3DSurface() const;
         inline bool IsSrgb() const;
+
+        void SetD3DSurface( IDirect3DSurface9* pSurface );
         //@}
 
-    private:
+    protected:
         /// Reference to the Direct3D 9 surface.
         IDirect3DSurface9* m_pSurface;
         /// True if gamma correction to sRGB should be applied when writing to this surface.
@@ -37,7 +39,7 @@ namespace Lunar
 
         /// @name Construction/Destruction
         //@{
-        ~D3D9Surface();
+        virtual ~D3D9Surface();
         //@}
     };
 }

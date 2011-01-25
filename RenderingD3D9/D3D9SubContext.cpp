@@ -65,15 +65,17 @@ void D3D9SubContext::Swap()
     }
 }
 
-/// @copydoc RRenderContext::OnPreReset()
+/// @copydoc D3D9DeviceResetListener::OnPreReset()
 void D3D9SubContext::OnPreReset()
 {
+    m_spBackBufferSurface.Release();
+
     HELIUM_ASSERT( m_pSwapChain );
     m_pSwapChain->Release();
     m_pSwapChain = NULL;
 }
 
-/// @copydoc RRenderContext::OnPostReset()
+/// @copydoc D3D9DeviceResetListener::OnPostReset()
 void D3D9SubContext::OnPostReset( D3D9Renderer* pRenderer )
 {
     HELIUM_ASSERT( pRenderer );

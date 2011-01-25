@@ -15,7 +15,9 @@
 #include "RenderingD3D9/D3D9ConstantBuffer.h"
 #include "RenderingD3D9/D3D9DeferredCommandProxy.h"
 #include "RenderingD3D9/D3D9DepthStencilState.h"
+#include "RenderingD3D9/D3D9DepthStencilSurface.h"
 #include "RenderingD3D9/D3D9DynamicIndexBuffer.h"
+#include "RenderingD3D9/D3D9DynamicTexture2d.h"
 #include "RenderingD3D9/D3D9DynamicVertexBuffer.h"
 #include "RenderingD3D9/D3D9Fence.h"
 #include "RenderingD3D9/D3D9ImmediateCommandProxy.h"
@@ -25,8 +27,6 @@
 #include "RenderingD3D9/D3D9SamplerState.h"
 #include "RenderingD3D9/D3D9StaticTexture2d.h"
 #include "RenderingD3D9/D3D9SubContext.h"
-#include "RenderingD3D9/D3D9Surface.h"
-#include "RenderingD3D9/D3D9Texture2d.h"
 #include "RenderingD3D9/D3D9VertexDescription.h"
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
@@ -603,14 +603,27 @@ RSurface* D3D9Renderer::CreateDepthStencilSurface(
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Failed to create depth-stencil surface (error " )
-            TXT( "code: 0x%x).\n" ) ),
+            ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Failed to create depth-stencil surface (error code: " )
+              TXT( "0x%x).\n" ) ),
             result );
 
         return NULL;
     }
 
-    D3D9Surface* pSurface = new D3D9Surface( pD3DSurface, false );
+    D3D9Surface* pSurface;
+    if( !m_bExDevice )
+    {
+        D3D9DepthStencilSurface* pDepthStencilSurface = new D3D9DepthStencilSurface( pD3DSurface, false );
+        HELIUM_ASSERT( pDepthStencilSurface );
+        RegisterDeviceResetListener( pDepthStencilSurface );
+
+        pSurface = pDepthStencilSurface;
+    }
+    else
+    {
+        pSurface = new D3D9Surface( pD3DSurface, false );
+    }
+
     HELIUM_ASSERT( pSurface );
 
     pD3DSurface->Release();
@@ -1129,15 +1142,26 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
         }
     }
 
-    // Create the approprate renderer resource wrapper.
+    // Create the appropriate renderer resource wrapper.
     bool bSrgb = PixelUtil::IsSrgbPixelFormat( format );
 
     D3D9Texture2d* pTexture;
     if( d3dPool == D3DPOOL_DEFAULT && usage == RENDERER_BUFFER_USAGE_STATIC )
     {
+        HELIUM_ASSERT( m_bExDevice );  // Combination should only occur with Direct3D 9Ex.
+
         // Static textures in the default pool cannot be locked directly, so use a texture type with support for
         // copying over the texture data from a staging area.
         pTexture = new D3D9StaticTexture2d( pD3DTexture, bSrgb );
+    }
+    else if( d3dPool == D3DPOOL_DEFAULT && !m_bExDevice )
+    {
+        // Textures in the default pool need to be recreated on device reset when not using Direct3D 9Ex.
+        D3D9DynamicTexture2d* pDynamicTexture = new D3D9DynamicTexture2d( pD3DTexture, bSrgb );
+        HELIUM_ASSERT( pDynamicTexture );
+        RegisterDeviceResetListener( pDynamicTexture );
+
+        pTexture = pDynamicTexture;
     }
     else
     {

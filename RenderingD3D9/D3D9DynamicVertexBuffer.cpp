@@ -26,7 +26,7 @@ D3D9DynamicVertexBuffer::~D3D9DynamicVertexBuffer()
 {
 }
 
-/// @copydoc RIndexBuffer::OnPreReset()
+/// @copydoc D3D9DeviceResetListener::OnPreReset()
 void D3D9DynamicVertexBuffer::OnPreReset()
 {
     HELIUM_ASSERT( m_pBuffer );
@@ -34,7 +34,7 @@ void D3D9DynamicVertexBuffer::OnPreReset()
     m_pBuffer = NULL;
 }
 
-/// @copydoc RIndexBuffer::OnPostReset()
+/// @copydoc D3D9DeviceResetListener::OnPostReset()
 void D3D9DynamicVertexBuffer::OnPostReset( D3D9Renderer* pRenderer )
 {
     HELIUM_ASSERT( pRenderer );

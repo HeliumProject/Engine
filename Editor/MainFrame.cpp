@@ -2093,7 +2093,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
         Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
-        data->m_Data.Set( transforms );
+        (*data->m_Data) = transforms;
 
         tstring xml;
         data->ToXML( xml );
@@ -2132,7 +2132,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::SafeCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
-                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
+                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms( *data->m_Data ) );
                 break;
             }
         }

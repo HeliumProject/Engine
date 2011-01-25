@@ -197,7 +197,7 @@ namespace Helium
                         return true;
                     }
 
-                    const std::vector< Reflect::ObjectPtr >& vals = arrayData->m_Data.Ref();
+                    const std::vector< Reflect::ObjectPtr >& vals = *arrayData->m_Data;
                     for ( std::vector< Reflect::ObjectPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
@@ -237,7 +237,7 @@ namespace Helium
                         return true;
                     }
 
-                    const Reflect::ObjectStlSetData::DataType& vals = setData->m_Data.Ref();
+                    const Reflect::ObjectStlSetData::DataType& vals = *setData->m_Data;
                     for ( Reflect::ObjectStlSetData::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );

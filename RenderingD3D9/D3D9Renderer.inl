@@ -21,10 +21,20 @@ namespace Lunar
     ///
     /// @return  Direct3D 9 device.
     ///
-    /// @see GetD3D()
+    /// @see GetD3D(), IsExDevice()
     IDirect3DDevice9* D3D9Renderer::GetD3DDevice() const
     {
         return m_pD3DDevice;
+    }
+
+    /// Get whether the Direct3D 9 device is a Direct3D 9Ex device.
+    ///
+    /// @return  True if the Direct3D device is a 9Ex device, false if not.
+    ///
+    /// @see GetD3DDevice()
+    bool D3D9Renderer::IsExDevice() const
+    {
+        return m_bExDevice;
     }
 
     /// Get the depth texture format to use for the current driver implementation.

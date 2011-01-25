@@ -38,6 +38,23 @@ namespace Lunar
     class LUNAR_RENDERING_API Renderer : NonCopyable
     {
     public:
+        /// Rendering device status.
+        enum EStatus
+        {
+            STATUS_FIRST   =  0,
+            STATUS_INVALID = -1,
+
+            /// Device is ready for use.
+            STATUS_READY,
+            /// Device has been lost and is not ready to be reset.
+            STATUS_LOST,
+            /// Device has been lost and is ready to be reset.
+            STATUS_NOT_RESET,
+
+            STATUS_MAX,
+            STATUS_LAST = STATUS_MAX - 1
+        };
+
         /// Rendering context initialization parameters.
         struct LUNAR_RENDERING_API ContextInitParameters
         {
@@ -79,12 +96,12 @@ namespace Lunar
         /// @name Display Initialization
         //@{
         virtual bool CreateMainContext( const ContextInitParameters& rInitParameters ) = 0;
+        virtual bool ResetMainContext( const ContextInitParameters& rInitParameters ) = 0;
         virtual RRenderContext* GetMainContext() = 0;
 
-        inline uint32_t GetMainContextWidth() const;
-        inline uint32_t GetMainContextHeight() const;
-
         virtual RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters ) = 0;
+
+        virtual EStatus GetStatus() = 0;
         //@}
 
         /// @name State Object Creation
@@ -142,11 +159,6 @@ namespace Lunar
         //@}
 
     protected:
-        /// Cached display width of the main context, in pixels.
-        uint32_t m_mainContextWidth;
-        /// Cached display height of the main context, in pixels.
-        uint32_t m_mainContextHeight;
-
         /// Renderer feature flags.
         uint32_t m_featureFlags;
 

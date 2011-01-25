@@ -15,7 +15,7 @@ using namespace Lunar;
 /// @param[in] pD3DBuffer  Direct3D 9 index buffer to wrap.  Its reference count will be incremented when this
 ///                        object is constructed and decremented back when this object is destroyed.
 D3D9IndexBuffer::D3D9IndexBuffer( IDirect3DIndexBuffer9* pD3DBuffer )
-: m_pBuffer( pD3DBuffer )
+    : m_pBuffer( pD3DBuffer )
 {
     HELIUM_ASSERT( pD3DBuffer );
     pD3DBuffer->AddRef();
@@ -35,7 +35,7 @@ void* D3D9IndexBuffer::Map( ERendererBufferMapHint hint )
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "D3D9IndexBuffer::Map(): Attempted to map a buffer for which no Direct3D resource has been " )
-            TXT( "allocated.\n" ) ) );
+              TXT( "allocated.\n" ) ) );
 
         return NULL;
     }
@@ -71,8 +71,8 @@ void D3D9IndexBuffer::Unmap()
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            ( TXT( "D3D9IndexBuffer::Unmap(): Attempted to unmap a buffer for which no Direct3D resource has " )
-            TXT( "been allocated.\n" ) ) );
+            ( TXT( "D3D9IndexBuffer::Unmap(): Attempted to unmap a buffer for which no Direct3D resource has been " )
+              TXT( "allocated.\n" ) ) );
 
         return;
     }

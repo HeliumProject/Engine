@@ -15,6 +15,8 @@ D3D9SubContext::D3D9SubContext( IDirect3DSwapChain9* pSwapChain )
 {
     HELIUM_ASSERT( pSwapChain );
     pSwapChain->AddRef();
+
+    L_D3D9_VERIFY( pSwapChain->GetPresentParameters( &m_cachedPresentParameters ) );
 }
 
 /// Destructor.
@@ -50,5 +52,34 @@ void D3D9SubContext::Swap()
     m_spBackBufferSurface.Release();
 
     // Present the scene.
-    L_D3D9_VERIFY( m_pSwapChain->Present( NULL, NULL, NULL, NULL, 0 ) );
+    HRESULT result = m_pSwapChain->Present( NULL, NULL, NULL, NULL, 0 );
+    if( result == D3DERR_DEVICELOST )
+    {
+        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+        HELIUM_ASSERT( pRenderer );
+        pRenderer->NotifyLost();
+    }
+    else
+    {
+        L_D3D9_ASSERT( result );
+    }
+}
+
+/// @copydoc RRenderContext::OnPreReset()
+void D3D9SubContext::OnPreReset()
+{
+    HELIUM_ASSERT( m_pSwapChain );
+    m_pSwapChain->Release();
+    m_pSwapChain = NULL;
+}
+
+/// @copydoc RRenderContext::OnPostReset()
+void D3D9SubContext::OnPostReset( D3D9Renderer* pRenderer )
+{
+    HELIUM_ASSERT( pRenderer );
+    IDirect3DDevice9* pDevice = pRenderer->GetD3DDevice();
+    HELIUM_ASSERT( pDevice );
+
+    HELIUM_ASSERT( !m_pSwapChain );
+    L_D3D9_VERIFY( pDevice->CreateAdditionalSwapChain( &m_cachedPresentParameters, &m_pSwapChain ) );
 }

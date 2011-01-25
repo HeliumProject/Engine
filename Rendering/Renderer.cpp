@@ -14,9 +14,7 @@ Renderer* Renderer::sm_pInstance = NULL;
 
 /// Constructor.
 Renderer::Renderer()
-: m_mainContextWidth( 0 )
-, m_mainContextHeight( 0 )
-, m_featureFlags( 0 )
+    : m_featureFlags( 0 )
 {
 }
 
@@ -44,14 +42,29 @@ Renderer::~Renderer()
 ///
 /// @return  True if the context was created successfully, false if not.
 ///
-/// @see GetMainContext(), CreateSubContext()
+/// @see ResetMainContext(), GetMainContext(), CreateSubContext(), GetStatus()
+
+/// @fn bool Renderer::ResetMainContext( const ContextInitParameters& rInitParameters )
+/// Reset the settings of the primary display context for this device.
+///
+/// Note that on certain platforms (namely Direct3D 9 on Windows), various rendering resources will need to be
+/// reacquired after resetting the main context.
+///
+/// The main context may also need to be reset if the device has been lost on certain platforms (again, namely Direct3D
+/// 9 on Windows).
+///
+/// @param[in] rInitParameters  Context initialization parameters.
+///
+/// @return  True if the context was reset successfully, false if not.
+///
+/// @see CreateMainContext(), GetMainContext(), GetStatus()
 
 /// @fn RRenderContext* Renderer::GetMainContext()
 /// Get a reference to the main rendering context.
 ///
 /// @return  Main rendering context.
 ///
-/// @see CreateMainContext()
+/// @see CreateMainContext(), ResetMainContext()
 
 /// @fn RRenderContext* Renderer::CreateSubContext( const ContextInitParameters& rInitParameters )
 /// Create a child rendering context for rendering to multiple windows or displays.
@@ -60,7 +73,22 @@ Renderer::~Renderer()
 ///
 /// @return  True if the context was created successfully, false if not.
 ///
-/// @see CreateMainContext()
+/// @see CreateMainContext(), ResetMainContext()
+
+/// @fn Renderer::EStatus Renderer::GetStatus()
+/// Get the current status of the rendering device.
+///
+/// This should be called at the start of each frame to determine whether rendering can be performed.
+///
+/// On certain platforms (namely Direct3D 9), the rendering device may be placed in a "lost" state under certain
+/// conditions, such as when a focus is lost from the main window while running a fullscreen application.  When such a
+/// situation arises, this function will return STATUS_LOST while the device is lost and not ready to be reacquired.
+/// Once the device is ready again, this will return STATUS_NOT_READY, in which case the main context will need to be
+/// reset using ResetMainContext() and various resources will need to be recreated before they can be used again.
+///
+/// @return  Identifier specifying the current device status.
+///
+/// @see CreateMainContext(), ResetMainContext()
 
 /// @fn RRasterizerState* Renderer::CreateRasterizerState( const RRasterizerState::Description& rDescription )
 /// Create a rasterizer state object based on the given description.

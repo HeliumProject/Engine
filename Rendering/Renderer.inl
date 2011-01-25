@@ -44,26 +44,6 @@ namespace Lunar
         return ( ( m_featureFlags & featureFlags ) != 0 );
     }
 
-    /// Get the width of the main display context.
-    ///
-    /// @return  Main context width, in pixels.
-    ///
-    /// @see GetMainContextHeight()
-    uint32_t Renderer::GetMainContextWidth() const
-    {
-        return m_mainContextWidth;
-    }
-
-    /// Get the height of the main display context.
-    ///
-    /// @return  Main context height, in pixels.
-    ///
-    /// @see GetMainContextHeight()
-    uint32_t Renderer::GetMainContextHeight() const
-    {
-        return m_mainContextHeight;
-    }
-
     /// Constructor.
     ///
     /// Initializes to a default set of parameters.

@@ -52,7 +52,7 @@ namespace Lunar
 
         /// @name Construction/Destruction
         //@{
-        ~D3D9Texture2d();
+        virtual ~D3D9Texture2d();
         //@}
     };
 }

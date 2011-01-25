@@ -56,5 +56,15 @@ void D3D9MainContext::Swap()
     m_spBackBufferSurface.Release();
 
     // Present the scene.
-    L_D3D9_VERIFY( m_pDevice->Present( NULL, NULL, NULL, NULL ) );
+    HRESULT result = m_pDevice->Present( NULL, NULL, NULL, NULL );
+    if( result == D3DERR_DEVICELOST )
+    {
+        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+        HELIUM_ASSERT( pRenderer );
+        pRenderer->NotifyLost();
+    }
+    else
+    {
+        L_D3D9_ASSERT( result );
+    }
 }

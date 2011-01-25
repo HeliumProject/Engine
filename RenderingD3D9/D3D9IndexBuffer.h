@@ -31,13 +31,13 @@ namespace Lunar
         inline IDirect3DIndexBuffer9* GetD3DBuffer() const;
         //@}
 
-    private:
+    protected:
         /// Vertex buffer instance.
         IDirect3DIndexBuffer9* m_pBuffer;
 
         /// @name Construction/Destruction
         //@{
-        ~D3D9IndexBuffer();
+        virtual ~D3D9IndexBuffer();
         //@}
     };
 }

@@ -15,9 +15,10 @@
 #include "RenderingD3D9/D3D9ConstantBuffer.h"
 #include "RenderingD3D9/D3D9DeferredCommandProxy.h"
 #include "RenderingD3D9/D3D9DepthStencilState.h"
+#include "RenderingD3D9/D3D9DynamicIndexBuffer.h"
+#include "RenderingD3D9/D3D9DynamicVertexBuffer.h"
 #include "RenderingD3D9/D3D9Fence.h"
 #include "RenderingD3D9/D3D9ImmediateCommandProxy.h"
-#include "RenderingD3D9/D3D9IndexBuffer.h"
 #include "RenderingD3D9/D3D9MainContext.h"
 #include "RenderingD3D9/D3D9PixelShader.h"
 #include "RenderingD3D9/D3D9RasterizerState.h"
@@ -26,7 +27,6 @@
 #include "RenderingD3D9/D3D9SubContext.h"
 #include "RenderingD3D9/D3D9Surface.h"
 #include "RenderingD3D9/D3D9Texture2d.h"
-#include "RenderingD3D9/D3D9VertexBuffer.h"
 #include "RenderingD3D9/D3D9VertexDescription.h"
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
@@ -58,10 +58,11 @@ const GUID D3D9Renderer::sm_privateDataGuid =
 
 /// Constructor.
 D3D9Renderer::D3D9Renderer()
-: m_pD3D( NULL )
-, m_pD3DDevice( NULL )
-, m_bExDevice( false )
-, m_depthTextureFormat( D3DFMT_UNKNOWN )
+    : m_pD3D( NULL )
+    , m_pD3DDevice( NULL )
+    , m_bExDevice( false )
+    , m_bLost( false )
+    , m_depthTextureFormat( D3DFMT_UNKNOWN )
 {
 }
 
@@ -233,9 +234,6 @@ void D3D9Renderer::Shutdown()
         m_pD3D = NULL;
     }
 
-    m_mainContextWidth = 0;
-    m_mainContextHeight = 0;
-
     m_depthTextureFormat = D3DFMT_UNKNOWN;
 
     m_featureFlags = 0;
@@ -263,15 +261,42 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
 
     // Build the presentation parameters.
     D3DPRESENT_PARAMETERS presentParameters;
-    GetPresentParameters( presentParameters, rInitParameters );
+    D3DDISPLAYMODEEX fullscreenDisplayMode;
+    if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the main context.\n" ) );
 
-    HRESULT createResult = m_pD3D->CreateDevice(
-        D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        static_cast< HWND >( rInitParameters.pWindow ),
-        D3DCREATE_HARDWARE_VERTEXPROCESSING,
-        &presentParameters,
-        &m_pD3DDevice );
+        return false;
+    }
+
+    HRESULT createResult;
+    if( m_bExDevice )
+    {
+        IDirect3DDevice9Ex* pD3DDeviceEx = NULL;
+        createResult = static_cast< IDirect3D9Ex* >( m_pD3D )->CreateDeviceEx(
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
+            static_cast< HWND >( rInitParameters.pWindow ),
+            D3DCREATE_HARDWARE_VERTEXPROCESSING,
+            &presentParameters,
+            ( rInitParameters.bFullscreen ? &fullscreenDisplayMode : NULL ),
+            &pD3DDeviceEx );
+
+        m_pD3DDevice = pD3DDeviceEx;
+    }
+    else
+    {
+        createResult = m_pD3D->CreateDevice(
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
+            static_cast< HWND >( rInitParameters.pWindow ),
+            D3DCREATE_HARDWARE_VERTEXPROCESSING,
+            &presentParameters,
+            &m_pD3DDevice );
+    }
+
     if( FAILED( createResult ) )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Device creation failed (error code: 0x%x).\n" ), createResult );
@@ -291,9 +316,6 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
         static_cast< int32_t >( rInitParameters.bFullscreen ),
         static_cast< int32_t >( rInitParameters.bVsync ) );
 
-    m_mainContextWidth = rInitParameters.displayWidth;
-    m_mainContextHeight = rInitParameters.displayHeight;
-
     // Create the immediate render command proxy interface.
     m_spImmediateCommandProxy = new D3D9ImmediateCommandProxy( m_pD3DDevice );
     HELIUM_ASSERT( m_spImmediateCommandProxy );
@@ -303,6 +325,57 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     HELIUM_ASSERT( m_spMainContext );
 
     return true;
+}
+
+/// @copydoc Renderer::ResetMainContext()
+bool D3D9Renderer::ResetMainContext( const ContextInitParameters& rInitParameters )
+{
+    HELIUM_ASSERT_MSG( m_pD3D, TXT( "D3D9Renderer not initialized" ) );
+
+    // Make sure the main context has been initialized.
+    HELIUM_ASSERT( m_spMainContext );
+    if( !m_spMainContext )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Attempted to reset the main rendering context without creating it first.\n" ) );
+
+        return NULL;
+    }
+
+    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Resetting main display context.\n" ) );
+
+    // Build the presentation parameters and reset the device.
+    D3DPRESENT_PARAMETERS presentParameters;
+    D3DDISPLAYMODEEX fullscreenDisplayMode;
+    if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the main context.\n" ) );
+
+        return false;
+    }
+
+    HELIUM_ASSERT( m_pD3DDevice );
+    HRESULT resetResult;
+    if( m_bExDevice )
+    {
+        resetResult = static_cast< IDirect3DDevice9Ex* >( m_pD3DDevice )->ResetEx(
+            &presentParameters,
+            ( rInitParameters.bFullscreen ? &fullscreenDisplayMode : NULL ) );
+    }
+    else
+    {
+        resetResult = m_pD3DDevice->Reset( &presentParameters );
+    }
+
+    if( resetResult == D3DERR_DEVICELOST )
+    {
+        NotifyLost();
+    }
+
+    return SUCCEEDED( resetResult );
 }
 
 /// @copydoc Renderer::GetMainContext()
@@ -326,9 +399,19 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
         return NULL;
     }
 
+    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Creating display sub-context.\n" ) );
+
     // Build the presentation parameters and create the swap chain.
     D3DPRESENT_PARAMETERS presentParameters;
-    GetPresentParameters( presentParameters, rInitParameters );
+    D3DDISPLAYMODEEX fullscreenDisplayMode;
+    if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the sub-context.\n" ) );
+
+        return false;
+    }
 
     IDirect3DSwapChain9* pSwapChain = NULL;
     HRESULT createResult = m_pD3DDevice->CreateAdditionalSwapChain( &presentParameters, &pSwapChain );
@@ -342,6 +425,16 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
         return NULL;
     }
 
+    HELIUM_ASSERT( pSwapChain );
+#ifndef NDEBUG
+    if( m_bExDevice )
+    {
+        void* pSwapChainEx = NULL;
+        L_D3D9_VERIFY( pSwapChain->QueryInterface( IID_IDirect3DSwapChain9Ex, &pSwapChainEx ) );
+        HELIUM_ASSERT( pSwapChainEx );
+    }
+#endif
+
     // Create the rendering sub-context interface.
     D3D9SubContext* pSubContext = new D3D9SubContext( pSwapChain );
     HELIUM_ASSERT( pSubContext );
@@ -350,6 +443,44 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     pSwapChain->Release();
 
     return pSubContext;
+}
+
+/// @copydoc Renderer::GetStatus()
+Renderer::EStatus D3D9Renderer::GetStatus()
+{
+    // Don't test anything until we have received a notification that the device was lost.
+    if( !m_bLost )
+    {
+        return STATUS_READY;
+    }
+
+    // Test the current cooperative-level status of the device.
+    HELIUM_ASSERT( m_pD3DDevice );
+    HRESULT result = m_pD3DDevice->TestCooperativeLevel();
+    if( result == D3D_OK )
+    {
+        // ???
+        m_bLost = false;
+
+        return STATUS_READY;
+    }
+
+    if( result == D3DERR_DEVICELOST )
+    {
+        return STATUS_LOST;
+    }
+
+    if( result == D3DERR_DEVICENOTRESET )
+    {
+        return STATUS_LOST;
+    }
+
+    // Unknown result.
+    HELIUM_ASSERT_MSG_FALSE(
+        TXT( "IDirect3DDevice9::TestCooperativeLevel() returned an unhandled result code (0x%x)." ),
+        static_cast< uint32_t >( result ) );
+
+    return STATUS_INVALID;
 }
 
 /// @copydoc Renderer::CreateRasterizerState()
@@ -446,8 +577,8 @@ RSurface* D3D9Renderer::CreateDepthStencilSurface(
         {
             HELIUM_TRACE(
                 TRACE_WARNING,
-                ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Multisample count cannot be more than 16.  " )
-                TXT( "Value will be clamped.\n" ) ) );
+                ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Multisample count cannot be more than 16.  Value " )
+                  TXT( "will be clamped.\n" ) ) );
             multisampleCount = 16;
         }
 
@@ -601,8 +732,10 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
         return NULL;
     }
 
-    DWORD d3dUsage = ( usage == RENDERER_BUFFER_USAGE_DYNAMIC ? D3DUSAGE_DYNAMIC : 0 );
-    D3DPOOL pool = ( m_bExDevice || usage == RENDERER_BUFFER_USAGE_DYNAMIC ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED );
+    bool bDynamic = ( usage == RENDERER_BUFFER_USAGE_DYNAMIC );
+
+    DWORD d3dUsage = ( bDynamic ? D3DUSAGE_DYNAMIC : 0 );
+    D3DPOOL pool = ( m_bExDevice || bDynamic ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED );
 
     IDirect3DVertexBuffer9* pD3DBuffer = NULL;
     HRESULT result = m_pD3DDevice->CreateVertexBuffer(
@@ -631,7 +764,20 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
         L_D3D9_VERIFY( pD3DBuffer->Unlock() );
     }
 
-    D3D9VertexBuffer* pBuffer = new D3D9VertexBuffer( pD3DBuffer );
+    D3D9VertexBuffer* pBuffer;
+    if( bDynamic && !m_bExDevice )
+    {
+        D3D9DynamicVertexBuffer* pDynamicBuffer = new D3D9DynamicVertexBuffer( pD3DBuffer );
+        HELIUM_ASSERT( pDynamicBuffer );
+        RegisterDeviceResetListener( pDynamicBuffer );
+
+        pBuffer = pDynamicBuffer;
+    }
+    else
+    {
+        pBuffer = new D3D9VertexBuffer( pD3DBuffer );
+    }
+
     HELIUM_ASSERT( pBuffer );
 
     pD3DBuffer->Release();
@@ -699,7 +845,20 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
         L_D3D9_VERIFY( pD3DBuffer->Unlock() );
     }
 
-    D3D9IndexBuffer* pBuffer = new D3D9IndexBuffer( pD3DBuffer );
+    D3D9IndexBuffer* pBuffer;
+    if( bDynamic && !m_bExDevice )
+    {
+        D3D9DynamicIndexBuffer* pDynamicBuffer = new D3D9DynamicIndexBuffer( pD3DBuffer );
+        HELIUM_ASSERT( pDynamicBuffer );
+        RegisterDeviceResetListener( pDynamicBuffer );
+
+        pBuffer = pDynamicBuffer;
+    }
+    else
+    {
+        pBuffer = new D3D9IndexBuffer( pD3DBuffer );
+    }
+
     HELIUM_ASSERT( pBuffer );
 
     pD3DBuffer->Release();
@@ -1082,6 +1241,65 @@ void D3D9Renderer::Flush()
     SyncFence( spFence );
 }
 
+/// Notify this renderer that a call on another resource has signaled that we have lost the device.
+void D3D9Renderer::NotifyLost()
+{
+    m_bLost = true;
+}
+
+/// Register an object as a listener for Direct3D device reset events.
+///
+/// This should only be called by D3D9Renderer when creating resources that need to respond to device resets.
+///
+/// @param[in] pListener  Listener to register.
+///
+/// @see UnregisterDeviceResetListener()
+void D3D9Renderer::RegisterDeviceResetListener( D3D9DeviceResetListener* pListener )
+{
+    HELIUM_ASSERT( pListener );
+    HELIUM_ASSERT( !pListener->m_pPreviousListener );
+    HELIUM_ASSERT( !pListener->m_pNextListener );
+
+    D3D9DeviceResetListener* pHeadListener = m_pDeviceResetListenerHead;
+    if( pHeadListener )
+    {
+        HELIUM_ASSERT( !pHeadListener->m_pPreviousListener );
+        pHeadListener->m_pPreviousListener = pListener;
+    }
+
+    pListener->m_pNextListener = pHeadListener;
+
+    m_pDeviceResetListenerHead = pListener;
+}
+
+/// Unregister an object as a listener for Direct3D device reset events.
+///
+/// This is automatically called by the D3D9DeviceResetListener destructor and should not be called elsewhere.
+///
+/// @param[in] pListener  Listener to unregister.
+///
+/// @see RegisterDeviceResetListener()
+void D3D9Renderer::UnregisterDeviceResetListener( D3D9DeviceResetListener* pListener )
+{
+    HELIUM_ASSERT( pListener );
+    D3D9DeviceResetListener* pPreviousListener = pListener->m_pPreviousListener;
+    D3D9DeviceResetListener* pNextListener = pListener->m_pNextListener;
+    if( pPreviousListener )
+    {
+        pPreviousListener->m_pNextListener = pNextListener;
+    }
+    else
+    {
+        HELIUM_ASSERT( m_pDeviceResetListenerHead == pListener );
+        m_pDeviceResetListenerHead = pNextListener;
+    }
+
+    if( pNextListener )
+    {
+        pNextListener->m_pPreviousListener = pPreviousListener;
+    }
+}
+
 /// Acquire a dynamic texture for use as a temporary staging area for mapped static texture loads from the pool if
 /// the texture properties are supported by the texture pool.
 ///
@@ -1282,6 +1500,185 @@ bool D3D9Renderer::CreateStaticInstance()
     return ( sm_pInstance != NULL );
 }
 
+/// Fill out a D3DPRESENT_PARAMETERS structure from values provided by a Renderer::ContextInitParameters structure for
+/// initializing a render context.
+///
+/// @param[in]  rContextInitParameters  Render context initialization parameters.
+/// @param[out] rParameters             Direct3D presentation parameters.
+/// @param[out] rFullscreenDisplayMode  Fullscreen display mode parameters (fullscreen modes for Direct3D 9Ex devices
+///                                     only.
+///
+/// @return  True if a valid display was found, false if not.  Note that all windowed display modes will be mapped
+///          succesfully.
+bool D3D9Renderer::GetPresentParameters(
+    const ContextInitParameters& rContextInitParameters,
+    D3DPRESENT_PARAMETERS& rParameters,
+    D3DDISPLAYMODEEX& rFullscreenDisplayMode ) const
+{
+    // Enumerate full-screen modes, comparing with the requested mode to find a valid match.
+    UINT fullscreenRefreshRate = 0;
+
+    if( rContextInitParameters.bFullscreen )
+    {
+        UINT bestModeIndex;
+        SetInvalid( bestModeIndex );
+
+        if( m_bExDevice )
+        {
+            // Check progressive-scan modes first, then interlaced.
+            D3DDISPLAYMODEEX mode;
+            MemoryZero( &mode, sizeof( mode ) );
+            mode.Size = sizeof( mode );
+
+            D3DDISPLAYMODEFILTER modeFilter;
+            MemoryZero( &modeFilter, sizeof( modeFilter ) );
+            modeFilter.Size = sizeof( modeFilter );
+            modeFilter.Format = D3DFMT_X8R8G8B8;
+            modeFilter.ScanLineOrdering = D3DSCANLINEORDERING_PROGRESSIVE;
+
+            UINT modeCount = static_cast< IDirect3D9Ex* >( m_pD3D )->GetAdapterModeCountEx(
+                D3DADAPTER_DEFAULT,
+                &modeFilter );
+            for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
+            {
+                L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
+                    D3DADAPTER_DEFAULT,
+                    &modeFilter,
+                    modeIndex,
+                    &mode ) );
+                if( mode.Width == rContextInitParameters.displayWidth &&
+                    mode.Height == rContextInitParameters.displayHeight )
+                {
+                    UINT refreshRate = mode.RefreshRate;
+                    if( IsInvalid( bestModeIndex ) || refreshRate > fullscreenRefreshRate )
+                    {
+                        bestModeIndex = modeIndex;
+                        fullscreenRefreshRate = refreshRate;
+                        rFullscreenDisplayMode = mode;
+                    }
+                }
+            }
+
+            if( IsInvalid( bestModeIndex ) )
+            {
+                modeFilter.ScanLineOrdering = D3DSCANLINEORDERING_INTERLACED;
+
+                modeCount = static_cast< IDirect3D9Ex* >( m_pD3D )->GetAdapterModeCountEx(
+                    D3DADAPTER_DEFAULT,
+                    &modeFilter );
+                for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
+                {
+                    L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
+                        D3DADAPTER_DEFAULT,
+                        &modeFilter,
+                        modeIndex,
+                        &mode ) );
+                    if( mode.Width == rContextInitParameters.displayWidth &&
+                        mode.Height == rContextInitParameters.displayHeight )
+                    {
+                        UINT refreshRate = mode.RefreshRate;
+                        if( IsInvalid( bestModeIndex ) || refreshRate > fullscreenRefreshRate )
+                        {
+                            bestModeIndex = modeIndex;
+                            fullscreenRefreshRate = refreshRate;
+                            rFullscreenDisplayMode = mode;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            D3DDISPLAYMODE mode;
+            MemoryZero( &mode, sizeof( mode ) );
+
+            UINT modeCount = m_pD3D->GetAdapterModeCount( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8 );
+            for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
+            {
+                L_D3D9_VERIFY( m_pD3D->EnumAdapterModes( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8, modeIndex, &mode ) );
+                if( mode.Width == rContextInitParameters.displayWidth &&
+                    mode.Height == rContextInitParameters.displayHeight )
+                {
+                    UINT refreshRate = mode.RefreshRate;
+                    if( IsInvalid( bestModeIndex ) || refreshRate > fullscreenRefreshRate )
+                    {
+                        bestModeIndex = modeIndex;
+                        fullscreenRefreshRate = refreshRate;
+                    }
+                }
+            }
+        }
+
+        if( IsInvalid( bestModeIndex ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                ( TXT( "D3D9Renderer: Failed to locate valid fullscreen display mode for resolution %" ) TPRIu32
+                  TXT( "x%" ) TPRIu32 TXT( ".\n" ) ),
+                rContextInitParameters.displayWidth,
+                rContextInitParameters.displayHeight );
+
+            return false;
+        }
+    }
+
+    // Build the presentation parameters structure information.
+    MemoryZero( &rParameters, sizeof( rParameters ) );
+
+    rParameters.BackBufferWidth = rContextInitParameters.displayWidth;
+    rParameters.BackBufferHeight = rContextInitParameters.displayHeight;
+    rParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
+    rParameters.BackBufferCount = 1;
+
+    rParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+    if( rContextInitParameters.multisampleCount > 1 )
+    {
+        uint32_t multisampleCount = rContextInitParameters.multisampleCount;
+        if( multisampleCount > 16 )
+        {
+            HELIUM_TRACE(
+                TRACE_WARNING,
+                TXT( "D3D9Renderer: Multisample count cannot be more than 16.  Value will be clamped.\n" ) );
+            multisampleCount = 16;
+        }
+
+        D3DMULTISAMPLE_TYPE multisampleType = static_cast< D3DMULTISAMPLE_TYPE >(
+            static_cast< uint32_t >( D3DMULTISAMPLE_2_SAMPLES ) + multisampleCount - 2 );
+
+        HRESULT checkResult = m_pD3D->CheckDeviceMultiSampleType(
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
+            D3DFMT_X8R8G8B8,
+            !rContextInitParameters.bFullscreen,
+            multisampleType,
+            NULL );
+        if( FAILED( checkResult ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "D3D9Renderer: Multisample count of %u is not supported.  Disabling multisampling.\n" ),
+                multisampleCount );
+        }
+        else
+        {
+            rParameters.MultiSampleType = multisampleType;
+        }
+    }
+
+    rParameters.MultiSampleQuality = 0;
+
+    rParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    rParameters.hDeviceWindow = static_cast< HWND >( rContextInitParameters.pWindow );
+    rParameters.Windowed = !rContextInitParameters.bFullscreen;
+    rParameters.EnableAutoDepthStencil = FALSE;
+    rParameters.Flags = 0;
+    rParameters.FullScreen_RefreshRateInHz = fullscreenRefreshRate;
+    rParameters.PresentationInterval =
+        rContextInitParameters.bVsync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
+
+    return true;
+}
+
 /// Get the pixel format identifier for the specified Direct3D format.
 ///
 /// @param[in] d3dFormat  Direct3D surface format.
@@ -1335,69 +1732,6 @@ ERendererPixelFormat D3D9Renderer::D3DFormatToPixelFormat( D3DFORMAT d3dFormat, 
     }
 
     return RENDERER_PIXEL_FORMAT_INVALID;
-}
-
-/// Fill out a D3DPRESENT_PARAMETERS structure from values provided by a Renderer::ContextInitParameters structure for
-/// initializing a render context.
-///
-/// @param[out] rParameters             Direct3D presentation parameters.
-/// @param[in]  rContextInitParameters  Render context initialization parameters.
-void D3D9Renderer::GetPresentParameters(
-    D3DPRESENT_PARAMETERS& rParameters,
-    const ContextInitParameters& rContextInitParameters ) const
-{
-    MemoryZero( &rParameters, sizeof( rParameters ) );
-
-    rParameters.BackBufferWidth = rContextInitParameters.displayWidth;
-    rParameters.BackBufferHeight = rContextInitParameters.displayHeight;
-    rParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
-    rParameters.BackBufferCount = 1;
-
-    rParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
-    if( rContextInitParameters.multisampleCount > 1 )
-    {
-        uint32_t multisampleCount = rContextInitParameters.multisampleCount;
-        if( multisampleCount > 16 )
-        {
-            HELIUM_TRACE(
-                TRACE_WARNING,
-                TXT( "D3D9Renderer: Multisample count cannot be more than 16.  Value will be clamped.\n" ) );
-            multisampleCount = 16;
-        }
-
-        D3DMULTISAMPLE_TYPE multisampleType = static_cast< D3DMULTISAMPLE_TYPE >(
-            static_cast< uint32_t >( D3DMULTISAMPLE_2_SAMPLES ) + multisampleCount - 2 );
-
-        HRESULT checkResult = m_pD3D->CheckDeviceMultiSampleType(
-            D3DADAPTER_DEFAULT,
-            D3DDEVTYPE_HAL,
-            D3DFMT_X8R8G8B8,
-            !rContextInitParameters.bFullscreen,
-            multisampleType,
-            NULL );
-        if( FAILED( checkResult ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "D3D9Renderer: Multisample count of %u is not supported.  Disabling multisampling.\n" ),
-                multisampleCount );
-        }
-        else
-        {
-            rParameters.MultiSampleType = multisampleType;
-        }
-    }
-
-    rParameters.MultiSampleQuality = 0;
-
-    rParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    rParameters.hDeviceWindow = static_cast< HWND >( rContextInitParameters.pWindow );
-    rParameters.Windowed = !rContextInitParameters.bFullscreen;
-    rParameters.EnableAutoDepthStencil = FALSE;
-    rParameters.Flags = 0;
-    rParameters.FullScreen_RefreshRateInHz = 0;
-    rParameters.PresentationInterval =
-        rContextInitParameters.bVsync ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
 }
 
 /// Get information about the static texture map target pool for a given texture size.

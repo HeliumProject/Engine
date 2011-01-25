@@ -442,6 +442,9 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     // D3D9SubContext instance now has its own reference to the swap chain, so release our reference.
     pSwapChain->Release();
 
+    // Register the sub-context object for device reset events.
+    RegisterDeviceResetListener( pSubContext );
+
     return pSubContext;
 }
 

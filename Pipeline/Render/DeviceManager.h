@@ -5,10 +5,13 @@
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/Automation/Event.h"
+#include "Rendering/Renderer.h"
 #include "Pipeline/API.h"
 
-#include <d3d9.h>
-#include <d3dx9.h>
+namespace Lunar
+{
+    L_DECLARE_RPTR( RRenderContext );
+}
 
 namespace Helium
 {
@@ -86,22 +89,22 @@ namespace Helium
         typedef Helium::Signature< const DeviceStateArgs& > DeviceStateSignature;
 
         // all rendering classes should be derived this
-        class PIPELINE_API DeviceManager
+        class PIPELINE_API DeviceManager : NonCopyable
         {
         public:
             DeviceManager();
             virtual ~DeviceManager();
 
             static void SetUnique(); // call before init
-            HRESULT Init(HWND hwnd,uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags=0);
+            bool Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags = 0 );
 
         private:
-            HRESULT ResizeSwapChain(uint32_t width, uint32_t height);
-            HRESULT ResizeDevice(uint32_t width, uint32_t height);
+            bool ResizeSwapChain( uint32_t width, uint32_t height );
+            bool ResizeDevice( uint32_t width, uint32_t height );
         public:
-            HRESULT Resize(uint32_t width, uint32_t height);
-            HRESULT Display(HWND target,RECT* src=0, RECT* dst=0);      // if display fails, call reset
-            HRESULT Reset();
+            bool Resize( uint32_t width, uint32_t height );
+            bool Swap();      // if swap fails, call reset
+            bool Reset();
 
             bool TestDeviceReady();
 
@@ -115,44 +118,7 @@ namespace Helium
                 m_IsLost = lost;
             }
 
-            IDirect3DSurface9* GetBufferData();
-
             bool SaveTGA(const tchar_t* fname);
-
-            inline IDirect3D9* GetD3D()
-            {
-                return m_d3d;
-            }
-
-            inline IDirect3DDevice9* GetD3DDevice() const
-            {
-                return m_device;
-            }
-
-            inline IDirect3DSurface9* GetBackBuffer()
-            {
-                return m_back_buffer;
-            }
-
-            inline IDirect3DSurface9* GetDepthBuffer()
-            {
-                return m_depth_buffer;
-            }
-
-            inline IDirect3DVertexShader9* GetStockVS(uint32_t idx)
-            {
-                return m_vertex_shaders[idx];
-            }
-
-            inline IDirect3DPixelShader9* GetStockPS(uint32_t idx)
-            {
-                return m_pixel_shaders[idx];
-            }
-
-            inline IDirect3DVertexDeclaration9* GetStockDecl(uint32_t idx)
-            {
-                return m_vertex_dec[idx];
-            }
 
             inline uint32_t GetWidth()
             {
@@ -166,7 +132,7 @@ namespace Helium
 
             // call up to the parent class to handle their default pool (this will be called for every client)
             // this is called for a number of reasons
-            HRESULT HandleClientDefaultPool(uint32_t reason)
+            bool HandleClientDefaultPool(uint32_t reason)
             {
                 if ( reason == DEFPOOL_RELEASE )
                 {
@@ -206,55 +172,27 @@ namespace Helium
             }
 
         private:
-            void CreateBaseResources();
-            void FreeBaseResources();
+            /// Window to which rendering is performed.
+            HWND m_hWnd;
+            /// Render context.
+            Lunar::RRenderContextPtr m_spRenderContext;
 
-            IDirect3D9*                           m_d3d;    
-            IDirect3DDevice9*                     m_device; 
-            IDirect3DSurface9*                    m_back_buffer;
-            IDirect3DSurface9*                    m_depth_buffer;
-            IDirect3DSwapChain9*                  m_swapchain;
             bool                                  m_using_swapchain;
-            D3DPRESENT_PARAMETERS                 m_d3dpp;
-            uint32_t                                   m_width;
-            uint32_t                                   m_height;
+            uint32_t                              m_width;
+            uint32_t                              m_height;
+
+            /// Main render context.
+            static Lunar::RRenderContextPtr sm_spMainRenderContext;
+            /// Main render context window handle.
+            static HWND sm_hMainRenderContextWnd;
+            /// Main render context width.
+            static uint32_t sm_mainRenderContextWidth;
+            /// Main render context heigth.
+            static uint32_t sm_mainRenderContextHeight;
 
             static bool                           m_unique;
-            static uint32_t                            m_master_count;
-            static IDirect3D9*                    m_master_d3d;                   // Used to create the D3DDevice
-            static IDirect3DDevice9*              m_master_device;                // rendering device 
-            static D3DFORMAT                      m_back_buffer_format;
-            static D3DPRESENT_PARAMETERS          m_master_pp;
-            static IDirect3DVertexShader9*        m_vertex_shaders[__VERTEX_SHADER_LAST__];
-            static IDirect3DPixelShader9*         m_pixel_shaders[__PIXEL_SHADER_LAST__];
-            static IDirect3DVertexDeclaration9*   m_vertex_dec[__VERTEX_DECL_LAST__];
+            static uint32_t                       m_master_count;
             static DeviceManager*                 m_clients[__MAX_CLIENTS__];
         };
-
-        // a predefined structure for use with vertex decl VERTEX_DECL_DEBUG
-        struct VertexDebug
-        {
-            D3DXVECTOR3 m_pos;
-            uint32_t         m_color;
-        }; //size 16
-
-        // a basic screen space vertex with a few texture params
-        struct VertexScreen
-        {
-            D3DXVECTOR4 m_pos;
-            D3DXVECTOR4 m_tex0;
-            D3DXVECTOR4 m_tex1;
-            D3DXVECTOR4 m_tex2;
-        };
-
-        // the main mesh vertex format is full expanded floats for easy access
-        struct MeshVertex
-        {
-            D3DXVECTOR3 m_pos;           // offset 0
-            D3DXVECTOR3 m_normal;        // offset 12
-            D3DXVECTOR4 m_tangent;       // offset 24
-            D3DXVECTOR2 m_uv;            // offset 40  
-            D3DXVECTOR4 m_color  ;       // offset 48
-        }; // size 64
     }
 }

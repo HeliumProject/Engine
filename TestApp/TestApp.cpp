@@ -1101,6 +1101,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Initialize();
+    rRenderResourceManager.UpdateMaxViewportSize( displayWidth, displayHeight );
 
     DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
     HELIUM_VERIFY( rDynamicDrawer.Initialize() );
@@ -1149,36 +1150,46 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         true ) ) );
     HELIUM_ASSERT( spSubCamera );
 
-    uint32_t mainSceneViewId = spWorld->GetMainSceneViewId();
-    if( IsValid( mainSceneViewId ) )
+    GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
+    HELIUM_ASSERT( pGraphicsScene );
+    if( pGraphicsScene )
     {
-        spMainCamera->SetSceneViewId( mainSceneViewId );
-
-        GraphicsScenePtr spGraphicsScene = spWorld->GetGraphicsScene();
-        HELIUM_ASSERT( spGraphicsScene );
-
-        uint32_t subSceneViewId = spGraphicsScene->AllocateSceneView();
-        if( IsValid( subSceneViewId ) )
+        uint32_t mainSceneViewId = pGraphicsScene->AllocateSceneView();
+        if( IsValid( mainSceneViewId ) )
         {
-            GraphicsSceneView* pMainSceneView = spGraphicsScene->GetSceneView( mainSceneViewId );
-            HELIUM_ASSERT( pMainSceneView );
-            GraphicsSceneView* pSubSceneView = spGraphicsScene->GetSceneView( subSceneViewId );
-            HELIUM_ASSERT( pSubSceneView );
+            float32_t aspectRatio =
+                static_cast< float32_t >( displayWidth ) / static_cast< float32_t >( displayHeight );
 
+            RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
+            HELIUM_ASSERT( pDepthStencilSurface );
+
+            GraphicsSceneView* pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
+            HELIUM_ASSERT( pMainSceneView );
+            pMainSceneView->SetRenderContext( spMainRenderContext );
+            pMainSceneView->SetDepthStencilSurface( pDepthStencilSurface );
+            pMainSceneView->SetAspectRatio( aspectRatio );
+            pMainSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
             pMainSceneView->SetClearColor( Color( 0x00202020 ) );
 
-            pSubSceneView->SetRenderContext( spSubRenderContext );
-            pSubSceneView->SetDepthStencilSurface( pMainSceneView->GetDepthStencilSurface() );
-            pSubSceneView->SetAspectRatio(
-                static_cast< float32_t >( displayWidth ) / static_cast< float32_t >( displayHeight ) );
-            pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
-            pSubSceneView->SetClearColor( Color( 0x00202020 ) );
+            spMainCamera->SetSceneViewId( mainSceneViewId );
 
-            spSubCamera->SetSceneViewId( subSceneViewId );
+            uint32_t subSceneViewId = pGraphicsScene->AllocateSceneView();
+            if( IsValid( subSceneViewId ) )
+            {
+                GraphicsSceneView* pSubSceneView = pGraphicsScene->GetSceneView( subSceneViewId );
+                HELIUM_ASSERT( pSubSceneView );
+                pSubSceneView->SetRenderContext( spSubRenderContext );
+                pSubSceneView->SetDepthStencilSurface( pDepthStencilSurface );
+                pSubSceneView->SetAspectRatio( aspectRatio );
+                pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
+                pSubSceneView->SetClearColor( Color( 0x00202020 ) );
+
+                spSubCamera->SetSceneViewId( subSceneViewId );
+            }
         }
-
+    
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-        BufferedDrawer& rSceneDrawer = spGraphicsScene->GetSceneBufferedDrawer();
+        BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
         rSceneDrawer.DrawScreenText(
             20,
             20,
@@ -1287,8 +1298,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             meshRotation += 0.01f;
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
                 const SimpleVertex sceneVertices[] =
                 {
@@ -1302,14 +1312,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     1,
                 };
 
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawLines(
                     sceneVertices,
                     static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneVertices ) ),
                     sceneIndices,
                     static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneIndices ) / 2 ) );
 
-                BufferedDrawer* pViewDrawer = pScene->GetSceneViewBufferedDrawer( 0 );
+                BufferedDrawer* pViewDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( 0 );
                 if( pViewDrawer )
                 {
                     const SimpleVertex viewVertices[] =
@@ -1334,10 +1344,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawWorldText(
                     Simd::Matrix44( Simd::Matrix44::INIT_SCALING, 0.75f ),
                     String( TXT( "Debug text test!" ) ),
@@ -1347,10 +1356,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawScreenText(
                     20,
                     20,

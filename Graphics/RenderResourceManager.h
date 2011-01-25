@@ -24,6 +24,7 @@ namespace Lunar
     L_DECLARE_RPTR( RBlendState );
     L_DECLARE_RPTR( RDepthStencilState );
     L_DECLARE_RPTR( RSamplerState );
+    L_DECLARE_RPTR( RSurface );
     L_DECLARE_RPTR( RTexture2d );
     L_DECLARE_RPTR( RVertexDescription );
 
@@ -133,6 +134,8 @@ namespace Lunar
         void Shutdown();
 
         void PostConfigUpdate();
+
+        void UpdateMaxViewportSize( uint32_t width, uint32_t height );
         //@}
 
         /// @name State Access
@@ -156,6 +159,8 @@ namespace Lunar
         //@{
         RTexture2d* GetSceneTexture() const;
         RTexture2d* GetShadowDepthTexture() const;
+
+        RSurface* GetDepthStencilSurface() const;
 
         ShaderVariant* GetPrePassVertexShader() const;
         ShaderVariant* GetSimpleWorldSpaceVertexShader() const;
@@ -203,6 +208,9 @@ namespace Lunar
         /// Shadow depth texture.
         RTexture2dPtr m_spShadowDepthTexture;
 
+        /// Main scene depth-stencil surface.
+        RSurfacePtr m_spDepthStencilSurface;
+
         /// Depth-only pre-pass vertex shader.
         ShaderVariantPtr m_spPrePassVertexShader;
         /// Simple world-space primitive vertex shader.
@@ -223,6 +231,12 @@ namespace Lunar
 
         /// Effective shadow mode in use (accounting for whether a shadow buffer was allocated, etc.).
         GraphicsConfig::EShadowMode m_shadowMode;
+
+        /// Maximum viewport width.
+        uint32_t m_viewportWidthMax;
+        /// Maximum viewport height.
+        uint32_t m_viewportHeightMax;
+
         /// Shadow depth texture usable size (cached from graphics config object value).
         uint32_t m_shadowDepthTextureUsableSize;
 

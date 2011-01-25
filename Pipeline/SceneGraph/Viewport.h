@@ -231,11 +231,6 @@ namespace Helium
                 m_Size = size;
             }
 
-            inline IDirect3DDevice9* GetDevice() const
-            {
-                return m_DeviceManager.GetD3DDevice();
-            }
-
             SettingsManager* GetSettingsManager() const
             {
                 return m_SettingsManager;

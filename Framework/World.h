@@ -76,7 +76,6 @@ namespace Lunar
         /// @name Scene Access
         //@{
         GraphicsScene* GetGraphicsScene() const;
-        inline uint32_t GetMainSceneViewId() const;
         //@}
 
     private:
@@ -85,8 +84,6 @@ namespace Lunar
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
-        /// Main scene view ID.
-        uint32_t m_mainSceneViewId;
     };
 }
 

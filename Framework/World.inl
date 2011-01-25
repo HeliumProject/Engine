@@ -16,12 +16,4 @@ namespace Lunar
     {
         return m_layers.GetSize();
     }
-
-    /// Get the ID of the main graphics scene view.
-    ///
-    /// @return  Main graphics scene view ID.
-    uint32_t World::GetMainSceneViewId() const
-    {
-        return m_mainSceneViewId;
-    }
 }

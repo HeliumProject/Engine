@@ -2,109 +2,62 @@
 #include "Renderer.h"
 
 #include "Foundation/Log.h"
+#include "Rendering/RRenderContext.h"
+#include "RenderingD3D9/D3D9Renderer.h"
 #include "Pipeline/Image/Formats/TGA.h"
 
 using namespace Helium;
 using namespace Helium::Render;
 
-bool                            DeviceManager::m_unique = false;
-uint32_t                             DeviceManager::m_master_count = 0;
-IDirect3D9*                     DeviceManager::m_master_d3d = 0;
-IDirect3DDevice9*               DeviceManager::m_master_device = 0;
-D3DFORMAT                       DeviceManager::m_back_buffer_format = D3DFMT_UNKNOWN;
-D3DPRESENT_PARAMETERS           DeviceManager::m_master_pp = {0};
-IDirect3DVertexShader9*         DeviceManager::m_vertex_shaders[__VERTEX_SHADER_LAST__] = {0};
-IDirect3DPixelShader9*          DeviceManager::m_pixel_shaders[__PIXEL_SHADER_LAST__] = {0};
-IDirect3DVertexDeclaration9*    DeviceManager::m_vertex_dec[__VERTEX_DECL_LAST__] = {0};
-DeviceManager*                  DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
+bool            DeviceManager::m_unique = false;
+uint32_t        DeviceManager::m_master_count = 0;
+DeviceManager*  DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::DeviceManager()
 : m_IsLost( false )
+, m_hWnd( NULL )
 {
-    m_d3d=0;
-    m_device=0; 
-    m_swapchain=0;
-    m_back_buffer=0;
-    m_depth_buffer=0;
-    m_width=0;
-    m_height=0;
-    m_using_swapchain=false;
-    m_back_buffer_format = D3DFMT_UNKNOWN;
+    m_width = 0;
+    m_height = 0;
+    m_using_swapchain = false;
 
     //record the this pointer in the client array so we can call back to free/recreate default pool resources
     // first look for empty entries in the client array
-    bool done = false;
-    for (uint32_t c=0;c<m_master_count;c++)
+    size_t clientIndex;
+    for ( clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c]==0)
+        if ( !m_clients[ clientIndex ] )
         {
-            m_clients[c]=this;
-            done=true;
+            m_clients[ clientIndex ] = this;
+            ++m_master_count;
+
             break;
         }
     }
 
-    if (!done)
-    {
-        m_clients[m_master_count]=this;
-        m_master_count++;
-    }
+    HELIUM_ASSERT( clientIndex < HELIUM_ARRAY_COUNT( m_clients ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::~DeviceManager()
 {
-    m_master_count--;  
+    --m_master_count;
 
     // this is the last client, we need to free up the global resources before we free the device
-    if (m_master_count==0)
+    if ( m_master_count == 0 )
     {
-        // free the shaders and declarations
-        FreeBaseResources();
-
-        m_master_d3d=0;
-        m_master_device=0;
+        sm_spMainRenderContext.Release();
     }
 
-    if (m_back_buffer)
-    {
-        m_back_buffer->Release();
-        m_back_buffer=0;
-    }
-
-    if (m_depth_buffer)
-    {
-        m_depth_buffer->Release();
-        m_depth_buffer=0;
-    }
-
-    if (m_swapchain)
-    {
-        // free the swap chain
-        m_swapchain->Release();
-        m_swapchain=0;
-        m_using_swapchain=false;
-    }
-
-    if (m_device)
-    {
-        m_device->Release();
-        m_device=0;
-    }
-
-    if (m_d3d)
-    {
-        m_d3d->Release();
-        m_d3d=0;
-    }
+    m_spRenderContext.Release();
 
     // go through all the clients and remove ourself
-    for (uint32_t c=0;c<m_master_count;c++)
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c]==this)
+        if ( m_clients[ clientIndex ] == this )
         {
-            m_clients[c]=0;
+            m_clients[ clientIndex ] = NULL;
             break;
         }
     }
@@ -113,358 +66,231 @@ DeviceManager::~DeviceManager()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void DeviceManager::SetUnique()
 {
-    if (m_master_d3d==0)
+    if ( !sm_spMainRenderContext )
     {
         m_unique = true;
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Init(HWND hwnd,uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t init_flags)
+bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t /*init_flags*/ )
 {
-    HRESULT hr;
-
-    // NOTE: Unknown always works for rendering but it will make messed up screen shots when the desktop is not in 32bpp
-    //       By default we will use that mode but if we can get a conversion from ARGB 32bit to the current mode then we
-    //       shall force 32bit. This will allow the screen shots to work. 
-    //
-    // robw [nov 2009] - We should modify the screen shot code to convert from 16bit to 32bit or dump a 16bit tga
-
-    if (m_master_d3d==0)
+    Lunar::Renderer* pRenderer = NULL;
+    if ( !sm_spMainRenderContext )
     {
-        if( NULL == ( m_master_d3d = Direct3DCreate9( D3D_SDK_VERSION ) ) )
+        bool bCreatedRenderer = Lunar::D3D9Renderer::CreateStaticInstance();
+        HELIUM_ASSERT( bCreatedRenderer );
+        if( !bCreatedRenderer )
         {
-            return E_FAIL;
+            return false;
         }
-        m_d3d = m_master_d3d;
 
-        // fill out the display params for thw default back buffer (which we don't use)   
-        ZeroMemory( &m_master_pp, sizeof( m_master_pp ) );
-
-        if (m_unique==false)
+        if ( m_unique )
+        {
+            sm_hMainRenderContextWnd = hwnd;
+            sm_mainRenderContextWidth = back_buffer_width;
+            sm_mainRenderContextHeight = back_buffer_height;
+        }
+        else
         {
             // if we are not running in unique mode then everything if a flip chain, the default back buffer is 64x64
-            m_master_pp.BackBufferWidth  = 64;
-            m_master_pp.BackBufferHeight = 64;
-        }
-        else
-        {
-            m_master_pp.BackBufferWidth = back_buffer_width;
-            m_master_pp.BackBufferHeight = back_buffer_height;
+            sm_mainRenderContextWidth = 64;
+            sm_mainRenderContextHeight = 64;
         }
 
-        D3DDISPLAYMODE mode;
-        m_master_d3d->GetAdapterDisplayMode(D3DADAPTER_DEFAULT,&mode);
-        HRESULT fmt_res = m_master_d3d->CheckDeviceFormatConversion(D3DADAPTER_DEFAULT,(init_flags & INIT_FLAG_REFRAST)?D3DDEVTYPE_REF:D3DDEVTYPE_HAL,D3DFMT_A8R8G8B8,mode.Format);
-        if (fmt_res==S_OK)
+        pRenderer = Lunar::Renderer::GetStaticInstance();
+        HELIUM_ASSERT( pRenderer );
+
+        Lunar::Renderer::ContextInitParameters initParameters;
+        initParameters.pWindow = hwnd;
+        initParameters.bFullscreen = false;
+        initParameters.bVsync = false;
+        initParameters.displayWidth = sm_mainRenderContextWidth;
+        initParameters.displayHeight = sm_mainRenderContextHeight;
+
+        bool bCreateResult = pRenderer->CreateMainContext( initParameters );
+        HELIUM_ASSERT( bCreateResult );
+        if ( !bCreateResult )
         {
-            Log::Print( TXT( "A8R8G8B8 to display format conversion available, forcing A8R8G8B8\n" ) );
-            m_back_buffer_format = D3DFMT_A8R8G8B8;
+            return false;
         }
-        else
+
+        sm_spMainRenderContext = pRenderer->GetMainContext();
+        HELIUM_ASSERT( sm_spMainRenderContext );
+
+        if ( m_unique )
         {
-            Log::Print( TXT( "A8R8G8B8 not available, using current display format [hr=%x]\n" ),fmt_res);
-        }
-        // add other display conversion checks here if needed.
-
-        m_master_pp.BackBufferFormat = m_back_buffer_format;
-        m_master_pp.Windowed = true;
-        m_master_pp.SwapEffect = D3DSWAPEFFECT_COPY; 
-        m_master_pp.EnableAutoDepthStencil = true;
-        m_master_pp.AutoDepthStencilFormat = D3DFMT_D24S8;
-        m_master_pp.hDeviceWindow = hwnd;
-
-        if (init_flags & INIT_FLAG_REFRAST)
-        {
-            Log::Print( TXT( "Using ref rast forcing render buffer to A8R8G8B8\n" ) );
-
-            // if refrast force the back buffer to ARGB 32bit
-            m_back_buffer_format = D3DFMT_A8R8G8B8;
-            m_master_pp.BackBufferFormat = m_back_buffer_format;
-
-            hr = m_d3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_REF , 0, D3DCREATE_MULTITHREADED| D3DCREATE_SOFTWARE_VERTEXPROCESSING, &m_master_pp, &m_master_device );
-        }
-        else
-        {
-            hr = m_d3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 0, D3DCREATE_MULTITHREADED | D3DCREATE_HARDWARE_VERTEXPROCESSING, &m_master_pp, &m_master_device );
-        }    
-        if (FAILED(hr))
-        {
-            m_d3d=0;
-            m_master_d3d->Release();
-            m_master_d3d=0;
-            return hr;
-        }
-        m_device = m_master_device;
-
-        // create the build in verts and pixel shaders
-        CreateBaseResources();
-
-        if (m_unique)
-        {
-            m_d3dpp = m_master_pp;
+            m_spRenderContext = sm_spMainRenderContext;
         }
     }
     else
     {
         // if we get to here it must be a second instance and when running unique that is not allowed.
-        if (m_unique)
-            return E_FAIL;
+        HELIUM_ASSERT( !m_unique );
+        if ( m_unique )
+        {
+            return false;
+        }
 
-        // replicate the existing device
-        m_device = m_master_device;
-        m_d3d = m_master_d3d;
-        m_device->AddRef();
-        m_d3d->AddRef();
+        pRenderer = Lunar::Renderer::GetStaticInstance();
+        HELIUM_ASSERT( pRenderer );
     }
 
-    if (!m_unique)
+    if ( !m_unique )
     {
-        // create the back buffer for the flip chain (note there is no depth buffer)
-        ZeroMemory( &m_d3dpp, sizeof( m_d3dpp ) );
-        m_d3dpp.BackBufferWidth  = back_buffer_width;
-        m_d3dpp.BackBufferHeight = back_buffer_height;
-        m_d3dpp.BackBufferFormat = m_back_buffer_format;
-        m_d3dpp.Windowed = true;
-        m_d3dpp.SwapEffect = D3DSWAPEFFECT_COPY; 
-        m_d3dpp.EnableAutoDepthStencil = false;
-        m_d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
-        m_d3dpp.hDeviceWindow = hwnd;
+        // Create an additional render context.
+        Lunar::Renderer::ContextInitParameters initParameters;
+        initParameters.pWindow = hwnd;
+        initParameters.bFullscreen = false;
+        initParameters.bVsync = false;
+        initParameters.displayWidth = back_buffer_width;
+        initParameters.displayHeight = back_buffer_height;
 
-        // create a flip chain
-        m_device->CreateAdditionalSwapChain(&m_d3dpp,&m_swapchain);
+        m_spRenderContext = pRenderer->CreateSubContext( initParameters );
+        HELIUM_ASSERT( m_spRenderContext );
+        if ( !m_spRenderContext )
+        {
+            return false;
+        }
 
-        // get the back buffer pointers
-        m_swapchain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&m_back_buffer);
         m_using_swapchain = true;
-
-        // create a depth buffer as the flip chain does not contain a depth buffer
-        m_device->CreateDepthStencilSurface(back_buffer_width,back_buffer_height,D3DFMT_D24S8, D3DMULTISAMPLE_NONE,0,true,&m_depth_buffer,0);
-    }
-    else
-    {
-        // if we are running unique get the back buffer pointers from the device
-        m_device->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&m_back_buffer);
-        m_device->GetDepthStencilSurface(&m_depth_buffer);
     }
 
-    //record the width and height
-    D3DSURFACE_DESC desc;
-    m_back_buffer->GetDesc(&desc);
-    m_width = desc.Width;
-    m_height = desc.Height;
+    m_hWnd = hwnd;
 
-    return S_OK;
+    m_width = back_buffer_width;
+    m_height = back_buffer_height;
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::ResizeSwapChain(uint32_t width, uint32_t height)
+bool DeviceManager::ResizeSwapChain( uint32_t width, uint32_t height )
 {
-    // we always have a back buffer pointer, release it
-    if (m_back_buffer)
-    {
-        m_back_buffer->Release();
-        m_back_buffer=0;
-    }
+    Lunar::Renderer::ContextInitParameters initParameters;
+    initParameters.pWindow = m_hWnd;
+    initParameters.bFullscreen = false;
+    initParameters.bVsync = false;
+    initParameters.displayWidth = width;
+    initParameters.displayHeight = height;
 
-    // we always have a back buffer pointer, release it
-    if (m_depth_buffer)
-    {
-        m_depth_buffer->Release();
-        m_depth_buffer=0;
-    }
+    m_spRenderContext->Reset( initParameters );
 
-    // if there is a swap chain delete it too
-    if (m_swapchain)
-    {
-        // free the swap chain
-        m_swapchain->Release();
-        m_swapchain=0;
-    }
-
-    m_d3dpp.BackBufferWidth = width;
-    m_d3dpp.BackBufferHeight = height;
-
-    // create a flip chain
-    m_device->CreateAdditionalSwapChain(&m_d3dpp,&m_swapchain);
-
-    // get the back buffer pointers
-    m_swapchain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&m_back_buffer);
-    m_using_swapchain = true;  
-
-    D3DSURFACE_DESC desc;
-    m_back_buffer->GetDesc(&desc);
-    m_width = desc.Width;
-    m_height = desc.Height;
-
-    // create a depth buffer as the flip chain does not contain a depth buffer
-    m_device->CreateDepthStencilSurface(width,height,D3DFMT_D24S8, D3DMULTISAMPLE_NONE,0,true,&m_depth_buffer,0);
-
-    return S_OK;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::ResizeDevice(uint32_t width, uint32_t height)
+bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
 {
     // release the default pool
     HandleClientDefaultPool(DEFPOOL_RELEASE);
 
-    if (m_back_buffer)
-    {
-        m_back_buffer->Release();
-        m_back_buffer=0;
-    }
+    Lunar::Renderer::ContextInitParameters initParameters;
+    initParameters.pWindow = m_hWnd;
+    initParameters.bFullscreen = false;
+    initParameters.bVsync = false;
+    initParameters.displayWidth = width;
+    initParameters.displayHeight = height;
 
-    if (m_depth_buffer)
-    {
-        m_depth_buffer->Release();
-        m_depth_buffer=0;
-    }
-
-    // if there is a swap chain delete it too (should never happen)
-    if (m_swapchain)
-    {
-        // free the swap chain
-        m_swapchain->Release();
-        m_swapchain=0;
-    }
-
-    m_d3dpp.BackBufferWidth = width;
-    m_d3dpp.BackBufferHeight = height;
-    m_master_pp.BackBufferWidth = width;
-    m_master_pp.BackBufferHeight = height;
-
-    m_device->Reset(&m_master_pp);
-
-    // get the new back buffer and new depth buffer pointers
-    m_device->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&m_back_buffer);
-    m_device->GetDepthStencilSurface(&m_depth_buffer);
-
-    // copy the width and height
-    D3DSURFACE_DESC desc;
-    m_back_buffer->GetDesc(&desc);
-    m_width = desc.Width;
-    m_height = desc.Height;
+    m_spRenderContext->Reset( initParameters );
 
     // recreate the default pool
     HandleClientDefaultPool(DEFPOOL_CREATE);
 
-    return S_OK;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Resize(uint32_t width, uint32_t height)
+bool DeviceManager::Resize( uint32_t width, uint32_t height )
 {
-    if (m_swapchain)
+    if ( m_using_swapchain )
     {
-        return ResizeSwapChain(width,height);
+        return ResizeSwapChain( width, height );
     }
-    else
-    {
-        // this will currently only be used in 'unique' mode
-        return ResizeDevice(width,height);
-    }
+
+    // this will currently only be used in 'unique' mode
+    HELIUM_ASSERT( m_unique );
+    return ResizeDevice( width, height );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Display(HWND target,RECT* src, RECT* dst)
-{  
-    HRESULT hr;
+bool DeviceManager::Swap()
+{
+    m_spRenderContext->Swap();
 
-    // if this was a normal render then present the scene otherwise copy it to the offscreen
-    if (m_swapchain)
-    {
-        // this is an additional swapchain surface
-        hr = m_swapchain->Present(src,dst,target,0,0);
-    }
-    else
-    {
-        // base surface
-        hr = m_device->Present(src,dst,target,0);
-    }
-
-    return hr;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT DeviceManager::Reset()
+bool DeviceManager::Reset()
 {
     HRESULT hr = S_OK;
 
     // step 1, go through all the clients and release their default pool resources
-    for (uint32_t c=0;c<m_master_count;c++)
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c])
+        DeviceManager* pClient = m_clients[ clientIndex ];
+        if ( pClient )
         {
-            m_clients[c]->HandleClientDefaultPool(DEFPOOL_RELEASE);
+            pClient->HandleClientDefaultPool( DEFPOOL_RELEASE );
         }
     }
 
-    // step 2, go through all the clients and destroy their depth buffers and swap chains
-    for (uint32_t c=0;c<m_master_count;c++)
+    // step 2, go through all the clients and release their render contexts
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c])
+        DeviceManager* pClient = m_clients[ clientIndex ];
+        if ( pClient )
         {
-            if (m_clients[c]->m_back_buffer)
-            {
-                m_clients[c]->m_back_buffer->Release();
-                m_clients[c]->m_back_buffer=0;
-            }
-
-            if (m_clients[c]->m_depth_buffer)
-            {
-                m_clients[c]->m_depth_buffer->Release();
-                m_clients[c]->m_depth_buffer=0;
-            }
-
-            if (m_clients[c]->m_swapchain)
-            {
-                m_clients[c]->m_swapchain->Release();
-                m_clients[c]->m_swapchain=0;
-            }      
+            pClient->m_spRenderContext.Release();
         }
     }
 
     // step 3, reset the device with the default device display parameters
-    m_device->Reset(&m_master_pp);
+    Lunar::Renderer::ContextInitParameters initParameters;
+    initParameters.pWindow = sm_hMainRenderContextWnd;
+    initParameters.displayWidth = sm_mainRenderContextWidth;
+    initParameters.displayHeight = sm_mainRenderContextHeight;
+    initParameters.bFullscreen = false;
+    initParameters.bVsync = false;
+
+    sm_spMainRenderContext->Reset( initParameters );
 
     // step 4, go through all the clients and recreate the depth buffer and swap chains based on the local parameters
-    for (uint32_t c=0;c<m_master_count;c++)
+    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c])
+        DeviceManager* pClient = m_clients[ clientIndex ];
+        if ( pClient )
         {
-            if (m_clients[c]->m_using_swapchain)
+            if ( pClient->m_using_swapchain )
             {
-                // create a flip chain
-                m_device->CreateAdditionalSwapChain(&m_clients[c]->m_d3dpp,&m_clients[c]->m_swapchain);
-
-                // get the back buffer pointers
-                m_clients[c]->m_swapchain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&m_clients[c]->m_back_buffer);
-
-                // create a depth buffer as the flip chain does not contain a depth buffer
-                m_device->CreateDepthStencilSurface(m_clients[c]->m_width,m_clients[c]->m_height,D3DFMT_D24S8, D3DMULTISAMPLE_NONE,0,true,&m_clients[c]->m_depth_buffer,0);
+                initParameters.pWindow = pClient->m_hWnd;
+                initParameters.displayWidth = pClient->m_width;
+                initParameters.displayHeight = pClient->m_height;
+                pClient->m_spRenderContext = pRenderer->CreateSubContext( initParameters );
+                HELIUM_ASSERT( pClient->m_spRenderContext );
             }
             else
             {
-                m_clients[c]->m_swapchain = 0;
-
-                // get the back buffer pointers and depth buffer pointers
-                m_device->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&m_clients[c]->m_back_buffer);
-                m_device->GetDepthStencilSurface(&m_clients[c]->m_depth_buffer);
+                pClient->m_spRenderContext = sm_spMainRenderContext;
             }
         }
     }
 
     // step 5, go through all the clients and create their default pool resources
-    for (uint32_t c=0;c<m_master_count;c++)
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
     {
-        if (m_clients[c])
+        DeviceManager* pClient = m_clients[ clientIndex ];
+        if ( pClient )
         {
-            m_clients[c]->HandleClientDefaultPool(DEFPOOL_CREATE);
+            pClient->HandleClientDefaultPool( DEFPOOL_CREATE );
         }
     }
 
-    return hr;
+    return true;
 }
 
 bool DeviceManager::TestDeviceReady()
@@ -579,151 +405,4 @@ bool DeviceManager::SaveTGA(const tchar_t* fname)
     surface->Release();
 
     return true;
-}
-
-#if PRECOMPILED_SHADERS
-
-// vertex shaders
-#include "screenspace_vs.h"
-#include "basicworldspace_vs.h"
-#include "basicobjspace_vs.h"
-#include "mesh_normal_vs.h"
-#include "mesh_debug_color_vs.h"
-#include "mesh_debug_constcolor_vs.h"
-#include "mesh_debug_vertnormal_vs.h"
-#include "mesh_debug_verttangent_vs.h"
-#include "mesh_debug_uv_vs.h"
-
-// pixel shaders
-#include "diffuse_ps.h"
-#include "diffuse_gpi_ps.h"
-#include "color_ps.h"
-#include "texture_ps.h"
-#include "texture_g_ps.h"
-#include "texture_a_ps.h"
-#include "sky_ps.h"
-
-#endif
-
-static const BYTE* g_compiled_vertex_shaders[__VERTEX_SHADER_LAST__] = 
-{
-#if PRECOMPILED_SHADERS
-    g_screenspace_vs,
-    g_basicworldspace_vs,
-    g_basicobjspace_vs,
-    g_mesh_normal_vs,
-    g_mesh_debug_color_vs,
-    g_mesh_debug_constcolor_vs,
-    g_mesh_debug_vertnormal_vs,
-    g_mesh_debug_verttangent_vs,
-    g_mesh_debug_uv_vs,
-#endif
-
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-static const BYTE* g_compiled_pixel_shaders[__PIXEL_SHADER_LAST__] = 
-{
-#if PRECOMPILED_SHADERS
-    g_diffuse_ps,
-    g_diffuse_gpi_ps,
-    g_color_ps,
-    g_texture_ps,
-    g_texture_g_ps,
-    g_texture_a_ps,
-    g_sky_ps,
-#endif
-
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-static D3DVERTEXELEMENT9 g_VertexDec_Screenspace[] = 
-{
-    {0,0, D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,0},
-    {0,16,D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,0},
-    {0,32,D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,1},
-    {0,48,D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,2},
-    {0xFF,0,D3DDECLTYPE_UNUSED, 0,0,0}  
-};
-
-static D3DVERTEXELEMENT9 g_VertexDec_Debug[] = 
-{
-    {0,0, D3DDECLTYPE_FLOAT3,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,0},
-    {0,12,D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,0},
-
-    {0xFF,0,D3DDECLTYPE_UNUSED, 0,0,0}  
-};
-
-static D3DVERTEXELEMENT9 g_VertexDec_Mesh[] =  // total size 64
-{
-    {0,0, D3DDECLTYPE_FLOAT3,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION,0},
-    {0,12,D3DDECLTYPE_FLOAT3,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,0}, // NORMAL
-    {0,24,D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,1}, // TANGENT
-    {0,40,D3DDECLTYPE_FLOAT2,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,2}, // UV
-    {0,48,D3DDECLTYPE_FLOAT4,   D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD,3}, // COLOR
-
-    {0xFF,0,D3DDECLTYPE_UNUSED, 0,0,0}  
-};
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void DeviceManager::CreateBaseResources()
-{
-#ifdef PRECOMPILED_SHADERS
-    for (uint32_t vs=0;vs<__VERTEX_SHADER_LAST__;vs++)
-    {
-        if (FAILED(m_device->CreateVertexShader((const DWORD*)g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
-        {
-            Log::Error( TXT( "Failed to create vertex shader %d\n" ),vs);
-            m_vertex_shaders[vs]=0;
-        }
-    }
-
-    for (uint32_t ps=0;ps<__PIXEL_SHADER_LAST__;ps++)
-    {
-        if (FAILED(m_device->CreatePixelShader((const DWORD*)g_compiled_pixel_shaders[ps],&m_pixel_shaders[ps])))
-        {
-            Log::Error( TXT( "Failed to create pixel shader %d\n" ),ps);
-            m_pixel_shaders[ps]=0;
-        }
-    }
-#endif
-
-    m_device->CreateVertexDeclaration(g_VertexDec_Debug,&m_vertex_dec[VERTEX_DECL_DEBUG]);
-    m_device->CreateVertexDeclaration(g_VertexDec_Mesh,&m_vertex_dec[VERTEX_DECL_MESH]);
-    m_device->CreateVertexDeclaration(g_VertexDec_Screenspace,&m_vertex_dec[VERTEX_DECL_SCREENSPACE]);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void DeviceManager::FreeBaseResources()
-{
-    // delete all the shaders and vertex decls
-    for (uint32_t s=0;s<__VERTEX_SHADER_LAST__;s++)
-    {
-        if (m_vertex_shaders[s])
-            m_vertex_shaders[s]->Release();
-    }
-    for (uint32_t s=0;s<__PIXEL_SHADER_LAST__;s++)
-    {
-        if (m_pixel_shaders[s])
-            m_pixel_shaders[s]->Release();
-    }
-    for (uint32_t s=0;s<__VERTEX_DECL_LAST__;s++)
-    {
-        if (m_vertex_dec[s])
-            m_vertex_dec[s]->Release();
-    }
 }

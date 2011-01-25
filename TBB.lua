@@ -9,6 +9,25 @@ This is mainly to support building from user folders in XP -Geoff
 
 --]]
 
+function FlipSlashes( cmd )
+	return string.gsub(cmd, "/", "\\")
+end
+
+function CallMake( arch, cmd )
+	local path = os.getenv("TMP") .. os.tmpname() .. ".bat";
+	print( "Creating temp bat file for make.exe: " .. path )
+
+	local bat = io.open( path, "w+")		
+	bat.write( bat, "@call \"%VCINSTALLDIR%\"\\vcvarsall.bat " .. arch .. "\n" )
+	bat.write( bat, "@set PATH=%PATH%;" .. FlipSlashes( os.getcwd() ) .. "\\..\\..\\Utilities\\Win32\n" )
+	bat.write( bat, "@make.exe " .. cmd .. "\n" )
+	io.close( bat )
+
+	local result = os.execute( "cmd.exe /c \"call \"" .. path .. "\"" )
+	--os.execute( "cmd.exe /c \"del " .. path .. "\"" )
+	return result
+end
+
 Helium.BuildTBB = function()
 
 	local cwd = os.getcwd()
@@ -19,26 +38,7 @@ Helium.BuildTBB = function()
 			print("VCINSTALLDIR is not detected in your environment")
 			os.exit(1)
 		end
-				
-		function FlipSlashes( cmd )
-			return string.gsub(cmd, "/", "\\")
-		end
-
-		function CallMake( arch, cmd )
-			local path = os.getenv("TMP") .. os.tmpname() .. ".bat";
-			print( "Creating temp bat file for make.exe: " .. path )
-
-			local bat = io.open( path, "w+")		
-			bat.write( bat, "@call \"%VCINSTALLDIR%\"\\vcvarsall.bat " .. arch .. "\n" )
-			bat.write( bat, "@set PATH=%PATH%;" .. FlipSlashes( os.getcwd() ) .. "\\..\\..\\Utilities\\Win32\n" )
-			bat.write( bat, "@make.exe " .. cmd .. "\n" )
-			io.close( bat )
-
-			local result = os.execute( "cmd.exe /c \"call \"" .. path .. "\"" )
-			os.execute( "cmd.exe /c \"del " .. path .. "\"" )
-			return result
-		end
-
+		
 		os.chdir( "Dependencies/tbb" )
 
 		local result
@@ -69,14 +69,14 @@ Helium.CleanTBB = function()
 			print("VCINSTALLDIR is not detected in your environment")
 			os.exit(1)
 		end
-				
-		os.chdir( "Utilities\\Win32" )
-
+		
+		os.chdir( "Dependencies/tbb" )
+		
 		local result
         result = CallMake( "x86", "clean arch=ia32" )
         if result ~= 0 then os.exit( 1 ) end
         if Helium.Build64Bit() then
-            result = os.execute( "x86_amd64", "clean arch=intel64" )
+            result = CallMake( "x86_amd64", "clean arch=intel64" )
             if result ~= 0 then os.exit( 1 ) end
         end
 	else

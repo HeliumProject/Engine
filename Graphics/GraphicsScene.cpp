@@ -81,14 +81,13 @@ void GraphicsScene::Update()
     }
 
     Renderer::EStatus rendererStatus = pRenderer->GetStatus();
-    if( rendererStatus == Renderer::STATUS_LOST )
+    if( rendererStatus != Renderer::STATUS_READY )
     {
-        return;
-    }
+        if( rendererStatus == Renderer::STATUS_NOT_RESET )
+        {
+            rendererStatus = pRenderer->Reset();
+        }
 
-    if( rendererStatus == Renderer::STATUS_NOT_RESET )
-    {
-        rendererStatus = pRenderer->Reset();
         if( rendererStatus != Renderer::STATUS_READY )
         {
             return;

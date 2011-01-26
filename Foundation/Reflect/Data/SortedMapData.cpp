@@ -205,9 +205,9 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Clear()
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::ConnectData(Helium::HybridPtr<void> data)
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
@@ -232,30 +232,12 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItems( A_V
     DataType::ConstIterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->Second(), m_Instance, m_Field ) ) ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( itr->First() ), m_Instance, m_Field ), Data::Bind( const_cast< ValueT& >( itr->Second() ), m_Instance, m_Field ) ) );
     }
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
-{
-    items.Clear();
-    items.Reserve( m_Data->GetSize() );
-
-    DataType::ConstIterator itr = m_Data->Begin();
-    DataType::ConstIterator end = m_Data->End();
-    for ( ; itr != end; ++itr )
-    {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->Second(), m_Instance, m_Field ) ) ) );
-    }
-}
-
-template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-DataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( const Data* key )
+DataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -263,29 +245,14 @@ DataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( c
     DataType::ConstIterator found = m_Data->Find( keyValue );
     if ( found != m_Data->End() )
     {
-        return Data::Bind( found->Second(), m_Instance, m_Field );
+        return Data::Bind( const_cast< ValueT& >( found->Second() ), m_Instance, m_Field );
     }
 
     return NULL;
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-ConstDataPtr SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::GetItem( const Data* key ) const
-{
-    KeyT keyValue;
-    Data::GetValue( key, keyValue );
-
-    DataType::ConstIterator found = m_Data->Find( keyValue );
-    if ( found != m_Data->End() )
-    {
-        return Data::Bind( found->Second(), m_Instance, m_Field );
-    }
-
-    return NULL;
-}
-
-template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SetItem( const Data* key, const Data* value )
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SetItem( Data* key, Data* value )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -294,7 +261,7 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::SetItem( cons
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::RemoveItem( const Data* key )
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::RemoveItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -303,7 +270,7 @@ void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::RemoveItem( c
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const SortedMapDataT* rhs = SafeCast< SortedMapDataT >( src );
     if ( !rhs )
@@ -317,7 +284,7 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Set( const Da
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( Object* object )
 {
     const SortedMapDataT* rhs = SafeCast< SortedMapDataT >( object );
     if ( !rhs )

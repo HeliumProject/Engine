@@ -47,7 +47,7 @@ namespace Helium
 
         public:
             REFLECT_DECLARE_ABSTRACT( AssetClass, ComponentCollection );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
         public:
             AssetClass();

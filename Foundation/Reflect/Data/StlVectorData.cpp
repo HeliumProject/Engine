@@ -78,9 +78,9 @@ SimpleStlVectorData<T>::~SimpleStlVectorData()
 }
 
 template < class T >
-void SimpleStlVectorData<T>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlVectorData<T>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class T >
@@ -114,19 +114,13 @@ DataPtr SimpleStlVectorData<T>::GetItem(size_t at)
 }
 
 template < class T >
-ConstDataPtr SimpleStlVectorData<T>::GetItem(size_t at) const
-{
-    return Data::Bind(m_Data->at(at), m_Instance, m_Field);
-}
-
-template < class T >
-void SimpleStlVectorData<T>::SetItem(size_t at, const Data* value)
+void SimpleStlVectorData<T>::SetItem(size_t at, Data* value)
 {
     Data::GetValue(value, m_Data->at(at));
 }
 
 template < class T >
-void SimpleStlVectorData<T>::Insert( size_t at, const Data* value )
+void SimpleStlVectorData<T>::Insert( size_t at, Data* value )
 {
     T temp;
     Data::GetValue( value, temp );
@@ -192,7 +186,7 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
+bool SimpleStlVectorData<T>::Set(Data* src, uint32_t flags)
 {
     const SimpleStlVectorData<T>* rhs = SafeCast<SimpleStlVectorData<T>>(src);
     if (!rhs)
@@ -206,7 +200,7 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Equals(const Object* object) const
+bool SimpleStlVectorData<T>::Equals(Object* object)
 {
     const SimpleStlVectorData<T>* rhs = SafeCast< SimpleStlVectorData<T> >(object);
     if (!rhs)

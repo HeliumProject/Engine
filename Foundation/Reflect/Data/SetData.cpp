@@ -74,9 +74,9 @@ SimpleSetData< KeyT, EqualKeyT, AllocatorT >::~SimpleSetData()
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::ConnectData( Helium::HybridPtr< void > data )
+void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
@@ -98,7 +98,7 @@ const Class* SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItemClass() const
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItems( DynArray< ConstDataPtr >& items ) const
+void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItems( DynArray< DataPtr >& items ) const
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -107,12 +107,12 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItems( DynArray< ConstData
     DataType::ConstIterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New( static_cast< const ConstDataPtr& >( Data::Bind( *itr, m_Instance, m_Field ) ) ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( *itr ), m_Instance, m_Field ) ) );
     }
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::AddItem( const Data* value )
+void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::AddItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -120,7 +120,7 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::AddItem( const Data* value )
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( const Data* value )
+void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -128,7 +128,7 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( const Data* value
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::ContainsItem( const Data* value ) const
+bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::ContainsItem( Data* value ) const
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -136,7 +136,7 @@ bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::ContainsItem( const Data* val
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const SetDataT* rhs = SafeCast< SetDataT >( src );
     if ( !rhs )
@@ -150,7 +150,7 @@ bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Equals( Object* object )
 {
     const SetDataT* rhs = SafeCast< SetDataT >( object );
     if ( !rhs )

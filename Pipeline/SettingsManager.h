@@ -65,7 +65,7 @@ namespace Helium
         M_Settings m_SettingsMap;
 
     public:
-        static void AcceptCompositeVisitor( Reflect::Composite& comp )
+        static void PopulateComposite( Reflect::Composite& comp )
         {
             comp.AddField( &SettingsManager::m_SettingsMap, TXT( "m_SettingsMap" ), Reflect::FieldFlags::Hide );
         }

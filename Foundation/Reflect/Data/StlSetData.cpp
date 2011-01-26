@@ -76,9 +76,9 @@ SimpleStlSetData<DataT, DataClassT>::~SimpleStlSetData()
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlSetData<DataT, DataClassT>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class DataT, class DataClassT >
@@ -100,19 +100,19 @@ const Class* SimpleStlSetData<DataT, DataClassT>::GetItemClass() const
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::GetItems(std::vector< ConstDataPtr >& items) const
+void SimpleStlSetData<DataT, DataClassT>::GetItems(std::vector< DataPtr >& items) const
 {
     items.resize( m_Data->size() );
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index] = static_cast< const ConstDataPtr& >( Data::Bind( *itr, m_Instance, m_Field ) );
+        items[index] = Data::Bind( const_cast< DataT& >( *itr ), m_Instance, m_Field );
     }
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::AddItem(const Data* value)
+void SimpleStlSetData<DataT, DataClassT>::AddItem(Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -120,7 +120,7 @@ void SimpleStlSetData<DataT, DataClassT>::AddItem(const Data* value)
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::RemoveItem(const Data* value)
+void SimpleStlSetData<DataT, DataClassT>::RemoveItem(Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -128,7 +128,7 @@ void SimpleStlSetData<DataT, DataClassT>::RemoveItem(const Data* value)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
+bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(Data* value) const
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -136,7 +136,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
+bool SimpleStlSetData<DataT, DataClassT>::Set(Data* src, uint32_t flags)
 {
     const StlSetDataT* rhs = SafeCast<StlSetDataT>(src);
     if (!rhs)
@@ -150,7 +150,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
+bool SimpleStlSetData<DataT, DataClassT>::Equals(Object* object)
 {
     const StlSetDataT* rhs = SafeCast<StlSetDataT>(object);
     if (!rhs)

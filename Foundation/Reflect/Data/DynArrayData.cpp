@@ -80,9 +80,9 @@ SimpleDynArrayData< T >::~SimpleDynArrayData()
 }
 
 template< class T >
-void SimpleDynArrayData< T >::ConnectData(Helium::HybridPtr<void> data)
+void SimpleDynArrayData< T >::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template< class T >
@@ -116,19 +116,13 @@ DataPtr SimpleDynArrayData< T >::GetItem( size_t at )
 }
 
 template< class T >
-ConstDataPtr SimpleDynArrayData< T >::GetItem( size_t at ) const
+void SimpleDynArrayData< T >::SetItem( size_t at, Data* value )
 {
-    return Data::Bind( m_Data->GetElement( at ), m_Instance, m_Field );
+    Data::GetValue( value, m_Data->GetElement( at ) );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::SetItem( size_t at, const Data* value )
-{
-    Data::GetValue(value, m_Data->GetElement( at ) );
-}
-
-template< class T >
-void SimpleDynArrayData< T >::Insert( size_t at, const Data* value )
+void SimpleDynArrayData< T >::Insert( size_t at, Data* value )
 {
     T temp;
     Data::GetValue( value, temp );
@@ -190,7 +184,7 @@ void SimpleDynArrayData< T >::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Set( const Data* src, uint32_t flags )
+bool SimpleDynArrayData< T >::Set( Data* src, uint32_t flags )
 {
     const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( src );
     if (!rhs)
@@ -204,7 +198,7 @@ bool SimpleDynArrayData< T >::Set( const Data* src, uint32_t flags )
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Equals( const Object* object ) const
+bool SimpleDynArrayData< T >::Equals( Object* object )
 {
     const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( object );
     if (!rhs)

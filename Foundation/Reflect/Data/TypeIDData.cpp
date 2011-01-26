@@ -18,14 +18,14 @@ TypeIDData::~TypeIDData()
 
 }
 
-void TypeIDData::ConnectData(Helium::HybridPtr<void> data)
+void TypeIDData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
-bool TypeIDData::Set(const Data* s, uint32_t flags)
+bool TypeIDData::Set(Data* data, uint32_t flags)
 {
-    const TypeIDData* rhs = SafeCast<TypeIDData>(s);
+    const TypeIDData* rhs = SafeCast<TypeIDData>(data);
     if (!rhs)
     {
         return false;
@@ -36,7 +36,7 @@ bool TypeIDData::Set(const Data* s, uint32_t flags)
     return true;
 }
 
-bool TypeIDData::Equals(const Object* object) const
+bool TypeIDData::Equals(Object* object)
 {
     const TypeIDData* rhs = SafeCast<TypeIDData>(object);
     if (!rhs)

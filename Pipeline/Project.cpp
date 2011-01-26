@@ -4,7 +4,7 @@ using namespace Helium;
 
 REFLECT_DEFINE_BASE_STRUCTURE( TestStructure );
 
-void TestStructure::AcceptCompositeVisitor( Reflect::Composite& comp )
+void TestStructure::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &This::m_Float32, TXT( "Float" ) );
     comp.AddField( &This::m_String, TXT( "String" ) );
@@ -19,11 +19,11 @@ TestStructure::TestStructure()
 
 REFLECT_DEFINE_OBJECT( Project );
 
-void Project::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Project::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
-    comp.AddStructureField( &This::m_Test, TXT( "m_Test" ) );
+    //comp.AddStructureField( &This::m_Test, TXT( "m_Test" ) );
 }
 
 Project::Project( const Path& path )

@@ -15,14 +15,14 @@ PointerData::~PointerData()
 
 }
 
-void PointerData::ConnectData(Helium::HybridPtr<void> data)
+void PointerData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
-bool PointerData::Set(const Data* s, uint32_t flags)
+bool PointerData::Set(Data* data, uint32_t flags)
 {
-    const PointerData* rhs = SafeCast<PointerData>(s);
+    const PointerData* rhs = SafeCast<PointerData>(data);
     if (!rhs)
     {
         return false;
@@ -40,7 +40,7 @@ bool PointerData::Set(const Data* s, uint32_t flags)
     return true;
 }
 
-bool PointerData::Equals(const Object* object) const
+bool PointerData::Equals(Object* object)
 {
     const PointerData* rhs = SafeCast<PointerData>(object);
     

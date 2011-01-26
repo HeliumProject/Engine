@@ -123,7 +123,7 @@ namespace Helium
             static Reflect::Class* CreateClass( const tchar_t* name );
 
             // Enumerates member data (stub)
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             //
             // Persistence
@@ -136,9 +136,9 @@ namespace Helium
             virtual bool                ProcessComponent( ObjectPtr object, const tchar_t* fieldName );
 
             // Serialize to a particular data target, just works on this
-            void                        ToXML( tstring& xml ) const;
-            void                        ToBinary( std::iostream& stream ) const;
-            void                        ToFile( const Path& path ) const;
+            void                        ToXML( tstring& xml );
+            void                        ToBinary( std::iostream& stream );
+            void                        ToFile( const Path& path );
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
             virtual ObjectPtr           GetTemplate() const;
@@ -156,7 +156,7 @@ namespace Helium
             virtual void                Accept( Visitor& visitor );
 
             // Do comparison logic against other object, checks type and field data
-            virtual bool                Equals( const Object* object ) const;
+            virtual bool                Equals( Object* object );
 
             // Copy this object's data into another object isntance
             virtual void                CopyTo( Object* object );

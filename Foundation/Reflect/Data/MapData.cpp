@@ -205,9 +205,9 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Clear()
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::ConnectData(Helium::HybridPtr<void> data)
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
@@ -233,29 +233,13 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ValueType
     for ( ; itr != end; ++itr )
     {
         HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->Second(), m_Instance, m_Field ) ) ) );
+            Data::Bind( const_cast< KeyT& >( itr->First() ), m_Instance, m_Field ),
+            Data::Bind( const_cast< ValueT& >( itr->Second() ), m_Instance, m_Field ) ) );
     }
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
-{
-    items.Clear();
-    items.Reserve( m_Data->GetSize() );
-
-    DataType::ConstIterator itr = m_Data->Begin();
-    DataType::ConstIterator end = m_Data->End();
-    for ( ; itr != end; ++itr )
-    {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->Second(), m_Instance, m_Field ) ) ) );
-    }
-}
-
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-DataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Data* key )
+DataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -263,29 +247,14 @@ DataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Dat
     DataType::ConstIterator found = m_Data->Find( keyValue );
     if ( found != m_Data->End() )
     {
-        return Data::Bind( found->Second(), m_Instance, m_Field );
+        return Data::Bind( const_cast< ValueT& >( found->Second() ), m_Instance, m_Field );
     }
 
     return NULL;
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-ConstDataPtr SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::GetItem( const Data* key ) const
-{
-    KeyT keyValue;
-    Data::GetValue( key, keyValue );
-
-    DataType::ConstIterator found = m_Data->Find( keyValue );
-    if ( found != m_Data->End() )
-    {
-        return Data::Bind( found->Second(), m_Instance, m_Field );
-    }
-
-    return NULL;
-}
-
-template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* key, const Data* value )
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( Data* key, Data* value )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -294,7 +263,7 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::SetItem( const Data* 
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::RemoveItem( const Data* key )
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::RemoveItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -303,7 +272,7 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::RemoveItem( const Dat
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const MapDataT* rhs = SafeCast< MapDataT >( src );
     if ( !rhs )
@@ -317,7 +286,7 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Set( const Data* src,
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
-bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( Object* object )
 {
     const MapDataT* rhs = SafeCast< MapDataT >( object );
     if ( !rhs )

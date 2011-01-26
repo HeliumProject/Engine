@@ -203,9 +203,9 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Clear()
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -228,26 +228,13 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ValueTyp
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
+        items[index].first = Data::Bind( const_cast< KeyT& >( itr->first ), m_Instance, m_Field );
+        items[index].second = Data::Bind( const_cast< ValueT& >( itr->second ), m_Instance, m_Field );
     }
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ConstValueType& items) const
-{
-    items.resize(m_Data->size());
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( size_t index=0; itr != end; ++itr, ++index )
-    {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
-    }
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key)
+DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -255,29 +242,14 @@ DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Da
     DataType::const_iterator found = m_Data->find( keyValue );
     if ( found != m_Data->end() )
     {
-        return Data::Bind( found->second, m_Instance, m_Field );
+        return Data::Bind( const_cast< ValueT& >( found->second ), m_Instance, m_Field );
     }
 
     return NULL;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-ConstDataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key) const
-{
-    KeyT keyValue;
-    Data::GetValue(key, keyValue);
-
-    DataType::const_iterator found = m_Data->find( keyValue );
-    if ( found != m_Data->end() )
-    {
-        return Data::Bind( found->second, m_Instance, m_Field );
-    }
-
-    return NULL;
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data* key, const Data* value)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(Data* key, Data* value)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -289,7 +261,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data*
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Data* key)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -298,7 +270,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Da
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src, uint32_t flags)
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(Data* src, uint32_t flags)
 {
     const StlMapDataT* rhs = SafeCast<StlMapDataT>(src);
     if (!rhs)
@@ -312,7 +284,7 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object* object) const
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(Object* object)
 {
     const StlMapDataT* rhs = SafeCast<StlMapDataT>(object);
     if (!rhs)

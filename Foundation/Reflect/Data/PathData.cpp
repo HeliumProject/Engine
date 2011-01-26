@@ -16,12 +16,12 @@ PathData::~PathData()
 {
 }
 
-void PathData::ConnectData( Helium::HybridPtr< void > data )
+void PathData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
-bool PathData::Set( const Data* src, uint32_t flags )
+bool PathData::Set( Data* src, uint32_t flags )
 {
     if ( GetClass() != src->GetClass() )
     {
@@ -35,7 +35,7 @@ bool PathData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool PathData::Equals( const Object* object ) const
+bool PathData::Equals( Object* object )
 {
     const PathData* rhs = SafeCast< PathData >( object );
 
@@ -123,7 +123,7 @@ tistream& PathData::operator<<( tistream& stream )
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* object = (Object*)m_Instance.Mutable();
+            Object* object = static_cast< Object* >( m_Instance );
             object->RaiseChanged( m_Field );
         }
     }

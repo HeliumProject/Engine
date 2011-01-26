@@ -4,10 +4,9 @@
 #include <iostream>
 
 #include "Foundation/Automation/Event.h"
-#include "Foundation/Memory/HybridPtr.h"
-#include "Foundation/SmartBuffer/BasicBuffer.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Archive.h"
+#include "Foundation/SmartBuffer/BasicBuffer.h"
 
 namespace Helium
 {
@@ -24,6 +23,201 @@ namespace Helium
         typedef DataFlags::DataFlag DataFlag;
 
         //
+        // A pointer to some typed (or void) data
+        //
+
+        template<class T>
+        class DataPointer
+        {
+        public:
+            DataPointer()
+                : m_Target( NULL )
+                , m_Owned( false )
+            {
+
+            }
+
+            ~DataPointer()
+            {
+                Deallocate();
+            }
+
+            void Allocate() const
+            {
+                Deallocate();
+                m_Target = new T;
+                m_Owned = true;
+            }
+
+            void Deallocate() const
+            {
+                if ( m_Owned && m_Target )
+                {
+                    delete m_Target;
+                    m_Target = NULL;
+                }
+            }
+
+            void Connect(void* pointer)
+            {
+                Deallocate();
+                m_Target = reinterpret_cast< T* >( pointer );
+                m_Owned = false;
+            }
+
+            void Disconnect()
+            {
+                Deallocate();
+            }
+
+            const T* operator->() const
+            {
+                if ( !m_Target )
+                {
+                    Allocate();
+                }
+
+                return m_Target;
+            }
+
+            T* operator->()
+            {
+                if ( !m_Target )
+                {
+                    Allocate();
+                }
+
+                return m_Target;
+            }
+
+            operator const T*() const
+            {
+                if ( !m_Target )
+                {
+                    Allocate();
+                }
+
+                return m_Target;
+            }
+
+            operator T*()
+            {
+                if ( !m_Target )
+                {
+                    Allocate();
+                }
+
+                return m_Target;
+            }
+
+        private:
+            mutable T*      m_Target;
+            mutable bool    m_Owned;
+        };
+
+        class VoidDataPointer
+        {
+        public:
+            VoidDataPointer()
+                : m_Target( NULL )
+                , m_Owned( false )
+                , m_Size( 0 )
+            {
+
+            }
+
+            ~VoidDataPointer()
+            {
+                Deallocate();
+            }
+
+            template< class T >
+            void Allocate() const
+            {
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == 0 || m_Size = sizeof( T ) );
+                m_Size = sizeof( T );
+                m_Target = new T;
+                m_Owned = true;
+            }
+
+            void Deallocate() const
+            {
+                if ( m_Owned && m_Target )
+                {
+                    delete m_Target;
+                    m_Target = NULL;
+                }
+            }
+
+            void Connect(void* pointer)
+            {
+                Deallocate();
+                m_Target = pointer;
+                m_Owned = false;
+            }
+
+            void Disconnect()
+            {
+                Deallocate();
+            }
+
+            template< class T >
+            const T* operator->() const
+            {
+                if ( !m_Target )
+                {
+                    Allocate<T>();
+                }
+
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                return m_Target;
+            }
+
+            template< class T >
+            T* operator->()
+            {
+                if ( !m_Target )
+                {
+                    Allocate<T>();
+                }
+
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                return m_Target;
+            }
+
+            template< class T >
+            operator const T*() const
+            {
+                if ( !m_Target )
+                {
+                    Allocate<T>();
+                }
+
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                return m_Target;
+            }
+
+            template< class T >
+            operator T*()
+            {
+                if ( !m_Target )
+                {
+                    Allocate<T>();
+                }
+
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                return m_Target;
+            }
+
+        private:
+            mutable void*   m_Target;
+            mutable bool    m_Owned;
+#ifdef REFLECT_CHECK_MEMORY
+            mutable size_t  m_Size;
+#endif
+        };
+        
+        //
         // A Data is an Object that knows how to read/write data
         //  from any kind of support Archive type (XML and Binary), given
         //  an address in memory to serialize/deserialize data to/from
@@ -32,77 +226,8 @@ namespace Helium
         class FOUNDATION_API Data : public Object
         {
         protected:
-            // derived classes will use this
-            template<class T>
-            class Pointer
-            {
-            public:
-                Pointer()
-                    : m_Owned( false )
-                {
-
-                }
-
-                ~Pointer()
-                {
-                    Deallocate();
-                }
-
-                template<class DataT>
-                void Allocate()
-                {
-                    m_Target = new DataT;
-                    m_Owned = true;
-                }
-
-                void Deallocate()
-                {
-                    if ( m_Owned && m_Target )
-                    {
-                        delete m_Target;
-                        m_Target = static_cast< const T* >( NULL );
-                    }
-                }
-
-                void Connect(Helium::HybridPtr<T> pointer)
-                {
-                    Deallocate();
-                    m_Target = pointer;
-                    m_Owned = false;
-                }
-
-                void Disconnect()
-                {
-                    Deallocate();
-                }
-
-                const T* operator->() const
-                {
-                    return m_Target;
-                }
-
-                T* operator->()
-                {
-                    return m_Target;
-                }
-
-                operator const T*() const
-                {
-                    return m_Target;
-                }
-
-                operator T*()
-                {
-                    return m_Target;
-                }
-
-            private:
-                Helium::HybridPtr<T>    m_Target;
-                bool                    m_Owned;
-            };
-
             // the instance we are processing, if any
-            Helium::HybridPtr<void> m_Instance;
+            void* m_Instance;
 
             // the field we are processing, if any
             const Field* m_Field;
@@ -123,10 +248,10 @@ namespace Helium
             //
 
             // set the address to interface with
-            virtual void ConnectData(Helium::HybridPtr<void> data) = 0;
+            virtual void ConnectData(void* data) = 0;
 
             // connect to a field of an object
-            void ConnectField(Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField = 0);
+            void ConnectField(void* instance, const Field* field, uintptr_t offsetInField = 0);
 
             // reset all pointers
             void Disconnect();
@@ -137,12 +262,6 @@ namespace Helium
 
             template<class T>
             static inline T* GetData(Data*)
-            {
-                return NULL;
-            }
-
-            template<class T>
-            static inline const T* GetData(const Data*)
             {
                 return NULL;
             }
@@ -188,31 +307,15 @@ namespace Helium
                 return ser;
             }
 
-            template <class T>
-            static DataPtr Bind(const T& value, const void* instance, const Field* field)
-            {
-                DataPtr ser = Create<T>();
-
-                if (ser.ReferencesObject())
-                {
-                    ser->ConnectData( &value );
-                    ser->m_Instance = instance;
-                    ser->m_Field = field;
-                }
-
-                return ser;
-            }
-
             //
             // Value templates
             //
 
             template <typename T>
-            static bool GetValue(const Data* ser, T& value);
+            static bool GetValue(Data* ser, T& value);
 
             template <typename T>
-            static bool SetValue(Data* ser, const T& value, bool raiseEvents = true);
-
+            static bool SetValue(Data* ser, T value, bool raiseEvents = true);
 
             //
             // Data Management
@@ -222,39 +325,39 @@ namespace Helium
             static bool CastSupported(const Class* srcType, const Class* destType);
 
             // convert value data from one data to another
-            static bool CastValue(const Data* src, Data* dest, uint32_t flags = 0);
+            static bool CastValue(Data* src, Data* dest, uint32_t flags = 0);
 
             // copies value data from one data to another
-            virtual bool Set(const Data* src, uint32_t flags = 0) = 0;
+            virtual bool Set(Data* src, uint32_t flags = 0) = 0;
 
             // assign
-            Data& operator=(const Data* rhs)
+            Data& operator=(Data* rhs)
             {
                 Set(rhs);
                 return *this;
             }
-            Data& operator=(const Data& rhs)
+            Data& operator=(Data& rhs)
             {
                 Set(&rhs);
                 return *this;
             }
 
             // equality
-            bool operator==(const Data* rhs) const
+            bool operator==(Data* rhs)
             {
                 return Equals(rhs);
             }
-            bool operator== (const Data& rhs) const
+            bool operator== (Data& rhs)
             {
                 return Equals(&rhs);
             }
 
             // inequality
-            bool operator!= (const Data* rhs) const
+            bool operator!=(Data* rhs)
             {
                 return !Equals(rhs);
             }
-            bool operator!= (const Data& rhs) const
+            bool operator!=(Data& rhs)
             {
                 return !Equals(&rhs);
             }
@@ -307,7 +410,7 @@ namespace Helium
         //
 
         template <class T>
-        inline bool Data::GetValue(const Data* ser, T& value)
+        inline bool Data::GetValue(Data* ser, T& value)
         {
             if ( ser == NULL )
             {
@@ -354,7 +457,7 @@ namespace Helium
         }
 
         template <class T>
-        inline bool Data::SetValue(Data* ser, const T& value, bool raiseEvents)
+        inline bool Data::SetValue(Data* ser, T value, bool raiseEvents)
         {
             if ( ser == NULL )
             {
@@ -399,7 +502,7 @@ namespace Helium
                 // Notify interested listeners that the data has changed.
                 if ( raiseEvents && ser && ser->m_Instance && ser->m_Field && ser->m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
                 {
-                    Object* object = (Object*)ser->m_Instance.Mutable();
+                    Object* object = static_cast< Object* >( ser->m_Instance );
                     object->RaiseChanged( ser->m_Field );
                 }
             }
@@ -415,3 +518,5 @@ namespace Helium
         }
     }
 }
+
+#include "Foundation/Reflect/Data/Data.inl"

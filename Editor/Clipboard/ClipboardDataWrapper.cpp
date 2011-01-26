@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_OBJECT( ClipboardDataWrapper );
 
-void ClipboardDataWrapper::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ClipboardDataWrapper::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &ClipboardDataWrapper::m_Data, TXT( "m_Data" ) );
 }

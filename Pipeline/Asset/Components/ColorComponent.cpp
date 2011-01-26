@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_OBJECT( ColorComponent );
 
-void ColorComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ColorComponent::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &ColorComponent::m_ColorHDR, TXT( "m_ColorHDR" ) );
     comp.AddField( &ColorComponent::m_Alpha, TXT( "m_Alpha" ) );

@@ -19,9 +19,9 @@ SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::~SimpleObjectMapData()
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::ConnectData( Helium::HybridPtr< void > data )
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
@@ -52,30 +52,12 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItems( A_ValueType& 
     DataType::Iterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            &itr->Second() ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( itr->First() ), m_Instance, m_Field ), &itr->Second() ) );
     }
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
-{
-    items.Clear();
-    items.Reserve( m_Data->GetSize() );
-
-    DataType::ConstIterator itr = m_Data->Begin();
-    DataType::ConstIterator end = m_Data->End();
-    for ( ; itr != end; ++itr )
-    {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            &itr->Second() ) );
-    }
-}
-
-template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-ObjectPtr* SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItem( const Data* key )
+ObjectPtr* SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -90,32 +72,15 @@ ObjectPtr* SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItem( const Da
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-const ObjectPtr* SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::GetItem( const Data* key ) const
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::SetItem( Data* key, Object* value )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
-
-    DataType::ConstIterator found = m_Data->Find( keyValue );
-    if ( found != m_Data->End() )
-    {
-        return &found->Second();
-    }
-
-    return NULL;
+    (*m_Data)[ keyValue ] = value;
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::SetItem( const Data* key, const Object* value )
-{
-    KeyT keyValue;
-    Data::GetValue( key, keyValue );
-
-#pragma TODO( "Fix const correctness." )
-    (*m_Data)[ keyValue ] = const_cast< Object* >( value );
-}
-
-template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( const Data* key )
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -124,7 +89,7 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::RemoveItem( const Data*
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const ObjectMapDataT* rhs = SafeCast< ObjectMapDataT >( src );
     if ( !rhs )
@@ -153,7 +118,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Set( const Data* src, u
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( Object* object )
 {
     const ObjectMapDataT* rhs = SafeCast< ObjectMapDataT >( object );
     if ( !rhs )
@@ -204,7 +169,7 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& arc
             ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass< KeyT >() );
 
             Data* ser = AssertCast< Data >( elem.Ptr() );
-            ser->ConnectData( &itr->First() );
+            ser->ConnectData( const_cast< KeyT* >( &itr->First() ) );
 
             HELIUM_VERIFY( components.New( ser ) );
             HELIUM_VERIFY( components.New( itr->Second() ) );
@@ -264,8 +229,8 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( Archive& a
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Accept( Visitor& visitor )
 {
-    DataType::Iterator itr = const_cast< Data::Pointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< Data::Pointer< DataType >& >( m_Data )->End();
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
     for ( ; itr != end; ++itr )
     {
         ObjectPtr& object = itr->Second();

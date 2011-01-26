@@ -29,7 +29,7 @@ namespace Helium
                 Structure* info = Structure::Create();
 
                 // populate reflection information
-                Composite::Create< StructureT >( name, baseName, &StructureT::AcceptCompositeVisitor, info );
+                Composite::Create< StructureT >( name, baseName, &StructureT::PopulateComposite, info );
 
                 info->m_Default = new StructureT;
 

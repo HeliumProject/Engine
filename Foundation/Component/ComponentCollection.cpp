@@ -11,9 +11,9 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ComponentCollection)
 
-void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ComponentCollection::PopulateComposite( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
+    comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }
 
 ComponentCollection::ComponentCollection()

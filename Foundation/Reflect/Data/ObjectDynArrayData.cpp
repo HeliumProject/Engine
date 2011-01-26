@@ -14,9 +14,9 @@ ObjectDynArrayData::~ObjectDynArrayData()
 {
 }
 
-void ObjectDynArrayData::ConnectData( Helium::HybridPtr< void > data )
+void ObjectDynArrayData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectDynArrayData::GetSize() const 
@@ -29,7 +29,7 @@ void ObjectDynArrayData::Clear()
     return m_Data->Clear(); 
 }
 
-bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
+bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
 {
     const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >(src);
     if (!rhs)
@@ -58,7 +58,7 @@ bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool ObjectDynArrayData::Equals( const Object* object ) const
+bool ObjectDynArrayData::Equals( Object* object )
 {
     const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >( object );
     if (!rhs)

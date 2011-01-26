@@ -5,7 +5,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_OBJECT(EntityManifest);
 
-void EntityManifest::AcceptCompositeVisitor( Reflect::Composite& comp )
+void EntityManifest::PopulateComposite( Reflect::Composite& comp )
 {
   comp.AddField( &EntityManifest::m_Shaders, TXT( "m_Shaders" ) );
   comp.AddField( &EntityManifest::m_BlendTextures, TXT( "m_BlendTextures" ) );

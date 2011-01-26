@@ -15,17 +15,17 @@ AggregateData::~AggregateData()
 
 }
 
-void AggregateData::ConnectData(Helium::HybridPtr<void> data)
+void AggregateData::ConnectData(void* data)
 {
 
 }
 
-bool AggregateData::Set(const Data* s, uint32_t flags)
+bool AggregateData::Set(Data* data, uint32_t flags)
 {
     return false;
 }
 
-bool AggregateData::Equals(const Object* object) const
+bool AggregateData::Equals(Object* object)
 {
     return false;
 }

@@ -21,13 +21,13 @@ SimpleData<T>::~SimpleData()
 }
 
 template <class T>
-void SimpleData<T>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleData<T>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template <class T>
-bool SimpleData<T>::Set(const Data* src, uint32_t flags)
+bool SimpleData<T>::Set(Data* src, uint32_t flags)
 {
     const SimpleDataT* rhs = SafeCast<SimpleDataT>(src);
     if (!rhs)
@@ -41,7 +41,7 @@ bool SimpleData<T>::Set(const Data* src, uint32_t flags)
 }
 
 template <class T>
-bool SimpleData<T>::Equals(const Object* object) const
+bool SimpleData<T>::Equals(Object* object)
 {
     const SimpleDataT* rhs = SafeCast<SimpleDataT>(object);
     if (!rhs)
@@ -125,7 +125,7 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
     if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
     {
-        Object* object = (Object*)m_Instance.Mutable();
+        Object* object = static_cast< Object* >( m_Instance );
         object->RaiseChanged( m_Field );
     }
 

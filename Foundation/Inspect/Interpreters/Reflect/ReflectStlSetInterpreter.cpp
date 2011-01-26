@@ -133,7 +133,7 @@ void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
                 for ( ; serItr != serEnd; ++serItr )
                 {
                     Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>(*serItr);
-                    std::vector< ConstDataPtr > items;
+                    std::vector< DataPtr > items;
                     setData->GetItems( items );
                     setData->RemoveItem( items[ *itr ] );
                 }

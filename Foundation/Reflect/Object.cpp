@@ -203,7 +203,6 @@ bool Object::IsClass( const Reflect::Class* type ) const
 {
     const Class* thisType = GetClass();
     HELIUM_ASSERT( thisType );
-
     return thisType->IsType( type );
 }
 
@@ -215,7 +214,7 @@ Reflect::Class* Object::CreateClass( const tchar_t* name )
     return type;
 }
 
-void Object::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Object::PopulateComposite( Reflect::Composite& comp )
 {
 
 }
@@ -230,23 +229,20 @@ bool Object::ProcessComponent(ObjectPtr object, const tchar_t* fieldName)
     return false; // incurs data loss
 }
 
-void Object::ToXML(tstring& xml) const
+void Object::ToXML(tstring& xml)
 {
-#pragma TODO( "Fix const correctness." )
-    ArchiveXML::ToString( const_cast< Object* >( this ), xml );
+    ArchiveXML::ToString( this, xml );
 }
 
-void Object::ToBinary(std::iostream& stream) const
+void Object::ToBinary(std::iostream& stream)
 {
-#pragma TODO( "Fix const correctness." )
-    ArchiveBinary::ToStream( const_cast< Object* >( this ), stream );
+    ArchiveBinary::ToStream( this, stream );
 }
 
-void Object::ToFile( const Path& path ) const
+void Object::ToFile( const Path& path )
 {
     ArchivePtr archive = GetArchive( path );
-#pragma TODO( "Fix const correctness." )
-    archive->Put( const_cast< Object* >( this ) );
+    archive->Put( this );
     archive->Close();
 }
 
@@ -288,7 +284,7 @@ void Object::Accept( Visitor& visitor )
     type->Visit( this, visitor );
 }
 
-bool Object::Equals( const Object* object ) const
+bool Object::Equals( Object* object )
 {
     const Class* type = GetClass();
 

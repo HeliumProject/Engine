@@ -36,7 +36,7 @@ namespace Helium
                 Class* info = Class::Create();
 
                 // populate reflection information
-                Composite::Create< ClassT >( name, baseName, &ClassT::AcceptCompositeVisitor, info );
+                Composite::Create< ClassT >( name, baseName, &ClassT::PopulateComposite, info );
 
                 // setup factory function
                 info->m_Creator = creator;
@@ -52,7 +52,7 @@ namespace Helium
 
         public:
             CreateObjectFunc        m_Creator;  // factory function for creating instances of this class
-            StrongPtr<const Object> m_Default;  // the template for this class (by default, the default instance)
+            StrongPtr< Object >     m_Default;  // the template for this class (by default, the default instance)
         };
 
         typedef Helium::SmartPtr< Class > ClassPtr;

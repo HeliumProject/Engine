@@ -18,11 +18,6 @@ template<> \
 static inline Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( Data* data ) \
 { \
     return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<Name*>( data )->m_Data.operator->() : NULL; \
-} \
-template<> \
-static inline const Name::DataType* Helium::Reflect::Data::GetData<Name::DataType>( const Data* data ) \
-{ \
-    return data && data->GetClass() == Helium::Reflect::GetDataClass<Name::DataType>() ? static_cast<const Name*>( data )->m_Data.operator->() : NULL; \
 }
 
 #include "Foundation/Reflect/Data/TypeIDData.h"

@@ -14,9 +14,9 @@ ObjectSortedSetData::~ObjectSortedSetData()
 {
 }
 
-void ObjectSortedSetData::ConnectData( Helium::HybridPtr< void > data )
+void ObjectSortedSetData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectSortedSetData::GetSize() const
@@ -29,7 +29,7 @@ void ObjectSortedSetData::Clear()
     return m_Data->Clear();
 }
 
-bool ObjectSortedSetData::Set( const Data* src, uint32_t flags )
+bool ObjectSortedSetData::Set( Data* src, uint32_t flags )
 {
     const ObjectSortedSetData* rhs = SafeCast< ObjectSortedSetData >( src );
     if ( !rhs )
@@ -57,7 +57,7 @@ bool ObjectSortedSetData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool ObjectSortedSetData::Equals( const Object* object ) const
+bool ObjectSortedSetData::Equals( Object* object )
 {
     const ObjectSortedSetData* rhs = SafeCast< ObjectSortedSetData >(object);
     if ( !rhs )
@@ -132,8 +132,8 @@ void ObjectSortedSetData::Deserialize( Archive& archive )
 
 void ObjectSortedSetData::Accept( Visitor& visitor )
 {
-    DataType::Iterator itr = const_cast< Data::Pointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< Data::Pointer< DataType >& >( m_Data )->End();
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
     for ( ; itr != end; ++itr )
     {
         // SortedSet keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.

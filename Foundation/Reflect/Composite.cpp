@@ -54,27 +54,12 @@ DataPtr Field::CreateData(void* instance) const
     return data;
 }
 
-DataPtr Field::CreateData(const void* instance) const
-{
-    DataPtr data = CreateData();
-
-    if ( data.ReferencesObject() )
-    {
-        if ( instance )
-        {
-            data->ConnectField( instance, this );
-        }
-    }
-
-    return data;
-}
-
 DataPtr Field::CreateDefaultData() const
 {
     return CreateData( m_Composite->m_Default );
 }
 
-DataPtr Field::ShouldSerialize( const void* instance ) const
+DataPtr Field::ShouldSerialize( void* instance ) const
 {
     // never write discard fields
     if ( m_Flags & FieldFlags::Discard )
@@ -195,7 +180,7 @@ void Composite::RemoveDerived( const Composite* derived ) const
     derived->m_NextSibling = NULL;
 }
 
-bool Composite::Equals(const void* a, const void* b) const
+bool Composite::Equals(void* a, void* b) const
 {
     if (a == b)
     {
@@ -265,16 +250,16 @@ void Composite::Visit(void* instance, Visitor& visitor) const
     }
 }
 
-void Composite::Copy( const void* source, void* destination ) const
+void Composite::Copy( void* source, void* destination ) const
 {
     if ( source != destination )
     {
 #pragma TODO("This should be inside a virtual function (like CopyTo) instead of a type check conditional")
         if ( IsType( GetClass<Data>() ) )
         {
-            const Data* data = static_cast<const Data*>(source);
-            Data* cln = static_cast<Data*>(destination);
-            cln->Set(data);
+            Data* src = static_cast<Data*>(source);
+            Data* dest = static_cast<Data*>(destination);
+            dest->Set( src );
         }
         else
         {

@@ -23,7 +23,7 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_OBJECT(EntityInstance);
 
-void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
+void EntityInstance::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &EntityInstance::m_Path,         TXT( "m_Path" ) );
     comp.AddField( &EntityInstance::m_ShowPointer,  TXT( "m_ShowPointer" ) );

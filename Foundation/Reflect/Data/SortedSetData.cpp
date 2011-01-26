@@ -74,9 +74,9 @@ SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::~SimpleSortedSetData()
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ConnectData( Helium::HybridPtr< void > data )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -98,7 +98,7 @@ const Class* SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItemClass(
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< ConstDataPtr >& items ) const
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< DataPtr >& items ) const
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -107,12 +107,12 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< C
     DataType::ConstIterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New( static_cast< const ConstDataPtr& >( Data::Bind( *itr, m_Instance, m_Field ) ) ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( *itr ), m_Instance, m_Field ) ) );
     }
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( const Data* value )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -120,7 +120,7 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( const Data* 
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( const Data* value )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -128,7 +128,7 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( const Dat
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( const Data* value ) const
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( Data* value ) const
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -136,7 +136,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( const D
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const SortedSetDataT* rhs = SafeCast< SortedSetDataT >( src );
     if ( !rhs )
@@ -150,7 +150,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src,
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( Object* object )
 {
     const SortedSetDataT* rhs = SafeCast< SortedSetDataT >( object );
     if ( !rhs )

@@ -17,7 +17,7 @@ namespace Helium
         Reflect::ObjectPtr  m_Object;
 
         REFLECT_DECLARE_BASE_STRUCTURE( TestStructure );
-        static void AcceptCompositeVisitor( Reflect::Composite& comp );
+        static void PopulateComposite( Reflect::Composite& comp );
     };
 
     class PIPELINE_API Project : public Reflect::Object
@@ -63,7 +63,7 @@ namespace Helium
 
     public:
         REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
-        static void AcceptCompositeVisitor( Reflect::Composite& comp );
+        static void PopulateComposite( Reflect::Composite& comp );
     };
 
     typedef Helium::StrongPtr<Project> ProjectPtr;

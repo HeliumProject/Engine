@@ -16,9 +16,9 @@ ObjectStlVectorData::~ObjectStlVectorData()
 
 }
 
-void ObjectStlVectorData::ConnectData(Helium::HybridPtr<void> data)
+void ObjectStlVectorData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectStlVectorData::GetSize() const 
@@ -31,7 +31,7 @@ void ObjectStlVectorData::Clear()
     return m_Data->clear(); 
 }
 
-bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
+bool ObjectStlVectorData::Set(Data* src, uint32_t flags)
 {
     const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(src);
     if (!rhs)
@@ -59,7 +59,7 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlVectorData::Equals(const Object* object) const
+bool ObjectStlVectorData::Equals(Object* object)
 {
     const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(object);
     if (!rhs)
@@ -107,8 +107,8 @@ void ObjectStlVectorData::Deserialize(Archive& archive)
 
 void ObjectStlVectorData::Accept(Visitor& visitor)
 {
-    std::vector< ObjectPtr >::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
-    std::vector< ObjectPtr >::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
+    std::vector< ObjectPtr >::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    std::vector< ObjectPtr >::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
     for ( ; itr != end; ++itr )
     {
         if (!itr->ReferencesObject())

@@ -16,19 +16,14 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ObjectStlMapData, ContainerData );
 
-            typedef std::pair< ConstDataPtr, ObjectPtr* > ValueType;
+            typedef std::pair< DataPtr, ObjectPtr* > ValueType;
             typedef std::vector< ValueType > V_ValueType;
-
-            typedef std::pair< ConstDataPtr, const ObjectPtr* > ConstValueType;
-            typedef std::vector< ConstValueType > V_ConstValueType;
 
             virtual const Class* GetKeyClass() const = 0;
             virtual void GetItems(V_ValueType& items) = 0;
-            virtual void GetItems(V_ConstValueType& items) const = 0;
-            virtual ObjectPtr* GetItem(const Data* key) = 0;
-            virtual const ObjectPtr* GetItem(const Data* key) const = 0;
-            virtual void SetItem(const Data* key, const Object* value) = 0;
-            virtual void RemoveItem(const Data* key) = 0;
+            virtual ObjectPtr* GetItem(Data* key) = 0;
+            virtual void SetItem(Data* key, Object* value) = 0;
+            virtual void RemoveItem(Data* key) = 0;
         };
 
         template <class KeyT>
@@ -36,7 +31,7 @@ namespace Helium
         {
         public:
             typedef std::map<KeyT, ObjectPtr> DataType;
-            Data::Pointer<DataType> m_Data;
+            DataPointer<DataType> m_Data;
 
             typedef SimpleObjectStlMapData<KeyT> ObjectStlMapDataT;
             REFLECT_DECLARE_OBJECT( ObjectStlMapDataT, ObjectStlMapData )
@@ -44,21 +39,19 @@ namespace Helium
                 SimpleObjectStlMapData();
             virtual ~SimpleObjectStlMapData();
 
-            virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
+            virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
             virtual const Class* GetKeyClass() const HELIUM_OVERRIDE;
             virtual void GetItems(V_ValueType& items) HELIUM_OVERRIDE;
-            virtual void GetItems(V_ConstValueType& items) const HELIUM_OVERRIDE;
-            virtual ObjectPtr* GetItem(const Data* key) HELIUM_OVERRIDE;
-            virtual const ObjectPtr* GetItem(const Data* key) const HELIUM_OVERRIDE;
-            virtual void SetItem(const Data* key, const Object* value) HELIUM_OVERRIDE;
-            virtual void RemoveItem(const Data* key) HELIUM_OVERRIDE;
+            virtual ObjectPtr* GetItem(Data* key) HELIUM_OVERRIDE;
+            virtual void SetItem(Data* key, Object* value) HELIUM_OVERRIDE;
+            virtual void RemoveItem(Data* key) HELIUM_OVERRIDE;
 
-            virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
+            virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;

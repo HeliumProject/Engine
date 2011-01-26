@@ -53,7 +53,7 @@ namespace Helium
             bool m_TranslateManipulatorLiveObjectsOnly;
 
         public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
+            static void PopulateComposite( Reflect::Composite& comp )
             {
                 comp.AddField( &SceneSettings::m_ScaleManipulatorSize, TXT( "Scale Manipulator Size" ) );
                 comp.AddField( &SceneSettings::m_ScaleManipulatorGridSnap, TXT( "Scale Manipulator Grid Snapping" ) );

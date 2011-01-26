@@ -19,11 +19,13 @@ EditorSettings::EditorSettings()
 {
 }
 
-void EditorSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
+void EditorSettings::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &EditorSettings::m_MRUProjects, TXT( "m_MRUProjects" ), Reflect::FieldFlags::Hide );
 
-    Reflect::Field* field = comp.AddField( &EditorSettings::m_ReopenLastProjectOnStartup, TXT( "m_ReopenLastProjectOnStartup" ) );
+    Reflect::Field* field = NULL;
+
+    field = comp.AddField( &EditorSettings::m_ReopenLastProjectOnStartup, TXT( "m_ReopenLastProjectOnStartup" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Reopen Last Project On Startup" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will automatically load up the last project you were working on." ) );
 

@@ -59,13 +59,12 @@ namespace Helium
 
             // allocate and connect to an instance
             DataPtr CreateData(void* instance) const;
-            DataPtr CreateData(const void* instance) const;
 
             // allocate and connect to the default
             DataPtr CreateDefaultData() const;
 
             // determine if this field should be serialized
-            DataPtr ShouldSerialize(const void* instance) const;
+            DataPtr ShouldSerialize(void* instance) const;
 
             const Composite*        m_Composite;    // the type we are a field of
             const tchar_t*          m_Name;         // name of this field
@@ -163,7 +162,7 @@ namespace Helium
             //  aware field pointers (since their pointer values would be used by the comparison operator).
             //
 
-            bool Equals( const void* a, const void* b ) const;
+            bool Equals( void* a, void* b ) const;
 
             //
             // Visits fields recursively, used to interactively traverse structures
@@ -176,7 +175,7 @@ namespace Helium
             //  fields from the source object into the destination object.
             // 
 
-            void Copy( const void* source, void* destination ) const;
+            void Copy( void* source, void* destination ) const;
 
             //
             // Find a field in this composite
@@ -243,7 +242,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -255,7 +254,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -267,7 +266,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( std::vector< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -279,7 +278,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( Attribute< std::vector< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -291,7 +290,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( std::set< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -303,7 +302,7 @@ namespace Helium
             }
 
             template < class CompositeT, class ObjectT >
-            inline Reflect::Field* AddObjectField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( Attribute< std::set< StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
@@ -315,7 +314,7 @@ namespace Helium
             }
 
             template < class CompositeT, class KeyT, class ObjectT >
-            inline Reflect::Field* AddObjectField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( std::map< KeyT, StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField( 
                     name, 
@@ -327,7 +326,7 @@ namespace Helium
             }
 
             template < class CompositeT, class KeyT, class ObjectT >
-            inline Reflect::Field* AddObjectField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddField( Attribute< std::map< KeyT, StrongPtr< ObjectT > > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField( 
                     name, 
@@ -345,7 +344,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetClass<Reflect::StructureData>(),
+                    Reflect::GetClass<Reflect::AggregateData>(),
                     Reflect::GetStructure<FieldT>(),
                     flags );
             }
@@ -357,7 +356,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetClass<Reflect::StructureData>(),
+                    Reflect::GetClass<Reflect::AggregateData>(),
                     Reflect::GetStructure<FieldT>(),
                     flags );
             }
@@ -416,7 +415,7 @@ namespace Helium
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
             DynArray< Field >                       m_Fields;               // fields in this composite
             AcceptVisitor                           m_Accept;               // function to populate this structure
-            const void*                             m_Default;             // default instance
+            void*                                   m_Default;             // default instance
         };
     }
 }

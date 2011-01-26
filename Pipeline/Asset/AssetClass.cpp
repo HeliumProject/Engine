@@ -23,7 +23,7 @@ tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 std::map< tstring, AssetFactory* > AssetClass::s_AssetFactories;
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
-void AssetClass::AcceptCompositeVisitor( Reflect::Composite& comp )
+void AssetClass::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &AssetClass::m_Description,  TXT( "m_Description" ) );
     comp.AddField( &AssetClass::m_Tags,         TXT( "m_Tags" ) );
@@ -111,7 +111,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlVectorData >() )
                 {
-                    const Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>( field->CreateData( instance ) );
+                    Reflect::StlVectorData* arrayData = Reflect::AssertCast<Reflect::StlVectorData>( field->CreateData( instance ) );
                     if ( arrayData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)arrayData->GetSize() < 1 )
@@ -134,7 +134,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlMapData >() )
                 {
-                    const Reflect::StlMapData* mapData = Reflect::AssertCast<Reflect::StlMapData>( field->CreateData( instance ) );
+                    Reflect::StlMapData* mapData = Reflect::AssertCast<Reflect::StlMapData>( field->CreateData( instance ) );
                     if ( mapData->GetValueClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)mapData->GetSize() < 1 )
@@ -142,11 +142,11 @@ namespace Helium
                             return true;
                         }
 
-                        Reflect::StlMapData::V_ConstValueType data;
+                        Reflect::StlMapData::V_ValueType data;
                         mapData->GetItems( data );
 
-                        Reflect::StlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                        Reflect::StlMapData::V_ConstValueType::const_iterator end = data.end();
+                        Reflect::StlMapData::V_ValueType::const_iterator itr = data.begin();
+                        Reflect::StlMapData::V_ValueType::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
@@ -162,7 +162,7 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::StlSetData >() )
                 {
-                    const Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>( field->CreateData( instance ) );
+                    Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>( field->CreateData( instance ) );
                     if ( setData->GetItemClass() == Reflect::GetClass< Reflect::PathData >() )
                     {
                         if ( (int)setData->GetSize() < 1 )
@@ -170,11 +170,11 @@ namespace Helium
                             return true;
                         }
 
-                        std::vector< Reflect::ConstDataPtr > data;
+                        std::vector< Reflect::DataPtr > data;
                         setData->GetItems( data );
 
-                        std::vector< Reflect::ConstDataPtr >::const_iterator itr = data.begin();
-                        std::vector< Reflect::ConstDataPtr >::const_iterator end = data.end();
+                        std::vector< Reflect::DataPtr >::const_iterator itr = data.begin();
+                        std::vector< Reflect::DataPtr >::const_iterator end = data.end();
                         for ( ; itr != end; ++itr )
                         {
                             Helium::Path path;
@@ -190,14 +190,14 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlVectorData >() )
                 {
-                    const Reflect::ObjectStlVectorData* arrayData = Reflect::AssertCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
+                    Reflect::ObjectStlVectorData* arrayData = Reflect::AssertCast< Reflect::ObjectStlVectorData >( field->CreateData( instance ) );
 
                     if ( (int)arrayData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const std::vector< Reflect::ObjectPtr >& vals = *arrayData->m_Data;
+                    std::vector< Reflect::ObjectPtr >& vals = *arrayData->m_Data;
                     for ( std::vector< Reflect::ObjectPtr >::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );
@@ -208,18 +208,18 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlMapData >() )
                 {
-                    const Reflect::ObjectStlMapData* mapData = Reflect::AssertCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
+                    Reflect::ObjectStlMapData* mapData = Reflect::AssertCast< Reflect::ObjectStlMapData >( field->CreateData( instance ) );
 
                     if ( (int)mapData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    Reflect::ObjectStlMapData::V_ConstValueType data;
+                    Reflect::ObjectStlMapData::V_ValueType data;
                     mapData->GetItems( data );
 
-                    Reflect::ObjectStlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                    Reflect::ObjectStlMapData::V_ConstValueType::const_iterator end = data.end();
+                    Reflect::ObjectStlMapData::V_ValueType::const_iterator itr = data.begin();
+                    Reflect::ObjectStlMapData::V_ValueType::const_iterator end = data.end();
                     for ( ; itr != end; ++itr )
                     {
                         (*itr->second)->Accept( *this );
@@ -230,14 +230,14 @@ namespace Helium
                 //-----------------------------------------------
                 else if ( field->m_DataClass == Reflect::GetClass< Reflect::ObjectStlSetData >() )
                 {
-                    const Reflect::ObjectStlSetData* setData = Reflect::AssertCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
+                    Reflect::ObjectStlSetData* setData = Reflect::AssertCast< Reflect::ObjectStlSetData >( field->CreateData( instance ) );
 
                     if ( (int)setData->GetSize() < 1 )
                     {
                         return true;
                     }
 
-                    const Reflect::ObjectStlSetData::DataType& vals = *setData->m_Data;
+                    Reflect::ObjectStlSetData::DataType& vals = *setData->m_Data;
                     for ( Reflect::ObjectStlSetData::DataType::const_iterator itr = vals.begin(), end = vals.end(); itr != end; ++itr )
                     {
                         (*itr)->Accept( *this );

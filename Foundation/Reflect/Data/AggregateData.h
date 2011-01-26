@@ -10,17 +10,17 @@ namespace Helium
         {
         public:
             typedef void DataType;
-            Data::Pointer<DataType> m_Data;
+            VoidDataPointer m_Data;
 
             REFLECT_DECLARE_OBJECT( AggregateData, Data );
 
             AggregateData();
             ~AggregateData();
 
-            virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
+            virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
-            virtual bool Set(const Data* s, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
+            virtual bool Set(Data* data, uint32_t flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(Object* object) HELIUM_OVERRIDE;
             virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
 
             virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;

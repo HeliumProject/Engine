@@ -7,37 +7,21 @@
 
 using namespace Helium::Editor;
 
-//int wxCALLBACK MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
-//{
-//    // inverse the order
-//    if (item1 < item2)
-//        return -1;
-//    if (item1 > item2)
-//        return 1;
-//
-//    return 0;
-//}
-
-///////////////////////////////////////////////////////////////////////////////
 tstring DetailsColumn::Path( const Helium::Path& path )
 {
     return path.Get();
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
 tstring DetailsColumn::Filename( const Helium::Path& path )
 {
     return path.Filename();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 tstring DetailsColumn::Directory( const Helium::Path& path )
 {
     return path.Directory();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 tstring DetailsColumn::Size( const Helium::Path& path )
 {
     int64_t size = path.Size();
@@ -60,8 +44,6 @@ tstring DetailsColumn::Size( const Helium::Path& path )
     return printSize.str().c_str();
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
 ListResultsView::ListResultsView( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : wxPanel( parent, id, pos, size, style )
 , m_ShowDetails( false )
@@ -75,13 +57,10 @@ ListResultsView::ListResultsView( wxWindow* parent, wxWindowID id, const wxPoint
   wxImageList *imageList = wxTheFileIconsTable->GetSmallImageList();
   m_ListCtrl->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
-  if ( m_DetailsColumns.empty() )
-  {
-      m_DetailsColumns[DetailsColumnTypes::Path] = DetailsColumn( DetailsColumnTypes::Path, TXT( "Path" ), 600, DetailsColumn::Path );
-      //m_DetailsColumns[DetailsColumnTypes::Filename] = DetailsColumn( DetailsColumnTypes::Filename, TXT( "Name" ), 200, DetailsColumn::Filename );
-      //m_DetailsColumns[DetailsColumnTypes::Directory] = DetailsColumn( DetailsColumnTypes::Directory, TXT( "Directory" ), 250, DetailsColumn::Directory );
-      //m_DetailsColumns[DetailsColumnTypes::Size] = DetailsColumn( DetailsColumnTypes::Size, TXT( "Size" ), 50, DetailsColumn::Size );
-  }
+  m_DetailsColumns[DetailsColumnTypes::Path] = DetailsColumn( DetailsColumnTypes::Path, TXT( "Path" ), 600, DetailsColumn::Path );
+  //m_DetailsColumns[DetailsColumnTypes::Filename] = DetailsColumn( DetailsColumnTypes::Filename, TXT( "Name" ), 200, DetailsColumn::Filename );
+  //m_DetailsColumns[DetailsColumnTypes::Directory] = DetailsColumn( DetailsColumnTypes::Directory, TXT( "Directory" ), 250, DetailsColumn::Directory );
+  //m_DetailsColumns[DetailsColumnTypes::Size] = DetailsColumn( DetailsColumnTypes::Size, TXT( "Size" ), 50, DetailsColumn::Size );
 
   m_DetailsColumnList.clear();
   m_DetailsColumnList.push_back( DetailsColumnTypes::Path );
@@ -146,15 +125,15 @@ void ListResultsView::SetResults( VaultSearchResults* results )
         {
             m_ListCtrl->EnableSorting( false );
 
-            const std::map< uint64_t, Helium::Path >& foundFiles = results->GetPathsMap();
-            for ( std::map< uint64_t, Helium::Path >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
+            const std::set< TrackedFile >& foundFiles = results->GetResults();
+            for ( std::set< TrackedFile >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
             {
-                //AddResult( file );
-                const Helium::Path& foundFile = itr->second;
+                const TrackedFile& foundFile = (*itr);
+                Path path( foundFile.mPath.value() );
 
                 // File Icon
                 int32_t imageIndex = wxFileIconsTable::file;
-                tstring fileExtension = foundFile.Extension();
+                tstring fileExtension = path.Extension();
                 if ( !fileExtension.empty() )
                 {
                     imageIndex = wxTheFileIconsTable->GetIconID( fileExtension.c_str() );
@@ -162,14 +141,15 @@ void ListResultsView::SetResults( VaultSearchResults* results )
 
                 // Basename
                 wxString buf;
-                buf.Printf( wxT( "%s" ), foundFile.Get().c_str() );
+                buf.Printf( wxT( "%s" ), path.Get().c_str() );
                 int32_t rowIndex = m_ListCtrl->InsertItem( m_CurrentFileIndex, buf, imageIndex );
-                if ( rowIndex == -1 )
-                {
-                    // FIXME: report error?
-                    continue;
-                }
+                HELIUM_ASSERT( rowIndex != -1 );
                 m_ListCtrl->SetItemData( rowIndex, m_CurrentFileIndex );
+
+                if ( foundFile.mBroken.value() )
+                {
+                    m_ListCtrl->SetItemTextColour( rowIndex, *wxRED );
+                }
 
                 //////////////////////
                 // insert the data index and file info pointer into the m_FileInfoIndexTable
@@ -185,7 +165,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
                         colEndItr = m_DetailsColumnList.end();
                         colItr != colEndItr; ++colItr, ++colIndex )
                     {
-                        m_ListCtrl->SetItem( rowIndex, colIndex, m_DetailsColumns[*colItr].Data( foundFile ).c_str() );
+                        m_ListCtrl->SetItem( rowIndex, colIndex, m_DetailsColumns[*colItr].Data( path ).c_str() );
                     }
                 }
             }

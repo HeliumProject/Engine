@@ -51,26 +51,16 @@ const tchar_t* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]
 const tchar_t* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
 const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
-//const char* s_MatchAssetPathPattern = "^[a-zA-Z]\\:(/[a-zA-Z0-9]([\\w\\-\\. ]*?[a-zA-Z0-9])*){1,}[/]{0,1}$";
-const tchar_t* s_MatchAssetPathPattern   = TXT( "^[a-z]\\:(?:[\\\\/]+[a-z0-9_\\-\\. ]+)*[\\\\/]*$" );
-const tchar_t* s_MatchTUIDPattern        = TXT( "^((?:0[x]){0,1}[a-f0-9]{16}|(?:[\\-]){0,1}[0-9]{16,})$$" );
-const tchar_t* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" ); // this is also icky, but it might actually be a decimal TUID
-
-
 ///////////////////////////////////////////////////////////////////////////////
-REFLECT_DEFINE_ENUMERATION( SearchType );
 REFLECT_DEFINE_OBJECT( VaultSearchQuery );
 void VaultSearchQuery::PopulateComposite( Reflect::Composite& comp )
 {
-    comp.AddEnumerationField( &VaultSearchQuery::m_SearchType, TXT( "m_SearchType" ) );
     comp.AddField( &VaultSearchQuery::m_QueryString, TXT( "m_QueryString" ) );
-    comp.AddField( &VaultSearchQuery::m_QueryPath, TXT( "m_QueryPath" ), Reflect::FieldFlags::Force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultSearchQuery::VaultSearchQuery()
-: m_SearchType( SearchType::CacheDB )
-, m_SQLQueryString( TXT("") )
+: m_SQLQueryString( TXT("") )
 {
 
 }
@@ -190,90 +180,50 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
 
 bool VaultSearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, VaultSearchQuery* query )
 {
-    const tregex matchAssetPath( s_MatchAssetPathPattern, std::tr1::regex::icase ); 
-    const tregex matchTUID( s_MatchTUIDPattern, std::tr1::regex::icase );
-
-
     tsmatch matchResult;
-    //-------------------------------------------
-    // Path
-    if ( std::tr1::regex_match( queryString, matchResult, matchAssetPath ) )
+    const tregex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );
+
+    // parse once to tokenize then match again
+    std::vector< tstring > tokens;
+    if ( TokenizeQuery( queryString, tokens ) )
     {
-        // we know it's a path, clean it
-        Helium::Path path( queryString );
-        if ( path.IsDirectory() )
+        tstring curToken;
+        tstring currentValue;
+
+        tsmatch matchResults;
+        std::vector< tstring >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
+        for ( ; tokenItr != tokenEnd; ++tokenItr )
         {
-            if ( query )
+            curToken = *tokenItr;
+
+            //-------------------------------------------
+            // Token Query
+            if ( std::tr1::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
             {
-                query->m_SearchType = SearchType::Directory;
+                tstring columnAlias =  Helium::MatchResultAsString( matchResults, 1 );
 
-                Helium::Path::GuaranteeSeparator( query->m_QueryString );
-            }
-            return true;
-        }
-        else if ( path.IsFile() )
-        {
-            if ( query )
-            {
-                query->m_SearchType = SearchType::File;
-            }
-            return true;
-        }
-        else
-        {
-            errors = TXT( "Invalid or partial path, or file/folder does not exist!" );
-            return false;
-        }
-    }
-
-    //-------------------------------------------
-    // CacheDB.
-    else
-    {
-        const tregex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );
-
-        // parse once to tokenize then match again
-        std::vector< tstring > tokens;
-        if ( TokenizeQuery( queryString, tokens ) )
-        {
-            tstring curToken;
-            tstring currentValue;
-
-            tsmatch matchResults;
-            std::vector< tstring >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
-            for ( ; tokenItr != tokenEnd; ++tokenItr )
-            {
-                curToken = *tokenItr;
-
-                //-------------------------------------------
-                // Token Query
-                if ( std::tr1::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
+                ++tokenItr;
+                if ( tokenItr == tokenEnd )
                 {
-                    tstring columnAlias =  Helium::MatchResultAsString( matchResults, 1 );
-
-                    ++tokenItr;
-                    if ( tokenItr == tokenEnd )
-                    {
-                        errors = TXT( "More information needed for search query \"" ) + columnAlias + TXT( ":\", missing argument." );
-                        return false;
-                    }
-                    curToken = *tokenItr;
-                }
-
-                //-------------------------------------------
-                // Phrase or Word
-                if ( ParsePhrase( curToken, matchResults, currentValue, errors )  )
-                {
-                    HELIUM_ASSERT( !currentValue.empty() );
-
-                    continue;
-                }
-                else
-                {
+                    errors = TXT( "More information needed for search query \"" ) + columnAlias + TXT( ":\", missing argument." );
                     return false;
                 }
-
+                curToken = *tokenItr;
             }
+
+            //-------------------------------------------
+            // Phrase or Word
+            if ( ParsePhrase( curToken, matchResults, currentValue, errors )  )
+            {
+                HELIUM_ASSERT( !currentValue.empty() );
+
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         return true;

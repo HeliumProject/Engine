@@ -839,7 +839,7 @@ void ThumbnailView::CalculateTotalVisibleItems()
 void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
     // Do the math
-    size_t totalItems = m_Results ? m_Results->GetPathsMap().size() : 0;
+    size_t totalItems = m_Results ? m_Results->GetResults().size() : 0;
     uint32_t totalItemsY = (uint32_t)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
     Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );

@@ -7,6 +7,11 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
+bool Helium::Editor::operator<( const TrackedFile& lhs, const TrackedFile& rhs )
+{
+    return lhs.mPath.value() < rhs.mPath.value();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Ctor/Dtor
 VaultSearchResults::VaultSearchResults( uint32_t vaultSearchID )
@@ -18,7 +23,7 @@ VaultSearchResults::VaultSearchResults( const VaultSearchResults* results )
 {
     HELIUM_ASSERT( results );
     m_VaultSearchID = results->m_VaultSearchID;
-    m_Paths = results->m_Paths;
+    m_Results = results->m_Results;
 }
 
 VaultSearchResults::~VaultSearchResults()
@@ -26,45 +31,33 @@ VaultSearchResults::~VaultSearchResults()
     Clear();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultSearchResults::Clear()
 {
-    m_Paths.clear();
+    m_Results.clear();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 bool VaultSearchResults::HasResults() const
 {
-    return !m_Paths.empty();
+    return !m_Results.empty();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-const std::map< uint64_t, Helium::Path >& VaultSearchResults::GetPathsMap() const
+void VaultSearchResults::SetResults( const std::set< TrackedFile >& results )
 {
-    return m_Paths;
+    m_Results = results;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-const Helium::Path* VaultSearchResults::Find( const uint64_t& hash ) const
+const std::set< TrackedFile >& VaultSearchResults::GetResults() const
 {
-    std::map< uint64_t, Helium::Path >::const_iterator found = m_Paths.find( hash );
-    if ( found != m_Paths.end() )
-    {
-        return &( found->second );
-    }
-
-    return NULL;
+    return m_Results;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-bool VaultSearchResults::AddPath( const Helium::Path& path )
+bool VaultSearchResults::Add( const TrackedFile& file )
 {
-    Helium::StdInsert< std::map< uint64_t, Helium::Path > >::Result inserted = m_Paths.insert( std::map< uint64_t, Helium::Path >::value_type( path.Hash(), path ) );
+    Helium::StdInsert< std::set< TrackedFile > >::Result inserted = m_Results.insert( file );
     return inserted.second;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-bool VaultSearchResults::RemovePath( const Helium::Path& path )
+bool VaultSearchResults::Remove( const TrackedFile& file )
 {
-    return m_Paths.erase( path.Hash() ) > 0;
+    return m_Results.erase( file ) > 0;
 }

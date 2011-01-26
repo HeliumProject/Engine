@@ -180,7 +180,7 @@ VaultSearch::~VaultSearch()
 
     m_CurrentSearchQuery = NULL;
     m_SearchResults = NULL;
-    m_FoundPaths.clear();
+    m_FoundFiles.clear();
 
     if ( m_DummyWindow )
     {
@@ -227,7 +227,7 @@ bool VaultSearch::StartSearchThread( VaultSearchQuery* searchQuery )
         // clear previous results, if any
         m_CurrentSearchQuery = searchQuery;
         m_SearchResults = new VaultSearchResults( m_CurrentSearchID );
-        m_FoundPaths.clear();
+        m_FoundFiles.clear();
 
         HELIUM_ASSERT( !m_DummyWindow );
         m_DummyWindow = new DummyWindow( TXT( "VaultSearch" ) );
@@ -299,7 +299,7 @@ void VaultSearch::OnSearchResultsAvailable( const Editor::DummyWindowArgs& args 
         m_SearchResultsAvailableListeners.Raise( SearchResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
     }
     m_SearchResults = new VaultSearchResults( searchID );
-    m_FoundPaths.clear();
+    m_FoundFiles.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -353,54 +353,33 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
         trackerDB.upgrade();
     }
 
-    //-------------------------------------------
-    // Path
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchType::File
-        || m_CurrentSearchQuery->GetSearchType() == SearchType::Directory )
-    {
-        Helium::Path searchPath( m_CurrentSearchQuery->GetQueryString() );
-        if ( m_CurrentSearchQuery->GetSearchType() == SearchType::File )
-        {
-            searchPath.Set( searchPath.Directory() );
-        }
-
-        AddPath( searchPath, searchID );
-        SearchThreadLeave( searchID );
-        return;
-    }
-
     if ( CheckSearchThreadLeave( searchID ) )
     {
         return;
     }
 
-    //-------------------------------------------
-    // CacheDB
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchType::CacheDB )
+    std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( trackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
+
     {
-        std::vector<TrackedFile> assetFiles = litesql::select<TrackedFile>( trackerDB, TrackedFile::MPath.like( m_CurrentSearchQuery->GetSQLQueryString().c_str() ) ).all();
+        Helium::MutexScopeLock mutex (m_SearchResultsMutex);
 
-        for ( std::vector<TrackedFile>::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
+        m_FoundFiles.clear();
+
+        for ( std::vector< TrackedFile >::const_iterator itr = assetFiles.begin(), end = assetFiles.end(); itr != end; ++itr )
         {
-            Helium::MutexScopeLock mutex (m_SearchResultsMutex);
-
-#pragma TODO( "Pass through some stats on a file, like if it's broken, etc." )
-
-            Helium::Path path = itr->mPath.value();
-            Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
-            if ( m_SearchResults && inserted.second )
-            {
-                m_SearchResults->AddPath( path );
-            }
+            m_FoundFiles.insert( (*itr) );
 
             if ( CheckSearchThreadLeave( searchID ) )
             {
-                break;
+                m_FoundFiles.clear();
+                return;
             }
         }
 
-        assetFiles.clear();
+        m_SearchResults->SetResults( m_FoundFiles );
     }
+
+    assetFiles.clear();
 
     if ( CheckSearchThreadLeave( searchID ) )
     {
@@ -475,32 +454,19 @@ inline void VaultSearch::SearchThreadLeave( int32_t searchID )
 // SearchThreadProc Helper Functions - Wrangle VaultSearchResults
 /////////////////////////////////////////////////////////////////////////////
 
-uint32_t VaultSearch::AddPath( const Helium::Path& path, int32_t searchID )
+uint32_t VaultSearch::Add( const TrackedFile& file, int32_t searchID )
 { 
     uint32_t numFilesAdded = 0;
 
-    Helium::MutexScopeLock mutex (m_SearchResultsMutex);
+    MutexScopeLock mutex (m_SearchResultsMutex);
 
-    Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( path );
+    HELIUM_ASSERT( !Path( file.mPath.value() ).IsDirectory() );
+
+    StdInsert< std::set< TrackedFile > >::Result inserted = m_FoundFiles.insert( file );
     if ( m_SearchResults && inserted.second )
     {
-        m_SearchResults->AddPath( path );
+        m_SearchResults->Add( file );
         ++numFilesAdded;
-    }
-
-    if ( path.IsDirectory() )
-    {
-        std::set< Helium::Path > files;
-        Helium::Directory::GetFiles( path.Get(), files );
-        for ( std::set< Helium::Path >::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
-        {
-            Helium::StdInsert<std::set< Helium::Path >>::Result inserted = m_FoundPaths.insert( *itr );
-            if ( inserted.second )
-            {
-                m_SearchResults->AddPath( *itr );
-                ++numFilesAdded;
-            }
-        }   
     }
 
     return numFilesAdded;

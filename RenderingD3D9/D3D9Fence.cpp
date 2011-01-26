@@ -36,6 +36,7 @@ void D3D9Fence::OnPreReset()
     if( m_pQuery )
     {
         m_pQuery->Release();
+        m_pQuery = NULL;
     }
 }
 

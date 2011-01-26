@@ -76,10 +76,13 @@ void D3D9DynamicTexture2d::OnPreReset()
             m_surfaces[ levelIndex ] = pSurface;
             pSurface->SetD3DSurface( NULL );
         }
+
+        pD3DSurface->Release();
     }
 
     // Release the texture.
     m_pTexture->Release();
+    m_pTexture = NULL;
 }
 
 /// @copydoc D3D9DeviceResetListener::OnPostReset()
@@ -123,6 +126,8 @@ void D3D9DynamicTexture2d::OnPostReset( D3D9Renderer* pRenderer )
             pSurface->SetD3DSurface( pD3DSurface );
 
             m_surfaces[ levelIndex ].Release();
+
+            pD3DSurface->Release();
         }
     }
 }

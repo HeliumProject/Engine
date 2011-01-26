@@ -95,7 +95,11 @@ Record SQLite3::Cursor::fetchOne() {
         if (sqlite3_column_type(stmt, i) == SQLITE_NULL)
             rec.push_back( LITESQL_L( "NULL" ) );
         else
-            rec.push_back((LITESQL_Char*) sqlite3_column_text(stmt, i));
+        {
+            LITESQL_String tempString;
+            LITESQL_ConvertString( (char*)sqlite3_column_text(stmt, i), tempString );
+            rec.push_back( tempString.c_str() );
+        }
     }
     return rec;
 }

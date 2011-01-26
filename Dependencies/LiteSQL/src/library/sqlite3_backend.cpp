@@ -74,7 +74,10 @@ Record SQLite3::Cursor::fetchOne() {
         {
         case SQLITE_ERROR: case SQLITE_MISUSE: {
           std::string error = sqlite3_errmsg(owner.db);
-                throw UnknownError("step failed: " +toString(status)  + error);
+          LITESQL_String tempString;
+          LITESQL_ConvertString( error, tempString );
+
+                throw UnknownError( LITESQL_L( "step failed: " ) + toString(status) + tempString );
             }
         case SQLITE_DONE: return Record(); break;
         case SQLITE_BUSY: case SQLITE_LOCKED:
@@ -90,9 +93,9 @@ Record SQLite3::Cursor::fetchOne() {
     Record rec(columnNum);
     for (int i = 0; i < columnNum; i++) {
         if (sqlite3_column_type(stmt, i) == SQLITE_NULL)
-            rec.push_back("NULL");
+            rec.push_back( LITESQL_L( "NULL" ) );
         else
-            rec.push_back((char*) sqlite3_column_text(stmt, i));
+            rec.push_back((LITESQL_Char*) sqlite3_column_text(stmt, i));
     }
     return rec;
 }
@@ -101,45 +104,49 @@ SQLite3::Cursor::~Cursor() {
         sqlite3_finalize(stmt);
     }
 }
-SQLite3::SQLite3(const string& connInfo) : db(NULL), transaction(false) {
-    Split params(connInfo,";");
-    string database;
+SQLite3::SQLite3(const LITESQL_String& connInfo) : db(NULL), transaction(false) {
+    Split params(connInfo, LITESQL_L( ";" ));
+    LITESQL_String database;
     for (size_t i = 0; i < params.size(); i++) {
-        Split param(params[i], "=");
+        Split param(params[i], LITESQL_L( "=" ));
         if (param.size() == 1)
             continue;
-        if (param[0] == "database")
+        if (param[0] == LITESQL_L( "database" ))
             database = param[1];
     }
     if (database.empty())
-        throw DatabaseError("no database-param specified");
+        throw DatabaseError( LITESQL_L( "no database-param specified" ));
 
-    if (sqlite3_open(database.c_str(), &db)) {
-        throw DatabaseError(sqlite3_errmsg(db));
+    std::string tempString;
+    LITESQL_ConvertString( database, tempString );
+    if (sqlite3_open(tempString.c_str(), &db)) {
+        LITESQL_String tempError;
+        LITESQL_ConvertString( sqlite3_errmsg(db), tempError );
+        throw DatabaseError( tempError );
     }
 
 }
 bool SQLite3::supportsSequences() const {
     return false;
 }
-string SQLite3::getInsertID() const {
+LITESQL_String SQLite3::getInsertID() const {
     return toString(sqlite3_last_insert_rowid(db));
 }
 void SQLite3::begin() const {
     if (!transaction) {
-        delete execute("BEGIN;");
+        delete execute( LITESQL_L( "BEGIN;" ));
         transaction = true;
     }
 }
 void SQLite3::commit() const {
     if (transaction) {
-        delete execute("COMMIT;");
+        delete execute( LITESQL_L( "COMMIT;" ));
         transaction = false;
     }
 }
 void SQLite3::rollback() const {
     if (transaction) {
-        delete execute("ROLLBACK;");
+        delete execute( LITESQL_L( "ROLLBACK;" ));
         transaction = false;
     }
 }
@@ -148,30 +155,42 @@ static int callback(void *r, int argc, char **argv, char **azColName) {
     SQLite3::Result * res = (SQLite3::Result*) r;
     if (res->flds.size() == 0) 
         for (int i = 0; i < argc; i++)
-            res->flds.push_back(azColName[i]);
+        {
+            LITESQL_String tempString;
+            LITESQL_ConvertString( azColName[i], tempString );
+            res->flds.push_back(tempString);
+        }
     Record rec(argc); 
-    for (int i = 0; i < argc; i++) 
-        rec.push_back(argv[i] ? argv[i] : "NULL");   
+    for (int i = 0; i < argc; i++)
+    {
+        LITESQL_String tempString;
+        LITESQL_ConvertString( argv[ i ], tempString );
+        rec.push_back(argv[i] ? tempString : LITESQL_L( "NULL" ));   
+    }
     res->recs.push_back(rec);
     return 0;
 }
 void SQLite3::throwError(int status) const {
-    string error = sqlite3_errmsg(db);
-    error = toString(status) + "=status code : " + error;
+    LITESQL_String error;
+    LITESQL_ConvertString( sqlite3_errmsg(db), error );
+    error = toString(status) + LITESQL_L( "=status code : " ) + error;
     switch(status) {
     case SQLITE_ERROR: throw SQLError(error);
     case SQLITE_INTERNAL: throw InternalError(error);
     case SQLITE_NOMEM: throw MemoryError(error);
     case SQLITE_FULL: throw InsertionError(error);
-    default: throw UnknownError("compile failed: " + error);
+    default: throw UnknownError( LITESQL_L( "compile failed: " ) + error);
     }
 }
-Backend::Result* SQLite3::execute(const string& query) const {
+Backend::Result* SQLite3::execute(const LITESQL_String& query) const {
     Result * r = new Result;
     char * errMsg;
     int status;
+    string tempQuery;
+    LITESQL_ConvertString( query, tempQuery );
+
     do {
-        status = sqlite3_exec(db, query.c_str(), callback, r, &errMsg);
+        status = sqlite3_exec(db, tempQuery.c_str(), callback, r, &errMsg);
         switch(status) {         
             case SQLITE_BUSY: 
             case SQLITE_LOCKED: 
@@ -184,14 +203,17 @@ Backend::Result* SQLite3::execute(const string& query) const {
     return r;    
 }
 
-Backend::Cursor* SQLite3::cursor(const string& query) const {
+Backend::Cursor* SQLite3::cursor(const LITESQL_String& query) const {
+    string tempQuery;
+    LITESQL_ConvertString( query, tempQuery );
     while (1) {
         sqlite3_stmt * stmt = NULL;
-        int status = sqlite3_prepare(db, query.c_str(), query.size(), 
+        int status = sqlite3_prepare(db, tempQuery.c_str(), tempQuery.size(), 
                                      &stmt, NULL);
         if (status != SQLITE_OK || stmt == NULL) {
-            string error = sqlite3_errmsg(db);
-            error = toString(status) + "=status code : " + error;
+            LITESQL_String error;
+            LITESQL_ConvertString( sqlite3_errmsg(db), error );
+            error = toString(status) + LITESQL_L( "=status code : " ) + error;
             switch(status) {
             case SQLITE_BUSY: 
             case SQLITE_LOCKED: 

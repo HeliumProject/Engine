@@ -14,6 +14,8 @@
 
 namespace Lunar
 {
+    class Serializer;
+
     /// 32-bit ARGB color value.
     class LUNAR_RENDERING_API Color
     {

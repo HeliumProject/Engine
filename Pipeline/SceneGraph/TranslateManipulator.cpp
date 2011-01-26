@@ -545,7 +545,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
         if (m_SelectedAxes != MultipleAxes::None && !m_ShowCones)
         {
-            m_Axes->SetColor(m_SelectedAxes, SceneGraph::Color::ColorValueToColor(SceneGraph::Color::YELLOW));
+            m_Axes->SetColor(m_SelectedAxes, SceneGraph::Color::YELLOW.GetArgb());
         }
 
         m_Axes->Update();

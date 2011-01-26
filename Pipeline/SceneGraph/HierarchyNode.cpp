@@ -730,14 +730,20 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
         if ( m_LayerColor )
         {
             const Color3& color = m_LayerColor->GetColor();
-            material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
+            material.Ambient.r = color.r;
+            material.Ambient.g = color.g;
+            material.Ambient.b = color.b;
+            material.Ambient.a = defaultMaterial.Ambient.a;
         }
         break;
 
     case ViewColorMode::Scene:
         {
             const Color3& color = m_Owner->GetColor();
-            material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
+            material.Ambient.r = color.r;
+            material.Ambient.g = color.g;
+            material.Ambient.b = color.b;
+            material.Ambient.a = defaultMaterial.Ambient.a;
         }
         break;
     }
@@ -841,7 +847,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             m_ObjectBounds.GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 0, 0 );
+            material.Ambient.r = 255;
+            material.Ambient.g = 0;
+            material.Ambient.b = 0;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -859,7 +868,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             GetGlobalBounds().GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 128, 128 );
+            material.Ambient.r = 255;
+            material.Ambient.g = 128;
+            material.Ambient.b = 128;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -877,7 +889,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             m_ObjectHierarchyBounds.GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 0, 0, 255 );
+            material.Ambient.r = 0;
+            material.Ambient.g = 0;
+            material.Ambient.b = 255;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -895,7 +910,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             GetGlobalHierarchyBounds().GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 128, 128, 255 );
+            material.Ambient.r = 128;
+            material.Ambient.g = 128;
+            material.Ambient.b = 255;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }

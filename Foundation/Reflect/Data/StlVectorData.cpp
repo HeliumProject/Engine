@@ -272,7 +272,7 @@ void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
 }
 
 template < class T >
-void SimpleStlVectorData<T>::Serialize(Archive& archive) const
+void SimpleStlVectorData<T>::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -385,7 +385,7 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
 
 // keep reading the string until we run out of buffer
 template <>
-void StlStringStlVectorData::Serialize(Archive& archive) const
+void StlStringStlVectorData::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {

@@ -47,7 +47,7 @@ bool TypeIDData::Equals(Object* object)
     return *m_Data == *rhs->m_Data;
 }
 
-void TypeIDData::Serialize(Archive& archive) const
+void TypeIDData::Serialize(Archive& archive)
 {
     const Type* type = *m_Data;
 

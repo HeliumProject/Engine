@@ -98,7 +98,7 @@ bool ObjectSetData::Equals( Object* object )
     return true;
 }
 
-void ObjectSetData::Serialize( Archive& archive ) const
+void ObjectSetData::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() );

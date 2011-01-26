@@ -77,7 +77,7 @@ void PointerData::Accept(Visitor& visitor)
     }
 }
 
-void PointerData::Serialize(Archive& archive) const
+void PointerData::Serialize(Archive& archive)
 {
     archive.Serialize( *m_Data );
 }

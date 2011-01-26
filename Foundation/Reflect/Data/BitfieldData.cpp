@@ -19,7 +19,7 @@ BitfieldData::~BitfieldData()
 
 }
 
-void BitfieldData::Serialize(Archive& archive) const
+void BitfieldData::Serialize(Archive& archive)
 {
     const Enumeration* enumeration = NULL;
     

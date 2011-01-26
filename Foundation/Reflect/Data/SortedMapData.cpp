@@ -296,7 +296,7 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( Objec
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Serialize( Archive& archive ) const
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );

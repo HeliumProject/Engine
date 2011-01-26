@@ -162,7 +162,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( Object* objec
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive ) const
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() );

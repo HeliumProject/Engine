@@ -50,7 +50,7 @@ bool EnumerationData::Equals(Object* object)
     return *m_Data == *rhs->m_Data;
 }
 
-void EnumerationData::Serialize(Archive& archive) const
+void EnumerationData::Serialize(Archive& archive)
 {
     const Enumeration* enumeration = NULL;
     

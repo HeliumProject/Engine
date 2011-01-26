@@ -152,7 +152,7 @@ bool SimpleObjectStlMapData<KeyT>::Equals(Object* object)
 }
 
 template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
+void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive)
 {
     std::vector< ObjectPtr > components;
     components.resize(m_Data->size() * 2);

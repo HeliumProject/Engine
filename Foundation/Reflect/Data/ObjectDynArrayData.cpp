@@ -91,7 +91,7 @@ bool ObjectDynArrayData::Equals( Object* object )
     return true;
 }
 
-void ObjectDynArrayData::Serialize( Archive& archive ) const
+void ObjectDynArrayData::Serialize( Archive& archive )
 {
     archive.Serialize( *m_Data );
 }

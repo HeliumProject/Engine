@@ -162,7 +162,7 @@ bool SimpleStlSetData<DataT, DataClassT>::Equals(Object* object)
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
+void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive)
 {
     int i = 0;
     std::vector< ObjectPtr > components;

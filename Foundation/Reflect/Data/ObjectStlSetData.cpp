@@ -92,7 +92,7 @@ bool ObjectStlSetData::Equals(Object* object)
     return true;
 }
 
-void ObjectStlSetData::Serialize(Archive& archive) const
+void ObjectStlSetData::Serialize(Archive& archive)
 {
     std::vector< ObjectPtr > components;
 

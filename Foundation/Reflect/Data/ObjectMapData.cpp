@@ -156,7 +156,7 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( Object* object 
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& archive ) const
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );

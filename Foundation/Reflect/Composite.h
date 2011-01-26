@@ -344,7 +344,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetClass<Reflect::AggregateData>(),
+                    Reflect::GetClass<Reflect::StructureData>(),
                     Reflect::GetStructure<FieldT>(),
                     flags );
             }
@@ -356,7 +356,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(FieldT),
-                    Reflect::GetClass<Reflect::AggregateData>(),
+                    Reflect::GetClass<Reflect::StructureData>(),
                     Reflect::GetStructure<FieldT>(),
                     flags );
             }

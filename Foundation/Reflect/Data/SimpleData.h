@@ -44,7 +44,7 @@ namespace Helium
             virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
             virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const HELIUM_OVERRIDE;
-            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+            virtual void Serialize(Archive& archive) HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
 
             virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;

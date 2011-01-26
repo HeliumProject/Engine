@@ -6,16 +6,16 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API AggregateData : public Data
+        class FOUNDATION_API StructureData : public Data
         {
         public:
             typedef void DataType;
             VoidDataPointer m_Data;
 
-            REFLECT_DECLARE_OBJECT( AggregateData, Data );
+            REFLECT_DECLARE_OBJECT( StructureData, Data );
 
-            AggregateData();
-            ~AggregateData();
+            StructureData();
+            ~StructureData();
 
             virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
@@ -23,10 +23,10 @@ namespace Helium
             virtual bool Equals(Object* object) HELIUM_OVERRIDE;
             virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
 
-            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
+            virtual void Serialize(Archive& archive) HELIUM_OVERRIDE;
             virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
         };
 
-        typedef Helium::SmartPtr<AggregateData> AggregateDataPtr;
+        typedef Helium::SmartPtr<StructureData> AggregateDataPtr;
     }
 }

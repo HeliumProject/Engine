@@ -47,7 +47,7 @@ bool PathData::Equals( Object* object )
     return *rhs->m_Data == *m_Data;
 }
 
-void PathData::Serialize( Archive& archive ) const
+void PathData::Serialize( Archive& archive )
 {
     const tstring& str = m_Data->Get();
 

@@ -4,7 +4,7 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/Data.h"
 #include "Foundation/Reflect/Data/PointerData.h"
-#include "Foundation/Reflect/Data/AggregateData.h"
+#include "Foundation/Reflect/Data/StructureData.h"
 #include "Foundation/Reflect/Data/EnumerationData.h"
 #include "Foundation/Reflect/Data/BitfieldData.h"
 

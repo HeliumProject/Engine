@@ -53,7 +53,7 @@ bool SimpleData<T>::Equals(Object* object)
 }
 
 template <class T>
-void SimpleData<T>::Serialize(Archive& archive) const
+void SimpleData<T>::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -138,7 +138,7 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 
 // must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StlStringData::Serialize(Archive& archive) const
+void StlStringData::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -206,7 +206,7 @@ tistream& StlStringData::operator<< (tistream& stream)
 
 // this is a char, we must treat it as a number
 template <>
-void UInt8Data::Serialize(Archive& archive) const
+void UInt8Data::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {
@@ -277,7 +277,7 @@ tistream& UInt8Data::operator<< (tistream& stream)
 
 // this is a char, we must treat it as a number
 template <>
-void Int8Data::Serialize(Archive& archive) const
+void Int8Data::Serialize(Archive& archive)
 {
     switch (archive.GetType())
     {

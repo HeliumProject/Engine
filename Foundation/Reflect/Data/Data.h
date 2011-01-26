@@ -131,20 +131,19 @@ namespace Helium
                 Deallocate();
             }
 
-            template< class T >
-            void Allocate() const
+            void Allocate( uint32_t size ) const
             {
-                REFLECT_CHECK_MEMORY_ASSERT( m_Size == 0 || m_Size = sizeof( T ) );
-                m_Size = sizeof( T );
-                m_Target = new T;
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == 0 || m_Size == size );
+                m_Target = new uint8_t[ size ];
                 m_Owned = true;
+                m_Size = size;
             }
 
             void Deallocate() const
             {
                 if ( m_Owned && m_Target )
                 {
-                    delete m_Target;
+                    delete[] m_Target;
                     m_Target = NULL;
                 }
             }
@@ -161,51 +160,25 @@ namespace Helium
                 Deallocate();
             }
 
-            template< class T >
-            const T* operator->() const
+            const void* Get(uint32_t size) const
             {
                 if ( !m_Target )
                 {
-                    Allocate<T>();
+                    Allocate(size);
                 }
 
-                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == size );
                 return m_Target;
             }
 
-            template< class T >
-            T* operator->()
+            void* Get(uint32_t size)
             {
                 if ( !m_Target )
                 {
-                    Allocate<T>();
+                    Allocate(size);
                 }
 
-                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
-                return m_Target;
-            }
-
-            template< class T >
-            operator const T*() const
-            {
-                if ( !m_Target )
-                {
-                    Allocate<T>();
-                }
-
-                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
-                return m_Target;
-            }
-
-            template< class T >
-            operator T*()
-            {
-                if ( !m_Target )
-                {
-                    Allocate<T>();
-                }
-
-                REFLECT_CHECK_MEMORY_ASSERT( m_Size == sizeof( T ) );
+                REFLECT_CHECK_MEMORY_ASSERT( m_Size == size );
                 return m_Target;
             }
 
@@ -213,7 +186,7 @@ namespace Helium
             mutable void*   m_Target;
             mutable bool    m_Owned;
 #ifdef REFLECT_CHECK_MEMORY
-            mutable size_t  m_Size;
+            mutable uint32_t  m_Size;
 #endif
         };
         
@@ -373,7 +346,7 @@ namespace Helium
             virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const;
 
             // data serialization (extract to archive)
-            virtual void Serialize(Archive& archive) const = 0;
+            virtual void Serialize(Archive& archive) = 0;
 
             // data deserialization (insert from archive)
             virtual void Deserialize(Archive& archive) = 0;

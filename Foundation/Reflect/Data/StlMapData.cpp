@@ -296,7 +296,7 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(Object* obje
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive) const
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive)
 {
     int i = 0;
     std::vector< ObjectPtr > components;

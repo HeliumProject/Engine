@@ -23,7 +23,7 @@ void Project::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
-    //comp.AddStructureField( &This::m_Test, TXT( "m_Test" ) );
+    comp.AddStructureField( &This::m_Test, TXT( "m_Test" ) );
 }
 
 Project::Project( const Path& path )

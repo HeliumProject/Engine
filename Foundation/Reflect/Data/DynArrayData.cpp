@@ -210,7 +210,7 @@ bool SimpleDynArrayData< T >::Equals( Object* object )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Serialize( Archive& archive ) const
+void SimpleDynArrayData< T >::Serialize( Archive& archive )
 {
     switch (archive.GetType())
     {
@@ -249,7 +249,6 @@ void SimpleDynArrayData< T >::Serialize( Archive& archive ) const
 
             for( size_t index = 0; index < countActual; ++index )
             {
-#pragma TODO( "Fix support for writing out non-POD types (i.e. strings)" )
                 stream.Write( &m_Data->GetElement( index ) );
             }
 
@@ -351,7 +350,7 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
 
 // keep reading the string until we run out of buffer
 template<>
-void StringDynArrayData::Serialize( Archive& archive ) const
+void StringDynArrayData::Serialize( Archive& archive )
 {
     switch (archive.GetType())
     {

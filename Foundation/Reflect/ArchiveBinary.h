@@ -19,7 +19,7 @@
 //  
 //    struct Field
 //    {
-//      int32_t field_id;       // latent type field index (id)
+//      int32_t field_id;       // latent type field index (name crc)
 //      Data ser;               // data instance data
 //    };
 //  
@@ -43,7 +43,6 @@
 //      uint8_t byte_order;     // BOM
 //      uint8_t encoding;       // character encoding
 //      uint32_t version;       // file format version
-//      uint32_t crc;           // crc of all bytes following the crc value itself
 //
 //      ObjectArray elements;  // client objects
 //    };

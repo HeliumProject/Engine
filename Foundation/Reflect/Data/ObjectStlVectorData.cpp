@@ -92,7 +92,7 @@ bool ObjectStlVectorData::Equals(Object* object)
     return true;
 }
 
-void ObjectStlVectorData::Serialize(Archive& archive) const
+void ObjectStlVectorData::Serialize(Archive& archive)
 {
     archive.Serialize( *m_Data );
 }

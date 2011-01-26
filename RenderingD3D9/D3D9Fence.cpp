@@ -24,5 +24,23 @@ D3D9Fence::D3D9Fence( IDirect3DQuery9* pD3DQuery )
 /// Destructor.
 D3D9Fence::~D3D9Fence()
 {
-    m_pQuery->Release();
+    if( m_pQuery )
+    {
+        m_pQuery->Release();
+    }
+}
+
+/// @copydoc D3D9DeviceResetListener::OnPreReset()
+void D3D9Fence::OnPreReset()
+{
+    if( m_pQuery )
+    {
+        m_pQuery->Release();
+    }
+}
+
+/// @copydoc D3D9DeviceResetListener::OnPostReset()
+void D3D9Fence::OnPostReset( D3D9Renderer* /*pRenderer*/ )
+{
+    // Don't recreate fences on device reset.
 }

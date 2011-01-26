@@ -102,6 +102,7 @@ namespace Lunar
         virtual RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters ) = 0;
 
         virtual EStatus GetStatus() = 0;
+        virtual EStatus Reset() = 0;
         //@}
 
         /// @name State Object Creation

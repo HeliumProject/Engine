@@ -68,3 +68,11 @@ void D3D9MainContext::Swap()
         L_D3D9_ASSERT( result );
     }
 }
+
+/// Release this context's reference to the back buffer surface.
+///
+/// This is typically called during device resets, where the back buffer surface may need to be recreated.
+void D3D9MainContext::ReleaseBackBufferSurface()
+{
+    m_spBackBufferSurface.Release();
+}

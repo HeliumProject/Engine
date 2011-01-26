@@ -98,6 +98,7 @@ namespace Lunar
         RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters );
 
         EStatus GetStatus();
+        EStatus Reset();
         //@}
 
         /// @name State Object Creation
@@ -207,6 +208,11 @@ namespace Lunar
         /// Main rendering context.
         D3D9MainContextPtr m_spMainContext;
 
+        /// Cached presentation parameters for the main context.
+        D3DPRESENT_PARAMETERS m_presentParameters;
+        /// Cached fullscreen display mode information for the main context (9Ex only).
+        D3DDISPLAYMODEEX m_fullscreenDisplayMode;
+
         /// Static texture map target pools for each supported texture pixel format at varying resolutions.
         DynArray< IDirect3DTexture9* >
             m_staticTextureMapTargetPools[ 2 * STATIC_TEXTURE_MAP_TARGET_LOG2_MAX + 1 ][ RENDERER_PIXEL_FORMAT_MAX ];
@@ -224,6 +230,11 @@ namespace Lunar
         //@{
         D3D9Renderer();
         virtual ~D3D9Renderer();
+        //@}
+
+        /// @name Private Utility Functions
+        //@{
+        HRESULT ResetDevice( D3DPRESENT_PARAMETERS& rPresentParameters, D3DDISPLAYMODEEX& rFullscreenDisplayMode );
         //@}
 
         /// @name Private Static Utility Functions

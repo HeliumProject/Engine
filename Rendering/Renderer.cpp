@@ -42,7 +42,7 @@ Renderer::~Renderer()
 ///
 /// @return  True if the context was created successfully, false if not.
 ///
-/// @see ResetMainContext(), GetMainContext(), CreateSubContext(), GetStatus()
+/// @see ResetMainContext(), GetMainContext(), CreateSubContext()
 
 /// @fn bool Renderer::ResetMainContext( const ContextInitParameters& rInitParameters )
 /// Reset the settings of the primary display context for this device.
@@ -57,7 +57,7 @@ Renderer::~Renderer()
 ///
 /// @return  True if the context was reset successfully, false if not.
 ///
-/// @see CreateMainContext(), GetMainContext(), GetStatus()
+/// @see CreateMainContext(), GetMainContext(), GetStatus(), Reset()
 
 /// @fn RRenderContext* Renderer::GetMainContext()
 /// Get a reference to the main rendering context.
@@ -88,7 +88,18 @@ Renderer::~Renderer()
 ///
 /// @return  Identifier specifying the current device status.
 ///
-/// @see CreateMainContext(), ResetMainContext()
+/// @see Reset(), ResetMainContext()
+
+/// @fn Renderer::EStatus Renderer::Reset()
+/// Reset the rendering device.
+///
+/// This should typically only be called when the rendering device is lost and needs to be reacquired (particularly only
+/// an issue with Direct3D 9 on PC).  Various resources will be recreated when doing so.
+///
+/// @return  Identifier specifying the new device status after attempting to reset.  A reset is successful if this
+///          returns STATUS_READY, whereas the reset will need to be reattempted later if this returns otherwise.
+///
+/// @see GetStatus(), ResetMainContext()
 
 /// @fn RRasterizerState* Renderer::CreateRasterizerState( const RRasterizerState::Description& rDescription )
 /// Create a rasterizer state object based on the given description.

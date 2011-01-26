@@ -11,10 +11,12 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RFence.h"
 
+#include "RenderingD3D9/D3D9DeviceResetListener.h"
+
 namespace Lunar
 {
     /// Direct3D 9 GPU command fence implementation.
-    class D3D9Fence : public RFence
+    class D3D9Fence : public RFence, public D3D9DeviceResetListener
     {
     public:
         /// @name Construction/Destruction
@@ -25,6 +27,12 @@ namespace Lunar
         /// @name Data Access
         //@{
         inline IDirect3DQuery9* GetQuery() const;
+        //@}
+
+        /// @name Device Reset Event Handlers
+        //@{
+        void OnPreReset();
+        void OnPostReset( D3D9Renderer* pRenderer );
         //@}
 
     protected:

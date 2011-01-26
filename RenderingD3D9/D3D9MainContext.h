@@ -29,6 +29,8 @@ namespace Lunar
         //@{
         RSurface* GetBackBufferSurface();
         void Swap();
+
+        void ReleaseBackBufferSurface();
         //@}
 
     private:

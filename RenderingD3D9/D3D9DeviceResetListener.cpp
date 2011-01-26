@@ -15,16 +15,18 @@ D3D9DeviceResetListener::D3D9DeviceResetListener()
 /// @param[in] rSource  Source object from which to copy.
 D3D9DeviceResetListener::D3D9DeviceResetListener( const D3D9DeviceResetListener& /*rSource*/ )
 {
-    // Since this is a new listener, it must have its own entry in the renderer's listener list.
-    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
-    HELIUM_ASSERT( pRenderer );
-
-    pRenderer->RegisterDeviceResetListener( this );
+    // Listeners must have their own entries in the renderer's listener list, so we never copy the link values.
 }
 
 /// Destructor.
+///
+/// This will automatically unregister this listener from the D3D9Renderer instance.
 D3D9DeviceResetListener::~D3D9DeviceResetListener()
 {
+    D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+    HELIUM_ASSERT( pRenderer );
+
+    pRenderer->UnregisterDeviceResetListener( this );
 }
 
 /// @fn void D3D9DeviceResetListener::OnPreReset()

@@ -73,6 +73,28 @@ GraphicsScene::~GraphicsScene()
 /// Update this graphics scene for the current frame.
 void GraphicsScene::Update()
 {
+    // Check for lost devices.
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    if( !pRenderer )
+    {
+        return;
+    }
+
+    Renderer::EStatus rendererStatus = pRenderer->GetStatus();
+    if( rendererStatus == Renderer::STATUS_LOST )
+    {
+        return;
+    }
+
+    if( rendererStatus == Renderer::STATUS_NOT_RESET )
+    {
+        rendererStatus = pRenderer->Reset();
+        if( rendererStatus != Renderer::STATUS_READY )
+        {
+            return;
+        }
+    }
+
     // No need to update anything if we have no scene render texture or scene views.
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 

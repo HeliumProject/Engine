@@ -43,6 +43,9 @@ namespace Lunar
 
 using namespace Lunar;
 
+// Non-zero to disable Direct3D 9Ex support (for testing purposes only; shipping builds should leave support enabled).
+#define L_DISABLE_DIRECT3D9EX 0
+
 // Direct3DCreate9Ex() function signature.
 typedef HRESULT ( WINAPI DIRECT3DCREATE9EX_FUNC )( UINT, IDirect3D9Ex** );
 
@@ -85,6 +88,7 @@ bool D3D9Renderer::Initialize()
 
     HELIUM_TRACE( TRACE_INFO, TXT( "Initializing Direct3D 9 rendering support (D3D9Renderer).\n" ) );
 
+#if !L_DISABLE_DIRECT3D9EX
     // Test for Direct3D9Ex support (provides better support for Windows Vista and later).
     HMODULE hD3DLibrary = LoadLibrary( TXT( "d3d9.dll" ) );
     if( !hD3DLibrary )
@@ -126,6 +130,7 @@ bool D3D9Renderer::Initialize()
             HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D9Ex initialized successfully.\n" ) );
         }
     }
+#endif
 
     if( !m_pD3D )
     {
@@ -177,7 +182,7 @@ bool D3D9Renderer::Initialize()
         HELIUM_TRACE(
             TRACE_WARNING,
             ( TXT( "Failed to find an appropriate D3DFORMAT for depth texture support.  Shadow mapping and other " )
-            TXT( "depth-dependent effects will be disabled.\n" ) ) );
+              TXT( "depth-dependent effects will be disabled.\n" ) ) );
     }
 
     // Store the renderer feature flag set.
@@ -260,9 +265,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Creating main display context.\n" ) );
 
     // Build the presentation parameters.
-    D3DPRESENT_PARAMETERS presentParameters;
-    D3DDISPLAYMODEEX fullscreenDisplayMode;
-    if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
+    if( !GetPresentParameters( rInitParameters, m_presentParameters, m_fullscreenDisplayMode ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
@@ -280,8 +283,8 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
             D3DDEVTYPE_HAL,
             static_cast< HWND >( rInitParameters.pWindow ),
             D3DCREATE_HARDWARE_VERTEXPROCESSING,
-            &presentParameters,
-            ( rInitParameters.bFullscreen ? &fullscreenDisplayMode : NULL ),
+            &m_presentParameters,
+            ( rInitParameters.bFullscreen ? &m_fullscreenDisplayMode : NULL ),
             &pD3DDeviceEx );
 
         m_pD3DDevice = pD3DDeviceEx;
@@ -293,7 +296,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
             D3DDEVTYPE_HAL,
             static_cast< HWND >( rInitParameters.pWindow ),
             D3DCREATE_HARDWARE_VERTEXPROCESSING,
-            &presentParameters,
+            &m_presentParameters,
             &m_pD3DDevice );
     }
 
@@ -340,7 +343,7 @@ bool D3D9Renderer::ResetMainContext( const ContextInitParameters& rInitParameter
             TRACE_ERROR,
             TXT( "D3D9Renderer: Attempted to reset the main rendering context without creating it first.\n" ) );
 
-        return NULL;
+        return false;
     }
 
     HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Resetting main display context.\n" ) );
@@ -357,25 +360,16 @@ bool D3D9Renderer::ResetMainContext( const ContextInitParameters& rInitParameter
         return false;
     }
 
-    HELIUM_ASSERT( m_pD3DDevice );
-    HRESULT resetResult;
-    if( m_bExDevice )
+    bool bResetSuccess = SUCCEEDED( ResetDevice( presentParameters, fullscreenDisplayMode ) );
+
+    // Store the new presentation parameters and fullscreen display mode information if resetting was successful.
+    if( bResetSuccess )
     {
-        resetResult = static_cast< IDirect3DDevice9Ex* >( m_pD3DDevice )->ResetEx(
-            &presentParameters,
-            ( rInitParameters.bFullscreen ? &fullscreenDisplayMode : NULL ) );
-    }
-    else
-    {
-        resetResult = m_pD3DDevice->Reset( &presentParameters );
+        m_presentParameters = presentParameters;
+        m_fullscreenDisplayMode = fullscreenDisplayMode;
     }
 
-    if( resetResult == D3DERR_DEVICELOST )
-    {
-        NotifyLost();
-    }
-
-    return SUCCEEDED( resetResult );
+    return bResetSuccess;
 }
 
 /// @copydoc Renderer::GetMainContext()
@@ -475,7 +469,7 @@ Renderer::EStatus D3D9Renderer::GetStatus()
 
     if( result == D3DERR_DEVICENOTRESET )
     {
-        return STATUS_LOST;
+        return STATUS_NOT_RESET;
     }
 
     // Unknown result.
@@ -484,6 +478,29 @@ Renderer::EStatus D3D9Renderer::GetStatus()
         static_cast< uint32_t >( result ) );
 
     return STATUS_INVALID;
+}
+
+/// @copydoc Renderer::Reset()
+Renderer::EStatus D3D9Renderer::Reset()
+{
+    HELIUM_ASSERT_MSG( m_pD3D, TXT( "D3D9Renderer not initialized" ) );
+
+    // Make sure the main context has been initialized.
+    HELIUM_ASSERT( m_spMainContext );
+    if( !m_spMainContext )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "D3D9Renderer: Attempted to reset the device without creating a main context first.\n" ) );
+
+        return STATUS_INVALID;
+    }
+
+    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Resetting device.\n" ) );
+
+    HRESULT resetResult = ResetDevice( m_presentParameters, m_fullscreenDisplayMode );
+
+    return ( resetResult == D3D_OK ? STATUS_READY : GetStatus() );
 }
 
 /// @copydoc Renderer::CreateRasterizerState()
@@ -1195,6 +1212,8 @@ RFence* D3D9Renderer::CreateFence()
     D3D9Fence* pFence = new D3D9Fence( pD3DQuery );
     HELIUM_ASSERT( pFence );
 
+    RegisterDeviceResetListener( pFence );
+
     pD3DQuery->Release();
 
     return pFence;
@@ -1206,7 +1225,11 @@ void D3D9Renderer::SyncFence( RFence* pFence )
     HELIUM_ASSERT( pFence );
 
     IDirect3DQuery9* pD3DQuery = static_cast< D3D9Fence* >( pFence )->GetQuery();
-    HELIUM_ASSERT( pD3DQuery );
+    if( !pD3DQuery )
+    {
+        // Direct3D query interface was released due to a device reset, so there is nothing to sync.
+        return;
+    }
 
     for( ; ; )
     {
@@ -1234,7 +1257,11 @@ bool D3D9Renderer::TrySyncFence( RFence* pFence )
     HELIUM_ASSERT( pFence );
 
     IDirect3DQuery9* pD3DQuery = static_cast< D3D9Fence* >( pFence )->GetQuery();
-    HELIUM_ASSERT( pD3DQuery );
+    if( !pD3DQuery )
+    {
+        // Direct3D query interface was released due to a device reset, so there is nothing to sync.
+        return true;
+    }
 
     HRESULT syncResult = pD3DQuery->GetData( NULL, 0, D3DGETDATA_FLUSH );
     if( syncResult == D3DERR_DEVICELOST )
@@ -1315,9 +1342,8 @@ void D3D9Renderer::UnregisterDeviceResetListener( D3D9DeviceResetListener* pList
     {
         pPreviousListener->m_pNextListener = pNextListener;
     }
-    else
+    else if( m_pDeviceResetListenerHead == pListener )
     {
-        HELIUM_ASSERT( m_pDeviceResetListenerHead == pListener );
         m_pDeviceResetListenerHead = pNextListener;
     }
 
@@ -1759,6 +1785,57 @@ ERendererPixelFormat D3D9Renderer::D3DFormatToPixelFormat( D3DFORMAT d3dFormat, 
     }
 
     return RENDERER_PIXEL_FORMAT_INVALID;
+}
+
+/// Reset the device with the specified parameters.
+///
+/// @param[in] rPresentParameters      Direct3D presentation parameters.
+/// @param[in] rFullscreenDisplayMode  Fullscreen display mode parameters.  This is ignored if not using a fullscreen
+///                                    display mode with the Direct3D 9Ex interface.
+///
+/// @return  Direct3D result from resetting the device.
+HRESULT D3D9Renderer::ResetDevice( D3DPRESENT_PARAMETERS& rPresentParameters, D3DDISPLAYMODEEX& rFullscreenDisplayMode )
+{
+    HELIUM_ASSERT( m_spMainContext );
+    m_spMainContext->ReleaseBackBufferSurface();
+
+    HELIUM_ASSERT( m_pD3DDevice );
+    HRESULT resetResult;
+    if( m_bExDevice )
+    {
+        resetResult = static_cast< IDirect3DDevice9Ex* >( m_pD3DDevice )->ResetEx(
+            &rPresentParameters,
+            ( rPresentParameters.Windowed ? NULL : &rFullscreenDisplayMode ) );
+    }
+    else
+    {
+        // Device resets without Direct3D 9Ex require certain resources to be reallocated, so prepare those resources
+        // before resetting and restore them afterward.
+        for( D3D9DeviceResetListener* pListener = m_pDeviceResetListenerHead;
+             pListener != NULL;
+             pListener = pListener->m_pNextListener )
+        {
+            pListener->OnPreReset();
+        }
+
+        resetResult = m_pD3DDevice->Reset( &rPresentParameters );
+
+        for( D3D9DeviceResetListener* pListener = m_pDeviceResetListenerHead;
+             pListener != NULL;
+             pListener = pListener->m_pNextListener )
+        {
+            pListener->OnPostReset( this );
+        }
+    }
+
+    m_bLost = false;
+
+    if( resetResult == D3DERR_DEVICELOST )
+    {
+        NotifyLost();
+    }
+
+    return resetResult;
 }
 
 /// Get information about the static texture map target pool for a given texture size.

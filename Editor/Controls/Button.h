@@ -12,7 +12,9 @@ namespace Helium
         {
             enum ButtonOption
             {
-                Toggle = 1 << 0,
+                HideLabel = 1 << 0,       // Sets WX styles: wxBU_NOTEXT
+                Toggle = 1 << 1,          // Sets MSW styles: BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP
+                NoAutoDraw = 1 << 2,      // Sets MSW styles: wxBU_AUTODRAW
             };
 
             const uint32_t Default = 0;
@@ -42,18 +44,15 @@ namespace Helium
             //Sets the toggle button to the given state.
             virtual void SetValue( bool value );
 
-            //const wxBitmap& GetBitmapToggled() const;
-            //void SetBitmapToggled( const wxBitmap& bitmap );
-
         protected:
             // Could we just override this instead:
             bool SendClickOrToggleEvent();
             virtual void Command( wxCommandEvent& event ) HELIUM_OVERRIDE;
             virtual bool MSWCommand( WXUINT param, WXWORD id ) HELIUM_OVERRIDE;
-            //void OnLeftClick( wxCommandEvent& event );
-            //void OnToggle( wxCommandEvent& event );
 
-            virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+            virtual WXDWORD MSWGetStyle( long flags, WXDWORD *exstyle = NULL ) const HELIUM_OVERRIDE;
+
+            virtual void DoSetBitmap( const wxBitmap& bitmap, State which ) HELIUM_OVERRIDE;
 
         public:
             // wxWidgets setup
@@ -61,6 +60,7 @@ namespace Helium
 
         private:
             ButtonOption m_ButtonOption;
+            bool m_IsStateBitmapSetByUser[wxButton::State_Max];
         };
     }
 }

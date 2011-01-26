@@ -34,7 +34,7 @@ namespace Helium
                 MouseOverToOpen     = 1 << 1,          // Drawers open when the button is moused over
             };
 
-            const uint32_t Default = ( ClickToOpen | MouseOverToOpen );
+            const uint32_t Default = ( ClickToOpen  );
         }
         typedef uint32_t DrawerButtonStyle;
 
@@ -44,8 +44,6 @@ namespace Helium
         public:
             Drawer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
             virtual ~Drawer();
-            
-            //virtual bool Destroy();
 
             virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
             void SetIcon( const tstring& icon );

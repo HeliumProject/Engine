@@ -13,18 +13,21 @@ IMPLEMENT_DYNAMIC_CLASS( MenuButton, wxButton );
 BEGIN_EVENT_TABLE( MenuButton, wxButton)
 END_EVENT_TABLE();
 
-MenuButton::MenuButton(wxWindow *parent,
-                       wxWindowID id,
-                       const wxBitmap& bitmap,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxValidator& validator,
-                       const wxString& name ) 
-                       : wxBitmapButton( parent, id, bitmap, pos, size, style, validator, name )
-                       , m_contextMenu ( NULL )
-                       , m_holdDelay( 0.5f )
-                       , m_timerShowOnHold( this )
+MenuButton::MenuButton
+(
+ wxWindow *parent,
+ wxWindowID id,
+ const wxString& label,
+ const wxPoint& pos,
+ const wxSize& size,
+ long style,
+ const wxValidator& validator,
+ const wxString& name
+ ) 
+ : Button( parent, id, label, pos, size, style, validator, name )
+ , m_ContextMenu ( NULL )
+ , m_HoldDelay( 0.5f )
+ , m_TimerShowOnHold( this )
 {
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MenuButton::OnRightMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MenuButton::OnLeftMouseDown ), NULL, this );
@@ -37,9 +40,9 @@ MenuButton::MenuButton(wxWindow *parent,
 
 MenuButton::~MenuButton(void)
 { 
-    if( m_contextMenu )
+    if( m_ContextMenu )
     {
-        delete m_contextMenu;
+        delete m_ContextMenu;
     }
 
     Disconnect( wxEVT_TIMER, wxTimerEventHandler( MenuButton::HandleTimerEvents ), NULL, this  );
@@ -53,25 +56,25 @@ MenuButton::~MenuButton(void)
 
 void MenuButton::SetContextMenu( wxMenu * menu ) 
 { 
-    if( m_contextMenu )
+    if( m_ContextMenu )
     {
-        delete m_contextMenu;
+        delete m_ContextMenu;
     }
 
-    m_contextMenu = menu;
+    m_ContextMenu = menu;
 }
 
 wxMenu* MenuButton::DetachContextMenu( ) 
 { 
-    wxMenu* tmp = m_contextMenu;
-    m_contextMenu = NULL;
+    wxMenu* tmp = m_ContextMenu;
+    m_ContextMenu = NULL;
 
     return tmp; 
 }
 
 wxMenu* MenuButton::GetContextMenu( ) const 
 { 
-    return m_contextMenu; 
+    return m_ContextMenu; 
 }
 
 void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
@@ -106,13 +109,13 @@ void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                 wxIMAGE_ALPHA_BLEND_COMPOSITE );
             
             wxBitmap newBitmap = wxBitmap( image );
-            wxBitmapButton::DoSetBitmap( newBitmap, which );
+            __super::DoSetBitmap( newBitmap, which );
 
             return;
         }
     }
    
-    wxBitmapButton::DoSetBitmap( bitmap, which );
+    __super::DoSetBitmap( bitmap, which );
 }
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )
@@ -128,11 +131,11 @@ void MenuButton::OnRightMouseDown( wxMouseEvent& event )
 
 void MenuButton::OnLeftMouseDown( wxMouseEvent& event )
 {
-    if( m_contextMenu && IsMouseInWindow() )
+    if( m_ContextMenu && IsMouseInWindow() )
     {
-        if ( m_holdDelay > 0.0f )
+        if ( m_HoldDelay > 0.0f )
         {
-            m_timerShowOnHold.Start( m_holdDelay * 1000, wxTIMER_ONE_SHOT );
+            m_TimerShowOnHold.Start( m_HoldDelay * 1000, wxTIMER_ONE_SHOT );
         }
         else
         {
@@ -146,7 +149,7 @@ void MenuButton::OnLeftMouseDown( wxMouseEvent& event )
 
 void MenuButton::OnLeftMouseUp( wxMouseEvent& event )
 {
-    m_timerShowOnHold.Stop( );
+    m_TimerShowOnHold.Stop( );
 
     // we still want other things to process this button click
     event.Skip();
@@ -164,7 +167,7 @@ void MenuButton::OnMenuClose( wxMenuEvent& event )
 
 void MenuButton::ShowPopupMenu()
 {
-    if( m_contextMenu )
+    if( m_ContextMenu )
     {
         int height;
         GetSize( NULL, &height );
@@ -172,13 +175,13 @@ void MenuButton::ShowPopupMenu()
         // we don't have the menu id here, so we use the id to specify if the event
         // was from a popup menu or a normal one
         //isPopup ? -1 : 0
-        wxMenuEvent openEvent(wxEVT_MENU_OPEN, -1, m_contextMenu);
+        wxMenuEvent openEvent(wxEVT_MENU_OPEN, -1, m_ContextMenu);
         openEvent.SetEventObject( this );
         GetEventHandler()->ProcessEvent( openEvent );
 
-        PopupMenu( m_contextMenu, 0, height );
+        PopupMenu( m_ContextMenu, 0, height );
 
-        wxMenuEvent closeEvent(wxEVT_MENU_CLOSE, -1, m_contextMenu);
+        wxMenuEvent closeEvent(wxEVT_MENU_CLOSE, -1, m_ContextMenu);
         closeEvent.SetEventObject( this );
         GetEventHandler()->ProcessEvent( closeEvent );
 
@@ -188,7 +191,7 @@ void MenuButton::ShowPopupMenu()
 
 void MenuButton::HandleTimerEvents( wxTimerEvent& event )
 {
-    if( event.GetId() == m_timerShowOnHold.GetId() )
+    if( event.GetId() == m_TimerShowOnHold.GetId() )
     {
         ShowPopupMenu();
     }

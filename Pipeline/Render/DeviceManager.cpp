@@ -15,8 +15,7 @@ DeviceManager*  DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::DeviceManager()
-: m_IsLost( false )
-, m_hWnd( NULL )
+: m_hWnd( NULL )
 {
     m_width = 0;
     m_height = 0;
@@ -80,7 +79,7 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
     {
         bool bCreatedRenderer = Lunar::D3D9Renderer::CreateStaticInstance();
         HELIUM_ASSERT( bCreatedRenderer );
-        if( !bCreatedRenderer )
+        if ( !bCreatedRenderer )
         {
             return false;
         }
@@ -167,6 +166,8 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::ResizeSwapChain( uint32_t width, uint32_t height )
 {
+    m_spRenderContext.Release();
+
     Lunar::Renderer::ContextInitParameters initParameters;
     initParameters.pWindow = m_hWnd;
     initParameters.bFullscreen = false;
@@ -174,16 +175,18 @@ bool DeviceManager::ResizeSwapChain( uint32_t width, uint32_t height )
     initParameters.displayWidth = width;
     initParameters.displayHeight = height;
 
-    m_spRenderContext->Reset( initParameters );
+    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+    m_spRenderContext = pRenderer->CreateSubContext( initParameters );
 
-    return true;
+    return ( m_spRenderContext != NULL );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
 {
-    // release the default pool
-    HandleClientDefaultPool(DEFPOOL_RELEASE);
+    m_spRenderContext.Release();
+    sm_spMainRenderContext.Release();
 
     Lunar::Renderer::ContextInitParameters initParameters;
     initParameters.pWindow = m_hWnd;
@@ -192,12 +195,14 @@ bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
     initParameters.displayWidth = width;
     initParameters.displayHeight = height;
 
-    m_spRenderContext->Reset( initParameters );
+    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+    pRenderer->ResetMainContext( initParameters );
 
-    // recreate the default pool
-    HandleClientDefaultPool(DEFPOOL_CREATE);
+    m_spRenderContext = pRenderer->GetMainContext();
+    sm_spMainRenderContext = m_spRenderContext;
 
-    return true;
+    return ( m_spRenderContext != NULL );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,129 +226,34 @@ bool DeviceManager::Swap()
     return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-bool DeviceManager::Reset()
+bool DeviceManager::TestDeviceReady()
 {
-    HRESULT hr = S_OK;
-
-    // step 1, go through all the clients and release their default pool resources
-    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
-    {
-        DeviceManager* pClient = m_clients[ clientIndex ];
-        if ( pClient )
-        {
-            pClient->HandleClientDefaultPool( DEFPOOL_RELEASE );
-        }
-    }
-
-    // step 2, go through all the clients and release their render contexts
-    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
-    {
-        DeviceManager* pClient = m_clients[ clientIndex ];
-        if ( pClient )
-        {
-            pClient->m_spRenderContext.Release();
-        }
-    }
-
-    // step 3, reset the device with the default device display parameters
-    Lunar::Renderer::ContextInitParameters initParameters;
-    initParameters.pWindow = sm_hMainRenderContextWnd;
-    initParameters.displayWidth = sm_mainRenderContextWidth;
-    initParameters.displayHeight = sm_mainRenderContextHeight;
-    initParameters.bFullscreen = false;
-    initParameters.bVsync = false;
-
-    sm_spMainRenderContext->Reset( initParameters );
-
-    // step 4, go through all the clients and recreate the depth buffer and swap chains based on the local parameters
     Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
 
-    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
+    Lunar::Renderer::EStatus rendererStatus = pRenderer->GetStatus();
+    if ( rendererStatus == Lunar::Renderer::STATUS_READY )
     {
-        DeviceManager* pClient = m_clients[ clientIndex ];
-        if ( pClient )
+        return true;
+    }
+
+    if ( rendererStatus == Lunar::Renderer::STATUS_NOT_RESET )
+    {
+        rendererStatus = pRenderer->Reset();
+        if ( rendererStatus == Lunar::Renderer::STATUS_READY )
         {
-            if ( pClient->m_using_swapchain )
-            {
-                initParameters.pWindow = pClient->m_hWnd;
-                initParameters.displayWidth = pClient->m_width;
-                initParameters.displayHeight = pClient->m_height;
-                pClient->m_spRenderContext = pRenderer->CreateSubContext( initParameters );
-                HELIUM_ASSERT( pClient->m_spRenderContext );
-            }
-            else
-            {
-                pClient->m_spRenderContext = sm_spMainRenderContext;
-            }
+            return true;
         }
     }
 
-    // step 5, go through all the clients and create their default pool resources
-    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
-    {
-        DeviceManager* pClient = m_clients[ clientIndex ];
-        if ( pClient )
-        {
-            pClient->HandleClientDefaultPool( DEFPOOL_CREATE );
-        }
-    }
-
-    return true;
-}
-
-bool DeviceManager::TestDeviceReady()
-{
-  IDirect3DDevice9* device = GetD3DDevice();
-  if ( !device )
-  {
     return false;
-  }
-
-  if ( !m_IsLost )
-  {
-    return true;
-  }
-
-  HRESULT result = device->TestCooperativeLevel();
-  if ( result == D3DERR_DEVICENOTRESET )
-  {
-    Reset();
-    result = device->TestCooperativeLevel();
-  }
-
-  m_IsLost = result != D3D_OK;
-
-  return !m_IsLost;
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-IDirect3DSurface9* DeviceManager::GetBufferData()
-{
-    D3DSURFACE_DESC desc;
-    m_back_buffer->GetDesc(&desc);
-
-    IDirect3DSurface9* surface;
-
-    if ( FAILED(m_device->CreateOffscreenPlainSurface(desc.Width,desc.Height,desc.Format,D3DPOOL_SYSTEMMEM,&surface,0)))
-    {
-        return 0;
-    }
-
-    if (FAILED(m_device->GetRenderTargetData(m_back_buffer,surface)))
-    {
-        surface->Release();
-        return 0;
-    }
-
-    return surface;
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::SaveTGA(const tchar_t* fname)
 {
+#pragma TODO( "Lunar::Renderer viewport integration - Reimplement DeviceManager::SaveTGA() support." )
+#if 0
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)
         return 0;
@@ -403,6 +313,7 @@ bool DeviceManager::SaveTGA(const tchar_t* fname)
 
     surface->UnlockRect();
     surface->Release();
+#endif
 
     return true;
 }

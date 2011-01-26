@@ -103,20 +103,9 @@ namespace Helium
             bool ResizeDevice( uint32_t width, uint32_t height );
         public:
             bool Resize( uint32_t width, uint32_t height );
-            bool Swap();      // if swap fails, call reset
-            bool Reset();
+            bool Swap();
 
             bool TestDeviceReady();
-
-            inline bool IsDeviceLost() const
-            {
-                return m_IsLost;
-            }
-
-            inline void SetDeviceLost( bool lost = true )
-            {
-                m_IsLost = lost;
-            }
 
             bool SaveTGA(const tchar_t* fname);
 
@@ -128,47 +117,6 @@ namespace Helium
             inline uint32_t GetHeight()
             {
                 return m_height;
-            }
-
-            // call up to the parent class to handle their default pool (this will be called for every client)
-            // this is called for a number of reasons
-            bool HandleClientDefaultPool(uint32_t reason)
-            {
-                if ( reason == DEFPOOL_RELEASE )
-                {
-                    m_Lost.Raise( DeviceStates::Lost );
-                }
-                else if ( reason == DEFPOOL_CREATE )
-                {
-                    m_Found.Raise( DeviceStates::Found );
-                }
-                return S_OK;
-            }
-
-        private:
-            bool m_IsLost;
-
-        private:
-            DeviceStateSignature::Event m_Found;
-        public:
-            void AddDeviceFoundListener( const DeviceStateSignature::Delegate& listener )
-            {
-                m_Found.Add( listener );
-            }
-            void RemoveDeviceFoundListener( const DeviceStateSignature::Delegate& listener )
-            {
-                m_Found.Remove( listener );
-            }
-        private:
-            DeviceStateSignature::Event m_Lost;
-        public:
-            void AddDeviceLostListener( const DeviceStateSignature::Delegate& listener )
-            {
-                m_Lost.Add( listener );
-            }
-            void RemoveDeviceLostListener( const DeviceStateSignature::Delegate& listener )
-            {
-                m_Lost.Remove( listener );
             }
 
         private:

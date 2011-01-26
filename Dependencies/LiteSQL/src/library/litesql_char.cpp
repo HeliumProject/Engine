@@ -1,6 +1,6 @@
 #include "litesql_char.hpp"
 
-#ifdef _GNUC_
+#ifndef __GNUC__
 
 bool LITESQL_ConvertChar(char src, wchar_t& dest)
 {

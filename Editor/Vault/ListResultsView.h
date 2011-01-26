@@ -18,6 +18,7 @@ namespace Helium
             enum DetailsColumnType
             {
                 NONE        = 0,
+                Icon,
                 Path,
                 Filename,
                 Directory,

@@ -3,13 +3,20 @@
 #include <vector>
 
 #include "Editor/API.h"
+#include "Editor/Tracker/TrackerDBGenerated.h"
+
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
+
 
 namespace Helium
 {
     namespace Editor
     {
+
+        // we need to define this operator to support sets of TrackedFile
+        bool operator<( const TrackedFile& lhs, const TrackedFile& rhs );
+
         class VaultSearchResults : public Helium::RefCountBase< VaultSearchResults >
         {
         public:
@@ -20,19 +27,19 @@ namespace Helium
             void Clear();
             bool HasResults() const;
 
-            const std::map< uint64_t, Helium::Path >& GetPathsMap() const;
-            bool AddPath( const Helium::Path& path );
-            bool RemovePath( const Helium::Path& path );
+            void SetResults( const std::set< TrackedFile >& results );
+            const std::set< TrackedFile >& GetResults() const;
 
             int32_t GetSearchID() { return m_VaultSearchID; }
+
+            bool Add( const TrackedFile& file );
+            bool Remove( const TrackedFile& file );
 
         private:
             // This is the ID of the VaultSearch that created these results, for easy of debugging
             int32_t m_VaultSearchID;
-            
-            std::map< uint64_t, Helium::Path > m_Paths;
 
-            const Helium::Path* Find( const uint64_t& hash ) const;
+            std::set< TrackedFile > m_Results;
         };
         typedef Helium::SmartPtr< VaultSearchResults > VaultSearchResultsPtr;
     }

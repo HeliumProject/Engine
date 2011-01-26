@@ -272,7 +272,7 @@ void Tracker::TrackEverything()
             }
 
             // update LastModified
-            assetTrackedFile.mPath = assetFilePath.Get();
+            assetTrackedFile.mPath = assetFilePath.GetRelativePath( m_Project->a_Path.Get() ).Get();
             assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
             assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
             assetTrackedFile.mToolsVersion = HELIUM_VERSION_NUMBER;

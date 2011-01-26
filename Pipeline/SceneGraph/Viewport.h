@@ -7,6 +7,8 @@
 
 #include "Foundation/Undo/Queue.h"
 
+#include "Rendering/Color.h"
+
 #include "Pipeline/API.h"
 #include "Pipeline/SettingsManager.h"
 #include "Pipeline/SceneGraph/Render.h"
@@ -202,21 +204,18 @@ namespace Helium
         class PIPELINE_API Viewport
         {
         public:
-            static D3DMATERIAL9 s_LiveMaterial;
-            static D3DMATERIAL9 s_SelectedMaterial;
-            static D3DMATERIAL9 s_ReactiveMaterial;
-            static D3DMATERIAL9 s_HighlightedMaterial;
-            static D3DMATERIAL9 s_UnselectableMaterial;
-            static D3DMATERIAL9 s_ComponentMaterial;
-            static D3DMATERIAL9 s_SelectedComponentMaterial;
+            static const Lunar::Color s_LiveMaterial;
+            static const Lunar::Color s_SelectedMaterial;
+            static const Lunar::Color s_ReactiveMaterial;
+            static const Lunar::Color s_HighlightedMaterial;
+            static const Lunar::Color s_UnselectableMaterial;
+            static const Lunar::Color s_ComponentMaterial;
+            static const Lunar::Color s_SelectedComponentMaterial;
 
-            static D3DMATERIAL9 s_RedMaterial;
-            static D3DMATERIAL9 s_YellowMaterial;
-            static D3DMATERIAL9 s_GreenMaterial;
-            static D3DMATERIAL9 s_BlueMaterial;
-
-            static void InitializeType();
-            static void CleanupType();
+            static const Lunar::Color s_RedMaterial;
+            static const Lunar::Color s_YellowMaterial;
+            static const Lunar::Color s_GreenMaterial;
+            static const Lunar::Color s_BlueMaterial;
 
             Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
@@ -362,8 +361,6 @@ namespace Helium
 
         private:
             // callbacks
-            void ReleaseResources( const Render::DeviceStateArgs& args );
-            void AllocateResources( const Render::DeviceStateArgs& args );
             void CameraMoved( const CameraMovedArgs& args );
 
             // 

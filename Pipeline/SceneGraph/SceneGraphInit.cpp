@@ -58,7 +58,6 @@ void SceneGraph::Initialize()
 
         g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 
-        g_SceneGraphInitStack.Push( Viewport::InitializeType, Viewport::CleanupType );
         g_SceneGraphInitStack.Push( Primitive::InitializeType, Primitive::CleanupType );
 
         g_SceneGraphInitStack.Push( Tool::InitializeType, Tool::CleanupType );

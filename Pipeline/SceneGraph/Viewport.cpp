@@ -20,80 +20,17 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-D3DMATERIAL9 Viewport::s_LiveMaterial;
-D3DMATERIAL9 Viewport::s_SelectedMaterial;
-D3DMATERIAL9 Viewport::s_ReactiveMaterial;
-D3DMATERIAL9 Viewport::s_HighlightedMaterial;
-D3DMATERIAL9 Viewport::s_UnselectableMaterial;
-D3DMATERIAL9 Viewport::s_ComponentMaterial;
-D3DMATERIAL9 Viewport::s_SelectedComponentMaterial;
-D3DMATERIAL9 Viewport::s_RedMaterial;
-D3DMATERIAL9 Viewport::s_YellowMaterial;
-D3DMATERIAL9 Viewport::s_GreenMaterial;
-D3DMATERIAL9 Viewport::s_BlueMaterial;
-
-void Viewport::InitializeType()
-{
-    ZeroMemory( &s_LiveMaterial, sizeof( s_LiveMaterial ) );
-    s_LiveMaterial.Ambient = SceneGraph::Color::MAGENTA;
-    s_LiveMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_LiveMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_SelectedMaterial, sizeof( s_SelectedMaterial ) );
-    s_SelectedMaterial.Ambient = SceneGraph::Color::SPRINGGREEN;
-    s_SelectedMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_SelectedMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_RedMaterial, sizeof( s_RedMaterial ) );
-    s_RedMaterial.Ambient = SceneGraph::Color::RED;
-    s_RedMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_RedMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_YellowMaterial, sizeof( s_YellowMaterial ) );
-    s_YellowMaterial.Ambient = SceneGraph::Color::YELLOW;
-    s_YellowMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_YellowMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_GreenMaterial, sizeof( s_GreenMaterial ) );
-    s_GreenMaterial.Ambient = SceneGraph::Color::GREEN;
-    s_GreenMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_GreenMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_ReactiveMaterial, sizeof( s_ReactiveMaterial ) );
-    s_ReactiveMaterial.Ambient = SceneGraph::Color::WHITE;
-    s_ReactiveMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_ReactiveMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_HighlightedMaterial, sizeof( s_HighlightedMaterial ) );
-    s_HighlightedMaterial.Ambient = SceneGraph::Color::CYAN;
-    s_HighlightedMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_HighlightedMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_UnselectableMaterial, sizeof( s_UnselectableMaterial ) );
-    s_UnselectableMaterial.Ambient = SceneGraph::Color::GRAY;
-    s_UnselectableMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_UnselectableMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_ComponentMaterial, sizeof( s_ComponentMaterial ) );
-    s_ComponentMaterial.Ambient = SceneGraph::Color::MAGENTA;
-    s_ComponentMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_ComponentMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_SelectedComponentMaterial, sizeof( s_SelectedComponentMaterial ) );
-    s_SelectedComponentMaterial.Ambient = SceneGraph::Color::YELLOW;
-    s_SelectedComponentMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_SelectedComponentMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory( &s_BlueMaterial, sizeof( s_BlueMaterial ) );
-    s_BlueMaterial.Ambient = SceneGraph::Color::BLUE;
-    s_BlueMaterial.Diffuse = SceneGraph::Color::BLACK;
-    s_BlueMaterial.Specular = SceneGraph::Color::BLACK;
-}
-
-void Viewport::CleanupType()
-{
-
-}
+const Lunar::Color Viewport::s_LiveMaterial = SceneGraph::Color::MAGENTA;
+const Lunar::Color Viewport::s_SelectedMaterial = SceneGraph::Color::SPRINGGREEN;
+const Lunar::Color Viewport::s_ReactiveMaterial = SceneGraph::Color::WHITE;
+const Lunar::Color Viewport::s_HighlightedMaterial = SceneGraph::Color::CYAN;
+const Lunar::Color Viewport::s_UnselectableMaterial = SceneGraph::Color::GRAY;
+const Lunar::Color Viewport::s_ComponentMaterial = SceneGraph::Color::MAGENTA;
+const Lunar::Color Viewport::s_SelectedComponentMaterial = SceneGraph::Color::YELLOW;
+const Lunar::Color Viewport::s_RedMaterial = SceneGraph::Color::RED;
+const Lunar::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
+const Lunar::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
+const Lunar::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
 Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 : m_Window( wnd )
@@ -124,9 +61,6 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 Viewport::~Viewport()
 {
     m_Cameras[ CameraMode::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
-
-    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
 
     for (uint32_t i=0; i<GlobalPrimitives::Count; i++)
         delete m_GlobalPrimitives[i];
@@ -295,8 +229,6 @@ SceneGraph::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPri
 void Viewport::InitDevice( HWND wnd )
 {
     m_DeviceManager.Init( wnd, 64, 64 );
-    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::ReleaseResources ) );
-    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::AllocateResources ) );
     m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
@@ -1067,18 +999,6 @@ void Viewport::UpdateCameraHistory()
     }
 
     m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
-}
-
-void Viewport::ReleaseResources( const Render::DeviceStateArgs& args )
-{
-    m_ResourceTracker->DeviceLost();
-    m_Statistics->Delete();
-}
-
-void Viewport::AllocateResources( const Render::DeviceStateArgs& args )
-{
-    m_ResourceTracker->DeviceReset();
-    m_Statistics->Create();
 }
 
 void Viewport::CameraMoved( const SceneGraph::CameraMovedArgs& args )

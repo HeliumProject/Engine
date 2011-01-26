@@ -11,28 +11,6 @@ namespace Helium
 {
     namespace Editor
     {
-        /////////////////////////////////////////////////////////////////////////////
-        class SearchType
-        {
-        public:
-            enum Enum
-            {
-                Invalid = -1,
-                File = 0,
-                Directory,
-                CacheDB,
-            };
-
-            REFLECT_DECLARE_ENUMERATION( SearchType );
-
-            static void EnumerateEnum( Reflect::Enumeration& info )
-            {
-                info.AddElement( File,      TXT( "File" ) );
-                info.AddElement( Directory, TXT( "Directory" ) );
-                info.AddElement( CacheDB,   TXT( "CacheDB" ) );
-            }
-        };
-
         ///////////////////////////////////////////////////////////////////////////////
         /// class VaultSearchQuery
         ///////////////////////////////////////////////////////////////////////////////
@@ -47,17 +25,10 @@ namespace Helium
             VaultSearchQuery();
             ~VaultSearchQuery();
 
-            SearchType GetSearchType() const { return m_SearchType; }
-
             bool SetQueryString( const tstring& queryString, tstring& errors );
             const tstring& GetQueryString() const { return m_QueryString; }
 
             const tstring& GetSQLQueryString() const;
-
-            const Helium::Path& GetQueryPath()
-            {
-                return m_QueryPath;
-            }
 
             bool operator<( const VaultSearchQuery& rhs ) const;
             bool operator==( const VaultSearchQuery& rhs ) const;
@@ -71,10 +42,8 @@ namespace Helium
             virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE; 
 
         private:
-            SearchType        m_SearchType;
             tstring           m_QueryString;
             mutable tstring   m_SQLQueryString;
-            Helium::Path      m_QueryPath;
         };
     }
 }

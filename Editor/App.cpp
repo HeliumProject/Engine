@@ -245,7 +245,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >( TXT("Editor::ClipboardFileList") ) );
 
     // vault
-    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::SearchType >( TXT( "Editor::SearchType" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< VaultSearchQuery >( TXT( "Editor::VaultSearchQuery" ) ) );   
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
 

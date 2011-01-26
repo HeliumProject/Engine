@@ -3,7 +3,7 @@
 
 using namespace xml;
 
-LitesqlMethodPanel::LitesqlMethodPanel( wxWindow* parent , Method* pMethod)
+LitesqlMethodPanel::LitesqlMethodPanel( wxWindow* parent , Method::counted_ptr& pMethod)
 :
 MethodPanel( parent ),
 m_pMethod(pMethod)

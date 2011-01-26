@@ -1,4 +1,3 @@
-#include "litesql_char.hpp"
 #include <iostream>
 
 #include <string.h>
@@ -39,12 +38,12 @@ bool XmlParser::parseFile(const LITESQL_String& filename)
     XMLParser_xmlSAX2EndElement);
 
   const size_t BUFF_SIZE = 255;
-  FILE* docfd = _tfopen(filename.c_str(), LITESQL_L("r"));
+  FILE* docfd = _tfopen(filename.c_str(),LITESQL_L("r"));
   
   bool success = (docfd !=NULL);
   if (!success)
   {
-    Logger::error(LITESQL_L("cant open %s"),filename.c_str());
+    Logger::error(LITESQL_L("cant open "),filename);
   }
   else {
     for (;;) {
@@ -77,7 +76,7 @@ bool XmlParser::parseFile(const LITESQL_String& filename)
   
   if (!success)
    {
-      LITESQL_cerr <<  LITESQL_L("error parsing ") << filename.c_str() << std::endl;
+      Logger::error(LITESQL_L("error parsing "), filename);
    }
   return success;
 }

@@ -3,7 +3,6 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
 #include "compatibility.hpp"
 #include "litesql/datasource.hpp"
 namespace litesql {
@@ -22,7 +21,7 @@ SelectQuery selectObjectQuery(const std::vector<FieldType>& fdatas,
     Split tableFilters;
     tableFilters.resize(tables.size()-1);
     for (size_t i = 1; i < tables.size(); i++)
-        tableFilters[i-1] = tables[i-1] +  LITESQL_L(".id_ = ") + tables[i] +  LITESQL_L(".id_");
+        tableFilters[i-1] = tables[i-1] + LITESQL_L(".id_ = ") + tables[i] + LITESQL_L(".id_");
     tableSet.clear();
     for (size_t i = 0; i < tables.size(); i++) {
         sel.source(tables[i]);
@@ -34,7 +33,7 @@ SelectQuery selectObjectQuery(const std::vector<FieldType>& fdatas,
         sel.where(e.asString());
     
     for (size_t i = 0; i < fdatas.size(); i++)
-        sel.result(fdatas[i].table() +  LITESQL_L(".") + fdatas[i].name());
+        sel.result(fdatas[i].table() + LITESQL_L(".") + fdatas[i].name());
 
     return sel;
 }

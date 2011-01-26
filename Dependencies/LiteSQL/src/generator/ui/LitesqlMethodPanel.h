@@ -16,10 +16,10 @@ class LitesqlMethodPanel : public ui::MethodPanel
 {
 public:
 	/** Constructor */
-  LitesqlMethodPanel( wxWindow* parent , xml::Method* pMethod);
+  LitesqlMethodPanel( wxWindow* parent , xml::Method::counted_ptr& pMethod);
 
 private:
-  xml::Method* m_pMethod;
+  xml::Method::counted_ptr m_pMethod;
 };
 
-#endif // __LitesqlMethodPanel__
+#endif // __LitesqlMethodPanel__

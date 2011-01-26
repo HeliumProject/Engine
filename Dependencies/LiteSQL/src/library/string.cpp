@@ -3,7 +3,7 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-#include "litesql_char.hpp"
+
 #include "litesql/utils.hpp"
 
 #include <ctype.h>
@@ -40,14 +40,17 @@ LITESQL_String toUpper(LITESQL_String s) {
 LITESQL_String capitalize(const LITESQL_String& s) {
     if (s.empty())
         return s;
-    LITESQL_Char buf[2] = {toupper(s[0]), 0};
+    LITESQL_Char buf[2] = {toupper(s[0]), '\0'};
     return LITESQL_String(buf) + s.substr(1, s.size());
 }
 LITESQL_String decapitalize(const LITESQL_String& s) {
     if (s.empty())
         return s;
     LITESQL_Char buf[2] = {tolower(s[0]), 0};
-    return LITESQL_String(buf) + s.substr(1, s.size());
+    LITESQL_String r;
+    r.append(buf);
+    r.append(s.substr(1, s.size()));
+    return r;
 }
 
 LITESQL_String rstrip(const LITESQL_String& s) {
@@ -109,11 +112,11 @@ LITESQL_String operator*(const LITESQL_String &s, int amount) {
 LITESQL_String escapeSQL(const LITESQL_String &str)
 { 
     LITESQL_String tmp;
-    if (str ==  LITESQL_L("NULL"))
-        return  LITESQL_L("NULL");
+    if (str == LITESQL_L("NULL"))
+        return LITESQL_L("NULL");
     
-    tmp = replace(str,  LITESQL_L("'NULL'"),  LITESQL_L("NULL"));
-    return  LITESQL_L("'") + replace(tmp,  LITESQL_L("'"),  LITESQL_L("''")) +  LITESQL_L("'");
+    tmp = replace(str, LITESQL_L("'NULL'"), LITESQL_L("NULL"));
+    return LITESQL_L("'") + replace(tmp, LITESQL_L("'"), LITESQL_L("''")) + LITESQL_L("'");
 } 
 }
 

@@ -2,30 +2,30 @@
 #define LITESQL_VIEW_H
 
 #include <wx/docview.h>
+#include <wx/treebook.h>
 
-class wxTreebook;
-class wxTreebookEvent;
+class LitesqlModelTreePanel;
 
 class LitesqlView: public wxView
 {
 public:
     wxMDIChildFrame *frame;
-    wxTreebook* m_treebook;
-  
+	LitesqlModelTreePanel* panel;
+
     LitesqlView();
     virtual ~LitesqlView();
 
 
 protected:
     wxPanel* GetSelectedPage();
+  wxMenu* GetContextMenu();
 
     bool OnCreate(wxDocument *doc, long flags);
     void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
     
     void OnDraw(wxDC *dc);
     bool OnClose(bool deleteWindow = true);
-    void OnSize(wxSizeEvent& event);
-
+   
     void OnPageChanged(wxTreebookEvent& event);
     void OnPageChanging(wxTreebookEvent& event);
 
@@ -48,7 +48,6 @@ protected:
 
     void OnGenerate(wxCommandEvent& event );
 
-    wxMenu* GetContextMenu();
 private:
     DECLARE_DYNAMIC_CLASS(LitesqlView)
     DECLARE_EVENT_TABLE()
@@ -57,4 +56,4 @@ private:
 
 };
 
-#endif // #ifndef LITESQL_VIEW_H
+#endif // #ifndef LITESQL_VIEW_H

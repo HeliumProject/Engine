@@ -1,9 +1,12 @@
 #ifndef litesql_xmlparser_hpp
 #define litesql_xmlparser_hpp
+
 #include "litesql_char.hpp"
 #include <string>
 
-#include "expat.h"
+extern "C" {
+	#include "expat.h"
+}
 
 namespace xml {
 /** abstract base class for SAX2 Parser based on libxml2 */

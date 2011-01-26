@@ -9,7 +9,6 @@
 */
 #ifndef litesql_backend_hpp
 #define litesql_backend_hpp
-#include "litesql_char.hpp"
 #include <memory>
 #include "litesql/types.hpp"
 namespace litesql {
@@ -57,11 +56,11 @@ namespace litesql {
             /** backend may want to set an AUTO_INCREMENT-attribute for table's primary 
               key field. this method is to deliver the details to database schema */
             virtual LITESQL_String getRowIDType() const {
-                return  LITESQL_L("INTEGER PRIMARY KEY");
+                return LITESQL_L("INTEGER PRIMARY KEY");
             }
             /** if backend supports this, new primary key of the last insert 
               is returned */
-            virtual LITESQL_String getInsertID() const { return  LITESQL_L(""); }
+            virtual LITESQL_String getInsertID() const { return LITESQL_L(""); }
             /** begin SQL transaction, may or may not have an effect */
             virtual void begin() const {}
             /** commit SQL transaction */
@@ -87,7 +86,7 @@ namespace litesql {
             virtual LITESQL_String groupInsert(Record tables, Records fields, Records values,
                     const LITESQL_String& sequence) const;
     /** returns a backend according to Backendtype in type, parameters are specific to backend and are separated by semicolon.
-      \param type type of the database backend (supported are :  LITESQL_L("mysql"), LITESQL_L("postgresql"), LITESQL_L("sqlite3"), LITESQL_L("odbc")
+      \param type type of the database backend (supported are : LITESQL_L("mysql"),LITESQL_L("postgresql"),LITESQL_L("sqlite3"),LITESQL_L("odbc")
       \param connInfo database connection specific parameters (parameters are separated by semicolon)
        @throw DatabaseError if no backend is found
       */

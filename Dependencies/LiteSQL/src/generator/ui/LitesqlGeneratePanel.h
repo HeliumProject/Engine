@@ -26,4 +26,4 @@ private:
   litesql::ObjectModel* m_pModel;
 };
 
-#endif // __LitesqlGeneratePanel__
+#endif // __LitesqlGeneratePanel__

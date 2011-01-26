@@ -3,12 +3,16 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
-//#include "compatibility.hpp"
 #include "mysql.hpp"
+#include "config.h"
+
 #ifdef HAVE_LIBMYSQLCLIENT
+
+#ifdef WIN32
+#include <winsock2.h>				/* For windows */
+#endif
+
 #include <string>
-#include "litesql_char.hpp"
-#include "config-win.h"
 #include <mysql.h>
 
 using namespace litesql;
@@ -67,29 +71,29 @@ Records MySQL::Result::records() const {
             break;
         recs[i].reserve(fieldnum);
         for (size_t i2 = 0; i2 < fieldnum; i2++) {
-            recs[i].push_back(row[i2] ? row[i2] :  LITESQL_L("NULL"));
+            recs[i].push_back(row[i2] ? row[i2] : LITESQL_L("NULL"));
         }
     }
     return recs;
 }
 
 MySQL::MySQL(const LITESQL_String& connInfo) {
-    Split params(connInfo, LITESQL_L(";"));
-    host =  LITESQL_L("localhost");
+    Split params(connInfo,LITESQL_L(";"));
+    host = LITESQL_L("localhost");
     int port = 0;
     for (size_t i = 0; i < params.size(); i++) {
-        Split param(params[i],  LITESQL_L("="));
+        Split param(params[i], LITESQL_L("="));
         if (param.size() == 1)
             continue;
-        if (param[0] ==  LITESQL_L("host"))
+        if (param[0] == LITESQL_L("host"))
             host = param[1];
-        else if (param[0] ==  LITESQL_L("database"))
+        else if (param[0] == LITESQL_L("database"))
             database = param[1];
-        else if (param[0] ==  LITESQL_L("password"))
+        else if (param[0] == LITESQL_L("password"))
             passwd = param[1];
-        else if (param[0] ==  LITESQL_L("user"))
+        else if (param[0] == LITESQL_L("user"))
             user = param[1];
-        else if (param[0] ==  LITESQL_L("port"))
+        else if (param[0] == LITESQL_L("port"))
             port = atoi(param[1]);
     }
     conn = new MYSQL;
@@ -109,7 +113,7 @@ bool MySQL::supportsSequences() const {
     return false;
 }
 LITESQL_String MySQL::getRowIDType() const {
-    return  LITESQL_L("INTEGER PRIMARY KEY AUTO_INCREMENT");
+    return LITESQL_L("INTEGER PRIMARY KEY AUTO_INCREMENT");
 }
 LITESQL_String MySQL::getInsertID() const {
     return toString(mysql_insert_id(conn));
@@ -166,7 +170,7 @@ Record MySQL::Cursor::fetchOne() {
     }
     Record rec(fieldNum);
     for (size_t i = 0; i < fieldNum; i++)
-        rec.push_back(row[i] ? row[i] :  LITESQL_L("NULL"));
+        rec.push_back(row[i] ? row[i] : LITESQL_L("NULL"));
     return rec;
 }
 MySQL::Cursor::~Cursor() {

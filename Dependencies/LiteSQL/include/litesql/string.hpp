@@ -8,7 +8,9 @@
     helpful LITESQL_String utils */
 #ifndef litesql_string_hpp
 #define litesql_string_hpp
+
 #include "litesql_char.hpp"
+
 #include <string>
 #include <sstream>
 namespace litesql {

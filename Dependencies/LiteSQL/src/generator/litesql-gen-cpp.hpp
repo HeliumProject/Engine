@@ -1,13 +1,14 @@
 #ifndef litesql_gen_cpp_hpp
 #define litesql_gen_cpp_hpp
-#include "litesql_char.hpp"
+
 #include "generator.hpp"
 
 namespace litesql {
   
   class CppGenerator : public CodeGenerator {
   public:
-    CppGenerator(): CodeGenerator(LITESQL_L("c++")) { };
+    static const LITESQL_Char* NAME;
+    CppGenerator(): CodeGenerator(NAME) { };
     bool generateCode(const ObjectModel* model);
     
     void setOutputSourcesDirectory(const LITESQL_String& directory);

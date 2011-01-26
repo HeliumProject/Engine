@@ -11,11 +11,11 @@
  * Part A
  * ------
  * 
- * Some parts, here collectively called "Part A", are found in the 
+ * Some parts, here collectively called LITESQL_L("Part A"), are found in the 
  * FleXML package.  They are Copyright © 1999-2005 Kristoffer Rose. 
  * All rights reserved.
  *
- * You can redistribute, use, perform, display and/or modify "Part A"
+ * You can redistribute, use, perform, display and/or modify LITESQL_L("Part A")
  * provided the following two conditions hold:
  *
  * 1. The program is distributed WITHOUT ANY WARRANTY from the author of
@@ -33,14 +33,14 @@
  * Part B
  * ------
  * 
- * The other parts, here collectively called "Part B", and which came 
+ * The other parts, here collectively called LITESQL_L("Part B"), and which came 
  * from the DTD used by FleXML to generate this program, can be 
  * distributed (or not, as the case may be) under the terms of whoever
  * wrote them, provided these terms respect and obey the two conditions 
- * above under the heading "Part A".
+ * above under the heading LITESQL_L("Part A").
  *
  * The author of and contributors to FleXML specifically disclaim
- * any copyright interest in "Part B", unless "Part B" was written 
+ * any copyright interest in LITESQL_L("Part B"), unless LITESQL_L("Part B") was written 
  * by the author of or contributors to FleXML.
  * 
  */
@@ -48,21 +48,20 @@
 #include "litesql-gen.hpp"
 
 
-#line 3 "litesql-gen.xml"
+#line 3 LITESQL_L("litesql-gen.xml")
 
 //#include "objectmodel.hpp"
 #include "xmlobjects.hpp"
-//#include "litesql-gen-main.hpp"
+#include "litesql-gen-main.hpp"
 #include "litesql-gen.hpp"
 
-using namespace std;
 using namespace xml;
 
 //ObjectModel model;
 
 
-vector<Object*> objects;
-vector<Relation*> relations;
+std::vector<Object*> objects;
+std::vector<Relation*> relations;
 Database db;
 
 Object * obj;
@@ -73,7 +72,7 @@ Index * idx;
 
 void STag_database(void)
 {
-#line 19 "litesql-gen.xml"
+#line 19 LITESQL_L("litesql-gen.xml")
 
 db.name = safe(A_database_name);
 db.include = safe(A_database_include);
@@ -83,7 +82,7 @@ db.nspace = safe(A_database_namespace);
 
 void STag_object(void)
 {
-#line 24 "litesql-gen.xml"
+#line 24 LITESQL_L("litesql-gen.xml")
 
 objects.push_back(obj = new Object(A_object_name, safe(A_object_inherits)));
 
@@ -91,7 +90,7 @@ objects.push_back(obj = new Object(A_object_name, safe(A_object_inherits)));
 
 void ETag_object(void)
 {
-#line 27 "litesql-gen.xml"
+#line 27 LITESQL_L("litesql-gen.xml")
 
 obj = NULL;
 
@@ -99,7 +98,7 @@ obj = NULL;
 
 void STag_relation(void)
 {
-#line 30 "litesql-gen.xml"
+#line 30 LITESQL_L("litesql-gen.xml")
 
 relations.push_back(rel = new Relation(safe(A_relation_id), safe(A_relation_name),A_relation_unidir));
 
@@ -107,7 +106,7 @@ relations.push_back(rel = new Relation(safe(A_relation_id), safe(A_relation_name
 
 void ETag_relation(void)
 {
-#line 33 "litesql-gen.xml"
+#line 33 LITESQL_L("litesql-gen.xml")
 
 rel = NULL;
 
@@ -115,7 +114,7 @@ rel = NULL;
 
 void STag_field(void)
 {
-#line 36 "litesql-gen.xml"
+#line 36 LITESQL_L("litesql-gen.xml")
 
 if (obj) {
     obj->fields.push_back(fld =new Field(A_field_name, 
@@ -129,7 +128,7 @@ if (obj) {
 
 void STag_index(void)
 {
-#line 45 "litesql-gen.xml"
+#line 45 LITESQL_L("litesql-gen.xml")
 
 idx = new Index(A_index_unique);
 if (obj) 
@@ -141,7 +140,7 @@ else if (rel)
 
 void ETag_index(void)
 {
-#line 52 "litesql-gen.xml"
+#line 52 LITESQL_L("litesql-gen.xml")
 
 idx = NULL;
 
@@ -149,7 +148,7 @@ idx = NULL;
 
 void STag_indexfield(void)
 {
-#line 55 "litesql-gen.xml"
+#line 55 LITESQL_L("litesql-gen.xml")
 
 if (idx)
     idx->fields.push_back(IndexField(A_indexfield_name));
@@ -158,7 +157,7 @@ if (idx)
 
 void STag_value(void)
 {
-#line 59 "litesql-gen.xml"
+#line 59 LITESQL_L("litesql-gen.xml")
 
 if (fld) 
     fld->value(Value(A_value_name, A_value_value));
@@ -167,7 +166,7 @@ if (fld)
 
 void ETag_field(void)
 {
-#line 63 "litesql-gen.xml"
+#line 63 LITESQL_L("litesql-gen.xml")
 
 fld = NULL;
 
@@ -175,7 +174,7 @@ fld = NULL;
 
 void STag_method(void)
 {
-#line 66 "litesql-gen.xml"
+#line 66 LITESQL_L("litesql-gen.xml")
 
 if (obj) {
     obj->methods.push_back(mtd = new Method(A_method_name, safe(A_method_returntype)));
@@ -185,7 +184,7 @@ if (obj) {
 
 void ETag_method(void)
 {
-#line 71 "litesql-gen.xml"
+#line 71 LITESQL_L("litesql-gen.xml")
 
 mtd = NULL;
 
@@ -193,7 +192,7 @@ mtd = NULL;
 
 void STag_param(void)
 {
-#line 74 "litesql-gen.xml"
+#line 74 LITESQL_L("litesql-gen.xml")
 
 if (mtd) 
     mtd->param(Param(A_param_name, A_param_type));
@@ -202,7 +201,7 @@ if (mtd)
 
 void STag_relate(void)
 {
-#line 78 "litesql-gen.xml"
+#line 78 LITESQL_L("litesql-gen.xml")
 
 if (rel)
     rel->related.push_back(new Relate(A_relate_object, A_relate_limit, A_relate_unique, safe(A_relate_handle)));
@@ -211,19 +210,19 @@ if (rel)
 
 void ETag_database(void)
 {
-#line 82 "litesql-gen.xml"
+#line 82 LITESQL_L("litesql-gen.xml")
 
     generateCode(db, objects, relations);    
 
 } /* ETag_database */
 
 
-#line 90 "litesql-gen.xml"
+#line 90 LITESQL_L("litesql-gen.xml")
 
 extern FILE * yyin;
 /*
 
-int main(int argc, char **argv) {
+int main(int argc, LITESQL_Char **argv) {
     return litesql_gen_main(argc, argv, &yyin);
 }
 

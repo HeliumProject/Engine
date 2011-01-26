@@ -2,7 +2,6 @@
 #define compatibility_hpp
 #include "config.h"
 #include "litesql_char.hpp"
-#include <string>
 
 #ifdef HAVE_MEMORY_H
 #include <memory.h>
@@ -22,7 +21,7 @@ struct tm *localtime_r(const time_t *clock, struct tm *result);
 #endif
 
 #ifdef WIN32
-#define snprintf _sntprintf
+#define snprintf _snprintf
 #endif
 
 #endif

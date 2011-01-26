@@ -6,7 +6,7 @@
 
 #ifndef _litesql_updatequery_hpp
 #define _litesql_updatequery_hpp
-#include "litesql_char.hpp"
+
 #include "litesql/utils.hpp"
 #include "litesql/expr.hpp"
 /** \file updatequery.hpp
@@ -20,9 +20,9 @@ class UpdateQuery {
     Split fields;
     Split values;
 public:
-    UpdateQuery(LITESQL_String t) : table(t), _where(LITESQL_L("True")) {}
+    UpdateQuery(const LITESQL_String& t) : table(t), _where(LITESQL_L("True")) {}
     UpdateQuery& where(const Expr& e);
-    UpdateQuery& set(FieldType f, LITESQL_String value);
+    UpdateQuery& set(const FieldType& f, const LITESQL_String& value);
     operator LITESQL_String() const;
     LITESQL_String asString() const { return this->operator LITESQL_String(); }
 };

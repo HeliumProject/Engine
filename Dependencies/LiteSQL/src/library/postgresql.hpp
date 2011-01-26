@@ -9,7 +9,6 @@
 #ifndef _litesql_postgresql_hpp
 #define _litesql_postgresql_hpp
 #ifdef HAVE_LIBPQ
-#include "litesql_char.hpp"
 #include "libpq-fe.h"
 #include "litesql/except.hpp"
 #include "litesql/types.hpp"
@@ -55,8 +54,8 @@ public:
     virtual void begin() const;
     virtual void commit() const;
     virtual void rollback() const;
-    Backend::Result* execute(LITESQL_String query) const;
-    Backend::Cursor* cursor(LITESQL_String query) const;
+    Backend::Result* execute(const LITESQL_String& query) const;
+    Backend::Cursor* cursor(const LITESQL_String& query) const;
     virtual ~PostgreSQL();
 };
 }

@@ -5,7 +5,9 @@ Helium.BuildWxWidgets = function()
 	local cwd = os.getcwd()
 
 	if os.get() == "windows" then
-		local make = "nmake.exe -f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+		-- This is not yet ready for prime time (as of jom 1.0.3)
+		-- local make = "jom.exe -j " .. os.getenv("NUMBER_OF_PROCESSORS") .. " /f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
+		local make = "nmake.exe /f makefile.vc SHARED=1 MONOLITHIC=1 DEBUG_INFO=1"
 
 		if not os.getenv("VCINSTALLDIR") then
 			print("VCINSTALLDIR is not detected in your environment")

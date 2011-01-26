@@ -78,6 +78,7 @@ inline bool LITESQL_ConvertString(const std::string& src, std::string& dest)
 
     bool LITESQL_ConvertString(const std::string& src, std::wstring& dest);
     bool LITESQL_ConvertString(const std::wstring& src, std::string& dest);
+    
 #endif
 
 #endif

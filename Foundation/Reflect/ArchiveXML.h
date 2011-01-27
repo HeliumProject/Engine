@@ -28,8 +28,8 @@ namespace Helium
                 // the name of the name being processed
                 tstring m_Name;
 
-                // the cdata section for xml files
-                tstring m_Buffer;
+                // the body of the element, cdata section
+                tstring m_Body;
 
                 // the current serializing field
                 const Field* m_Field;
@@ -72,6 +72,9 @@ namespace Helium
 
             typedef Helium::SmartPtr<ParsingState> ParsingStatePtr;
 
+            // File format version
+            uint32_t m_Version;
+
             // The expat parser object
             XML_Parser m_Parser;
 
@@ -81,20 +84,8 @@ namespace Helium
             // Indent helper
             Indent<tchar_t> m_Indent;
 
-            // File format version
-            uint32_t m_Version;
-
             // The nesting stack of parsing state
             std::stack< ParsingStatePtr > m_StateStack;
-
-            // The current name of the serializing field
-            std::stack< const tchar_t* > m_FieldNames;
-
-            // The current collection of components
-            std::vector< ObjectPtr > m_Objects;
-
-            // The container to decode elements to
-            std::vector< ObjectPtr >* m_Target;
 
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
@@ -137,7 +128,9 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( Object* object );
+            void Serialize( Object* object, const tchar_t* fieldName );
             virtual void Serialize( void* structure, const Structure* type );
+            void Serialize( void* structure, const Structure* type, const tchar_t* fieldName );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 

@@ -256,23 +256,23 @@ namespace Helium
             // The number of bytes Parsed so far
             unsigned m_Progress;
 
+            // The abort status
+            bool m_Abort;
+
             // The file we are working with
             Path m_Path;
-
-            // The byte order
-            ByteOrder m_ByteOrder;
-
-            // The array of elements that we've found
-            std::vector< ObjectPtr > m_Objects;
 
             // The mode
             ArchiveMode m_Mode;
 
+            // The byte order
+            ByteOrder m_ByteOrder;
+
             // The type to serach for
             const Class* m_SearchClass;
 
-            // The abort status
-            bool m_Abort;
+            // The array of elements that we've found
+            std::vector< ObjectPtr > m_Objects;
         };
 
         typedef Helium::SmartPtr< Archive > ArchivePtr;

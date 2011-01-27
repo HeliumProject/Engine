@@ -23,7 +23,6 @@ const uint32_t ArchiveXML::CURRENT_VERSION                               = 4;
 ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
-, m_Target( &m_Objects )
 {
     m_Parser = XML_ParserCreate( NULL );
 
@@ -39,7 +38,6 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 ArchiveXML::ArchiveXML()
 : Archive()
 , m_Version( CURRENT_VERSION )
-, m_Target( &m_Objects )
 {
     m_Parser = XML_ParserCreate( NULL );
 
@@ -166,6 +164,11 @@ void ArchiveXML::Write()
 
 void ArchiveXML::Serialize(Object* object)
 {
+    Serialize( object, NULL );
+}
+
+void ArchiveXML::Serialize(Object* object, const tchar_t* fieldName)
+{
     if ( object )
     {
         object->PreSerialize( NULL );
@@ -181,13 +184,10 @@ void ArchiveXML::Serialize(Object* object)
     
     *m_Stream << TXT( "\"" );
 
-    if ( !m_FieldNames.empty() && m_FieldNames.top() )
+    if ( fieldName )
     {
-        tstring name;
-        Helium::ConvertString( m_FieldNames.top(), name );
-
         // our link back to the field we are nested in
-        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
+        *m_Stream << TXT( " Name=\"" ) << fieldName << TXT( "\"" );
     }
 
     if ( !object || object->IsCompact() )
@@ -230,19 +230,21 @@ void ArchiveXML::Serialize(Object* object)
 
 void ArchiveXML::Serialize( void* structure, const Structure* type )
 {
+    Serialize( structure, type, NULL );
+}
+
+void ArchiveXML::Serialize( void* structure, const Structure* type, const tchar_t* fieldName )
+{
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
     *m_Stream << TXT( "<Object Type=\"" );
     *m_Stream << type->m_Name;
     *m_Stream << TXT( "\"" );
 
-    if ( !m_FieldNames.empty() && m_FieldNames.top() )
+    if ( fieldName )
     {
-        tstring name;
-        Helium::ConvertString( m_FieldNames.top(), name );
-
         // our link back to the field we are nested in
-        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
+        *m_Stream << TXT( " Name=\"" ) << fieldName << TXT( "\"" );
     }
 
     *m_Stream << TXT( ">\n" );
@@ -268,14 +270,12 @@ void ArchiveXML::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flag
 template< typename ConstIteratorType >
 void ArchiveXML::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
 {
-    m_FieldNames.push( NULL );
-
     size_t size = static_cast< size_t >( end - begin );
 
     ConstIteratorType itr = begin;
     for (int index = 0; itr != end; ++itr, ++index )
     {
-        Serialize(*itr);
+        Serialize(*itr, NULL);
 
         if ( flags & ArchiveFlags::Status )
         {
@@ -291,8 +291,6 @@ void ArchiveXML::Serialize( ConstIteratorType begin, ConstIteratorType end, uint
         info.m_Progress = 100;
         e_Status.Raise( info );
     }
-
-    m_FieldNames.pop();
 }
 
 void ArchiveXML::SerializeFields(Object* object)
@@ -308,16 +306,12 @@ void ArchiveXML::SerializeFields(Object* object)
         DataPtr data = object->ShouldSerialize( field );
         if ( data )
         {
-            m_FieldNames.push( field->m_Name );
-
             object->PreSerialize( field );
-            Serialize( data );
+            Serialize( data, field->m_Name );
             object->PostSerialize( field );
 
             // might be useful to cache the data object here
             data->Disconnect();
-
-            m_FieldNames.pop();
         }
     }
 }
@@ -332,14 +326,10 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
         DataPtr data = field->ShouldSerialize( structure );
         if ( data )
         {
-            m_FieldNames.push( field->m_Name );
-
-            Serialize( data );
+            Serialize( data, field->m_Name );
 
             // might be useful to cache the data object here
             data->Disconnect();
-
-            m_FieldNames.pop();
         }
     }
 }
@@ -570,7 +560,7 @@ void ArchiveXML::OnCharacterData(const XML_Char *pszData, int nLength)
     ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
     if ( topState && topState->m_Object )
     {
-        topState->m_Buffer.append( pszData, nLength );
+        topState->m_Body.append( pszData, nLength );
     }
 }
 
@@ -613,10 +603,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         Data* data = SafeCast< Data >( topState->m_Object );
 
         // do data logic
-        if ( data && !topState->m_Buffer.empty())
+        if ( data && !topState->m_Body.empty())
         {
             ArchiveXML xml;
-            tstringstream stream (topState->m_Buffer);
+            tstringstream stream (topState->m_Body);
             xml.m_Stream = new Reflect::TCharStream(&stream, false);
             xml.m_Objects = topState->m_Objects;
 
@@ -671,7 +661,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     else
     {
         // we've reached the top of the processed stack, send off to client for processing
-        m_Target->push_back( topState->m_Object );
+        m_Objects.push_back( topState->m_Object );
 
         ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = m_Progress;

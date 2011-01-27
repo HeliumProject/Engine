@@ -29,7 +29,7 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
 
     // Set up the button
     m_Button = new Button( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-    m_Button->SetButtonOptions( ButtonOptions::Toggle );
+    m_Button->SetButtonOptions( ButtonOptions::Toggle  );
     m_Button->SetValue( false );
 
     // Add the button to the sizer
@@ -142,7 +142,7 @@ void Drawer::SetLabel( const wxString& label )
 
 void Drawer::SetIcon( const tstring& icon )
 {
-    //m_Button->SetBitmap( wxArtProvider::GetIcon( (wxArtID)m_Icon, wxART_OTHER, wxSize( 16, 16 ) ) );
+    m_Button->SetBitmap( wxArtProvider::GetIcon( (wxArtID)m_Icon, wxART_OTHER, wxSize( 16, 16 ) ) );
     m_Button->SetSize( m_Button->GetBestSize() );
     m_Button->SetMinSize( m_Button->GetBestSize() );
 
@@ -237,8 +237,6 @@ void Drawer::Open()
         m_AuiManager->Update();
     }
 
-    //m_Button->SetValue( true );
-
     e_Opened.Raise( DrawerEventArgs( this ) );
 }
 
@@ -261,8 +259,6 @@ void Drawer::Close()
             //m_CurrentFrame->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( Drawer::OnCloseAuiPane ), NULL, this );
         }
     }
-
-    //m_Button->SetValue( false );
 
     e_Closed.Raise( DrawerEventArgs( this ) );
 }

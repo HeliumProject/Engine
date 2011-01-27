@@ -14,7 +14,6 @@ namespace Helium
             {
                 HideLabel = 1 << 0,       // Sets WX styles: wxBU_NOTEXT
                 Toggle = 1 << 1,          // Sets MSW styles: BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP
-                NoAutoDraw = 1 << 2,      // Sets MSW styles: wxBU_AUTODRAW
             };
 
             const uint32_t Default = 0;

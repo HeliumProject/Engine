@@ -485,7 +485,6 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 ObjectPtr object = Registry::GetInstance()->CreateInstance( newState->m_Field->m_DataClass );
 
                 Data* data = SafeCast<Data>(object);
-
                 if ( data )
                 {
                     // connect the current instance to the data
@@ -621,10 +620,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                 topState->m_Object = NULL; // discard the object
             }
 
-            // if we are we should see if it's being processed and perhaps be added as a component
+            // if we are we should see if it's being processed and perhaps be added as a field
             if ( parentState != NULL )
             {
-                // see if we should process this object as a as a field, or as a component
+                // see if we should process this object as a field, or as unknown
                 if ( topState->GetFlag( ParsingState::kField ) )
                 {
                     DataPtr data = SafeCast<Data>(topState->m_Object);
@@ -639,12 +638,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                 }
                 else
                 {
-                    ObjectPtr container = parentState->m_Object;
-
-                    // we are a component, so send us up to be processed by container
-                    if ( container && !container->ProcessComponent(topState->m_Object, topState->m_Field ? topState->m_Field->m_Name : NULL ) )
+                    // we are unknown, so send us up to be processed by the parent
+                    if ( parentState->m_Object )
                     {
-                        Log::Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_Name, topState->m_Object->GetClass()->m_Name );
+                        parentState->m_Object->ProcessUnknown(topState->m_Object, topState->m_Field ? Crc32( topState->m_Field->m_Name ) : 0 );
                     }
                 }
             }

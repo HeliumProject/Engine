@@ -231,7 +231,7 @@ void ArchiveBinary::Serialize(Object* object)
     uint32_t classCrc = 0;
     if ( object )
     {
-        classCrc = Helium::Crc32( object->GetClass()->m_Name );
+        classCrc = Crc32( object->GetClass()->m_Name );
     }
 
     m_Stream->Write(&classCrc); 
@@ -298,7 +298,7 @@ void ArchiveBinary::Serialize(Object* object)
 void ArchiveBinary::Serialize( void* structure, const Structure* type )
 {
     // write the crc of the class of structure (used to factory allocate an instance when reading)
-    uint32_t typeCrc = Helium::Crc32( type->m_Name );
+    uint32_t typeCrc = Crc32( type->m_Name );
     m_Stream->Write(&typeCrc); 
 
     // stub out the length we are about to write
@@ -706,7 +706,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
         const Class* type = object->GetClass();
         HELIUM_ASSERT( type );
 
-        ObjectPtr component;
+        ObjectPtr unknown;
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
         if ( field )
@@ -718,8 +718,8 @@ void ArchiveBinary::DeserializeFields(Object* object)
 #endif
 
             // pull and object and downcast to data
-            DataPtr latent_data = SafeCast<Data>( Allocate() );
-            if (!latent_data.ReferencesObject())
+            DataPtr latentData = SafeCast<Data>( Allocate() );
+            if (!latentData.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
                 throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
@@ -730,43 +730,43 @@ void ArchiveBinary::DeserializeFields(Object* object)
             if ( field->m_DataClass == field->m_DataClass )
             {
                 // set data pointer
-                latent_data->ConnectField( object, field );
+                latentData->ConnectField( object, field );
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latent_data );
+                Deserialize( (ObjectPtr&)latentData );
                 object->PostDeserialize( field );
 
                 // disconnect
-                latent_data->Disconnect();
+                latentData->Disconnect();
             }
             else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
             {
                 REFLECT_SCOPE_TIMER(("Casting"));
 
                 // construct current serialization object
-                ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
+                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
                 // downcast to data
-                DataPtr current_data = SafeCast<Data>(current_element);
-                if (!current_data.ReferencesObject())
+                DataPtr currentData = SafeCast<Data>(currentObject);
+                if (!currentData.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus
                     throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
                 }
 
                 // process into temporary memory
-                current_data->ConnectField(object, field);
+                currentData->ConnectField(object, field);
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latent_data );
+                Deserialize( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
-                if ( !Data::CastValue( latent_data, current_data, DataFlags::Shallow ) )
+                if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
                 {
-                    // to the component block!
-                    component = latent_data;
+                    // handle as unknown
+                    unknown = latentData;
                 }
                 else
                 {
@@ -775,28 +775,25 @@ void ArchiveBinary::DeserializeFields(Object* object)
                 }
 
                 // disconnect
-                current_data->Disconnect();
+                currentData->Disconnect();
             }
         }
         else // else the field does not exist in the current class anymore
         {
             try
             {
-                Deserialize( component );
+                Deserialize( unknown );
             }
             catch (Reflect::LogisticException& ex)
             {
-                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_Name, field->m_Name, ex.What());
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding: %s\n" ), type->m_Name, field->m_Name, ex.What());
             }
         }
 
-        if ( component.ReferencesObject() )
+        if ( unknown.ReferencesObject() )
         {
             // attempt processing
-            if (!object->ProcessComponent(component, field->m_Name))
-            {
-                Log::Debug( TXT( "%s did not process %s, discarding\n" ), object->GetClass()->m_Name, component->GetClass()->m_Name );
-            }
+            object->ProcessUnknown( unknown, field ? Crc32( field->m_Name ) : 0 );
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -832,8 +829,8 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
 #endif
 
             // pull and structure and downcast to data
-            DataPtr latent_data = SafeCast<Data>( Allocate() );
-            if (!latent_data.ReferencesObject())
+            DataPtr latentData = SafeCast<Data>( Allocate() );
+            if (!latentData.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
                 throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
@@ -844,40 +841,40 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
             if ( field->m_DataClass == field->m_DataClass )
             {
                 // set data pointer
-                latent_data->ConnectField( structure, field );
+                latentData->ConnectField( structure, field );
 
                 // process natively
-                Deserialize( (ObjectPtr&)latent_data );
+                Deserialize( (ObjectPtr&)latentData );
 
                 // disconnect
-                latent_data->Disconnect();
+                latentData->Disconnect();
             }
             else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
             {
                 REFLECT_SCOPE_TIMER(("Casting"));
 
                 // construct current serialization structure
-                ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
+                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
                 // downcast to data
-                DataPtr current_data = SafeCast<Data>(current_element);
-                if (!current_data.ReferencesObject())
+                DataPtr currentData = SafeCast<Data>(currentObject);
+                if (!currentData.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus
                     throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
                 }
 
                 // process into temporary memory
-                current_data->ConnectField(structure, field);
+                currentData->ConnectField(structure, field);
 
                 // process natively
-                Deserialize( (ObjectPtr&)latent_data );
+                Deserialize( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
-                Data::CastValue( latent_data, current_data, DataFlags::Shallow );
+                Data::CastValue( latentData, currentData, DataFlags::Shallow );
 
                 // disconnect
-                current_data->Disconnect();
+                currentData->Disconnect();
             }
         }
 

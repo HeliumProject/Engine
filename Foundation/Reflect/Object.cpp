@@ -224,9 +224,16 @@ bool Object::IsCompact() const
     return false;
 }
 
-bool Object::ProcessComponent(ObjectPtr object, const tchar_t* fieldName)
+void Object::ProcessUnknown(Object* object, uint32_t fieldNameCrc)
 {
-    return false; // incurs data loss
+    if ( fieldNameCrc )
+    {
+        Log::Debug( TXT( "%s did not process %s (unknown field: %d), discarding\n" ), GetClass()->m_Name, object->GetClass()->m_Name, fieldNameCrc );
+    }
+    else
+    {
+        Log::Debug( TXT( "%s did not process %s, discarding\n" ), GetClass()->m_Name, object->GetClass()->m_Name );
+    }
 }
 
 void Object::ToXML(tstring& xml)

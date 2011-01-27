@@ -132,8 +132,8 @@ namespace Helium
             // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;
 
-            // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent( ObjectPtr object, const tchar_t* fieldName );
+            // This the process callback for sub and primitive elements to have their data be aggregated into the parent instance
+            virtual void                ProcessUnknown( Object* object, uint32_t fieldNameCrc );
 
             // Serialize to a particular data target, just works on this
             void                        ToXML( tstring& xml );

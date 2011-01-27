@@ -277,31 +277,6 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
-bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
-{
-    if ( !_tcscmp( fieldName, TXT( "m_Components" ) ) )
-    {
-        V_Component attributes;
-        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ObjectPtr >&)attributes );
-
-        for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
-            itr != end;
-            ++itr )
-        {
-            HELIUM_ASSERT( (*itr)->GetSlot() != NULL );
-
-            if ( (*itr)->GetSlot() != NULL )
-            {
-                m_Components[ (*itr)->GetSlot() ] = *itr;
-            }
-        }
-
-        return true;
-    }
-
-    return Base::ProcessComponent(element, fieldName);
-}
-
 void ComponentCollection::PreSerialize( const Reflect::Field* field )
 {
     Base::PreSerialize( field );

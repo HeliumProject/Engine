@@ -95,6 +95,7 @@ namespace Helium
 
             // The container to decode elements to
             std::vector< ObjectPtr >* m_Target;
+
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             ~ArchiveXML();
@@ -136,6 +137,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( Object* object );
+            virtual void Serialize( void* structure, const Structure* type );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
@@ -152,6 +154,7 @@ namespace Helium
         public:
             // For handling components
             virtual void Deserialize( ObjectPtr& object );
+            virtual void Deserialize( void* structure, const Structure* type );
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 

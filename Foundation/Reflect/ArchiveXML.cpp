@@ -197,6 +197,11 @@ void ArchiveXML::Serialize(Object* object)
     }
 }
 
+void ArchiveXML::Serialize( void* structure, const Structure* type )
+{
+
+}
+
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
 {
     Serialize( elements.begin(), elements.end(), flags );
@@ -336,6 +341,11 @@ void ArchiveXML::Deserialize(ObjectPtr& object)
         HELIUM_BREAK();
         throw Reflect::LogisticException( TXT( "Internal Error: Missing object" ) );
     }
+}
+
+void ArchiveXML::Deserialize( void* structure, const Structure* type )
+{
+
 }
 
 void ArchiveXML::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)

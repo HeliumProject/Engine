@@ -352,10 +352,10 @@ namespace Helium
             virtual void Deserialize(Archive& archive) = 0;
 
             // text serialization (extract to text stream)
-            virtual tostream& operator>> (tostream& stream) const;
+            virtual tostream& operator>>(tostream& stream) const;
 
             // text deserialization (insert from text stream)
-            virtual tistream& operator<< (tistream& stream);
+            virtual tistream& operator<<(tistream& stream);
 
             //
             // Visitor

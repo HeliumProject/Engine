@@ -130,6 +130,7 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( Object* object );
+            virtual void Serialize( void* structure, const Structure* type );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
@@ -145,6 +146,7 @@ namespace Helium
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
             virtual void Deserialize( ObjectPtr& object );
+            virtual void Deserialize( void* structure, const Structure* type );
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
 

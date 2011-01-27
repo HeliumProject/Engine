@@ -63,6 +63,7 @@ void StructureData::Serialize(Archive& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
+    archive.Serialize( m_Data.Get( structure->m_Size ), structure );
 }
 
 void StructureData::Deserialize(Archive& archive)
@@ -70,4 +71,5 @@ void StructureData::Deserialize(Archive& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
+    archive.Serialize( m_Data.Get( structure->m_Size ), structure );
 }

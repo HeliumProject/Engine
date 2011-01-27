@@ -294,6 +294,11 @@ void ArchiveBinary::Serialize(Object* object)
 #endif
 }
 
+void ArchiveBinary::Serialize( void* structure, const Structure* type )
+{
+
+}
+
 void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
 {
     Serialize( elements.begin(), elements.end(), flags );
@@ -494,6 +499,11 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
         m_Indent.Pop();
 #endif
     }
+}
+
+void ArchiveBinary::Deserialize( void* structure, const Structure* type )
+{
+
 }
 
 void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)

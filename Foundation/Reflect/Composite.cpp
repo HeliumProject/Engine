@@ -198,7 +198,7 @@ bool Composite::Equals(void* a, void* b) const
     {
         const Field* field = &*itr;
 
-        // create serializers
+        // create data objects
         DataPtr aData = field->CreateData();
         DataPtr bData = field->CreateData();
 
@@ -206,14 +206,14 @@ bool Composite::Equals(void* a, void* b) const
         aData->ConnectField(a, field);
         bData->ConnectField(b, field);
 
-        bool serializersEqual = aData->Equals( bData );
+        bool equality = aData->Equals( bData );
 
         // disconnect
         aData->Disconnect();
         bData->Disconnect();
 
         // If the serialziers aren't equal, the elements can't be equal
-        if ( !serializersEqual )
+        if ( !equality )
         {
             return false;
         }
@@ -269,7 +269,7 @@ void Composite::Copy( void* source, void* destination ) const
             {
                 const Field* field = &*itr;
 
-                // create serializers
+                // create data objects
                 DataPtr lhs = field->CreateData();
                 DataPtr rhs = field->CreateData();
 

@@ -918,8 +918,8 @@ namespace Helium
             const Reflect::Field* m_Field;
 
         public:
-            MultiDataFormatter( const std::vector< Reflect::DataPtr >& serializers, const Reflect::Field* field )
-                : m_Datas( serializers )
+            MultiDataFormatter( const std::vector< Reflect::DataPtr >& datas, const Reflect::Field* field )
+                : m_Datas( datas )
                 , m_Field( field )
             {
 

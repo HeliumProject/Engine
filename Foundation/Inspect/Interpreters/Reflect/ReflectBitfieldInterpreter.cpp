@@ -121,7 +121,7 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
     parent->AddChild(container);
 
-    // create the serializers
+    // create the data objects
     std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )

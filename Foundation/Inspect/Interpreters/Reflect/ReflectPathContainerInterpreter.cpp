@@ -160,7 +160,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     // we only let them modify the data if we're only dealing with a single list
     buttonContainer->a_IsEnabled.Set( instances.size() == 1 );
 
-    // create the serializers
+    // create the data objects
     std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
@@ -179,7 +179,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         m_Datas.push_back(s);
     }
 
-    // bind the ui to the serializers
+    // bind the ui to the data objects
     Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( (std::vector<Reflect::Data*>&)m_Datas );
     list->Bind( data );
     if ( addButton && isContainer )

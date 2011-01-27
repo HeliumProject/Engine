@@ -393,7 +393,7 @@ namespace Helium
             bool result = false;
             const Class* dataClass = Reflect::GetDataClass<T>();
 
-            // if you die here, then you are not using serializers that
+            // if you die here, then you are not using data objects that
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 
@@ -440,7 +440,7 @@ namespace Helium
             bool result = false;
             const Class* dataClass = Reflect::GetDataClass< T >();
 
-            // if you die here, then you are not using serializers that
+            // if you die here, then you are not using data objects that
             //  fully implement the type deduction functions above
             HELIUM_ASSERT( dataClass != NULL );
 

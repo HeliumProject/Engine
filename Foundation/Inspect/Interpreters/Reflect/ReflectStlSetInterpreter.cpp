@@ -44,7 +44,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
 
     container->a_Name.Set( temp );
 
-    // create the serializers
+    // create the data objects
     std::vector< Reflect::Object* >::const_iterator itr = instances.begin();
     std::vector< Reflect::Object* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )

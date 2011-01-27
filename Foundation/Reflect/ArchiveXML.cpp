@@ -1,9 +1,9 @@
-#include "ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Object.h"
-#include "Registry.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Structure.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
-
 #include "Foundation/Log.h"
 
 #include <strstream>
@@ -171,8 +171,33 @@ void ArchiveXML::Serialize(Object* object)
         object->PreSerialize( NULL );
     }
 
-    // Always serialize a header, even with null object references.
-    SerializeHeader(object);
+    m_Indent.Push();
+    m_Indent.Get( *m_Stream );
+    *m_Stream << TXT( "<Object Type=\"" );
+    if ( object )
+    {
+        *m_Stream << object->GetClass()->m_Name;
+    }
+    
+    *m_Stream << TXT( "\"" );
+
+    if ( !m_FieldNames.empty() && m_FieldNames.top() )
+    {
+        tstring name;
+        Helium::ConvertString( m_FieldNames.top(), name );
+
+        // our link back to the field we are nested in
+        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
+    }
+
+    if ( !object || object->IsCompact() )
+    {
+        *m_Stream << TXT( ">" );
+    }
+    else
+    {
+        *m_Stream << TXT( ">\n" );
+    }
 
     if ( object )
     {
@@ -188,8 +213,14 @@ void ArchiveXML::Serialize(Object* object)
         }
     }
 
-    // Always serialize a footer, even with null object references.
-    SerializeFooter(object);
+    if ( object && !object->IsCompact() )
+    {
+        m_Indent.Get(*m_Stream);
+    }
+
+    *m_Stream << TXT( "</Object>\n" );
+
+    m_Indent.Pop();
 
     if ( object )
     {
@@ -199,7 +230,29 @@ void ArchiveXML::Serialize(Object* object)
 
 void ArchiveXML::Serialize( void* structure, const Structure* type )
 {
+    m_Indent.Push();
+    m_Indent.Get( *m_Stream );
+    *m_Stream << TXT( "<Object Type=\"" );
+    *m_Stream << type->m_Name;
+    *m_Stream << TXT( "\"" );
 
+    if ( !m_FieldNames.empty() && m_FieldNames.top() )
+    {
+        tstring name;
+        Helium::ConvertString( m_FieldNames.top(), name );
+
+        // our link back to the field we are nested in
+        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
+    }
+
+    *m_Stream << TXT( ">\n" );
+
+    SerializeFields(structure, type);
+
+    m_Indent.Get(*m_Stream);
+    *m_Stream << TXT( "</Object>\n" );
+
+    m_Indent.Pop();
 }
 
 void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
@@ -251,89 +304,52 @@ void ArchiveXML::SerializeFields(Object* object)
     DynArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
-        SerializeField(object, &*itr);
+        const Field* field = &*itr;
+        DataPtr data = object->ShouldSerialize( field );
+        if ( data )
+        {
+            m_FieldNames.push( field->m_Name );
+
+            object->PreSerialize( field );
+            Serialize( data );
+            object->PostSerialize( field );
+
+            // might be useful to cache the data object here
+            data->Disconnect();
+
+            m_FieldNames.pop();
+        }
     }
 }
 
-void ArchiveXML::SerializeField(Object* object, const Field* field)
+void ArchiveXML::SerializeFields( void* structure, const Structure* type )
 {
-    DataPtr data = object->ShouldSerialize( field );
-    if ( data )
+    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynArray< Field >::ConstIterator end = type->m_Fields.End();
+    for ( ; itr != end; ++itr )
     {
-        m_FieldNames.push( field->m_Name );
+        const Field* field = &*itr;
+        DataPtr data = field->ShouldSerialize( structure );
+        if ( data )
+        {
+            m_FieldNames.push( field->m_Name );
 
-        object->PreSerialize( field );
-        Serialize( data );
-        object->PostSerialize( field );
+            Serialize( data );
 
-        // might be useful to cache the data object here
-        data->Disconnect();
+            // might be useful to cache the data object here
+            data->Disconnect();
 
-        m_FieldNames.pop();
+            m_FieldNames.pop();
+        }
     }
-}
-
-void ArchiveXML::SerializeHeader(Object* object)
-{
-    //
-    // Start header
-    //
-
-    m_Indent.Push();
-    m_Indent.Get( *m_Stream );
-    *m_Stream << TXT( "<Object Type=\"" );
-    if ( object )
-    {
-        *m_Stream << object->GetClass()->m_Name;
-    }
-    
-    *m_Stream << TXT( "\"" );
-
-    //
-    // Field name
-    //
-
-    if ( !m_FieldNames.empty() && m_FieldNames.top() )
-    {
-        tstring name;
-        Helium::ConvertString( m_FieldNames.top(), name );
-
-        // our link back to the field we are nested in
-        *m_Stream << TXT( " Name=\"" ) << name << TXT( "\"" );
-    }
-
-    //
-    // End header
-    //
-
-    if ( !object || object->IsCompact() )
-    {
-        *m_Stream << TXT( ">" );
-    }
-    else
-    {
-        *m_Stream << TXT( ">\n" );
-    }
-}
-
-void ArchiveXML::SerializeFooter(Object* object)
-{
-    if ( object && !object->IsCompact() )
-    {
-        m_Indent.Get(*m_Stream);
-    }
-
-    *m_Stream << TXT( "</Object>\n" );
-
-    m_Indent.Pop();
 }
 
 void ArchiveXML::Deserialize(ObjectPtr& object)
 {
-    if (m_Components.size() == 1)
+    if (m_Objects.size() == 1)
     {
-        object = m_Components.front();
-        m_Components.clear();
+        object = m_Objects.front();
+        m_Objects.clear();
     }
     else
     {
@@ -350,16 +366,16 @@ void ArchiveXML::Deserialize( void* structure, const Structure* type )
 
 void ArchiveXML::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
 {
-    if (!m_Components.empty())
+    if (!m_Objects.empty())
     {
         if ( !(flags & ArchiveFlags::Sparse) )
         {
-            m_Components.erase( std::remove( m_Components.begin(), m_Components.end(), ObjectPtr () ), m_Components.end() );
+            m_Objects.erase( std::remove( m_Objects.begin(), m_Objects.end(), ObjectPtr () ), m_Objects.end() );
         }
 
-        elements = m_Components;
+        elements = m_Objects;
 
-        m_Components.clear();
+        m_Objects.clear();
     }
 }
 
@@ -367,21 +383,21 @@ void ArchiveXML::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
 {
     elements.Clear();
 
-    if (!m_Components.empty())
+    if (!m_Objects.empty())
     {
         if ( !(flags & ArchiveFlags::Sparse) )
         {
-            m_Components.erase( std::remove( m_Components.begin(), m_Components.end(), ObjectPtr () ), m_Components.end() );
+            m_Objects.erase( std::remove( m_Objects.begin(), m_Objects.end(), ObjectPtr () ), m_Objects.end() );
         }
 
-        size_t size = m_Components.size();
+        size_t size = m_Objects.size();
         elements.Reserve( size );
         for( size_t index = 0; index < size; ++index )
         {
-            elements.Push( m_Components[ index ] );
+            elements.Push( m_Objects[ index ] );
         }
 
-        m_Components.clear();
+        m_Objects.clear();
     }
 }
 
@@ -602,7 +618,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
             ArchiveXML xml;
             tstringstream stream (topState->m_Buffer);
             xml.m_Stream = new Reflect::TCharStream(&stream, false);
-            xml.m_Components = topState->m_Components;
+            xml.m_Objects = topState->m_Objects;
 
             data->Deserialize(xml);
         }
@@ -650,7 +666,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     {
         ParsingStatePtr parentState = m_StateStack.top();
 
-        parentState->m_Components.push_back(topState->m_Object);
+        parentState->m_Objects.push_back(topState->m_Object);
     }
     else
     {

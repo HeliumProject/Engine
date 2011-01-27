@@ -138,6 +138,7 @@ namespace Helium
             // Helpers
             template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
             void SerializeFields( Object* object );
+            void SerializeFields( void* structure, const Structure* type );
 
         private:
             // pulls an object from the head of the stream
@@ -154,6 +155,7 @@ namespace Helium
             // Helpers
             template< typename ArrayPusher > void Deserialize( ArrayPusher& push, uint32_t flags );
             void DeserializeFields( Object* object );
+            void DeserializeFields( void* object, const Structure* type );
 
         public:
             // Reading and writing single object via binary

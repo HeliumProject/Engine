@@ -38,7 +38,7 @@ namespace Helium
                 ObjectPtr m_Object;
 
                 // The collected components
-                std::vector< ObjectPtr > m_Components;
+                std::vector< ObjectPtr > m_Objects;
 
                 // flags, as specified below
                 unsigned int m_Flags;
@@ -91,7 +91,7 @@ namespace Helium
             std::stack< const tchar_t* > m_FieldNames;
 
             // The current collection of components
-            std::vector< ObjectPtr > m_Components;
+            std::vector< ObjectPtr > m_Objects;
 
             // The container to decode elements to
             std::vector< ObjectPtr >* m_Target;
@@ -144,12 +144,8 @@ namespace Helium
         protected:
             // Helpers
             template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
-            void SerializeFields(Object* object);
-            void SerializeField(Object* object, const Field* field);
-
-            // <Object> and </Object>
-            void SerializeHeader(Object* object);
-            void SerializeFooter(Object* object);
+            void SerializeFields( Object* object );
+            void SerializeFields( void* structure, const Structure* type );
 
         public:
             // For handling components

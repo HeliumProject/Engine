@@ -649,8 +649,7 @@ void ThumbnailView::CreateResources()
     Path processPath( GetProcessPath() );
     if ( !m_TextureMissing )
     {
-        //        tstring file = TXT( "Icons/256x256/editor/MissingScreenshot.png" );
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/editor/Editor.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureMissing = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureMissing->GetTexture() );
@@ -658,8 +657,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureError )
     {
-        //tstring file = TXT( "Icons/256x256/status/Error.png" );
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/editor/Editor.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureError = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureError->GetTexture() );
@@ -667,8 +665,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureLoading )
     {
-        //tstring file = TXT( "Icons/256x256/status/Loading.png" );
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/editor/Editor.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Busy.png" );
 
         m_TextureLoading = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureLoading->GetTexture() );
@@ -676,8 +673,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureFolder )
     {
-        //tstring file = TXT( "Icons/256x256/filesystem/Folder.png" );
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/filesystem/Folder.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/Folder.png" );
 
         m_TextureFolder = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureFolder->GetTexture() );
@@ -709,8 +705,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureBlankFile )
     {
-        //tstring file = TXT( "Icons/256x256/filesystem/File.png" );
-        tstring file = processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/File.png" );
 
         m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -1965,48 +1960,19 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
                 // we got it, just share it
                 tile->SetThumbnail( found->second );
             }
-            else // load the file associated icon from the shell
+            else // load the associated filetype icon
             {
-                WORD index = 0;
-
-                tstring native = args.GetPath().Native();
-
-                // get the icon resource for this example file
-                tchar_t path[MAX_PATH];
-                _tcscpy( path, native.c_str() );
-                HICON icon = ExtractAssociatedIcon( NULL, path, &index );
-
-                // if we got the resource
-                if ( icon )
+                found = m_FileTypeIcons.find( extension );
+                
+                if ( found != m_FileTypeIcons.end() )
                 {
-                    // check to see if its the fallback in shell32.dll
-                    tchar_t file[MAX_PATH];
-                    _tsplitpath( path, NULL, NULL, file, NULL );
-
-                    // if its windows' stub icon, don't bother using it
-                    if ( _tcsicmp( file, TXT( "SHELL32" ) ) )
-                    {
-                        // build a thumbnail texture from the icon resource
-                        ThumbnailPtr thumb = new Thumbnail( &m_DeviceManager );
-                        if ( thumb->FromIcon( icon ) )
-                        {
-                            // cache it for re-use
-                            m_AssociatedIcons[ extension ] = thumb;
-
-                            // set this file's thumb
-                            tile->SetThumbnail( thumb );
-                        }
-                        else
-                        {
-                            // there is no decent associated icon, so juse use missing
-                            m_AssociatedIcons[ extension ] = m_TextureMissing;
-                        }
-                    }
+                    m_AssociatedIcons[ extension ] = found->second;
+                    tile->SetThumbnail( found->second );
                 }
-
-                // if we don't have a thumbnail use the fallback
-                if ( !tile->GetThumbnail() )
+                else
                 {
+                    // there is no decent associated icon, so juse use missing
+                    m_AssociatedIcons[ extension ] = m_TextureMissing;
                     tile->SetThumbnail( m_TextureMissing );
                 }
             }

@@ -20,7 +20,7 @@ TreeMonitor::TreeMonitor( SceneGraph::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_FreezeTreeSorting( 0 )
 , m_NeedsSorting( false )
-, m_ThawTimer( TXT( "TreeMonitorThawTimer" ), 2000 )
+, m_ThawTimer( TXT( "Tree Monitor Thaw Timer" ), 2000 )
 , m_SelfFrozen( false )
 {
     m_SceneManager->e_SceneAdded.AddMethod( this, &TreeMonitor::OnSceneAdded );

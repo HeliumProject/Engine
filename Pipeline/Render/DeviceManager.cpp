@@ -158,7 +158,6 @@ HRESULT DeviceManager::Init(HWND hwnd,uint32_t back_buffer_width, uint32_t back_
         HRESULT fmt_res = m_master_d3d->CheckDeviceFormatConversion(D3DADAPTER_DEFAULT,(init_flags & INIT_FLAG_REFRAST)?D3DDEVTYPE_REF:D3DDEVTYPE_HAL,D3DFMT_A8R8G8B8,mode.Format);
         if (fmt_res==S_OK)
         {
-            Log::Print( TXT( "A8R8G8B8 to display format conversion available, forcing A8R8G8B8\n" ) );
             m_back_buffer_format = D3DFMT_A8R8G8B8;
         }
         else

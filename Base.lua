@@ -1,6 +1,7 @@
 Helium = {}
 
 Helium.RequiredCLVersion = 150030729
+Helium.RequiredFBXVersion = '2011.3.1'
 
 os.capture = function( cmd, raw )
     local f = assert( io.popen( cmd, 'r' ) )
@@ -36,12 +37,20 @@ Helium.Build64Bit = function()
 end
 
 Helium.GetFbxSdkLocation = function()
-	if os.get() == "windows" then
-		return "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\2011.3.1"
-	else
-		print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
-		os.exit(1)
-	end
+    local fbxLocation = os.getenv( 'FBX_SDK' )
+    if not fbxLocation then
+        if os.get() == "windows" then
+            fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
+            if not os.isdir( fbxLocation ) then
+                fbxLocation = nil
+            end
+        else
+            print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
+            os.exit(1)
+        end
+    end
+    
+    return fbxLocation
 end
 
 Helium.Sleep = function( seconds )
@@ -62,6 +71,8 @@ Helium.CheckEnvironment = function()
         
         if os.pathsearch( 'Python.exe', os.getenv( 'PATH' ) ) == nil then
             print( " -> Python was not found in your path.  Python is required for the 'prebuild' phase." )
+            print( " -> Make sure to download python (http://www.python.org/download/) and add it to your path." )
+            print( " -> eg: Add c:\\Python\\Python31 to your path." )
             failed = 1
 		end
 
@@ -95,8 +106,15 @@ Helium.CheckEnvironment = function()
             failed = 1
         end
         
-        if not os.isdir( Helium.GetFbxSdkLocation() ) then
-            print( " -> You must have the FBX SDK installed (" .. Helium.GetFbxSdkLocation() .. " is not found)." )
+        local fbxDir = Helium.GetFbxSdkLocation()
+        if not fbxDir or not os.isdir( fbxDir ) then
+            print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
+            print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\2011.3.1" )
+            failed = 1
+        end
+        
+        if fbxDir and not string.match( fbxDir, '2011\.3\.1$' ) then
+            print( " -> Currently, Helium only supports version 2011.3.1 of the FBX SDK.  Please download that specific version and make sure your FBX_SDK environment variable points to the proper install location." )
             failed = 1
         end
         

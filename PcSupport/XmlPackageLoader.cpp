@@ -1470,6 +1470,7 @@ void XmlPackageLoader::TickPreload()
     }
 
     packageDirectoryPath += m_packagePath.ToFilePathString().GetData();
+    packageDirectoryPath += TXT("/");
 
     Directory packageDirectory( packageDirectoryPath );
 

@@ -23,8 +23,8 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         Freeze();
 
+        m_OptionsButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
-        m_OptionsButton->SetMargins( 3, 3 );
 
         m_ThumbnailView = new ThumbnailView( m_ResultsPanel );
         m_ThumbnailView->Hide();

@@ -2382,7 +2382,7 @@
                         <object class="notebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">Types</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -2564,7 +2564,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -2612,16 +2612,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer19</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">0</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -2668,7 +2668,7 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
+                        <object class="wxBoxSizer" expanded="1">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer36</property>
                             <property name="orient">wxHORIZONTAL</property>
@@ -2677,30 +2677,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Create New Layer From Selection</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_CreateNewLayerFromSelectionButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -2709,7 +2704,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnNewLayerFromSelection</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -2739,30 +2734,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Create New Layer</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_CreateNewLayerButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -2771,7 +2761,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnNewLayer</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -2801,30 +2791,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Delete Selected Layers</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_DeleteSelectedLayersButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -2833,7 +2818,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnDeleteLayer</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -2917,30 +2902,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Add Selection To Layer</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_AddSelectionToLayerButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -2949,7 +2929,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnAddSelectionToLayer</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -2979,30 +2959,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Remove Selection From Layer</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_RemoveSelectionFromLayerButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -3011,7 +2986,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnRemoveSelectionFromLayer</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -3095,30 +3070,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Select Layer Members</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_SelectLayerMembersButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -3127,7 +3097,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnSelectLayerMembers</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -3157,30 +3127,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Select Layers</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_SelectLayersButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -3189,7 +3154,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnSelectLayer</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -3220,7 +3185,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -3268,16 +3233,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer24</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -3324,16 +3289,16 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
+                        <object class="wxBoxSizer" expanded="1">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer36</property>
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="0">
+                            <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizer39</property>
                                     <property name="orient">wxHORIZONTAL</property>
@@ -3395,34 +3360,29 @@
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="0">
-                                        <property name="border">2</property>
+                                        <property name="border">5</property>
                                         <property name="flag">wxALL</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBitmapButton" expanded="0">
+                                        <object class="wxButton" expanded="0">
                                             <property name="bg"></property>
-                                            <property name="bitmap"></property>
                                             <property name="context_help"></property>
                                             <property name="context_menu">1</property>
                                             <property name="default">0</property>
-                                            <property name="disabled"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
-                                            <property name="focus"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="hover"></property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Project View Settings</property>
+                                            <property name="label">Options</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_OptionsButton</property>
-                                            <property name="permission">protected</property>
+                                            <property name="permission">public</property>
                                             <property name="pos"></property>
-                                            <property name="selected"></property>
                                             <property name="size"></property>
-                                            <property name="style">wxBU_AUTODRAW</property>
+                                            <property name="style">wxBU_EXACTFIT</property>
                                             <property name="subclass">Helium::Editor::MenuButton; Editor/Controls/MenuButton.h</property>
-                                            <property name="tooltip">Project View Settings...</property>
+                                            <property name="tooltip"></property>
                                             <property name="validator_data_type"></property>
                                             <property name="validator_style">wxFILTER_NONE</property>
                                             <property name="validator_type">wxDefaultValidator</property>
@@ -3519,11 +3479,11 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">1</property>
-                    <object class="wxScrolledWindow" expanded="0">
+                    <object class="wxScrolledWindow" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -3572,16 +3532,16 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
+                        <object class="wxBoxSizer" expanded="1">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer48</property>
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="0">
+                            <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
                                 <property name="proportion">0</property>
-                                <object class="wxPanel" expanded="0">
+                                <object class="wxPanel" expanded="1">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -3628,16 +3588,16 @@
                                     <event name="OnSetFocus"></event>
                                     <event name="OnSize"></event>
                                     <event name="OnUpdateUI"></event>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer45</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag"></property>
                                             <property name="proportion">0</property>
-                                            <object class="wxBoxSizer" expanded="0">
+                                            <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer43</property>
                                                 <property name="orient">wxHORIZONTAL</property>
@@ -3876,11 +3836,11 @@
                                     </object>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="0">
+                            <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
                                 <property name="proportion">1</property>
-                                <object class="wxPanel" expanded="0">
+                                <object class="wxPanel" expanded="1">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -3927,16 +3887,16 @@
                                     <event name="OnSetFocus"></event>
                                     <event name="OnSize"></event>
                                     <event name="OnUpdateUI"></event>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer361</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxBoxSizer" expanded="0">
+                                            <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer40</property>
                                                 <property name="orient">wxVERTICAL</property>
@@ -3945,7 +3905,7 @@
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxButton" expanded="1">
+                                                    <object class="wxButton" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -3959,11 +3919,11 @@
                                                         <property name="maximum_size"></property>
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_OpenProjectButton</property>
-                                                        <property name="permission">protected</property>
+                                                        <property name="permission">public</property>
                                                         <property name="pos"></property>
                                                         <property name="size"></property>
                                                         <property name="style">wxBU_LEFT</property>
-                                                        <property name="subclass"></property>
+                                                        <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                                         <property name="tooltip"></property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
@@ -3998,11 +3958,11 @@
                                                         <event name="OnUpdateUI"></event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxButton" expanded="1">
+                                                    <object class="wxButton" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -4016,11 +3976,11 @@
                                                         <property name="maximum_size"></property>
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_CreateNewProjectButton</property>
-                                                        <property name="permission">protected</property>
+                                                        <property name="permission">public</property>
                                                         <property name="pos"></property>
                                                         <property name="size">-1,-1</property>
                                                         <property name="style">wxBU_LEFT</property>
-                                                        <property name="subclass"></property>
+                                                        <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                                         <property name="tooltip"></property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
@@ -4351,7 +4311,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="1">
+        <object class="Panel" expanded="0">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -4399,16 +4359,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer26</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">0</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="1">
+                    <object class="wxPanel" expanded="0">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -4455,16 +4415,16 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="1">
+                        <object class="wxBoxSizer" expanded="0">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer27</property>
                             <property name="orient">wxHORIZONTAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4517,11 +4477,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4574,11 +4534,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4631,11 +4591,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4742,11 +4702,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4799,11 +4759,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4856,11 +4816,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4913,11 +4873,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4970,11 +4930,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -5027,11 +4987,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -5194,11 +5154,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -5251,11 +5211,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -5308,11 +5268,11 @@
                                     <event name="OnUpdateUI"></event>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxButton" expanded="1">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -5789,31 +5749,26 @@
                                 <property name="border">5</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">Vault Settings</property>
+                                    <property name="label">Options</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_OptionsButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
                                     <property name="subclass">Helium::Editor::MenuButton; Editor/Controls/MenuButton.h</property>
-                                    <property name="tooltip">Vault Settings...</property>
+                                    <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
                                     <property name="validator_type">wxDefaultValidator</property>
@@ -5975,7 +5930,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -6023,16 +5978,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer21</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">1</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="0">
+                    <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -6079,7 +6034,7 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="0">
+                        <object class="wxBoxSizer" expanded="1">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer35</property>
                             <property name="orient">wxHORIZONTAL</property>
@@ -6088,30 +6043,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap">; Load From File [-1; -1]</property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Frame Origin</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_FrameOriginButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6150,30 +6100,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Frame Selected Item</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_FrameSelectedButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6266,30 +6211,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Highlight Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_HighlightModeToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6382,30 +6322,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Previous View</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_PreviousViewButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6444,30 +6379,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Next View</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_NextViewButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass"></property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6560,30 +6490,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">ID_OrbitCamera</property>
                                     <property name="label">Orbit Camera</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_OrbitCameraToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6622,30 +6547,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">ID_FrontCamera</property>
                                     <property name="label">Front Camera</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_FrontCameraToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6684,30 +6604,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">ID_SideCamera</property>
                                     <property name="label">Side Camera</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_SideCameraToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6746,30 +6661,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">ID_TopCamera</property>
                                     <property name="label">Top Camera</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_TopCameraToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6862,30 +6772,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Show Axes</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ShowAxesToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6924,30 +6829,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Show Grid</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ShowGridToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6956,7 +6856,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnViewChange</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -6986,30 +6886,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Show Bounds</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ShowBoundsToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7048,30 +6943,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Show Statistics</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ShowStatisticsToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7164,30 +7054,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Frustum Culling</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_FrustumCullingToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7226,30 +7111,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Backface Culling</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_BackfaceCullingToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7258,7 +7138,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnViewChange</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -7342,30 +7222,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Wireframe</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_WireframeShadingToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7404,30 +7279,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Material</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_MaterialShadingToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7436,7 +7306,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnViewChange</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -7520,30 +7390,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Scene Color Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ColorModeSceneToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7582,30 +7447,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Layer Color Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ColorModeLayerToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7644,30 +7504,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Node Type Color Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ColorModeNodeTypeToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7676,7 +7531,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnColorMode</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -7706,30 +7561,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Scale Color Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ColorModeScaleToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7768,30 +7618,25 @@
                                 <property name="border">2</property>
                                 <property name="flag">wxALL</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBitmapButton" expanded="0">
+                                <object class="wxButton" expanded="0">
                                     <property name="bg"></property>
-                                    <property name="bitmap"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
                                     <property name="default">0</property>
-                                    <property name="disabled"></property>
                                     <property name="enabled">1</property>
                                     <property name="fg"></property>
-                                    <property name="focus"></property>
                                     <property name="font"></property>
                                     <property name="hidden">0</property>
-                                    <property name="hover"></property>
                                     <property name="id">wxID_ANY</property>
                                     <property name="label">Scale Gradient Color Mode</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_ColorModeScaleGradientToggleButton</property>
-                                    <property name="permission">protected</property>
+                                    <property name="permission">public</property>
                                     <property name="pos"></property>
-                                    <property name="selected"></property>
                                     <property name="size"></property>
-                                    <property name="style">wxBU_AUTODRAW</property>
-                                    <property name="subclass">wxBitmapToggleButton; wx/tglbtn.h</property>
+                                    <property name="style">wxBU_EXACTFIT</property>
+                                    <property name="subclass">Helium::Editor::Button; Editor/Controls/Button.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7800,7 +7645,7 @@
                                     <property name="window_extra_style"></property>
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
-                                    <event name="OnButtonClick">OnColorMode</event>
+                                    <event name="OnButtonClick"></event>
                                     <event name="OnChar"></event>
                                     <event name="OnEnterWindow"></event>
                                     <event name="OnEraseBackground"></event>
@@ -7886,234 +7731,6 @@
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
                         </object>
-                    </object>
-                </object>
-            </object>
-        </object>
-        <object class="Panel" expanded="1">
-            <property name="bg"></property>
-            <property name="context_help"></property>
-            <property name="context_menu">1</property>
-            <property name="enabled">1</property>
-            <property name="event_handler">impl_virtual</property>
-            <property name="fg"></property>
-            <property name="font"></property>
-            <property name="hidden">0</property>
-            <property name="id">wxID_ANY</property>
-            <property name="maximum_size"></property>
-            <property name="minimum_size"></property>
-            <property name="name">TestPanelGenerated</property>
-            <property name="pos"></property>
-            <property name="size">500,300</property>
-            <property name="subclass"></property>
-            <property name="tooltip"></property>
-            <property name="validator_data_type"></property>
-            <property name="validator_style">wxFILTER_NONE</property>
-            <property name="validator_type">wxDefaultValidator</property>
-            <property name="validator_variable"></property>
-            <property name="window_extra_style"></property>
-            <property name="window_name"></property>
-            <property name="window_style">wxTAB_TRAVERSAL</property>
-            <event name="OnChar"></event>
-            <event name="OnEnterWindow"></event>
-            <event name="OnEraseBackground"></event>
-            <event name="OnInitDialog"></event>
-            <event name="OnKeyDown"></event>
-            <event name="OnKeyUp"></event>
-            <event name="OnKillFocus"></event>
-            <event name="OnLeaveWindow"></event>
-            <event name="OnLeftDClick"></event>
-            <event name="OnLeftDown"></event>
-            <event name="OnLeftUp"></event>
-            <event name="OnMiddleDClick"></event>
-            <event name="OnMiddleDown"></event>
-            <event name="OnMiddleUp"></event>
-            <event name="OnMotion"></event>
-            <event name="OnMouseEvents"></event>
-            <event name="OnMouseWheel"></event>
-            <event name="OnPaint"></event>
-            <event name="OnRightDClick"></event>
-            <event name="OnRightDown"></event>
-            <event name="OnRightUp"></event>
-            <event name="OnSetFocus"></event>
-            <event name="OnSize"></event>
-            <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
-                <property name="minimum_size"></property>
-                <property name="name">bSizer43</property>
-                <property name="orient">wxVERTICAL</property>
-                <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL</property>
-                    <property name="proportion">0</property>
-                    <object class="wxStaticText" expanded="1">
-                        <property name="bg"></property>
-                        <property name="context_help"></property>
-                        <property name="context_menu">1</property>
-                        <property name="enabled">1</property>
-                        <property name="fg"></property>
-                        <property name="font"></property>
-                        <property name="hidden">0</property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="label">Hello World!</property>
-                        <property name="maximum_size"></property>
-                        <property name="minimum_size"></property>
-                        <property name="name">m_staticText14</property>
-                        <property name="permission">protected</property>
-                        <property name="pos"></property>
-                        <property name="size"></property>
-                        <property name="style"></property>
-                        <property name="subclass"></property>
-                        <property name="tooltip"></property>
-                        <property name="validator_data_type"></property>
-                        <property name="validator_style">wxFILTER_NONE</property>
-                        <property name="validator_type">wxDefaultValidator</property>
-                        <property name="validator_variable"></property>
-                        <property name="window_extra_style"></property>
-                        <property name="window_name"></property>
-                        <property name="window_style"></property>
-                        <property name="wrap">-1</property>
-                        <event name="OnChar"></event>
-                        <event name="OnEnterWindow"></event>
-                        <event name="OnEraseBackground"></event>
-                        <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
-                        <event name="OnKillFocus"></event>
-                        <event name="OnLeaveWindow"></event>
-                        <event name="OnLeftDClick"></event>
-                        <event name="OnLeftDown"></event>
-                        <event name="OnLeftUp"></event>
-                        <event name="OnMiddleDClick"></event>
-                        <event name="OnMiddleDown"></event>
-                        <event name="OnMiddleUp"></event>
-                        <event name="OnMotion"></event>
-                        <event name="OnMouseEvents"></event>
-                        <event name="OnMouseWheel"></event>
-                        <event name="OnPaint"></event>
-                        <event name="OnRightDClick"></event>
-                        <event name="OnRightDown"></event>
-                        <event name="OnRightUp"></event>
-                        <event name="OnSetFocus"></event>
-                        <event name="OnSize"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL</property>
-                    <property name="proportion">0</property>
-                    <object class="wxCheckBox" expanded="1">
-                        <property name="bg"></property>
-                        <property name="checked">0</property>
-                        <property name="context_help"></property>
-                        <property name="context_menu">1</property>
-                        <property name="enabled">1</property>
-                        <property name="fg"></property>
-                        <property name="font"></property>
-                        <property name="hidden">0</property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="label">Check Me!</property>
-                        <property name="maximum_size"></property>
-                        <property name="minimum_size"></property>
-                        <property name="name">m_checkBox1</property>
-                        <property name="permission">protected</property>
-                        <property name="pos"></property>
-                        <property name="size"></property>
-                        <property name="style"></property>
-                        <property name="subclass"></property>
-                        <property name="tooltip"></property>
-                        <property name="validator_data_type"></property>
-                        <property name="validator_style">wxFILTER_NONE</property>
-                        <property name="validator_type">wxDefaultValidator</property>
-                        <property name="validator_variable"></property>
-                        <property name="window_extra_style"></property>
-                        <property name="window_name"></property>
-                        <property name="window_style"></property>
-                        <event name="OnChar"></event>
-                        <event name="OnCheckBox"></event>
-                        <event name="OnEnterWindow"></event>
-                        <event name="OnEraseBackground"></event>
-                        <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
-                        <event name="OnKillFocus"></event>
-                        <event name="OnLeaveWindow"></event>
-                        <event name="OnLeftDClick"></event>
-                        <event name="OnLeftDown"></event>
-                        <event name="OnLeftUp"></event>
-                        <event name="OnMiddleDClick"></event>
-                        <event name="OnMiddleDown"></event>
-                        <event name="OnMiddleUp"></event>
-                        <event name="OnMotion"></event>
-                        <event name="OnMouseEvents"></event>
-                        <event name="OnMouseWheel"></event>
-                        <event name="OnPaint"></event>
-                        <event name="OnRightDClick"></event>
-                        <event name="OnRightDown"></event>
-                        <event name="OnRightUp"></event>
-                        <event name="OnSetFocus"></event>
-                        <event name="OnSize"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL</property>
-                    <property name="proportion">0</property>
-                    <object class="wxTextCtrl" expanded="1">
-                        <property name="bg"></property>
-                        <property name="context_help"></property>
-                        <property name="context_menu">1</property>
-                        <property name="enabled">1</property>
-                        <property name="fg"></property>
-                        <property name="font"></property>
-                        <property name="hidden">0</property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="maximum_size"></property>
-                        <property name="maxlength">0</property>
-                        <property name="minimum_size"></property>
-                        <property name="name">m_textCtrl7</property>
-                        <property name="permission">protected</property>
-                        <property name="pos"></property>
-                        <property name="size"></property>
-                        <property name="style"></property>
-                        <property name="subclass"></property>
-                        <property name="tooltip"></property>
-                        <property name="validator_data_type"></property>
-                        <property name="validator_style">wxFILTER_NONE</property>
-                        <property name="validator_type">wxDefaultValidator</property>
-                        <property name="validator_variable"></property>
-                        <property name="value"></property>
-                        <property name="window_extra_style"></property>
-                        <property name="window_name"></property>
-                        <property name="window_style"></property>
-                        <event name="OnChar"></event>
-                        <event name="OnEnterWindow"></event>
-                        <event name="OnEraseBackground"></event>
-                        <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
-                        <event name="OnKillFocus"></event>
-                        <event name="OnLeaveWindow"></event>
-                        <event name="OnLeftDClick"></event>
-                        <event name="OnLeftDown"></event>
-                        <event name="OnLeftUp"></event>
-                        <event name="OnMiddleDClick"></event>
-                        <event name="OnMiddleDown"></event>
-                        <event name="OnMiddleUp"></event>
-                        <event name="OnMotion"></event>
-                        <event name="OnMouseEvents"></event>
-                        <event name="OnMouseWheel"></event>
-                        <event name="OnPaint"></event>
-                        <event name="OnRightDClick"></event>
-                        <event name="OnRightDown"></event>
-                        <event name="OnRightUp"></event>
-                        <event name="OnSetFocus"></event>
-                        <event name="OnSize"></event>
-                        <event name="OnText"></event>
-                        <event name="OnTextEnter"></event>
-                        <event name="OnTextMaxLen"></event>
-                        <event name="OnTextURL"></event>
-                        <event name="OnUpdateUI"></event>
                     </object>
                 </object>
             </object>

@@ -37,7 +37,18 @@ Helium.Build64Bit = function()
 end
 
 Helium.GetFbxSdkLocation = function()
-    return os.getenv( 'FBX_SDK' )
+    local fbxLocation = os.getenv( 'FBX_SDK' )
+    if not fbxLocation then
+        if os.get() == "windows" then
+            fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
+            if not os.isdir( fbxLocation ) then
+                fbxLocation = nil
+            end
+        else
+            print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
+            os.exit(1)
+        end
+    end
 end
 
 Helium.Sleep = function( seconds )

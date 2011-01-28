@@ -12,6 +12,9 @@ List::List()
 : a_IsSorted( false )
 {
     a_IsFixedHeight.Set( true );
+
+    m_ContextMenu = new ContextMenu (this);
+    m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &List::SetToDefault));
 }
 
 bool List::Process(const tstring& key, const tstring& value)
@@ -36,4 +39,10 @@ bool List::Process(const tstring& key, const tstring& value)
     }
 
     return false;
+}
+
+void List::SetToDefault(const ContextMenuEventArgs& event)
+{
+  event.m_Control->SetDefault();
+  event.m_Control->Read();
 }

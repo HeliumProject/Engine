@@ -10,7 +10,7 @@ PrimitiveLocator::PrimitiveLocator(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)
 {
     SetElementCount( 6 );
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Length = 1.0f;
 }
@@ -22,14 +22,14 @@ void PrimitiveLocator::Update()
 
     m_Vertices.clear();
 
-    m_Vertices.push_back(Position (-m_Length, 0.0f, 0.0f));
-    m_Vertices.push_back(Position (m_Length, 0.0f, 0.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( -m_Length, 0.0f, 0.0f ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( m_Length, 0.0f, 0.0f ) );
 
-    m_Vertices.push_back(Position (0.0f, -m_Length, 0.0f));
-    m_Vertices.push_back(Position (0.0f, m_Length, 0.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, -m_Length, 0.0f ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, m_Length, 0.0f ) );
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, -m_Length));
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, -m_Length ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, m_Length ) );
 
     Base::Update();
 }

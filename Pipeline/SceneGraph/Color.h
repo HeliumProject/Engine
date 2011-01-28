@@ -15,7 +15,7 @@ namespace Helium
             static void UnpackColor( uint32_t packed, uint32_t& a, uint32_t& r, uint32_t& g, uint32_t& b );
 
             // blend color with a weight
-            static uint32_t BlendColor( uint32_t color1, uint32_t color2, float32_t weight );
+            static Lunar::Color BlendColor( Lunar::Color color1, Lunar::Color color2, float32_t weight );
 
             static const Lunar::Color SNOW;
             static const Lunar::Color GHOSTWHITE;

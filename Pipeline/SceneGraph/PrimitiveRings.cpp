@@ -28,27 +28,33 @@ void PrimitiveRings::Update()
     SetElementCount( m_Steps*6 );
     m_Vertices.clear();
 
-    float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
+    float32_t stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
 
     for (uint32_t x=0; x<m_Steps; x++)
     {
-        float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector(0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius)));
-        m_Vertices.push_back(Position(SetupVector(0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius)));
+        float32_t theta = (float32_t)(x) * stepAngle;
+        Vector3 position = SetupVector( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     for (uint32_t y=0; y<m_Steps; y++)
     {
-        float theta = (float32_t)(y) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta)) * m_Radius, 0.0f, (float32_t)(sin(theta)) * m_Radius)));
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f, (float32_t)(sin(theta + stepAngle)) * m_Radius)));
+        float32_t theta = (float32_t)(y) * stepAngle;
+        Vector3 position = SetupVector( Cos( theta ) * m_Radius, 0.0f, Sin( theta ) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( Cos( theta + stepAngle ) * m_Radius, 0.0f, Sin( theta + stepAngle ) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     for (uint32_t z=0; z<m_Steps; z++)
     {
-        float theta = (float32_t)(z) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, 0.0f)));
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius, 0.0f)));
+        float32_t theta = (float32_t)(z) * stepAngle;
+        Vector3 position = SetupVector( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, 0.0f );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius, 0.0f );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();

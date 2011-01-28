@@ -15,13 +15,13 @@ namespace Helium
             mutable int32_t m_PolyVertCount;
 
         public:
-            int m_LengthSteps;
+            int32_t m_LengthSteps;
 
         public:
             PrimitiveSphere(ResourceTracker* tracker);
 
-            int GetWireVertCount() const;
-            int GetPolyVertCount() const;
+            int32_t GetWireVertCount() const;
+            int32_t GetPolyVertCount() const;
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;

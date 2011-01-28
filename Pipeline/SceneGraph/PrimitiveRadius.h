@@ -6,10 +6,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveRadius : public PrimitiveTemplate<Position>
+        class PrimitiveRadius : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<Position> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
             float m_Radius;
             int m_RadiusSteps;

@@ -13,7 +13,7 @@ PrimitiveSphere::PrimitiveSphere(ResourceTracker* tracker)
     m_LengthSteps = 9;
 }
 
-int PrimitiveSphere::GetWireVertCount() const
+int32_t PrimitiveSphere::GetWireVertCount() const
 {
     if (m_RadiusSteps == 0 || m_LengthSteps == 0)
     {
@@ -21,19 +21,19 @@ int PrimitiveSphere::GetWireVertCount() const
     }
     else
     {
-        int count = 0;
-        int dphi = 180 / m_LengthSteps;
-        int dtheta = 360 / m_RadiusSteps;
+        int32_t count = 0;
+        int32_t dphi = 180 / m_LengthSteps;
+        int32_t dtheta = 360 / m_RadiusSteps;
 
-        for (int phi=-90; phi<=90; phi+=dphi)
-            for (int theta=0; theta<=360-dtheta; theta+=dtheta)
+        for (int32_t phi=-90; phi<=90; phi+=dphi)
+            for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
                 count+=2;
 
         return m_WireVertCount = count;
     }
 }
 
-int PrimitiveSphere::GetPolyVertCount() const
+int32_t PrimitiveSphere::GetPolyVertCount() const
 {
     if (m_RadiusSteps == 0)
     {
@@ -41,13 +41,13 @@ int PrimitiveSphere::GetPolyVertCount() const
     }
     else
     {
-        int count = 0;
-        int dtheta = 360 / m_RadiusSteps;
-        int dphi = 360 / m_RadiusSteps;
+        int32_t count = 0;
+        int32_t dtheta = 360 / m_RadiusSteps;
+        int32_t dphi = 360 / m_RadiusSteps;
 
-        for (int theta=-90; theta<=90-dtheta; theta+=dtheta)
+        for (int32_t theta=-90; theta<=90-dtheta; theta+=dtheta)
         {
-            for (int phi=0; phi<=360-dphi; phi+=dphi)
+            for (int32_t phi=0; phi<=360-dphi; phi+=dphi)
             {
                 count+=3;
 
@@ -73,28 +73,30 @@ void PrimitiveSphere::Update()
     // Wire
     //
 
-    int dphi = 180 / m_LengthSteps;
-    int dtheta = 360 / m_RadiusSteps;
+    int32_t dphi = 180 / m_LengthSteps;
+    int32_t dtheta = 360 / m_RadiusSteps;
 
-    for (int phi=-90; phi<=90; phi+=dphi)
+    for (int32_t phi=-90; phi<=90; phi+=dphi)
     {
-        for (int theta=0; theta<=360-dtheta; theta+=dtheta)
+        for (int32_t theta=0; theta<=360-dtheta; theta+=dtheta)
         {
-            float sinTheta = (float32_t)(sin(theta * HELIUM_DEG_TO_RAD));
-            float sinTheta2 = (float32_t)(sin((theta+dtheta) * HELIUM_DEG_TO_RAD));
-            float cosTheta = (float32_t)(cos(theta * HELIUM_DEG_TO_RAD));
-            float cosTheta2 = (float32_t)(cos((theta+dtheta) * HELIUM_DEG_TO_RAD));
+            float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float32_t sinTheta2 = Sin( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float32_t cosTheta2 = Cos( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
-            float sinPhi = (float32_t)(sin(phi * HELIUM_DEG_TO_RAD));
-            float cosPhi = (float32_t)(cos(phi * HELIUM_DEG_TO_RAD));
+            float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
-            m_Vertices.push_back(Position(SetupVector(sinTheta * cosPhi * m_Radius,
+            Vector3 position = SetupVector(sinTheta * cosPhi * m_Radius,
                 sinPhi * m_Radius,
-                cosTheta * cosPhi * m_Radius)));
+                cosTheta * cosPhi * m_Radius);
+            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
 
-            m_Vertices.push_back(Position(SetupVector(sinTheta2 * cosPhi * m_Radius,
+            position = SetupVector(sinTheta2 * cosPhi * m_Radius,
                 sinPhi * m_Radius,
-                cosTheta2 * cosPhi * m_Radius)));
+                cosTheta2 * cosPhi * m_Radius);
+            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
         }
     }
 
@@ -108,35 +110,48 @@ void PrimitiveSphere::Update()
         dtheta = 360 / m_RadiusSteps;
         dphi = 360 / m_RadiusSteps;
 
-        for (int theta=-90; theta<=90-dtheta; theta+=dtheta)
+        for (int32_t theta=-90; theta<=90-dtheta; theta+=dtheta)
         {
-            for (int phi=0; phi<=360-dphi; phi+=dphi)
+            for (int32_t phi=0; phi<=360-dphi; phi+=dphi)
             {
-                float sinTheta = (float32_t)(sin(theta * HELIUM_DEG_TO_RAD));
-                float sinTheta2 = (float32_t)(sin((theta+dtheta) * HELIUM_DEG_TO_RAD));
-                float cosTheta = (float32_t)(cos(theta * HELIUM_DEG_TO_RAD));
-                float cosTheta2 = (float32_t)(cos((theta+dtheta) * HELIUM_DEG_TO_RAD));
+                float32_t sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t sinTheta2 = Sin( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t cosTheta2 = Cos( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
-                float sinPhi = (float32_t)(sin(phi * HELIUM_DEG_TO_RAD));
-                float sinPhi2 = (float32_t)(sin((phi+dphi) * HELIUM_DEG_TO_RAD));
-                float cosPhi = (float32_t)(cos(phi * HELIUM_DEG_TO_RAD));
-                float cosPhi2 = (float32_t)(cos((phi+dphi) * HELIUM_DEG_TO_RAD));
+                float32_t sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t sinPhi2 = Sin( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+                float32_t cosPhi2 = Cos( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
-                Vector3 a = Vector3 (cosTheta * cosPhi * m_Radius, cosTheta * sinPhi * m_Radius, sinTheta * m_Radius);
-                m_Vertices.push_back(Position (a));
+                Lunar::SimpleVertex a(
+                    cosTheta * cosPhi * m_Radius,
+                    cosTheta * sinPhi * m_Radius,
+                    sinTheta * m_Radius );
+                m_Vertices.push_back( a );
 
-                Vector3 b = Vector3 (cosTheta2 * cosPhi2 * m_Radius, cosTheta2 * sinPhi2 * m_Radius, sinTheta2 * m_Radius);
-                m_Vertices.push_back(Position (b));
+                Lunar::SimpleVertex b(
+                    cosTheta2 * cosPhi2 * m_Radius,
+                    cosTheta2 * sinPhi2 * m_Radius,
+                    sinTheta2 * m_Radius );
+                m_Vertices.push_back( b );
 
-                m_Vertices.push_back(Position (cosTheta2 * cosPhi * m_Radius, cosTheta2 * sinPhi * m_Radius, sinTheta2 * m_Radius));
+                Lunar::SimpleVertex vertex(
+                    cosTheta2 * cosPhi * m_Radius,
+                    cosTheta2 * sinPhi * m_Radius,
+                    sinTheta2 * m_Radius );
+                m_Vertices.push_back( vertex );
 
                 if (theta > -90 && theta < 90)
                 {
-                    m_Vertices.push_back(Position (b));
+                    m_Vertices.push_back( b );
 
-                    m_Vertices.push_back(Position (a));
+                    m_Vertices.push_back( a );
 
-                    m_Vertices.push_back(Position (cosTheta * cosPhi2 * m_Radius, cosTheta * sinPhi2 * m_Radius, sinTheta * m_Radius));
+                    vertex.position[ 0 ] = cosTheta * cosPhi2 * m_Radius;
+                    vertex.position[ 1 ] = cosTheta * sinPhi2 * m_Radius;
+                    vertex.position[ 2 ] = sinTheta * m_Radius;
+                    m_Vertices.push_back( vertex );
                 }
             }
         }

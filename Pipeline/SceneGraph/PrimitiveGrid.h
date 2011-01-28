@@ -6,18 +6,18 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveGrid : public PrimitiveTemplate<PositionColored>
+        class PrimitiveGrid : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<PositionColored> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
-            int m_Width;
-            int m_Length;
-            int m_AxisColor;
-            int m_MajorColor;
-            int m_MinorColor;
-            float m_MajorStep;
-            float m_MinorStep;
+            int32_t m_Width;
+            int32_t m_Length;
+            Lunar::Color m_AxisColor;
+            Lunar::Color m_MajorColor;
+            Lunar::Color m_MinorColor;
+            float32_t m_MajorStep;
+            float32_t m_MinorStep;
 
             void SetAxisColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );
             void SetMajorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );

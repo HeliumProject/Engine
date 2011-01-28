@@ -11,31 +11,31 @@ using namespace Helium::SceneGraph;
 PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)
 {
-    SetElementType( ElementTypes::PositionColored );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Width = 10;
     m_Length = 10;
-    m_AxisColor = D3DCOLOR_ARGB( 0xFF, 0x00, 0x00, 0x00 );
-    m_MajorColor = D3DCOLOR_ARGB( 0xFF, 0x80, 0x80, 0x80 );
-    m_MinorColor = D3DCOLOR_ARGB( 0xFF, 0x80, 0x80, 0x80 );
+    m_AxisColor.SetArgb( 0xFF000000 );
+    m_MajorColor.SetArgb( 0xFF808080 );
+    m_MinorColor.SetArgb( 0xFF808080 );
     m_MinorStep = 0.5f;
     m_MajorStep = 0.5f;
 }
 
 void PrimitiveGrid::SetAxisColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_AxisColor = D3DCOLOR_ARGB( a, r, g, b );
+    m_AxisColor.SetArgb( a, r, g, b );
 }
 
 
 void PrimitiveGrid::SetMajorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_MajorColor = D3DCOLOR_ARGB( a, r, g, b );
+    m_MajorColor.SetArgb( a, r, g, b );
 }
 
 void PrimitiveGrid::SetMinorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_MinorColor = D3DCOLOR_ARGB( a, r, g, b );
+    m_MinorColor.SetArgb( a, r, g, b );
 }
 
 void PrimitiveGrid::Update()
@@ -44,30 +44,28 @@ void PrimitiveGrid::Update()
 
     if ( ( m_Width > 0 ) && ( m_Length > 0 ) && ( m_MajorStep > 0.0f ) && ( m_MinorStep > 0.0f ) )
     {
-        int numWidthLines = 2 * m_Width + 1;
-        int numLengthLines = 2 * m_Length + 1;
+        int32_t numWidthLines = 2 * m_Width + 1;
+        int32_t numLengthLines = 2 * m_Length + 1;
 
         m_Vertices.reserve( 2 * ( numWidthLines + numLengthLines ) );
 
-        int color;
-        Vector3 v1;
-        Vector3 v2a;
-        Vector3 v2b;
+        int32_t color;
+        Vector3 v1, v2a, v2b, v1v2a, v1v2b;
 
-        float epsilon = 0.00001f;
-        float halfWidth = (float) m_Width * m_MinorStep;
-        float halfLength = (float) m_Length * m_MinorStep;
+        float32_t epsilon = 0.00001f;
+        float32_t halfWidth = (float32_t) m_Width * m_MinorStep;
+        float32_t halfLength = (float32_t) m_Length * m_MinorStep;
 
-        for ( float x = 0.0f; x <= halfWidth; x += m_MinorStep )
+        for ( float32_t x = 0.0f; x <= halfWidth; x += m_MinorStep )
         {
-            if ( fabs( x ) < epsilon )
+            if ( Abs( x ) < epsilon )
             {
                 color = m_AxisColor;
             }
             else
             {
-                float majorDelta = fabs( x / m_MajorStep );
-                if ( majorDelta - (int) majorDelta < epsilon )
+                float32_t majorDelta = Abs( x / m_MajorStep );
+                if ( majorDelta - (int32_t) majorDelta < epsilon )
                 {
                     color = m_MajorColor;
                 }
@@ -80,27 +78,59 @@ void PrimitiveGrid::Update()
             v1 = SideVector * x;
             v2a = OutVector * halfLength;
             v2b = OutVector * -halfLength;
-            m_Vertices.push_back( PositionColored( v1 + v2a, color ) );
-            m_Vertices.push_back( PositionColored( v1 + v2b, color ) );
+            v1v2a = v1 + v2a;
+            v1v2b = v1 + v2b;
+            m_Vertices.push_back( Lunar::SimpleVertex(
+                v1v2a.x,
+                v1v2a.y,
+                v1v2a.z,
+                color.GetR(),
+                color.GetG(),
+                color.GetB(),
+                color.GetA() ) );
+            m_Vertices.push_back( Lunar::SimpleVertex(
+                v1v2b.x,
+                v1v2b.y,
+                v1v2b.z,
+                color.GetR(),
+                color.GetG(),
+                color.GetB(),
+                color.GetA() ) );
 
             if ( x > 0.0f )
             {
                 v1 = SideVector * -x;
-                m_Vertices.push_back( PositionColored( v1 + v2a, color ) );
-                m_Vertices.push_back( PositionColored( v1 + v2b, color ) );
+                v1v2a = v1 + v2a;
+                v1v2b = v1 + v2b;
+                m_Vertices.push_back( Lunar::SimpleVertex(
+                    v1v2a.x,
+                    v1v2a.y,
+                    v1v2a.z,
+                    color.GetR(),
+                    color.GetG(),
+                    color.GetB(),
+                    color.GetA() ) );
+                m_Vertices.push_back( Lunar::SimpleVertex(
+                    v1v2b.x,
+                    v1v2b.y,
+                    v1v2b.z,
+                    color.GetR(),
+                    color.GetG(),
+                    color.GetB(),
+                    color.GetA() ) );
             }
         }
 
-        for ( float y = 0.0f; y <= halfLength; y += m_MinorStep )
+        for ( float32_t y = 0.0f; y <= halfLength; y += m_MinorStep )
         {
-            if ( fabs( y ) < epsilon )
+            if ( Abs( y ) < epsilon )
             {
                 color = m_AxisColor;
             }
             else
             {
-                float majorDelta = fabs( y / m_MajorStep );
-                if ( majorDelta - (int) majorDelta < epsilon )
+                float32_t majorDelta = Abs( y / m_MajorStep );
+                if ( majorDelta - (int32_t) majorDelta < epsilon )
                 {
                     color = m_MajorColor;
                 }
@@ -113,14 +143,46 @@ void PrimitiveGrid::Update()
             v1 = OutVector * y;
             v2a = SideVector * halfWidth;
             v2b = SideVector * -halfWidth;
-            m_Vertices.push_back( PositionColored( v1 + v2a, color ) );
-            m_Vertices.push_back( PositionColored( v1 + v2b, color ) );
+            v1v2a = v1 + v2a;
+            v1v2b = v1 + v2b;
+            m_Vertices.push_back( Lunar::SimpleVertex(
+                v1v2a.x,
+                v1v2a.y,
+                v1v2a.z,
+                color.GetR(),
+                color.GetG(),
+                color.GetB(),
+                color.GetA() ) );
+            m_Vertices.push_back( Lunar::SimpleVertex(
+                v1v2b.x,
+                v1v2b.y,
+                v1v2b.z,
+                color.GetR(),
+                color.GetG(),
+                color.GetB(),
+                color.GetA() ) );
 
             if ( y > 0.0f )
             {
                 v1 = OutVector * -y;
-                m_Vertices.push_back( PositionColored( v1 + v2a , color ) );
-                m_Vertices.push_back( PositionColored( v1 + v2b, color ) );
+                v1v2a = v1 + v2a;
+                v1v2b = v1 + v2b;
+                m_Vertices.push_back( Lunar::SimpleVertex(
+                    v1v2a.x,
+                    v1v2a.y,
+                    v1v2a.z,
+                    color.GetR(),
+                    color.GetG(),
+                    color.GetB(),
+                    color.GetA() ) );
+                m_Vertices.push_back( Lunar::SimpleVertex(
+                    v1v2b.x,
+                    v1v2b.y,
+                    v1v2b.z,
+                    color.GetR(),
+                    color.GetG(),
+                    color.GetB(),
+                    color.GetA() ) );
             }
         }
     }

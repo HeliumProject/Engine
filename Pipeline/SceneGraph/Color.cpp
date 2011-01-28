@@ -12,20 +12,18 @@ void Color::UnpackColor( uint32_t packed, uint32_t& a, uint32_t& r, uint32_t& g,
     b = ( packed & 0xff );
 }
 
-uint32_t Color::BlendColor( uint32_t color1, uint32_t color2, float32_t weight )
+Lunar::Color Color::BlendColor( Lunar::Color color1, Lunar::Color color2, float32_t weight )
 {
     uint32_t a1, a2, r1, r2, g1, g2, b1, b2;
 
-    Color::UnpackColor( color1, a1, r1, g1, b1 );
-    Color::UnpackColor( color2, a2, r2, g2, b2 );
+    Color::UnpackColor( color1.GetArgb(), a1, r1, g1, b1 );
+    Color::UnpackColor( color2.GetArgb(), a2, r2, g2, b2 );
 
-    Lunar::Color blendedColor(
+    return Lunar::Color(
         static_cast< uint8_t >( static_cast< float32_t >( r1 ) + static_cast< float32_t >( r2 - r1 ) * weight + 0.5f ),
         static_cast< uint8_t >( static_cast< float32_t >( g1 ) + static_cast< float32_t >( g2 - g1 ) * weight + 0.5f ),
         static_cast< uint8_t >( static_cast< float32_t >( b1 ) + static_cast< float32_t >( b2 - b1 ) * weight + 0.5f ),
         static_cast< uint8_t >( static_cast< float32_t >( a1 ) + static_cast< float32_t >( a2 - a1 ) * weight + 0.5f ) );
-
-    return blendedColor.GetArgb();
 }
 
 const Lunar::Color Color::SNOW( 255, 250, 250, static_cast< uint8_t >( 255 ) );

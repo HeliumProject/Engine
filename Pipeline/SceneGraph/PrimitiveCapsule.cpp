@@ -100,9 +100,9 @@ void PrimitiveCapsule::Update()
         for (int theta=0; theta<=360-dtheta; theta+=dtheta)
         {
             float sinTheta = Sin( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
-            float sinTheta2 = Sin( ( theta+dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float sinTheta2 = Sin( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
             float cosTheta = Cos( theta * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
-            float cosTheta2 = Cos( ( theta+dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
+            float cosTheta2 = Cos( ( theta + dtheta ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
             float sinPhi = Sin( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
             float cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );

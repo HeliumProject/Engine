@@ -42,12 +42,6 @@ namespace Helium
                 StaticMeshVertex,
                 SimpleTexturedVertex,
                 Count,
-
-                // Legacy vertex type mappings.
-                PositionColored = SimpleVertex,
-                TransformedColored = ScreenVertex,
-                StandardVertex = StaticMeshVertex,
-                PositionUV = SimpleTexturedVertex,
             };
         }
 

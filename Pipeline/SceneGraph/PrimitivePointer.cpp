@@ -22,18 +22,29 @@ void PrimitivePointer::Update()
 {
     m_Vertices.clear();
 
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
+    Vector3 position;
+
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 1.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 1.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
 
     Base::Update();
 }

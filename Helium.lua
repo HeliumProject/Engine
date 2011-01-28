@@ -30,12 +30,12 @@ includedirs
 	"Dependencies/png",
 	"Dependencies/tbb/include",
 	"Dependencies/zlib",
-	"Integrations/FBX/include",
+	Helium.GetFbxSdkLocation() .. "/include",
 }
 
 libdirs
 {
-	"Integrations/FBX/lib/vs2008",
+	Helium.GetFbxSdkLocation() .. "/lib/vs2008",
 }
 
 if haveGranny then

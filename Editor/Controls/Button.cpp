@@ -55,18 +55,6 @@ void Button::SetButtonOptions( const ButtonOption option )
             wxNewStyle &= ~wxBU_NOTEXT;
         }
 
-        // NoAutoDraw
-        if ( HasFlags<ButtonOption>( m_ButtonOption, ButtonOptions::NoAutoDraw )
-            && HasFlags<long>( wxOldStyle, wxBU_AUTODRAW ) )
-        {
-            wxNewStyle &= ~wxBU_AUTODRAW;
-        }
-        else if ( !HasFlags<ButtonOption>( m_ButtonOption, ButtonOptions::NoAutoDraw )
-            && !HasFlags<long>( wxOldStyle, wxBU_AUTODRAW ) )
-        {
-            wxNewStyle |= wxBU_AUTODRAW;
-        }
-
         // Reset the wx window style flags
         if ( wxNewStyle != wxOldStyle )
         {

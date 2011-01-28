@@ -29,7 +29,11 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
 
     // Set up the button
     m_Button = new Button( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-    m_Button->SetButtonOptions( ButtonOptions::Toggle  );
+    m_Button->SetButtonOptions( ButtonOptions::Toggle );
+    m_Button->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
+    m_Button->SetBitmapPosition( wxDirection( wxRIGHT ) );
+    m_Button->SetBitmapMargins( 1, 1 );
+    //m_Button->SetButtonOptions( ButtonOptions::Toggle );
     m_Button->SetValue( false );
 
     // Add the button to the sizer
@@ -151,7 +155,7 @@ void Drawer::SetIcon( const tstring& icon )
 
 Button* Drawer::GetButton()
 {
-    return m_Button;
+    return (Button*) m_Button;
 }
 
 int32_t Drawer::GetButtonID() const

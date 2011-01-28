@@ -21,7 +21,7 @@ namespace Helium
         class ThumbnailLoader
         {
         public:
-            ThumbnailLoader( Render::DeviceManager* d3dManager, const tstring& thumbnailDirectory );
+            ThumbnailLoader( Render::DeviceManager* d3dManager );
             ~ThumbnailLoader();
 
             void Enqueue( const std::set< Helium::Path >& files );
@@ -74,7 +74,6 @@ namespace Helium
             Helium::Semaphore                                       m_Signal; // Signalling semaphore to wake up load thread
             bool                                                    m_Quit;
             Render::DeviceManager*                            m_DeviceManager;
-            tstring                                                 m_ThumbnailDirectory;
         };
     }
 }

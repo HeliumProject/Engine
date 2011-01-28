@@ -1,4 +1,5 @@
 require "Base"
+require "FBX"
 require "TBB"
 require "WxWidgets"
 
@@ -7,18 +8,6 @@ if _ACTION then
 
 	-- Check prereqs
 	Helium.CheckEnvironment()
-
-	-- Check for FBX integration.
-	haveFbx = os.isfile( "Integrations/FBX/FBX.lua" )
-	if haveFbx then
-		require "Integrations/Fbx/Fbx"
-	end
-
-	-- Check for Granny integration.
-	haveGranny = os.isfile( "Integrations/Granny/Granny.lua" )
-	if haveGranny then
-		require "Integrations/Granny/Granny"
-	end
 
 	-- Custom action to just run the pre-build scripts.
 	newaction
@@ -39,22 +28,12 @@ if _ACTION then
 
 		if _ACTION ~= "clean" then
 			local bin = "Bin"
-
 			Helium.BuildWxWidgets()
 			Helium.PublishWxWidgets( bin )
 			Helium.BuildTBB()
 			Helium.PublishTBB( bin )
-
-			if haveFbx then
-				Helium.PublishFBX( bin )
-			end
-
-			if haveGranny then
-				Helium.PublishGranny( bin )
-			end
-
+			Helium.PublishFBX( bin )
 			Helium.PublishIcons( bin )
-
 			Helium.Prebuild()
 		else
 			Helium.CleanWxWidgets()

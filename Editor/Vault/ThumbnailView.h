@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Editor/Vault/VaultPanel.h"
 #include "VaultMenuIDs.h"
 #include "Thumbnail.h"
 #include "ThumbnailManager.h"
@@ -106,7 +105,6 @@ namespace Helium
             };
 
         public:
-            //ThumbnailView( VaultPanel *vaultPanel, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
             ThumbnailView( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Editor::ThumbnailView" ) );
             virtual ~ThumbnailView();
 
@@ -188,7 +186,7 @@ namespace Helium
 
             void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
-            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar_t* fileName );
+            void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename );
 
             bool Draw();
             void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
@@ -303,8 +301,6 @@ namespace Helium
             Matrix4 m_ViewMatrix;
             Frustum m_ViewFrustum;
             float m_Scale;
-
-            //VaultPanel* m_VaultPanel;
 
         private:
             ThumbnailSelectionSignature::Event m_SelectionChanged;

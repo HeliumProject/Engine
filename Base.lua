@@ -35,6 +35,15 @@ Helium.Build64Bit = function()
     end
 end
 
+Helium.GetFbxSdkLocation = function()
+	if os.get() == "windows" then
+		return "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\2011.3.1"
+	else
+		print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
+		os.exit(1)
+	end
+end
+
 Helium.Sleep = function( seconds )
 	if os.get() == "windows" then
 		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
@@ -83,6 +92,11 @@ Helium.CheckEnvironment = function()
         
         if os.getenv( "DXSDK_DIR" ) == nil then
             print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
+            failed = 1
+        end
+        
+        if not os.isdir( Helium.GetFbxSdkLocation() ) then
+            print( " -> You must have the FBX SDK installed (" .. Helium.GetFbxSdkLocation() .. " is not found)." )
             failed = 1
         end
         

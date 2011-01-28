@@ -14,7 +14,6 @@ void SettingsManager::PopulateComposite( Reflect::Composite& comp )
 
 SettingsManager::SettingsManager()
 {
-    m_Test.m_Float32 = 5.0f;
 }
 
 SettingsManager::~SettingsManager()

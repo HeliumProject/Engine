@@ -64,6 +64,7 @@ namespace Helium
     private:
         M_Settings m_SettingsMap;
 
+    public:
         TestStructure m_Test;
     };
 

@@ -18,10 +18,15 @@ StructureData::~StructureData()
 
 void StructureData::ConnectData(void* data)
 {
-    const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
-    HELIUM_ASSERT( structure );
+    const Structure* structure = NULL;
+    
+    if ( data )
+    {
+        structure = ReflectionCast< Structure >( m_Field->m_Type );
+        HELIUM_ASSERT( structure );
+    }
 
-    m_Data.Connect( data, structure->m_Size );
+    m_Data.Connect( data, structure ? structure->m_Size : 0x0 );
 }
 
 bool StructureData::Set(Data* data, uint32_t flags)

@@ -231,7 +231,6 @@ Undo::CommandPtr Scene::Import( const Helium::Path& path, ImportAction action, u
     {
         Reflect::ArchivePtr archive = Reflect::GetArchive( path );
         archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
-        archive->d_Exception.Set( this, &Scene::ArchiveException );
         archive->Get( elements );
     }
     catch ( const Helium::Exception& exception )
@@ -666,11 +665,6 @@ void Scene::ArchiveStatus( const Reflect::ArchiveStatus& info )
     }
 }
 
-void Scene::ArchiveException( const Reflect::ArchiveExceptionInfo& info )
-{
-#pragma TODO( "Sub default assets?" )
-}
-
 bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     bool result = true;
@@ -900,7 +894,6 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
         {
             Reflect::ArchivePtr archive = Reflect::GetArchive( path );
             archive->e_Status.AddMethod( this, &Scene::ArchiveStatus );
-            archive->d_Exception.Set( this, &Scene::ArchiveException );
             archive->Open( true );
             archive->Put( spool );
             archive->Write();

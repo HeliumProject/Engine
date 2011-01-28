@@ -1461,7 +1461,6 @@ void MainFrame::OnExport(wxCommandEvent& event)
                         {
                             Reflect::ArchivePtr archive = Reflect::GetArchive( file );
                             archive->e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
-                            archive->d_Exception.Set( m_SceneManager.GetCurrentScene(), &Scene::ArchiveException );
                             archive->Put( elements );
                             archive->Close();
                         }

@@ -44,47 +44,6 @@ Archive::~Archive()
 {
 }
 
-bool Archive::TryObjectCallback( Object* object, ObjectCallback callback, const Field* field )
-{
-    if ( Helium::IsDebuggerPresent() )
-    {
-        (object->*callback)( field );
-    }
-    else
-    {
-        try
-        {
-            (object->*callback)( field );
-        }
-        catch ( const Helium::Exception& exception )
-        {
-            ArchiveExceptionInfo info( *this, object, callback, field, exception );
-
-            d_Exception.Invoke( info );
-
-            switch ( info.m_Action )
-            {
-            case ArchiveExceptionActions::Unknown:
-                {
-                    throw;
-                }
-
-            case ArchiveExceptionActions::Accept:
-                {
-                    return true;
-                }
-
-            case ArchiveExceptionActions::Reject:
-                {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
 #pragma TODO( "Add support for writing objects piecemeal into the archive in Put" )
 
 void Archive::Put( Object* object )

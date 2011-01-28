@@ -352,7 +352,10 @@ void ArchiveXML::Deserialize(ObjectPtr& object)
 
 void ArchiveXML::Deserialize( void* structure, const Structure* type )
 {
-    // this should probably just push a structure instance onto the state stack
+    State state;
+    state.m_Instance = structure;
+    state.m_Composite = type;
+    m_States.push( state );
 }
 
 void ArchiveXML::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flags)
@@ -447,7 +450,10 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //
 
     State startState;
-    startState.m_Type = objectClassName.c_str();
+
+#if HELIUM_DEBUG
+    startState.m_Type = objectClassName;
+#endif
 
     State* topState = NULL;
     if ( !m_States.empty() )
@@ -460,50 +466,36 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Check parent for a data matching this object... handles serializers and field objects
     //
 
-    if ( topState && topState->m_Object )
+    if ( topState && topState->m_Instance && topState->m_Composite )
     {
-        // pointer to the parent object below which we are nested
-        ObjectPtr parentObject = topState->m_Object;
-
-        // retrieve the type information for our parent structure
-        const Class* parentTypeDefinition = parentObject->GetClass();
-
-        if ( parentTypeDefinition )
+        // look for the field name in the attributes
+        const tchar_t* fieldName = NULL;
+        for (int i=0; papszAttrs[i]; i+=2)
         {
-            // look for the field name in the attributes
-            const tchar_t* fieldName = NULL;
-            for (int i=0; papszAttrs[i]; i+=2)
+            if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )
             {
-                if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )
-                {
-                    fieldName = papszAttrs[i+1];
-                }
+                fieldName = papszAttrs[i+1];
             }
+        }
 
-            if ( fieldName )
-            {
-                startState.m_Field = parentTypeDefinition->FindFieldByName( Crc32( fieldName ) );
-            }
+        // if we found the field name in the xml, find the actual field in reflection data
+        if ( fieldName )
+        {
+            startState.m_Field = topState->m_Composite->FindFieldByName( Crc32( fieldName ) );
+        }
 
-            // we have found a fieldinfo into our parent's definition
-            if ( startState.m_Field != NULL )
-            {
-                // this is our new object
-                ObjectPtr object = Registry::GetInstance()->CreateInstance( startState.m_Field->m_DataClass );
+        // if we have found a field in our parent's definition
+        if ( startState.m_Field )
+        {
+            // create the data object, if this fails then we have something besides a data class associated w/ this field (bad)
+            DataPtr data = SafeCast<Data>( Registry::GetInstance()->CreateInstance( startState.m_Field->m_DataClass ) );
+            HELIUM_ASSERT( data );
 
-                Data* data = SafeCast<Data>(object);
-                if ( data )
-                {
-                    // connect the current instance to the data
-                    data->ConnectField(parentObject.Ptr(), startState.m_Field);
-                }
+            // connect the current instance to the data
+            data->ConnectField( topState->m_Instance, startState.m_Field );
 
-                if (object.ReferencesObject())
-                {
-                    // use this object to parse with
-                    startState.m_Object = object;
-                }
-            }
+            // use this object to parse with
+            startState.m_Object = data;
         }
     }
 
@@ -514,35 +506,18 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     if ( !startState.m_Object.ReferencesObject() && !objectClassName.empty() )
     {
-        //
-        // Attempt creation of object via name
-        //
+        startState.m_Object = Registry::GetInstance()->CreateInstance( Crc32( objectClassName.c_str() ) );
 
-        const Class* type = Reflect::Registry::GetInstance()->GetClass( Crc32( objectClassName.c_str() ) );
-
-        if ( type )
+        if ( startState.m_Object.ReferencesObject() )
         {
-            startState.m_Object = Registry::GetInstance()->CreateInstance( type );
+            startState.m_Composite = startState.m_Object->GetClass();
+            startState.m_Object->PreDeserialize( NULL );
         }
-
-        if ( !startState.m_Object.ReferencesObject() )
+        else
         {
             Log::Debug( TXT( "Unable to create object with name: %s\n" ), objectClassName);
         }
     }
-
-    //
-    // Do callbacks
-    //
-
-    if (startState.m_Object)
-    {
-        startState.m_Object->PreDeserialize( NULL );
-    }
-
-    //
-    // Push state
-    //
 
     m_States.push( startState );
 
@@ -579,11 +554,8 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         return;
     }
 
-    // this should never happen, an object just ended
-    HELIUM_ASSERT( !m_States.empty() );
-    State endState = m_States.top();
-
     // we own this state, do pop it off the stack
+    State endState = m_States.top();
     m_States.pop();
 
 #ifdef REFLECT_DISPLAY_PARSE_STACK
@@ -595,17 +567,13 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     if ( endState.m_Object )
     {
         // are we nested within another object?
-        State* parentState = m_States.empty() ? NULL : &m_States.top();
-
-        // do callbacks
-        if ( parentState != NULL )
+        State* topState = m_States.empty() ? NULL : &m_States.top();
+        if ( topState && endState.m_Field )
         {
-            parentState->m_Object->PreDeserialize( endState.m_Field );
+            topState->m_Object->PreDeserialize( endState.m_Field );
         }
 
         Data* data = SafeCast< Data >( endState.m_Object );
-
-        // do data logic
         if ( data )
         {
             ArchiveXML xml;
@@ -617,16 +585,12 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
             data->Deserialize( xml );
         }
 
-        // do callbacks
         if ( endState.m_Object )
         {
-            if ( !TryObjectCallback( endState.m_Object, &Object::PostDeserialize, NULL ) )
-            {
-                endState.m_Object = NULL; // discard the object
-            }
+            endState.m_Object->PostDeserialize( NULL );
 
             // if we are we should see if it's being processed and perhaps be added as a field
-            if ( parentState != NULL )
+            if ( topState != NULL )
             {
                 // see if we should process this object as a field, or as unknown
                 if ( endState.m_Field && endState.m_Object )
@@ -639,14 +603,14 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                         // might be useful to cache the data object here
                     }
 
-                    parentState->m_Object->PostDeserialize( endState.m_Field );
+                    topState->m_Object->PostDeserialize( endState.m_Field );
                 }
                 else
                 {
                     // we are unknown, so send us up to be processed by the parent
-                    if ( parentState->m_Object )
+                    if ( topState->m_Object )
                     {
-                        parentState->m_Object->ProcessUnknown(endState.m_Object, endState.m_Field ? Crc32( endState.m_Field->m_Name ) : 0 );
+                        topState->m_Object->ProcessUnknown(endState.m_Object, endState.m_Field ? Crc32( endState.m_Field->m_Name ) : 0 );
                     }
                 }
             }

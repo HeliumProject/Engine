@@ -591,10 +591,7 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
             DeserializeFields(object);
         }
 
-        if ( !TryObjectCallback( object, &Object::PostDeserialize, NULL ) )
-        {
-            object = NULL; // discard the object
-        }
+        object->PostDeserialize( NULL );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Pop();

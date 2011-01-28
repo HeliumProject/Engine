@@ -148,11 +148,12 @@ namespace Helium
                 }
             }
 
-            void Connect(void* pointer)
+            void Connect(void* pointer, uint32_t size)
             {
                 Deallocate();
                 m_Target = pointer;
                 m_Owned = false;
+                m_Size = size;
             }
 
             void Disconnect()

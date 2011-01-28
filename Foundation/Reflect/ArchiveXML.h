@@ -25,8 +25,10 @@ namespace Helium
             class State
             {
             public:
+#if HELIUM_DEBUG
                 // the name of the type being processed
                 tstring m_Type;
+#endif
 
                 // the body of the element, cdata section
                 tstring m_Body;
@@ -34,7 +36,10 @@ namespace Helium
                 // the current serializing field
                 const Field* m_Field;
 
-                // the instance being processed
+                // the type of the instance being processed
+                const Composite* m_Composite;
+
+                // the instance being processed (for structure support)
                 void* m_Instance;
 
                 // the object being processed (could be the same as instance)
@@ -45,6 +50,8 @@ namespace Helium
 
                 State()
                     : m_Field( NULL )
+                    , m_Composite( NULL )
+                    , m_Instance( NULL )
                 {
 
                 }

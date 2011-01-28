@@ -98,46 +98,6 @@ namespace Helium
         typedef Helium::Signature< const ArchiveStatus& > ArchiveStatusSignature;
 
         //
-        // Exception handling
-        //
-
-        namespace ArchiveExceptionActions
-        {
-            enum ArchiveExceptionAction
-            {
-                Unknown,
-                Accept,
-                Reject,
-            };
-        }
-        typedef ArchiveExceptionActions::ArchiveExceptionAction ArchiveExceptionAction;
-
-        typedef void (Object::*ObjectCallback)( const Field* field );
-
-        struct ArchiveExceptionInfo
-        {
-            ArchiveExceptionInfo( const Archive& archive, Object* object, ObjectCallback callback, const Field* field, const Helium::Exception& exception )
-                : m_Archive ( archive )
-                , m_Object ( object )
-                , m_Callback ( callback )
-                , m_Field( field )
-                , m_Exception ( exception )
-                , m_Action ( ArchiveExceptionActions::Unknown )
-            {
-            }
-
-            const Archive&                  m_Archive;
-            Object*                         m_Object;
-            ObjectCallback                  m_Callback;
-            const Field*                    m_Field;
-            const Helium::Exception&        m_Exception;
-
-            // set this to say what you want to happen
-            mutable ArchiveExceptionAction  m_Action;
-        };
-        typedef Helium::Signature< const ArchiveExceptionInfo& > ArchiveExceptionSignature;
-
-        //
         // Archive base class
         //
 
@@ -198,14 +158,6 @@ namespace Helium
             //
 
             ArchiveStatusSignature::Event e_Status;
-            ArchiveExceptionSignature::Delegate d_Exception;
-
-            //
-            // Serialization
-            //
-
-            // Shared code for doing per-object pre and post serialize work with exception handling
-            bool TryObjectCallback( Object* object, ObjectCallback callback, const Field* field );
 
             //
             // Get objects from the file

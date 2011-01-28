@@ -2,6 +2,8 @@
 #include "ThumbnailTileCreator.h"
 #include "ThumbnailView.h"
 
+#include "Editor/App.h"
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -48,8 +50,10 @@ void ThumbnailTileCreator::ThreadProc( int32_t threadID )
             {
                 return;
             }
+            
             const TrackedFile& file = (*itr);
-            Path path( file.mPath.value() );
+            HELIUM_ASSERT( wxGetApp().GetFrame()->GetProject() );
+            Path path( wxGetApp().GetFrame()->GetProject()->a_Path.Get().Directory() + file.mPath.value() );
             ThumbnailTilePtr tile = new ThumbnailTile( path );
             m_Tiles.insert( std::make_pair( path, tile ) );
             m_Sorter.Add( tile );

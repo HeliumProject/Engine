@@ -212,7 +212,6 @@ bool Composite::Equals(void* a, void* b) const
         aData->Disconnect();
         bData->Disconnect();
 
-        // If the serialziers aren't equal, the elements can't be equal
         if ( !equality )
         {
             return false;
@@ -376,7 +375,7 @@ Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset,
     {
         const Enumeration* enumerationType = ReflectionCast< Enumeration >( type );
 
-        // if you hit this, then you need to make sure you register your enums before you register elements that use them
+        // if you hit this, then you need to make sure you register your enums before you register objects that use them
         HELIUM_ASSERT( enumerationType != NULL );
     }
 

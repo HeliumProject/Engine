@@ -33,7 +33,7 @@
 //  
 //    struct ObjectArray
 //    {
-//      int32_t count;          // count of contained elements
+//      int32_t count;          // count of contained objects
 //      Object[] objects;       // object instance data
 //      int32_t term;           // -1
 //    };
@@ -44,7 +44,7 @@
 //      uint8_t encoding;       // character encoding
 //      uint32_t version;       // file format version
 //
-//      ObjectArray elements;  // client objects
+//      ObjectArray objects;    // client objects
 //    };
 //
 
@@ -131,8 +131,8 @@ namespace Helium
             // Serialize
             virtual void Serialize( Object* object );
             virtual void Serialize( void* structure, const Structure* type );
-            virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
-            virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
+            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -148,8 +148,8 @@ namespace Helium
             // pulls from the stream, or deserializes into a freshly allocated instance
             virtual void Deserialize( ObjectPtr& object );
             virtual void Deserialize( void* structure, const Structure* type );
-            virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
-            virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
+            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
+            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -162,9 +162,9 @@ namespace Helium
             static void       ToStream( Object* object, std::iostream& stream );
             static ObjectPtr FromStream( std::iostream& stream, const Class* searchClass = NULL );
 
-            // Reading and writing multiple elements via binary
-            static void       ToStream( const std::vector< ObjectPtr >& elements, std::iostream& stream );
-            static void       FromStream( std::iostream& stream, std::vector< ObjectPtr >& elements );
+            // Reading and writing multiple objects via binary
+            static void       ToStream( const std::vector< ObjectPtr >& objects, std::iostream& stream );
+            static void       FromStream( std::iostream& stream, std::vector< ObjectPtr >& objects );
         };
     }
 }

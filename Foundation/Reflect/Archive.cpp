@@ -92,18 +92,18 @@ void Archive::Put( Object* object )
     m_Objects.push_back( object );
 }
 
-void Archive::Put( const std::vector< ObjectPtr >& elements )
+void Archive::Put( const std::vector< ObjectPtr >& objects )
 {
-    m_Objects.reserve( m_Objects.size() + elements.size() );
-    m_Objects.insert( m_Objects.end(), elements.begin(), elements.end() );
+    m_Objects.reserve( m_Objects.size() + objects.size() );
+    m_Objects.insert( m_Objects.end(), objects.begin(), objects.end() );
 }
 
 ObjectPtr Archive::Get( const Class* searchClass )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
-    std::vector< ObjectPtr > elements;
-    Get( elements );
+    std::vector< ObjectPtr > objects;
+    Get( objects );
 
     if ( searchClass == NULL )
     {
@@ -111,8 +111,8 @@ ObjectPtr Archive::Get( const Class* searchClass )
     }
 
     ObjectPtr result = NULL;
-    std::vector< ObjectPtr >::iterator itr = elements.begin();
-    std::vector< ObjectPtr >::iterator end = elements.end();
+    std::vector< ObjectPtr >::iterator itr = objects.begin();
+    std::vector< ObjectPtr >::iterator end = objects.end();
     for ( ; itr != end; ++itr )
     {
         if ( (*itr)->IsClass( searchClass ) )
@@ -124,7 +124,7 @@ ObjectPtr Archive::Get( const Class* searchClass )
     return NULL;
 }
 
-void Archive::Get( std::vector< ObjectPtr >& elements )
+void Archive::Get( std::vector< ObjectPtr >& objects )
 {
     REFLECT_SCOPE_TIMER( ( "%s", m_Path.c_str() ) );
 
@@ -163,7 +163,7 @@ void Archive::Get( std::vector< ObjectPtr >& elements )
         }
     }
 
-    elements = m_Objects;
+    objects = m_Objects;
 }
 
 ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )
@@ -191,15 +191,15 @@ ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteO
 
 bool Reflect::ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
-    std::vector< ObjectPtr > elements;
-    elements.push_back( object );
-    return ToArchive( path, elements, archiveType, error, byteOrder );
+    std::vector< ObjectPtr > objects;
+    objects.push_back( object );
+    return ToArchive( path, objects, archiveType, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
-    HELIUM_ASSERT( elements.size() > 0 );
+    HELIUM_ASSERT( objects.size() > 0 );
     HELIUM_ASSERT( byteOrder == ByteOrders::BigEndian || byteOrder == ByteOrders::LittleEndian ); // should be a known byteorder
 
     REFLECT_SCOPE_TIMER( ( "%s", path.c_str() ) );
@@ -211,7 +211,7 @@ bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& eleme
     safetyPath.ReplaceExtension( path.Extension() );
 
     ArchivePtr archive = GetArchive( safetyPath, archiveType, byteOrder );
-    archive->Put( elements );
+    archive->Put( objects );
 
     // generate the file to the safety location
     if ( Helium::IsDebuggerPresent() )

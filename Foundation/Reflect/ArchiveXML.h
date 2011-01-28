@@ -22,11 +22,11 @@ namespace Helium
         private:
             friend class Archive;
 
-            class ParsingState : public Helium::RefCountBase<ParsingState>
+            class State
             {
             public:
-                // the name of the name being processed
-                tstring m_Name;
+                // the name of the type being processed
+                tstring m_Type;
 
                 // the body of the element, cdata section
                 tstring m_Body;
@@ -34,43 +34,21 @@ namespace Helium
                 // the current serializing field
                 const Field* m_Field;
 
-                // the item being processed
+                // the instance being processed
+                void* m_Instance;
+
+                // the object being processed (could be the same as instance)
                 ObjectPtr m_Object;
 
-                // The collected components
-                std::vector< ObjectPtr > m_Objects;
+                // objects stashed at this parsing data
+                std::vector< ObjectPtr > m_Stash;
 
-                // flags, as specified below
-                unsigned int m_Flags;
-
-                enum ProcessFlag
-                {
-                    kField  = 0x1 << 0,
-                };
-
-                ParsingState(const tchar_t* name)
-                    : m_Name (name)
-                    , m_Field (NULL) 
-                    , m_Flags (0)
+                State()
+                    : m_Field( NULL )
                 {
 
-                }
-
-                void SetFlag( ProcessFlag flag, bool state )
-                {
-                    if ( state )
-                        m_Flags |= flag;
-                    else
-                        m_Flags &= ~flag;
-                }
-
-                bool GetFlag( ProcessFlag flag )
-                {
-                    return ((m_Flags & flag) != 0x0);
                 }
             };
-
-            typedef Helium::SmartPtr<ParsingState> ParsingStatePtr;
 
             // File format version
             uint32_t m_Version;
@@ -85,7 +63,7 @@ namespace Helium
             Indent<tchar_t> m_Indent;
 
             // The nesting stack of parsing state
-            std::stack< ParsingStatePtr > m_StateStack;
+            std::stack< State > m_States;
 
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );

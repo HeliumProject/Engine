@@ -153,7 +153,7 @@ void ArchiveXML::Write()
     *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
     *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
 
-    // serialize main file elements
+    // serialize main file objects
     Serialize(m_Objects, ArchiveFlags::Status);
 
     *m_Stream << TXT( "</Reflect>\n\0" );
@@ -257,14 +257,14 @@ void ArchiveXML::Serialize( void* structure, const Structure* type, const tchar_
     m_Indent.Pop();
 }
 
-void ArchiveXML::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
+void ArchiveXML::Serialize(const std::vector< ObjectPtr >& objects, uint32_t flags)
 {
-    Serialize( elements.begin(), elements.end(), flags );
+    Serialize( objects.begin(), objects.end(), flags );
 }
 
-void ArchiveXML::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags )
+void ArchiveXML::Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags )
 {
-    Serialize( elements.Begin(), elements.End(), flags );
+    Serialize( objects.Begin(), objects.End(), flags );
 }
 
 template< typename ConstIteratorType >
@@ -336,14 +336,15 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
 
 void ArchiveXML::Deserialize(ObjectPtr& object)
 {
-    if (m_Objects.size() == 1)
+    if ( m_Objects.size() == 1 )
     {
         object = m_Objects.front();
         m_Objects.clear();
     }
     else
     {
-        // xml doesn't work this way
+        // xml doesn't work this way, this function is basically a pass-off point of object pointers
+        //  from PointerSerializer... since XML parsing means we don't have flow control of the stream
         HELIUM_BREAK();
         throw Reflect::LogisticException( TXT( "Internal Error: Missing object" ) );
     }
@@ -351,10 +352,10 @@ void ArchiveXML::Deserialize(ObjectPtr& object)
 
 void ArchiveXML::Deserialize( void* structure, const Structure* type )
 {
-
+    // this should probably just push a structure instance onto the state stack
 }
 
-void ArchiveXML::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
+void ArchiveXML::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flags)
 {
     if (!m_Objects.empty())
     {
@@ -363,15 +364,15 @@ void ArchiveXML::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
             m_Objects.erase( std::remove( m_Objects.begin(), m_Objects.end(), ObjectPtr () ), m_Objects.end() );
         }
 
-        elements = m_Objects;
+        objects = m_Objects;
 
         m_Objects.clear();
     }
 }
 
-void ArchiveXML::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
+void ArchiveXML::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
 {
-    elements.Clear();
+    objects.Clear();
 
     if (!m_Objects.empty())
     {
@@ -381,10 +382,10 @@ void ArchiveXML::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
         }
 
         size_t size = m_Objects.size();
-        elements.Reserve( size );
+        objects.Reserve( size );
         for( size_t index = 0; index < size; ++index )
         {
-            elements.Push( m_Objects[ index ] );
+            objects.Push( m_Objects[ index ] );
         }
 
         m_Objects.clear();
@@ -421,7 +422,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     // Find object type
     //
 
-    tstring elementType;
+    tstring objectClassName;
     bool foundTypeAttribute = false;
 
     for (int i=0; papszAttrs[i]; i+=2)
@@ -430,7 +431,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         {
             foundTypeAttribute = true;
 
-            bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], elementType );
+            bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], objectClassName );
             HELIUM_ASSERT( converted );
         }
     }
@@ -445,12 +446,18 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     // We use a stack to track the state of parsing, this will be the new state
     //
 
-    ParsingStatePtr newState = new ParsingState (elementType.c_str());
-    ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
+    State startState;
+    startState.m_Type = objectClassName.c_str();
+
+    State* topState = NULL;
+    if ( !m_States.empty() )
+    {
+        topState = &m_States.top();
+    }
 
     //
     // First pass at creation:
-    //  Check parent for a data matching this object... handles serializers and field elements
+    //  Check parent for a data matching this object... handles serializers and field objects
     //
 
     if ( topState && topState->m_Object )
@@ -475,29 +482,26 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
             if ( fieldName )
             {
-                newState->m_Field = parentTypeDefinition->FindFieldByName( Crc32( fieldName ) );
+                startState.m_Field = parentTypeDefinition->FindFieldByName( Crc32( fieldName ) );
             }
 
             // we have found a fieldinfo into our parent's definition
-            if ( newState->m_Field != NULL )
+            if ( startState.m_Field != NULL )
             {
                 // this is our new object
-                ObjectPtr object = Registry::GetInstance()->CreateInstance( newState->m_Field->m_DataClass );
+                ObjectPtr object = Registry::GetInstance()->CreateInstance( startState.m_Field->m_DataClass );
 
                 Data* data = SafeCast<Data>(object);
                 if ( data )
                 {
                     // connect the current instance to the data
-                    data->ConnectField(parentObject.Ptr(), newState->m_Field);
+                    data->ConnectField(parentObject.Ptr(), startState.m_Field);
                 }
 
                 if (object.ReferencesObject())
                 {
-                    // flag this as a field
-                    newState->SetFlag( ParsingState::kField, true );
-
-                    // use this object to Parse with
-                    newState->m_Object = object;
+                    // use this object to parse with
+                    startState.m_Object = object;
                 }
             }
         }
@@ -508,22 +512,22 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //  Try and get a creator for a new object to store the data
     //
 
-    if ( !newState->m_Object.ReferencesObject() && !elementType.empty() )
+    if ( !startState.m_Object.ReferencesObject() && !objectClassName.empty() )
     {
         //
         // Attempt creation of object via name
         //
 
-        const Class* type = Reflect::Registry::GetInstance()->GetClass( Crc32( elementType.c_str() ) );
+        const Class* type = Reflect::Registry::GetInstance()->GetClass( Crc32( objectClassName.c_str() ) );
 
         if ( type )
         {
-            newState->m_Object = Registry::GetInstance()->CreateInstance( type );
+            startState.m_Object = Registry::GetInstance()->CreateInstance( type );
         }
 
-        if ( !newState->m_Object.ReferencesObject() )
+        if ( !startState.m_Object.ReferencesObject() )
         {
-            Log::Debug( TXT( "Unable to create object with name: %s\n" ), elementType);
+            Log::Debug( TXT( "Unable to create object with name: %s\n" ), objectClassName);
         }
     }
 
@@ -531,16 +535,16 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     // Do callbacks
     //
 
-    if (newState->m_Object)
+    if (startState.m_Object)
     {
-        newState->m_Object->PreDeserialize( NULL );
+        startState.m_Object->PreDeserialize( NULL );
     }
 
     //
     // Push state
     //
 
-    m_StateStack.push( newState );
+    m_States.push( startState );
 
 #ifdef REFLECT_DISPLAY_PARSE_STACK
     m_Indent.Push();
@@ -556,7 +560,7 @@ void ArchiveXML::OnCharacterData(const XML_Char *pszData, int nLength)
         return;
     }
 
-    ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
+    State* topState = m_States.empty() ? NULL : &m_States.top();
     if ( topState && topState->m_Object )
     {
         topState->m_Body.append( pszData, nLength );
@@ -576,11 +580,11 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     }
 
     // this should never happen, an object just ended
-    HELIUM_ASSERT( !m_StateStack.empty() );
-    ParsingStatePtr topState = m_StateStack.top();
+    HELIUM_ASSERT( !m_States.empty() );
+    State endState = m_States.top();
 
     // we own this state, do pop it off the stack
-    m_StateStack.pop();
+    m_States.pop();
 
 #ifdef REFLECT_DISPLAY_PARSE_STACK
     m_Indent.Get(std::cout);
@@ -588,45 +592,46 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     m_Indent.Pop();
 #endif
 
-    if ( topState->m_Object )
+    if ( endState.m_Object )
     {
         // are we nested within another object?
-        ParsingStatePtr parentState = m_StateStack.empty() ? NULL : m_StateStack.top();
+        State* parentState = m_States.empty() ? NULL : &m_States.top();
 
         // do callbacks
         if ( parentState != NULL )
         {
-            parentState->m_Object->PreDeserialize( topState->m_Field );
+            parentState->m_Object->PreDeserialize( endState.m_Field );
         }
 
-        Data* data = SafeCast< Data >( topState->m_Object );
+        Data* data = SafeCast< Data >( endState.m_Object );
 
         // do data logic
-        if ( data && !topState->m_Body.empty())
+        if ( data )
         {
             ArchiveXML xml;
-            tstringstream stream (topState->m_Body);
-            xml.m_Stream = new Reflect::TCharStream(&stream, false);
-            xml.m_Objects = topState->m_Objects;
-
-            data->Deserialize(xml);
+            tstringstream stream( endState.m_Body );
+            Reflect::TCharStream archiveStream( &stream, false );
+            archiveStream.IncrRefCount();
+            xml.m_Stream = &archiveStream;
+            xml.m_Objects = endState.m_Stash;
+            data->Deserialize( xml );
         }
 
         // do callbacks
-        if ( topState->m_Object )
+        if ( endState.m_Object )
         {
-            if ( !TryObjectCallback( topState->m_Object, &Object::PostDeserialize, NULL ) )
+            if ( !TryObjectCallback( endState.m_Object, &Object::PostDeserialize, NULL ) )
             {
-                topState->m_Object = NULL; // discard the object
+                endState.m_Object = NULL; // discard the object
             }
 
             // if we are we should see if it's being processed and perhaps be added as a field
             if ( parentState != NULL )
             {
                 // see if we should process this object as a field, or as unknown
-                if ( topState->GetFlag( ParsingState::kField ) )
+                if ( endState.m_Field && endState.m_Object )
                 {
-                    DataPtr data = SafeCast<Data>(topState->m_Object);
+                    DataPtr data = SafeCast<Data>( endState.m_Object );
                     if ( data.ReferencesObject() )
                     {
                         data->Disconnect();
@@ -634,14 +639,14 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                         // might be useful to cache the data object here
                     }
 
-                    parentState->m_Object->PostDeserialize( topState->m_Field );
+                    parentState->m_Object->PostDeserialize( endState.m_Field );
                 }
                 else
                 {
                     // we are unknown, so send us up to be processed by the parent
                     if ( parentState->m_Object )
                     {
-                        parentState->m_Object->ProcessUnknown(topState->m_Object, topState->m_Field ? Crc32( topState->m_Field->m_Name ) : 0 );
+                        parentState->m_Object->ProcessUnknown(endState.m_Object, endState.m_Field ? Crc32( endState.m_Field->m_Name ) : 0 );
                     }
                 }
             }
@@ -649,16 +654,14 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     }
 
     // if this is a top level object push the result into the target (even if its null)
-    if ( !m_StateStack.empty() )
+    if ( !m_States.empty() )
     {
-        ParsingStatePtr parentState = m_StateStack.top();
-
-        parentState->m_Objects.push_back(topState->m_Object);
+        m_States.top().m_Stash.push_back( endState.m_Object );
     }
     else
     {
         // we've reached the top of the processed stack, send off to client for processing
-        m_Objects.push_back( topState->m_Object );
+        m_Objects.push_back( endState.m_Object );
 
         ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
         info.m_Progress = m_Progress;
@@ -670,9 +673,9 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
 void ArchiveXML::ToString(Object* object, tstring& xml )
 {
-    std::vector< ObjectPtr > elements(1);
-    elements[0] = object;
-    return ToString( elements, xml );
+    std::vector< ObjectPtr > objects(1);
+    objects[0] = object;
+    return ToString( objects, xml );
 }
 
 ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
@@ -703,19 +706,19 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
     return NULL;
 }
 
-void ArchiveXML::ToString( const std::vector< ObjectPtr >& elements, tstring& xml )
+void ArchiveXML::ToString( const std::vector< ObjectPtr >& objects, tstring& xml )
 {
     ArchiveXML archive;
     tstringstream strStream;
 
     archive.m_Stream = new Reflect::TCharStream( &strStream, false ); 
-    archive.m_Objects  = elements;
+    archive.m_Objects = objects;
     archive.Write();
 
     xml = strStream.str();
 }
 
-void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& elements )
+void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& objects )
 {
     ArchiveXML archive;
     tstringstream strStream;
@@ -724,5 +727,5 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& eleme
     archive.m_Stream = new Reflect::TCharStream( &strStream, false );
     archive.Read();
 
-    elements = archive.m_Objects;
+    objects = archive.m_Objects;
 }

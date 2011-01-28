@@ -163,7 +163,7 @@ void ArchiveBinary::Read()
         throw Reflect::StreamException( TXT( "Input stream version for '%s' is not what is currently supported (input: %d, current: %d)\n" ), m_Path.c_str(), m_Version, CURRENT_VERSION); 
     }
 
-    // deserialize main file elements
+    // deserialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Read Objects") );
         Deserialize(m_Objects, ArchiveFlags::Status);
@@ -211,7 +211,7 @@ void ArchiveBinary::Write()
     HELIUM_ASSERT( m_Version == CURRENT_VERSION );
     m_Stream->Write(&m_Version); 
 
-    // serialize main file elements
+    // serialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Main Spool Write") );
 
@@ -348,14 +348,14 @@ void ArchiveBinary::Serialize( void* structure, const Structure* type )
 #endif
 }
 
-void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
+void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& objects, uint32_t flags)
 {
-    Serialize( elements.begin(), elements.end(), flags );
+    Serialize( objects.begin(), objects.end(), flags );
 }
 
-void ArchiveBinary::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags )
+void ArchiveBinary::Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags )
 {
-    Serialize( elements.Begin(), elements.End(), flags );
+    Serialize( objects.Begin(), objects.End(), flags );
 }
 
 template< typename ConstIteratorType >
@@ -366,7 +366,7 @@ void ArchiveBinary::Serialize( ConstIteratorType begin, ConstIteratorType end, u
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Serializing %d elements\n"), elements.size());
+    Log::Debug(TXT("Serializing %d objects\n"), elements.size());
     m_Indent.Push();
 #endif
 
@@ -617,14 +617,14 @@ void ArchiveBinary::Deserialize( void* structure, const Structure* type )
 #endif
 }
 
-void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
+void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flags)
 {
-    Deserialize( StlVectorPusher( elements ), flags );
+    Deserialize( StlVectorPusher( objects ), flags );
 }
 
-void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
+void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
 {
-    Deserialize( DynArrayPusher( elements ), flags );
+    Deserialize( DynArrayPusher( objects ), flags );
 }
 
 template< typename ArrayPusher >
@@ -637,7 +637,7 @@ void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing %d elements\n"), element_count);
+    Log::Debug(TXT("Deserializing %d objects\n"), element_count);
     m_Indent.Push();
 #endif
 
@@ -893,9 +893,9 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
 
 void ArchiveBinary::ToStream( Object* object, std::iostream& stream )
 {
-    std::vector< ObjectPtr > elements(1);
-    elements[0] = object;
-    ToStream( elements, stream );
+    std::vector< ObjectPtr > objects(1);
+    objects[0] = object;
+    ToStream( objects, stream );
 }
 
 ObjectPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* searchClass )
@@ -926,12 +926,12 @@ ObjectPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* searchC
     return NULL;
 }
 
-void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& elements, std::iostream& stream )
+void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& objects, std::iostream& stream )
 {
     ArchiveBinary archive;
 
     // fix the spool
-    archive.m_Objects = elements;
+    archive.m_Objects = objects;
 
     Reflect::CharStreamPtr charStream = new CharStream( &stream, false ); 
     archive.OpenStream( charStream, true );
@@ -939,7 +939,7 @@ void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& elements, std::ios
     archive.Close(); 
 }
 
-void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >& elements )
+void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >& objects )
 {
     ArchiveBinary archive;
 
@@ -948,5 +948,5 @@ void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >&
     archive.Read();
     archive.Close(); 
 
-    elements = archive.m_Objects;
+    objects = archive.m_Objects;
 }

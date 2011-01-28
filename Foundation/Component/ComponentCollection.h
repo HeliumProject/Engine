@@ -109,7 +109,7 @@ namespace Helium
             virtual void ComponentChanged( const ComponentBase* attr = NULL );
 
         protected:
-            // this is a callback called by elements being changed by procedurally generated UI (EditorProperties)
+            // this is a callback called by objects being changed by procedurally generated UI (EditorProperties)
             void ComponentChanged( const Reflect::ObjectChangeArgs& args )
             {
                 // call into the virtual prototype in case it gets overridden in a derived class

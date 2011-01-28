@@ -186,12 +186,12 @@ namespace Helium
 
             virtual void Serialize( Object* object ) = 0;
             virtual void Serialize( void* structure, const Structure* type ) = 0;
-            virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
-            virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
+            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
+            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
             virtual void Deserialize( ObjectPtr& object ) = 0;
             virtual void Deserialize( void* structure, const Structure* type ) = 0;
-            virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 ) = 0;
+            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
+            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
 
             //
             // Event API
@@ -208,14 +208,14 @@ namespace Helium
             bool TryObjectCallback( Object* object, ObjectCallback callback, const Field* field );
 
             //
-            // Get elements from the file
+            // Get objects from the file
             //
 
             void Put( Object* object );
-            void Put( const std::vector< ObjectPtr >& elements );
+            void Put( const std::vector< ObjectPtr >& objects );
 
             ObjectPtr Get( const Class* searchClass = NULL );
-            void Get( std::vector< ObjectPtr >& elements );
+            void Get( std::vector< ObjectPtr >& objects );
 
             // Get a single object of the specified type in the archive
             template <class T>
@@ -235,7 +235,7 @@ namespace Helium
 
             // Get all objects of the specified type in the archive
             template< class T >
-            void Get( std::vector< Helium::StrongPtr<T> >& elements )
+            void Get( std::vector< Helium::StrongPtr<T> >& objects )
             {
                 std::vector< ObjectPtr > archiveObjects;
                 Get( archiveObjects );
@@ -247,7 +247,7 @@ namespace Helium
                     T* casted = Reflect::SafeCast< T >( *itr )
                     if( casted ) 
                     {
-                        elements.push_back( casted );
+                        objects.push_back( casted );
                     }
                 }
             }
@@ -271,7 +271,7 @@ namespace Helium
             // The type to serach for
             const Class* m_SearchClass;
 
-            // The array of elements that we've found
+            // The array of objects that we've found
             std::vector< ObjectPtr > m_Objects;
         };
 
@@ -281,7 +281,7 @@ namespace Helium
         FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& elements, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
         Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
@@ -297,10 +297,10 @@ namespace Helium
         }
 
         template< class T >
-        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& elements, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
+        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& objects, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
             ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
-            archive->Get< T >( elements );
+            archive->Get< T >( objects );
         }
     }
 }

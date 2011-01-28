@@ -2,38 +2,40 @@
 
 #include "Primitive.h"
 
+#include "GraphicsTypes/VertexTypes.h"
+
 namespace Helium
 {
     class Matrix4;
 
     namespace SceneGraph
     {
-        class PrimitiveAxes : public PrimitiveTemplate<PositionColored>
+        class PrimitiveAxes : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<PositionColored> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
         private:
-            uint32_t m_ColorX;
-            uint32_t m_ColorY;
-            uint32_t m_ColorZ;
+            Lunar::Color m_ColorX;
+            Lunar::Color m_ColorY;
+            Lunar::Color m_ColorZ;
 
         public:
-            float m_Length;
+            float32_t m_Length;
 
         public:
-            SceneGraph::PrimitiveAxes(ResourceTracker* tracker);
+            SceneGraph::PrimitiveAxes( ResourceTracker* tracker );
 
-            void SetColor(AxesFlags axis, uint32_t c);
-            void SetColor(uint32_t c);
+            void SetColor( AxesFlags axis, Lunar::Color c );
+            void SetColor( Lunar::Color c );
             void SetRGB();
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
-            virtual void DrawAxes(DrawArgs* args, AxesFlags axes) const;
-            virtual void DrawViewport(DrawArgs* args, const SceneGraph::Camera* camera) const;
+            virtual void DrawAxes( DrawArgs* args, AxesFlags axes ) const;
+            virtual void DrawViewport( DrawArgs* args, const SceneGraph::Camera* camera ) const;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
-            AxesFlags PickAxis(const Matrix4& transform, Line pick, float err);
+            AxesFlags PickAxis( const Matrix4& transform, Line pick, float32_t err );
         };
     }
 }

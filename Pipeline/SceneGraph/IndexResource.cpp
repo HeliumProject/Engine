@@ -7,20 +7,24 @@ using namespace Helium::SceneGraph;
 Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
 
 IndexResource::IndexResource( ResourceTracker* tracker )
-: Resource ( ResourceTypes::Index, tracker )
-, m_Buffer(NULL)
+: Resource( ResourceTypes::Index, tracker )
+, m_ElementType( IndexElementTypes::Unknown )
 {
 
 }
 
+uint32_t IndexResource::GetElementSize() const
+{
+    return IndexElementSizes[ m_ElementType ];
+}
+
 uint8_t* IndexResource::Lock() 
 {
-    uint8_t* data = NULL;
-    uint32_t lockFlags = (!IsManaged() && IsDynamic()) ? D3DLOCK_DISCARD : 0;
-    HRESULT result = m_Buffer->Lock(0, 0, (void**)&data, lockFlags);
-    HELIUM_ASSERT(SUCCEEDED(result));
+    void* data = m_Buffer->Map(
+        IsDynamic() ? Lunar::RENDERER_BUFFER_MAP_HINT_DISCARD : Lunar::RENDERER_BUFFER_MAP_HINT_NONE );
+    HELIUM_ASSERT( data );
 
-    return data;
+    return static_cast< uint8_t* >( data );
 }
 
 
@@ -49,45 +53,38 @@ bool IndexResource::SetState() const
 
 void IndexResource::Unlock() 
 {
-    m_Buffer->Unlock();
+    m_Buffer->Unmap();
 }
 
 bool IndexResource::Allocate() 
 {
-    UINT size = GetElementCount() * ElementSizes[ GetElementType() ];
-
-    if(size == 0)
+    uint32_t size = GetElementCount() * IndexElementSizes[ GetElementType() ];
+    if ( size == 0 )
     {
         return false; 
     }
 
-    DWORD usage = D3DUSAGE_WRITEONLY;
-    if (IsDynamic())
+    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+
+    m_Buffer = pRenderer->CreateIndexBuffer(
+        size,
+        ( IsDynamic() ? Lunar::RENDERER_BUFFER_USAGE_DYNAMIC : Lunar::RENDERER_BUFFER_USAGE_STATIC ),
+        IndexElementFormats[ GetElementType() ] );
+    HELIUM_ASSERT( m_Buffer );
+    if ( m_Buffer )
     {
-        usage |= D3DUSAGE_DYNAMIC;
+        Profile::Memory::Allocate( s_MemoryPool, size );
     }
 
-    D3DFORMAT format = (D3DFORMAT)ElementFormats[ GetElementType() ];
-
-    D3DPOOL pool = IsManaged() ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT;
-
-    HRESULT result = m_Device->CreateIndexBuffer( size, usage, format, pool, &m_Buffer, NULL );
-    bool success = SUCCEEDED(result);
-    HELIUM_ASSERT(success);
-
-    Profile::Memory::Allocate( s_MemoryPool, size );
-
-    return success;
-
+    return ( m_Buffer != NULL );
 }
 
 void IndexResource::Release() 
 {
-    if (m_Buffer)
+    if ( m_Buffer )
     {
-        m_Buffer->Release();
-        m_Buffer = NULL;
+        m_Buffer.Release();
+        Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * IndexElementSizes[ GetElementType() ] );
     }
-
-    Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * ElementSizes[ GetElementType() ] );
 }

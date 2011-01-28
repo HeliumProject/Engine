@@ -8,23 +8,22 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveAxes::PrimitiveAxes(ResourceTracker* tracker)
-: PrimitiveTemplate (tracker)
+PrimitiveAxes::PrimitiveAxes( ResourceTracker* tracker )
+: PrimitiveTemplate( tracker )
+, m_ColorX( 0xffff0000 )
+, m_ColorY( 0xff00ff00 )
+, m_ColorZ( 0xff0000ff )
 {
     SetElementCount( 6 );
-    SetElementType( ElementTypes::PositionColored );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Length = 50.0f;
-
-    m_ColorX = D3DCOLOR_ARGB(255, 255, 0, 0);
-    m_ColorY = D3DCOLOR_ARGB(255, 0, 255, 0);
-    m_ColorZ = D3DCOLOR_ARGB(255, 0, 0, 255);
 
     m_Bounds.minimum = Vector3 (0.0f, 0.0f, 0.0f);
     m_Bounds.maximum = Vector3 (m_Length, m_Length, m_Length);
 }
 
-void PrimitiveAxes::SetColor(AxesFlags axes, uint32_t c)
+void PrimitiveAxes::SetColor( AxesFlags axes, Lunar::Color c )
 {
     if ((axes & MultipleAxes::X) == MultipleAxes::X)
         m_ColorX = c;
@@ -36,7 +35,7 @@ void PrimitiveAxes::SetColor(AxesFlags axes, uint32_t c)
         m_ColorZ = c;
 }
 
-void PrimitiveAxes::SetColor(uint32_t c)
+void PrimitiveAxes::SetColor( Lunar::Color c )
 {
     m_ColorX = c;
     m_ColorY = c;
@@ -45,9 +44,9 @@ void PrimitiveAxes::SetColor(uint32_t c)
 
 void PrimitiveAxes::SetRGB()
 {
-    m_ColorX = D3DCOLOR_ARGB(255, 255, 0, 0);
-    m_ColorY = D3DCOLOR_ARGB(255, 0, 255, 0);
-    m_ColorZ = D3DCOLOR_ARGB(255, 0, 0, 255);
+    m_ColorX.SetArgb( 0xffff0000 );
+    m_ColorY.SetArgb( 0xff00ff00 );
+    m_ColorZ.SetArgb( 0xff0000ff );
 }
 
 void PrimitiveAxes::Update()
@@ -56,12 +55,18 @@ void PrimitiveAxes::Update()
     m_Bounds.maximum = Vector3 (m_Length, m_Length, m_Length);
 
     m_Vertices.clear();
-    m_Vertices.push_back(PositionColored (0.0f, 0.0f, 0.0f, m_ColorX));
-    m_Vertices.push_back(PositionColored (m_Length, 0.0f, 0.0f, m_ColorX));
-    m_Vertices.push_back(PositionColored (0.0f, 0.0f, 0.0f, m_ColorY));
-    m_Vertices.push_back(PositionColored (0.0f, m_Length, 0.0f, m_ColorY));
-    m_Vertices.push_back(PositionColored (0.0f, 0.0f, 0.0f, m_ColorZ));
-    m_Vertices.push_back(PositionColored (0.0f, 0.0f, m_Length, m_ColorZ));
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB() m_ColorX.GetA() ) );
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( m_Length, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB() m_ColorX.GetA() ) );
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( 0.0f, m_Length, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB() m_ColorY.GetA() ) );
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
+    m_Vertices.push_back(
+        Lunar::SimpleVertex( 0.0f, 0.0f, m_Length, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB() m_ColorZ.GetA() ) );
 
     Base::Update();
 }
@@ -128,7 +133,7 @@ void PrimitiveAxes::DrawViewport( DrawArgs* args, const SceneGraph::Camera* came
         // transform
         inverseProjection.TransformVertex(pos);
 
-        float s = camera->GetOffset();
+        float32_t s = camera->GetOffset();
         Matrix4 world = Matrix4 (Scale (s, s, s)) * camera->GetOrientation() * Matrix4 (pos) * Matrix4 (Vector3 (OutVector * 100));
         m_Device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&world);
 
@@ -153,10 +158,10 @@ bool PrimitiveAxes::Pick( PickVisitor* pick, const bool* solid ) const
     return false;
 }
 
-AxesFlags PrimitiveAxes::PickAxis(const Matrix4& transform, Line pick, float err)
+AxesFlags PrimitiveAxes::PickAxis(const Matrix4& transform, Line pick, float32_t err)
 {
     Vector3 offset;
-    float minX = m_Length, minY = m_Length, minZ = m_Length;
+    float32_t minX = m_Length, minY = m_Length, minZ = m_Length;
 
     Vector3 axisOrigin (Vector3::Zero);
     Vector3 axisEnd (m_Length, 0.f, 0.f);

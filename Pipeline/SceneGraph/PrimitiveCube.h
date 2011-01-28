@@ -6,10 +6,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCube : public PrimitiveTemplate<Position>
+        class PrimitiveCube : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<Position> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
             PrimitiveCube(ResourceTracker* tracker);
 

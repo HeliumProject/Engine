@@ -6,10 +6,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCone : public PrimitiveTemplate<Position>
+        class PrimitiveCone : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         private:
-            typedef PrimitiveTemplate<Position> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
             mutable int32_t m_WireVertCount;
             mutable int32_t m_PolyVertCount;

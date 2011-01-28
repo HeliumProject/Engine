@@ -2,6 +2,11 @@
 
 #include "Resource.h" 
 
+namespace Lunar
+{
+    L_DECLARE_RPTR( RVertexBuffer );
+}
+
 namespace Helium
 {
     namespace SceneGraph
@@ -11,14 +16,28 @@ namespace Helium
         {
         public:
             static Profile::MemoryPoolHandle s_MemoryPool;
-            IDirect3DIndexBuffer9*           m_Buffer; 
+            IndexElementType m_ElementType;
+            Lunar::RIndexBufferPtr m_Buffer; 
 
             IndexResource( ResourceTracker* tracker ); 
+
+            IndexElementType GetElementType() const
+            {
+                return m_ElementType;
+            }
+
+            void SetElementType( IndexElementType type )
+            {
+                m_ElementType = type;
+                m_IsDirty = true;
+            }
 
             IDirect3DIndexBuffer9* GetBuffer() const
             {
                 return m_Buffer; 
             }
+
+            virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
 
             virtual uint8_t* Lock() HELIUM_OVERRIDE; 
             virtual void Unlock() HELIUM_OVERRIDE; 

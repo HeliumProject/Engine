@@ -9,7 +9,7 @@ using namespace Helium::SceneGraph;
 PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
 : PrimitiveTemplate(m_Tracker)
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Length = 1.0f;
     m_Radius = 0.5f;
@@ -58,22 +58,24 @@ void PrimitiveCone::Update()
     // Wire
     //
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(0.f)) * m_Radius, (float32_t)(sin(0.f)) * m_Radius, -m_Length/2.0f));
+    float32_t halfLength = m_Length * 0.5f;
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI_2)) * m_Radius, (float32_t)(sin(HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( m_Radius, 0.0f, -halfLength ) );
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI)) * m_Radius, (float32_t)(sin(HELIUM_PI)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, m_Radius, -halfLength ) );
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(-HELIUM_PI_2)) * m_Radius, (float32_t)(sin(-HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( -m_Radius, 0.0f, -halfLength ) );
+
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, -m_Radius, -halfLength ) );
 
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
 
@@ -81,18 +83,18 @@ void PrimitiveCone::Update()
     // Poly
     //
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, -m_Length/2.0f));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, -halfLength ) );
     for (int x=m_Steps; x>=0; x--)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
     Base::Update();

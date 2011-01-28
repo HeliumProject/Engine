@@ -27,12 +27,6 @@ namespace Helium
         class ResourceTracker
         {
         private:
-            // the device those resources are using
-            IDirect3DDevice9* m_Device;
-
-            // all the resources we are tracking
-            S_Resource m_Resources;
-
             // state caching
             IDirect3DIndexBuffer9*  m_Indices;
             IDirect3DVertexBuffer9* m_Vertices;
@@ -83,18 +77,6 @@ namespace Helium
 
             // reset state
             void ResetState();
-
-            // registers a resource, adds it to the m_ResourceTracker list
-            void Register(Resource* resource);
-
-            // deregisters a resource from the m_AllocatedResources list, eg on delete or dispose
-            void Release(Resource* resource);
-
-            // free all default resources
-            void DeviceLost();
-
-            // reallocate all default resources
-            void DeviceReset();
         };
 
         //
@@ -147,9 +129,6 @@ namespace Helium
             // tracker
             ResourceTracker* m_Tracker;
 
-            // device
-            IDirect3DDevice9* m_Device;
-
             // populator
             PopulateSignature::Delegate m_Populator;
 
@@ -159,33 +138,26 @@ namespace Helium
             bool m_IsCreated;
 
             // flags
-            bool m_IsManaged;
             bool m_IsDynamic;
 
             // data
             uint32_t m_BaseIndex;
             uint32_t m_ElementCount;
-            ElementType m_ElementType;
 
         public:
             Resource(ResourceType type, ResourceTracker* tracker)
                 : m_Type ( type )
                 , m_Tracker ( tracker )
-                , m_Device ( tracker->GetDevice() )
                 , m_IsDirty ( true )
                 , m_IsCreated ( false )
-                , m_IsManaged ( true )
                 , m_IsDynamic ( false )
                 , m_BaseIndex ( 0 )
                 , m_ElementCount ( 0 )
-                , m_ElementType ( ElementTypes::Unknown )
             {
-                m_Tracker->Register( this );
             }
 
             virtual ~Resource()
             {
-                m_Tracker->Release( this );
             }
 
             ResourceType GetResourceType()
@@ -198,31 +170,15 @@ namespace Helium
                 return m_Tracker;
             }
 
-            bool IsManaged()
-            {
-                return m_IsManaged;
-            }
-            void SetManaged(bool managed)
-            {
-                m_IsManaged = managed;
-                m_IsDirty = true;
-            }
-
             bool IsDynamic()
             {
                 return m_IsDynamic;
             }
+
             void SetDynamic(bool dynamic)
             {
-                if (!m_IsManaged)
-                {
-                    m_IsDynamic = dynamic;
-                    m_IsDirty = true;
-                }
-                else
-                {
-                    HELIUM_BREAK();
-                }
+                m_IsDynamic = dynamic;
+                m_IsDirty = true;
             }
 
             uint32_t GetBaseIndex() const
@@ -240,15 +196,7 @@ namespace Helium
                 m_IsDirty = true;
             }
 
-            ElementType GetElementType() const
-            {
-                return m_ElementType;
-            }
-            void SetElementType(ElementType type)
-            {
-                m_ElementType = type;
-                m_IsDirty = true;
-            }
+            virtual uint32_t GetElementSize() const = 0;
 
             void SetPopulator( const PopulateSignature::Delegate& populator )
             {

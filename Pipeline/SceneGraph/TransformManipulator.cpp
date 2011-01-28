@@ -32,17 +32,9 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGrap
 , m_StartY (0)
 , m_Manipulating (false)
 , m_Manipulated (false)
+, m_AxisMaterial (SceneGraph::Color::BLACK)
+, m_SelectedAxisMaterial (SceneGraph::Color::YELLOW)
 {
-    ZeroMemory(&m_AxisMaterial, sizeof(m_AxisMaterial));
-    m_AxisMaterial.Ambient = SceneGraph::Color::BLACK;
-    m_AxisMaterial.Diffuse = SceneGraph::Color::BLACK;
-    m_AxisMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory(&m_SelectedAxisMaterial, sizeof(m_SelectedAxisMaterial));
-    m_SelectedAxisMaterial.Ambient = SceneGraph::Color::YELLOW;
-    m_SelectedAxisMaterial.Diffuse = SceneGraph::Color::BLACK;
-    m_SelectedAxisMaterial.Specular = SceneGraph::Color::BLACK;
-
     m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate (this, &TransformManipulator::SelectionChanged) );
 
     SelectionChanged(m_Scene->GetSelection().GetItems());

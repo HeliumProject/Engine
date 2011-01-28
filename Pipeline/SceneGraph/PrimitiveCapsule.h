@@ -6,10 +6,10 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCapsule : public PrimitiveTemplate<Position>
+        class PrimitiveCapsule : public PrimitiveTemplate< Lunar::SimpleVertex >
         {
         private:
-            typedef PrimitiveTemplate<Position> Base;
+            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
             mutable int32_t m_WireVertCount;
             mutable int32_t m_PolyVertCount;
@@ -24,7 +24,7 @@ namespace Helium
             int32_t m_LengthSteps;
 
         public:
-            SceneGraph::PrimitiveCapsule(ResourceTracker* tracker);
+            SceneGraph::PrimitiveCapsule( ResourceTracker* tracker );
 
             int GetWireVertCount() const;
             int GetPolyVertCount() const;

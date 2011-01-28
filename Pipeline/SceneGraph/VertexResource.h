@@ -2,6 +2,11 @@
 
 #include "Resource.h" 
 
+namespace Lunar
+{
+    L_DECLARE_RPTR( RVertexBuffer );
+}
+
 namespace Helium
 {
     namespace SceneGraph
@@ -11,14 +16,28 @@ namespace Helium
         {
         public:
             static Profile::MemoryPoolHandle s_MemoryPool;
-            IDirect3DVertexBuffer9*          m_Buffer; 
+            VertexElementType m_ElementType;
+            Lunar::RVertexBufferPtr m_Buffer;
 
             VertexResource( ResourceTracker* tracker ); 
 
-            IDirect3DVertexBuffer9* GetBuffer() const
+            VertexElementType GetElementType() const
+            {
+                return m_ElementType;
+            }
+
+            void SetElementType( VertexElementType type )
+            {
+                m_ElementType = type;
+                m_IsDirty = true;
+            }
+
+            Lunar::RVertexBuffer* GetBuffer() const
             {
                 return m_Buffer;
             }
+
+            virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
 
             virtual uint8_t* Lock() HELIUM_OVERRIDE; 
             virtual void Unlock() HELIUM_OVERRIDE; 

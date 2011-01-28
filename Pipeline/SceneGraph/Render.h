@@ -1,12 +1,5 @@
 #pragma once
 
-// Include our Windows header data first to make sure everything is set up properly before the Direct3D includes pull it
-// in.
-#include "Platform/Windows/Windows.h"
-
-#include <d3d9.h>
-#include <d3dx9.h>
-
 #include "Platform/Types.h"
 
 #include "Foundation/Automation/Event.h" 
@@ -15,6 +8,10 @@
 #include "Foundation/Math/Vector4.h"
 #include "Foundation/Math/Matrix4.h"
 
+#include "Rendering/Renderer.h"
+
+#include "GraphicsTypes/VertexTypes.h"
+
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Pipeline/SceneGraph/Visitor.h"
 
@@ -22,235 +19,68 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        namespace ElementTypes
+        namespace IndexElementTypes
         {
-            enum ElementType
+            enum IndexElementType
             {
                 Unknown,
+                Unsigned16,
                 Unsigned32,
-                Position,
-                PositionNormal,
-                PositionColored,
-                TransformedColored,
-                StandardVertex,
-                PositionUV,
                 Count,
             };
         }
 
-        typedef ElementTypes::ElementType ElementType;
+        typedef IndexElementTypes::IndexElementType IndexElementType;
 
-        struct Position
+        namespace VertexElementTypes
         {
-            Vector3 m_Position;
-
-            Position()
-                : m_Position (Vector3::Zero)
+            enum VertexElementType
             {
+                Unknown,
+                SimpleVertex,
+                ScreenVertex,
+                StaticMeshVertex,
+                SimpleTexturedVertex,
+                Count,
 
-            }
+                // Legacy vertex type mappings.
+                PositionColored = SimpleVertex,
+                TransformedColored = ScreenVertex,
+                StandardVertex = StaticMeshVertex,
+                PositionUV = SimpleTexturedVertex,
+            };
+        }
 
-            Position(const Vector3& p)
-                : m_Position (p)
-            {
+        typedef VertexElementTypes::VertexElementType VertexElementType;
 
-            }
-
-            Position(float32_t x, float32_t y, float32_t z)
-                : m_Position (x, y, z)
-            {
-
-            }
+        static uint32_t IndexElementSizes[] =
+        {
+            0x0,                // Unknown
+            sizeof( uint16_t ), // Unsigned16
+            sizeof( uint32_t ), // Unsigned32
         };
 
-        struct PositionNormal
+        HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( IndexElementSizes ) == IndexElementTypes::Count );
+
+        static uint32_t VertexElementSizes[] =
         {
-            Vector3 m_Position;
-            Vector3 m_Normal;
-
-            PositionNormal()
-                : m_Position (Vector3::Zero)
-                , m_Normal (Vector3::Zero)
-            {
-
-            }
-
-            PositionNormal(const Vector3& p)
-                : m_Position (p)
-                , m_Normal (Vector3::Zero)
-            {
-
-            }
-
-            PositionNormal(const Vector3& p, const Vector3& n)
-                : m_Position (p)
-                , m_Normal (n)
-            {
-
-            }
-
-            PositionNormal(float32_t x, float32_t y, float32_t z)
-                : m_Position (x, y, z)
-                , m_Normal (Vector3::Zero)
-            {
-
-            }
-
-            PositionNormal(float32_t xp, float32_t yp, float32_t zp, float32_t xn, float32_t yn, float32_t zn)
-                : m_Position (xp, yp, zp)
-                , m_Normal (xn, yn, zn)
-            {
-
-            }
+            0x0,                                    // Unknown
+            sizeof( Lunar::SimpleVertex ),          // SimpleVertex
+            sizeof( Lunar::ScreenVertex ),          // ScreenVertex
+            sizeof( Lunar::StaticMeshVertex< 1 > ), // StaticMeshVertex
+            sizeof( Lunar::SimpleTexturedVertex ),  // SimpleTexturedVertex
         };
 
-        struct PositionColored
+        HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( VertexElementSizes ) == VertexElementTypes::Count );
+
+        static Lunar::ERendererIndexFormat IndexElementFormats[] =
         {
-            Vector3 m_Position;
-            uint32_t m_Color;
-
-            PositionColored()
-                : m_Position (Vector3::Zero)
-                , m_Color (0)
-            {
-
-            }
-
-            PositionColored(const Vector3& p)
-                : m_Position (p)
-                , m_Color (0)
-            {
-
-            }
-
-            PositionColored(const Vector3& p, uint32_t c)
-                : m_Position (p)
-                , m_Color (c)
-            {
-
-            }
-
-            PositionColored(float32_t x, float32_t y, float32_t z)
-                : m_Position (x, y, z)
-                , m_Color (0)
-            {
-
-            }
-
-            PositionColored(float32_t x, float32_t y, float32_t z, uint32_t c)
-                : m_Position (x, y, z)
-                , m_Color (c)
-            {
-
-            }
+            Lunar::RENDERER_INDEX_FORMAT_INVALID,   // Unknown
+            Lunar::RENDERER_INDEX_FORMAT_UINT16,    // Unsigned16
+            Lunar::RENDERER_INDEX_FORMAT_UINT32,    // Unsigned32
         };
 
-        struct TransformedColored
-        {
-            Vector4 m_Position;
-            uint32_t m_Color;
-
-            TransformedColored()
-                : m_Position (Vector3::Zero)
-                , m_Color (0)
-            {
-
-            }
-
-            TransformedColored(const Vector3& p)
-                : m_Position (p)
-                , m_Color (0)
-            {
-
-            }
-
-            TransformedColored(const Vector3& p, uint32_t c)
-                : m_Position (p)
-                , m_Color (c)
-            {
-
-            }
-
-            TransformedColored(float32_t x, float32_t y, float32_t z)
-                : m_Position (x, y, z, 1)
-                , m_Color (0)
-            {
-
-            }
-
-            TransformedColored(float32_t x, float32_t y, float32_t z, uint32_t c)
-                : m_Position (x, y, z, 1)
-                , m_Color (c)
-            {
-
-            }
-        };
-
-        struct StandardVertex
-        {
-            Vector3 m_Position;
-            Vector3 m_Normal;
-            uint32_t           m_Diffuse;
-            Vector2 m_BaseUV;
-
-            StandardVertex()
-                : m_Position( Vector3::Zero )
-                , m_Normal( Vector3::Zero )
-                , m_Diffuse( D3DCOLOR_ARGB(1, 0, 0, 0) )
-                , m_BaseUV( Vector2::Zero )
-            {
-
-            }
-
-            StandardVertex( const Vector3& pos, const Vector3& norm, uint32_t diffuse, const Vector2& baseUV )
-                : m_Position( pos )
-                , m_Normal( norm )
-                , m_Diffuse( diffuse )
-                , m_BaseUV( baseUV )
-            {
-
-            }
-        };
-
-        struct PositionUV
-        {
-            Vector3 m_Position;
-            Vector2 m_BaseUV;
-
-            PositionUV( const Vector3& pos = Vector3::Zero, const Vector2& uv = Vector2::Zero )
-                : m_Position( pos )
-                , m_BaseUV( uv )
-            {
-            }
-        };
-
-        static uint32_t ElementSizes[] =
-        {
-            0x0,                          // Unknown
-            sizeof(uint32_t),                  // Unsigned32
-            sizeof(Position),             // Position
-            sizeof(PositionNormal),       // PositionNormal
-            sizeof(PositionColored),      // PositionColored
-            sizeof(TransformedColored),   // TransformedColored
-            sizeof(StandardVertex),       // StandardVertex
-            sizeof(PositionUV),           // PositionUV
-        };
-
-        HELIUM_COMPILE_ASSERT(sizeof(ElementSizes) / sizeof(uint32_t) == ElementTypes::Count);
-
-        static uint32_t ElementFormats[] =
-        {
-            0x0,                                                        // Unknown
-            D3DFMT_INDEX32,                                             // Unsigned32
-            D3DFVF_XYZ,                                                 // Position
-            D3DFVF_XYZ | D3DFVF_NORMAL,                                 // PositionNormal
-            D3DFVF_XYZ | D3DFVF_DIFFUSE,                                // PositionColored
-            D3DFVF_XYZRHW | D3DFVF_DIFFUSE,                             // TransformedColored
-            D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1,  // StandardVertex
-            D3DFVF_XYZ | D3DFVF_TEX1,                                   // PositionUV
-        };
-
-        HELIUM_COMPILE_ASSERT(sizeof(ElementFormats) / sizeof(uint32_t) == ElementTypes::Count);
+        HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( IndexElementFormats ) == IndexElementTypes::Count );
 
 
         //
@@ -293,9 +123,9 @@ namespace Helium
         //
 
         class SceneNode;
-        typedef void (*DeviceFunction)( IDirect3DDevice9* device );
-        typedef void (*SceneNodeFunction)( IDirect3DDevice9* device, const SceneNode* node );
-        typedef void (*DrawFunction)( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* node );
+        typedef void (*DeviceFunction)( Lunar::Renderer* renderer );
+        typedef void (*SceneNodeFunction)( Lunar::Renderer* renderer, const SceneNode* node );
+        typedef void (*DrawFunction)( Lunar::Renderer* renderer, DrawArgs* args, const SceneNode* node );
 
 
         //
@@ -396,9 +226,6 @@ namespace Helium
             // the render object pointers to sort
             V_RenderEntryDumbPtr m_EntryPointers;
 
-            // the device to issue draw commands to
-            IDirect3DDevice9* m_Device;
-
             // profile start time
             uint64_t m_StartTime;
 
@@ -426,6 +253,6 @@ namespace Helium
         };
 
         PIPELINE_API bool IsSupportedTexture( const tstring& file );
-        PIPELINE_API IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, uint32_t* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
+        PIPELINE_API Lunar::RTexture2d* LoadTexture( const tstring& file, uint32_t* textureSize = NULL, bool* hasAlpha = NULL );
     }
 }

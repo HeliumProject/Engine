@@ -9,7 +9,7 @@ using namespace Helium::SceneGraph;
 PrimitiveCube::PrimitiveCube(ResourceTracker* tracker)
 : PrimitiveTemplate(tracker)
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
     SetElementCount( 60 );
 
     m_Bounds.minimum = Vector3 (-1.0f, -1.0f, -1.0f);
@@ -20,10 +20,17 @@ void PrimitiveCube::Update()
 {
     m_Vertices.clear();
 
-    V_Vector3 vertices;
+    V_Vector3 vertices, drawVertices;
     m_Bounds.GetVertices( vertices );
-    m_Bounds.GetWireframe( vertices, (V_Vector3&)m_Vertices, false );
-    m_Bounds.GetTriangulated( vertices, (V_Vector3&)m_Vertices, false );
+    m_Bounds.GetWireframe( vertices, drawVertices, false );
+    m_Bounds.GetTriangulated( vertices, drawVertices, false );
+
+    size_t drawVertexCount = drawVertices.size();
+    m_Vertices.reserve( drawVertexCount );
+    for ( size_t vertexIndex = 0; vertexIndex < drawVertexCount; ++vertexIndex )
+    {
+        m_Vertices.push_back( Lunar::SimpleVertex( drawVertices[ vertexIndex ] ) );
+    }
 
     Base::Update();
 }

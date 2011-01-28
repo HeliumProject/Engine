@@ -426,20 +426,16 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     //
 
     tstring objectClassName;
-    bool foundTypeAttribute = false;
-
     for (int i=0; papszAttrs[i]; i+=2)
     {
         if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
         {
-            foundTypeAttribute = true;
-
-            bool converted = Helium::ConvertString( papszAttrs[ i + 1 ], objectClassName );
-            HELIUM_ASSERT( converted );
+            objectClassName = papszAttrs[ i + 1 ];
+            break;
         }
     }
 
-    if ( !foundTypeAttribute )
+    if ( objectClassName.empty() )
     {
         HELIUM_BREAK();
         throw Reflect::DataFormatException( TXT( "Unable to find object type attribute" ) );
@@ -475,6 +471,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )
             {
                 fieldName = papszAttrs[i+1];
+                break;
             }
         }
 
@@ -495,7 +492,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
             data->ConnectField( topState->m_Instance, startState.m_Field );
 
             // use this object to parse with
-            startState.m_Object = data;
+            startState.m_Instance = startState.m_Object = data;
         }
     }
 
@@ -506,7 +503,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
     if ( !startState.m_Object.ReferencesObject() && !objectClassName.empty() )
     {
-        startState.m_Object = Registry::GetInstance()->CreateInstance( Crc32( objectClassName.c_str() ) );
+        startState.m_Instance = startState.m_Object = Registry::GetInstance()->CreateInstance( Crc32( objectClassName.c_str() ) );
 
         if ( startState.m_Object.ReferencesObject() )
         {

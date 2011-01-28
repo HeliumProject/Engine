@@ -49,6 +49,8 @@ Helium.GetFbxSdkLocation = function()
             os.exit(1)
         end
     end
+    
+    return fbxLocation
 end
 
 Helium.Sleep = function( seconds )

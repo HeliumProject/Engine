@@ -168,8 +168,14 @@ void Widget::OnContextMenu( wxContextMenuEvent& event )
 {
     wxMenu menu;
 
-    std::vector< tstring >::const_iterator itr = m_Control->GetContextMenu()->GetItems().begin();
-    std::vector< tstring >::const_iterator end = m_Control->GetContextMenu()->GetItems().end();
+    Inspect::ContextMenuPtr context_menu = m_Control->GetContextMenu();
+    if (!context_menu.ReferencesObject())
+    {
+      return;
+    }
+
+    std::vector< tstring >::const_iterator itr = context_menu->GetItems().begin();
+    std::vector< tstring >::const_iterator end = context_menu->GetItems().end();
     for ( int32_t count = 0; itr != end; ++itr, ++count )
     {
         if ( *itr == TXT( "-" ) )

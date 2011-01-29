@@ -31,7 +31,7 @@ namespace Helium
         public:
             struct ResultArgs
             {
-                Helium::Path* m_Path;
+                Helium::Path m_Path;
                 V_ThumbnailPtr m_Textures;
                 bool m_Cancelled;
             };

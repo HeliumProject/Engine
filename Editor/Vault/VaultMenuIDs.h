@@ -125,6 +125,8 @@ namespace Helium
         public:
             enum Enum
             {
+                None,
+
                 Details,
                 List,
 

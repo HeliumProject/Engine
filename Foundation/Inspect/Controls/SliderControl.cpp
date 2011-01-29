@@ -11,6 +11,8 @@ Slider::Slider()
 , a_Max( 100.0f )
 , a_AutoAdjustMinMax( true )
 {
+  m_ContextMenu = new ContextMenu (this);
+  m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &Slider::SetToDefault));
 }
 
 bool Slider::Process( const tstring& key, const tstring& value )
@@ -32,4 +34,10 @@ bool Slider::Process( const tstring& key, const tstring& value )
     }
 
     return false;
+}
+
+void Slider::SetToDefault(const ContextMenuEventArgs& event)
+{
+  event.m_Control->SetDefault();
+  event.m_Control->Read();
 }

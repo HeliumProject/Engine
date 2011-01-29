@@ -52,6 +52,6 @@ namespace Helium
 
     inline uint64_t MurmurHash2( const tstring& data )
     {
-        return MurmurHash64A( data.data(), (uint64_t)data.length(), 42 );
+        return MurmurHash64A( data.data(), (uint64_t)( data.length() * sizeof( tchar_t ) ), 42 );
     }
 }

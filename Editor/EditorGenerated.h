@@ -12,7 +12,6 @@
 
 namespace Helium{ namespace Editor{ class Button; } }
 namespace Helium{ namespace Editor{ class Frame; } }
-namespace Helium{ namespace Editor{ class ListResultsView; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
 
 #include "Editor/Frame.h"
@@ -367,7 +366,6 @@ namespace Helium
 				wxPanel* m_NavigationPanel;
 				wxSearchCtrl* m_SearchCtrl;
 				wxPanel* m_ResultsPanel;
-				Helium::Editor::ListResultsView* m_ListResultsView;
 				
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnSearchCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }

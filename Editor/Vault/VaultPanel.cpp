@@ -18,6 +18,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
 , m_VaultSettings( NULL )
 , m_ThumbnailView( NULL )
 , m_CurrentView( NULL )
+, m_CurrentViewMode( VaultViewMode::None )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
@@ -26,14 +27,13 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
         m_OptionsButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
 
-        m_ThumbnailView = new ThumbnailView( m_ResultsPanel );
+        m_ListResultsView = new ListResultsView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+        m_ListResultsView->Hide();
+
+        m_ThumbnailView = new ThumbnailView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
         m_ThumbnailView->Hide();
 
-        m_CurrentView = m_ListResultsView;
-        m_CurrentViewMode = VaultViewMode::Details;
-        m_ListResultsView->Show();
-
-        m_ListResultsView->InitResults();
+        SetViewMode( VaultViewMode::Details );
 
         Layout();
         Thaw();
@@ -98,7 +98,7 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     m_VaultSettings = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >();
     if ( m_VaultSettings )
     {
-        m_CurrentViewMode = m_VaultSettings->m_VaultViewMode;
+        SetViewMode( m_VaultSettings->m_VaultViewMode );
         m_CurrentThumbnailSize = m_VaultSettings->m_ThumbnailSize;
         Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->ApplyToWindow( this, m_FrameManager, true );
@@ -233,6 +233,9 @@ void VaultPanel::SetViewMode( VaultViewMode view )
             GetSizer()->FitInside( this );
             Layout();
         }
+
+        // Redo any existing search to force a re-render
+        StartSearchFromField();
     }
 }
 
@@ -375,7 +378,35 @@ void VaultPanel::OnOptionsMenuOpen( wxMenuEvent& event )
     event.Skip();
     if ( event.GetMenu() == m_OptionsMenu )
     {
-#pragma TODO( "refresh menu's view toggles" )
+        for ( wxMenuItemList::iterator itr = event.GetMenu()->GetMenuItems().begin(), end = event.GetMenu()->GetMenuItems().end(); itr != end; ++itr )
+        {
+            (*itr)->Check( false );
+        }
+
+        HELIUM_ASSERT( m_CurrentViewMode != VaultViewMode::None );
+
+        int id = -1;
+        switch ( m_CurrentViewMode )
+        {
+        default:
+        case VaultViewMode::List:
+            id = VaultMenu::ViewResultList;
+            break;
+        case VaultViewMode::Details:
+            id = VaultMenu::ViewResultDetails;
+            break;
+        case VaultViewMode::ThumbnailsSmall:
+            id = VaultMenu::ViewThumbnailsSmall;
+            break;
+        case VaultViewMode::ThumbnailsMedium:
+            id = VaultMenu::ViewThumbnailsMedium;
+            break;
+        case VaultViewMode::ThumbnailsLarge:
+            id = VaultMenu::ViewThumbnailsLarge;
+            break;
+        }
+
+        event.GetMenu()->Check( id, true );
     }
 }
 

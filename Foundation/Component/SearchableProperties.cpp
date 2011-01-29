@@ -22,7 +22,7 @@ SearchableProperties::~SearchableProperties()
 //    m_StringProperties = stringProperties;
 //}
 
-const std::multimap< tstring, tstring > SearchableProperties::GetStringProperties() const
+const std::multimap< tstring, tstring >& SearchableProperties::GetStringProperties() const
 {
     return m_StringProperties;
 }

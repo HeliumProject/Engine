@@ -80,7 +80,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
 
         ResultArgs args;
-        args.m_Path = &path;
+        args.m_Path = path;
         args.m_Cancelled = false;
 
         if ( SceneGraph::IsSupportedTexture( path.Get() ) )
@@ -218,7 +218,7 @@ void ThumbnailLoader::Stop()
     while ( !queue->Empty() )
     {
         ResultArgs args;
-        args.m_Path = &( queue->Front() );
+        args.m_Path = ( queue->Front() );
         args.m_Cancelled = true;
         m_Result.Raise( args );
         

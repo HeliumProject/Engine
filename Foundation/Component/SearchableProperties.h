@@ -8,7 +8,7 @@ namespace Helium
 {
     class FOUNDATION_API SearchableProperties : public Reflect::Object
     {
-    public:
+    private:
         std::multimap< tstring, tstring > m_StringProperties;
 
     public:

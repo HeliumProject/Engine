@@ -223,9 +223,7 @@ void Tracker::TrackEverything()
                         // get file's properties
                         Helium::SearchableProperties fileProperties;
                         assetClass->GatherSearchableProperties( &fileProperties );
-                        for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(),
-                            filePropertiesItrEnd = fileProperties.GetStringProperties().end();
-                            filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
+                        for( std::multimap< tstring, tstring >::const_iterator filePropertiesItr = fileProperties.GetStringProperties().begin(), filePropertiesItrEnd = fileProperties.GetStringProperties().end(); filePropertiesItr != filePropertiesItrEnd; ++filePropertiesItr )
                         {
                             //TrackedProperty
                             TrackedProperty prop( *m_TrackerDB );
@@ -238,9 +236,7 @@ void Tracker::TrackEverything()
                         // get file's dependencies
                         std::set< Helium::Path > fileReferences;
                         assetClass->GetFileReferences( fileReferences );
-                        for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(),
-                            fileRefsItrEnd = fileReferences.end();
-                            fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
+                        for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(), fileRefsItrEnd = fileReferences.end(); fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
                         {
                             //   see if the file has changed
                             const Helium::Path& fileRefPath = (*fileRefsItr);

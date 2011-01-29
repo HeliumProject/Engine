@@ -30,20 +30,20 @@ namespace Helium
         class DataPointer
         {
         public:
-            DataPointer();
-            ~DataPointer();
+            inline DataPointer();
+            inline ~DataPointer();
 
-            void Allocate() const;
-            void Deallocate() const;
+            inline void Allocate() const;
+            inline void Deallocate() const;
 
-            void Connect(void* pointer);
-            void Disconnect();
+            inline void Connect(void* pointer);
+            inline void Disconnect();
 
-            const T* operator->() const;
-            T* operator->();
+            inline const T* operator->() const;
+            inline T* operator->();
 
-            operator const T*() const;
-            operator T*();
+            inline operator const T*() const;
+            inline operator T*();
 
         private:
             mutable T*      m_Target;
@@ -57,17 +57,17 @@ namespace Helium
         class VoidDataPointer
         {
         public:
-            VoidDataPointer();
-            ~VoidDataPointer();
+            inline VoidDataPointer();
+            inline ~VoidDataPointer();
 
-            void Allocate( uint32_t size ) const;
-            void Deallocate() const;
+            inline void Allocate( uint32_t size ) const;
+            inline void Deallocate() const;
 
-            void Connect(void* pointer, uint32_t size);
-            void Disconnect();
+            inline void Connect(void* pointer, uint32_t size);
+            inline void Disconnect();
 
-            const void* Get(uint32_t size) const;
-            void* Get(uint32_t size);
+            inline const void* Get(uint32_t size) const;
+            inline void* Get(uint32_t size);
 
         private:
             mutable void*       m_Target;
@@ -121,30 +121,30 @@ namespace Helium
             //
 
             template<class T>
-            static inline T* GetData(Data*);
+            inline static T* GetData(Data*);
 
             //
             // Creation templates
             //
 
             template <class T>
-            static DataPtr Create();
+            inline static DataPtr Create();
 
             template <class T>
-            static DataPtr Create(const T& value);
+            inline static DataPtr Create(const T& value);
 
             template <class T>
-            static DataPtr Bind(T& value, void* instance, const Field* field);
+            inline static DataPtr Bind(T& value, void* instance, const Field* field);
 
             //
             // Value templates
             //
 
             template <typename T>
-            static bool GetValue(Data* ser, T& value);
+            inline static bool GetValue(Data* ser, T& value);
 
             template <typename T>
-            static bool SetValue(Data* ser, T value, bool raiseEvents = true);
+            inline static bool SetValue(Data* ser, T value, bool raiseEvents = true);
 
             //
             // Data Management
@@ -212,7 +212,7 @@ namespace Helium
         //
 
         template<class T>
-        static const Class* GetDataClass();
+        inline static const Class* GetDataClass();
     }
 }
 

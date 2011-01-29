@@ -10,7 +10,6 @@
 
 #include "Editor/Controls/Button.h"
 #include "Editor/Controls/MenuButton.h"
-#include "Editor/Vault/ListResultsView.h"
 
 #include "EditorGenerated.h"
 
@@ -883,9 +882,6 @@ VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const
 	m_ResultsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bResultsSizer;
 	bResultsSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_ListResultsView = new Helium::Editor::ListResultsView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bResultsSizer->Add( m_ListResultsView, 1, wxEXPAND, 0 );
 	
 	m_ResultsPanel->SetSizer( bResultsSizer );
 	m_ResultsPanel->Layout();

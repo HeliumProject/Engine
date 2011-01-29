@@ -3,6 +3,7 @@
 #include "VaultMenuIDs.h"
 #include "Editor/EditorGenerated.h"
 #include "Editor/Vault/VaultSearch.h"
+#include "Editor/Vault/ListResultsView.h"
 #include "Editor/Vault/ThumbnailView.h"
 
 namespace Helium
@@ -56,6 +57,7 @@ namespace Helium
             VaultViewMode m_CurrentViewMode;
             uint32_t m_CurrentThumbnailSize;
 
+            ListResultsView* m_ListResultsView;
             ThumbnailView* m_ThumbnailView;
             wxWindow* m_CurrentView;
 

@@ -116,23 +116,24 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
 
     CalculateTotalItemSize();
 
+#pragma TODO( "Move these types of settings (and the icons below) to some kind of configuration file" )
     // Setup Ribbon colors and FileType Icons
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     Path processPath( GetProcessPath() );
-#pragma TODO( "Replace with appropriate filenames" )
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumShader" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), tstring( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
 
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
@@ -1320,35 +1321,35 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Draw type name on top of the thumbnail image
-        tstring typeLabel = tile->GetTypeLabel();
-        if ( !typeLabel.empty() )
-        {
-            float left = 0.0f;
-            float top = 0.0f;
-            Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
-            m_World.Transform( topLeft );
-            WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+        //tstring typeLabel = tile->GetTypeLabel();
+        //if ( !typeLabel.empty() )
+        //{
+        //    float left = 0.0f;
+        //    float top = 0.0f;
+        //    Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
+        //    m_World.Transform( topLeft );
+        //    WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
-            float right = 0.0f;
-            float bottom = 0.0f;
-            Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
-            m_World.Transform( bottomRight );
-            WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
+        //    float right = 0.0f;
+        //    float bottom = 0.0f;
+        //    Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
+        //    m_World.Transform( bottomRight );
+        //    WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
 
-            RECT rect;
-            rect.top = top + 2;
-            rect.left = left;
-            rect.right = right;
-            rect.bottom = bottom;
-            LPD3DXSPRITE sprite = NULL;
+        //    RECT rect;
+        //    rect.top = top + 2;
+        //    rect.left = left;
+        //    rect.right = right;
+        //    rect.bottom = bottom;
+        //    LPD3DXSPRITE sprite = NULL;
 
-            DWORD color = s_TextColorDefault;
-            if ( tile->GetThumbnail()->IsFromIcon() )
-            {
-                color = s_TextColorDark;
-            }
-            result = m_LabelFont->DrawText( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
-        }
+        //    DWORD color = s_TextColorDefault;
+        //    if ( tile->GetThumbnail()->IsFromIcon() )
+        //    {
+        //        color = s_TextColorDark;
+        //    }
+        //    result = m_LabelFont->DrawText( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
+        //}
     }
 }
 
@@ -1951,7 +1952,6 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
         {
             // the extension is used to identify this type of file
             tstring extension = args.GetPath().Extension();
-            toLower( extension );
 
             // look for a cached thumbnail for this extension
             std::map<tstring, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );

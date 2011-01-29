@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/ObjectMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -156,6 +158,52 @@ bool SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Equals( Object* object 
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Accept( Visitor& visitor )
+{
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
+    for ( ; itr != end; ++itr )
+    {
+        ObjectPtr& object = itr->Second();
+        if ( !object.Get() )
+        {
+            continue;
+        }
+
+        if ( !visitor.VisitPointer( object ) )
+        {
+            continue;
+        }
+
+        object->Accept( visitor );
+    }
+}
+
+template< typename KeyT, typename EqualKeyT, typename AllocatorT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename EqualKeyT, typename AllocatorT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename EqualKeyT, typename AllocatorT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename EqualKeyT, typename AllocatorT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
@@ -223,28 +271,6 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( Archive& a
             Data::GetValue( key, k );
             (*m_Data)[ k ] = value;
         }
-    }
-}
-
-template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Accept( Visitor& visitor )
-{
-    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
-    for ( ; itr != end; ++itr )
-    {
-        ObjectPtr& object = itr->Second();
-        if ( !object.Get() )
-        {
-            continue;
-        }
-
-        if ( !visitor.VisitPointer( object ) )
-        {
-            continue;
-        }
-
-        object->Accept( visitor );
     }
 }
 

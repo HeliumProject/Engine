@@ -49,7 +49,7 @@ namespace Helium
             friend void Reflect::Cleanup();
 
             Registry();
-            virtual ~Registry();
+            ~Registry();
 
         public:
             // singleton constructor and accessor

@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectStlVectorData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ObjectStlVectorData);
@@ -92,19 +95,6 @@ bool ObjectStlVectorData::Equals(Object* object)
     return true;
 }
 
-void ObjectStlVectorData::Serialize(Archive& archive)
-{
-    archive.Serialize( *m_Data );
-}
-
-void ObjectStlVectorData::Deserialize(Archive& archive)
-{
-    // if we are referring to a real field, clear its contents
-    m_Data->clear();
-
-    archive.Deserialize( *m_Data );
-}
-
 void ObjectStlVectorData::Accept(Visitor& visitor)
 {
     std::vector< ObjectPtr >::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
@@ -123,4 +113,37 @@ void ObjectStlVectorData::Accept(Visitor& visitor)
 
         (*itr)->Accept( visitor );
     }
+}
+
+void ObjectStlVectorData::Serialize(ArchiveBinary& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlVectorData::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlVectorData::Serialize(ArchiveXML& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlVectorData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlVectorData::Serialize(Archive& archive)
+{
+    archive.Serialize( *m_Data );
+}
+
+void ObjectStlVectorData::Deserialize(Archive& archive)
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    archive.Deserialize( *m_Data );
 }

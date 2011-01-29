@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/ObjectSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium::Reflect;
 
@@ -98,6 +100,48 @@ bool ObjectSetData::Equals( Object* object )
     return true;
 }
 
+void ObjectSetData::Accept( Visitor& visitor )
+{
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
+    for ( ; itr != end; ++itr )
+    {
+        // Set keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.
+        ObjectPtr& object = const_cast< ObjectPtr& >( *itr );
+        if ( !object.Get() )
+        {
+            continue;
+        }
+
+        if ( !visitor.VisitPointer( object ) )
+        {
+            continue;
+        }
+
+        object->Accept( visitor );
+    }
+}
+
+void ObjectSetData::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectSetData::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectSetData::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectSetData::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
 void ObjectSetData::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
@@ -127,27 +171,5 @@ void ObjectSetData::Deserialize( Archive& archive )
     for ( ; itr != end; ++itr )
     {
         m_Data->Insert( *itr );
-    }
-}
-
-void ObjectSetData::Accept( Visitor& visitor )
-{
-    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
-    for ( ; itr != end; ++itr )
-    {
-        // Set keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.
-        ObjectPtr& object = const_cast< ObjectPtr& >( *itr );
-        if ( !object.Get() )
-        {
-            continue;
-        }
-
-        if ( !visitor.VisitPointer( object ) )
-        {
-            continue;
-        }
-
-        object->Accept( visitor );
     }
 }

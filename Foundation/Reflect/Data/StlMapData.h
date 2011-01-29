@@ -38,7 +38,7 @@ namespace Helium
             REFLECT_DECLARE_OBJECT( StlMapDataT, StlMapData );
 
             SimpleStlMapData();
-            virtual ~SimpleStlMapData();
+            ~SimpleStlMapData();
 
             virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
@@ -55,11 +55,17 @@ namespace Helium
             virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
-            virtual void Serialize(Archive& archive) HELIUM_OVERRIDE;
-            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            
+            virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
 
-            virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;
-            virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
+            void Serialize( Archive& archive );
+            void Deserialize( Archive& archive );
+
+            virtual tostream& operator>>(tostream& stream) const HELIUM_OVERRIDE;
+            virtual tistream& operator<<(tistream& stream) HELIUM_OVERRIDE;
         };
 
         typedef SimpleStlMapData<tstring, StlStringData, tstring, StlStringData> StlStringStlStringStlMapData;

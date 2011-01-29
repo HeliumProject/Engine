@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectDynArrayData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT( ObjectDynArrayData );
@@ -91,19 +94,6 @@ bool ObjectDynArrayData::Equals( Object* object )
     return true;
 }
 
-void ObjectDynArrayData::Serialize( Archive& archive )
-{
-    archive.Serialize( *m_Data );
-}
-
-void ObjectDynArrayData::Deserialize( Archive& archive )
-{
-    // if we are referring to a real field, clear its contents
-    m_Data->Clear();
-
-    archive.Deserialize( *m_Data );
-}
-
 void ObjectDynArrayData::Accept( Visitor& visitor )
 {
     DynArray< ObjectPtr >::Iterator itr = m_Data->Begin();
@@ -123,4 +113,37 @@ void ObjectDynArrayData::Accept( Visitor& visitor )
 
         object->Accept( visitor );
     }
+}
+
+void ObjectDynArrayData::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectDynArrayData::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectDynArrayData::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectDynArrayData::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectDynArrayData::Serialize( Archive& archive )
+{
+    archive.Serialize( *m_Data );
+}
+
+void ObjectDynArrayData::Deserialize( Archive& archive )
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->Clear();
+
+    archive.Deserialize( *m_Data );
 }

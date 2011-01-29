@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/StlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -296,6 +298,30 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(Object* obje
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive)
 {
     int i = 0;
@@ -368,7 +394,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>> (tostream& stream) const
+tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>>(tostream& stream) const
 {
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -386,7 +412,7 @@ tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>> (to
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<< (tistream& stream)
+tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<<(tistream& stream)
 {
     m_Data->clear();
 

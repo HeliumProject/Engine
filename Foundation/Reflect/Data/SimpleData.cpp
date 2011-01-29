@@ -3,7 +3,6 @@
 #include "Foundation/Memory/Endian.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -53,30 +52,6 @@ bool SimpleData<T>::Equals(Object* object)
 }
 
 template <class T>
-void SimpleData<T>::Serialize(Archive& archive)
-{
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream() << *m_Data;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            const T* data = m_Data;
-            binary.GetStream().Write( data ); 
-            break;
-        }
-    }
-}
-
-template <class T>
 void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
 {
     T val = *m_Data;
@@ -87,7 +62,33 @@ void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_
 }
 
 template <class T>
-tostream& SimpleData<T>::operator>> (tostream& stream) const
+void SimpleData<T>::Serialize(ArchiveBinary& archive)
+{
+    const T* data = m_Data;
+    archive.GetStream().Write( data ); 
+}
+
+template <class T>
+void SimpleData<T>::Deserialize(ArchiveBinary& archive)
+{
+    T* data = m_Data;
+    archive.GetStream().Read( data ); 
+}
+
+template <class T>
+void SimpleData<T>::Serialize(ArchiveXML& archive)
+{
+    archive.GetStream() << *m_Data;
+}
+
+template <class T>
+void SimpleData<T>::Deserialize(ArchiveXML& archive)
+{
+    archive.GetStream() >> *m_Data;
+}
+
+template <class T>
+tostream& SimpleData<T>::operator>>(tostream& stream) const
 {
     stream << *m_Data;
 
@@ -95,31 +96,7 @@ tostream& SimpleData<T>::operator>> (tostream& stream) const
 }
 
 template <class T>
-void SimpleData<T>::Deserialize(Archive& archive)
-{
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-            
-            xml.GetStream() >> *m_Data;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            T* data = m_Data;
-            binary.GetStream().Read( data ); 
-            break;
-        }
-    }
-}
-
-template <class T>
-tistream& SimpleData<T>::operator<< (tistream& stream)
+tistream& SimpleData<T>::operator<<(tistream& stream)
 {
     stream >> *m_Data;
 
@@ -136,58 +113,34 @@ tistream& SimpleData<T>::operator<< (tistream& stream)
 // Specializations
 //
 
-// must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StlStringData::Serialize(Archive& archive)
+void StlStringData::Serialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            binary.GetStream().WriteString( *m_Data ); 
-            break;
-        }
-    }
+    archive.GetStream().WriteString( *m_Data ); 
 }
 
-// keep reading the string until we run out of buffer
 template <>
-void StlStringData::Deserialize(Archive& archive)
+void StlStringData::Deserialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+    archive.GetStream().ReadString( *m_Data );
+}
 
-            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
-            m_Data->resize( (size_t)size );
-            xml.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
-            break;
-        }
+template <>
+void StlStringData::Serialize(ArchiveXML& archive)
+{
+    archive.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
+}
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            binary.GetStream().ReadString( *m_Data );
-            break;
-        }
-    }
+template <>
+void StlStringData::Deserialize(ArchiveXML& archive)
+{
+    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+    m_Data->resize( (size_t)size );
+    archive.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
 }
 
 template<>
-tostream& StlStringData::operator>> (tostream& stream) const
+tostream& StlStringData::operator>>(tostream& stream) const
 {
     stream << *m_Data;
 
@@ -195,7 +148,7 @@ tostream& StlStringData::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& StlStringData::operator<< (tistream& stream)
+tistream& StlStringData::operator<<(tistream& stream)
 {
     std::streamsize size = stream.rdbuf()->in_avail();
     m_Data->resize( (size_t) size);
@@ -204,131 +157,83 @@ tistream& StlStringData::operator<< (tistream& stream)
     return stream;
 }
 
-// this is a char, we must treat it as a number
 template <>
-void UInt8Data::Serialize(Archive& archive)
+void UInt8Data::Serialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            uint16_t tmp = *m_Data;
-            xml.GetStream() << tmp;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            const uint8_t* data = m_Data;
-            binary.GetStream().Write( data ); 
-            break;
-        }
-    }
+    const uint8_t* data = m_Data;
+    archive.GetStream().Write( data ); 
 }
 
 template <>
-void UInt8Data::Deserialize(Archive& archive)
+void UInt8Data::Deserialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+    const uint8_t* data = m_Data;
+    archive.GetStream().Read( data ); 
+}
 
-            uint16_t tmp;
-            xml.GetStream() >> tmp;
-            *m_Data = (unsigned char)tmp;
-            break;
-        }
+template <>
+void UInt8Data::Serialize(ArchiveXML& archive)
+{
+    uint16_t tmp = *m_Data;
+    archive.GetStream() << tmp;
+}
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            const uint8_t* data = m_Data;
-            binary.GetStream().Read( data ); 
-            break;
-        }
-    }
+template <>
+void UInt8Data::Deserialize(ArchiveXML& archive)
+{
+    uint16_t tmp;
+    archive.GetStream() >> tmp;
+    *m_Data = (uint8_t)tmp;
 }
 
 template<>
-tostream& UInt8Data::operator>> (tostream& stream) const
+tostream& UInt8Data::operator>>(tostream& stream) const
 {
     uint16_t val = *m_Data;
     stream << val;
-
     return stream;
 }
 
 template<>
-tistream& UInt8Data::operator<< (tistream& stream)
+tistream& UInt8Data::operator<<(tistream& stream)
 {
     uint16_t val;
     stream >> val;
     *m_Data = (uint8_t)val;
-
     return stream;
 }
 
-// this is a char, we must treat it as a number
 template <>
-void Int8Data::Serialize(Archive& archive)
+void Int8Data::Serialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            int16_t tmp = *m_Data;
-            xml.GetStream() << tmp;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            const int8_t* data = m_Data;
-            binary.GetStream().Write( data ); 
-            break;
-        }
-    }
+    const int8_t* data = m_Data;
+    archive.GetStream().Write( data ); 
 }
 
 template <>
-void Int8Data::Deserialize(Archive& archive)
+void Int8Data::Deserialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+    const int8_t* data = m_Data;
+    archive.GetStream().Read( data ); 
+}
 
-            int16_t tmp;
-            xml.GetStream() >> tmp;
-            *m_Data = (char)tmp;
-            break;
-        }
+template <>
+void Int8Data::Serialize(ArchiveXML& archive)
+{
+    int16_t tmp = *m_Data;
+    archive.GetStream() << tmp;
+}
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            const int8_t* data = m_Data;
-            binary.GetStream().Read( data ); 
-            break;
-        }
-    }
+template <>
+void Int8Data::Deserialize(ArchiveXML& archive)
+{
+    int16_t tmp;
+    archive.GetStream() >> tmp;
+    *m_Data = (char)tmp;
 }
 
 template<>
-tostream& Int8Data::operator>> (tostream& stream) const
+tostream& Int8Data::operator>>(tostream& stream) const
 {
     int16_t val = *m_Data;
     stream << val;
@@ -337,7 +242,7 @@ tostream& Int8Data::operator>> (tostream& stream) const
 }
 
 template<>
-tistream& Int8Data::operator<< (tistream& stream)
+tistream& Int8Data::operator<<(tistream& stream)
 {
     int16_t val;
     stream >> val;

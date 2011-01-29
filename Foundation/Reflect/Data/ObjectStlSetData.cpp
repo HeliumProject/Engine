@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectStlSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ObjectStlSetData);
@@ -92,6 +95,50 @@ bool ObjectStlSetData::Equals(Object* object)
     return true;
 }
 
+void ObjectStlSetData::Accept(Visitor& visitor)
+{
+    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
+    for ( ; itr != end; ++itr )
+    {
+        if (!itr->ReferencesObject())
+        {
+            continue;
+        }
+
+        // just a note, this code is problematic with STLPort, but i wasn't 
+        // able to figure out how to fix it ... works fine with msvc native iterators
+        // i wish i had saved the compile error; geoff suspects it is const-ness related
+        //
+        if (!visitor.VisitPointer(*itr))
+        {
+            continue;
+        }
+
+        (*itr)->Accept( visitor );
+    }
+}
+
+void ObjectStlSetData::Serialize(ArchiveBinary& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlSetData::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlSetData::Serialize(ArchiveXML& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectStlSetData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
 void ObjectStlSetData::Serialize(Archive& archive)
 {
     std::vector< ObjectPtr > components;
@@ -119,29 +166,5 @@ void ObjectStlSetData::Deserialize(Archive& archive)
     for ( ; itr != end; ++itr )
     {
         m_Data->insert(*itr);
-    }
-}
-
-void ObjectStlSetData::Accept(Visitor& visitor)
-{
-    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
-    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
-    for ( ; itr != end; ++itr )
-    {
-        if (!itr->ReferencesObject())
-        {
-            continue;
-        }
-
-        // just a note, this code is problematic with STLPort, but i wasn't 
-        // able to figure out how to fix it ... works fine with msvc native iterators
-        // i wish i had saved the compile error; geoff suspects it is const-ness related
-        //
-        if (!visitor.VisitPointer(*itr))
-        {
-            continue;
-        }
-
-        (*itr)->Accept( visitor );
     }
 }

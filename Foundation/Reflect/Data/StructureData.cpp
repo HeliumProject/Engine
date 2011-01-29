@@ -1,4 +1,7 @@
 #include "Foundation/Reflect/Data/StructureData.h"
+
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Structure.h"
 
 using namespace Helium;
@@ -66,7 +69,7 @@ void StructureData::Accept(Visitor& visitor)
     structure->Visit( m_Data.Get( structure->m_Size ), visitor );
 }
 
-void StructureData::Serialize(Archive& archive)
+void StructureData::Serialize(ArchiveBinary& archive)
 {
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
@@ -74,7 +77,23 @@ void StructureData::Serialize(Archive& archive)
     archive.Serialize( m_Data.Get( structure->m_Size ), structure );
 }
 
-void StructureData::Deserialize(Archive& archive)
+void StructureData::Deserialize(ArchiveBinary& archive)
+{
+    const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
+    HELIUM_ASSERT( structure );
+
+    archive.Deserialize( m_Data.Get( structure->m_Size ), structure );
+}
+
+void StructureData::Serialize(ArchiveXML& archive)
+{
+    const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
+    HELIUM_ASSERT( structure );
+
+    archive.Serialize( m_Data.Get( structure->m_Size ), structure );
+}
+
+void StructureData::Deserialize(ArchiveXML& archive)
 {
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );

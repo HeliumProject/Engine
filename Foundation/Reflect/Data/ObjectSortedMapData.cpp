@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/ObjectSortedMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -156,6 +158,52 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( Object*
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Accept( Visitor& visitor )
+{
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
+    for ( ; itr != end; ++itr )
+    {
+        ObjectPtr& object = itr->Second();
+        if ( !object.Get() )
+        {
+            continue;
+        }
+
+        if ( !visitor.VisitPointer( object ) )
+        {
+            continue;
+        }
+
+        object->Accept( visitor );
+    }
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
@@ -223,28 +271,6 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Ar
             Data::GetValue( key, k );
             (*m_Data)[ k ] = value;
         }
-    }
-}
-
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Accept( Visitor& visitor )
-{
-    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
-    for ( ; itr != end; ++itr )
-    {
-        ObjectPtr& object = itr->Second();
-        if ( !object.Get() )
-        {
-            continue;
-        }
-
-        if ( !visitor.VisitPointer( object ) )
-        {
-            continue;
-        }
-
-        object->Accept( visitor );
     }
 }
 

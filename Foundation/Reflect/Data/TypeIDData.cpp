@@ -47,64 +47,43 @@ bool TypeIDData::Equals(Object* object)
     return *m_Data == *rhs->m_Data;
 }
 
-void TypeIDData::Serialize(Archive& archive)
+void TypeIDData::Serialize(ArchiveBinary& archive)
 {
     const Type* type = *m_Data;
+    uint32_t crc = type ? Crc32( type->m_Name ) : BeginCrc32();
+    archive.GetStream().Write(&crc); 
+}
 
-    switch (archive.GetType())
+void TypeIDData::Deserialize(ArchiveBinary& archive)
+{
+    uint32_t crc;
+    archive.GetStream().Read(&crc);
+
+    const Type* type = Registry::GetInstance()->GetType( crc );
+    if ( type )
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            if ( type )
-            {
-                xml.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
-            }
-
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t crc = type ? Crc32( type->m_Name ) : BeginCrc32();
-            binary.GetStream().Write(&crc); 
-            break;
-        }
+        *m_Data = type;
     }
 }
 
-void TypeIDData::Deserialize(Archive& archive)
+void TypeIDData::Serialize(ArchiveXML& archive)
 {
-    const Type* type = NULL;
+    const Type* type = *m_Data;
 
-    switch (archive.GetType())
+    if ( type )
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
-            tstring str;
-            str.resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
-            type = Registry::GetInstance()->GetType( str.c_str() );
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t crc;
-            binary.GetStream().Read(&crc);
-            type = Registry::GetInstance()->GetType( crc );
-            break;
-        }
+        archive.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
     }
+}
 
+void TypeIDData::Deserialize(ArchiveXML& archive)
+{
+    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+    tstring str;
+    str.resize( (size_t)size );
+    archive.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
+
+    const Type* type = Registry::GetInstance()->GetType( str.c_str() );
     if ( type )
     {
         *m_Data = type;

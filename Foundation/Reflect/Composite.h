@@ -87,7 +87,7 @@ namespace Helium
 
         protected:
             Composite();
-            virtual ~Composite();
+            ~Composite();
 
         public:
             template< class CompositeT >

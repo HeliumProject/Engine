@@ -325,13 +325,13 @@ void Data::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugS
     HELIUM_BREAK();
 }
 
-tostream& Data::operator>> (tostream& stream) const
+tostream& Data::operator>>(tostream& stream) const
 { 
     HELIUM_BREAK(); 
     return stream; 
 }
 
-tistream& Data::operator<< (tistream& stream)
+tistream& Data::operator<<(tistream& stream)
 { 
     HELIUM_BREAK(); 
     return stream; 

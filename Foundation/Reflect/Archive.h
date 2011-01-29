@@ -108,7 +108,7 @@ namespace Helium
 
             Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
-            virtual ~Archive();
+            ~Archive();
 
         public:
             const Helium::Path& GetPath() const

@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/SortedMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -293,6 +295,30 @@ bool SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Equals( Objec
     }
 
     return *m_Data == *rhs->m_Data;
+}
+
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedMapData< KeyT, ValueT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
 }
 
 template< typename KeyT, typename ValueT, typename CompareKeyT, typename AllocatorT >

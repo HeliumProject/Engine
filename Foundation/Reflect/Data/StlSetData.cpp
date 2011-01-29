@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/StlSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -162,6 +164,30 @@ bool SimpleStlSetData<DataT, DataClassT>::Equals(Object* object)
 }
 
 template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive)
 {
     int i = 0;
@@ -223,7 +249,7 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
 }
 
 template < class DataT, class DataClassT >
-tostream& SimpleStlSetData<DataT, DataClassT>::operator>> (tostream& stream) const
+tostream& SimpleStlSetData<DataT, DataClassT>::operator>>(tostream& stream) const
 {
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -241,7 +267,7 @@ tostream& SimpleStlSetData<DataT, DataClassT>::operator>> (tostream& stream) con
 }
 
 template < class DataT, class DataClassT >
-tistream& SimpleStlSetData<DataT, DataClassT>::operator<< (tistream& stream)
+tistream& SimpleStlSetData<DataT, DataClassT>::operator<<(tistream& stream)
 {
     m_Data->clear();
 

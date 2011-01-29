@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectSortedSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT( ObjectSortedSetData );
@@ -98,6 +101,46 @@ bool ObjectSortedSetData::Equals( Object* object )
     return true;
 }
 
+void ObjectSortedSetData::Accept( Visitor& visitor )
+{
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
+    for ( ; itr != end; ++itr )
+    {
+        // SortedSet keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.
+        ObjectPtr& object = const_cast< ObjectPtr& >( *itr );
+        if ( !object.Get() )
+        {
+            continue;
+        }
+
+        if ( !visitor.VisitPointer( object ) )
+        {
+            continue;
+        }
+
+        object->Accept( visitor );
+    }
+}
+
+void ObjectSortedSetData::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+void ObjectSortedSetData::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void ObjectSortedSetData::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+void ObjectSortedSetData::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
 void ObjectSortedSetData::Serialize( Archive& archive )
 {
     DynArray< ObjectPtr > components;
@@ -127,27 +170,5 @@ void ObjectSortedSetData::Deserialize( Archive& archive )
     for ( ; itr != end; ++itr )
     {
         m_Data->Insert( *itr );
-    }
-}
-
-void ObjectSortedSetData::Accept( Visitor& visitor )
-{
-    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
-    for ( ; itr != end; ++itr )
-    {
-        // SortedSet keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.
-        ObjectPtr& object = const_cast< ObjectPtr& >( *itr );
-        if ( !object.Get() )
-        {
-            continue;
-        }
-
-        if ( !visitor.VisitPointer( object ) )
-        {
-            continue;
-        }
-
-        object->Accept( visitor );
     }
 }

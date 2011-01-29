@@ -24,7 +24,7 @@ namespace Helium
 
         protected:
             Class();
-            virtual ~Class();
+            ~Class();
 
         public:
             // protect external allocation to keep inlined code in this dll

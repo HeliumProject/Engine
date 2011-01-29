@@ -47,56 +47,32 @@ bool PathData::Equals( Object* object )
     return *rhs->m_Data == *m_Data;
 }
 
-void PathData::Serialize( Archive& archive )
+void PathData::Serialize( ArchiveBinary& archive )
 {
     const tstring& str = m_Data->Get();
-
-    switch ( archive.GetType() )
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream() << str;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            binary.GetStream().WriteString( str ); 
-            break;
-        }
-    }
+    archive.GetStream().WriteString( str ); 
 }
 
-void PathData::Deserialize( Archive& archive )
+void PathData::Deserialize( ArchiveBinary& archive )
 {
-    switch ( archive.GetType() )
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+    tstring str;
+    archive.GetStream().ReadString( str );
+    m_Data->Set( str );
+}
 
-            tstring buf;
-            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
-            buf.resize( (size_t)size );
-            xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
-            m_Data->Set( buf );
-            break;
-        }
+void PathData::Serialize( ArchiveXML& archive )
+{
+    const tstring& str = m_Data->Get();
+    archive.GetStream() << str;
+}
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            tstring str;
-            binary.GetStream().ReadString( str );
-            m_Data->Set( str );
-            break;
-        }
-    }
+void PathData::Deserialize( ArchiveXML& archive )
+{
+    tstring buf;
+    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+    buf.resize( (size_t)size );
+    archive.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
+    m_Data->Set( buf );
 }
 
 tostream& PathData::operator>>( tostream& stream ) const

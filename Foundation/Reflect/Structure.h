@@ -17,7 +17,7 @@ namespace Helium
 
         protected:
             Structure();
-            virtual ~Structure();
+            ~Structure();
 
         public:
             // protect external allocation to keep inlined code in this dll

@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/MapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -314,6 +316,30 @@ bool SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Equals( Object* objec
     }
 
     return true;
+}
+
+template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >
+void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
 }
 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT >

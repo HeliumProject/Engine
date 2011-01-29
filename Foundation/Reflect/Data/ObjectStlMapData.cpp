@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/ObjectStlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -152,6 +154,51 @@ bool SimpleObjectStlMapData<KeyT>::Equals(Object* object)
 }
 
 template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
+{
+    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
+    for ( ; itr != end; ++itr )
+    {
+        if (!itr->second.ReferencesObject())
+        {
+            continue;
+        }
+
+        if (!visitor.VisitPointer(itr->second))
+        {
+            continue;
+        }
+
+        itr->second->Accept( visitor );
+    }
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveBinary& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveXML& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveXML& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive)
 {
     std::vector< ObjectPtr > components;
@@ -214,27 +261,6 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
             Data::GetValue( key, k );
             (*m_Data)[ k ] = value;
         }
-    }
-}
-
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
-{
-    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
-    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
-    for ( ; itr != end; ++itr )
-    {
-        if (!itr->second.ReferencesObject())
-        {
-            continue;
-        }
-
-        if (!visitor.VisitPointer(itr->second))
-        {
-            continue;
-        }
-
-        itr->second->Accept( visitor );
     }
 }
 

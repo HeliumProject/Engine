@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/SortedSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -159,6 +161,30 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( Object* objec
     }
 
     return *m_Data == *rhs->m_Data;
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize( static_cast< Archive& >( archive ) );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >

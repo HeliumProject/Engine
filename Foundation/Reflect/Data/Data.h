@@ -12,6 +12,9 @@ namespace Helium
 {
     namespace Reflect
     {
+        class ArchiveBinary;
+        class ArchiveXML;
+
         namespace DataFlags
         {
             enum DataFlag
@@ -97,7 +100,7 @@ namespace Helium
 
             // instance init and cleanup
             Data();
-            virtual ~Data();
+            ~Data();
 
             // static init and cleanup
             static void Initialize();
@@ -181,11 +184,13 @@ namespace Helium
             // data serialization (extract to smart buffer)
             virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const;
 
-            // data serialization (extract to archive)
-            virtual void Serialize(Archive& archive) = 0;
+            // binary serialization
+            virtual void Serialize(ArchiveBinary& archive) = 0;
+            virtual void Deserialize(ArchiveBinary& archive) = 0;
 
-            // data deserialization (insert from archive)
-            virtual void Deserialize(Archive& archive) = 0;
+            // xml serialization
+            virtual void Serialize(ArchiveXML& archive) = 0;
+            virtual void Deserialize(ArchiveXML& archive) = 0;
 
             // text serialization (extract to text stream)
             virtual tostream& operator>>(tostream& stream) const;

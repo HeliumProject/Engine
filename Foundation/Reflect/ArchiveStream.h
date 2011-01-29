@@ -116,7 +116,7 @@ namespace Helium
 
             }
 
-            virtual ~Stream()
+            ~Stream()
             {
                 if ( m_OwnStream )
                 {
@@ -161,12 +161,12 @@ namespace Helium
                 return m_Stream->tellp(); 
             }
 
-            std::streamsize ObjectsRead()
+            std::streamsize ElementsRead()
             {
                 return m_Stream->gcount(); 
             }
 
-            std::streamsize ObjectsAvailable()
+            std::streamsize ElementsAvailable()
             {
                 return m_Stream->rdbuf()->in_avail();
             }

@@ -1,5 +1,8 @@
 #include "Foundation/Reflect/Data/PointerData.h"
 
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+
 using namespace Helium;
 using namespace Helium::Reflect;
 
@@ -75,6 +78,26 @@ void PointerData::Accept(Visitor& visitor)
     {
         (*m_Data)->Accept( visitor );
     }
+}
+
+void PointerData::Serialize(ArchiveBinary& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void PointerData::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
+}
+
+void PointerData::Serialize(ArchiveXML& archive)
+{
+    Serialize( static_cast< Archive& >( archive ) );
+}
+
+void PointerData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize( static_cast< Archive& >( archive ) );
 }
 
 void PointerData::Serialize(Archive& archive)

@@ -144,11 +144,11 @@ void Tracker::TrackEverything()
     // create tables, sequences and indexes
     m_TrackerDB->verbose = true;
 
-    try
+    if ( !m_Project->GetTrackerDB().Exists() )
     {
         m_TrackerDB->create();
     }
-    catch( const litesql::SQLError& )
+    else
     {
         m_TrackerDB->upgrade();
     }
@@ -199,7 +199,7 @@ void Tracker::TrackEverything()
             {
                 try
                 {
-                    assetTrackedFile = litesql::select<TrackedFile>( *m_TrackerDB, TrackedFile::MPath == assetFilePath.Get() ).one();
+                    assetTrackedFile = litesql::select<TrackedFile>( *m_TrackerDB, TrackedFile::MPath == assetFilePath.GetRelativePath( m_Project->a_Path.Get() ) ).one();
                     if ( assetFilePath.ChangedSince( assetTrackedFile.mLastModified.value().timeStamp() ) || assetTrackedFile.mToolsVersion != HELIUM_VERSION_NUMBER )
                     {
                         assetTrackedFile.properties().del();

@@ -162,13 +162,17 @@ Helium.Publish = function( files )
             linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
 		end
 		local result = os.execute( linkCommand )
-		
+
+		-- If creating a hardlink failed, attempt a normal copy with "xcopy" as a fallback.
+		if result ~= 0 then
+			result = os.execute( "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y" )
+			if result ~= 0 then
+				os.exit( 1 )
+			end
+		end
+
 		-- the files were copied, complete this entry
-		if result == 0 then
-			files[ i ] = nil
-		else
-			os.exit( 1 )
-		end						
+		files[ i ] = nil
 	end
 end
 

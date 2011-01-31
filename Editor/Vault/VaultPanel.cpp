@@ -13,24 +13,27 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-///////////////////////////////////////////////////////////////////////////////
 VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : VaultPanelGenerated( parent, id, pos, size, style )
 , m_VaultSettings( NULL )
+, m_ThumbnailView( NULL )
 , m_CurrentView( NULL )
+, m_CurrentViewMode( VaultViewMode::None )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
         Freeze();
 
+        m_OptionsButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
-        m_OptionsButton->SetMargins( 3, 3 );
 
-        m_CurrentView = m_ListResultsView;
-        m_CurrentViewMode = VaultViewMode::Details;
-        m_ListResultsView->Show();
+        m_ListResultsView = new ListResultsView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+        m_ListResultsView->Hide();
 
-        m_ListResultsView->InitResults();
+        m_ThumbnailView = new ThumbnailView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+        m_ThumbnailView->Hide();
+
+        SetViewMode( VaultViewMode::Details );
 
         Layout();
         Thaw();
@@ -63,7 +66,6 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Small ),
             VaultMenu::Label( VaultMenu::ViewThumbnailsSmall ),
             wxITEM_RADIO );
-        smallMenuItem->Enable( false );
         m_OptionsMenu->Append( smallMenuItem );
         Connect( VaultMenu::ViewThumbnailsSmall, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
 
@@ -73,7 +75,6 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             VaultMenu::Label( VaultMenu::ViewThumbnailsMedium ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Medium ),
             VaultMenu::Label( VaultMenu::ViewThumbnailsMedium ),
             wxITEM_RADIO );
-        mediumMenuItem->Enable( false );
         m_OptionsMenu->Append( mediumMenuItem );
         Connect( VaultMenu::ViewThumbnailsMedium, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
 
@@ -83,7 +84,6 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
             VaultMenu::Label( VaultMenu::ViewThumbnailsLarge ) + std::string( " " ) + VaultThumbnailsSizes::Label( VaultThumbnailsSizes::Large ),
             VaultMenu::Label( VaultMenu::ViewThumbnailsLarge ),
             wxITEM_RADIO );
-        largeMenuItem->Enable( false );
         m_OptionsMenu->Append( largeMenuItem );
         Connect( VaultMenu::ViewThumbnailsLarge, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( VaultPanel::OnOptionsMenuSelect ), NULL, this );
     }
@@ -98,12 +98,12 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     m_VaultSettings = wxGetApp().GetSettingsManager()->GetSettings< VaultSettings >();
     if ( m_VaultSettings )
     {
-        m_CurrentViewMode = m_VaultSettings->m_VaultViewMode;
+        SetViewMode( m_VaultSettings->m_VaultViewMode );
         m_CurrentThumbnailSize = m_VaultSettings->m_ThumbnailSize;
         Clamp( m_CurrentThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
         //m_VaultSettings->m_WindowSettings->ApplyToWindow( this, m_FrameManager, true );
     }
-    
+
     m_VaultSearch.AddSearchResultsAvailableListener( Editor::SearchResultsAvailableSignature::Delegate( this, &VaultPanel::OnSearchResultsAvailable ) );
 }
 
@@ -121,6 +121,8 @@ VaultPanel::~VaultPanel()
     m_VaultSettings = NULL;
 
     m_VaultSearch.AddSearchResultsAvailableListener( Editor::SearchResultsAvailableSignature::Delegate( this, &VaultPanel::OnSearchResultsAvailable ) );
+
+    delete m_ThumbnailView;
 }
 
 void VaultPanel::SetDirectory( const Helium::Path& directory )
@@ -169,7 +171,7 @@ void VaultPanel::SetViewMode( VaultViewMode view )
         if ( m_CurrentView )
         {
             m_CurrentView->Hide();
-            //GetSizer()->Detach( m_CurrentView );
+            m_ResultsPanel->GetSizer()->Detach( m_CurrentView );
             m_CurrentView = NULL;
         }
 
@@ -195,28 +197,28 @@ void VaultPanel::SetViewMode( VaultViewMode view )
         case VaultViewMode::ThumbnailsSmall:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Small;
-                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Small );
-                //m_CurrentView = m_ThumbnailView;
+                m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Small );
+                m_CurrentView = m_ThumbnailView;
             }
             break;
         case VaultViewMode::ThumbnailsMedium:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Medium;
-                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Medium );
-                //m_CurrentView = m_ThumbnailView;
+                m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Medium );
+                m_CurrentView = m_ThumbnailView;
             }
             break;
         case VaultViewMode::ThumbnailsLarge:
             {
                 m_CurrentThumbnailSize = VaultThumbnailsSizes::Large;
-                //m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Large );
-                //m_CurrentView = m_ThumbnailView;
+                m_ThumbnailView->SetZoom( VaultThumbnailsSizes::Large );
+                m_CurrentView = m_ThumbnailView;
             }
             break;
         case VaultViewMode::ThumbnailsCustom:
             {
-                //m_ThumbnailView->SetZoom( m_CurrentThumbnailSize );
-                //m_CurrentView = m_ThumbnailView;
+                m_ThumbnailView->SetZoom( m_CurrentThumbnailSize );
+                m_CurrentView = m_ThumbnailView;
             }
             break;
         }
@@ -227,10 +229,13 @@ void VaultPanel::SetViewMode( VaultViewMode view )
             m_CurrentView->Show();
             m_CurrentView->Layout();
 
-            //GetSizer()->Add( m_CurrentView, 1, wxALL | wxEXPAND, 0 );
+            m_ResultsPanel->GetSizer()->Add( m_CurrentView, 1, wxALL | wxEXPAND, 0 );
             GetSizer()->FitInside( this );
             Layout();
         }
+
+        // Redo any existing search to force a re-render
+        StartSearchFromField();
     }
 }
 
@@ -240,12 +245,8 @@ VaultViewMode VaultPanel::GetViewMode() const
     return m_CurrentViewMode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SetResults( VaultSearchResults* results )
 {
-    //std::vector< tstring > unused;
-    //ResultChangeArgs args;
-
     switch ( m_CurrentViewMode )
     {
     default:
@@ -254,20 +255,15 @@ void VaultPanel::SetResults( VaultSearchResults* results )
         m_ListResultsView->SetResults( results );
         break;
 
-        //case VaultViewMode::ThumbnailsSmall:
-        //case VaultViewMode::ThumbnailsMedium:
-        //case VaultViewMode::ThumbnailsLarge:
-        //case VaultViewMode::ThumbnailsCustom:
-        //    //m_ThumbnailView->SetResults( results );
-        //    //args.m_NumSelected = m_ThumbnailView->GetSelectedPaths( unused );
-        //    //args.m_HighlightPath = m_ThumbnailView->GetHighlightedPath();
-        //    break;
+    case VaultViewMode::ThumbnailsSmall:
+    case VaultViewMode::ThumbnailsMedium:
+    case VaultViewMode::ThumbnailsLarge:
+    case VaultViewMode::ThumbnailsCustom:
+        m_ThumbnailView->SetResults( results );
+        break;
     }
-
-    //m_ResultsChanged.Raise( args );
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::ClearResults()
 {
     switch ( m_CurrentViewMode )
@@ -282,15 +278,11 @@ void VaultPanel::ClearResults()
     case VaultViewMode::ThumbnailsMedium:
     case VaultViewMode::ThumbnailsLarge:
     case VaultViewMode::ThumbnailsCustom:
-        //m_ThumbnailView->ClearResults();
+        m_ThumbnailView->ClearResults();
         break;
     }
-
-    //ResultChangeArgs args;
-    //m_ResultsChanged.Raise( args );
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SelectPath( const Helium::Path& path )
 {
     switch ( m_CurrentViewMode )
@@ -305,7 +297,7 @@ void VaultPanel::SelectPath( const Helium::Path& path )
     case VaultViewMode::ThumbnailsMedium:
     case VaultViewMode::ThumbnailsLarge:
     case VaultViewMode::ThumbnailsCustom:
-        //m_ThumbnailView->SelectPath( path );
+        m_ThumbnailView->SelectPath( path );
         break;
     }
 }
@@ -317,16 +309,18 @@ uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
     {
     default:
     case VaultViewMode::Details:
+        HELIUM_BREAK();
         break;
 
     case VaultViewMode::List:
+        HELIUM_BREAK();
         break;
 
     case VaultViewMode::ThumbnailsSmall:
     case VaultViewMode::ThumbnailsMedium:
     case VaultViewMode::ThumbnailsLarge:
     case VaultViewMode::ThumbnailsCustom:
-        //m_ThumbnailView->GetSelectedPaths( paths );
+        m_ThumbnailView->GetSelectedPaths( paths );
         break;
     }
 
@@ -341,7 +335,6 @@ void VaultPanel::SaveSettings()
         m_VaultSettings->m_VaultViewMode = m_CurrentViewMode;
         m_VaultSettings->m_ThumbnailSize = m_CurrentThumbnailSize;
         Clamp( m_VaultSettings->m_ThumbnailSize, VaultThumbnailsSizes::Small, VaultThumbnailsSizes::Large );
-        //m_VaultSettings->m_WindowSettings->SetFromWindow( this, m_FrameManager );
     }
 }
 
@@ -380,24 +373,49 @@ void VaultPanel::OnSearchTextEnter( wxCommandEvent& event )
     event.Skip(false);
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnOptionsMenuOpen( wxMenuEvent& event )
 {
     event.Skip();
     if ( event.GetMenu() == m_OptionsMenu )
     {
-        // refresh menu's view toggles
+        for ( wxMenuItemList::iterator itr = event.GetMenu()->GetMenuItems().begin(), end = event.GetMenu()->GetMenuItems().end(); itr != end; ++itr )
+        {
+            (*itr)->Check( false );
+        }
+
+        HELIUM_ASSERT( m_CurrentViewMode != VaultViewMode::None );
+
+        int id = -1;
+        switch ( m_CurrentViewMode )
+        {
+        default:
+        case VaultViewMode::List:
+            id = VaultMenu::ViewResultList;
+            break;
+        case VaultViewMode::Details:
+            id = VaultMenu::ViewResultDetails;
+            break;
+        case VaultViewMode::ThumbnailsSmall:
+            id = VaultMenu::ViewThumbnailsSmall;
+            break;
+        case VaultViewMode::ThumbnailsMedium:
+            id = VaultMenu::ViewThumbnailsMedium;
+            break;
+        case VaultViewMode::ThumbnailsLarge:
+            id = VaultMenu::ViewThumbnailsLarge;
+            break;
+        }
+
+        event.GetMenu()->Check( id, true );
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnOptionsMenuClose( wxMenuEvent& event )
 {
     m_SearchCtrl->SetFocus();
     event.Skip();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnOptionsMenuSelect( wxCommandEvent& event )
 {
     event.Skip();
@@ -431,7 +449,6 @@ void VaultPanel::OnOptionsMenuSelect( wxCommandEvent& event )
     SetViewMode( id );
 }
 
-///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::OnClose( wxCloseEvent& event )
 {
     SaveSettings();

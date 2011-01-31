@@ -6,7 +6,6 @@
 
 #ifndef litesql_field_hpp
 #define litesql_field_hpp
-#include "litesql_char.hpp"
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -32,7 +31,7 @@ public:
               const LITESQL_String& tbl,
               const Values& vals = Values())
         : _name(n), _type(t), _table(tbl), _values(vals) {}
-    LITESQL_String fullName() const { return  table() +  LITESQL_L(".") + name(); }
+    LITESQL_String fullName() const { return  table() + LITESQL_L(".") + name(); }
     LITESQL_String name() const { return _name; }
     LITESQL_String type() const { return _type; }
     LITESQL_String table() const { return _table; }

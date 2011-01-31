@@ -122,7 +122,7 @@ namespace Helium
             int32_t                     m_CurrentSearchID;   // Used for debugging to track a search through the system
             VaultSearchQueryPtr     m_CurrentSearchQuery;
             VaultSearchResultsPtr   m_SearchResults;     // The results to populate and pass to SearchResultsAvailableArgs
-            std::set< Helium::Path > m_FoundPaths;       // The *complete* list of found files from this section
+            std::set< TrackedFile > m_FoundFiles;       // The *complete* list of found files from this section
             //---------------------------------------------------------------//
 
             // Searching Thread
@@ -149,7 +149,7 @@ namespace Helium
             bool CheckSearchThreadLeave( int32_t searchID );
             void SearchThreadLeave( int32_t searchID );
 
-            uint32_t AddPath( const Helium::Path& path, int32_t searchID );
+            uint32_t Add( const TrackedFile& file, int32_t searchID );
 
             // 
             // Events

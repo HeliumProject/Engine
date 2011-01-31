@@ -10,10 +10,8 @@
 
 #include <wx/intl.h>
 
-class wxBitmapToggleButton;
 namespace Helium{ namespace Editor{ class Button; } }
 namespace Helium{ namespace Editor{ class Frame; } }
-namespace Helium{ namespace Editor{ class ListResultsView; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
 
 #include "Editor/Frame.h"
@@ -36,14 +34,12 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/richtext/richtextctrl.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
 #include <wx/srchctrl.h>
-#include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -227,27 +223,17 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_LayerManagementPanel;
-				wxBitmapButton* m_CreateNewLayerFromSelectionButton;
-				wxBitmapButton* m_CreateNewLayerButton;
-				wxBitmapButton* m_DeleteSelectedLayersButton;
 				wxStaticLine* m_staticline4;
-				wxBitmapButton* m_AddSelectionToLayerButton;
-				wxBitmapButton* m_RemoveSelectionFromLayerButton;
 				wxStaticLine* m_staticline5;
-				wxBitmapButton* m_SelectLayerMembersButton;
-				wxBitmapButton* m_SelectLayersButton;
-				
-				// Virtual event handlers, overide them in your derived class
-				virtual void OnNewLayerFromSelection( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnAddSelectionToLayer( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnRemoveSelectionFromLayer( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnSelectLayerMembers( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnSelectLayer( wxCommandEvent& event ) { event.Skip(); }
-				
 			
 			public:
+				Helium::Editor::Button* m_CreateNewLayerFromSelectionButton;
+				Helium::Editor::Button* m_CreateNewLayerButton;
+				Helium::Editor::Button* m_DeleteSelectedLayersButton;
+				Helium::Editor::Button* m_AddSelectionToLayerButton;
+				Helium::Editor::Button* m_RemoveSelectionFromLayerButton;
+				Helium::Editor::Button* m_SelectLayerMembersButton;
+				Helium::Editor::Button* m_SelectLayersButton;
 				
 				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 				~LayersPanelGenerated();
@@ -264,7 +250,6 @@ namespace Helium
 			protected:
 				wxPanel* m_ProjectManagementPanel;
 				wxStaticText* m_ProjectNameStaticText;
-				Helium::Editor::MenuButton* m_OptionsButton;
 				wxDataViewCtrl* m_DataViewCtrl;
 				wxScrolledWindow* m_OpenProjectPanel;
 				wxPanel* m_RecentProjectsPanel;
@@ -273,8 +258,6 @@ namespace Helium
 				wxStaticLine* m_staticline16;
 				wxBoxSizer* m_RecentProjectsSizer;
 				wxStaticLine* m_staticline13;
-				wxButton* m_OpenProjectButton;
-				wxButton* m_CreateNewProjectButton;
 				
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -282,7 +265,10 @@ namespace Helium
 				
 			
 			public:
+				Helium::Editor::MenuButton* m_OptionsButton;
 				wxPanel* m_OpenOrCreateProjectPanel;
+				Helium::Editor::Button* m_OpenProjectButton;
+				Helium::Editor::Button* m_CreateNewProjectButton;
 				
 				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL );
 				~ProjectPanelGenerated();
@@ -379,9 +365,7 @@ namespace Helium
 			protected:
 				wxPanel* m_NavigationPanel;
 				wxSearchCtrl* m_SearchCtrl;
-				Helium::Editor::MenuButton* m_OptionsButton;
 				wxPanel* m_ResultsPanel;
-				Helium::Editor::ListResultsView* m_ListResultsView;
 				
 				// Virtual event handlers, overide them in your derived class
 				virtual void OnSearchCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -390,6 +374,7 @@ namespace Helium
 				
 			
 			public:
+				Helium::Editor::MenuButton* m_OptionsButton;
 				
 				VaultPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 773,453 ), long style = wxTAB_TRAVERSAL );
 				~VaultPanelGenerated();
@@ -413,28 +398,6 @@ namespace Helium
 				};
 				
 				wxPanel* m_ToolPanel;
-				wxBitmapButton* m_FrameOriginButton;
-				wxBitmapButton* m_FrameSelectedButton;
-				wxBitmapToggleButton* m_HighlightModeToggleButton;
-				wxBitmapButton* m_PreviousViewButton;
-				wxBitmapButton* m_NextViewButton;
-				wxBitmapToggleButton* m_OrbitCameraToggleButton;
-				wxBitmapToggleButton* m_FrontCameraToggleButton;
-				wxBitmapToggleButton* m_SideCameraToggleButton;
-				wxBitmapToggleButton* m_TopCameraToggleButton;
-				wxBitmapToggleButton* m_ShowAxesToggleButton;
-				wxBitmapToggleButton* m_ShowGridToggleButton;
-				wxBitmapToggleButton* m_ShowBoundsToggleButton;
-				wxBitmapToggleButton* m_ShowStatisticsToggleButton;
-				wxBitmapToggleButton* m_FrustumCullingToggleButton;
-				wxBitmapToggleButton* m_BackfaceCullingToggleButton;
-				wxBitmapToggleButton* m_WireframeShadingToggleButton;
-				wxBitmapToggleButton* m_MaterialShadingToggleButton;
-				wxBitmapToggleButton* m_ColorModeSceneToggleButton;
-				wxBitmapToggleButton* m_ColorModeLayerToggleButton;
-				wxBitmapToggleButton* m_ColorModeNodeTypeToggleButton;
-				wxBitmapToggleButton* m_ColorModeScaleToggleButton;
-				wxBitmapToggleButton* m_ColorModeScaleGradientToggleButton;
 				wxPanel* m_ViewContainerPanel;
 				
 				// Virtual event handlers, overide them in your derived class
@@ -448,28 +411,31 @@ namespace Helium
 				
 			
 			public:
+				Helium::Editor::Button* m_FrameOriginButton;
+				Helium::Editor::Button* m_FrameSelectedButton;
+				Helium::Editor::Button* m_HighlightModeToggleButton;
+				Helium::Editor::Button* m_PreviousViewButton;
+				Helium::Editor::Button* m_NextViewButton;
+				Helium::Editor::Button* m_OrbitCameraToggleButton;
+				Helium::Editor::Button* m_FrontCameraToggleButton;
+				Helium::Editor::Button* m_SideCameraToggleButton;
+				Helium::Editor::Button* m_TopCameraToggleButton;
+				Helium::Editor::Button* m_ShowAxesToggleButton;
+				Helium::Editor::Button* m_ShowGridToggleButton;
+				Helium::Editor::Button* m_ShowBoundsToggleButton;
+				Helium::Editor::Button* m_ShowStatisticsToggleButton;
+				Helium::Editor::Button* m_FrustumCullingToggleButton;
+				Helium::Editor::Button* m_BackfaceCullingToggleButton;
+				Helium::Editor::Button* m_WireframeShadingToggleButton;
+				Helium::Editor::Button* m_MaterialShadingToggleButton;
+				Helium::Editor::Button* m_ColorModeSceneToggleButton;
+				Helium::Editor::Button* m_ColorModeLayerToggleButton;
+				Helium::Editor::Button* m_ColorModeNodeTypeToggleButton;
+				Helium::Editor::Button* m_ColorModeScaleToggleButton;
+				Helium::Editor::Button* m_ColorModeScaleGradientToggleButton;
 				
 				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
 				~ViewPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
-		/// Class TestPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class TestPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-				wxStaticText* m_staticText14;
-				wxCheckBox* m_checkBox1;
-				wxTextCtrl* m_textCtrl7;
-			
-			public:
-				
-				TestPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-				~TestPanelGenerated();
 			
 		};
 		

@@ -52,7 +52,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/debug/litesqld.lib DESTINATION lib/sta
 	COMPONENT devel)
 endif(MSVC)
 
-if (WITH_SQLITE3)
+if (LITESQL_WITH_SQLITE3)
   set(${LIBNAME}_sqlite_SRC
 				sqlite3_backend.cpp 
 				sqlite3.hpp )
@@ -74,9 +74,9 @@ install(EXPORT ${LIBNAME}_sqlite DESTINATION lib)
 if (MSVC)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/debug/${LIBNAME}_sqlited.lib DESTINATION lib/static COMPONENT devel)
 endif(MSVC)
-endif (WITH_SQLITE3)
+endif (LITESQL_WITH_SQLITE3)
 
-if (WITH_MYSQL)
+if (LITESQL_WITH_MYSQL)
   add_library(  ${LIBNAME}_mysql STATIC
         				mysql.cpp
    
@@ -90,9 +90,9 @@ if (MSVC)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/debug/${LIBNAME}_mysqld.lib DESTINATION lib/static COMPONENT devel)
 endif(MSVC)
 
-endif (WITH_MYSQL)
+endif (LITESQL_WITH_MYSQL)
 
-if (WITH_POSTGRES)
+if (LITESQL_WITH_POSTGRES)
   add_library(  ${LIBNAME}_postgresql STATIC
 				postgresql.cpp 
   )
@@ -103,9 +103,9 @@ if (WITH_POSTGRES)
 if (MSVC)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/debug/${LIBNAME}_postgresqld.lib DESTINATION lib/static COMPONENT devel)
 endif(MSVC)
-endif (WITH_POSTGRES)
+endif (LITESQL_WITH_POSTGRES)
 
-if (WITH_ODBC)
+if (LITESQL_WITH_ODBC)
   add_library(  ${LIBNAME}_odbc STATIC
       				odbc_backend.cpp 
 		      		odbc_backend.hpp 
@@ -118,7 +118,7 @@ if (MSVC)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/debug/${LIBNAME}_odbcd.lib DESTINATION lib/static COMPONENT devel)
 endif(MSVC)
 
-endif (WITH_ODBC)
+endif (LITESQL_WITH_ODBC)
 
 include_directories(../../src/library ../../include)
 

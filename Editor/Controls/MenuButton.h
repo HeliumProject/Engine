@@ -6,9 +6,10 @@
 /// right mouse button is pressed.
 #include "Editor/API.h"
 
+#include "Editor/Controls/Button.h"
+
 #include <wx/timer.h>
 #include <wx/menu.h>
-#include <wx/button.h>
 
 namespace Helium
 {
@@ -16,7 +17,7 @@ namespace Helium
     {
         /// @class MenuButton
         /// @brief adds on to the Button class to add menu functionality through mouse interaction
-        class MenuButton : public wxBitmapButton
+        class MenuButton : public Button
         {
         public:
             // wxWidgets setup
@@ -24,11 +25,11 @@ namespace Helium
             DECLARE_EVENT_TABLE( )
 
         protected:
-            wxMenu *m_contextMenu;          //<! context menu associated with this button
+            wxMenu *m_ContextMenu;          //<! context menu associated with this button
 
         private:
-            float   m_holdDelay;            //<! amount of seconds to delay if we need to hold the button for the menu to show
-            wxTimer m_timerShowOnHold;      //<! when the left mouse button is held, this timer fires telling us we should display the menu
+            float m_HoldDelay;             //<! amount of seconds to delay if we need to hold the button for the menu to show
+            wxTimer m_TimerShowOnHold;     //<! when the left mouse button is held, this timer fires telling us we should display the menu
 
             /// @function HandleTimerEvents
             /// @brief this is the function that responds to timer events and displays the context menu
@@ -46,7 +47,7 @@ namespace Helium
             /// @brief Constructor
             MenuButton(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& bitmap,
+                const wxString& label = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxBU_EXACTFIT,
@@ -61,12 +62,12 @@ namespace Helium
             /// @function SetHoldDelay
             /// @brief set the amount of time needed to left mouse down before the menu displays
             /// @param amount of Seconds before the menu displays
-            void  SetHoldDelay( float delay ) { m_holdDelay = delay; }
+            void  SetHoldDelay( float delay ) { m_HoldDelay = delay; }
 
             /// @function GetHoldDelay
             /// @brief get the amount of time needed before the menu displays
             /// @return time to display in Seconds
-            float GetHoldDelay( ) const { return m_holdDelay; }
+            float GetHoldDelay( ) const { return m_HoldDelay; }
 
             /// @function DetatchContextMenu
             /// @brief unassociates a menu from the button. The button will no longer reference this menu and it is up to the user to clean it up.
@@ -81,10 +82,10 @@ namespace Helium
             /// @function SetContextMenu
             /// @brief associates a menu with the button. During shutdown, the button will try to destroy this menu if it still retains a reference to it.
             /// @param the menu to associate with this button
-            void    SetContextMenu( wxMenu * menu ) ;
+            void SetContextMenu( wxMenu * menu ) ;
 
         protected:
-            virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+            virtual void DoSetBitmap(const wxBitmap& bitmap, State which) HELIUM_OVERRIDE;
 
             /// @function OnRightMouseDown
             /// @brief Right mouse down event handler. Displays the menu

@@ -6,14 +6,14 @@
 using namespace litesql;
 
 const LITESQL_Char* help = 
- LITESQL_L( "Usage: ddl2litesql [options] <my-database.xml>\n\n" )
- LITESQL_L( "Options:\n" )
- LITESQL_L( " -v, --verbose                      verbosely report code generation\n" )
- LITESQL_L( " --help                             print help\n" )
+LITESQL_L("Usage: ddl2litesql [options] <my-database.xml>\n\n")
+LITESQL_L("Options:\n")
+LITESQL_L(" -v, --verbose                      verbosely report code generation\n")
+LITESQL_L(" --help                             print help\n")
 
- LITESQL_L( " --output-dir=/path/to/src          output all files to directory \n" )
- LITESQL_L( "\n" )
- LITESQL_L( "\n\n" )
+LITESQL_L(" --output-dir=/path/to/src          output all files to directory \n")
+LITESQL_L("\n")
+LITESQL_L("\n\n")
 ;
 
 struct options_t {
@@ -21,7 +21,7 @@ struct options_t {
   bool printHelp;
 };
 
-options_t options = { LITESQL_L( "" ),false};
+options_t options = {LITESQL_L(""),false};
 
 int parseArgs(int argc, LITESQL_Char **argv) 
 {
@@ -30,18 +30,18 @@ int parseArgs(int argc, LITESQL_Char **argv)
 
   for (int i = 1; i < argc; i++) {
     LITESQL_String arg = argv[i];
-    if (arg ==  LITESQL_L( "-v" ) || arg ==  LITESQL_L( "--verbose" )) {
+    if (arg == LITESQL_L("-v") || arg == LITESQL_L("--verbose")) {
       Logger::verbose(true);
       continue;
-    } else if (litesql::startsWith(arg,  LITESQL_L( "--output-dir" ))) {
-      litesql::Split param(arg,  LITESQL_L( "=" ));
+    } else if (litesql::startsWith(arg, LITESQL_L("--output-dir"))) {
+      litesql::Split param(arg, LITESQL_L("="));
       options.output_dir=param[1];
       continue;
-    } else if (arg ==  LITESQL_L( "--help" )) {
+    } else if (arg == LITESQL_L("--help")) {
       options.printHelp = true;
       continue;
     } else if (i < argc - 1) {
-      Logger::error( LITESQL_L( "Error: invalid argument " )+ arg);
+      Logger::error(LITESQL_L("Error: invalid argument ")+ arg);
       return -1;
     }
   }
@@ -67,7 +67,7 @@ int main(int argc, LITESQL_Char **argv) {
     is.open(argv[argc-1]);
     if (!is.is_open())
     {
-      Logger::error( LITESQL_L( "cant open " ),argv[argc-1]);
+      Logger::error(LITESQL_L("cant open "),argv[argc-1]);
       return EXIT_FAILURE;
     }
     else

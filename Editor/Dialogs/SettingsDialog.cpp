@@ -182,13 +182,11 @@ void SettingsDialog::OnOk( wxCommandEvent& args )
         return;
     }
 
-    if ( m_CurrentSetting->m_Clone->Equals( m_CurrentSetting->m_Source ) )
+    if ( !m_CurrentSetting->m_Clone->Equals( m_CurrentSetting->m_Source ) )
     {
-        return;
+        m_CurrentSetting->m_Clone->CopyTo( m_CurrentSetting->m_Source );
+        m_CurrentSetting->m_Source->RaiseChanged();
     }
-
-    m_CurrentSetting->m_Clone->CopyTo( m_CurrentSetting->m_Source );
-    m_CurrentSetting->m_Source->RaiseChanged();
 
     EndModal( wxID_OK );
 }

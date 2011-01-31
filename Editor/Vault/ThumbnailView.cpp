@@ -13,6 +13,8 @@
 #include "Pipeline/SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "Pipeline/SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
 
+#include "Platform/Process.h"
+
 #include <wx/dnd.h>
 #include <shellapi.h>
 
@@ -80,8 +82,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
 , m_Scale( 128.0f )
 //, m_VaultPanel( vaultPanel )
 {
-    Helium::Path thumbnailDirectory;
-    m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager, thumbnailDirectory );
+    m_ThumbnailManager = new ThumbnailManager( this, &m_DeviceManager );
 
     // Don't erase background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -115,27 +116,29 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
 
     CalculateTotalItemSize();
 
+#pragma TODO( "Move these types of settings (and the icons below) to some kind of configuration file" )
     // Setup Ribbon colors and FileType Icons
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumEntity" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumScene" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "HeliumShader" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumEntity" ), TXT( "entity" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumScene" ), TXT( "scene" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.HeliumShader" ), TXT( "shader" ) );
-
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
+    Path processPath( GetProcessPath() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumShader" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), tstring( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
 
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
-    //m_VaultPanel->Connect( m_VaultPanel->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
+    Connect( parent->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnVaultPanelClosing ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,12 +177,10 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar_t* fileName )
+void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename )
 {
 #pragma TODO( "reimplement icons as resources" )
-    tstring file = fileName;
-
-    Helium::StdInsert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) ) ) );
+    Helium::StdInsert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, filename ) ) ) );
     HELIUM_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
 }
 
@@ -646,9 +647,10 @@ void ThumbnailView::CreateResources()
 
 #pragma TODO( "redo the below as resources" )
 
+    Path processPath( GetProcessPath() );
     if ( !m_TextureMissing )
     {
-        tstring file = TXT( "screenshot_missing.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureMissing = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureMissing->GetTexture() );
@@ -656,7 +658,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureError )
     {
-        tstring file = TXT( "file_error_256.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
 
         m_TextureError = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureError->GetTexture() );
@@ -664,7 +666,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureLoading )
     {
-        tstring file = TXT( "screenshot_loading.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Busy.png" );
 
         m_TextureLoading = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureLoading->GetTexture() );
@@ -672,7 +674,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureFolder )
     {
-        tstring file = TXT( "folder_256.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/Folder.png" );
 
         m_TextureFolder = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureFolder->GetTexture() );
@@ -680,7 +682,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureOverlay )
     {
-        tstring file = TXT( "thumbnail_overlay.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Overlay.png" );
 
         m_TextureOverlay = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureOverlay->GetTexture() );
@@ -688,7 +690,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureSelected )
     {
-        tstring file = TXT( "thumbnail_overlay_selected.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Selected.png" );
 
         m_TextureSelected = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureSelected->GetTexture() );
@@ -696,7 +698,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureHighlighted )
     {
-        tstring file = TXT( "thumbnail_overlay_highlighted.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/status/Highlighted.png" );
 
         m_TextureHighlighted = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureHighlighted->GetTexture() );
@@ -704,7 +706,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureBlankFile )
     {
-        tstring file = TXT( "blank_file_32.png" );
+        tstring file = processPath.Directory() + TXT( "Icons/256x256/filesystem/File.png" );
 
         m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -839,7 +841,7 @@ void ThumbnailView::CalculateTotalVisibleItems()
 void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
     // Do the math
-    size_t totalItems = m_Results ? m_Results->GetPathsMap().size() : 0;
+    size_t totalItems = m_Results ? m_Results->GetResults().size() : 0;
     uint32_t totalItemsY = (uint32_t)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
     Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
@@ -1263,13 +1265,13 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
 
             // FileType Overlay
-                M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetPath().FullExtension() );
-                if ( findIcon != m_FileTypeIcons.end() )
-                {
-                    Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-                }
+            M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetPath().Extension() );
+            if ( findIcon != m_FileTypeIcons.end() )
+            {
+                Helium::StdInsert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
             }
+        }
 
         if ( tile->GetThumbnail() == m_TextureLoading )
         {
@@ -1319,35 +1321,35 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Draw type name on top of the thumbnail image
-        tstring typeLabel = tile->GetTypeLabel();
-        if ( !typeLabel.empty() )
-        {
-            float left = 0.0f;
-            float top = 0.0f;
-            Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
-            m_World.Transform( topLeft );
-            WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+        //tstring typeLabel = tile->GetTypeLabel();
+        //if ( !typeLabel.empty() )
+        //{
+        //    float left = 0.0f;
+        //    float top = 0.0f;
+        //    Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
+        //    m_World.Transform( topLeft );
+        //    WorldToScreen( Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
-            float right = 0.0f;
-            float bottom = 0.0f;
-            Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
-            m_World.Transform( bottomRight );
-            WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
+        //    float right = 0.0f;
+        //    float bottom = 0.0f;
+        //    Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
+        //    m_World.Transform( bottomRight );
+        //    WorldToScreen( Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
 
-            RECT rect;
-            rect.top = top + 2;
-            rect.left = left;
-            rect.right = right;
-            rect.bottom = bottom;
-            LPD3DXSPRITE sprite = NULL;
+        //    RECT rect;
+        //    rect.top = top + 2;
+        //    rect.left = left;
+        //    rect.right = right;
+        //    rect.bottom = bottom;
+        //    LPD3DXSPRITE sprite = NULL;
 
-            DWORD color = s_TextColorDefault;
-            if ( tile->GetThumbnail()->IsFromIcon() )
-            {
-                color = s_TextColorDark;
-            }
-            result = m_LabelFont->DrawText( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
-        }
+        //    DWORD color = s_TextColorDefault;
+        //    if ( tile->GetThumbnail()->IsFromIcon() )
+        //    {
+        //        color = s_TextColorDark;
+        //    }
+        //    result = m_LabelFont->DrawText( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
+        //}
     }
 }
 
@@ -1950,7 +1952,6 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
         {
             // the extension is used to identify this type of file
             tstring extension = args.GetPath().Extension();
-            toLower( extension );
 
             // look for a cached thumbnail for this extension
             std::map<tstring, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
@@ -1959,48 +1960,19 @@ void ThumbnailView::OnThumbnailLoaded( Editor::ThumbnailLoadedEvent& args )
                 // we got it, just share it
                 tile->SetThumbnail( found->second );
             }
-            else // load the file associated icon from the shell
+            else // load the associated filetype icon
             {
-                WORD index = 0;
-
-                tstring native = args.GetPath().Native();
-
-                // get the icon resource for this example file
-                tchar_t path[MAX_PATH];
-                _tcscpy( path, native.c_str() );
-                HICON icon = ExtractAssociatedIcon( NULL, path, &index );
-
-                // if we got the resource
-                if ( icon )
+                found = m_FileTypeIcons.find( extension );
+                
+                if ( found != m_FileTypeIcons.end() )
                 {
-                    // check to see if its the fallback in shell32.dll
-                    tchar_t file[MAX_PATH];
-                    _tsplitpath( path, NULL, NULL, file, NULL );
-
-                    // if its windows' stub icon, don't bother using it
-                    if ( _tcsicmp( file, TXT( "SHELL32" ) ) )
-                    {
-                        // build a thumbnail texture from the icon resource
-                        ThumbnailPtr thumb = new Thumbnail( &m_DeviceManager );
-                        if ( thumb->FromIcon( icon ) )
-                        {
-                            // cache it for re-use
-                            m_AssociatedIcons[ extension ] = thumb;
-
-                            // set this file's thumb
-                            tile->SetThumbnail( thumb );
-                        }
-                        else
-                        {
-                            // there is no decent associated icon, so juse use missing
-                            m_AssociatedIcons[ extension ] = m_TextureMissing;
-                        }
-                    }
+                    m_AssociatedIcons[ extension ] = found->second;
+                    tile->SetThumbnail( found->second );
                 }
-
-                // if we don't have a thumbnail use the fallback
-                if ( !tile->GetThumbnail() )
+                else
                 {
+                    // there is no decent associated icon, so juse use missing
+                    m_AssociatedIcons[ extension ] = m_TextureMissing;
                     tile->SetThumbnail( m_TextureMissing );
                 }
             }

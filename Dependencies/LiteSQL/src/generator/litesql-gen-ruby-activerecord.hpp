@@ -1,26 +1,29 @@
 #ifndef litesql_gen_ruby_activerecord_hpp
 #define litesql_gen_ruby_activerecord_hpp
-#include "litesql_char.hpp"
+
 #include "generator.hpp"
 
 namespace litesql {
 
   class RubyActiveRecordGenerator : public CompositeGenerator {
   public:
+     static const LITESQL_Char* NAME;
     RubyActiveRecordGenerator();
   };
 
   class ActiveRecordClassGenerator : public CodeGenerator {
   public:
-    ActiveRecordClassGenerator(): CodeGenerator(LITESQL_L("ruby-activerecord-class")) { };
+     static const LITESQL_Char* NAME;
+    ActiveRecordClassGenerator(): CodeGenerator(NAME) { };
     bool generateCode(const ObjectModel* model);
   protected:   
-    bool generate(xml::Object* const object);
+    bool generate(const xml::ObjectPtr& object);
   };
 
   class RubyMigrationsGenerator : public CodeGenerator {
   public:
-    RubyMigrationsGenerator(): CodeGenerator(LITESQL_L("ruby-activerecord-migrations")) { };
+     static const LITESQL_Char* NAME;
+    RubyMigrationsGenerator(): CodeGenerator(NAME) { };
     bool generateCode(const ObjectModel* model);
   };
 

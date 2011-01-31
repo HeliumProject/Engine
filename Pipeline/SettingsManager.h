@@ -58,6 +58,9 @@ namespace Helium
             m_SettingsMap.erase( Type::GetType() );
         }
 
+        // removes any unknown settings types
+        void Clean();
+
     private:
         M_Settings m_SettingsMap;
 

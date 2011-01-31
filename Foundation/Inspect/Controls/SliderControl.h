@@ -17,7 +17,9 @@ namespace Helium
 
             Slider();
 
+        protected:
             virtual bool Process( const tstring& key, const tstring& value );
+            void SetToDefault(const ContextMenuEventArgs& event);
 
         public:
             Attribute< float >  a_Min;

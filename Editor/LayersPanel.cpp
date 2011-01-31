@@ -4,6 +4,7 @@
 #include "ArtProvider.h"
 #include "EditorIDs.h"
 
+#include "Editor/Controls/Button.h"
 #include "Pipeline/SceneGraph/DependencyCommand.h"
 
 using namespace Helium;
@@ -40,12 +41,25 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     {
         Freeze();
 
+        m_CreateNewLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_CreateNewLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayer ) );
+        
+        m_CreateNewLayerFromSelectionButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_CreateNewLayerFromSelectionButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayerFromSelection ) );
+        
+        m_DeleteSelectedLayersButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_DeleteSelectedLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DeleteSelectedLayers ) );
+        
+        m_AddSelectionToLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_AddSelectionToLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::AddSelectionToLayers ) );
+        
+        m_RemoveSelectionFromLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_RemoveSelectionFromLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RemoveSelectionFromLayers ) );
+        
+        m_SelectLayerMembersButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_SelectLayerMembersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayerMembers ) );
+        
+        m_SelectLayersButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_SelectLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayers ) );
 
         m_LayerManagementPanel->Layout();

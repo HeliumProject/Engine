@@ -6,7 +6,6 @@
 
 #ifndef litesql_expr_hpp
 #define litesql_expr_hpp
-#include "litesql_char.hpp"
 #include <string>
 #include <utility>
 #include "litesql/utils.hpp"
@@ -18,25 +17,29 @@ namespace litesql {
     See \ref usage_selecting_persistents */
 class Expr {
 protected:
-    // extra tables to be joined
-    Split extraTables;
+  // extra tables to be joined
+  Split extraTables;
 public:
   /// constant for True expression
   static const LITESQL_Char* True; 
-    // default expression is true
-    virtual LITESQL_String asString() const { return True; }
+
+  Expr() {};
+  Expr(const Expr& e) : extraTables(e.extraTables) {};
+  virtual ~Expr() {}
+
+  // default expression is true
+  virtual LITESQL_String asString() const { return True; }
 
 
-    Split getExtraTables() const { 
-        return extraTables;
-    }
-    virtual ~Expr() {}
+  Split getExtraTables() const { 
+    return extraTables;
+  }
 };
 /** used to inject custom expression into WHERE-clause */
 class RawExpr : public Expr {
     LITESQL_String expr;
 public:
-    RawExpr(LITESQL_String e) : expr(e) {}
+    RawExpr(const LITESQL_String& e) : expr(e) {}
     virtual LITESQL_String asString() const { return expr; }
 };
 /** used to connect two expressions */
@@ -44,24 +47,25 @@ class Connective : public Expr {
 private:
     LITESQL_String op;
 protected:
-    const Expr &e1, &e2;
-    
-    Connective(LITESQL_String o, const Expr & e1_, const Expr & e2_)
+    const Expr &e1;
+    const Expr &e2;
+
+    Connective(const LITESQL_String& o, const Expr & e1_, const Expr & e2_)
         : op(o), e1(e1_), e2(e2_) { }
-    
+ 
 public:        
     virtual ~Connective() {}
     
     virtual LITESQL_String asString() const {
-        LITESQL_String res =  LITESQL_L("(") + e1.asString() +  LITESQL_L(") ") + op 
-            +  LITESQL_L(" (") + e2.asString() +  LITESQL_L(")");
+        LITESQL_String res = LITESQL_L("(") + e1.asString() + LITESQL_L(") ") + op 
+            + LITESQL_L(" (") + e2.asString() + LITESQL_L(")");
         return res;
     }
 };  
 /** connects two expressions with and-operator. */
 class And : public Connective {
 public:
-    And(const Expr & e1_, const Expr & e2_) : Connective(LITESQL_L("and"), e1_, e2_) {}
+    And(const Expr & e1_,const Expr & e2_) : Connective(LITESQL_L("and"), e1_, e2_) {}
     virtual LITESQL_String asString() const {     
         if (e1.asString() == True)
             return e2.asString();
@@ -90,7 +94,7 @@ private:
 public:
     Not(const Expr & _exp) : exp(_exp) {}
     virtual LITESQL_String asString() const {    
-        return  LITESQL_L("not (")+exp.asString()+ LITESQL_L(")");
+        return LITESQL_L("not (")+exp.asString()+LITESQL_L(")");
     }
         
 };
@@ -114,7 +118,7 @@ protected:
 public:
     virtual LITESQL_String asString() const {
         LITESQL_String res;
-        res += field.fullName() +  LITESQL_L(" ") + op +  LITESQL_L(" ") + (escape ? escapeSQL(data) : data);
+        res += field.fullName() + LITESQL_L(" ") + op + LITESQL_L(" ") + (escape ? escapeSQL(data) : data);
         return res;
     }
 };
@@ -122,18 +126,18 @@ public:
 class Eq : public Oper {
 public:
     Eq(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L("="), d) {}
+        : Oper(fld, LITESQL_L("="), d) {}
     Eq(const FieldType & fld, const FieldType & f2)
-        : Oper(fld,  LITESQL_L("="), f2) {}
+        : Oper(fld, LITESQL_L("="), f2) {}
 
 };
 /** inequality operator */
 class NotEq : public Oper {
 public:
     NotEq(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L("<>"), d) {}
+        : Oper(fld, LITESQL_L("<>"), d) {}
     NotEq(const FieldType & fld, const FieldType & f2)
-        : Oper(fld,  LITESQL_L("<>"), f2) {
+        : Oper(fld, LITESQL_L("<>"), f2) {
     }
    
 };
@@ -141,58 +145,59 @@ public:
 class Gt : public Oper {
 public:
     Gt(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L(">"), d) {}
+        : Oper(fld, LITESQL_L(">"), d) {}
     Gt(const FieldType & fld, const FieldType& d)
-        : Oper(fld,  LITESQL_L(">"), d) {}
+        : Oper(fld, LITESQL_L(">"), d) {}
 
 };
 /** greater or equal operator */
 class GtEq : public Oper {
 public:
     GtEq(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L(">="), d) {}
+        : Oper(fld, LITESQL_L(">="), d) {}
     GtEq(const FieldType & fld, const FieldType& d)
-        : Oper(fld,  LITESQL_L(">="), d) {}
+        : Oper(fld, LITESQL_L(">="), d) {}
 
 };
-/** less than operator */
+/** std::less than operator */
 class Lt : public Oper {
 public:
     Lt(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L("<"), d) {}
+        : Oper(fld, LITESQL_L("<"), d) {}
     Lt(const FieldType & fld, const FieldType& d)
-        : Oper(fld,  LITESQL_L("<"), d) {}
+        : Oper(fld, LITESQL_L("<"), d) {}
 
 };
-/** less than or equal operator */
+/** std::less than or equal operator */
 class LtEq : public Oper {
 public:
     LtEq(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L("<="), d) {}
+        : Oper(fld, LITESQL_L("<="), d) {}
     LtEq(const FieldType & fld, const FieldType& d)
-        : Oper(fld,  LITESQL_L("<="), d) {}
+        : Oper(fld, LITESQL_L("<="), d) {}
 
 };
 /** like operator */
 class Like : public Oper {
 public:
     Like(const FieldType & fld, const LITESQL_String& d)
-        : Oper(fld,  LITESQL_L("like"), d) {}
+        : Oper(fld, LITESQL_L("like"), d) {}
 };
 class SelectQuery;
 /** in operator */
 class In : public Oper {
 public:
     In(const FieldType & fld, const LITESQL_String& set)
-        : Oper(fld,  LITESQL_L("in"),  LITESQL_L("(")+set+ LITESQL_L(")")) {};
+        : Oper(fld, LITESQL_L("in"), LITESQL_L("(")+set+LITESQL_L(")")) {};
     In(const FieldType & fld, const SelectQuery& s);
     virtual LITESQL_String asString() const {
-        return field.fullName() +  LITESQL_L(" ") + op +  LITESQL_L(" ") + data;
+        return field.fullName() + LITESQL_L(" ") + op + LITESQL_L(" ") + data;
     }
     
 };
 And operator&&(const Expr& o1, const Expr& o2);
 Or operator||(const Expr& o1, const Expr& o2);
+
 template <class T>
 litesql::Eq operator==(const litesql::FieldType& fld, const T& o2) {
     return litesql::Eq(fld, litesql::toString(o2));

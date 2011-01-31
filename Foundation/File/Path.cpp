@@ -556,7 +556,7 @@ bool Path::IsAbsolute() const
     return Path::IsAbsolute( m_Path.c_str() );
 }
 
-bool Path::IsUnder( const tstring& location )
+bool Path::IsUnder( const tstring& location ) const
 {
     return Path::IsUnder( location, m_Path );
 }

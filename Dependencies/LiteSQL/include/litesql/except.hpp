@@ -7,6 +7,7 @@
 #ifndef _litesql_except_hpp
 #define _litesql_except_hpp
 #include "litesql_char.hpp"
+#include <iostream>
 #include <string>
 #include <exception>
 #include "litesql/utils.hpp"
@@ -28,7 +29,7 @@ public:
 #else
         return msg.c_str();
 #endif
-	}
+    }
     friend LITESQL_oStream &operator<<(LITESQL_oStream &os, const Except &e) {
         os << e.msg;
         return os;
@@ -37,7 +38,7 @@ public:
 /** exception thrown when a record is not found */    
 class NotFound : public Except {
 public:
-    NotFound(LITESQL_String s= LITESQL_L("")) : Except(LITESQL_L("NotFound: ")+s) {}
+    NotFound(LITESQL_String s=LITESQL_L("")) : Except(LITESQL_L("NotFound: ")+s) {}
 };
 /** exception thrown when database cannot be accessed */
 class DatabaseError : public Except {

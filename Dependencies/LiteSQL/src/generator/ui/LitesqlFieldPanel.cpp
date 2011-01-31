@@ -1,8 +1,6 @@
 #include "LitesqlFieldPanel.h"
 #include "objectmodel.hpp"
 
-//#include "litesql/field.hpp"
-
 #include "ddx.h"
 
 using namespace xml;
@@ -11,7 +9,7 @@ IMPLEMENT_DYNAMIC_CLASS(LitesqlFieldPanel,ui::FieldPanel)
 
 /////////////////////////////////////////////////////////////////////////////
 
-LitesqlFieldPanel::LitesqlFieldPanel( wxWindow* parent , Field* pField)
+LitesqlFieldPanel::LitesqlFieldPanel( wxWindow* parent , Field::counted_ptr pField)
 :
 FieldPanel( parent ),
 m_pField(pField)
@@ -21,7 +19,7 @@ m_pField(pField)
   m_textCtrlDefaultValue->Enable(m_pField->isEditable()); 
   m_checkBoxIndexed->Enable(m_pField->isEditable());
   m_checkBoxUnique->Enable(m_pField->isEditable());
-
+  m_listValues->Enable(m_pField->isEditable());
   
   m_textCtrlName->SetValidator(StdStringValidator(wxFILTER_ALPHANUMERIC,&m_pField->name));
   m_textCtrlDefaultValue->SetValidator(StdStringValidator(wxFILTER_ALPHANUMERIC,&m_pField->default_));
@@ -31,37 +29,55 @@ m_pField(pField)
 
   m_checkBoxIndexed->SetValidator(FieldIndexedValidator(m_pField));
   m_checkBoxUnique->SetValidator(FieldUniqueValidator(m_pField));
+
   m_listValues->SetValidator(FieldValuesValidator(m_pField));
+  
+  m_listValues->InsertColumn(0, _(LITESQL_L("Name")) , wxLIST_FORMAT_LEFT, m_listValues->GetSize().GetWidth()/2 );
+  m_listValues->InsertColumn(1, _(LITESQL_L("Value")), wxLIST_FORMAT_LEFT, wxLIST_AUTOSIZE );
 }
 
 void LitesqlFieldPanel::OnAddValue( wxCommandEvent& event )
 {
-  m_listValues->AppendString(_( LITESQL_L( "newValue" )));
+  long index = m_listValues->InsertItem(m_listValues->GetItemCount(), _(LITESQL_L("newValue")));
+  m_listValues->SetItem(index, 1, _(LITESQL_L("?")));
 }
 
 void LitesqlFieldPanel::OnRemoveValue( wxCommandEvent& event )
-{}
+{
+  long item = -1;
+  for ( ;; )
+  {
+    item = m_listValues->GetNextItem(item,
+      wxLIST_NEXT_ALL,
+      wxLIST_STATE_SELECTED);
+    if ( item == -1 )
+      break;
+
+    // this item is selected - do whatever is needed with it
+    m_listValues->DeleteItem(item);
+  }
+}
 
 // FieldTypeValidator implementation
 /****************************************************************************/
 const wxString FTSTRING[] = { 
-               _( LITESQL_L( "" )),
-               _( LITESQL_L( "boolean" )),
-               _( LITESQL_L( "integer" )),
-               _( LITESQL_L( "LITESQL_String" )),
-               _( LITESQL_L( "float" )),
-               _( LITESQL_L( "double" )),
-               _( LITESQL_L( "time" )),
-               _( LITESQL_L( "date" )),
-               _( LITESQL_L( "datetime" )),
-               _( LITESQL_L( "blob" )) 
+               _(LITESQL_L("")),
+               _(LITESQL_L("boolean")),
+               _(LITESQL_L("integer")),
+               _(LITESQL_L("LITESQL_String")),
+               _(LITESQL_L("float")),
+               _(LITESQL_L("double")),
+               _(LITESQL_L("time")),
+               _(LITESQL_L("date")),
+               _(LITESQL_L("datetime")),
+               _(LITESQL_L("blob")) 
 };  
 
 const wxArrayString FieldTypeValidator::FIELDTYPES(sizeof(FTSTRING)/sizeof(FTSTRING[0]),FTSTRING);
 
 IMPLEMENT_DYNAMIC_CLASS(FieldTypeValidator,wxGenericValidator)
 
-FieldTypeValidator::FieldTypeValidator (xml::Field *val)
+FieldTypeValidator::FieldTypeValidator (xml::Field::counted_ptr val)
 : m_pField(val),
   wxGenericValidator(&value)
 {
@@ -99,7 +115,7 @@ bool FieldTypeValidator::TransferFromWindow()
 
 IMPLEMENT_DYNAMIC_CLASS(FieldIndexedValidator,wxGenericValidator)
 
-FieldIndexedValidator::FieldIndexedValidator (xml::Field* pField)
+FieldIndexedValidator::FieldIndexedValidator (xml::Field::counted_ptr pField)
 : m_pField(pField),
   wxGenericValidator(&isIndexed)
 {
@@ -139,7 +155,7 @@ bool FieldIndexedValidator::TransferFromWindow()
 
 IMPLEMENT_DYNAMIC_CLASS(FieldUniqueValidator,wxGenericValidator)
 
-FieldUniqueValidator::FieldUniqueValidator (xml::Field* pField)
+FieldUniqueValidator::FieldUniqueValidator (xml::Field::counted_ptr pField)
 : m_pField(pField),
   wxGenericValidator(&isUnique)
 {
@@ -179,7 +195,7 @@ bool FieldUniqueValidator::TransferFromWindow()
 /****************************************************************************/
 IMPLEMENT_DYNAMIC_CLASS(FieldValuesValidator,wxValidator)
 
-FieldValuesValidator::FieldValuesValidator (xml::Field *val)
+FieldValuesValidator::FieldValuesValidator (Field::counted_ptr val)
 : m_pField(val),
   wxValidator()
 {
@@ -199,17 +215,19 @@ wxObject *FieldValuesValidator::Clone() const
 bool FieldValuesValidator::TransferToWindow() 
 {
   wxWindow * pWin = GetWindow();
-  if ( !pWin || !pWin->IsKindOf(CLASSINFO(wxListBox)) )
+  if ( !pWin || !pWin->IsKindOf(CLASSINFO(wxListCtrl)) )
   {
     return false;    
   }
   else {
-    wxListBox* pList = (wxListBox*)pWin; 
-    pList->Clear();
+    wxListCtrl* pList = (wxListCtrl*)pWin; 
+    pList->DeleteAllItems();
     size_t pos = 0;
     for (std::vector<Value>::const_iterator it = m_pField->values.begin(); it != m_pField->values.end();it++)
     {
-      pList->Insert(wxString::FromUTF8(it->name.c_str()),pos++);
+      long index = pList->InsertItem(pList->GetItemCount(),wxString::FromUTF8(it->name.c_str()),pos++);
+      pList->SetItem(index,1,wxString::FromUTF8(it->value.c_str()),pos++);
+
     }
   }
   return true;
@@ -219,22 +237,38 @@ bool FieldValuesValidator::TransferToWindow()
 bool FieldValuesValidator::TransferFromWindow()
 {
   wxWindow * pWin = GetWindow();
-  if ( !pWin || !pWin->IsKindOf(CLASSINFO(wxListBox)) )
+  if ( !pWin || !pWin->IsKindOf(CLASSINFO(wxListCtrl)) )
   {
     return false;    
   }
   else
   {
-    wxArrayString values = ((wxListBox*)pWin)->GetStrings();
-    
+    wxListCtrl* pList = (wxListCtrl*)pWin; 
     m_pField->values.clear();
-    size_t i = 0;
-    for (wxArrayString::const_iterator it = values.begin(); it != values.end();it++)
+    
+    ;
+  
+    wxListItem info;
+    for( long index = pList->GetNextItem(-1); 
+         index !=wxNOT_FOUND;
+         index = pList->GetNextItem(index) 
+       )
     {
-      LITESQL_String name = (*it).ToUTF8();
-      xml::Value v(name,toString<int>(i++));
+      
+      LITESQL_String name(pList->GetItemText(index).ToUTF8());
+      
+      // get column 1 as value
+      info.SetId(index);
+      info.SetColumn(1);
+      info.SetMask(wxLIST_MASK_TEXT);
+      pList->GetItem(info);
+      
+      LITESQL_String value(info.GetText().ToUTF8());
+      
+      xml::Value v(name,value);
       m_pField->values.push_back( v );
     }
+    
     return true;
   }
 }

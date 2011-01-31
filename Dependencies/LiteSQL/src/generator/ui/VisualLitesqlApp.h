@@ -49,4 +49,4 @@ private:
 
 DECLARE_APP(VisualLitesqlApp)
 
-#endif // #ifndef VisualLitesqlApp_H
+#endif // #ifndef VisualLitesqlApp_H

@@ -5,7 +5,7 @@
  * See LICENSE for copyright information. */
 #ifndef _litesql_types_hpp
 #define _litesql_types_hpp
-#include "litesql_char.hpp"
+#include <string>
 #include <vector>
 #include "litesql/utils.hpp"
 #include "litesql/except.hpp"

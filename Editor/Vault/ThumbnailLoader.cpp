@@ -80,7 +80,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
 
         ResultArgs args;
-        args.m_Path = &path;
+        args.m_Path = path;
         args.m_Cancelled = false;
 
         if ( SceneGraph::IsSupportedTexture( path.Get() ) )
@@ -94,27 +94,35 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
         else
         {
-            tstringstream str;
-            str << path.Hash();
-            Helium::Path thumbnailFolderPath( m_Loader.m_ThumbnailDirectory + wxT('/') + str.str() );
-            Helium::Directory thumbnailFolder( thumbnailFolderPath.Get() );
+#pragma TODO( "When we store the thumbnail in the asset file, fix this." )
 
-            while( !thumbnailFolder.IsDone() )
+            if ( path.Extension() == TXT( "HeliumEntity" ) )
             {
-                IDirect3DTexture9* texture = NULL;
-                if ( texture = LoadTexture( device, thumbnailFolder.GetItem().m_Path ) )
+                Path thumbnailPath( path.Directory() + path.Basename() + TXT( "_thumbnail.png" ) );
+
+                if ( thumbnailPath.Exists() )
                 {
-                    ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
-                    args.m_Textures.push_back( thumbnail );
+                    IDirect3DTexture9* texture = NULL;
+                    if ( texture = LoadTexture( device, thumbnailPath.Get() ) )
+                    {
+                        ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
+                        args.m_Textures.push_back( thumbnail );
+                    }
+                }
+            }
+            // Include the color map of a shader as a possible thumbnail image
+            else if ( path.Extension() == TXT( "HeliumShader" ) )
+            {
+                Asset::ShaderAssetPtr shader = NULL;
+                try
+                {
+                    shader = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( path );
+                }
+                catch( const Exception& )
+                {
+                    shader = NULL;
                 }
 
-                thumbnailFolder.Next();
-            }
-
-            // Include the color map of a shader as a possible thumbnail image
-            if ( path.FullExtension() == TXT( "HeliumShader" ) )
-            {
-                Asset::ShaderAssetPtr shader = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( path );
                 if ( shader )
                 {
                     Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
@@ -132,6 +140,32 @@ void* ThumbnailLoader::LoadThread::Entry()
                     }
                 }
             }
+            else if ( path.Extension() == TXT( "HeliumTexture" ) )
+            {
+                Asset::TexturePtr textureAsset = NULL;
+                
+                try
+                {
+                    textureAsset = Asset::AssetClass::LoadAssetClass< Asset::Texture >( path );
+                }
+                catch( const Exception& )
+                {
+                    textureAsset = NULL;
+                }
+
+                if ( textureAsset.ReferencesObject() )
+                {
+                    if ( textureAsset->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
+                    {
+                        IDirect3DTexture9* texture = NULL;
+                        if ( texture = LoadTexture( device, textureAsset->GetContentPath().Get() ) )
+                        {
+                            ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
+                            args.m_Textures.push_back( thumbnail );
+                        }
+                    }
+                }
+            }
         }
 
         m_Loader.m_Result.Raise( args );
@@ -140,10 +174,9 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( DeviceManager* d3dManager, const tstring& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( DeviceManager* d3dManager )
 : m_LoadThread( *this )
 , m_Quit( false )
-, m_ThumbnailDirectory( thumbnailDirectory )
 , m_DeviceManager( d3dManager )
 {
     m_LoadThread.Create();
@@ -185,7 +218,7 @@ void ThumbnailLoader::Stop()
     while ( !queue->Empty() )
     {
         ResultArgs args;
-        args.m_Path = &( queue->Front() );
+        args.m_Path = ( queue->Front() );
         args.m_Cancelled = true;
         m_Result.Raise( args );
         

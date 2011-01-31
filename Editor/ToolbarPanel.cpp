@@ -29,46 +29,46 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         Freeze();
 
+        m_SelectButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_SelectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectTool ) );
-        m_SelectButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_TranslateButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_TranslateButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::TranslateTool ) );
-        m_TranslateButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_RotateButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_RotateButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RotateTool ) );
-        m_RotateButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_ScaleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_ScaleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ScaleTool ) );
-        m_ScaleButton->SetButtonOptions( ButtonOptions::Toggle );
 
+        m_DuplicateToolButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_DuplicateToolButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DuplicateTool ) );
-        m_DuplicateToolButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_LocatorToolButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_LocatorToolButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Locator ) );
-        m_LocatorToolButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_VolumeToolButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_VolumeToolButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Volume ) );
-        m_VolumeToolButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_EntityToolButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_EntityToolButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Entity ) );
-        m_EntityToolButton->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_CurveToolLocator->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_CurveToolLocator->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Curve ) );
-        m_CurveToolLocator->SetButtonOptions( ButtonOptions::Toggle );
         
+        m_CurveEditToolButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_CurveEditToolButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CurveEdit ) );
-        m_CurveEditToolButton->SetButtonOptions( ButtonOptions::Toggle );
 
+        m_PlayButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Play ) );
-        m_PlayButton->SetButtonOptions( ButtonOptions::Toggle );
         m_PlayButton->Enable( false );
         
+        m_PauseButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Pause ) );
-        m_PauseButton->SetButtonOptions( ButtonOptions::Toggle );
         m_PauseButton->Enable( false );
         
+        m_StopButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
         m_StopButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Stop ) );
-        m_StopButton->SetButtonOptions( ButtonOptions::Toggle );
         m_StopButton->Enable( false );
 
         Layout();
@@ -112,7 +112,10 @@ void ToolbarPanel::ToggleTool( int32_t selectedTool )
 {
     for ( std::vector< Button* >::const_iterator itr = m_ToolsButtons.begin(), end = m_ToolsButtons.end(); itr != end; ++itr )
     {
-        (*itr)->SetValue( (*itr)->GetId() == selectedTool );
+        if ( (*itr)->GetId() != selectedTool )
+        {
+            (*itr)->SetValue( false );
+        }
     }
 
     Refresh();

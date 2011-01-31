@@ -1,6 +1,7 @@
 Helium = {}
 
 Helium.RequiredCLVersion = 150030729
+Helium.RequiredFBXVersion = '2011.3.1'
 
 os.capture = function( cmd, raw )
     local f = assert( io.popen( cmd, 'r' ) )
@@ -35,6 +36,23 @@ Helium.Build64Bit = function()
     end
 end
 
+Helium.GetFbxSdkLocation = function()
+    local fbxLocation = os.getenv( 'FBX_SDK' )
+    if not fbxLocation then
+        if os.get() == "windows" then
+            fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
+            if not os.isdir( fbxLocation ) then
+                fbxLocation = nil
+            end
+        else
+            print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
+            os.exit(1)
+        end
+    end
+    
+    return fbxLocation
+end
+
 Helium.Sleep = function( seconds )
 	if os.get() == "windows" then
 		os.execute("ping 127.0.0.1 -n " .. seconds + 1 .. " -w 1000 >:nul 2>&1")
@@ -51,11 +69,18 @@ Helium.CheckEnvironment = function()
     
         local failed = 0
         
+        if os.pathsearch( 'Python.exe', os.getenv( 'PATH' ) ) == nil then
+            print( " -> Python was not found in your path.  Python is required for the 'prebuild' phase." )
+            print( " -> Make sure to download python (http://www.python.org/download/) and add it to your path." )
+            print( " -> eg: Add c:\\Python\\Python31 to your path." )
+            failed = 1
+		end
+
         if os.getenv( "VCINSTALLDIR" ) == nil then
             print( " -> You must be running in a Visual Studio Command Prompt.")
             failed = 1
         end
-        
+
         if not failed then
             if os.pathsearch( 'cl.exe', os.getenv( 'PATH' ) ) == nil then
                 print( " -> cl.exe was not found in your path.  Make sure you are using a Visual Studio 2008 SP1 Command Prompt." )
@@ -76,8 +101,24 @@ Helium.CheckEnvironment = function()
             end
         end
         
+        if os.getenv( 'CL' ) == nil or not string.match( os.getenv( 'CL' ), '\/MP' ) then
+            print( "\n\n  SUGGESTION: You should consider setting the 'CL' environment variable to contain '/MP' to take advantage of multiple cores/hyperthreading to help improve Helium build times.\n\n\n" )
+        end
+        
         if os.getenv( "DXSDK_DIR" ) == nil then
             print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
+            failed = 1
+        end
+        
+        local fbxDir = Helium.GetFbxSdkLocation()
+        if not fbxDir or not os.isdir( fbxDir ) then
+            print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
+            print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\2011.3.1" )
+            failed = 1
+        end
+        
+        if fbxDir and not string.match( fbxDir, '2011\.3\.1$' ) then
+            print( " -> Currently, Helium only supports version 2011.3.1 of the FBX SDK.  Please download that specific version and make sure your FBX_SDK environment variable points to the proper install location." )
             failed = 1
         end
         
@@ -86,7 +127,6 @@ Helium.CheckEnvironment = function()
             os.exit( 1 )
         end
     end
-
 end
 
 Helium.Publish = function( files )

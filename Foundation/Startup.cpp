@@ -78,7 +78,6 @@ void Helium::Startup( int argc, const tchar_t** argv )
 {
     if ( ++g_InitCount == 1 )
     {
-
         g_StringTable.AddString( "en", "WaitingDebuggerAttach", TXT( "Waiting <MINUTES> minutes for debugger to attach...\n" ) );
         g_StringTable.AddString( "en", "DebuggerAttached", TXT( "Debugger attached\n" ) );
         g_StringTable.AddString( "en", "RunningApp", TXT( "Running <APPNAME>...\n" ) );
@@ -90,21 +89,12 @@ void Helium::Startup( int argc, const tchar_t** argv )
 #pragma TODO( "Set the language at some more appropriate point in the code?" )
         Localization::GlobalLocalizer().SetLanguageId( "en" );
 
-
-
         InitializeStandardTraceFiles(); 
 
-        //
         // Set our start time
-        //
-
         _ftime( &g_StartTime ); 
 
-
-        //
         // Init command line, wait for remote debugger
-        //
-
         if ( argc )
         {
             Helium::SetCmdLine( argc, argv );
@@ -131,11 +121,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
             }
         }
 
-
-        //
         // Setup debug CRT
-        //
-
 #ifdef _DEBUG
         int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
         if (Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ))
@@ -149,11 +135,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
         _CrtSetDbgFlag(flags);
 #endif
 
-
-        //
         // Only print startup summary if we are not in script mode
-        //
-
         if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
             //
@@ -178,11 +160,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
             Log::Print( stmt.Get().c_str() );
         }
 
-
-        //
         // Setup Console
-        //
-
         if ( Helium::GetCmdLineFlag( StartupArgs::Extreme ) )
         {
             Log::SetLevel( Log::Levels::Extreme );
@@ -246,11 +224,6 @@ void Helium::Startup( int argc, const tchar_t** argv )
             }
         }
 
-
-        //
-        // Setup exception handlers, do this last
-        //
-
         // handle invalid parameters, etc...
         Helium::EnableCPPErrorHandling( true );
 
@@ -274,25 +247,16 @@ int Helium::Shutdown( int code )
         // signal our shutdown has begun
         g_ShutdownStarted = true;
 
-
         Localization::Cleanup();
 
-        //
-        // This should be done first, so that dynamic libraries to be freed in Cleanup()
-        //  don't cause breakage in profile
-        //
-
+        // This should be done first, so that dynamic libraries to be freed in Cleanup() don't cause breakage in profile
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
             Profile::Memory::Cleanup();
             Profile::Accumulator::ReportAll();
         }
 
-
-        //
         // Only print shutdown summary if we are not in script mode
-        //
-
         if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
             //
@@ -336,10 +300,7 @@ int Helium::Shutdown( int code )
                 }
             }
 
-
-            //
             // Print general success or failure, depends on the result code
-            //
             tchar_t module[MAX_PATH];
             GetModuleFileName( 0, module, MAX_PATH );
 
@@ -349,11 +310,7 @@ int Helium::Shutdown( int code )
             Log::Print( TXT( "%s: " ), name );
             Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? Log::Colors::Red : Log::Colors::Green );
 
-
-            //
             // Print warning/error count
-            //
-
             if (Log::GetWarningCount() || Log::GetErrorCount())
             {
                 Log::Print( TXT( " with" ) );
@@ -381,18 +338,11 @@ int Helium::Shutdown( int code )
             Log::Print( TXT( "\n" ) );
         }
 
-
-        //
         // Raise Shutdown Event
-        //
-
         g_ShuttingDown.Raise( ShutdownArgs () );
 
 
-        //
         // Setup debug CRT to dump memleaks to OutputDebugString and stderr
-        //
-
 #ifdef _DEBUG
         if ( !Helium::GetCmdLineFlag( StartupArgs::DisableDebugHeap ) && !Helium::GetCmdLineFlag( StartupArgs::DisableLeakCheck ) )
         {
@@ -407,11 +357,7 @@ int Helium::Shutdown( int code )
         }
 #endif
 
-
-        //
         // Disable exception handling
-        //
-
         Helium::Debug::CleanupExceptionListener();
 
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))

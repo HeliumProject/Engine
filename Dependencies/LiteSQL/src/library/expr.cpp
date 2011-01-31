@@ -4,15 +4,15 @@
  * 
  * See LICENSE for copyright information. */
 
-#include "litesql_char.hpp"
+
 #include "litesql/expr.hpp"
 #include "litesql/selectquery.hpp"
 namespace litesql {
 
-const LITESQL_Char* Expr::True = LITESQL_L("True");
+const LITESQL_Char* Expr::True =LITESQL_L("True");
 
 In::In(const FieldType & fld, const SelectQuery& s)
-    : Oper(fld,  LITESQL_L("in"),  LITESQL_L("(") + s.asString() +  LITESQL_L(")")) {}
+    : Oper(fld, LITESQL_L("in"), LITESQL_L("(") + s.asString() + LITESQL_L(")")) {}
 And operator&&(const Expr &o1, const Expr &o2) {
     return And(o1,o2);
 }

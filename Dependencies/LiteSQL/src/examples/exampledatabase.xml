@@ -54,4 +54,12 @@
         <relate object="Employee" handle="office"/>
         <relate object="Office" handle="employees"/>
     </relation>
+  <object name="ThingWithMethods">
+    <method name="sayHello">
+      <param type="string" name="text" />
+      <param type="int" name="repeat" />
+
+    </method>  
+
+  </object>
 </database>

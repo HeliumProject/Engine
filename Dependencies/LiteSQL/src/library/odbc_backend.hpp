@@ -13,7 +13,7 @@
 //#include <sql.h>
 //#include <sqlext.h>
 
-#include "litesql_char.hpp"
+
 #include "litesql/except.hpp"
 #include "litesql/types.hpp"
 #include "litesql/string.hpp"
@@ -62,4 +62,4 @@ public:
 };
 }
 #endif
-#endif
+#endif

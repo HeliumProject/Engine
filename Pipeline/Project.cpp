@@ -13,6 +13,11 @@ Project::~Project()
 {
 }
 
+Path Project::GetTrackerDB() const
+{
+    return Path( a_Path.Get().Directory() + TXT( ".Helium/" ) + a_Path.Get().Basename() + TXT( ".trackerdb" ) );
+}
+
 void Project::AddPath( const Path& path )
 {
     Path relativePath = path.GetRelativePath( a_Path.Get() );

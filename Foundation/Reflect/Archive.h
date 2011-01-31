@@ -285,7 +285,13 @@ namespace Helium
         Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
             ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
-            return archive->Get< T >();
+
+            if ( archive.ReferencesObject() )
+            {
+                return archive->Get< T >();
+            }
+
+            return NULL;
         }
 
         template< class T >

@@ -37,7 +37,7 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 }
 
 ArchiveXML::ArchiveXML()
-: Archive( TXT( "" ) )
+: Archive()
 , m_Version( CURRENT_VERSION )
 , m_Target( &m_Objects )
 {

@@ -9,6 +9,7 @@ digraph database {
     "Employee" -> "Role";
     "School";
     "Office";
+    "ThingWithMethods";
   }
   subgraph relations {
     edge[dir=forward,arrowhead=vee];

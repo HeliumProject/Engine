@@ -28,4 +28,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // #ifndef GENERATE_VIEW_H
+#endif // #ifndef GENERATE_VIEW_H

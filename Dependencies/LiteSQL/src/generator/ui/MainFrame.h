@@ -26,4 +26,4 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-#endif // #ifndef MAINFRAME_H
+#endif // #ifndef MAINFRAME_H

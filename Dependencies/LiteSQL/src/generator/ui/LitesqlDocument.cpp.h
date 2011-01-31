@@ -12,4 +12,4 @@ public:
   ~LitesqlDocument(void);
 };
 
-#endif // #ifndef LITESQL_DOCUMENT_H
+#endif // #ifndef LITESQL_DOCUMENT_H

@@ -6,7 +6,6 @@
 
 #ifndef litesql_database_hpp
 #define litesql_database_hpp
-#include "litesql_char.hpp"
 #include <string>
 #include <set>
 #include "litesql/types.hpp"
@@ -39,7 +38,7 @@ class Database {
 private:
     /** name of the backend */
     LITESQL_String backendType;
-    /** connection info  "param=value param=value ..." */
+    /** connection info LITESQL_L("param=value param=value ...") */
     LITESQL_String connInfo;
     /** assignment is forbidden */
     Database &operator=(const Database &op);
@@ -83,8 +82,8 @@ public:
 	bool verbose;
     /** opens connection to backend, throw exception if fails or cannot
         found a Backend class
-        \param backendType backend type ("postgresql","mysql" or  "sqlite3")
-        \param connInfo connection params, syntax "param=value param=value ..."
+        \param backendType backend type (LITESQL_L("postgresql"),LITESQL_L("mysql") or LITESQL_L("sqlite3"))
+        \param connInfo connection params, syntax LITESQL_L("param=value param=value ...")
                valid keys: host,user,password,database and port 
 		*/
     Database(const LITESQL_String& backendType, const LITESQL_String& connInfo);

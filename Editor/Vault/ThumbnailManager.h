@@ -27,7 +27,7 @@ namespace Helium
         class ThumbnailManager
         {
         public:
-            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager, const tstring& thumbnailDirectory );
+            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager );
             virtual ~ThumbnailManager();
 
             void Reset();
@@ -41,7 +41,7 @@ namespace Helium
         private:
             wxWindow* m_Window;
             ThumbnailLoader m_Loader;
-            Helium::Locker< std::map< uint64_t, Helium::Path* > > m_AllRequests;
+            Helium::Locker< std::map< uint64_t, Helium::Path > > m_AllRequests;
             Helium::Mutex m_WindowMutex;
         };
     }

@@ -8,8 +8,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCapsule::PrimitiveCapsule( ResourceTracker* tracker )
-: PrimitiveTemplate( tracker )
+PrimitiveCapsule::PrimitiveCapsule()
 {
     SetElementType( VertexElementTypes::SimpleVertex );
 
@@ -212,12 +211,12 @@ void PrimitiveCapsule::Update()
             Vector3 point = SetupVector(Sin(theta) * m_Radius,
                 m_Length/2.0f,
                 Cos(theta) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
 
             point = SetupVector(Sin(theta) * m_Radius,
                 -m_Length/2.0f,
                 Cos(theta) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
         }
     }
 

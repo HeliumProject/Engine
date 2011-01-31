@@ -38,15 +38,8 @@ void Mesh::InitializeType()
 {
     Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
 
-    ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
-    s_WireMaterial.Ambient = Color::BLACK;
-    s_WireMaterial.Diffuse = Color::BLACK;
-    s_WireMaterial.Specular = Color::BLACK;
-
-    ZeroMemory(&s_FillMaterial, sizeof(s_FillMaterial));
-    s_FillMaterial.Ambient = Color::DARKGRAY;
-    s_FillMaterial.Diffuse = Color::DARKGRAY;
-    s_FillMaterial.Specular = Color::DARKGRAY;
+    s_WireMaterial = Color::BLACK;
+    s_FillMaterial = Color::DARKGRAY;
 }
 
 void Mesh::CleanupType()
@@ -139,14 +132,14 @@ void Mesh::Initialize()
         count += m_ShaderTriangleCounts[i];
     }
 
-    m_Indices = new IndexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Indices->SetElementType( ElementTypes::Unsigned32 );
+    m_Indices = new IndexResource;
+    m_Indices->SetElementType( IndexElementTypes::Unsigned32 );
     m_Indices->SetElementCount( (uint32_t)(m_WireframeVertexIndices.size() + m_TriangleVertexIndices.size()) );
     m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
     m_Indices->Create();
 
-    m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Vertices->SetElementType( ElementTypes::StandardVertex );
+    m_Vertices = new VertexResource;
+    m_Vertices->SetElementType( VertexElementTypes::SimpleVertex );
     m_Vertices->SetElementCount( (uint32_t)m_Positions.size() );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
     m_Vertices->Create();

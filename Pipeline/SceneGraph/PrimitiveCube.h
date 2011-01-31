@@ -11,7 +11,7 @@ namespace Helium
         public:
             typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
 
-            PrimitiveCube(ResourceTracker* tracker);
+            PrimitiveCube();
 
             void SetRadius( float radius )
             {

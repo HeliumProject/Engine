@@ -15,7 +15,7 @@ namespace Helium
             uint32_t m_Steps;
 
         public:
-            PrimitiveRings(ResourceTracker* tracker);
+            PrimitiveRings();
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;

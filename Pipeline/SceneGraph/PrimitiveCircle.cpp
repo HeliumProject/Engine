@@ -6,9 +6,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCircle::PrimitiveCircle(ResourceTracker* tracker)
-: PrimitiveRadius(tracker)
-, m_HackyRotateFlag( false )
+PrimitiveCircle::PrimitiveCircle()
+: m_HackyRotateFlag( false )
 {
     m_Bounds.minimum = Vector3 (0.0f, -m_Radius, -m_Radius);
     m_Bounds.maximum = Vector3 (0.0f, m_Radius, m_Radius);
@@ -30,17 +29,17 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
+            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
-            m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
         }    
     }
 
-    m_Vertices.push_back(Position (Vector3::Zero));
+    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f ) );
 
     for (int x=0; x<m_RadiusSteps; x++)
     {
@@ -48,22 +47,22 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
+            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
         }
 
         if (x+1 >= m_RadiusSteps)
         {
             if( !m_HackyRotateFlag )
             {
-                m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
+                m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
             }
             else
             {
-                m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f  ) );
+                m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
             }
         }
     }

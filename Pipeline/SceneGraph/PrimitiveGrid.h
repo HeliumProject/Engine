@@ -24,7 +24,7 @@ namespace Helium
             void SetMinorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a );
 
         public:
-            PrimitiveGrid(ResourceTracker* tracker);
+            PrimitiveGrid();
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;

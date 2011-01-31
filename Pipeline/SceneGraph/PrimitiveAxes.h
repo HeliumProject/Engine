@@ -24,7 +24,7 @@ namespace Helium
             float32_t m_Length;
 
         public:
-            SceneGraph::PrimitiveAxes( ResourceTracker* tracker );
+            PrimitiveAxes();
 
             void SetColor( AxesFlags axis, Lunar::Color c );
             void SetColor( Lunar::Color c );

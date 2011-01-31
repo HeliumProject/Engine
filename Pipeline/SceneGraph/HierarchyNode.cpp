@@ -716,13 +716,13 @@ bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
     return true;
 }
 
-void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
+void HierarchyNode::SetMaterial( Lunar::Color defaultMaterial ) const
 {
     SceneGraph::Viewport* view = m_Owner->GetViewport();
 
     IDirect3DDevice9* device = view->GetResources()->GetDevice();
 
-    D3DMATERIAL9 material = defaultMaterial;
+    Lunar::Color material = defaultMaterial;
 
     switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
     {
@@ -730,20 +730,18 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
         if ( m_LayerColor )
         {
             const Color3& color = m_LayerColor->GetColor();
-            material.Ambient.r = color.r;
-            material.Ambient.g = color.g;
-            material.Ambient.b = color.b;
-            material.Ambient.a = defaultMaterial.Ambient.a;
+            material.SetR( color.r );
+            material.SetG( color.g );
+            material.SetB( color.b );
         }
         break;
 
     case ViewColorMode::Scene:
         {
             const Color3& color = m_Owner->GetColor();
-            material.Ambient.r = color.r;
-            material.Ambient.g = color.g;
-            material.Ambient.b = color.b;
-            material.Ambient.a = defaultMaterial.Ambient.a;
+            material.SetR( color.r );
+            material.SetG( color.g );
+            material.SetB( color.b );
         }
         break;
     }
@@ -769,10 +767,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
                 material = SceneGraph::Viewport::s_LiveMaterial;
             }
 
-            material.Ambient.a = defaultMaterial.Ambient.a;
-            material.Diffuse.a = defaultMaterial.Diffuse.a;
-            material.Specular.a = defaultMaterial.Specular.a;
-            material.Emissive.a = defaultMaterial.Emissive.a;
+            material.SetA( defaultMaterial.GetA() );;
         }
         else
         {
@@ -781,10 +776,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     else
     {
-        material.Ambient.a = defaultMaterial.Ambient.a;
-        material.Diffuse.a = defaultMaterial.Diffuse.a;
-        material.Specular.a = defaultMaterial.Specular.a;
-        material.Emissive.a = defaultMaterial.Emissive.a;
+        material.SetA( defaultMaterial.GetA() );
     }
 
     device->SetMaterial( &material );

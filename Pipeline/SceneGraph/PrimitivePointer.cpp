@@ -8,11 +8,10 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitivePointer::PrimitivePointer(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitivePointer::PrimitivePointer()
 {
     SetElementCount( 12 );
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Bounds.minimum = SetupVector(-1, 0, -2);
     m_Bounds.maximum = SetupVector( 1, 1,  0);

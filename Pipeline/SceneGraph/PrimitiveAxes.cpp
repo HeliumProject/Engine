@@ -8,9 +8,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveAxes::PrimitiveAxes( ResourceTracker* tracker )
-: PrimitiveTemplate( tracker )
-, m_ColorX( 0xffff0000 )
+PrimitiveAxes::PrimitiveAxes()
+: m_ColorX( 0xffff0000 )
 , m_ColorY( 0xff00ff00 )
 , m_ColorZ( 0xff0000ff )
 {
@@ -56,17 +55,17 @@ void PrimitiveAxes::Update()
 
     m_Vertices.clear();
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB() m_ColorX.GetA() ) );
+        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( m_Length, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB() m_ColorX.GetA() ) );
+        Lunar::SimpleVertex( m_Length, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
     m_Vertices.push_back(
         Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, m_Length, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB() m_ColorY.GetA() ) );
+        Lunar::SimpleVertex( 0.0f, m_Length, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
     m_Vertices.push_back(
         Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, m_Length, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB() m_ColorZ.GetA() ) );
+        Lunar::SimpleVertex( 0.0f, 0.0f, m_Length, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
 
     Base::Update();
 }

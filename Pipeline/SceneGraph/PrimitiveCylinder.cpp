@@ -8,9 +8,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCylinder::PrimitiveCylinder(ResourceTracker* tracker)
-: PrimitiveRadius(tracker)
-, m_VerticalOrientation( true )
+PrimitiveCylinder::PrimitiveCylinder()
+: m_VerticalOrientation( true )
 {
     m_Length = 2.0f;
     m_LengthSteps = 5;
@@ -37,6 +36,8 @@ void PrimitiveCylinder::Update()
     float sideValue = 0.0f;
     float upValue = 0.0f;
 
+    Vector3 position;
+
     //
     // Wire
     //
@@ -50,15 +51,17 @@ void PrimitiveCylinder::Update()
         {
             float theta = (float32_t)(s) * stepAngle;
 
-            sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
-            upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : (float32_t)(sin(theta)) * m_Radius;
+            sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
+            upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : Sin(theta) * m_Radius;
 
-            m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)) );
+            position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
+            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
 
-            sideValue = m_VerticalOrientation ? (float32_t)(sin(theta + stepAngle)) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
-            upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : (float32_t)(sin(theta + stepAngle)) * m_Radius;
+            sideValue = m_VerticalOrientation ? Sin(theta + stepAngle) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
+            upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : Sin(theta + stepAngle) * m_Radius;
 
-            m_Vertices.push_back(Position(SetupVector( sideValue, upValue, (float32_t)(cos(theta + stepAngle)) * m_Radius)));
+            position = SetupVector( sideValue, upValue, Cos(theta + stepAngle) * m_Radius );
+            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
         }
     }
 
@@ -71,39 +74,45 @@ void PrimitiveCylinder::Update()
     {
         float theta = (float32_t)(x) * stepAngle;
 
-        sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : m_Length/2.0f;
-        upValue   = m_VerticalOrientation ? m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
+        sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : m_Length/2.0f;
+        upValue   = m_VerticalOrientation ? m_Length/2.0f : Sin(theta) * m_Radius;
 
-        m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
+        position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
 
-        sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f;
-        upValue   = m_VerticalOrientation ? -m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
+        sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : -m_Length/2.0f;
+        upValue   = m_VerticalOrientation ? -m_Length/2.0f : Sin(theta) * m_Radius;
 
-        m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
+        position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     // top
-    m_Vertices.push_back(Position (SetupVector(m_Length/2.0f, 0.0f, 0.0f)));
+    position = SetupVector( m_Length/2.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     for (int x=0; x<=m_RadiusSteps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
 
-        sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : m_Length/2.0f;
-        upValue   = m_VerticalOrientation ?  m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
+        sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : m_Length/2.0f;
+        upValue   = m_VerticalOrientation ?  m_Length/2.0f : Sin(theta) * m_Radius;
 
-        m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
+        position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     // bottom, construct backward to wrap polys correctly
-    m_Vertices.push_back(Position (SetupVector(-m_Length/2.0f, 0.0f, 0.0f)));
+    position = SetupVector( -m_Length/2.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     for (int x=m_RadiusSteps; x>=0; x--)
     {
         float theta = (float32_t)(x) * stepAngle;
 
-        sideValue = m_VerticalOrientation ? (float32_t)(sin(theta)) * m_Radius : -m_Length/2.0f;
-        upValue   = m_VerticalOrientation ?  -m_Length/2.0f : (float32_t)(sin(theta)) * m_Radius;
+        sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : -m_Length/2.0f;
+        upValue   = m_VerticalOrientation ?  -m_Length/2.0f : Sin(theta) * m_Radius;
 
-        m_Vertices.push_back(Position (SetupVector( sideValue, upValue, (float32_t)(cos(theta)) * m_Radius)));
+        position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();

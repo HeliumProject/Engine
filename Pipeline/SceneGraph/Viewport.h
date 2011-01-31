@@ -235,11 +235,6 @@ namespace Helium
                 return m_SettingsManager;
             }
 
-            ResourceTracker* GetResources() const
-            {
-                return m_ResourceTracker;
-            }
-
             Statistics* GetStatistics() const
             {
                 return m_Statistics;
@@ -466,7 +461,6 @@ namespace Helium
             SettingsManager*        m_SettingsManager;
 
             Render::DeviceManager   m_DeviceManager;
-            ResourceTracker*        m_ResourceTracker;
             RenderVisitor           m_RenderVisitor;
 
             Tool*                   m_Tool;

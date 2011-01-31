@@ -6,8 +6,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveLocator::PrimitiveLocator(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveLocator::PrimitiveLocator()
 {
     SetElementCount( 6 );
     SetElementType( VertexElementTypes::SimpleVertex );

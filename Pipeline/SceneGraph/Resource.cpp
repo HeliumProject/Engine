@@ -16,32 +16,6 @@ using Helium::Insert;
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
-: m_Device (device)
-{
-    if (!IndexResource::s_MemoryPool.Valid())
-    {
-        IndexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Index Data" ) );
-    }
-
-    if (!VertexResource::s_MemoryPool.Valid())
-    {
-        VertexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Vertex Data" ) );
-    }
-}
-
-ResourceTracker::~ResourceTracker()
-{
-
-}
-
-void ResourceTracker::ResetState()
-{
-    m_Indices = NULL;
-    m_Vertices = NULL;
-    m_VertexFormat = ElementFormats[ ElementTypes::Unknown ];
-}
-
 void Resource::Create()
 {
     if ( !m_IsCreated )

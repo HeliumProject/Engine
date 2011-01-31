@@ -4,7 +4,7 @@
 
 namespace Lunar
 {
-    L_DECLARE_RPTR( RVertexBuffer );
+    L_DECLARE_RPTR( RIndexBuffer );
 }
 
 namespace Helium
@@ -19,7 +19,8 @@ namespace Helium
             IndexElementType m_ElementType;
             Lunar::RIndexBufferPtr m_Buffer; 
 
-            IndexResource( ResourceTracker* tracker ); 
+            IndexResource();
+            virtual ~IndexResource();
 
             IndexElementType GetElementType() const
             {

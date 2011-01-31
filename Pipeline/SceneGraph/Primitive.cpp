@@ -16,9 +16,8 @@ void Primitive::CleanupType()
     Reflect::UnregisterClassType< SceneGraph::Primitive >();
 }
 
-Primitive::Primitive(ResourceTracker* tracker)
-: VertexResource (tracker)
-, m_IsSolid (false)
+Primitive::Primitive()
+: m_IsSolid (false)
 , m_IsTransparent (false)
 , m_IsUsingCameraShadingMode (false)
 {

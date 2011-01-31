@@ -6,8 +6,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
-: PrimitiveTemplate(m_Tracker)
+PrimitiveCone::PrimitiveCone()
 {
     SetElementType( VertexElementTypes::SimpleVertex );
 

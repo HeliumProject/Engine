@@ -18,7 +18,7 @@ namespace Helium
             int32_t m_LengthSteps;
 
         public:
-            PrimitiveSphere(ResourceTracker* tracker);
+            PrimitiveSphere();
 
             int32_t GetWireVertCount() const;
             int32_t GetPolyVertCount() const;

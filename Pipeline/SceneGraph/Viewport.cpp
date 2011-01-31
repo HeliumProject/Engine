@@ -36,7 +36,6 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
 , m_Focused( false )
-, m_ResourceTracker( NULL )
 , m_Tool( NULL )
 , m_CameraMode( CameraMode::Orbit )
 , m_GeometryMode( GeometryMode::Render )
@@ -67,8 +66,6 @@ Viewport::~Viewport()
 
     delete m_Statistics;
     delete m_SelectionFrame;
-
-    delete m_ResourceTracker;
 }
 
 void Viewport::Reset()
@@ -92,7 +89,7 @@ void Viewport::Reset()
 
     SceneGraph::PrimitiveAxes* transformAxesSelected = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] );
     transformAxesSelected->m_Length = 0.10f;
-    transformAxesSelected->SetColor( D3DCOLOR_COLORVALUE( s_SelectedMaterial.Ambient.r, s_SelectedMaterial.Ambient.g, s_SelectedMaterial.Ambient.b, s_SelectedMaterial.Ambient.a ) );
+    transformAxesSelected->SetColor( s_SelectedMaterial );
     transformAxesSelected->Update();
 
     SceneGraph::PrimitiveAxes* jointAxes = static_cast< SceneGraph::PrimitiveAxes* >( m_GlobalPrimitives[GlobalPrimitives::JointAxes] );
@@ -229,7 +226,6 @@ SceneGraph::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPri
 void Viewport::InitDevice( HWND wnd )
 {
     m_DeviceManager.Init( wnd, 64, 64 );
-    m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
 void Viewport::InitWidgets()
@@ -242,34 +238,34 @@ void Viewport::InitWidgets()
     // primitive API uses this, so init it first
     m_Statistics = new Statistics( m_ResourceTracker->GetDevice() );
 
-    m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::ViewportAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new SceneGraph::PrimitiveGrid;
 
     m_SettingsManager->GetSettings< GridSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &Viewport::OnGridSettingsChanged ));
 
     OnGridSettingsChanged( Reflect::ObjectChangeArgs( NULL, NULL ) );
 
-    m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new SceneGraph::PrimitiveRings (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new SceneGraph::PrimitiveRings;
     m_GlobalPrimitives[GlobalPrimitives::StandardRings]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::TransformAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::TransformAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::SelectedAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::SelectedAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new SceneGraph::PrimitiveAxes (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::JointAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::JointAxes]->Update();
 
-    m_GlobalPrimitives[GlobalPrimitives::JointRings] = new SceneGraph::PrimitiveRings (m_ResourceTracker);
+    m_GlobalPrimitives[GlobalPrimitives::JointRings] = new SceneGraph::PrimitiveRings;
     m_GlobalPrimitives[GlobalPrimitives::JointRings]->Update();
 
-    m_SelectionFrame = new SceneGraph::PrimitiveFrame ( m_ResourceTracker );
+    m_SelectionFrame = new SceneGraph::PrimitiveFrame;
     m_SelectionFrame->Update();
 }
 

@@ -20,7 +20,7 @@ namespace Helium
             int32_t m_Steps;
 
         public:
-            PrimitiveCone(ResourceTracker* tracker);
+            PrimitiveCone();
 
             uint32_t GetWireVertCount() const;
             uint32_t GetPolyVertCount() const;

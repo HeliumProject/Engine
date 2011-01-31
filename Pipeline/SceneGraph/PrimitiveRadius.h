@@ -15,7 +15,7 @@ namespace Helium
             int m_RadiusSteps;
 
         public:
-            PrimitiveRadius(ResourceTracker* tracker);
+            PrimitiveRadius();
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE = 0;

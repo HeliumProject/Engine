@@ -8,8 +8,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveGrid::PrimitiveGrid()
 {
     SetElementType( VertexElementTypes::SimpleVertex );
 
@@ -24,18 +23,27 @@ PrimitiveGrid::PrimitiveGrid(ResourceTracker* tracker)
 
 void PrimitiveGrid::SetAxisColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_AxisColor.SetArgb( a, r, g, b );
+    m_AxisColor.SetR( r );
+    m_AxisColor.SetG( g );
+    m_AxisColor.SetB( b );
+    m_AxisColor.SetA( a );
 }
 
 
 void PrimitiveGrid::SetMajorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_MajorColor.SetArgb( a, r, g, b );
+    m_MajorColor.SetR( r );
+    m_MajorColor.SetG( g );
+    m_MajorColor.SetB( b );
+    m_MajorColor.SetA( a );
 }
 
 void PrimitiveGrid::SetMinorColor( uint8_t r, uint8_t g, uint8_t b, uint8_t a )
 {
-    m_MinorColor.SetArgb( a, r, g, b );
+    m_MinorColor.SetR( r );
+    m_MinorColor.SetG( g );
+    m_MinorColor.SetB( b );
+    m_MinorColor.SetA( a );
 }
 
 void PrimitiveGrid::Update()
@@ -49,7 +57,7 @@ void PrimitiveGrid::Update()
 
         m_Vertices.reserve( 2 * ( numWidthLines + numLengthLines ) );
 
-        int32_t color;
+        Lunar::Color color;
         Vector3 v1, v2a, v2b, v1v2a, v1v2b;
 
         float32_t epsilon = 0.00001f;

@@ -34,7 +34,7 @@ namespace Helium
             static void CleanupType();
 
         public:
-            Primitive(ResourceTracker* tracker);
+            Primitive();
             virtual ~Primitive();
 
             const AlignedBox& GetBounds() const
@@ -86,8 +86,7 @@ namespace Helium
         protected:
             std::vector<T> m_Vertices;
 
-            PrimitiveTemplate(ResourceTracker* tracker)
-                : SceneGraph::Primitive (tracker)
+            PrimitiveTemplate()
             {
 
             }

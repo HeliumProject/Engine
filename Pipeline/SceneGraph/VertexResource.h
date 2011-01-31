@@ -19,7 +19,8 @@ namespace Helium
             VertexElementType m_ElementType;
             Lunar::RVertexBufferPtr m_Buffer;
 
-            VertexResource( ResourceTracker* tracker ); 
+            VertexResource();
+            virtual ~VertexResource();
 
             VertexElementType GetElementType() const
             {

@@ -7,8 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveFrame::PrimitiveFrame()
 {
     SetElementCount( 9 );
     SetElementType( VertexElementTypes::ScreenVertex );

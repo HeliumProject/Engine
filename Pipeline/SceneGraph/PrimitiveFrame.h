@@ -18,7 +18,7 @@ namespace Helium
             Lunar::Color m_BorderColor;
 
         public:
-            PrimitiveFrame(ResourceTracker* tracker);
+            PrimitiveFrame();
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;

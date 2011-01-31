@@ -24,7 +24,7 @@ namespace Helium
             int32_t m_LengthSteps;
 
         public:
-            SceneGraph::PrimitiveCapsule( ResourceTracker* tracker );
+            PrimitiveCapsule();
 
             int GetWireVertCount() const;
             int GetPolyVertCount() const;

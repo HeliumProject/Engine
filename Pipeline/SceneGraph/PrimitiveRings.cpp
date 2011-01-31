@@ -8,10 +8,9 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveRings::PrimitiveRings(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveRings::PrimitiveRings()
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Radius = 1.0f;
     m_Steps = 36;

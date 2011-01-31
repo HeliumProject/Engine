@@ -6,9 +6,14 @@ using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
 
-IndexResource::IndexResource( ResourceTracker* tracker )
-: Resource( ResourceTypes::Index, tracker )
+IndexResource::IndexResource()
+: Resource( ResourceTypes::Index )
 , m_ElementType( IndexElementTypes::Unknown )
+{
+
+}
+
+IndexResource::~IndexResource()
 {
 
 }

@@ -18,68 +18,6 @@ namespace Helium
     namespace SceneGraph
     { 
         //
-        // Resource Tracker
-        //
-
-        class Resource;
-        typedef std::set<Resource*> S_Resource;
-
-        class ResourceTracker
-        {
-        private:
-            // state caching
-            IDirect3DIndexBuffer9*  m_Indices;
-            IDirect3DVertexBuffer9* m_Vertices;
-            DWORD                   m_VertexFormat;
-
-        public:
-            // create a resource manager on a device
-            ResourceTracker(IDirect3DDevice9* device);
-
-            // delete the manager and free all allocated resources
-            ~ResourceTracker();
-
-            // device access
-            IDirect3DDevice9* GetDevice()
-            {
-                return m_Device;
-            }
-
-            // index stream state
-            IDirect3DIndexBuffer9* GetIndices()
-            {
-                return m_Indices;
-            }
-            void SetIndices(IDirect3DIndexBuffer9* indices)
-            {
-                m_Indices = indices;
-            }
-
-            // vertex stream state
-            IDirect3DVertexBuffer9* GetVertices()
-            {
-                return m_Vertices;
-            }
-            void SetVertices(IDirect3DVertexBuffer9* vertices)
-            {
-                m_Vertices = vertices;
-            }
-
-            // vertex format state
-            DWORD GetVertexFormat()
-            {
-                return m_VertexFormat;
-            }
-            void SetVertexFormat(DWORD format)
-            {
-                m_VertexFormat = format;
-            }
-
-            // reset state
-            void ResetState();
-        };
-
-        //
         // Enumeration of compatible info types
         //
 
@@ -118,23 +56,20 @@ namespace Helium
         // Resource object
         //
 
-        class ResourceTracker;
-
         class Resource : public Reflect::Object
         {
         protected:
             // type
             ResourceType m_Type;
 
-            // tracker
-            ResourceTracker* m_Tracker;
-
             // populator
             PopulateSignature::Delegate m_Populator;
 
-        private:
             // state
             bool m_IsDirty;
+
+        private:
+            // state
             bool m_IsCreated;
 
             // flags
@@ -145,9 +80,8 @@ namespace Helium
             uint32_t m_ElementCount;
 
         public:
-            Resource(ResourceType type, ResourceTracker* tracker)
+            Resource(ResourceType type)
                 : m_Type ( type )
-                , m_Tracker ( tracker )
                 , m_IsDirty ( true )
                 , m_IsCreated ( false )
                 , m_IsDynamic ( false )
@@ -163,11 +97,6 @@ namespace Helium
             ResourceType GetResourceType()
             {
                 return m_Type;
-            }
-
-            ResourceTracker* GetResourceTracker()
-            {
-                return m_Tracker;
             }
 
             bool IsDynamic()

@@ -15,9 +15,6 @@ namespace Helium
         // the shader we reference
         typedef std::vector< Shader* > V_ShaderDumbPtr;
 
-        // these gather arrayed components in the content class into a concrete vertex
-        typedef std::vector< StandardVertex > V_StandardVertex;
-
         class MeshEdge
         {
         public:
@@ -221,8 +218,8 @@ namespace Helium
             uint32_t                 m_VertexCount;          // the number of vertices
             uint32_t                 m_TriangleCount;        // the number of triangles to draw
             std::vector< uint32_t >  m_ShaderStartIndices;   // the start index of each shader-sorted segment of indices
-            static D3DMATERIAL9 s_WireMaterial;
-            static D3DMATERIAL9 s_FillMaterial;
+            static Lunar::Color s_WireMaterial;
+            static Lunar::Color s_FillMaterial;
             IndexResourcePtr    m_Indices;
             VertexResourcePtr   m_Vertices;
         };

@@ -1,15 +1,22 @@
 /*#include "Precompile.h"*/
-#include "VertexResource.h" 
+#include "VertexResource.h"
+
+#include "Rendering/RVertexBuffer.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle VertexResource::s_MemoryPool;
 
-VertexResource::VertexResource( ResourceTracker* tracker )
-: Resource( ResourceTypes::Vertex, tracker )
+VertexResource::VertexResource()
+: Resource( ResourceTypes::Vertex )
 , m_ElementType( VertexElementTypes::Unknown )
 , m_LockedVerts( NULL )
+{
+
+}
+
+VertexResource::~VertexResource()
 {
 
 }

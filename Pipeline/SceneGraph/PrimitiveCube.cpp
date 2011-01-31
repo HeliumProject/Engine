@@ -6,8 +6,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCube::PrimitiveCube(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveCube::PrimitiveCube()
 {
     SetElementType( VertexElementTypes::SimpleVertex );
     SetElementCount( 60 );
@@ -29,7 +28,8 @@ void PrimitiveCube::Update()
     m_Vertices.reserve( drawVertexCount );
     for ( size_t vertexIndex = 0; vertexIndex < drawVertexCount; ++vertexIndex )
     {
-        m_Vertices.push_back( Lunar::SimpleVertex( drawVertices[ vertexIndex ] ) );
+        const Vector3& position = drawVertices[ vertexIndex ];
+        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();

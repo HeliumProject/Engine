@@ -7,8 +7,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveSphere::PrimitiveSphere(ResourceTracker* tracker)
-: PrimitiveRadius(tracker)
+PrimitiveSphere::PrimitiveSphere()
 {
     m_LengthSteps = 9;
 }

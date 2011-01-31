@@ -17,7 +17,7 @@ namespace Helium
             bool m_VerticalOrientation;
 
         public:
-            PrimitiveCylinder(ResourceTracker* tracker);
+            PrimitiveCylinder();
 
             int GetWireVertCount() const;
             int GetPolyVertCount() const;

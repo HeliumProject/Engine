@@ -249,7 +249,7 @@ namespace Helium
             virtual bool BoundsCheck(const Matrix4& instanceMatrix) const;
 
             // set the material on the device based upon this object's selection state
-            virtual void SetMaterial( const D3DMATERIAL9& defaultMaterial ) const;
+            virtual void SetMaterial( Lunar::Color defaultMaterial ) const;
 
             // call VisitHierarchyNode() on the render object for each hierarhcy node recursively
             virtual TraversalAction TraverseHierarchy( HierarchyTraverser* traverser );

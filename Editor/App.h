@@ -48,10 +48,7 @@ namespace Helium
 
             MainFrame* GetFrame()
             {
-                if ( !m_Frame )
-                {
-                    m_Frame = new MainFrame( m_SettingsManager );
-                }
+                HELIUM_ASSERT( m_Frame );
                 return m_Frame;
             }
 

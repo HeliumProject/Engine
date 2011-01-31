@@ -125,16 +125,6 @@ VaultPanel::~VaultPanel()
     delete m_ThumbnailView;
 }
 
-void VaultPanel::SetDirectory( const Helium::Path& directory )
-{
-    m_VaultSearch.SetDirectory( directory );
-}
-
-const Path& VaultPanel::GetDirectory() const
-{
-    return m_VaultSearch.GetDirectory();
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the string in the NavBar and starts the search query.
 void VaultPanel::Search( const tstring& queryString )
@@ -142,6 +132,12 @@ void VaultPanel::Search( const tstring& queryString )
     wxBusyCursor bc;
     if ( queryString.empty() )
     {
+        return;
+    }
+
+    if ( !wxGetApp().GetFrame()->GetProject().ReferencesObject() )
+    {
+        wxMessageBox( wxT( "You must have a project loaded to use the vault." ), TXT( "Project Not Loaded" ), wxCENTER | wxICON_WARNING | wxOK, this );
         return;
     }
 
@@ -158,9 +154,9 @@ void VaultPanel::Search( const tstring& queryString )
         return;
     }
 
+    m_VaultSearch.SetProject( wxGetApp().GetFrame()->GetProject() );
     m_VaultSearch.StartSearchThread( query );
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 void VaultPanel::SetViewMode( VaultViewMode view )

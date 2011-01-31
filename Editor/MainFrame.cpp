@@ -405,11 +405,6 @@ void MainFrame::OpenProject( const Helium::Path& path )
 
     m_ProjectPanel->OpenProject( m_Project, document );
 
-    if ( m_VaultPanel )
-    {
-        m_VaultPanel->SetDirectory( path );
-    }
-
     wxGetApp().GetTracker()->SetProject( m_Project );
     if ( !wxGetApp().GetTracker()->IsThreadRunning() )
     {
@@ -1070,12 +1065,14 @@ void MainFrame::OpenVaultPanel()
 
     if ( !m_VaultPanel->IsShown() )
     {
-        wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
-        if ( pane.IsOk() )
-        {
-            pane.Show( !pane.IsShown() );
-            m_FrameManager.Update();
-        }
+        m_VaultPanel->Show();
+    }
+
+    wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
+    if ( pane.IsOk() )
+    {
+        pane.Show( !pane.IsShown() );
+        m_FrameManager.Update();
     }
 
     if ( !queryString.empty() )

@@ -148,7 +148,8 @@ void Tracker::TrackEverything()
     {
         m_TrackerDB->create();
     }
-    else
+
+    if ( m_TrackerDB->needsUpgrade() )
     {
         m_TrackerDB->upgrade();
     }

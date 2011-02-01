@@ -414,7 +414,7 @@ void Helium::DynArray< T, Allocator >::InsertArray( size_t index, const T* pValu
 /// @param[in] index  Index from which to remove elements.
 /// @param[in] count  Number of elements to remove.
 ///
-/// @see RemoveSwap()
+/// @see RemoveSwap(), RemoveAll()
 template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::Remove( size_t index, size_t count )
 {
@@ -440,7 +440,7 @@ void Helium::DynArray< T, Allocator >::Remove( size_t index, size_t count )
 /// @param[in] index  Index from which to remove elements.
 /// @param[in] count  Number of elements to remove.
 ///
-/// @see Remove()
+/// @see Remove(), RemoveAll()
 template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::RemoveSwap( size_t index, size_t count )
 {
@@ -466,6 +466,15 @@ void Helium::DynArray< T, Allocator >::RemoveSwap( size_t index, size_t count )
 
     ArrayInPlaceDestroy( m_pBuffer + newSize, count );
     m_size = newSize;
+}
+
+/// Remove all elements from this array without modifying its capacity.
+///
+/// @see Remove(), RemoveAll()
+template< typename T, typename Allocator >
+void Helium::DynArray< T, Allocator >::RemoveAll()
+{
+    Remove( 0, m_size );
 }
 
 /// Get the first element in this array.

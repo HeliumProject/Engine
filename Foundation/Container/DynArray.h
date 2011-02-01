@@ -74,6 +74,7 @@ namespace Helium
         void InsertArray( size_t index, const T* pValues, size_t count );
         void Remove( size_t index, size_t count = 1 );
         void RemoveSwap( size_t index, size_t count = 1 );
+        void RemoveAll();
 
         T& GetFirst();
         const T& GetFirst() const;

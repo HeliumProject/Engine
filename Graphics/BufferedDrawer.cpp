@@ -87,6 +87,12 @@ void BufferedDrawer::Shutdown()
         m_wireMeshDrawCalls[ depthModeIndex ].Clear();
         m_solidMeshDrawCalls[ depthModeIndex ].Clear();
         m_texturedMeshDrawCalls[ depthModeIndex ].Clear();
+
+        m_lineBufferDrawCalls[ depthModeIndex ].Clear();
+        m_wireMeshBufferDrawCalls[ depthModeIndex ].Clear();
+        m_solidMeshBufferDrawCalls[ depthModeIndex ].Clear();
+        m_texturedMeshBufferDrawCalls[ depthModeIndex ].Clear();
+
         m_worldTextDrawCalls[ depthModeIndex ].Clear();
     }
 
@@ -160,6 +166,53 @@ void BufferedDrawer::DrawLines(
     pDrawCall->primitiveCount = lineCount;
 }
 
+/// Buffer a line list draw call.
+///
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
+///                             vertices.
+/// @param[in] pIndices         Indices to use for drawing.
+/// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.  Index buffer values will be relative to
+///                             this vertex.
+/// @param[in] vertexCount      Number of vertices used for rendering.
+/// @param[in] startIndex       Index of the first index to use for drawing.
+/// @param[in] lineCount        Number of lines to draw.
+/// @param[in] depthMode        Mode in which to handle depth testing and writing.
+///
+/// @see DrawWireMesh(), DrawSolidMesh(), DrawTexturedMesh()
+void BufferedDrawer::DrawLines(
+    RVertexBuffer* pVertices,
+    RIndexBuffer* pIndices,
+    uint32_t baseVertexIndex,
+    uint32_t vertexCount,
+    uint32_t startIndex,
+    uint32_t lineCount,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pIndices );
+    HELIUM_ASSERT( vertexCount );
+    HELIUM_ASSERT( lineCount );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    UntexturedBufferDrawCall* pDrawCall = m_lineBufferDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = vertexCount;
+    pDrawCall->startIndex = startIndex;
+    pDrawCall->primitiveCount = lineCount;
+    pDrawCall->spVertexBuffer = pVertices;
+    pDrawCall->spIndexBuffer = pIndices;
+}
+
 /// Buffer a wireframe mesh draw call.
 ///
 /// @param[in] pVertices      Vertices to use for drawing.
@@ -205,6 +258,53 @@ void BufferedDrawer::DrawWireMesh(
     pDrawCall->primitiveCount = triangleCount;
 }
 
+/// Buffer a wireframe mesh draw call.
+///
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
+///                             vertices.
+/// @param[in] pIndices         Indices to use for drawing.
+/// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.  Index buffer values will be relative to
+///                             this vertex.
+/// @param[in] vertexCount      Number of vertices used for rendering.
+/// @param[in] startIndex       Index of the first index to use for drawing.
+/// @param[in] triangleCount    Number of triangles to draw.
+/// @param[in] depthMode        Mode in which to handle depth testing and writing.
+///
+/// @see DrawLines(), DrawSolidMesh(), DrawTexturedMesh()
+void BufferedDrawer::DrawWireMesh(
+    RVertexBuffer* pVertices,
+    RIndexBuffer* pIndices,
+    uint32_t baseVertexIndex,
+    uint32_t vertexCount,
+    uint32_t startIndex,
+    uint32_t triangleCount,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pIndices );
+    HELIUM_ASSERT( vertexCount );
+    HELIUM_ASSERT( triangleCount );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    UntexturedBufferDrawCall* pDrawCall = m_wireMeshBufferDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = vertexCount;
+    pDrawCall->startIndex = startIndex;
+    pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->spVertexBuffer = pVertices;
+    pDrawCall->spIndexBuffer = pIndices;
+}
+
 /// Buffer a solid mesh draw call.
 ///
 /// @param[in] pVertices      Vertices to use for drawing.
@@ -248,6 +348,53 @@ void BufferedDrawer::DrawSolidMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+}
+
+/// Buffer a solid mesh draw call.
+///
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
+///                             vertices.
+/// @param[in] pIndices         Indices to use for drawing.
+/// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.  Index buffer values will be relative to
+///                             this vertex.
+/// @param[in] vertexCount      Number of vertices used for rendering.
+/// @param[in] startIndex       Index of the first index to use for drawing.
+/// @param[in] triangleCount    Number of triangles to draw.
+/// @param[in] depthMode        Mode in which to handle depth testing and writing.
+///
+/// @see DrawLines(), DrawWireMesh(), DrawTexturedMesh()
+void BufferedDrawer::DrawSolidMesh(
+    RVertexBuffer* pVertices,
+    RIndexBuffer* pIndices,
+    uint32_t baseVertexIndex,
+    uint32_t vertexCount,
+    uint32_t startIndex,
+    uint32_t triangleCount,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pIndices );
+    HELIUM_ASSERT( vertexCount );
+    HELIUM_ASSERT( triangleCount );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    UntexturedBufferDrawCall* pDrawCall = m_solidMeshBufferDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = vertexCount;
+    pDrawCall->startIndex = startIndex;
+    pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->spVertexBuffer = pVertices;
+    pDrawCall->spIndexBuffer = pIndices;
 }
 
 /// Buffer a textured mesh draw call.
@@ -297,6 +444,57 @@ void BufferedDrawer::DrawTexturedMesh(
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
     pDrawCall->spTexture = pTexture;
+}
+
+/// Buffer a textured mesh draw call.
+///
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
+///                             vertices.
+/// @param[in] pIndices         Indices to use for drawing.
+/// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.  Index buffer values will be relative to
+///                             this vertex.
+/// @param[in] vertexCount      Number of vertices used for rendering.
+/// @param[in] startIndex       Index of the first index to use for drawing.
+/// @param[in] triangleCount    Number of triangles to draw.
+/// @param[in] pTexture         Texture to apply to the mesh.
+/// @param[in] depthMode        Mode in which to handle depth testing and writing.
+///
+/// @see DrawLines(), DrawWireMesh(), DrawSolidMesh()
+void BufferedDrawer::DrawTexturedMesh(
+    RVertexBuffer* pVertices,
+    RIndexBuffer* pIndices,
+    uint32_t baseVertexIndex,
+    uint32_t vertexCount,
+    uint32_t startIndex,
+    uint32_t triangleCount,
+    RTexture2d* pTexture,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pIndices );
+    HELIUM_ASSERT( vertexCount );
+    HELIUM_ASSERT( triangleCount );
+    HELIUM_ASSERT( pTexture );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    TexturedBufferDrawCall* pDrawCall = m_texturedMeshBufferDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = vertexCount;
+    pDrawCall->startIndex = startIndex;
+    pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->spTexture = pTexture;
+    pDrawCall->spVertexBuffer = pVertices;
+    pDrawCall->spIndexBuffer = pIndices;
 }
 
 /// Draw text in world space at a specific transform.
@@ -730,11 +928,17 @@ void BufferedDrawer::EndDrawing()
 
     for( size_t depthModeIndex = 0; depthModeIndex < static_cast< size_t >( DEPTH_MODE_MAX ); ++depthModeIndex )
     {
-        m_worldTextDrawCalls[ depthModeIndex ].Remove( 0, m_worldTextDrawCalls[ depthModeIndex ].GetSize() );
-        m_texturedMeshDrawCalls[ depthModeIndex ].Remove( 0, m_texturedMeshDrawCalls[ depthModeIndex ].GetSize() );
-        m_solidMeshDrawCalls[ depthModeIndex ].Remove( 0, m_solidMeshDrawCalls[ depthModeIndex ].GetSize() );
-        m_wireMeshDrawCalls[ depthModeIndex ].Remove( 0, m_wireMeshDrawCalls[ depthModeIndex ].GetSize() );
-        m_lineDrawCalls[ depthModeIndex ].Remove( 0, m_lineDrawCalls[ depthModeIndex ].GetSize() );
+        m_worldTextDrawCalls[ depthModeIndex ].RemoveAll();
+
+        m_texturedMeshBufferDrawCalls[ depthModeIndex ].RemoveAll();
+        m_solidMeshBufferDrawCalls[ depthModeIndex ].RemoveAll();
+        m_wireMeshBufferDrawCalls[ depthModeIndex ].RemoveAll();
+        m_lineBufferDrawCalls[ depthModeIndex ].RemoveAll();
+
+        m_texturedMeshDrawCalls[ depthModeIndex ].RemoveAll();
+        m_solidMeshDrawCalls[ depthModeIndex ].RemoveAll();
+        m_wireMeshDrawCalls[ depthModeIndex ].RemoveAll();
+        m_lineDrawCalls[ depthModeIndex ].RemoveAll();
     }
 
     m_currentResourceSetIndex = ( m_currentResourceSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_resourceSets );
@@ -875,7 +1079,9 @@ void BufferedDrawer::DrawWorldElements()
 
     worldResources.spCommandProxy = pRenderer->GetImmediateCommandProxy();
     HELIUM_ASSERT( worldResources.spCommandProxy );
-    worldResources.bSetBlendState = false;
+
+    StateCache stateCache( worldResources.spCommandProxy );
+    worldResources.pStateCache = &stateCache;
 
     // Draw depth enabled data first.
     RDepthStencilState* pDepthStencilState = rRenderResourceManager.GetDepthStencilState(
@@ -1055,31 +1261,77 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
     RRenderCommandProxy* pCommandProxy = rWorldResources.spCommandProxy;
     HELIUM_ASSERT( pCommandProxy );
 
+    StateCache* pStateCache = rWorldResources.pStateCache;
+    HELIUM_ASSERT( pStateCache );
+
+    RRasterizerState* pRasterizerStateDefault = rRenderResourceManager.GetRasterizerState(
+        RenderResourceManager::RASTERIZER_STATE_DEFAULT );
+    HELIUM_ASSERT( pRasterizerStateDefault );
+    RRasterizerState* pRasterizerStateWireframe = rRenderResourceManager.GetRasterizerState(
+        RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+    HELIUM_ASSERT( pRasterizerStateWireframe );
+
+    RBlendState* pBlendStateTransparent = rRenderResourceManager.GetBlendState(
+        RenderResourceManager::BLEND_STATE_TRANSPARENT );
+    HELIUM_ASSERT( pBlendStateTransparent );
+
     // Draw textured meshes first.
+    const DynArray< TexturedBufferDrawCall >& rTexturedMeshBufferDrawCalls = m_texturedMeshBufferDrawCalls[ depthMode ];
+    size_t texturedMeshBufferDrawCallCount = rTexturedMeshBufferDrawCalls.GetSize();
+    if( texturedMeshBufferDrawCallCount != 0 )
+    {
+        pStateCache->SetVertexShader( rWorldResources.spTextureBlendVertexShader );
+        pStateCache->SetPixelShader( rWorldResources.spTextureBlendPixelShader );
+
+        rWorldResources.spTextureBlendVertexShader->CacheDescription(
+            pRenderer,
+            rWorldResources.spSimpleTexturedVertexDescription );
+        RVertexInputLayout* pVertexInputLayout =
+            rWorldResources.spTextureBlendVertexShader->GetCachedInputLayout();
+        HELIUM_ASSERT( pVertexInputLayout );
+        pStateCache->SetVertexInputLayout( pVertexInputLayout );
+
+        pStateCache->SetRasterizerState( pRasterizerStateDefault );
+        pStateCache->SetBlendState( pBlendStateTransparent );
+
+        for( size_t drawCallIndex = 0; drawCallIndex < texturedMeshBufferDrawCallCount; ++drawCallIndex )
+        {
+            const TexturedBufferDrawCall& rDrawCall = rTexturedMeshBufferDrawCalls[ drawCallIndex ];
+
+            pStateCache->SetVertexBuffer(
+                rDrawCall.spVertexBuffer,
+                static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) ) );
+            pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
+            pStateCache->SetTexture( rDrawCall.spTexture );
+
+            pCommandProxy->DrawIndexed(
+                RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+                rDrawCall.baseVertexIndex,
+                0,
+                rDrawCall.vertexCount,
+                rDrawCall.startIndex,
+                rDrawCall.primitiveCount );
+        }
+    }
+
     if( rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
     {
         const DynArray< TexturedDrawCall >& rTexturedMeshDrawCalls = m_texturedMeshDrawCalls[ depthMode ];
         const DynArray< TexturedDrawCall >& rWorldTextDrawCalls = m_worldTextDrawCalls[ depthMode ];
         size_t texturedMeshDrawCallCount = rTexturedMeshDrawCalls.GetSize();
-        size_t textDrawCallCount = rWorldTextDrawCalls.GetSize();
-        if( texturedMeshDrawCallCount | textDrawCallCount )
+        size_t worldTextDrawCallCount = rWorldTextDrawCalls.GetSize();
+
+        if( ( texturedMeshDrawCallCount | worldTextDrawCallCount ) != 0 )
         {
-            uint32_t vertexStride = static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) );
-            uint32_t vertexOffset = 0;
-            pCommandProxy->SetVertexBuffers(
-                0,
-                1,
-                &rResourceSet.spTexturedVertexBuffer,
-                &vertexStride,
-                &vertexOffset );
+            pStateCache->SetVertexBuffer(
+                rResourceSet.spTexturedVertexBuffer,
+                static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) ) );
+            pStateCache->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
 
-            pCommandProxy->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
-
-            if( texturedMeshDrawCallCount != 0 &&
-                rWorldResources.spTextureBlendVertexShader && rWorldResources.spTextureBlendPixelShader )
+            if( texturedMeshDrawCallCount != 0 )
             {
-                pCommandProxy->SetVertexShader( rWorldResources.spTextureBlendVertexShader );
-                pCommandProxy->SetPixelShader( rWorldResources.spTextureBlendPixelShader );
+                pStateCache->SetVertexShader( rWorldResources.spTextureBlendVertexShader );
+                pStateCache->SetPixelShader( rWorldResources.spTextureBlendPixelShader );
 
                 rWorldResources.spTextureBlendVertexShader->CacheDescription(
                     pRenderer,
@@ -1087,25 +1339,16 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                 RVertexInputLayout* pVertexInputLayout =
                     rWorldResources.spTextureBlendVertexShader->GetCachedInputLayout();
                 HELIUM_ASSERT( pVertexInputLayout );
-                pCommandProxy->SetVertexInputLayout( pVertexInputLayout );
+                pStateCache->SetVertexInputLayout( pVertexInputLayout );
 
-                if( !rWorldResources.bSetBlendState )
-                {
-                    RBlendState* pBlendState = rRenderResourceManager.GetBlendState(
-                        RenderResourceManager::BLEND_STATE_TRANSPARENT );
-                    HELIUM_ASSERT( pBlendState );
-                    pCommandProxy->SetBlendState( pBlendState );
-                }
-
-                RRasterizerState* pRasterizerState = rRenderResourceManager.GetRasterizerState(
-                    RenderResourceManager::RASTERIZER_STATE_DEFAULT );
-                pCommandProxy->SetRasterizerState( pRasterizerState );
+                pStateCache->SetRasterizerState( pRasterizerStateDefault );
+                pStateCache->SetBlendState( pBlendStateTransparent );
 
                 for( size_t drawCallIndex = 0; drawCallIndex < texturedMeshDrawCallCount; ++drawCallIndex )
                 {
                     const TexturedDrawCall& rDrawCall = rTexturedMeshDrawCalls[ drawCallIndex ];
 
-                    pCommandProxy->SetTexture( 0, rDrawCall.spTexture );
+                    pStateCache->SetTexture( rDrawCall.spTexture );
 
                     pCommandProxy->DrawIndexed(
                         RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
@@ -1115,15 +1358,12 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                         rDrawCall.startIndex,
                         rDrawCall.primitiveCount );
                 }
-
-                pCommandProxy->SetTexture( 0, NULL );
             }
 
-            if( textDrawCallCount != 0 &&
-                rWorldResources.spTextureAlphaVertexShader && rWorldResources.spTextureAlphaPixelShader )
+            if( worldTextDrawCallCount != 0 )
             {
-                pCommandProxy->SetVertexShader( rWorldResources.spTextureAlphaVertexShader );
-                pCommandProxy->SetPixelShader( rWorldResources.spTextureAlphaPixelShader );
+                pStateCache->SetVertexShader( rWorldResources.spTextureAlphaVertexShader );
+                pStateCache->SetPixelShader( rWorldResources.spTextureAlphaPixelShader );
 
                 rWorldResources.spTextureAlphaVertexShader->CacheDescription(
                     pRenderer,
@@ -1131,25 +1371,16 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                 RVertexInputLayout* pVertexInputLayout =
                     rWorldResources.spTextureAlphaVertexShader->GetCachedInputLayout();
                 HELIUM_ASSERT( pVertexInputLayout );
-                pCommandProxy->SetVertexInputLayout( pVertexInputLayout );
+                pStateCache->SetVertexInputLayout( pVertexInputLayout );
 
-                if( !rWorldResources.bSetBlendState )
-                {
-                    RBlendState* pBlendState = rRenderResourceManager.GetBlendState(
-                        RenderResourceManager::BLEND_STATE_TRANSPARENT );
-                    HELIUM_ASSERT( pBlendState );
-                    pCommandProxy->SetBlendState( pBlendState );
-                }
+                pStateCache->SetRasterizerState( pRasterizerStateDefault );
+                pStateCache->SetBlendState( pBlendStateTransparent );
 
-                RRasterizerState* pRasterizerState = rRenderResourceManager.GetRasterizerState(
-                    RenderResourceManager::RASTERIZER_STATE_DEFAULT );
-                pCommandProxy->SetRasterizerState( pRasterizerState );
-
-                for( size_t drawCallIndex = 0; drawCallIndex < textDrawCallCount; ++drawCallIndex )
+                for( size_t drawCallIndex = 0; drawCallIndex < worldTextDrawCallCount; ++drawCallIndex )
                 {
                     const TexturedDrawCall& rDrawCall = rWorldTextDrawCalls[ drawCallIndex ];
 
-                    pCommandProxy->SetTexture( 0, rDrawCall.spTexture );
+                    pStateCache->SetTexture( rDrawCall.spTexture );
 
                     pCommandProxy->DrawIndexed(
                         RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
@@ -1159,15 +1390,86 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                         rDrawCall.startIndex,
                         rDrawCall.primitiveCount );
                 }
-
-                pCommandProxy->SetTexture( 0, NULL );
             }
         }
     }
 
     // Draw untextured data.
-    if( rWorldResources.spUntexturedVertexShader && rWorldResources.spUntexturedPixelShader &&
-        rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+    const DynArray< UntexturedBufferDrawCall >& rSolidMeshBufferDrawCalls = m_solidMeshBufferDrawCalls[ depthMode ];
+    const DynArray< UntexturedBufferDrawCall >& rWireMeshBufferDrawCalls = m_wireMeshBufferDrawCalls[ depthMode ];
+    const DynArray< UntexturedBufferDrawCall >& rLineBufferDrawCalls = m_lineBufferDrawCalls[ depthMode ];
+    size_t solidMeshBufferDrawCallCount = rSolidMeshBufferDrawCalls.GetSize();
+    size_t wireMeshBufferDrawCallCount = rWireMeshBufferDrawCalls.GetSize();
+    size_t lineBufferDrawCallCount = rLineBufferDrawCalls.GetSize();
+    if( ( solidMeshBufferDrawCallCount | wireMeshBufferDrawCallCount | lineBufferDrawCallCount ) != 0 )
+    {
+        pStateCache->SetVertexShader( rWorldResources.spUntexturedVertexShader );
+        pStateCache->SetPixelShader( rWorldResources.spUntexturedPixelShader );
+
+        rWorldResources.spUntexturedVertexShader->CacheDescription(
+            pRenderer,
+            rWorldResources.spSimpleVertexDescription );
+        RVertexInputLayout* pVertexInputLayout = rWorldResources.spUntexturedVertexShader->GetCachedInputLayout();
+        HELIUM_ASSERT( pVertexInputLayout );
+        pStateCache->SetVertexInputLayout( pVertexInputLayout );
+
+        pStateCache->SetRasterizerState( pRasterizerStateDefault );
+        pStateCache->SetBlendState( pBlendStateTransparent );
+
+        pStateCache->SetTexture( NULL );
+
+        for( size_t drawCallIndex = 0; drawCallIndex < solidMeshBufferDrawCallCount; ++drawCallIndex )
+        {
+            const UntexturedBufferDrawCall& rDrawCall = rSolidMeshBufferDrawCalls[ drawCallIndex ];
+
+            pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+            pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
+
+            pCommandProxy->DrawIndexed(
+                RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+                rDrawCall.baseVertexIndex,
+                0,
+                rDrawCall.vertexCount,
+                rDrawCall.startIndex,
+                rDrawCall.primitiveCount );
+        }
+
+        pStateCache->SetRasterizerState( pRasterizerStateWireframe );
+
+        for( size_t drawCallIndex = 0; drawCallIndex < wireMeshBufferDrawCallCount; ++drawCallIndex )
+        {
+            const UntexturedBufferDrawCall& rDrawCall = rWireMeshBufferDrawCalls[ drawCallIndex ];
+
+            pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+            pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
+
+            pCommandProxy->DrawIndexed(
+                RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+                rDrawCall.baseVertexIndex,
+                0,
+                rDrawCall.vertexCount,
+                rDrawCall.startIndex,
+                rDrawCall.primitiveCount );
+        }
+
+        for( size_t drawCallIndex = 0; drawCallIndex < lineBufferDrawCallCount; ++drawCallIndex )
+        {
+            const UntexturedBufferDrawCall& rDrawCall = rLineBufferDrawCalls[ drawCallIndex ];
+
+            pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+            pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
+
+            pCommandProxy->DrawIndexed(
+                RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+                rDrawCall.baseVertexIndex,
+                0,
+                rDrawCall.vertexCount,
+                rDrawCall.startIndex,
+                rDrawCall.primitiveCount );
+        }
+    }
+
+    if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
     {
         const DynArray< UntexturedDrawCall >& rSolidMeshDrawCalls = m_solidMeshDrawCalls[ depthMode ];
         const DynArray< UntexturedDrawCall >& rWireMeshDrawCalls = m_wireMeshDrawCalls[ depthMode ];
@@ -1177,37 +1479,25 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
         size_t lineDrawCallCount = rLineDrawCalls.GetSize();
         if( ( solidMeshDrawCallCount | wireMeshDrawCallCount | lineDrawCallCount ) != 0 )
         {
-            pCommandProxy->SetVertexShader( rWorldResources.spUntexturedVertexShader );
-            pCommandProxy->SetPixelShader( rWorldResources.spUntexturedPixelShader );
+            pStateCache->SetVertexShader( rWorldResources.spUntexturedVertexShader );
+            pStateCache->SetPixelShader( rWorldResources.spUntexturedPixelShader );
 
-            uint32_t vertexStride = static_cast< uint32_t >( sizeof( SimpleVertex ) );
-            uint32_t vertexOffset = 0;
-            pCommandProxy->SetVertexBuffers(
-                0,
-                1,
-                &rResourceSet.spUntexturedVertexBuffer,
-                &vertexStride,
-                &vertexOffset );
-            pCommandProxy->SetIndexBuffer( rResourceSet.spUntexturedIndexBuffer );
+            pStateCache->SetVertexBuffer(
+                rResourceSet.spUntexturedVertexBuffer,
+                static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+            pStateCache->SetIndexBuffer( rResourceSet.spUntexturedIndexBuffer );
 
             rWorldResources.spUntexturedVertexShader->CacheDescription(
                 pRenderer,
                 rWorldResources.spSimpleVertexDescription );
             RVertexInputLayout* pVertexInputLayout = rWorldResources.spUntexturedVertexShader->GetCachedInputLayout();
             HELIUM_ASSERT( pVertexInputLayout );
-            pCommandProxy->SetVertexInputLayout( pVertexInputLayout );
+            pStateCache->SetVertexInputLayout( pVertexInputLayout );
 
-            if( !rWorldResources.bSetBlendState )
-            {
-                RBlendState* pBlendState = rRenderResourceManager.GetBlendState(
-                    RenderResourceManager::BLEND_STATE_TRANSPARENT );
-                HELIUM_ASSERT( pBlendState );
-                pCommandProxy->SetBlendState( pBlendState );
-            }
+            pStateCache->SetRasterizerState( pRasterizerStateDefault );
+            pStateCache->SetBlendState( pBlendStateTransparent );
 
-            RRasterizerState* pRasterizerState = rRenderResourceManager.GetRasterizerState(
-                RenderResourceManager::RASTERIZER_STATE_DEFAULT );
-            pCommandProxy->SetRasterizerState( pRasterizerState );
+            pStateCache->SetTexture( NULL );
 
             for( size_t drawCallIndex = 0; drawCallIndex < solidMeshDrawCallCount; ++drawCallIndex )
             {
@@ -1222,9 +1512,7 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                     rDrawCall.primitiveCount );
             }
 
-            pRasterizerState = rRenderResourceManager.GetRasterizerState(
-                RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
-            pCommandProxy->SetRasterizerState( pRasterizerState );
+            pStateCache->SetRasterizerState( pRasterizerStateWireframe );
 
             for( size_t drawCallIndex = 0; drawCallIndex < wireMeshDrawCallCount; ++drawCallIndex )
             {
@@ -1253,6 +1541,161 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             }
         }
     }
+}
+
+/// Constructor.
+///
+/// @param[in] pCommandProxy  Render command proxy interface to use when issuing state changes.
+BufferedDrawer::StateCache::StateCache( RRenderCommandProxy* pCommandProxy )
+    : m_spRenderCommandProxy( pCommandProxy )
+{
+    ResetStateCache();
+}
+
+/// Set the render command proxy to use for issuing state changes.
+///
+/// @param[in] pCommandProxy  Render command proxy interface to use when issuing state changes.
+void BufferedDrawer::StateCache::SetRenderCommandProxy( RRenderCommandProxy* pCommandProxy )
+{
+    if( m_spRenderCommandProxy != pCommandProxy )
+    {
+        m_spRenderCommandProxy = pCommandProxy;
+        ResetStateCache();
+    }
+}
+
+/// Set the rasterizer state.
+///
+/// @param[in] pState  Rasterizer state to set.
+void BufferedDrawer::StateCache::SetRasterizerState( RRasterizerState* pState )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pRasterizerState != pState )
+    {
+        m_pRasterizerState = pState;
+        m_spRenderCommandProxy->SetRasterizerState( pState );
+    }
+}
+
+/// Set the blend state.
+///
+/// @param[in] pState  Blend state to set.
+void BufferedDrawer::StateCache::SetBlendState( RBlendState* pState )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pBlendState != pState )
+    {
+        m_pBlendState = pState;
+        m_spRenderCommandProxy->SetBlendState( pState );
+    }
+}
+
+/// Set the current vertex buffer.
+///
+/// @param[in] pBuffer  Vertex buffer to set.
+/// @param[in] stride   Bytes between consecutive vertices.
+void BufferedDrawer::StateCache::SetVertexBuffer( RVertexBuffer* pBuffer, uint32_t stride )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pVertexBuffer != pBuffer || m_vertexStride != stride )
+    {
+        m_pVertexBuffer = pBuffer;
+        m_vertexStride = stride;
+
+        uint32_t offset = 0;
+        m_spRenderCommandProxy->SetVertexBuffers( 0, 1, &pBuffer, &stride, &offset );
+    }
+}
+
+/// Set the current index buffer.
+///
+/// @param[in] pBuffer  Index buffer to set.
+void BufferedDrawer::StateCache::SetIndexBuffer( RIndexBuffer* pBuffer )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pIndexBuffer != pBuffer )
+    {
+        m_pIndexBuffer = pBuffer;
+        m_spRenderCommandProxy->SetIndexBuffer( pBuffer );
+    }
+}
+
+/// Set the current vertex shader.
+///
+/// @param[in] pShader  Vertex shader to set.
+void BufferedDrawer::StateCache::SetVertexShader( RVertexShader* pShader )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pVertexShader != pShader )
+    {
+        m_pVertexShader = pShader;
+        m_spRenderCommandProxy->SetVertexShader( pShader );
+    }
+}
+
+/// Set the current pixel shader.
+///
+/// @param[in] pShader  Pixel shader to set.
+void BufferedDrawer::StateCache::SetPixelShader( RPixelShader* pShader )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pPixelShader != pShader )
+    {
+        m_pPixelShader = pShader;
+        m_spRenderCommandProxy->SetPixelShader( pShader );
+    }
+}
+
+/// Set the current vertex input layout.
+///
+/// @param[in] pLayout  Vertex input layout to set.
+void BufferedDrawer::StateCache::SetVertexInputLayout( RVertexInputLayout* pLayout )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pVertexInputLayout != pLayout )
+    {
+        m_pVertexInputLayout = pLayout;
+        m_spRenderCommandProxy->SetVertexInputLayout( pLayout );
+    }
+}
+
+/// Set the current texture.
+///
+/// @param[in] pTexture  Texture to set.
+void BufferedDrawer::StateCache::SetTexture( RTexture2d* pTexture )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pTexture != pTexture )
+    {
+        m_pTexture = pTexture;
+        m_spRenderCommandProxy->SetTexture( 0, pTexture );
+    }
+}
+
+/// Clear all cached state data.
+void BufferedDrawer::StateCache::ResetStateCache()
+{
+    m_pRasterizerState = NULL;
+    m_pBlendState = NULL;
+
+    m_pVertexBuffer = NULL;
+    m_vertexStride = 0;
+
+    m_pIndexBuffer = NULL;
+
+    m_pVertexShader = NULL;
+    m_pPixelShader = NULL;
+    m_pVertexInputLayout = NULL;
+
+    m_pTexture = NULL;
 }
 
 /// Constructor.

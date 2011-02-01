@@ -9,6 +9,8 @@
 
 namespace Lunar
 {
+    class RVertexInputLayout;
+
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RIndexBuffer );
     L_DECLARE_RPTR( RPixelShader );
@@ -57,15 +59,31 @@ namespace Lunar
         void DrawLines(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount,
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawLines(
+            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
+            uint32_t startIndex, uint32_t lineCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+
         void DrawWireMesh(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawWireMesh(
+            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
+            uint32_t startIndex, uint32_t triangleCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+
         void DrawSolidMesh(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawSolidMesh(
+            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
+            uint32_t startIndex, uint32_t triangleCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
             uint32_t triangleCount, RTexture2d* pTexture, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawTexturedMesh(
+            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
+            uint32_t startIndex, uint32_t triangleCount, RTexture2d* pTexture,
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, const Color& rColor = Color( 0xffffffff ),
@@ -86,7 +104,7 @@ namespace Lunar
         //@}
 
     private:
-        /// Untextured primitive draw call information.
+        /// Untextured primitive draw call information using internal vertex/index buffers.
         struct UntexturedDrawCall
         {
             /// Starting vertex index.
@@ -99,8 +117,24 @@ namespace Lunar
             uint32_t primitiveCount;
         };
 
-        /// Textured primitive draw call information.
+        /// Textured primitive draw call information using internal vertex/index buffers.
         struct TexturedDrawCall : UntexturedDrawCall
+        {
+            /// Texture with which to draw.
+            RTexture2dPtr spTexture;
+        };
+
+        /// Untextured primitive draw call information using external vertex/index buffers.
+        struct UntexturedBufferDrawCall : UntexturedDrawCall
+        {
+            /// Vertex buffer.
+            RVertexBufferPtr spVertexBuffer;
+            /// Index buffer.
+            RIndexBufferPtr spIndexBuffer;
+        };
+
+        /// Textured primitive draw call information using external vertex/index buffers.
+        struct TexturedBufferDrawCall : UntexturedBufferDrawCall
         {
             /// Texture with which to draw.
             RTexture2dPtr spTexture;
@@ -151,6 +185,68 @@ namespace Lunar
             uint32_t screenSpaceTextVertexBufferSize;
         };
 
+        /// Cached renderer state information.
+        class StateCache
+        {
+        public:
+            /// @name Construction/Destruction
+            //@{
+            explicit StateCache( RRenderCommandProxy* pCommandProxy = NULL );
+            //@}
+
+            /// @name Render Command Proxy Modification
+            //@{
+            void SetRenderCommandProxy( RRenderCommandProxy* pCommandProxy );
+            //@}
+
+            /// @name State Modification
+            //@{
+            void SetRasterizerState( RRasterizerState* pState );
+            void SetBlendState( RBlendState* pState );
+
+            void SetVertexBuffer( RVertexBuffer* pBuffer, uint32_t stride );
+            void SetIndexBuffer( RIndexBuffer* pBuffer );
+
+            void SetVertexShader( RVertexShader* pShader );
+            void SetPixelShader( RPixelShader* pShader );
+            void SetVertexInputLayout( RVertexInputLayout* pLayout );
+
+            void SetTexture( RTexture2d* pTexture );
+            //@}
+
+        private:
+            /// Render command proxy used to issue render commands.
+            RRenderCommandProxyPtr m_spRenderCommandProxy;
+
+            /// Current rasterizer state.
+            RRasterizerState* m_pRasterizerState;
+            /// Current blend state.
+            RBlendState* m_pBlendState;
+
+            /// Current vertex buffer.
+            RVertexBuffer* m_pVertexBuffer;
+            /// Current vertex stride.
+            uint32_t m_vertexStride;
+
+            /// Current index buffer.
+            RIndexBuffer* m_pIndexBuffer;
+
+            /// Current vertex shader.
+            RVertexShader* m_pVertexShader;
+            /// Current pixel shader.
+            RPixelShader* m_pPixelShader;
+            /// Current vertex input layout.
+            RVertexInputLayout* m_pVertexInputLayout;
+
+            /// Current texture.
+            RTexture2d* m_pTexture;
+
+            /// @name Private Utility Functions
+            //@{
+            void ResetStateCache();
+            //@}
+        };
+
         /// Rendering resources used for drawing world elements.
         struct WorldElementResources
         {
@@ -177,8 +273,8 @@ namespace Lunar
             /// Cached reference to the vertex description for SimpleTexturedVertex;
             RVertexDescriptionPtr spSimpleTexturedVertexDescription;
 
-            /// True if the transparent rendering blend state has been set.
-            bool bSetBlendState;
+            /// Render state cache.
+            StateCache* pStateCache;
         };
 
         /// Glyph handler for rendering world-space text.
@@ -265,14 +361,24 @@ namespace Lunar
         /// Textured draw call indices.
         DynArray< uint16_t > m_texturedIndices;
 
-        /// Line list draw call data.
+        /// Line list draw call data using internal vertex/index buffers.
         DynArray< UntexturedDrawCall > m_lineDrawCalls[ DEPTH_MODE_MAX ];
-        /// Wireframe mesh draw call data
+        /// Wireframe mesh draw call data using internal vertex/index buffers.
         DynArray< UntexturedDrawCall > m_wireMeshDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid mesh draw call data.
+        /// Solid mesh draw call data using internal vertex/index buffers.
         DynArray< UntexturedDrawCall > m_solidMeshDrawCalls[ DEPTH_MODE_MAX ];
-        /// Textured mesh draw call data.
+        /// Textured mesh draw call data using internal vertex/index buffers.
         DynArray< TexturedDrawCall > m_texturedMeshDrawCalls[ DEPTH_MODE_MAX ];
+
+        /// Line list draw call data using internal vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_lineBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Wireframe mesh draw call data using internal vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_wireMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Solid mesh draw call data using internal vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_solidMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Textured mesh draw call data using internal vertex/index buffers.
+        DynArray< TexturedBufferDrawCall > m_texturedMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
+
         /// World-space text draw call data.
         DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];
 

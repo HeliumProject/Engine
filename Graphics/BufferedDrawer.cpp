@@ -5,6 +5,7 @@
 #include "Foundation/StringConverter.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RConstantBuffer.h"
+#include "Rendering/RFence.h"
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/RPixelShader.h"
 #include "Rendering/RRenderCommandProxy.h"
@@ -28,6 +29,8 @@ BufferedDrawer::BufferedDrawer()
         rResourceSet.texturedVertexBufferSize = 0;
         rResourceSet.texturedIndexBufferSize = 0;
         rResourceSet.screenSpaceTextVertexBufferSize = 0;
+        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
+        rResourceSet.instancePixelConstantBlendColor = Color( 0xffffffff );
     }
 }
 
@@ -65,6 +68,33 @@ bool BufferedDrawer::Initialize()
 
             return false;
         }
+
+        // Allocate constant buffers for per-instance pixel shader constants.
+        for( size_t resourceSetIndex = 0; resourceSetIndex < HELIUM_ARRAY_COUNT( m_resourceSets ); ++resourceSetIndex )
+        {
+            ResourceSet& rResourceSet = m_resourceSets[ resourceSetIndex ];
+
+            for( size_t bufferIndex = 0;
+                 bufferIndex < HELIUM_ARRAY_COUNT( rResourceSet.instancePixelConstantBuffers );
+                 ++bufferIndex )
+            {
+                RConstantBuffer* pConstantBuffer = pRenderer->CreateConstantBuffer(
+                    sizeof( float32_t ) * 4,
+                    RENDERER_BUFFER_USAGE_DYNAMIC );
+                rResourceSet.instancePixelConstantBuffers[ bufferIndex ] = pConstantBuffer;
+                if( !pConstantBuffer )
+                {
+                    HELIUM_TRACE(
+                        TRACE_ERROR,
+                        ( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance pixel shader constant " )
+                          TXT( "buffers.\n" ) ) );
+
+                    Shutdown();
+
+                    return false;
+                }
+            }
+        }
     }
 
     return true;
@@ -101,6 +131,11 @@ void BufferedDrawer::Shutdown()
 
     m_spScreenSpaceTextIndexBuffer.Release();
 
+    for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instancePixelConstantFences ); ++fenceIndex )
+    {
+        m_instancePixelConstantFences[ fenceIndex ].Release();
+    }
+
     for( size_t resourceSetIndex = 0; resourceSetIndex < HELIUM_ARRAY_COUNT( m_resourceSets ); ++resourceSetIndex )
     {
         ResourceSet& rResourceSet = m_resourceSets[ resourceSetIndex ];
@@ -109,11 +144,20 @@ void BufferedDrawer::Shutdown()
         rResourceSet.spTexturedVertexBuffer.Release();
         rResourceSet.spTexturedIndexBuffer.Release();
         rResourceSet.spScreenSpaceTextVertexBuffer.Release();
+        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
+        rResourceSet.instancePixelConstantBlendColor = Color( 0xffffffff );
         rResourceSet.untexturedVertexBufferSize = 0;
         rResourceSet.untexturedIndexBufferSize = 0;
         rResourceSet.texturedVertexBufferSize = 0;
         rResourceSet.texturedIndexBufferSize = 0;
         rResourceSet.screenSpaceTextVertexBufferSize = 0;
+
+        for( size_t bufferIndex = 0;
+             bufferIndex < HELIUM_ARRAY_COUNT( rResourceSet.instancePixelConstantBuffers );
+             ++bufferIndex )
+        {
+            rResourceSet.instancePixelConstantBuffers[ bufferIndex ].Release();
+        }
     }
 
     m_currentResourceSetIndex = 0;
@@ -127,6 +171,7 @@ void BufferedDrawer::Shutdown()
 /// @param[in] vertexCount  Number of vertices used for drawing.
 /// @param[in] pIndices     Indices to use for drawing.
 /// @param[in] lineCount    Number of lines to draw.
+/// @param[in] blendColor   Color with which to blend each vertex color.
 /// @param[in] depthMode    Mode in which to handle depth testing and writing.
 ///
 /// @see DrawWireMesh(), DrawSolidMesh(), DrawTexturedMesh()
@@ -135,6 +180,7 @@ void BufferedDrawer::DrawLines(
     uint32_t vertexCount,
     const uint16_t* pIndices,
     uint32_t lineCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -164,6 +210,7 @@ void BufferedDrawer::DrawLines(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = lineCount;
+    pDrawCall->blendColor = blendColor;
 }
 
 /// Buffer a line list draw call.
@@ -176,6 +223,7 @@ void BufferedDrawer::DrawLines(
 /// @param[in] vertexCount      Number of vertices used for rendering.
 /// @param[in] startIndex       Index of the first index to use for drawing.
 /// @param[in] lineCount        Number of lines to draw.
+/// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
 /// @see DrawWireMesh(), DrawSolidMesh(), DrawTexturedMesh()
@@ -186,6 +234,7 @@ void BufferedDrawer::DrawLines(
     uint32_t vertexCount,
     uint32_t startIndex,
     uint32_t lineCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -209,6 +258,7 @@ void BufferedDrawer::DrawLines(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = lineCount;
+    pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
 }
@@ -219,6 +269,7 @@ void BufferedDrawer::DrawLines(
 /// @param[in] vertexCount    Number of vertices used for drawing.
 /// @param[in] pIndices       Indices to use for drawing.
 /// @param[in] triangleCount  Number of triangles to draw.
+/// @param[in] blendColor     Color with which to blend each vertex color.
 /// @param[in] depthMode      Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawSolidMesh(), DrawTexturedMesh()
@@ -227,6 +278,7 @@ void BufferedDrawer::DrawWireMesh(
     uint32_t vertexCount,
     const uint16_t* pIndices,
     uint32_t triangleCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -256,6 +308,7 @@ void BufferedDrawer::DrawWireMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
 }
 
 /// Buffer a wireframe mesh draw call.
@@ -268,6 +321,7 @@ void BufferedDrawer::DrawWireMesh(
 /// @param[in] vertexCount      Number of vertices used for rendering.
 /// @param[in] startIndex       Index of the first index to use for drawing.
 /// @param[in] triangleCount    Number of triangles to draw.
+/// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawSolidMesh(), DrawTexturedMesh()
@@ -278,6 +332,7 @@ void BufferedDrawer::DrawWireMesh(
     uint32_t vertexCount,
     uint32_t startIndex,
     uint32_t triangleCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -301,6 +356,7 @@ void BufferedDrawer::DrawWireMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
 }
@@ -311,6 +367,7 @@ void BufferedDrawer::DrawWireMesh(
 /// @param[in] vertexCount    Number of vertices used for drawing.
 /// @param[in] pIndices       Indices to use for drawing.
 /// @param[in] triangleCount  Number of triangles to draw.
+/// @param[in] blendColor     Color with which to blend each vertex color.
 /// @param[in] depthMode      Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawWireMesh(), DrawTexturedMesh()
@@ -319,6 +376,7 @@ void BufferedDrawer::DrawSolidMesh(
     uint32_t vertexCount,
     const uint16_t* pIndices,
     uint32_t triangleCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -348,6 +406,7 @@ void BufferedDrawer::DrawSolidMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
 }
 
 /// Buffer a solid mesh draw call.
@@ -360,6 +419,7 @@ void BufferedDrawer::DrawSolidMesh(
 /// @param[in] vertexCount      Number of vertices used for rendering.
 /// @param[in] startIndex       Index of the first index to use for drawing.
 /// @param[in] triangleCount    Number of triangles to draw.
+/// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawWireMesh(), DrawTexturedMesh()
@@ -370,6 +430,7 @@ void BufferedDrawer::DrawSolidMesh(
     uint32_t vertexCount,
     uint32_t startIndex,
     uint32_t triangleCount,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -393,6 +454,7 @@ void BufferedDrawer::DrawSolidMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
 }
@@ -404,6 +466,7 @@ void BufferedDrawer::DrawSolidMesh(
 /// @param[in] pIndices       Indices to use for drawing.
 /// @param[in] triangleCount  Number of triangles to draw.
 /// @param[in] pTexture       Texture to apply to the mesh.
+/// @param[in] blendColor     Color with which to blend each vertex color.
 /// @param[in] depthMode      Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawWireMesh(), DrawSolidMesh()
@@ -413,6 +476,7 @@ void BufferedDrawer::DrawTexturedMesh(
     const uint16_t* pIndices,
     uint32_t triangleCount,
     RTexture2d* pTexture,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -443,6 +507,7 @@ void BufferedDrawer::DrawTexturedMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
     pDrawCall->spTexture = pTexture;
 }
 
@@ -457,6 +522,7 @@ void BufferedDrawer::DrawTexturedMesh(
 /// @param[in] startIndex       Index of the first index to use for drawing.
 /// @param[in] triangleCount    Number of triangles to draw.
 /// @param[in] pTexture         Texture to apply to the mesh.
+/// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
 /// @see DrawLines(), DrawWireMesh(), DrawSolidMesh()
@@ -468,6 +534,7 @@ void BufferedDrawer::DrawTexturedMesh(
     uint32_t startIndex,
     uint32_t triangleCount,
     RTexture2d* pTexture,
+    Color blendColor,
     EDepthMode depthMode )
 {
     HELIUM_ASSERT( pVertices );
@@ -492,6 +559,7 @@ void BufferedDrawer::DrawTexturedMesh(
     pDrawCall->vertexCount = vertexCount;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = triangleCount;
+    pDrawCall->blendColor = blendColor;
     pDrawCall->spTexture = pTexture;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
@@ -501,7 +569,7 @@ void BufferedDrawer::DrawTexturedMesh(
 ///
 /// @param[in] rTransform  World transform at which to start the text.
 /// @param[in] rText       Text to draw.
-/// @param[in] rColor      Color to blend with the text.
+/// @param[in] color       Color to blend with the text.
 /// @param[in] size        Identifier of the font size to use.
 /// @param[in] depthMode   Mode in which to handle depth testing and writing.
 ///
@@ -509,7 +577,7 @@ void BufferedDrawer::DrawTexturedMesh(
 void BufferedDrawer::DrawWorldText(
     const Simd::Matrix44& rTransform,
     const String& rText,
-    const Color& rColor,
+    Color color,
     RenderResourceManager::EDebugFontSize size,
     EDepthMode depthMode )
 {
@@ -535,24 +603,24 @@ void BufferedDrawer::DrawWorldText(
     }
 
     // Render the text.
-    WorldSpaceTextGlyphHandler glyphHandler( this, pFont, rColor, depthMode, rTransform );
+    WorldSpaceTextGlyphHandler glyphHandler( this, pFont, color, depthMode, rTransform );
     pFont->ProcessText( rText, glyphHandler );
 }
 
 /// Draw text in screen space at a specific transform.
 ///
-/// @param[in] x       X-coordinate of the screen pixel at which to begin drawing the text.
-/// @param[in] y       Y-coordinate of the screen pixel at which to begin drawing the text.
-/// @param[in] rText   Text to draw.
-/// @param[in] rColor  Color to blend with the text.
-/// @param[in] size    Identifier of the font size to use.
+/// @param[in] x      X-coordinate of the screen pixel at which to begin drawing the text.
+/// @param[in] y      Y-coordinate of the screen pixel at which to begin drawing the text.
+/// @param[in] rText  Text to draw.
+/// @param[in] color  Color to blend with the text.
+/// @param[in] size   Identifier of the font size to use.
 ///
 /// @see DrawWorldText()
 void BufferedDrawer::DrawScreenText(
     int32_t x,
     int32_t y,
     const String& rText,
-    const Color& rColor,
+    Color color,
     RenderResourceManager::EDebugFontSize size )
 {
     HELIUM_ASSERT(
@@ -576,7 +644,7 @@ void BufferedDrawer::DrawScreenText(
     }
 
     // Store the information needed for drawing the text later.
-    ScreenSpaceTextGlyphHandler glyphHandler( this, pFont, x, y, rColor, size );
+    ScreenSpaceTextGlyphHandler glyphHandler( this, pFont, x, y, color, size );
     pFont->ProcessText( rText, glyphHandler );
 }
 
@@ -892,10 +960,13 @@ void BufferedDrawer::BeginDrawing()
     }
 
     // Clear the buffered vertex and index data, as it is no longer needed.
-    m_untexturedVertices.Remove( 0, m_untexturedVertices.GetSize() );
-    m_texturedVertices.Remove( 0, m_texturedVertices.GetSize() );
-    m_untexturedIndices.Remove( 0, m_untexturedIndices.GetSize() );
-    m_texturedIndices.Remove( 0, m_texturedIndices.GetSize() );
+    m_untexturedVertices.RemoveAll();
+    m_texturedVertices.RemoveAll();
+    m_untexturedIndices.RemoveAll();
+    m_texturedIndices.RemoveAll();
+
+    // Reset per-instance pixel shader constant management data.
+    SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
 }
 
 /// Finish issuing draw commands and reset buffered data for the next set of draw calls.
@@ -922,9 +993,9 @@ void BufferedDrawer::EndDrawing()
         return;
     }
 
-    // Clear all buffered draw call data and swap rendering resources for the next set of buffered draw calls.
-    m_screenTextGlyphIndices.Remove( 0, m_screenTextGlyphIndices.GetSize() );
-    m_screenTextDrawCalls.Remove( 0, m_screenTextDrawCalls.GetSize() );
+    // Clear all buffered draw call data.
+    m_screenTextGlyphIndices.RemoveAll();
+    m_screenTextDrawCalls.RemoveAll();
 
     for( size_t depthModeIndex = 0; depthModeIndex < static_cast< size_t >( DEPTH_MODE_MAX ); ++depthModeIndex )
     {
@@ -941,6 +1012,13 @@ void BufferedDrawer::EndDrawing()
         m_lineDrawCalls[ depthModeIndex ].RemoveAll();
     }
 
+    // Release all fences used to block the usage lifetime of various instance-specific pixel shader constant buffers.
+    for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instancePixelConstantFences ); ++fenceIndex )
+    {
+        m_instancePixelConstantFences[ fenceIndex ].Release();
+    }
+
+    // Swap rendering resources for the next set of buffered draw calls.
     m_currentResourceSetIndex = ( m_currentResourceSetIndex + 1 ) % HELIUM_ARRAY_COUNT( m_resourceSets );
 }
 
@@ -1304,6 +1382,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
             pStateCache->SetTexture( rDrawCall.spTexture );
 
+            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rDrawCall.blendColor );
+            HELIUM_ASSERT( pPixelConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
             pCommandProxy->DrawIndexed(
                 RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                 rDrawCall.baseVertexIndex,
@@ -1350,6 +1435,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 
                     pStateCache->SetTexture( rDrawCall.spTexture );
 
+                    RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                        pCommandProxy,
+                        rResourceSet,
+                        rDrawCall.blendColor );
+                    HELIUM_ASSERT( pPixelConstantBuffer );
+                    pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
                     pCommandProxy->DrawIndexed(
                         RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                         rDrawCall.baseVertexIndex,
@@ -1381,6 +1473,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                     const TexturedDrawCall& rDrawCall = rWorldTextDrawCalls[ drawCallIndex ];
 
                     pStateCache->SetTexture( rDrawCall.spTexture );
+
+                    RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                        pCommandProxy,
+                        rResourceSet,
+                        rDrawCall.blendColor );
+                    HELIUM_ASSERT( pPixelConstantBuffer );
+                    pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
 
                     pCommandProxy->DrawIndexed(
                         RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
@@ -1425,6 +1524,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
             pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
 
+            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rDrawCall.blendColor );
+            HELIUM_ASSERT( pPixelConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
             pCommandProxy->DrawIndexed(
                 RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                 rDrawCall.baseVertexIndex,
@@ -1443,6 +1549,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
             pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
 
+            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rDrawCall.blendColor );
+            HELIUM_ASSERT( pPixelConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
             pCommandProxy->DrawIndexed(
                 RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                 rDrawCall.baseVertexIndex,
@@ -1458,6 +1571,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
             pStateCache->SetIndexBuffer( rDrawCall.spIndexBuffer );
+
+            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rDrawCall.blendColor );
+            HELIUM_ASSERT( pPixelConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
 
             pCommandProxy->DrawIndexed(
                 RENDERER_PRIMITIVE_TYPE_LINE_LIST,
@@ -1503,6 +1623,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             {
                 const UntexturedDrawCall& rDrawCall = rSolidMeshDrawCalls[ drawCallIndex ];
 
+                RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                    pCommandProxy,
+                    rResourceSet,
+                    rDrawCall.blendColor );
+                HELIUM_ASSERT( pPixelConstantBuffer );
+                pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
                 pCommandProxy->DrawIndexed(
                     RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                     rDrawCall.baseVertexIndex,
@@ -1518,6 +1645,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             {
                 const UntexturedDrawCall& rDrawCall = rWireMeshDrawCalls[ drawCallIndex ];
 
+                RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                    pCommandProxy,
+                    rResourceSet,
+                    rDrawCall.blendColor );
+                HELIUM_ASSERT( pPixelConstantBuffer );
+                pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
                 pCommandProxy->DrawIndexed(
                     RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
                     rDrawCall.baseVertexIndex,
@@ -1531,6 +1665,13 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             {
                 const UntexturedDrawCall& rDrawCall = rLineDrawCalls[ drawCallIndex ];
 
+                RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                    pCommandProxy,
+                    rResourceSet,
+                    rDrawCall.blendColor );
+                HELIUM_ASSERT( pPixelConstantBuffer );
+                pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
                 pCommandProxy->DrawIndexed(
                     RENDERER_PRIMITIVE_TYPE_LINE_LIST,
                     rDrawCall.baseVertexIndex,
@@ -1541,6 +1682,71 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             }
         }
     }
+
+    pStateCache->SetPixelConstantBuffer( NULL );
+}
+
+/// Set the pixel shader constant data for the current draw instance.
+///
+/// @param[in] pCommandProxy  Interface through which render commands should be issued.
+/// @param[in] rResourceSet   Active resource set data for the current frame.
+/// @param[in] blendColor     Color with which to blend each vertex color during rendering.
+///
+/// @return  Pixel shader constant buffer to use for the current instance.
+RConstantBuffer* BufferedDrawer::SetInstancePixelConstantData(
+    RRenderCommandProxy* pCommandProxy,
+    ResourceSet& rResourceSet,
+    Color blendColor )
+{
+    HELIUM_ASSERT( pCommandProxy );
+
+    uint32_t bufferIndex = rResourceSet.instancePixelConstantBufferIndex;
+    bool bFirstUpdate = IsInvalid( bufferIndex );
+
+    if( bFirstUpdate || rResourceSet.instancePixelConstantBlendColor != blendColor )
+    {
+        Renderer* pRenderer = Renderer::GetStaticInstance();
+        HELIUM_ASSERT( pRenderer );
+
+        if( !bFirstUpdate )
+        {
+            HELIUM_ASSERT( bufferIndex < HELIUM_ARRAY_COUNT( m_instancePixelConstantFences ) );
+            HELIUM_ASSERT( !m_instancePixelConstantFences[ bufferIndex ] );
+
+            RFence* pFence = pRenderer->CreateFence();
+            HELIUM_ASSERT( pFence );
+            m_instancePixelConstantFences[ bufferIndex ] = pFence;
+
+            pCommandProxy->SetFence( pFence );
+        }
+
+        bufferIndex = ( bufferIndex + 1 ) % HELIUM_ARRAY_COUNT( rResourceSet.instancePixelConstantBuffers );
+        rResourceSet.instancePixelConstantBufferIndex = bufferIndex;
+
+        RFence* pFence = m_instancePixelConstantFences[ bufferIndex ];
+        if( pFence )
+        {
+            pRenderer->SyncFence( pFence );
+            m_instancePixelConstantFences[ bufferIndex ].Release();
+        }
+
+        RConstantBuffer* pConstantBuffer = rResourceSet.instancePixelConstantBuffers[ bufferIndex ];
+        HELIUM_ASSERT( pConstantBuffer );
+        float32_t* pConstantValues =
+            static_cast< float32_t* >( pConstantBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+        HELIUM_ASSERT( pConstantValues );
+
+        *( pConstantValues++ ) = static_cast< float32_t >( blendColor.GetR() ) / 255.0f;
+        *( pConstantValues++ ) = static_cast< float32_t >( blendColor.GetG() ) / 255.0f;
+        *( pConstantValues++ ) = static_cast< float32_t >( blendColor.GetB() ) / 255.0f;
+        *pConstantValues = static_cast< float32_t >( blendColor.GetA() ) / 255.0f;
+
+        pConstantBuffer->Unmap();
+
+        rResourceSet.instancePixelConstantBlendColor = blendColor;
+    }
+
+    return rResourceSet.instancePixelConstantBuffers[ bufferIndex ];
 }
 
 /// Constructor.
@@ -1666,6 +1872,20 @@ void BufferedDrawer::StateCache::SetVertexInputLayout( RVertexInputLayout* pLayo
     }
 }
 
+/// Set the current pixel shader constant buffer.
+///
+/// @param[in] pConstantBuffer  Constant buffer to set.
+void BufferedDrawer::StateCache::SetPixelConstantBuffer( RConstantBuffer* pConstantBuffer )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pPixelConstantBuffer != pConstantBuffer )
+    {
+        m_pPixelConstantBuffer = pConstantBuffer;
+        m_spRenderCommandProxy->SetPixelConstantBuffers( 0, 1, &pConstantBuffer );
+    }
+}
+
 /// Set the current texture.
 ///
 /// @param[in] pTexture  Texture to set.
@@ -1695,6 +1915,8 @@ void BufferedDrawer::StateCache::ResetStateCache()
     m_pPixelShader = NULL;
     m_pVertexInputLayout = NULL;
 
+    m_pPixelConstantBuffer = NULL;
+
     m_pTexture = NULL;
 }
 
@@ -1702,19 +1924,19 @@ void BufferedDrawer::StateCache::ResetStateCache()
 ///
 /// @param[in] pDrawer     Buffered drawer instance being used to perform the rendering.
 /// @param[in] pFont       Font being used for rendering.
-/// @param[in] rColor      Text color.
+/// @param[in] color       Text color.
 /// @param[in] depthMode   Mode in which to handle depth testing and writing.
 /// @param[in] rTransform  World-space transform matrix.
 BufferedDrawer::WorldSpaceTextGlyphHandler::WorldSpaceTextGlyphHandler(
     BufferedDrawer* pDrawer,
     Font* pFont,
-    const Color& rColor,
+    Color color,
     EDepthMode depthMode,
     const Simd::Matrix44& rTransform )
     : m_rTransform( rTransform )
     , m_pDrawer( pDrawer )
     , m_pFont( pFont )
-    , m_color( rColor )
+    , m_color( color )
     , m_depthMode( depthMode )
     , m_inverseTextureWidth( 1.0f / static_cast< float32_t >( pFont->GetTextureSheetWidth() ) )
     , m_inverseTextureHeight( 1.0f / static_cast< float32_t >( pFont->GetTextureSheetHeight() ) )
@@ -1792,6 +2014,7 @@ void BufferedDrawer::WorldSpaceTextGlyphHandler::operator()( const Font::Charact
     pDrawCall->vertexCount = 4;
     pDrawCall->startIndex = startIndex;
     pDrawCall->primitiveCount = 2;
+    pDrawCall->blendColor = Color( 0xffffffff );
     pDrawCall->spTexture = pTexture;
 
     m_penX += Font::Fixed26x6ToFloat32( pCharacter->advance );
@@ -1803,21 +2026,21 @@ void BufferedDrawer::WorldSpaceTextGlyphHandler::operator()( const Font::Charact
 /// @param[in] pFont    Font being used for rendering.
 /// @param[in] x        Pixel x-coordinate at which to begin rendering the text.
 /// @param[in] y        Pixel y-coordinate at which to begin rendering the text.
-/// @param[in] rColor   Color with which to render the text.
+/// @param[in] color    Color with which to render the text.
 /// @param[in] size     Size at which to render the text.
 BufferedDrawer::ScreenSpaceTextGlyphHandler::ScreenSpaceTextGlyphHandler(
     BufferedDrawer* pDrawer,
     Font* pFont,
     int32_t x,
     int32_t y,
-    const Color& rColor,
+    Color color,
     RenderResourceManager::EDebugFontSize size )
     : m_pDrawer( pDrawer )
     , m_pFont( pFont )
     , m_pDrawCall( NULL )
     , m_x( x )
     , m_y( y )
-    , m_color( rColor )
+    , m_color( color )
     , m_size( size )
 {
 }

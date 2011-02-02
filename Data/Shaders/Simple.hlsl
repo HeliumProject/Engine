@@ -52,9 +52,15 @@ float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
 Texture2D DiffuseMap;
 #endif
 
+cbuffer InstanceData
+{
+	// Color to blend with each pixel color.
+	float4 BlendColor : register( c0 );
+}
+
 float4 main( VertexOutput vOut ) : SV_Target
 {
-	float4 color = vOut.color;
+	float4 color = BlendColor * vOut.color;
 #if TEXTURING_BLEND
 	color *= DiffuseMap.Sample( DefaultSamplerState, vOut.texCoord.xy );
 #elif TEXTURING_ALPHA

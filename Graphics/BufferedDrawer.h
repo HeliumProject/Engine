@@ -12,6 +12,7 @@ namespace Lunar
     class RVertexInputLayout;
 
     L_DECLARE_RPTR( RConstantBuffer );
+    L_DECLARE_RPTR( RFence );
     L_DECLARE_RPTR( RIndexBuffer );
     L_DECLARE_RPTR( RPixelShader );
     L_DECLARE_RPTR( RRenderCommandProxy );
@@ -24,6 +25,9 @@ namespace Lunar
     class LUNAR_GRAPHICS_API BufferedDrawer : NonCopyable
     {
     public:
+        /// Constant buffers to cycle through for pixel shader blend color parameters.
+        static const size_t INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT = 16;
+
         /// Maximum number of characters to convert for rendered text strings (including null terminator).
         static const size_t TEXT_CHARACTER_COUNT_MAX = 1024;
 
@@ -58,39 +62,43 @@ namespace Lunar
         //@{
         void DrawLines(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount,
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawLines(
             RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t lineCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            uint32_t startIndex, uint32_t lineCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWireMesh(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawWireMesh(
             RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            uint32_t startIndex, uint32_t triangleCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawSolidMesh(
             const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawSolidMesh(
             RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            uint32_t startIndex, uint32_t triangleCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawTexturedMesh(
             const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
-            uint32_t triangleCount, RTexture2d* pTexture, EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            uint32_t triangleCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawTexturedMesh(
             RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, RTexture2d* pTexture,
+            uint32_t startIndex, uint32_t triangleCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWorldText(
-            const Simd::Matrix44& rTransform, const String& rText, const Color& rColor = Color( 0xffffffff ),
+            const Simd::Matrix44& rTransform, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM,
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawScreenText(
-            int32_t x, int32_t y, const String& rText, const Color& rColor = Color( 0xffffffff ),
+            int32_t x, int32_t y, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
         //@}
 
@@ -115,6 +123,8 @@ namespace Lunar
             uint32_t startIndex;
             /// Number of primitives to draw.
             uint32_t primitiveCount;
+            /// Color with which to blend each vertex color.
+            Color blendColor;
         };
 
         /// Textured primitive draw call information using internal vertex/index buffers.
@@ -171,6 +181,13 @@ namespace Lunar
             /// Vertex buffer for screen-space text rendering.
             RVertexBufferPtr spScreenSpaceTextVertexBuffer;
 
+            /// Pixel constant buffers.
+            RConstantBufferPtr instancePixelConstantBuffers[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
+            /// Index of the current instance pixel constant buffer.
+            uint32_t instancePixelConstantBufferIndex;
+            /// Current instance pixel constant buffer blend color.
+            Color instancePixelConstantBlendColor;
+
             /// Maximum number of vertices in the untextured primitive vertex buffer.
             uint32_t untexturedVertexBufferSize;
             /// Maximum number if indices in the untextured primitive index buffer.
@@ -211,6 +228,8 @@ namespace Lunar
             void SetPixelShader( RPixelShader* pShader );
             void SetVertexInputLayout( RVertexInputLayout* pLayout );
 
+            void SetPixelConstantBuffer( RConstantBuffer* pConstantBuffer );
+
             void SetTexture( RTexture2d* pTexture );
             //@}
 
@@ -237,6 +256,9 @@ namespace Lunar
             RPixelShader* m_pPixelShader;
             /// Current vertex input layout.
             RVertexInputLayout* m_pVertexInputLayout;
+
+            /// Current pixel shader constant buffer.
+            RConstantBuffer* m_pPixelConstantBuffer;
 
             /// Current texture.
             RTexture2d* m_pTexture;
@@ -284,7 +306,7 @@ namespace Lunar
             /// @name Construction/Destruction
             //@{
             WorldSpaceTextGlyphHandler(
-                BufferedDrawer* pDrawer, Font* pFont, const Color& rColor, EDepthMode depthMode,
+                BufferedDrawer* pDrawer, Font* pFont, Color color, EDepthMode depthMode,
                 const Simd::Matrix44& rTransform );
             //@}
 
@@ -324,7 +346,7 @@ namespace Lunar
             /// @name Construction/Destruction
             //@{
             ScreenSpaceTextGlyphHandler(
-                BufferedDrawer* pDrawer, Font* pFont, int32_t x, int32_t y, const Color& rColor,
+                BufferedDrawer* pDrawer, Font* pFont, int32_t x, int32_t y, Color color,
                 RenderResourceManager::EDebugFontSize size );
             //@}
 
@@ -390,6 +412,9 @@ namespace Lunar
         /// Index buffer for screen-space text rendering.
         RIndexBufferPtr m_spScreenSpaceTextIndexBuffer;
 
+        /// Render fences used to mark the end of when a per-instance pixel shader constant buffer is in use.
+        RFencePtr m_instancePixelConstantFences[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
+
         /// Rendering resource data.
         ResourceSet m_resourceSets[ 2 ];
         /// Current resource set to use for buffered draw calls.
@@ -401,6 +426,8 @@ namespace Lunar
 
         /// @name Rendering Utility Functions
         //@{
+        RConstantBuffer* SetInstancePixelConstantData(
+            RRenderCommandProxy* pCommandProxy, ResourceSet& rResourceSet, Color blendColor );
         void DrawDepthModeWorldElements( WorldElementResources& rWorldResources, EDepthMode depthMode );
         //@}
     };

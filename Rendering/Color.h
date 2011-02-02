@@ -51,6 +51,12 @@ namespace Lunar
         inline void SetFloatA( float32_t a );
         //@}
 
+        /// @name Overloaded Operators
+        //@{
+        inline bool operator==( const Color& rOther ) const;
+        inline bool operator!=( const Color& rOther ) const;
+        //@}
+
         /// @name Friend Functions
         //@{
         friend Serializer& operator<<( Serializer& s, Color& rValue );

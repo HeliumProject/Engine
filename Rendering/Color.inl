@@ -231,4 +231,28 @@ namespace Lunar
     {
         m_color.components.a = static_cast< uint8_t >( Clamp( a, 0.0f, 1.0f ) * 255.0f + 0.5f );
     }
+
+    /// Equality comparison operator.
+    ///
+    /// @param[in] rOther  Color with which to compare.
+    ///
+    /// @return  True if this color and the given color are the same, false if not.
+    ///
+    /// @see operator!=()
+    bool Color::operator==( const Color& rOther ) const
+    {
+        return ( m_color.packed == rOther.m_color.packed );
+    }
+
+    /// Inequality comparison operator.
+    ///
+    /// @param[in] rOther  Color with which to compare.
+    ///
+    /// @return  True if this color and the given color are different, false if they are the same.
+    ///
+    /// @see operator==()
+    bool Color::operator!=( const Color& rOther ) const
+    {
+        return ( m_color.packed != rOther.m_color.packed );
+    }
 }

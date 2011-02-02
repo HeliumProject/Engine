@@ -82,6 +82,16 @@ bool PanelButton::GetValue() const
 void PanelButton::SetValue( bool value )
 {
     m_Toggled = value;
+
+    if( HasFlags< PanelButtonOption >( m_Options, PanelButtonOptions::Toggle ) && m_Toggled )
+    {
+        SetBackgroundColour( s_ToggledColor );
+    }
+    else
+    {
+        SetBackgroundColour( wxNullColour );
+    }
+
     Refresh( true );
 }
 
@@ -120,7 +130,6 @@ void PanelButton::OnMouseLeave( wxMouseEvent& event )
         }
 
         Refresh( true );
-        m_MouseTimer.Stop();
     }
 }
 

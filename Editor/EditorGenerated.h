@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,6 +13,7 @@
 namespace Helium{ namespace Editor{ class Button; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
+namespace Helium{ namespace Editor{ class PanelButton; } }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -309,6 +310,32 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_MainPanel;
+				wxStaticText* m_SelectText;
+				wxStaticBitmap* m_SelectBitmap;
+				wxStaticText* m_TranslateText;
+				wxStaticBitmap* m_TranslateBitmap;
+				wxStaticText* m_RotateText;
+				wxStaticBitmap* m_RotateBitmap;
+				wxStaticText* m_ScaleText;
+				wxStaticBitmap* m_ScaleBitmap;
+				wxStaticText* m_DuplicateToolText;
+				wxStaticBitmap* m_DuplicateToolBitmap;
+				wxStaticText* m_LocatorToolText;
+				wxStaticBitmap* m_LocatorToolBitmap;
+				wxStaticText* m_VolumeToolText;
+				wxStaticBitmap* m_VolumeToolBitmap;
+				wxStaticText* m_EntityToolText;
+				wxStaticBitmap* m_EntityToolBitmap;
+				wxStaticText* m_CurveToolText;
+				wxStaticBitmap* m_CurveToolBitmap;
+				wxStaticText* m_CurveEditToolText;
+				wxStaticBitmap* m_CurveEditToolBitmap;
+				wxStaticText* m_PlayText;
+				wxStaticBitmap* m_PlayBitmap;
+				wxStaticText* m_PauseText;
+				wxStaticBitmap* m_PauseBitmap;
+				wxStaticText* m_StopText;
+				wxStaticBitmap* m_StopBitmap;
 				
 				
 				wxPanel* m_ToolsPropertiesPanel;
@@ -319,22 +346,22 @@ namespace Helium
 				
 			
 			public:
-				Helium::Editor::Button* m_SelectButton;
-				Helium::Editor::Button* m_TranslateButton;
-				Helium::Editor::Button* m_RotateButton;
-				Helium::Editor::Button* m_ScaleButton;
-				Helium::Editor::Button* m_DuplicateToolButton;
-				Helium::Editor::Button* m_LocatorToolButton;
-				Helium::Editor::Button* m_VolumeToolButton;
-				Helium::Editor::Button* m_EntityToolButton;
-				Helium::Editor::Button* m_CurveToolLocator;
-				Helium::Editor::Button* m_CurveEditToolButton;
-				Helium::Editor::Button* m_PlayButton;
-				Helium::Editor::Button* m_PauseButton;
-				Helium::Editor::Button* m_StopButton;
+				Helium::Editor::PanelButton* m_SelectPanelButton;
+				Helium::Editor::PanelButton* m_TranslatePanelButton;
+				Helium::Editor::PanelButton* m_RotatePanelButton;
+				Helium::Editor::PanelButton* m_ScalePanelButton;
+				Helium::Editor::PanelButton* m_DuplicateToolPanelButton;
+				Helium::Editor::PanelButton* m_LocatorToolPanelButton;
+				Helium::Editor::PanelButton* m_VolumeToolPanelButton;
+				Helium::Editor::PanelButton* m_EntityToolPanelButton;
+				Helium::Editor::PanelButton* m_CurveToolPanelButton;
+				Helium::Editor::PanelButton* m_CurveEditToolPanelButton;
+				Helium::Editor::PanelButton* m_PlayPanelButton;
+				Helium::Editor::PanelButton* m_PausePanelButton;
+				Helium::Editor::PanelButton* m_StopPanelButton;
 				wxSearchCtrl* m_VaultSearchBox;
 				
-				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
 			
 		};

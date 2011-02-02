@@ -166,16 +166,16 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( m_ToolbarPanel->GetMinSize() ).MaxSize( m_ToolbarPanel->GetMaxSize() ) );
     m_ToolbarPanel->EnableTools( false );
 
-    m_ToolbarPanel->m_SelectButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_TranslateButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_RotateButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_ScaleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_DuplicateToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_LocatorToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_VolumeToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_EntityToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_CurveToolLocator->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
-    m_ToolbarPanel->m_CurveEditToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_SelectPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_TranslatePanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_RotatePanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_ScalePanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_DuplicateToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_LocatorToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_VolumeToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_EntityToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
+    m_ToolbarPanel->m_CurveToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
+    m_ToolbarPanel->m_CurveEditToolPanelButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
 
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MainFrame::OnSearchTextEnter ), NULL, this );
@@ -821,7 +821,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
         break;
 
     case KeyCodes::Escape:
-        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, m_ToolbarPanel->m_SelectButton->GetId() ) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, m_ToolbarPanel->m_SelectPanelButton->GetId() ) );
         event.Skip(false);
         break;
 
@@ -1654,43 +1654,43 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     }
     
     if ( event.GetId() == 0
-        || event.GetId() == m_ToolbarPanel->m_SelectButton->GetId() )
+        || event.GetId() == m_ToolbarPanel->m_SelectPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(NULL);
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_TranslateButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_TranslatePanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::TranslateManipulator( m_SettingsManager, ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_RotateButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_RotatePanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::RotateManipulator( m_SettingsManager, ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_ScaleButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_ScalePanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_EntityToolButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_EntityToolPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::EntityInstanceCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_LocatorToolButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_LocatorToolPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::LocatorCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_VolumeToolButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_VolumeToolPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::VolumeCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_DuplicateToolButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_DuplicateToolPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolLocator->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolPanelButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool( new SceneGraph::CurveCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() ) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_CurveEditToolButton->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_CurveEditToolPanelButton->GetId() )
     {
         SceneGraph::CurveEditTool* curveEditTool = new SceneGraph::CurveEditTool( m_SettingsManager, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() );
         m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
@@ -1807,7 +1807,7 @@ void MainFrame::DocumentClosed( const DocumentEventArgs& args )
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 {
-    int32_t selectedTool = m_ToolbarPanel->m_SelectButton->GetId();
+    int32_t selectedTool = m_ToolbarPanel->m_SelectPanelButton->GetId();
     if ( args.m_NewTool )
     {
         SceneGraph::TransformManipulator* manipulator = Reflect::SafeCast< SceneGraph::TransformManipulator >( args.m_NewTool );
@@ -1816,7 +1816,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:
-                selectedTool = m_ToolbarPanel->m_ScaleButton->GetId();
+                selectedTool = m_ToolbarPanel->m_ScalePanelButton->GetId();
                 break;
 
             case ManipulatorModes::ScalePivot:
@@ -1824,7 +1824,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
 
             case ManipulatorModes::Rotate:
-                selectedTool = m_ToolbarPanel->m_RotateButton->GetId();
+                selectedTool = m_ToolbarPanel->m_RotatePanelButton->GetId();
                 break;
 
             case ManipulatorModes::RotatePivot:
@@ -1832,7 +1832,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
 
             case ManipulatorModes::Translate:
-                selectedTool = m_ToolbarPanel->m_TranslateButton->GetId();
+                selectedTool = m_ToolbarPanel->m_TranslatePanelButton->GetId();
                 break;
 
             case ManipulatorModes::TranslatePivot:
@@ -1842,27 +1842,27 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_EntityToolButton->GetId();
+            selectedTool = m_ToolbarPanel->m_EntityToolPanelButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::VolumeCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_VolumeToolButton->GetId();
+            selectedTool = m_ToolbarPanel->m_VolumeToolPanelButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_LocatorToolButton->GetId();
+            selectedTool = m_ToolbarPanel->m_LocatorToolPanelButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::DuplicateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_DuplicateToolButton->GetId();
+            selectedTool = m_ToolbarPanel->m_DuplicateToolPanelButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_CurveToolLocator->GetId();
+            selectedTool = m_ToolbarPanel->m_CurveToolPanelButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_CurveEditToolButton->GetId();
+            selectedTool = m_ToolbarPanel->m_CurveEditToolPanelButton->GetId();
         }
     }
 

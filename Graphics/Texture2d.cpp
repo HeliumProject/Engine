@@ -8,7 +8,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/Texture2d.h"
 
-#include "Rendering/PixelUtil.h"
+#include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RTexture2d.h"
 
@@ -77,7 +77,7 @@ bool Texture2d::BeginPrecacheResourceData()
         }
 
         uint32_t mipLevelHeight = pTexture2d->GetHeight( mipIndex );
-        size_t rowCount = PixelUtil::PixelToBlockRowCount( mipLevelHeight, format );
+        size_t rowCount = RendererUtil::PixelToBlockRowCount( mipLevelHeight, format );
         size_t mipLevelSize = pitch * rowCount;
 
         HELIUM_ASSERT( mipLevelSize == GetSubDataSize( mipIndex ) );

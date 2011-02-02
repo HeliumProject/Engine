@@ -60,38 +60,32 @@ namespace Lunar
 
         /// @name Draw Call Generation
         //@{
-        void DrawLines(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t lineCount,
+        void DrawWire(
+            ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
+            const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawWire(
+            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
+            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
             Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawLines(
-            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t lineCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
-        void DrawWireMesh(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
+        void DrawSolid(
+            ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
+            const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawSolid(
+            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
+            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
             Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawWireMesh(
-            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
-        void DrawSolidMesh(
-            const SimpleVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices, uint32_t triangleCount,
+        void DrawTextured(
+            ERendererPrimitiveType primitiveType, const SimpleTexturedVertex* pVertices, uint32_t vertexCount,
+            const uint16_t* pIndices, uint32_t primitiveCount, RTexture2d* pTexture,
             Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawSolidMesh(
-            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
-
-        void DrawTexturedMesh(
-            const SimpleTexturedVertex* pVertices, uint32_t vertexCount, const uint16_t* pIndices,
-            uint32_t triangleCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawTexturedMesh(
-            RVertexBuffer* pVertices, RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount,
-            uint32_t startIndex, uint32_t triangleCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawTextured(
+            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
+            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
+            RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, Color color = Color( 0xffffffff ),
@@ -115,6 +109,8 @@ namespace Lunar
         /// Untextured primitive draw call information using internal vertex/index buffers.
         struct UntexturedDrawCall
         {
+            /// Primitive type.
+            ERendererPrimitiveType primitiveType;
             /// Starting vertex index.
             uint32_t baseVertexIndex;
             /// Vertex count.
@@ -383,23 +379,19 @@ namespace Lunar
         /// Textured draw call indices.
         DynArray< uint16_t > m_texturedIndices;
 
-        /// Line list draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_lineDrawCalls[ DEPTH_MODE_MAX ];
-        /// Wireframe mesh draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_wireMeshDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid mesh draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_solidMeshDrawCalls[ DEPTH_MODE_MAX ];
-        /// Textured mesh draw call data using internal vertex/index buffers.
-        DynArray< TexturedDrawCall > m_texturedMeshDrawCalls[ DEPTH_MODE_MAX ];
+        /// Wireframe draw call data using internal vertex/index buffers.
+        DynArray< UntexturedDrawCall > m_wireDrawCalls[ DEPTH_MODE_MAX ];
+        /// Solid draw call data using internal vertex/index buffers.
+        DynArray< UntexturedDrawCall > m_solidDrawCalls[ DEPTH_MODE_MAX ];
+        /// Textured draw call data using internal vertex/index buffers.
+        DynArray< TexturedDrawCall > m_texturedDrawCalls[ DEPTH_MODE_MAX ];
 
-        /// Line list draw call data using internal vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_lineBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Wireframe mesh draw call data using internal vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_wireMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid mesh draw call data using internal vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_solidMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Textured mesh draw call data using internal vertex/index buffers.
-        DynArray< TexturedBufferDrawCall > m_texturedMeshBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Wireframe draw call data using internal vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_wireBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Solid draw call data using internal vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_solidBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Textured draw call data using internal vertex/index buffers.
+        DynArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ DEPTH_MODE_MAX ];
 
         /// World-space text draw call data.
         DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];

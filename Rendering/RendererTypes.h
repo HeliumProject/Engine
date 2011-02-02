@@ -337,8 +337,8 @@ namespace Lunar
 
     /// Surface pixel formats.
     ///
-    /// When adding, removing, or modifying formats, make sure to update the PixelUtil functions as well as the texture
-    /// creation functions (Renderer::CreateTexture2d()) as appropriate.
+    /// When adding, removing, or modifying formats, make sure to update the RendererUtil functions as well as the
+    /// texture creation functions (Renderer::CreateTexture2d()) as appropriate.
     enum ERendererPixelFormat
     {
         RENDERER_PIXEL_FORMAT_FIRST   =  0,

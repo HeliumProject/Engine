@@ -9,7 +9,7 @@
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #include "Platform/Thread.h"
-#include "Rendering/PixelUtil.h"
+#include "Rendering/RendererUtil.h"
 
 #include "RenderingD3D9/D3D9BlendState.h"
 #include "RenderingD3D9/D3D9ConstantBuffer.h"
@@ -1145,7 +1145,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
 
             size_t copyPitch = Min( sourcePitch, destPitch );
 
-            uint_fast32_t blockRowCount = PixelUtil::PixelToBlockRowCount( mipHeight, format );
+            uint_fast32_t blockRowCount = RendererUtil::PixelToBlockRowCount( mipHeight, format );
             for( uint_fast32_t rowIndex = 0; rowIndex < blockRowCount; ++rowIndex )
             {
                 MemoryCopy( pDestRow, pSourceRow, copyPitch );
@@ -1160,7 +1160,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
     }
 
     // Create the appropriate renderer resource wrapper.
-    bool bSrgb = PixelUtil::IsSrgbPixelFormat( format );
+    bool bSrgb = RendererUtil::IsSrgbPixelFormat( format );
 
     D3D9Texture2d* pTexture;
     if( d3dPool == D3DPOOL_DEFAULT && usage == RENDERER_BUFFER_USAGE_STATIC )

@@ -1,7 +1,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/Font.h"
 
-#include "Rendering/PixelUtil.h"
+#include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 
 using namespace Lunar;
@@ -79,7 +79,7 @@ bool Font::BeginPrecacheResourceData()
     // Allocate and begin loading texture resources.
     ERendererPixelFormat format =
         ( m_textureCompression == ECompression::COLOR_COMPRESSED ? RENDERER_PIXEL_FORMAT_BC1 : RENDERER_PIXEL_FORMAT_R8 );
-    size_t blockRowCount = PixelUtil::PixelToBlockRowCount( m_textureSheetHeight, format );
+    size_t blockRowCount = RendererUtil::PixelToBlockRowCount( m_textureSheetHeight, format );
 
     uint16_t textureSheetWidth = Max< uint16_t >( m_textureSheetWidth, 1 );
     uint16_t textureSheetHeight = Max< uint16_t >( m_textureSheetHeight, 1 );

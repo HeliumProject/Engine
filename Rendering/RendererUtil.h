@@ -1,28 +1,34 @@
 //----------------------------------------------------------------------------------------------------------------------
-// PixelUtil.h
+// RendererUtil.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_PIXEL_UTIL_H
-#define LUNAR_RENDERING_PIXEL_UTIL_H
+#ifndef LUNAR_RENDERING_RENDERER_UTIL_H
+#define LUNAR_RENDERING_RENDERER_UTIL_H
 
 #include "Rendering/RendererTypes.h"
 
 namespace Lunar
 {
-    /// Pixel format utility functions.
-    class LUNAR_RENDERING_API PixelUtil
+    /// Renderer utility functions.
+    class LUNAR_RENDERING_API RendererUtil
     {
     public:
-        /// @name Static Utility Functions
+        /// @name Pixel Format Support
         //@{
         static bool IsSrgbPixelFormat( ERendererPixelFormat format );
         static uint32_t PixelToBlockRowCount( uint32_t pixelRowCount, ERendererPixelFormat format );
         //@}
+
+        /// @name Primitive Math
+        //@{
+        static uint32_t PrimitiveCountToIndexCount( ERendererPrimitiveType primitiveType, uint32_t primitiveCount );
+        static uint32_t IndexCountToPrimitiveCount( ERendererPrimitiveType primitiveType, uint32_t indexCount );
+        //@}
     };
 }
 
-#endif  // LUNAR_RENDERING_PIXEL_UTIL_H
+#endif  // LUNAR_RENDERING_RENDERER_UTIL_H

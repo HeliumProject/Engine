@@ -52,12 +52,6 @@ namespace Helium
 {
     namespace Reflect
     {
-        //
-        // Binary Archive Class
-        //
-
-        typedef std::map< const tchar_t*, Helium::SmartPtr< const Class > > M_NameToClass;
-
         class FOUNDATION_API ArchiveBinary : public Archive
         {
         public: 
@@ -119,20 +113,20 @@ namespace Helium
 
             virtual void Open( bool write = false ) HELIUM_OVERRIDE;
             void OpenStream( CharStream* stream, bool write = false );
-            virtual void Close(); 
+            virtual void Close() HELIUM_OVERRIDE; 
 
             // Begins parsing the InputStream
-            virtual void Read();
+            virtual void Read() HELIUM_OVERRIDE;
 
             // Write to the OutputStream
-            virtual void Write();
+            virtual void Write() HELIUM_OVERRIDE;
 
         public:
             // Serialize
-            virtual void Serialize( Object* object );
-            virtual void Serialize( void* structure, const Structure* type );
-            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
-            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
+            virtual void Serialize( Object* object ) HELIUM_OVERRIDE;
+            virtual void Serialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
+            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
 
         protected:
             // Helpers
@@ -146,10 +140,10 @@ namespace Helium
 
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
-            virtual void Deserialize( ObjectPtr& object );
-            virtual void Deserialize( void* structure, const Structure* type );
-            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
-            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
+            virtual void Deserialize( ObjectPtr& object ) HELIUM_OVERRIDE;
+            virtual void Deserialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
+            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
 
         protected:
             // Helpers

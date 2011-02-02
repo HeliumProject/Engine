@@ -264,6 +264,8 @@ void Drawer::Close()
         }
     }
 
+    m_Button->SetValue( false );
+
     e_Closed.Raise( DrawerEventArgs( this ) );
 }
 

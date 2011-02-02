@@ -119,12 +119,9 @@ void Button::Command( wxCommandEvent& event )
     if( HasFlags<ButtonOption>( m_ButtonOption, ButtonOptions::Toggle ) )
     {
         SetValue( !GetValue() );
-        ProcessCommand( event );
     }
-    else
-    {
-        ProcessCommand( event );
-    }
+
+    ProcessCommand( event );
 }
 
 bool Button::MSWCommand( WXUINT param, WXWORD id )

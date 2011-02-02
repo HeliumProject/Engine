@@ -267,7 +267,8 @@ bool App::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
-    GetFrame()->Show();
+    m_Frame = new MainFrame( m_SettingsManager );
+    m_Frame->Show();
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )
     {
@@ -277,7 +278,7 @@ bool App::OnInit()
             Path projectPath( *mruPaths.rbegin() );
             if ( projectPath.Exists() )
             {
-                GetFrame()->OpenProject( *mruPaths.rbegin() );
+                m_Frame->OpenProject( *mruPaths.rbegin() );
             }
         }
     }

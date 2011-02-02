@@ -68,6 +68,7 @@ namespace Lunar
         void DrawIndexed(
             ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
             uint32_t startIndex, uint32_t primitiveCount );
+        void DrawUnindexed( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount );
         //@}
 
         /// @name Fence Commands

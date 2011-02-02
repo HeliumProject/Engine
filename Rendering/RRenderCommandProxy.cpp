@@ -174,6 +174,17 @@ RRenderCommandProxy::~RRenderCommandProxy()
 ///                             minimum vertex index value.
 /// @param[in] startIndex       Offset of the first index within the index buffer to use for rendering.
 /// @param[in] primitiveCount   Number of primitives to render.
+///
+/// @see DrawUnindexed()
+
+/// @fn void RRenderCommandProxy::DrawUnindexed( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount )
+/// Draw primitives based on an unindexed list of vertices.
+///
+/// @param[in] primitiveType    Type of primitive to render.
+/// @param[in] baseVertexIndex  Vertex offset of the first vertex to use from the start of each vertex stream.
+/// @param[in] primitiveCount   Number of primitives to render.
+///
+/// @see DrawIndexed()
 
 /// @fn void RRenderCommandProxy::SetFence( RFence* pFence )
 /// Signal a fence once all previously issued commands have been processed by the GPU.

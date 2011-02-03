@@ -30,12 +30,14 @@ namespace Helium
             REFLECT_DECLARE_OBJECT( EditorSettings, Settings );
             static void PopulateComposite( Reflect::Composite& comp );
 
-        private:
+        public:
             std::vector< tstring > m_MRUProjects;
             
             bool m_ReopenLastProjectOnStartup;
             bool m_ShowFileExtensionsInProjectView;
             bool m_EnableAssetTracker;
+            bool m_ShowTextOnButtons;
+            bool m_ShowIconsOnButtons;
         };
 
         typedef Helium::StrongPtr< EditorSettings > GeneralSettingsPtr;

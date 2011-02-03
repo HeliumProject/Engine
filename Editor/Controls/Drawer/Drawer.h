@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 
 #include "Editor/ArtProvider.h"
-#include "Editor/Controls/Button.h"
+#include "Editor/Controls/PanelButton.h"
 #include "Foundation/Automation/Event.h"
 
 namespace Helium
@@ -48,7 +48,7 @@ namespace Helium
             virtual void SetLabel( const wxString& label ) HELIUM_OVERRIDE;
             void SetIcon( const tstring& icon );
 
-            Button* GetButton();
+            PanelButton* GetButton();
             int32_t GetButtonID() const;
 
             wxPanel* GetPanel();
@@ -82,7 +82,10 @@ namespace Helium
 
             wxString m_Icon;
 
-            Button* m_Button;
+            PanelButton* m_Button;
+            wxStaticText* m_ButtonText;
+            wxStaticBitmap* m_ButtonBitmap;
+
             DrawerButtonStyle m_ButtonStyle;
             wxTimer m_MouseHoverTimer;
             wxTimer m_MouseLocationTimer;

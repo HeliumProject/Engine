@@ -53,7 +53,7 @@ if( $pull )
   $result += _DoGit( $git_command, "Git Pull" );
 }
 
-my $premake = 'premake4 vs2008';
+my $premake = 'Utilities\Win32\premake4 vs2008';
 my $depends = 'perl "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", "Dependencies.sln" ) . '"';
 my $compile = 'perl "' . File::Spec->catfile( dirname( $0 ), "build.pl" ) . '" "' . File::Spec->catfile( getcwd(), "Premake", basename( getcwd() ) . ".sln" ) . '"';
 

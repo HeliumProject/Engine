@@ -5,8 +5,7 @@
 /// either when the left mouse button is held down for a specified amount of time, or if the 
 /// right mouse button is pressed.
 #include "Editor/API.h"
-
-#include "Editor/Controls/Button.h"
+#include "Editor/Controls/EditorButton.h"
 
 #include <wx/timer.h>
 #include <wx/menu.h>
@@ -16,8 +15,8 @@ namespace Helium
     namespace Editor
     {
         /// @class MenuButton
-        /// @brief adds on to the Button class to add menu functionality through mouse interaction
-        class MenuButton : public Button
+        /// @brief adds on to the EditorButton class to add menu functionality through mouse interaction
+        class MenuButton : public EditorButton
         {
         public:
             // wxWidgets setup
@@ -30,6 +29,9 @@ namespace Helium
         private:
             float m_HoldDelay;             //<! amount of seconds to delay if we need to hold the button for the menu to show
             wxTimer m_TimerShowOnHold;     //<! when the left mouse button is held, this timer fires telling us we should display the menu
+            wxStaticText* m_Text;
+            wxStaticBitmap* m_Bitmap;
+            wxStaticBitmap* m_Arrow;
 
             /// @function HandleTimerEvents
             /// @brief this is the function that responds to timer events and displays the context menu
@@ -52,13 +54,15 @@ namespace Helium
                 const wxSize& size = wxDefaultSize,
                 long style = wxBU_EXACTFIT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxT( "MenuButton" ) );
 
             /// @function ~MenuButton
             /// @brief destructor
             virtual ~MenuButton(void);
 
         public:
+            virtual void SetBitmap( const wxBitmap& bitmap );
+
             /// @function SetHoldDelay
             /// @brief set the amount of time needed to left mouse down before the menu displays
             /// @param amount of Seconds before the menu displays
@@ -85,7 +89,8 @@ namespace Helium
             void SetContextMenu( wxMenu * menu ) ;
 
         protected:
-            virtual void DoSetBitmap(const wxBitmap& bitmap, State which) HELIUM_OVERRIDE;
+
+            virtual void OnUpdateUI( wxUpdateUIEvent& event );
 
             /// @function OnRightMouseDown
             /// @brief Right mouse down event handler. Displays the menu

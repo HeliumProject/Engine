@@ -29,20 +29,21 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     Freeze();
     {
 #pragma TODO( "Remove call(s) to SetBitmap if/when wxFormBuilder supports wxArtProvider" )
-        m_OptionsButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
         
         m_RecentProjectsBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFolder ) );
         m_RecentProjectsBitmap->SetHelpText( TXT( "This area provides a list of recently opened projects which you can choose from.\n\nSimply click the button for a given project to open it in the editor." ) );
         m_RecentProjectsStaticText->SetHelpText( m_RecentProjectsBitmap->GetHelpText() );
 
-        m_OpenProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ) );
+        m_OpenProjectBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ) );
         //m_OpenProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ).ConvertToImage().ConvertToDisabled() );
         m_OpenProjectButton->SetHelpText( TXT( "Clicking this button will allow you to open a project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
+        m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnOpenProjectButtonClick ), NULL, this );
 
-        m_CreateNewProjectButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ) );
+        m_CreateNewProjectBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ) );
         //m_CreateNewProjectButton->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ).ConvertToImage().ConvertToDisabled() );
         m_CreateNewProjectButton->SetHelpText( TXT( "Clicking this button will allow you to create a new project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
+        m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnNewProjectButtonClick ), NULL, this );
 
         m_ProjectManagementPanel->Hide();
         m_DataViewCtrl->Hide();
@@ -268,10 +269,17 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 Helium::Path path( *itr );
                 bool fileExists = path.Exists();
 
-                Helium::Editor::Button* button = new Helium::Editor::Button( m_RecentProjectsPanel, wxNewId(), path.Basename().c_str(), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
-                button->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ) );
-                //button->SetBitmapDisabled( wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ).ConvertToImage().ConvertToDisabled() );
-                //button->SetLabel( path.Basename().c_str() );
+                EditorButton* button = new EditorButton( m_RecentProjectsPanel, wxNewId() );
+                
+                wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+                button->SetSizer( sizer );
+
+                wxStaticBitmap* bitmap = new wxStaticBitmap( button, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ) );
+                sizer->Add( bitmap );
+
+                wxStaticText* text = new wxStaticText( button, wxID_ANY, path.Basename().c_str() );
+                sizer->Add( text );
+
                 button->Enable( fileExists );
                 m_RecentProjectsSizer->Add( button, 0, wxEXPAND, 5 );
 

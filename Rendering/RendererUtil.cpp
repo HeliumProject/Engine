@@ -98,6 +98,7 @@ uint32_t RendererUtil::PrimitiveCountToIndexCount( ERendererPrimitiveType primit
         }
 
         case RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP:
+        case RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN:
         {
             return primitiveCount + 2;
         }
@@ -147,6 +148,7 @@ uint32_t RendererUtil::IndexCountToPrimitiveCount( ERendererPrimitiveType primit
         }
 
         case RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP:
+        case RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN:
         {
             return ( indexCount > 2 ? indexCount - 2 : 0 );
         }

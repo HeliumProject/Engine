@@ -7,6 +7,18 @@ Helium::Simd::Matrix44::Matrix44()
 
 /// Constructor.
 ///
+/// This creates a matrix based on a contiguous array of floats.  The array is not expected to be properly aligned.
+///
+/// @param[in] pMatrix  Array of values from which to initialize this matrix.
+Helium::Simd::Matrix44::Matrix44( const float32_t* pMatrix )
+{
+    HELIUM_ASSERT( pMatrix );
+
+    MemoryCopy( this, pMatrix, sizeof( float32_t ) * 16 );
+}
+
+/// Constructor.
+///
 /// Initializes to a rotation matrix.
 ///
 /// @param[in] rRotation  Rotation to set.

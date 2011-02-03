@@ -5,6 +5,18 @@ Helium::Simd::Vector3::Vector3()
 {
 }
 
+/// Constructor.
+///
+/// This creates a vector based on a contiguous array of floats.  The array is not expected to be properly aligned.
+///
+/// @param[in] pVector  Array of values from which to initialize this vector.
+Helium::Simd::Vector3::Vector3( const float32_t* pVector )
+{
+    HELIUM_ASSERT( pVector );
+
+    MemoryCopy( this, pVector, sizeof( float32_t ) * 3 );
+}
+
 /// Perform a component-wise addition of this vector and the given vector.
 ///
 /// @param[in] rVector  Vector to add.

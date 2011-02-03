@@ -24,36 +24,19 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 {
-    m_Parser = XML_ParserCreate( NULL );
 
-    // set the user data used in callbacks
-    XML_SetUserData(m_Parser, (void*)this);
-
-    // attach callbacks, will call back to 'this' via user data pointer
-    XML_SetStartElementHandler(m_Parser, &StartElementHandler);
-    XML_SetEndElementHandler(m_Parser, &EndElementHandler);
-    XML_SetCharacterDataHandler(m_Parser, &CharacterDataHandler);
 }
 
 ArchiveXML::ArchiveXML()
 : Archive()
 , m_Version( CURRENT_VERSION )
 {
-    m_Parser = XML_ParserCreate( NULL );
 
-    // set the user data used in callbacks
-    XML_SetUserData(m_Parser, (void*)this);
-
-    // attach callbacks, will call back to 'this' via user data pointer
-    XML_SetStartElementHandler(m_Parser, &StartElementHandler);
-    XML_SetEndElementHandler(m_Parser, &EndElementHandler);
-    XML_SetCharacterDataHandler(m_Parser, &CharacterDataHandler);
 }
 
 ArchiveXML::~ArchiveXML()
 {
-    XML_ParserFree( m_Parser );
-    m_Parser = NULL;
+
 }
 
 void ArchiveXML::Open( bool write )
@@ -112,22 +95,17 @@ void ArchiveXML::Read()
     // while there is data, parse buffer
     long step = 0;
     const unsigned bufferSizeInBytes = 4096;
+    char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
     while (!m_Stream->Fail() && !m_Abort)
     {
         m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
-        tchar_t* pszBuffer = (tchar_t*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
-        HELIUM_ASSERT(pszBuffer != NULL);
-
         // divide by the character size so wide char builds don't override the allocation
         //  stream objects read characters, not byte-by-byte
-        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar_t));
+        m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
+        int bytesRead = static_cast<int>(m_Stream->ElementsRead());
 
-        int last_read = static_cast<int>(m_Stream->ElementsRead());
-        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar_t), last_read == 0) != 0)
-        {
-            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar_t*)pszBuffer);
-        }
+        m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
     }
 
     info.m_State = ArchiveStates::ObjectProcessed;

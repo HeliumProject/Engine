@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Indent.h"
-#include "Archive.h"
+#include "Foundation/XMLDocument.h"
+#include "Foundation/Reflect/Indent.h"
+#include "Foundation/Reflect/Archive.h"
 
 namespace Helium
 {
@@ -23,6 +24,9 @@ namespace Helium
 
             // The stream to use
             TCharStreamPtr m_Stream;
+
+            // Indentation helper
+            Indent<tchar_t> m_Indent;
 
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );

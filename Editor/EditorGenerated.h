@@ -35,8 +35,8 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/richtext/richtextctrl.h>
-#include <wx/button.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
@@ -224,17 +224,28 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_LayerManagementPanel;
+				wxStaticText* m_NewLayerFromSelectionText;
+				wxStaticBitmap* m_NewLayerFromSelectionBitmap;
+				wxStaticText* m_NewLayerText;
+				wxStaticBitmap* m_NewLayerBitmap;
+				wxStaticText* m_DeleteLayersText;
+				wxStaticBitmap* m_DeleteLayersBitmap;
 				wxStaticLine* m_staticline4;
+				wxStaticText* m_AddToLayerText;
+				wxStaticBitmap* m_AddToLayerBitmap;
+				wxStaticText* m_RemoveFromLayerText;
+				wxStaticBitmap* m_RemoveFromLayerBitmap;
 				wxStaticLine* m_staticline5;
+				wxStaticText* m_SelectMembersText;
+				wxStaticBitmap* m_SelectMembersBitmap;
 			
 			public:
-				Helium::Editor::Button* m_CreateNewLayerFromSelectionButton;
-				Helium::Editor::Button* m_CreateNewLayerButton;
-				Helium::Editor::Button* m_DeleteSelectedLayersButton;
-				Helium::Editor::Button* m_AddSelectionToLayerButton;
-				Helium::Editor::Button* m_RemoveSelectionFromLayerButton;
-				Helium::Editor::Button* m_SelectLayerMembersButton;
-				Helium::Editor::Button* m_SelectLayersButton;
+				Helium::Editor::EditorButton* m_NewLayerFromSelectionButton;
+				Helium::Editor::EditorButton* m_NewLayerButton;
+				Helium::Editor::EditorButton* m_DeleteLayersButton;
+				Helium::Editor::EditorButton* m_AddToLayerButton;
+				Helium::Editor::EditorButton* m_RemoveFromLayerButton;
+				Helium::Editor::EditorButton* m_SelectMembersButton;
 				
 				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 				~LayersPanelGenerated();
@@ -416,50 +427,79 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_OrbitCamera = 1000,
-					ID_FrontCamera,
-					ID_SideCamera,
-					ID_TopCamera,
-				};
-				
 				wxPanel* m_ToolPanel;
+				wxStaticText* m_FrameOriginText;
+				wxStaticBitmap* m_FrameOriginBitmap;
+				wxStaticText* m_FrameSelectionText;
+				wxStaticBitmap* m_FrameSelectionBitmap;
+				wxStaticText* m_HighlightModeToggleText;
+				wxStaticBitmap* m_HighlightModeToggleBitmap;
+				wxStaticText* m_PreviousViewText;
+				wxStaticBitmap* m_PreviousViewBitmap;
+				wxStaticText* m_NextViewText;
+				wxStaticBitmap* m_NextViewBitmap;
+				wxStaticText* m_OrbitViewToggleText;
+				wxStaticBitmap* m_OrbitViewToggleBitmap;
+				wxStaticText* m_FrontViewToggleText;
+				wxStaticBitmap* m_FrontViewToggleBitmap;
+				wxStaticText* m_SideViewToggleText;
+				wxStaticBitmap* m_SideViewToggleBitmap;
+				wxStaticText* m_TopViewToggleText;
+				wxStaticBitmap* m_TopViewToggleBitmap;
+				wxStaticText* m_ShowAxesToggleText;
+				wxStaticBitmap* m_ShowAxesToggleBitmap;
+				wxStaticText* m_ShowGridToggleText;
+				wxStaticBitmap* m_ShowGridToggleBitmap;
+				wxStaticText* m_ShowBoundsToggleText;
+				wxStaticBitmap* m_ShowBoundsToggleBitmap;
+				wxStaticText* m_ShowStatisticsToggleText;
+				wxStaticBitmap* m_ShowStatisticsToggleBitmap;
+				wxStaticText* m_FrustumCullingToggleText;
+				wxStaticBitmap* m_FrustumCullingToggleBitmap;
+				wxStaticText* m_BackfaceCullingToggleText;
+				wxStaticBitmap* m_BackfaceCullingToggleBitmap;
+				wxStaticText* m_WireframeShadingToggleText;
+				wxStaticBitmap* m_WireframeShadingToggleBitmap;
+				wxStaticText* m_MaterialShadingToggleText;
+				wxStaticBitmap* m_MaterialShadingToggleBitmap;
+				wxStaticText* m_TextureShadingToggleText;
+				wxStaticBitmap* m_TextureShadingToggleBitmap;
+				wxStaticText* m_ColorModeSceneToggleText;
+				wxStaticBitmap* m_ColorModeSceneToggleBitmap;
+				wxStaticText* m_ColorModeLayerToggleText;
+				wxStaticBitmap* m_ColorModeLayerToggleBitmap;
+				wxStaticText* m_ColorModeTypeToggleText;
+				wxStaticBitmap* m_ColorModeTypeToggleBitmap;
+				wxStaticText* m_ColorModeScaleToggleText;
+				wxStaticBitmap* m_ColorModeScaleToggleBitmap;
+				wxStaticText* m_ColorModeScaleGradientToggleText;
+				wxStaticBitmap* m_ColorModeScaleGradientToggleBitmap;
 				wxPanel* m_ViewContainerPanel;
-				
-				// Virtual event handlers, overide them in your derived class
-				virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnToggleHighlightMode( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
-				
 			
 			public:
-				Helium::Editor::Button* m_FrameOriginButton;
-				Helium::Editor::Button* m_FrameSelectedButton;
-				Helium::Editor::Button* m_HighlightModeToggleButton;
-				Helium::Editor::Button* m_PreviousViewButton;
-				Helium::Editor::Button* m_NextViewButton;
-				Helium::Editor::Button* m_OrbitCameraToggleButton;
-				Helium::Editor::Button* m_FrontCameraToggleButton;
-				Helium::Editor::Button* m_SideCameraToggleButton;
-				Helium::Editor::Button* m_TopCameraToggleButton;
-				Helium::Editor::Button* m_ShowAxesToggleButton;
-				Helium::Editor::Button* m_ShowGridToggleButton;
-				Helium::Editor::Button* m_ShowBoundsToggleButton;
-				Helium::Editor::Button* m_ShowStatisticsToggleButton;
-				Helium::Editor::Button* m_FrustumCullingToggleButton;
-				Helium::Editor::Button* m_BackfaceCullingToggleButton;
-				Helium::Editor::Button* m_WireframeShadingToggleButton;
-				Helium::Editor::Button* m_MaterialShadingToggleButton;
-				Helium::Editor::Button* m_ColorModeSceneToggleButton;
-				Helium::Editor::Button* m_ColorModeLayerToggleButton;
-				Helium::Editor::Button* m_ColorModeNodeTypeToggleButton;
-				Helium::Editor::Button* m_ColorModeScaleToggleButton;
-				Helium::Editor::Button* m_ColorModeScaleGradientToggleButton;
+				Helium::Editor::EditorButton* m_FrameOriginButton;
+				Helium::Editor::EditorButton* m_FrameSelectionButton;
+				Helium::Editor::EditorButton* m_HighlightModeToggleButton;
+				Helium::Editor::EditorButton* m_PreviousViewButton;
+				Helium::Editor::EditorButton* m_NextViewButton;
+				Helium::Editor::EditorButton* m_OrbitViewToggleButton;
+				Helium::Editor::EditorButton* m_FrontViewToggleButton;
+				Helium::Editor::EditorButton* m_SideViewToggleButton;
+				Helium::Editor::EditorButton* m_TopViewToggleButton;
+				Helium::Editor::EditorButton* m_ShowAxesToggleButton;
+				Helium::Editor::EditorButton* m_ShowGridToggleButton;
+				Helium::Editor::EditorButton* m_ShowBoundsToggleButton;
+				Helium::Editor::EditorButton* m_ShowStatisticsToggleButton;
+				Helium::Editor::EditorButton* m_FrustumCullingToggleButton;
+				Helium::Editor::EditorButton* m_BackfaceCullingToggleButton;
+				Helium::Editor::EditorButton* m_WireframeShadingToggleButton;
+				Helium::Editor::EditorButton* m_MaterialShadingToggleButton;
+				Helium::Editor::EditorButton* m_TextureShadingToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeSceneToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeLayerToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeTypeToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeScaleToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeScaleGradientToggleButton;
 				
 				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
 				~ViewPanelGenerated();

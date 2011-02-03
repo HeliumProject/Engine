@@ -47,7 +47,6 @@ namespace Helium
             void OnLeftMouseDown( wxMouseEvent& event );
             void OnMouseTimer( wxTimerEvent& event );
 
-            // Could we just override this instead:
             bool SendClickOrToggleEvent();
 
             virtual void AddChild( wxWindowBase *child ) HELIUM_OVERRIDE;

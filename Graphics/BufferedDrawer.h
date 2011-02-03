@@ -2,6 +2,7 @@
 
 #include "Graphics/Graphics.h"
 
+#include "Platform/Math/Simd/Matrix44.h"
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/VertexTypes.h"
 #include "Graphics/Font.h"
@@ -25,7 +26,9 @@ namespace Lunar
     class LUNAR_GRAPHICS_API BufferedDrawer : NonCopyable
     {
     public:
-        /// Constant buffers to cycle through for pixel shader blend color parameters.
+        /// Number of constant buffers to cycle through for vertex shader transform data.
+        static const size_t INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT = 64;
+        /// Number of constant buffers to cycle through for pixel shader blend color parameters.
         static const size_t INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT = 16;
 
         /// Maximum number of characters to convert for rendered text strings (including null terminator).
@@ -65,33 +68,36 @@ namespace Lunar
             const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawWire(
-            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
-            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
-            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
+            RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
+            uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawSolid(
             ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawSolid(
-            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
-            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
-            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
+            RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
+            uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawTextured(
             ERendererPrimitiveType primitiveType, const SimpleTexturedVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, RTexture2d* pTexture,
             Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawTextured(
-            ERendererPrimitiveType primitiveType, RVertexBuffer* pVertices, RIndexBuffer* pIndices,
-            uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
-            RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
+            RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
+            uint32_t primitiveCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawPoints(
             const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ),
             EDepthMode depthMode = DEPTH_MODE_ENABLED );
         void DrawPoints(
-            RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount,
+            const Simd::Matrix44& rTransform, RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount,
             Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
         void DrawWorldText(
@@ -108,7 +114,7 @@ namespace Lunar
         void BeginDrawing();
         void EndDrawing();
 
-        void DrawWorldElements();
+        void DrawWorldElements( const Simd::Matrix44& rInverseViewProjection );
         void DrawScreenElements();
         //@}
 
@@ -138,20 +144,23 @@ namespace Lunar
         };
 
         /// Untextured primitive draw call information using external vertex/index buffers.
-        struct UntexturedBufferDrawCall : UntexturedDrawCall
+        HELIUM_SIMD_ALIGN_PRE struct UntexturedBufferDrawCall : UntexturedDrawCall
         {
             /// Vertex buffer.
             RVertexBufferPtr spVertexBuffer;
             /// Index buffer.
             RIndexBufferPtr spIndexBuffer;
-        };
+
+            /// World transform.
+            Simd::Matrix44 transform;
+        } HELIUM_SIMD_ALIGN_POST;
 
         /// Textured primitive draw call information using external vertex/index buffers.
-        struct TexturedBufferDrawCall : UntexturedBufferDrawCall
+        HELIUM_SIMD_ALIGN_PRE struct TexturedBufferDrawCall : UntexturedBufferDrawCall
         {
             /// Texture with which to draw.
             RTexture2dPtr spTexture;
-        };
+        } HELIUM_SIMD_ALIGN_POST;
 
         /// Text draw call information.
         struct TextDrawCall
@@ -169,7 +178,7 @@ namespace Lunar
         };
 
         /// Vertex and index buffer set for primitive drawing.
-        struct ResourceSet
+        HELIUM_SIMD_ALIGN_PRE struct ResourceSet
         {
             /// Vertex buffer for untextured primitive rendering.
             RVertexBufferPtr spUntexturedVertexBuffer;
@@ -184,12 +193,19 @@ namespace Lunar
             /// Vertex buffer for screen-space text rendering.
             RVertexBufferPtr spScreenSpaceTextVertexBuffer;
 
+            /// Vertex constant buffers.
+            RConstantBufferPtr instanceVertexConstantBuffers[ INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT ];
+            /// Current instance vertex constant buffer transform.
+            Simd::Matrix44 instanceVertexConstantTransform;
+            /// Index of the current instance vertex constant buffer.
+            uint32_t instanceVertexConstantBufferIndex;
+
             /// Pixel constant buffers.
             RConstantBufferPtr instancePixelConstantBuffers[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
-            /// Index of the current instance pixel constant buffer.
-            uint32_t instancePixelConstantBufferIndex;
             /// Current instance pixel constant buffer blend color.
             Color instancePixelConstantBlendColor;
+            /// Index of the current instance pixel constant buffer.
+            uint32_t instancePixelConstantBufferIndex;
 
             /// Maximum number of vertices in the untextured primitive vertex buffer.
             uint32_t untexturedVertexBufferSize;
@@ -203,7 +219,7 @@ namespace Lunar
 
             /// Maximum number of vertices in the screen-space text vertex buffer.
             uint32_t screenSpaceTextVertexBufferSize;
-        };
+        } HELIUM_SIMD_ALIGN_POST;
 
         /// Cached renderer state information.
         class StateCache
@@ -231,6 +247,7 @@ namespace Lunar
             void SetPixelShader( RPixelShader* pShader );
             void SetVertexInputLayout( RVertexInputLayout* pLayout );
 
+            void SetVertexConstantBuffer( RConstantBuffer* pConstantBuffer );
             void SetPixelConstantBuffer( RConstantBuffer* pConstantBuffer );
 
             void SetTexture( RTexture2d* pTexture );
@@ -260,6 +277,8 @@ namespace Lunar
             /// Current vertex input layout.
             RVertexInputLayout* m_pVertexInputLayout;
 
+            /// Current vertex shader constant buffer.
+            RConstantBuffer* m_pVertexConstantBuffer;
             /// Current pixel shader constant buffer.
             RConstantBuffer* m_pPixelConstantBuffer;
 
@@ -273,8 +292,11 @@ namespace Lunar
         };
 
         /// Rendering resources used for drawing world elements.
-        struct WorldElementResources
+        HELIUM_SIMD_ALIGN_PRE struct WorldElementResources
         {
+            /// Inverse view/projection matrix.
+            Simd::Matrix44 inverseViewProjection;
+
             /// Render command proxy interface.
             RRenderCommandProxyPtr spCommandProxy;
 
@@ -302,7 +324,7 @@ namespace Lunar
 
             /// Render state cache.
             StateCache* pStateCache;
-        };
+        } HELIUM_SIMD_ALIGN_POST;
 
         /// Glyph handler for rendering world-space text.
         class LUNAR_GRAPHICS_API WorldSpaceTextGlyphHandler : NonCopyable
@@ -417,6 +439,8 @@ namespace Lunar
         /// Index buffer for screen-space text rendering.
         RIndexBufferPtr m_spScreenSpaceTextIndexBuffer;
 
+        /// Render fences used to mark the end of when a per-instance vertex shader constant buffer is in use.
+        RFencePtr m_instanceVertexConstantFences[ INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT ];
         /// Render fences used to mark the end of when a per-instance pixel shader constant buffer is in use.
         RFencePtr m_instancePixelConstantFences[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
 
@@ -431,8 +455,12 @@ namespace Lunar
 
         /// @name Rendering Utility Functions
         //@{
+        RConstantBuffer* SetInstanceVertexConstantData(
+            RRenderCommandProxy* pCommandProxy, ResourceSet& rResourceSet, const Simd::Matrix44& rInverseViewProjection,
+            const Simd::Matrix44& rTransform );
         RConstantBuffer* SetInstancePixelConstantData(
             RRenderCommandProxy* pCommandProxy, ResourceSet& rResourceSet, Color blendColor );
+
         void DrawDepthModeWorldElements( WorldElementResources& rWorldResources, EDepthMode depthMode );
         //@}
     };

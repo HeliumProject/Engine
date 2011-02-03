@@ -29,9 +29,9 @@ struct VertexInput
 #endif
 };
 
-cbuffer ViewGlobalData
+cbuffer InstanceData
 {
-    ViewVertexConstantGlobalData ViewGlobalData : register( c0 );
+    matrix WorldInverseViewProjection : register( c0 );
 }
 
 void main(
@@ -53,7 +53,7 @@ void main(
     vPointSize = 5.0f;
 #endif
 
-    vPos = mul( ViewGlobalData.inverseViewProjection, vIn.position );
+    vPos = mul( WorldInverseViewProjection, vIn.position );
 }
 
 #endif  // L_TYPE_VERTEX

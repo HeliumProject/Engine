@@ -30,8 +30,10 @@ BufferedDrawer::BufferedDrawer()
         rResourceSet.texturedVertexBufferSize = 0;
         rResourceSet.texturedIndexBufferSize = 0;
         rResourceSet.screenSpaceTextVertexBufferSize = 0;
-        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
+        rResourceSet.instanceVertexConstantTransform = Simd::Matrix44::IDENTITY;
+        SetInvalid( rResourceSet.instanceVertexConstantBufferIndex );
         rResourceSet.instancePixelConstantBlendColor = Color( 0xffffffff );
+        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
     }
 }
 
@@ -70,10 +72,31 @@ bool BufferedDrawer::Initialize()
             return false;
         }
 
-        // Allocate constant buffers for per-instance pixel shader constants.
+        // Allocate constant buffers for per-instance vertex and pixel shader constants.
         for( size_t resourceSetIndex = 0; resourceSetIndex < HELIUM_ARRAY_COUNT( m_resourceSets ); ++resourceSetIndex )
         {
             ResourceSet& rResourceSet = m_resourceSets[ resourceSetIndex ];
+
+            for( size_t bufferIndex = 0;
+                 bufferIndex < HELIUM_ARRAY_COUNT( rResourceSet.instanceVertexConstantBuffers );
+                 ++bufferIndex )
+            {
+                RConstantBuffer* pConstantBuffer = pRenderer->CreateConstantBuffer(
+                    sizeof( float32_t ) * 16,
+                    RENDERER_BUFFER_USAGE_DYNAMIC );
+                rResourceSet.instanceVertexConstantBuffers[ bufferIndex ] = pConstantBuffer;
+                if( !pConstantBuffer )
+                {
+                    HELIUM_TRACE(
+                        TRACE_ERROR,
+                        ( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance vertex shader constant " )
+                          TXT( "buffers.\n" ) ) );
+
+                    Shutdown();
+
+                    return false;
+                }
+            }
 
             for( size_t bufferIndex = 0;
                  bufferIndex < HELIUM_ARRAY_COUNT( rResourceSet.instancePixelConstantBuffers );
@@ -132,6 +155,11 @@ void BufferedDrawer::Shutdown()
 
     m_spScreenSpaceTextIndexBuffer.Release();
 
+    for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instanceVertexConstantFences ); ++fenceIndex )
+    {
+        m_instanceVertexConstantFences[ fenceIndex ].Release();
+    }
+
     for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instancePixelConstantFences ); ++fenceIndex )
     {
         m_instancePixelConstantFences[ fenceIndex ].Release();
@@ -145,8 +173,10 @@ void BufferedDrawer::Shutdown()
         rResourceSet.spTexturedVertexBuffer.Release();
         rResourceSet.spTexturedIndexBuffer.Release();
         rResourceSet.spScreenSpaceTextVertexBuffer.Release();
-        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
+        rResourceSet.instanceVertexConstantTransform = Simd::Matrix44::IDENTITY;
+        SetInvalid( rResourceSet.instanceVertexConstantBufferIndex );
         rResourceSet.instancePixelConstantBlendColor = Color( 0xffffffff );
+        SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
         rResourceSet.untexturedVertexBufferSize = 0;
         rResourceSet.untexturedIndexBufferSize = 0;
         rResourceSet.texturedVertexBufferSize = 0;
@@ -228,6 +258,7 @@ void BufferedDrawer::DrawWire(
 /// Buffer a wireframe primitive draw call.
 ///
 /// @param[in] primitiveType    Type of primitive to draw.
+/// @param[in] rTransform       World transform to apply when rendering.
 /// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
 ///                             vertices.
 /// @param[in] pIndices         Indices to use for drawing.  If this is null, unindexed rendering will be performed.
@@ -242,6 +273,7 @@ void BufferedDrawer::DrawWire(
 /// @see DrawSolid(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawWire(
     ERendererPrimitiveType primitiveType,
+    const Simd::Matrix44& rTransform,
     RVertexBuffer* pVertices,
     RIndexBuffer* pIndices,
     uint32_t baseVertexIndex,
@@ -277,6 +309,7 @@ void BufferedDrawer::DrawWire(
     pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
+    pDrawCall->transform = rTransform;
 }
 
 /// Buffer a solid primitive draw call.
@@ -341,6 +374,7 @@ void BufferedDrawer::DrawSolid(
 /// Buffer a solid primitive draw call.
 ///
 /// @param[in] primitiveType    Type of primitive to draw.
+/// @param[in] rTransform       World transform to apply when rendering.
 /// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
 ///                             vertices.
 /// @param[in] pIndices         Indices to use for drawing.  If this is null, unindexed rendering will be performed.
@@ -355,6 +389,7 @@ void BufferedDrawer::DrawSolid(
 /// @see DrawWire(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawSolid(
     ERendererPrimitiveType primitiveType,
+    const Simd::Matrix44& rTransform,
     RVertexBuffer* pVertices,
     RIndexBuffer* pIndices,
     uint32_t baseVertexIndex,
@@ -390,6 +425,7 @@ void BufferedDrawer::DrawSolid(
     pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
+    pDrawCall->transform = rTransform;
 }
 
 /// Buffer a textured primitive draw call.
@@ -458,6 +494,7 @@ void BufferedDrawer::DrawTextured(
 /// Buffer a textured primitive draw call.
 ///
 /// @param[in] primitiveType    Type of primitive to draw.
+/// @param[in] rTransform       World transform to apply when rendering.
 /// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of
 ///                             SimpleTexturedVertex vertices.
 /// @param[in] pIndices         Indices to use for drawing.  If this is null, unindexed rendering will be performed.
@@ -473,6 +510,7 @@ void BufferedDrawer::DrawTextured(
 /// @see DrawWire(), DrawSolid(), DrawPoints()
 void BufferedDrawer::DrawTextured(
     ERendererPrimitiveType primitiveType,
+    const Simd::Matrix44& rTransform,
     RVertexBuffer* pVertices,
     RIndexBuffer* pIndices,
     uint32_t baseVertexIndex,
@@ -511,6 +549,7 @@ void BufferedDrawer::DrawTextured(
     pDrawCall->spTexture = pTexture;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
+    pDrawCall->transform = rTransform;
 }
 
 /// Buffer a point list draw call using points larger than a pixel.
@@ -555,6 +594,7 @@ void BufferedDrawer::DrawPoints(
 
 /// Buffer a point list draw call using points larger than a pixel.
 ///
+/// @param[in] rTransform       World transform to apply when rendering.
 /// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
 ///                             vertices.
 /// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.
@@ -564,6 +604,7 @@ void BufferedDrawer::DrawPoints(
 ///
 /// @see DrawWire(), DrawSolid(), DrawTextured()
 void BufferedDrawer::DrawPoints(
+    const Simd::Matrix44& rTransform,
     RVertexBuffer* pVertices,
     uint32_t baseVertexIndex,
     uint32_t pointCount,
@@ -593,6 +634,7 @@ void BufferedDrawer::DrawPoints(
     pDrawCall->blendColor = blendColor;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = NULL;
+    pDrawCall->transform = rTransform;
 }
 
 /// Draw text in world space at a specific transform.
@@ -995,7 +1037,8 @@ void BufferedDrawer::BeginDrawing()
     m_untexturedIndices.RemoveAll();
     m_texturedIndices.RemoveAll();
 
-    // Reset per-instance pixel shader constant management data.
+    // Reset per-instance shader constant management data.
+    SetInvalid( rResourceSet.instanceVertexConstantBufferIndex );
     SetInvalid( rResourceSet.instancePixelConstantBufferIndex );
 }
 
@@ -1042,7 +1085,12 @@ void BufferedDrawer::EndDrawing()
         m_wireDrawCalls[ depthModeIndex ].RemoveAll();
     }
 
-    // Release all fences used to block the usage lifetime of various instance-specific pixel shader constant buffers.
+    // Release all fences used to block the usage lifetime of various instance-specific shader constant buffers.
+    for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instanceVertexConstantFences ); ++fenceIndex )
+    {
+        m_instanceVertexConstantFences[ fenceIndex ].Release();
+    }
+
     for( size_t fenceIndex = 0; fenceIndex < HELIUM_ARRAY_COUNT( m_instancePixelConstantFences ); ++fenceIndex )
     {
         m_instancePixelConstantFences[ fenceIndex ].Release();
@@ -1058,12 +1106,13 @@ void BufferedDrawer::EndDrawing()
 /// between a BeginDrawing() and EndDrawing() pair.
 ///
 /// Special care should be taken with regards to the following:
-/// - This function expects the proper global shader constant data (view/projection matrices) to be already set in
-///   vertex constant buffer 0.
+/// - Vertex and pixel shader constants will be set during rendering.
 /// - The rasterizer, blend, and depth-stencil states may be altered when this function returns.
 ///
+/// @param[in] rInverseViewProjection  Combined inverse view and projection matrix.
+///
 /// @see BeginDrawing(), EndDrawing(), DrawScreenElements()
-void BufferedDrawer::DrawWorldElements()
+void BufferedDrawer::DrawWorldElements( const Simd::Matrix44& rInverseViewProjection )
 {
     HELIUM_ASSERT( m_bDrawing );
 
@@ -1095,6 +1144,7 @@ void BufferedDrawer::DrawWorldElements()
     }
 
     WorldElementResources worldResources;
+    worldResources.inverseViewProjection = rInverseViewProjection;
 
     Shader* pShader = Reflect::AssertCast< Shader >( pVertexShaderVariant->GetOwner() );
     HELIUM_ASSERT( pShader );
@@ -1408,6 +1458,8 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
         RenderResourceManager::BLEND_STATE_TRANSPARENT );
     HELIUM_ASSERT( pBlendStateTransparent );
 
+    const Simd::Matrix44& rInverseViewProjection = rWorldResources.inverseViewProjection;
+
     // Draw textured primitives first.
     const DynArray< TexturedBufferDrawCall >& rTexturedBufferDrawCalls = m_texturedBufferDrawCalls[ depthMode ];
     size_t texturedBufferDrawCallCount = rTexturedBufferDrawCalls.GetSize();
@@ -1436,12 +1488,17 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                 static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) ) );
             pStateCache->SetTexture( rDrawCall.spTexture );
 
-            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
                 pCommandProxy,
                 rResourceSet,
-                rDrawCall.blendColor );
-            HELIUM_ASSERT( pPixelConstantBuffer );
-            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+                rInverseViewProjection,
+                rDrawCall.transform );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
+
+            pConstantBuffer = SetInstancePixelConstantData( pCommandProxy, rResourceSet, rDrawCall.blendColor );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pConstantBuffer );
 
             RIndexBuffer* pIndexBuffer = rDrawCall.spIndexBuffer;
             if( pIndexBuffer )
@@ -1478,6 +1535,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
                 rResourceSet.spTexturedVertexBuffer,
                 static_cast< uint32_t >( sizeof( SimpleTexturedVertex ) ) );
             pStateCache->SetIndexBuffer( rResourceSet.spTexturedIndexBuffer );
+
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                Simd::Matrix44::IDENTITY );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
             if( texturedDrawCallCount != 0 )
             {
@@ -1599,6 +1664,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
 
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                rDrawCall.transform );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
+
             RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
                 pCommandProxy,
                 rResourceSet,
@@ -1634,6 +1707,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             const UntexturedBufferDrawCall& rDrawCall = rWireBufferDrawCalls[ drawCallIndex ];
 
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                rDrawCall.transform );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
             RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
                 pCommandProxy,
@@ -1691,6 +1772,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
             pStateCache->SetBlendState( pBlendStateTransparent );
 
             pStateCache->SetTexture( NULL );
+
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                Simd::Matrix44::IDENTITY );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
 
             for( size_t drawCallIndex = 0; drawCallIndex < solidDrawCallCount; ++drawCallIndex )
             {
@@ -1784,6 +1873,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 
             pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
 
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                rDrawCall.transform );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
+
             RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
                 pCommandProxy,
                 rResourceSet,
@@ -1826,6 +1923,14 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 
             pStateCache->SetTexture( NULL );
 
+            RConstantBuffer* pConstantBuffer = SetInstanceVertexConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rInverseViewProjection,
+                Simd::Matrix44::IDENTITY );
+            HELIUM_ASSERT( pConstantBuffer );
+            pStateCache->SetVertexConstantBuffer( pConstantBuffer );
+
             for( size_t drawCallIndex = 0; drawCallIndex < pointDrawCallCount; ++drawCallIndex )
             {
                 const UntexturedDrawCall& rDrawCall = rPointDrawCalls[ drawCallIndex ];
@@ -1847,6 +1952,74 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
     }
 }
 
+/// Set the vertex shader constant data for the current draw instance.
+///
+/// @param[in] pCommandProxy           Interface through which render commands should be issued.
+/// @param[in] rResourceSet            Active resource set data for the current frame.
+/// @param[in] rInverseViewProjection  Current view/projection matrix.
+/// @param[in] rTransform              World transform to apply.
+///
+/// @return  Vertex shader constant buffer to use for the current instance.
+///
+/// @see SetInstancePixelConstantData()
+RConstantBuffer* BufferedDrawer::SetInstanceVertexConstantData(
+    RRenderCommandProxy* pCommandProxy,
+    ResourceSet& rResourceSet,
+    const Simd::Matrix44& rInverseViewProjection,
+    const Simd::Matrix44& rTransform )
+{
+    HELIUM_ASSERT( pCommandProxy );
+
+    uint32_t bufferIndex = rResourceSet.instanceVertexConstantBufferIndex;
+    bool bFirstUpdate = IsInvalid( bufferIndex );
+
+    if( bFirstUpdate || rResourceSet.instanceVertexConstantTransform != rTransform )
+    {
+        Renderer* pRenderer = Renderer::GetStaticInstance();
+        HELIUM_ASSERT( pRenderer );
+
+        if( !bFirstUpdate )
+        {
+            HELIUM_ASSERT( bufferIndex < HELIUM_ARRAY_COUNT( m_instanceVertexConstantFences ) );
+            HELIUM_ASSERT( !m_instanceVertexConstantFences[ bufferIndex ] );
+
+            RFence* pFence = pRenderer->CreateFence();
+            HELIUM_ASSERT( pFence );
+            m_instanceVertexConstantFences[ bufferIndex ] = pFence;
+
+            pCommandProxy->SetFence( pFence );
+        }
+
+        Simd::Matrix44 worldInverseViewProjection;
+        worldInverseViewProjection.MultiplySet( rTransform, rInverseViewProjection );
+        worldInverseViewProjection.Transpose();
+
+        bufferIndex = ( bufferIndex + 1 ) % HELIUM_ARRAY_COUNT( rResourceSet.instanceVertexConstantBuffers );
+        rResourceSet.instanceVertexConstantBufferIndex = bufferIndex;
+
+        RFence* pFence = m_instanceVertexConstantFences[ bufferIndex ];
+        if( pFence )
+        {
+            pRenderer->SyncFence( pFence );
+            m_instanceVertexConstantFences[ bufferIndex ].Release();
+        }
+
+        RConstantBuffer* pConstantBuffer = rResourceSet.instanceVertexConstantBuffers[ bufferIndex ];
+        HELIUM_ASSERT( pConstantBuffer );
+        float32_t* pConstantValues =
+            static_cast< float32_t* >( pConstantBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+        HELIUM_ASSERT( pConstantValues );
+
+        MemoryCopy( pConstantValues, &worldInverseViewProjection, sizeof( worldInverseViewProjection ) );
+
+        pConstantBuffer->Unmap();
+
+        rResourceSet.instanceVertexConstantTransform = rTransform;
+    }
+
+    return rResourceSet.instanceVertexConstantBuffers[ bufferIndex ];
+}
+
 /// Set the pixel shader constant data for the current draw instance.
 ///
 /// @param[in] pCommandProxy  Interface through which render commands should be issued.
@@ -1854,6 +2027,8 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
 /// @param[in] blendColor     Color with which to blend each vertex color during rendering.
 ///
 /// @return  Pixel shader constant buffer to use for the current instance.
+///
+/// @see SetInstanceVertexConstantData()
 RConstantBuffer* BufferedDrawer::SetInstancePixelConstantData(
     RRenderCommandProxy* pCommandProxy,
     ResourceSet& rResourceSet,
@@ -2033,6 +2208,20 @@ void BufferedDrawer::StateCache::SetVertexInputLayout( RVertexInputLayout* pLayo
     }
 }
 
+/// Set the current vertex shader constant buffer.
+///
+/// @param[in] pConstantBuffer  Constant buffer to set.
+void BufferedDrawer::StateCache::SetVertexConstantBuffer( RConstantBuffer* pConstantBuffer )
+{
+    HELIUM_ASSERT( m_spRenderCommandProxy );
+
+    if( m_pVertexConstantBuffer != pConstantBuffer )
+    {
+        m_pVertexConstantBuffer = pConstantBuffer;
+        m_spRenderCommandProxy->SetVertexConstantBuffers( 0, 1, &pConstantBuffer );
+    }
+}
+
 /// Set the current pixel shader constant buffer.
 ///
 /// @param[in] pConstantBuffer  Constant buffer to set.
@@ -2076,6 +2265,7 @@ void BufferedDrawer::StateCache::ResetStateCache()
     m_pPixelShader = NULL;
     m_pVertexInputLayout = NULL;
 
+    m_pVertexConstantBuffer = NULL;
     m_pPixelConstantBuffer = NULL;
 
     m_pTexture = NULL;

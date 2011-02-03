@@ -1198,14 +1198,15 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
     // Draw buffered world-space draw calls for the current scene and view.
-    m_sceneBufferedDrawer.DrawWorldElements();
+    const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
+    m_sceneBufferedDrawer.DrawWorldElements( rInverseViewProjectionMatrix );
 
     if( viewIndex < m_viewBufferedDrawers.GetSize() )
     {
         BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
         if( pDrawer )
         {
-            pDrawer->DrawWorldElements();
+            pDrawer->DrawWorldElements( rInverseViewProjectionMatrix );
         }
     }
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

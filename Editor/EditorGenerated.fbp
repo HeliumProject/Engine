@@ -2564,7 +2564,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="1">
+        <object class="Panel" expanded="0">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -2612,16 +2612,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer19</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">0</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="1">
+                    <object class="wxPanel" expanded="0">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
@@ -2668,7 +2668,7 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
-                        <object class="wxBoxSizer" expanded="1">
+                        <object class="wxBoxSizer" expanded="0">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer36</property>
                             <property name="orient">wxHORIZONTAL</property>
@@ -4311,7 +4311,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -4435,11 +4435,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_SelectPanelButton</property>
+                                    <property name="name">m_SelectButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -4604,11 +4604,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_TranslatePanelButton</property>
+                                    <property name="name">m_TranslateButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -4773,11 +4773,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_RotatePanelButton</property>
+                                    <property name="name">m_RotateButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -4942,11 +4942,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_ScalePanelButton</property>
+                                    <property name="name">m_ScaleButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -5165,11 +5165,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_DuplicateToolPanelButton</property>
+                                    <property name="name">m_DuplicateToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -5334,11 +5334,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_LocatorToolPanelButton</property>
+                                    <property name="name">m_LocatorToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -5503,11 +5503,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_VolumeToolPanelButton</property>
+                                    <property name="name">m_VolumeToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -5672,11 +5672,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_EntityToolPanelButton</property>
+                                    <property name="name">m_EntityToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -5841,11 +5841,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_CurveToolPanelButton</property>
+                                    <property name="name">m_CurveToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6010,11 +6010,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_CurveEditToolPanelButton</property>
+                                    <property name="name">m_CurveEditToolButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6289,11 +6289,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_PlayPanelButton</property>
+                                    <property name="name">m_PlayButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6458,11 +6458,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_PausePanelButton</property>
+                                    <property name="name">m_PauseButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -6627,11 +6627,11 @@
                                     <property name="id">wxID_ANY</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
-                                    <property name="name">m_StopPanelButton</property>
+                                    <property name="name">m_StopButton</property>
                                     <property name="permission">public</property>
                                     <property name="pos"></property>
                                     <property name="size"></property>
-                                    <property name="subclass">Helium::Editor::PanelButton; Editor/Controls/PanelButton.h</property>
+                                    <property name="subclass">Helium::Editor::EditorButton; Editor/Controls/EditorButton.h</property>
                                     <property name="tooltip"></property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -7333,7 +7333,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="1">
+        <object class="Panel" expanded="0">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -7381,16 +7381,16 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer21</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">1</property>
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">0</property>
-                    <object class="wxPanel" expanded="1">
+                    <object class="wxPanel" expanded="0">
                         <property name="bg"></property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>

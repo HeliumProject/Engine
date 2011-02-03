@@ -11,9 +11,9 @@
 #include <wx/intl.h>
 
 namespace Helium{ namespace Editor{ class Button; } }
+namespace Helium{ namespace Editor{ class EditorButton; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
-namespace Helium{ namespace Editor{ class PanelButton; } }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -346,19 +346,19 @@ namespace Helium
 				
 			
 			public:
-				Helium::Editor::PanelButton* m_SelectPanelButton;
-				Helium::Editor::PanelButton* m_TranslatePanelButton;
-				Helium::Editor::PanelButton* m_RotatePanelButton;
-				Helium::Editor::PanelButton* m_ScalePanelButton;
-				Helium::Editor::PanelButton* m_DuplicateToolPanelButton;
-				Helium::Editor::PanelButton* m_LocatorToolPanelButton;
-				Helium::Editor::PanelButton* m_VolumeToolPanelButton;
-				Helium::Editor::PanelButton* m_EntityToolPanelButton;
-				Helium::Editor::PanelButton* m_CurveToolPanelButton;
-				Helium::Editor::PanelButton* m_CurveEditToolPanelButton;
-				Helium::Editor::PanelButton* m_PlayPanelButton;
-				Helium::Editor::PanelButton* m_PausePanelButton;
-				Helium::Editor::PanelButton* m_StopPanelButton;
+				Helium::Editor::EditorButton* m_SelectButton;
+				Helium::Editor::EditorButton* m_TranslateButton;
+				Helium::Editor::EditorButton* m_RotateButton;
+				Helium::Editor::EditorButton* m_ScaleButton;
+				Helium::Editor::EditorButton* m_DuplicateToolButton;
+				Helium::Editor::EditorButton* m_LocatorToolButton;
+				Helium::Editor::EditorButton* m_VolumeToolButton;
+				Helium::Editor::EditorButton* m_EntityToolButton;
+				Helium::Editor::EditorButton* m_CurveToolButton;
+				Helium::Editor::EditorButton* m_CurveEditToolButton;
+				Helium::Editor::EditorButton* m_PlayButton;
+				Helium::Editor::EditorButton* m_PauseButton;
+				Helium::Editor::EditorButton* m_StopButton;
 				wxSearchCtrl* m_VaultSearchBox;
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL );

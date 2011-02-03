@@ -16,6 +16,8 @@ EditorSettings::EditorSettings()
 : m_ReopenLastProjectOnStartup( true )
 , m_ShowFileExtensionsInProjectView( false )
 , m_EnableAssetTracker( true )
+, m_ShowTextOnButtons( true )
+, m_ShowIconsOnButtons( true )
 {
 }
 
@@ -34,6 +36,14 @@ void EditorSettings::AcceptCompositeVisitor( Reflect::Composite& comp )
     field = comp.AddField( &EditorSettings::m_EnableAssetTracker, TXT( "m_EnableAssetTracker" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Enable Asset Tracker" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will find and index assets that can be used in the currently loaded project.  This allows for fast searches through your asset library." ) );
+
+    field = comp.AddField( &EditorSettings::m_ShowTextOnButtons, TXT( "m_ShowTextOnButtons" ) );
+    field->SetProperty( TXT( "UIName" ), TXT( "Display Text on Buttons" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display text on buttons in the UI." ) );
+
+    field = comp.AddField( &EditorSettings::m_ShowIconsOnButtons, TXT( "m_ShowIconsOnButtons" ) );
+    field->SetProperty( TXT( "UIName" ), TXT( "Display Icons on Buttons" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display icons on buttons in the UI." ) );
 }
 
 std::vector< tstring >& EditorSettings::GetMRUProjects()

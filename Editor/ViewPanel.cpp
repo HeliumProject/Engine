@@ -3,7 +3,6 @@
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
 #include "Editor/EditorGenerated.h"
-#include "Editor/Controls/Button.h"
 
 #include "Pipeline/SceneGraph/CameraSettings.h"
 
@@ -25,71 +24,67 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
     {
         //Freeze();
 
-        m_FrameOriginButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_FrameOriginButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameOrigin ) );
-        
-        m_FrameSelectedButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_FrameSelectedButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameSelected ) );
+        m_FrameOriginBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameOrigin ) );
+        m_FrameSelectionBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameSelected ) );
+        m_PreviousViewBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PreviousView ) );
+        m_NextViewBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NextView ) );
 
-        m_PreviousViewButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_PreviousViewButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PreviousView ) );
-        
-        m_NextViewButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_NextViewButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NextView ) );
+        m_HighlightModeToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_HighlightModeToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::HighlightMode ) );
 
-        m_HighlightModeToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_HighlightModeToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::HighlightMode ) );
+        m_OrbitViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_OrbitViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PerspectiveCamera ) );
+        
+        m_FrontViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_FrontViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrontOrthoCamera ) );
+        
+        m_SideViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_SideViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SideOrthoCamera ) );
+        
+        m_TopViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_TopViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::TopOrthoCamera ) );
 
-        m_OrbitCameraToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_OrbitCameraToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PerspectiveCamera ) );
+        m_ShowAxesToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ShowAxesToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowAxes ) );
         
-        m_FrontCameraToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_FrontCameraToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrontOrthoCamera ) );
+        m_ShowGridToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ShowGridToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowGrid ) );
         
-        m_SideCameraToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_SideCameraToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SideOrthoCamera ) );
+        m_ShowBoundsToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ShowBoundsToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowBounds ) );
         
-        m_TopCameraToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_TopCameraToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::TopOrthoCamera ) );
+        m_ShowStatisticsToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ShowStatisticsToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowStatistics ) );
 
-        m_ShowAxesToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ShowAxesToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowAxes ) );
+        m_FrustumCullingToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_FrustumCullingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrustumCulling ) );
         
-        m_ShowGridToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ShowGridToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowGrid ) );
-        
-        m_ShowBoundsToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ShowBoundsToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowBounds ) );
-        
-        m_ShowStatisticsToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ShowStatisticsToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowStatistics ) );
+        m_BackfaceCullingToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_BackfaceCullingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::BackfaceCulling ) );
 
-        m_FrustumCullingToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_FrustumCullingToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrustumCulling ) );
+        m_WireframeShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_WireframeShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingWireframe ) );
         
-        m_BackfaceCullingToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_BackfaceCullingToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::BackfaceCulling ) );
+        m_MaterialShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_MaterialShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingMaterial ) );
 
-        m_WireframeShadingToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_WireframeShadingToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingWireframe ) );
-        
-        m_MaterialShadingToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_MaterialShadingToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingMaterial ) );
+        m_TextureShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_TextureShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingTexture ) );
 
-        m_ColorModeSceneToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ColorModeSceneToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScene ) );
+        m_ColorModeSceneToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ColorModeSceneToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScene ) );
         
-        m_ColorModeLayerToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ColorModeLayerToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeLayer ) );
+        m_ColorModeLayerToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ColorModeLayerToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeLayer ) );
         
-        m_ColorModeNodeTypeToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ColorModeNodeTypeToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeNodeType ) );
+        m_ColorModeTypeToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ColorModeTypeToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeNodeType ) );
         
-        m_ColorModeScaleToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ColorModeScaleToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScale ) );
+        m_ColorModeScaleToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ColorModeScaleToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScale ) );
         
-        m_ColorModeScaleGradientToggleButton->SetButtonOptions( ButtonOptions::Toggle | ButtonOptions::HideLabel );
-        m_ColorModeScaleGradientToggleButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScaleGradient ) );
+        m_ColorModeScaleGradientToggleButton->SetOptions( PanelButtonOptions::Toggle );
+        m_ColorModeScaleGradientToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScaleGradient ) );
 
         m_ToolPanel->Layout();
 
@@ -97,26 +92,18 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
         //Thaw();
     }
 
-#pragma TODO( "Remove this block when wxFormBuilder fully supports wxToggleButton" )
-    {
-        m_OrbitCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-	    m_FrontCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-	    m_SideCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-	    m_TopCameraToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-    }
-
     m_FrameOriginButton->SetHelpText( TXT( "Frame the origin in the viewport." ) );
-    m_FrameSelectedButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
+    m_FrameSelectionButton->SetHelpText( TXT( "Frame the selected item in the viewport." ) );
 
     m_PreviousViewButton->SetHelpText( TXT( "Switch to the previous camera view." ) );
     m_NextViewButton->SetHelpText( TXT( "Switch to the next camera view." ) );
 
     m_HighlightModeToggleButton->SetHelpText( TXT( "Toggle Highlight mode." ) );
 
-    m_OrbitCameraToggleButton->SetHelpText( TXT( "Use the orbit camera." ) );
-    m_FrontCameraToggleButton->SetHelpText( TXT( "Use the front camera." ) );
-    m_SideCameraToggleButton->SetHelpText( TXT( "Use the side camera." ) );
-    m_TopCameraToggleButton->SetHelpText( TXT( "Use the top camera." ) );
+    m_OrbitViewToggleButton->SetHelpText( TXT( "Use the orbit camera." ) );
+    m_FrontViewToggleButton->SetHelpText( TXT( "Use the front camera." ) );
+    m_SideViewToggleButton->SetHelpText( TXT( "Use the side camera." ) );
+    m_TopViewToggleButton->SetHelpText( TXT( "Use the top camera." ) );
 
     m_ShowAxesToggleButton->SetHelpText( TXT( "Toggle drawing the axes in the viewport." ) );
     m_ShowGridToggleButton->SetHelpText( TXT( "Toggle drawing the grid in the viewport." ) );
@@ -128,10 +115,11 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
 
     m_WireframeShadingToggleButton->SetHelpText( TXT( "Toggle wireframe mode." ) );
     m_MaterialShadingToggleButton->SetHelpText( TXT( "Toggle material shading mode." ) );
+    m_TextureShadingToggleButton->SetHelpText( TXT( "Toggle texture shading mode." ) );
 
     m_ColorModeSceneToggleButton->SetHelpText( TXT( "Toggle scene coloring mode." ) );
     m_ColorModeLayerToggleButton->SetHelpText( TXT( "Toggle layer coloring mode." ) );
-    m_ColorModeNodeTypeToggleButton->SetHelpText( TXT( "Toggle node type coloring mode." ) );
+    m_ColorModeTypeToggleButton->SetHelpText( TXT( "Toggle type coloring mode." ) );
     m_ColorModeScaleToggleButton->SetHelpText( TXT( "Toggle scale coloring mode." ) );
     m_ColorModeScaleGradientToggleButton->SetHelpText( TXT( "Toggle scale gradient coloring mode." ) );
 
@@ -150,18 +138,22 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( ViewPanel::OnChar ), NULL, this );
 
-    Connect( ViewPanelEvents::Wireframe, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
-    Connect( ViewPanelEvents::Material, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
-    Connect( ViewPanelEvents::Texture, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
-    Connect( ViewPanelEvents::OrbitCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-    Connect( ViewPanelEvents::FrontCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-    Connect( ViewPanelEvents::SideCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-    Connect( ViewPanelEvents::TopCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
-    Connect( ViewPanelEvents::FrameOrigin, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnFrameOrigin ), NULL, this );
-    Connect( ViewPanelEvents::FrameSelected, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnFrameSelected ), NULL, this );
-    Connect( ViewPanelEvents::ToggleHighlightMode, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnToggleHighlightMode ), NULL, this );
-    Connect( ViewPanelEvents::NextView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnNextView ), NULL, this );
-    Connect( ViewPanelEvents::PreviousView, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( ViewPanel::OnPreviousView ), NULL, this );
+    m_WireframeShadingToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    m_MaterialShadingToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    m_TextureShadingToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnRenderMode ), NULL, this );
+    m_OrbitViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_FrontViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_SideViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_TopViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_FrameOriginButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnFrameOrigin ), NULL, this );
+    m_FrameSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnFrameSelected ), NULL, this );
+    m_HighlightModeToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnToggleHighlightMode ), NULL, this );
+    m_NextViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnNextView ), NULL, this );
+    m_PreviousViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnPreviousView ), NULL, this );
+    m_OrbitViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_FrontViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_SideViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_TopViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
 
     Layout();
 }
@@ -170,10 +162,10 @@ void ViewPanel::RefreshButtonStates()
 {
     m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
 
-    m_OrbitCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Orbit );
-    m_FrontCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Front );
-    m_SideCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Side );
-    m_TopCameraToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Top );
+    m_OrbitViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Orbit );
+    m_FrontViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Front );
+    m_SideViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Side );
+    m_TopViewToggleButton->SetValue( m_ViewCanvas->GetViewport().GetCameraMode() == SceneGraph::CameraMode::Top );
 
     m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
     m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
@@ -388,48 +380,35 @@ void ViewPanel::OnRenderMode( wxCommandEvent& event )
 
 void ViewPanel::OnCamera( wxCommandEvent& event )
 {
-    switch ( event.GetId() )
+    int eventId = event.GetId();
+    if ( eventId == ViewPanelEvents::OrbitCamera || eventId == m_OrbitViewToggleButton->GetId() )
     {
-    case ViewPanelEvents::OrbitCamera:
-    case ID_OrbitCamera:
-        {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Orbit );
-            Refresh();
-            event.Skip( false );
-            break;
-        }
-
-    case ViewPanelEvents::FrontCamera:
-    case ID_FrontCamera:
-        {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Front );
-            Refresh();
-            event.Skip( false );
-            break;
-        }
-
-    case ViewPanelEvents::SideCamera:
-    case ID_SideCamera:
-        {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Side );
-            Refresh();
-            event.Skip( false );
-            break;
-        }
-
-    case ViewPanelEvents::TopCamera:
-    case ID_TopCamera:
-        {
-            m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Top );
-            Refresh();
-            event.Skip( false );
-            break;
-        }
-
-    default:
+        m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Orbit );
+        Refresh();
+        event.Skip( false );
+    }
+    else if ( eventId == ViewPanelEvents::FrontCamera || eventId == m_FrontViewToggleButton->GetId() )
+    {
+        m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Front );
+        Refresh();
+        event.Skip( false );
+    }
+    else if ( eventId == ViewPanelEvents::SideCamera || eventId == m_SideViewToggleButton->GetId() )
+    {
+        m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Side );
+        Refresh();
+        event.Skip( false );
+    }
+    else if ( eventId == ViewPanelEvents::TopCamera || eventId == m_TopViewToggleButton->GetId() )
+    {
+        m_ViewCanvas->GetViewport().SetCameraMode( CameraMode::Top );
+        Refresh();
+        event.Skip( false );
+    }
+    else
+    {
         event.Skip();
         event.ResumePropagation( wxEVENT_PROPAGATE_MAX );
-        break;
     }
 
     RefreshButtonStates();

@@ -133,7 +133,7 @@ void Drawer::SetLabel( const wxString& label )
 {
     __super::SetLabel( label );
 
-    m_Button->SetLabel( GetLabel() );
+    m_ButtonText->SetLabel( GetLabel() );
     m_Button->SetSize( m_Button->GetBestSize() );
     m_Button->SetMinSize( m_Button->GetBestSize() );
 

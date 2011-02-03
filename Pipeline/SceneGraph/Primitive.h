@@ -4,8 +4,10 @@
 #include "VertexResource.h"
 #include "Render.h"
 
+#include "Platform/Math/Simd/Matrix44.h"
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Math/Color3.h"
+#include "Pipeline/SceneGraph/Color.h"
 
 namespace Helium
 {
@@ -71,7 +73,10 @@ namespace Helium
             }
 
             virtual void Populate( PopulateArgs* ) = 0;
-            virtual void Draw( DrawArgs*, const bool* solid = NULL, const bool* transparent = NULL ) const = 0;
+            virtual void Draw(
+                Lunar::BufferedDrawer*, DrawArgs*, Lunar::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const = 0;
             virtual bool Pick( PickVisitor*, const bool* solid = NULL ) const = 0;
         };
 
@@ -98,7 +103,7 @@ namespace Helium
                 case ResourceTypes::Vertex:
                     {
                         HELIUM_ASSERT(m_Vertices.size() == GetElementCount());
-                        HELIUM_ASSERT(sizeof(T) == ElementSizes[ GetElementType() ]);
+                        HELIUM_ASSERT(sizeof(T) == VertexElementSizes[ GetElementType() ]);
 
                         memcpy(args->m_Buffer + args->m_Offset, &(*m_Vertices.begin()), m_Vertices.size() * sizeof(T));
                         args->m_Offset += (uint32_t)m_Vertices.size() * sizeof(T);

@@ -145,9 +145,6 @@ namespace Helium
             // populate the allocated resource data from the populator delegate
             virtual void Populate();
 
-            // set the runtime stream and fvf state for drawing using this resource
-            virtual bool SetState() const = 0;
-
         protected:
             // lock resource memory
             virtual uint8_t* Lock() = 0;

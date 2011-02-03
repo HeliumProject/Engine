@@ -716,11 +716,9 @@ bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
     return true;
 }
 
-void HierarchyNode::SetMaterial( Lunar::Color defaultMaterial ) const
+Lunar::Color HierarchyNode::GetMaterialColor( Lunar::Color defaultMaterial ) const
 {
     SceneGraph::Viewport* view = m_Owner->GetViewport();
-
-    IDirect3DDevice9* device = view->GetResources()->GetDevice();
 
     Lunar::Color material = defaultMaterial;
 
@@ -779,7 +777,7 @@ void HierarchyNode::SetMaterial( Lunar::Color defaultMaterial ) const
         material.SetA( defaultMaterial.GetA() );
     }
 
-    device->SetMaterial( &material );
+    return material;
 }
 
 TraversalAction HierarchyNode::TraverseHierarchy( HierarchyTraverser* traverser )

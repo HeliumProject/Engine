@@ -42,7 +42,6 @@ namespace Helium
 
             virtual uint8_t* Lock() HELIUM_OVERRIDE; 
             virtual void Unlock() HELIUM_OVERRIDE; 
-            virtual bool SetState() const HELIUM_OVERRIDE; 
 
         protected:
             virtual bool Allocate() HELIUM_OVERRIDE; 

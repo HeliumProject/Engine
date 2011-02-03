@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveLocator.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 using namespace Helium;
@@ -33,20 +34,40 @@ void PrimitiveLocator::Update()
     Base::Update();
 }
 
-void PrimitiveLocator::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveLocator::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
+    HELIUM_ASSERT( args );
 
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 3);
+    drawInterface->DrawWire(
+        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        6,
+        0,
+        3,
+        materialColor );
     args->m_LineCount += 3;
 }
 
 bool PrimitiveLocator::Pick( PickVisitor* pick, const bool* solid ) const
 {
-    for (size_t i=0; i<m_Vertices.size(); i+=2)
+    size_t vertexCount = m_Vertices.size();
+    for ( size_t vertexIndex = 0; vertexIndex < vertexCount; vertexIndex += 2 )
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position, 0.0f))
+        const Lunar::SimpleVertex& vertex0 = m_Vertices[ vertexIndex ];
+        const Lunar::SimpleVertex& vertex1 = m_Vertices[ vertexIndex + 1 ];
+        Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+        Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+        if ( pick->PickSegment( position0, position1, 0.0f ) )
         {
             return true;
         }

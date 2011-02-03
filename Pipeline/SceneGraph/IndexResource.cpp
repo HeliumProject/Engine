@@ -32,30 +32,6 @@ uint8_t* IndexResource::Lock()
     return static_cast< uint8_t* >( data );
 }
 
-
-bool IndexResource::SetState() const 
-{
-    if ( GetElementCount() > 0 )
-    {
-        if ( m_Buffer == NULL )
-        {
-            HELIUM_BREAK();
-            return false;
-        }
-
-        if ( m_Buffer != m_Tracker->GetIndices() )
-        {
-#ifdef SCENE_DEBUG_RESOURCES
-            Log::Print("Setting indices to 0x%p\n", m_Buffer);
-#endif
-            m_Device->SetIndices( m_Buffer );
-            m_Tracker->SetIndices( m_Buffer );
-        }
-    }
-
-    return true;
-}
-
 void IndexResource::Unlock() 
 {
     m_Buffer->Unmap();

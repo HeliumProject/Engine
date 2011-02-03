@@ -15,6 +15,11 @@
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Pipeline/SceneGraph/Visitor.h"
 
+namespace Lunar
+{
+    class BufferedDrawer;
+}
+
 namespace Helium
 {
     namespace SceneGraph
@@ -214,11 +219,8 @@ namespace Helium
             // view we are rendering for
             const SceneGraph::Viewport* m_View;
 
-            // the render object data pool
-            V_RenderEntry m_EntryData;
-
-            // the render object pointers to sort
-            V_RenderEntryDumbPtr m_EntryPointers;
+            // buffered rendering interface
+            Lunar::BufferedDrawer* m_DrawInterface;
 
             // profile start time
             uint64_t m_StartTime;
@@ -234,14 +236,12 @@ namespace Helium
                 return m_View;
             }
 
-            uint32_t GetSize() const
+            Lunar::BufferedDrawer* GetDrawInterface() const
             {
-                return (uint32_t)m_EntryData.size();
+                return m_DrawInterface;
             }
 
-            void Reset( DrawArgs* args, const SceneGraph::Viewport* view );
-
-            RenderEntry* Allocate( const SceneNode* object );
+            void Reset( DrawArgs* args, const SceneGraph::Viewport* view, Lunar::BufferedDrawer* drawInterface );
 
             void Draw();
         };

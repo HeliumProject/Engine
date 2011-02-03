@@ -3,6 +3,7 @@
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
+#include "Platform/Trace.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"

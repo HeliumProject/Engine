@@ -248,8 +248,8 @@ namespace Helium
             // do bounds check
             virtual bool BoundsCheck(const Matrix4& instanceMatrix) const;
 
-            // set the material on the device based upon this object's selection state
-            virtual void SetMaterial( Lunar::Color defaultMaterial ) const;
+            // get the material color based upon this object's selection state
+            virtual Lunar::Color GetMaterialColor( Lunar::Color defaultMaterial ) const;
 
             // call VisitHierarchyNode() on the render object for each hierarhcy node recursively
             virtual TraversalAction TraverseHierarchy( HierarchyTraverser* traverser );

@@ -7,6 +7,8 @@
 
 #include "Foundation/Undo/PropertyCommand.h"
 
+#include "Graphics/BufferedDrawer.h"
+
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Pipeline/SceneGraph/PrimitiveLocator.h"
 #include "Pipeline/SceneGraph/PrimitiveCone.h"
@@ -27,8 +29,8 @@ REFLECT_DEFINE_ENUMERATION( CurveType );
 REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
 REFLECT_DEFINE_OBJECT( Curve );
 
-D3DMATERIAL9 Curve::s_Material;
-D3DMATERIAL9 Curve::s_HullMaterial;
+Lunar::Color Curve::s_Material;
+Lunar::Color Curve::s_HullMaterial;
 
 void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
@@ -53,11 +55,8 @@ void Curve::InitializeType()
 {
     Reflect::RegisterClassType< Curve >( TXT( "SceneGraph::Curve" ) );
 
-    ZeroMemory(&s_Material, sizeof(s_Material));
-    s_Material.Ambient = Color::FORESTGREEN;
-
-    ZeroMemory(&s_HullMaterial, sizeof(s_HullMaterial));
-    s_HullMaterial.Ambient = Color::GRAY;
+    s_Material = Color::FORESTGREEN;
+    s_HullMaterial = Color::GRAY;
 
     PropertiesGenerator::InitializePanel( TXT( "Curve" ), CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
 }
@@ -533,7 +532,7 @@ void Curve::Populate( PopulateArgs* args )
                 if ( vertexCount == 0 )
                     break;
 
-                Position* bufferStart = reinterpret_cast<Position*>( args->m_Buffer + args->m_Offset );
+                Lunar::SimpleVertex* bufferStart = reinterpret_cast<Lunar::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the control points
                 uint32_t countControlPoints = 0;
@@ -549,8 +548,15 @@ void Curve::Populate( PopulateArgs* args )
                         {
                             firstPoint = point;
                         }
-                        bufferStart[countControlPoints].m_Position = m_ObjectBounds.Test( point->GetPosition() );
-                        args->m_Offset += sizeof(Position); 
+                        Vector3 position = m_ObjectBounds.Test( point->GetPosition() );
+                        bufferStart[ countControlPoints ].position[ 0 ] = position.x;
+                        bufferStart[ countControlPoints ].position[ 1 ] = position.y;
+                        bufferStart[ countControlPoints ].position[ 2 ] = position.z;
+                        bufferStart[ countControlPoints ].color[ 0 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
+                        args->m_Offset += sizeof(Lunar::SimpleVertex); 
                         ++countControlPoints;
                     }
                 }
@@ -558,26 +564,47 @@ void Curve::Populate( PopulateArgs* args )
                 // loop back for closed curves
                 if ( countControlPoints > 0 ) 
                 {
-                    bufferStart[countControlPoints].m_Position = m_ObjectBounds.Test( firstPoint->GetPosition() );
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( firstPoint->GetPosition() );
+                    bufferStart[ countControlPoints ].position[ 0 ] = position.x;
+                    bufferStart[ countControlPoints ].position[ 1 ] = position.y;
+                    bufferStart[ countControlPoints ].position[ 2 ] = position.z;
+                    bufferStart[ countControlPoints ].color[ 0 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
                 }
 
                 // reset the buffer start to its new location
-                bufferStart = reinterpret_cast<Position*>( args->m_Buffer + args->m_Offset );
+                bufferStart = reinterpret_cast<Lunar::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the calculated curve points
                 uint32_t countCurvePoints = (uint32_t)m_Points.size();
                 for ( uint32_t i = 0; i < countCurvePoints; ++i )
                 {
-                    bufferStart[i].m_Position = m_ObjectBounds.Test( m_Points[ i ] );
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( m_Points[ i ] );
+                    bufferStart[ i ].position[ 0 ] = position.x;
+                    bufferStart[ i ].position[ 1 ] = position.y;
+                    bufferStart[ i ].position[ 2 ] = position.z;
+                    bufferStart[ i ].color[ 0 ] = 0xff;
+                    bufferStart[ i ].color[ 1 ] = 0xff;
+                    bufferStart[ i ].color[ 2 ] = 0xff;
+                    bufferStart[ i ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
                 }
 
                 // loop back for closed curves
                 if ( countCurvePoints > 0 ) 
                 {
-                    bufferStart[countCurvePoints].m_Position = m_ObjectBounds.Test( m_Points[ 0 ] );        
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( m_Points[ 0 ] );
+                    bufferStart[ countCurvePoints ].position[ 0 ] = position.x;
+                    bufferStart[ countCurvePoints ].position[ 1 ] = position.y;
+                    bufferStart[ countCurvePoints ].position[ 2 ] = position.z;
+                    bufferStart[ countCurvePoints ].color[ 0 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 1 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 2 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
                 }
             }
             break;
@@ -766,6 +793,12 @@ void Curve::Evaluate( GraphDirection direction )
 
 void Curve::Render( RenderVisitor* render )
 {
+    HELIUM_ASSERT( render );
+
+    Lunar::BufferedDrawer* drawInterface = render->GetDrawInterface();
+    HELIUM_ASSERT( drawInterface );
+
+
     RenderEntry* entry = render->Allocate(this);
 
     entry->m_Location = render->State().m_Matrix;
@@ -775,7 +808,7 @@ void Curve::Render( RenderVisitor* render )
     Base::Render( render );
 }
 
-void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
+void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const SceneNode* object )
 {
     const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
     const Curve* curve = Reflect::AssertCast< Curve > ( node );
@@ -792,42 +825,40 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Draw start end end locators
     //
 
-    curve->SetMaterial( curve->s_Material );
+    Lunar::Color materialColor = curve->GetMaterialColor( curve->s_Material );
 
-    const Matrix4& globalTransform = curve->GetGlobalTransform();
+    Simd::Matrix44 globalTransform( curve->GetGlobalTransform().array1d );
 
     if ( !curve->m_Closed )
     {
-        Matrix4 m;
+        Simd::Matrix44 m;
 
         if ( countCurvePoints > 0 )
         {
-            m = Matrix4( curve->m_Points[ 0 ] ) * globalTransform;
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Locator->Draw( args );
+            Simd::Vector3 point( &curve->m_Points[ 0 ].x );
+            m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
+            curve->m_Locator->Draw( drawInterface, args, materialColor, m );
         }
 
         if ( countCurvePoints > 1 )
         {
-            m = Matrix4( curve->m_Points[ countCurvePoints - 1 ] ) * globalTransform;
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Locator->Draw( args );
+            Simd::Vector3 point( &curve->m_Points[ countCurvePoints - 1 ].x );
+            m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
+            curve->m_Locator->Draw( drawInterface, args, m );
 
-            Vector3 p1 = curve->m_Points[ countCurvePoints - 2 ];
-            Vector3 p2 = curve->m_Points[ countCurvePoints - 1 ];
-            Vector3 dir = (p2 - p1).Normalized();
-            m = Matrix4 ( AngleAxis::Rotation( OutVector, dir ) );
-            m.t = p2 - (dir * (curve->m_Cone->m_Length / 2.0f));
+            Simd::Vector3 p1( &curve->m_Points[ countCurvePoints - 2 ].x );
+            Simd::Vector3 p2( &curve->m_Points[ countCurvePoints - 1 ].x );
+            Simd::Vector3 dir = ( p2 - p1 ).GetNormalized();
+            AngleAxis angleAxis = AngleAxis::Rotation(
+                OutVector,
+                Vector3( dir.GetElement( 0 ), dir.GetElement( 1 ), dir.GetElement( 2 ) ) );
+            m.SetRotationTranslation(
+                Simd::Quat( Simd::Vector3( &angleAxis.axis.x ), angleAxis.angle ),
+                p2 - ( dir * ( curve->m_Cone->m_Length * 0.5f ) ) );
             m *= globalTransform;
 
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Cone->Draw( args );
+            curve->m_Cone->Draw( drawInterface, args, materialColor, m );
         }
-    }
-
-    if ( !vertices->SetState() )
-    {
-        return;
     }
 
     device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&globalTransform );
@@ -841,18 +872,28 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
         if ( countCurveLines > 0 )
         {
-            device->DrawPrimitive( D3DPT_LINESTRIP, (uint32_t)vertices->GetBaseIndex() + countControlPoints + 1, countCurveLines );
+            drawInterface->DrawWire(
+                Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                globalTransform,
+                vertices->GetBuffer(),
+                NULL,
+                vertices->GetBaseIndex() + countControlPoints + 1,
+                countCurveLines + 1,
+                0,
+                countCurveLines,
+                materialColor );
             args->m_LineCount += countCurveLines;
         }
 
         //
         //  Draw Curve points 
         //
-        static float curvePointSize = 5.0f;
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-        device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &curvePointSize ) );
-        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + countControlPoints + 1, countCurvePoints );
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
+        drawInterface->DrawPoints(
+            globalTransform,
+            vertices->GetBuffer(),
+            vertices->GetBaseIndex() + countControlPoints + 1,
+            countCurvePoints,
+            materialColor );
     }
 
 
@@ -868,12 +909,18 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
         if ( curve->m_Type != CurveType::Linear )
         {
-            uint32_t countControlLines = curve->m_Closed ? countControlPoints : countControlPoints - 1;
-            device->SetMaterial( &curve->s_HullMaterial );
-
             if ( countControlLines > 0 )
             {
-                device->DrawPrimitive( D3DPT_LINESTRIP, (uint32_t)vertices->GetBaseIndex(), countControlLines  );
+                drawInterface->DrawWire(
+                    Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                    globalTransform,
+                    vertices->GetBuffer(),
+                    NULL,
+                    vertices->GetBaseIndex(),
+                    countControlLines + 1,
+                    0,
+                    countControlLines,
+                    curve->s_HullMaterial );
                 args->m_LineCount += countControlLines;
             }
         }
@@ -883,10 +930,12 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         // Draw all points
         //
 
-        static float controlPointSize = 5.0f;
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-        device->SetMaterial( &Viewport::s_ComponentMaterial );
-        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex(), countControlPoints );
+        drawInterface->DrawPoints(
+            globalTransform,
+            vertices->GetBuffer(),
+            vertices->GetBaseIndex(),
+            countControlPoints,
+            Viewport::s_ComponentMaterial );
 
 
         //

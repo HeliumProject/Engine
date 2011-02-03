@@ -13,29 +13,27 @@ using namespace Helium;
 using namespace Helium::SceneGraph;
 
 RenderVisitor::RenderVisitor()
-: m_Args (NULL)
-, m_View (NULL)
-, m_Device (NULL)
-, m_StartTime (0x0)
+: m_Args( NULL )
+, m_View( NULL )
+, m_DrawInterface( NULL )
+, m_StartTime( 0x0 )
+, m_CompareTime( 0x0 )
 {
 
 }
 
-void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view )
+void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view, Lunar::BufferedDrawer* drawInterface )
 {
-  m_Args = args;
-  m_View = view;
-  m_Device = view->GetDevice();
+    m_Args = args;
+    m_View = view;
+    m_DrawInterface = drawInterface;
 
-  // if you hit this then you are leaking entries in the state stack, BAD :P
-  HELIUM_ASSERT( m_States.size() == 1 );
-  m_States.clear();
-  m_States.resize( 1 );
+    // if you hit this then you are leaking entries in the state stack, BAD :P
+    HELIUM_ASSERT( m_States.size() == 1 );
+    m_States.clear();
+    m_States.resize( 1 );
 
-  m_EntryData.clear();
-  m_EntryPointers.clear();
-
-  m_StartTime = Helium::TimerGetClock();
+    m_StartTime = Helium::TimerGetClock();
 }
 
 int RenderEntry::Compare( const void* ptr1, const void* ptr2 )
@@ -118,24 +116,6 @@ int RenderEntry::Compare( const void* ptr1, const void* ptr2 )
   }
 
   return 0;
-}
-
-RenderEntry* RenderVisitor::Allocate(const SceneNode* node)
-{
-  static RenderEntry renderObject;
-
-  size_t capacity = m_EntryData.capacity();
-
-  m_EntryData.push_back( renderObject );
-  m_EntryData.back().m_Visitor = this;
-  m_EntryData.back().m_SceneNode = node;
-
-  if (m_EntryData.capacity() > capacity)
-  {
-    Log::Debug( TXT( "RenderEntries reallocated from %d to %d\n" ), capacity * sizeof(RenderEntry), m_EntryData.capacity() * sizeof(RenderEntry));
-  }
-
-  return &m_EntryData.back();
 }
 
 void RenderVisitor::Draw()

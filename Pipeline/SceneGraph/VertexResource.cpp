@@ -40,38 +40,6 @@ void VertexResource::Unlock()
     m_Buffer->Unmap();
 }
 
-bool VertexResource::SetState() const 
-{
-    if ( GetElementCount() > 0 )
-    {
-        if ( m_Buffer == NULL )
-        {
-            HELIUM_BREAK();
-            return false;
-        }
-
-        if ( m_Buffer != m_Tracker->GetVertices() )
-        {
-#ifdef SCENE_DEBUG_RESOURCES
-            Log::Print("Setting vertices to 0x%p\n", m_Buffer);
-#endif
-            m_Device->SetStreamSource( 0, m_Buffer, 0, (UINT)ElementSizes[ GetElementType() ] );
-            m_Tracker->SetVertices( m_Buffer );
-        }
-
-        if ( ElementFormats[ GetElementType() ] != m_Tracker->GetVertexFormat() )
-        {
-#ifdef SCENE_DEBUG_RESOURCES
-            Log::Print("Setting FVF to 0x%x\n", ElementFormats[ m_ElementType ]);
-#endif
-            m_Device->SetFVF( ElementFormats[ GetElementType() ] );
-            m_Tracker->SetVertexFormat( ElementFormats[ GetElementType() ] );
-        }
-    }
-
-    return true;
-}
-
 bool VertexResource::Allocate() 
 {
     uint32_t size = GetElementCount() * VertexElementSizes[ GetElementType() ];

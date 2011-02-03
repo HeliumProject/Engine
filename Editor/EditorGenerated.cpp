@@ -8,7 +8,6 @@
 #include "Precompile.h"
 
 
-#include "Editor/Controls/Button.h"
 #include "Editor/Controls/EditorButton.h"
 #include "Editor/Controls/MenuButton.h"
 
@@ -733,11 +732,37 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	
-	m_OpenProjectButton = new Helium::Editor::Button( m_OpenOrCreateProjectPanel, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
-	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND, 5 );
+	m_OpenProjectButton = new Helium::Editor::EditorButton( m_OpenOrCreateProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111116;
+	bSizer43111116 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CreateNewProjectButton = new Helium::Editor::Button( m_OpenOrCreateProjectPanel, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxSize( -1,-1 ), wxBU_LEFT );
-	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND, 5 );
+	m_OpenProjectBitmap = new wxStaticBitmap( m_OpenProjectButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111116->Add( m_OpenProjectBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_OpenProjectText = new wxStaticText( m_OpenProjectButton, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OpenProjectText->Wrap( -1 );
+	bSizer43111116->Add( m_OpenProjectText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_OpenProjectButton->SetSizer( bSizer43111116 );
+	m_OpenProjectButton->Layout();
+	bSizer43111116->Fit( m_OpenProjectButton );
+	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_CreateNewProjectButton = new Helium::Editor::EditorButton( m_OpenOrCreateProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431111161;
+	bSizer431111161 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CreateNewProjectBitmap = new wxStaticBitmap( m_CreateNewProjectButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431111161->Add( m_CreateNewProjectBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CreateNewProjectText = new wxStaticText( m_CreateNewProjectButton, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CreateNewProjectText->Wrap( -1 );
+	bSizer431111161->Add( m_CreateNewProjectText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CreateNewProjectButton->SetSizer( bSizer431111161 );
+	m_CreateNewProjectButton->Layout();
+	bSizer431111161->Fit( m_CreateNewProjectButton );
+	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND | wxALL, 0 );
 	
 	bSizer361->Add( bSizer40, 1, wxEXPAND, 5 );
 	
@@ -753,18 +778,10 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();
-	
-	// Connect Events
-	m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
-	m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
-	// Disconnect Events
-	m_OpenProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
-	m_CreateNewProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
-	
 }
 
 PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )

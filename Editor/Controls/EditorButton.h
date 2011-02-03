@@ -21,7 +21,6 @@ namespace Helium
         protected:
             void OnUpdateUI( wxUpdateUIEvent& event );
 
-        private:
             bool m_ShowText;
             bool m_ShowIcons;
 

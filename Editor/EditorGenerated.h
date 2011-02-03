@@ -10,7 +10,6 @@
 
 #include <wx/intl.h>
 
-namespace Helium{ namespace Editor{ class Button; } }
 namespace Helium{ namespace Editor{ class EditorButton; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
@@ -270,17 +269,16 @@ namespace Helium
 				wxStaticLine* m_staticline16;
 				wxBoxSizer* m_RecentProjectsSizer;
 				wxStaticLine* m_staticline13;
-				
-				// Virtual event handlers, overide them in your derived class
-				virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNewProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
-				
+				wxStaticBitmap* m_OpenProjectBitmap;
+				wxStaticText* m_OpenProjectText;
+				wxStaticBitmap* m_CreateNewProjectBitmap;
+				wxStaticText* m_CreateNewProjectText;
 			
 			public:
 				Helium::Editor::MenuButton* m_OptionsButton;
 				wxPanel* m_OpenOrCreateProjectPanel;
-				Helium::Editor::Button* m_OpenProjectButton;
-				Helium::Editor::Button* m_CreateNewProjectButton;
+				Helium::Editor::EditorButton* m_OpenProjectButton;
+				Helium::Editor::EditorButton* m_CreateNewProjectButton;
 				
 				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL );
 				~ProjectPanelGenerated();

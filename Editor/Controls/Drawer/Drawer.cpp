@@ -38,7 +38,7 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
     buttonSizer->Add( m_ButtonText );
 
     m_ButtonBitmap = new wxStaticBitmap( m_Button, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
-    buttonSizer->Add( m_ButtonBitmap );
+    buttonSizer->Add( m_ButtonBitmap, 0, wxALIGN_BOTTOM | wxALIGN_RIGHT );
 
     m_Button->SetValue( false );
 

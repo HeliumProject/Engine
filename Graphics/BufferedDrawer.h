@@ -87,6 +87,13 @@ namespace Lunar
             uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex, uint32_t primitiveCount,
             RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
 
+        void DrawPoints(
+            const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ),
+            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+        void DrawPoints(
+            RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount,
+            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM,
@@ -273,6 +280,8 @@ namespace Lunar
 
             /// Untextured rendering vertex shader.
             RVertexShaderPtr spUntexturedVertexShader;
+            /// Untextured point sprite vertex shader.
+            RVertexShaderPtr spUntexturedPointsVertexShader;
             /// Untextured rendering pixel shader.
             RPixelShaderPtr spUntexturedPixelShader;
 
@@ -385,13 +394,17 @@ namespace Lunar
         DynArray< UntexturedDrawCall > m_solidDrawCalls[ DEPTH_MODE_MAX ];
         /// Textured draw call data using internal vertex/index buffers.
         DynArray< TexturedDrawCall > m_texturedDrawCalls[ DEPTH_MODE_MAX ];
+        /// Point draw call data using internal vertex/index buffers.
+        DynArray< UntexturedDrawCall > m_pointDrawCalls[ DEPTH_MODE_MAX ];
 
-        /// Wireframe draw call data using internal vertex/index buffers.
+        /// Wireframe draw call data using external vertex/index buffers.
         DynArray< UntexturedBufferDrawCall > m_wireBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid draw call data using internal vertex/index buffers.
+        /// Solid draw call data using external vertex/index buffers.
         DynArray< UntexturedBufferDrawCall > m_solidBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Textured draw call data using internal vertex/index buffers.
+        /// Textured draw call data using external vertex/index buffers.
         DynArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Point draw call data using external vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_pointBufferDrawCalls[ DEPTH_MODE_MAX ];
 
         /// World-space text draw call data.
         DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];

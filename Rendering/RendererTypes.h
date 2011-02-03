@@ -441,6 +441,8 @@ namespace Lunar
         RENDERER_PRIMITIVE_TYPE_FIRST   =  0,
         RENDERER_PRIMITIVE_TYPE_INVALID = -1,
 
+        /// Point list.
+        RENDERER_PRIMITIVE_TYPE_POINT_LIST,
         /// Line list.
         RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         /// Line strip.

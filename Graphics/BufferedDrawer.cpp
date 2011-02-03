@@ -117,10 +117,12 @@ void BufferedDrawer::Shutdown()
         m_wireDrawCalls[ depthModeIndex ].Clear();
         m_solidDrawCalls[ depthModeIndex ].Clear();
         m_texturedDrawCalls[ depthModeIndex ].Clear();
+        m_pointDrawCalls[ depthModeIndex ].Clear();
 
         m_wireBufferDrawCalls[ depthModeIndex ].Clear();
         m_solidBufferDrawCalls[ depthModeIndex ].Clear();
         m_texturedBufferDrawCalls[ depthModeIndex ].Clear();
+        m_pointBufferDrawCalls[ depthModeIndex ].Clear();
 
         m_worldTextDrawCalls[ depthModeIndex ].Clear();
     }
@@ -174,7 +176,7 @@ void BufferedDrawer::Shutdown()
 /// @param[in] blendColor      Color with which to blend each vertex color.
 /// @param[in] depthMode       Mode in which to handle depth testing and writing.
 ///
-/// @see DrawSolid(), DrawTextured()
+/// @see DrawSolid(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawWire(
     ERendererPrimitiveType primitiveType,
     const SimpleVertex* pVertices,
@@ -237,7 +239,7 @@ void BufferedDrawer::DrawWire(
 /// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
-/// @see DrawSolid(), DrawTextured()
+/// @see DrawSolid(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawWire(
     ERendererPrimitiveType primitiveType,
     RVertexBuffer* pVertices,
@@ -287,7 +289,7 @@ void BufferedDrawer::DrawWire(
 /// @param[in] blendColor      Color with which to blend each vertex color.
 /// @param[in] depthMode       Mode in which to handle depth testing and writing.
 ///
-/// @see DrawWire(), DrawTextured()
+/// @see DrawWire(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawSolid(
     ERendererPrimitiveType primitiveType,
     const SimpleVertex* pVertices,
@@ -350,7 +352,7 @@ void BufferedDrawer::DrawSolid(
 /// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
-/// @see DrawWire(), DrawTextured()
+/// @see DrawWire(), DrawTextured(), DrawPoints()
 void BufferedDrawer::DrawSolid(
     ERendererPrimitiveType primitiveType,
     RVertexBuffer* pVertices,
@@ -401,7 +403,7 @@ void BufferedDrawer::DrawSolid(
 /// @param[in] blendColor      Color with which to blend each vertex color.
 /// @param[in] depthMode       Mode in which to handle depth testing and writing.
 ///
-/// @see DrawWire(), DrawSolid()
+/// @see DrawWire(), DrawSolid(), DrawPoints()
 void BufferedDrawer::DrawTextured(
     ERendererPrimitiveType primitiveType,
     const SimpleTexturedVertex* pVertices,
@@ -456,8 +458,8 @@ void BufferedDrawer::DrawTextured(
 /// Buffer a textured primitive draw call.
 ///
 /// @param[in] primitiveType    Type of primitive to draw.
-/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
-///                             vertices.
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of
+///                             SimpleTexturedVertex vertices.
 /// @param[in] pIndices         Indices to use for drawing.  If this is null, unindexed rendering will be performed.
 /// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.  Index buffer values will be relative to
 ///                             this vertex.
@@ -468,7 +470,7 @@ void BufferedDrawer::DrawTextured(
 /// @param[in] blendColor       Color with which to blend each vertex color.
 /// @param[in] depthMode        Mode in which to handle depth testing and writing.
 ///
-/// @see DrawWire(), DrawSolid()
+/// @see DrawWire(), DrawSolid(), DrawPoints()
 void BufferedDrawer::DrawTextured(
     ERendererPrimitiveType primitiveType,
     RVertexBuffer* pVertices,
@@ -509,6 +511,88 @@ void BufferedDrawer::DrawTextured(
     pDrawCall->spTexture = pTexture;
     pDrawCall->spVertexBuffer = pVertices;
     pDrawCall->spIndexBuffer = pIndices;
+}
+
+/// Buffer a point list draw call using points larger than a pixel.
+///
+/// @param[in] pVertices   Vertices to use for drawing.
+/// @param[in] pointCount  Number of points to draw.
+/// @param[in] blendColor  Color with which to blend each vertex color.
+/// @param[in] depthMode   Mode in which to handle depth testing and writing.
+///
+/// @see DrawWire(), DrawSolid(), DrawTextured()
+void BufferedDrawer::DrawPoints(
+    const SimpleVertex* pVertices,
+    uint32_t pointCount,
+    Color blendColor,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pointCount );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    uint32_t baseVertexIndex = static_cast< uint32_t >( m_untexturedVertices.GetSize() );
+    m_untexturedVertices.AddArray( pVertices, pointCount );
+
+    UntexturedDrawCall* pDrawCall = m_pointDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->primitiveType = RENDERER_PRIMITIVE_TYPE_POINT_LIST;
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = pointCount;
+    SetInvalid( pDrawCall->startIndex );
+    pDrawCall->primitiveCount = pointCount;
+    pDrawCall->blendColor = blendColor;
+}
+
+/// Buffer a point list draw call using points larger than a pixel.
+///
+/// @param[in] pVertices        Vertex buffer to use for drawing.  This must contain a packed array of SimpleVertex
+///                             vertices.
+/// @param[in] baseVertexIndex  Index of the first vertex to use for rendering.
+/// @param[in] pointCount       Number of points to draw.
+/// @param[in] blendColor       Color with which to blend each vertex color.
+/// @param[in] depthMode        Mode in which to handle depth testing and writing.
+///
+/// @see DrawWire(), DrawSolid(), DrawTextured()
+void BufferedDrawer::DrawPoints(
+    RVertexBuffer* pVertices,
+    uint32_t baseVertexIndex,
+    uint32_t pointCount,
+    Color blendColor,
+    EDepthMode depthMode )
+{
+    HELIUM_ASSERT( pVertices );
+    HELIUM_ASSERT( pointCount );
+    HELIUM_ASSERT( static_cast< size_t >( depthMode ) < static_cast< size_t >( DEPTH_MODE_MAX ) );
+
+    // Cannot add draw calls while rendering.
+    HELIUM_ASSERT( !m_bDrawing );
+
+    // Don't buffer any drawing information if we have no renderer.
+    if( !Renderer::GetStaticInstance() )
+    {
+        return;
+    }
+
+    UntexturedBufferDrawCall* pDrawCall = m_pointBufferDrawCalls[ depthMode ].New();
+    HELIUM_ASSERT( pDrawCall );
+    pDrawCall->primitiveType = RENDERER_PRIMITIVE_TYPE_POINT_LIST;
+    pDrawCall->baseVertexIndex = baseVertexIndex;
+    pDrawCall->vertexCount = pointCount;
+    SetInvalid( pDrawCall->startIndex );
+    pDrawCall->primitiveCount = pointCount;
+    pDrawCall->blendColor = blendColor;
+    pDrawCall->spVertexBuffer = pVertices;
+    pDrawCall->spIndexBuffer = NULL;
 }
 
 /// Draw text in world space at a specific transform.
@@ -947,10 +1031,12 @@ void BufferedDrawer::EndDrawing()
     {
         m_worldTextDrawCalls[ depthModeIndex ].RemoveAll();
 
+        m_pointBufferDrawCalls[ depthModeIndex ].RemoveAll();
         m_texturedBufferDrawCalls[ depthModeIndex ].RemoveAll();
         m_solidBufferDrawCalls[ depthModeIndex ].RemoveAll();
         m_wireBufferDrawCalls[ depthModeIndex ].RemoveAll();
 
+        m_pointDrawCalls[ depthModeIndex ].RemoveAll();
         m_texturedDrawCalls[ depthModeIndex ].RemoveAll();
         m_solidDrawCalls[ depthModeIndex ].RemoveAll();
         m_wireDrawCalls[ depthModeIndex ].RemoveAll();
@@ -1042,6 +1128,22 @@ void BufferedDrawer::DrawWorldElements()
     HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_PIXEL );
     worldResources.spUntexturedPixelShader = static_cast< RPixelShader* >( pShaderResource );
 
+    static const Shader::SelectPair untexturedPointSelectOptions[] =
+    {
+        { Name( TXT( "TEXTURING" ) ), Name( TXT( "NONE" ) ) },
+        { Name( TXT( "POINT_SPRITE" ) ), Name( TXT( "1" ) ) },
+    };
+
+    optionSetIndex = rSystemOptions.GetOptionSetIndex(
+        RShader::TYPE_VERTEX,
+        NULL,
+        0,
+        untexturedPointSelectOptions,
+        HELIUM_ARRAY_COUNT( untexturedPointSelectOptions ) );
+    pShaderResource = pVertexShaderVariant->GetRenderResource( optionSetIndex );
+    HELIUM_ASSERT( !pShaderResource || pShaderResource->GetType() == RShader::TYPE_VERTEX );
+    worldResources.spUntexturedPointsVertexShader = static_cast< RVertexShader* >( pShaderResource );
+
     static const Shader::SelectPair textureBlendSelectOptions[] =
     {
         { Name( TXT( "TEXTURING" ) ), Name( TXT( "TEXTURING_BLEND" ) ) },
@@ -1119,6 +1221,15 @@ void BufferedDrawer::DrawWorldElements()
     worldResources.spCommandProxy->SetDepthStencilState( pDepthStencilState, 0 );
 
     DrawDepthModeWorldElements( worldResources, DEPTH_MODE_DISABLED );
+
+    // Unset resources.
+    stateCache.SetVertexBuffer( NULL, 0 );
+    stateCache.SetIndexBuffer( NULL );
+    stateCache.SetVertexShader( NULL );
+    stateCache.SetPixelShader( NULL );
+    stateCache.SetVertexInputLayout( NULL );
+    stateCache.SetPixelConstantBuffer( NULL );
+    stateCache.SetTexture( NULL );
 }
 
 /// Issue draw commands for buffered development-mode draw calls in screen space.
@@ -1647,7 +1758,93 @@ void BufferedDrawer::DrawDepthModeWorldElements( WorldElementResources& rWorldRe
         }
     }
 
-    pStateCache->SetPixelConstantBuffer( NULL );
+    // Draw non-pixel points.
+    const DynArray< UntexturedBufferDrawCall >& rPointBufferDrawCalls = m_pointBufferDrawCalls[ depthMode ];
+    size_t pointBufferDrawCallCount = rPointBufferDrawCalls.GetSize();
+    if( pointBufferDrawCallCount != 0 )
+    {
+        pStateCache->SetVertexShader( rWorldResources.spUntexturedPointsVertexShader );
+        pStateCache->SetPixelShader( rWorldResources.spUntexturedPixelShader );
+
+        rWorldResources.spUntexturedPointsVertexShader->CacheDescription(
+            pRenderer,
+            rWorldResources.spSimpleVertexDescription );
+        RVertexInputLayout* pVertexInputLayout = rWorldResources.spUntexturedPointsVertexShader->GetCachedInputLayout();
+        HELIUM_ASSERT( pVertexInputLayout );
+        pStateCache->SetVertexInputLayout( pVertexInputLayout );
+
+        pStateCache->SetRasterizerState( pRasterizerStateDefault );
+        pStateCache->SetBlendState( pBlendStateTransparent );
+
+        pStateCache->SetTexture( NULL );
+
+        for( size_t drawCallIndex = 0; drawCallIndex < pointBufferDrawCallCount; ++drawCallIndex )
+        {
+            const UntexturedBufferDrawCall& rDrawCall = rPointBufferDrawCalls[ drawCallIndex ];
+
+            pStateCache->SetVertexBuffer( rDrawCall.spVertexBuffer, static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+
+            RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                pCommandProxy,
+                rResourceSet,
+                rDrawCall.blendColor );
+            HELIUM_ASSERT( pPixelConstantBuffer );
+            pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
+            HELIUM_ASSERT( !rDrawCall.spIndexBuffer );  // No index buffer is given for points.
+            pCommandProxy->DrawUnindexed(
+                rDrawCall.primitiveType,
+                rDrawCall.baseVertexIndex,
+                rDrawCall.primitiveCount );
+        }
+    }
+
+    if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
+    {
+        const DynArray< UntexturedDrawCall >& rPointDrawCalls = m_pointDrawCalls[ depthMode ];
+        size_t pointDrawCallCount = rPointDrawCalls.GetSize();
+        if( pointDrawCallCount != 0 )
+        {
+            pStateCache->SetVertexShader( rWorldResources.spUntexturedPointsVertexShader );
+            pStateCache->SetPixelShader( rWorldResources.spUntexturedPixelShader );
+
+            pStateCache->SetVertexBuffer(
+                rResourceSet.spUntexturedVertexBuffer,
+                static_cast< uint32_t >( sizeof( SimpleVertex ) ) );
+            // No index buffer is given for points.
+
+            rWorldResources.spUntexturedPointsVertexShader->CacheDescription(
+                pRenderer,
+                rWorldResources.spSimpleVertexDescription );
+            RVertexInputLayout* pVertexInputLayout =
+                rWorldResources.spUntexturedPointsVertexShader->GetCachedInputLayout();
+            HELIUM_ASSERT( pVertexInputLayout );
+            pStateCache->SetVertexInputLayout( pVertexInputLayout );
+
+            pStateCache->SetRasterizerState( pRasterizerStateDefault );
+            pStateCache->SetBlendState( pBlendStateTransparent );
+
+            pStateCache->SetTexture( NULL );
+
+            for( size_t drawCallIndex = 0; drawCallIndex < pointDrawCallCount; ++drawCallIndex )
+            {
+                const UntexturedDrawCall& rDrawCall = rPointDrawCalls[ drawCallIndex ];
+
+                RConstantBuffer* pPixelConstantBuffer = SetInstancePixelConstantData(
+                    pCommandProxy,
+                    rResourceSet,
+                    rDrawCall.blendColor );
+                HELIUM_ASSERT( pPixelConstantBuffer );
+                pStateCache->SetPixelConstantBuffer( pPixelConstantBuffer );
+
+                // No index buffer is given for points.
+                pCommandProxy->DrawUnindexed(
+                    rDrawCall.primitiveType,
+                    rDrawCall.baseVertexIndex,
+                    rDrawCall.primitiveCount );
+            }
+        }
+    }
 }
 
 /// Set the pixel shader constant data for the current draw instance.

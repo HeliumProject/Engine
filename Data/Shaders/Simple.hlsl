@@ -6,6 +6,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 //! @sysselect TEXTURING NONE TEXTURING_BLEND TEXTURING_ALPHA
+//! @systoggle_v POINT_SPRITE
 
 #include "Common.inl"
 
@@ -33,14 +34,26 @@ cbuffer ViewGlobalData
     ViewVertexConstantGlobalData ViewGlobalData : register( c0 );
 }
 
-float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
-{
-	vOut.color = vIn.color;
-#if TEXTURING
-	vOut.texCoord = vIn.texCoord;
+void main(
+    VertexInput vIn,
+    out VertexOutput vOut,
+#if POINT_SPRITE
+    out float vPointSize : PSIZE,
 #endif
-	
-	return mul( ViewGlobalData.inverseViewProjection, vIn.position );
+    out float4 vPos : POSITION )
+{
+    vOut.color = vIn.color;
+#if TEXTURING
+    vOut.texCoord = vIn.texCoord;
+#endif
+
+#if POINT_SPRITE
+    // While it would be better to drive this using a shader constant, point sprites are rarely used in the engine, so
+    // this should cover their usual case.
+    vPointSize = 5.0f;
+#endif
+
+    vPos = mul( ViewGlobalData.inverseViewProjection, vIn.position );
 }
 
 #endif  // L_TYPE_VERTEX
@@ -54,20 +67,20 @@ Texture2D DiffuseMap;
 
 cbuffer InstanceData
 {
-	// Color to blend with each pixel color.
-	float4 BlendColor : register( c0 );
+    // Color to blend with each pixel color.
+    float4 BlendColor : register( c0 );
 }
 
 float4 main( VertexOutput vOut ) : SV_Target
 {
-	float4 color = BlendColor * vOut.color;
+    float4 color = BlendColor * vOut.color;
 #if TEXTURING_BLEND
-	color *= DiffuseMap.Sample( DefaultSamplerState, vOut.texCoord.xy );
+    color *= DiffuseMap.Sample( DefaultSamplerState, vOut.texCoord.xy );
 #elif TEXTURING_ALPHA
-	color.a *= DiffuseMap.Sample( DefaultSamplerState, vOut.texCoord.xy ).r;
+    color.a *= DiffuseMap.Sample( DefaultSamplerState, vOut.texCoord.xy ).r;
 #endif
 
-	return color;
+    return color;
 }
 
 #endif  // L_TYPE_PIXEL

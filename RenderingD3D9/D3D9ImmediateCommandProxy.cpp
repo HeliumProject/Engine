@@ -769,6 +769,8 @@ void D3D9ImmediateCommandProxy::DrawIndexed(
 
     static const D3DPRIMITIVETYPE d3dPrimitiveTypes[] =
     {
+        // RENDERER_PRIMITIVE_TYPE_POINT_LIST
+        D3DPT_POINTLIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_LIST
         D3DPT_LINELIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_STRIP
@@ -803,6 +805,8 @@ void D3D9ImmediateCommandProxy::DrawUnindexed(
 
     static const D3DPRIMITIVETYPE d3dPrimitiveTypes[] =
     {
+        // RENDERER_PRIMITIVE_TYPE_POINT_LIST
+        D3DPT_POINTLIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_LIST
         D3DPT_LINELIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_STRIP

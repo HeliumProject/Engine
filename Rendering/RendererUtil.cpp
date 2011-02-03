@@ -77,6 +77,11 @@ uint32_t RendererUtil::PrimitiveCountToIndexCount( ERendererPrimitiveType primit
 
     switch( primitiveType )
     {
+        case RENDERER_PRIMITIVE_TYPE_POINT_LIST:
+        {
+            return primitiveCount;
+        }
+
         case RENDERER_PRIMITIVE_TYPE_LINE_LIST:
         {
             return primitiveCount * 2;
@@ -121,6 +126,11 @@ uint32_t RendererUtil::IndexCountToPrimitiveCount( ERendererPrimitiveType primit
 
     switch( indexCount )
     {
+        case RENDERER_PRIMITIVE_TYPE_POINT_LIST:
+        {
+            return indexCount;
+        }
+
         case RENDERER_PRIMITIVE_TYPE_LINE_LIST:
         {
             return indexCount / 2;

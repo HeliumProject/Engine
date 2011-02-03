@@ -8,7 +8,6 @@
 #include "Editor/App.h"
 #include "Editor/Dialogs/FileDialog.h"
 
-#include "Editor/Controls/MultiStateBitmap.h"
 #include "Editor/Controls/Drawer/DrawerManager.h"
 
 using namespace Helium;

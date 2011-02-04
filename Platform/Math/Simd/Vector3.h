@@ -2,6 +2,7 @@
 
 #include "Platform/Math/Simd.h"
 #include "Platform/Math/MathCommon.h"
+#include "Platform/Utility.h"
 
 namespace Helium
 {

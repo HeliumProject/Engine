@@ -241,6 +241,11 @@ namespace Helium
                 return m_DrawInterface;
             }
 
+            DrawArgs* GetArgs() const
+            {
+                return m_Args;
+            }
+
             void Reset( DrawArgs* args, const SceneGraph::Viewport* view, Lunar::BufferedDrawer* drawInterface );
 
             void Draw();

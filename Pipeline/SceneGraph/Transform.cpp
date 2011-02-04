@@ -346,29 +346,15 @@ void Transform::Render( RenderVisitor* render )
 
     if (IsSelected() && m_Scene->IsCurrent())
     {
-        entry->m_Draw = &Transform::DrawSelected;
+        GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
     }
     else
     {
-        entry->m_Draw = &Transform::DrawNormal;
+        GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
     }
 #endif
 
     Base::Render( render );
-}
-
-void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
-{
-    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
-
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
-}
-
-void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
-{
-    const SceneGraph::HierarchyNode* node = Reflect::AssertCast<SceneGraph::HierarchyNode>( object );
-
-    node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }
 
 bool Transform::Pick( PickVisitor* pick )

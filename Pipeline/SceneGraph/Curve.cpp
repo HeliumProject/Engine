@@ -1,6 +1,8 @@
 /*#include "Precompile.h"*/
 #include "Curve.h"
 
+#include "Platform/Math/Simd/Quat.h"
+
 #include "Foundation/Log.h"
 #include "Foundation/Math/CalculateCurve.h"
 #include "Foundation/Math/AngleAxis.h"
@@ -107,16 +109,16 @@ void Curve::Initialize()
         }
     }
 
-    m_Locator = new PrimitiveLocator( m_Owner->GetViewport()->GetResources() );
+    m_Locator = new PrimitiveLocator;
     m_Locator->Update();
 
-    m_Cone = new PrimitiveCone( m_Owner->GetViewport()->GetResources() );
+    m_Cone = new PrimitiveCone;
     m_Cone->m_Radius = 0.2f;
     m_Cone->SetSolid(true);
     m_Cone->Update();
 
-    m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Vertices->SetElementType( ElementTypes::Position );
+    m_Vertices = new VertexResource;
+    m_Vertices->SetElementType( VertexElementTypes::SimpleVertex );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Curve::Populate ) );
 }
 
@@ -795,80 +797,63 @@ void Curve::Render( RenderVisitor* render )
 {
     HELIUM_ASSERT( render );
 
+    DrawArgs* args = render->GetArgs();
+    HELIUM_ASSERT( args );
+
     Lunar::BufferedDrawer* drawInterface = render->GetDrawInterface();
     HELIUM_ASSERT( drawInterface );
 
+    const VertexResource* vertices = m_Vertices;
 
-    RenderEntry* entry = render->Allocate(this);
-
-    entry->m_Location = render->State().m_Matrix;
-    entry->m_Center = m_ObjectBounds.Center();
-    entry->m_Draw = &Curve::Draw;
-
-    Base::Render( render );
-}
-
-void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const SceneNode* object )
-{
-    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
-    const Curve* curve = Reflect::AssertCast< Curve > ( node );
-
-    const VertexResource* vertices = curve->m_Vertices;
-
-    Viewport* view = node->GetOwner()->GetViewport();
-    Camera* camera = view->GetCamera();
-
-    uint32_t countCurvePoints    = (uint32_t)curve->m_Points.size();
-    uint32_t countControlPoints  = curve->GetNumberControlPoints();
+    uint32_t countCurvePoints    = (uint32_t)m_Points.size();
+    uint32_t countControlPoints  = GetNumberControlPoints();
 
     //
     //  Draw start end end locators
     //
 
-    Lunar::Color materialColor = curve->GetMaterialColor( curve->s_Material );
+    Lunar::Color materialColor = GetMaterialColor( s_Material );
 
-    Simd::Matrix44 globalTransform( curve->GetGlobalTransform().array1d );
+    Simd::Matrix44 globalTransform( GetGlobalTransform().array1d );
 
-    if ( !curve->m_Closed )
+    if ( !m_Closed )
     {
         Simd::Matrix44 m;
 
         if ( countCurvePoints > 0 )
         {
-            Simd::Vector3 point( &curve->m_Points[ 0 ].x );
+            Simd::Vector3 point( &m_Points[ 0 ].x );
             m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
-            curve->m_Locator->Draw( drawInterface, args, materialColor, m );
+            m_Locator->Draw( drawInterface, args, materialColor, m );
         }
 
         if ( countCurvePoints > 1 )
         {
-            Simd::Vector3 point( &curve->m_Points[ countCurvePoints - 1 ].x );
+            Simd::Vector3 point( &m_Points[ countCurvePoints - 1 ].x );
             m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
-            curve->m_Locator->Draw( drawInterface, args, m );
+            m_Locator->Draw( drawInterface, args, materialColor, m );
 
-            Simd::Vector3 p1( &curve->m_Points[ countCurvePoints - 2 ].x );
-            Simd::Vector3 p2( &curve->m_Points[ countCurvePoints - 1 ].x );
+            Simd::Vector3 p1( &m_Points[ countCurvePoints - 2 ].x );
+            Simd::Vector3 p2( &m_Points[ countCurvePoints - 1 ].x );
             Simd::Vector3 dir = ( p2 - p1 ).GetNormalized();
             AngleAxis angleAxis = AngleAxis::Rotation(
                 OutVector,
                 Vector3( dir.GetElement( 0 ), dir.GetElement( 1 ), dir.GetElement( 2 ) ) );
             m.SetRotationTranslation(
                 Simd::Quat( Simd::Vector3( &angleAxis.axis.x ), angleAxis.angle ),
-                p2 - ( dir * ( curve->m_Cone->m_Length * 0.5f ) ) );
+                p2 - ( dir * ( m_Cone->m_Length * 0.5f ) ) );
             m *= globalTransform;
 
-            curve->m_Cone->Draw( drawInterface, args, materialColor, m );
+            m_Cone->Draw( drawInterface, args, materialColor, m );
         }
     }
-
-    device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&globalTransform );
 
     if ( countCurvePoints > 0 ) 
     {
         //
         //  Draw Curve
         //
-        uint32_t countCurveLines = curve->m_Closed ? countCurvePoints : countCurvePoints - 1;
+        uint32_t countCurveLines = m_Closed ? countCurvePoints : countCurvePoints - 1;
 
         if ( countCurveLines > 0 )
         {
@@ -907,8 +892,10 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
         // Draw points hull
         //
 
-        if ( curve->m_Type != CurveType::Linear )
+        if ( m_Type != CurveType::Linear )
         {
+            uint32_t countControlLines = m_Closed ? countControlPoints : countControlPoints - 1;
+
             if ( countControlLines > 0 )
             {
                 drawInterface->DrawWire(
@@ -920,7 +907,7 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
                     countControlLines + 1,
                     0,
                     countControlLines,
-                    curve->s_HullMaterial );
+                    s_HullMaterial );
                 args->m_LineCount += countControlLines;
             }
         }
@@ -942,15 +929,10 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
         //  Overdraw selected points
         //
         {
-            Camera* camera = curve->GetOwner()->GetViewport()->GetCamera();
-            const Matrix4& viewMatrix = camera->GetViewport();
-            const Matrix4& projMatrix = camera->GetProjection();
-            ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
-            DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
+            Lunar::Color textColor( 0xffffffff );
 
-            device->SetMaterial( &Viewport::s_SelectedComponentMaterial );
-            OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
-            OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
+            OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
                 CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
@@ -958,16 +940,22 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
                 {
                     if ( point->IsSelected() )
                     {
-                        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + i, 1 );
+                        drawInterface->DrawPoints(
+                            globalTransform,
+                            vertices->GetBuffer(),
+                            vertices->GetBaseIndex() + i,
+                            1,
+                            Viewport::s_SelectedComponentMaterial,
+                            Lunar::BufferedDrawer::DEPTH_MODE_DISABLED );
                     }
 
-                    if ( curve->GetControlPointLabel() != ControlPointLabel::None )
+                    if ( GetControlPointLabel() != ControlPointLabel::None )
                     {
                         tstringstream label;
-                        switch ( curve->GetControlPointLabel() )
+                        switch ( GetControlPointLabel() )
                         {
                         case ControlPointLabel::CurveAndIndex:
-                            label << curve->GetName() << TXT( "[" ) << i << TXT( "]" );
+                            label << GetName() << TXT( "[" ) << i << TXT( "]" );
                             break;
 
                         case ControlPointLabel::IndexOnly:
@@ -975,26 +963,21 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
                             break;
                         }
 
-                        Vector3 position ( point->GetPosition() );
+                        Simd::Vector3 position( &point->GetPosition().x );
 
                         // local to global
-                        curve->GetGlobalTransform().TransformVertex( position );
+                        globalTransform.TransformPoint( position, position );
 
-                        // map to screen space
-                        float screenX = 0.0f;
-                        float screenY = 0.0f;
-                        camera->WorldToScreen( position, screenX, screenY );
+                        const int32_t offsetX = 0;
+                        const int32_t offsetY = 15;
 
-                        const float offsetX = 0;
-                        const float offsetY = 15;
-
-                        RECT rect;
-                        rect.top = (LONG)( screenY - offsetY );
-                        rect.left = (LONG)( screenX - offsetX );
-                        rect.right = (LONG)screenX;
-                        rect.bottom = (LONG)( screenY - 2 );
-
-                        font->DrawText( NULL, label.str().c_str(), (INT)label.str().length(), &rect, DT_NOCLIP, color );
+                        drawInterface->DrawProjectedText(
+                            position,
+                            offsetX,
+                            offsetY,
+                            String( label.str().c_str() ),
+                            textColor,
+                            Lunar::RenderResourceManager::DEBUG_FONT_SIZE_SMALL );
                     }
                     ++i;
                 }
@@ -1005,9 +988,8 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
         //  Overdraw highlighted points
         // 
         {
-            device->SetMaterial (&Viewport::s_HighlightedMaterial);
-            OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
-            OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
+            OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
                 CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
@@ -1015,19 +997,21 @@ void Curve::Draw( Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const Sc
                 {
                     if ( point->IsHighlighted() )
                     {
-                        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + i, 1 );
+                        drawInterface->DrawPoints(
+                            globalTransform,
+                            vertices->GetBuffer(),
+                            vertices->GetBaseIndex() + i,
+                            1,
+                            Viewport::s_HighlightedMaterial,
+                            Lunar::BufferedDrawer::DEPTH_MODE_DISABLED );
                     }
                     ++i;
                 }
             }
         }
-
-        //
-        // Restore render state
-        //
-
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
     }
+
+    Base::Render( render );
 }
 
 bool Curve::Pick( PickVisitor* pick )

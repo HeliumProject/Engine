@@ -6,10 +6,8 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Statistics::Statistics(IDirect3DDevice9* device)
-: m_Device (device)
-, m_Font (NULL)
-, m_FrameNumber (0)
+Statistics::Statistics()
+: m_FrameNumber (0)
 , m_Previous (0)
 {
   Create();

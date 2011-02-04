@@ -141,7 +141,6 @@ namespace Helium
             float32_t CalculateCurveLength() const;
 
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-            static void Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
 
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 

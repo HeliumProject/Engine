@@ -190,11 +190,19 @@ void RenderResourceManager::Initialize()
     vertexElements[ 2 ].semanticIndex = 0;
     vertexElements[ 2 ].bufferIndex = 0;
 
+    vertexElements[ 3 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
+    vertexElements[ 3 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+    vertexElements[ 3 ].semanticIndex = 1;
+    vertexElements[ 3 ].bufferIndex = 0;
+
     m_spSimpleVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 2 );
     HELIUM_ASSERT( m_spSimpleVertexDescription );
 
     m_spSimpleTexturedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
     HELIUM_ASSERT( m_spSimpleTexturedVertexDescription );
+
+    m_spProjectedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 4 );
+    HELIUM_ASSERT( m_spProjectedVertexDescription );
 
     vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
     vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
@@ -475,6 +483,7 @@ void RenderResourceManager::Shutdown()
     m_spSimpleTexturedVertexDescription.Release();
     m_spSimpleVertexDescription.Release();
     m_spScreenVertexDescription.Release();
+    m_spProjectedVertexDescription.Release();
 
     for( size_t descriptionIndex = 0;
         descriptionIndex < HELIUM_ARRAY_COUNT( m_staticMeshVertexDescriptions );
@@ -743,8 +752,8 @@ RSamplerState* RenderResourceManager::GetSamplerState(
 ///
 /// @return  SimpleVertex vertex description.
 ///
-/// @see GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 {
     return m_spSimpleVertexDescription;
@@ -754,8 +763,8 @@ RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 ///
 /// @return  SimpleTexturedVertex vertex description.
 ///
-/// @see GetSimpleVertexDescription(), GetScreenVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetScreenVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() const
 {
     return m_spSimpleTexturedVertexDescription;
@@ -765,11 +774,22 @@ RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() 
 ///
 /// @return  ScreenVertex vertex description.
 ///
-/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 {
     return m_spScreenVertexDescription;
+}
+
+/// Get the description for ProjectedVertex vertices.
+///
+/// @return  ScreenVertex vertex description.
+///
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
+RVertexDescription* RenderResourceManager::GetProjectedVertexDescription() const
+{
+    return m_spProjectedVertexDescription;
 }
 
 /// Get the description for static mesh vertices with the specified number of texture coordinate sets.
@@ -780,7 +800,7 @@ RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 /// @return  Vertex description.
 ///
 /// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+///      GetProjectedVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const
 {
     HELIUM_ASSERT( textureCoordinateSetCount >= 1 );
@@ -794,7 +814,7 @@ RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_
 /// @return  Skinned mesh vertex description.
 ///
 /// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
-///      GetStaticMeshVertexDescription()
+///      GetProjectedVertexDescription(), GetStaticMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSkinnedMeshVertexDescription() const
 {
     return m_spSkinnedMeshVertexDescription;

@@ -154,14 +154,6 @@ namespace Lunar
         return m_frustum;
     }
 
-    /// Get the constant buffer providing parameters used by the vertex shader for screen-space rendering.
-    ///
-    /// @return  Vertex shader constant buffer for screen-space rendering.
-    RConstantBuffer* GraphicsSceneView::GetScreenSpaceVertexConstantBuffer() const
-    {
-        return m_spScreenSpaceVertexConstantBuffer;
-    }
-
     /// Get the distance from the camera at which shadows should no longer be rendered.
     ///
     /// @return  Shadow cutoff distance.

@@ -151,6 +151,7 @@ namespace Lunar
         RVertexDescription* GetSimpleVertexDescription() const;
         RVertexDescription* GetSimpleTexturedVertexDescription() const;
         RVertexDescription* GetScreenVertexDescription() const;
+        RVertexDescription* GetProjectedVertexDescription() const;
         RVertexDescription* GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const;
         RVertexDescription* GetSkinnedMeshVertexDescription() const;
         //@}
@@ -198,6 +199,8 @@ namespace Lunar
         RVertexDescriptionPtr m_spSimpleTexturedVertexDescription;
         /// Screen-space vertex description.
         RVertexDescriptionPtr m_spScreenVertexDescription;
+        /// Projected vertex description.
+        RVertexDescriptionPtr m_spProjectedVertexDescription;
         /// Static mesh vertex descriptions.
         RVertexDescriptionPtr m_staticMeshVertexDescriptions[ MESH_TEXTURE_COORDINATE_SET_COUNT_MAX ];
         /// Skinned mesh vertex description.

@@ -126,10 +126,6 @@ namespace Lunar
         /// Depth-stencil surface for this view.
         RSurfacePtr m_spDepthStencilSurface;
 
-        /// Constant buffer specifying scale and offset values to apply to pixel coordinates during screen-space
-        /// rendering.
-        RConstantBufferPtr m_spScreenSpaceVertexConstantBuffer;
-
         /// Horizontal pixel coordinate of the upper-left corner of this view.
         uint32_t m_viewportX;
         /// Vertical pixel coordinate of the upper-left corner of this view.

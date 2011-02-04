@@ -615,17 +615,16 @@ void GraphicsScene::SwapDynamicConstantBuffers()
     m_constantBufferSetIndex = bufferSetIndex;
 
     // Update view constant buffers.
-    DynArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers =
-        m_viewVertexGlobalDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers =
-        m_viewVertexBasePassDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers =
-        m_viewPixelBasePassDataBuffers[ bufferSetIndex ];
+    DynArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers = m_viewVertexGlobalDataBuffers[ bufferSetIndex ];
+    DynArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers = m_viewVertexBasePassDataBuffers[ bufferSetIndex ];
+    DynArray< RConstantBufferPtr >& rViewVertexScreenDataBuffers = m_viewVertexScreenDataBuffers[ bufferSetIndex ];
+    DynArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers = m_viewPixelBasePassDataBuffers[ bufferSetIndex ];
     DynArray< RConstantBufferPtr >& rShadowViewVertexDataBuffers = m_shadowViewVertexDataBuffers[ bufferSetIndex ];
 
     size_t sceneViewCount = m_sceneViews.GetSize();
     size_t viewBufferCount = rViewVertexGlobalDataBuffers.GetSize();
     HELIUM_ASSERT( rViewVertexBasePassDataBuffers.GetSize() == viewBufferCount );
+    HELIUM_ASSERT( rViewVertexScreenDataBuffers.GetSize() == viewBufferCount );
     HELIUM_ASSERT( rViewPixelBasePassDataBuffers.GetSize() == viewBufferCount );
     HELIUM_ASSERT( rShadowViewVertexDataBuffers.GetSize() == viewBufferCount );
     if( viewBufferCount < sceneViewCount )
@@ -633,6 +632,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
         size_t additionalBufferCount = sceneViewCount - viewBufferCount;
         rViewVertexGlobalDataBuffers.Add( NULL, additionalBufferCount );
         rViewVertexBasePassDataBuffers.Add( NULL, additionalBufferCount );
+        rViewVertexScreenDataBuffers.Add( NULL, additionalBufferCount );
         rViewPixelBasePassDataBuffers.Add( NULL, additionalBufferCount );
         rShadowViewVertexDataBuffers.Add( NULL, additionalBufferCount );
     }
@@ -648,9 +648,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
         RConstantBufferPtr spBuffer = rViewVertexGlobalDataBuffers[ viewIndex ];
         if( !spBuffer )
         {
-            spBuffer = pRenderer->CreateConstantBuffer(
-                sizeof( float32_t ) * 32,
-                RENDERER_BUFFER_USAGE_DYNAMIC );
+            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
             if( !spBuffer )
             {
                 HELIUM_TRACE(
@@ -712,9 +710,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
         spBuffer = rViewVertexBasePassDataBuffers[ viewIndex ];
         if( !spBuffer )
         {
-            spBuffer = pRenderer->CreateConstantBuffer(
-                sizeof( float32_t ) * 24,
-                RENDERER_BUFFER_USAGE_DYNAMIC );
+            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 24, RENDERER_BUFFER_USAGE_DYNAMIC );
             if( !spBuffer )
             {
                 HELIUM_TRACE(
@@ -773,13 +769,64 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             spBuffer->Unmap();
         }
 
+        // Update the screen-space vertex shader constants.
+        spBuffer = rViewVertexScreenDataBuffers[ viewIndex ];
+        if( !spBuffer )
+        {
+            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 20, RENDERER_BUFFER_USAGE_DYNAMIC );
+            if( !spBuffer )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant " )
+                      TXT( "buffer creation failed!\n" ) ) );
+            }
+
+            rViewVertexScreenDataBuffers[ viewIndex ] = spBuffer;
+        }
+
+        if( spBuffer )
+        {
+            float32_t* pMappedData = static_cast< float32_t* >( spBuffer->Map( RENDERER_BUFFER_MAP_HINT_DISCARD ) );
+            HELIUM_ASSERT( pMappedData );
+
+            GraphicsSceneView& rView = m_sceneViews[ viewIndex ];
+
+            float32_t invWidth = 1.0f / static_cast< float32_t >( rView.GetViewportWidth() );
+            float32_t invHeight = 1.0f / static_cast< float32_t >( rView.GetViewportHeight() );
+
+            const Simd::Matrix44& rInverseViewProjectionMatrix = rView.GetInverseViewProjectionMatrix();
+
+            *( pMappedData++ ) = 2.0f * invWidth;
+            *( pMappedData++ ) = -2.0f * invHeight;
+            *( pMappedData++ ) = -1.0f - invWidth;
+            *( pMappedData++ ) = 1.0f + invHeight;
+
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 0 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 4 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 8 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 12 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 1 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 5 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 9 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 13 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 2 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 6 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 10 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 14 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 3 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 7 );
+            *( pMappedData++ ) = rInverseViewProjectionMatrix.GetElement( 11 );
+            *pMappedData       = rInverseViewProjectionMatrix.GetElement( 15 );
+
+            spBuffer->Unmap();
+        }
+
         // Update the base-pass pixel shader constants.
         spBuffer = rViewPixelBasePassDataBuffers[ viewIndex ];
         if( !spBuffer )
         {
-            spBuffer = pRenderer->CreateConstantBuffer(
-                sizeof( float32_t ) * 16,
-                RENDERER_BUFFER_USAGE_DYNAMIC );
+            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 16, RENDERER_BUFFER_USAGE_DYNAMIC );
             if( !spBuffer )
             {
                 HELIUM_TRACE(
@@ -823,9 +870,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
         spBuffer = rShadowViewVertexDataBuffers[ viewIndex ];
         if( !spBuffer )
         {
-            spBuffer = pRenderer->CreateConstantBuffer(
-                sizeof( float32_t ) * 32,
-                RENDERER_BUFFER_USAGE_DYNAMIC );
+            spBuffer = pRenderer->CreateConstantBuffer( sizeof( float32_t ) * 32, RENDERER_BUFFER_USAGE_DYNAMIC );
             if( !spBuffer )
             {
                 HELIUM_TRACE(
@@ -1266,22 +1311,26 @@ void GraphicsScene::DrawSceneView( uint_fast32_t viewIndex )
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
     // Draw buffered screen-space draw calls for the current scene and view.
-    RConstantBuffer* pScreenSpaceVertexConstantBuffer = rView.GetScreenSpaceVertexConstantBuffer();
-    spCommandProxy->SetVertexConstantBuffers( 0, 1, &pScreenSpaceVertexConstantBuffer );
-    spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
-
-    RBlendState* pBlendStateTranslucent = rRenderResourceManager.GetBlendState(
-        RenderResourceManager::BLEND_STATE_TRANSPARENT );
-    spCommandProxy->SetBlendState( pBlendStateTranslucent );
-
-    m_sceneBufferedDrawer.DrawScreenElements();
-
-    if( viewIndex < m_viewBufferedDrawers.GetSize() )
+    RConstantBuffer* pScreenSpaceVertexConstantBuffer =
+        m_viewVertexScreenDataBuffers[ m_constantBufferSetIndex ][ viewIndex ];
+    if( pScreenSpaceVertexConstantBuffer )
     {
-        BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
-        if( pDrawer )
+        spCommandProxy->SetVertexConstantBuffers( 0, 1, &pScreenSpaceVertexConstantBuffer );
+        spCommandProxy->SetRasterizerState( pRasterizerStateDefault );
+
+        RBlendState* pBlendStateTranslucent = rRenderResourceManager.GetBlendState(
+            RenderResourceManager::BLEND_STATE_TRANSPARENT );
+        spCommandProxy->SetBlendState( pBlendStateTranslucent );
+
+        m_sceneBufferedDrawer.DrawScreenElements();
+
+        if( viewIndex < m_viewBufferedDrawers.GetSize() )
         {
-            pDrawer->DrawScreenElements();
+            BufferedDrawer* pDrawer = m_viewBufferedDrawers[ viewIndex ];
+            if( pDrawer )
+            {
+                pDrawer->DrawScreenElements();
+            }
         }
     }
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

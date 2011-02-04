@@ -100,6 +100,36 @@ namespace Lunar
         //@}
     };
 
+    /// Vertex with world position and screen coordinate offset values.
+    struct LUNAR_GRAPHICS_TYPES_API ProjectedVertex
+    {
+        /// World position.
+        float32_t position[ 3 ];
+        /// Color.
+        uint8_t color[ 4 ];
+        /// Texture coordinates.
+        Float16 texCoords[ 2 ];
+        /// Screen offset.
+        float32_t screenOffset[ 2 ];
+
+        /// @name Construction/Destruction
+        //@{
+        inline ProjectedVertex();
+        inline ProjectedVertex(
+            float32_t positionX, float32_t positionY, float32_t positionZ, float32_t screenOffsetX,
+            float32_t screenOffsetY, Float16 texCoordU, Float16 texCoordV, uint8_t colorRed = 0xff,
+            uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
+        inline ProjectedVertex(
+            const Simd::Vector3& rPosition, const Simd::Vector2& rScreenOffset, const Simd::Vector2& rTexCoords,
+            const Color& rColor = Color( 0xffffffff ) );
+        //@}
+
+        /// @name Serialization
+        //@{
+        inline void Serialize( Serializer& s );
+        //@}
+    };
+
     /// Basic static mesh vertex type.
     template< size_t TexCoordSetCount >
     struct StaticMeshVertex

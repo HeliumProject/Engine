@@ -107,6 +107,10 @@ namespace Lunar
         void DrawScreenText(
             int32_t x, int32_t y, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
+        void DrawProjectedText(
+            const Simd::Vector3& rWorldOffset, int32_t screenOffsetX, int32_t screenOffsetY, const String& rText,
+            Color color = Color( 0xffffffff ),
+            RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
         //@}
 
         /// @name Rendering
@@ -162,8 +166,8 @@ namespace Lunar
             RTexture2dPtr spTexture;
         } HELIUM_SIMD_ALIGN_POST;
 
-        /// Text draw call information.
-        struct TextDrawCall
+        /// Screen-space text draw call information.
+        struct ScreenTextDrawCall
         {
             /// Horizontal pixel coordinate at which to render the text.
             int32_t x;
@@ -177,8 +181,15 @@ namespace Lunar
             uint32_t glyphCount;
         };
 
+        /// Projected text draw call information.
+        struct ProjectedTextDrawCall : ScreenTextDrawCall
+        {
+            /// Base world-space position at which to render the text.
+            float32_t worldPosition[ 3 ];
+        };
+
         /// Vertex and index buffer set for primitive drawing.
-        HELIUM_SIMD_ALIGN_PRE struct ResourceSet
+        struct ResourceSet
         {
             /// Vertex buffer for untextured primitive rendering.
             RVertexBufferPtr spUntexturedVertexBuffer;
@@ -192,20 +203,13 @@ namespace Lunar
 
             /// Vertex buffer for screen-space text rendering.
             RVertexBufferPtr spScreenSpaceTextVertexBuffer;
+            /// Vertex buffer for projected text rendering.
+            RVertexBufferPtr spProjectedTextVertexBuffer;
 
             /// Vertex constant buffers.
             RConstantBufferPtr instanceVertexConstantBuffers[ INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT ];
-            /// Current instance vertex constant buffer transform.
-            Simd::Matrix44 instanceVertexConstantTransform;
-            /// Index of the current instance vertex constant buffer.
-            uint32_t instanceVertexConstantBufferIndex;
-
             /// Pixel constant buffers.
             RConstantBufferPtr instancePixelConstantBuffers[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
-            /// Current instance pixel constant buffer blend color.
-            Color instancePixelConstantBlendColor;
-            /// Index of the current instance pixel constant buffer.
-            uint32_t instancePixelConstantBufferIndex;
 
             /// Maximum number of vertices in the untextured primitive vertex buffer.
             uint32_t untexturedVertexBufferSize;
@@ -219,6 +223,8 @@ namespace Lunar
 
             /// Maximum number of vertices in the screen-space text vertex buffer.
             uint32_t screenSpaceTextVertexBufferSize;
+            /// Maximum number of vertices in the projected text vertex buffer.
+            uint32_t projectedTextVertexBufferSize;
         } HELIUM_SIMD_ALIGN_POST;
 
         /// Cached renderer state information.
@@ -388,12 +394,54 @@ namespace Lunar
             /// Font resource being used for rendering.
             Font* m_pFont;
             /// Text draw call to update.
-            TextDrawCall* m_pDrawCall;
+            ScreenTextDrawCall* m_pDrawCall;
 
             /// Pixel x-coordinate at which to begin rendering the text.
             int32_t m_x;
             /// Pixel y-coordinate at which to begin rendering the text.
             int32_t m_y;
+            /// Color with which to render the text.
+            Color m_color;
+            /// Size at which to render the text.
+            RenderResourceManager::EDebugFontSize m_size;
+        };
+
+        /// Glyph handler for rendering projected text.
+        class LUNAR_GRAPHICS_API ProjectedTextGlyphHandler : NonCopyable
+        {
+        public:
+            /// @name Construction/Destruction
+            //@{
+            ProjectedTextGlyphHandler(
+                BufferedDrawer* pDrawer, Font* pFont, const Simd::Vector3& rWorldOffset, int32_t screenOffsetX,
+                int32_t screenOffsetY, Color color, RenderResourceManager::EDebugFontSize size );
+            //@}
+
+            /// @name Overloaded Operators
+            //@{
+            void operator()( const Font::Character* pCharacter );
+            //@}
+
+        private:
+            /// Pointer to the BufferedDrawer instance performing the rendering.
+            BufferedDrawer* m_pDrawer;
+            /// Font resource being used for rendering.
+            Font* m_pFont;
+            /// Text draw call to update.
+            ProjectedTextDrawCall* m_pDrawCall;
+
+            /// World x-coordinate at which to begin rendering the text.
+            float32_t m_worldOffsetX;
+            /// World y-coordinate at which to begin rendering the text.
+            float32_t m_worldOffsetY;
+            /// World z-coordinate at which to begin rendering the text.
+            float32_t m_worldOffsetZ;
+
+            /// Pixel x-coordinate at which to begin rendering the text.
+            int32_t m_screenOffsetX;
+            /// Pixel y-coordinate at which to begin rendering the text.
+            int32_t m_screenOffsetY;
+
             /// Color with which to render the text.
             Color m_color;
             /// Size at which to render the text.
@@ -432,17 +480,31 @@ namespace Lunar
         DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];
 
         /// Screen-space text draw call data.
-        DynArray< TextDrawCall > m_screenTextDrawCalls;
+        DynArray< ScreenTextDrawCall > m_screenTextDrawCalls;
         /// Screen-space text draw call glyph indices.
         DynArray< uint32_t > m_screenTextGlyphIndices;
+
+        /// Projected text draw call data.
+        DynArray< ProjectedTextDrawCall > m_projectedTextDrawCalls;
+        /// Projected text draw call glyph indices.
+        DynArray< uint32_t > m_projectedTextGlyphIndices;
 
         /// Index buffer for screen-space text rendering.
         RIndexBufferPtr m_spScreenSpaceTextIndexBuffer;
 
         /// Render fences used to mark the end of when a per-instance vertex shader constant buffer is in use.
         RFencePtr m_instanceVertexConstantFences[ INSTANCE_VERTEX_CONSTANT_BUFFER_COUNT ];
+        /// Current instance vertex constant buffer transform.
+        Simd::Matrix44 m_instanceVertexConstantTransform;
+        /// Index of the current instance vertex constant buffer.
+        uint32_t m_instanceVertexConstantBufferIndex;
+
         /// Render fences used to mark the end of when a per-instance pixel shader constant buffer is in use.
         RFencePtr m_instancePixelConstantFences[ INSTANCE_PIXEL_CONSTANT_BUFFER_COUNT ];
+        /// Current instance pixel constant buffer blend color.
+        Color m_instancePixelConstantBlendColor;
+        /// Index of the current instance pixel constant buffer.
+        uint32_t m_instancePixelConstantBufferIndex;
 
         /// Rendering resource data.
         ResourceSet m_resourceSets[ 2 ];

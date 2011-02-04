@@ -190,6 +190,8 @@ namespace Lunar
         DynArray< RConstantBufferPtr > m_viewVertexGlobalDataBuffers[ 2 ];
         /// Per-view base-pass vertex constant buffers.
         DynArray< RConstantBufferPtr > m_viewVertexBasePassDataBuffers[ 2 ];
+        /// Per-view screen-space vertex constant buffers.
+        DynArray< RConstantBufferPtr > m_viewVertexScreenDataBuffers[ 2 ];
 
         /// Per-view base-pass pixel constant buffers.
         DynArray< RConstantBufferPtr > m_viewPixelBasePassDataBuffers[ 2 ];

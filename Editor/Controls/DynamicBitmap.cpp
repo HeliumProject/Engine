@@ -46,6 +46,9 @@ void DynamicBitmap::Initialize()
     }
 
     m_Bitmaps[m_CurrentState] = new wxBitmap( GetBitmap() );
+
+    SetExtraStyle( GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES );
+    Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DynamicBitmap::OnUpdateUI ), NULL, this );
 }
 
 void DynamicBitmap::Cleanup()
@@ -60,12 +63,54 @@ void DynamicBitmap::Cleanup()
             m_Bitmaps[state] = NULL;
         }
     }
+
+    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DynamicBitmap::OnUpdateUI ), NULL, this );
+}
+
+void DynamicBitmap::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    bool needsUpdate = false;
+
+    if ( !IsEnabled() )
+    {
+        if ( m_CurrentState != wxButtonBase::State_Disabled )
+        {
+            m_CurrentState = wxButtonBase::State_Disabled;
+            needsUpdate = true;
+        }
+    }
+    else
+    {
+        if ( IsMouseInWindow() )
+        {
+            if ( m_CurrentState != wxButtonBase::State_Current )
+            {
+                m_CurrentState = wxButtonBase::State_Current;
+                needsUpdate = true;
+            }
+        }
+        else
+        {
+            if ( m_CurrentState != wxButtonBase::State_Normal )
+            {
+                m_CurrentState = wxButtonBase::State_Normal;
+                needsUpdate = true;
+            }
+        }
+    }
+
+    if ( needsUpdate )
+    {
+        RefreshBitmapFromState();
+    }
 }
 
 void DynamicBitmap::RefreshBitmapFromState()
 {
     wxButtonBase::State state = IsEnabled() ? m_CurrentState : wxButtonBase::State_Disabled;
-    SetImage( m_Bitmaps[state] );
+    wxBitmap* currentBitmap = m_Bitmaps[ state ] ? m_Bitmaps[ state ] : m_Bitmaps[ wxButtonBase::State_Normal ];
+    HELIUM_ASSERT( currentBitmap );
+    SetImage( currentBitmap );
     Refresh();
 }
 

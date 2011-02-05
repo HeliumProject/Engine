@@ -8,6 +8,7 @@
 #include "Editor/Inspect/StripCanvas.h"
 
 #include "Editor/Controls/EditorButton.h"
+#include "Editor/Controls/DynamicBitmap.h"
 #include "Editor/Controls/Drawer/DrawerManager.h"
 
 

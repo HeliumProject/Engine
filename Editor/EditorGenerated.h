@@ -10,6 +10,7 @@
 
 #include <wx/intl.h>
 
+namespace Helium{ namespace Editor{ class DynamicBitmap; } }
 namespace Helium{ namespace Editor{ class EditorButton; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
@@ -224,19 +225,19 @@ namespace Helium
 			protected:
 				wxPanel* m_LayerManagementPanel;
 				wxStaticText* m_NewLayerFromSelectionText;
-				wxStaticBitmap* m_NewLayerFromSelectionBitmap;
+				Helium::Editor::DynamicBitmap* m_NewLayerFromSelectionBitmap;
 				wxStaticText* m_NewLayerText;
-				wxStaticBitmap* m_NewLayerBitmap;
+				Helium::Editor::DynamicBitmap* m_NewLayerBitmap;
 				wxStaticText* m_DeleteLayersText;
-				wxStaticBitmap* m_DeleteLayersBitmap;
+				Helium::Editor::DynamicBitmap* m_DeleteLayersBitmap;
 				wxStaticLine* m_staticline4;
 				wxStaticText* m_AddToLayerText;
-				wxStaticBitmap* m_AddToLayerBitmap;
+				Helium::Editor::DynamicBitmap* m_AddToLayerBitmap;
 				wxStaticText* m_RemoveFromLayerText;
-				wxStaticBitmap* m_RemoveFromLayerBitmap;
+				Helium::Editor::DynamicBitmap* m_RemoveFromLayerBitmap;
 				wxStaticLine* m_staticline5;
 				wxStaticText* m_SelectMembersText;
-				wxStaticBitmap* m_SelectMembersBitmap;
+				Helium::Editor::DynamicBitmap* m_SelectMembersBitmap;
 			
 			public:
 				Helium::Editor::EditorButton* m_NewLayerFromSelectionButton;
@@ -269,9 +270,9 @@ namespace Helium
 				wxStaticLine* m_staticline16;
 				wxBoxSizer* m_RecentProjectsSizer;
 				wxStaticLine* m_staticline13;
-				wxStaticBitmap* m_OpenProjectBitmap;
+				Helium::Editor::DynamicBitmap* m_OpenProjectBitmap;
 				wxStaticText* m_OpenProjectText;
-				wxStaticBitmap* m_CreateNewProjectBitmap;
+				Helium::Editor::DynamicBitmap* m_CreateNewProjectBitmap;
 				wxStaticText* m_CreateNewProjectText;
 			
 			public:
@@ -320,31 +321,31 @@ namespace Helium
 			protected:
 				wxPanel* m_MainPanel;
 				wxStaticText* m_SelectText;
-				wxStaticBitmap* m_SelectBitmap;
+				Helium::Editor::DynamicBitmap* m_SelectBitmap;
 				wxStaticText* m_TranslateText;
-				wxStaticBitmap* m_TranslateBitmap;
+				Helium::Editor::DynamicBitmap* m_TranslateBitmap;
 				wxStaticText* m_RotateText;
-				wxStaticBitmap* m_RotateBitmap;
+				Helium::Editor::DynamicBitmap* m_RotateBitmap;
 				wxStaticText* m_ScaleText;
-				wxStaticBitmap* m_ScaleBitmap;
+				Helium::Editor::DynamicBitmap* m_ScaleBitmap;
 				wxStaticText* m_DuplicateToolText;
-				wxStaticBitmap* m_DuplicateToolBitmap;
+				Helium::Editor::DynamicBitmap* m_DuplicateToolBitmap;
 				wxStaticText* m_LocatorToolText;
-				wxStaticBitmap* m_LocatorToolBitmap;
+				Helium::Editor::DynamicBitmap* m_LocatorToolBitmap;
 				wxStaticText* m_VolumeToolText;
-				wxStaticBitmap* m_VolumeToolBitmap;
+				Helium::Editor::DynamicBitmap* m_VolumeToolBitmap;
 				wxStaticText* m_EntityToolText;
-				wxStaticBitmap* m_EntityToolBitmap;
+				Helium::Editor::DynamicBitmap* m_EntityToolBitmap;
 				wxStaticText* m_CurveToolText;
-				wxStaticBitmap* m_CurveToolBitmap;
+				Helium::Editor::DynamicBitmap* m_CurveToolBitmap;
 				wxStaticText* m_CurveEditToolText;
-				wxStaticBitmap* m_CurveEditToolBitmap;
+				Helium::Editor::DynamicBitmap* m_CurveEditToolBitmap;
 				wxStaticText* m_PlayText;
-				wxStaticBitmap* m_PlayBitmap;
+				Helium::Editor::DynamicBitmap* m_PlayBitmap;
 				wxStaticText* m_PauseText;
-				wxStaticBitmap* m_PauseBitmap;
+				Helium::Editor::DynamicBitmap* m_PauseBitmap;
 				wxStaticText* m_StopText;
-				wxStaticBitmap* m_StopBitmap;
+				Helium::Editor::DynamicBitmap* m_StopBitmap;
 				
 				
 				wxPanel* m_ToolsPropertiesPanel;
@@ -427,51 +428,51 @@ namespace Helium
 			protected:
 				wxPanel* m_ToolPanel;
 				wxStaticText* m_FrameOriginText;
-				wxStaticBitmap* m_FrameOriginBitmap;
+				Helium::Editor::DynamicBitmap* m_FrameOriginBitmap;
 				wxStaticText* m_FrameSelectionText;
-				wxStaticBitmap* m_FrameSelectionBitmap;
+				Helium::Editor::DynamicBitmap* m_FrameSelectionBitmap;
 				wxStaticText* m_HighlightModeToggleText;
-				wxStaticBitmap* m_HighlightModeToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_HighlightModeToggleBitmap;
 				wxStaticText* m_PreviousViewText;
-				wxStaticBitmap* m_PreviousViewBitmap;
+				Helium::Editor::DynamicBitmap* m_PreviousViewBitmap;
 				wxStaticText* m_NextViewText;
-				wxStaticBitmap* m_NextViewBitmap;
+				Helium::Editor::DynamicBitmap* m_NextViewBitmap;
 				wxStaticText* m_OrbitViewToggleText;
-				wxStaticBitmap* m_OrbitViewToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_OrbitViewToggleBitmap;
 				wxStaticText* m_FrontViewToggleText;
-				wxStaticBitmap* m_FrontViewToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_FrontViewToggleBitmap;
 				wxStaticText* m_SideViewToggleText;
-				wxStaticBitmap* m_SideViewToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_SideViewToggleBitmap;
 				wxStaticText* m_TopViewToggleText;
-				wxStaticBitmap* m_TopViewToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_TopViewToggleBitmap;
 				wxStaticText* m_ShowAxesToggleText;
-				wxStaticBitmap* m_ShowAxesToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ShowAxesToggleBitmap;
 				wxStaticText* m_ShowGridToggleText;
-				wxStaticBitmap* m_ShowGridToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ShowGridToggleBitmap;
 				wxStaticText* m_ShowBoundsToggleText;
-				wxStaticBitmap* m_ShowBoundsToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ShowBoundsToggleBitmap;
 				wxStaticText* m_ShowStatisticsToggleText;
-				wxStaticBitmap* m_ShowStatisticsToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ShowStatisticsToggleBitmap;
 				wxStaticText* m_FrustumCullingToggleText;
-				wxStaticBitmap* m_FrustumCullingToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_FrustumCullingToggleBitmap;
 				wxStaticText* m_BackfaceCullingToggleText;
-				wxStaticBitmap* m_BackfaceCullingToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_BackfaceCullingToggleBitmap;
 				wxStaticText* m_WireframeShadingToggleText;
-				wxStaticBitmap* m_WireframeShadingToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_WireframeShadingToggleBitmap;
 				wxStaticText* m_MaterialShadingToggleText;
-				wxStaticBitmap* m_MaterialShadingToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_MaterialShadingToggleBitmap;
 				wxStaticText* m_TextureShadingToggleText;
-				wxStaticBitmap* m_TextureShadingToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_TextureShadingToggleBitmap;
 				wxStaticText* m_ColorModeSceneToggleText;
-				wxStaticBitmap* m_ColorModeSceneToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ColorModeSceneToggleBitmap;
 				wxStaticText* m_ColorModeLayerToggleText;
-				wxStaticBitmap* m_ColorModeLayerToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ColorModeLayerToggleBitmap;
 				wxStaticText* m_ColorModeTypeToggleText;
-				wxStaticBitmap* m_ColorModeTypeToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ColorModeTypeToggleBitmap;
 				wxStaticText* m_ColorModeScaleToggleText;
-				wxStaticBitmap* m_ColorModeScaleToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ColorModeScaleToggleBitmap;
 				wxStaticText* m_ColorModeScaleGradientToggleText;
-				wxStaticBitmap* m_ColorModeScaleGradientToggleBitmap;
+				Helium::Editor::DynamicBitmap* m_ColorModeScaleGradientToggleBitmap;
 				wxPanel* m_ViewContainerPanel;
 			
 			public:

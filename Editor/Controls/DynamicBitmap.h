@@ -79,6 +79,8 @@ namespace Helium
             void Initialize();
             void Cleanup();
 
+            virtual void OnUpdateUI( wxUpdateUIEvent& event );
+
             void RefreshBitmapFromState();
             void DoSetBitmap( const wxBitmap& bitmap, wxButtonBase::State state );
 

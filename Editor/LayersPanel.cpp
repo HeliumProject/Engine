@@ -5,6 +5,7 @@
 #include "EditorIDs.h"
 
 #include "Editor/Controls/EditorButton.h"
+#include "Editor/Controls/DynamicBitmap.h"
 #include "Pipeline/SceneGraph/DependencyCommand.h"
 
 using namespace Helium;

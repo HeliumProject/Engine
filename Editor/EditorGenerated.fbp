@@ -2564,7 +2564,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
@@ -2805,7 +2805,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -2974,7 +2974,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3143,7 +3143,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3366,7 +3366,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3535,7 +3535,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3758,7 +3758,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -3853,7 +3853,7 @@
                 <property name="name">bSizer24</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="1">
+                <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
@@ -4156,7 +4156,7 @@
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
                                 <property name="proportion">0</property>
-                                <object class="wxPanel" expanded="0">
+                                <object class="wxPanel" expanded="1">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4203,16 +4203,16 @@
                                     <event name="OnSetFocus"></event>
                                     <event name="OnSize"></event>
                                     <event name="OnUpdateUI"></event>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer45</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="0">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag"></property>
                                             <property name="proportion">0</property>
-                                            <object class="wxBoxSizer" expanded="0">
+                                            <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer43</property>
                                                 <property name="orient">wxHORIZONTAL</property>
@@ -4451,11 +4451,11 @@
                                     </object>
                                 </object>
                             </object>
-                            <object class="sizeritem" expanded="1">
+                            <object class="sizeritem" expanded="0">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
                                 <property name="proportion">1</property>
-                                <object class="wxPanel" expanded="1">
+                                <object class="wxPanel" expanded="0">
                                     <property name="bg"></property>
                                     <property name="context_help"></property>
                                     <property name="context_menu">1</property>
@@ -4502,25 +4502,25 @@
                                     <event name="OnSetFocus"></event>
                                     <event name="OnSize"></event>
                                     <event name="OnUpdateUI"></event>
-                                    <object class="wxBoxSizer" expanded="1">
+                                    <object class="wxBoxSizer" expanded="0">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer361</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxBoxSizer" expanded="1">
+                                            <object class="wxBoxSizer" expanded="0">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer40</property>
                                                 <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">0</property>
                                                     <property name="flag">wxEXPAND | wxALL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxPanel" expanded="1">
+                                                    <object class="wxPanel" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -4567,16 +4567,16 @@
                                                         <event name="OnSetFocus"></event>
                                                         <event name="OnSize"></event>
                                                         <event name="OnUpdateUI"></event>
-                                                        <object class="wxBoxSizer" expanded="1">
+                                                        <object class="wxBoxSizer" expanded="0">
                                                             <property name="minimum_size"></property>
                                                             <property name="name">bSizer43111116</property>
                                                             <property name="orient">wxHORIZONTAL</property>
                                                             <property name="permission">none</property>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
                                                                 <property name="flag">wxALIGN_CENTER|wxALL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticBitmap" expanded="1">
+                                                                <object class="wxStaticBitmap" expanded="0">
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
                                                                     <property name="context_help"></property>
@@ -4592,7 +4592,7 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pos"></property>
                                                                     <property name="size"></property>
-                                                                    <property name="subclass"></property>
+                                                                    <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
                                                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -4626,11 +4626,11 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
                                                                 <property name="flag">wxALIGN_CENTER|wxALL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticText" expanded="1">
+                                                                <object class="wxStaticText" expanded="0">
                                                                     <property name="bg"></property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
@@ -4685,11 +4685,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">0</property>
                                                     <property name="flag">wxEXPAND | wxALL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxPanel" expanded="1">
+                                                    <object class="wxPanel" expanded="0">
                                                         <property name="bg"></property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -4736,16 +4736,16 @@
                                                         <event name="OnSetFocus"></event>
                                                         <event name="OnSize"></event>
                                                         <event name="OnUpdateUI"></event>
-                                                        <object class="wxBoxSizer" expanded="1">
+                                                        <object class="wxBoxSizer" expanded="0">
                                                             <property name="minimum_size"></property>
                                                             <property name="name">bSizer431111161</property>
                                                             <property name="orient">wxHORIZONTAL</property>
                                                             <property name="permission">none</property>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
                                                                 <property name="flag">wxALIGN_CENTER|wxALL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticBitmap" expanded="1">
+                                                                <object class="wxStaticBitmap" expanded="0">
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
                                                                     <property name="context_help"></property>
@@ -4761,7 +4761,7 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pos"></property>
                                                                     <property name="size"></property>
-                                                                    <property name="subclass"></property>
+                                                                    <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                                     <property name="tooltip"></property>
                                                                     <property name="validator_data_type"></property>
                                                                     <property name="validator_style">wxFILTER_NONE</property>
@@ -4795,11 +4795,11 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="1">
+                                                            <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
                                                                 <property name="flag">wxALIGN_CENTER|wxALL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticText" expanded="1">
+                                                                <object class="wxStaticText" expanded="0">
                                                                     <property name="bg"></property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
@@ -5391,7 +5391,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -5560,7 +5560,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -5729,7 +5729,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -5898,7 +5898,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6121,7 +6121,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6290,7 +6290,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6459,7 +6459,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6628,7 +6628,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6797,7 +6797,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -6966,7 +6966,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -7245,7 +7245,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -7414,7 +7414,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -7583,7 +7583,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -8413,7 +8413,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -8582,7 +8582,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -8805,7 +8805,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9028,7 +9028,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9197,7 +9197,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9420,7 +9420,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9589,7 +9589,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9758,7 +9758,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -9927,7 +9927,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -10150,7 +10150,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -10319,7 +10319,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -10488,7 +10488,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -10657,7 +10657,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -10880,7 +10880,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -11049,7 +11049,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -11272,7 +11272,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -11441,7 +11441,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -11610,7 +11610,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -11833,7 +11833,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -12002,7 +12002,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -12171,7 +12171,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -12340,7 +12340,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
@@ -12509,7 +12509,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>
-                                                <property name="subclass"></property>
+                                                <property name="subclass">Helium::Editor::DynamicBitmap; Editor/Controls/DynamicBitmap.h</property>
                                                 <property name="tooltip"></property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>

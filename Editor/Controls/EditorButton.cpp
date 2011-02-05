@@ -42,7 +42,7 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
 
     bool needsUpdate = false;
 
-    if ( settings->m_ShowTextOnButtons != m_ShowText )
+    if ( !( GetOptions() & PanelButtonOptions::AlwaysShowText ) && ( settings->m_ShowTextOnButtons != m_ShowText ) )
     {
         m_ShowText = settings->m_ShowTextOnButtons;
         needsUpdate = true;

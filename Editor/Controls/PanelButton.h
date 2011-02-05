@@ -13,6 +13,7 @@ namespace Helium
             enum PanelButtonOption
             {
                 Toggle = 1 << 0,
+                AlwaysShowText = 1 << 1,
             };
 
             const uint32_t Default = 0;

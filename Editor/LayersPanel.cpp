@@ -67,6 +67,13 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     m_LayerManagementPanel->SetHelpText( TXT( "This is the layer toolbar." ) );
     m_Grid->GetPanel()->SetHelpText( TXT( "This is the layer grid, you can select a layer to manipulate here." ) );
 
+    m_NewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayer ), NULL, this );
+    m_NewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayerFromSelection ), NULL, this );
+    m_DeleteLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnDeleteLayer ), NULL, this );
+    m_AddToLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnAddSelectionToLayer ), NULL, this );
+    m_RemoveFromLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnRemoveSelectionFromLayer ), NULL, this );
+    m_SelectMembersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnSelectLayerMembers ), NULL, this );
+
     // Make sure the toolbar buttons start out disabled
     UpdateToolBarButtons();
 
@@ -85,6 +92,13 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
 
 LayersPanel::~LayersPanel()
 {
+    m_NewLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayer ), NULL, this );
+    m_NewLayerFromSelectionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayerFromSelection ), NULL, this );
+    m_DeleteLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnDeleteLayer ), NULL, this );
+    m_AddToLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnAddSelectionToLayer ), NULL, this );
+    m_RemoveFromLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnRemoveSelectionFromLayer ), NULL, this );
+    m_SelectMembersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnSelectLayerMembers ), NULL, this );
+
     // Remove listeners that are not dependent on the current scene
     if ( m_SceneManager )
     {

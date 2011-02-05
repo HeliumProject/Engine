@@ -154,6 +154,8 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
     m_FrontViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
     m_SideViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
     m_TopViewToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnCamera ), NULL, this );
+    m_ShowAxesToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnToggleShowAxes ), NULL, this );
+    m_ShowGridToggleButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ViewPanel::OnToggleShowGrid ), NULL, this );
 
     Layout();
 }
@@ -439,6 +441,22 @@ void ViewPanel::OnToggleHighlightMode( wxCommandEvent& event )
 {
     m_ViewCanvas->GetViewport().SetHighlighting( !m_ViewCanvas->GetViewport().IsHighlighting() );
     m_HighlightModeToggleButton->SetValue( m_ViewCanvas->GetViewport().IsHighlighting() );
+    Refresh();
+    event.Skip( false );
+}
+
+void ViewPanel::OnToggleShowAxes( wxCommandEvent& event )
+{
+    m_ViewCanvas->GetViewport().SetAxesVisible( !m_ViewCanvas->GetViewport().IsAxesVisible() );
+    m_ShowAxesToggleButton->SetValue( m_ViewCanvas->GetViewport().IsAxesVisible() );
+    Refresh();
+    event.Skip( false );
+}
+
+void ViewPanel::OnToggleShowGrid( wxCommandEvent& event )
+{
+    m_ViewCanvas->GetViewport().SetGridVisible( !m_ViewCanvas->GetViewport().IsGridVisible() );
+    m_ShowGridToggleButton->SetValue( m_ViewCanvas->GetViewport().IsGridVisible() );
     Refresh();
     event.Skip( false );
 }

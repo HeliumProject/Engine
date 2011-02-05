@@ -98,6 +98,8 @@ namespace Helium
             void OnFrameOrigin( wxCommandEvent& event );
             void OnFrameSelected( wxCommandEvent& event );
             void OnToggleHighlightMode( wxCommandEvent& event );
+            void OnToggleShowAxes( wxCommandEvent& event );
+            void OnToggleShowGrid( wxCommandEvent& event );
             void OnNextView( wxCommandEvent& event );
             void OnPreviousView( wxCommandEvent& event );
 

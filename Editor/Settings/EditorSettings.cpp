@@ -16,7 +16,7 @@ EditorSettings::EditorSettings()
 : m_ReopenLastProjectOnStartup( true )
 , m_ShowFileExtensionsInProjectView( false )
 , m_EnableAssetTracker( true )
-, m_ShowTextOnButtons( true )
+, m_ShowTextOnButtons( false )
 , m_ShowIconsOnButtons( true )
 {
 }

@@ -195,12 +195,6 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
 
-    // Vault
-    m_VaultPanel = new VaultPanel( this );
-    wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 );
-    m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
-    //m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
-
     // Help
     m_HelpPanel = new HelpPanel( this );
     wxAuiPaneInfo helpPaneInfo = wxAuiPaneInfo().Name( wxT( "help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 2 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 200, 200 ) );
@@ -211,15 +205,19 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_DirectoryPanel = new DirectoryPanel( &m_SceneManager, &m_TreeMonitor, this );
     m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
 
-    // Properties/Layers/Types area
+    // Properties/Layers/Vault area
     m_PropertiesPanel = new PropertiesPanel( this );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
     m_LayersPanel = new LayersPanel( &m_SceneManager, this );
-    m_FrameManager.AddPane( m_LayersPanel, wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ) );
+    wxAuiPaneInfo layersPaneInfo = wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 400, 200 ) );
+    layersPaneInfo.dock_proportion = 10000;
+    m_FrameManager.AddPane( m_LayersPanel, layersPaneInfo );
 
-    m_TypesPanel = new TypesPanel( &m_SceneManager, this );
-    m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
+    // Vault (hidden by default)
+    m_VaultPanel = new VaultPanel( this );
+    wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 ).Hide();
+    m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
 
     m_FrameManager.Update();
 
@@ -229,10 +227,8 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
     m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
-
     // Disable accelerators, we'll handle them ourselves
     m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
-
 
     // Attach event handlers
     m_SceneManager.e_CurrentSceneChanging.AddMethod( this, &MainFrame::CurrentSceneChanging );
@@ -1573,12 +1569,6 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
                 //End batching
                 m_LayersPanel->EndBatch();
             } 
-            else if ( nodeType->IsClass( Reflect::GetClass< SceneGraph::HierarchyNodeType >() ) )
-            {
-                // Hierarchy node types need to be added to the object grid UI.
-                SceneGraph::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< SceneGraph::HierarchyNodeType >( nodeTypeItr->second );
-                m_TypesPanel->AddType( hierarchyNodeType );
-            }
         }
 
 #pragma TODO( "Change the selection or display changes in the Project view" )

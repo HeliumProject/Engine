@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveGrid.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -200,20 +201,30 @@ void PrimitiveGrid::Update()
     Base::Update();
 }
 
-void PrimitiveGrid::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveGrid::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if ( !SetState() )
-    {
-        return;
-    }
+    HELIUM_ASSERT( drawInterface );
 
-    m_Device->SetRenderState( D3DRS_LIGHTING, FALSE );
-
-    uint32_t lineCount = ( (uint32_t) m_Vertices.size() ) / 2;
-    m_Device->DrawPrimitive( D3DPT_LINELIST, (UINT)GetBaseIndex(), lineCount );
+    uint32_t vertexCount = static_cast< uint32_t >( m_Vertices.size() );
+    uint32_t lineCount = vertexCount / 2;
+    drawInterface->DrawUntextured(
+        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        vertexCount,
+        0,
+        lineCount,
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += lineCount;
-
-    m_Device->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 bool PrimitiveGrid::Pick( PickVisitor* pick, const bool* solid ) const

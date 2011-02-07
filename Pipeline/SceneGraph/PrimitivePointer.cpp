@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitivePointer.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -48,12 +49,27 @@ void PrimitivePointer::Update()
     Base::Update();
 }
 
-void PrimitivePointer::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitivePointer::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
 
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 6);
+    drawInterface->DrawUntextured(
+        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        12,
+        0,
+        6,
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 6;
 }
 
@@ -61,7 +77,11 @@ bool PrimitivePointer::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
+        const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+        Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+        Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+        if ( pick->PickSegment( position0, position1 ) )
         {
             return true;
         }

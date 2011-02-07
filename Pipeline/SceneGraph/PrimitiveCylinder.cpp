@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveCylinder.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -118,42 +119,74 @@ void PrimitiveCylinder::Update()
     Base::Update();
 }
 
-void PrimitiveCylinder::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveCylinder::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
 
     if (transparent ? *transparent : m_IsTransparent)
     {
-        D3DMATERIAL9 m;
-        ZeroMemory(&m, sizeof(m));
-
-        m_Device->GetMaterial(&m);
-        m.Ambient.a = m.Ambient.a < 0.0001 ? 0.5f : m.Ambient.a;
-        m.Diffuse = m.Ambient;
-        m_Device->SetMaterial(&m);
-
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+        if ( materialColor.GetA() == 0 )
+        {
+            materialColor.SetA( 0x80 );
+        }
     }
 
     if (solid ? *solid : m_IsSolid)
     {
-        m_Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, (UINT)(GetBaseIndex() + GetWireVertCount()), m_RadiusSteps*2);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + GetWireVertCount(),
+            m_RadiusSteps * 2 + 2,
+            0,
+            m_RadiusSteps * 2,
+            materialColor );
         args->m_TriangleCount += (m_RadiusSteps*2);
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)((GetBaseIndex() + m_RadiusSteps*2+2) + GetWireVertCount()), m_RadiusSteps);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + GetWireVertCount() + m_RadiusSteps * 2 + 2,
+            m_RadiusSteps + 2,
+            0,
+            m_RadiusSteps,
+            materialColor );
         args->m_TriangleCount += (m_RadiusSteps);
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)((GetBaseIndex() + m_RadiusSteps*2+2+m_RadiusSteps+2) + GetWireVertCount()), m_RadiusSteps);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + GetWireVertCount() + m_RadiusSteps * 3 + 4,
+            m_RadiusSteps + 2,
+            0,
+            m_RadiusSteps,
+            materialColor );
         args->m_TriangleCount += (m_RadiusSteps);
     }
     else
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), m_RadiusSteps*m_LengthSteps);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex(),
+            m_RadiusSteps * m_LengthSteps + 2,
+            0,
+            m_RadiusSteps * m_LengthSteps,
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += (m_RadiusSteps*m_LengthSteps);
-    }
-
-    if (transparent ? *transparent : m_IsTransparent)
-    {
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
     }
 }
 

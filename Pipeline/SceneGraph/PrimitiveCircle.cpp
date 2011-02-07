@@ -100,16 +100,17 @@ void PrimitiveCircle::DrawFill(
     Lunar::Color materialColor,
     const Simd::Matrix44& transform ) const
 {
-    D3DCULL cull;
-    m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
-    {
-        m_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)GetBaseIndex() + (m_RadiusSteps * 2), m_RadiusSteps);
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-    }
-    m_Device->SetRenderState(D3DRS_CULLMODE, cull);
-
+    drawInterface->DrawUntextured(
+        Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex() + m_RadiusSteps * 2,
+        m_RadiusSteps + 2,
+        0,
+        m_RadiusSteps,
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED );
     args->m_TriangleCount += m_RadiusSteps;
 }
 

@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveSphere.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Orientation.h"
 
@@ -159,38 +160,52 @@ void PrimitiveSphere::Update()
     Base::Update();
 }
 
-void PrimitiveSphere::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveSphere::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
 
     if (transparent ? *transparent : m_IsTransparent)
     {
-        D3DMATERIAL9 m;
-        ZeroMemory(&m, sizeof(m));
-
-        m_Device->GetMaterial(&m);
-        m.Ambient.a = m.Ambient.a < 0.0001 ? 0.5f : m.Ambient.a;
-        m.Diffuse = m.Ambient;
-        m_Device->SetMaterial(&m);
-
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+        if( materialColor.GetA() == 0 )
+        {
+            materialColor.SetA( 0x80 );
+        }
     }
 
     if (solid ? *solid : m_IsSolid)
     {
-        m_Device->DrawPrimitive(D3DPT_TRIANGLELIST, (UINT)GetBaseIndex() + m_WireVertCount, m_PolyVertCount/3);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + m_WireVertCount,
+            m_PolyVertCount,
+            0,
+            m_PolyVertCount / 3,
+            materialColor );
         args->m_TriangleCount += (m_PolyVertCount/3);
     }
     else
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), m_WireVertCount/2);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex(),
+            m_WireVertCount,
+            0,
+            m_WireVertCount / 2,
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += (m_WireVertCount/2);
-    }
-
-    if (transparent ? *transparent : m_IsTransparent)
-    {
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
     }
 }
 
@@ -213,7 +228,11 @@ bool PrimitiveSphere::Pick( PickVisitor* pick, const bool* solid ) const
         {
             for (size_t i=0; i<m_Vertices.size(); i+=2)
             {
-                if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+                const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
+                const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+                Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+                Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+                if ( pick->PickSegment( position0, position1 ) )
                 {
                     return true;
                 }

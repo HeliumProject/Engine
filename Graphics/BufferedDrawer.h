@@ -10,8 +10,6 @@
 
 namespace Lunar
 {
-    class RVertexInputLayout;
-
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RFence );
     L_DECLARE_RPTR( RIndexBuffer );
@@ -20,6 +18,7 @@ namespace Lunar
     L_DECLARE_RPTR( RTexture2d );
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RVertexDescription );
+    L_DECLARE_RPTR( RVertexInputLayout );
     L_DECLARE_RPTR( RVertexShader );
 
     /// Buffered drawing interface.
@@ -33,21 +32,6 @@ namespace Lunar
 
         /// Maximum number of characters to convert for rendered text strings (including null terminator).
         static const size_t TEXT_CHARACTER_COUNT_MAX = 1024;
-
-        /// Depth buffer modes.
-        enum EDepthMode
-        {
-            DEPTH_MODE_FIRST   =  0,
-            DEPTH_MODE_INVALID = -1,
-
-            /// Enable depth tests and writes.
-            DEPTH_MODE_ENABLED,
-            /// Disable depth tests and writes.
-            DEPTH_MODE_DISABLED,
-
-            DEPTH_MODE_MAX,
-            DEPTH_MODE_LAST = DEPTH_MODE_MAX - 1
-        };
 
         /// @name Construction/Destruction
         //@{
@@ -63,47 +47,44 @@ namespace Lunar
 
         /// @name Draw Call Generation
         //@{
-        void DrawWire(
+        void DrawUntextured(
             ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawWire(
+            RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
+        void DrawUntextured(
             ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
             RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
             uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
-
-        void DrawSolid(
-            ERendererPrimitiveType primitiveType, const SimpleVertex* pVertices, uint32_t vertexCount,
-            const uint16_t* pIndices, uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
-        void DrawSolid(
-            ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
-            RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
-            uint32_t primitiveCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
 
         void DrawTextured(
             ERendererPrimitiveType primitiveType, const SimpleTexturedVertex* pVertices, uint32_t vertexCount,
             const uint16_t* pIndices, uint32_t primitiveCount, RTexture2d* pTexture,
-            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            Color blendColor = Color( 0xffffffff ),
+            RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
         void DrawTextured(
             ERendererPrimitiveType primitiveType, const Simd::Matrix44& rTransform, RVertexBuffer* pVertices,
             RIndexBuffer* pIndices, uint32_t baseVertexIndex, uint32_t vertexCount, uint32_t startIndex,
             uint32_t primitiveCount, RTexture2d* pTexture, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
 
         void DrawPoints(
             const SimpleVertex* pVertices, uint32_t pointCount, Color blendColor = Color( 0xffffffff ),
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
         void DrawPoints(
             const Simd::Matrix44& rTransform, RVertexBuffer* pVertices, uint32_t baseVertexIndex, uint32_t pointCount,
-            Color blendColor = Color( 0xffffffff ), EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            Color blendColor = Color( 0xffffffff ),
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
 
         void DrawWorldText(
             const Simd::Matrix44& rTransform, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM,
-            EDepthMode depthMode = DEPTH_MODE_ENABLED );
+            RenderResourceManager::ERasterizerState rasterizerState = RenderResourceManager::RASTERIZER_STATE_DEFAULT,
+            RenderResourceManager::EDepthStencilState depthStencilState = RenderResourceManager::DEPTH_STENCIL_STATE_DEFAULT );
         void DrawScreenText(
             int32_t x, int32_t y, const String& rText, Color color = Color( 0xffffffff ),
             RenderResourceManager::EDebugFontSize size = RenderResourceManager::DEBUG_FONT_SIZE_MEDIUM );
@@ -245,6 +226,7 @@ namespace Lunar
             //@{
             void SetRasterizerState( RRasterizerState* pState );
             void SetBlendState( RBlendState* pState );
+            void SetDepthStencilState( RDepthStencilState* pState, uint8_t stencilReferenceValue );
 
             void SetVertexBuffer( RVertexBuffer* pBuffer, uint32_t stride );
             void SetIndexBuffer( RIndexBuffer* pBuffer );
@@ -264,32 +246,36 @@ namespace Lunar
             RRenderCommandProxyPtr m_spRenderCommandProxy;
 
             /// Current rasterizer state.
-            RRasterizerState* m_pRasterizerState;
+            RRasterizerStatePtr m_spRasterizerState;
             /// Current blend state.
-            RBlendState* m_pBlendState;
+            RBlendStatePtr m_spBlendState;
+            /// Current depth-stencil state.
+            RDepthStencilStatePtr m_spDepthStencilState;
+            /// Current stencil reference value.
+            uint8_t m_stencilReferenceValue;
 
             /// Current vertex buffer.
-            RVertexBuffer* m_pVertexBuffer;
+            RVertexBufferPtr m_spVertexBuffer;
             /// Current vertex stride.
             uint32_t m_vertexStride;
 
             /// Current index buffer.
-            RIndexBuffer* m_pIndexBuffer;
+            RIndexBufferPtr m_spIndexBuffer;
 
             /// Current vertex shader.
-            RVertexShader* m_pVertexShader;
+            RVertexShaderPtr m_spVertexShader;
             /// Current pixel shader.
-            RPixelShader* m_pPixelShader;
+            RPixelShaderPtr m_spPixelShader;
             /// Current vertex input layout.
-            RVertexInputLayout* m_pVertexInputLayout;
+            RVertexInputLayoutPtr m_spVertexInputLayout;
 
             /// Current vertex shader constant buffer.
-            RConstantBuffer* m_pVertexConstantBuffer;
+            RConstantBufferPtr m_spVertexConstantBuffer;
             /// Current pixel shader constant buffer.
-            RConstantBuffer* m_pPixelConstantBuffer;
+            RConstantBufferPtr m_spPixelConstantBuffer;
 
             /// Current texture.
-            RTexture2d* m_pTexture;
+            RTexture2dPtr m_spTexture;
 
             /// @name Private Utility Functions
             //@{
@@ -339,8 +325,9 @@ namespace Lunar
             /// @name Construction/Destruction
             //@{
             WorldSpaceTextGlyphHandler(
-                BufferedDrawer* pDrawer, Font* pFont, Color color, EDepthMode depthMode,
-                const Simd::Matrix44& rTransform );
+                BufferedDrawer* pDrawer, Font* pFont, Color color,
+                RenderResourceManager::ERasterizerState rasterizerState,
+                RenderResourceManager::EDepthStencilState depthStencilState, const Simd::Matrix44& rTransform );
             //@}
 
             /// @name Overloaded Operators
@@ -355,10 +342,10 @@ namespace Lunar
             BufferedDrawer* m_pDrawer;
             /// Font resource being used for rendering.
             Font* m_pFont;
+            /// Draw call set index for the desired rasterizer and depth-stencil state.
+            size_t m_stateIndex;
             /// Text color.
             Color m_color;
-            /// Mode in which to handle depth testing and writing.
-            EDepthMode m_depthMode;
 
             /// Cached indices to use for quad rendering.
             uint16_t m_quadIndices[ 6 ];
@@ -458,26 +445,22 @@ namespace Lunar
         /// Textured draw call indices.
         DynArray< uint16_t > m_texturedIndices;
 
-        /// Wireframe draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_wireDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_solidDrawCalls[ DEPTH_MODE_MAX ];
+        /// Untextured draw call data using internal vertex/index buffers.
+        DynArray< UntexturedDrawCall > m_untexturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Textured draw call data using internal vertex/index buffers.
-        DynArray< TexturedDrawCall > m_texturedDrawCalls[ DEPTH_MODE_MAX ];
+        DynArray< TexturedDrawCall > m_texturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Point draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_pointDrawCalls[ DEPTH_MODE_MAX ];
+        DynArray< UntexturedDrawCall > m_pointDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
-        /// Wireframe draw call data using external vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_wireBufferDrawCalls[ DEPTH_MODE_MAX ];
-        /// Solid draw call data using external vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_solidBufferDrawCalls[ DEPTH_MODE_MAX ];
+        /// Untextured draw call data using external vertex/index buffers.
+        DynArray< UntexturedBufferDrawCall > m_untexturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Textured draw call data using external vertex/index buffers.
-        DynArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ DEPTH_MODE_MAX ];
+        DynArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Point draw call data using external vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_pointBufferDrawCalls[ DEPTH_MODE_MAX ];
+        DynArray< UntexturedBufferDrawCall > m_pointBufferDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
         /// World-space text draw call data.
-        DynArray< TexturedDrawCall > m_worldTextDrawCalls[ DEPTH_MODE_MAX ];
+        DynArray< TexturedDrawCall > m_worldTextDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
         /// Screen-space text draw call data.
         DynArray< ScreenTextDrawCall > m_screenTextDrawCalls;
@@ -523,7 +506,21 @@ namespace Lunar
         RConstantBuffer* SetInstancePixelConstantData(
             RRenderCommandProxy* pCommandProxy, ResourceSet& rResourceSet, Color blendColor );
 
-        void DrawDepthModeWorldElements( WorldElementResources& rWorldResources, EDepthMode depthMode );
+        void DrawDepthStencilStateWorldElements(
+            WorldElementResources& rWorldResources, RenderResourceManager::EDepthStencilState depthStencilState );
+        void DrawStateWorldElements(
+            WorldElementResources& rWorldResources, RenderResourceManager::ERasterizerState rasterizerState,
+            RenderResourceManager::EDepthStencilState depthStencilState );
+        //@}
+
+        /// @name Static Utility Functions
+        //@{
+        static size_t GetStateIndex(
+            RenderResourceManager::ERasterizerState rasterizerState,
+            RenderResourceManager::EDepthStencilState depthStencilState );
+        static void GetStatesFromIndex(
+            size_t stateIndex, RenderResourceManager::ERasterizerState& rRasterizerState,
+            RenderResourceManager::EDepthStencilState& rDepthStencilState );
         //@}
     };
 }

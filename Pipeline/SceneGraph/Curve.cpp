@@ -857,7 +857,7 @@ void Curve::Render( RenderVisitor* render )
 
         if ( countCurveLines > 0 )
         {
-            drawInterface->DrawWire(
+            drawInterface->DrawUntextured(
                 Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
                 globalTransform,
                 vertices->GetBuffer(),
@@ -866,7 +866,8 @@ void Curve::Render( RenderVisitor* render )
                 countCurveLines + 1,
                 0,
                 countCurveLines,
-                materialColor );
+                materialColor,
+                Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
             args->m_LineCount += countCurveLines;
         }
 
@@ -898,7 +899,7 @@ void Curve::Render( RenderVisitor* render )
 
             if ( countControlLines > 0 )
             {
-                drawInterface->DrawWire(
+                drawInterface->DrawUntextured(
                     Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
                     globalTransform,
                     vertices->GetBuffer(),
@@ -907,7 +908,8 @@ void Curve::Render( RenderVisitor* render )
                     countControlLines + 1,
                     0,
                     countControlLines,
-                    s_HullMaterial );
+                    s_HullMaterial,
+                    Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
                 args->m_LineCount += countControlLines;
             }
         }
@@ -946,7 +948,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBaseIndex() + i,
                             1,
                             Viewport::s_SelectedComponentMaterial,
-                            Lunar::BufferedDrawer::DEPTH_MODE_DISABLED );
+                            Lunar::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
 
                     if ( GetControlPointLabel() != ControlPointLabel::None )
@@ -1003,7 +1005,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBaseIndex() + i,
                             1,
                             Viewport::s_HighlightedMaterial,
-                            Lunar::BufferedDrawer::DEPTH_MODE_DISABLED );
+                            Lunar::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
                     ++i;
                 }

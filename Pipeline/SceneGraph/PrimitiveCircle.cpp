@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveCircle.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 using namespace Helium;
@@ -70,21 +71,35 @@ void PrimitiveCircle::Update()
     Base::Update();
 }
 
-void PrimitiveCircle::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveCircle::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), m_RadiusSteps);
+    drawInterface->DrawUntextured(
+        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        m_RadiusSteps * 2,
+        0,
+        m_RadiusSteps,
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
 
     args->m_LineCount += m_RadiusSteps;
 }
 
-void PrimitiveCircle::DrawFill( DrawArgs* args ) const
+void PrimitiveCircle::DrawFill(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform ) const
 {
-    if (!SetState())
-        return;
-
     D3DCULL cull;
     m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
     {

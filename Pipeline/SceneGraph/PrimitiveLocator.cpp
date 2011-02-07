@@ -45,7 +45,7 @@ void PrimitiveLocator::Draw(
     HELIUM_ASSERT( drawInterface );
     HELIUM_ASSERT( args );
 
-    drawInterface->DrawWire(
+    drawInterface->DrawUntextured(
         Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         transform,
         m_Buffer,
@@ -54,7 +54,8 @@ void PrimitiveLocator::Draw(
         6,
         0,
         3,
-        materialColor );
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 3;
 }
 

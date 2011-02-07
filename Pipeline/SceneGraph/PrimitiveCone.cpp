@@ -118,7 +118,7 @@ void PrimitiveCone::Draw(
 
     if (solid ? *solid : m_IsSolid)
     {
-        drawInterface->DrawSolid(
+        drawInterface->DrawUntextured(
             Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
@@ -128,7 +128,7 @@ void PrimitiveCone::Draw(
             0,
             m_Steps,
             materialColor );
-        drawInterface->DrawSolid(
+        drawInterface->DrawUntextured(
             Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
@@ -142,7 +142,7 @@ void PrimitiveCone::Draw(
     }
     else
     {
-        drawInterface->DrawWire(
+        drawInterface->DrawUntextured(
             Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
@@ -151,8 +151,9 @@ void PrimitiveCone::Draw(
             8,
             0,
             4,
-            materialColor );
-        drawInterface->DrawWire(
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        drawInterface->DrawUntextured(
             Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
             transform,
             m_Buffer,
@@ -161,7 +162,8 @@ void PrimitiveCone::Draw(
             m_Steps + 2,
             0,
             m_Steps + 1,
-            materialColor );
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_TriangleCount += (m_Steps*2);
     }
 }

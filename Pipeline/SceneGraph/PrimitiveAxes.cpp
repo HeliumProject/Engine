@@ -1,6 +1,8 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveAxes.h"
 
+#include "Graphics/BufferedDrawer.h"
+
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -70,48 +72,90 @@ void PrimitiveAxes::Update()
     Base::Update();
 }
 
-void PrimitiveAxes::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveAxes::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
-    m_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 3);
+    drawInterface->DrawUntextured(
+        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        6,
+        0,
+        3,
+        materialColor,
+        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 3;
-
-    m_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
-void PrimitiveAxes::DrawAxes( DrawArgs* args, AxesFlags axes ) const
+void PrimitiveAxes::DrawAxes(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    AxesFlags axes,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform ) const
 {
-    if (!SetState())
-        return;
-
-    m_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
-
     if (axes & MultipleAxes::X)
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 1);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex(),
+            2,
+            0,
+            1,
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
 
     if (axes & MultipleAxes::Y)
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex()+2, 1);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + 2,
+            2,
+            0,
+            1,
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
 
     if (axes & MultipleAxes::Z)
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex()+4, 1);
+        drawInterface->DrawUntextured(
+            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + 4,
+            2,
+            0,
+            1,
+            materialColor,
+            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
-
-    m_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
-void PrimitiveAxes::DrawViewport( DrawArgs* args, const SceneGraph::Camera* camera ) const
+void PrimitiveAxes::DrawViewport(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    const SceneGraph::Camera* camera,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform ) const
 {
     Matrix4 projection, inverseProjection;
     camera->GetOrthographicProjection(projection);
@@ -149,7 +193,11 @@ bool PrimitiveAxes::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
+        const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+        Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+        Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+        if ( pick->PickSegment( position0, position1 ) )
         {
             return true;
         }

@@ -1,6 +1,7 @@
 /*#include "Precompile.h"*/
 #include "PrimitiveFrame.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Color.h"
 
@@ -71,11 +72,14 @@ void PrimitiveFrame::Update()
     Base::Update();
 }
 
-void PrimitiveFrame::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveFrame::Draw(
+    Lunar::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Lunar::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
     D3DCULL cull;
     m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
     m_Device->SetRenderState(D3DRS_ZENABLE, FALSE);

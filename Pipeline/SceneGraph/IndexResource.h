@@ -33,7 +33,7 @@ namespace Helium
                 m_IsDirty = true;
             }
 
-            IDirect3DIndexBuffer9* GetBuffer() const
+            Lunar::RIndexBuffer* GetBuffer() const
             {
                 return m_Buffer; 
             }

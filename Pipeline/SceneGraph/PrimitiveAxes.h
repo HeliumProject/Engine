@@ -31,9 +31,18 @@ namespace Helium
             void SetRGB();
 
             virtual void Update() HELIUM_OVERRIDE;
-            virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
-            virtual void DrawAxes( DrawArgs* args, AxesFlags axes ) const;
-            virtual void DrawViewport( DrawArgs* args, const SceneGraph::Camera* camera ) const;
+            virtual void Draw(
+                Lunar::BufferedDrawer* drawInterface, DrawArgs* args, Lunar::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const HELIUM_OVERRIDE;
+            virtual void DrawAxes(
+                Lunar::BufferedDrawer* drawInterface, DrawArgs* args, AxesFlags axes,
+                Lunar::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
+            virtual void DrawViewport(
+                Lunar::BufferedDrawer* drawInterface, DrawArgs* args, const SceneGraph::Camera* camera,
+                Lunar::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
             AxesFlags PickAxis( const Matrix4& transform, Line pick, float32_t err );
         };

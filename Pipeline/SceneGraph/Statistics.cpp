@@ -16,10 +16,6 @@ Statistics::Statistics()
 
 Statistics::~Statistics()
 {
-  if (m_Font != NULL)
-  {
-    m_Font->Release();
-  }
 }
 
 void Statistics::Reset()
@@ -78,32 +74,10 @@ void Statistics::Update()
 
 void Statistics::Create()
 {
-  if (m_Font == NULL)
-  {
-    HRESULT result = D3DXCreateFont( m_Device,
-                                     14,
-                                     0,
-                                     700,
-                                     1,
-                                     FALSE,
-                                     DEFAULT_CHARSET,
-                                     OUT_DEFAULT_PRECIS,
-                                     DEFAULT_QUALITY,
-                                     DEFAULT_PITCH | FF_DONTCARE,
-                                     TXT( "Arial" ),
-                                     &m_Font );
-
-    HELIUM_ASSERT(SUCCEEDED(result));
-  }
-  else
-  {
-    m_Font->OnResetDevice();
-  }
 }
 
 void Statistics::Delete()
 {
-  m_Font->OnLostDevice();
 }
 
 void Statistics::Draw( DrawArgs* args )

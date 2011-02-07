@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -8,7 +8,8 @@
 #include "Precompile.h"
 
 
-#include "Editor/Controls/Button.h"
+#include "Editor/Controls/DynamicBitmap.h"
+#include "Editor/Controls/EditorButton.h"
 #include "Editor/Controls/MenuButton.h"
 
 #include "EditorGenerated.h"
@@ -221,40 +222,40 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
-	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
-	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
-	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
-	this->Connect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
-	this->Connect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
-	this->Connect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
-	this->Connect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( ID_ImportFromClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
-	this->Connect( ID_Export, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( ID_ExportToClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
-	this->Connect( ID_Exit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
-	this->Connect( wxID_UNDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
-	this->Connect( wxID_REDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
-	this->Connect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
-	this->Connect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
-	this->Connect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
-	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
-	this->Connect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
-	this->Connect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
-	this->Connect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
-	this->Connect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
-	this->Connect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
-	this->Connect( ID_Ungroup, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
-	this->Connect( ID_Center, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
-	this->Connect( ID_Duplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
-	this->Connect( ID_SmartDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
-	this->Connect( ID_CopyTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
-	this->Connect( ID_PasteTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
-	this->Connect( ID_SnapToCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
-	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
-	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
-	this->Connect( ID_Settings, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
-	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
+	this->Connect( m_ItemFileNewScene->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
+	this->Connect( m_ItemFileNewEntity->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
+	this->Connect( m_ItemFileNewProject->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewProject ) );
+	this->Connect( m_ItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Connect( m_ItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
+	this->Connect( m_ItemSaveAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Connect( m_ItemImport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( m_ItemImportFromClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( m_ItemExport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( m_ItemExportToClipboard->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( m_ItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
+	this->Connect( m_ItemUndo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Connect( m_ItemRedo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	this->Connect( m_ItemCut->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Connect( m_ItemCopy->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Connect( m_ItemPaste->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( m_ItemDelete->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
+	this->Connect( m_ItemSelectAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
+	this->Connect( m_ItemInvertSelection->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
+	this->Connect( m_ItemParent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
+	this->Connect( m_ItemUnparent->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
+	this->Connect( m_ItemGroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
+	this->Connect( m_ItemUngroup->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
+	this->Connect( m_ItemCenter->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
+	this->Connect( m_ItemDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
+	this->Connect( m_ItemSmartDuplicate->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
+	this->Connect( m_ItemCopyTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
+	this->Connect( m_ItemPasteTransform->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
+	this->Connect( m_ItemSnapToCamera->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
+	this->Connect( m_ItemSnapCameraTo->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
+	this->Connect( m_ItemWalkUp->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( m_ItemWalkForward->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( m_ItemSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSettings ) );
+	this->Connect( m_ItemAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
 }
 
 MainFrameGenerated::~MainFrameGenerated()
@@ -537,32 +538,107 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CreateNewLayerFromSelectionButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Create New Layer From Selection"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_CreateNewLayerFromSelectionButton, 0, wxALL, 2 );
+	m_NewLayerFromSelectionButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43;
+	bSizer43 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CreateNewLayerButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Create New Layer"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_CreateNewLayerButton, 0, wxALL, 2 );
+	m_NewLayerFromSelectionText = new wxStaticText( m_NewLayerFromSelectionButton, wxID_ANY, _("New Layer (from selection)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NewLayerFromSelectionText->Wrap( -1 );
+	bSizer43->Add( m_NewLayerFromSelectionText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_DeleteSelectedLayersButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Delete Selected Layers"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_DeleteSelectedLayersButton, 0, wxALL, 2 );
+	m_NewLayerFromSelectionBitmap = new Helium::Editor::DynamicBitmap( m_NewLayerFromSelectionButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43->Add( m_NewLayerFromSelectionBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_NewLayerFromSelectionButton->SetSizer( bSizer43 );
+	m_NewLayerFromSelectionButton->Layout();
+	bSizer43->Fit( m_NewLayerFromSelectionButton );
+	bSizer36->Add( m_NewLayerFromSelectionButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_NewLayerButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431;
+	bSizer431 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_NewLayerText = new wxStaticText( m_NewLayerButton, wxID_ANY, _("New Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NewLayerText->Wrap( -1 );
+	bSizer431->Add( m_NewLayerText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_NewLayerBitmap = new Helium::Editor::DynamicBitmap( m_NewLayerButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431->Add( m_NewLayerBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_NewLayerButton->SetSizer( bSizer431 );
+	m_NewLayerButton->Layout();
+	bSizer431->Fit( m_NewLayerButton );
+	bSizer36->Add( m_NewLayerButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_DeleteLayersButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311;
+	bSizer4311 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_DeleteLayersText = new wxStaticText( m_DeleteLayersButton, wxID_ANY, _("Delete  Layer(s)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DeleteLayersText->Wrap( -1 );
+	bSizer4311->Add( m_DeleteLayersText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_DeleteLayersBitmap = new Helium::Editor::DynamicBitmap( m_DeleteLayersButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311->Add( m_DeleteLayersBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_DeleteLayersButton->SetSizer( bSizer4311 );
+	m_DeleteLayersButton->Layout();
+	bSizer4311->Fit( m_DeleteLayersButton );
+	bSizer36->Add( m_DeleteLayersButton, 0, wxEXPAND | wxALL, 0 );
 	
 	m_staticline4 = new wxStaticLine( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer36->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
 	
-	m_AddSelectionToLayerButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Add Selection To Layer"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_AddSelectionToLayerButton, 0, wxALL, 2 );
+	m_AddToLayerButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111;
+	bSizer43111 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_RemoveSelectionFromLayerButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Remove Selection From Layer"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_RemoveSelectionFromLayerButton, 0, wxALL, 2 );
+	m_AddToLayerText = new wxStaticText( m_AddToLayerButton, wxID_ANY, _("Add to Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AddToLayerText->Wrap( -1 );
+	bSizer43111->Add( m_AddToLayerText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_AddToLayerBitmap = new Helium::Editor::DynamicBitmap( m_AddToLayerButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111->Add( m_AddToLayerBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_AddToLayerButton->SetSizer( bSizer43111 );
+	m_AddToLayerButton->Layout();
+	bSizer43111->Fit( m_AddToLayerButton );
+	bSizer36->Add( m_AddToLayerButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_RemoveFromLayerButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431111;
+	bSizer431111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_RemoveFromLayerText = new wxStaticText( m_RemoveFromLayerButton, wxID_ANY, _("Remove from Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RemoveFromLayerText->Wrap( -1 );
+	bSizer431111->Add( m_RemoveFromLayerText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_RemoveFromLayerBitmap = new Helium::Editor::DynamicBitmap( m_RemoveFromLayerButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431111->Add( m_RemoveFromLayerBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_RemoveFromLayerButton->SetSizer( bSizer431111 );
+	m_RemoveFromLayerButton->Layout();
+	bSizer431111->Fit( m_RemoveFromLayerButton );
+	bSizer36->Add( m_RemoveFromLayerButton, 0, wxEXPAND | wxALL, 0 );
 	
 	m_staticline5 = new wxStaticLine( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer36->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
 	
-	m_SelectLayerMembersButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Select Layer Members"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_SelectLayerMembersButton, 0, wxALL, 2 );
+	m_SelectMembersButton = new Helium::Editor::EditorButton( m_LayerManagementPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311111;
+	bSizer4311111 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_SelectLayersButton = new Helium::Editor::Button( m_LayerManagementPanel, wxID_ANY, _("Select Layers"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer36->Add( m_SelectLayersButton, 0, wxALL, 2 );
+	m_SelectMembersText = new wxStaticText( m_SelectMembersButton, wxID_ANY, _("Select Layer Members"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SelectMembersText->Wrap( -1 );
+	bSizer4311111->Add( m_SelectMembersText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_SelectMembersBitmap = new Helium::Editor::DynamicBitmap( m_SelectMembersButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311111->Add( m_SelectMembersBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_SelectMembersButton->SetSizer( bSizer4311111 );
+	m_SelectMembersButton->Layout();
+	bSizer4311111->Fit( m_SelectMembersButton );
+	bSizer36->Add( m_SelectMembersButton, 0, wxEXPAND | wxALL, 0 );
 	
 	m_LayerManagementPanel->SetSizer( bSizer36 );
 	m_LayerManagementPanel->Layout();
@@ -657,11 +733,37 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	
-	m_OpenProjectButton = new Helium::Editor::Button( m_OpenOrCreateProjectPanel, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, wxBU_LEFT );
-	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND, 5 );
+	m_OpenProjectButton = new Helium::Editor::EditorButton( m_OpenOrCreateProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111116;
+	bSizer43111116 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CreateNewProjectButton = new Helium::Editor::Button( m_OpenOrCreateProjectPanel, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxSize( -1,-1 ), wxBU_LEFT );
-	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND, 5 );
+	m_OpenProjectBitmap = new Helium::Editor::DynamicBitmap( m_OpenProjectButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111116->Add( m_OpenProjectBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_OpenProjectText = new wxStaticText( m_OpenProjectButton, wxID_ANY, _("Open Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OpenProjectText->Wrap( -1 );
+	bSizer43111116->Add( m_OpenProjectText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_OpenProjectButton->SetSizer( bSizer43111116 );
+	m_OpenProjectButton->Layout();
+	bSizer43111116->Fit( m_OpenProjectButton );
+	bSizer40->Add( m_OpenProjectButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_CreateNewProjectButton = new Helium::Editor::EditorButton( m_OpenOrCreateProjectPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431111161;
+	bSizer431111161 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CreateNewProjectBitmap = new Helium::Editor::DynamicBitmap( m_CreateNewProjectButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431111161->Add( m_CreateNewProjectBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CreateNewProjectText = new wxStaticText( m_CreateNewProjectButton, wxID_ANY, _("Create New Project..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CreateNewProjectText->Wrap( -1 );
+	bSizer431111161->Add( m_CreateNewProjectText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CreateNewProjectButton->SetSizer( bSizer431111161 );
+	m_CreateNewProjectButton->Layout();
+	bSizer431111161->Fit( m_CreateNewProjectButton );
+	bSizer40->Add( m_CreateNewProjectButton, 0, wxEXPAND | wxALL, 0 );
 	
 	bSizer361->Add( bSizer40, 1, wxEXPAND, 5 );
 	
@@ -677,18 +779,10 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();
-	
-	// Connect Events
-	m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
-	m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
 }
 
 ProjectPanelGenerated::~ProjectPanelGenerated()
 {
-	// Disconnect Events
-	m_OpenProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnOpenProjectButtonClick ), NULL, this );
-	m_CreateNewProjectButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanelGenerated::OnNewProjectButtonClick ), NULL, this );
-	
 }
 
 PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -742,39 +836,169 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer27;
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_SelectButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_SelectButton, 0, wxALL, 2 );
+	m_SelectButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43;
+	bSizer43 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TranslateButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Translate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_TranslateButton, 0, wxALL, 2 );
+	m_SelectText = new wxStaticText( m_SelectButton, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SelectText->Wrap( -1 );
+	bSizer43->Add( m_SelectText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_RotateButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_RotateButton, 0, wxALL, 2 );
+	m_SelectBitmap = new Helium::Editor::DynamicBitmap( m_SelectButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43->Add( m_SelectBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_ScaleButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Scale"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_ScaleButton, 0, wxALL, 2 );
+	m_SelectButton->SetSizer( bSizer43 );
+	m_SelectButton->Layout();
+	bSizer43->Fit( m_SelectButton );
+	bSizer27->Add( m_SelectButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_TranslateButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer44;
+	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_TranslateText = new wxStaticText( m_TranslateButton, wxID_ANY, _("Translate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TranslateText->Wrap( -1 );
+	bSizer44->Add( m_TranslateText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_TranslateBitmap = new Helium::Editor::DynamicBitmap( m_TranslateButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer44->Add( m_TranslateBitmap, 0, wxALL, 5 );
+	
+	m_TranslateButton->SetSizer( bSizer44 );
+	m_TranslateButton->Layout();
+	bSizer44->Fit( m_TranslateButton );
+	bSizer27->Add( m_TranslateButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_RotateButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer45;
+	bSizer45 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_RotateText = new wxStaticText( m_RotateButton, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RotateText->Wrap( -1 );
+	bSizer45->Add( m_RotateText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_RotateBitmap = new Helium::Editor::DynamicBitmap( m_RotateButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_RotateBitmap, 0, wxALL, 5 );
+	
+	m_RotateButton->SetSizer( bSizer45 );
+	m_RotateButton->Layout();
+	bSizer45->Fit( m_RotateButton );
+	bSizer27->Add( m_RotateButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ScaleButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer451;
+	bSizer451 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ScaleText = new wxStaticText( m_ScaleButton, wxID_ANY, _("Scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ScaleText->Wrap( -1 );
+	bSizer451->Add( m_ScaleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ScaleBitmap = new Helium::Editor::DynamicBitmap( m_ScaleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer451->Add( m_ScaleBitmap, 0, wxALL, 5 );
+	
+	m_ScaleButton->SetSizer( bSizer451 );
+	m_ScaleButton->Layout();
+	bSizer451->Fit( m_ScaleButton );
+	bSizer27->Add( m_ScaleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline16;
 	m_staticline16 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer27->Add( m_staticline16, 0, wxEXPAND | wxALL, 2 );
 	
-	m_DuplicateToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Duplicate"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_DuplicateToolButton, 0, wxALL, 2 );
+	m_DuplicateToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer452;
+	bSizer452 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_LocatorToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Locator"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_LocatorToolButton, 0, wxALL, 2 );
+	m_DuplicateToolText = new wxStaticText( m_DuplicateToolButton, wxID_ANY, _("Duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DuplicateToolText->Wrap( -1 );
+	bSizer452->Add( m_DuplicateToolText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_VolumeToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Volumn"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_VolumeToolButton, 0, wxALL, 2 );
+	m_DuplicateToolBitmap = new Helium::Editor::DynamicBitmap( m_DuplicateToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer452->Add( m_DuplicateToolBitmap, 0, wxALL, 5 );
 	
-	m_EntityToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Entity"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_EntityToolButton, 0, wxALL, 2 );
+	m_DuplicateToolButton->SetSizer( bSizer452 );
+	m_DuplicateToolButton->Layout();
+	bSizer452->Fit( m_DuplicateToolButton );
+	bSizer27->Add( m_DuplicateToolButton, 0, wxEXPAND | wxALL, 0 );
 	
-	m_CurveToolLocator = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Curve"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_CurveToolLocator, 0, wxALL, 2 );
+	m_LocatorToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4521;
+	bSizer4521 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CurveEditToolButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Edit Curve"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_CurveEditToolButton, 0, wxALL, 2 );
+	m_LocatorToolText = new wxStaticText( m_LocatorToolButton, wxID_ANY, _("Duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LocatorToolText->Wrap( -1 );
+	bSizer4521->Add( m_LocatorToolText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_LocatorToolBitmap = new Helium::Editor::DynamicBitmap( m_LocatorToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4521->Add( m_LocatorToolBitmap, 0, wxALL, 5 );
+	
+	m_LocatorToolButton->SetSizer( bSizer4521 );
+	m_LocatorToolButton->Layout();
+	bSizer4521->Fit( m_LocatorToolButton );
+	bSizer27->Add( m_LocatorToolButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_VolumeToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer45211;
+	bSizer45211 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_VolumeToolText = new wxStaticText( m_VolumeToolButton, wxID_ANY, _("Volume"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_VolumeToolText->Wrap( -1 );
+	bSizer45211->Add( m_VolumeToolText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_VolumeToolBitmap = new Helium::Editor::DynamicBitmap( m_VolumeToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45211->Add( m_VolumeToolBitmap, 0, wxALL, 5 );
+	
+	m_VolumeToolButton->SetSizer( bSizer45211 );
+	m_VolumeToolButton->Layout();
+	bSizer45211->Fit( m_VolumeToolButton );
+	bSizer27->Add( m_VolumeToolButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_EntityToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer452111;
+	bSizer452111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_EntityToolText = new wxStaticText( m_EntityToolButton, wxID_ANY, _("Entity"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EntityToolText->Wrap( -1 );
+	bSizer452111->Add( m_EntityToolText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_EntityToolBitmap = new Helium::Editor::DynamicBitmap( m_EntityToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer452111->Add( m_EntityToolBitmap, 0, wxALL, 5 );
+	
+	m_EntityToolButton->SetSizer( bSizer452111 );
+	m_EntityToolButton->Layout();
+	bSizer452111->Fit( m_EntityToolButton );
+	bSizer27->Add( m_EntityToolButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_CurveToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4521111;
+	bSizer4521111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CurveToolText = new wxStaticText( m_CurveToolButton, wxID_ANY, _("Curve"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurveToolText->Wrap( -1 );
+	bSizer4521111->Add( m_CurveToolText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CurveToolBitmap = new Helium::Editor::DynamicBitmap( m_CurveToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4521111->Add( m_CurveToolBitmap, 0, wxALL, 5 );
+	
+	m_CurveToolButton->SetSizer( bSizer4521111 );
+	m_CurveToolButton->Layout();
+	bSizer4521111->Fit( m_CurveToolButton );
+	bSizer27->Add( m_CurveToolButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_CurveEditToolButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer45211111;
+	bSizer45211111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CurveEditToolText = new wxStaticText( m_CurveEditToolButton, wxID_ANY, _("Curve Edit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_CurveEditToolText->Wrap( -1 );
+	bSizer45211111->Add( m_CurveEditToolText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_CurveEditToolBitmap = new Helium::Editor::DynamicBitmap( m_CurveEditToolButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45211111->Add( m_CurveEditToolBitmap, 0, wxALL, 5 );
+	
+	m_CurveEditToolButton->SetSizer( bSizer45211111 );
+	m_CurveEditToolButton->Layout();
+	bSizer45211111->Fit( m_CurveEditToolButton );
+	bSizer27->Add( m_CurveEditToolButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline15;
 	m_staticline15 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
@@ -785,14 +1009,53 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_staticText10->Wrap( -1 );
 	bSizer27->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_PlayButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Play"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
+	m_PlayButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer45211112;
+	bSizer45211112 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_PauseButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Pause"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
+	m_PlayText = new wxStaticText( m_PlayButton, wxID_ANY, _("Play"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PlayText->Wrap( -1 );
+	bSizer45211112->Add( m_PlayText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_StopButton = new Helium::Editor::Button( m_MainPanel, wxID_ANY, _("Stop"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
+	m_PlayBitmap = new Helium::Editor::DynamicBitmap( m_PlayButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45211112->Add( m_PlayBitmap, 0, wxALL, 5 );
+	
+	m_PlayButton->SetSizer( bSizer45211112 );
+	m_PlayButton->Layout();
+	bSizer45211112->Fit( m_PlayButton );
+	bSizer27->Add( m_PlayButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_PauseButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer452111121;
+	bSizer452111121 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_PauseText = new wxStaticText( m_PauseButton, wxID_ANY, _("Pause"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PauseText->Wrap( -1 );
+	bSizer452111121->Add( m_PauseText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_PauseBitmap = new Helium::Editor::DynamicBitmap( m_PauseButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer452111121->Add( m_PauseBitmap, 0, wxALL, 5 );
+	
+	m_PauseButton->SetSizer( bSizer452111121 );
+	m_PauseButton->Layout();
+	bSizer452111121->Fit( m_PauseButton );
+	bSizer27->Add( m_PauseButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_StopButton = new Helium::Editor::EditorButton( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4521111211;
+	bSizer4521111211 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_StopText = new wxStaticText( m_StopButton, wxID_ANY, _("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StopText->Wrap( -1 );
+	bSizer4521111211->Add( m_StopText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_StopBitmap = new Helium::Editor::DynamicBitmap( m_StopButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4521111211->Add( m_StopBitmap, 0, wxALL, 5 );
+	
+	m_StopButton->SetSizer( bSizer4521111211 );
+	m_StopButton->Layout();
+	bSizer4521111211->Fit( m_StopButton );
+	bSizer27->Add( m_StopButton, 0, wxEXPAND | wxALL, 0 );
 	
 	
 	bSizer27->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -917,99 +1180,401 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_FrameOriginButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Frame Origin"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_FrameOriginButton, 0, wxALL, 2 );
+	m_FrameOriginButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431111;
+	bSizer431111 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_FrameSelectedButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Frame Selected Item"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_FrameSelectedButton, 0, wxALL, 2 );
+	m_FrameOriginText = new wxStaticText( m_FrameOriginButton, wxID_ANY, _("Frame Origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FrameOriginText->Wrap( -1 );
+	bSizer431111->Add( m_FrameOriginText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrameOriginBitmap = new Helium::Editor::DynamicBitmap( m_FrameOriginButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431111->Add( m_FrameOriginBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrameOriginButton->SetSizer( bSizer431111 );
+	m_FrameOriginButton->Layout();
+	bSizer431111->Fit( m_FrameOriginButton );
+	bSizer35->Add( m_FrameOriginButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_FrameSelectionButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311111;
+	bSizer4311111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_FrameSelectionText = new wxStaticText( m_FrameSelectionButton, wxID_ANY, _("Frame Selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FrameSelectionText->Wrap( -1 );
+	bSizer4311111->Add( m_FrameSelectionText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrameSelectionBitmap = new Helium::Editor::DynamicBitmap( m_FrameSelectionButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311111->Add( m_FrameSelectionBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrameSelectionButton->SetSizer( bSizer4311111 );
+	m_FrameSelectionButton->Layout();
+	bSizer4311111->Fit( m_FrameSelectionButton );
+	bSizer35->Add( m_FrameSelectionButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline3;
 	m_staticline3 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline3, 0, wxALL|wxEXPAND, 2 );
 	
-	m_HighlightModeToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Highlight Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_HighlightModeToggleButton, 0, wxALL, 2 );
+	m_HighlightModeToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311112;
+	bSizer4311112 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_HighlightModeToggleText = new wxStaticText( m_HighlightModeToggleButton, wxID_ANY, _("Highlight Mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_HighlightModeToggleText->Wrap( -1 );
+	bSizer4311112->Add( m_HighlightModeToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_HighlightModeToggleBitmap = new Helium::Editor::DynamicBitmap( m_HighlightModeToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311112->Add( m_HighlightModeToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_HighlightModeToggleButton->SetSizer( bSizer4311112 );
+	m_HighlightModeToggleButton->Layout();
+	bSizer4311112->Fit( m_HighlightModeToggleButton );
+	bSizer35->Add( m_HighlightModeToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline4;
 	m_staticline4 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline4, 0, wxALL|wxEXPAND, 2 );
 	
-	m_PreviousViewButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Previous View"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_PreviousViewButton, 0, wxALL, 2 );
+	m_PreviousViewButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311113;
+	bSizer4311113 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_NextViewButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Next View"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_NextViewButton, 0, wxALL, 2 );
+	m_PreviousViewText = new wxStaticText( m_PreviousViewButton, wxID_ANY, _("Previous View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PreviousViewText->Wrap( -1 );
+	bSizer4311113->Add( m_PreviousViewText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_PreviousViewBitmap = new Helium::Editor::DynamicBitmap( m_PreviousViewButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311113->Add( m_PreviousViewBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_PreviousViewButton->SetSizer( bSizer4311113 );
+	m_PreviousViewButton->Layout();
+	bSizer4311113->Fit( m_PreviousViewButton );
+	bSizer35->Add( m_PreviousViewButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_NextViewButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311114;
+	bSizer4311114 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_NextViewText = new wxStaticText( m_NextViewButton, wxID_ANY, _("Next View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NextViewText->Wrap( -1 );
+	bSizer4311114->Add( m_NextViewText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_NextViewBitmap = new Helium::Editor::DynamicBitmap( m_NextViewButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311114->Add( m_NextViewBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_NextViewButton->SetSizer( bSizer4311114 );
+	m_NextViewButton->Layout();
+	bSizer4311114->Fit( m_NextViewButton );
+	bSizer35->Add( m_NextViewButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline5;
 	m_staticline5 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline5, 0, wxALL|wxEXPAND, 2 );
 	
-	m_OrbitCameraToggleButton = new Helium::Editor::Button( m_ToolPanel, ID_OrbitCamera, _("Orbit Camera"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_OrbitCameraToggleButton, 0, wxALL, 2 );
+	m_OrbitViewToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311115;
+	bSizer4311115 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_FrontCameraToggleButton = new Helium::Editor::Button( m_ToolPanel, ID_FrontCamera, _("Front Camera"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_FrontCameraToggleButton, 0, wxALL, 2 );
+	m_OrbitViewToggleText = new wxStaticText( m_OrbitViewToggleButton, wxID_ANY, _("Orbit View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OrbitViewToggleText->Wrap( -1 );
+	bSizer4311115->Add( m_OrbitViewToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_SideCameraToggleButton = new Helium::Editor::Button( m_ToolPanel, ID_SideCamera, _("Side Camera"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_SideCameraToggleButton, 0, wxALL, 2 );
+	m_OrbitViewToggleBitmap = new Helium::Editor::DynamicBitmap( m_OrbitViewToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311115->Add( m_OrbitViewToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_TopCameraToggleButton = new Helium::Editor::Button( m_ToolPanel, ID_TopCamera, _("Top Camera"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_TopCameraToggleButton, 0, wxALL, 2 );
+	m_OrbitViewToggleButton->SetSizer( bSizer4311115 );
+	m_OrbitViewToggleButton->Layout();
+	bSizer4311115->Fit( m_OrbitViewToggleButton );
+	bSizer35->Add( m_OrbitViewToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_FrontViewToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311116;
+	bSizer4311116 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_FrontViewToggleText = new wxStaticText( m_FrontViewToggleButton, wxID_ANY, _("Front View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FrontViewToggleText->Wrap( -1 );
+	bSizer4311116->Add( m_FrontViewToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrontViewToggleBitmap = new Helium::Editor::DynamicBitmap( m_FrontViewToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311116->Add( m_FrontViewToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrontViewToggleButton->SetSizer( bSizer4311116 );
+	m_FrontViewToggleButton->Layout();
+	bSizer4311116->Fit( m_FrontViewToggleButton );
+	bSizer35->Add( m_FrontViewToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_SideViewToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311117;
+	bSizer4311117 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_SideViewToggleText = new wxStaticText( m_SideViewToggleButton, wxID_ANY, _("Side View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SideViewToggleText->Wrap( -1 );
+	bSizer4311117->Add( m_SideViewToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_SideViewToggleBitmap = new Helium::Editor::DynamicBitmap( m_SideViewToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311117->Add( m_SideViewToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_SideViewToggleButton->SetSizer( bSizer4311117 );
+	m_SideViewToggleButton->Layout();
+	bSizer4311117->Fit( m_SideViewToggleButton );
+	bSizer35->Add( m_SideViewToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_TopViewToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311118;
+	bSizer4311118 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_TopViewToggleText = new wxStaticText( m_TopViewToggleButton, wxID_ANY, _("Top View"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TopViewToggleText->Wrap( -1 );
+	bSizer4311118->Add( m_TopViewToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_TopViewToggleBitmap = new Helium::Editor::DynamicBitmap( m_TopViewToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311118->Add( m_TopViewToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_TopViewToggleButton->SetSizer( bSizer4311118 );
+	m_TopViewToggleButton->Layout();
+	bSizer4311118->Fit( m_TopViewToggleButton );
+	bSizer35->Add( m_TopViewToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline51;
 	m_staticline51 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline51, 0, wxEXPAND | wxALL, 2 );
 	
-	m_ShowAxesToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Show Axes"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ShowAxesToggleButton, 0, wxALL, 2 );
+	m_ShowAxesToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4311119;
+	bSizer4311119 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_ShowGridToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Show Grid"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ShowGridToggleButton, 0, wxALL, 2 );
+	m_ShowAxesToggleText = new wxStaticText( m_ShowAxesToggleButton, wxID_ANY, _("Show Axes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowAxesToggleText->Wrap( -1 );
+	bSizer4311119->Add( m_ShowAxesToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_ShowBoundsToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Show Bounds"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ShowBoundsToggleButton, 0, wxALL, 2 );
+	m_ShowAxesToggleBitmap = new Helium::Editor::DynamicBitmap( m_ShowAxesToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4311119->Add( m_ShowAxesToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_ShowStatisticsToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Show Statistics"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ShowStatisticsToggleButton, 0, wxALL, 2 );
+	m_ShowAxesToggleButton->SetSizer( bSizer4311119 );
+	m_ShowAxesToggleButton->Layout();
+	bSizer4311119->Fit( m_ShowAxesToggleButton );
+	bSizer35->Add( m_ShowAxesToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ShowGridToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111110;
+	bSizer43111110 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ShowGridToggleText = new wxStaticText( m_ShowGridToggleButton, wxID_ANY, _("Show Grid"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowGridToggleText->Wrap( -1 );
+	bSizer43111110->Add( m_ShowGridToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowGridToggleBitmap = new Helium::Editor::DynamicBitmap( m_ShowGridToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111110->Add( m_ShowGridToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowGridToggleButton->SetSizer( bSizer43111110 );
+	m_ShowGridToggleButton->Layout();
+	bSizer43111110->Fit( m_ShowGridToggleButton );
+	bSizer35->Add( m_ShowGridToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ShowBoundsToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111111;
+	bSizer43111111 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ShowBoundsToggleText = new wxStaticText( m_ShowBoundsToggleButton, wxID_ANY, _("Show Bounds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowBoundsToggleText->Wrap( -1 );
+	bSizer43111111->Add( m_ShowBoundsToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowBoundsToggleBitmap = new Helium::Editor::DynamicBitmap( m_ShowBoundsToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111111->Add( m_ShowBoundsToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowBoundsToggleButton->SetSizer( bSizer43111111 );
+	m_ShowBoundsToggleButton->Layout();
+	bSizer43111111->Fit( m_ShowBoundsToggleButton );
+	bSizer35->Add( m_ShowBoundsToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ShowStatisticsToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111112;
+	bSizer43111112 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ShowStatisticsToggleText = new wxStaticText( m_ShowStatisticsToggleButton, wxID_ANY, _("Show Statistics"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowStatisticsToggleText->Wrap( -1 );
+	bSizer43111112->Add( m_ShowStatisticsToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowStatisticsToggleBitmap = new Helium::Editor::DynamicBitmap( m_ShowStatisticsToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111112->Add( m_ShowStatisticsToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ShowStatisticsToggleButton->SetSizer( bSizer43111112 );
+	m_ShowStatisticsToggleButton->Layout();
+	bSizer43111112->Fit( m_ShowStatisticsToggleButton );
+	bSizer35->Add( m_ShowStatisticsToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline52;
 	m_staticline52 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline52, 0, wxEXPAND | wxALL, 2 );
 	
-	m_FrustumCullingToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Frustum Culling"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_FrustumCullingToggleButton, 0, wxALL, 2 );
+	m_FrustumCullingToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111113;
+	bSizer43111113 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BackfaceCullingToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Backface Culling"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_BackfaceCullingToggleButton, 0, wxALL, 2 );
+	m_FrustumCullingToggleText = new wxStaticText( m_FrustumCullingToggleButton, wxID_ANY, _("Frustum Culling"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FrustumCullingToggleText->Wrap( -1 );
+	bSizer43111113->Add( m_FrustumCullingToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrustumCullingToggleBitmap = new Helium::Editor::DynamicBitmap( m_FrustumCullingToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111113->Add( m_FrustumCullingToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_FrustumCullingToggleButton->SetSizer( bSizer43111113 );
+	m_FrustumCullingToggleButton->Layout();
+	bSizer43111113->Fit( m_FrustumCullingToggleButton );
+	bSizer35->Add( m_FrustumCullingToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_BackfaceCullingToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111114;
+	bSizer43111114 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_BackfaceCullingToggleText = new wxStaticText( m_BackfaceCullingToggleButton, wxID_ANY, _("Backface Culling"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BackfaceCullingToggleText->Wrap( -1 );
+	bSizer43111114->Add( m_BackfaceCullingToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_BackfaceCullingToggleBitmap = new Helium::Editor::DynamicBitmap( m_BackfaceCullingToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111114->Add( m_BackfaceCullingToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_BackfaceCullingToggleButton->SetSizer( bSizer43111114 );
+	m_BackfaceCullingToggleButton->Layout();
+	bSizer43111114->Fit( m_BackfaceCullingToggleButton );
+	bSizer35->Add( m_BackfaceCullingToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline53;
 	m_staticline53 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline53, 0, wxEXPAND | wxALL, 2 );
 	
-	m_WireframeShadingToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Wireframe"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_WireframeShadingToggleButton, 0, wxALL, 2 );
+	m_WireframeShadingToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111115;
+	bSizer43111115 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_MaterialShadingToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Material"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_MaterialShadingToggleButton, 0, wxALL, 2 );
+	m_WireframeShadingToggleText = new wxStaticText( m_WireframeShadingToggleButton, wxID_ANY, _("Wireframe Shading"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_WireframeShadingToggleText->Wrap( -1 );
+	bSizer43111115->Add( m_WireframeShadingToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_WireframeShadingToggleBitmap = new Helium::Editor::DynamicBitmap( m_WireframeShadingToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111115->Add( m_WireframeShadingToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_WireframeShadingToggleButton->SetSizer( bSizer43111115 );
+	m_WireframeShadingToggleButton->Layout();
+	bSizer43111115->Fit( m_WireframeShadingToggleButton );
+	bSizer35->Add( m_WireframeShadingToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_MaterialShadingToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111116;
+	bSizer43111116 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_MaterialShadingToggleText = new wxStaticText( m_MaterialShadingToggleButton, wxID_ANY, _("Material Shading"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaterialShadingToggleText->Wrap( -1 );
+	bSizer43111116->Add( m_MaterialShadingToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_MaterialShadingToggleBitmap = new Helium::Editor::DynamicBitmap( m_MaterialShadingToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111116->Add( m_MaterialShadingToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_MaterialShadingToggleButton->SetSizer( bSizer43111116 );
+	m_MaterialShadingToggleButton->Layout();
+	bSizer43111116->Fit( m_MaterialShadingToggleButton );
+	bSizer35->Add( m_MaterialShadingToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_TextureShadingToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer431111161;
+	bSizer431111161 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_TextureShadingToggleText = new wxStaticText( m_TextureShadingToggleButton, wxID_ANY, _("Texture Shading"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextureShadingToggleText->Wrap( -1 );
+	bSizer431111161->Add( m_TextureShadingToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_TextureShadingToggleBitmap = new Helium::Editor::DynamicBitmap( m_TextureShadingToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer431111161->Add( m_TextureShadingToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_TextureShadingToggleButton->SetSizer( bSizer431111161 );
+	m_TextureShadingToggleButton->Layout();
+	bSizer431111161->Fit( m_TextureShadingToggleButton );
+	bSizer35->Add( m_TextureShadingToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	wxStaticLine* m_staticline54;
 	m_staticline54 = new wxStaticLine( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer35->Add( m_staticline54, 0, wxEXPAND | wxALL, 2 );
 	
-	m_ColorModeSceneToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Scene Color Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ColorModeSceneToggleButton, 0, wxALL, 2 );
+	m_ColorModeSceneToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111117;
+	bSizer43111117 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_ColorModeLayerToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Layer Color Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ColorModeLayerToggleButton, 0, wxALL, 2 );
+	m_ColorModeSceneToggleText = new wxStaticText( m_ColorModeSceneToggleButton, wxID_ANY, _("Scene Coloring"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ColorModeSceneToggleText->Wrap( -1 );
+	bSizer43111117->Add( m_ColorModeSceneToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_ColorModeNodeTypeToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Node Type Color Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ColorModeNodeTypeToggleButton, 0, wxALL, 2 );
+	m_ColorModeSceneToggleBitmap = new Helium::Editor::DynamicBitmap( m_ColorModeSceneToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111117->Add( m_ColorModeSceneToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_ColorModeScaleToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Scale Color Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ColorModeScaleToggleButton, 0, wxALL, 2 );
+	m_ColorModeSceneToggleButton->SetSizer( bSizer43111117 );
+	m_ColorModeSceneToggleButton->Layout();
+	bSizer43111117->Fit( m_ColorModeSceneToggleButton );
+	bSizer35->Add( m_ColorModeSceneToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
-	m_ColorModeScaleGradientToggleButton = new Helium::Editor::Button( m_ToolPanel, wxID_ANY, _("Scale Gradient Color Mode"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer35->Add( m_ColorModeScaleGradientToggleButton, 0, wxALL, 2 );
+	m_ColorModeLayerToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111118;
+	bSizer43111118 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ColorModeLayerToggleText = new wxStaticText( m_ColorModeLayerToggleButton, wxID_ANY, _("Layer Coloring"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ColorModeLayerToggleText->Wrap( -1 );
+	bSizer43111118->Add( m_ColorModeLayerToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeLayerToggleBitmap = new Helium::Editor::DynamicBitmap( m_ColorModeLayerToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111118->Add( m_ColorModeLayerToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeLayerToggleButton->SetSizer( bSizer43111118 );
+	m_ColorModeLayerToggleButton->Layout();
+	bSizer43111118->Fit( m_ColorModeLayerToggleButton );
+	bSizer35->Add( m_ColorModeLayerToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ColorModeTypeToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111119;
+	bSizer43111119 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ColorModeTypeToggleText = new wxStaticText( m_ColorModeTypeToggleButton, wxID_ANY, _("Type Coloring"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ColorModeTypeToggleText->Wrap( -1 );
+	bSizer43111119->Add( m_ColorModeTypeToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeTypeToggleBitmap = new Helium::Editor::DynamicBitmap( m_ColorModeTypeToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111119->Add( m_ColorModeTypeToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeTypeToggleButton->SetSizer( bSizer43111119 );
+	m_ColorModeTypeToggleButton->Layout();
+	bSizer43111119->Fit( m_ColorModeTypeToggleButton );
+	bSizer35->Add( m_ColorModeTypeToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ColorModeScaleToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111120;
+	bSizer43111120 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ColorModeScaleToggleText = new wxStaticText( m_ColorModeScaleToggleButton, wxID_ANY, _("Scale Coloring"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ColorModeScaleToggleText->Wrap( -1 );
+	bSizer43111120->Add( m_ColorModeScaleToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeScaleToggleBitmap = new Helium::Editor::DynamicBitmap( m_ColorModeScaleToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111120->Add( m_ColorModeScaleToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeScaleToggleButton->SetSizer( bSizer43111120 );
+	m_ColorModeScaleToggleButton->Layout();
+	bSizer43111120->Fit( m_ColorModeScaleToggleButton );
+	bSizer35->Add( m_ColorModeScaleToggleButton, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ColorModeScaleGradientToggleButton = new Helium::Editor::EditorButton( m_ToolPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer43111121;
+	bSizer43111121 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ColorModeScaleGradientToggleText = new wxStaticText( m_ColorModeScaleGradientToggleButton, wxID_ANY, _("Scale Gradient Coloring"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ColorModeScaleGradientToggleText->Wrap( -1 );
+	bSizer43111121->Add( m_ColorModeScaleGradientToggleText, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeScaleGradientToggleBitmap = new Helium::Editor::DynamicBitmap( m_ColorModeScaleGradientToggleButton, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer43111121->Add( m_ColorModeScaleGradientToggleBitmap, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_ColorModeScaleGradientToggleButton->SetSizer( bSizer43111121 );
+	m_ColorModeScaleGradientToggleButton->Layout();
+	bSizer43111121->Fit( m_ColorModeScaleGradientToggleButton );
+	bSizer35->Add( m_ColorModeScaleGradientToggleButton, 0, wxEXPAND | wxALL, 0 );
 	
 	m_ToolPanel->SetSizer( bSizer35 );
 	m_ToolPanel->Layout();
@@ -1027,38 +1592,8 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
-	
-	// Connect Events
-	m_FrameOriginButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
-	m_FrameSelectedButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
-	m_HighlightModeToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
-	m_PreviousViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
-	m_NextViewButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
-	m_ShowAxesToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ShowBoundsToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ShowStatisticsToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_FrustumCullingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_WireframeShadingToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ColorModeSceneToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
-	m_ColorModeLayerToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
-	m_ColorModeScaleToggleButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
 }
 
 ViewPanelGenerated::~ViewPanelGenerated()
 {
-	// Disconnect Events
-	m_FrameOriginButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ), NULL, this );
-	m_FrameSelectedButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ), NULL, this );
-	m_HighlightModeToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnToggleHighlightMode ), NULL, this );
-	m_PreviousViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ), NULL, this );
-	m_NextViewButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ), NULL, this );
-	m_ShowAxesToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ShowBoundsToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ShowStatisticsToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_FrustumCullingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_WireframeShadingToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ), NULL, this );
-	m_ColorModeSceneToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
-	m_ColorModeLayerToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
-	m_ColorModeScaleToggleButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ), NULL, this );
-	
 }

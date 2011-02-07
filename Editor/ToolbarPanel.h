@@ -7,7 +7,8 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/Inspect/StripCanvas.h"
 
-#include "Editor/Controls/Button.h"
+#include "Editor/Controls/EditorButton.h"
+#include "Editor/Controls/DynamicBitmap.h"
 #include "Editor/Controls/Drawer/DrawerManager.h"
 
 
@@ -44,7 +45,7 @@ namespace Helium
             }
 
         private:
-            std::vector< Button* > m_ToolsButtons;
+            std::vector< EditorButton* > m_ToolsButtons;
 
             CommandQueue m_CommandQueue;
             StripCanvas m_ToolPropertiesCanvas;

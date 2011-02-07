@@ -174,7 +174,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_ToolbarPanel->m_LocatorToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_VolumeToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_EntityToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_CurveToolLocator->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
+    m_ToolbarPanel->m_CurveToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
     m_ToolbarPanel->m_CurveEditToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
 
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
@@ -1685,7 +1685,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolLocator->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool( new SceneGraph::CurveCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() ) );
     }
@@ -1857,7 +1857,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_CurveToolLocator->GetId();
+            selectedTool = m_ToolbarPanel->m_CurveToolButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
         {

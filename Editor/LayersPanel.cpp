@@ -4,7 +4,8 @@
 #include "ArtProvider.h"
 #include "EditorIDs.h"
 
-#include "Editor/Controls/Button.h"
+#include "Editor/Controls/EditorButton.h"
+#include "Editor/Controls/DynamicBitmap.h"
 #include "Pipeline/SceneGraph/DependencyCommand.h"
 
 using namespace Helium;
@@ -41,26 +42,14 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     {
         Freeze();
 
-        m_CreateNewLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_CreateNewLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayer ) );
+        m_NewLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayer ) );
+        m_NewLayerFromSelectionBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayerFromSelection ) );
+        m_DeleteLayersBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DeleteSelectedLayers ) );
+
+        m_AddToLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::AddSelectionToLayers ) );
+        m_RemoveFromLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RemoveSelectionFromLayers ) );
         
-        m_CreateNewLayerFromSelectionButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_CreateNewLayerFromSelectionButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayerFromSelection ) );
-        
-        m_DeleteSelectedLayersButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_DeleteSelectedLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DeleteSelectedLayers ) );
-        
-        m_AddSelectionToLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_AddSelectionToLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::AddSelectionToLayers ) );
-        
-        m_RemoveSelectionFromLayerButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_RemoveSelectionFromLayerButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RemoveSelectionFromLayers ) );
-        
-        m_SelectLayerMembersButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_SelectLayerMembersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayerMembers ) );
-        
-        m_SelectLayersButton->SetButtonOptions( ButtonOptions::HideLabel );
-        m_SelectLayersButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayers ) );
+        m_SelectMembersBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayerMembers ) );
 
         m_LayerManagementPanel->Layout();
 
@@ -68,16 +57,22 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
         Thaw();
     }
 
-    m_CreateNewLayerButton->SetHelpText( TXT( "Creates a new layer in the scene." ) );
-    m_CreateNewLayerFromSelectionButton->SetHelpText( TXT( "Creates a new layer in the scene and adds the selection to it." ) );
-    m_DeleteSelectedLayersButton->SetHelpText( TXT( "Deletes the selected layer from the scene." ) );
-    m_AddSelectionToLayerButton->SetHelpText( TXT( "Adds the currently selected items to the layer." ) );
-    m_RemoveSelectionFromLayerButton->SetHelpText( TXT( "Removes the currently selected items from the layer." ) );
-    m_SelectLayerMembersButton->SetHelpText( TXT( "Selects all items that are part of this layer." ) );
-    m_SelectLayersButton->SetHelpText( TXT( "Selects all items in all selected layers." ) );
+    m_NewLayerButton->SetHelpText( TXT( "Creates a new layer in the scene." ) );
+    m_NewLayerFromSelectionButton->SetHelpText( TXT( "Creates a new layer in the scene and adds the selection to it." ) );
+    m_DeleteLayersButton->SetHelpText( TXT( "Deletes the selected layer from the scene." ) );
+    m_AddToLayerButton->SetHelpText( TXT( "Adds the currently selected items to the layer." ) );
+    m_RemoveFromLayerButton->SetHelpText( TXT( "Removes the currently selected items from the layer." ) );
+    m_SelectMembersButton->SetHelpText( TXT( "Selects all items that are part of the selected layer(s)." ) );
 
     m_LayerManagementPanel->SetHelpText( TXT( "This is the layer toolbar." ) );
     m_Grid->GetPanel()->SetHelpText( TXT( "This is the layer grid, you can select a layer to manipulate here." ) );
+
+    m_NewLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayer ), NULL, this );
+    m_NewLayerFromSelectionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayerFromSelection ), NULL, this );
+    m_DeleteLayersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnDeleteLayer ), NULL, this );
+    m_AddToLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnAddSelectionToLayer ), NULL, this );
+    m_RemoveFromLayerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnRemoveSelectionFromLayer ), NULL, this );
+    m_SelectMembersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnSelectLayerMembers ), NULL, this );
 
     // Make sure the toolbar buttons start out disabled
     UpdateToolBarButtons();
@@ -97,6 +92,13 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
 
 LayersPanel::~LayersPanel()
 {
+    m_NewLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayer ), NULL, this );
+    m_NewLayerFromSelectionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnNewLayerFromSelection ), NULL, this );
+    m_DeleteLayersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnDeleteLayer ), NULL, this );
+    m_AddToLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnAddSelectionToLayer ), NULL, this );
+    m_RemoveFromLayerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnRemoveSelectionFromLayer ), NULL, this );
+    m_SelectMembersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( LayersPanel::OnSelectLayerMembers ), NULL, this );
+
     // Remove listeners that are not dependent on the current scene
     if ( m_SceneManager )
     {

@@ -28,12 +28,18 @@ Drawer::Drawer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSiz
     SetSizer( sizer );
 
     // Set up the button
-    m_Button = new Button( this, wxID_ANY, GetLabel(), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-    m_Button->SetButtonOptions( ButtonOptions::Toggle );
-    m_Button->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
-    m_Button->SetBitmapPosition( wxDirection( wxRIGHT ) );
-    m_Button->SetBitmapMargins( 1, 1 );
-    //m_Button->SetButtonOptions( ButtonOptions::Toggle );
+    m_Button = new PanelButton( this );
+    m_Button->SetOptions( PanelButtonOptions::Toggle );
+    
+    wxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_Button->SetSizer( buttonSizer );
+
+    m_ButtonText = new wxStaticText( m_Button, wxID_ANY, GetLabel() );
+    buttonSizer->Add( m_ButtonText );
+
+    m_ButtonBitmap = new wxStaticBitmap( m_Button, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
+    buttonSizer->Add( m_ButtonBitmap, 0, wxALIGN_BOTTOM | wxALIGN_RIGHT );
+
     m_Button->SetValue( false );
 
     // Add the button to the sizer
@@ -127,7 +133,7 @@ void Drawer::SetLabel( const wxString& label )
 {
     __super::SetLabel( label );
 
-    m_Button->SetLabel( GetLabel() );
+    m_ButtonText->SetLabel( GetLabel() );
     m_Button->SetSize( m_Button->GetBestSize() );
     m_Button->SetMinSize( m_Button->GetBestSize() );
 
@@ -146,16 +152,16 @@ void Drawer::SetLabel( const wxString& label )
 
 void Drawer::SetIcon( const tstring& icon )
 {
-    m_Button->SetBitmap( wxArtProvider::GetIcon( (wxArtID)m_Icon, wxART_OTHER, wxSize( 16, 16 ) ) );
+    m_ButtonBitmap->SetBitmap( wxArtProvider::GetIcon( (wxArtID)m_Icon, wxART_OTHER, wxSize( 16, 16 ) ) );
     m_Button->SetSize( m_Button->GetBestSize() );
     m_Button->SetMinSize( m_Button->GetBestSize() );
 
     Layout();
 }
 
-Button* Drawer::GetButton()
+PanelButton* Drawer::GetButton()
 {
-    return (Button*) m_Button;
+    return m_Button;
 }
 
 int32_t Drawer::GetButtonID() const

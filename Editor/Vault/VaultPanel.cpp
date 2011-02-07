@@ -24,7 +24,6 @@ VaultPanel::VaultPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, con
     {
         Freeze();
 
-        m_OptionsButton->SetButtonOptions( ButtonOptions::HideLabel );
         m_OptionsButton->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Options, wxART_OTHER, wxSize(16, 16) ) );
 
         m_ListResultsView = new ListResultsView( m_ResultsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

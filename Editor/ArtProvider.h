@@ -128,6 +128,7 @@ namespace Helium
                 static const wxChar* SelectTool = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SELECT_TOOL );
                 static const wxChar* ShadingMaterial = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHADING_MATERIAL );
                 static const wxChar* ShadingWireframe = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHADING_WIREFRAME );
+                static const wxChar* ShadingTexture = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHADING_TEXTURE );
                 static const wxChar* ShowAxes = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHOW_AXES );
                 static const wxChar* ShowBounds = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHOW_BOUNDS );
                 static const wxChar* ShowGrid = wxART_MAKE_ART_ID( HELIUM_ART_ID_EDITOR_SHOW_GRID );

@@ -615,6 +615,7 @@ void SceneOutliner::OnChar( wxKeyEvent& args )
         // Pass everything else on to the view to handle the normal keyboard shortcuts
     default:
         args.Skip();
+        args.ResumePropagation( wxEVENT_PROPAGATE_MAX );
         break;
     }
 }

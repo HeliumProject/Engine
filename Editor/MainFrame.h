@@ -85,6 +85,11 @@ namespace Helium
                 return &m_DocumentManager;
             }
 
+        public:
+            void InvertSelection();
+
+            bool SaveAll( tstring& error );
+
 
         private:
             // Stores information about the state of each outliner for each scene

@@ -7,6 +7,8 @@
 #include "Editor/App.h"
 #include "Editor/Settings/EditorSettings.h"
 
+#include <wx/bitmap.h>
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -54,6 +56,12 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
         needsUpdate = true;
     }
 
+    if ( settings->m_IconSizeOnButtons != m_IconSize )
+    {
+        m_IconSize = settings->m_IconSizeOnButtons;
+        needsUpdate = true;
+    }
+
     if ( !needsUpdate )
     {
         return;
@@ -74,6 +82,14 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
             {
                 bitmap->Hide();
             }
+
+            DynamicBitmap* dynamicBitmap = dynamic_cast< DynamicBitmap* >( (*itr) );
+            if ( dynamicBitmap )
+            {
+                dynamicBitmap->SetIconSize( m_IconSize );
+            }
+
+            continue;
         }
 
         wxStaticText* text = dynamic_cast< wxStaticText* >( (*itr) );
@@ -87,6 +103,8 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
             {
                 text->Hide();
             }
+
+            continue;
         }
     }
 

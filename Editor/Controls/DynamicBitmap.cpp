@@ -138,6 +138,43 @@ wxButtonBase::State DynamicBitmap::GetState() const
     return m_CurrentState;
 }
 
+void DynamicBitmap::SetArtID( const wxArtID& artID )
+{
+    if ( m_ArtID != artID )
+    {
+        m_ArtID = artID;
+        SetBitmap( wxArtProvider::GetBitmap( m_ArtID ), wxButtonBase::State_Normal );
+    }
+}
+
+void DynamicBitmap::SetIconSize( const int size )
+{
+    int x = 0;
+    int y = 0;
+    GetSize( &x, &y );
+
+    // Only resize the square ones
+    if ( x == y && size != x )
+    {
+        if ( !m_ArtID.empty() )
+        {
+            SetBitmap( wxArtProvider::GetBitmap( m_ArtID, wxART_OTHER, wxSize( size, size ) ), wxButtonBase::State_Normal );
+        }
+        else
+        {
+            wxImage image( GetBitmap().ConvertToImage() );
+            HELIUM_ASSERT( image.Ok() );
+            if ( image.GetWidth() != size || image.GetHeight() != size )
+            {
+                image.Rescale( size, size );
+            }
+            SetBitmap( wxBitmap( image ), wxButtonBase::State_Normal );
+        }
+        SetSize( size, size );
+        Refresh();
+    }
+}
+
 void DynamicBitmap::SetBitmap( const wxBitmap& bitmap )
 {
     SetBitmap( bitmap, wxButtonBase::State_Normal );

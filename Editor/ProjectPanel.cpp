@@ -322,6 +322,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 button->SetSizer( sizer );
 
                 DynamicBitmap* bitmap = new DynamicBitmap( button, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ) );
+                bitmap->SetArtID( ArtIDs::Editor::ProjectFile );
                 sizer->Add( bitmap, 0, wxALIGN_CENTER | wxALL, 5 );
 
                 wxStaticText* text = new wxStaticText( button, wxID_ANY, path.Basename().c_str() );

@@ -38,6 +38,8 @@ namespace Helium
             
             virtual void OnActivateItem( wxDataViewEvent& event );
 
+            virtual void OnUpdateUI( wxUpdateUIEvent& event );
+
             void ProjectPanel::OnAddItems( wxCommandEvent& event );
             void ProjectPanel::OnDeleteItems( wxCommandEvent& event );
 
@@ -62,7 +64,7 @@ namespace Helium
 
             OrderedSet< Path* > m_Selected;
 
-            typedef std::map< wxWindowID, tstring > M_ProjectMRULookup;
+            typedef std::map< wxWindowID, Path > M_ProjectMRULookup;
             M_ProjectMRULookup m_ProjectMRULookup;
             
             FileDropTarget* m_DropTarget;

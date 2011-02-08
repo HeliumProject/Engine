@@ -5,6 +5,7 @@
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 #include "Platform/Windows/Console.h"
+#include "Platform/Timer.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
@@ -183,6 +184,8 @@ App::~App()
 // 
 bool App::OnInit()
 {
+    Timer::StaticInitialize();
+
     SetVendorName( HELIUM_APP_NAME );
 
     //parse.SetLogo( wxT( "Editor (c) 2010 - "HELIUM_APP_NAME"\n" ) );

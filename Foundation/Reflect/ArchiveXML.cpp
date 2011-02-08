@@ -12,9 +12,6 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-char Indent<char>::m_Space = ' ';
-wchar_t Indent<wchar_t>::m_Space = L' ';
-
 // uncomment to display parse stack progress
 //#define REFLECT_DISPLAY_PARSE_STACK
 
@@ -314,26 +311,12 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
 
 void ArchiveXML::Deserialize(ObjectPtr& object)
 {
-    if ( m_Objects.size() == 1 )
-    {
-        object = m_Objects.front();
-        m_Objects.clear();
-    }
-    else
-    {
-        // xml doesn't work this way, this function is basically a pass-off point of object pointers
-        //  from PointerSerializer... since XML parsing means we don't have flow control of the stream
-        HELIUM_BREAK();
-        throw Reflect::LogisticException( TXT( "Internal Error: Missing object" ) );
-    }
+
 }
 
 void ArchiveXML::Deserialize( void* structure, const Structure* type )
 {
-    State state;
-    state.m_Instance = structure;
-    state.m_Composite = type;
-    m_States.push( state );
+
 }
 
 void ArchiveXML::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flags)
@@ -372,6 +355,8 @@ void ArchiveXML::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
         m_Objects.clear();
     }
 }
+
+#if 0
 
 void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszAttrs)
 {
@@ -609,6 +594,8 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         m_Abort |= info.m_Abort;
     }
 }
+
+#endif
 
 void ArchiveXML::ToString(Object* object, tstring& xml )
 {

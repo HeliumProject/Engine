@@ -24,6 +24,8 @@ namespace Helium
             bool m_ShowText;
             bool m_ShowIcons;
 
+            int m_IconSize;
+
         public:
             DECLARE_DYNAMIC_CLASS( EditorButton )
         };

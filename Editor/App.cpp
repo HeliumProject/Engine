@@ -24,6 +24,8 @@
 #include "Pipeline/CoreInit.h"
 
 #include "Editor/ArtProvider.h"
+#include "Editor/Input.h"
+#include "Editor/EditorGenerated.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/ProjectViewModel.h"
 #include "Pipeline/Settings.h"
@@ -267,6 +269,8 @@ bool App::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Editor with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
+    Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
+
     m_Frame = new MainFrame( m_SettingsManager );
     m_Frame->Show();
 
@@ -291,6 +295,8 @@ bool App::OnInit()
 // 
 int App::OnExit()
 {
+    Disconnect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
+
     SaveSettings();
 
     m_InitializerStack.Cleanup();
@@ -298,6 +304,69 @@ int App::OnExit()
     wxImage::CleanUpHandlers();
 
     return wxApp::OnExit();
+}
+
+void App::OnChar( wxKeyEvent& event )
+{
+    if ( !m_Frame )
+    {
+        return;
+    }
+
+    Helium::KeyboardInput input;
+    Helium::ConvertEvent( event, input );
+    tstring error;
+
+    if ( input.IsCtrlDown() )
+    {
+        switch( input.GetKeyCode() )
+        {
+        case KeyCodes::a: // ctrl-a
+            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_SELECTALL ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::i: // ctrl-i
+            m_Frame->InvertSelection();
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::o: // ctrl-o
+            m_Frame->OpenProjectDialog();
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::s: // ctrl-s
+            if ( !m_Frame->SaveAll( error ) )
+            {
+                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_Frame );
+            }
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::v: // ctrl-v
+            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_PASTE ) );
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::w: // ctrl-w
+            m_Frame->CloseProject();
+            event.Skip( false );
+            return;
+            break;
+
+        case KeyCodes::x: // ctrl-x
+            m_Frame->GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_CUT ) );
+            event.Skip( false );
+            return;
+            break;
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -28,11 +28,12 @@ namespace Helium
             App();
             ~App();
 
-            virtual bool    OnInit() HELIUM_OVERRIDE;
-            virtual int     OnExit() HELIUM_OVERRIDE;
-            virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
-            virtual void    OnUnhandledException() HELIUM_OVERRIDE;
-            virtual bool    OnExceptionInMainLoop() HELIUM_OVERRIDE;
+            virtual bool OnInit() HELIUM_OVERRIDE;
+            virtual int OnExit() HELIUM_OVERRIDE;
+            virtual void OnChar( wxKeyEvent& event );
+            virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
+            virtual void OnUnhandledException() HELIUM_OVERRIDE;
+            virtual bool OnExceptionInMainLoop() HELIUM_OVERRIDE;
 
             const tstring& AppVersion() const { return m_AppVersion; }
             const tstring& AppName() const { return m_AppName; }

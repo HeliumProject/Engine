@@ -1102,19 +1102,6 @@ ToolbarPanelGenerated::~ToolbarPanelGenerated()
 	
 }
 
-TypesPanelGenerated::TypesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer30;
-	bSizer30 = new wxBoxSizer( wxVERTICAL );
-	
-	this->SetSizer( bSizer30 );
-	this->Layout();
-}
-
-TypesPanelGenerated::~TypesPanelGenerated()
-{
-}
-
 VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bSizer33;

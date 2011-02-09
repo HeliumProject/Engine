@@ -3,6 +3,8 @@
 #include "ProjectPanel.h"
 #include "ArtProvider.h"
 
+#include "Platform/Timer.h"
+
 #include "Pipeline/Asset/AssetClass.h"
 
 #include "Editor/App.h"
@@ -91,6 +93,9 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
     m_DropTarget->AddDroppedListener( FileDroppedSignature::Delegate( this, &ProjectPanel::OnDroppedFiles ) );
     m_DataViewCtrl->GetMainWindow()->SetDropTarget( m_DropTarget );
 
+    SetExtraStyle( GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES );
+    Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( ProjectPanel::OnUpdateUI ), NULL, this );
+
     wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->e_Changed.Add( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
 
@@ -111,6 +116,8 @@ ProjectPanel::~ProjectPanel()
     m_OptionsButton->Disconnect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ProjectPanel::OnOptionsMenuClose ), NULL, this );
 
     Disconnect( wxEVT_CONTEXT_MENU, wxContextMenuEventHandler( ProjectPanel::OnContextMenu ), NULL, this );
+
+    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( ProjectPanel::OnUpdateUI ), NULL, this );
 
     wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >()->e_Changed.Remove( Reflect::ObjectChangeSignature::Delegate( this, &ProjectPanel::GeneralSettingsChanged ) );
 }
@@ -249,6 +256,46 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
     HELIUM_BREAK();
 }
 
+void ProjectPanel::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    if ( !m_RecentProjectsPanel->IsShown() )
+    {
+        return;
+    }
+
+    static float64_t secondsAtLastCall = 0;
+    if ( Timer::GetSeconds() - secondsAtLastCall < 1.0 )
+    {
+        return;
+    }
+
+    secondsAtLastCall = Timer::GetSeconds();
+
+    wxWindowList children = m_RecentProjectsPanel->GetChildren();
+
+    bool needsRefresh = false;
+    for ( wxWindowList::iterator itr = children.begin(), end = children.end(); itr != end; ++itr )
+    {
+        EditorButton* button = dynamic_cast< EditorButton* >( (*itr) );
+        if ( button )
+        {
+            M_ProjectMRULookup::iterator mruEntry = m_ProjectMRULookup.find( button->GetId() );
+            HELIUM_ASSERT( mruEntry != m_ProjectMRULookup.end() );
+
+            if ( button->IsEnabled() != (*mruEntry).second.Exists() )
+            {
+                button->Enable( (*mruEntry).second.Exists() );
+                needsRefresh = true;
+            }
+        }
+    }
+
+    if ( needsRefresh )
+    {
+        Refresh();
+    }
+}
+
 void ProjectPanel::PopulateOpenProjectListItems()
 {
     Freeze();
@@ -275,6 +322,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 button->SetSizer( sizer );
 
                 DynamicBitmap* bitmap = new DynamicBitmap( button, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Editor::ProjectFile ) );
+                bitmap->SetArtID( ArtIDs::Editor::ProjectFile );
                 sizer->Add( bitmap, 0, wxALIGN_CENTER | wxALL, 5 );
 
                 wxStaticText* text = new wxStaticText( button, wxID_ANY, path.Basename().c_str() );
@@ -283,7 +331,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
                 button->Enable( fileExists );
                 m_RecentProjectsSizer->Add( button, 0, wxEXPAND, 5 );
 
-                m_ProjectMRULookup.insert( M_ProjectMRULookup::value_type( button->GetId(), path.Get() ) );
+                m_ProjectMRULookup.insert( M_ProjectMRULookup::value_type( button->GetId(), path ) );
 
                 if ( fileExists )
                 {

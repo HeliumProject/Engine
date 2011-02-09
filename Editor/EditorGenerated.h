@@ -247,7 +247,7 @@ namespace Helium
 				Helium::Editor::EditorButton* m_RemoveFromLayerButton;
 				Helium::Editor::EditorButton* m_SelectMembersButton;
 				
-				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,200 ), long style = wxTAB_TRAVERSAL );
 				~LayersPanelGenerated();
 			
 		};
@@ -373,22 +373,6 @@ namespace Helium
 				
 				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
-		/// Class TypesPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class TypesPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-			
-			public:
-				
-				TypesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-				~TypesPanelGenerated();
 			
 		};
 		

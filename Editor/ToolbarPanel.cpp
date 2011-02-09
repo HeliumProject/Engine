@@ -30,45 +30,45 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         Freeze();
 
         m_SelectButton->SetOptions( PanelButtonOptions::Toggle );
-        m_SelectBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectTool ) );
+        m_SelectBitmap->SetArtID( ArtIDs::Editor::SelectTool );
         
         m_TranslateButton->SetOptions( PanelButtonOptions::Toggle );
-        m_TranslateBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::TranslateTool ) );
+        m_TranslateBitmap->SetArtID( ArtIDs::Editor::TranslateTool );
         
         m_RotateButton->SetOptions( PanelButtonOptions::Toggle );
-        m_RotateBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RotateTool ) );
+        m_RotateBitmap->SetArtID( ArtIDs::Editor::RotateTool );
         
         m_ScaleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ScaleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ScaleTool ) );
+        m_ScaleBitmap->SetArtID( ArtIDs::Editor::ScaleTool );
 
         m_DuplicateToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_DuplicateToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DuplicateTool ) );
+        m_DuplicateToolBitmap->SetArtID( ArtIDs::Editor::DuplicateTool );
         
         m_LocatorToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_LocatorToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Locator ) );
+        m_LocatorToolBitmap->SetArtID( ArtIDs::Editor::Locator );
         
         m_VolumeToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_VolumeToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Volume ) );
+        m_VolumeToolBitmap->SetArtID( ArtIDs::Editor::Volume );
         
         m_EntityToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_EntityToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Entity ) );
+        m_EntityToolBitmap->SetArtID( ArtIDs::Editor::Entity );
         
         m_CurveToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_CurveToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::Curve ) );
+        m_CurveToolBitmap->SetArtID( ArtIDs::Editor::Curve );
         
         m_CurveEditToolButton->SetOptions( PanelButtonOptions::Toggle );
-        m_CurveEditToolBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CurveEdit ) );
+        m_CurveEditToolBitmap->SetArtID( ArtIDs::Editor::CurveEdit );
 
         m_PlayButton->SetOptions( PanelButtonOptions::Toggle );
-        m_PlayBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Play ) );
+        m_PlayBitmap->SetArtID( ArtIDs::Actions::Play );
         m_PlayButton->Enable( false );
         
         m_PauseButton->SetOptions( PanelButtonOptions::Toggle );
-        m_PauseBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Pause ) );
+        m_PauseBitmap->SetArtID( ArtIDs::Actions::Pause );
         m_PauseButton->Enable( false );
         
         m_StopButton->SetOptions( PanelButtonOptions::Toggle );
-        m_StopBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Stop ) );
+        m_StopBitmap->SetArtID( ArtIDs::Actions::Stop );
         m_StopButton->Enable( false );
 
         Layout();

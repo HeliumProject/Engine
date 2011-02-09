@@ -16,8 +16,9 @@ EditorSettings::EditorSettings()
 : m_ReopenLastProjectOnStartup( true )
 , m_ShowFileExtensionsInProjectView( false )
 , m_EnableAssetTracker( true )
-, m_ShowTextOnButtons( true )
+, m_ShowTextOnButtons( false )
 , m_ShowIconsOnButtons( true )
+, m_IconSizeOnButtons( 24 )
 {
 }
 
@@ -46,6 +47,11 @@ void EditorSettings::PopulateComposite( Reflect::Composite& comp )
     field = comp.AddField( &EditorSettings::m_ShowIconsOnButtons, TXT( "m_ShowIconsOnButtons" ) );
     field->SetProperty( TXT( "UIName" ), TXT( "Display Icons on Buttons" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "If this is enabled, the editor will display icons on buttons in the UI." ) );
+
+    field = comp.AddField( &EditorSettings::m_IconSizeOnButtons, TXT( "m_IconSizeOnButtons" ) );
+    field->SetProperty( TXT( "UIName" ), TXT( "Icon Size on Buttons" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "Select the size of the icon to display on buttons." ) );
+    
 }
 
 std::vector< tstring >& EditorSettings::GetMRUProjects()

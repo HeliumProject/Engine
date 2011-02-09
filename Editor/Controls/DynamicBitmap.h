@@ -37,6 +37,9 @@ namespace Helium
             void SetState( wxButtonBase::State state );
             wxButtonBase::State GetState() const;
 
+            void SetArtID( const wxArtID& artID );
+            void SetIconSize( const int size );
+
             // Methods for setting individual images for different states: normal,
             // selected (meaning pushed or pressed), focused (meaning normal state for
             // a focused button), disabled or hover (a.k.a. hot or current).
@@ -88,6 +91,8 @@ namespace Helium
             wxButtonBase::State m_CurrentState;
             wxBitmap* m_Bitmaps[wxButtonBase::State_Max];
             bool m_WasStateSetByUser[wxButtonBase::State_Max];
+            wxArtID m_ArtID;
+
         };
     }
 }

@@ -8,7 +8,6 @@
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
 #include "ToolbarPanel.h"
-#include "TypesPanel.h"
 #include "ViewPanel.h"
 
 #include "Editor/Vault/VaultPanel.h"
@@ -86,6 +85,11 @@ namespace Helium
                 return &m_DocumentManager;
             }
 
+        public:
+            void InvertSelection();
+
+            bool SaveAll( tstring& error );
+
 
         private:
             // Stores information about the state of each outliner for each scene
@@ -95,7 +99,6 @@ namespace Helium
             HelpPanel*                  m_HelpPanel;
             ProjectPanel*               m_ProjectPanel;
             LayersPanel*                m_LayersPanel;
-            TypesPanel*                 m_TypesPanel;
             ViewPanel*                  m_ViewPanel;
             ToolbarPanel*               m_ToolbarPanel;
             DirectoryPanel*             m_DirectoryPanel;

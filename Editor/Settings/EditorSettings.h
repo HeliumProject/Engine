@@ -38,6 +38,7 @@ namespace Helium
             bool m_EnableAssetTracker;
             bool m_ShowTextOnButtons;
             bool m_ShowIconsOnButtons;
+            int m_IconSizeOnButtons;
         };
 
         typedef Helium::StrongPtr< EditorSettings > GeneralSettingsPtr;

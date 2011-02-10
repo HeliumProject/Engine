@@ -215,6 +215,95 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
+    //pmd - Added UDP/TCP socket demo code
+    HELIUM_TRACE( TRACE_DEBUG, TXT("Testing Sockets"));
+    Helium::InitializeSockets();
+    {
+        HELIUM_TRACE( TRACE_DEBUG, TXT(" - UDP"));
+        // Get the local host information
+        hostent* localhost = gethostbyname("");
+        char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
+
+        // Set up the sockaddr structure
+        struct sockaddr_in peer1_addr;
+        peer1_addr.sin_family = AF_INET;
+        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
+        peer1_addr.sin_port = htons(45554);
+
+        struct sockaddr_in peer2_addr;
+        peer2_addr.sin_family = AF_INET;
+        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
+        peer2_addr.sin_port = htons(45555);
+
+        Helium::Socket peer1(0);
+        Helium::CreateSocket(peer1, Helium::SocketProtocols::Udp);
+        Helium::BindSocket(peer1, 45554);
+
+        Helium::Socket peer2(0);
+        Helium::CreateSocket(peer2, Helium::SocketProtocols::Udp);
+        Helium::BindSocket(peer2, 45555);
+
+        uint32_t wrote;
+        Helium::Condition terminate_condition(Condition::RESET_MODE_MANUAL);
+        Helium::WriteSocket(peer1, "test_data", 10, wrote, terminate_condition, &peer2_addr);
+
+        char buffer[256];
+        sockaddr_in peer_addr;
+
+        uint32_t read;
+        Helium::ReadSocket(peer2, buffer, 256, read, terminate_condition, &peer_addr);
+
+        Helium::CloseSocket(peer1);
+        Helium::CloseSocket(peer2);
+    }
+
+    {
+        HELIUM_TRACE( TRACE_DEBUG, TXT(" - TCP"));
+
+        // Get the local host information
+        hostent* localhost = gethostbyname("");
+        char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
+
+        // Set up the sockaddr structure
+        struct sockaddr_in peer1_addr;
+        peer1_addr.sin_family = AF_INET;
+        peer1_addr.sin_addr.s_addr = inet_addr(local_ip);
+        peer1_addr.sin_port = htons(45554);
+
+        struct sockaddr_in peer2_addr;
+        peer2_addr.sin_family = AF_INET;
+        peer2_addr.sin_addr.s_addr = inet_addr(local_ip);
+        peer2_addr.sin_port = htons(45555);
+
+        Helium::Socket peer1(0);
+        Helium::CreateSocket(peer1, Helium::SocketProtocols::Tcp);
+        Helium::BindSocket(peer1, 45554);
+        Helium::ListenSocket(peer1);
+
+        Helium::Socket peer2(0);
+        Helium::CreateSocket(peer2, Helium::SocketProtocols::Tcp);
+        Helium::ConnectSocket(peer2, &peer1_addr);
+
+        sockaddr_in peer_addr;
+        Helium::Socket peer1_new_client(0);
+        Helium::CreateSocket(peer1_new_client, SocketProtocols::Tcp);
+        Helium::AcceptSocket(peer1_new_client, peer1, &peer_addr);
+
+        uint32_t wrote;
+        Helium::Condition terminate_condition(Condition::RESET_MODE_MANUAL);
+        Helium::WriteSocket(peer1_new_client, "test_data", 10, wrote, terminate_condition);
+
+        char buffer[256];
+
+        uint32_t read;
+        Helium::ReadSocket(peer2, buffer, 256, read, terminate_condition);
+        Helium::CloseSocket(peer1);
+        Helium::CloseSocket(peer2);
+        Helium::CloseSocket(peer1_new_client);
+    }
+
+    Helium::CleanupSockets();
+
     HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "GameObject" ) ) ) == GameObject::GetStaticType() );
 
     {

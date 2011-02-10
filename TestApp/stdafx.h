@@ -21,6 +21,7 @@
 #include "Platform/Math/Simd/QuatSoa.h"
 #include "Platform/Math/Simd/AaBox.h"
 #include "Platform/Math/Float16.h"
+#include "Platform/Socket.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"

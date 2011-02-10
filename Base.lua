@@ -30,6 +30,8 @@ end
 Helium.Build64Bit = function()
     if os.get() == "windows" then
         return string.find( os.getenv("PATH"), "x64" )
+    elseif os.get() == "macosx" then
+    	return true;
     else
 		print("Implement support for " .. os.get() .. " to Helium.Build64Bit()")
 		os.exit(1)
@@ -159,7 +161,7 @@ Helium.Publish = function( files )
                 linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
             end
    		else
-            linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
+            linkCommand = "ln \"" .. path .. "\" \"" .. destination .. "\""
 		end
 		local result = os.execute( linkCommand )
 

@@ -10,7 +10,7 @@ using namespace Helium::Editor;
 
 static int s_MouseLocationTimerFrequency = 100;
 static wxColor s_HighlighColor( 8, 8, 8 );
-static wxColor s_ToggledColor( 200, 200, 220 );
+static wxColor s_ToggledColor( 210, 210, 220 );
 
 wxColor operator+( const wxColor& lhs, const wxColor& rhs )
 {
@@ -34,8 +34,6 @@ PanelButton::PanelButton( wxWindow *parent, wxWindowID id, const wxPoint& pos, c
 , m_Options( PanelButtonOptions::Default )
 , m_Toggled( false )
 {
-    SetWindowStyle( GetWindowStyle() | wxBORDER_THEME );
-
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PanelButton::OnRightMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PanelButton::OnLeftMouseDown ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( PanelButton::OnMouseEnter ), NULL, this );

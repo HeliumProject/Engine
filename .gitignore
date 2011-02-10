@@ -7,6 +7,7 @@
 *.BASE.*
 *.LOCAL.*
 *.REMOTE.*
+.DS_Store
 Bin/*
 Logs/*
 DataPC/

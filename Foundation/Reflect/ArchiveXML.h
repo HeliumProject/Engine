@@ -22,6 +22,9 @@ namespace Helium
             // The xml data
             XMLDocument m_Document;
 
+            // The current element
+            XMLElement* m_Current;
+
             // The stream to use
             TCharStreamPtr m_Stream;
 

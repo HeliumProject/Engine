@@ -17,11 +17,23 @@ namespace Helium
         typedef Map< Name, String >::ValueType  AttributeValueType;
 
         XMLElement()
-            : m_Parent( NULL )
-            , m_FirstChild( NULL )
-            , m_NextSibling( NULL )
+            : m_Index( -1 )
+            , m_Parent( -1 )
+            , m_FirstChild( -1 )
+            , m_NextSibling( -1 )
         {
 
+        }
+
+        const String* GetAttributeValue( const Name& name )
+        {
+            AttributeMap::ConstIterator found = m_Attributes.Find( name );
+            if ( found != m_Attributes.End() )
+            {
+                return &found->Second();
+            }
+
+            return NULL;
         }
 
         // Element Info
@@ -30,9 +42,11 @@ namespace Helium
         AttributeMap    m_Attributes;
 
         // Element Hierarchy
-        XMLElement*     m_Parent;
-        XMLElement*     m_FirstChild;
-        XMLElement*     m_NextSibling;
+        int32_t         m_Index;
+        int32_t         m_Parent;
+        int32_t         m_FirstChild;
+        int32_t         m_NextSibling;
+
     };
 
     class FOUNDATION_API XMLDocument
@@ -59,7 +73,7 @@ namespace Helium
 
         XML_Parser              m_Parser;
         XMLElement*             m_Root;
-        DynArray< XMLElement* > m_Stack;
+        DynArray< int32_t >     m_Stack;
         DynArray< XMLElement >  m_Elements;
     };
 }

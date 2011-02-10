@@ -213,8 +213,7 @@ void ArchiveBinary::Write()
 
     // serialize main file objects
     {
-        REFLECT_SCOPE_TIMER( ("Main Spool Write") );
-
+        REFLECT_SCOPE_TIMER( ("Write Objects") );
         Serialize(m_Objects, ArchiveFlags::Status);
     }
 

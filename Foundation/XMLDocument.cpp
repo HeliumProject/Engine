@@ -38,11 +38,13 @@ void XMLDocument::OnStartElement(const tchar_t *pszName, const tchar_t **papszAt
     XMLElement* parent = NULL;
     if ( !m_Stack.IsEmpty() )
     {
-        parent = m_Stack.GetLast();
+        parent = &m_Elements[ m_Stack.GetLast() ];
     }
 
+    int32_t index = static_cast< int32_t >( m_Elements.GetSize() );
     m_Elements.Push( XMLElement () );
     XMLElement* element = &m_Elements.GetLast();
+    element->m_Index = index;
 
     // copy data
     element->m_Name.Set( pszName );
@@ -52,32 +54,34 @@ void XMLDocument::OnStartElement(const tchar_t *pszName, const tchar_t **papszAt
     }
 
     // setup hierarchy
-    element->m_Parent = parent;
     if ( parent )
     {
-        XMLElement* sibling = parent->m_FirstChild;
-        if ( sibling )
+        element->m_Parent = parent->m_Index;
+
+        if ( parent->m_FirstChild >= 0 )
         {
+            XMLElement* sibling = &m_Elements[ parent->m_FirstChild ];
             XMLElement* previousSibling = sibling;
-            while ( sibling = sibling->m_NextSibling )
+            while ( sibling = ( sibling->m_NextSibling >= 0 ? &m_Elements[ sibling->m_NextSibling ] : NULL ) )
             {
                 previousSibling = sibling;
             }
 
-            previousSibling->m_NextSibling = element;
+            HELIUM_ASSERT( previousSibling->m_NextSibling == -1 );
+            previousSibling->m_NextSibling = element->m_Index;
         }
         else
         {
-            parent->m_FirstChild = element;
+            parent->m_FirstChild = element->m_Index;
         }
     }
 
-    m_Stack.Push( element );
+    m_Stack.Push( element->m_Index );
 }
 
 void XMLDocument::OnCharacterData(const tchar_t *pszData, int nLength)
 {
-    m_Stack.GetLast()->m_Body.Add( pszData, nLength );
+    m_Elements[ m_Stack.GetLast() ].m_Body.Add( pszData, nLength );
 }
 
 void XMLDocument::OnEndElement(const tchar_t *pszName)

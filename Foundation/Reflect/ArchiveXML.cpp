@@ -90,19 +90,41 @@ void ArchiveXML::Read()
     }
 
     // while there is data, parse buffer
-    long step = 0;
-    const unsigned bufferSizeInBytes = 4096;
-    char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
-    while (!m_Stream->Fail() && !m_Abort)
     {
-        m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
+        REFLECT_SCOPE_TIMER( ("Parse XML") );
 
-        // divide by the character size so wide char builds don't override the allocation
-        //  stream objects read characters, not byte-by-byte
-        m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
-        int bytesRead = static_cast<int>(m_Stream->ElementsRead());
+        long step = 0;
+        const unsigned bufferSizeInBytes = 4096;
+        char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
+        while (!m_Stream->Fail() && !m_Abort)
+        {
+            m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
-        m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
+            // divide by the character size so wide char builds don't override the allocation
+            //  stream objects read characters, not byte-by-byte
+            m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
+            int bytesRead = static_cast<int>(m_Stream->ElementsRead());
+
+            m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
+        }
+    }
+
+    m_Current = m_Document.GetRoot();
+
+    // read file format version attribute
+    const String* version = m_Current->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
+    if ( version )
+    {
+        tstringstream str ( version->GetData() );
+        str >> m_Version;
+    }
+
+    m_Current = m_Current->GetFirstChild();
+
+    // deserialize main file objects
+    {
+        REFLECT_SCOPE_TIMER( ("Read Objects") );
+        Deserialize(m_Objects, ArchiveFlags::Status);
     }
 
     info.m_State = ArchiveStates::ObjectProcessed;
@@ -129,7 +151,10 @@ void ArchiveXML::Write()
     *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
 
     // serialize main file objects
-    Serialize(m_Objects, ArchiveFlags::Status);
+    {
+        REFLECT_SCOPE_TIMER( ("Write Objects") );
+        Serialize(m_Objects, ArchiveFlags::Status);
+    }
 
     *m_Stream << TXT( "</Reflect>\n\0" );
 
@@ -309,7 +334,7 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
     }
 }
 
-void ArchiveXML::Deserialize(ObjectPtr& object)
+void ArchiveXML::Deserialize( ObjectPtr& object )
 {
 
 }

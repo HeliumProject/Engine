@@ -10,19 +10,22 @@ typedef struct XML_ParserStruct *XML_Parser;
 
 namespace Helium
 {
+    class XMLDocument;
+
     class FOUNDATION_API XMLElement
     {
     public:
         typedef Map< Name, String >             AttributeMap;
         typedef Map< Name, String >::ValueType  AttributeValueType;
 
-        XMLElement()
-            : m_Parent( NULL )
-            , m_FirstChild( NULL )
-            , m_NextSibling( NULL )
-        {
+        inline XMLElement();
 
-        }
+        // Data helpers
+        inline const String* GetAttributeValue( const Name& name );
+        inline XMLDocument* GetDocument();
+        inline XMLElement* GetParent();
+        inline XMLElement* GetFirstChild();
+        inline XMLElement* GetNextSibling();
 
         // Element Info
         Name            m_Name;
@@ -30,9 +33,11 @@ namespace Helium
         AttributeMap    m_Attributes;
 
         // Element Hierarchy
-        XMLElement*     m_Parent;
-        XMLElement*     m_FirstChild;
-        XMLElement*     m_NextSibling;
+        XMLDocument*    m_Document;
+        int32_t         m_Index;
+        int32_t         m_Parent;
+        int32_t         m_FirstChild;
+        int32_t         m_NextSibling;
     };
 
     class FOUNDATION_API XMLDocument
@@ -41,10 +46,8 @@ namespace Helium
         XMLDocument();
         ~XMLDocument();
 
-        XMLElement* GetRoot()
-        {
-            return m_Root;
-        }
+        inline XMLElement* GetRoot();
+        inline XMLElement* GetElement( int32_t index );
 
         void ParseBuffer( const void* buffer, uint32_t length, bool finalize );
 
@@ -59,7 +62,9 @@ namespace Helium
 
         XML_Parser              m_Parser;
         XMLElement*             m_Root;
-        DynArray< XMLElement* > m_Stack;
+        DynArray< int32_t >     m_Stack;
         DynArray< XMLElement >  m_Elements;
     };
 }
+
+#include "Foundation/XMLDocument.inl"

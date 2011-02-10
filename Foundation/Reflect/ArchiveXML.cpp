@@ -119,7 +119,7 @@ void ArchiveXML::Read()
         str >> m_Version;
     }
 
-    m_Current = m_Current->m_FirstChild;
+    m_Current = m_Current->GetFirstChild();
 
     // deserialize main file objects
     {

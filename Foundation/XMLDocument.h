@@ -10,31 +10,22 @@ typedef struct XML_ParserStruct *XML_Parser;
 
 namespace Helium
 {
+    class XMLDocument;
+
     class FOUNDATION_API XMLElement
     {
     public:
         typedef Map< Name, String >             AttributeMap;
         typedef Map< Name, String >::ValueType  AttributeValueType;
 
-        XMLElement()
-            : m_Index( -1 )
-            , m_Parent( -1 )
-            , m_FirstChild( -1 )
-            , m_NextSibling( -1 )
-        {
+        inline XMLElement();
 
-        }
-
-        const String* GetAttributeValue( const Name& name )
-        {
-            AttributeMap::ConstIterator found = m_Attributes.Find( name );
-            if ( found != m_Attributes.End() )
-            {
-                return &found->Second();
-            }
-
-            return NULL;
-        }
+        // Data helpers
+        inline const String* GetAttributeValue( const Name& name );
+        inline XMLDocument* GetDocument();
+        inline XMLElement* GetParent();
+        inline XMLElement* GetFirstChild();
+        inline XMLElement* GetNextSibling();
 
         // Element Info
         Name            m_Name;
@@ -42,11 +33,11 @@ namespace Helium
         AttributeMap    m_Attributes;
 
         // Element Hierarchy
+        XMLDocument*    m_Document;
         int32_t         m_Index;
         int32_t         m_Parent;
         int32_t         m_FirstChild;
         int32_t         m_NextSibling;
-
     };
 
     class FOUNDATION_API XMLDocument
@@ -55,10 +46,8 @@ namespace Helium
         XMLDocument();
         ~XMLDocument();
 
-        XMLElement* GetRoot()
-        {
-            return m_Root;
-        }
+        inline XMLElement* GetRoot();
+        inline XMLElement* GetElement( int32_t index );
 
         void ParseBuffer( const void* buffer, uint32_t length, bool finalize );
 
@@ -77,3 +66,5 @@ namespace Helium
         DynArray< XMLElement >  m_Elements;
     };
 }
+
+#include "Foundation/XMLDocument.inl"

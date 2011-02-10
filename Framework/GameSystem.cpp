@@ -15,6 +15,7 @@
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"
+#include "Engine/CacheManager.h"
 #include "Windowing/WindowManager.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RSurface.h"
@@ -98,6 +99,7 @@ bool GameSystem::Initialize(
     }
 #endif
 
+
     // Initialize the async loading thread.
     bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();
     HELIUM_ASSERT( bAsyncLoaderInitSuccess );
@@ -107,6 +109,16 @@ bool GameSystem::Initialize(
 
         return false;
     }
+
+    //pmd - Initialize the cache manager
+    Path baseDirectory;
+    if ( !File::GetBaseDirectory( baseDirectory ) )
+    {
+      HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+      return false;
+    }
+
+    HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 
     // Initialize the reflection type registry and register GameObject-based types.
     Reflect::Initialize();

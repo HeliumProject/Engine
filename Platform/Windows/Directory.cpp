@@ -35,7 +35,8 @@ bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
     if ( handle.m_Handle == INVALID_HANDLE_VALUE )
     {
         DWORD error = GetLastError();
-        if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND ) 
+        //pmd020611 - Added ERROR_ACCESS_DENIED
+        if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND || error == ERROR_ACCESS_DENIED ) 
         {
             return false;
         }

@@ -7,33 +7,38 @@
 
 namespace Helium
 {
-  //
-  // Creates a new process with no window or output, use it for running scripts and file association apps
-  //
+    //
+    // Creates a new process with no window or output, use it for running scripts and file association apps
+    //
 
-  PLATFORM_API int Execute( const tstring& command, bool showWindow = false, bool block = false );
+    PLATFORM_API int Execute( const tstring& command, bool showWindow = false, bool block = false );
 
-  //
-  // Creates a new process and captures its standard out and standard error into the passed string
-  //
+    //
+    // Creates a new process and captures its standard out and standard error into the passed string
+    //
 
-  PLATFORM_API int Execute( const tstring& command, tstring& output, bool showWindow = false );
+    PLATFORM_API int Execute( const tstring& command, tstring& output, bool showWindow = false );
 
-  //
-  // Get a unique string for this process
-  //
+    //
+    // Get a unique string for this process
+    //
 
-  PLATFORM_API tstring GetProcessString();
+    PLATFORM_API tstring GetProcessString();
 
-  //
-  // Get the application path for this process
-  //
+    //
+    // Get the application path for this process
+    //
 
-  PLATFORM_API tstring GetProcessPath();
+    PLATFORM_API tstring GetProcessPath();
 
-  //
-  // Get the executable name for this process
-  //
+    //
+    // Get the executable name for this process
+    //
 
-  PLATFORM_API tstring GetProcessName();
+    PLATFORM_API tstring GetProcessName();
+
+    //
+    // Get the crashdump directory
+    //
+    PLATFORM_API tstring GetCrashdumpDirectory();
 }

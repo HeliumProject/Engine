@@ -43,6 +43,21 @@ namespace Helium
     class FOUNDATION_API XMLDocument
     {
     public:
+        class Iterator
+        {
+        public:
+            inline Iterator();
+            inline Iterator( XMLDocument* document );
+
+            inline bool IsDone();
+            inline XMLElement* Advance( bool skipChildren = false );
+            inline XMLElement* GetCurrent();
+            inline void SetCurrent( XMLElement* element );
+
+        private:
+            XMLElement* m_Current;
+        };
+
         XMLDocument();
         ~XMLDocument();
 

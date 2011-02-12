@@ -441,11 +441,9 @@ void App::LoadSettings()
 	}
 
     SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path, Reflect::ArchiveTypes::XML );
-
-    settingsManager->m_Test.m_Float32 = 5.0f;
-
     if ( settingsManager.ReferencesObject() )
     {
+        settingsManager->m_Test.m_Float32 = 5.0f;
         settingsManager->Clean();
         m_SettingsManager = settingsManager;
     }

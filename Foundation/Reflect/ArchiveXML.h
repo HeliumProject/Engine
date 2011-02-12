@@ -29,9 +29,12 @@ namespace Helium
             XMLDocument m_Document;
 
             // The current element
-            XMLElement* m_Current;
+            XMLDocument::Iterator m_Iterator;
 
-            // The stream to use
+            // The stream for element bodies
+            TCharStream* m_Body;
+
+            // The stream for the file
             TCharStreamPtr m_Stream;
 
             // Indentation helper
@@ -48,7 +51,8 @@ namespace Helium
             // Stream access
             TCharStream& GetStream()
             {
-                return *m_Stream;
+                HELIUM_ASSERT( m_Body );
+                return *m_Body;
             }
 
         protected:

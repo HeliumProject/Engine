@@ -51,6 +51,7 @@ ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Size( 0 )
 , m_Skip( false )
+, m_Body( NULL )
 {
 
 }
@@ -60,6 +61,7 @@ ArchiveXML::ArchiveXML()
 , m_Version( CURRENT_VERSION )
 , m_Size( 0 )
 , m_Skip( false )
+, m_Body( NULL )
 {
 
 }
@@ -142,17 +144,17 @@ void ArchiveXML::Read()
         }
     }
 
-    m_Current = m_Document.GetRoot();
+    m_Iterator.SetCurrent( m_Document.GetRoot() );
 
     // read file format version attribute
-    const String* version = m_Current->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
+    const String* version = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
     if ( version )
     {
         tstringstream str ( version->GetData() );
         str >> m_Version;
     }
 
-    m_Current = m_Current->GetFirstChild();
+    m_Iterator.Advance();
 
     // deserialize main file objects
     {
@@ -396,7 +398,15 @@ void ArchiveXML::Deserialize(ObjectPtr& object)
 
         if ( data )
         {
+#pragma TODO("Make sure this string copy goes away when replace the stl stream APIs")
+            tstringstream stringStream ( m_Iterator.GetCurrent()->m_Body.GetData() );
+            TCharStream stream ( &stringStream, false );
+            m_Body = &stream;
+
             data->Deserialize(*this);
+            m_Body = NULL;
+
+            m_Iterator.Advance();
         }
         else
         {
@@ -441,7 +451,7 @@ ObjectPtr ArchiveXML::Allocate()
     ObjectPtr object;
 
     // find type
-    const String* typeStr = m_Current->GetAttributeValue( Name( TXT("Type") ) );
+    const String* typeStr = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT("Type") ) );
     uint32_t typeCrc = typeStr ? Crc32( typeStr->GetData() ) : 0x0;
 
     // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
@@ -464,6 +474,9 @@ ObjectPtr ArchiveXML::Allocate()
         //  1 - a type was completely removed from the codebase
         //  2 - a type was not found because its type library is not registered
         Log::Debug( TXT( "Unable to create object of type %s, skipping...\n" ), type ? type->m_Name : TXT("Unknown") );
+
+        // skip past this object, skipping our children
+        m_Iterator.Advance( true );
 #pragma TODO("Support blind data")
     }
 
@@ -479,10 +492,10 @@ void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
     m_Indent.Push();
 #endif
 
-    XMLElement* current = m_Current;
-    for ( XMLElement* child = current->GetFirstChild(); child != NULL; child = child->GetNextSibling() )
+    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
     {
-        m_Current = child;
+        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+
         ObjectPtr object;
         Deserialize(object);
 
@@ -496,6 +509,7 @@ void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
             if ( flags & ArchiveFlags::Status )
             {
                 ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+#pragma TODO("Update progress value for inter-array processing")
                 //info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
                 e_Status.Raise( info );
 
@@ -505,7 +519,6 @@ void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
 
         push( object );
     }
-    m_Current = current;
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Pop();
@@ -521,12 +534,11 @@ void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
 
 void ArchiveXML::DeserializeFields(Object* object)
 {
-    XMLElement* current = m_Current;
-    for ( XMLElement* child = current->GetFirstChild(); child != NULL; child = child->GetNextSibling() )
+    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
     {
-        m_Current = child;
+        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-        const String* fieldNameStr = m_Current->GetAttributeValue( Name( TXT("Field") ) );
+        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Field") ) );
         uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
         const Class* type = object->GetClass();
@@ -625,17 +637,15 @@ void ArchiveXML::DeserializeFields(Object* object)
         m_Indent.Pop();
 #endif
     }
-    m_Current = current;
 }
 
 void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
 {
-    XMLElement* current = m_Current;
-    for ( XMLElement* child = current->GetFirstChild(); child != NULL; child = child->GetNextSibling() )
+    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
     {
-        m_Current = child;
+        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-        const String* fieldNameStr = m_Current->GetAttributeValue( Name( TXT("Field") ) );
+        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Field") ) );
         uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
@@ -701,7 +711,6 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
         m_Indent.Pop();
 #endif
     }
-    m_Current = current;
 }
 
 void ArchiveXML::ToString( Object* object, tstring& xml )

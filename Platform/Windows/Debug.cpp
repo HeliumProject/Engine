@@ -7,6 +7,7 @@
 #include "Platform/String.h"
 #include "Platform/Debug.h"
 #include "Platform/Trace.h"
+#include "Platform/Process.h"
 #include "Platform/Windows/Windows.h"
 
 #include <map>
@@ -762,29 +763,26 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-    tchar_t* tempDir = _tgetenv( TXT("HELIUM_PROJECT_TMP") );
-    if ( tempDir == NULL )
+    tstring directory = GetCrashdumpDirectory();
+    if ( directory.empty() )
     {
-        _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("HELIUM_PROJECT_TMP") );
-        return TXT("");
+        _tprintf( TXT( "Could not determine crash dump directory, failed to generate dump." ) );
+        return TXT( "" );
     }
 
-    // Make sure that the directory exists
-    tchar_t directory[MAX_PATH] = { 0 };
-    _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\crashdumps"), tempDir );
-    SHCreateDirectoryEx( NULL, directory, NULL );
+    SHCreateDirectoryEx( NULL, directory.c_str(), NULL );
 
     // Tack time (in seconds since UTC) onto end of file name
     time_t now;
     time( &now );
 
-    tchar_t module[MAX_PATH];
-    tchar_t file[MAX_PATH];
+    tchar_t module[ MAX_PATH ];
+    tchar_t file[ MAX_PATH ];
     GetModuleFileName( 0, module, MAX_PATH );
     _tsplitpath( module, NULL, NULL, file, NULL );
 
-    tchar_t dmp_file[MAX_PATH] = { '\0' };
-    _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory, file, now );
+    tchar_t dmp_file[ MAX_PATH ] = { '\0' };
+    _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory.c_str(), file, now );
 
     HANDLE dmp;
     dmp = CreateFile( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );

@@ -19,6 +19,12 @@ namespace Helium
             // File format version
             uint32_t m_Version;
 
+            // File size
+            std::streamoff m_Size;
+
+            // Skip flag
+            bool m_Skip;
+
             // The xml data
             XMLDocument m_Document;
 
@@ -72,24 +78,34 @@ namespace Helium
         public:
             // Serialize
             virtual void Serialize( Object* object ) HELIUM_OVERRIDE;
-            void Serialize( Object* object, const tchar_t* fieldName );
             virtual void Serialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
-            void Serialize( void* structure, const Structure* type, const tchar_t* fieldName );
             virtual void Serialize( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) HELIUM_OVERRIDE;
             virtual void Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 ) HELIUM_OVERRIDE;
 
         protected:
             // Helpers
-            template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
+            void Serialize( Object* object, const tchar_t* fieldName );
+            void Serialize( void* structure, const Structure* type, const tchar_t* fieldName );
+
+            template< typename ConstIteratorType >
+            void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
             void SerializeFields( Object* object );
             void SerializeFields( void* structure, const Structure* type );
 
         public:
-            // For handling components
+            // Deserialize
             virtual void Deserialize( ObjectPtr& object ) HELIUM_OVERRIDE;
             virtual void Deserialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
             virtual void Deserialize( std::vector< ObjectPtr >& elements, uint32_t flags = 0 ) HELIUM_OVERRIDE;
             virtual void Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+
+        protected:
+            // Helpers
+            ObjectPtr Allocate();
+            template< typename ArrayPusher >
+            void Deserialize( ArrayPusher& push, uint32_t flags );
+            void DeserializeFields( Object* object );
+            void DeserializeFields( void* object, const Structure* type );
 
         public:
             // Reading and writing single object from string data

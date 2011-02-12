@@ -5,9 +5,6 @@
 
 #include "Foundation/File/Path.h"
 
-// enable verbose archive printing
-//#define REFLECT_ARCHIVE_VERBOSE
-
 //  
 //    Reflect Binary Format:
 //  
@@ -72,7 +69,7 @@ namespace Helium
             uint32_t m_Version;
 
             // File size
-            long m_Size;
+            std::streamoff m_Size;
 
             // Skip flag
             bool m_Skip;
@@ -130,13 +127,10 @@ namespace Helium
 
         protected:
             // Helpers
-            template< typename ConstIteratorType > void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
+            template< typename ConstIteratorType >
+            void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
             void SerializeFields( Object* object );
             void SerializeFields( void* structure, const Structure* type );
-
-        private:
-            // pulls an object from the head of the stream
-            ObjectPtr Allocate();
 
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
@@ -147,7 +141,9 @@ namespace Helium
 
         protected:
             // Helpers
-            template< typename ArrayPusher > void Deserialize( ArrayPusher& push, uint32_t flags );
+            ObjectPtr Allocate();
+            template< typename ArrayPusher >
+            void Deserialize( ArrayPusher& push, uint32_t flags );
             void DeserializeFields( Object* object );
             void DeserializeFields( void* object, const Structure* type );
 

@@ -12,7 +12,6 @@ using Helium::Insert;
 using namespace Helium;
 using namespace Helium::Reflect; 
 
-// version / feature management 
 const uint32_t ArchiveBinary::CURRENT_VERSION = 8;
 
 class StlVectorPusher : NonCopyable
@@ -46,10 +45,6 @@ public:
         m_ObjectArray.Push( object );
     }
 };
-
-//
-// Binary Archive implements our own custom serialization technique
-//
 
 ArchiveBinary::ArchiveBinary( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
@@ -365,7 +360,7 @@ void ArchiveBinary::Serialize( ConstIteratorType begin, ConstIteratorType end, u
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Serializing %d objects\n"), elements.size());
+    Log::Debug(TXT("Serializing %d objects\n"), size);
     m_Indent.Push();
 #endif
 
@@ -505,55 +500,6 @@ void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
     m_Stream->Write(&terminator); 
 }
 
-ObjectPtr ArchiveBinary::Allocate()
-{
-    ObjectPtr object;
-
-    // read type string
-    uint32_t typeCrc = Helium::BeginCrc32();
-    m_Stream->Read(&typeCrc);
-
-    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
-    const Class* type = NULL;
-    if ( typeCrc != 0 )
-    {
-        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
-    }
-
-    // read length info if we have it
-    uint32_t length = 0;
-    m_Stream->Read(&length);
-
-    if ( m_Skip || typeCrc == 0 )
-    {
-        // skip it, but account for already reading the length from the stream
-        m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
-    }
-    else
-    {
-        if (type)
-        {
-            // allocate instance by name
-            object = Registry::GetInstance()->CreateInstance( type );
-        }
-
-        // if we failed
-        if (!object.ReferencesObject())
-        {
-            // skip it, but account for already reading the length from the stream
-            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
-
-            // if you see this, then data is being lost because:
-            //  1 - a type was completely removed from the codebase
-            //  2 - a type was not found because its type library is not registered
-            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
-#pragma TODO("Support blind data")
-        }
-    }
-
-    return object;
-}
-
 void ArchiveBinary::Deserialize(ObjectPtr& object)
 {
     //
@@ -613,7 +559,7 @@ void ArchiveBinary::Deserialize( void* structure, const Structure* type )
 #endif
 }
 
-void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flags)
+void ArchiveBinary::Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags )
 {
     Deserialize( StlVectorPusher( objects ), flags );
 }
@@ -621,6 +567,55 @@ void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& objects, uint32_t flag
 void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
 {
     Deserialize( DynArrayPusher( objects ), flags );
+}
+
+ObjectPtr ArchiveBinary::Allocate()
+{
+    ObjectPtr object;
+
+    // read type string
+    uint32_t typeCrc = Helium::BeginCrc32();
+    m_Stream->Read(&typeCrc);
+
+    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
+    const Class* type = NULL;
+    if ( typeCrc != 0 )
+    {
+        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+    }
+
+    // read length info if we have it
+    uint32_t length = 0;
+    m_Stream->Read(&length);
+
+    if ( m_Skip || typeCrc == 0 )
+    {
+        // skip it, but account for already reading the length from the stream
+        m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
+    }
+    else
+    {
+        if (type)
+        {
+            // allocate instance by name
+            object = Registry::GetInstance()->CreateInstance( type );
+        }
+
+        // if we failed
+        if (!object.ReferencesObject())
+        {
+            // skip it, but account for already reading the length from the stream
+            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
+
+            // if you see this, then data is being lost because:
+            //  1 - a type was completely removed from the codebase
+            //  2 - a type was not found because its type library is not registered
+            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
+#pragma TODO("Support blind data")
+        }
+    }
+
+    return object;
 }
 
 template< typename ArrayPusher >

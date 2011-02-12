@@ -6,7 +6,6 @@
 using namespace Helium;
 
 XMLDocument::XMLDocument()
-: m_Root( NULL )
 {
     m_Parser = XML_ParserCreate( NULL );
 
@@ -35,16 +34,11 @@ void XMLDocument::ParseBuffer( const void* buffer, uint32_t lengthInBytes, bool 
 
 void XMLDocument::OnStartElement(const tchar_t *pszName, const tchar_t **papszAttrs)
 {
-    XMLElement* parent = NULL;
-    if ( !m_Stack.IsEmpty() )
-    {
-        parent = &m_Elements[ m_Stack.GetLast() ];
-    }
-
     int32_t index = static_cast< int32_t >( m_Elements.GetSize() );
     m_Elements.Push( XMLElement () );
     XMLElement* element = &m_Elements.GetLast();
     element->m_Index = index;
+    element->m_Document = this;
 
     // copy data
     element->m_Name.Set( pszName );
@@ -53,26 +47,33 @@ void XMLDocument::OnStartElement(const tchar_t *pszName, const tchar_t **papszAt
         element->m_Attributes.Insert( XMLElement::AttributeValueType ( Name( papszAttrs[i] ), String( papszAttrs[i+1] ) ) );
     }
 
+    // fetch parent
+    XMLElement* parent = NULL;
+    if ( !m_Stack.IsEmpty() )
+    {
+        parent = &m_Elements[ m_Stack.GetLast() ];
+    }
+
     // setup hierarchy
     if ( parent )
     {
         element->m_Parent = parent->m_Index;
 
-        if ( parent->m_FirstChild >= 0 )
+        if ( parent->m_FirstChild == -1 )
+        {
+            parent->m_FirstChild = element->m_Index;
+        }
+        else
         {
             XMLElement* sibling = &m_Elements[ parent->m_FirstChild ];
             XMLElement* previousSibling = sibling;
-            while ( sibling = ( sibling->m_NextSibling >= 0 ? &m_Elements[ sibling->m_NextSibling ] : NULL ) )
+            while ( sibling = ( sibling->m_NextSibling != -1 ? &m_Elements[ sibling->m_NextSibling ] : NULL ) )
             {
                 previousSibling = sibling;
             }
 
             HELIUM_ASSERT( previousSibling->m_NextSibling == -1 );
             previousSibling->m_NextSibling = element->m_Index;
-        }
-        else
-        {
-            parent->m_FirstChild = element->m_Index;
         }
     }
 

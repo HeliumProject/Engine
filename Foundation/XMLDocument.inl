@@ -40,7 +40,7 @@ Helium::XMLElement* Helium::XMLElement::GetNextSibling()
 
 Helium::XMLElement* Helium::XMLDocument::GetRoot()
 {
-    return m_Root;
+    return &m_Elements[ 0 ];
 }
 
 Helium::XMLElement* Helium::XMLDocument::GetElement( int32_t index )

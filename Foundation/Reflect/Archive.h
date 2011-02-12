@@ -19,6 +19,9 @@
 #include "Foundation/Reflect/Exceptions.h"
 #include "Foundation/Reflect/ArchiveStream.h" 
 
+// enable verbose archive printing
+#define REFLECT_ARCHIVE_VERBOSE
+
 namespace Helium
 {
     namespace Reflect

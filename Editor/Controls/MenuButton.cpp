@@ -105,8 +105,8 @@ void MenuButton::SetBitmap( const wxBitmap& bitmap )
     HELIUM_ASSERT( bitmap.IsOk() );
 
     m_Bitmap->SetBitmap( bitmap );
-    Layout();
     Refresh();
+    Layout();
 }
 
 void MenuButton::OnUpdateUI( wxUpdateUIEvent& event )
@@ -154,10 +154,12 @@ void MenuButton::OnUpdateUI( wxUpdateUIEvent& event )
         m_Text->Hide();
     }
 
-    Layout();
+    GetSizer()->RecalcSizes();
     Refresh();
-    GetParent()->Layout();
+    Layout();
+    GetParent()->GetSizer()->RecalcSizes();
     GetParent()->Refresh();
+    GetParent()->Layout();
     event.Skip();
 }
 

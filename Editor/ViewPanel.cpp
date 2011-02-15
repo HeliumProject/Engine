@@ -24,67 +24,67 @@ ViewPanel::ViewPanel( SettingsManager* settingsManager, wxWindow *parent, wxWind
     {
         //Freeze();
 
-        m_FrameOriginBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameOrigin ) );
-        m_FrameSelectionBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrameSelected ) );
-        m_PreviousViewBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PreviousView ) );
-        m_NextViewBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NextView ) );
+        m_FrameOriginBitmap->SetArtID( ArtIDs::Editor::FrameOrigin );
+        m_FrameSelectionBitmap->SetArtID( ArtIDs::Editor::FrameSelected );
+        m_PreviousViewBitmap->SetArtID( ArtIDs::Editor::PreviousView );
+        m_NextViewBitmap->SetArtID( ArtIDs::Editor::NextView );
 
         m_HighlightModeToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_HighlightModeToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::HighlightMode ) );
+        m_HighlightModeToggleBitmap->SetArtID( ArtIDs::Editor::HighlightMode );
 
         m_OrbitViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_OrbitViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::PerspectiveCamera ) );
+        m_OrbitViewToggleBitmap->SetArtID( ArtIDs::Editor::PerspectiveCamera );
         
         m_FrontViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_FrontViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrontOrthoCamera ) );
+        m_FrontViewToggleBitmap->SetArtID( ArtIDs::Editor::FrontOrthoCamera );
         
         m_SideViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_SideViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SideOrthoCamera ) );
+        m_SideViewToggleBitmap->SetArtID( ArtIDs::Editor::SideOrthoCamera );
         
         m_TopViewToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_TopViewToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::TopOrthoCamera ) );
+        m_TopViewToggleBitmap->SetArtID( ArtIDs::Editor::TopOrthoCamera );
 
         m_ShowAxesToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ShowAxesToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowAxes ) );
+        m_ShowAxesToggleBitmap->SetArtID( ArtIDs::Editor::ShowAxes );
         
         m_ShowGridToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ShowGridToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowGrid ) );
+        m_ShowGridToggleBitmap->SetArtID( ArtIDs::Editor::ShowGrid );
         
         m_ShowBoundsToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ShowBoundsToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowBounds ) );
+        m_ShowBoundsToggleBitmap->SetArtID( ArtIDs::Editor::ShowBounds );
         
         m_ShowStatisticsToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ShowStatisticsToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShowStatistics ) );
+        m_ShowStatisticsToggleBitmap->SetArtID( ArtIDs::Editor::ShowStatistics );
 
         m_FrustumCullingToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_FrustumCullingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::FrustumCulling ) );
+        m_FrustumCullingToggleBitmap->SetArtID( ArtIDs::Editor::FrustumCulling );
         
         m_BackfaceCullingToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_BackfaceCullingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::BackfaceCulling ) );
+        m_BackfaceCullingToggleBitmap->SetArtID( ArtIDs::Editor::BackfaceCulling );
 
         m_WireframeShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_WireframeShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingWireframe ) );
+        m_WireframeShadingToggleBitmap->SetArtID( ArtIDs::Editor::ShadingWireframe );
         
         m_MaterialShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_MaterialShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingMaterial ) );
+        m_MaterialShadingToggleBitmap->SetArtID( ArtIDs::Editor::ShadingMaterial );
 
         m_TextureShadingToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_TextureShadingToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ShadingTexture ) );
+        m_TextureShadingToggleBitmap->SetArtID( ArtIDs::Editor::ShadingTexture );
 
         m_ColorModeSceneToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ColorModeSceneToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScene ) );
+        m_ColorModeSceneToggleBitmap->SetArtID( ArtIDs::Editor::ColorModeScene );
         
         m_ColorModeLayerToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ColorModeLayerToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeLayer ) );
+        m_ColorModeLayerToggleBitmap->SetArtID( ArtIDs::Editor::ColorModeLayer );
         
         m_ColorModeTypeToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ColorModeTypeToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeNodeType ) );
+        m_ColorModeTypeToggleBitmap->SetArtID( ArtIDs::Editor::ColorModeNodeType );
         
         m_ColorModeScaleToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ColorModeScaleToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScale ) );
+        m_ColorModeScaleToggleBitmap->SetArtID( ArtIDs::Editor::ColorModeScale );
         
         m_ColorModeScaleGradientToggleButton->SetOptions( PanelButtonOptions::Toggle );
-        m_ColorModeScaleGradientToggleBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::ColorModeScaleGradient ) );
+        m_ColorModeScaleGradientToggleBitmap->SetArtID( ArtIDs::Editor::ColorModeScaleGradient );
 
         m_ToolPanel->Layout();
 

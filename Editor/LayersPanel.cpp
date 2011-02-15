@@ -42,14 +42,14 @@ LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id
     {
         Freeze();
 
-        m_NewLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayer ) );
-        m_NewLayerFromSelectionBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::CreateNewLayerFromSelection ) );
-        m_DeleteLayersBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::DeleteSelectedLayers ) );
+        m_NewLayerBitmap->SetArtID( ArtIDs::Editor::CreateNewLayer );
+        m_NewLayerFromSelectionBitmap->SetArtID( ArtIDs::Editor::CreateNewLayerFromSelection );
+        m_DeleteLayersBitmap->SetArtID( ArtIDs::Editor::DeleteSelectedLayers );
 
-        m_AddToLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::AddSelectionToLayers ) );
-        m_RemoveFromLayerBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::RemoveSelectionFromLayers ) );
+        m_AddToLayerBitmap->SetArtID( ArtIDs::Editor::AddSelectionToLayers );
+        m_RemoveFromLayerBitmap->SetArtID( ArtIDs::Editor::RemoveSelectionFromLayers );
         
-        m_SelectMembersBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::SelectLayerMembers ) );
+        m_SelectMembersBitmap->SetArtID( ArtIDs::Editor::SelectLayerMembers );
 
         m_LayerManagementPanel->Layout();
 

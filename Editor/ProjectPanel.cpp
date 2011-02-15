@@ -39,12 +39,12 @@ ProjectPanel::ProjectPanel( wxWindow *parent, DocumentManager* documentManager )
         m_OpenProjectButton->SetOptions( PanelButtonOptions::AlwaysShowText );
         m_OpenProjectButton->SetHelpText( TXT( "Clicking this button will allow you to open a project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
         m_OpenProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnOpenProjectButtonClick ), NULL, this );
-        m_OpenProjectBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Actions::Find ) );
+        m_OpenProjectBitmap->SetArtID( ArtIDs::Actions::Find );
 
         m_CreateNewProjectButton->SetOptions( PanelButtonOptions::AlwaysShowText );
         m_CreateNewProjectButton->SetHelpText( TXT( "Clicking this button will allow you to create a new project file.\n\nA project file is the core of the Helium toolset and is necessary for you to do any work." ) );
         m_CreateNewProjectButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ProjectPanel::OnNewProjectButtonClick ), NULL, this );
-        m_CreateNewProjectBitmap->SetBitmap( wxArtProvider::GetBitmap( ArtIDs::Editor::NewProject ) );
+        m_CreateNewProjectBitmap->SetArtID( ArtIDs::Editor::NewProject );
 
         m_ProjectManagementPanel->Hide();
         m_DataViewCtrl->Hide();

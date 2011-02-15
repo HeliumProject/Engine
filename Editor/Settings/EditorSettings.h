@@ -10,6 +10,26 @@ namespace Helium
 {
     namespace Editor
     {
+        class IconSize
+        {
+        public:
+            enum Enum
+            {
+                Small,
+                Medium,
+                Large,
+            };
+
+            REFLECT_DECLARE_ENUMERATION( IconSize );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
+            {
+                info.AddElement( Small, TXT( "Small" ) );
+                info.AddElement( Medium, TXT( "Medium" ) );
+                info.AddElement( Large, TXT( "Large" ) );
+            }
+        };
+
         class EditorSettings : public Settings
         {
         public:
@@ -38,7 +58,7 @@ namespace Helium
             bool m_EnableAssetTracker;
             bool m_ShowTextOnButtons;
             bool m_ShowIconsOnButtons;
-            int m_IconSizeOnButtons;
+            IconSize m_IconSizeOnButtons;
         };
 
         typedef Helium::StrongPtr< EditorSettings > GeneralSettingsPtr;

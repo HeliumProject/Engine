@@ -254,6 +254,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
 
     // settings
+    m_InitializerStack.Push( Reflect::RegisterEnumType< IconSize >( TXT( "Editor::IconSize" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClassType< EditorSettings >( TXT( "Editor::EditorSettings" ) ) );
     Reflect::GetClass< EditorSettings >()->SetProperty( TXT( "UIName" ), TXT( "Editor Settings" ) );
 

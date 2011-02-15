@@ -16,5 +16,6 @@ namespace Helium
 
     PLATFORM_API void DebugLog( const tchar_t* pMessage );
 #endif
+
     //@}
 }

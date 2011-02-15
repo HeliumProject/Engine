@@ -191,7 +191,9 @@ namespace Helium
 
                 if (m_Stream->fail() && !m_Stream->eof())
                 {
-                    throw Reflect::StreamException( TXT( "General read failure" ) ); 
+                    tchar_t error[ 1024 ];
+                    _tcserror_s( error, 1024, errno );
+                    throw Reflect::StreamException( TXT( "General read failure: %s" ), &error );
                 }
 
                 return *this; 

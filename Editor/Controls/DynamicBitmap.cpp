@@ -112,6 +112,7 @@ void DynamicBitmap::RefreshBitmapFromState()
     HELIUM_ASSERT( currentBitmap );
     SetImage( currentBitmap );
     Refresh();
+    Layout(); 
 }
 
 bool DynamicBitmap::Enable( bool enable )
@@ -149,41 +150,35 @@ void DynamicBitmap::SetArtID( const wxArtID& artID )
 
 void DynamicBitmap::SetIconSize( const int size )
 {
-    int x = 0;
-    int y = 0;
-    GetSize( &x, &y );
+    wxSize currentSize = GetBitmap().GetSize();
+    HELIUM_ASSERT( currentSize.GetX() > 0 && currentSize.GetY() > 0 );
 
-    // Only resize the square ones
-    if ( x == y && size != x )
+    int newX = size;
+    int newY = size * ( (float)currentSize.GetX()/(float)currentSize.GetY() );
+
+    if ( !m_ArtID.empty() )
     {
-        if ( !m_ArtID.empty() )
-        {
-            SetBitmap( wxArtProvider::GetBitmap( m_ArtID, wxART_OTHER, wxSize( size, size ) ), wxButtonBase::State_Normal );
-        }
-        else
-        {
-            wxImage image( GetBitmap().ConvertToImage() );
-            HELIUM_ASSERT( image.Ok() );
-            if ( image.GetWidth() != size || image.GetHeight() != size )
-            {
-                image.Rescale( size, size );
-            }
-            SetBitmap( wxBitmap( image ), wxButtonBase::State_Normal );
-        }
-        SetSize( size, size );
-        Refresh();
+        SetBitmap( wxArtProvider::GetBitmap( m_ArtID, wxART_OTHER, wxSize( newX, newY ) ), wxButtonBase::State_Normal );
     }
+    else
+    {
+        wxImage image( GetBitmap().ConvertToImage() );
+        HELIUM_ASSERT( image.Ok() );
+        if ( image.GetWidth() != newX || image.GetHeight() != newY )
+        {
+            image.Rescale( newX, newY );
+        }
+        SetBitmap( wxBitmap( image ), wxButtonBase::State_Normal );
+    }
+    SetSize( newX, newY );
+    SetMinSize( wxSize( newX, newY ) );
+    RefreshBitmapFromState();
 }
 
 void DynamicBitmap::SetBitmap( const wxBitmap& bitmap )
 {
     SetBitmap( bitmap, wxButtonBase::State_Normal );
 }
-
-//void DynamicBitmap::SetIcon( const wxIcon& icon )
-//{
-//    SetBitmap( icon, wxButtonBase::State_Normal );
-//}
 
 // See also: wxButton::DoSetBitmap and wxBitmapButton::DoSetBitmap
 void DynamicBitmap::SetBitmap( const wxBitmap& bitmap, wxButtonBase::State state )

@@ -86,7 +86,21 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
             DynamicBitmap* dynamicBitmap = dynamic_cast< DynamicBitmap* >( (*itr) );
             if ( dynamicBitmap )
             {
-                dynamicBitmap->SetIconSize( m_IconSize );
+                switch( m_IconSize )
+                {
+                case IconSize::Small:
+                    dynamicBitmap->SetIconSize( 16 );
+                    break;
+                case IconSize::Medium:
+                    dynamicBitmap->SetIconSize( 24 );
+                    break;
+                case IconSize::Large:
+                    dynamicBitmap->SetIconSize( 32 );
+                    break;
+                default:
+                    HELIUM_BREAK();
+                    break;
+                }
             }
 
             continue;
@@ -108,9 +122,11 @@ void EditorButton::OnUpdateUI( wxUpdateUIEvent& event )
         }
     }
 
+    Refresh();
+    GetSizer()->RecalcSizes();
     Layout();
-    Refresh( true );
-    GetParent()->Layout();
     GetParent()->Refresh();
+    GetParent()->GetSizer()->RecalcSizes();
+    GetParent()->Layout();
     event.Skip();
 }

@@ -15,6 +15,7 @@ namespace Helium
         /// @name Static Timing Support
         //@{
         static void StaticInitialize();
+        static bool IsInitialized();
 
         static uint64_t GetTickCount();
         inline static uint64_t GetStartTickCount();

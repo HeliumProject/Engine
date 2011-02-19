@@ -6,34 +6,29 @@ using namespace Helium;
 
 UpdateManager* UpdateManager::sm_pInstance = NULL;
 
-/// Constructor.
 UpdateManager::UpdateManager()
 : m_Run( true )
 {
+    if ( !Timer::IsInitialized() )
+    {
+        Timer::StaticInitialize();
+    }
 }
 
-/// Destructor.
 UpdateManager::~UpdateManager()
 {
 }
 
-/// Initialize
 void UpdateManager::Initialize()
 {
 }
 
-/// Shut down
 void UpdateManager::Shutdown()
 {
-    for ( PhaseMap::iterator itr = m_Phases.begin(), end = m_Phases.end(); itr != end; ++itr )
+    for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end; ++itr )
     {
-        UpdateEntryMap& phase = (*itr).second;
-
-        for ( UpdateEntryMap::iterator itr = phase.begin(), end = phase.end(); itr != end; ++itr )
-        {
-            UpdateEntry* ue = (*itr).second;
-            delete ue;
-        }
+        UpdateEntry* ue = (*itr).second;
+        delete ue;
     }
 }
 
@@ -41,59 +36,50 @@ void UpdateManager::Start()
 {
     while( m_Run )
     {
+        bool allEntriesComplete = false;
 
-        for ( uint32_t phaseId = 0; phaseId < PhaseIds::MaxPhaseId; ++phaseId )
+        while( !allEntriesComplete && m_Run )
         {
-            Print( TXT( "UM: Executing phase id: %d\n" ), phaseId );
+            allEntriesComplete = true;
 
-            UpdateEntryMap& phase = m_Phases[ phaseId ];
-
-            bool phaseComplete = false;
-
-            while ( !phaseComplete )
-            {
-                phaseComplete = true;
-
-                for ( UpdateEntryMap::iterator itr = phase.begin(), end = phase.end(); itr != end; ++itr )
-                {
-                    UpdateEntry* ue = (*itr).second;
-
-                    Print( TXT( "UM:  Executing UpdateEntry (id: %d)\n" ), ue->GetId() );
-
-                    if ( !ue->IsComplete() && !ue->IsCalled() )
-                    {
-                        bool dependenciesComplete = true;
-                        UpdateEntry::DependencySet* deps = ue->GetDependencies();
-                        for ( UpdateEntry::DependencySet::iterator itr = deps->begin(), end = deps->end(); itr != end; ++itr )
-                        {
-                            if ( !phase[ *itr ]->IsComplete() )
-                            {
-                                Print( TXT( "UM:    Waiting on completion of UpdateEntry with id (%d)\n" ), *itr );
-
-                                dependenciesComplete = false;
-                                break;
-                            }
-                        }
-
-                        if ( dependenciesComplete )
-                        {
-                            ue->Call();
-                        }                            
-                    }
-
-                    if ( !ue->IsComplete() )
-                    {
-                        phaseComplete = false;
-                    }
-                }
-            }
-
-            for ( UpdateEntryMap::iterator itr = phase.begin(), end = phase.end(); itr != end; ++itr )
+            for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end && m_Run; ++itr )
             {
                 UpdateEntry* ue = (*itr).second;
-                ue->Reset();
-            }
 
+                float64_t currentTime = Timer::GetSeconds();
+
+                if ( ( ( currentTime - ue->GetLastUpdateTime() ) > ( 1.0f / ue->GetFrequency() ) ) && !ue->IsComplete() && !ue->IsCalled() )
+                {
+                    bool dependenciesComplete = true;
+                    UpdateEntry::DependencySet* deps = ue->GetDependencies();
+                    for ( UpdateEntry::DependencySet::iterator itr = deps->begin(), end = deps->end(); itr != end && m_Run; ++itr )
+                    {
+                        if ( !m_UpdateEntries[ *itr ]->IsComplete() )
+                        {
+                            dependenciesComplete = false;
+                            break;
+                        }
+                    }
+
+                    if ( dependenciesComplete && m_Run )
+                    {
+                        ue->Call();
+                    }                            
+                }
+
+                if ( ue->IsCalled() && !ue->IsComplete() )
+                {
+                    allEntriesComplete = false;
+                }
+
+                // yield
+                Helium::Sleep( 0 );
+            }
+        }
+
+        for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end; ++itr )
+        {
+            (*itr).second->Reset();
         }
     }
 }
@@ -101,13 +87,13 @@ void UpdateManager::Start()
 void UpdateManager::Stop()
 {
     m_Run = false;
+
+    for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end; ++itr )
+    {
+        (*itr).second->Reset();
+    }
 }
 
-/// Get the singleton instance, creating it if necessary.
-///
-/// @return  Reference to the instance.
-///
-/// @see DestroyStaticInstance()
 UpdateManager& UpdateManager::GetStaticInstance()
 {
     if( !sm_pInstance )
@@ -119,9 +105,6 @@ UpdateManager& UpdateManager::GetStaticInstance()
     return *sm_pInstance;
 }
 
-/// Destroy the singleton instance.
-///
-/// @see GetStaticInstance()
 void UpdateManager::DestroyStaticInstance()
 {
     sm_pInstance->Stop();
@@ -130,38 +113,33 @@ void UpdateManager::DestroyStaticInstance()
     sm_pInstance = NULL;
 }
 
-void UpdateManager::AddEntry( PhaseId phaseId, UpdateEntry* ue )
+void UpdateManager::AddEntry( UpdateEntry* ue )
 {
-    HELIUM_ASSERT( phaseId < PhaseIds::MaxPhaseId );
-    HELIUM_ASSERT( m_Phases[ phaseId ].find( ue->GetId() ) == m_Phases[ phaseId ].end() );
+    HELIUM_ASSERT( m_UpdateEntries.find( ue->GetId() ) == m_UpdateEntries.end() );
 
-    (m_Phases[ phaseId ])[ ue->GetId() ] = ue;
+    m_UpdateEntries[ ue->GetId() ] = ue;
 }
 
-void UpdateManager::RemoveEntry( PhaseId phaseId, uint64_t id )
+void UpdateManager::RemoveEntry( UpdateEntry* ue )
 {
-    HELIUM_ASSERT( phaseId < PhaseIds::MaxPhaseId );
-
-    for ( UpdateEntryMap::iterator itr = m_Phases[ phaseId ].begin(), end = m_Phases[ phaseId ].end(); itr != end; ++itr )
+    for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end; ++itr )
     {
-        if ( (*itr).second->GetId() == id )
+        if ( *(*itr).second == *ue )
         {
-            m_Phases[ phaseId ].erase( itr );
+            m_UpdateEntries.erase( itr );
             delete (*itr).second;
             break;
         }
     }
 }
 
-void UpdateManager::RemoveEntry( PhaseId phaseId, UpdateEntry* ue )
+void UpdateManager::RemoveEntry( tuid id )
 {
-    HELIUM_ASSERT( (uint32_t)phaseId < m_Phases.size() );
-
-    for ( UpdateEntryMap::iterator itr = m_Phases[ phaseId ].begin(), end = m_Phases[ phaseId ].end(); itr != end; ++itr )
+    for ( UpdateEntryMap::iterator itr = m_UpdateEntries.begin(), end = m_UpdateEntries.end(); itr != end; ++itr )
     {
-        if ( (*itr).second == ue )
+        if ( (*itr).second->GetId() == id )
         {
-            m_Phases[ phaseId ].erase( itr );
+            m_UpdateEntries.erase( itr );
             delete (*itr).second;
             break;
         }

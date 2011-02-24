@@ -14,6 +14,8 @@ using namespace Helium::Reflect;
 
 const uint32_t ArchiveXML::CURRENT_VERSION = 4;
 
+#pragma TODO("Structures still have an extra <Object Type=\"StructureType\">, eliminate that with removing the type check for Data")
+
 class StlVectorPusher : NonCopyable
 {
 public:
@@ -534,11 +536,14 @@ void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
 
 void ArchiveXML::DeserializeFields(Object* object)
 {
+    // advance to the first child
+    m_Iterator.Advance();
+
     for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
     {
         HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Field") ) );
+        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
         uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
         const Class* type = object->GetClass();
@@ -641,11 +646,14 @@ void ArchiveXML::DeserializeFields(Object* object)
 
 void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
 {
+    // advance to the first child
+    m_Iterator.Advance();
+
     for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
     {
         HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Field") ) );
+        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
         uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
         const Field* field = type->FindFieldByName(fieldNameCrc);

@@ -61,7 +61,7 @@ Helium::XMLElement* Helium::XMLDocument::Iterator::Advance( bool skipChildren )
 
     XMLElement* previous = m_Current;
 
-    if ( skipChildren )
+    if ( !skipChildren )
     {
         // always decend to the children first
         m_Current = m_Current->GetFirstChild();

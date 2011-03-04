@@ -120,34 +120,34 @@ namespace Helium
 
         public:
             // Serialize
-            virtual void Serialize( Object* object ) HELIUM_OVERRIDE;
-            virtual void Serialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
-            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
-            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+            void SerializeInstance( Object* object );
+            void SerializeInstance( void* structure, const Structure* type );
+            void SerializeFields( Object* object );
+            void SerializeFields( void* structure, const Structure* type );
+            void SerializeArray( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
+            void SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         protected:
             // Helpers
             template< typename ConstIteratorType >
-            void Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
-            void SerializeFields( Object* object );
-            void SerializeFields( void* structure, const Structure* type );
+            void SerializeArray( ConstIteratorType begin, ConstIteratorType end, uint32_t flags );
 
         public:
             // pulls from the stream, or deserializes into a freshly allocated instance
-            virtual void Deserialize( ObjectPtr& object ) HELIUM_OVERRIDE;
-            virtual void Deserialize( void* structure, const Structure* type ) HELIUM_OVERRIDE;
-            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
-            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+            void DeserializeInstance( ObjectPtr& object );
+            void DeserializeInstance( void* structure, const Structure* type );
+            void DeserializeFields( Object* object );
+            void DeserializeFields( void* object, const Structure* type );
+            void DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
+            void DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         protected:
             // Helpers
-            ObjectPtr Allocate();
             template< typename ArrayPusher >
-            void Deserialize( ArrayPusher& push, uint32_t flags );
-            void DeserializeFields( Object* object );
-            void DeserializeFields( void* object, const Structure* type );
+            void DeserializeArray( ArrayPusher& push, uint32_t flags );
+            ObjectPtr Allocate();
 
-        public:
+		public:
             // Reading and writing single object via binary
             static void       ToStream( Object* object, std::iostream& stream );
             static ObjectPtr FromStream( std::iostream& stream, const Class* searchClass = NULL );

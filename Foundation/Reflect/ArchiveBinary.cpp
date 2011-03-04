@@ -161,7 +161,7 @@ void ArchiveBinary::Read()
     // deserialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Read Objects") );
-        Deserialize(m_Objects, ArchiveFlags::Status);
+        DeserializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     // invalidate the search type and abort flags so we process the append block
@@ -209,7 +209,7 @@ void ArchiveBinary::Write()
     // serialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Write Objects") );
-        Serialize(m_Objects, ArchiveFlags::Status);
+        SerializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     // do cleanup
@@ -219,7 +219,7 @@ void ArchiveBinary::Write()
     e_Status.Raise( info );
 }
 
-void ArchiveBinary::Serialize(Object* object)
+void ArchiveBinary::SerializeInstance(Object* object)
 {
     // write the crc of the class of object (used to factory allocate an instance when reading)
     uint32_t classCrc = 0;
@@ -289,7 +289,7 @@ void ArchiveBinary::Serialize(Object* object)
 #endif
 }
 
-void ArchiveBinary::Serialize( void* structure, const Structure* type )
+void ArchiveBinary::SerializeInstance( void* structure, const Structure* type )
 {
     // write the crc of the class of structure (used to factory allocate an instance when reading)
     uint32_t typeCrc = Crc32( type->m_Name );
@@ -342,56 +342,6 @@ void ArchiveBinary::Serialize( void* structure, const Structure* type )
 #endif
 }
 
-void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& objects, uint32_t flags)
-{
-    Serialize( objects.begin(), objects.end(), flags );
-}
-
-void ArchiveBinary::Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags )
-{
-    Serialize( objects.Begin(), objects.End(), flags );
-}
-
-template< typename ConstIteratorType >
-void ArchiveBinary::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
-{
-    int32_t size = (int32_t)( end - begin );
-    m_Stream->Write(&size); 
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
-    Log::Debug(TXT("Serializing %d objects\n"), size);
-    m_Indent.Push();
-#endif
-
-    ConstIteratorType itr = begin;
-    for (int index = 0; itr != end; ++itr, ++index )
-    {
-        Serialize(*itr);
-
-        if ( flags & ArchiveFlags::Status )
-        {
-            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
-            e_Status.Raise( info );
-        }
-    }
-
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Pop();
-#endif
-
-    const int32_t terminator = -1;
-    m_Stream->Write(&terminator); 
-}
-
 void ArchiveBinary::SerializeFields( Object* object )
 {
     const Composite* composite = object->GetClass();
@@ -427,7 +377,7 @@ void ArchiveBinary::SerializeFields( Object* object )
 #endif
 
                 object->PreSerialize( field );
-                Serialize( data );
+                SerializeInstance( data );
                 object->PostSerialize( field );
 
                 // might be useful to cache the data object here
@@ -480,7 +430,7 @@ void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
                 m_Indent.Push();
 #endif
 
-                Serialize( data );
+                SerializeInstance( data );
 
                 // might be useful to cache the data object here
                 data->Disconnect();               
@@ -500,7 +450,57 @@ void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
     m_Stream->Write(&terminator); 
 }
 
-void ArchiveBinary::Deserialize(ObjectPtr& object)
+void ArchiveBinary::SerializeArray(const std::vector< ObjectPtr >& objects, uint32_t flags)
+{
+    SerializeArray( objects.begin(), objects.end(), flags );
+}
+
+void ArchiveBinary::SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    SerializeArray( objects.Begin(), objects.End(), flags );
+}
+
+template< typename ConstIteratorType >
+void ArchiveBinary::SerializeArray( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
+{
+    int32_t size = (int32_t)( end - begin );
+    m_Stream->Write(&size); 
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Debug(TXT("Serializing %d objects\n"), size);
+    m_Indent.Push();
+#endif
+
+    ConstIteratorType itr = begin;
+    for (int index = 0; itr != end; ++itr, ++index )
+    {
+        SerializeInstance(*itr);
+
+        if ( flags & ArchiveFlags::Status )
+        {
+            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
+            e_Status.Raise( info );
+        }
+    }
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+
+    const int32_t terminator = -1;
+    m_Stream->Write(&terminator); 
+}
+
+void ArchiveBinary::DeserializeInstance(ObjectPtr& object)
 {
     //
     // If we don't have an object allocated for deserialization, pull one from the stream
@@ -544,7 +544,7 @@ void ArchiveBinary::Deserialize(ObjectPtr& object)
     }
 }
 
-void ArchiveBinary::Deserialize( void* structure, const Structure* type )
+void ArchiveBinary::DeserializeInstance( void* structure, const Structure* type )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
@@ -557,131 +557,6 @@ void ArchiveBinary::Deserialize( void* structure, const Structure* type )
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Pop();
 #endif
-}
-
-void ArchiveBinary::Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags )
-{
-    Deserialize( StlVectorPusher( objects ), flags );
-}
-
-void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
-{
-    Deserialize( DynArrayPusher( objects ), flags );
-}
-
-ObjectPtr ArchiveBinary::Allocate()
-{
-    ObjectPtr object;
-
-    // read type string
-    uint32_t typeCrc = Helium::BeginCrc32();
-    m_Stream->Read(&typeCrc);
-
-    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
-    const Class* type = NULL;
-    if ( typeCrc != 0 )
-    {
-        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
-    }
-
-    // read length info if we have it
-    uint32_t length = 0;
-    m_Stream->Read(&length);
-
-    if ( m_Skip || typeCrc == 0 )
-    {
-        // skip it, but account for already reading the length from the stream
-        m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
-    }
-    else
-    {
-        if (type)
-        {
-            // allocate instance by name
-            object = Registry::GetInstance()->CreateInstance( type );
-        }
-
-        // if we failed
-        if (!object.ReferencesObject())
-        {
-            // skip it, but account for already reading the length from the stream
-            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
-
-            // if you see this, then data is being lost because:
-            //  1 - a type was completely removed from the codebase
-            //  2 - a type was not found because its type library is not registered
-            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
-#pragma TODO("Support blind data")
-        }
-    }
-
-    return object;
-}
-
-template< typename ArrayPusher >
-void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
-{
-    uint32_t start_offset = (uint32_t)m_Stream->TellRead();
-
-    int32_t element_count = -1;
-    m_Stream->Read(&element_count); 
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing %d objects\n"), element_count);
-    m_Indent.Push();
-#endif
-
-    if (element_count > 0)
-    {
-        for (int i=0; i<element_count && !m_Abort; i++)
-        {
-            ObjectPtr object;
-            Deserialize(object);
-
-            if (object.ReferencesObject())
-            {
-                if ( object->IsClass( m_SearchClass ) )
-                {
-                    m_Skip = true;
-                }
-
-                if ( flags & ArchiveFlags::Status )
-                {
-                    uint32_t current = (uint32_t)m_Stream->TellRead();
-
-                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-                    info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
-                    e_Status.Raise( info );
-
-                    m_Abort |= info.m_Abort;
-                }
-            }
-
-            push( object );
-        }
-    }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Pop();
-#endif
-
-    if (!m_Abort)
-    {
-        int32_t terminator = -1;
-        m_Stream->Read(&terminator);
-        if (terminator != -1)
-        {
-            throw Reflect::DataFormatException( TXT( "Unterminated object array block (%s)" ), m_Path.c_str() );
-        }
-    }
-
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
 }
 
 void ArchiveBinary::DeserializeFields(Object* object)
@@ -725,7 +600,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
                 object->PostDeserialize( field );
 
                 // disconnect
@@ -751,7 +626,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
                 if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
@@ -773,7 +648,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
         {
             try
             {
-                Deserialize( unknown );
+                DeserializeInstance( unknown );
             }
             catch (Reflect::LogisticException& ex)
             {
@@ -835,7 +710,7 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
                 latentData->ConnectField( structure, field );
 
                 // process natively
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // disconnect
                 latentData->Disconnect();
@@ -859,7 +734,7 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
                 currentData->ConnectField(structure, field);
 
                 // process natively
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
                 Data::CastValue( latentData, currentData, DataFlags::Shallow );
@@ -880,6 +755,131 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
     {
         throw Reflect::DataFormatException( TXT( "Unterminated field array block (%s)" ), m_Path.c_str() );
     }
+}
+
+void ArchiveBinary::DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( StlVectorPusher( objects ), flags );
+}
+
+void ArchiveBinary::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( DynArrayPusher( objects ), flags );
+}
+
+template< typename ArrayPusher >
+void ArchiveBinary::DeserializeArray( ArrayPusher& push, uint32_t flags )
+{
+    uint32_t start_offset = (uint32_t)m_Stream->TellRead();
+
+    int32_t element_count = -1;
+    m_Stream->Read(&element_count); 
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Debug(TXT("Deserializing %d objects\n"), element_count);
+    m_Indent.Push();
+#endif
+
+    if (element_count > 0)
+    {
+        for (int i=0; i<element_count && !m_Abort; i++)
+        {
+            ObjectPtr object;
+            DeserializeInstance(object);
+
+            if (object.ReferencesObject())
+            {
+                if ( object->IsClass( m_SearchClass ) )
+                {
+                    m_Skip = true;
+                }
+
+                if ( flags & ArchiveFlags::Status )
+                {
+                    uint32_t current = (uint32_t)m_Stream->TellRead();
+
+                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+                    info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
+                    e_Status.Raise( info );
+
+                    m_Abort |= info.m_Abort;
+                }
+            }
+
+            push( object );
+        }
+    }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+
+    if (!m_Abort)
+    {
+        int32_t terminator = -1;
+        m_Stream->Read(&terminator);
+        if (terminator != -1)
+        {
+            throw Reflect::DataFormatException( TXT( "Unterminated object array block (%s)" ), m_Path.c_str() );
+        }
+    }
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
+}
+
+ObjectPtr ArchiveBinary::Allocate()
+{
+    ObjectPtr object;
+
+    // read type string
+    uint32_t typeCrc = Helium::BeginCrc32();
+    m_Stream->Read(&typeCrc);
+
+    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
+    const Class* type = NULL;
+    if ( typeCrc != 0 )
+    {
+        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+    }
+
+    // read length info if we have it
+    uint32_t length = 0;
+    m_Stream->Read(&length);
+
+    if ( m_Skip || typeCrc == 0 )
+    {
+        // skip it, but account for already reading the length from the stream
+        m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
+    }
+    else
+    {
+        if (type)
+        {
+            // allocate instance by name
+            object = Registry::GetInstance()->CreateInstance( type );
+        }
+
+        // if we failed
+        if (!object.ReferencesObject())
+        {
+            // skip it, but account for already reading the length from the stream
+            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
+
+            // if you see this, then data is being lost because:
+            //  1 - a type was completely removed from the codebase
+            //  2 - a type was not found because its type library is not registered
+            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
+#pragma TODO("Support blind data")
+        }
+    }
+
+    return object;
 }
 
 void ArchiveBinary::ToStream( Object* object, std::iostream& stream )

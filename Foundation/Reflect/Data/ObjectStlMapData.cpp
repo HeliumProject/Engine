@@ -177,29 +177,29 @@ void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
 template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveBinary& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveBinary& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveXML& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 template < class KeyT >
 void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveXML& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive)
+template < class KeyT > template< class ArchiveT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
     components.resize(m_Data->size() * 2);
@@ -219,7 +219,7 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive)
         }
     }
 
-    archive.Serialize(components);
+    archive.SerializeArray( components );
 
     {
         std::vector< ObjectPtr >::iterator itr = components.begin();
@@ -235,11 +235,11 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive)
     }
 }
 
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
+template < class KeyT > template< class ArchiveT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
-    archive.Deserialize(components, ArchiveFlags::Sparse);
+    archive.DeserializeArray(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
     {

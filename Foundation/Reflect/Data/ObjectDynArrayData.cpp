@@ -117,33 +117,35 @@ void ObjectDynArrayData::Accept( Visitor& visitor )
 
 void ObjectDynArrayData::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 void ObjectDynArrayData::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 void ObjectDynArrayData::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 void ObjectDynArrayData::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-void ObjectDynArrayData::Serialize( Archive& archive )
+template< class ArchiveT >
+void ObjectDynArrayData::Serialize( ArchiveT& archive )
 {
-    archive.Serialize( *m_Data );
+    archive.SerializeArray( *m_Data );
 }
 
-void ObjectDynArrayData::Deserialize( Archive& archive )
+template< class ArchiveT >
+void ObjectDynArrayData::Deserialize( ArchiveT& archive )
 {
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
 
-    archive.Deserialize( *m_Data );
+    archive.DeserializeArray( *m_Data );
 }

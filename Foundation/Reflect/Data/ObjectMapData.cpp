@@ -182,29 +182,29 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Accept( Visitor& visito
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
 void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& archive )
+template< typename KeyT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );
@@ -224,7 +224,7 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& arc
         }
     }
 
-    archive.Serialize( components );
+    archive.SerializeArray( components );
 
     {
         DynArray< ObjectPtr >::Iterator itr = components.Begin();
@@ -240,11 +240,11 @@ void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Serialize( Archive& arc
     }
 }
 
-template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( Archive& archive )
+template< typename KeyT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectMapData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
-    archive.Deserialize( components, ArchiveFlags::Sparse );
+    archive.DeserializeArray( components, ArchiveFlags::Sparse );
 
     size_t componentCount = components.GetSize();
     if ( componentCount % 2 != 0 )

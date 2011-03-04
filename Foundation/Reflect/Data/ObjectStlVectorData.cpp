@@ -117,33 +117,35 @@ void ObjectStlVectorData::Accept(Visitor& visitor)
 
 void ObjectStlVectorData::Serialize(ArchiveBinary& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 void ObjectStlVectorData::Deserialize(ArchiveBinary& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 void ObjectStlVectorData::Serialize(ArchiveXML& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 void ObjectStlVectorData::Deserialize(ArchiveXML& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-void ObjectStlVectorData::Serialize(Archive& archive)
+template< class ArchiveT >
+void ObjectStlVectorData::Serialize(ArchiveT& archive)
 {
-    archive.Serialize( *m_Data );
+    archive.SerializeArray( *m_Data );
 }
 
-void ObjectStlVectorData::Deserialize(Archive& archive)
+template< class ArchiveT >
+void ObjectStlVectorData::Deserialize(ArchiveT& archive)
 {
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    archive.Deserialize( *m_Data );
+    archive.DeserializeArray( *m_Data );
 }

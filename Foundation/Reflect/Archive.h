@@ -144,19 +144,6 @@ namespace Helium
             virtual void Write() = 0;
 
             //
-            // Serialization
-            //
-
-            virtual void Serialize( Object* object ) = 0;
-            virtual void Serialize( void* structure, const Structure* type ) = 0;
-            virtual void Serialize( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
-            virtual void Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( ObjectPtr& object ) = 0;
-            virtual void Deserialize( void* structure, const Structure* type ) = 0;
-            virtual void Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
-            virtual void Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags = 0 ) = 0;
-
-            //
             // Event API
             //
 

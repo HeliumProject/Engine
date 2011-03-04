@@ -56,12 +56,15 @@ namespace Helium
             virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
             virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
 
-            void Serialize( Archive& archive );
-            void Deserialize( Archive& archive );
-
             virtual tostream& operator>>( tostream& stream ) const HELIUM_OVERRIDE;
             virtual tistream& operator<<( tistream& stream ) HELIUM_OVERRIDE;
-        };
+
+		private:
+			template< class ArchiveT >
+            void Serialize( ArchiveT& archive );
+			template< class ArchiveT >
+            void Deserialize( ArchiveT& archive );
+		};
 
         typedef SimpleSetData< String > StringSetData;
         typedef SimpleSetData< uint32_t > UInt32SetData;

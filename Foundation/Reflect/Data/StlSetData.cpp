@@ -166,86 +166,25 @@ bool SimpleStlSetData<DataT, DataClassT>::Equals(Object* object)
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 template < class DataT, class DataClassT >
 void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
-}
-
-template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive)
-{
-    int i = 0;
-    std::vector< ObjectPtr > components;
-    components.resize( m_Data->size() );
-
-    {
-        DataType::const_iterator itr = m_Data->begin();
-        DataType::const_iterator end = m_Data->end();
-        for ( ; itr != end; ++itr )
-        {
-            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<DataClassT>() );
-
-            // downcast to data type
-            DataClassT* dataSer = AssertCast<DataClassT>(dataElem);
-
-            // connect to our map data memory address
-            dataSer->ConnectData(const_cast<DataT*>(&(*itr)));
-
-            // serialize to the archive stream
-            components[i++] = dataSer;
-        }
-    }
-
-    archive.Serialize(components);
-
-    std::vector< ObjectPtr >::iterator itr = components.begin();
-    std::vector< ObjectPtr >::iterator end = components.end();
-    for ( ; itr != end; ++itr )
-    {
-        Data* ser = AssertCast<Data>(*itr);
-        ser->Disconnect();
-
-        // might be useful to cache the data object here
-    }
-}
-
-template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
-{
-    std::vector< ObjectPtr > components;
-    archive.Deserialize(components);
-
-    // if we are referring to a real field, clear its contents
-    m_Data->clear();
-
-    std::vector< ObjectPtr >::iterator itr = components.begin();
-    std::vector< ObjectPtr >::iterator end = components.end();
-    for ( ; itr != end; ++itr )
-    {
-        DataClassT* data = SafeCast<DataClassT>(*itr);
-        if (!data)
-        {
-            throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
-        }
-
-        m_Data->insert( *data->m_Data );
-    }
+    Deserialize<ArchiveXML>( archive );
 }
 
 template < class DataT, class DataClassT >
@@ -279,7 +218,68 @@ tistream& SimpleStlSetData<DataT, DataClassT>::operator<<(tistream& stream)
     Tokenize< DataT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
-}  
+}
+
+template < class DataT, class DataClassT > template< class ArchiveT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveT& archive )
+{
+    int i = 0;
+    std::vector< ObjectPtr > components;
+    components.resize( m_Data->size() );
+
+    {
+        DataType::const_iterator itr = m_Data->begin();
+        DataType::const_iterator end = m_Data->end();
+        for ( ; itr != end; ++itr )
+        {
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<DataClassT>() );
+
+            // downcast to data type
+            DataClassT* dataSer = AssertCast<DataClassT>(dataElem);
+
+            // connect to our map data memory address
+            dataSer->ConnectData(const_cast<DataT*>(&(*itr)));
+
+            // serialize to the archive stream
+            components[i++] = dataSer;
+        }
+    }
+
+    archive.SerializeArray( components );
+
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        Data* ser = AssertCast<Data>(*itr);
+        ser->Disconnect();
+
+        // might be useful to cache the data object here
+    }
+}
+
+template < class DataT, class DataClassT > template < class ArchiveT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveT& archive )
+{
+    std::vector< ObjectPtr > components;
+    archive.DeserializeArray(components);
+
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        DataClassT* data = SafeCast<DataClassT>(*itr);
+        if (!data)
+        {
+            throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
+        }
+
+        m_Data->insert( *data->m_Data );
+    }
+}
 
 template SimpleStlSetData< tstring, StlStringData >;
 template SimpleStlSetData< uint32_t, UInt32Data >;

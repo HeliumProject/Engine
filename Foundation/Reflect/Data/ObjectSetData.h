@@ -35,8 +35,11 @@ namespace Helium
             virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
             virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
 
-            void Serialize( Archive& archive );
-            void Deserialize( Archive& archive );
+		private:
+			template< class ArchiveT >
+            void Serialize( ArchiveT& archive );
+			template< class ArchiveT >
+            void Deserialize( ArchiveT& archive );
         };
     }
 }

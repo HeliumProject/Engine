@@ -82,32 +82,34 @@ void PointerData::Accept(Visitor& visitor)
 
 void PointerData::Serialize(ArchiveBinary& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 void PointerData::Deserialize(ArchiveBinary& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 void PointerData::Serialize(ArchiveXML& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 void PointerData::Deserialize(ArchiveXML& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-void PointerData::Serialize(Archive& archive)
+template< class ArchiveT >
+void PointerData::Serialize(ArchiveT& archive)
 {
-    archive.Serialize( *m_Data );
+    archive.SerializeInstance( *m_Data );
 }
 
-void PointerData::Deserialize(Archive& archive)
+template< class ArchiveT >
+void PointerData::Deserialize(ArchiveT& archive)
 {
     *m_Data = NULL;
 
-    archive.Deserialize( *m_Data );
+    archive.DeserializeInstance( *m_Data );
 }

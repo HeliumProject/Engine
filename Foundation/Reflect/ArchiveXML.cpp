@@ -161,7 +161,7 @@ void ArchiveXML::Read()
     // deserialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Read Objects") );
-        Deserialize(m_Objects, ArchiveFlags::Status);
+        DeserializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     info.m_State = ArchiveStates::ObjectProcessed;
@@ -190,7 +190,7 @@ void ArchiveXML::Write()
     // serialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Write Objects") );
-        Serialize(m_Objects, ArchiveFlags::Status);
+        SerializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     *m_Stream << TXT( "</Reflect>\n\0" );
@@ -199,27 +199,17 @@ void ArchiveXML::Write()
     e_Status.Raise( info );
 }
 
-void ArchiveXML::Serialize( Object* object )
+void ArchiveXML::SerializeInstance( Object* object )
 {
-    Serialize( object, NULL );
+    SerializeInstance( object, NULL );
 }
 
-void ArchiveXML::Serialize( void* structure, const Structure* type )
+void ArchiveXML::SerializeInstance( void* structure, const Structure* type )
 {
-    Serialize( structure, type, NULL );
+    SerializeInstance( structure, type, NULL );
 }
 
-void ArchiveXML::Serialize(const std::vector< ObjectPtr >& objects, uint32_t flags)
-{
-    Serialize( objects.begin(), objects.end(), flags );
-}
-
-void ArchiveXML::Serialize( const DynArray< ObjectPtr >& objects, uint32_t flags )
-{
-    Serialize( objects.Begin(), objects.End(), flags );
-}
-
-void ArchiveXML::Serialize(Object* object, const tchar_t* fieldName)
+void ArchiveXML::SerializeInstance(Object* object, const tchar_t* fieldName)
 {
     if ( object )
     {
@@ -233,7 +223,7 @@ void ArchiveXML::Serialize(Object* object, const tchar_t* fieldName)
     {
         *m_Stream << object->GetClass()->m_Name;
     }
-    
+
     *m_Stream << TXT( "\"" );
 
     if ( fieldName )
@@ -280,7 +270,7 @@ void ArchiveXML::Serialize(Object* object, const tchar_t* fieldName)
     }
 }
 
-void ArchiveXML::Serialize( void* structure, const Structure* type, const tchar_t* fieldName )
+void ArchiveXML::SerializeInstance( void* structure, const Structure* type, const tchar_t* fieldName )
 {
     m_Indent.Push();
     m_Indent.Get( *m_Stream );
@@ -304,32 +294,6 @@ void ArchiveXML::Serialize( void* structure, const Structure* type, const tchar_
     m_Indent.Pop();
 }
 
-template< typename ConstIteratorType >
-void ArchiveXML::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
-{
-    size_t size = static_cast< size_t >( end - begin );
-
-    ConstIteratorType itr = begin;
-    for (int index = 0; itr != end; ++itr, ++index )
-    {
-        Serialize(*itr, NULL);
-
-        if ( flags & ArchiveFlags::Status )
-        {
-            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
-            e_Status.Raise( info );
-        }
-    }
-
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
-}
-
 void ArchiveXML::SerializeFields( Object* object )
 {
     const Class* type = object->GetClass();
@@ -344,7 +308,7 @@ void ArchiveXML::SerializeFields( Object* object )
         if ( data )
         {
             object->PreSerialize( field );
-            Serialize( data, field->m_Name );
+            SerializeInstance( data, field->m_Name );
             object->PostSerialize( field );
 
             // might be useful to cache the data object here
@@ -363,7 +327,7 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
         DataPtr data = field->ShouldSerialize( structure );
         if ( data )
         {
-            Serialize( data, field->m_Name );
+            SerializeInstance( data, field->m_Name );
 
             // might be useful to cache the data object here
             data->Disconnect();
@@ -371,7 +335,43 @@ void ArchiveXML::SerializeFields( void* structure, const Structure* type )
     }
 }
 
-void ArchiveXML::Deserialize(ObjectPtr& object)
+void ArchiveXML::SerializeArray(const std::vector< ObjectPtr >& objects, uint32_t flags)
+{
+    SerializeArray( objects.begin(), objects.end(), flags );
+}
+
+void ArchiveXML::SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    SerializeArray( objects.Begin(), objects.End(), flags );
+}
+
+template< typename ConstIteratorType >
+void ArchiveXML::SerializeArray( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
+{
+    size_t size = static_cast< size_t >( end - begin );
+
+    ConstIteratorType itr = begin;
+    for (int index = 0; itr != end; ++itr, ++index )
+    {
+        SerializeInstance(*itr, NULL);
+
+        if ( flags & ArchiveFlags::Status )
+        {
+            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
+            e_Status.Raise( info );
+        }
+    }
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
+}
+
+void ArchiveXML::DeserializeInstance(ObjectPtr& object)
 {
     //
     // If we don't have an object allocated for deserialization, pull one from the stream
@@ -423,7 +423,7 @@ void ArchiveXML::Deserialize(ObjectPtr& object)
     }
 }
 
-void ArchiveXML::Deserialize( void* structure, const Structure* type )
+void ArchiveXML::DeserializeInstance( void* structure, const Structure* type )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
@@ -436,102 +436,6 @@ void ArchiveXML::Deserialize( void* structure, const Structure* type )
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Pop();
 #endif
-}
-
-void ArchiveXML::Deserialize( std::vector< ObjectPtr >& objects, uint32_t flags )
-{
-    Deserialize( StlVectorPusher( objects ), flags );
-}
-
-void ArchiveXML::Deserialize( DynArray< ObjectPtr >& objects, uint32_t flags )
-{
-    Deserialize( DynArrayPusher( objects ), flags );
-}
-
-ObjectPtr ArchiveXML::Allocate()
-{
-    ObjectPtr object;
-
-    // find type
-    const String* typeStr = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT("Type") ) );
-    uint32_t typeCrc = typeStr ? Crc32( typeStr->GetData() ) : 0x0;
-
-    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
-    const Class* type = NULL;
-    if ( typeCrc != 0 )
-    {
-        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
-    }
-
-    if (type)
-    {
-        // allocate instance by name
-        object = Registry::GetInstance()->CreateInstance( type );
-    }
-
-    // if we failed
-    if (!object.ReferencesObject())
-    {
-        // if you see this, then data is being lost because:
-        //  1 - a type was completely removed from the codebase
-        //  2 - a type was not found because its type library is not registered
-        Log::Debug( TXT( "Unable to create object of type %s, skipping...\n" ), type ? type->m_Name : TXT("Unknown") );
-
-        // skip past this object, skipping our children
-        m_Iterator.Advance( true );
-#pragma TODO("Support blind data")
-    }
-
-    return object;
-}
-
-template< typename ArrayPusher >
-void ArchiveXML::Deserialize( ArrayPusher& push, uint32_t flags )
-{
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing objects\n"));
-    m_Indent.Push();
-#endif
-
-    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
-    {
-        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
-
-        ObjectPtr object;
-        Deserialize(object);
-
-        if (object.ReferencesObject())
-        {
-            if ( object->IsClass( m_SearchClass ) )
-            {
-                m_Skip = true;
-            }
-
-            if ( flags & ArchiveFlags::Status )
-            {
-                ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-#pragma TODO("Update progress value for inter-array processing")
-                //info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
-                e_Status.Raise( info );
-
-                m_Abort |= info.m_Abort;
-            }
-        }
-
-        push( object );
-    }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Pop();
-#endif
-
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
 }
 
 void ArchiveXML::DeserializeFields(Object* object)
@@ -576,7 +480,7 @@ void ArchiveXML::DeserializeFields(Object* object)
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
                 object->PostDeserialize( field );
 
                 // disconnect
@@ -602,7 +506,7 @@ void ArchiveXML::DeserializeFields(Object* object)
 
                 // process natively
                 object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
                 if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
@@ -624,7 +528,7 @@ void ArchiveXML::DeserializeFields(Object* object)
         {
             try
             {
-                Deserialize( unknown );
+                DeserializeInstance( unknown );
             }
             catch (Reflect::LogisticException& ex)
             {
@@ -681,7 +585,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
                 latentData->ConnectField( structure, field );
 
                 // process natively
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // disconnect
                 latentData->Disconnect();
@@ -705,7 +609,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
                 currentData->ConnectField(structure, field);
 
                 // process natively
-                Deserialize( (ObjectPtr&)latentData );
+                DeserializeInstance( (ObjectPtr&)latentData );
 
                 // attempt cast data into new definition
                 Data::CastValue( latentData, currentData, DataFlags::Shallow );
@@ -719,6 +623,102 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
         m_Indent.Pop();
 #endif
     }
+}
+
+void ArchiveXML::DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( StlVectorPusher( objects ), flags );
+}
+
+void ArchiveXML::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( DynArrayPusher( objects ), flags );
+}
+
+template< typename ArrayPusher >
+void ArchiveXML::DeserializeArray( ArrayPusher& push, uint32_t flags )
+{
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Debug(TXT("Deserializing objects\n"));
+    m_Indent.Push();
+#endif
+
+    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
+    {
+        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+
+        ObjectPtr object;
+        DeserializeInstance(object);
+
+        if (object.ReferencesObject())
+        {
+            if ( object->IsClass( m_SearchClass ) )
+            {
+                m_Skip = true;
+            }
+
+            if ( flags & ArchiveFlags::Status )
+            {
+                ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+#pragma TODO("Update progress value for inter-array processing")
+                //info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
+                e_Status.Raise( info );
+
+                m_Abort |= info.m_Abort;
+            }
+        }
+
+        push( object );
+    }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
+}
+
+ObjectPtr ArchiveXML::Allocate()
+{
+    ObjectPtr object;
+
+    // find type
+    const String* typeStr = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT("Type") ) );
+    uint32_t typeCrc = typeStr ? Crc32( typeStr->GetData() ) : 0x0;
+
+    // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
+    const Class* type = NULL;
+    if ( typeCrc != 0 )
+    {
+        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+    }
+
+    if (type)
+    {
+        // allocate instance by name
+        object = Registry::GetInstance()->CreateInstance( type );
+    }
+
+    // if we failed
+    if (!object.ReferencesObject())
+    {
+        // if you see this, then data is being lost because:
+        //  1 - a type was completely removed from the codebase
+        //  2 - a type was not found because its type library is not registered
+        Log::Debug( TXT( "Unable to create object of type %s, skipping...\n" ), type ? type->m_Name : TXT("Unknown") );
+
+        // skip past this object, skipping our children
+        m_Iterator.Advance( true );
+#pragma TODO("Support blind data")
+    }
+
+    return object;
 }
 
 void ArchiveXML::ToString( Object* object, tstring& xml )

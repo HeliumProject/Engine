@@ -121,25 +121,26 @@ void ObjectStlSetData::Accept(Visitor& visitor)
 
 void ObjectStlSetData::Serialize(ArchiveBinary& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 void ObjectStlSetData::Deserialize(ArchiveBinary& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 void ObjectStlSetData::Serialize(ArchiveXML& archive)
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 void ObjectStlSetData::Deserialize(ArchiveXML& archive)
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-void ObjectStlSetData::Serialize(Archive& archive)
+template< class ArchiveT >
+void ObjectStlSetData::Serialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
 
@@ -150,13 +151,14 @@ void ObjectStlSetData::Serialize(Archive& archive)
         components.push_back(*itr);
     }
 
-    archive.Serialize(components);
+    archive.SerializeArray( components );
 }
 
-void ObjectStlSetData::Deserialize(Archive& archive)
+template< class ArchiveT >
+void ObjectStlSetData::Deserialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
-    archive.Deserialize(components);
+    archive.DeserializeArray(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();

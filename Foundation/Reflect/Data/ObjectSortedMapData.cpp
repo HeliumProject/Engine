@@ -182,29 +182,29 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Accept( Visitor
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive )
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );
@@ -224,7 +224,7 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Arch
         }
     }
 
-    archive.Serialize( components );
+    archive.SerializeArray( components );
 
     {
         DynArray< ObjectPtr >::Iterator itr = components.Begin();
@@ -240,11 +240,11 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Arch
     }
 }
 
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Archive& archive )
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
-    archive.Deserialize( components, ArchiveFlags::Sparse );
+    archive.DeserializeArray( components, ArchiveFlags::Sparse );
 
     size_t componentCount = components.GetSize();
     if ( componentCount % 2 != 0 )

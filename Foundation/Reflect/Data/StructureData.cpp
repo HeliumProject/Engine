@@ -74,7 +74,7 @@ void StructureData::Serialize(ArchiveBinary& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
-    archive.Serialize( m_Data.Get( structure->m_Size ), structure );
+    archive.SerializeInstance( m_Data.Get( structure->m_Size ), structure );
 }
 
 void StructureData::Deserialize(ArchiveBinary& archive)
@@ -82,7 +82,7 @@ void StructureData::Deserialize(ArchiveBinary& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
-    archive.Deserialize( m_Data.Get( structure->m_Size ), structure );
+    archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
 }
 
 void StructureData::Serialize(ArchiveXML& archive)
@@ -90,7 +90,7 @@ void StructureData::Serialize(ArchiveXML& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
-    archive.Serialize( m_Data.Get( structure->m_Size ), structure );
+    archive.SerializeInstance( m_Data.Get( structure->m_Size ), structure );
 }
 
 void StructureData::Deserialize(ArchiveXML& archive)
@@ -98,5 +98,5 @@ void StructureData::Deserialize(ArchiveXML& archive)
     const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
     HELIUM_ASSERT( structure );
 
-    archive.Deserialize( m_Data.Get( structure->m_Size ), structure );
+    archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
 }

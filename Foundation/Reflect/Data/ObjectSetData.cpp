@@ -124,25 +124,26 @@ void ObjectSetData::Accept( Visitor& visitor )
 
 void ObjectSetData::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 void ObjectSetData::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 void ObjectSetData::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 void ObjectSetData::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveXML>( archive );
 }
 
-void ObjectSetData::Serialize( Archive& archive )
+template< class ArchiveT >
+void ObjectSetData::Serialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() );
@@ -154,13 +155,14 @@ void ObjectSetData::Serialize( Archive& archive )
         components.Push( *itr );
     }
 
-    archive.Serialize( components );
+    archive.SerializeArray( components );
 }
 
-void ObjectSetData::Deserialize( Archive& archive )
+template< class ArchiveT >
+void ObjectSetData::Deserialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
-    archive.Deserialize( components );
+    archive.DeserializeArray( components );
 
     // if we are referring to a real field, clear its contents
     m_Data->Clear();

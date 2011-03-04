@@ -300,97 +300,25 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(Object* obje
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveBinary& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveBinary>( archive );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveBinary& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
+    Deserialize<ArchiveBinary>( archive );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveXML& archive )
 {
-    Serialize( static_cast< Archive& >( archive ) );
+    Serialize<ArchiveXML>( archive );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
 void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveXML& archive )
 {
-    Deserialize( static_cast< Archive& >( archive ) );
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive)
-{
-    int i = 0;
-    std::vector< ObjectPtr > components;
-    components.resize( m_Data->size() * 2 );
-
-    {
-        DataType::const_iterator itr = m_Data->begin();
-        DataType::const_iterator end = m_Data->end();
-        for ( ; itr != end; ++itr )
-        {
-            ObjectPtr keyElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<KeyClassT>() );
-            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
-
-            // downcast to data type
-            KeyClassT* keySer = AssertCast<KeyClassT>(keyElem);
-            ValueClassT* dataSer = AssertCast<ValueClassT>(dataElem);
-
-            // connect to our map key memory address
-            keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
-
-            // connect to our map data memory address
-            dataSer->ConnectData(const_cast<ValueT*>(&(itr->second)));
-
-            // serialize to the archive stream
-            components[i++] = keySer;
-            components[i++] = dataSer;
-        }
-    }
-
-    archive.Serialize(components);
-
-    std::vector< ObjectPtr >::iterator itr = components.begin();
-    std::vector< ObjectPtr >::iterator end = components.end();
-    for ( ; itr != end; ++itr )
-    {
-        Data* ser = AssertCast<Data>(*itr);
-        ser->Disconnect();
-
-        // might be useful to cache the data object here
-    }
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive& archive)
-{
-    std::vector< ObjectPtr > components;
-    archive.Deserialize(components, ArchiveFlags::Sparse);
-
-    if (components.size() % 2 != 0)
-    {
-        throw Reflect::DataFormatException( TXT( "Unmatched map objects" ) );
-    }
-
-    // if we are referring to a real field, clear its contents
-    m_Data->clear();
-
-    std::vector< ObjectPtr >::iterator itr = components.begin();
-    std::vector< ObjectPtr >::iterator end = components.end();
-    for ( ; itr != end; ++itr )
-    {
-        KeyClassT* key = SafeCast<KeyClassT>( *itr );
-        ValueClassT* value = SafeCast<ValueClassT>( *(++itr) );
-
-        if (key && value)
-        {
-            (*m_Data)[ *key->m_Data ] = *value->m_Data;
-        }
-    }
+    Deserialize<ArchiveXML>( archive );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -425,6 +353,78 @@ tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<<(tis
 
     return stream;
 }  
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT > template< class ArchiveT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(ArchiveT& archive)
+{
+    int i = 0;
+    std::vector< ObjectPtr > components;
+    components.resize( m_Data->size() * 2 );
+
+    {
+        DataType::const_iterator itr = m_Data->begin();
+        DataType::const_iterator end = m_Data->end();
+        for ( ; itr != end; ++itr )
+        {
+            ObjectPtr keyElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<KeyClassT>() );
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetClass<ValueClassT>() );
+
+            // downcast to data type
+            KeyClassT* keySer = AssertCast<KeyClassT>(keyElem);
+            ValueClassT* dataSer = AssertCast<ValueClassT>(dataElem);
+
+            // connect to our map key memory address
+            keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
+
+            // connect to our map data memory address
+            dataSer->ConnectData(const_cast<ValueT*>(&(itr->second)));
+
+            // serialize to the archive stream
+            components[i++] = keySer;
+            components[i++] = dataSer;
+        }
+    }
+
+    archive.SerializeArray( components );
+
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        Data* ser = AssertCast<Data>(*itr);
+        ser->Disconnect();
+
+        // might be useful to cache the data object here
+    }
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT > template< class ArchiveT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(ArchiveT& archive)
+{
+    std::vector< ObjectPtr > components;
+    archive.DeserializeArray(components, ArchiveFlags::Sparse);
+
+    if (components.size() % 2 != 0)
+    {
+        throw Reflect::DataFormatException( TXT( "Unmatched map objects" ) );
+    }
+
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    std::vector< ObjectPtr >::iterator itr = components.begin();
+    std::vector< ObjectPtr >::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        KeyClassT* key = SafeCast<KeyClassT>( *itr );
+        ValueClassT* value = SafeCast<ValueClassT>( *(++itr) );
+
+        if (key && value)
+        {
+            (*m_Data)[ *key->m_Data ] = *value->m_Data;
+        }
+    }
+}
 
 template SimpleStlMapData<tstring, StlStringData, tstring, StlStringData>;
 template SimpleStlMapData<tstring, StlStringData, bool, BoolData>;

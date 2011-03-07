@@ -51,8 +51,9 @@ namespace Helium
             // Stream access
             TCharStream& GetStream()
             {
-                HELIUM_ASSERT( m_Body );
-                return *m_Body;
+				TCharStream* stream = m_Mode == ArchiveModes::Read ? m_Body : m_Stream;
+				HELIUM_ASSERT( stream );
+				return *stream;
             }
 
         protected:

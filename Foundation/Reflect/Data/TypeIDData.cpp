@@ -69,7 +69,6 @@ void TypeIDData::Deserialize(ArchiveBinary& archive)
 void TypeIDData::Serialize(ArchiveXML& archive)
 {
     const Type* type = *m_Data;
-
     if ( type )
     {
         archive.GetStream() << "<![CDATA[" << type->m_Name << "]]>";

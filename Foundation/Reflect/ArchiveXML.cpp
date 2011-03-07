@@ -95,7 +95,7 @@ void ArchiveXML::OpenStream( TCharStream* stream, bool write )
     stream->SetPrecision(32);
 
     // Setup stream
-    m_Stream = stream; 
+    m_Stream = stream;
 }
 
 void ArchiveXML::Close()

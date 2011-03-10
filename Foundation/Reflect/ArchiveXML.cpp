@@ -156,8 +156,6 @@ void ArchiveXML::Read()
         str >> m_Version;
     }
 
-    m_Iterator.Advance();
-
     // deserialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Read Objects") );
@@ -390,7 +388,7 @@ void ArchiveXML::DeserializeInstance(ObjectPtr& object)
     {
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
+        Log::Print(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
         m_Indent.Push();
 #endif
 
@@ -408,7 +406,7 @@ void ArchiveXML::DeserializeInstance(ObjectPtr& object)
             data->Deserialize(*this);
             m_Body = NULL;
 
-            m_Iterator.Advance();
+            m_Iterator.Advance( true );
         }
         else
         {
@@ -427,7 +425,7 @@ void ArchiveXML::DeserializeInstance( void* structure, const Structure* type )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing %s\n"), type->m_Name);
+    Log::Print(TXT("Deserializing %s\n"), type->m_Name);
     m_Indent.Push();
 #endif
 
@@ -459,7 +457,7 @@ void ArchiveXML::DeserializeFields(Object* object)
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
             m_Indent.Get(stdout);
-            Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
+            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
             m_Indent.Push();
 #endif
 
@@ -638,9 +636,12 @@ void ArchiveXML::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flag
 template< typename ArrayPusher >
 void ArchiveXML::DeserializeArray( ArrayPusher& push, uint32_t flags )
 {
+    // advance to the first child (the first array element)
+    m_Iterator.Advance();
+
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing objects\n"));
+    Log::Print(TXT("Deserializing objects\n"));
     m_Indent.Push();
 #endif
 

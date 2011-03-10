@@ -38,6 +38,50 @@ Helium::XMLElement* Helium::XMLElement::GetNextSibling()
     return m_NextSibling != -1 ? m_Document->GetElement( m_NextSibling ) : NULL;
 }
 
+Helium::XMLElement* Helium::XMLElement::GetNext( bool skipChildren )
+{
+    HELIUM_ASSERT( this );
+
+    XMLElement* next = NULL;
+
+    if ( !skipChildren )
+    {
+        // always decend to the children first
+        next = GetFirstChild();
+    }
+
+    if ( !next )
+    {
+        // no more children, next sibling
+        next = GetNextSibling();
+    }
+
+    XMLElement* previous = this;
+
+    // no more siblings, find the next uncle
+    while ( !next )
+    {
+        // get the relative location's parent
+        next = previous->GetParent();
+
+        // if we have a parent (we aren't the root)
+        if ( next )
+        {
+            // set the relative location to be this parent
+            previous = next;
+
+            // get the next sibling of of this parent (uncle)
+            next = previous->GetNextSibling();
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return next;
+}
+
 Helium::XMLDocument::Iterator::Iterator()
 : m_Current( NULL )
 {
@@ -59,47 +103,7 @@ Helium::XMLElement* Helium::XMLDocument::Iterator::Advance( bool skipChildren )
 {
     HELIUM_ASSERT( !IsDone() );
 
-    XMLElement* previous = m_Current;
-
-    if ( !skipChildren )
-    {
-        // always decend to the children first
-        m_Current = m_Current->GetFirstChild();
-        if ( m_Current )
-        {
-            return m_Current;
-        }
-    }
-
-    // no more children, next sibling
-    m_Current = m_Current->GetNextSibling();
-    if ( m_Current )
-    {
-        return m_Current;
-    }
-
-    // no more siblings, find the next uncle
-    while ( m_Current == NULL )
-    {
-        // get the previous location's parent
-        m_Current = previous->GetParent();
-
-        // if we have a parent (we aren't the root)
-        if ( m_Current )
-        {
-            // set the previous location to be this parent
-            previous = m_Current;
-
-            // get the next sibling of of this parent (uncle)
-            m_Current = previous->GetNextSibling();
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    return m_Current;
+    return m_Current = m_Current->GetNext( skipChildren );
 }
 
 Helium::XMLElement* Helium::XMLDocument::Iterator::GetCurrent()

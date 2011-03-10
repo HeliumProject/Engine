@@ -26,6 +26,7 @@ namespace Helium
         inline XMLElement* GetParent();
         inline XMLElement* GetFirstChild();
         inline XMLElement* GetNextSibling();
+        inline XMLElement* GetNext( bool skipChildren = false );
 
         // Element Info
         Name            m_Name;

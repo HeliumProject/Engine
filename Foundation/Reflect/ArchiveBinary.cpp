@@ -65,7 +65,7 @@ ArchiveBinary::ArchiveBinary()
 void ArchiveBinary::Open( bool write )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
+    Log::Print(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
     Reflect::CharStreamPtr stream = new CharFileStream( m_Path, write ); 
@@ -236,7 +236,7 @@ void ArchiveBinary::SerializeInstance(Object* object)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug( TXT( "Serializing %s\n" ), object->GetClass()->m_Name );
+    Log::Print( TXT( "Serializing %s\n" ), object->GetClass()->m_Name );
     m_Indent.Push();
 #endif
 
@@ -301,7 +301,7 @@ void ArchiveBinary::SerializeInstance( void* structure, const Structure* type )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug( TXT( "Serializing %s\n" ), type->m_Name );
+    Log::Print( TXT( "Serializing %s\n" ), type->m_Name );
     m_Indent.Push();
 #endif
 
@@ -372,7 +372,7 @@ void ArchiveBinary::SerializeFields( Object* object )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Get(stdout);
-                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
+                Log::Print(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
                 m_Indent.Push();
 #endif
 
@@ -426,7 +426,7 @@ void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Get(stdout);
-                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
+                Log::Print(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
                 m_Indent.Push();
 #endif
 
@@ -468,7 +468,7 @@ void ArchiveBinary::SerializeArray( ConstIteratorType begin, ConstIteratorType e
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Serializing %d objects\n"), size);
+    Log::Print(TXT("Serializing %d objects\n"), size);
     m_Indent.Push();
 #endif
 
@@ -519,7 +519,7 @@ void ArchiveBinary::DeserializeInstance(ObjectPtr& object)
     {
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
+        Log::Print(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
         m_Indent.Push();
 #endif
 
@@ -548,7 +548,7 @@ void ArchiveBinary::DeserializeInstance( void* structure, const Structure* type 
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing %s\n"), type->m_Name);
+    Log::Print(TXT("Deserializing %s\n"), type->m_Name);
     m_Indent.Push();
 #endif
 
@@ -579,7 +579,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
             m_Indent.Get(stdout);
-            Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
+            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
             m_Indent.Push();
 #endif
 
@@ -690,7 +690,7 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
             m_Indent.Get(stdout);
-            Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
+            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
             m_Indent.Push();
 #endif
 

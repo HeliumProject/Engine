@@ -165,9 +165,15 @@ Helium.Publish = function( files )
 		end
 		local result = os.execute( linkCommand )
 
-		-- If creating a hardlink failed, attempt a normal copy with "xcopy" as a fallback.
+		-- If creating a hardlink failed, attempt a normal copy
 		if result ~= 0 then
-			result = os.execute( "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y" )
+			local copyCommand = ''
+			if ( os.get() == "windows" ) then
+				copyCommand = "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y"
+			else
+				copyCommand = "cp " .. path .. " " .. destination
+			end
+			os.execute( copyCommand )
 			if result ~= 0 then
 				os.exit( 1 )
 			end

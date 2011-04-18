@@ -236,8 +236,11 @@ Helium.PublishWxWidgets = function( bin )
 				files[16] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" }
 			end       
 		end   
-    end
-    
+	else
+		print("Implement support for " .. os.get() .. " to PublishWxWidgets()")
+		os.exit(1)
+	end
+
     Helium.Publish( files )
 
 end

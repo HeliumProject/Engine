@@ -43,13 +43,17 @@ Helium.GetFbxSdkLocation = function()
     if not fbxLocation then
         if os.get() == "windows" then
             fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
-            if not os.isdir( fbxLocation ) then
-                fbxLocation = nil
-            end
+        elseif os.get() == "macosx" then
+        	if Helium.RequiredFBXVersion == '2011.3.1' then
+ 		       	fbxLocation = "/Applications/Autodesk/FBXSDK20113_1"
+ 		   	end
         else
             print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
             os.exit(1)
         end
+		if not os.isdir( fbxLocation ) then
+			fbxLocation = nil
+		end
     end
     
     return fbxLocation

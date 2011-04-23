@@ -399,10 +399,11 @@ void ArchiveXML::DeserializeInstance(ObjectPtr& object)
         if ( data )
         {
 #pragma TODO("Make sure this string copy goes away when replace the stl stream APIs")
-            tstringstream stringStream ( m_Iterator.GetCurrent()->m_Body.GetData() );
+            tstring body ( m_Iterator.GetCurrent()->m_Body.GetData(), m_Iterator.GetCurrent()->m_Body.GetSize() );
+            tstringstream stringStream ( body );
             TCharStream stream ( &stringStream, false );
-            m_Body = &stream;
 
+            m_Body = &stream;
             data->Deserialize(*this);
             m_Body = NULL;
 
@@ -438,188 +439,204 @@ void ArchiveXML::DeserializeInstance( void* structure, const Structure* type )
 
 void ArchiveXML::DeserializeFields(Object* object)
 {
-    // advance to the first child
-    m_Iterator.Advance();
-
-    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
+    if ( m_Iterator.GetCurrent()->GetFirstChild() )
     {
-        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+        // advance to the first child
+        m_Iterator.Advance();
 
-        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
-        uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
-
-        const Class* type = object->GetClass();
-        HELIUM_ASSERT( type );
-
-        ObjectPtr unknown;
-        const Field* field = type->FindFieldByName(fieldNameCrc);
-        if ( field )
+        for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
+            HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+
+            const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
+            uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
+
+            const Class* type = object->GetClass();
+            HELIUM_ASSERT( type );
+
+            ObjectPtr unknown;
+            const Field* field = type->FindFieldByName(fieldNameCrc);
+            if ( field )
+            {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-            m_Indent.Get(stdout);
-            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
-            m_Indent.Push();
+                m_Indent.Get(stdout);
+                Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
+                m_Indent.Push();
 #endif
 
-            // pull and object and downcast to data
-            DataPtr latentData = SafeCast<Data>( Allocate() );
-            if (!latentData.ReferencesObject())
-            {
-                // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                // pull and object and downcast to data
+                DataPtr latentData = SafeCast<Data>( Allocate() );
+                if (!latentData.ReferencesObject())
+                {
+                    // this should never happen, the type id read from the file is bogus
+                    throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
 #pragma TODO("Support blind data")
-            }
-
-            // if the types match we are a natural fit to just deserialize directly into the field data
-            if ( field->m_DataClass == field->m_DataClass )
-            {
-                // set data pointer
-                latentData->ConnectField( object, field );
-
-                // process natively
-                object->PreDeserialize( field );
-                DeserializeInstance( (ObjectPtr&)latentData );
-                object->PostDeserialize( field );
-
-                // disconnect
-                latentData->Disconnect();
-            }
-            else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
-            {
-                REFLECT_SCOPE_TIMER(("Casting"));
-
-                // construct current serialization object
-                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
-
-                // downcast to data
-                DataPtr currentData = SafeCast<Data>(currentObject);
-                if (!currentData.ReferencesObject())
-                {
-                    // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
                 }
 
-                // process into temporary memory
-                currentData->ConnectField(object, field);
-
-                // process natively
-                object->PreDeserialize( field );
-                DeserializeInstance( (ObjectPtr&)latentData );
-
-                // attempt cast data into new definition
-                if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
+                // if the types match we are a natural fit to just deserialize directly into the field data
+                if ( field->m_DataClass == field->m_DataClass )
                 {
-                    // handle as unknown
-                    unknown = latentData;
-                }
-                else
-                {
-                    // post process
+                    // set data pointer
+                    latentData->ConnectField( object, field );
+
+                    // process natively
+                    object->PreDeserialize( field );
+                    DeserializeInstance( (ObjectPtr&)latentData );
                     object->PostDeserialize( field );
+
+                    // disconnect
+                    latentData->Disconnect();
                 }
+                else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
+                {
+                    REFLECT_SCOPE_TIMER(("Casting"));
 
-                // disconnect
-                currentData->Disconnect();
-            }
-        }
-        else // else the field does not exist in the current class anymore
-        {
-            try
-            {
-                DeserializeInstance( unknown );
-            }
-            catch (Reflect::LogisticException& ex)
-            {
-                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding: %s\n" ), type->m_Name, field->m_Name, ex.What());
-            }
-        }
+                    // construct current serialization object
+                    ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
 
-        if ( unknown.ReferencesObject() )
-        {
-            // attempt processing
-            object->ProcessUnknown( unknown, field ? Crc32( field->m_Name ) : 0 );
-        }
+                    // downcast to data
+                    DataPtr currentData = SafeCast<Data>(currentObject);
+                    if (!currentData.ReferencesObject())
+                    {
+                        // this should never happen, the type id in the rtti data is bogus
+                        throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                    }
+
+                    // process into temporary memory
+                    currentData->ConnectField(object, field);
+
+                    // process natively
+                    object->PreDeserialize( field );
+                    DeserializeInstance( (ObjectPtr&)latentData );
+
+                    // attempt cast data into new definition
+                    if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
+                    {
+                        // handle as unknown
+                        unknown = latentData;
+                    }
+                    else
+                    {
+                        // post process
+                        object->PostDeserialize( field );
+                    }
+
+                    // disconnect
+                    currentData->Disconnect();
+                }
+            }
+            else // else the field does not exist in the current class anymore
+            {
+                try
+                {
+                    DeserializeInstance( unknown );
+                }
+                catch (Reflect::LogisticException& ex)
+                {
+                    Log::Debug( TXT( "Unable to deserialize %s::%s, discarding: %s\n" ), type->m_Name, field->m_Name, ex.What());
+                }
+            }
+
+            if ( unknown.ReferencesObject() )
+            {
+                // attempt processing
+                object->ProcessUnknown( unknown, field ? Crc32( field->m_Name ) : 0 );
+            }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Pop();
+            m_Indent.Pop();
 #endif
+        }
+    }
+    else
+    {
+        // advance to the next element
+        m_Iterator.Advance();
     }
 }
 
 void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
 {
-    // advance to the first child
-    m_Iterator.Advance();
-
-    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
+    if ( m_Iterator.GetCurrent()->GetFirstChild() )
     {
-        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+        // advance to the first child
+        m_Iterator.Advance();
 
-        const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
-        uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
-
-        const Field* field = type->FindFieldByName(fieldNameCrc);
-        if ( field )
+        for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
+            HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
+
+            const String* fieldNameStr = sibling->GetAttributeValue( Name( TXT("Name") ) );
+            uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
+
+            const Field* field = type->FindFieldByName(fieldNameCrc);
+            if ( field )
+            {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-            m_Indent.Get(stdout);
-            Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
-            m_Indent.Push();
+                m_Indent.Get(stdout);
+                Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
+                m_Indent.Push();
 #endif
 
-            // pull and structure and downcast to data
-            DataPtr latentData = SafeCast<Data>( Allocate() );
-            if (!latentData.ReferencesObject())
-            {
-                // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
-#pragma TODO("Support blind data")
-            }
-
-            // if the types match we are a natural fit to just deserialize directly into the field data
-            if ( field->m_DataClass == field->m_DataClass )
-            {
-                // set data pointer
-                latentData->ConnectField( structure, field );
-
-                // process natively
-                DeserializeInstance( (ObjectPtr&)latentData );
-
-                // disconnect
-                latentData->Disconnect();
-            }
-            else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
-            {
-                REFLECT_SCOPE_TIMER(("Casting"));
-
-                // construct current serialization structure
-                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
-
-                // downcast to data
-                DataPtr currentData = SafeCast<Data>(currentObject);
-                if (!currentData.ReferencesObject())
+                // pull and structure and downcast to data
+                DataPtr latentData = SafeCast<Data>( Allocate() );
+                if (!latentData.ReferencesObject())
                 {
-                    // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                    // this should never happen, the type id read from the file is bogus
+                    throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+#pragma TODO("Support blind data")
                 }
 
-                // process into temporary memory
-                currentData->ConnectField(structure, field);
+                // if the types match we are a natural fit to just deserialize directly into the field data
+                if ( field->m_DataClass == field->m_DataClass )
+                {
+                    // set data pointer
+                    latentData->ConnectField( structure, field );
 
-                // process natively
-                DeserializeInstance( (ObjectPtr&)latentData );
+                    // process natively
+                    DeserializeInstance( (ObjectPtr&)latentData );
 
-                // attempt cast data into new definition
-                Data::CastValue( latentData, currentData, DataFlags::Shallow );
+                    // disconnect
+                    latentData->Disconnect();
+                }
+                else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
+                {
+                    REFLECT_SCOPE_TIMER(("Casting"));
 
-                // disconnect
-                currentData->Disconnect();
+                    // construct current serialization structure
+                    ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
+
+                    // downcast to data
+                    DataPtr currentData = SafeCast<Data>(currentObject);
+                    if (!currentData.ReferencesObject())
+                    {
+                        // this should never happen, the type id in the rtti data is bogus
+                        throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                    }
+
+                    // process into temporary memory
+                    currentData->ConnectField(structure, field);
+
+                    // process natively
+                    DeserializeInstance( (ObjectPtr&)latentData );
+
+                    // attempt cast data into new definition
+                    Data::CastValue( latentData, currentData, DataFlags::Shallow );
+
+                    // disconnect
+                    currentData->Disconnect();
+                }
             }
-        }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Pop();
+            m_Indent.Pop();
 #endif
+        }
+    }
+    else
+    {
+        // advance to the next element
+        m_Iterator.Advance();
     }
 }
 
@@ -636,41 +653,49 @@ void ArchiveXML::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flag
 template< typename ArrayPusher >
 void ArchiveXML::DeserializeArray( ArrayPusher& push, uint32_t flags )
 {
-    // advance to the first child (the first array element)
-    m_Iterator.Advance();
+    if ( m_Iterator.GetCurrent()->GetFirstChild() )
+    {
+        // advance to the first child (the first array element)
+        m_Iterator.Advance();
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
-    Log::Print(TXT("Deserializing objects\n"));
-    m_Indent.Push();
+        m_Indent.Get(stdout);
+        Log::Print(TXT("Deserializing objects\n"));
+        m_Indent.Push();
 #endif
 
-    for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
-    {
-        HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
-
-        ObjectPtr object;
-        DeserializeInstance(object);
-
-        if (object.ReferencesObject())
+        for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
-            if ( object->IsClass( m_SearchClass ) )
-            {
-                m_Skip = true;
-            }
+            HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-            if ( flags & ArchiveFlags::Status )
+            ObjectPtr object;
+            DeserializeInstance(object);
+
+            if (object.ReferencesObject())
             {
-                ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+                if ( object->IsClass( m_SearchClass ) )
+                {
+                    m_Skip = true;
+                }
+
+                if ( flags & ArchiveFlags::Status )
+                {
+                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
 #pragma TODO("Update progress value for inter-array processing")
-                //info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
-                e_Status.Raise( info );
+                    //info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
+                    e_Status.Raise( info );
 
-                m_Abort |= info.m_Abort;
+                    m_Abort |= info.m_Abort;
+                }
             }
-        }
 
-        push( object );
+            push( object );
+        }
+    }
+    else
+    {
+        // advance to the next element
+        m_Iterator.Advance();
     }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE

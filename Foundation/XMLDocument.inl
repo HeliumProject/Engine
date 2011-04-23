@@ -101,7 +101,10 @@ bool Helium::XMLDocument::Iterator::IsDone()
 
 Helium::XMLElement* Helium::XMLDocument::Iterator::Advance( bool skipChildren )
 {
-    HELIUM_ASSERT( !IsDone() );
+    if ( IsDone() )
+    {
+        return NULL;
+    }
 
     return m_Current = m_Current->GetNext( skipChildren );
 }

@@ -7,6 +7,10 @@
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+//TEMP
+#include "Project.h"
+//TEMP
+
 namespace Helium
 {
     struct SettingsManagerLoadedArgs {};
@@ -18,14 +22,10 @@ namespace Helium
     {
     public:
         REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );
+        static void PopulateComposite( Reflect::Composite& comp );
 
-        SettingsManager()
-        {
-        }
-
-        virtual ~SettingsManager()
-        {
-        }
+        SettingsManager();
+        ~SettingsManager();
 
         const M_Settings& GetSettingsMap()
         {
@@ -65,10 +65,7 @@ namespace Helium
         M_Settings m_SettingsMap;
 
     public:
-        static void AcceptCompositeVisitor( Reflect::Composite& comp )
-        {
-            comp.AddField( &SettingsManager::m_SettingsMap, TXT( "m_SettingsMap" ), Reflect::FieldFlags::Hide );
-        }
+        TestStructure m_Test;
     };
 
     typedef Helium::StrongPtr< SettingsManager > SettingsManagerPtr;

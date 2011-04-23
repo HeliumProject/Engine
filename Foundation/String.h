@@ -42,7 +42,7 @@ namespace Helium
         const CharType& GetElement( size_t index ) const;
 
         void Add( CharType character, size_t count = 1 );
-        void Add( const CharType* pString );
+        void Add( const CharType* pString, size_t length = 0 );
         void Insert( size_t index, CharType character, size_t count = 1 );
         void Insert( size_t index, const CharType* pString );
         void Remove( size_t index, size_t count = 1 );
@@ -165,7 +165,7 @@ namespace Helium
         /// @name String Operations
         //@{
         void Add( char character, size_t count = 1 );
-        void Add( const char* pString );
+        void Add( const char* pString, size_t length = 0 );
         void Add( const CharString& rString );
 
         void Insert( size_t index, char character, size_t count = 1 );
@@ -205,7 +205,7 @@ namespace Helium
         /// @name String Operations
         //@{
         void Add( wchar_t character, size_t count = 1 );
-        void Add( const wchar_t* pString );
+        void Add( const wchar_t* pString, size_t length = 0 );
         void Add( const WideString& rString );
 
         void Insert( size_t index, wchar_t character, size_t count = 1 );

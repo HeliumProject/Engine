@@ -22,60 +22,60 @@ Data::~Data()
 }
 
 template<class srcT, class destT>
-bool Cast(const Data* src, Data* dest)
+bool Cast(Data* src, Data* dest)
 {
-    const SimpleData<srcT>* source = static_cast<const SimpleData<srcT>*>(src);
+    SimpleData<srcT>* source = static_cast<SimpleData<srcT>*>(src);
     SimpleData<destT>* destination = static_cast<SimpleData<destT>*>(dest);
 
-    return Helium::RangeCast( source->m_Data.Get(), destination->m_Data.Ref() );
+    return Helium::RangeCast( *source->m_Data, *destination->m_Data );
 }
 
 template<>
-bool Cast<uint64_t, Helium::TUID>(const Data* src, Data* dest)
+bool Cast<uint64_t, Helium::TUID>(Data* src, Data* dest)
 {
-    const SimpleData<uint64_t>* source = static_cast<const SimpleData<uint64_t>*>(src);
+    SimpleData<uint64_t>* source = static_cast<SimpleData<uint64_t>*>(src);
     SimpleData<Helium::TUID>* destination = static_cast<SimpleData<Helium::TUID>*>(dest);
 
-    destination->m_Data.Set( source->m_Data.Get() );
+    *destination->m_Data = *source->m_Data;
 
     return true;
 }
 
 template<>
-bool Cast<Helium::TUID, uint64_t>(const Data* src, Data* dest)
+bool Cast<Helium::TUID, uint64_t>(Data* src, Data* dest)
 {
-    const SimpleData<Helium::TUID>* source = static_cast<const SimpleData<Helium::TUID>*>(src);
+    SimpleData<Helium::TUID>* source = static_cast<SimpleData<Helium::TUID>*>(src);
     SimpleData<uint64_t>* destination = static_cast<SimpleData<uint64_t>*>(dest);
 
-    destination->m_Data.Set( source->m_Data.Get() );
+    *destination->m_Data = *source->m_Data;
 
     return true;
 }
 
 template<>
-bool Cast<Helium::TUID, Helium::GUID>(const Data* src, Data* dest)
+bool Cast<Helium::TUID, Helium::GUID>(Data* src, Data* dest)
 {
-    const SimpleData<Helium::TUID>* source = static_cast<const SimpleData<Helium::TUID>*>(src);
+    SimpleData<Helium::TUID>* source = static_cast<SimpleData<Helium::TUID>*>(src);
     SimpleData<Helium::GUID>* destination = static_cast<SimpleData<Helium::GUID>*>(dest);
 
-    destination->m_Data.Ref().FromTUID( source->m_Data.Get() );
+    (*destination->m_Data).FromTUID( *source->m_Data );
 
     return true;
 }
 
 template<>
-bool Cast<Helium::GUID, Helium::TUID>(const Data* src, Data* dest)
+bool Cast<Helium::GUID, Helium::TUID>(Data* src, Data* dest)
 {
-    const SimpleData<Helium::GUID>* source = static_cast<const SimpleData<Helium::GUID>*>(src);
+    SimpleData<Helium::GUID>* source = static_cast<SimpleData<Helium::GUID>*>(src);
     SimpleData<Helium::TUID>* destination = static_cast<SimpleData<Helium::TUID>*>(dest);
 
-    destination->m_Data.Ref().FromGUID( source->m_Data.Get() );
+    (*destination->m_Data).FromGUID( *source->m_Data );
 
     return true;
 }
 
 typedef std::pair<const Class*, const Class*> ClassPair;
-typedef std::map<ClassPair, bool (*)(const Data*, Data*)> CastingFunctionMap;
+typedef std::map<ClassPair, bool (*)(Data*, Data*)> CastingFunctionMap;
 
 CastingFunctionMap g_CastingFunctions;
 
@@ -168,18 +168,18 @@ void Data::Cleanup()
     }
 }
 
-void Data::ConnectField( Helium::HybridPtr<void> instance, const Field* field, uintptr_t offsetInField )
+void Data::ConnectField( void* instance, const Field* field, uintptr_t offsetInField )
 {
     m_Instance = instance;
     m_Field = field;
-    ConnectData( Helium::HybridPtr<void>( m_Instance.Address() + m_Field->m_Offset + offsetInField, m_Instance.State()) ); 
+    ConnectData( static_cast< char* >( m_Instance ) + m_Field->m_Offset + offsetInField ); 
 }
 
 void Data::Disconnect()
 {
     m_Instance = (Object*)NULL;
     m_Field = NULL;
-    ConnectData( Helium::HybridPtr<void> () );
+    ConnectData( NULL );
 }
 
 bool Data::CastSupported(const Class* srcType, const Class* destType)
@@ -200,7 +200,7 @@ bool Data::CastSupported(const Class* srcType, const Class* destType)
     }
 }
 
-bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
+bool Data::CastValue(Data* src, Data* dest, uint32_t flags)
 {
     // if the types are a match, just do set value
     if (dest->IsClass(src->GetClass()) || src->IsClass(dest->GetClass()))
@@ -218,7 +218,7 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
     // check to see if we can do a container cast, casting the data within the container
     if (src->IsClass( Reflect::GetClass<ContainerData>()) && dest->IsClass( Reflect::GetClass<ContainerData>() ))
     {
-        const StlVectorData* srcArray = AssertCast<StlVectorData>( src );
+        StlVectorData* srcArray = AssertCast<StlVectorData>( src );
         StlVectorData* destArray = AssertCast<StlVectorData>( dest );
         if ( srcArray && destArray )
         {
@@ -236,17 +236,17 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<StlSetData>() ) && dest->IsClass( Reflect::GetClass<StlSetData>() ))
         {
-            const StlSetData* srcSet = AssertCast<StlSetData>( src );
+            StlSetData* srcSet = AssertCast<StlSetData>( src );
             StlSetData* destSet = AssertCast<StlSetData>( dest );
             if (CastSupported( srcSet->GetItemClass(), destSet->GetItemClass() ))
             {
-                std::vector< ConstDataPtr > data;
+                std::vector< DataPtr > data;
                 srcSet->GetItems( data );
 
                 destSet->Clear();
 
-                std::vector< ConstDataPtr >::const_iterator itr = data.begin();
-                std::vector< ConstDataPtr >::const_iterator end = data.end();
+                std::vector< DataPtr >::const_iterator itr = data.begin();
+                std::vector< DataPtr >::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr value = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destSet->GetItemClass() ) );
@@ -261,17 +261,17 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<StlMapData>() ) && dest->IsClass( Reflect::GetClass<StlMapData>() ))
         {
-            const StlMapData* srcMap = AssertCast<StlMapData>( src );
+            StlMapData* srcMap = AssertCast<StlMapData>( src );
             StlMapData* destMap = AssertCast<StlMapData>( dest );
             if ( CastSupported( srcMap->GetKeyClass(), destMap->GetKeyClass() ) && CastSupported( srcMap->GetValueClass(), destMap->GetValueClass() ) )
             {
-                StlMapData::V_ConstValueType data;
+                StlMapData::V_ValueType data;
                 srcMap->GetItems( data );
 
                 destMap->Clear();
 
-                StlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                StlMapData::V_ConstValueType::const_iterator end = data.end();
+                StlMapData::V_ValueType::const_iterator itr = data.begin();
+                StlMapData::V_ValueType::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destMap->GetKeyClass() ) );
@@ -287,17 +287,17 @@ bool Data::CastValue(const Data* src, Data* dest, uint32_t flags)
         }
         else if (src->IsClass( Reflect::GetClass<ObjectStlMapData>() ) && dest->IsClass( Reflect::GetClass<ObjectStlMapData>() ))
         {
-            const ObjectStlMapData* srcObjectMap = AssertCast<ObjectStlMapData>( src );
+            ObjectStlMapData* srcObjectMap = AssertCast<ObjectStlMapData>( src );
             ObjectStlMapData* destObjectMap = AssertCast<ObjectStlMapData>( dest );
             if (CastSupported( srcObjectMap->GetKeyClass(), destObjectMap->GetKeyClass() ))
             {
-                ObjectStlMapData::V_ConstValueType data;
+                ObjectStlMapData::V_ValueType data;
                 srcObjectMap->GetItems( data );
 
                 destObjectMap->Clear();
 
-                ObjectStlMapData::V_ConstValueType::const_iterator itr = data.begin();
-                ObjectStlMapData::V_ConstValueType::const_iterator end = data.end();
+                ObjectStlMapData::V_ValueType::const_iterator itr = data.begin();
+                ObjectStlMapData::V_ValueType::const_iterator end = data.end();
                 for ( ; itr != end; ++itr )
                 {
                     DataPtr key = AssertCast<Data>( Registry::GetInstance()->CreateInstance( destObjectMap->GetKeyClass() ) );
@@ -325,13 +325,13 @@ void Data::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugS
     HELIUM_BREAK();
 }
 
-tostream& Data::operator>> (tostream& stream) const
+tostream& Data::operator>>(tostream& stream) const
 { 
     HELIUM_BREAK(); 
     return stream; 
 }
 
-tistream& Data::operator<< (tistream& stream)
+tistream& Data::operator<<(tistream& stream)
 { 
     HELIUM_BREAK(); 
     return stream; 

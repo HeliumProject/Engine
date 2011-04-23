@@ -10,6 +10,26 @@ namespace Helium
 {
     namespace Editor
     {
+        class IconSize
+        {
+        public:
+            enum Enum
+            {
+                Small,
+                Medium,
+                Large,
+            };
+
+            REFLECT_DECLARE_ENUMERATION( IconSize );
+
+            static void EnumerateEnum( Reflect::Enumeration& info )
+            {
+                info.AddElement( Small, TXT( "Small" ) );
+                info.AddElement( Medium, TXT( "Medium" ) );
+                info.AddElement( Large, TXT( "Large" ) );
+            }
+        };
+
         class EditorSettings : public Settings
         {
         public:
@@ -28,14 +48,17 @@ namespace Helium
             void SetEnableAssetTracker( bool value );
 
             REFLECT_DECLARE_OBJECT( EditorSettings, Settings );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
-        private:
+        public:
             std::vector< tstring > m_MRUProjects;
             
             bool m_ReopenLastProjectOnStartup;
             bool m_ShowFileExtensionsInProjectView;
             bool m_EnableAssetTracker;
+            bool m_ShowTextOnButtons;
+            bool m_ShowIconsOnButtons;
+            IconSize m_IconSizeOnButtons;
         };
 
         typedef Helium::StrongPtr< EditorSettings > GeneralSettingsPtr;

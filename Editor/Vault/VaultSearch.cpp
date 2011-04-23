@@ -3,8 +3,6 @@
 
 #include "VaultSearchResults.h"
 
-#include "Editor/App.h"
-
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/File/Directory.h"
@@ -160,8 +158,9 @@ namespace Helium
 /////////////////////////////////////////////////////////////////////////////
 /// VaultSearch
 /////////////////////////////////////////////////////////////////////////////
-VaultSearch::VaultSearch()
-: m_SearchResults( NULL )
+VaultSearch::VaultSearch( Project* project )
+: m_Project( project )
+, m_SearchResults( NULL )
 , m_StopSearching( true )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )
@@ -189,14 +188,9 @@ VaultSearch::~VaultSearch()
     }
 }
 
-void VaultSearch::SetDirectory( const Helium::Path& directory )
+void VaultSearch::SetProject( Project* project )
 {
-    m_Directory = directory;
-}
-
-const Path& VaultSearch::GetDirectory() const
-{
-    return m_Directory;
+    m_Project = project;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -327,25 +321,19 @@ void VaultSearch::OnEndSearchThread( const Editor::DummyWindowArgs& args )
 //
 void VaultSearch::SearchThreadProc( int32_t searchID )
 {
+    HELIUM_ASSERT( m_Project );
+
     SearchThreadEnter( searchID );
 
-    if ( !wxGetApp().GetFrame()->GetProject().ReferencesObject() )
-    {
-        return;
-    }
-
-    tstring dbSpec = tstring( TXT( "database=" ) ) + wxGetApp().GetFrame()->GetProject()->GetTrackerDB().Get();
+    tstring dbSpec = tstring( TXT( "database=" ) ) + m_Project->GetTrackerDB().Get();
     TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
 
     // create tables, sequences and indexes
     trackerDB.verbose = true;
-    #pragma TODO( "Test if the database already existed" )
-    try
+
+    if ( !m_Project->GetTrackerDB().Exists() )
     {
         trackerDB.create();
-    }
-    catch( const litesql::SQLError& )
-    {
     }
 
     if ( trackerDB.needsUpgrade() )

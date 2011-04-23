@@ -1,7 +1,9 @@
 #include "Precompile.h"
 #include "MenuButton.h"
 
+#include "Editor/App.h"
 #include "Editor/ArtProvider.h"
+#include "Editor/Settings/EditorSettings.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -9,8 +11,8 @@ using namespace Helium::Editor;
 //-----------------------------------------------------------
 // macros
 //-----------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS( MenuButton, Button );
-BEGIN_EVENT_TABLE( MenuButton, Button )
+IMPLEMENT_DYNAMIC_CLASS( MenuButton, wxButton );
+BEGIN_EVENT_TABLE( MenuButton, wxButton )
 END_EVENT_TABLE();
 
 MenuButton::MenuButton
@@ -24,11 +26,28 @@ MenuButton::MenuButton
  const wxValidator& validator,
  const wxString& name
  ) 
- : Button( parent, id, label, pos, size, style, validator, name )
+ : EditorButton( parent, id, pos, size, style, name )
  , m_ContextMenu ( NULL )
  , m_HoldDelay( 0.5f )
  , m_TimerShowOnHold( this )
 {
+    SetExtraStyle( GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES );
+
+    wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( sizer );
+
+    SetLabel( label );
+    m_Text = new wxStaticText( this, wxID_ANY, GetLabel() );
+    sizer->Add( m_Text );
+
+    m_Bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap() );
+    sizer->Add( m_Bitmap );
+
+    m_Arrow = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ) );
+    sizer->Add( m_Arrow, 0, wxALIGN_BOTTOM | wxALIGN_RIGHT, 0 );
+
+    Layout();
+
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MenuButton::OnRightMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MenuButton::OnLeftMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MenuButton::OnLeftMouseUp ), NULL, this ); 
@@ -36,6 +55,8 @@ MenuButton::MenuButton
 
     Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( MenuButton::OnMenuOpen ), NULL, this );
     Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( MenuButton::OnMenuClose ), NULL, this );
+
+    Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MenuButton::OnUpdateUI ), NULL, this );
 }
 
 MenuButton::~MenuButton(void)
@@ -52,6 +73,8 @@ MenuButton::~MenuButton(void)
 
     Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( MenuButton::OnMenuOpen ), NULL, this );
     Disconnect( wxEVT_MENU_OPEN, wxMenuEventHandler( MenuButton::OnMenuClose ), NULL, this );
+
+    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MenuButton::OnUpdateUI ), NULL, this );
 }
 
 void MenuButton::SetContextMenu( wxMenu * menu ) 
@@ -77,45 +100,67 @@ wxMenu* MenuButton::GetContextMenu( ) const
     return m_ContextMenu; 
 }
 
-void MenuButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void MenuButton::SetBitmap( const wxBitmap& bitmap )
 {
-    if ( bitmap.IsOk() )
+    HELIUM_ASSERT( bitmap.IsOk() );
+
+    m_Bitmap->SetBitmap( bitmap );
+    Refresh();
+    Layout();
+}
+
+void MenuButton::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    EditorSettings* settings = wxGetApp().GetSettingsManager()->GetSettings< EditorSettings >();
+    if ( !settings )
     {
-        wxImage downArrowImage =  wxArtProvider::GetBitmap( ArtIDs::Actions::Down, wxART_OTHER, wxSize( 8, 8 ) ).ConvertToImage();
-        
-        int separator = 4;
-        int width = bitmap.GetWidth() + downArrowImage.GetWidth() + separator;
-        int height = bitmap.GetHeight();
-        wxImage image( width, height, true );
-        image.InitAlpha();
-
-        // set to 0
-        for ( int x = 0; x < width; ++x )
-        {
-            for ( int y = 0; y < height; ++y )
-            {
-                image.SetAlpha( x, y, 0 );
-            }
-        }
-
-        if ( image.Ok() && downArrowImage.Ok() )
-        {
-            image.Paste( bitmap.ConvertToImage(), 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSITE );
-
-            image.Paste(
-                ( which == wxButtonBase::State_Disabled ? downArrowImage.ConvertToDisabled() : downArrowImage ),
-                ( width - downArrowImage.GetWidth() ),
-                ( height/2 - downArrowImage.GetHeight()/2 ),
-                wxIMAGE_ALPHA_BLEND_COMPOSITE );
-            
-            wxBitmap newBitmap = wxBitmap( image );
-            __super::DoSetBitmap( newBitmap, which );
-
-            return;
-        }
+        return;
     }
-   
-    __super::DoSetBitmap( bitmap, which );
+
+    bool needsUpdate = false;
+
+    if ( settings->m_ShowTextOnButtons != m_ShowText )
+    {
+        m_ShowText = settings->m_ShowTextOnButtons;
+        needsUpdate = true;
+    }
+
+    if ( settings->m_ShowIconsOnButtons != m_ShowIcons )
+    {
+        m_ShowIcons = settings->m_ShowIconsOnButtons;
+        needsUpdate = true;
+    }
+
+    if ( !needsUpdate )
+    {
+        return;
+    }
+
+    if ( m_ShowIcons )
+    {
+        m_Bitmap->Show();
+    }
+    else
+    {
+        m_Bitmap->Hide();
+    }
+
+    if ( m_ShowText )
+    {
+        m_Text->Show();
+    }
+    else
+    {
+        m_Text->Hide();
+    }
+
+    GetSizer()->RecalcSizes();
+    Refresh();
+    Layout();
+    GetParent()->GetSizer()->RecalcSizes();
+    GetParent()->Refresh();
+    GetParent()->Layout();
+    event.Skip();
 }
 
 void MenuButton::OnRightMouseDown( wxMouseEvent& event )

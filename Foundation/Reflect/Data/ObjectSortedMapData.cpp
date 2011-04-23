@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/ObjectSortedMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -19,9 +21,9 @@ SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::~SimpleObjectSortedM
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::ConnectData( Helium::HybridPtr< void > data )
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -52,30 +54,12 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItems( A_Val
     DataType::Iterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            &itr->Second() ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( itr->First() ), m_Instance, m_Field ), &itr->Second() ) );
     }
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItems( A_ConstValueType& items ) const
-{
-    items.Clear();
-    items.Reserve( m_Data->GetSize() );
-
-    DataType::ConstIterator itr = m_Data->Begin();
-    DataType::ConstIterator end = m_Data->End();
-    for ( ; itr != end; ++itr )
-    {
-        HELIUM_VERIFY( items.New(
-            static_cast< const ConstDataPtr& >( Data::Bind( itr->First(), m_Instance, m_Field ) ),
-            &itr->Second() ) );
-    }
-}
-
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-ObjectPtr* SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItem( const Data* key )
+ObjectPtr* SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -90,32 +74,15 @@ ObjectPtr* SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItem( 
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-const ObjectPtr* SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::GetItem( const Data* key ) const
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::SetItem( Data* key, Object* value )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
-
-    DataType::ConstIterator found = m_Data->Find( keyValue );
-    if ( found != m_Data->End() )
-    {
-        return &found->Second();
-    }
-
-    return NULL;
+    (*m_Data)[ keyValue ] = value;
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::SetItem( const Data* key, const Object* value )
-{
-    KeyT keyValue;
-    Data::GetValue( key, keyValue );
-
-#pragma TODO( "Fix const correctness." )
-    m_Data.Ref()[ keyValue ] = const_cast< Object* >( value );
-}
-
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( const Data* key )
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( Data* key )
 {
     KeyT keyValue;
     Data::GetValue( key, keyValue );
@@ -124,7 +91,7 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( con
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const ObjectSortedMapDataT* rhs = SafeCast< ObjectSortedMapDataT >( src );
     if ( !rhs )
@@ -136,7 +103,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data
 
     if ( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -145,7 +112,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data
         for ( ; itr != end; ++itr )
         {
             Object* object = itr->Second();
-            m_Data.Ref()[ itr->First() ] = ( object ? object->Clone() : NULL );
+            (*m_Data)[ itr->First() ] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -153,7 +120,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Set( const Data
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( Object* object )
 {
     const ObjectSortedMapDataT* rhs = SafeCast< ObjectSortedMapDataT >( object );
     if ( !rhs )
@@ -166,7 +133,7 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( const O
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -191,7 +158,53 @@ bool SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Equals( const O
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive ) const
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Accept( Visitor& visitor )
+{
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
+    for ( ; itr != end; ++itr )
+    {
+        ObjectPtr& object = itr->Second();
+        if ( !object.Get() )
+        {
+            continue;
+        }
+
+        if ( !visitor.VisitPointer( object ) )
+        {
+            continue;
+        }
+
+        object->Accept( visitor );
+    }
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );
@@ -204,14 +217,14 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Arch
             ObjectPtr elem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass< KeyT >() );
 
             Data* ser = AssertCast< Data >( elem.Ptr() );
-            ser->ConnectData( &itr->First() );
+            ser->ConnectData( const_cast< KeyT* >( &itr->First() ) );
 
             HELIUM_VERIFY( components.New( ser ) );
             HELIUM_VERIFY( components.New( itr->Second() ) );
         }
     }
 
-    archive.Serialize( components );
+    archive.SerializeArray( components );
 
     {
         DynArray< ObjectPtr >::Iterator itr = components.Begin();
@@ -227,11 +240,11 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Serialize( Arch
     }
 }
 
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Archive& archive )
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
 {
     DynArray< ObjectPtr > components;
-    archive.Deserialize( components, ArchiveFlags::Sparse );
+    archive.DeserializeArray( components, ArchiveFlags::Sparse );
 
     size_t componentCount = components.GetSize();
     if ( componentCount % 2 != 0 )
@@ -256,30 +269,8 @@ void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Ar
         {
             KeyT k;
             Data::GetValue( key, k );
-            m_Data.Ref()[ k ] = value;
+            (*m_Data)[ k ] = value;
         }
-    }
-}
-
-template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::Accept( Visitor& visitor )
-{
-    DataType::Iterator itr = const_cast< Data::Pointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< Data::Pointer< DataType >& >( m_Data )->End();
-    for ( ; itr != end; ++itr )
-    {
-        ObjectPtr& object = itr->Second();
-        if ( !object.Get() )
-        {
-            continue;
-        }
-
-        if ( !visitor.VisitPointer( object ) )
-        {
-            continue;
-        }
-
-        object->Accept( visitor );
     }
 }
 

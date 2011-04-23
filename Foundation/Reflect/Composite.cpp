@@ -54,27 +54,12 @@ DataPtr Field::CreateData(void* instance) const
     return data;
 }
 
-DataPtr Field::CreateData(const void* instance) const
-{
-    DataPtr data = CreateData();
-
-    if ( data.ReferencesObject() )
-    {
-        if ( instance )
-        {
-            data->ConnectField( instance, this );
-        }
-    }
-
-    return data;
-}
-
 DataPtr Field::CreateDefaultData() const
 {
     return CreateData( m_Composite->m_Default );
 }
 
-DataPtr Field::ShouldSerialize( const void* instance ) const
+DataPtr Field::ShouldSerialize( void* instance ) const
 {
     // never write discard fields
     if ( m_Flags & FieldFlags::Discard )
@@ -195,7 +180,7 @@ void Composite::RemoveDerived( const Composite* derived ) const
     derived->m_NextSibling = NULL;
 }
 
-bool Composite::Equals(const void* a, const void* b) const
+bool Composite::Equals(void* a, void* b) const
 {
     if (a == b)
     {
@@ -213,7 +198,7 @@ bool Composite::Equals(const void* a, const void* b) const
     {
         const Field* field = &*itr;
 
-        // create serializers
+        // create data objects
         DataPtr aData = field->CreateData();
         DataPtr bData = field->CreateData();
 
@@ -221,14 +206,13 @@ bool Composite::Equals(const void* a, const void* b) const
         aData->ConnectField(a, field);
         bData->ConnectField(b, field);
 
-        bool serializersEqual = aData->Equals( bData );
+        bool equality = aData->Equals( bData );
 
         // disconnect
         aData->Disconnect();
         bData->Disconnect();
 
-        // If the serialziers aren't equal, the elements can't be equal
-        if ( !serializersEqual )
+        if ( !equality )
         {
             return false;
         }
@@ -265,16 +249,16 @@ void Composite::Visit(void* instance, Visitor& visitor) const
     }
 }
 
-void Composite::Copy( const void* source, void* destination ) const
+void Composite::Copy( void* source, void* destination ) const
 {
     if ( source != destination )
     {
 #pragma TODO("This should be inside a virtual function (like CopyTo) instead of a type check conditional")
         if ( IsType( GetClass<Data>() ) )
         {
-            const Data* data = static_cast<const Data*>(source);
-            Data* cln = static_cast<Data*>(destination);
-            cln->Set(data);
+            Data* src = static_cast<Data*>(source);
+            Data* dest = static_cast<Data*>(destination);
+            dest->Set( src );
         }
         else
         {
@@ -284,7 +268,7 @@ void Composite::Copy( const void* source, void* destination ) const
             {
                 const Field* field = &*itr;
 
-                // create serializers
+                // create data objects
                 DataPtr lhs = field->CreateData();
                 DataPtr rhs = field->CreateData();
 
@@ -375,23 +359,26 @@ uint32_t Composite::GetBaseFieldCount() const
     return count;
 }
 
-Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, int32_t flags )
+Reflect::Field* Composite::AddField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
 {
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_DataClass = dataClass;
-    m_Fields.Add( field );
+    // deduction of the data class has failed, you must provide one yourself!
+    HELIUM_ASSERT( dataClass );
 
-    return &m_Fields.GetLast();
-}
+    if ( dataClass == Reflect::GetClass< PointerData >() )
+    {
+        const Class* classType = ReflectionCast< Class >( type );
 
-Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Type* type, int32_t flags )
-{
+        // if you hit this, then you need to make sure you register your class before you register fields that are pointers of that type
+        HELIUM_ASSERT( classType != NULL );
+    }
+    else if ( dataClass == Reflect::GetClass< EnumerationData >() || dataClass == Reflect::GetClass< BitfieldData >() )
+    {
+        const Enumeration* enumerationType = ReflectionCast< Enumeration >( type );
+
+        // if you hit this, then you need to make sure you register your enums before you register objects that use them
+        HELIUM_ASSERT( enumerationType != NULL );
+    }
+
     Field field;
     field.m_Composite = this;
     field.m_Name = name;
@@ -400,25 +387,6 @@ Reflect::Field* Composite::AddObjectField( const tchar_t* name, const uint32_t o
     field.m_Flags = flags;
     field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
     field.m_Type = type;
-    field.m_DataClass = dataClass ? dataClass : GetClass<PointerData>();
-    m_Fields.Add( field );
-
-    return &m_Fields.GetLast();
-}
-
-Reflect::Field* Composite::AddEnumerationField( const tchar_t* name, const uint32_t offset, uint32_t size, const Class* dataClass, const Enumeration* enumeration, int32_t flags )
-{
-    // if you hit this, then you need to make sure you register your enums before you register elements that use them
-    HELIUM_ASSERT(enumeration != NULL);
-
-    Field field;
-    field.m_Composite = this;
-    field.m_Name = name;
-    field.m_Size = size;
-    field.m_Offset = offset;
-    field.m_Flags = flags;
-    field.m_Index = GetBaseFieldCount() + (uint32_t)m_Fields.GetSize();
-    field.m_Type = enumeration;
     field.m_DataClass = dataClass;
     m_Fields.Add( field );
 

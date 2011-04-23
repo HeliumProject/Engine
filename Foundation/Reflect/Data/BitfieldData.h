@@ -14,11 +14,14 @@ namespace Helium
             BitfieldData ();
             ~BitfieldData();
 
-            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
-            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
+            virtual void Deserialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
 
-            virtual tostream& operator>> (tostream& stream) const;
-            virtual tistream& operator<< (tistream& stream);
+            virtual void Serialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+            virtual void Deserialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+
+            virtual tostream& operator>>(tostream& stream) const;
+            virtual tistream& operator<<(tistream& stream);
         };
 
         typedef Helium::SmartPtr<BitfieldData> BitfieldDataPtr;

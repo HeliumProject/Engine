@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Foundation/Functions.h"
 #include "Foundation/Container/Table.h"
 
 namespace Helium

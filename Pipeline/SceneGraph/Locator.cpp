@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 REFLECT_DEFINE_ENUMERATION( LocatorShape );
 REFLECT_DEFINE_OBJECT( Locator );
 
-void Locator::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Locator::PopulateComposite( Reflect::Composite& comp )
 {
     Reflect::Field* field = comp.AddEnumerationField( &Locator::m_Shape, TXT( "m_Shape" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );

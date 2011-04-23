@@ -20,7 +20,7 @@ REFLECT_DEFINE_OBJECT(Light);
 
 D3DMATERIAL9 Light::s_Material;
 
-void Light::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Light::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Light::m_Color, TXT( "m_Color" ) );
 }

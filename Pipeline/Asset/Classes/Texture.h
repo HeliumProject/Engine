@@ -85,7 +85,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( Texture, AssetClass );
 
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
         public:
             Texture()

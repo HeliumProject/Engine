@@ -14,7 +14,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( ClipboardDataWrapper, Reflect::Object );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             ClipboardDataWrapper();
             virtual ~ClipboardDataWrapper();

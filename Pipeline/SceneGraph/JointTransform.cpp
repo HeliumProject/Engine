@@ -17,7 +17,7 @@ static D3DMATERIAL9 g_JointTransformMaterial;
 
 REFLECT_DEFINE_OBJECT( JointTransform );
 
-void JointTransform::AcceptCompositeVisitor( Reflect::Composite& comp )
+void JointTransform::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &JointTransform::m_SegmentScaleCompensate, TXT( "m_SegmentScaleCompensate" ) );
 }

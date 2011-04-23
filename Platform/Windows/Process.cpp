@@ -168,3 +168,18 @@ tstring Helium::GetProcessName()
 
     return file;
 }
+
+tstring Helium::GetCrashdumpDirectory()
+{
+    tchar_t tempDir[ MAX_PATH ];
+    size_t result = GetTempPath( MAX_PATH, tempDir );
+    if ( result == 0 || result > MAX_PATH )
+    {
+        return TXT("");
+    }
+
+    // Make sure that the directory exists
+    tchar_t directory[ MAX_PATH ] = { 0 };
+    _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\HeliumCrashdumps"), &tempDir );
+    return directory;
+}

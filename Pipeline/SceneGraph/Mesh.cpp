@@ -18,7 +18,7 @@ REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Mesh::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Mesh::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Mesh::m_Positions,                  TXT( "m_Positions" ) );
     comp.AddField( &Mesh::m_Normals,                    TXT( "m_Normals" ) );

@@ -17,7 +17,7 @@ namespace Helium
 
             REFLECT_DECLARE_ABSTRACT(AssetManifest, Reflect::Object);
 
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
         };
 
         typedef Helium::SmartPtr<AssetManifest> AssetManifestPtr;

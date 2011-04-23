@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/SortedSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -74,9 +76,9 @@ SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::~SimpleSortedSetData()
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ConnectData( Helium::HybridPtr< void > data )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -98,7 +100,7 @@ const Class* SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItemClass(
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< ConstDataPtr >& items ) const
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< DataPtr >& items ) const
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -107,12 +109,12 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::GetItems( DynArray< C
     DataType::ConstIterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
-        HELIUM_VERIFY( items.New( static_cast< const ConstDataPtr& >( Data::Bind( *itr, m_Instance, m_Field ) ) ) );
+        HELIUM_VERIFY( items.New( Data::Bind( const_cast< KeyT& >( *itr ), m_Instance, m_Field ) ) );
     }
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( const Data* value )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -120,7 +122,7 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::AddItem( const Data* 
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( const Data* value )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( Data* value )
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -128,7 +130,7 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::RemoveItem( const Dat
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( const Data* value ) const
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( Data* value ) const
 {
     KeyT dataValue;
     Data::GetValue( value, dataValue );
@@ -136,7 +138,7 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::ContainsItem( const D
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src, uint32_t flags )
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( Data* src, uint32_t flags )
 {
     const SortedSetDataT* rhs = SafeCast< SortedSetDataT >( src );
     if ( !rhs )
@@ -144,13 +146,13 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Set( const Data* src,
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( const Object* object ) const
+bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( Object* object )
 {
     const SortedSetDataT* rhs = SafeCast< SortedSetDataT >( object );
     if ( !rhs )
@@ -158,70 +160,31 @@ bool SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Equals( const Object*
         return false;
     }
 
-    return m_Data.Ref() == rhs->m_Data.Ref();
+    return *m_Data == *rhs->m_Data;
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( Archive& archive ) const
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveBinary& archive )
 {
-    DynArray< ObjectPtr > components;
-    components.Reserve( m_Data->GetSize() );
-
-    {
-        DataType::ConstIterator itr = m_Data->Begin();
-        DataType::ConstIterator end = m_Data->End();
-        for ( ; itr != end; ++itr )
-        {
-            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass< KeyT >() );
-
-            // downcast to data type
-            Data* dataSer = AssertCast< Data >( dataElem );
-
-            // connect to our map data memory address
-            dataSer->ConnectData( const_cast< KeyT* >( &( *itr ) ) );
-
-            // serialize to the archive stream
-            HELIUM_VERIFY( components.New( dataSer ) );
-        }
-    }
-
-    archive.Serialize( components );
-
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
-    for ( ; itr != end; ++itr )
-    {
-        Data* ser = AssertCast< Data >( *itr );
-        ser->Disconnect();
-
-        // might be useful to cache the data object here
-    }
+    Serialize<ArchiveBinary>( archive );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
-void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( Archive& archive )
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveBinary& archive )
 {
-    DynArray< ObjectPtr > components;
-    archive.Deserialize( components );
+    Deserialize<ArchiveBinary>( archive );
+}
 
-    // if we are referring to a real field, clear its contents
-    m_Data->Clear();
-    m_Data->Reserve( components.GetSize() );
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
 
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
-    for ( ; itr != end; ++itr )
-    {
-        Data* data = SafeCast< Data >( *itr );
-        if ( !data )
-        {
-            throw LogisticException( TXT( "SortedSet value type has changed, this is unpossible" ) );
-        }
-
-        KeyT k;
-        Data::GetValue( data, k );
-        m_Data->Insert( k );
-    }
+template< typename KeyT, typename CompareKeyT, typename AllocatorT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
 }
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
@@ -253,10 +216,74 @@ tistream& SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::operator<<( tist
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< KeyT, CompareKeyT, AllocatorT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< KeyT, CompareKeyT, AllocatorT >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }  
+
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Serialize( ArchiveT& archive )
+{
+    DynArray< ObjectPtr > components;
+    components.Reserve( m_Data->GetSize() );
+
+    {
+        DataType::ConstIterator itr = m_Data->Begin();
+        DataType::ConstIterator end = m_Data->End();
+        for ( ; itr != end; ++itr )
+        {
+            ObjectPtr dataElem = Registry::GetInstance()->CreateInstance( Reflect::GetDataClass< KeyT >() );
+
+            // downcast to data type
+            Data* dataSer = AssertCast< Data >( dataElem );
+
+            // connect to our map data memory address
+            dataSer->ConnectData( const_cast< KeyT* >( &( *itr ) ) );
+
+            // serialize to the archive stream
+            HELIUM_VERIFY( components.New( dataSer ) );
+        }
+    }
+
+    archive.SerializeArray( components );
+
+    DynArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynArray< ObjectPtr >::Iterator end = components.End();
+    for ( ; itr != end; ++itr )
+    {
+        Data* ser = AssertCast< Data >( *itr );
+        ser->Disconnect();
+
+        // might be useful to cache the data object here
+    }
+}
+
+template< typename KeyT, typename CompareKeyT, typename AllocatorT > template< class ArchiveT >
+void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
+{
+    DynArray< ObjectPtr > components;
+    archive.DeserializeArray( components );
+
+    // if we are referring to a real field, clear its contents
+    m_Data->Clear();
+    m_Data->Reserve( components.GetSize() );
+
+    DynArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynArray< ObjectPtr >::Iterator end = components.End();
+    for ( ; itr != end; ++itr )
+    {
+        Data* data = SafeCast< Data >( *itr );
+        if ( !data )
+        {
+            throw LogisticException( TXT( "SortedSet value type has changed, this is unpossible" ) );
+        }
+
+        KeyT k;
+        Data::GetValue( data, k );
+        m_Data->Insert( k );
+    }
+}
 
 template SimpleSortedSetData< String >;
 template SimpleSortedSetData< uint32_t >;

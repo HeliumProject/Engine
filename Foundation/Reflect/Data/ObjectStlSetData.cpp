@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectStlSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ObjectStlSetData);
@@ -16,9 +19,9 @@ ObjectStlSetData::~ObjectStlSetData()
 
 }
 
-void ObjectStlSetData::ConnectData(Helium::HybridPtr<void> data)
+void ObjectStlSetData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectStlSetData::GetSize() const
@@ -31,7 +34,7 @@ void ObjectStlSetData::Clear()
     return m_Data->clear();
 }
 
-bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
+bool ObjectStlSetData::Set(Data* src, uint32_t flags)
 {
     const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(src);
     if (!rhs)
@@ -43,7 +46,7 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -59,7 +62,7 @@ bool ObjectStlSetData::Set(const Data* src, uint32_t flags)
     return true;
 }
 
-bool ObjectStlSetData::Equals(const Object* object) const
+bool ObjectStlSetData::Equals(Object* object)
 {
     const ObjectStlSetData* rhs = SafeCast<ObjectStlSetData>(object);
     if (!rhs)
@@ -92,40 +95,10 @@ bool ObjectStlSetData::Equals(const Object* object) const
     return true;
 }
 
-void ObjectStlSetData::Serialize(Archive& archive) const
-{
-    std::vector< ObjectPtr > components;
-
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( ; itr != end; ++itr )
-    {
-        components.push_back(*itr);
-    }
-
-    archive.Serialize(components);
-}
-
-void ObjectStlSetData::Deserialize(Archive& archive)
-{
-    std::vector< ObjectPtr > components;
-    archive.Deserialize(components);
-
-    // if we are referring to a real field, clear its contents
-    m_Data->clear();
-
-    std::vector< ObjectPtr >::const_iterator itr = components.begin();
-    std::vector< ObjectPtr >::const_iterator end = components.end();
-    for ( ; itr != end; ++itr )
-    {
-        m_Data->insert(*itr);
-    }
-}
-
 void ObjectStlSetData::Accept(Visitor& visitor)
 {
-    DataType::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
-    DataType::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
+    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
     for ( ; itr != end; ++itr )
     {
         if (!itr->ReferencesObject())
@@ -143,5 +116,57 @@ void ObjectStlSetData::Accept(Visitor& visitor)
         }
 
         (*itr)->Accept( visitor );
+    }
+}
+
+void ObjectStlSetData::Serialize(ArchiveBinary& archive)
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+void ObjectStlSetData::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+void ObjectStlSetData::Serialize(ArchiveXML& archive)
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+void ObjectStlSetData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< class ArchiveT >
+void ObjectStlSetData::Serialize(ArchiveT& archive)
+{
+    std::vector< ObjectPtr > components;
+
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
+    {
+        components.push_back(*itr);
+    }
+
+    archive.SerializeArray( components );
+}
+
+template< class ArchiveT >
+void ObjectStlSetData::Deserialize(ArchiveT& archive)
+{
+    std::vector< ObjectPtr > components;
+    archive.DeserializeArray(components);
+
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    std::vector< ObjectPtr >::const_iterator itr = components.begin();
+    std::vector< ObjectPtr >::const_iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        m_Data->insert(*itr);
     }
 }

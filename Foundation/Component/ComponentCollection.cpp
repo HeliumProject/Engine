@@ -11,9 +11,9 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ComponentCollection)
 
-void ComponentCollection::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ComponentCollection::PopulateComposite( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldComponentsByType = comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
+    comp.AddField( &ComponentCollection::m_Components, TXT( "m_Components" ) );
 }
 
 ComponentCollection::ComponentCollection()
@@ -275,31 +275,6 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
     // an there is not a persistent object wrapping the component.  Therefore, changes to the
     // component can only be detected on the collection itself.
     RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
-}
-
-bool ComponentCollection::ProcessComponent(ObjectPtr element, const tchar_t* fieldName)
-{
-    if ( !_tcscmp( fieldName, TXT( "m_Components" ) ) )
-    {
-        V_Component attributes;
-        Data::GetValue( Reflect::AssertCast<Reflect::Data>( element ), (std::vector< ObjectPtr >&)attributes );
-
-        for ( V_Component::const_iterator itr = attributes.begin(), end = attributes.end();
-            itr != end;
-            ++itr )
-        {
-            HELIUM_ASSERT( (*itr)->GetSlot() != NULL );
-
-            if ( (*itr)->GetSlot() != NULL )
-            {
-                m_Components[ (*itr)->GetSlot() ] = *itr;
-            }
-        }
-
-        return true;
-    }
-
-    return Base::ProcessComponent(element, fieldName);
 }
 
 void ComponentCollection::PreSerialize( const Reflect::Field* field )

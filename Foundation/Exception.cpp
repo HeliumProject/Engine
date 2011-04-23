@@ -66,18 +66,11 @@ void Debug::ProcessException(const Helium::Exception& exception, bool print, boo
         Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n" ), args.m_CPPClass.c_str(), args.m_Message.c_str() );
     }
 
-    if ( g_ExceptionOccurred.Valid() )
-    {
-        g_ExceptionOccurred.Invoke( args );
-    }
+    g_ExceptionOccurred.Invoke( args );
 
     if ( fatal )
     {
-        if ( g_Terminating.Count() )
-        {
-            g_Terminating.Raise( TerminateArgs () );
-        }
-
+        g_Terminating.Raise( TerminateArgs () );
         EnableExceptionFilter( false );
     }
     else if ( g_EnableExceptionFilter )
@@ -115,18 +108,11 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
         Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n" ), args.m_CPPClass.c_str(), args.m_Message.c_str() );
     }
 
-    if ( g_ExceptionOccurred.Valid() )
-    {
-        g_ExceptionOccurred.Invoke( args );
-    }
+    g_ExceptionOccurred.Invoke( args );
 
     if ( fatal )
     {
-        if ( g_Terminating.Count() )
-        {
-            g_Terminating.Raise( TerminateArgs () );
-        }
-
+        g_Terminating.Raise( TerminateArgs () );
         EnableExceptionFilter( false );
     }
     else if ( g_EnableExceptionFilter )
@@ -163,18 +149,11 @@ uint32_t Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fat
 
         args.m_Dump = Debug::WriteDump(info, false);
 
-        if ( g_ExceptionOccurred.Valid() )
-        {
-            g_ExceptionOccurred.Invoke( args );
-        }
+        g_ExceptionOccurred.Invoke( args );
 
         if ( fatal )
         {
-            if ( g_Terminating.Count() )
-            {
-                g_Terminating.Raise( TerminateArgs () );
-            }
-
+            g_Terminating.Raise( TerminateArgs () );
             EnableExceptionFilter( false );
         }
     }

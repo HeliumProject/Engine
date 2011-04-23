@@ -34,7 +34,7 @@ REFLECT_DEFINE_OBJECT( Curve );
 Lunar::Color Curve::s_Material;
 Lunar::Color Curve::s_HullMaterial;
 
-void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Curve::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
     comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );

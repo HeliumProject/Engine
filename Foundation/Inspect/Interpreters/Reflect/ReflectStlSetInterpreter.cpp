@@ -44,7 +44,7 @@ void ReflectStlSetInterpreter::InterpretField( const Reflect::Field* field, cons
 
     container->a_Name.Set( temp );
 
-    // create the serializers
+    // create the data objects
     std::vector< Reflect::Object* >::const_iterator itr = instances.begin();
     std::vector< Reflect::Object* >::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
@@ -133,7 +133,7 @@ void ReflectStlSetInterpreter::OnRemove( const ButtonClickedArgs& args )
                 for ( ; serItr != serEnd; ++serItr )
                 {
                     Reflect::StlSetData* setData = Reflect::AssertCast<Reflect::StlSetData>(*serItr);
-                    std::vector< ConstDataPtr > items;
+                    std::vector< DataPtr > items;
                     setData->GetItems( items );
                     setData->RemoveItem( items[ *itr ] );
                 }

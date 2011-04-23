@@ -30,6 +30,8 @@ end
 Helium.Build64Bit = function()
     if os.get() == "windows" then
         return string.find( os.getenv("PATH"), "x64" )
+    elseif os.get() == "macosx" then
+    	return true;
     else
 		print("Implement support for " .. os.get() .. " to Helium.Build64Bit()")
 		os.exit(1)
@@ -41,13 +43,17 @@ Helium.GetFbxSdkLocation = function()
     if not fbxLocation then
         if os.get() == "windows" then
             fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
-            if not os.isdir( fbxLocation ) then
-                fbxLocation = nil
-            end
+        elseif os.get() == "macosx" then
+        	if Helium.RequiredFBXVersion == '2011.3.1' then
+ 		       	fbxLocation = "/Applications/Autodesk/FBXSDK20113_1"
+ 		   	end
         else
             print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
             os.exit(1)
         end
+		if not os.isdir( fbxLocation ) then
+			fbxLocation = nil
+		end
     end
     
     return fbxLocation
@@ -159,13 +165,19 @@ Helium.Publish = function( files )
                 linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
             end
    		else
-            linkCommand = "ln -s \"" .. destination .. "\" \"" .. path .. "\""
+            linkCommand = "ln \"" .. path .. "\" \"" .. destination .. "\""
 		end
 		local result = os.execute( linkCommand )
 
-		-- If creating a hardlink failed, attempt a normal copy with "xcopy" as a fallback.
+		-- If creating a hardlink failed, attempt a normal copy
 		if result ~= 0 then
-			result = os.execute( "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y" )
+			local copyCommand = ''
+			if ( os.get() == "windows" ) then
+				copyCommand = "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y"
+			else
+				copyCommand = "cp " .. path .. " " .. destination
+			end
+			os.execute( copyCommand )
 			if result ~= 0 then
 				os.exit( 1 )
 			end
@@ -190,8 +202,16 @@ Helium.PublishIcons = function( bin )
             os.execute("Utilities\\Win32\\robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Release\\Icons\" *.png")
         end
     else
-		print("Implement support for " .. os.get() .. " to Helium.PublishIcons()")
-		os.exit(1)
+        os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x32/Debug/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+        os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x32/Intermediate/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+        os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x32/Profile/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+        os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x32/Release/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+        if Helium.Build64Bit() then
+            os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x64/Debug/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+            os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x64/Intermediate/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+            os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x64/Profile/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+            os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x64/Release/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
+        end
     end
 
 end
@@ -199,21 +219,26 @@ end
 -- Pre-build script execution.
 Helium.Prebuild = function()
 
+	local python = "python"
+	
+	if os.get() == "windows" then
+		python = python .. ".exe"
+    else
+		python = python .. "3"
+    end
+
+	local pythonPath = os.pathsearch( python, os.getenv( 'PATH' ) )
+	if pythonPath == nil then
+		error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
+	end
+
 	local commands =
 	{
-		"python Build/JobDefParser.py JobDefinitions . .",
-		"python Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
-		"python Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
+		python .. " Build/JobDefParser.py JobDefinitions . .",
+		python .. " Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
+		python .. " Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
 	}
-    
-    local pythonPath = os.pathsearch( 'python', os.getenv( 'PATH' ) )
-    if pythonPath == nil then
-        pythonPath = os.pathsearch( 'python.exe', os.getenv( 'PATH' ) )
-        if pythonPath == nil then
-            error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
-        end
-    end
-        
+
 	local result = 0
 
 	for i, commandString in ipairs( commands ) do

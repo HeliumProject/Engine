@@ -14,6 +14,13 @@
 #define REFLECT_SCOPE_TIMER(__Str)
 #endif
 
+#if !HELIUM_RELEASE
+# define REFLECT_CHECK_MEMORY 1
+# define REFLECT_CHECK_MEMORY_ASSERT HELIUM_ASSERT
+#else
+# define REFLECT_CHECK_MEMORY_ASSERT( EXPR )
+#endif
+
 namespace Helium
 {
     namespace Reflect
@@ -31,6 +38,5 @@ namespace Helium
 
         class Data;
         typedef Helium::StrongPtr<Data> DataPtr;
-        typedef Helium::StrongPtr<const Data> ConstDataPtr;
     }
 }

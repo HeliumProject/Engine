@@ -128,6 +128,9 @@ namespace Helium
         {
         public:
             REFLECTION_BASE(ReflectionTypes::Invalid, ReflectionInfo);
+
+            ReflectionInfo();
+            virtual ~ReflectionInfo();
         };
 
         template<typename T>

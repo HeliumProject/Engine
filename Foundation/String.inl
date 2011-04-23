@@ -206,11 +206,16 @@ void Helium::StringBase< CharType, Allocator >::Add( CharType character, size_t 
 ///
 /// @param[in] pString  String to append.
 template< typename CharType, typename Allocator >
-void Helium::StringBase< CharType, Allocator >::Add( const CharType* pString )
+void Helium::StringBase< CharType, Allocator >::Add( const CharType* pString, size_t length )
 {
     if( pString )
     {
-        size_t stringLength = StringLength( pString );
+        size_t stringLength = length;
+                if( stringLength == 0 )
+        {
+            stringLength = StringLength( pString );
+        }
+
         if( stringLength != 0 )
         {
             HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );

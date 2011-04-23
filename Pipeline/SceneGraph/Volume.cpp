@@ -17,7 +17,7 @@ using namespace Helium::SceneGraph;
 REFLECT_DEFINE_ENUMERATION( VolumeShape );
 REFLECT_DEFINE_OBJECT( Volume );
 
-void Volume::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Volume::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddEnumerationField( &Volume::m_Shape, TXT( "m_Shape" ) );
     comp.AddField( &Volume::m_ShowPointer,      TXT( "m_ShowPointer" ) );

@@ -13,7 +13,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_ABSTRACT( ReflectClipboardData, Reflect::Object );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             ReflectClipboardData();
             virtual ~ReflectClipboardData();

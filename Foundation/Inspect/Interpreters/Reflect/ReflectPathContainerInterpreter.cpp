@@ -160,7 +160,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
     // we only let them modify the data if we're only dealing with a single list
     buttonContainer->a_IsEnabled.Set( instances.size() == 1 );
 
-    // create the serializers
+    // create the data objects
     std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
@@ -179,7 +179,7 @@ void PathContainerInterpreter::InterpretField(const Field* field, const std::vec
         m_Datas.push_back(s);
     }
 
-    // bind the ui to the serializers
+    // bind the ui to the data objects
     Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Data>( (std::vector<Reflect::Data*>&)m_Datas );
     list->Bind( data );
     if ( addButton && isContainer )
@@ -204,7 +204,7 @@ void PathContainerInterpreter::OnAdd( const ButtonClickedArgs& args )
     if ( !fileDialogArgs.m_Result.empty() )
     {
         Reflect::PathData pathData;
-        pathData.m_Data.Set( fileDialogArgs.m_Result.Get() );
+        pathData.m_Data->Set( fileDialogArgs.m_Result.Get() );
 
         if ( m_PathVector )
         {
@@ -265,13 +265,13 @@ void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
     if ( !fileDialogArgs.m_Result.empty() )
     {
         Reflect::PathData pathData;
-        pathData.m_Data.Set( fileDialogArgs.m_Result.Get() );
+        pathData.m_Data->Set( fileDialogArgs.m_Result.Get() );
 
         std::vector< Path > paths;
 
         if ( m_PathSet )
         {
-            for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data.Get().begin(), end = m_PathSet->m_Data.Get().end(); itr != end; ++itr )
+            for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
             {
                 paths.push_back( *itr );
             }
@@ -288,7 +288,7 @@ void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
             {
                 Reflect::PathData tempData;
                 HELIUM_ASSERT( *itr < paths.size() );
-                tempData.m_Data.Set( paths[ *itr ] );
+                tempData.m_Data->Set( paths[ *itr ] );
                 m_PathSet->RemoveItem( &tempData );
             }
         }
@@ -308,11 +308,11 @@ void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
 
     if ( m_PathVector )
     {
-        paths = m_PathVector->m_Data.Get();
+        paths = *m_PathVector->m_Data;
     }
     else if ( m_PathSet )
     {
-        for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data.Get().begin(), end = m_PathSet->m_Data.Get().end(); itr != end; ++itr )
+        for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
         {
             paths.push_back( *itr );
         }
@@ -326,7 +326,7 @@ void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
 
     if ( m_PathVector )
     {
-        m_PathVector->m_Data.Set( paths );
+        (*m_PathVector->m_Data) = paths;
     }
     else if ( m_PathSet )
     {
@@ -336,7 +336,7 @@ void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
             pathSet.insert( std::set< Path >::value_type( *itr ) );
         }
 
-        m_PathSet->m_Data.Set( pathSet );
+        (*m_PathSet->m_Data) = pathSet;
     }
 
     args.m_Control->GetCanvas()->Read();

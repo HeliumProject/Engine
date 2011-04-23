@@ -12,7 +12,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( Layer );
 
-void Layer::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Layer::PopulateComposite( Reflect::Composite& comp )
 {
   comp.AddField( &Layer::m_Visible,     TXT( "m_Visible" ) );
   comp.AddField( &Layer::m_Selectable,  TXT( "m_Selectable" ) );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  4 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,7 +10,8 @@
 
 #include <wx/intl.h>
 
-namespace Helium{ namespace Editor{ class Button; } }
+namespace Helium{ namespace Editor{ class DynamicBitmap; } }
+namespace Helium{ namespace Editor{ class EditorButton; } }
 namespace Helium{ namespace Editor{ class Frame; } }
 namespace Helium{ namespace Editor{ class MenuButton; } }
 
@@ -34,8 +35,8 @@ namespace Helium{ namespace Editor{ class MenuButton; } }
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/richtext/richtextctrl.h>
-#include <wx/button.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
@@ -223,19 +224,30 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_LayerManagementPanel;
+				wxStaticText* m_NewLayerFromSelectionText;
+				Helium::Editor::DynamicBitmap* m_NewLayerFromSelectionBitmap;
+				wxStaticText* m_NewLayerText;
+				Helium::Editor::DynamicBitmap* m_NewLayerBitmap;
+				wxStaticText* m_DeleteLayersText;
+				Helium::Editor::DynamicBitmap* m_DeleteLayersBitmap;
 				wxStaticLine* m_staticline4;
+				wxStaticText* m_AddToLayerText;
+				Helium::Editor::DynamicBitmap* m_AddToLayerBitmap;
+				wxStaticText* m_RemoveFromLayerText;
+				Helium::Editor::DynamicBitmap* m_RemoveFromLayerBitmap;
 				wxStaticLine* m_staticline5;
+				wxStaticText* m_SelectMembersText;
+				Helium::Editor::DynamicBitmap* m_SelectMembersBitmap;
 			
 			public:
-				Helium::Editor::Button* m_CreateNewLayerFromSelectionButton;
-				Helium::Editor::Button* m_CreateNewLayerButton;
-				Helium::Editor::Button* m_DeleteSelectedLayersButton;
-				Helium::Editor::Button* m_AddSelectionToLayerButton;
-				Helium::Editor::Button* m_RemoveSelectionFromLayerButton;
-				Helium::Editor::Button* m_SelectLayerMembersButton;
-				Helium::Editor::Button* m_SelectLayersButton;
+				Helium::Editor::EditorButton* m_NewLayerFromSelectionButton;
+				Helium::Editor::EditorButton* m_NewLayerButton;
+				Helium::Editor::EditorButton* m_DeleteLayersButton;
+				Helium::Editor::EditorButton* m_AddToLayerButton;
+				Helium::Editor::EditorButton* m_RemoveFromLayerButton;
+				Helium::Editor::EditorButton* m_SelectMembersButton;
 				
-				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+				LayersPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,200 ), long style = wxTAB_TRAVERSAL );
 				~LayersPanelGenerated();
 			
 		};
@@ -258,17 +270,16 @@ namespace Helium
 				wxStaticLine* m_staticline16;
 				wxBoxSizer* m_RecentProjectsSizer;
 				wxStaticLine* m_staticline13;
-				
-				// Virtual event handlers, overide them in your derived class
-				virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNewProjectButtonClick( wxCommandEvent& event ) { event.Skip(); }
-				
+				Helium::Editor::DynamicBitmap* m_OpenProjectBitmap;
+				wxStaticText* m_OpenProjectText;
+				Helium::Editor::DynamicBitmap* m_CreateNewProjectBitmap;
+				wxStaticText* m_CreateNewProjectText;
 			
 			public:
 				Helium::Editor::MenuButton* m_OptionsButton;
 				wxPanel* m_OpenOrCreateProjectPanel;
-				Helium::Editor::Button* m_OpenProjectButton;
-				Helium::Editor::Button* m_CreateNewProjectButton;
+				Helium::Editor::EditorButton* m_OpenProjectButton;
+				Helium::Editor::EditorButton* m_CreateNewProjectButton;
 				
 				ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,344 ), long style = wxTAB_TRAVERSAL );
 				~ProjectPanelGenerated();
@@ -309,6 +320,32 @@ namespace Helium
 			
 			protected:
 				wxPanel* m_MainPanel;
+				wxStaticText* m_SelectText;
+				Helium::Editor::DynamicBitmap* m_SelectBitmap;
+				wxStaticText* m_TranslateText;
+				Helium::Editor::DynamicBitmap* m_TranslateBitmap;
+				wxStaticText* m_RotateText;
+				Helium::Editor::DynamicBitmap* m_RotateBitmap;
+				wxStaticText* m_ScaleText;
+				Helium::Editor::DynamicBitmap* m_ScaleBitmap;
+				wxStaticText* m_DuplicateToolText;
+				Helium::Editor::DynamicBitmap* m_DuplicateToolBitmap;
+				wxStaticText* m_LocatorToolText;
+				Helium::Editor::DynamicBitmap* m_LocatorToolBitmap;
+				wxStaticText* m_VolumeToolText;
+				Helium::Editor::DynamicBitmap* m_VolumeToolBitmap;
+				wxStaticText* m_EntityToolText;
+				Helium::Editor::DynamicBitmap* m_EntityToolBitmap;
+				wxStaticText* m_CurveToolText;
+				Helium::Editor::DynamicBitmap* m_CurveToolBitmap;
+				wxStaticText* m_CurveEditToolText;
+				Helium::Editor::DynamicBitmap* m_CurveEditToolBitmap;
+				wxStaticText* m_PlayText;
+				Helium::Editor::DynamicBitmap* m_PlayBitmap;
+				wxStaticText* m_PauseText;
+				Helium::Editor::DynamicBitmap* m_PauseBitmap;
+				wxStaticText* m_StopText;
+				Helium::Editor::DynamicBitmap* m_StopBitmap;
 				
 				
 				wxPanel* m_ToolsPropertiesPanel;
@@ -319,39 +356,23 @@ namespace Helium
 				
 			
 			public:
-				Helium::Editor::Button* m_SelectButton;
-				Helium::Editor::Button* m_TranslateButton;
-				Helium::Editor::Button* m_RotateButton;
-				Helium::Editor::Button* m_ScaleButton;
-				Helium::Editor::Button* m_DuplicateToolButton;
-				Helium::Editor::Button* m_LocatorToolButton;
-				Helium::Editor::Button* m_VolumeToolButton;
-				Helium::Editor::Button* m_EntityToolButton;
-				Helium::Editor::Button* m_CurveToolLocator;
-				Helium::Editor::Button* m_CurveEditToolButton;
-				Helium::Editor::Button* m_PlayButton;
-				Helium::Editor::Button* m_PauseButton;
-				Helium::Editor::Button* m_StopButton;
+				Helium::Editor::EditorButton* m_SelectButton;
+				Helium::Editor::EditorButton* m_TranslateButton;
+				Helium::Editor::EditorButton* m_RotateButton;
+				Helium::Editor::EditorButton* m_ScaleButton;
+				Helium::Editor::EditorButton* m_DuplicateToolButton;
+				Helium::Editor::EditorButton* m_LocatorToolButton;
+				Helium::Editor::EditorButton* m_VolumeToolButton;
+				Helium::Editor::EditorButton* m_EntityToolButton;
+				Helium::Editor::EditorButton* m_CurveToolButton;
+				Helium::Editor::EditorButton* m_CurveEditToolButton;
+				Helium::Editor::EditorButton* m_PlayButton;
+				Helium::Editor::EditorButton* m_PauseButton;
+				Helium::Editor::EditorButton* m_StopButton;
 				wxSearchCtrl* m_VaultSearchBox;
 				
-				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,88 ), long style = wxTAB_TRAVERSAL );
+				ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 986,88 ), long style = wxTAB_TRAVERSAL );
 				~ToolbarPanelGenerated();
-			
-		};
-		
-		///////////////////////////////////////////////////////////////////////////////
-		/// Class TypesPanelGenerated
-		///////////////////////////////////////////////////////////////////////////////
-		class TypesPanelGenerated : public wxPanel 
-		{
-			private:
-			
-			protected:
-			
-			public:
-				
-				TypesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-				~TypesPanelGenerated();
 			
 		};
 		
@@ -389,50 +410,79 @@ namespace Helium
 			private:
 			
 			protected:
-				enum
-				{
-					ID_OrbitCamera = 1000,
-					ID_FrontCamera,
-					ID_SideCamera,
-					ID_TopCamera,
-				};
-				
 				wxPanel* m_ToolPanel;
+				wxStaticText* m_FrameOriginText;
+				Helium::Editor::DynamicBitmap* m_FrameOriginBitmap;
+				wxStaticText* m_FrameSelectionText;
+				Helium::Editor::DynamicBitmap* m_FrameSelectionBitmap;
+				wxStaticText* m_HighlightModeToggleText;
+				Helium::Editor::DynamicBitmap* m_HighlightModeToggleBitmap;
+				wxStaticText* m_PreviousViewText;
+				Helium::Editor::DynamicBitmap* m_PreviousViewBitmap;
+				wxStaticText* m_NextViewText;
+				Helium::Editor::DynamicBitmap* m_NextViewBitmap;
+				wxStaticText* m_OrbitViewToggleText;
+				Helium::Editor::DynamicBitmap* m_OrbitViewToggleBitmap;
+				wxStaticText* m_FrontViewToggleText;
+				Helium::Editor::DynamicBitmap* m_FrontViewToggleBitmap;
+				wxStaticText* m_SideViewToggleText;
+				Helium::Editor::DynamicBitmap* m_SideViewToggleBitmap;
+				wxStaticText* m_TopViewToggleText;
+				Helium::Editor::DynamicBitmap* m_TopViewToggleBitmap;
+				wxStaticText* m_ShowAxesToggleText;
+				Helium::Editor::DynamicBitmap* m_ShowAxesToggleBitmap;
+				wxStaticText* m_ShowGridToggleText;
+				Helium::Editor::DynamicBitmap* m_ShowGridToggleBitmap;
+				wxStaticText* m_ShowBoundsToggleText;
+				Helium::Editor::DynamicBitmap* m_ShowBoundsToggleBitmap;
+				wxStaticText* m_ShowStatisticsToggleText;
+				Helium::Editor::DynamicBitmap* m_ShowStatisticsToggleBitmap;
+				wxStaticText* m_FrustumCullingToggleText;
+				Helium::Editor::DynamicBitmap* m_FrustumCullingToggleBitmap;
+				wxStaticText* m_BackfaceCullingToggleText;
+				Helium::Editor::DynamicBitmap* m_BackfaceCullingToggleBitmap;
+				wxStaticText* m_WireframeShadingToggleText;
+				Helium::Editor::DynamicBitmap* m_WireframeShadingToggleBitmap;
+				wxStaticText* m_MaterialShadingToggleText;
+				Helium::Editor::DynamicBitmap* m_MaterialShadingToggleBitmap;
+				wxStaticText* m_TextureShadingToggleText;
+				Helium::Editor::DynamicBitmap* m_TextureShadingToggleBitmap;
+				wxStaticText* m_ColorModeSceneToggleText;
+				Helium::Editor::DynamicBitmap* m_ColorModeSceneToggleBitmap;
+				wxStaticText* m_ColorModeLayerToggleText;
+				Helium::Editor::DynamicBitmap* m_ColorModeLayerToggleBitmap;
+				wxStaticText* m_ColorModeTypeToggleText;
+				Helium::Editor::DynamicBitmap* m_ColorModeTypeToggleBitmap;
+				wxStaticText* m_ColorModeScaleToggleText;
+				Helium::Editor::DynamicBitmap* m_ColorModeScaleToggleBitmap;
+				wxStaticText* m_ColorModeScaleGradientToggleText;
+				Helium::Editor::DynamicBitmap* m_ColorModeScaleGradientToggleBitmap;
 				wxPanel* m_ViewContainerPanel;
-				
-				// Virtual event handlers, overide them in your derived class
-				virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnToggleHighlightMode( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
-				virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
-				
 			
 			public:
-				Helium::Editor::Button* m_FrameOriginButton;
-				Helium::Editor::Button* m_FrameSelectedButton;
-				Helium::Editor::Button* m_HighlightModeToggleButton;
-				Helium::Editor::Button* m_PreviousViewButton;
-				Helium::Editor::Button* m_NextViewButton;
-				Helium::Editor::Button* m_OrbitCameraToggleButton;
-				Helium::Editor::Button* m_FrontCameraToggleButton;
-				Helium::Editor::Button* m_SideCameraToggleButton;
-				Helium::Editor::Button* m_TopCameraToggleButton;
-				Helium::Editor::Button* m_ShowAxesToggleButton;
-				Helium::Editor::Button* m_ShowGridToggleButton;
-				Helium::Editor::Button* m_ShowBoundsToggleButton;
-				Helium::Editor::Button* m_ShowStatisticsToggleButton;
-				Helium::Editor::Button* m_FrustumCullingToggleButton;
-				Helium::Editor::Button* m_BackfaceCullingToggleButton;
-				Helium::Editor::Button* m_WireframeShadingToggleButton;
-				Helium::Editor::Button* m_MaterialShadingToggleButton;
-				Helium::Editor::Button* m_ColorModeSceneToggleButton;
-				Helium::Editor::Button* m_ColorModeLayerToggleButton;
-				Helium::Editor::Button* m_ColorModeNodeTypeToggleButton;
-				Helium::Editor::Button* m_ColorModeScaleToggleButton;
-				Helium::Editor::Button* m_ColorModeScaleGradientToggleButton;
+				Helium::Editor::EditorButton* m_FrameOriginButton;
+				Helium::Editor::EditorButton* m_FrameSelectionButton;
+				Helium::Editor::EditorButton* m_HighlightModeToggleButton;
+				Helium::Editor::EditorButton* m_PreviousViewButton;
+				Helium::Editor::EditorButton* m_NextViewButton;
+				Helium::Editor::EditorButton* m_OrbitViewToggleButton;
+				Helium::Editor::EditorButton* m_FrontViewToggleButton;
+				Helium::Editor::EditorButton* m_SideViewToggleButton;
+				Helium::Editor::EditorButton* m_TopViewToggleButton;
+				Helium::Editor::EditorButton* m_ShowAxesToggleButton;
+				Helium::Editor::EditorButton* m_ShowGridToggleButton;
+				Helium::Editor::EditorButton* m_ShowBoundsToggleButton;
+				Helium::Editor::EditorButton* m_ShowStatisticsToggleButton;
+				Helium::Editor::EditorButton* m_FrustumCullingToggleButton;
+				Helium::Editor::EditorButton* m_BackfaceCullingToggleButton;
+				Helium::Editor::EditorButton* m_WireframeShadingToggleButton;
+				Helium::Editor::EditorButton* m_MaterialShadingToggleButton;
+				Helium::Editor::EditorButton* m_TextureShadingToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeSceneToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeLayerToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeTypeToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeScaleToggleButton;
+				Helium::Editor::EditorButton* m_ColorModeScaleGradientToggleButton;
 				
 				ViewPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,617 ), long style = wxTAB_TRAVERSAL );
 				~ViewPanelGenerated();

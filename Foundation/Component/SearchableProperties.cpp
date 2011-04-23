@@ -4,7 +4,7 @@ using namespace Helium;
 
 REFLECT_DEFINE_ABSTRACT( SearchableProperties );
 
-void SearchableProperties::AcceptCompositeVisitor( Reflect::Composite& comp )
+void SearchableProperties::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &SearchableProperties::m_StringProperties, TXT( "m_StringProperties" ) );
 }

@@ -49,7 +49,7 @@ namespace Helium
             friend void Reflect::Cleanup();
 
             Registry();
-            virtual ~Registry();
+            ~Registry();
 
         public:
             // singleton constructor and accessor
@@ -107,6 +107,14 @@ namespace Helium
         }
 
         template<class T>
+        inline const Structure* GetStructure()
+        {
+            const Structure* type = T::s_Structure;
+            HELIUM_ASSERT(type); // if you hit this then your type is not registered
+            return type;
+        }
+
+        template<class T>
         inline const Enumeration* GetEnumeration()
         {
             const Enumeration* type = T::s_Enumeration;
@@ -119,6 +127,27 @@ namespace Helium
         //
 
         typedef void (*UnregisterFunc)();
+
+        template< class T >
+        inline UnregisterFunc RegisterStructureType( const tchar_t* name )
+        {
+            // create the type information and register it with the registry
+            if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateStructure( name ) ) )
+            {
+                // this function will unregister the type we just registered
+                return &UnregisterStructureType< T >;
+            }
+
+            // there was a problem
+            return NULL;
+        }
+
+        template<class T>
+        inline void UnregisterStructureType()
+        {
+            // retrieve the class information and unregister it from the registry
+            Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetStructure<T>() );
+        }
 
         template< class T >
         inline UnregisterFunc RegisterClassType( const tchar_t* name )

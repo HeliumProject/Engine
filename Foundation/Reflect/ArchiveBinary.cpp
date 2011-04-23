@@ -1,8 +1,9 @@
-#include "ArchiveBinary.h"
-#include "Object.h"
-#include "Registry.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Structure.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Memory/Endian.h"
@@ -11,7 +12,6 @@ using Helium::Insert;
 using namespace Helium;
 using namespace Helium::Reflect; 
 
-// version / feature management 
 const uint32_t ArchiveBinary::CURRENT_VERSION = 8;
 
 class StlVectorPusher : NonCopyable
@@ -46,10 +46,6 @@ public:
     }
 };
 
-//
-// Binary Archive implements our own custom serialization technique
-//
-
 ArchiveBinary::ArchiveBinary( const Path& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
@@ -69,7 +65,7 @@ ArchiveBinary::ArchiveBinary()
 void ArchiveBinary::Open( bool write )
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(TXT("Opening file '%s'\n"), m_Path.c_str());
+    Log::Print(TXT("Opening file '%s'\n"), m_Path.c_str());
 #endif
 
     Reflect::CharStreamPtr stream = new CharFileStream( m_Path, write ); 
@@ -162,10 +158,10 @@ void ArchiveBinary::Read()
         throw Reflect::StreamException( TXT( "Input stream version for '%s' is not what is currently supported (input: %d, current: %d)\n" ), m_Path.c_str(), m_Version, CURRENT_VERSION); 
     }
 
-    // deserialize main file elements
+    // deserialize main file objects
     {
         REFLECT_SCOPE_TIMER( ("Read Objects") );
-        Deserialize(m_Objects, ArchiveFlags::Status);
+        DeserializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     // invalidate the search type and abort flags so we process the append block
@@ -210,11 +206,10 @@ void ArchiveBinary::Write()
     HELIUM_ASSERT( m_Version == CURRENT_VERSION );
     m_Stream->Write(&m_Version); 
 
-    // serialize main file elements
+    // serialize main file objects
     {
-        REFLECT_SCOPE_TIMER( ("Main Spool Write") );
-
-        Serialize(m_Objects, ArchiveFlags::Status);
+        REFLECT_SCOPE_TIMER( ("Write Objects") );
+        SerializeArray(m_Objects, ArchiveFlags::Status);
     }
 
     // do cleanup
@@ -224,13 +219,13 @@ void ArchiveBinary::Write()
     e_Status.Raise( info );
 }
 
-void ArchiveBinary::Serialize(Object* object)
+void ArchiveBinary::SerializeInstance(Object* object)
 {
     // write the crc of the class of object (used to factory allocate an instance when reading)
     uint32_t classCrc = 0;
     if ( object )
     {
-        classCrc = Helium::Crc32( object->GetClass()->m_Name );
+        classCrc = Crc32( object->GetClass()->m_Name );
     }
 
     m_Stream->Write(&classCrc); 
@@ -241,7 +236,7 @@ void ArchiveBinary::Serialize(Object* object)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug( TXT( "Serializing %s\n" ), object->GetClass()->m_Name );
+    Log::Print( TXT( "Serializing %s\n" ), object->GetClass()->m_Name );
     m_Indent.Push();
 #endif
 
@@ -294,54 +289,57 @@ void ArchiveBinary::Serialize(Object* object)
 #endif
 }
 
-void ArchiveBinary::Serialize(const std::vector< ObjectPtr >& elements, uint32_t flags)
+void ArchiveBinary::SerializeInstance( void* structure, const Structure* type )
 {
-    Serialize( elements.begin(), elements.end(), flags );
-}
+    // write the crc of the class of structure (used to factory allocate an instance when reading)
+    uint32_t typeCrc = Crc32( type->m_Name );
+    m_Stream->Write(&typeCrc); 
 
-void ArchiveBinary::Serialize( const DynArray< ObjectPtr >& elements, uint32_t flags )
-{
-    Serialize( elements.Begin(), elements.End(), flags );
-}
-
-template< typename ConstIteratorType >
-void ArchiveBinary::Serialize( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
-{
-    int32_t size = (int32_t)( end - begin );
-    m_Stream->Write(&size); 
+    // stub out the length we are about to write
+    uint32_t start_offset = (uint32_t)m_Stream->TellWrite();
+    m_Stream->Write(&start_offset); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Log::Debug(TXT("Serializing %d elements\n"), elements.size());
+    Log::Print( TXT( "Serializing %s\n" ), type->m_Name );
     m_Indent.Push();
 #endif
 
-    ConstIteratorType itr = begin;
-    for (int index = 0; itr != end; ++itr, ++index )
+    if ( structure )
     {
-        Serialize(*itr);
-
-        if ( flags & ArchiveFlags::Status )
+        // push a new struct on the stack
+        WriteFields data;
+        data.m_Count = 0;
+        data.m_CountOffset = m_Stream->TellWrite();
+        m_FieldStack.push(data);
         {
-            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
-            e_Status.Raise( info );
+            // stub out the number of fields we are about to write
+            m_Stream->Write(&m_FieldStack.top().m_Count);
+
+            // serialize each field of the structure
+            SerializeFields(structure, type);
+
+            // seek back and write our count
+            m_Stream->SeekWrite(m_FieldStack.top().m_CountOffset, std::ios_base::beg);
+            m_Stream->Write(&m_FieldStack.top().m_Count); 
         }
+        m_FieldStack.pop();
     }
 
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
+    // compute amound written
+    uint32_t end_offset = (uint32_t)m_Stream->TellWrite();
+    uint32_t length = end_offset - start_offset;
+
+    // seek back and write written amount at start offset
+    m_Stream->SeekWrite(start_offset, std::ios_base::beg);
+    m_Stream->Write(&length); 
+
+    // seek back to the end of the stream
+    m_Stream->SeekWrite(0, std::ios_base::end);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Pop();
 #endif
-
-    const int32_t terminator = -1;
-    m_Stream->Write(&terminator); 
 }
 
 void ArchiveBinary::SerializeFields( Object* object )
@@ -374,12 +372,12 @@ void ArchiveBinary::SerializeFields( Object* object )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                 m_Indent.Get(stdout);
-                Log::Debug(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
+                Log::Print(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
                 m_Indent.Push();
 #endif
 
                 object->PreSerialize( field );
-                Serialize( data );
+                SerializeInstance( data );
                 object->PostSerialize( field );
 
                 // might be useful to cache the data object here
@@ -398,6 +396,441 @@ void ArchiveBinary::SerializeFields( Object* object )
 
     const int32_t terminator = -1;
     m_Stream->Write(&terminator); 
+}
+
+void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
+{
+    std::stack< const Composite* > bases;
+    for ( const Composite* current = type; current != NULL; current = current->m_Base )
+    {
+        bases.push( current );
+    }
+
+    while ( !bases.empty() )
+    {
+        const Composite* current = bases.top();
+        bases.pop();
+
+        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynArray< Field >::ConstIterator end = current->m_Fields.End();
+        for ( ; itr != end; ++itr )
+        {
+            const Field* field = &*itr;
+
+            // check to see if we should serialize (will return non-null if we are gtg)
+            DataPtr data = field->ShouldSerialize( structure );
+            if ( data )
+            {
+                uint32_t fieldNameCrc = Crc32( field->m_Name );
+                m_Stream->Write(&fieldNameCrc); 
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+                m_Indent.Get(stdout);
+                Log::Print(TXT("Serializing field %s (class %s)\n"), field->m_Name, field->m_DataClass->m_Name);
+                m_Indent.Push();
+#endif
+
+                SerializeInstance( data );
+
+                // might be useful to cache the data object here
+                data->Disconnect();               
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+                m_Indent.Pop();
+#endif
+
+                // we wrote a field, so increment our count
+                HELIUM_ASSERT(m_FieldStack.size() > 0);
+                m_FieldStack.top().m_Count++;
+            }
+        }
+    }
+
+    const int32_t terminator = -1;
+    m_Stream->Write(&terminator); 
+}
+
+void ArchiveBinary::SerializeArray(const std::vector< ObjectPtr >& objects, uint32_t flags)
+{
+    SerializeArray( objects.begin(), objects.end(), flags );
+}
+
+void ArchiveBinary::SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    SerializeArray( objects.Begin(), objects.End(), flags );
+}
+
+template< typename ConstIteratorType >
+void ArchiveBinary::SerializeArray( ConstIteratorType begin, ConstIteratorType end, uint32_t flags )
+{
+    int32_t size = (int32_t)( end - begin );
+    m_Stream->Write(&size); 
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Print(TXT("Serializing %d objects\n"), size);
+    m_Indent.Push();
+#endif
+
+    ConstIteratorType itr = begin;
+    for (int index = 0; itr != end; ++itr, ++index )
+    {
+        SerializeInstance(*itr);
+
+        if ( flags & ArchiveFlags::Status )
+        {
+            ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+            info.m_Progress = (int)(((float)(index) / (float)size) * 100.0f);
+            e_Status.Raise( info );
+        }
+    }
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+
+    const int32_t terminator = -1;
+    m_Stream->Write(&terminator); 
+}
+
+void ArchiveBinary::DeserializeInstance(ObjectPtr& object)
+{
+    //
+    // If we don't have an object allocated for deserialization, pull one from the stream
+    //
+
+    if (!object.ReferencesObject())
+    {
+        object = Allocate();
+    }
+
+    //
+    // We should now have an instance (unless data was skipped)
+    //
+
+    if (object.ReferencesObject())
+    {
+#ifdef REFLECT_ARCHIVE_VERBOSE
+        m_Indent.Get(stdout);
+        Log::Print(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
+        m_Indent.Push();
+#endif
+
+        object->PreDeserialize( NULL );
+
+        Data* data = SafeCast<Data>(object);
+
+        if ( data )
+        {
+            data->Deserialize(*this);
+        }
+        else
+        {
+            DeserializeFields(object);
+        }
+
+        object->PostDeserialize( NULL );
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+        m_Indent.Pop();
+#endif
+    }
+}
+
+void ArchiveBinary::DeserializeInstance( void* structure, const Structure* type )
+{
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Print(TXT("Deserializing %s\n"), type->m_Name);
+    m_Indent.Push();
+#endif
+
+    DeserializeFields(structure, type);
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+}
+
+void ArchiveBinary::DeserializeFields(Object* object)
+{
+    int32_t fieldCount = -1;
+    m_Stream->Read(&fieldCount); 
+
+    for (int i=0; i<fieldCount; i++)
+    {
+        uint32_t fieldNameCrc = BeginCrc32();
+        m_Stream->Read( &fieldNameCrc );
+
+        const Class* type = object->GetClass();
+        HELIUM_ASSERT( type );
+
+        ObjectPtr unknown;
+
+        const Field* field = type->FindFieldByName(fieldNameCrc);
+        if ( field )
+        {
+#ifdef REFLECT_ARCHIVE_VERBOSE
+            m_Indent.Get(stdout);
+            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
+            m_Indent.Push();
+#endif
+
+            // pull and object and downcast to data
+            DataPtr latentData = SafeCast<Data>( Allocate() );
+            if (!latentData.ReferencesObject())
+            {
+                // this should never happen, the type id read from the file is bogus
+                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+#pragma TODO("Support blind data")
+            }
+
+            // if the types match we are a natural fit to just deserialize directly into the field data
+            if ( field->m_DataClass == field->m_DataClass )
+            {
+                // set data pointer
+                latentData->ConnectField( object, field );
+
+                // process natively
+                object->PreDeserialize( field );
+                DeserializeInstance( (ObjectPtr&)latentData );
+                object->PostDeserialize( field );
+
+                // disconnect
+                latentData->Disconnect();
+            }
+            else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
+            {
+                REFLECT_SCOPE_TIMER(("Casting"));
+
+                // construct current serialization object
+                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
+
+                // downcast to data
+                DataPtr currentData = SafeCast<Data>(currentObject);
+                if (!currentData.ReferencesObject())
+                {
+                    // this should never happen, the type id in the rtti data is bogus
+                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                }
+
+                // process into temporary memory
+                currentData->ConnectField(object, field);
+
+                // process natively
+                object->PreDeserialize( field );
+                DeserializeInstance( (ObjectPtr&)latentData );
+
+                // attempt cast data into new definition
+                if ( !Data::CastValue( latentData, currentData, DataFlags::Shallow ) )
+                {
+                    // handle as unknown
+                    unknown = latentData;
+                }
+                else
+                {
+                    // post process
+                    object->PostDeserialize( field );
+                }
+
+                // disconnect
+                currentData->Disconnect();
+            }
+        }
+        else // else the field does not exist in the current class anymore
+        {
+            try
+            {
+                DeserializeInstance( unknown );
+            }
+            catch (Reflect::LogisticException& ex)
+            {
+                Log::Debug( TXT( "Unable to deserialize %s::%s, discarding: %s\n" ), type->m_Name, field->m_Name, ex.What());
+            }
+        }
+
+        if ( unknown.ReferencesObject() )
+        {
+            // attempt processing
+            object->ProcessUnknown( unknown, field ? Crc32( field->m_Name ) : 0 );
+        }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+        m_Indent.Pop();
+#endif
+    }
+
+    int32_t terminator = -1;
+    m_Stream->Read(&terminator); 
+    if (terminator != -1)
+    {
+        throw Reflect::DataFormatException( TXT( "Unterminated field array block (%s)" ), m_Path.c_str() );
+    }
+}
+
+void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
+{
+    int32_t fieldCount = -1;
+    m_Stream->Read(&fieldCount); 
+
+    for (int i=0; i<fieldCount; i++)
+    {
+        uint32_t fieldNameCrc = BeginCrc32();
+        m_Stream->Read( &fieldNameCrc );
+
+        const Field* field = type->FindFieldByName(fieldNameCrc);
+        if ( field )
+        {
+#ifdef REFLECT_ARCHIVE_VERBOSE
+            m_Indent.Get(stdout);
+            Log::Print(TXT("Deserializing field %s\n"), field->m_Name);
+            m_Indent.Push();
+#endif
+
+            // pull and structure and downcast to data
+            DataPtr latentData = SafeCast<Data>( Allocate() );
+            if (!latentData.ReferencesObject())
+            {
+                // this should never happen, the type id read from the file is bogus
+                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+#pragma TODO("Support blind data")
+            }
+
+            // if the types match we are a natural fit to just deserialize directly into the field data
+            if ( field->m_DataClass == field->m_DataClass )
+            {
+                // set data pointer
+                latentData->ConnectField( structure, field );
+
+                // process natively
+                DeserializeInstance( (ObjectPtr&)latentData );
+
+                // disconnect
+                latentData->Disconnect();
+            }
+            else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
+            {
+                REFLECT_SCOPE_TIMER(("Casting"));
+
+                // construct current serialization structure
+                ObjectPtr currentObject = Registry::GetInstance()->CreateInstance( field->m_DataClass );
+
+                // downcast to data
+                DataPtr currentData = SafeCast<Data>(currentObject);
+                if (!currentData.ReferencesObject())
+                {
+                    // this should never happen, the type id in the rtti data is bogus
+                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
+                }
+
+                // process into temporary memory
+                currentData->ConnectField(structure, field);
+
+                // process natively
+                DeserializeInstance( (ObjectPtr&)latentData );
+
+                // attempt cast data into new definition
+                Data::CastValue( latentData, currentData, DataFlags::Shallow );
+
+                // disconnect
+                currentData->Disconnect();
+            }
+        }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+        m_Indent.Pop();
+#endif
+    }
+
+    int32_t terminator = -1;
+    m_Stream->Read(&terminator); 
+    if (terminator != -1)
+    {
+        throw Reflect::DataFormatException( TXT( "Unterminated field array block (%s)" ), m_Path.c_str() );
+    }
+}
+
+void ArchiveBinary::DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( StlVectorPusher( objects ), flags );
+}
+
+void ArchiveBinary::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags )
+{
+    DeserializeArray( DynArrayPusher( objects ), flags );
+}
+
+template< typename ArrayPusher >
+void ArchiveBinary::DeserializeArray( ArrayPusher& push, uint32_t flags )
+{
+    uint32_t start_offset = (uint32_t)m_Stream->TellRead();
+
+    int32_t element_count = -1;
+    m_Stream->Read(&element_count); 
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Get(stdout);
+    Log::Debug(TXT("Deserializing %d objects\n"), element_count);
+    m_Indent.Push();
+#endif
+
+    if (element_count > 0)
+    {
+        for (int i=0; i<element_count && !m_Abort; i++)
+        {
+            ObjectPtr object;
+            DeserializeInstance(object);
+
+            if (object.ReferencesObject())
+            {
+                if ( object->IsClass( m_SearchClass ) )
+                {
+                    m_Skip = true;
+                }
+
+                if ( flags & ArchiveFlags::Status )
+                {
+                    uint32_t current = (uint32_t)m_Stream->TellRead();
+
+                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+                    info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
+                    e_Status.Raise( info );
+
+                    m_Abort |= info.m_Abort;
+                }
+            }
+
+            push( object );
+        }
+    }
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    m_Indent.Pop();
+#endif
+
+    if (!m_Abort)
+    {
+        int32_t terminator = -1;
+        m_Stream->Read(&terminator);
+        if (terminator != -1)
+        {
+            throw Reflect::DataFormatException( TXT( "Unterminated object array block (%s)" ), m_Path.c_str() );
+        }
+    }
+
+    if ( flags & ArchiveFlags::Status )
+    {
+        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
+        info.m_Progress = 100;
+        e_Status.Raise( info );
+    }
 }
 
 ObjectPtr ArchiveBinary::Allocate()
@@ -449,255 +882,11 @@ ObjectPtr ArchiveBinary::Allocate()
     return object;
 }
 
-void ArchiveBinary::Deserialize(ObjectPtr& object)
-{
-    //
-    // If we don't have an object allocated for deserialization, pull one from the stream
-    //
-
-    if (!object.ReferencesObject())
-    {
-        object = Allocate();
-    }
-
-    //
-    // We should now have an instance (unless data was skipped)
-    //
-
-    if (object.ReferencesObject())
-    {
-#ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing %s\n"), object->GetClass()->m_Name);
-        m_Indent.Push();
-#endif
-
-        object->PreDeserialize( NULL );
-
-        Data* data = SafeCast<Data>(object);
-
-        if ( data )
-        {
-            data->Deserialize(*this);
-        }
-        else
-        {
-            DeserializeFields(object);
-        }
-
-        if ( !TryObjectCallback( object, &Object::PostDeserialize, NULL ) )
-        {
-            object = NULL; // discard the object
-        }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Pop();
-#endif
-    }
-}
-
-void ArchiveBinary::Deserialize(std::vector< ObjectPtr >& elements, uint32_t flags)
-{
-    Deserialize( StlVectorPusher( elements ), flags );
-}
-
-void ArchiveBinary::Deserialize( DynArray< ObjectPtr >& elements, uint32_t flags )
-{
-    Deserialize( DynArrayPusher( elements ), flags );
-}
-
-template< typename ArrayPusher >
-void ArchiveBinary::Deserialize( ArrayPusher& push, uint32_t flags )
-{
-    uint32_t start_offset = (uint32_t)m_Stream->TellRead();
-
-    int32_t element_count = -1;
-    m_Stream->Read(&element_count); 
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Get(stdout);
-    Log::Debug(TXT("Deserializing %d elements\n"), element_count);
-    m_Indent.Push();
-#endif
-
-    if (element_count > 0)
-    {
-        for (int i=0; i<element_count && !m_Abort; i++)
-        {
-            ObjectPtr object;
-            Deserialize(object);
-
-            if (object.ReferencesObject())
-            {
-                if ( object->IsClass( m_SearchClass ) )
-                {
-                    m_Skip = true;
-                }
-
-                if ( flags & ArchiveFlags::Status )
-                {
-                    uint32_t current = (uint32_t)m_Stream->TellRead();
-
-                    ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-                    info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);
-                    e_Status.Raise( info );
-
-                    m_Abort |= info.m_Abort;
-                }
-            }
-
-            push( object );
-        }
-    }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    m_Indent.Pop();
-#endif
-
-    if (!m_Abort)
-    {
-        int32_t terminator = -1;
-        m_Stream->Read(&terminator);
-        if (terminator != -1)
-        {
-            throw Reflect::DataFormatException( TXT( "Unterminated object array block (%s)" ), m_Path.c_str() );
-        }
-    }
-
-    if ( flags & ArchiveFlags::Status )
-    {
-        ArchiveStatus info( *this, ArchiveStates::ObjectProcessed );
-        info.m_Progress = 100;
-        e_Status.Raise( info );
-    }
-}
-
-void ArchiveBinary::DeserializeFields(Object* object)
-{
-    int32_t fieldCount = -1;
-    m_Stream->Read(&fieldCount); 
-
-    for (int i=0; i<fieldCount; i++)
-    {
-        uint32_t fieldNameCrc = BeginCrc32();
-        m_Stream->Read( &fieldNameCrc );
-
-        const Class* type = object->GetClass();
-        HELIUM_ASSERT( type );
-        const Field* field = type->FindFieldByName(fieldNameCrc);
-        HELIUM_ASSERT( field );
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Get(stdout);
-        Log::Debug(TXT("Deserializing field %s\n"), field->m_Name);
-        m_Indent.Push();
-#endif
-
-        // our missing component
-        ObjectPtr component;
-
-        if ( field )
-        {
-            // pull and object and downcast to data
-            DataPtr latent_data = SafeCast<Data>( Allocate() );
-            if (!latent_data.ReferencesObject())
-            {
-                // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( TXT( "Unknown data for field %s (%s)" ), field->m_Name, m_Path.c_str() );
-#pragma TODO("Support blind data")
-            }
-
-            // if the types match we are a natural fit to just deserialize directly into the field data
-            if ( field->m_DataClass == field->m_DataClass )
-            {
-                // set data pointer
-                latent_data->ConnectField( object, field );
-
-                // process natively
-                object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latent_data );
-                object->PostDeserialize( field );
-
-                // disconnect
-                latent_data->Disconnect();
-            }
-            else // else the type does not match, deserialize it into temp data then attempt to cast it into the field data
-            {
-                REFLECT_SCOPE_TIMER(("Casting"));
-
-                // construct current serialization object
-                ObjectPtr current_element = Registry::GetInstance()->CreateInstance( field->m_DataClass );
-
-                // downcast to data
-                DataPtr current_data = SafeCast<Data>(current_element);
-                if (!current_data.ReferencesObject())
-                {
-                    // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field %s (%s)" ), field->m_Name, m_Path.c_str() );
-                }
-
-                // process into temporary memory
-                current_data->ConnectField(object, field);
-
-                // process natively
-                object->PreDeserialize( field );
-                Deserialize( (ObjectPtr&)latent_data );
-
-                // attempt cast data into new definition
-                if ( !Data::CastValue( latent_data, current_data, DataFlags::Shallow ) )
-                {
-                    // to the component block!
-                    component = latent_data;
-                }
-                else
-                {
-                    // post process
-                    object->PostDeserialize( field );
-                }
-
-                // disconnect
-                current_data->Disconnect();
-            }
-        }
-        else // else the field does not exist in the current class anymore
-        {
-            try
-            {
-                Deserialize( component );
-            }
-            catch (Reflect::LogisticException& ex)
-            {
-                Log::Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_Name, field->m_Name, ex.What());
-            }
-        }
-
-        if ( component.ReferencesObject() )
-        {
-            // attempt processing
-            if (!object->ProcessComponent(component, field->m_Name))
-            {
-                Log::Debug( TXT( "%s did not process %s, discarding\n" ), object->GetClass()->m_Name, component->GetClass()->m_Name );
-            }
-        }
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Pop();
-#endif
-    }
-
-    int32_t terminator = -1;
-    m_Stream->Read(&terminator); 
-    if (terminator != -1)
-    {
-        throw Reflect::DataFormatException( TXT( "Unterminated field array block (%s)" ), m_Path.c_str() );
-    }
-}
-
 void ArchiveBinary::ToStream( Object* object, std::iostream& stream )
 {
-    std::vector< ObjectPtr > elements(1);
-    elements[0] = object;
-    ToStream( elements, stream );
+    std::vector< ObjectPtr > objects(1);
+    objects[0] = object;
+    ToStream( objects, stream );
 }
 
 ObjectPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* searchClass )
@@ -728,12 +917,12 @@ ObjectPtr ArchiveBinary::FromStream( std::iostream& stream, const Class* searchC
     return NULL;
 }
 
-void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& elements, std::iostream& stream )
+void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& objects, std::iostream& stream )
 {
     ArchiveBinary archive;
 
     // fix the spool
-    archive.m_Objects = elements;
+    archive.m_Objects = objects;
 
     Reflect::CharStreamPtr charStream = new CharStream( &stream, false ); 
     archive.OpenStream( charStream, true );
@@ -741,7 +930,7 @@ void ArchiveBinary::ToStream( const std::vector< ObjectPtr >& elements, std::ios
     archive.Close(); 
 }
 
-void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >& elements )
+void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >& objects )
 {
     ArchiveBinary archive;
 
@@ -750,5 +939,5 @@ void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >&
     archive.Read();
     archive.Close(); 
 
-    elements = archive.m_Objects;
+    objects = archive.m_Objects;
 }

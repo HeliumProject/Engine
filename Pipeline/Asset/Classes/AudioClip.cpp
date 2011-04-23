@@ -6,7 +6,7 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AudioClipMode );
 REFLECT_DEFINE_OBJECT( AudioClip );
 
-void AudioClip::AcceptCompositeVisitor( Reflect::Composite& comp )
+void AudioClip::PopulateComposite( Reflect::Composite& comp )
 {
     comp.SetProperty( AssetProperties::FileFilter, TXT( "*.wav;*.mp3;*.ogg" ) );
 

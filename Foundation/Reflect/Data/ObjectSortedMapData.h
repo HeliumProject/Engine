@@ -16,19 +16,14 @@ namespace Helium
         public:
             REFLECT_DECLARE_ABSTRACT( ObjectSortedMapData, ContainerData );
 
-            typedef Pair< ConstDataPtr, ObjectPtr* > ValueType;
+            typedef Pair< DataPtr, ObjectPtr* > ValueType;
             typedef DynArray< ValueType > A_ValueType;
-
-            typedef Pair< ConstDataPtr, const ObjectPtr* > ConstValueType;
-            typedef DynArray< ConstValueType > A_ConstValueType;
 
             virtual const Class* GetKeyClass() const = 0;
             virtual void GetItems( A_ValueType& items ) = 0;
-            virtual void GetItems( A_ConstValueType& items ) const = 0;
-            virtual ObjectPtr* GetItem( const Data* key ) = 0;
-            virtual const ObjectPtr* GetItem( const Data* key ) const = 0;
-            virtual void SetItem( const Data* key, const Object* value ) = 0;
-            virtual void RemoveItem( const Data* key ) = 0;
+            virtual ObjectPtr* GetItem( Data* key ) = 0;
+            virtual void SetItem( Data* key, Object* value ) = 0;
+            virtual void RemoveItem( Data* key ) = 0;
         };
 
         template< typename KeyT, typename CompareKeyT = Less< KeyT >, typename AllocatorT = DefaultAllocator >
@@ -36,34 +31,40 @@ namespace Helium
         {
         public:
             typedef SortedMap< KeyT, ObjectPtr, CompareKeyT, AllocatorT > DataType;
-            Data::Pointer< DataType > m_Data;
+            DataPointer< DataType > m_Data;
 
             typedef SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT > ObjectSortedMapDataT;
             REFLECT_DECLARE_OBJECT( ObjectSortedMapDataT, ObjectSortedMapData )
 
             SimpleObjectSortedMapData();
-            virtual ~SimpleObjectSortedMapData();
+            ~SimpleObjectSortedMapData();
 
-            virtual void ConnectData( Helium::HybridPtr< void > data ) HELIUM_OVERRIDE;
+            virtual void ConnectData( void* data ) HELIUM_OVERRIDE;
 
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
             virtual const Class* GetKeyClass() const HELIUM_OVERRIDE;
             virtual void GetItems( A_ValueType& items ) HELIUM_OVERRIDE;
-            virtual void GetItems( A_ConstValueType& items ) const HELIUM_OVERRIDE;
-            virtual ObjectPtr* GetItem( const Data* key ) HELIUM_OVERRIDE;
-            virtual const ObjectPtr* GetItem( const Data* key ) const HELIUM_OVERRIDE;
-            virtual void SetItem( const Data* key, const Object* value ) HELIUM_OVERRIDE;
-            virtual void RemoveItem( const Data* key ) HELIUM_OVERRIDE;
+            virtual ObjectPtr* GetItem( Data* key ) HELIUM_OVERRIDE;
+            virtual void SetItem( Data* key, Object* value ) HELIUM_OVERRIDE;
+            virtual void RemoveItem( Data* key ) HELIUM_OVERRIDE;
 
-            virtual bool Set( const Data* src, uint32_t flags = 0 ) HELIUM_OVERRIDE;
-            virtual bool Equals( const Object* object ) const HELIUM_OVERRIDE;
-
-            virtual void Serialize( Archive& archive ) const HELIUM_OVERRIDE;
-            virtual void Deserialize( Archive& archive ) HELIUM_OVERRIDE;
-
+            virtual bool Set( Data* src, uint32_t flags = 0 ) HELIUM_OVERRIDE;
+            virtual bool Equals( Object* object ) HELIUM_OVERRIDE;
             virtual void Accept( Visitor& visitor ) HELIUM_OVERRIDE;
+
+            virtual void Serialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+
+            virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+
+		private:
+			template< class ArchiveT >
+            void Serialize( ArchiveT& archive );
+			template< class ArchiveT >
+            void Deserialize( ArchiveT& archive );
         };
 
         typedef SimpleObjectSortedMapData< TypeID > TypeIDObjectSortedMapData;

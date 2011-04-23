@@ -141,7 +141,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
     Connect( wxID_SELECTALL, wxCommandEventHandler( MainFrame::OnSelectAll ) );
-
+    Connect( ID_Close, wxCommandEventHandler( MainFrame::OnClose ), NULL, this );
     
     //EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
     //EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
@@ -174,7 +174,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_ToolbarPanel->m_LocatorToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_VolumeToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_EntityToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_CurveToolLocator->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
+    m_ToolbarPanel->m_CurveToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
     m_ToolbarPanel->m_CurveEditToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
 
     m_ToolbarPanel->m_VaultSearchBox->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( MainFrame::OnSearchGoButtonClick ), NULL, this );
@@ -195,12 +195,6 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
 
-    // Vault
-    m_VaultPanel = new VaultPanel( this );
-    wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 );
-    m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
-    //m_ExcludeFromPanelsMenu.insert( vaultPanelInfo.name );
-
     // Help
     m_HelpPanel = new HelpPanel( this );
     wxAuiPaneInfo helpPaneInfo = wxAuiPaneInfo().Name( wxT( "help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 2 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 200, 200 ) );
@@ -211,15 +205,19 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_DirectoryPanel = new DirectoryPanel( &m_SceneManager, &m_TreeMonitor, this );
     m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
 
-    // Properties/Layers/Types area
+    // Properties/Layers/Vault area
     m_PropertiesPanel = new PropertiesPanel( this );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
     m_LayersPanel = new LayersPanel( &m_SceneManager, this );
-    m_FrameManager.AddPane( m_LayersPanel, wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ) );
+    wxAuiPaneInfo layersPaneInfo = wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 400, 200 ) );
+    layersPaneInfo.dock_proportion = 10000;
+    m_FrameManager.AddPane( m_LayersPanel, layersPaneInfo );
 
-    m_TypesPanel = new TypesPanel( &m_SceneManager, this );
-    m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
+    // Vault (hidden by default)
+    m_VaultPanel = new VaultPanel( this );
+    wxAuiPaneInfo vaultPanelInfo = wxAuiPaneInfo().Name( wxT( "vault" ) ).Caption( wxT( "Asset Vault" ) ).Right().Layer( 1 ).Position( 4 ).Hide();
+    m_FrameManager.AddPane( m_VaultPanel, vaultPanelInfo );
 
     m_FrameManager.Update();
 
@@ -229,10 +227,8 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     wxGetApp().GetSettingsManager()->GetSettings< WindowSettings >()->ApplyToWindow( this, &m_FrameManager, true );
     m_ViewPanel->GetViewCanvas()->GetViewport().LoadSettings( wxGetApp().GetSettingsManager()->GetSettings< ViewportSettings >() ); 
 
-
     // Disable accelerators, we'll handle them ourselves
     m_MainMenuBar->SetAcceleratorTable( wxAcceleratorTable() );
-
 
     // Attach event handlers
     m_SceneManager.e_CurrentSceneChanging.AddMethod( this, &MainFrame::CurrentSceneChanging );
@@ -404,11 +400,6 @@ void MainFrame::OpenProject( const Helium::Path& path )
     wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->SetMRUProjects( m_MenuMRU );
 
     m_ProjectPanel->OpenProject( m_Project, document );
-
-    if ( m_VaultPanel )
-    {
-        m_VaultPanel->SetDirectory( path );
-    }
 
     wxGetApp().GetTracker()->SetProject( m_Project );
     if ( !wxGetApp().GetTracker()->IsThreadRunning() )
@@ -593,6 +584,54 @@ void MainFrame::CloseAllScenes()
     }
 
     m_SceneManager.RemoveAllScenes();
+}
+
+static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_SceneNodeDumbPtr& oldSelection, OS_SceneNodeDumbPtr& newSelection )
+{
+    for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
+    {
+        SceneGraph::HierarchyNode* child = *itr;
+        RecurseToggleSelection( child, oldSelection, newSelection );
+    }
+
+    bool found = false;
+    OS_SceneNodeDumbPtr::Iterator selItr = oldSelection.Begin();
+    OS_SceneNodeDumbPtr::Iterator selEnd = oldSelection.End();
+    for ( ; selItr != selEnd && !found; ++selItr )
+    {
+        SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
+        if ( current )
+        {
+            if ( current == node )
+            {
+                found = true; // breaks out of the loop
+            }
+        }
+    }
+
+    if ( !found )
+    {
+        newSelection.Append( node );
+    }
+}
+
+void MainFrame::InvertSelection()
+{
+    if ( m_SceneManager.HasCurrentScene() )
+    {
+        const OS_SceneNodeDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
+        if ( selection.Size() > 0 )
+        {
+            OS_SceneNodeDumbPtr newSelection;
+            RecurseToggleSelection( m_SceneManager.GetCurrentScene()->GetRoot(), selection, newSelection );
+            m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
+        }
+    }
+}
+
+bool MainFrame::SaveAll( tstring& error )
+{
+    return m_DocumentManager.SaveAll( error );
 }
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
@@ -792,42 +831,42 @@ void MainFrame::OnChar(wxKeyEvent& event)
     {
     case KeyCodes::Space:
         m_ViewPanel->GetViewCanvas()->GetViewport().NextCameraMode();
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Up:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Down:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Right:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Left:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Insert:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Delete:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     case KeyCodes::Escape:
         GetEventHandler()->ProcessEvent( wxCommandEvent( wxEVT_COMMAND_MENU_SELECTED, m_ToolbarPanel->m_SelectButton->GetId() ) );
-        event.Skip(false);
+        event.Skip( false );
         break;
 
     default:
@@ -1045,7 +1084,7 @@ void MainFrame::OnClose( wxCommandEvent& event )
 void MainFrame::OnSaveAll( wxCommandEvent& event )
 {
     tstring error;
-    if ( !m_DocumentManager.SaveAll( error ) )
+    if ( !SaveAll( error ) )
     {
         wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
@@ -1070,12 +1109,14 @@ void MainFrame::OpenVaultPanel()
 
     if ( !m_VaultPanel->IsShown() )
     {
-        wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
-        if ( pane.IsOk() )
-        {
-            pane.Show( !pane.IsShown() );
-            m_FrameManager.Update();
-        }
+        m_VaultPanel->Show();
+    }
+
+    wxAuiPaneInfo& pane = m_FrameManager.GetPane( m_VaultPanel );
+    if ( pane.IsOk() )
+    {
+        pane.Show( !pane.IsShown() );
+        m_FrameManager.Update();
     }
 
     if ( !queryString.empty() )
@@ -1461,7 +1502,6 @@ void MainFrame::OnExport(wxCommandEvent& event)
                         {
                             Reflect::ArchivePtr archive = Reflect::GetArchive( file );
                             archive->e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
-                            archive->d_Exception.Set( m_SceneManager.GetCurrentScene(), &Scene::ArchiveException );
                             archive->Put( elements );
                             archive->Close();
                         }
@@ -1576,12 +1616,6 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
                 //End batching
                 m_LayersPanel->EndBatch();
             } 
-            else if ( nodeType->IsClass( Reflect::GetClass< SceneGraph::HierarchyNodeType >() ) )
-            {
-                // Hierarchy node types need to be added to the object grid UI.
-                SceneGraph::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< SceneGraph::HierarchyNodeType >( nodeTypeItr->second );
-                m_TypesPanel->AddType( hierarchyNodeType );
-            }
         }
 
 #pragma TODO( "Change the selection or display changes in the Project view" )
@@ -1689,7 +1723,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolLocator->GetId() )
+    else if ( event.GetId() == m_ToolbarPanel->m_CurveToolButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool( new SceneGraph::CurveCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator() ) );
     }
@@ -1861,7 +1895,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveCreateTool >() )
         {
-            selectedTool = m_ToolbarPanel->m_CurveToolLocator->GetId();
+            selectedTool = m_ToolbarPanel->m_CurveToolButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::CurveEditTool >() )
         {
@@ -1986,47 +2020,9 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
     m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( selection ) );
 }
 
-static void RecurseToggleSelection( SceneGraph::HierarchyNode* node, const OS_SceneNodeDumbPtr& oldSelection, OS_SceneNodeDumbPtr& newSelection )
-{
-    for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
-    {
-        SceneGraph::HierarchyNode* child = *itr;
-        RecurseToggleSelection( child, oldSelection, newSelection );
-    }
-
-    bool found = false;
-    OS_SceneNodeDumbPtr::Iterator selItr = oldSelection.Begin();
-    OS_SceneNodeDumbPtr::Iterator selEnd = oldSelection.End();
-    for ( ; selItr != selEnd && !found; ++selItr )
-    {
-        SceneGraph::HierarchyNode* current = Reflect::SafeCast< SceneGraph::HierarchyNode >( *selItr );
-        if ( current )
-        {
-            if ( current == node )
-            {
-                found = true; // breaks out of the loop
-            }
-        }
-    }
-
-    if ( !found )
-    {
-        newSelection.Append( node );
-    }
-}
-
 void MainFrame::OnInvertSelection(wxCommandEvent& event)
 {
-    if ( m_SceneManager.HasCurrentScene() )
-    {
-        const OS_SceneNodeDumbPtr& selection = m_SceneManager.GetCurrentScene()->GetSelection().GetItems();
-        if ( selection.Size() > 0 )
-        {
-            OS_SceneNodeDumbPtr newSelection;
-            RecurseToggleSelection( m_SceneManager.GetCurrentScene()->GetRoot(), selection, newSelection );
-            m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
-        }
-    }
+    InvertSelection();
 }
 
 void MainFrame::OnParent(wxCommandEvent& event)
@@ -2093,7 +2089,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
         Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
-        data->m_Data.Set( transforms );
+        (*data->m_Data) = transforms;
 
         tstring xml;
         data->ToXML( xml );
@@ -2132,7 +2128,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::SafeCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
-                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
+                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms( *data->m_Data ) );
                 break;
             }
         }

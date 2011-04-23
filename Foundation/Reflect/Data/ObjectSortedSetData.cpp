@@ -1,7 +1,10 @@
 #include "Foundation/Reflect/Data/ObjectSortedSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT( ObjectSortedSetData );
@@ -14,9 +17,9 @@ ObjectSortedSetData::~ObjectSortedSetData()
 {
 }
 
-void ObjectSortedSetData::ConnectData( Helium::HybridPtr< void > data )
+void ObjectSortedSetData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectSortedSetData::GetSize() const
@@ -29,7 +32,7 @@ void ObjectSortedSetData::Clear()
     return m_Data->Clear();
 }
 
-bool ObjectSortedSetData::Set( const Data* src, uint32_t flags )
+bool ObjectSortedSetData::Set( Data* src, uint32_t flags )
 {
     const ObjectSortedSetData* rhs = SafeCast< ObjectSortedSetData >( src );
     if ( !rhs )
@@ -41,7 +44,7 @@ bool ObjectSortedSetData::Set( const Data* src, uint32_t flags )
 
     if ( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -57,7 +60,7 @@ bool ObjectSortedSetData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool ObjectSortedSetData::Equals( const Object* object ) const
+bool ObjectSortedSetData::Equals( Object* object )
 {
     const ObjectSortedSetData* rhs = SafeCast< ObjectSortedSetData >(object);
     if ( !rhs )
@@ -70,7 +73,7 @@ bool ObjectSortedSetData::Equals( const Object* object ) const
         return false;
     }
 
-    const DataType& rhsData = m_Data.Ref();
+    const DataType& rhsData = *m_Data;
 
     DataType::ConstIterator itrLHS = m_Data->Begin();
     DataType::ConstIterator endLHS = m_Data->End();
@@ -98,42 +101,10 @@ bool ObjectSortedSetData::Equals( const Object* object ) const
     return true;
 }
 
-void ObjectSortedSetData::Serialize( Archive& archive ) const
-{
-    DynArray< ObjectPtr > components;
-    components.Reserve( m_Data->GetSize() );
-
-    DataType::ConstIterator itr = m_Data->Begin();
-    DataType::ConstIterator end = m_Data->End();
-    for ( ; itr != end; ++itr )
-    {
-        components.Push( *itr );
-    }
-
-    archive.Serialize( components );
-}
-
-void ObjectSortedSetData::Deserialize( Archive& archive )
-{
-    DynArray< ObjectPtr > components;
-    archive.Deserialize( components );
-
-    // if we are referring to a real field, clear its contents
-    m_Data->Clear();
-    m_Data->Reserve( components.GetSize() );
-
-    DynArray< ObjectPtr >::ConstIterator itr = components.Begin();
-    DynArray< ObjectPtr >::ConstIterator end = components.End();
-    for ( ; itr != end; ++itr )
-    {
-        m_Data->Insert( *itr );
-    }
-}
-
 void ObjectSortedSetData::Accept( Visitor& visitor )
 {
-    DataType::Iterator itr = const_cast< Data::Pointer< DataType >& >( m_Data )->Begin();
-    DataType::Iterator end = const_cast< Data::Pointer< DataType >& >( m_Data )->End();
+    DataType::Iterator itr = const_cast< DataPointer< DataType >& >( m_Data )->Begin();
+    DataType::Iterator end = const_cast< DataPointer< DataType >& >( m_Data )->End();
     for ( ; itr != end; ++itr )
     {
         // SortedSet keys are immutable, so we need to const_cast here to get VisitPointer()'s non-const reference later.
@@ -149,5 +120,57 @@ void ObjectSortedSetData::Accept( Visitor& visitor )
         }
 
         object->Accept( visitor );
+    }
+}
+
+void ObjectSortedSetData::Serialize( ArchiveBinary& archive )
+{
+    Serialize<ArchiveBinary>( archive );
+}
+void ObjectSortedSetData::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+void ObjectSortedSetData::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
+void ObjectSortedSetData::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< class ArchiveT >
+void ObjectSortedSetData::Serialize( ArchiveT& archive )
+{
+    DynArray< ObjectPtr > components;
+    components.Reserve( m_Data->GetSize() );
+
+    DataType::ConstIterator itr = m_Data->Begin();
+    DataType::ConstIterator end = m_Data->End();
+    for ( ; itr != end; ++itr )
+    {
+        components.Push( *itr );
+    }
+
+    archive.SerializeArray( components );
+}
+
+template< class ArchiveT >
+void ObjectSortedSetData::Deserialize( ArchiveT& archive )
+{
+    DynArray< ObjectPtr > components;
+    archive.DeserializeArray( components );
+
+    // if we are referring to a real field, clear its contents
+    m_Data->Clear();
+    m_Data->Reserve( components.GetSize() );
+
+    DynArray< ObjectPtr >::ConstIterator itr = components.Begin();
+    DynArray< ObjectPtr >::ConstIterator end = components.End();
+    for ( ; itr != end; ++itr )
+    {
+        m_Data->Insert( *itr );
     }
 }

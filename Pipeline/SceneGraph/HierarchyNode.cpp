@@ -20,16 +20,17 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNode );
 
-void HierarchyNode::AcceptCompositeVisitor( Reflect::Composite& comp )
+void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 
-    {
-        Reflect::Field* field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
-        field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
-    }
+    Reflect::Field* field = NULL;
 
-    comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
+    field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+
+    field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
 }
 
 void HierarchyNode::InitializeType()

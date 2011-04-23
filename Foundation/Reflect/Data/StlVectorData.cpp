@@ -1,8 +1,8 @@
 #include "Foundation/Reflect/Data/StlVectorData.h"
 
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -78,9 +78,9 @@ SimpleStlVectorData<T>::~SimpleStlVectorData()
 }
 
 template < class T >
-void SimpleStlVectorData<T>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlVectorData<T>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class T >
@@ -114,19 +114,13 @@ DataPtr SimpleStlVectorData<T>::GetItem(size_t at)
 }
 
 template < class T >
-ConstDataPtr SimpleStlVectorData<T>::GetItem(size_t at) const
-{
-    return Data::Bind(m_Data->at(at), m_Instance, m_Field);
-}
-
-template < class T >
-void SimpleStlVectorData<T>::SetItem(size_t at, const Data* value)
+void SimpleStlVectorData<T>::SetItem(size_t at, Data* value)
 {
     Data::GetValue(value, m_Data->at(at));
 }
 
 template < class T >
-void SimpleStlVectorData<T>::Insert( size_t at, const Data* value )
+void SimpleStlVectorData<T>::Insert( size_t at, Data* value )
 {
     T temp;
     Data::GetValue( value, temp );
@@ -155,9 +149,9 @@ void SimpleStlVectorData<T>::MoveUp( std::set< size_t >& selectedIndices )
             continue;
         }
         
-        T temp = m_Data.Ref()[ (*itr) - 1 ];
-        m_Data.Ref()[ (*itr) - 1 ] = m_Data.Ref()[ (*itr) ];
-        m_Data.Ref()[ (*itr) ] = temp;
+        T temp = m_Data->at( (*itr) - 1 );
+        m_Data->at( (*itr) - 1 ) = m_Data->at( (*itr) );
+        m_Data->at( (*itr) ) = temp;
 
         newSelectedIndices.insert( *itr - 1 );
     }
@@ -181,9 +175,9 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
             continue;
         }
         
-        T temp = m_Data.Ref()[ (*itr) + 1 ];
-        m_Data.Ref()[ (*itr) + 1 ] = m_Data.Ref()[ (*itr) ];
-        m_Data.Ref()[ (*itr) ] = temp;
+        T temp = m_Data->at( (*itr) + 1 );
+        m_Data->at( (*itr) + 1 ) = m_Data->at( (*itr) );
+        m_Data->at( (*itr) ) = temp;
 
         newSelectedIndices.insert( *itr + 1 );
     }
@@ -192,7 +186,7 @@ void SimpleStlVectorData<T>::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
+bool SimpleStlVectorData<T>::Set(Data* src, uint32_t flags)
 {
     const SimpleStlVectorData<T>* rhs = SafeCast<SimpleStlVectorData<T>>(src);
     if (!rhs)
@@ -200,13 +194,13 @@ bool SimpleStlVectorData<T>::Set(const Data* src, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
 template < class T >
-bool SimpleStlVectorData<T>::Equals(const Object* object) const
+bool SimpleStlVectorData<T>::Equals(Object* object)
 {
     const SimpleStlVectorData<T>* rhs = SafeCast< SimpleStlVectorData<T> >(object);
     if (!rhs)
@@ -214,7 +208,7 @@ bool SimpleStlVectorData<T>::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 //
@@ -278,82 +272,64 @@ void ReadVector( std::vector< bool >& v, Reflect::CharStream& stream )
 }
 
 template < class T >
-void SimpleStlVectorData<T>::Serialize(Archive& archive) const
+void SimpleStlVectorData<T>::Serialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetIndent().Push();
-
-            // foreach datum
-            for (size_t i=0; i<m_Data->size(); i++)
-            {
-                // indent
-                xml.GetIndent().Get(xml.GetStream());
-
-                // write
-                xml.GetStream() << m_Data.Get()[i];
-
-                // newline
-                xml.GetStream() << "\n";
-            }
-
-            xml.GetIndent().Pop();
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-            WriteVector( m_Data.Ref(), binary.GetStream() );
-            break;
-        }
-    }
+    WriteVector( *m_Data, archive.GetStream() );
 }
 
 template < class T >
-void SimpleStlVectorData<T>::Deserialize(Archive& archive)
+void SimpleStlVectorData<T>::Deserialize(ArchiveBinary& archive)
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+    ReadVector( *m_Data, archive.GetStream() );
+}
+
+template < class T >
+void SimpleStlVectorData<T>::Serialize(ArchiveXML& archive)
+{
+    archive.GetIndent().Push();
+
+    // foreach datum
+    for (size_t i=0; i<m_Data->size(); i++)
+    {
+        // indent
+        archive.GetIndent().Get(archive.GetStream());
+
+        // write
+        archive.GetStream() << m_Data->at( i );
+
+        // newline
+        archive.GetStream() << "\n";
+    }
+
+    archive.GetIndent().Pop();
+}
+
+template < class T >
+void SimpleStlVectorData<T>::Deserialize(ArchiveXML& archive)
 {
     // if we are referring to a real field, clear its contents
     m_Data->clear();
 
-    switch (archive.GetType())
+    T value;
+    archive.GetStream().SkipWhitespace(); 
+
+    while (!archive.GetStream().Done())
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+        // read data
+        archive.GetStream() >> value;
 
-            T value;
-            xml.GetStream().SkipWhitespace(); 
+        // copy onto vector
+        m_Data->push_back(value);
 
-            while (!xml.GetStream().Done())
-            {
-                // read data
-                xml.GetStream() >> value;
-
-                // copy onto vector
-                m_Data->push_back(value);
-
-                // read to next non-whitespace char
-                xml.GetStream().SkipWhitespace(); 
-            }
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-            ReadVector( m_Data.Ref(), binary.GetStream() );
-            break;
-        }
+        // read to next non-whitespace char
+        archive.GetStream().SkipWhitespace(); 
     }
 }
 
 template < class T >
-tostream& SimpleStlVectorData<T>::operator>> (tostream& stream) const
+tostream& SimpleStlVectorData<T>::operator>>(tostream& stream) const
 {
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
@@ -371,7 +347,7 @@ tostream& SimpleStlVectorData<T>::operator>> (tostream& stream) const
 }
 
 template < class T >
-tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
+tistream& SimpleStlVectorData<T>::operator<<(tistream& stream)
 {
     m_Data->clear();
 
@@ -380,7 +356,7 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read( const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<T, T>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -389,119 +365,95 @@ tistream& SimpleStlVectorData<T>::operator<< (tistream& stream)
 // Specializations
 //
 
-// keep reading the string until we run out of buffer
 template <>
-void StlStringStlVectorData::Serialize(Archive& archive) const
+void StlStringStlVectorData::Serialize(ArchiveBinary& archive)
 {
-    switch (archive.GetType())
+    uint32_t count = (uint32_t)m_Data->size();
+    archive.GetStream().Write( &count ); 
+
+    for (size_t i=0; i<m_Data->size(); i++)
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetIndent().Push();
-            xml.GetIndent().Get(xml.GetStream());
-
-            // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
-            xml.GetStream() << TXT("<![CDATA[\n");
-
-            for (size_t i=0; i<m_Data->size(); i++)
-            {
-                xml.GetIndent().Get(xml.GetStream());
-
-                // output the escape-code free character sequence between double qutoes
-                xml.GetStream() << TXT('\"') << m_Data.Get()[i].c_str() << TXT('\"') << s_ContainerItemDelimiter;
-            }
-
-            // end our CDATA escape section
-            xml.GetIndent().Get(xml.GetStream());
-            xml.GetStream() << TXT("]]>\n");
-
-            xml.GetIndent().Pop();
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t count = (uint32_t)m_Data->size();
-            binary.GetStream().Write( &count ); 
-
-            for (size_t i=0; i<m_Data->size(); i++)
-            {
-                binary.GetStream().WriteString( m_Data.Get()[i] ); 
-            }
-
-            break;
-        }
+        archive.GetStream().WriteString( m_Data->at( i ) ); 
     }
 }
 
-// must escape strings to account for special "evil" characters... like ", &, `, etc...
 template <>
-void StlStringStlVectorData::Deserialize(Archive& archive)
+void StlStringStlVectorData::Deserialize(ArchiveBinary& archive)
 {
     m_Data->clear();
 
-    switch (archive.GetType())
+    uint32_t count = (uint32_t)m_Data->size();
+    archive.GetStream().Read( &count ); 
+
+    m_Data->resize(count);
+    for ( uint32_t i=0; i<count; i++ )
     {
-    case ArchiveTypes::XML:
+        archive.GetStream().ReadString( m_Data->at( i ) ); 
+    }
+}
+
+template <>
+void StlStringStlVectorData::Serialize(ArchiveXML& archive)
+{
+    archive.GetIndent().Push();
+    archive.GetIndent().Get(archive.GetStream());
+
+    // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
+    archive.GetStream() << TXT("<![CDATA[\n");
+
+    for (size_t i=0; i<m_Data->size(); i++)
+    {
+        archive.GetIndent().Get(archive.GetStream());
+
+        // output the escape-code free character sequence between double qutoes
+        archive.GetStream() << TXT('\"') << m_Data->at( i ) << TXT('\"') << s_ContainerItemDelimiter;
+    }
+
+    // end our CDATA escape section
+    archive.GetIndent().Get(archive.GetStream());
+    archive.GetStream() << TXT("]]>\n");
+
+    archive.GetIndent().Pop();
+}
+
+template <>
+void StlStringStlVectorData::Deserialize(ArchiveXML& archive)
+{
+    m_Data->clear();
+
+    archive.GetStream().SkipWhitespace(); 
+    tstring value;
+
+    while (!archive.GetStream().Done())
+    {
+        std::getline( archive.GetStream().GetInternal(), value ); 
+
+        size_t start = value.find_first_of('\"');
+        size_t end = value.find_last_of('\"');
+
+        // if we found a pair of quotes
+        if (start != std::string::npos && end != std::string::npos && start != end)
         {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream().SkipWhitespace(); 
-            tstring value;
-
-            while (!xml.GetStream().Done())
+            // if all we have are open/close quotes, push a blank string
+            if (start == end-1)
             {
-                std::getline( xml.GetStream().GetInternal(), value ); 
-
-                size_t start = value.find_first_of('\"');
-                size_t end = value.find_last_of('\"');
-
-                // if we found a pair of quotes
-                if (start != std::string::npos && end != std::string::npos && start != end)
-                {
-                    // if all we have are open/close quotes, push a blank string
-                    if (start == end-1)
-                    {
-                        m_Data->push_back(tstring ());
-                    }
-                    // else we have some non-null string data
-                    else
-                    {
-                        m_Data->push_back(value.substr(start + 1, end - start - 1));
-                    }
-                }
-                else
-                {
-                    start = value.find_first_not_of( TXT( " \t\n" ) );
-
-                    if (start != std::string::npos)
-                        m_Data->push_back(value.substr(start));
-                }
-
-                xml.GetStream().SkipWhitespace(); 
+                m_Data->push_back(tstring ());
             }
-            break;
+            // else we have some non-null string data
+            else
+            {
+                m_Data->push_back(value.substr(start + 1, end - start - 1));
+            }
+        }
+        else
+        {
+            start = value.find_first_not_of( TXT( " \t\n" ) );
+
+            if (start != std::string::npos)
+                m_Data->push_back(value.substr(start));
         }
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t count = (uint32_t)m_Data->size();
-            binary.GetStream().Read( &count ); 
-
-            m_Data->resize(count);
-            for ( uint32_t i=0; i<count; i++ )
-            {
-                binary.GetStream().ReadString( m_Data.Ref()[i] ); 
-            }
-
-            break;
-        }
+        archive.GetStream().SkipWhitespace(); 
     }
 }
 
@@ -513,7 +465,7 @@ void StlStringStlVectorData::Deserialize(Archive& archive)
 //
 
 template <>
-tistream& SimpleStlVectorData<uint8_t>::operator<< (tistream& stream)
+tistream& SimpleStlVectorData<uint8_t>::operator<<(tistream& stream)
 {
     m_Data->clear();
 
@@ -522,13 +474,13 @@ tistream& SimpleStlVectorData<uint8_t>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<uint8_t, uint16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<uint8_t, uint16_t>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
 
 template <>
-tistream& SimpleStlVectorData<int8_t>::operator<< (tistream& stream)
+tistream& SimpleStlVectorData<int8_t>::operator<<(tistream& stream)
 {
     m_Data->clear();
 
@@ -537,10 +489,11 @@ tistream& SimpleStlVectorData<int8_t>::operator<< (tistream& stream)
     str.resize( (size_t) size );
     stream.read(const_cast< tchar_t* >( str.c_str() ), size );
 
-    Tokenize<int8_t, int16_t>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize<int8_t, int16_t>( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
+
 #endif // UNICODE
 
 template SimpleStlVectorData<tstring>;

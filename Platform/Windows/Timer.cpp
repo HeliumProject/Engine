@@ -10,6 +10,7 @@
 
 using namespace Helium;
 
+static bool s_IsInitialized = false;
 uint64_t TimerPlatformData::sm_ticksPerSecond = 0;
 uint64_t TimerPlatformData::sm_startTickCount = 0;
 float64_t TimerPlatformData::sm_secondsPerTick = 0.0;
@@ -26,6 +27,12 @@ void Timer::StaticInitialize()
 
     HELIUM_VERIFY( QueryPerformanceCounter( &perfQuery ) );
     sm_startTickCount = perfQuery.QuadPart;
+    s_IsInitialized = true;
+}
+
+bool Timer::IsInitialized()
+{
+    return s_IsInitialized;
 }
 
 /// Get the current application timer tick count.

@@ -1,6 +1,8 @@
 #include "Foundation/Reflect/Data/StlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -203,9 +205,9 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Clear()
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
@@ -228,26 +230,13 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ValueTyp
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
+        items[index].first = Data::Bind( const_cast< KeyT& >( itr->first ), m_Instance, m_Field );
+        items[index].second = Data::Bind( const_cast< ValueT& >( itr->second ), m_Instance, m_Field );
     }
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItems(V_ConstValueType& items) const
-{
-    items.resize(m_Data->size());
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( size_t index=0; itr != end; ++itr, ++index )
-    {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = static_cast< const ConstDataPtr& >( Data::Bind( itr->second, m_Instance, m_Field ) );
-    }
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key)
+DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -255,29 +244,14 @@ DataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Da
     DataType::const_iterator found = m_Data->find( keyValue );
     if ( found != m_Data->end() )
     {
-        return Data::Bind( found->second, m_Instance, m_Field );
+        return Data::Bind( const_cast< ValueT& >( found->second ), m_Instance, m_Field );
     }
 
     return NULL;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-ConstDataPtr SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::GetItem(const Data* key) const
-{
-    KeyT keyValue;
-    Data::GetValue(key, keyValue);
-
-    DataType::const_iterator found = m_Data->find( keyValue );
-    if ( found != m_Data->end() )
-    {
-        return Data::Bind( found->second, m_Instance, m_Field );
-    }
-
-    return NULL;
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data* key, const Data* value)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(Data* key, Data* value)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -285,20 +259,20 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::SetItem(const Data*
     ValueT valueValue;
     Data::GetValue(value, valueValue);
 
-    (m_Data.Ref())[keyValue] = valueValue;
+    (*m_Data)[keyValue] = valueValue;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(const Data* key)
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::RemoveItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
 
-    (m_Data.Ref()).erase(keyValue);
+    m_Data->erase(keyValue);
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src, uint32_t flags)
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(Data* src, uint32_t flags)
 {
     const StlMapDataT* rhs = SafeCast<StlMapDataT>(src);
     if (!rhs)
@@ -306,13 +280,13 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Set(const Data* src
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object* object) const
+bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(Object* object)
 {
     const StlMapDataT* rhs = SafeCast<StlMapDataT>(object);
     if (!rhs)
@@ -320,11 +294,68 @@ bool SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Equals(const Object
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& archive) const
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveBinary& archive )
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>>(tostream& stream) const
+{
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
+    {
+        if ( itr != m_Data->begin() )
+        {
+            stream << s_ContainerItemDelimiter;
+        }
+
+        stream << itr->first << s_ContainerItemDelimiter << itr->second;
+    }
+
+    return stream;
+}
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
+tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<<(tistream& stream)
+{
+    m_Data->clear();
+
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size);
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+
+    Tokenize< KeyT, ValueT >( str, *m_Data, s_ContainerItemDelimiter );
+
+    return stream;
+}  
+
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT > template< class ArchiveT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(ArchiveT& archive)
 {
     int i = 0;
     std::vector< ObjectPtr > components;
@@ -354,7 +385,7 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
         }
     }
 
-    archive.Serialize(components);
+    archive.SerializeArray( components );
 
     std::vector< ObjectPtr >::iterator itr = components.begin();
     std::vector< ObjectPtr >::iterator end = components.end();
@@ -367,11 +398,11 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Serialize(Archive& 
     }
 }
 
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive& archive)
+template < class KeyT, class KeyClassT, class ValueT, class ValueClassT > template< class ArchiveT >
+void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
-    archive.Deserialize(components, ArchiveFlags::Sparse);
+    archive.DeserializeArray(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
     {
@@ -390,43 +421,10 @@ void SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::Deserialize(Archive
 
         if (key && value)
         {
-            m_Data.Ref()[ key->m_Data.Get() ] = value->m_Data.Get();
+            (*m_Data)[ *key->m_Data ] = *value->m_Data;
         }
     }
 }
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-tostream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator>> (tostream& stream) const
-{
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( ; itr != end; ++itr )
-    {
-        if ( itr != m_Data->begin() )
-        {
-            stream << s_ContainerItemDelimiter;
-        }
-
-        stream << itr->first << s_ContainerItemDelimiter << itr->second;
-    }
-
-    return stream;
-}
-
-template < class KeyT, class KeyClassT, class ValueT, class ValueClassT >
-tistream& SimpleStlMapData<KeyT, KeyClassT, ValueT, ValueClassT>::operator<< (tistream& stream)
-{
-    m_Data->clear();
-
-    tstring str;
-    std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( (size_t) size);
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
-
-    Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
-
-    return stream;
-}  
 
 template SimpleStlMapData<tstring, StlStringData, tstring, StlStringData>;
 template SimpleStlMapData<tstring, StlStringData, bool, BoolData>;

@@ -39,7 +39,7 @@ namespace Helium
         public:
             REFLECT_DECLARE_OBJECT( AnimationClip, AssetClass );
 
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
         public:
             AnimationClip()

@@ -30,13 +30,15 @@ namespace Helium
 
             void PopulateOpenProjectListItems();
             void OnRecentProjectButtonClick( wxCommandEvent& event );
-            virtual void OnOpenProjectButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;
-            virtual void OnNewProjectButtonClick( wxCommandEvent& event ) HELIUM_OVERRIDE;
+            virtual void OnOpenProjectButtonClick( wxCommandEvent& event );
+            virtual void OnNewProjectButtonClick( wxCommandEvent& event );
 
             // UI event handlers
             virtual void OnContextMenu( wxContextMenuEvent& event );
             
             virtual void OnActivateItem( wxDataViewEvent& event );
+
+            virtual void OnUpdateUI( wxUpdateUIEvent& event );
 
             void ProjectPanel::OnAddItems( wxCommandEvent& event );
             void ProjectPanel::OnDeleteItems( wxCommandEvent& event );
@@ -62,7 +64,7 @@ namespace Helium
 
             OrderedSet< Path* > m_Selected;
 
-            typedef std::map< wxWindowID, tstring > M_ProjectMRULookup;
+            typedef std::map< wxWindowID, Path > M_ProjectMRULookup;
             M_ProjectMRULookup m_ProjectMRULookup;
             
             FileDropTarget* m_DropTarget;

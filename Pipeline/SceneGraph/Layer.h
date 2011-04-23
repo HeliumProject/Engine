@@ -12,7 +12,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Layer, SceneGraph::SceneNode );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

@@ -429,25 +429,31 @@ std::set< uint32_t > Grid::GetSelectedRows() const
   // NOTE: m_Grid->GetSelectedRows() only reports rows that are selected by clicking on the
   // row header (or calling SelectRows directly).  This does us no good since we don't have
   // row headers.  We have to calculate the row selection manually.
-  //wxArrayInt selection = m_Grid->GetSelectedRows();
+  wxArrayInt selectionArray = m_Grid->GetSelectedRows();
 
   std::set< uint32_t > selection;
-  wxGridCellCoordsArray topLeftArray = m_Grid->GetSelectionBlockTopLeft();
-  wxGridCellCoordsArray bottomRightArray = m_Grid->GetSelectionBlockBottomRight();
-  HELIUM_ASSERT( topLeftArray.GetCount() == bottomRightArray.GetCount() );
 
-  uint32_t currentTop = 0;
-  uint32_t currentBottom = 0;
-  const size_t numCells = topLeftArray.GetCount();
-  for ( ; currentTop < numCells; ++currentTop, ++currentBottom )
+  for ( size_t i = 0; i < selectionArray.Count(); ++i )
   {
-    uint32_t firstRow = topLeftArray[currentTop].GetRow();
-    uint32_t lastRow = bottomRightArray[currentBottom].GetRow();
-    for ( uint32_t currentRow = firstRow; currentRow <= lastRow; ++currentRow )
-    {
-      selection.insert( currentRow );
-    }
+      selection.insert( selectionArray[ i ] );
   }
+
+  //wxGridCellCoordsArray topLeftArray = m_Grid->GetSelectionBlockTopLeft();
+  //wxGridCellCoordsArray bottomRightArray = m_Grid->GetSelectionBlockBottomRight();
+  //HELIUM_ASSERT( topLeftArray.GetCount() == bottomRightArray.GetCount() );
+
+  //uint32_t currentTop = 0;
+  //uint32_t currentBottom = 0;
+  //const size_t numCells = topLeftArray.GetCount();
+  //for ( ; currentTop < numCells; ++currentTop, ++currentBottom )
+  //{
+  //  uint32_t firstRow = topLeftArray[currentTop].GetRow();
+  //  uint32_t lastRow = bottomRightArray[currentBottom].GetRow();
+  //  for ( uint32_t currentRow = firstRow; currentRow <= lastRow; ++currentRow )
+  //  {
+  //    selection.insert( currentRow );
+  //  }
+  //}
 
   return selection;
 }

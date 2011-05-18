@@ -91,7 +91,9 @@ Helium::Reflect::DataPointer<T>::operator T*()
 Helium::Reflect::VoidDataPointer::VoidDataPointer()
     : m_Target( NULL )
     , m_Owned( false )
+#ifdef REFLECT_CHECK_MEMORY
     , m_Size( 0 )
+#endif
 {
 
 }
@@ -106,7 +108,9 @@ void Helium::Reflect::VoidDataPointer::Allocate( uint32_t size ) const
     REFLECT_CHECK_MEMORY_ASSERT( m_Size == 0 || m_Size == size );
     m_Target = new uint8_t[ size ];
     m_Owned = true;
+#ifdef REFLECT_CHECK_MEMORY
     m_Size = size;
+#endif
 }
 
 void Helium::Reflect::VoidDataPointer::Deallocate() const
@@ -123,7 +127,9 @@ void Helium::Reflect::VoidDataPointer::Connect(void* pointer, uint32_t size)
     Deallocate();
     m_Target = pointer;
     m_Owned = false;
+#ifdef REFLECT_CHECK_MEMORY
     m_Size = size;
+#endif
 }
 
 void Helium::Reflect::VoidDataPointer::Disconnect()

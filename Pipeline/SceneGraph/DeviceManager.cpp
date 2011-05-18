@@ -252,8 +252,7 @@ bool DeviceManager::TestDeviceReady()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::SaveTGA(const tchar_t* fname)
 {
-#pragma TODO( "Lunar::Renderer viewport integration - Reimplement DeviceManager::SaveTGA() support." )
-#if 0
+#ifdef VIEWPORT_REFACTOR
     IDirect3DSurface9* surface = GetBufferData();
     if (surface==0)
         return 0;

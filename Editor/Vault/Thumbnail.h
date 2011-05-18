@@ -4,7 +4,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {
@@ -13,8 +13,8 @@ namespace Helium
         class Thumbnail : public Helium::RefCountBase< Thumbnail >
         {
         public:
-            Thumbnail( Render::DeviceManager* d3dManager );
-            Thumbnail( Render::DeviceManager* d3dManager, IDirect3DTexture9* texture );
+            Thumbnail( DeviceManager* d3dManager );
+            Thumbnail( DeviceManager* d3dManager, IDirect3DTexture9* texture );
             virtual ~Thumbnail();
 
             bool FromIcon( HICON icon );
@@ -26,7 +26,7 @@ namespace Helium
             }
 
         private:
-            Render::DeviceManager* m_DeviceManager;
+            DeviceManager* m_DeviceManager;
             IDirect3DTexture9* m_Texture;
             bool m_IsFromIcon;
         };

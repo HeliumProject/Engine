@@ -11,7 +11,7 @@
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"
 
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {
@@ -228,8 +228,8 @@ namespace Helium
 
             void OnVaultPanelClosing( wxCloseEvent& args );
 
-            void OnReleaseResources( const Render::DeviceStateArgs& args );
-            void OnAllocateResources( const Render::DeviceStateArgs& args );
+            void OnReleaseResources( const DeviceStateArgs& args );
+            void OnAllocateResources( const DeviceStateArgs& args );
 
         private:
             static const float s_NearClipDistance;
@@ -244,7 +244,7 @@ namespace Helium
             static const float s_MinThumbnailSize;
             static const float s_MaxThumbnailSize;
 
-            Render::DeviceManager m_DeviceManager;
+            DeviceManager m_DeviceManager;
             float m_LabelFontHeight;
             ID3DXFont* m_LabelFont;
             ID3DXFont* m_TypeFont;

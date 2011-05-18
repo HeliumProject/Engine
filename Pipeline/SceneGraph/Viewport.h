@@ -15,7 +15,7 @@
 #include "Pipeline/SceneGraph/Camera.h"
 #include "Pipeline/SceneGraph/Resource.h"
 #include "Pipeline/SceneGraph/ViewportSettings.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {
@@ -455,12 +455,12 @@ namespace Helium
 
         private:
             HWND                    m_Window;
-            Point             m_Size;
+            Point                   m_Size;
             bool                    m_Focused;
 
             SettingsManager*        m_SettingsManager;
 
-            Render::DeviceManager   m_DeviceManager;
+            DeviceManager           m_DeviceManager;
             RenderVisitor           m_RenderVisitor;
 
             Tool*                   m_Tool;
@@ -471,8 +471,8 @@ namespace Helium
             GeometryMode            m_GeometryMode;
 
             DragMode                m_DragMode;
-            Point             m_Start;
-            Point             m_End;
+            Point                   m_Start;
+            Point                   m_End;
 
             bool                    m_Highlighting;
             bool                    m_AxesVisible;

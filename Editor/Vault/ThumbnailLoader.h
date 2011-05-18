@@ -6,7 +6,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 
@@ -21,7 +21,7 @@ namespace Helium
         class ThumbnailLoader
         {
         public:
-            ThumbnailLoader( Render::DeviceManager* d3dManager );
+            ThumbnailLoader( DeviceManager* d3dManager );
             ~ThumbnailLoader();
 
             void Enqueue( const std::set< Helium::Path >& files );
@@ -73,7 +73,7 @@ namespace Helium
             Helium::Locker< Helium::OrderedSet< Helium::Path > >    m_FileQueue; // The queue of files to load (mutex locked)
             Helium::Semaphore                                       m_Signal; // Signalling semaphore to wake up load thread
             bool                                                    m_Quit;
-            Render::DeviceManager*                            m_DeviceManager;
+            DeviceManager*                            m_DeviceManager;
         };
     }
 }

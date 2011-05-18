@@ -2,7 +2,7 @@
 
 #include "Platform/Mutex.h"
 
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 #include "Editor/Vault/ThumbnailLoader.h"
@@ -27,7 +27,7 @@ namespace Helium
         class ThumbnailManager
         {
         public:
-            ThumbnailManager( wxWindow* window, Render::DeviceManager* d3dmanager );
+            ThumbnailManager( wxWindow* window, DeviceManager* d3dmanager );
             virtual ~ThumbnailManager();
 
             void Reset();

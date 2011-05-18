@@ -14,7 +14,7 @@
 #include "Pipeline/SceneGraph/Resource.h"
 #include "Pipeline/SceneGraph/Viewport.h"
 #include "Pipeline/SceneGraph/ViewportSettings.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {

@@ -1,6 +1,0 @@
-[submodule "Integrations/FBX"]
-	path = Integrations/FBX
-	url = git@github.com:WhiteMoonDreams/FBX.git
-[submodule "Integrations/Granny"]
-	path = Integrations/Granny
-	url = git@github.com:WhiteMoonDreams/Granny.git

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Render;

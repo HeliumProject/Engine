@@ -82,6 +82,7 @@ void Statistics::Delete()
 
 void Statistics::Draw( DrawArgs* args )
 {
+#ifdef VIEWPORT_REFACTOR
   int result = 0, space = 15;
   DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
 
@@ -157,4 +158,5 @@ void Statistics::Draw( DrawArgs* args )
   rect.top += space;
   sprintf(buf, "  Nodes Evaluated: %d", m_NodeCountResult );
   result = m_Font->DrawTextA(NULL, buf, -1, &rect, DT_NOCLIP, color);
+#endif
 }

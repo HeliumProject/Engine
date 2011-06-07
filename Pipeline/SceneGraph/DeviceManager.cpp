@@ -1,5 +1,5 @@
 /*#include "Precompile.h"*/
-#include "Renderer.h"
+#include "DeviceManager.h"
 
 #include "Foundation/Log.h"
 #include "Rendering/RRenderContext.h"
@@ -7,7 +7,6 @@
 #include "Pipeline/Image/Formats/TGA.h"
 
 using namespace Helium;
-using namespace Helium::Render;
 
 bool            DeviceManager::m_unique = false;
 uint32_t        DeviceManager::m_master_count = 0;

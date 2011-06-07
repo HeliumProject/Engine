@@ -70,6 +70,7 @@ Viewport::~Viewport()
 
 void Viewport::Reset()
 {
+#ifdef VIEWPORT_REFACTOR
     if ( !GetDevice() )
     {
         return;
@@ -108,6 +109,8 @@ void Viewport::Reset()
 
 #ifdef _DEBUG
     m_StatisticsVisible = true;
+#endif
+
 #endif
 }
 

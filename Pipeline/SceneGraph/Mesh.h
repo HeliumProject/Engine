@@ -77,28 +77,7 @@ namespace Helium
             virtual void Delete() HELIUM_OVERRIDE;
             virtual void Populate( PopulateArgs* args );
             virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
-
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-
-            static void SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object );
-            static void SetupFlippedObject( IDirect3DDevice9* device, const SceneNode* object );
-            static void ResetFlippedObject( IDirect3DDevice9* device, const SceneNode* object );
-
-            static void SetupNormalWire( IDirect3DDevice9* device );
-            static void DrawNormalWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-            static void DrawUnselectableWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
-            static void SetupUnselectableWire( IDirect3DDevice9* device );
-            static void SetupSelectedWire( IDirect3DDevice9* device );
-            static void SetupHighlightedWire( IDirect3DDevice9* device );
-            static void SetupLiveWire( IDirect3DDevice9* device );
-
-            static void SetupAlpha( IDirect3DDevice9* device );
-            static void ResetAlpha( IDirect3DDevice9* device );
-            static void SetupNormal( IDirect3DDevice9* device );
-            static void ResetNormal( IDirect3DDevice9* device );
-            static void DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
             uint32_t GetVertexCount() const

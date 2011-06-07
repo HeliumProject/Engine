@@ -613,6 +613,7 @@ void CreateTool::Draw( DrawArgs* args )
     ringTransform.t.y = m_InstanceTranslation.y;
     ringTransform.t.z = m_InstanceTranslation.z;
 
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&ringTransform));
 
     SceneGraph::PrimitiveCircle ring (m_View->GetResources());
@@ -620,6 +621,7 @@ void CreateTool::Draw( DrawArgs* args )
     ring.m_Radius = s_PaintRadius;
     ring.Update();
     ring.Draw(args);
+#endif
 }
 
 bool CreateTool::AllowSelection()

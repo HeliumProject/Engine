@@ -72,11 +72,7 @@ namespace Helium
 
         public:
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
-
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-            static void DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-            static void DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;

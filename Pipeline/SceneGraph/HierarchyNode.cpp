@@ -815,6 +815,7 @@ void HierarchyNode::Render( RenderVisitor* render )
 {
     SceneGraph::Transform* transform = GetTransform();
 
+#ifdef VIEWPORT_REFACTOR
     if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
     {
         V_Vector3 vertices;
@@ -911,6 +912,7 @@ void HierarchyNode::Render( RenderVisitor* render )
 
         m_Owner->GetViewport()->GetResources()->ResetState();
     }
+#endif
 }
 
 bool HierarchyNode::Pick(PickVisitor* pick)

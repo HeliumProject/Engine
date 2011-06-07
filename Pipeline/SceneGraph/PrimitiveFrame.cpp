@@ -80,6 +80,7 @@ void PrimitiveFrame::Draw(
     const bool* solid,
     const bool* transparent ) const
 {
+#ifdef VIEWPORT_REFACTOR
     D3DCULL cull;
     m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
     m_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -99,6 +100,7 @@ void PrimitiveFrame::Draw(
     m_Device->SetRenderState(D3DRS_CULLMODE, cull);
 
     args->m_LineCount += 4;
+#endif
 }
 
 bool PrimitiveFrame::Pick( PickVisitor* pick, const bool* solid ) const

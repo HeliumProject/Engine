@@ -792,6 +792,7 @@ project "TestApp"  -- DEPRECATED
 			"dxguid",
 			"d3dcompiler",
 			"wininet",
+			"ws2_32",
 			"dbghelp",
 		}
 	configuration { "windows", "x32" }
@@ -909,6 +910,7 @@ project "ExampleMain"
 			"dxguid",
 			"d3dcompiler",
 			"wininet",
+			"ws2_32",
 			"dbghelp",
 		}
 	configuration { "windows", "x32" }

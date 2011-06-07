@@ -9,6 +9,8 @@ typedef int socklen_t;
 
 namespace Helium
 {
+#pragma warning( push )
+#pragma warning( disable : 4201 ) // warning C4201: nonstandard extension used : nameless struct/union
     struct PLATFORM_API Socket
     {
         SOCKET m_Handle;
@@ -28,6 +30,9 @@ namespace Helium
             };
             void* hEvent;
         } m_Overlapped;
+#pragma warning( pop )
+
+        int m_Protocol;
 
         Socket(int);
         ~Socket();

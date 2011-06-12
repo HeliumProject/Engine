@@ -159,8 +159,8 @@ bool Helium::AcceptSocket(Socket& socket, Socket& server_socket, sockaddr_in* cl
 
     int lengthname = sizeof(sockaddr_in);
 
-	socket.m_Protocol = Protocols::Tcp;
-    socket.m_Handle = ::accept( server_socket, (struct sockaddr *)client_info, &lengthname);
+		socket.m_Protocol = Helium::SocketProtocols::Tcp;
+		socket.m_Handle = ::accept( server_socket, (struct sockaddr *)client_info, &lengthname);
 
     int error = WSAGetLastError();
 

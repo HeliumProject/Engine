@@ -1,7 +1,6 @@
 /*#include "Precompile.h"*/
 #include "InstancePanel.h"
 #include "Instance.h"
-#include "Volume.h"
 
 #include "Foundation/Inspect/Controls/ChoiceControl.h"
 #include "Foundation/Inspect/Controls/ButtonControl.h"
@@ -53,30 +52,6 @@ InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SceneNodeD
         m_TransparentOverride->e_ControlChanged.Raise( m_TransparentOverride );
     }
     m_Generator->Pop();
-
-    bool allVolumes = true;
-
-    OS_SceneNodeDumbPtr::Iterator itr = m_Selection.Begin();
-    OS_SceneNodeDumbPtr::Iterator end = m_Selection.End();
-    for ( ; itr != end; ++itr )
-    {
-        SceneGraph::VolumePtr volume = Reflect::SafeCast< Volume >( *itr );
-        if ( !volume )
-        {
-            allVolumes = false;
-        }
-    }
-
-    if ( allVolumes )
-    {
-        m_Generator->PushContainer( TXT( "Volume Pointer Rendering Control" ) );
-        {
-            const tstring helpText = TXT( "Determines if a pointer should be drawn in the 3d view at the location where the volume is." );
-            m_Generator->AddLabel( TXT( "Show Pointer" ) )->a_HelpText.Set( helpText );
-            m_Generator->AddCheckBox<SceneGraph::Volume, bool>( m_Selection, &SceneGraph::Volume::IsPointerVisible, &SceneGraph::Volume::SetPointerVisible )->a_HelpText.Set( helpText );
-        }
-        m_Generator->Pop();
-    }
 }
 
 void InstancePanel::OnSolidOverride( const Inspect::ControlChangedArgs& args )

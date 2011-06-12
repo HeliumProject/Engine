@@ -83,9 +83,6 @@ namespace Helium
             // update state with current selection
             virtual void SelectionChanged(const SelectionChangeArgs& args);
 
-            // setup the material in the render device for teh applicable axes
-            virtual bool SetAxisMaterial(AxesFlags axes);
-
             // get the normal to the provided axes, or camera direction if all
             virtual Vector3 GetAxesNormal(AxesFlags axes);
 

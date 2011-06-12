@@ -116,6 +116,7 @@ void PrimitiveCircle::DrawFill(
 
 void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* camera, const Matrix4& m) const
 {
+#ifdef VIEWPORT_REFACTOR
     if (!SetState())
         return;
 
@@ -160,13 +161,14 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
     }
 
     args->m_LineCount += count;
+#endif
 }
 
 bool PrimitiveCircle::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        if (pick->PickSegment( (const Vector3&)m_Vertices[i].position, (const Vector3&)m_Vertices[i+1].position))
         {
             return true;
         }

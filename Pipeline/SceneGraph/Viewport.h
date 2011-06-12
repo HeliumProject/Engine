@@ -13,7 +13,6 @@
 #include "Pipeline/SettingsManager.h"
 #include "Pipeline/SceneGraph/Render.h"
 #include "Pipeline/SceneGraph/Camera.h"
-#include "Pipeline/SceneGraph/Resource.h"
 #include "Pipeline/SceneGraph/ViewportSettings.h"
 #include "Pipeline/SceneGraph/DeviceManager.h"
 

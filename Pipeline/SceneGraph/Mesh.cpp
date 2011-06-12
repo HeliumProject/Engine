@@ -11,9 +11,6 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-D3DMATERIAL9 Mesh::s_WireMaterial;
-D3DMATERIAL9 Mesh::s_FillMaterial;
-
 REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
@@ -169,6 +166,7 @@ void Mesh::Delete()
 
 void Mesh::Populate(PopulateArgs* args)
 {
+#ifdef VIEWPORT_REFACTOR
     switch ( args->m_Type )
     {
     case ResourceTypes::Index:
@@ -230,6 +228,7 @@ void Mesh::Populate(PopulateArgs* args)
             break;
         }
     }
+#endif
 }
 
 void Mesh::Evaluate(GraphDirection direction)
@@ -260,6 +259,7 @@ void Mesh::Evaluate(GraphDirection direction)
 
 void Mesh::Render( RenderVisitor* render )
 {
+#ifdef VIEWPORT_REFACTOR
     RenderEntry* entry = render->Allocate(this);
 
     if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
@@ -380,9 +380,12 @@ void Mesh::Render( RenderVisitor* render )
             break;
         }
     }
+#endif
 
     Base::Render( render );
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )
 {
@@ -568,6 +571,8 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
         HELIUM_BREAK();
     }
 }
+
+#endif
 
 bool Mesh::Pick( PickVisitor* pick )
 {

@@ -30,12 +30,7 @@ InstanceType::InstanceType( SceneGraph::Scene* scene, const Reflect::Class* inst
 : SceneGraph::HierarchyNodeType( scene, instanceClass )
 , m_Pointer( NULL )
 {
-    ZeroMemory(&m_Material, sizeof(m_WireMaterial));
-    m_Material.Ambient = SceneGraph::Color::BLACK;
-    m_Material.Diffuse = SceneGraph::Color::BLACK;
-    m_Material.Specular = SceneGraph::Color::BLACK;
-
-    m_Pointer = new SceneGraph::PrimitivePointer( scene->GetViewport()->GetResources() );
+    m_Pointer = new SceneGraph::PrimitivePointer();
     m_Pointer->Update();
 }
 

@@ -161,6 +161,7 @@ void PrimitiveAxes::DrawViewport(
     camera->GetOrthographicProjection(projection);
     inverseProjection = projection.Inverted();
 
+#ifdef VIEWPORT_REFACTOR
     // render in view space
     m_Device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
     m_Device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&Matrix4::Identity);
@@ -187,6 +188,7 @@ void PrimitiveAxes::DrawViewport(
     // restore matrix state
     m_Device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&camera->GetViewport());
     m_Device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&camera->GetProjection());
+#endif
 }
 
 bool PrimitiveAxes::Pick( PickVisitor* pick, const bool* solid ) const

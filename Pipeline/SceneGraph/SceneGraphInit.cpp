@@ -34,13 +34,10 @@
 #include "Pipeline/SceneGraph/Locator.h"
 #include "Pipeline/SceneGraph/LocatorType.h"
 #include "Pipeline/SceneGraph/LocatorCreateTool.h"
-#include "Pipeline/SceneGraph/Volume.h"
-#include "Pipeline/SceneGraph/VolumeType.h"
-#include "Pipeline/SceneGraph/VolumeCreateTool.h"
-#include "Pipeline/SceneGraph/Light.h"
 #include "Pipeline/SceneGraph/ViewportSettings.h"
 #include "Pipeline/SceneGraph/SceneSettings.h"
 #include "Pipeline/SceneGraph/GridSettings.h"
+#include "Pipeline/SceneGraph/Primitive.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -95,13 +92,6 @@ void SceneGraph::Initialize()
         g_SceneGraphInitStack.Push( Instance::InitializeType, Instance::CleanupType );
         g_SceneGraphInitStack.Push( InstanceSet::InitializeType, InstanceSet::CleanupType );
         g_SceneGraphInitStack.Push( InstanceType::InitializeType, InstanceType::CleanupType );
-
-        g_SceneGraphInitStack.Push( Light::InitializeType, Light::CleanupType );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<VolumeShape>( TXT( "SceneGraph::VolumeShape" ) ) );
-        g_SceneGraphInitStack.Push( Volume::InitializeType, Volume::CleanupType );
-        g_SceneGraphInitStack.Push( VolumeType::InitializeType, VolumeType::CleanupType );
-        g_SceneGraphInitStack.Push( VolumeCreateTool::InitializeType, VolumeCreateTool::CleanupType );
 
         g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<LocatorShape>( TXT( "SceneGraph::LocatorShape" ) ) );
         g_SceneGraphInitStack.Push( Locator::InitializeType, Locator::CleanupType );

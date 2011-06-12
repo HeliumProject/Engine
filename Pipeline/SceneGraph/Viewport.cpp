@@ -10,7 +10,6 @@
 #include "Pipeline/SceneGraph/PrimitiveFrame.h"
 #include "Pipeline/SceneGraph/PrimitiveGrid.h"
 #include "Pipeline/SceneGraph/PrimitiveRings.h"
-#include "Pipeline/SceneGraph/Resource.h"
 #include "Pipeline/SceneGraph/SceneSettings.h"
 #include "Pipeline/SceneGraph/Statistics.h"
 #include "Pipeline/SceneGraph/Orientation.h"

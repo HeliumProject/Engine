@@ -25,11 +25,6 @@ void JointTransform::PopulateComposite( Reflect::Composite& comp )
 void JointTransform::InitializeType()
 {
     Reflect::RegisterClassType< JointTransform >( TXT( "SceneGraph::JointTransform" ) );
-
-    ZeroMemory(&g_JointTransformMaterial, sizeof(g_JointTransformMaterial));
-    g_JointTransformMaterial.Ambient = SceneGraph::Color::DARKGREEN;
-    g_JointTransformMaterial.Diffuse = SceneGraph::Color::BLACK;
-    g_JointTransformMaterial.Specular = SceneGraph::Color::BLACK;
 }
 
 void JointTransform::CleanupType()
@@ -67,6 +62,7 @@ tstring JointTransform::GetApplicationTypeName() const
 
 void JointTransform::Render( RenderVisitor* render )
 {
+#ifdef VIEWPORT_REFACTOR
     RenderEntry* entry = render->Allocate(this);
 
     entry->m_Location = render->State().m_Matrix.Normalized();
@@ -80,10 +76,13 @@ void JointTransform::Render( RenderVisitor* render )
     {
         entry->m_Draw = &JointTransform::DrawNormal;
     }
+#endif
 
     // don't call Base here, it will draw big ass axes
     SceneGraph::HierarchyNode::Render( render );
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
@@ -108,6 +107,8 @@ void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, con
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
     node->GetOwner()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
+
+#endif
 
 bool JointTransform::Pick( PickVisitor* pick )
 {

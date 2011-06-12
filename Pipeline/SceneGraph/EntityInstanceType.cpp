@@ -1,19 +1,18 @@
 /*#include "Precompile.h"*/
 #include "EntityInstanceType.h"
 
-#include "EntitySet.h"
-#include "EntityInstance.h"
-#include "Pipeline/SceneGraph/Scene.h"
-
-#include "Pipeline/SceneGraph/Viewport.h"
-#include "Color.h"
-#include "PrimitiveCube.h"
-#include "PrimitiveSphere.h"
-#include "PrimitiveCapsule.h"
-#include "PrimitiveCylinder.h"
-
 #include "Foundation/Component/ComponentHandle.h"
+
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Pipeline/SceneGraph/Color.h"
+#include "Pipeline/SceneGraph/EntitySet.h"
+#include "Pipeline/SceneGraph/EntityInstance.h"
+#include "Pipeline/SceneGraph/PrimitiveCube.h"
+#include "Pipeline/SceneGraph/PrimitiveSphere.h"
+#include "Pipeline/SceneGraph/PrimitiveCapsule.h"
+#include "Pipeline/SceneGraph/PrimitiveCylinder.h"
+#include "Pipeline/SceneGraph/Scene.h"
+#include "Pipeline/SceneGraph/Viewport.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -33,10 +32,7 @@ void EntityInstanceType::CleanupType()
 EntityInstanceType::EntityInstanceType( SceneGraph::Scene* scene, const Reflect::Class* instanceClass )
 : SceneGraph::InstanceType( scene, instanceClass )
 {
-    ZeroMemory(&m_Material, sizeof(m_WireMaterial));
-    m_Material.Ambient = SceneGraph::Color::BLACK;
-    m_Material.Diffuse = SceneGraph::Color::BLACK;
-    m_Material.Specular = SceneGraph::Color::BLACK;
+
 }
 
 EntityInstanceType::~EntityInstanceType()

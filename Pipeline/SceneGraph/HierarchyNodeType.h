@@ -27,11 +27,6 @@ namespace Helium
             bool m_Selectable;
 
         public:
-            // materials
-            D3DMATERIAL9 m_WireMaterial;
-            D3DMATERIAL9 m_SolidMaterial;
-
-        public:
             REFLECT_DECLARE_ABSTRACT( HierarchyNodeType, SceneGraph::SceneNodeType );
             static void InitializeType();
             static void CleanupType();

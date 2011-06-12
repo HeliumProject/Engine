@@ -37,9 +37,7 @@
 #include "Pipeline/SceneGraph/InstanceType.h"
 #include "Pipeline/SceneGraph/EntityInstance.h"
 #include "Pipeline/SceneGraph/EntityInstanceType.h"
-#include "Pipeline/SceneGraph/Volume.h"
 #include "Pipeline/SceneGraph/Locator.h"
-#include "Pipeline/SceneGraph/Light.h"
 
 #define snprintf _snprintf
 

@@ -1,19 +1,16 @@
 /*#include "Precompile.h"*/
 #include "EntityInstancePanel.h"
-#include "EntitySet.h"
 
+#include "Platform/Process.h"
+
+#include "Foundation/Log.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Inspect/Controls/ValueControl.h"
 #include "Foundation/Inspect/Controls/ButtonControl.h"
 
+#include "Pipeline/SceneGraph/EntitySet.h"
 #include "Pipeline/Asset/AssetInit.h"
-#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetClass.h"
-#include "Foundation/Log.h"
-#include "Platform/Process.h"
-#include "Volume.h"
-
-#include "Light.h"
-
 #include "Pipeline/SceneGraph/Scene.h"
 #include "Pipeline/SceneGraph/SceneManager.h"
 

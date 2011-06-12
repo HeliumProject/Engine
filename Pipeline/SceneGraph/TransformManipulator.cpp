@@ -66,35 +66,6 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
     }
 }
 
-bool TransformManipulator::SetAxisMaterial(AxesFlags axes)
-{
-    if ((m_SelectedAxes & axes) != MultipleAxes::None)
-    {
-        m_View->GetDevice()->SetMaterial(&m_SelectedAxisMaterial);
-        return m_SelectedAxes != MultipleAxes::All;
-    }
-    else
-    {
-        switch (axes)
-        {
-        case MultipleAxes::X:
-            m_AxisMaterial.Ambient = SceneGraph::Color::RED;
-            break;
-
-        case MultipleAxes::Y:
-            m_AxisMaterial.Ambient = SceneGraph::Color::GREEN;
-            break;
-
-        case MultipleAxes::Z:
-            m_AxisMaterial.Ambient = SceneGraph::Color::BLUE;
-            break;
-        }
-
-        m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
-        return false;
-    }
-}
-
 Vector3 TransformManipulator::GetAxesNormal(AxesFlags axes)
 {
     Vector3 result;

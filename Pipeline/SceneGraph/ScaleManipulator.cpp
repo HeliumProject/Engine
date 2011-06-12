@@ -40,22 +40,22 @@ ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const Mani
     m_GridSnap = settings->ScaleManipulatorGridSnap();
     m_Distance = settings->ScaleManipulatorDistance();
 
-    m_Axes = new SceneGraph::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
+    m_Axes = new SceneGraph::PrimitiveAxes ();
     m_Axes->Update();
 
-    m_Cube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_Cube = new SceneGraph::PrimitiveCube ();
     m_Cube->SetSolid(true);
     m_Cube->Update();
 
-    m_XCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_XCube = new SceneGraph::PrimitiveCube ();
     m_XCube->SetSolid(true);
     m_XCube->Update();
 
-    m_YCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_YCube = new SceneGraph::PrimitiveCube ();
     m_YCube->SetSolid(true);
     m_YCube->Update();
 
-    m_ZCube = new SceneGraph::PrimitiveCube (m_Scene->GetViewport()->GetResources());
+    m_ZCube = new SceneGraph::PrimitiveCube ();
     m_ZCube->SetSolid(true);
     m_ZCube->Update();
 
@@ -227,22 +227,27 @@ void ScaleManipulator::Draw( DrawArgs* args )
 
     AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, HELIUM_CRITICAL_DOT_PRODUCT);
 
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
     m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
+#endif
 
     if (m_SelectedAxes == MultipleAxes::All)
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::YELLOW;
+        m_AxisMaterial = SceneGraph::Color::YELLOW;
     }
     else
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::SKYBLUE;
+        m_AxisMaterial = SceneGraph::Color::SKYBLUE;
     }
 
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4 (inverse) * frame));
     m_Cube->Draw(args);
+#endif
 
+#ifdef VIEWPORT_REFACTOR
     if (parallelAxis != MultipleAxes::X)
     {
         SetAxisMaterial(MultipleAxes::X);
@@ -263,6 +268,7 @@ void ScaleManipulator::Draw( DrawArgs* args )
         m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4 (inverse) * Matrix4 (m_ZPosition) * frame));
         m_ZCube->Draw(args);
     }
+#endif
 }
 
 bool ScaleManipulator::Pick( PickVisitor* pick )

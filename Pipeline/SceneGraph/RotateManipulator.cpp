@@ -42,7 +42,7 @@ RotateManipulator::RotateManipulator( SettingsManager* settingsManager, const Ma
     m_SnapDegrees = settings->RotateManipulatorSnapDegrees();
     m_Space = settings->RotateManipulatorSpace();
 
-    m_Ring = new SceneGraph::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
+    m_Ring = new SceneGraph::PrimitiveCircle ();
     m_Ring->m_RadiusSteps = 360;
     m_Ring->Update();
 }
@@ -149,41 +149,51 @@ void RotateManipulator::Draw( DrawArgs* args )
 
     // render x
     Matrix4 x = frame;
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&x));
     SetAxisMaterial(MultipleAxes::X);
+#endif
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), x);
 
     // render y
     Matrix4 y = Matrix4::RotateZ((float)(HELIUM_PI_2)) * frame;
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&y));
     SetAxisMaterial(MultipleAxes::Y);
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), y);
+#endif
 
     // render z
     Matrix4 z = Matrix4::RotateY(-(float)(HELIUM_PI_2)) * frame;
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&z));
     SetAxisMaterial(MultipleAxes::Z);
     m_Ring->DrawHiddenBack(args, m_View->GetCamera(), z);
+#endif
 
     // render arcball sphere
-    m_AxisMaterial.Ambient = SceneGraph::Color::LIGHTGRAY;
+    m_AxisMaterial = SceneGraph::Color::LIGHTGRAY;
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&toCamera);
     m_Ring->Draw(args);
+#endif
 
     // render camera plane ring
     if (m_SelectedAxes == MultipleAxes::All && m_Type == RotationTypes::CameraPlane)
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::YELLOW;
+        m_AxisMaterial = SceneGraph::Color::YELLOW;
     }
     else
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::SKYBLUE;
+        m_AxisMaterial = SceneGraph::Color::SKYBLUE;
     }
 
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4 (Scale(1.2f, 1.2f, 1.2f)) * toCamera));
     m_Ring->Draw(args);
+#endif
 }
 
 bool RotateManipulator::Pick( PickVisitor* pick )

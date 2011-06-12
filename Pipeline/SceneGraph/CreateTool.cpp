@@ -616,7 +616,7 @@ void CreateTool::Draw( DrawArgs* args )
 #ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)(&ringTransform));
 
-    SceneGraph::PrimitiveCircle ring (m_View->GetResources());
+    SceneGraph::PrimitiveCircle ring ();
     ring.m_RadiusSteps = 360;
     ring.m_Radius = s_PaintRadius;
     ring.Update();

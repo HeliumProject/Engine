@@ -19,7 +19,6 @@ void Primitive::CleanupType()
 Primitive::Primitive()
 : m_IsSolid (false)
 , m_IsTransparent (false)
-, m_IsUsingCameraShadingMode (false)
 {
     SetPopulator( PopulateSignature::Delegate( this, &Primitive::Populate ) );
 }
@@ -27,34 +26,4 @@ Primitive::Primitive()
 Primitive::~Primitive()
 {
     Delete();
-}
-
-bool Primitive::IsSolid(SceneGraph::Camera* camera) const
-{
-    if (m_IsUsingCameraShadingMode)
-    {
-        switch (camera->GetShadingMode())
-        {
-        case ShadingMode::Wireframe:
-            {
-                return false;
-            }
-
-        case ShadingMode::Material:
-            {
-                return true;
-            }
-
-        case ShadingMode::Texture:
-            {
-                return true;
-            }
-        }
-
-        return m_IsSolid;
-    }
-    else
-    {
-        return m_IsSolid;
-    }
 }

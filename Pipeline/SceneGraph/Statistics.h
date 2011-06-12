@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Pipeline/SceneGraph/Viewport.h"
-#include "Resource.h"
 
 namespace Helium
 {

@@ -1,11 +1,7 @@
 #pragma once
 
 #include "Resource.h" 
-
-namespace Lunar
-{
-    L_DECLARE_RPTR( RIndexBuffer );
-}
+#include "Rendering/RIndexBuffer.h"
 
 namespace Helium
 {

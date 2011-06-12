@@ -5,8 +5,6 @@
 
 #include "Pipeline/SceneGraph/PivotTransform.h"
 #include "Pipeline/SceneGraph/Shader.h"
-#include "Pipeline/SceneGraph/IndexResource.h"
-#include "Pipeline/SceneGraph/VertexResource.h"
 
 namespace Helium
 {

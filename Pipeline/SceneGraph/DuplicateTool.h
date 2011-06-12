@@ -3,7 +3,6 @@
 #include "Foundation/TUID.h"
 
 #include "Pipeline/API.h"
-#include "Pipeline/SceneGraph/Volume.h"
 #include "Pipeline/SceneGraph/CreateTool.h"
 
 namespace Helium

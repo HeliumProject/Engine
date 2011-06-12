@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Pipeline/SceneGraph/Camera.h"
-#include "VertexResource.h"
-#include "Render.h"
-
 #include "Platform/Math/Simd/Matrix44.h"
+
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Math/Color3.h"
+
 #include "Pipeline/SceneGraph/Color.h"
+#include "Pipeline/SceneGraph/Camera.h"
+#include "Pipeline/SceneGraph/Render.h"
+#include "Pipeline/SceneGraph/VertexResource.h"
 
 namespace Helium
 {
@@ -27,9 +28,6 @@ namespace Helium
             // are we solid or transparent
             bool m_IsTransparent;
 
-            // should we use the camera's shading mode for our render mode?
-            bool m_IsUsingCameraShadingMode;
-
         public:
             REFLECT_DECLARE_ABSTRACT( Primitive, Reflect::Object );
             static void InitializeType();
@@ -44,12 +42,11 @@ namespace Helium
                 return m_Bounds;
             }
 
-            bool IsSolid(SceneGraph::Camera* camera) const;
             bool IsSolid() const
             {
                 return m_IsSolid;
             }
-            void SetSolid(bool value)
+            void SetSolid( bool value )
             {
                 m_IsSolid = value;
             }
@@ -58,26 +55,22 @@ namespace Helium
             {
                 return m_IsTransparent;
             }
-            void SetTransparent(bool value)
+            void SetTransparent( bool value )
             {
                 m_IsTransparent = value;
             }
 
-            bool IsUsingCameraShadingMode() const
-            {
-                return m_IsUsingCameraShadingMode;
-            }
-            void SetUsingCameraShadingMode(bool use)
-            {
-                m_IsUsingCameraShadingMode = use;
-            }
+            virtual void Populate( PopulateArgs* args ) = 0;
 
-            virtual void Populate( PopulateArgs* ) = 0;
-            virtual void Draw(
-                Lunar::BufferedDrawer*, DrawArgs*, Lunar::Color materialColor = Color::WHITE,
-                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
-                const bool* transparent = NULL ) const = 0;
-            virtual bool Pick( PickVisitor*, const bool* solid = NULL ) const = 0;
+            virtual void Draw( Lunar::BufferedDrawer*,
+                               DrawArgs*,
+                               Lunar::Color materialColor = Color::WHITE,
+                               const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
+                               const bool* solid = NULL,
+                               const bool* transparent = NULL ) const = 0;
+
+            virtual bool Pick( PickVisitor*,
+                               const bool* solid = NULL ) const = 0;
         };
 
 

@@ -145,7 +145,7 @@ namespace Helium
       };
 
       template <class T>
-      class VectorWrapper : public IVectorWrapper
+      class VectorWrapper : public IVectorWrapper, NonCopyable
       {
       public:
         VectorWrapper(std::vector<T *> &_wrapped)
@@ -187,7 +187,7 @@ namespace Helium
 
     /// NOTE: Preferred method of doing this is ComponentType::RegisterComponentType(system, count)
     ///
-    LUNAR_FRAMEWORK_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
+    LUNAR_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
 
     template <class T>
     TypeId GetType()
@@ -199,19 +199,19 @@ namespace Helium
     }
 
     //! Resolves the component by handle. If the handle is stale, returns NULL
-    LUNAR_FRAMEWORK_API Component*  ResolveHandle(Handle _handle);
+    LUNAR_ENGINE_API Component*  ResolveHandle(Handle _handle);
 
     //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-    LUNAR_FRAMEWORK_API Component*  Allocate(HostContext &_host, TypeId _type, void *_init_data = NULL);
+    LUNAR_ENGINE_API Component*  Allocate(HostContext &_host, TypeId _type, void *_init_data = NULL);
 
     //! Returns the component to its pool. Old handles to this component will no longer be valid.
-    LUNAR_FRAMEWORK_API void        Free(HostContext &_host, Component &_component);
+    LUNAR_ENGINE_API void        Free(HostContext &_host, Component &_component);
 
     //! Frees every component in the given host
-    LUNAR_FRAMEWORK_API void        FreeAll(HostContext &_host);
+    LUNAR_ENGINE_API void        FreeAll(HostContext &_host);
 
     //! Get first component of the given type
-    LUNAR_FRAMEWORK_API Component*  FindOneComponent(HostContext &_host, TypeId _type);
+    LUNAR_ENGINE_API Component*  FindOneComponent(HostContext &_host, TypeId _type);
 
     //! Get first component that implements the given type
     Component*  FindOneComponentThatImplements(HostContext &_host, TypeId _type);
@@ -220,12 +220,14 @@ namespace Helium
 
     inline void FindAllComponents(HostContext &_host, TypeId _type, V_Components &_components)
     {
-      Private::FindAllComponents(_host, _type, Private::VectorWrapper<Component>(_components));
+      Private::VectorWrapper<Component> vector_wrapper(_components);
+      Private::FindAllComponents(_host, _type, vector_wrapper);
     }
 
     inline void FindAllComponents(TypeId _type, V_Components &_components)
     {
-      Private::FindAllComponents(_type, Private::VectorWrapper<Component>(_components));
+      Private::VectorWrapper<Component> vector_wrapper(_components);
+      Private::FindAllComponents(_type, vector_wrapper);
     }
 
     //! Find all components that implements the given type (pass _host for those attached to a particular host)
@@ -240,7 +242,7 @@ namespace Helium
     }
 
     //! Check that _implementor implements _implementee
-    LUNAR_FRAMEWORK_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
+    LUNAR_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
 
     // And some typesafe helpers
 
@@ -618,7 +620,7 @@ namespace Helium
   REFLECT_DEFINE_ABSTRACT
 
     //! Base component class
-    class LUNAR_FRAMEWORK_API Component : public Reflect::Object
+    class LUNAR_ENGINE_API Component : public Reflect::Object
     {
     public:
       Component() : m_Handle(NULL_HANDLE) { }
@@ -655,9 +657,9 @@ namespace Helium
     }
 
     //! Must be called before creating any systems
-    LUNAR_FRAMEWORK_API void Initialize();
+    LUNAR_ENGINE_API void Initialize();
 
     //! Call to tear down the component system
-    LUNAR_FRAMEWORK_API void Cleanup();
+    LUNAR_ENGINE_API void Cleanup();
   }
 }

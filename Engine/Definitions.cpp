@@ -1,6 +1,6 @@
 
-#include "FrameworkPch.h"
-#include "Framework/Definitions.h"
+#include "EnginePch.h"
+#include "Engine/Definitions.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/Object.h"

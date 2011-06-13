@@ -21,13 +21,13 @@ namespace Helium
       };
     }
 
-    struct LUNAR_FRAMEWORK_API IFacet : public Reflect::Object
+    struct LUNAR_ENGINE_API IFacet : public Reflect::Object
     {
       REFLECT_DECLARE_ABSTRACT(IFacet, Reflect::Object);
       static void IF_YOU_SEE_THIS_THE_FACET_YOU_ARE_TRYING_TO_REGISTER_DOES_NOT_IMPLEMENT_IFACET() { }
     };
 
-    struct LUNAR_FRAMEWORK_API FacetIterator
+    struct LUNAR_ENGINE_API FacetIterator
     {
     public:
       FacetIterator(uintptr_t _object_address, Private::OffsetStructure::iterator &_iter)
@@ -110,8 +110,8 @@ namespace Helium
       return 0;
     }
 
-    LUNAR_FRAMEWORK_API void Initialize();
-    LUNAR_FRAMEWORK_API void Cleanup();
+    LUNAR_ENGINE_API void Initialize();
+    LUNAR_ENGINE_API void Cleanup();
   }
 }
 

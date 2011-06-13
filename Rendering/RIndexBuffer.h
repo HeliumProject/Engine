@@ -31,6 +31,8 @@ namespace Lunar
         virtual ~RIndexBuffer() = 0;
         //@}
     };
+
+    typedef Helium::SmartPtr< RIndexBuffer > RIndexBufferPtr;
 }
 
 #endif  // LUNAR_RENDERING_R_INDEX_BUFFER_H

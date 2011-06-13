@@ -7,7 +7,6 @@ namespace Helium
 {
     namespace SceneGraph
     {
-
         class IndexResource : public Resource
         {
         public:

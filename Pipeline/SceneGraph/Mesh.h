@@ -3,6 +3,8 @@
 #include "Foundation/Math/CalculateBounds.h"
 #include "Foundation/Math/AlignedBox.h"
 
+#include "Pipeline/SceneGraph/VertexResource.h"
+#include "Pipeline/SceneGraph/IndexResource.h"
 #include "Pipeline/SceneGraph/PivotTransform.h"
 #include "Pipeline/SceneGraph/Shader.h"
 

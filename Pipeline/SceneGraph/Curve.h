@@ -3,6 +3,7 @@
 #include "Pipeline/SceneGraph/PivotTransform.h"
 #include "Pipeline/SceneGraph/CurveControlPoint.h"
 #include "Pipeline/SceneGraph/PropertiesGenerator.h"
+#include "Pipeline/SceneGraph/VertexResource.h"
 
 namespace Helium
 {

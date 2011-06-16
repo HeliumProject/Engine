@@ -168,29 +168,82 @@ configuration { "windows", "x64" }
 		}
 	end
 
-configuration { "windows", "x32", "Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
-	}
+if _ACTION == "vs2005" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc8_debug",
+		}
 
-configuration { "windows", "x32", "not Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
-	}
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc8_release",
+		}
 
-configuration { "windows", "x64", "Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
-	}
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc8_debug",
+		}
 
-configuration { "windows", "x64", "not Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
-	}
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc8_release",
+		}
+elseif _ACTION == "vs2008" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+		}
+elseif _ACTION == "vs2010" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc10_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc10_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc10_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+		}
+else
+	print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
+	os.exit(1)
+end
 
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"

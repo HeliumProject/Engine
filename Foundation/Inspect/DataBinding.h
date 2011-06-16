@@ -76,7 +76,8 @@ namespace Helium
             }
             else
             {
-                val->resize( size );
+				HELIUM_ASSERT(size < 0xFFFFFFFFL);
+				val->resize( tstring::size_type(size) );
                 stream.read( const_cast< tchar_t* >( val->c_str() ), size );
             }
         }

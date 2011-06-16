@@ -110,7 +110,7 @@ void ObjectStlSetData::Accept(Visitor& visitor)
         // able to figure out how to fix it ... works fine with msvc native iterators
         // i wish i had saved the compile error; geoff suspects it is const-ness related
         //
-        if (!visitor.VisitPointer(*itr))
+        if (!visitor.VisitPointer(const_cast<ObjectPtr&>(*itr)))
         {
             continue;
         }

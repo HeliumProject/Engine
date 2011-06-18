@@ -44,7 +44,7 @@ static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
     va_list argptr;
     va_start(argptr, tstring);
     _vsntprintf(buf, sizeof(buf), tstring, argptr);
-    buf[ sizeof(buf) - 1] = 0; 
+    buf[ sizeof(buf)/sizeof(buf[0]) - 1] = 0; 
     va_end(argptr);
 
     buffer += buf;

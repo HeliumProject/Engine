@@ -29,7 +29,7 @@ PointerFixup::PointerFixup(uint32_t size)
 : Fixup()
 , m_HasReference ( false )
 , m_Size (size)
-, m_Destination ( 0, NULL )
+, m_Destination ( 0, nullptr )
 {
 
 }
@@ -134,7 +134,7 @@ OffsetFixup::OffsetFixup( bool absolute )
 : Fixup()
 , m_HasReference ( false )
 , m_Absolute ( absolute )
-, m_Destination ( 0, NULL )
+, m_Destination ( 0, nullptr )
 {
 
 }

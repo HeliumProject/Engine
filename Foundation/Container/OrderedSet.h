@@ -239,7 +239,7 @@ namespace Helium
 
             if (found != m_Elements.end())
             {
-                Element* element = &(*found);
+                const Element* element = &(*found);
 
                 // remove element from prev's next
                 if (element->m_Prev)

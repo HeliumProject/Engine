@@ -234,9 +234,9 @@ namespace Helium
     {
         const Matrix3 &m = *this;
 
-        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
         return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
     }

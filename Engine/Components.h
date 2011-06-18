@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Engine/Engine.h"
+
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Object.h"
 

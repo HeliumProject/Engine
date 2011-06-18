@@ -290,6 +290,10 @@ Helium.DoDefaultSolutionSettings = function()
 		"EnableSSE2",
 		"NoMinimalRebuild",
 	}
+		
+	if os.getenv( 'CL' ) then
+		buildoptions { os.getenv( 'CL' ) }
+	end
 
 	configuration "x64"
 		defines

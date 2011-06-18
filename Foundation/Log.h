@@ -121,7 +121,7 @@ namespace Helium
         // Printing event
         //
 
-        struct FOUNDATION_API PrintingArgs
+        struct FOUNDATION_API PrintingArgs : NonCopyable
         {
             const Statement&  m_Statement;
             bool              m_Skip;
@@ -144,7 +144,7 @@ namespace Helium
         // Printed event
         //
 
-        struct FOUNDATION_API PrintedArgs
+        struct FOUNDATION_API PrintedArgs : NonCopyable
         {
             const Statement&  m_Statement;
 

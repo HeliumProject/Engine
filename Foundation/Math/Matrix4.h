@@ -283,9 +283,9 @@ namespace Helium
     {
         const Matrix4 &m = *this;
 
-        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
 
         return (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
     }
@@ -355,10 +355,10 @@ namespace Helium
         Matrix4 m = *this;
         Matrix4 &result = *this;
 
-        auto float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
-        auto float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
-        auto float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
-        auto float32_t det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
+        float32_t det1 = ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]));
+        float32_t det2 = ((m[0][2] * m[2][1]) - (m[0][1] * m[2][2]));
+        float32_t det3 = ((m[0][1] * m[1][2]) - (m[0][2] * m[1][1]));
+        float32_t det = (m[0][0] * det1) + (m[1][0] * det2) + (m[2][0] * det3);
 
         if (det != 0)
         {
@@ -400,7 +400,7 @@ namespace Helium
 
     inline Matrix4& Matrix4::Transpose()
     {
-        auto float32_t temp;
+        float32_t temp;
 
         temp = x[1]; x[1] = y[0]; y[0] = temp;
         temp = x[2]; x[2] = z[0]; z[0] = temp;

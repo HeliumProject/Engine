@@ -61,7 +61,16 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     int32_t result = 0;
 
     {
-        // Initialize a GameSystem instance.
+		Path baseDirectory;
+		if ( !File::GetBaseDirectory( baseDirectory ) )
+		{
+			HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+			return -1;
+		}
+
+		HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
+
+		// Initialize a GameSystem instance.
         CommandLineInitializationWin commandLineInitialization;
         Example::ObjectTypeRegistration< ObjectTypeRegistrationWin > objectTypeRegistration;
         MemoryHeapPreInitialization memoryHeapPreInitialization;

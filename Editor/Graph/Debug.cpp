@@ -14,7 +14,7 @@ namespace Debug
     {
         static tchar_t buffer[1024];
         ::_vsntprintf_s(buffer, sizeof(buffer), _TRUNCATE, fmt, args);
-        buffer[sizeof(buffer) - 1] = 0;
+        buffer[sizeof(buffer)/sizeof(buffer[0]) - 1] = 0;
         return buffer;
     }
 

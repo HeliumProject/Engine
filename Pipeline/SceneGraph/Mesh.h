@@ -189,18 +189,16 @@ namespace Helium
 
         protected:
             // Non-reflected
-            bool                m_HasAlpha;             // does this mesh draw with alpha?
-            bool                m_HasColor;             // does this mesh have per-vertex color?
-            bool                m_HasTexture;           // does thie mesh have texture data?
-            V_ShaderDumbPtr     m_Shaders;              // the shader objects this mesh uses
-            uint32_t                 m_LineCount;            // the number of lines to draw
-            uint32_t                 m_VertexCount;          // the number of vertices
-            uint32_t                 m_TriangleCount;        // the number of triangles to draw
-            std::vector< uint32_t >  m_ShaderStartIndices;   // the start index of each shader-sorted segment of indices
-            static Lunar::Color s_WireMaterial;
-            static Lunar::Color s_FillMaterial;
-            IndexResourcePtr    m_Indices;
-            VertexResourcePtr   m_Vertices;
+            bool                    m_HasAlpha;             // does this mesh draw with alpha?
+            bool                    m_HasColor;             // does this mesh have per-vertex color?
+            bool                    m_HasTexture;           // does thie mesh have texture data?
+            V_ShaderDumbPtr         m_Shaders;              // the shader objects this mesh uses
+            uint32_t                m_LineCount;            // the number of lines to draw
+            uint32_t                m_VertexCount;          // the number of vertices
+            uint32_t                m_TriangleCount;        // the number of triangles to draw
+            std::vector< uint32_t > m_ShaderStartIndices;   // the start index of each shader-sorted segment of indices
+            IndexResourcePtr        m_Indices;
+            VertexResourcePtr       m_Vertices;
         };
         typedef Helium::StrongPtr< Mesh > MeshPtr;
     }

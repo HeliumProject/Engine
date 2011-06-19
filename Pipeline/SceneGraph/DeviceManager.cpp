@@ -8,9 +8,13 @@
 
 using namespace Helium;
 
-bool            DeviceManager::m_unique = false;
-uint32_t        DeviceManager::m_master_count = 0;
-DeviceManager*  DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
+bool                        DeviceManager::m_unique = false;
+uint32_t                    DeviceManager::m_master_count = 0;
+DeviceManager*              DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
+Lunar::RRenderContextPtr    DeviceManager::sm_spMainRenderContext;
+HWND                        DeviceManager::sm_hMainRenderContextWnd;
+uint32_t                    DeviceManager::sm_mainRenderContextWidth;
+uint32_t                    DeviceManager::sm_mainRenderContextHeight;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::DeviceManager()

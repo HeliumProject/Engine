@@ -16,7 +16,6 @@
 #include "Pipeline/SceneGraph/DuplicateTool.h"
 #include "Pipeline/SceneGraph/EntityInstanceCreateTool.h"
 #include "Pipeline/SceneGraph/LocatorCreateTool.h"
-#include "Pipeline/SceneGraph/VolumeCreateTool.h"
 #include "Pipeline/SceneGraph/ScaleManipulator.h"
 #include "Pipeline/SceneGraph/RotateManipulator.h"
 #include "Pipeline/SceneGraph/TranslateManipulator.h"
@@ -1715,10 +1714,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::LocatorCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_VolumeToolButton->GetId() )
-    {
-        m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::VolumeCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
-    }
     else if ( event.GetId() == m_ToolbarPanel->m_DuplicateToolButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
@@ -1880,10 +1875,6 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
         {
             selectedTool = m_ToolbarPanel->m_EntityToolButton->GetId();
-        }
-        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::VolumeCreateTool >() )
-        {
-            selectedTool = m_ToolbarPanel->m_VolumeToolButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {

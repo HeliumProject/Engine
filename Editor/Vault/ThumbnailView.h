@@ -189,10 +189,12 @@ namespace Helium
             void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename );
 
             bool Draw();
+#ifdef VIEWPORT_REFACTOR
             void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
             void DrawTileOverlays( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
             void DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& tileCorners, DWORD color );
             void DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
+#endif
 
             void OnPaint( wxPaintEvent& args );
 

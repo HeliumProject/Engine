@@ -232,13 +232,8 @@ void Viewport::InitDevice( HWND wnd )
 
 void Viewport::InitWidgets()
 {
-    if ( !GetDevice() )
-    {
-        return;
-    }
-
     // primitive API uses this, so init it first
-    m_Statistics = new Statistics( m_ResourceTracker->GetDevice() );
+    m_Statistics = new Statistics();
 
     m_GlobalPrimitives[GlobalPrimitives::ViewportAxes] = new SceneGraph::PrimitiveAxes;
     m_GlobalPrimitives[GlobalPrimitives::ViewportAxes]->Update();
@@ -292,11 +287,6 @@ void Viewport::SetSize(uint32_t x, uint32_t y)
 {
     m_Size.x = x;
     m_Size.y = y;
-
-    if ( !GetDevice() )
-    {
-        return;
-    }
 
     if ( x > 0 && y > 0 )
     {
@@ -692,18 +682,13 @@ void Viewport::Draw()
         return;
     }
 
-    IDirect3DDevice9* device = GetDevice();
-    if ( !device )
-    {
-        return;
-    }
-
     SCENE_GRAPH_RENDER_SCOPE_TIMER( ("") );
 
     uint64_t start = Helium::TimerGetClock();
 
     DrawArgs args;
 
+#ifdef VIEWPORT_REFACTOR
     // this seems like a bad place to do this
     if (m_Tool)
     {
@@ -960,6 +945,7 @@ void Viewport::Draw()
             m_DeviceManager.SetDeviceLost();
         }
     }
+#endif
 }
 
 void Viewport::UndoTransform()

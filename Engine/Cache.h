@@ -22,7 +22,7 @@ namespace Lunar
     {
     public:
         /// Current cache file format version number.
-        static const uint32_t VERSION = 0;
+        static const uint32_t sm_Version = 0;
 
         /// Default Entry pool block size (for use with modifiable caches on the PC).
         static const size_t ENTRY_POOL_BLOCK_SIZE = 64;

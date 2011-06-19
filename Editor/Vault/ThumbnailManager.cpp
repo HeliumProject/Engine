@@ -4,7 +4,6 @@
 #include "Pipeline/SceneGraph/DeviceManager.h"
 
 using namespace Helium;
-using namespace Helium::Render;
 using namespace Helium::Editor;
 
 ///////////////////////////////////////////////////////////////////////////////

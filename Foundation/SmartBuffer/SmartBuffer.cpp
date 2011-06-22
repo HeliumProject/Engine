@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "SmartBuffer.h"
 
 #include "Platform/Assert.h"

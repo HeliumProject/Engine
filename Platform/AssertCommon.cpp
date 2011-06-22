@@ -1,3 +1,4 @@
+#include "PlatformPch.h"
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
 

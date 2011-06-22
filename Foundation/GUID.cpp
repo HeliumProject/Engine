@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "GUID.h"
 #include "TUID.h"
 

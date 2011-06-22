@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Point.h"
 
 using namespace Helium;

@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 
 #include "Platform/Math/Simd/Frustum.h"
 #include "Platform/Math/Simd/Matrix44Soa.h"

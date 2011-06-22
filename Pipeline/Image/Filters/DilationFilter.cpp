@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "DilationFilter.h"
 
 using namespace Helium;

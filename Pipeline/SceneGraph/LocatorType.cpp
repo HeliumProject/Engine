@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "LocatorType.h"
 
 #include "Pipeline/SceneGraph/Locator.h"

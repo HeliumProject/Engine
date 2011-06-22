@@ -1,6 +1,6 @@
+#include "PlatformPch.h"
 #include "Platform/Path.h"
 #include "Platform/Types.h"
-#include "Platform/Windows/Windows.h"
 
 #include <vector>
 #include <sys/stat.h>

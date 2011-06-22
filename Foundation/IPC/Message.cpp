@@ -1,5 +1,6 @@
-#include "Platform/API.h"
+#include "FoundationPch.h"
 #include "Message.h"
+
 #include "Platform/Assert.h"
 
 using namespace Helium::IPC;

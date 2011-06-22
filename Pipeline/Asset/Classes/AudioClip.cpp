@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "AudioClip.h"
 
 using namespace Helium;

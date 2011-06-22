@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 #include "Platform/Math/Float16.h"
 #include "Platform/Math/MathCommon.h"
 

@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "DependenciesComponent.h"
 
 using namespace Helium;

@@ -254,7 +254,6 @@ namespace Helium
     typedef CharString String;
 #endif  // HELIUM_UNICODE
 
-#pragma TODO( "Remove std::iostream String support once we can get rid of our dependency on STL" )
     /// @defgroup stringiostream std::iostream String Support
     //@{
 

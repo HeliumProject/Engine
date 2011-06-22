@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Archive.h"
 
 #include "Platform/Mutex.h"

@@ -50,6 +50,7 @@
 // poison incompatible APIs
 #define GetThreadId GetThreadId_doesnt_work_with_Windows_XP_32_bit_and_is_not_protected_by_a_preprocessor_guard
 
+#undef CreateFile
 #undef CreateDirectory
 #undef GetObject
 #undef GetEnvironmentVariable

@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Object.h"
 
 #include "Foundation/Container/ObjectPool.h"

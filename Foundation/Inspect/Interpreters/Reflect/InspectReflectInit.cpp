@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "InspectReflectInit.h"
 
 #include "Foundation/InitializerStack.h"

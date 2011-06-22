@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Profile.h"
 #include "Log.h"
 

@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "ShaderAsset.h"
 
 #include "Foundation/Log.h"

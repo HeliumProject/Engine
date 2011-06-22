@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/StlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"

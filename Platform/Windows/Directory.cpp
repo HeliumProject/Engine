@@ -1,9 +1,8 @@
+#include "PlatformPch.h"
 #include "Platform/Directory.h"
-
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
 

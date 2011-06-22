@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Vector2.h"
 
 using namespace Helium;

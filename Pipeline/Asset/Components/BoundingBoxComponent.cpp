@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "BoundingBoxComponent.h"
 
 using namespace Helium;

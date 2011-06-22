@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "PerforceWaitDialog.h"
 
 #include "Editor/Perforce/Perforce.h"

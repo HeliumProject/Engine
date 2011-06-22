@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "AssetClass.h"
 
 #include "Foundation/Log.h"

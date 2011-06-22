@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/ReflectionInfo.h"
 
 using namespace Helium;

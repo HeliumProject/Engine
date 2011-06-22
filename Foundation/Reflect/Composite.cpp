@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Composite.h"
 
 #include "Foundation/Log.h"

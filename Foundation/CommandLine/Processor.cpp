@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Processor.h"
 
 #include <iomanip>
@@ -25,36 +26,36 @@ Processor::~Processor()
 
 const tstring& Processor::Help() const
 {
-	if ( m_Help.empty() )
-	{
-		// Usage
-		m_Help += tstring( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + tstring( TXT( " " ) ) + m_Usage + tstring( TXT( "\n" ) );
+    if ( m_Help.empty() )
+    {
+        // Usage
+        m_Help += tstring( TXT( "\nUsage: " ) ) + m_Token + m_OptionsMap.Usage() + tstring( TXT( " " ) ) + m_Usage + tstring( TXT( "\n" ) );
 
         m_Help += tstring( TXT( "\n" ) ) + m_ShortHelp + tstring( TXT( "\n" ) );
 
-		// Options
-		m_Help += tstring( TXT( "\n" ) ) + m_OptionsMap.Help();
+        // Options
+        m_Help += tstring( TXT( "\n" ) ) + m_OptionsMap.Help();
 
-		// Commands
-		tstringstream str;
-		
-		m_Help += tstring( TXT( "\nCommands:\n" ) );
-		for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
-		{
-			const Command* command = (*argsBegin).second;
-			//m_Help += tstring( "  " ) + command->Token() + tstring( "\t" ) + command->ShortHelp() + tstring( "\n" );
-			str << TXT( "  " ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
-			str << TXT( " " ) << command->ShortHelp() << std::endl;
-		}
+        // Commands
+        tstringstream str;
+        
+        m_Help += tstring( TXT( "\nCommands:\n" ) );
+        for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
+        {
+            const Command* command = (*argsBegin).second;
+            //m_Help += tstring( "  " ) + command->Token() + tstring( "\t" ) + command->ShortHelp() + tstring( "\n" );
+            str << TXT( "  " ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
+            str << TXT( " " ) << command->ShortHelp() << std::endl;
+        }
 
-		m_Help += str.str();
-	}
-	return m_Help;
+        m_Help += str.str();
+    }
+    return m_Help;
 }
 
 bool Processor::AddOption( const OptionPtr& option, tstring& error )
 {
-	return m_OptionsMap.AddOption( option, error );
+    return m_OptionsMap.AddOption( option, error );
 }
 
 bool Processor::ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
@@ -64,64 +65,64 @@ bool Processor::ParseOptions( std::vector< tstring >::const_iterator& argsBegin,
 
 bool Processor::RegisterCommand( Command* command, tstring& error )
 {
-	Helium::StdInsert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
-	if ( !inserted.second )
-	{
-		error = tstring( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();
-		return false;
-	}
+    Helium::StdInsert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
+    if ( !inserted.second )
+    {
+        error = tstring( TXT( "Failed to add command, token is not unique: " ) ) + command->Token();
+        return false;
+    }
 
-	m_Help.clear();
-	return true;
+    m_Help.clear();
+    return true;
 }
 
 Command* Processor::GetCommand( const tstring& token )
 {
-	Command* command = NULL;
-	M_StringToCommandDumbPtr::iterator commandsItr = m_Commands.find( token );
-	if ( commandsItr != m_Commands.end() )
-	{
-		command = (*commandsItr).second;
-	}
-	return command;
+    Command* command = NULL;
+    M_StringToCommandDumbPtr::iterator commandsItr = m_Commands.find( token );
+    if ( commandsItr != m_Commands.end() )
+    {
+        command = (*commandsItr).second;
+    }
+    return command;
 }
 
 bool Processor::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
-	if ( !ParseOptions( argsBegin, argsEnd, error ) )
-	{
-		return false;
-	}
+    if ( !ParseOptions( argsBegin, argsEnd, error ) )
+    {
+        return false;
+    }
 
-	bool result = true;
+    bool result = true;
 
-	while ( result && ( argsBegin != argsEnd ) )
-	{
-		const tstring& arg = (*argsBegin);
+    while ( result && ( argsBegin != argsEnd ) )
+    {
+        const tstring& arg = (*argsBegin);
         ++argsBegin;
 
-		if ( arg.length() < 1 )
-			continue;
+        if ( arg.length() < 1 )
+            continue;
 
-		if ( arg[ 0 ] == '-' )
-		{
-			error = tstring( TXT( "Unknown option, or option passed out of order: " ) ) + arg;
-			result = false;
-		}
-		else
-		{
-			M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
-			if ( commandItr != m_Commands.end() )
-			{
-				result &= (*commandItr).second->Process( argsBegin, argsEnd, error );
-			}
-			else
-			{
-				error = tstring( TXT( "Unknown commandline parameter: " ) ) + arg + TXT( "\n\n" );
-				result = false;
-			}
-		}
-	}
+        if ( arg[ 0 ] == '-' )
+        {
+            error = tstring( TXT( "Unknown option, or option passed out of order: " ) ) + arg;
+            result = false;
+        }
+        else
+        {
+            M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
+            if ( commandItr != m_Commands.end() )
+            {
+                result &= (*commandItr).second->Process( argsBegin, argsEnd, error );
+            }
+            else
+            {
+                error = tstring( TXT( "Unknown commandline parameter: " ) ) + arg + TXT( "\n\n" );
+                result = false;
+            }
+        }
+    }
 
     return result;
 }

@@ -1,3 +1,4 @@
+#include "PlatformPch.h"
 #include "Platform/Math/Simd.h"
 #include "Platform/Assert.h"
 #include "Platform/Math/MathCommon.h"

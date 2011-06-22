@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "TransformComponent.h"
 
 using namespace Helium;

@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "AnimationClip.h"
 
 using namespace Helium;

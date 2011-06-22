@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Thumbnail.h"
 #include "Pipeline/SceneGraph/DeviceManager.h"
 

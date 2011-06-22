@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "VertexResource.h"
 
 #include "Rendering/RVertexBuffer.h"

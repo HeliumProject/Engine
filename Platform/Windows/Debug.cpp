@@ -1,5 +1,4 @@
-#include "Debug.h"
-
+#include "PlatformPch.h"
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
@@ -8,7 +7,7 @@
 #include "Platform/Debug.h"
 #include "Platform/Trace.h"
 #include "Platform/Process.h"
-#include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Debug.h"
 
 #include <map>
 #include <time.h>
@@ -785,7 +784,11 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory.c_str(), file, now );
 
     HANDLE dmp;
-    dmp = CreateFile( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
+#ifdef UNICODE
+    dmp = CreateFileW( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
+#else
+    dmp = CreateFileA( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
+#endif
     if ( dmp!=INVALID_HANDLE_VALUE )
     {
         MINIDUMP_EXCEPTION_INFORMATION ex;

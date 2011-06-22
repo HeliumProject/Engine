@@ -262,6 +262,9 @@ project "Platform"
 		"Platform/X86/*",
 	}
 
+    pchheader( "PlatformPch.h" )
+    pchsource( "Platform/PlatformPch.cpp" )
+
 	configuration "windows"
 		files
 		{
@@ -310,6 +313,9 @@ project "Foundation"
 		"Foundation/**",
 		"Foundation/**",
 	}
+
+    pchheader( "FoundationPch.h" )
+    pchsource( "Foundation/FoundationPch.cpp" )
 
 	configuration "Debug"
 		kind "SharedLib"
@@ -602,6 +608,9 @@ project "Pipeline"
 		"Pipeline/**.cpp",
 	}
 
+    pchheader( "PipelinePch.h" )
+    pchsource( "Pipeline/PipelinePch.cpp" )
+
 	configuration "windows"
 		includedirs
 		{
@@ -655,8 +664,8 @@ project "Editor"
 		"Editor/Editor.rc",
 	}
 
-    pchheader( "Precompile.h" )
-    pchsource( "Editor/Precompile.cpp" )
+    pchheader( "EditorPch.h" )
+    pchsource( "Editor/EditorPch.cpp" )
 
 	includedirs
 	{
@@ -786,10 +795,10 @@ project "TestApp"  -- DEPRECATED
 	{
 		"TestApp/Moon.ico",
 		"TestApp/resource.h",
-		"TestApp/stdafx.cpp",
-		"TestApp/stdafx.h",
 		"TestApp/TestApp.cpp",
 		"TestApp/TestApp.rc",
+		"TestApp/TestAppPch.cpp",
+		"TestApp/TestAppPch.h",
 		"TestApp/WindowProc.cpp",
 		"TestApp/WindowProc.h",
 	}
@@ -820,8 +829,8 @@ project "TestApp"  -- DEPRECATED
 		"TestJobs",
 	}
 
-	pchheader( "stdafx.h" )
-	pchsource( "TestApp/stdafx.cpp" )
+	pchheader( "TestAppPch.h" )
+	pchsource( "TestApp/TestAppPch.cpp" )
 
 	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
 	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/Graph/Debug.h"
 #include "Editor/Graph/Shape.h"
 #include "Editor/Graph/LuaUtilities.h"
@@ -184,8 +184,11 @@ namespace Debug
         AllocConsole();
         console = GetStdHandle(STD_OUTPUT_HANDLE);
         // Create the log file.
-        log = CreateFile(TXT("C:\\Users\\Andre\\Desktop\\log.txt"), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-        
+#ifdef UNICODE
+        log = CreateFileW(TXT("C:\\Users\\Andre\\Desktop\\log.txt"), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+#else
+        log = CreateFileA(TXT("C:\\Users\\Andre\\Desktop\\log.txt"), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+#endif
         // Register global Lua functions.
         lua_pushcfunction(L, LuaAssert);
         lua_setglobal(L, "assert");

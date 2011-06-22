@@ -1,6 +1,6 @@
-#include "Platform/Windows/Windows.h"
-#include "Platform/Error.h"
+#include "PlatformPch.h"
 #include "Platform/Semaphore.h"
+#include "Platform/Error.h"
 #include "Platform/PlatformUtility.h"
 #include "Platform/Assert.h"
 

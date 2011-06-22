@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "InitializerStack.h"
 
 using namespace Helium;

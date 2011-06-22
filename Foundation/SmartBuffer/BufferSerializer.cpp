@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "BufferSerializer.h"
 #include "SmartBuffer.h"
 #include "ObjectBuffer.h"

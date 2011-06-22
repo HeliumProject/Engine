@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/Data.h"
 
 #include "Platform/Debug.h"

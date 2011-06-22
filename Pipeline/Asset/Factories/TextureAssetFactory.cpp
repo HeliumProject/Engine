@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "TextureAssetFactory.h"
 
 #include "Foundation/File/Path.h"

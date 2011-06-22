@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/String.h"
 
 using namespace Helium;

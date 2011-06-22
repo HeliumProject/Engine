@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/ObjectSortedSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"

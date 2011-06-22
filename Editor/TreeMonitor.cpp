@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "TreeMonitor.h"
 
 #include "Pipeline/SceneGraph/Scene.h"

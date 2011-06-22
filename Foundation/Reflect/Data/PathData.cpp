@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/PathData.h"
 
 #include "Foundation/Log.h"

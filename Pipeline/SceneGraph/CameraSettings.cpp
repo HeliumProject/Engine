@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "CameraSettings.h"
 
 using namespace Helium;

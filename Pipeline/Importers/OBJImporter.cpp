@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Pipeline/Importers/OBJImporter.h"
 
 #include "Pipeline/SceneGraph/Mesh.h"

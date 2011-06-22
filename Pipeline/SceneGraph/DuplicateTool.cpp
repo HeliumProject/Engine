@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "DuplicateTool.h"
 
 #include "Pipeline/SceneGraph/Mesh.h"

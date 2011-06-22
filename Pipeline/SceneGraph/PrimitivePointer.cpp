@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitivePointer.h"
 
 #include "Graphics/BufferedDrawer.h"

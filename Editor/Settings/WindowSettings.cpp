@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "WindowSettings.h"
 
 #include <wx/aui/aui.h>

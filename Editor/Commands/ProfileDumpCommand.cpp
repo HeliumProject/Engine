@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ProfileDumpCommand.h"
 
 #include "Foundation/Log.h"

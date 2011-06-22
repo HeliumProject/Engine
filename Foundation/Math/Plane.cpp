@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Plane.h"
 
 using namespace Helium;

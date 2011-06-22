@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "EntityInstancePanel.h"
 
 #include "Platform/Process.h"

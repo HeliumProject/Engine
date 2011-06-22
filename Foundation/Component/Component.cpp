@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Component.h"
 #include "ComponentCollection.h"
 

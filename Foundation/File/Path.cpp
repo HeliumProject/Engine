@@ -1,10 +1,11 @@
+#include "FoundationPch.h"
 #include "Path.h"
 
 #include "Platform/Types.h"
 #include "Platform/Stat.h"
 #include "Platform/Path.h"
-
 #include "Platform/Exception.h"
+
 #include "Foundation/Checksum/Crc32.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Checksum/MurmurHash2.h"

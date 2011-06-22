@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Compression.h" 
 #include "Exceptions.h" 
 

@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ComponentCollection.h"
 #include "Foundation/Component/ComponentExceptions.h"
 

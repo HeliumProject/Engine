@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "HierarchyNodeType.h"
 
 #include "Foundation/Reflect/Object.h" 

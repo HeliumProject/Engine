@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Numeric.h"
 
 using namespace Helium;

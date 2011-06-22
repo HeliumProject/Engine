@@ -1,9 +1,10 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
-
 #pragma once
+
+#include "Platform/Platform.h"
+
+#if HELIUM_OS_WIN
+# include "Platform/Windows/Windows.h"
+#endif
 
 #include "Platform/Trace.h"
 #include "Foundation/File/File.h"

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/Vault/VaultMenuIDs.h"
 
 using namespace Helium;

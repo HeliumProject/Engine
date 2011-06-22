@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Inspect/ContextMenu.h"
 #include "Foundation/Inspect/Container.h"
 

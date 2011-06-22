@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "AssetManifest.h"
 
 using namespace Helium;

@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PivotTransform.h"
 
 #include "Foundation/Math/EulerAngles.h"

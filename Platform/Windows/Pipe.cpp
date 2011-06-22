@@ -1,4 +1,4 @@
-#include "Platform/Windows/Windows.h"
+#include "PlatformPch.h"
 #include "Platform/Windows/Pipe.h"
 #include "Platform/Pipe.h"
 #include "Platform/Assert.h"
@@ -81,7 +81,11 @@ bool Helium::OpenPipe(const tchar_t* name, Pipe& pipe)
         return false;
     }
 
-    pipe.m_Handle = ::CreateFile( name,
+#ifdef UNICODE
+    pipe.m_Handle = ::CreateFileW( name,
+#else
+    pipe.m_Handle = ::CreateFileA( name,
+#endif
         GENERIC_READ | GENERIC_WRITE, 
         0,
         NULL,

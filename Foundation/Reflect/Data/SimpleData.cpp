@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/SimpleData.h"
 
 #include "Foundation/Memory/Endian.h"

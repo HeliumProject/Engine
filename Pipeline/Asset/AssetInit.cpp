@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "AssetInit.h"
 
 #include "Foundation/Component/ComponentInit.h"

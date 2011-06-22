@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "CoreInit.h"
 
 #include "Foundation/InitializerStack.h"

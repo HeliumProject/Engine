@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "SceneAsset.h"
 
 #include "Foundation/Reflect/ArchiveXML.h"

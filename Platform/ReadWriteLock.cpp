@@ -1,6 +1,5 @@
+#include "PlatformPch.h"
 #include "Platform/ReadWriteLock.h"
-
-#if HELIUM_USE_TBB_READ_WRITE_LOCK
 
 using namespace Helium;
 
@@ -45,5 +44,3 @@ void ReadWriteLock::UnlockWrite()
 {
     m_lock.unlock();
 }
-
-#endif  // HELIUM_USE_TBB_READ_WRITE_LOCK

@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "EntityManifest.h"
 
 using namespace Helium;

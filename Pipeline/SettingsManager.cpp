@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Pipeline/SettingsManager.h"
 
 #include "Platform/Debug.h"

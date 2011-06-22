@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "RawFile.h"
 
 #include "Foundation/Reflect/ArchiveXML.h"

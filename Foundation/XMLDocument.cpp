@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/XMLDocument.h"
 #include "Foundation/Exception.h"
 

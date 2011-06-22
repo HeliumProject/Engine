@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Exception.h"
 
 #include "Platform/Assert.h"

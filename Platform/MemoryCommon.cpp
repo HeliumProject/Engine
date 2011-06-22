@@ -1,8 +1,5 @@
-// Note that we do not use pre-compiled headers for this file so as to allow including "Platform/Memory.h" without the
-// inline, module-specific "new"/"delete" overrides.
-
+#include "PlatformPch.h"
 #include "Platform/Memory.h"
-
 #include "Platform/Thread.h"
 
 // Define the memory heap for the current module and include the "new"/"delete" operator implementations.

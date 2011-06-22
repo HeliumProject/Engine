@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "SceneManifest.h"
 
 using namespace Helium;

@@ -1,8 +1,8 @@
-#include "Platform/Exception.h"
-
+#include "FoundationPch.h"
 #include "Directory.h"
 
 #include "Platform/Assert.h"
+#include "Platform/Exception.h"
 
 using namespace Helium;
 

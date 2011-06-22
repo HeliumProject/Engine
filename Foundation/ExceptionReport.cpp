@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ExceptionReport.h"
 
 #include "Platform/Process.h"

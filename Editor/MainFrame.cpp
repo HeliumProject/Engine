@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "MainFrame.h"
 
 #include "Platform/Platform.h"

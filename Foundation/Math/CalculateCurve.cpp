@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "CalculateCurve.h"
 #include "Matrix4.h"
 

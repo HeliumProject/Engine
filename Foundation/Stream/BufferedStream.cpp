@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "FoundationPch.h"
 #include "Foundation/Stream/BufferedStream.h"
 
 #include "Platform/Memory.h"

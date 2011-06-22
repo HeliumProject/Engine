@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "MeshProcessingComponent.h"
 
 using namespace Helium;

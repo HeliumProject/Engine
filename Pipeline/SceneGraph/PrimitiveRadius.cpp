@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveRadius.h"
 
 using namespace Helium;

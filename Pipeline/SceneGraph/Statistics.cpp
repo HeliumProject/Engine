@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Statistics.h"
 
 #include "Foundation/Profile.h"

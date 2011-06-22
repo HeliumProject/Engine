@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "StripCanvas.h"
 
 #include "Editor/FileIconsTable.h"

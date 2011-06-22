@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "SearchableProperties.h"
 
 using namespace Helium;

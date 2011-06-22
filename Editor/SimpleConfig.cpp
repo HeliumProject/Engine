@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "SimpleConfig.h"
 #include <wx/config.h>
 

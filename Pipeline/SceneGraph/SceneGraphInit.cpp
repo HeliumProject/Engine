@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "SceneGraphInit.h"
 
 #include "Foundation/InitializerStack.h"

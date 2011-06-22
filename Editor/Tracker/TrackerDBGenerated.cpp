@@ -6,7 +6,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "Precompile.h"
+#include "EditorPch.h"
 
 #include "TrackerDBGenerated.h"
 

@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "SceneSettings.h"
 
 #include "Foundation/Preferences.h"

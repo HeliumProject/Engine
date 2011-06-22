@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ThumbnailTileCreator.h"
 #include "ThumbnailView.h"
 

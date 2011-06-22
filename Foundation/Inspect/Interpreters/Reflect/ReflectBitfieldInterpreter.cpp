@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ReflectBitfieldInterpreter.h"
 
 #include "Foundation/Reflect/Enumeration.h"

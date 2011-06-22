@@ -1,6 +1,5 @@
+#include "PlatformPch.h"
 #include "Platform/Error.h"
-
-#include "Windows.h"
 
 using namespace Helium;
 

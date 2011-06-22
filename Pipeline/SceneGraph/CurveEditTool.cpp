@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "CurveEditTool.h"
 
 #include "Pipeline/SceneGraph/CurveControlPoint.h"

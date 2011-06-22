@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Startup.h"
 
 #include "Platform/Assert.h"
@@ -71,7 +72,7 @@ namespace Helium
 
 namespace Helium
 {
-	static Localization::StringTable g_StringTable( "Helium" );
+    static Localization::StringTable g_StringTable( "Helium" );
 }
 
 void Helium::Startup( int argc, const tchar_t** argv )
@@ -683,15 +684,6 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
     delete[] argv;
 
     return result;
-}
-
-namespace Helium
-{
-    FOUNDATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
-        HINSTANCE hInstance = ::GetModuleHandle(NULL),
-        HINSTANCE hPrevInstance = NULL,
-        LPTSTR lpCmdLine = ::GetCommandLine(),
-        int nShowCmd = SW_SHOWNORMAL );
 }
 
 int Helium::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )

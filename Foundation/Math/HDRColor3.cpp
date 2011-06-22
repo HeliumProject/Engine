@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "HDRColor3.h"
 #include "HDRColor4.h"
 

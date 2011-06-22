@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ExistenceCommand.h"
 
 using namespace Helium::Undo;

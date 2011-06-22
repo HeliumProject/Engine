@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/DynArrayData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "VaultSearchQuery.h"
 
 #include "Editor/App.h"

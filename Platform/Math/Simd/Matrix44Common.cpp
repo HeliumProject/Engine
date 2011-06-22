@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 #include "Platform/Math/Simd/Matrix44.h"
 
 const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(

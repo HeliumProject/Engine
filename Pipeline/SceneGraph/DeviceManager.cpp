@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "DeviceManager.h"
 
 #include "Foundation/Log.h"

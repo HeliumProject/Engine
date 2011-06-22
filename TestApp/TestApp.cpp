@@ -1,7 +1,5 @@
-// TestApp.cpp : Defines the entry point for the console application.
-//
+#include "TestAppPch.h"
 
-#include "stdafx.h"
 #include "Foundation/Reflect/Registry.h"
 #include "WindowProc.h"
 

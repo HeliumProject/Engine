@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveCylinder.h"
 
 #include "Graphics/BufferedDrawer.h"

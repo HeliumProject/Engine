@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/MessageDisplayer.h"
 #include "Editor/Dialogs/YesNoAllDialog.h"
 

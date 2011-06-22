@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 
 #include "Foundation/Reflect/Object.h"

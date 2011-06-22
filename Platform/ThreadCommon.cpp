@@ -1,3 +1,4 @@
+#include "PlatformPch.h"
 #include "Platform/Thread.h"
 
 using namespace Helium;

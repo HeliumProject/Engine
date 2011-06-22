@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Client.h"
 
 #include "Foundation/Log.h"

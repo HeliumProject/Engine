@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Inspect/Controls/CheckBoxControl.h"
 #include "Foundation/Inspect/Container.h"
 

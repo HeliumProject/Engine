@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "DXT.h"
 
 #include "Platform/Exception.h"

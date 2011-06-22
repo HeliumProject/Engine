@@ -2,17 +2,7 @@
 
 #include "Platform/ScopeLock.h"
 
-/// Non-zero to use the TBB reader-writer lock implementation.
-#define HELIUM_USE_TBB_READ_WRITE_LOCK 1
-
-#if HELIUM_USE_TBB_READ_WRITE_LOCK
-#pragma TODO( "tbb/reader_writer_lock.h includes windows.h; evaluate alternatives or enabling of precompiled headers." )
-#if HELIUM_OS_WIN
-// Make sure our Windows.h gets included before tbb/reader_writer_lock.h attempts to include <windows.h>.
-#include "Platform/Windows/Windows.h"
-#endif
 #include "tbb/reader_writer_lock.h"
-#endif
 
 namespace Helium
 {
@@ -44,20 +34,8 @@ namespace Helium
         //@}
 
     private:
-#if HELIUM_USE_TBB_READ_WRITE_LOCK
         /// Reader-writer mutex instance.
         tbb::interface5::reader_writer_lock m_lock;
-#elif HELIUM_OS_WIN
-        /// Number of threads with read access, or -1 if write access is currently being held.
-        volatile int32_t m_readLockCount;
-
-        /// Read-lock release event.
-        void* m_hReadReleaseEvent;
-        /// Write-lock release event.
-        void* m_hWriteReleaseEvent;
-#else
-# error Implement for this platform.
-#endif
     };
 
     /// Scope-based read-locking mechanism for ReadWriteLock objects.

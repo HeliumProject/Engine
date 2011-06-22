@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "EntitySet.h"
 
 #include "Foundation/Log.h"

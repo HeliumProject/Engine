@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "CameraMovedCommand.h"
 
 #include "Pipeline/SceneGraph/Camera.h"

@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Curve.h"
 
 #include "Platform/Math/Simd/Quat.h"

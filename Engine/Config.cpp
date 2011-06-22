@@ -11,7 +11,7 @@
 #include "Engine/GameObjectLoader.h"
 #include "Engine/PackageLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 Config* Config::sm_pInstance = NULL;
 

@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     class RSurface;
 

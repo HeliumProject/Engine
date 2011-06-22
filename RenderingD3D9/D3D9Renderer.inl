@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the main Direct3D 9 interface.
     ///

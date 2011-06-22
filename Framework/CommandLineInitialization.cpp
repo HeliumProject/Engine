@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/CommandLineInitialization.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 CommandLineInitialization::~CommandLineInitialization()

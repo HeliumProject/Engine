@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Index buffer interface.
     class LUNAR_RENDERING_API RIndexBuffer : public RRenderResource

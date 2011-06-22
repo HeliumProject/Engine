@@ -10,7 +10,7 @@
 
 #include "WindowingWin/WinWindow.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 WinWindowManager::WinWindowManager()
@@ -51,7 +51,7 @@ bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
     windowClass.hCursor = NULL;
     windowClass.hbrBackground = NULL;
     windowClass.lpszMenuName = NULL;
-    windowClass.lpszClassName = TXT( "LunarWindowClass" );
+    windowClass.lpszClassName = TXT( "HeliumWindowClass" );
     windowClass.hIconSm = NULL;
 
     m_windowClassAtom = RegisterClassEx( &windowClass );

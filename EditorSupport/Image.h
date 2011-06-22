@@ -13,7 +13,7 @@
 
 #if L_EDITOR
 
-namespace Lunar
+namespace Helium
 {
     class Color;
 

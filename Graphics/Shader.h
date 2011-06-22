@@ -14,7 +14,7 @@
 
 #include "Rendering/RShader.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( ShaderVariant );
 

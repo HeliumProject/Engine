@@ -60,22 +60,22 @@ void PrimitiveCone::Update()
 
     float32_t halfLength = m_Length * 0.5f;
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( m_Radius, 0.0f, -halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( m_Radius, 0.0f, -halfLength ) );
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, m_Radius, -halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, m_Radius, -halfLength ) );
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( -m_Radius, 0.0f, -halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( -m_Radius, 0.0f, -halfLength ) );
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, -m_Radius, -halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, -m_Radius, -halfLength ) );
 
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
 
@@ -83,27 +83,27 @@ void PrimitiveCone::Update()
     // Poly
     //
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, -halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, -halfLength ) );
     for (int x=m_Steps; x>=0; x--)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back( Lunar::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
     Base::Update();
 }
 
 void PrimitiveCone::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -119,7 +119,7 @@ void PrimitiveCone::Draw(
     if (solid ? *solid : m_IsSolid)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
             NULL,
@@ -129,7 +129,7 @@ void PrimitiveCone::Draw(
             m_Steps,
             materialColor );
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
             NULL,
@@ -143,7 +143,7 @@ void PrimitiveCone::Draw(
     else
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -152,9 +152,9 @@ void PrimitiveCone::Draw(
             0,
             4,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
             transform,
             m_Buffer,
             NULL,
@@ -163,7 +163,7 @@ void PrimitiveCone::Draw(
             0,
             m_Steps + 1,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_TriangleCount += (m_Steps*2);
     }
 }

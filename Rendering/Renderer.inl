@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the set of bit flags specifying which optional renderer features are supported by the current renderer
     /// implementation and system drivers.

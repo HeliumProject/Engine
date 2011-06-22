@@ -26,7 +26,7 @@
 #define L_CONFIG_PLATFORM_SUFFIX L_CONFIG_PLATFORM_SUFFIX_WIN
 #endif
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( GameObject );
     HELIUM_DECLARE_PTR( Package );

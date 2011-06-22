@@ -16,7 +16,7 @@
 #include "Rendering/Color.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RRenderContext );

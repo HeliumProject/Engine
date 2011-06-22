@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RConstantBuffer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RConstantBuffer::~RConstantBuffer()

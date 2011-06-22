@@ -19,17 +19,17 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-const Lunar::Color Viewport::s_LiveMaterial = SceneGraph::Color::MAGENTA;
-const Lunar::Color Viewport::s_SelectedMaterial = SceneGraph::Color::SPRINGGREEN;
-const Lunar::Color Viewport::s_ReactiveMaterial = SceneGraph::Color::WHITE;
-const Lunar::Color Viewport::s_HighlightedMaterial = SceneGraph::Color::CYAN;
-const Lunar::Color Viewport::s_UnselectableMaterial = SceneGraph::Color::GRAY;
-const Lunar::Color Viewport::s_ComponentMaterial = SceneGraph::Color::MAGENTA;
-const Lunar::Color Viewport::s_SelectedComponentMaterial = SceneGraph::Color::YELLOW;
-const Lunar::Color Viewport::s_RedMaterial = SceneGraph::Color::RED;
-const Lunar::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
-const Lunar::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
-const Lunar::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
+const Helium::Color Viewport::s_LiveMaterial = SceneGraph::Color::MAGENTA;
+const Helium::Color Viewport::s_SelectedMaterial = SceneGraph::Color::SPRINGGREEN;
+const Helium::Color Viewport::s_ReactiveMaterial = SceneGraph::Color::WHITE;
+const Helium::Color Viewport::s_HighlightedMaterial = SceneGraph::Color::CYAN;
+const Helium::Color Viewport::s_UnselectableMaterial = SceneGraph::Color::GRAY;
+const Helium::Color Viewport::s_ComponentMaterial = SceneGraph::Color::MAGENTA;
+const Helium::Color Viewport::s_SelectedComponentMaterial = SceneGraph::Color::YELLOW;
+const Helium::Color Viewport::s_RedMaterial = SceneGraph::Color::RED;
+const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
+const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
+const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
 Viewport::Viewport( HWND wnd, SettingsManager* settingsManager )
 : m_Window( wnd )

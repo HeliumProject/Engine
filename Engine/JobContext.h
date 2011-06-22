@@ -22,7 +22,7 @@ namespace tbb
     class task;
 }
 
-namespace Lunar
+namespace Helium
 {
     /// Context associated with a running job instance.
     class LUNAR_ENGINE_API JobContext : NonCopyable

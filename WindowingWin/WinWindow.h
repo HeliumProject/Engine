@@ -12,7 +12,7 @@
 #include "WindowingWin/WindowingWin.h"
 #include "Windowing/Window.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Windows(R) Window implementation.
     class WinWindow : public Window

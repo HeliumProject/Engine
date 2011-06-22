@@ -11,7 +11,7 @@
 
 #include "Engine/GameObjectLoader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Package loader interface.
     class LUNAR_ENGINE_API PackageLoader : NonCopyable

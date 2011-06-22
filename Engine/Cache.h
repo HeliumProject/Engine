@@ -15,7 +15,7 @@
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serialization cache interface.
     class LUNAR_ENGINE_API Cache : NonCopyable

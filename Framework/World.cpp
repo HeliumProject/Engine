@@ -15,12 +15,12 @@
 #include "Framework/Entity.h"
 #include "Framework/Layer.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( World );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( World, Framework, 0 );
 

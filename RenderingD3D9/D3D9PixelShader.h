@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RPixelShader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 pixel shader implementation.
     class D3D9PixelShader : public RPixelShader

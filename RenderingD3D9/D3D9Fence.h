@@ -13,7 +13,7 @@
 
 #include "RenderingD3D9/D3D9DeviceResetListener.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 GPU command fence implementation.
     class D3D9Fence : public RFence, public D3D9DeviceResetListener

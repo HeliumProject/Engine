@@ -2,7 +2,7 @@
 
 #include "Resource.h" 
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RVertexBuffer );
 }
@@ -17,7 +17,7 @@ namespace Helium
         public:
             static Profile::MemoryPoolHandle s_MemoryPool;
             VertexElementType m_ElementType;
-            Lunar::RVertexBufferPtr m_Buffer;
+            Helium::RVertexBufferPtr m_Buffer;
 
             VertexResource();
             virtual ~VertexResource();
@@ -33,7 +33,7 @@ namespace Helium
                 m_IsDirty = true;
             }
 
-            Lunar::RVertexBuffer* GetBuffer() const
+            Helium::RVertexBuffer* GetBuffer() const
             {
                 return m_Buffer;
             }

@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RPixelShader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RPixelShader::~RPixelShader()

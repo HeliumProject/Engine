@@ -13,7 +13,7 @@
 
 #include "Engine/Cache.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base interface for object types that correspond to a resource file.
     ///

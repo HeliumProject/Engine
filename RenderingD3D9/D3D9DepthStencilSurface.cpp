@@ -1,7 +1,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9DepthStencilSurface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 D3D9DepthStencilSurface::D3D9DepthStencilSurface( IDirect3DSurface9* pD3DSurface, bool bSrgb )

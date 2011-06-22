@@ -8,7 +8,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsConfig.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, LUNAR_GRAPHICS_API );
 L_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, LUNAR_GRAPHICS_API );

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the render resource for this texture.
     ///

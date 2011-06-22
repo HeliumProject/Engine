@@ -4,7 +4,7 @@
 #include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_DEFINE_ENUMERATION( Font::ECompression, LUNAR_GRAPHICS_API );
 

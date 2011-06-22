@@ -6,7 +6,7 @@
 #include <cfloat>
 #include <ctime>
 
-using namespace Lunar;
+using namespace Helium;
 
 class NonTrivialClass
 {
@@ -1103,7 +1103,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     windowClass.hCursor = NULL;
     windowClass.hbrBackground = NULL;
     windowClass.lpszMenuName = NULL;
-    windowClass.lpszClassName = TXT( "LunarTestAppClass" );
+    windowClass.lpszClassName = TXT( "HeliumTestAppClass" );
     windowClass.hIconSm = NULL;
     HELIUM_VERIFY( RegisterClassEx( &windowClass ) );
 
@@ -1124,8 +1124,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
     HWND hMainWnd = CreateWindow(
-        TXT( "LunarTestAppClass" ),
-        TXT( "Lunar TestApp" ),
+        TXT( "HeliumTestAppClass" ),
+        TXT( "Helium TestApp" ),
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1144,8 +1144,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
     HWND hSubWnd = CreateWindow(
-        TXT( "LunarTestAppClass" ),
-        TXT( "Lunar TestApp (second view)" ),
+        TXT( "HeliumTestAppClass" ),
+        TXT( "Helium TestApp (second view)" ),
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1770,7 +1770,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- Lunar SortJob: %f msec\n" ), jobParallelAvg );
+    HELIUM_TRACE( TRACE_DEBUG, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
 
     JobManager::DestroyStaticInstance();
 

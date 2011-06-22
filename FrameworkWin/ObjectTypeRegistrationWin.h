@@ -12,7 +12,7 @@
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/ObjectTypeRegistration.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Object type registration base class for Windows.
     class LUNAR_FRAMEWORK_WIN_API ObjectTypeRegistrationWin : public ObjectTypeRegistration

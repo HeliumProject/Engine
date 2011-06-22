@@ -17,7 +17,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 PcPreprocessor::PcPreprocessor()

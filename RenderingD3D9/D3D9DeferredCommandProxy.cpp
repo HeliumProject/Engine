@@ -19,7 +19,7 @@
 #include "RenderingD3D9/D3D9ImmediateCommandProxy.h"
 #include "RenderingD3D9/D3D9RenderCommandList.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RRasterizerState );
     L_DECLARE_RPTR( RBlendState );
@@ -38,7 +38,7 @@ namespace Lunar
     L_DECLARE_RPTR( RFence );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 class D3D9SetRasterizerStateCommand : public D3D9RenderCommand
 {

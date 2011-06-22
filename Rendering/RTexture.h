@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base interface to texture resources.
     class LUNAR_RENDERING_API RTexture : public RRenderResource

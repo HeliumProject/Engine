@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RIndexBuffer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 index buffer implementation.
     class D3D9IndexBuffer : public RIndexBuffer

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Update this scene view if an update is needed and clear the dirty flag.
     void GraphicsSceneView::ConditionalUpdate()

@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RRenderContext.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RRenderContext::~RRenderContext()

@@ -30,13 +30,13 @@
 #define L_DECLARE_OBJECT( TYPE, PARENT ) \
         REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
-        virtual const Lunar::GameObjectType* GetGameObjectType() const; \
+        virtual const Helium::GameObjectType* GetGameObjectType() const; \
         virtual size_t GetInstanceSize() const; \
-        virtual Lunar::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
+        virtual Helium::GameObject* InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const; \
         virtual void InPlaceDestroy(); \
-        static const Lunar::GameObjectType* InitStaticType(); \
+        static const Helium::GameObjectType* InitStaticType(); \
         static void ReleaseStaticType(); \
-        static const Lunar::GameObjectType* GetStaticType();
+        static const Helium::GameObjectType* GetStaticType();
 
 /// Utility macro for implementing standard GameObject-class variables and functions, without implementing
 /// InitStaticType().
@@ -46,7 +46,7 @@
 #define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_OBJECT( TYPE ) \
     \
-    const Lunar::GameObjectType* TYPE::GetGameObjectType() const \
+    const Helium::GameObjectType* TYPE::GetGameObjectType() const \
     { \
         return TYPE::GetStaticType(); \
     } \
@@ -56,7 +56,7 @@
         return sizeof( *this ); \
     } \
     \
-    Lunar::GameObject* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
+    Helium::GameObject* TYPE::InPlaceConstruct( void* pMemory, CUSTOM_DESTROY_CALLBACK* pDestroyCallback ) const \
     { \
         HELIUM_ASSERT( pMemory ); \
         HELIUM_ASSERT( pDestroyCallback ); \
@@ -76,15 +76,15 @@
     { \
         if( s_Class ) \
         { \
-            Lunar::GameObjectType::Unregister( static_cast< const Lunar::GameObjectType* >( s_Class ) ); \
+            Helium::GameObjectType::Unregister( static_cast< const Helium::GameObjectType* >( s_Class ) ); \
             s_Class = NULL; \
         } \
     } \
     \
-    const Lunar::GameObjectType* TYPE::GetStaticType() \
+    const Helium::GameObjectType* TYPE::GetStaticType() \
     { \
         HELIUM_ASSERT( s_Class ); \
-        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
+        return static_cast< const Helium::GameObjectType* >( s_Class ); \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -95,22 +95,22 @@
 #define L_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
     L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     \
-    const Lunar::GameObjectType* TYPE::InitStaticType() \
+    const Helium::GameObjectType* TYPE::InitStaticType() \
     { \
         if( !s_Class ) \
         { \
-            extern Lunar::Package* Get##MODULE##TypePackage(); \
-            Lunar::Package* pTypePackage = Get##MODULE##TypePackage(); \
+            extern Helium::Package* Get##MODULE##TypePackage(); \
+            Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
             HELIUM_ASSERT( pTypePackage ); \
             \
-            const Lunar::GameObjectType* pParentType = Base::InitStaticType(); \
+            const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
             HELIUM_ASSERT( pParentType ); \
             \
-            Lunar::StrongPtr< TYPE > spTemplate = new TYPE; \
+            Helium::StrongPtr< TYPE > spTemplate = new TYPE; \
             HELIUM_ASSERT( spTemplate ); \
             \
-            s_Class = Lunar::GameObjectType::Create( \
-                Lunar::Name( TXT( #TYPE ) ), \
+            s_Class = Helium::GameObjectType::Create( \
+                Helium::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \
                 spTemplate, \
@@ -119,12 +119,12 @@
             HELIUM_ASSERT( s_Class ); \
         } \
         \
-        return static_cast< const Lunar::GameObjectType* >( s_Class ); \
+        return static_cast< const Helium::GameObjectType* >( s_Class ); \
     }
 
 //@}
 
-namespace Lunar
+namespace Helium
 {
     class Serializer;
 

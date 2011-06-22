@@ -22,7 +22,7 @@ RenderVisitor::RenderVisitor()
 
 }
 
-void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view, Lunar::BufferedDrawer* drawInterface )
+void RenderVisitor::Reset( DrawArgs* args, const SceneGraph::Viewport* view, Helium::BufferedDrawer* drawInterface )
 {
     m_Args = args;
     m_View = view;

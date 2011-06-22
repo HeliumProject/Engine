@@ -21,7 +21,7 @@
     #define LUNAR_ENGINE_JOBS_API
 #endif
 
-namespace Lunar
+namespace Helium
 {
     LUNAR_ENGINE_JOBS_API extern void InitEngineJobsDefaultHeap();
 }

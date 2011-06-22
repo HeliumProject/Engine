@@ -13,7 +13,7 @@
 /// Maximum number of jobs to spawn at once for scene instance buffer updates.
 #define GRAPHICS_SCENE_INSTANCE_UPDATE_JOB_MAX 128
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Spawn jobs to update all instance constant buffers for graphics scene objects and sub-meshes.
 ///

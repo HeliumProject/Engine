@@ -17,7 +17,7 @@
 #include "Engine/Serializer.h"
 #include "Rendering/Color.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Maximum number of bones influencing vertices per skinned mesh (must match the same constant in
     /// Data/Shaders/Common.inl).

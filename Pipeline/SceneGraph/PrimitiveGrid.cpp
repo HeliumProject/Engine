@@ -58,7 +58,7 @@ void PrimitiveGrid::Update()
 
         m_Vertices.reserve( 2 * ( numWidthLines + numLengthLines ) );
 
-        Lunar::Color color;
+        Helium::Color color;
         Vector3 v1, v2a, v2b, v1v2a, v1v2b;
 
         float32_t epsilon = 0.00001f;
@@ -89,7 +89,7 @@ void PrimitiveGrid::Update()
             v2b = OutVector * -halfLength;
             v1v2a = v1 + v2a;
             v1v2b = v1 + v2b;
-            m_Vertices.push_back( Lunar::SimpleVertex(
+            m_Vertices.push_back( Helium::SimpleVertex(
                 v1v2a.x,
                 v1v2a.y,
                 v1v2a.z,
@@ -97,7 +97,7 @@ void PrimitiveGrid::Update()
                 color.GetG(),
                 color.GetB(),
                 color.GetA() ) );
-            m_Vertices.push_back( Lunar::SimpleVertex(
+            m_Vertices.push_back( Helium::SimpleVertex(
                 v1v2b.x,
                 v1v2b.y,
                 v1v2b.z,
@@ -111,7 +111,7 @@ void PrimitiveGrid::Update()
                 v1 = SideVector * -x;
                 v1v2a = v1 + v2a;
                 v1v2b = v1 + v2b;
-                m_Vertices.push_back( Lunar::SimpleVertex(
+                m_Vertices.push_back( Helium::SimpleVertex(
                     v1v2a.x,
                     v1v2a.y,
                     v1v2a.z,
@@ -119,7 +119,7 @@ void PrimitiveGrid::Update()
                     color.GetG(),
                     color.GetB(),
                     color.GetA() ) );
-                m_Vertices.push_back( Lunar::SimpleVertex(
+                m_Vertices.push_back( Helium::SimpleVertex(
                     v1v2b.x,
                     v1v2b.y,
                     v1v2b.z,
@@ -154,7 +154,7 @@ void PrimitiveGrid::Update()
             v2b = SideVector * -halfWidth;
             v1v2a = v1 + v2a;
             v1v2b = v1 + v2b;
-            m_Vertices.push_back( Lunar::SimpleVertex(
+            m_Vertices.push_back( Helium::SimpleVertex(
                 v1v2a.x,
                 v1v2a.y,
                 v1v2a.z,
@@ -162,7 +162,7 @@ void PrimitiveGrid::Update()
                 color.GetG(),
                 color.GetB(),
                 color.GetA() ) );
-            m_Vertices.push_back( Lunar::SimpleVertex(
+            m_Vertices.push_back( Helium::SimpleVertex(
                 v1v2b.x,
                 v1v2b.y,
                 v1v2b.z,
@@ -176,7 +176,7 @@ void PrimitiveGrid::Update()
                 v1 = OutVector * -y;
                 v1v2a = v1 + v2a;
                 v1v2b = v1 + v2b;
-                m_Vertices.push_back( Lunar::SimpleVertex(
+                m_Vertices.push_back( Helium::SimpleVertex(
                     v1v2a.x,
                     v1v2a.y,
                     v1v2a.z,
@@ -184,7 +184,7 @@ void PrimitiveGrid::Update()
                     color.GetG(),
                     color.GetB(),
                     color.GetA() ) );
-                m_Vertices.push_back( Lunar::SimpleVertex(
+                m_Vertices.push_back( Helium::SimpleVertex(
                     v1v2b.x,
                     v1v2b.y,
                     v1v2b.z,
@@ -202,9 +202,9 @@ void PrimitiveGrid::Update()
 }
 
 void PrimitiveGrid::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -214,7 +214,7 @@ void PrimitiveGrid::Draw(
     uint32_t vertexCount = static_cast< uint32_t >( m_Vertices.size() );
     uint32_t lineCount = vertexCount / 2;
     drawInterface->DrawUntextured(
-        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         transform,
         m_Buffer,
         NULL,
@@ -223,7 +223,7 @@ void PrimitiveGrid::Draw(
         0,
         lineCount,
         materialColor,
-        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += lineCount;
 }
 

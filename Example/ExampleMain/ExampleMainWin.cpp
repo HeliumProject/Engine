@@ -9,7 +9,7 @@
 
 #include "ExampleMain/ObjectTypeRegistration.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Windows application entry point.
 ///

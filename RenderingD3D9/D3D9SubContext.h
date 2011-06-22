@@ -4,7 +4,7 @@
 #include "Rendering/RRenderContext.h"
 #include "RenderingD3D9/D3D9DeviceResetListener.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( D3D9Surface );
 

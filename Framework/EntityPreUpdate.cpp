@@ -12,7 +12,7 @@
 #include "Framework/Entity.h"
 #include "Framework/WorldManager.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Run the EntityPreUpdate job.
 ///

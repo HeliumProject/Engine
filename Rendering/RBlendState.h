@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Blending state interface.
     class LUNAR_RENDERING_API RBlendState : public RRenderResource

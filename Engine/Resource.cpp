@@ -11,7 +11,7 @@
 #include "Foundation/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Resource, Engine, 0 );
 

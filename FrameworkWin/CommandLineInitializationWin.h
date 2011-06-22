@@ -12,7 +12,7 @@
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/CommandLineInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Command-line initialization for Windows.
     class LUNAR_FRAMEWORK_WIN_API CommandLineInitializationWin : public CommandLineInitialization

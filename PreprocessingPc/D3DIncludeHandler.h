@@ -14,7 +14,7 @@
 
 #include <d3d10_1.h>
 
-namespace Lunar
+namespace Helium
 {
     /// Include handler to use when compiling Direct3D HLSL shaders.
     class D3DIncludeHandler : public ID3D10Include

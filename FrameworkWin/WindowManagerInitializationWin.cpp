@@ -10,7 +10,7 @@
 
 #include "WindowingWin/WinWindowManager.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///

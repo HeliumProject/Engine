@@ -15,7 +15,7 @@
 #include "Foundation/StringConverter.h"
 #include "Rendering/Color.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 FbxSupport* FbxSupport::sm_pInstance = NULL;
 

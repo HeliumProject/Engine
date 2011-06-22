@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RSamplerState.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 texture sampler state object.
     class D3D9SamplerState : public RSamplerState

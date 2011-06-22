@@ -12,7 +12,7 @@
 #include "Rendering/RVertexDescription.h"
 #include "Rendering/RVertexInputLayout.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 RVertexShader::RVertexShader()

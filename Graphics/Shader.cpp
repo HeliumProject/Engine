@@ -15,7 +15,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 L_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );

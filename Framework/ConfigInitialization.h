@@ -11,7 +11,7 @@
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base class for initializing application configuration settings.
     class LUNAR_FRAMEWORK_API ConfigInitialization

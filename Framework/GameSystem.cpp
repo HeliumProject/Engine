@@ -34,7 +34,7 @@
 
 #include <boost/bind.hpp>
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
@@ -212,7 +212,7 @@ bool GameSystem::Initialize(
         bool bVsync = spGraphicsConfig->GetVsync();
 
         Window::Parameters windowParameters;
-        windowParameters.pTitle = TXT( "Lunar" );
+        windowParameters.pTitle = TXT( "Helium" );
         windowParameters.width = displayWidth;
         windowParameters.height = displayHeight;
         windowParameters.bFullscreen = bFullscreen;

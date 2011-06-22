@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Render command list interface.
     class LUNAR_RENDERING_API RRenderCommandList : public RRenderResource

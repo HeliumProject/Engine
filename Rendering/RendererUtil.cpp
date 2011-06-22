@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RendererUtil.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 
 /// Get whether a given pixel format is an sRGB pixel format.

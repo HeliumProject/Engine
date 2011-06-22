@@ -15,7 +15,7 @@
 
 #include "PcSupport/ResourceHandler.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Material resource types.
     class LUNAR_EDITOR_SUPPORT_API MaterialResourceHandler : public ResourceHandler

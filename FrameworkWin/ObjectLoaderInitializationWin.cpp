@@ -13,7 +13,7 @@
 #include "PreprocessingPc/PcPreprocessor.h"
 #include "EditorSupport/EditorObjectLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc ObjectLoaderInitialization::Initialize()
 GameObjectLoader* ObjectLoaderInitializationWin::Initialize()

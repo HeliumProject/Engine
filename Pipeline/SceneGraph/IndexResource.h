@@ -12,7 +12,7 @@ namespace Helium
         public:
             static Profile::MemoryPoolHandle s_MemoryPool;
             IndexElementType m_ElementType;
-            Lunar::RIndexBufferPtr m_Buffer; 
+            Helium::RIndexBufferPtr m_Buffer; 
 
             IndexResource();
             virtual ~IndexResource();
@@ -28,7 +28,7 @@ namespace Helium
                 m_IsDirty = true;
             }
 
-            Lunar::RIndexBuffer* GetBuffer() const
+            Helium::RIndexBuffer* GetBuffer() const
             {
                 return m_Buffer; 
             }

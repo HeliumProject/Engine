@@ -17,7 +17,7 @@
 
 #include "PcSupport/XmlPackageLoaderMap.h"
 
-namespace Lunar
+namespace Helium
 {
     class XmlObjectLoader;
 

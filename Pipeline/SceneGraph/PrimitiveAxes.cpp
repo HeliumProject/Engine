@@ -24,7 +24,7 @@ PrimitiveAxes::PrimitiveAxes()
     m_Bounds.maximum = Vector3 (m_Length, m_Length, m_Length);
 }
 
-void PrimitiveAxes::SetColor( AxesFlags axes, Lunar::Color c )
+void PrimitiveAxes::SetColor( AxesFlags axes, Helium::Color c )
 {
     if ((axes & MultipleAxes::X) == MultipleAxes::X)
         m_ColorX = c;
@@ -36,7 +36,7 @@ void PrimitiveAxes::SetColor( AxesFlags axes, Lunar::Color c )
         m_ColorZ = c;
 }
 
-void PrimitiveAxes::SetColor( Lunar::Color c )
+void PrimitiveAxes::SetColor( Helium::Color c )
 {
     m_ColorX = c;
     m_ColorY = c;
@@ -57,31 +57,31 @@ void PrimitiveAxes::Update()
 
     m_Vertices.clear();
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
+        Helium::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( m_Length, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
+        Helium::SimpleVertex( m_Length, 0.0f, 0.0f, m_ColorX.GetR(), m_ColorX.GetG(), m_ColorX.GetB(), m_ColorX.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
+        Helium::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, m_Length, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
+        Helium::SimpleVertex( 0.0f, m_Length, 0.0f, m_ColorY.GetR(), m_ColorY.GetG(), m_ColorY.GetB(), m_ColorY.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
+        Helium::SimpleVertex( 0.0f, 0.0f, 0.0f, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
     m_Vertices.push_back(
-        Lunar::SimpleVertex( 0.0f, 0.0f, m_Length, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
+        Helium::SimpleVertex( 0.0f, 0.0f, m_Length, m_ColorZ.GetR(), m_ColorZ.GetG(), m_ColorZ.GetB(), m_ColorZ.GetA() ) );
 
     Base::Update();
 }
 
 void PrimitiveAxes::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
 {
     drawInterface->DrawUntextured(
-        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         transform,
         m_Buffer,
         NULL,
@@ -90,21 +90,21 @@ void PrimitiveAxes::Draw(
         0,
         3,
         materialColor,
-        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 3;
 }
 
 void PrimitiveAxes::DrawAxes(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
     AxesFlags axes,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform ) const
 {
     if (axes & MultipleAxes::X)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -113,14 +113,14 @@ void PrimitiveAxes::DrawAxes(
             0,
             1,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
 
     if (axes & MultipleAxes::Y)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -129,14 +129,14 @@ void PrimitiveAxes::DrawAxes(
             0,
             1,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
 
     if (axes & MultipleAxes::Z)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -145,16 +145,16 @@ void PrimitiveAxes::DrawAxes(
             0,
             1,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 1;
     }
 }
 
 void PrimitiveAxes::DrawViewport(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
     const SceneGraph::Camera* camera,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform ) const
 {
     Matrix4 projection, inverseProjection;
@@ -195,8 +195,8 @@ bool PrimitiveAxes::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
-        const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+        const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+        const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
         Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
         Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
         if ( pick->PickSegment( position0, position1 ) )

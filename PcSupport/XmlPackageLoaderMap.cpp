@@ -10,7 +10,7 @@
 
 #include "PcSupport/XmlPackageLoader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Constructor.
     XmlPackageLoaderMap::XmlPackageLoaderMap()

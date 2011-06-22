@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Depth-stencil state interface.
     class LUNAR_RENDERING_API RDepthStencilState : public RRenderResource

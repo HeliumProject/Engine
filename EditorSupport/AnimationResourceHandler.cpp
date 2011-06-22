@@ -23,7 +23,7 @@
 #include "EditorSupport/GrannyStreamWriter.h"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
 

@@ -11,7 +11,7 @@
 #include "Engine/CacheManager.h"
 #include "Engine/GameObjectLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 ObjectLoaderInitialization::~ObjectLoaderInitialization()

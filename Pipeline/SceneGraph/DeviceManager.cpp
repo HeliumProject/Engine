@@ -11,7 +11,7 @@ using namespace Helium;
 bool                        DeviceManager::m_unique = false;
 uint32_t                    DeviceManager::m_master_count = 0;
 DeviceManager*              DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
-Lunar::RRenderContextPtr    DeviceManager::sm_spMainRenderContext;
+Helium::RRenderContextPtr    DeviceManager::sm_spMainRenderContext;
 HWND                        DeviceManager::sm_hMainRenderContextWnd;
 uint32_t                    DeviceManager::sm_mainRenderContextWidth;
 uint32_t                    DeviceManager::sm_mainRenderContextHeight;
@@ -77,10 +77,10 @@ void DeviceManager::SetUnique()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_buffer_height, uint32_t /*init_flags*/ )
 {
-    Lunar::Renderer* pRenderer = NULL;
+    Helium::Renderer* pRenderer = NULL;
     if ( !sm_spMainRenderContext )
     {
-        bool bCreatedRenderer = Lunar::D3D9Renderer::CreateStaticInstance();
+        bool bCreatedRenderer = Helium::D3D9Renderer::CreateStaticInstance();
         HELIUM_ASSERT( bCreatedRenderer );
         if ( !bCreatedRenderer )
         {
@@ -100,11 +100,11 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
             sm_mainRenderContextHeight = 64;
         }
 
-        pRenderer = Lunar::Renderer::GetStaticInstance();
+        pRenderer = Helium::Renderer::GetStaticInstance();
         HELIUM_ASSERT( pRenderer );
         pRenderer->Initialize();
 
-        Lunar::Renderer::ContextInitParameters initParameters;
+        Helium::Renderer::ContextInitParameters initParameters;
         initParameters.pWindow = hwnd;
         initParameters.bFullscreen = false;
         initParameters.bVsync = false;
@@ -135,14 +135,14 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
             return false;
         }
 
-        pRenderer = Lunar::Renderer::GetStaticInstance();
+        pRenderer = Helium::Renderer::GetStaticInstance();
         HELIUM_ASSERT( pRenderer );
     }
 
     if ( !m_unique )
     {
         // Create an additional render context.
-        Lunar::Renderer::ContextInitParameters initParameters;
+        Helium::Renderer::ContextInitParameters initParameters;
         initParameters.pWindow = hwnd;
         initParameters.bFullscreen = false;
         initParameters.bVsync = false;
@@ -172,14 +172,14 @@ bool DeviceManager::ResizeSwapChain( uint32_t width, uint32_t height )
 {
     m_spRenderContext.Release();
 
-    Lunar::Renderer::ContextInitParameters initParameters;
+    Helium::Renderer::ContextInitParameters initParameters;
     initParameters.pWindow = m_hWnd;
     initParameters.bFullscreen = false;
     initParameters.bVsync = false;
     initParameters.displayWidth = width;
     initParameters.displayHeight = height;
 
-    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
     m_spRenderContext = pRenderer->CreateSubContext( initParameters );
 
@@ -192,14 +192,14 @@ bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
     m_spRenderContext.Release();
     sm_spMainRenderContext.Release();
 
-    Lunar::Renderer::ContextInitParameters initParameters;
+    Helium::Renderer::ContextInitParameters initParameters;
     initParameters.pWindow = m_hWnd;
     initParameters.bFullscreen = false;
     initParameters.bVsync = false;
     initParameters.displayWidth = width;
     initParameters.displayHeight = height;
 
-    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
     pRenderer->ResetMainContext( initParameters );
 
@@ -232,19 +232,19 @@ bool DeviceManager::Swap()
 
 bool DeviceManager::TestDeviceReady()
 {
-    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
 
-    Lunar::Renderer::EStatus rendererStatus = pRenderer->GetStatus();
-    if ( rendererStatus == Lunar::Renderer::STATUS_READY )
+    Helium::Renderer::EStatus rendererStatus = pRenderer->GetStatus();
+    if ( rendererStatus == Helium::Renderer::STATUS_READY )
     {
         return true;
     }
 
-    if ( rendererStatus == Lunar::Renderer::STATUS_NOT_RESET )
+    if ( rendererStatus == Helium::Renderer::STATUS_NOT_RESET )
     {
         rendererStatus = pRenderer->Reset();
-        if ( rendererStatus == Lunar::Renderer::STATUS_READY )
+        if ( rendererStatus == Helium::Renderer::STATUS_READY )
         {
             return true;
         }

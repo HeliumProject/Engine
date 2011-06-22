@@ -31,8 +31,8 @@ REFLECT_DEFINE_ENUMERATION( CurveType );
 REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
 REFLECT_DEFINE_OBJECT( Curve );
 
-Lunar::Color Curve::s_Material;
-Lunar::Color Curve::s_HullMaterial;
+Helium::Color Curve::s_Material;
+Helium::Color Curve::s_HullMaterial;
 
 void Curve::PopulateComposite( Reflect::Composite& comp )
 {
@@ -534,7 +534,7 @@ void Curve::Populate( PopulateArgs* args )
                 if ( vertexCount == 0 )
                     break;
 
-                Lunar::SimpleVertex* bufferStart = reinterpret_cast<Lunar::SimpleVertex*>( args->m_Buffer + args->m_Offset );
+                Helium::SimpleVertex* bufferStart = reinterpret_cast<Helium::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the control points
                 uint32_t countControlPoints = 0;
@@ -558,7 +558,7 @@ void Curve::Populate( PopulateArgs* args )
                         bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
                         bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
                         bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
-                        args->m_Offset += sizeof(Lunar::SimpleVertex); 
+                        args->m_Offset += sizeof(Helium::SimpleVertex); 
                         ++countControlPoints;
                     }
                 }
@@ -574,11 +574,11 @@ void Curve::Populate( PopulateArgs* args )
                     bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
                     bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
                     bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
-                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
 
                 // reset the buffer start to its new location
-                bufferStart = reinterpret_cast<Lunar::SimpleVertex*>( args->m_Buffer + args->m_Offset );
+                bufferStart = reinterpret_cast<Helium::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the calculated curve points
                 uint32_t countCurvePoints = (uint32_t)m_Points.size();
@@ -592,7 +592,7 @@ void Curve::Populate( PopulateArgs* args )
                     bufferStart[ i ].color[ 1 ] = 0xff;
                     bufferStart[ i ].color[ 2 ] = 0xff;
                     bufferStart[ i ].color[ 3 ] = 0xff;
-                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
 
                 // loop back for closed curves
@@ -606,7 +606,7 @@ void Curve::Populate( PopulateArgs* args )
                     bufferStart[ countCurvePoints ].color[ 1 ] = 0xff;
                     bufferStart[ countCurvePoints ].color[ 2 ] = 0xff;
                     bufferStart[ countCurvePoints ].color[ 3 ] = 0xff;
-                    args->m_Offset += sizeof(Lunar::SimpleVertex); 
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
             }
             break;
@@ -800,7 +800,7 @@ void Curve::Render( RenderVisitor* render )
     DrawArgs* args = render->GetArgs();
     HELIUM_ASSERT( args );
 
-    Lunar::BufferedDrawer* drawInterface = render->GetDrawInterface();
+    Helium::BufferedDrawer* drawInterface = render->GetDrawInterface();
     HELIUM_ASSERT( drawInterface );
 
     const VertexResource* vertices = m_Vertices;
@@ -812,7 +812,7 @@ void Curve::Render( RenderVisitor* render )
     //  Draw start end end locators
     //
 
-    Lunar::Color materialColor = GetMaterialColor( s_Material );
+    Helium::Color materialColor = GetMaterialColor( s_Material );
 
     Simd::Matrix44 globalTransform( GetGlobalTransform().array1d );
 
@@ -858,7 +858,7 @@ void Curve::Render( RenderVisitor* render )
         if ( countCurveLines > 0 )
         {
             drawInterface->DrawUntextured(
-                Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
                 globalTransform,
                 vertices->GetBuffer(),
                 NULL,
@@ -867,7 +867,7 @@ void Curve::Render( RenderVisitor* render )
                 0,
                 countCurveLines,
                 materialColor,
-                Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+                Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
             args->m_LineCount += countCurveLines;
         }
 
@@ -900,7 +900,7 @@ void Curve::Render( RenderVisitor* render )
             if ( countControlLines > 0 )
             {
                 drawInterface->DrawUntextured(
-                    Lunar::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                    Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
                     globalTransform,
                     vertices->GetBuffer(),
                     NULL,
@@ -909,7 +909,7 @@ void Curve::Render( RenderVisitor* render )
                     0,
                     countControlLines,
                     s_HullMaterial,
-                    Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+                    Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
                 args->m_LineCount += countControlLines;
             }
         }
@@ -931,7 +931,7 @@ void Curve::Render( RenderVisitor* render )
         //  Overdraw selected points
         //
         {
-            Lunar::Color textColor( 0xffffffff );
+            Helium::Color textColor( 0xffffffff );
 
             OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
             OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
@@ -948,7 +948,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBaseIndex() + i,
                             1,
                             Viewport::s_SelectedComponentMaterial,
-                            Lunar::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
 
                     if ( GetControlPointLabel() != ControlPointLabel::None )
@@ -979,7 +979,7 @@ void Curve::Render( RenderVisitor* render )
                             offsetY,
                             String( label.str().c_str() ),
                             textColor,
-                            Lunar::RenderResourceManager::DEBUG_FONT_SIZE_SMALL );
+                            Helium::RenderResourceManager::DEBUG_FONT_SIZE_SMALL );
                     }
                     ++i;
                 }
@@ -1005,7 +1005,7 @@ void Curve::Render( RenderVisitor* render )
                             vertices->GetBaseIndex() + i,
                             1,
                             Viewport::s_HighlightedMaterial,
-                            Lunar::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
+                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
                     ++i;
                 }

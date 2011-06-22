@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RSurface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RSurface::~RSurface()

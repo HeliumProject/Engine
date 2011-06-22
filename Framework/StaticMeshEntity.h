@@ -11,7 +11,7 @@
 
 #include "Framework/MeshEntity.h"
 
-namespace Lunar
+namespace Helium
 {
     /// In-game entity comprising of a static (non-skinned) mesh, with optional collision data.
     class LUNAR_FRAMEWORK_API StaticMeshEntity : public MeshEntity

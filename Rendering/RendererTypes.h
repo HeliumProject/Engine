@@ -11,7 +11,7 @@
 
 #include "Rendering/Rendering.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Maximum simultaneous render targets supported by the engine (note that the render device may support less).
     static const size_t SIMULTANEOUS_RENDER_TARGET_COUNT_MAX = 16;

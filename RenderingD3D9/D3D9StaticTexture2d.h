@@ -11,7 +11,7 @@
 
 #include "RenderingD3D9/D3D9Texture2d.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Static Direct3D 9 2D texture.
     ///

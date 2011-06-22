@@ -14,7 +14,7 @@
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "Framework/Mesh.h"
 
-namespace Lunar
+namespace Helium
 {
     class GraphicsScene;
     class GraphicsSceneObject;

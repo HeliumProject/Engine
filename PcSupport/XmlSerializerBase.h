@@ -21,7 +21,7 @@
 #define L_XML_NEWLINE "\n"
 #endif
 
-namespace Lunar
+namespace Helium
 {
     /// Base support for XML serialization routines.
     class LUNAR_PC_SUPPORT_API XmlSerializerBase : public Serializer

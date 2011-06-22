@@ -27,7 +27,7 @@
 
 #include "expat.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Property parsing stack layer.
 struct XmlPackageParseProperty

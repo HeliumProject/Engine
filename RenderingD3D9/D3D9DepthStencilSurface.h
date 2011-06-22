@@ -3,7 +3,7 @@
 #include "RenderingD3D9/D3D9Surface.h"
 #include "RenderingD3D9/D3D9DeviceResetListener.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Wrapper for a restorable Direct3D 9 depth-stencil surface.
     ///

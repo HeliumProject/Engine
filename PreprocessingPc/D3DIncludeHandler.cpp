@@ -13,7 +13,7 @@
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/StringConverter.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///

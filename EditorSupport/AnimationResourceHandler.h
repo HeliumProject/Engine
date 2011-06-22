@@ -17,7 +17,7 @@
 
 #include "Graphics/Animation.h"
 
-namespace Lunar
+namespace Helium
 {
     class FbxSupport;
 

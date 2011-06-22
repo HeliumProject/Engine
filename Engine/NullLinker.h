@@ -11,7 +11,7 @@
 
 #include "Engine/Serializer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serialization linker that merely unsets the link indices on all object references.
     ///

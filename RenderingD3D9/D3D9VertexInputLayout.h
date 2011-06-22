@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexInputLayout.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 vertex input layout implementation.
     class D3D9VertexInputLayout : public RVertexInputLayout

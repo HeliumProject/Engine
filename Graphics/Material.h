@@ -17,7 +17,7 @@
 #include "Platform/Math/Simd/Vector4.h"
 #include "Graphics/Shader.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Shader );
     HELIUM_DECLARE_PTR( ShaderVariant );

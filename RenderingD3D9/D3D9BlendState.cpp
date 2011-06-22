@@ -8,7 +8,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9BlendState.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Translate a Direct3D 9 blend factor to an engine blend factor without using a lookup table (safe and
 // future-proof).

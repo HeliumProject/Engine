@@ -52,8 +52,8 @@ namespace Helium
             bool m_Manipulated;
 
             // Materials
-            Lunar::Color m_AxisMaterial;
-            Lunar::Color m_SelectedAxisMaterial;
+            Helium::Color m_AxisMaterial;
+            Helium::Color m_SelectedAxisMaterial;
 
             // Start
             M_ManipulationStart m_ManipulationStart;

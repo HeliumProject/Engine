@@ -19,7 +19,7 @@
 #define L_TRACK_JOB_POOL_HITS ( L_DEBUG )
 #endif
 
-namespace Lunar
+namespace Helium
 {
     /// Job manager.
     class LUNAR_ENGINE_API JobManager : NonCopyable

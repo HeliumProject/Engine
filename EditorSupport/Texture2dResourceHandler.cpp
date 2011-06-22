@@ -27,7 +27,7 @@
 
 #include <nvtt/nvtt.h>
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Texture2dResourceHandler, EditorSupport, 0 );
 

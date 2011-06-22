@@ -11,7 +11,7 @@
 
 #include "Graphics/Graphics.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Graphics configuration data.
     class LUNAR_GRAPHICS_API GraphicsConfig : public GameObject

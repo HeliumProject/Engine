@@ -8,7 +8,7 @@
 #include "Rendering/Renderer.h"
 #include "Pipeline/API.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RRenderContext );
 }
@@ -121,14 +121,14 @@ namespace Helium
         /// Window to which rendering is performed.
         HWND m_hWnd;
         /// Render context.
-        Lunar::RRenderContextPtr m_spRenderContext;
+        Helium::RRenderContextPtr m_spRenderContext;
 
         bool                                  m_using_swapchain;
         uint32_t                              m_width;
         uint32_t                              m_height;
 
         /// Main render context.
-        static Lunar::RRenderContextPtr sm_spMainRenderContext;
+        static Helium::RRenderContextPtr sm_spMainRenderContext;
         /// Main render context window handle.
         static HWND sm_hMainRenderContextWnd;
         /// Main render context width.

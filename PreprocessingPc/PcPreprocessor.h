@@ -12,7 +12,7 @@
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-namespace Lunar
+namespace Helium
 {
     /// PC object and resource preprocessing support.
     class LUNAR_PREPROCESSING_PC_API PcPreprocessor : public PlatformPreprocessor

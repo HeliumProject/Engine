@@ -11,7 +11,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Renderer utility functions.
     class LUNAR_RENDERING_API RendererUtil

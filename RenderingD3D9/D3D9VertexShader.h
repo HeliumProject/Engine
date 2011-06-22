@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexShader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 vertex shader implementation.
     class D3D9VertexShader : public RVertexShader

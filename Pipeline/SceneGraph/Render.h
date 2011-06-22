@@ -15,7 +15,7 @@
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Pipeline/SceneGraph/Visitor.h"
 
-namespace Lunar
+namespace Helium
 {
     class BufferedDrawer;
 }
@@ -67,19 +67,19 @@ namespace Helium
         static uint32_t VertexElementSizes[] =
         {
             0x0,                                    // Unknown
-            sizeof( Lunar::SimpleVertex ),          // SimpleVertex
-            sizeof( Lunar::ScreenVertex ),          // ScreenVertex
-            sizeof( Lunar::StaticMeshVertex< 1 > ), // StaticMeshVertex
-            sizeof( Lunar::SimpleTexturedVertex ),  // SimpleTexturedVertex
+            sizeof( Helium::SimpleVertex ),          // SimpleVertex
+            sizeof( Helium::ScreenVertex ),          // ScreenVertex
+            sizeof( Helium::StaticMeshVertex< 1 > ), // StaticMeshVertex
+            sizeof( Helium::SimpleTexturedVertex ),  // SimpleTexturedVertex
         };
 
         HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( VertexElementSizes ) == VertexElementTypes::Count );
 
-        static Lunar::ERendererIndexFormat IndexElementFormats[] =
+        static Helium::ERendererIndexFormat IndexElementFormats[] =
         {
-            Lunar::RENDERER_INDEX_FORMAT_INVALID,   // Unknown
-            Lunar::RENDERER_INDEX_FORMAT_UINT16,    // Unsigned16
-            Lunar::RENDERER_INDEX_FORMAT_UINT32,    // Unsigned32
+            Helium::RENDERER_INDEX_FORMAT_INVALID,   // Unknown
+            Helium::RENDERER_INDEX_FORMAT_UINT16,    // Unsigned16
+            Helium::RENDERER_INDEX_FORMAT_UINT32,    // Unsigned32
         };
 
         HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( IndexElementFormats ) == IndexElementTypes::Count );
@@ -130,7 +130,7 @@ namespace Helium
             const SceneGraph::Viewport* m_View;
 
             // buffered rendering interface
-            Lunar::BufferedDrawer* m_DrawInterface;
+            Helium::BufferedDrawer* m_DrawInterface;
 
             // profile start time
             uint64_t m_StartTime;
@@ -146,7 +146,7 @@ namespace Helium
                 return m_View;
             }
 
-            Lunar::BufferedDrawer* GetDrawInterface() const
+            Helium::BufferedDrawer* GetDrawInterface() const
             {
                 return m_DrawInterface;
             }
@@ -156,7 +156,7 @@ namespace Helium
                 return m_Args;
             }
 
-            void Reset( DrawArgs* args, const SceneGraph::Viewport* view, Lunar::BufferedDrawer* drawInterface );
+            void Reset( DrawArgs* args, const SceneGraph::Viewport* view, Helium::BufferedDrawer* drawInterface );
         };
     }
 }

@@ -11,7 +11,7 @@
 
 #include "Engine/Serializer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serializer for performing a direct byte dump of an object to a buffer.
     ///

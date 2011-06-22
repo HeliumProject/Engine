@@ -12,7 +12,7 @@
 #include "GrannySkeletalMeshEntityInterface.cpp.inl"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( SkeletalMeshEntity, Framework, 0 );
 
@@ -139,7 +139,7 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
 #if L_USE_GRANNY_ANIMATION
             Granny::SkeletalMeshEntityData::SetSceneObjectBoneData( pMesh, pSceneObject );
 #else
-#pragma TODO( "Lunar::Mesh needs to be updated to store the inverse reference pose, which should be used here." )
+#pragma TODO( "Helium::Mesh needs to be updated to store the inverse reference pose, which should be used here." )
             const Simd::Matrix44* pInverseReferencePose = pMesh->GetReferencePose();
             uint8_t boneCount = pMesh->GetBoneCount();
 

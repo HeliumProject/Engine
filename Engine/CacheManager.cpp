@@ -12,7 +12,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/File/File.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 CacheManager* CacheManager::sm_pInstance = NULL;
 

@@ -18,7 +18,7 @@ extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc ObjectTypeRegistration::Register()
 void ObjectTypeRegistrationWin::Register()

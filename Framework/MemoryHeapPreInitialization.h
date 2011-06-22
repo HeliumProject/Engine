@@ -11,7 +11,7 @@
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base class for pre-initialization of multi-threaded module memory heaps.
     ///

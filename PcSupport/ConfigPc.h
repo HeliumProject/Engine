@@ -11,7 +11,7 @@
 
 #include "PcSupport/PcSupport.h"
 
-namespace Lunar
+namespace Helium
 {
     class XmlSerializer;
     class GameObject;

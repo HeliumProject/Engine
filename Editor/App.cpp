@@ -99,7 +99,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
-using namespace Lunar;
+using namespace Helium;
 
 extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();

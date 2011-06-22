@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RRenderContext.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( D3D9Surface );
 

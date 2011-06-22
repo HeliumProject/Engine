@@ -10,7 +10,7 @@
 
 #include "Framework/World.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Layer, Framework, 0 );
 

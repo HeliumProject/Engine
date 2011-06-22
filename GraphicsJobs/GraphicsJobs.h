@@ -21,7 +21,7 @@
     #define LUNAR_GRAPHICS_JOBS_API
 #endif
 
-namespace Lunar
+namespace Helium
 {
     LUNAR_GRAPHICS_JOBS_API extern void InitGraphicsJobsDefaultHeap();
 }

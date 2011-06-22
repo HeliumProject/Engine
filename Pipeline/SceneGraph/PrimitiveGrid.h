@@ -6,16 +6,16 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveGrid : public PrimitiveTemplate< Lunar::SimpleVertex >
+        class PrimitiveGrid : public PrimitiveTemplate< Helium::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate< Lunar::SimpleVertex > Base;
+            typedef PrimitiveTemplate< Helium::SimpleVertex > Base;
 
             int32_t m_Width;
             int32_t m_Length;
-            Lunar::Color m_AxisColor;
-            Lunar::Color m_MajorColor;
-            Lunar::Color m_MinorColor;
+            Helium::Color m_AxisColor;
+            Helium::Color m_MajorColor;
+            Helium::Color m_MinorColor;
             float32_t m_MajorStep;
             float32_t m_MinorStep;
 
@@ -28,7 +28,7 @@ namespace Helium
 
             virtual void Update() HELIUM_OVERRIDE;
             virtual void Draw(
-                Lunar::BufferedDrawer* drawInterface, DrawArgs* args, Lunar::Color materialColor = Color::WHITE,
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
                 const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
                 const bool* transparent = NULL ) const HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;

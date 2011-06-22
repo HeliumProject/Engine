@@ -12,7 +12,7 @@
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/ConfigInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Config initialization for Windows.
     class LUNAR_FRAMEWORK_WIN_API ConfigInitializationWin : public ConfigInitialization

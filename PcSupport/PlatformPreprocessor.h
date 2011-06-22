@@ -15,7 +15,7 @@
 
 #include "Foundation/File/Path.h"
 
-namespace Lunar
+namespace Helium
 {
     struct ShaderConstantBufferInfo;
     struct ShaderSamplerInfo;

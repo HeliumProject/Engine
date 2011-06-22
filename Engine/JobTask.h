@@ -12,11 +12,11 @@
 #include "Engine/Engine.h"
 #include "tbb/task.h"
 
-namespace Lunar
+namespace Helium
 {
     class JobContext;
 
-    /// TBB task implementation for executing Lunar jobs.
+    /// TBB task implementation for executing Helium jobs.
     class JobTask : public tbb::task
     {
     public:

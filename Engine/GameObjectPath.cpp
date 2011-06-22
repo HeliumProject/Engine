@@ -10,7 +10,7 @@
 
 #include "Foundation/File/Path.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 GameObjectPath::TableBucket* GameObjectPath::sm_pTable = NULL;
 StackMemoryHeap<>* GameObjectPath::sm_pEntryMemoryHeap = NULL;

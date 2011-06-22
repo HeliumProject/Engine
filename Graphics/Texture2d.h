@@ -11,7 +11,7 @@
 
 #include "Graphics/Texture.h"
 
-namespace Lunar
+namespace Helium
 {
     /// 2D texture resource.
     class LUNAR_GRAPHICS_API Texture2d : public Texture

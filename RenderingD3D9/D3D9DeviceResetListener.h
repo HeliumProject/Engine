@@ -2,7 +2,7 @@
 
 #include "RenderingD3D9/RenderingD3D9.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for resources listening for Direct3D 9 device reset events.
     class D3D9DeviceResetListener

@@ -6,7 +6,7 @@
 /// @return  Font size, in points.
 ///
 /// @see GetDpi()
-float32_t Lunar::Font::GetPointSize() const
+float32_t Helium::Font::GetPointSize() const
 {
     return m_pointSize;
 }
@@ -19,7 +19,7 @@ float32_t Lunar::Font::GetPointSize() const
 /// @return  Display resolution, in DPI (dots per inch).
 ///
 /// @see GetPointSize()
-uint32_t Lunar::Font::GetDpi() const
+uint32_t Helium::Font::GetDpi() const
 {
     return m_dpi;
 }
@@ -29,7 +29,7 @@ uint32_t Lunar::Font::GetDpi() const
 /// @return  Texture sheet width, in texels.
 ///
 /// @see GetTextureSheetHeight()
-uint16_t Lunar::Font::GetTextureSheetWidth() const
+uint16_t Helium::Font::GetTextureSheetWidth() const
 {
     return m_textureSheetWidth;
 }
@@ -39,7 +39,7 @@ uint16_t Lunar::Font::GetTextureSheetWidth() const
 /// @return  Texture sheet height, in texels.
 ///
 /// @see GetTextureSheetWidth()
-uint16_t Lunar::Font::GetTextureSheetHeight() const
+uint16_t Helium::Font::GetTextureSheetHeight() const
 {
     return m_textureSheetHeight;
 }
@@ -47,7 +47,7 @@ uint16_t Lunar::Font::GetTextureSheetHeight() const
 /// Get the compression scheme to use for texture sheets for this font.
 ///
 /// @return  Texture compression scheme.
-Lunar::Font::ECompression Lunar::Font::GetTextureCompression() const
+Helium::Font::ECompression Helium::Font::GetTextureCompression() const
 {
     return m_textureCompression;
 }
@@ -55,7 +55,7 @@ Lunar::Font::ECompression Lunar::Font::GetTextureCompression() const
 /// Get whether this font should be rendered with antialiased edges.
 ///
 /// @return  True if antialiasing should be used to smooth font edges, false if not.
-bool Lunar::Font::GetAntialiased() const
+bool Helium::Font::GetAntialiased() const
 {
     return m_bAntialiased;
 }
@@ -65,7 +65,7 @@ bool Lunar::Font::GetAntialiased() const
 /// @return  Maximum ascender height from the baseline, in pixels.
 ///
 /// @see GetAscenderFloat(), GetDescenderFixed(), GetHeightFixed(), GetMaxAdvanceFixed()
-int32_t Lunar::Font::GetAscenderFixed() const
+int32_t Helium::Font::GetAscenderFixed() const
 {
     return m_ascender;
 }
@@ -75,7 +75,7 @@ int32_t Lunar::Font::GetAscenderFixed() const
 /// @return  Maximum descender depth from the baseline, in pixels.
 ///
 /// @see GetDescenderFloat(), GetAscenderFixed(), GetHeightFixed(), GetMaxAdvanceFixed()
-int32_t Lunar::Font::GetDescenderFixed() const
+int32_t Helium::Font::GetDescenderFixed() const
 {
     return m_descender;
 }
@@ -85,7 +85,7 @@ int32_t Lunar::Font::GetDescenderFixed() const
 /// @return  Maximum character height, in pixels.
 ///
 /// @see GetHeightFloat(), GetAscenderFixed(), GetDescenderFixed(), GetMaxAdvanceFixed()
-int32_t Lunar::Font::GetHeightFixed() const
+int32_t Helium::Font::GetHeightFixed() const
 {
     return m_height;
 }
@@ -95,7 +95,7 @@ int32_t Lunar::Font::GetHeightFixed() const
 /// @return  Maximum character advance step, in pixels.
 ///
 /// @see GetMaxAdvanceFloat(), GetAscenderFixed(), GetDescenderFixed(), GetHeightFixed()
-int32_t Lunar::Font::GetMaxAdvanceFixed() const
+int32_t Helium::Font::GetMaxAdvanceFixed() const
 {
     return m_maxAdvance;
 }
@@ -105,7 +105,7 @@ int32_t Lunar::Font::GetMaxAdvanceFixed() const
 /// @return  Maximum ascender height from the baseline, in pixels.
 ///
 /// @see GetAscenderFixed(), GetDescenderFloat(), GetHeightFloat(), GetMaxAdvanceFloat()
-float32_t Lunar::Font::GetAscenderFloat() const
+float32_t Helium::Font::GetAscenderFloat() const
 {
     return Fixed26x6ToFloat32( m_ascender );
 }
@@ -115,7 +115,7 @@ float32_t Lunar::Font::GetAscenderFloat() const
 /// @return  Maximum descender depth from the baseline, in pixels.
 ///
 /// @see GetDescenderFixed(), GetAscenderFloat(), GetHeightFloat(), GetMaxAdvanceFloat()
-float32_t Lunar::Font::GetDescenderFloat() const
+float32_t Helium::Font::GetDescenderFloat() const
 {
     return Fixed26x6ToFloat32( m_descender );
 }
@@ -125,7 +125,7 @@ float32_t Lunar::Font::GetDescenderFloat() const
 /// @return  Maximum character height, in pixels.
 ///
 /// @see GetHeightFixed(), GetAscenderFloat(), GetDescenderFloat(), GetMaxAdvanceFloat()
-float32_t Lunar::Font::GetHeightFloat() const
+float32_t Helium::Font::GetHeightFloat() const
 {
     return Fixed26x6ToFloat32( m_height );
 }
@@ -135,7 +135,7 @@ float32_t Lunar::Font::GetHeightFloat() const
 /// @return  Maximum character advance step, in pixels.
 ///
 /// @see GetMaxAdvanceFixed(), GetAscenderFloat(), GetDescenderFloat(), GetHeightFloat()
-float32_t Lunar::Font::GetMaxAdvanceFloat() const
+float32_t Helium::Font::GetMaxAdvanceFloat() const
 {
     return Fixed26x6ToFloat32( m_maxAdvance );
 }
@@ -145,7 +145,7 @@ float32_t Lunar::Font::GetMaxAdvanceFloat() const
 /// @return  Character count.
 ///
 /// @see GetCharacter(), GetCharacterIndex(), FindCharacter()
-uint32_t Lunar::Font::GetCharacterCount() const
+uint32_t Helium::Font::GetCharacterCount() const
 {
     return m_characterCount;
 }
@@ -159,7 +159,7 @@ uint32_t Lunar::Font::GetCharacterCount() const
 /// @return  Reference to the information associated with the character at the given index.
 ///
 /// @see GetCharacterCount(), GetCharacterIndex(), FindCharacter()
-const Lunar::Font::Character& Lunar::Font::GetCharacter( uint32_t index ) const
+const Helium::Font::Character& Helium::Font::GetCharacter( uint32_t index ) const
 {
     HELIUM_ASSERT( index < m_characterCount );
 
@@ -171,7 +171,7 @@ const Lunar::Font::Character& Lunar::Font::GetCharacter( uint32_t index ) const
 /// @param[in] pCharacter  Pointer to the character data (must point to valid character data stored in this font).
 ///
 /// @return  Index associated with the given character data.
-uint32_t Lunar::Font::GetCharacterIndex( const Character* pCharacter ) const
+uint32_t Helium::Font::GetCharacterIndex( const Character* pCharacter ) const
 {
     HELIUM_ASSERT( pCharacter >= m_pCharacters );
     HELIUM_ASSERT( pCharacter < m_pCharacters + m_characterCount );
@@ -189,7 +189,7 @@ uint32_t Lunar::Font::GetCharacterIndex( const Character* pCharacter ) const
 ///          code point.
 ///
 /// @see GetCharacterCount(), GetCharacter(), GetCharacterIndex()
-const Lunar::Font::Character* Lunar::Font::FindCharacter( uint32_t codePoint ) const
+const Helium::Font::Character* Helium::Font::FindCharacter( uint32_t codePoint ) const
 {
     uint32_t baseIndex = 0;
     uint32_t searchCount = m_characterCount;
@@ -223,7 +223,7 @@ const Lunar::Font::Character* Lunar::Font::FindCharacter( uint32_t codePoint ) c
 /// @return  Texture sheet count.
 ///
 /// @see GetTextureSheet()
-uint8_t Lunar::Font::GetTextureSheetCount() const
+uint8_t Helium::Font::GetTextureSheetCount() const
 {
     return m_textureCount;
 }
@@ -235,7 +235,7 @@ uint8_t Lunar::Font::GetTextureSheetCount() const
 /// @return  Pointer to the texture sheet resource associated with the given index.
 ///
 /// @see GetTextureSheetCount()
-Lunar::RTexture2d* Lunar::Font::GetTextureSheet( uint8_t index ) const
+Helium::RTexture2d* Helium::Font::GetTextureSheet( uint8_t index ) const
 {
     HELIUM_ASSERT( index < m_textureCount );
     HELIUM_ASSERT( m_pspTextures );
@@ -249,7 +249,7 @@ Lunar::RTexture2d* Lunar::Font::GetTextureSheet( uint8_t index ) const
 /// @param[in] characterCount  Number of characters to process.
 /// @param[in] rGlyphHandler   Handler for processing characters (i.e. for display, length counting, etc.).
 template< typename GlyphHandler, typename CharType >
-void Lunar::Font::ProcessText( const CharType* pString, size_t characterCount, GlyphHandler& rGlyphHandler ) const
+void Helium::Font::ProcessText( const CharType* pString, size_t characterCount, GlyphHandler& rGlyphHandler ) const
 {
     HELIUM_ASSERT( pString || characterCount == 0 );
 
@@ -305,7 +305,7 @@ void Lunar::Font::ProcessText( const CharType* pString, size_t characterCount, G
 /// @param[in] pString        Null-terminated string to process.
 /// @param[in] rGlyphHandler  Handler for processing characters (i.e. for display, length counting, etc.).
 template< typename GlyphHandler, typename CharType >
-void Lunar::Font::ProcessText( const CharType* pString, GlyphHandler& rGlyphHandler ) const
+void Helium::Font::ProcessText( const CharType* pString, GlyphHandler& rGlyphHandler ) const
 {
     ProcessText( pString, StringLength( pString ), rGlyphHandler );
 }
@@ -315,7 +315,7 @@ void Lunar::Font::ProcessText( const CharType* pString, GlyphHandler& rGlyphHand
 /// @param[in] rString        String to process.
 /// @param[in] rGlyphHandler  Handler for processing characters (i.e. for display, length counting, etc.).
 template< typename GlyphHandler, typename CharType, typename Allocator >
-void Lunar::Font::ProcessText(
+void Helium::Font::ProcessText(
     const Helium::StringBase< CharType, Allocator >& rString,
     GlyphHandler& rGlyphHandler ) const
 {
@@ -329,7 +329,7 @@ void Lunar::Font::ProcessText(
 /// @return  32-bit floating-point value.
 ///
 /// @see Float32ToFixed26x6()
-float32_t Lunar::Font::Fixed26x6ToFloat32( int32_t value )
+float32_t Helium::Font::Fixed26x6ToFloat32( int32_t value )
 {
     float32_t result =
         static_cast< float32_t >( value >> 6 ) +
@@ -345,7 +345,7 @@ float32_t Lunar::Font::Fixed26x6ToFloat32( int32_t value )
 /// @return  26.6 fixed-point value.
 ///
 /// @see Fixed26x6ToFloat32()
-int32_t Lunar::Font::Float32ToFixed26x6( float32_t value )
+int32_t Helium::Font::Float32ToFixed26x6( float32_t value )
 {
     float32_t integer = 0.0f;
     float32_t fraction = Modf( value, integer );
@@ -363,7 +363,7 @@ int32_t Lunar::Font::Float32ToFixed26x6( float32_t value )
 ///
 /// @param[in] pString  String to convert to a wide-character string.
 /// @param[in] length   String length.
-Lunar::Font::ProcessTextConverter< char >::ProcessTextConverter( const char* pString, size_t /*length*/ )
+Helium::Font::ProcessTextConverter< char >::ProcessTextConverter( const char* pString, size_t /*length*/ )
 {
     m_length = Helium::StringConverter< char, wchar_t >::Convert( m_string, STRING_LENGTH_MAX, pString );
     if( IsInvalid( m_length ) )
@@ -383,7 +383,7 @@ Lunar::Font::ProcessTextConverter< char >::ProcessTextConverter( const char* pSt
 /// @return  Converted string.
 ///
 /// @see GetLength()
-const wchar_t* Lunar::Font::ProcessTextConverter< char >::GetString() const
+const wchar_t* Helium::Font::ProcessTextConverter< char >::GetString() const
 {
     return m_string;
 }
@@ -393,7 +393,7 @@ const wchar_t* Lunar::Font::ProcessTextConverter< char >::GetString() const
 /// @return  Cached string length.
 ///
 /// @see GetString()
-size_t Lunar::Font::ProcessTextConverter< char >::GetLength() const
+size_t Helium::Font::ProcessTextConverter< char >::GetLength() const
 {
     return m_length;
 }
@@ -404,7 +404,7 @@ size_t Lunar::Font::ProcessTextConverter< char >::GetLength() const
 ///
 /// @param[in] pString  String to cache.
 /// @param[in] length   String length.
-Lunar::Font::ProcessTextConverter< wchar_t >::ProcessTextConverter( const wchar_t* pString, size_t length )
+Helium::Font::ProcessTextConverter< wchar_t >::ProcessTextConverter( const wchar_t* pString, size_t length )
     : m_pString( pString )
     , m_length( length )
 {
@@ -415,7 +415,7 @@ Lunar::Font::ProcessTextConverter< wchar_t >::ProcessTextConverter( const wchar_
 /// @return  Converted string.
 ///
 /// @see GetLength()
-const wchar_t* Lunar::Font::ProcessTextConverter< wchar_t >::GetString() const
+const wchar_t* Helium::Font::ProcessTextConverter< wchar_t >::GetString() const
 {
     return m_pString;
 }
@@ -425,7 +425,7 @@ const wchar_t* Lunar::Font::ProcessTextConverter< wchar_t >::GetString() const
 /// @return  Cached string length.
 ///
 /// @see GetString()
-size_t Lunar::Font::ProcessTextConverter< wchar_t >::GetLength() const
+size_t Helium::Font::ProcessTextConverter< wchar_t >::GetLength() const
 {
     return m_length;
 }

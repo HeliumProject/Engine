@@ -17,7 +17,7 @@
 #include "Framework/FrameworkInterface.h"
 #include "Framework/WorldManager.h"
 
-namespace Lunar
+namespace Helium
 {
     class World;
 

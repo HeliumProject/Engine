@@ -10,7 +10,7 @@
 
 #include "Rendering/RTexture.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_DEFINE_ENUMERATION( Texture::ECompression, LUNAR_GRAPHICS_API );
 L_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );

@@ -67,7 +67,7 @@
 #include <tchar.h>
 #include <algorithm>
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Camera );
     HELIUM_DECLARE_PTR( SkeletalMeshEntity );

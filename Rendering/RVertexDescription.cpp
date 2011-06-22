@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RVertexDescription.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RVertexDescription::~RVertexDescription()

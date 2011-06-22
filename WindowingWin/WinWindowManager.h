@@ -12,7 +12,7 @@
 #include "WindowingWin/WindowingWin.h"
 #include "Windowing/WindowManager.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Windows(R) WindowManager implementation.
     class WinWindowManager : public WindowManager

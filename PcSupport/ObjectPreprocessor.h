@@ -13,7 +13,7 @@
 
 #include "Engine/Cache.h"
 
-namespace Lunar
+namespace Helium
 {
     class GameObject;
     class Resource;

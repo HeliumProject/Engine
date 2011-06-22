@@ -25,7 +25,7 @@ namespace Helium
     class Simd::Matrix44;
 }
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RIndexBuffer );

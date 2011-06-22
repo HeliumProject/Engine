@@ -8,7 +8,7 @@
 #include "WindowingPch.h"
 #include "Windowing/Window.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///

@@ -14,7 +14,7 @@
 #include "Rendering/Color.h"
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class RRasterizerState;
     class RBlendState;

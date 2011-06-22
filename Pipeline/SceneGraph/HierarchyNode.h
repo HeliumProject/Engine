@@ -249,7 +249,7 @@ namespace Helium
             virtual bool BoundsCheck(const Matrix4& instanceMatrix) const;
 
             // get the material color based upon this object's selection state
-            virtual Lunar::Color GetMaterialColor( Lunar::Color defaultMaterial ) const;
+            virtual Helium::Color GetMaterialColor( Helium::Color defaultMaterial ) const;
 
             // call VisitHierarchyNode() on the render object for each hierarhcy node recursively
             virtual TraversalAction TraverseHierarchy( HierarchyTraverser* traverser );

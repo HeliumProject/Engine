@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RTexture2d.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 2D texture implementation.
     class D3D9Texture2d : public RTexture2d

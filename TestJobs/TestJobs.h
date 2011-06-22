@@ -21,7 +21,7 @@
     #define LUNAR_TEST_JOBS_API
 #endif
 
-namespace Lunar
+namespace Helium
 {
     LUNAR_TEST_JOBS_API extern void InitTestJobsDefaultHeap();
 }

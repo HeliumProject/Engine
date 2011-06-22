@@ -3,7 +3,7 @@
 
 #include "RenderingD3D9/D3D9Surface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 D3D9DynamicTexture2d::D3D9DynamicTexture2d( IDirect3DTexture9* pD3DTexture, bool bSrgb )

@@ -21,7 +21,7 @@
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 ObjectPreprocessor* ObjectPreprocessor::sm_pInstance = NULL;
 

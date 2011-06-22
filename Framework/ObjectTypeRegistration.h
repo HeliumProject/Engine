@@ -11,7 +11,7 @@
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base class for GameObject type registration support.
     ///

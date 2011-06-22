@@ -717,11 +717,11 @@ bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
     return true;
 }
 
-Lunar::Color HierarchyNode::GetMaterialColor( Lunar::Color defaultMaterial ) const
+Helium::Color HierarchyNode::GetMaterialColor( Helium::Color defaultMaterial ) const
 {
     SceneGraph::Viewport* view = m_Owner->GetViewport();
 
-    Lunar::Color material = defaultMaterial;
+    Helium::Color material = defaultMaterial;
 
     switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
     {

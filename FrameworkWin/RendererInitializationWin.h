@@ -12,7 +12,7 @@
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/RendererInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Renderer factory implementation for Windows.
     class LUNAR_FRAMEWORK_WIN_API RendererInitializationWin : public RendererInitialization

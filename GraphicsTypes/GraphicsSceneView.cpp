@@ -13,7 +13,7 @@
 #include "Rendering/RRenderContext.h"
 #include "Rendering/RSurface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 const float32_t GraphicsSceneView::DEFAULT_HORIZONTAL_FOV = 70.0f;
 const float32_t GraphicsSceneView::DEFAULT_ASPECT_RATIO = 1.0f;

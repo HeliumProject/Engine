@@ -30,13 +30,13 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
 static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
 #endif !HELIUM_RELEASE && !HELIUM_PROFILE
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RRenderCommandProxy );
 }

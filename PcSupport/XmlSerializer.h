@@ -19,7 +19,7 @@ namespace Helium
     class BufferedStream;
 }
 
-namespace Lunar
+namespace Helium
 {
     /// XML file object serializer.
     class LUNAR_PC_SUPPORT_API XmlSerializer : public XmlSerializerBase

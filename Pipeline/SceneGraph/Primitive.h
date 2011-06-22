@@ -62,9 +62,9 @@ namespace Helium
 
             virtual void Populate( PopulateArgs* args ) = 0;
 
-            virtual void Draw( Lunar::BufferedDrawer*,
+            virtual void Draw( Helium::BufferedDrawer*,
                                DrawArgs*,
-                               Lunar::Color materialColor = Color::WHITE,
+                               Helium::Color materialColor = Color::WHITE,
                                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY,
                                const bool* solid = NULL,
                                const bool* transparent = NULL ) const = 0;

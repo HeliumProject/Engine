@@ -10,7 +10,7 @@
 
 #include "RenderingD3D9/D3D9Renderer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc RendererInitialization::Initialize()
 bool RendererInitializationWin::Initialize()

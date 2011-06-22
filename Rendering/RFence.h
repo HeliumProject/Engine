@@ -10,7 +10,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// GPU command buffer fence interface.
     class LUNAR_RENDERING_API RFence : public RRenderResource

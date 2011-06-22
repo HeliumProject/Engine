@@ -13,7 +13,7 @@
 
 #include "Windowing/Window.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for managing window creation.
     class LUNAR_WINDOWING_API WindowManager : NonCopyable

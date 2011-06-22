@@ -30,16 +30,16 @@ void PrimitiveCube::Update()
     for ( size_t vertexIndex = 0; vertexIndex < drawVertexCount; ++vertexIndex )
     {
         const Vector3& position = drawVertices[ vertexIndex ];
-        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();
 }
 
 void PrimitiveCube::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -57,7 +57,7 @@ void PrimitiveCube::Draw(
     if (solid ? *solid : m_IsSolid)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -71,7 +71,7 @@ void PrimitiveCube::Draw(
     else
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -80,7 +80,7 @@ void PrimitiveCube::Draw(
             0,
             12,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += 12;
     }
 }
@@ -95,8 +95,8 @@ bool PrimitiveCube::Pick( PickVisitor* pick, const bool* solid ) const
     {
         for (size_t i=0; i<24; i+=2)
         {
-            const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
-            const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+            const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+            const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
             Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
             Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
             if ( pick->PickSegment( position0, position1 ) )

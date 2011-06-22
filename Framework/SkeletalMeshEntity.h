@@ -17,7 +17,7 @@
 #include "GrannySkeletalMeshEntityInterface.h"
 #endif
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Animation );
 

@@ -14,7 +14,7 @@
 
 #include "Foundation/String.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base interface for management of application and component initialization and the main application loop.
     class LUNAR_FRAMEWORK_API System : NonCopyable

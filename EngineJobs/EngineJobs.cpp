@@ -8,14 +8,14 @@
 #include "EngineJobsPch.h"
 #include "EngineJobs/EngineJobs.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Initialize the default memory heap for the EngineJobs module.
 ///
 /// This should be called from the main thread before running any jobs to make sure the allocator is properly
 /// initialized, as initialization of the heap is not thread-safe.  Note that this will only initialize a separate
 /// heap if module-specific memory heaps are enabled.
-void Lunar::InitEngineJobsDefaultHeap()
+void Helium::InitEngineJobsDefaultHeap()
 {
     HELIUM_DEFAULT_HEAP;
 }

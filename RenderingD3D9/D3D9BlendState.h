@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RBlendState.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 blend state object.
     class D3D9BlendState : public RBlendState

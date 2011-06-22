@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/XmlSerializerBase.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Structure tag strings.
 static const char STRUCT_TAG_START[] = "<struct>" L_XML_NEWLINE;

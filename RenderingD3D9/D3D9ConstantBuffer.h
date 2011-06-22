@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RConstantBuffer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 constant buffer implementation.
     class D3D9ConstantBuffer : public RConstantBuffer

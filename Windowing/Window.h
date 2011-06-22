@@ -13,7 +13,7 @@
 
 #include <boost/function.hpp>
 
-namespace Lunar
+namespace Helium
 {
     /// Interface to a window.
     class LUNAR_WINDOWING_API Window : NonCopyable

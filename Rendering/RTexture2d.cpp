@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RTexture2d.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RTexture2d::~RTexture2d()

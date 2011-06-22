@@ -56,13 +56,13 @@ void PrimitiveCylinder::Update()
             upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : Sin(theta) * m_Radius;
 
             position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
-            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
 
             sideValue = m_VerticalOrientation ? Sin(theta + stepAngle) * m_Radius : -m_Length/2.0f + stepLength*(float32_t)(l);
             upValue   = m_VerticalOrientation ? -m_Length/2.0f + stepLength*(float32_t)(l) : Sin(theta + stepAngle) * m_Radius;
 
             position = SetupVector( sideValue, upValue, Cos(theta + stepAngle) * m_Radius );
-            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
         }
     }
 
@@ -79,18 +79,18 @@ void PrimitiveCylinder::Update()
         upValue   = m_VerticalOrientation ? m_Length/2.0f : Sin(theta) * m_Radius;
 
         position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
-        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
 
         sideValue = m_VerticalOrientation ? Sin(theta) * m_Radius : -m_Length/2.0f;
         upValue   = m_VerticalOrientation ? -m_Length/2.0f : Sin(theta) * m_Radius;
 
         position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
-        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     // top
     position = SetupVector( m_Length/2.0f, 0.0f, 0.0f );
-    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     for (int x=0; x<=m_RadiusSteps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
@@ -99,12 +99,12 @@ void PrimitiveCylinder::Update()
         upValue   = m_VerticalOrientation ?  m_Length/2.0f : Sin(theta) * m_Radius;
 
         position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
-        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     // bottom, construct backward to wrap polys correctly
     position = SetupVector( -m_Length/2.0f, 0.0f, 0.0f );
-    m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     for (int x=m_RadiusSteps; x>=0; x--)
     {
         float theta = (float32_t)(x) * stepAngle;
@@ -113,16 +113,16 @@ void PrimitiveCylinder::Update()
         upValue   = m_VerticalOrientation ?  -m_Length/2.0f : Sin(theta) * m_Radius;
 
         position = SetupVector( sideValue, upValue, Cos(theta) * m_Radius );
-        m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();
 }
 
 void PrimitiveCylinder::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -140,7 +140,7 @@ void PrimitiveCylinder::Draw(
     if (solid ? *solid : m_IsSolid)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
             transform,
             m_Buffer,
             NULL,
@@ -151,7 +151,7 @@ void PrimitiveCylinder::Draw(
             materialColor );
         args->m_TriangleCount += (m_RadiusSteps*2);
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
             NULL,
@@ -162,7 +162,7 @@ void PrimitiveCylinder::Draw(
             materialColor );
         args->m_TriangleCount += (m_RadiusSteps);
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
             transform,
             m_Buffer,
             NULL,
@@ -176,7 +176,7 @@ void PrimitiveCylinder::Draw(
     else
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -185,7 +185,7 @@ void PrimitiveCylinder::Draw(
             0,
             m_RadiusSteps * m_LengthSteps,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += (m_RadiusSteps*m_LengthSteps);
     }
 }

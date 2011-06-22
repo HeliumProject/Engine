@@ -166,8 +166,8 @@ namespace Helium
             // Non-reflected
             PrimitiveLocator* m_Locator;
             PrimitiveCone*    m_Cone;
-            static Lunar::Color     s_Material;
-            static Lunar::Color     s_HullMaterial;
+            static Helium::Color     s_Material;
+            static Helium::Color     s_HullMaterial;
             VertexResourcePtr       m_Vertices;
         };
 

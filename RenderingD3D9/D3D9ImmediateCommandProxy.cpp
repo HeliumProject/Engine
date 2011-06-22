@@ -23,7 +23,7 @@
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///

@@ -24,7 +24,7 @@
 #include "GrannyMeshResourceHandlerInterface.h"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( MeshResourceHandler, EditorSupport, 0 );
 

@@ -13,7 +13,7 @@
 
 #include "Engine/Cache.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Package loader for loading objects from a binary cache.
     class CachePackageLoader : public PackageLoader

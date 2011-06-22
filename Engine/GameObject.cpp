@@ -14,7 +14,7 @@
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 REFLECT_DEFINE_OBJECT( GameObject )
 

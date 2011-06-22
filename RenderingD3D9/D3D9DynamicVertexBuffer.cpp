@@ -1,7 +1,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9DynamicVertexBuffer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 D3D9DynamicVertexBuffer::D3D9DynamicVertexBuffer( IDirect3DVertexBuffer9* pD3DBuffer )

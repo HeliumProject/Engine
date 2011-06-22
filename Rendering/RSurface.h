@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for a renderable surface.
     class LUNAR_RENDERING_API RSurface : public RRenderResource

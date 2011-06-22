@@ -16,7 +16,7 @@
 
 #include <nvtt/nvtt.h>
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Maximum Unicode code point value.
 static const uint_fast32_t UNICODE_CODE_POINT_MAX = 0x10ffff;

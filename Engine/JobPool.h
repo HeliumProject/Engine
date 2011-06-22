@@ -13,7 +13,7 @@
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Pool of job objects.
     ///

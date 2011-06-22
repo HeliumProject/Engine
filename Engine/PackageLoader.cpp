@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/PackageLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 PackageLoader::~PackageLoader()

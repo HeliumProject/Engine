@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for the input layout of a shader with regards to a specific vertex format.
     class LUNAR_RENDERING_API RVertexInputLayout : public RRenderResource

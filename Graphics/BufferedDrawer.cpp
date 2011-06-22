@@ -16,7 +16,7 @@
 #include "Graphics/Font.h"
 #include "Graphics/Shader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 BufferedDrawer::BufferedDrawer()

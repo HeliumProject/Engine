@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
 #if L_USE_GRANNY_ANIMATION
     /// Get the Granny-specific animation data.

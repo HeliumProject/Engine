@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/System.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 System* System::sm_pInstance = NULL;
 

@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/Renderer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 Renderer* Renderer::sm_pInstance = NULL;
 

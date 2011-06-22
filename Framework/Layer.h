@@ -16,7 +16,7 @@
 #include "Platform/Math/Simd/Vector3.h"
 #include "Framework/Entity.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Entity );
     HELIUM_DECLARE_WPTR( World );

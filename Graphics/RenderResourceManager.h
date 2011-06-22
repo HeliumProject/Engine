@@ -15,7 +15,7 @@
 #include "Rendering/RRenderResource.h"
 #include "Graphics/GraphicsConfig.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Font );
     HELIUM_DECLARE_PTR( ShaderVariant );

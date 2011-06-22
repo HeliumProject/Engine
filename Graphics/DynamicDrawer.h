@@ -14,7 +14,7 @@
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class Renderer;
     class RRenderCommandProxy;

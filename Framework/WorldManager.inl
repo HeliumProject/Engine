@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the elapsed world timer tick count for the start of the current frame, adjusted for frame rate limits.
     ///

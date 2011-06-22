@@ -18,7 +18,7 @@
 #include "GrannyAnimationInterface.h"
 #endif
 
-namespace Lunar
+namespace Helium
 {
     /// Animation resource data.
     class LUNAR_GRAPHICS_API Animation : public Resource

@@ -1,7 +1,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9DynamicIndexBuffer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 D3D9DynamicIndexBuffer::D3D9DynamicIndexBuffer( IDirect3DIndexBuffer9* pD3DBuffer )

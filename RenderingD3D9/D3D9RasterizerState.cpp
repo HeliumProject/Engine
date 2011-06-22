@@ -8,7 +8,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9RasterizerState.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 D3D9RasterizerState::~D3D9RasterizerState()

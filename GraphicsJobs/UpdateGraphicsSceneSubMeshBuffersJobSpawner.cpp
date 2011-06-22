@@ -15,7 +15,7 @@ static const uint_fast32_t SUB_MESH_CHILD_JOB_MAX = 128;
 /// Maximum number of sub-meshes to update in each child job.
 static const uint_fast32_t SUB_MESH_CHILD_JOB_OBJECT_COUNT_MAX = 100;
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Spawn jobs to update the constant buffer data for all graphics scene object sub-meshes.
 ///

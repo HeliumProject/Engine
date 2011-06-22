@@ -8,7 +8,7 @@
 #include "Graphics/Font.h"
 #include "Graphics/RenderResourceManager.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RFence );

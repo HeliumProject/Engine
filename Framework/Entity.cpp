@@ -10,7 +10,7 @@
 
 #include "Framework/Layer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Entity, Framework, 0 );
 

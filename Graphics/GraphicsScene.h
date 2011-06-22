@@ -22,7 +22,7 @@
 #include "Graphics/BufferedDrawer.h"
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RConstantBuffer );
 

@@ -15,7 +15,7 @@
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     class RTexture2d;
 

@@ -8,7 +8,7 @@
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RTexture2d );
 

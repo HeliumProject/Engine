@@ -8,7 +8,7 @@
 #include "WindowingWinPch.h"
 #include "WindowingWin/WinWindow.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 WinWindow::WinWindow()

@@ -13,20 +13,20 @@
 
 #include "ExampleGame/ExampleObject.h"
 
-static Lunar::StrongPtr< Lunar::Package > spExampleGameTypePackage;
+static Helium::StrongPtr< Helium::Package > spExampleGameTypePackage;
 
-EXAMPLE_EXAMPLE_GAME_API Lunar::Package* GetExampleGameTypePackage()
+EXAMPLE_EXAMPLE_GAME_API Helium::Package* GetExampleGameTypePackage()
 {
-    Lunar::Package* pPackage = spExampleGameTypePackage;
+    Helium::Package* pPackage = spExampleGameTypePackage;
     if( !pPackage )
     {
-        Lunar::GameObject* pTypesPackageObject = Lunar::GameObject::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
+        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        HELIUM_VERIFY( Lunar::GameObject::Create< Lunar::Package >(
+        HELIUM_VERIFY( Helium::GameObject::Create< Helium::Package >(
             spExampleGameTypePackage,
-            Lunar::Name( TXT( "ExampleGame" ) ),
+            Helium::Name( TXT( "ExampleGame" ) ),
             pTypesPackageObject ) );
         pPackage = spExampleGameTypePackage;
         HELIUM_ASSERT( pPackage );

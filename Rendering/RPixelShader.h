@@ -11,7 +11,7 @@
 
 #include "Rendering/RShader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Pixel shader interface.
     class LUNAR_RENDERING_API RPixelShader : public RShader

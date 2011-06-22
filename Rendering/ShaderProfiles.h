@@ -11,7 +11,7 @@
 
 #include "Rendering/Rendering.h"
 
-namespace Lunar
+namespace Helium
 {
     namespace ShaderProfile
     {

@@ -91,12 +91,12 @@ void PrimitiveSphere::Update()
             Vector3 position = SetupVector(sinTheta * cosPhi * m_Radius,
                 sinPhi * m_Radius,
                 cosTheta * cosPhi * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
 
             position = SetupVector(sinTheta2 * cosPhi * m_Radius,
                 sinPhi * m_Radius,
                 cosTheta2 * cosPhi * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( position.x, position.y, position.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
         }
     }
 
@@ -124,19 +124,19 @@ void PrimitiveSphere::Update()
                 float32_t cosPhi = Cos( phi * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
                 float32_t cosPhi2 = Cos( ( phi + dphi ) * static_cast< float32_t >( HELIUM_DEG_TO_RAD ) );
 
-                Lunar::SimpleVertex a(
+                Helium::SimpleVertex a(
                     cosTheta * cosPhi * m_Radius,
                     cosTheta * sinPhi * m_Radius,
                     sinTheta * m_Radius );
                 m_Vertices.push_back( a );
 
-                Lunar::SimpleVertex b(
+                Helium::SimpleVertex b(
                     cosTheta2 * cosPhi2 * m_Radius,
                     cosTheta2 * sinPhi2 * m_Radius,
                     sinTheta2 * m_Radius );
                 m_Vertices.push_back( b );
 
-                Lunar::SimpleVertex vertex(
+                Helium::SimpleVertex vertex(
                     cosTheta2 * cosPhi * m_Radius,
                     cosTheta2 * sinPhi * m_Radius,
                     sinTheta2 * m_Radius );
@@ -161,9 +161,9 @@ void PrimitiveSphere::Update()
 }
 
 void PrimitiveSphere::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -181,7 +181,7 @@ void PrimitiveSphere::Draw(
     if (solid ? *solid : m_IsSolid)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -195,7 +195,7 @@ void PrimitiveSphere::Draw(
     else
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -204,7 +204,7 @@ void PrimitiveSphere::Draw(
             0,
             m_WireVertCount / 2,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += (m_WireVertCount/2);
     }
 }
@@ -228,8 +228,8 @@ bool PrimitiveSphere::Pick( PickVisitor* pick, const bool* solid ) const
         {
             for (size_t i=0; i<m_Vertices.size(); i+=2)
             {
-                const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
-                const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+                const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+                const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
                 Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
                 Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
                 if ( pick->PickSegment( position0, position1 ) )

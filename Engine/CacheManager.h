@@ -18,7 +18,7 @@
 /// Cache file extension.
 #define L_CACHE_EXTENSION TXT( "cache" )
 
-namespace Lunar
+namespace Helium
 {
     /// Manager for object and resource serialization caches.
     class LUNAR_ENGINE_API CacheManager : NonCopyable

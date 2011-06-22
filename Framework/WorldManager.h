@@ -16,7 +16,7 @@
 /// Non-zero to enable debug verification of methods called on Entity-based instances during world updates.
 #define L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING ( !L_RELEASE )
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( World );
 

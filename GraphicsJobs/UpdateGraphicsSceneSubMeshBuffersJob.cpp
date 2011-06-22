@@ -15,7 +15,7 @@
 #include "GrannySceneObjectInterface.h"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Update the instance buffer data for a set of graphics scene object sub-meshes.
 ///

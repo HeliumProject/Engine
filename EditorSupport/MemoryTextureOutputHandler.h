@@ -15,7 +15,7 @@
 
 #include <nvtt/nvtt.h>
 
-namespace Lunar
+namespace Helium
 {
     /// NVIDIA Texture Tools OutputHandler implementation for outputting texture data to a memory buffer.
     class MemoryTextureOutputHandler : public nvtt::OutputHandler

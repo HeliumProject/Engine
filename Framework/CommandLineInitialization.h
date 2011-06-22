@@ -11,7 +11,7 @@
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for initializing platform command-line parameters.
     class LUNAR_FRAMEWORK_API CommandLineInitialization

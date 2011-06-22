@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/XmlTemplateSerializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 XmlTemplateSerializer::XmlTemplateSerializer()

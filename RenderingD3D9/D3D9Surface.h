@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RSurface.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Wrapper for a Direct3D 9 surface.
     class D3D9Surface : public RSurface

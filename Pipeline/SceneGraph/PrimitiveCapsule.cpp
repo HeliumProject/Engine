@@ -111,12 +111,12 @@ void PrimitiveCapsule::Update()
             Vector3 point = SetupVector(sinTheta * cosPhi * m_Radius,
                 sinPhi * m_Radius + (MATH_SIGN(phi) * m_Length / 2.0f),
                 cosTheta * cosPhi * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
 
             point = SetupVector(sinTheta2 * cosPhi * m_Radius,
                 sinPhi * m_Radius + (MATH_SIGN(phi) * m_Length / 2.0f),
                 cosTheta2 * cosPhi * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
         }
     }
 
@@ -132,12 +132,12 @@ void PrimitiveCapsule::Update()
             Vector3 point = SetupVector(Sin(theta) * m_Radius,
                 -m_Length/2.0f + stepLength*(float32_t)(l),
                 Cos(theta) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
 
             point = SetupVector(Sin(theta + stepAngle) * m_Radius,
                 -m_Length/2.0f + stepLength*(float32_t)(l),
                 Cos(theta + stepAngle) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
         }
     }
 
@@ -176,31 +176,31 @@ void PrimitiveCapsule::Update()
                     (sinTheta * m_Radius) + offset,
                     cosTheta * cosPhi * m_Radius);
 
-                m_Vertices.push_back( Lunar::SimpleVertex( a.x, a.y, a.z ) );
+                m_Vertices.push_back( Helium::SimpleVertex( a.x, a.y, a.z ) );
 
                 Vector3 b = SetupVector(cosTheta2 * sinPhi2 * m_Radius,
                     (sinTheta2 * m_Radius) + offset,
                     cosTheta2 * cosPhi2 * m_Radius);
 
-                m_Vertices.push_back( Lunar::SimpleVertex( b.x, b.y, b.z ) );
+                m_Vertices.push_back( Helium::SimpleVertex( b.x, b.y, b.z ) );
 
                 Vector3 point = SetupVector(cosTheta2 * sinPhi * m_Radius,
                     (sinTheta2 * m_Radius) + offset,
                     cosTheta2 * cosPhi * m_Radius);
 
-                m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+                m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
 
                 if (theta > -90 && theta < 90)
                 {
-                    m_Vertices.push_back( Lunar::SimpleVertex( b.x, b.y, b.z ) );
+                    m_Vertices.push_back( Helium::SimpleVertex( b.x, b.y, b.z ) );
 
-                    m_Vertices.push_back( Lunar::SimpleVertex( a.x, a.y, a.z ) );
+                    m_Vertices.push_back( Helium::SimpleVertex( a.x, a.y, a.z ) );
 
                     point = SetupVector(cosTheta * sinPhi2 * m_Radius,
                         (sinTheta * m_Radius) + offset,
                         cosTheta * cosPhi2 * m_Radius);
 
-                    m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+                    m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
                 }
             }
         }
@@ -213,12 +213,12 @@ void PrimitiveCapsule::Update()
             Vector3 point = SetupVector(Sin(theta) * m_Radius,
                 m_Length/2.0f,
                 Cos(theta) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
 
             point = SetupVector(Sin(theta) * m_Radius,
                 -m_Length/2.0f,
                 Cos(theta) * m_Radius);
-            m_Vertices.push_back( Lunar::SimpleVertex( point.x, point.y, point.z ) );
+            m_Vertices.push_back( Helium::SimpleVertex( point.x, point.y, point.z ) );
         }
     }
 
@@ -226,9 +226,9 @@ void PrimitiveCapsule::Update()
 }
 
 void PrimitiveCapsule::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -244,7 +244,7 @@ void PrimitiveCapsule::Draw(
     if (solid ? *solid : m_IsSolid)
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -256,7 +256,7 @@ void PrimitiveCapsule::Draw(
         args->m_TriangleCount += (m_CapVertCount/3);
 
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
             transform,
             m_Buffer,
             NULL,
@@ -270,7 +270,7 @@ void PrimitiveCapsule::Draw(
     else
     {
         drawInterface->DrawUntextured(
-            Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
             transform,
             m_Buffer,
             NULL,
@@ -279,7 +279,7 @@ void PrimitiveCapsule::Draw(
             0,
             m_WireVertCount / 2,
             materialColor,
-            Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_LineCount += (m_WireVertCount/2);
     }
 }
@@ -313,8 +313,8 @@ bool PrimitiveCapsule::Pick( PickVisitor* pick, const bool* solid ) const
     {
         for (size_t i=0; i<m_Vertices.size(); i+=2)
         {
-            const Lunar::SimpleVertex& vertex0 = m_Vertices[ i ];
-            const Lunar::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+            const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+            const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
             Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
             Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
             if ( pick->PickSegment( position0, position1 ) )

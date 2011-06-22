@@ -16,7 +16,7 @@
 #include "Platform/Math/Simd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
-namespace Lunar
+namespace Helium
 {
     class Entity;
 

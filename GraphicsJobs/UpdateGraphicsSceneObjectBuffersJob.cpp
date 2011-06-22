@@ -11,7 +11,7 @@
 #include "Engine/JobManager.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Update the instance buffer data for a set of graphics scene objects.
     ///

@@ -14,7 +14,7 @@
 #include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/Stream/DynamicMemoryStream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// GameObject serializer for package and resource caching.
     class LUNAR_ENGINE_API BinarySerializer : public Serializer

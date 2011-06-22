@@ -11,7 +11,7 @@
 
 #include "Framework/Entity.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Camera entity.
     class LUNAR_FRAMEWORK_API Camera : public Entity

@@ -10,7 +10,7 @@
 
 #include "Engine/JobTask.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 JobContext::JobContext()

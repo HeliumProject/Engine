@@ -3,7 +3,7 @@
 #include "RenderingD3D9/D3D9IndexBuffer.h"
 #include "RenderingD3D9/D3D9DeviceResetListener.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Dynamic Direct3D 9 index buffer.
     ///

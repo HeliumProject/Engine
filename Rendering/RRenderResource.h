@@ -17,7 +17,7 @@
 /// @param[in] CLASS  Class for which to declare the smart pointer type.
 #define L_DECLARE_RPTR( CLASS ) class CLASS; typedef Helium::SmartPtr< CLASS > CLASS##Ptr;
 
-namespace Lunar
+namespace Helium
 {
     /// Base class for all reference-counted render resources.
     class LUNAR_RENDERING_API RRenderResource : public AtomicRefCountBase< RRenderResource >, NonCopyable

@@ -11,7 +11,7 @@
 
 #include "Rendering/RShader.h"
 
-namespace Lunar
+namespace Helium
 {
     class Renderer;
 

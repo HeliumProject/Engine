@@ -33,7 +33,7 @@
 // long-standing bugs with the FBX SDK attempting to free allocations returned by CRT functions, i.e. strdup()).
 #define L_ENABLE_FBX_MEMORY_ALLOCATOR 0
 
-namespace Lunar
+namespace Helium
 {
 #if L_ENABLE_FBX_MEMORY_ALLOCATOR
     /// Custom FBX memory allocator.

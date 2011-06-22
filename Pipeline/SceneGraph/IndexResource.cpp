@@ -26,7 +26,7 @@ uint32_t IndexResource::GetElementSize() const
 uint8_t* IndexResource::Lock() 
 {
     void* data = m_Buffer->Map(
-        IsDynamic() ? Lunar::RENDERER_BUFFER_MAP_HINT_DISCARD : Lunar::RENDERER_BUFFER_MAP_HINT_NONE );
+        IsDynamic() ? Helium::RENDERER_BUFFER_MAP_HINT_DISCARD : Helium::RENDERER_BUFFER_MAP_HINT_NONE );
     HELIUM_ASSERT( data );
 
     return static_cast< uint8_t* >( data );
@@ -45,12 +45,12 @@ bool IndexResource::Allocate()
         return false; 
     }
 
-    Lunar::Renderer* pRenderer = Lunar::Renderer::GetStaticInstance();
+    Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
 
     m_Buffer = pRenderer->CreateIndexBuffer(
         size,
-        ( IsDynamic() ? Lunar::RENDERER_BUFFER_USAGE_DYNAMIC : Lunar::RENDERER_BUFFER_USAGE_STATIC ),
+        ( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ),
         IndexElementFormats[ GetElementType() ] );
     HELIUM_ASSERT( m_Buffer );
     if ( m_Buffer )

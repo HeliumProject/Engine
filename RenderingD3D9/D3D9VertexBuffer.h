@@ -12,7 +12,7 @@
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexBuffer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 vertex buffer implementation.
     class D3D9VertexBuffer : public RVertexBuffer

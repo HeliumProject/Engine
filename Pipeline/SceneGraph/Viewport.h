@@ -203,18 +203,18 @@ namespace Helium
         class PIPELINE_API Viewport
         {
         public:
-            static const Lunar::Color s_LiveMaterial;
-            static const Lunar::Color s_SelectedMaterial;
-            static const Lunar::Color s_ReactiveMaterial;
-            static const Lunar::Color s_HighlightedMaterial;
-            static const Lunar::Color s_UnselectableMaterial;
-            static const Lunar::Color s_ComponentMaterial;
-            static const Lunar::Color s_SelectedComponentMaterial;
+            static const Helium::Color s_LiveMaterial;
+            static const Helium::Color s_SelectedMaterial;
+            static const Helium::Color s_ReactiveMaterial;
+            static const Helium::Color s_HighlightedMaterial;
+            static const Helium::Color s_UnselectableMaterial;
+            static const Helium::Color s_ComponentMaterial;
+            static const Helium::Color s_SelectedComponentMaterial;
 
-            static const Lunar::Color s_RedMaterial;
-            static const Lunar::Color s_YellowMaterial;
-            static const Lunar::Color s_GreenMaterial;
-            static const Lunar::Color s_BlueMaterial;
+            static const Helium::Color s_RedMaterial;
+            static const Helium::Color s_YellowMaterial;
+            static const Helium::Color s_GreenMaterial;
+            static const Helium::Color s_BlueMaterial;
 
             Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();

@@ -14,7 +14,7 @@
 #include "Foundation/StringConverter.h"
 #include "Foundation/AsyncLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// TOC header magic number.
 static const uint32_t TOC_MAGIC = 0xcac4e70c;

@@ -11,7 +11,7 @@
 
 #include "PcSupport/XmlSerializerBase.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serializer for tracking of template object properties for comparison during general object serialization.
     class LUNAR_PC_SUPPORT_API XmlTemplateSerializer : public XmlSerializerBase

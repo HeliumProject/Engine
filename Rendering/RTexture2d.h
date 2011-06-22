@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class RSurface;
 

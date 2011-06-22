@@ -18,7 +18,7 @@ namespace Helium
     template< typename CharType, typename Allocator > class StringBase;
 }
 
-namespace Lunar
+namespace Helium
 {
     /// Serializer for retrieving object properties from a direct byte dump (previously created using DirectSerializer).
     ///

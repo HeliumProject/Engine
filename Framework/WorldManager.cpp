@@ -13,7 +13,7 @@
 #include "Framework/FrameworkInterface.h"
 #include "Framework/Layer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 WorldManager* WorldManager::sm_pInstance = NULL;
 

@@ -12,7 +12,7 @@
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/ObjectLoaderInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// GameObjectLoader initialization implementation for Windows.
     class LUNAR_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization

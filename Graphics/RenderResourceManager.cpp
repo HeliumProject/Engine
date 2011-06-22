@@ -21,7 +21,7 @@
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/Shader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 RenderResourceManager* RenderResourceManager::sm_pInstance = NULL;
 

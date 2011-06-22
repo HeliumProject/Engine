@@ -8,7 +8,7 @@
 #include "WindowingPch.h"
 #include "Windowing/WindowManager.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 WindowManager* WindowManager::sm_pInstance = NULL;
 

@@ -38,7 +38,7 @@
         if( FAILED( d3dResult ) ) \
         { \
             tchar_t messageBuffer[ 512 ]; \
-            Lunar::StringFormat( \
+            Helium::StringFormat( \
                 messageBuffer, \
                 HELIUM_ARRAY_COUNT( messageBuffer ), \
                 TXT( "Direct3D result failed (0x%x)" ), \
@@ -69,7 +69,7 @@
 
 //@}
 
-namespace Lunar
+namespace Helium
 {
     class D3D9DeviceResetListener;
 

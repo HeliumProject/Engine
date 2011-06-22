@@ -16,7 +16,7 @@
 #include "Rendering/RTexture2d.h"
 #include "Rendering/RVertexDescription.h"
 
-namespace Lunar
+namespace Helium
 {
     class RRenderCommandProxy;
     class RRenderContext;

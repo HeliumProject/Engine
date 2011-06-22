@@ -22,22 +22,22 @@ void PrimitiveLocator::Update()
 
     m_Vertices.clear();
 
-    m_Vertices.push_back( Lunar::SimpleVertex( -m_Length, 0.0f, 0.0f ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( m_Length, 0.0f, 0.0f ) );
+    m_Vertices.push_back( Helium::SimpleVertex( -m_Length, 0.0f, 0.0f ) );
+    m_Vertices.push_back( Helium::SimpleVertex( m_Length, 0.0f, 0.0f ) );
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, -m_Length, 0.0f ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, m_Length, 0.0f ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, -m_Length, 0.0f ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, m_Length, 0.0f ) );
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, -m_Length ) );
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, m_Length ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, -m_Length ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, m_Length ) );
 
     Base::Update();
 }
 
 void PrimitiveLocator::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
@@ -46,7 +46,7 @@ void PrimitiveLocator::Draw(
     HELIUM_ASSERT( args );
 
     drawInterface->DrawUntextured(
-        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         transform,
         m_Buffer,
         NULL,
@@ -55,7 +55,7 @@ void PrimitiveLocator::Draw(
         0,
         3,
         materialColor,
-        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 3;
 }
 
@@ -64,8 +64,8 @@ bool PrimitiveLocator::Pick( PickVisitor* pick, const bool* solid ) const
     size_t vertexCount = m_Vertices.size();
     for ( size_t vertexIndex = 0; vertexIndex < vertexCount; vertexIndex += 2 )
     {
-        const Lunar::SimpleVertex& vertex0 = m_Vertices[ vertexIndex ];
-        const Lunar::SimpleVertex& vertex1 = m_Vertices[ vertexIndex + 1 ];
+        const Helium::SimpleVertex& vertex0 = m_Vertices[ vertexIndex ];
+        const Helium::SimpleVertex& vertex1 = m_Vertices[ vertexIndex + 1 ];
         Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
         Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
         if ( pick->PickSegment( position0, position1, 0.0f ) )

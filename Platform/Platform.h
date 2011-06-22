@@ -60,11 +60,3 @@
 #if HELIUM_OS_WIN
 # include "Platform/Windows/Platform.h"
 #endif
-
-#if HELIUM_CC_MSC
-# pragma message ( "TODO: Remove this once Lunar/Helium integration is done -Geoff" )
-#endif
-namespace Lunar
-{
-    using namespace Helium;
-}

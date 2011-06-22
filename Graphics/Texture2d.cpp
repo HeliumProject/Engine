@@ -12,7 +12,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RTexture2d.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 

@@ -11,7 +11,7 @@
 
 #include "Engine/GameObjectLoader.h"
 
-namespace Lunar
+namespace Helium
 {
     class CachePackageLoader;
 

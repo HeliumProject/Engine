@@ -8,7 +8,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9SamplerState.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Translate a Direct3D 9 texture address mode to an engine texture address mode without using a lookup table (safe
 // and future-proof).

@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Sampler state interface.
     class LUNAR_RENDERING_API RSamplerState : public RRenderResource

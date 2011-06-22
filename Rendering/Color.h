@@ -12,7 +12,7 @@
 #include "Rendering/Rendering.h"
 #include "Platform/Math/MathCommon.h"
 
-namespace Lunar
+namespace Helium
 {
     class Serializer;
 

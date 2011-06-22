@@ -14,7 +14,7 @@
 #include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/Stream/ExternalMemoryStream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Binary object property deserializer.
     class LUNAR_ENGINE_API BinaryDeserializer : public Serializer

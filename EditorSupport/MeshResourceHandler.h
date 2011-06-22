@@ -17,7 +17,7 @@
 
 #include "Framework/Mesh.h"
 
-namespace Lunar
+namespace Helium
 {
     class FbxSupport;
 

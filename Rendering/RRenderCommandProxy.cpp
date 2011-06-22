@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RRenderCommandProxy.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RRenderCommandProxy::~RRenderCommandProxy()

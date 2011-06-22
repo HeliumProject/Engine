@@ -18,7 +18,7 @@
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     class GraphicsScene;
 

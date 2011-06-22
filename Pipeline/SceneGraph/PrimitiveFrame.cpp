@@ -14,7 +14,7 @@ PrimitiveFrame::PrimitiveFrame()
     SetElementType( VertexElementTypes::ScreenVertex );
 
     m_BorderColor.SetArgb( 0xffc8c8c8 );
-    m_InnerColor = SceneGraph::Color::BlendColor( m_BorderColor, Lunar::Color( 0 ), 0.5f);
+    m_InnerColor = SceneGraph::Color::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
 }
 
 void PrimitiveFrame::Update()
@@ -26,7 +26,7 @@ void PrimitiveFrame::Update()
 
     m_Vertices.clear();
 
-    Lunar::ScreenVertex vertex;
+    Helium::ScreenVertex vertex;
     vertex.texCoords[ 0 ].packed = 0;
     vertex.texCoords[ 1 ].packed = 0;
 
@@ -73,9 +73,9 @@ void PrimitiveFrame::Update()
 }
 
 void PrimitiveFrame::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const

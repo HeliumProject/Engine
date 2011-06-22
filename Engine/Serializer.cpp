@@ -16,7 +16,7 @@
 #include "Platform/Math/Simd/AaBox.h"
 #include "Platform/Math/Float16.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 Serializer::~Serializer()

@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get whether byte swapping needs to be performed when converting between the current platform and the target
     /// platform of this preprocessor.

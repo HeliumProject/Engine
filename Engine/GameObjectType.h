@@ -18,7 +18,7 @@
 #include "Foundation/Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"
 
-namespace Lunar
+namespace Helium
 {
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;

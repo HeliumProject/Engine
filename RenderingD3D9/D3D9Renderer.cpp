@@ -31,7 +31,7 @@
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RFence );
 
@@ -41,7 +41,7 @@ namespace Lunar
     L_DECLARE_RPTR( D3D9SamplerState );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 // Non-zero to disable Direct3D 9Ex support (for testing purposes only; shipping builds should leave support enabled).
 #define L_DISABLE_DIRECT3D9EX 0

@@ -13,7 +13,7 @@
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Vertex layout description interface.
     class LUNAR_RENDERING_API RVertexDescription : public RRenderResource

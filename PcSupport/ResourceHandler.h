@@ -19,7 +19,7 @@ namespace Helium
     class Stream;
 }
 
-namespace Lunar
+namespace Helium
 {
     class ObjectPreprocessor;
 

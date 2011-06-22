@@ -17,7 +17,7 @@
 
 #include "Graphics/Shader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Shader resource types.
     class LUNAR_EDITOR_SUPPORT_API ShaderResourceHandler : public ResourceHandler

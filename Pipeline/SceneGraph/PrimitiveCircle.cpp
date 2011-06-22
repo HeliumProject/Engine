@@ -30,17 +30,17 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
-            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
-            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
         }    
     }
 
-    m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, 0.0f, 0.0f ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, 0.0f ) );
 
     for (int x=0; x<m_RadiusSteps; x++)
     {
@@ -48,22 +48,22 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
         }
 
         if (x+1 >= m_RadiusSteps)
         {
             if( !m_HackyRotateFlag )
             {
-                m_Vertices.push_back( Lunar::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
+                m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
             }
             else
             {
-                m_Vertices.push_back( Lunar::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
+                m_Vertices.push_back( Helium::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
             }
         }
     }
@@ -72,15 +72,15 @@ void PrimitiveCircle::Update()
 }
 
 void PrimitiveCircle::Draw(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform,
     const bool* solid,
     const bool* transparent ) const
 {
     drawInterface->DrawUntextured(
-        Lunar::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         transform,
         m_Buffer,
         NULL,
@@ -89,19 +89,19 @@ void PrimitiveCircle::Draw(
         0,
         m_RadiusSteps,
         materialColor,
-        Lunar::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
 
     args->m_LineCount += m_RadiusSteps;
 }
 
 void PrimitiveCircle::DrawFill(
-    Lunar::BufferedDrawer* drawInterface,
+    Helium::BufferedDrawer* drawInterface,
     DrawArgs* args,
-    Lunar::Color materialColor,
+    Helium::Color materialColor,
     const Simd::Matrix44& transform ) const
 {
     drawInterface->DrawUntextured(
-        Lunar::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+        Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
         transform,
         m_Buffer,
         NULL,
@@ -110,7 +110,7 @@ void PrimitiveCircle::DrawFill(
         0,
         m_RadiusSteps,
         materialColor,
-        Lunar::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED );
+        Helium::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED );
     args->m_TriangleCount += m_RadiusSteps;
 }
 

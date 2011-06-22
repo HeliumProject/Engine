@@ -16,7 +16,7 @@
 #include "PcSupport/ResourceHandler.h"
 #include "Foundation/File/Path.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Texture2d resource types.
     class LUNAR_EDITOR_SUPPORT_API Texture2dResourceHandler : public ResourceHandler

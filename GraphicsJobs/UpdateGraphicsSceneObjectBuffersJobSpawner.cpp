@@ -16,7 +16,7 @@ static const uint_fast32_t SCENE_OBJECT_CHILD_JOB_MAX = 128;
 static const uint_fast32_t SCENE_OBJECT_CHILD_JOB_OBJECT_COUNT_MAX = 100;
 
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Spawn jobs to update the constant buffer data for all graphics scene objects.
 ///

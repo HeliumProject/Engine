@@ -11,7 +11,7 @@
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface to a low-level shader resource.
     class LUNAR_RENDERING_API RShader : public RRenderResource

@@ -11,7 +11,7 @@
 
 #include "Framework/RendererInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Renderer initializer that creates a null renderer.
     class LUNAR_FRAMEWORK_API NullRendererInitialization : public RendererInitialization

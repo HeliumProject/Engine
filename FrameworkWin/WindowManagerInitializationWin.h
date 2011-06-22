@@ -14,7 +14,7 @@
 
 #include "Platform/Windows/Windows.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Window manager factory implementation for Windows.
     class LUNAR_FRAMEWORK_WIN_API WindowManagerInitializationWin : public WindowManagerInitialization

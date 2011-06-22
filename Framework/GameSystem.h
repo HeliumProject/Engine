@@ -13,7 +13,7 @@
 
 #include "Windowing/Window.h"
 
-namespace Lunar
+namespace Helium
 {
     class GameObjectType;
 

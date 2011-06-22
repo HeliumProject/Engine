@@ -290,6 +290,10 @@ Helium.DoDefaultSolutionSettings = function()
 		"EnableSSE2",
 		"NoMinimalRebuild",
 	}
+		
+	if os.getenv( 'CL' ) then
+		buildoptions { os.getenv( 'CL' ) }
+	end
 
 	configuration "x64"
 		defines
@@ -422,7 +426,8 @@ Helium.DoDefaultLunarProjectSettings = function()
 
 	flags
 	{
-		"ExtraWarnings",
+	    -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
+		--"ExtraWarnings",
 		"FatalWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
 		"NoRTTI",

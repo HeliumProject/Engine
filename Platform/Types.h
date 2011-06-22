@@ -9,10 +9,6 @@
 // Register types
 //
 
-#ifndef NULL
-#define NULL (0)
-#endif
-
 #if HELIUM_CC_MSC
 
 /// @defgroup inttypes Integer Types

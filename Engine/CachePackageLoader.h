@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CACHE_PACKAGE_LOADER_H
-#define LUNAR_ENGINE_CACHE_PACKAGE_LOADER_H
+#ifndef HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H
+#define HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H
 
 #include "Engine/PackageLoader.h"
 
@@ -135,4 +135,4 @@ namespace Helium
 
 #include "Engine/CachePackageLoader.inl"
 
-#endif  // LUNAR_ENGINE_CACHE_PACKAGE_LOADER_H
+#endif  // HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H

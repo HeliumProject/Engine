@@ -419,8 +419,8 @@ Helium.DoDefaultSolutionSettings = function()
 
 end
 
--- Common settings for projects linking with Lunar libraries.
-Helium.DoDefaultLunarProjectSettings = function()
+-- Common settings for projects linking with libraries.
+Helium.DoDefaultProjectSettings = function()
 
 	language "C++"
 
@@ -495,8 +495,8 @@ Helium.DoDefaultLunarProjectSettings = function()
 
 end
 
--- Common settings for Lunar modules.
-Helium.DoLunarModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
+-- Common settings for modules.
+Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
 	defines
 	{
@@ -511,7 +511,7 @@ Helium.DoLunarModuleProjectSettings = function( baseDirectory, tokenPrefix, modu
 	pchheader( moduleName .. "Pch.h" )
 	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
 
-	Helium.DoDefaultLunarProjectSettings()
+	Helium.DoDefaultProjectSettings()
 
 	configuration "Debug"
 		kind "SharedLib"

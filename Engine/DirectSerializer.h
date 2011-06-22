@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_DIRECT_SERIALIZER_H
-#define LUNAR_ENGINE_DIRECT_SERIALIZER_H
+#ifndef HELIUM_ENGINE_DIRECT_SERIALIZER_H
+#define HELIUM_ENGINE_DIRECT_SERIALIZER_H
 
 #include "Engine/Serializer.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     ///
     /// @note  This will serialize pointer values directly.  As such, it should only be used within the context of a
     ///        running instance of the application and never written to disk.
-    class LUNAR_ENGINE_API DirectSerializer : public Serializer
+    class HELIUM_ENGINE_API DirectSerializer : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -71,4 +71,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_ENGINE_DIRECT_SERIALIZER_H
+#endif  // HELIUM_ENGINE_DIRECT_SERIALIZER_H

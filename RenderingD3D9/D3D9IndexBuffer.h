@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_INDEX_BUFFER_H
-#define LUNAR_RENDERING_D3D9_D3D9_INDEX_BUFFER_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_INDEX_BUFFER_H
+#define HELIUM_RENDERING_D3D9_D3D9_INDEX_BUFFER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RIndexBuffer.h"
@@ -44,4 +44,4 @@ namespace Helium
 
 #include "RenderingD3D9/D3D9IndexBuffer.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_INDEX_BUFFER_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_INDEX_BUFFER_H

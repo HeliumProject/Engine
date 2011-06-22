@@ -5,15 +5,15 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#ifndef LUNAR_RENDERING_R_FENCE_H
-#define LUNAR_RENDERING_R_FENCE_H
+#ifndef HELIUM_RENDERING_R_FENCE_H
+#define HELIUM_RENDERING_R_FENCE_H
 
 #include "Rendering/RRenderResource.h"
 
 namespace Helium
 {
     /// GPU command buffer fence interface.
-    class LUNAR_RENDERING_API RFence : public RRenderResource
+    class HELIUM_RENDERING_API RFence : public RRenderResource
     {
     protected:
         /// @name Construction/Destruction
@@ -23,4 +23,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_R_FENCE_H
+#endif  // HELIUM_RENDERING_R_FENCE_H

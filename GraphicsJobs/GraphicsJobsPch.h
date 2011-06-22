@@ -6,10 +6,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H
-#define LUNAR_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H
+#ifndef HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H
+#define HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H
 
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Foundation/String.h"
 
-#endif  // LUNAR_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H
+#endif  // HELIUM_GRAPHICS_JOBS_GRAPHICS_JOBS_PCH_H

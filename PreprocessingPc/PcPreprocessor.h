@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PREPROCESSING_PC_PC_PREPROCESSOR_H
-#define LUNAR_PREPROCESSING_PC_PC_PREPROCESSOR_H
+#ifndef HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H
+#define HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "PcSupport/PlatformPreprocessor.h"
@@ -15,7 +15,7 @@
 namespace Helium
 {
     /// PC object and resource preprocessing support.
-    class LUNAR_PREPROCESSING_PC_API PcPreprocessor : public PlatformPreprocessor
+    class HELIUM_PREPROCESSING_PC_API PcPreprocessor : public PlatformPreprocessor
     {
     public:
         /// @name Construction/Destruction
@@ -44,4 +44,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PREPROCESSING_PC_PC_PREPROCESSOR_H
+#endif  // HELIUM_PREPROCESSING_PC_PC_PREPROCESSOR_H

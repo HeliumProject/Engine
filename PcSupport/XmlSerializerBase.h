@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_XML_SERIALIZER_BASE_H
-#define LUNAR_PC_SUPPORT_XML_SERIALIZER_BASE_H
+#ifndef HELIUM_PC_SUPPORT_XML_SERIALIZER_BASE_H
+#define HELIUM_PC_SUPPORT_XML_SERIALIZER_BASE_H
 
 #include "PcSupport/PcSupport.h"
 #include "Engine/Serializer.h"
@@ -24,7 +24,7 @@
 namespace Helium
 {
     /// Base support for XML serialization routines.
-    class LUNAR_PC_SUPPORT_API XmlSerializerBase : public Serializer
+    class HELIUM_PC_SUPPORT_API XmlSerializerBase : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -254,4 +254,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PC_SUPPORT_XML_SERIALIZER_BASE_H
+#endif  // HELIUM_PC_SUPPORT_XML_SERIALIZER_BASE_H

@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PREPROCESSING_PC_PREPROCESSING_PC_H
-#define LUNAR_PREPROCESSING_PC_PREPROCESSING_PC_H
+#ifndef HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
+#define HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-    #ifdef LUNAR_PREPROCESSING_PC_EXPORTS
-        #define LUNAR_PREPROCESSING_PC_API HELIUM_API_EXPORT
+    #ifdef HELIUM_PREPROCESSING_PC_EXPORTS
+        #define HELIUM_PREPROCESSING_PC_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_PREPROCESSING_PC_API HELIUM_API_IMPORT
+        #define HELIUM_PREPROCESSING_PC_API HELIUM_API_IMPORT
     #endif
 #else
-    #define LUNAR_PREPROCESSING_PC_API
+    #define HELIUM_PREPROCESSING_PC_API
 #endif
 
-#endif  // LUNAR_PREPROCESSING_PC_PREPROCESSING_PC_H
+#endif  // HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H

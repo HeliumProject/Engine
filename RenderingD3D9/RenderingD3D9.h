@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_RENDERING_D3D9_H
-#define LUNAR_RENDERING_D3D9_RENDERING_D3D9_H
+#ifndef HELIUM_RENDERING_D3D9_RENDERING_D3D9_H
+#define HELIUM_RENDERING_D3D9_RENDERING_D3D9_H
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-    #ifdef LUNAR_RENDERING_D3D9_EXPORTS
-        #define LUNAR_RENDERING_D3D9_API HELIUM_API_EXPORT
+    #ifdef HELIUM_RENDERING_D3D9_EXPORTS
+        #define HELIUM_RENDERING_D3D9_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_RENDERING_D3D9_API HELIUM_API_IMPORT
+        #define HELIUM_RENDERING_D3D9_API HELIUM_API_IMPORT
     #endif
 #else
-    #define LUNAR_RENDERING_D3D9_API
+    #define HELIUM_RENDERING_D3D9_API
 #endif
 
-#endif  // LUNAR_RENDERING_D3D9_RENDERING_D3D9_H
+#endif  // HELIUM_RENDERING_D3D9_RENDERING_D3D9_H

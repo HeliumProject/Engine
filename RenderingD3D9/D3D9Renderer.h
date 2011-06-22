@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
-#define LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
+#define HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/Renderer.h"
@@ -179,7 +179,7 @@ namespace Helium
 
         /// @name Static Initialization
         //@{
-        LUNAR_RENDERING_D3D9_API static bool CreateStaticInstance();
+        HELIUM_RENDERING_D3D9_API static bool CreateStaticInstance();
         //@}
 
         /// @name Static Data Access
@@ -248,4 +248,4 @@ namespace Helium
 
 #include "RenderingD3D9/D3D9Renderer.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_RENDERER_H

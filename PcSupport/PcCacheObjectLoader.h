@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H
-#define LUNAR_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H
+#ifndef HELIUM_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H
+#define HELIUM_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H
 
 #include "PcSupport/PcSupport.h"
 #include "Engine/CacheObjectLoader.h"
@@ -30,7 +30,7 @@ namespace Helium
 
         /// @name Static Initialization
         //@{
-        LUNAR_PC_SUPPORT_API static bool InitializeStaticInstance();
+        HELIUM_PC_SUPPORT_API static bool InitializeStaticInstance();
         //@}
 
     private:
@@ -45,4 +45,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H
+#endif  // HELIUM_PC_SUPPORT_PC_CACHE_OBJECT_LOADER_H

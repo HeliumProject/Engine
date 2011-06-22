@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_GRAPHICS_PCH_H
-#define LUNAR_GRAPHICS_GRAPHICS_PCH_H
+#ifndef HELIUM_GRAPHICS_GRAPHICS_PCH_H
+#define HELIUM_GRAPHICS_GRAPHICS_PCH_H
 
 #include "Graphics/Graphics.h"
 
@@ -19,4 +19,4 @@
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"
 
-#endif  // LUNAR_GRAPHICS_GRAPHICS_PCH_H
+#endif  // HELIUM_GRAPHICS_GRAPHICS_PCH_H

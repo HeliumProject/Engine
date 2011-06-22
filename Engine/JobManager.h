@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOB_MANAGER_H
-#define LUNAR_ENGINE_JOB_MANAGER_H
+#ifndef HELIUM_ENGINE_JOB_MANAGER_H
+#define HELIUM_ENGINE_JOB_MANAGER_H
 
 #include "Engine/JobPool.h"
 
@@ -22,7 +22,7 @@
 namespace Helium
 {
     /// Job manager.
-    class LUNAR_ENGINE_API JobManager : NonCopyable
+    class HELIUM_ENGINE_API JobManager : NonCopyable
     {
     public:
         /// @name Initialization
@@ -87,4 +87,4 @@ namespace Helium
 
 #include "Engine/JobManager.inl"
 
-#endif  // LUNAR_ENGINE_JOB_MANAGER_H
+#endif  // HELIUM_ENGINE_JOB_MANAGER_H

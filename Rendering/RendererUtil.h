@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_RENDERER_UTIL_H
-#define LUNAR_RENDERING_RENDERER_UTIL_H
+#ifndef HELIUM_RENDERING_RENDERER_UTIL_H
+#define HELIUM_RENDERING_RENDERER_UTIL_H
 
 #include "Rendering/RendererTypes.h"
 
 namespace Helium
 {
     /// Renderer utility functions.
-    class LUNAR_RENDERING_API RendererUtil
+    class HELIUM_RENDERING_API RendererUtil
     {
     public:
         /// @name Pixel Format Support
@@ -31,4 +31,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_RENDERER_UTIL_H
+#endif  // HELIUM_RENDERING_RENDERER_UTIL_H

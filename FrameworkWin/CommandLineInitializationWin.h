@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H
-#define LUNAR_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H
+#ifndef HELIUM_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H
+#define HELIUM_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/CommandLineInitialization.h"
@@ -15,7 +15,7 @@
 namespace Helium
 {
     /// Command-line initialization for Windows.
-    class LUNAR_FRAMEWORK_WIN_API CommandLineInitializationWin : public CommandLineInitialization
+    class HELIUM_FRAMEWORK_WIN_API CommandLineInitializationWin : public CommandLineInitialization
     {
     public:
         /// @name Command-line Initialization
@@ -25,4 +25,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H
+#endif  // HELIUM_FRAMEWORK_WIN_COMMAND_LINE_INITIALIZATION_WIN_H

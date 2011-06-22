@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_SERIALIZER_H
-#define LUNAR_ENGINE_SERIALIZER_H
+#ifndef HELIUM_ENGINE_SERIALIZER_H
+#define HELIUM_ENGINE_SERIALIZER_H
 
 #include "Engine/Engine.h"
 
@@ -252,7 +252,7 @@ namespace Helium
     };
 
     /// Base interface for GameObject serialization.
-    class LUNAR_ENGINE_API Serializer : NonCopyable
+    class HELIUM_ENGINE_API Serializer : NonCopyable
     {
     public:
         /// Serialization modes.
@@ -311,7 +311,7 @@ namespace Helium
         };
 
         /// Property tag.
-        class LUNAR_ENGINE_API Tag
+        class HELIUM_ENGINE_API Tag
         {
         public:
             /// @name Construction/Destruction
@@ -468,4 +468,4 @@ namespace Helium
 
 #include "Engine/Serializer.inl"
 
-#endif  // LUNAR_ENGINE_SERIALIZER_H
+#endif  // HELIUM_ENGINE_SERIALIZER_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_OBJECT_H
-#define LUNAR_ENGINE_OBJECT_H
+#ifndef HELIUM_ENGINE_OBJECT_H
+#define HELIUM_ENGINE_OBJECT_H
 
 #include "Engine/Engine.h"
 #include "Foundation/Reflect/Object.h"
@@ -137,7 +137,7 @@ namespace Helium
     HELIUM_DECLARE_WPTR( GameObject );
 
     /// Base class for the engine's game object system.
-    class LUNAR_ENGINE_API GameObject : public Helium::Reflect::Object
+    class HELIUM_ENGINE_API GameObject : public Helium::Reflect::Object
     {
         REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object )
 
@@ -175,7 +175,7 @@ namespace Helium
         };
 
         /// Object rename parameters.
-        struct LUNAR_ENGINE_API RenameParameters
+        struct HELIUM_ENGINE_API RenameParameters
         {
             /// Object name.
             Name name;
@@ -371,4 +371,4 @@ namespace Helium
 
 #include "Engine/GameObject.inl"
 
-#endif  // LUNAR_ENGINE_OBJECT_H
+#endif  // HELIUM_ENGINE_OBJECT_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_RENDERER_H
-#define LUNAR_RENDERING_RENDERER_H
+#ifndef HELIUM_RENDERING_RENDERER_H
+#define HELIUM_RENDERING_RENDERER_H
 
 #include "Rendering/RRasterizerState.h"
 #include "Rendering/RBlendState.h"
@@ -35,7 +35,7 @@ namespace Helium
     class RFence;
 
     /// Main renderer base class.
-    class LUNAR_RENDERING_API Renderer : NonCopyable
+    class HELIUM_RENDERING_API Renderer : NonCopyable
     {
     public:
         /// Rendering device status.
@@ -56,7 +56,7 @@ namespace Helium
         };
 
         /// Rendering context initialization parameters.
-        struct LUNAR_RENDERING_API ContextInitParameters
+        struct HELIUM_RENDERING_API ContextInitParameters
         {
             /// Platform-specific handle for the window to associate with the context.
             void* pWindow;
@@ -176,4 +176,4 @@ namespace Helium
 
 #include "Rendering/Renderer.inl"
 
-#endif  // LUNAR_RENDERING_RENDERER_H
+#endif  // HELIUM_RENDERING_RENDERER_H

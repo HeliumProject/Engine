@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_CORE_ASYNC_LOADER_H
-#define LUNAR_CORE_ASYNC_LOADER_H
+#ifndef HELIUM_CORE_ASYNC_LOADER_H
+#define HELIUM_CORE_ASYNC_LOADER_H
 
 #include "Foundation/API.h"
 
@@ -164,4 +164,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_CORE_ASYNC_LOADER_H
+#endif  // HELIUM_CORE_ASYNC_LOADER_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_NULL_LINKER_H
-#define LUNAR_ENGINE_NULL_LINKER_H
+#ifndef HELIUM_ENGINE_NULL_LINKER_H
+#define HELIUM_ENGINE_NULL_LINKER_H
 
 #include "Engine/Serializer.h"
 
@@ -19,7 +19,7 @@ namespace Helium
     /// object is passed through an instance of this class in order to zero out link indices prior to destroying the
     /// object, as the smart pointer destructor will otherwise interpret the link indices as object pointers and attempt
     /// to dereference them (bad).
-    class LUNAR_ENGINE_API NullLinker : public Serializer
+    class HELIUM_ENGINE_API NullLinker : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -59,4 +59,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_ENGINE_NULL_LINKER_H
+#endif  // HELIUM_ENGINE_NULL_LINKER_H

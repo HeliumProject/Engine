@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_OBJECT_PREPROCESSOR_H
-#define LUNAR_PC_SUPPORT_OBJECT_PREPROCESSOR_H
+#ifndef HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H
+#define HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     class PlatformPreprocessor;
 
     /// GameObject caching and resource preprocessing interface.
-    class LUNAR_PC_SUPPORT_API ObjectPreprocessor : NonCopyable
+    class HELIUM_PC_SUPPORT_API ObjectPreprocessor : NonCopyable
     {
     public:
         /// @name Platform Preprocessor Registration
@@ -75,4 +75,4 @@ namespace Helium
 
 #include "PcSupport/ObjectPreprocessor.inl"
 
-#endif  // LUNAR_PC_SUPPORT_OBJECT_PREPROCESSOR_H
+#endif  // HELIUM_PC_SUPPORT_OBJECT_PREPROCESSOR_H

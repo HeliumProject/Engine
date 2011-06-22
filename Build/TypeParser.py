@@ -23,7 +23,7 @@ def PrintCommandLineUsage():
     print( '    -s PATH, --sources=PATH     Search for module source directories within', file = sys.stderr )
     print( '                                PATH instead of the current directory.', file = sys.stderr )
     print( '    -p PREFIX, --prefix=PREFIX  Use PREFIX for module API preprocessor tokens', file = sys.stderr )
-    print( '                                (default: "LUNAR_"', file = sys.stderr )
+    print( '                                (default: "HELIUM_"', file = sys.stderr )
 
 def ModuleToTokenName( moduleName ):
     lastCharacter = None
@@ -67,7 +67,7 @@ if len( moduleList ) == 0:
 
 includePath = ''
 sourcePath = ''
-apiTokenPrefix = 'LUNAR_'
+apiTokenPrefix = 'HELIUM_'
 
 for option, value in optionList:
     if option == '-i' or option == '--includes':
@@ -131,40 +131,40 @@ includeListingFormatString = \
 
 sourceFormatString1 = \
 '''
-static Lunar::StrongPtr< Lunar::Package > sp{MODULE}TypePackage;
+static Helium::StrongPtr< Helium::Package > sp{MODULE}TypePackage;
 
-{API_TOKEN_PREFIX}{MODULE_TOKEN}_API Lunar::Package* Get{MODULE}TypePackage()
+{API_TOKEN_PREFIX}{MODULE_TOKEN}_API Helium::Package* Get{MODULE}TypePackage()
 {{
-    Lunar::Package* pPackage = sp{MODULE}TypePackage;
+    Helium::Package* pPackage = sp{MODULE}TypePackage;
     if( !pPackage )
     {{
 '''
 
 sourceFormatString2Engine = \
-'''        HELIUM_VERIFY( Lunar::GameObject::InitStaticType() );
+'''        HELIUM_VERIFY( Helium::GameObject::InitStaticType() );
 
-        Lunar::GameObject* pTypesPackageObject = Lunar::GameObject::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
+        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        Lunar::GameObject* pPackageObject = Lunar::GameObject::FindChildOf(
+        Helium::GameObject* pPackageObject = Helium::GameObject::FindChildOf(
             pTypesPackageObject,
-            Lunar::Name( TXT( "{MODULE}" ) ) );
+            Helium::Name( TXT( "{MODULE}" ) ) );
         HELIUM_ASSERT( pPackageObject );
         HELIUM_ASSERT( pPackageObject->IsPackage() );
 
-        pPackage = Helium::Reflect::AssertCast< Lunar::Package >( pPackageObject );
+        pPackage = Helium::Reflect::AssertCast< Helium::Package >( pPackageObject );
         sp{MODULE}TypePackage = pPackage;
 '''
 
 sourceFormatString2Default = \
-'''        Lunar::GameObject* pTypesPackageObject = Lunar::GameObject::FindChildOf( NULL, Lunar::Name( TXT( "Types" ) ) );
+'''        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
         HELIUM_ASSERT( pTypesPackageObject );
         HELIUM_ASSERT( pTypesPackageObject->IsPackage() );
 
-        HELIUM_VERIFY( Lunar::GameObject::Create< Lunar::Package >(
+        HELIUM_VERIFY( Helium::GameObject::Create< Helium::Package >(
             sp{MODULE}TypePackage,
-            Lunar::Name( TXT( "{MODULE}" ) ),
+            Helium::Name( TXT( "{MODULE}" ) ),
             pTypesPackageObject ) );
         pPackage = sp{MODULE}TypePackage;
         HELIUM_ASSERT( pPackage );

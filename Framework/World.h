@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WORLD_H
-#define LUNAR_FRAMEWORK_WORLD_H
+#ifndef HELIUM_FRAMEWORK_WORLD_H
+#define HELIUM_FRAMEWORK_WORLD_H
 
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
@@ -28,7 +28,7 @@ namespace Helium
     /// A world contains a discrete group of entities that can be simulated within an application environment.  Multiple
     /// world instances can exist at the same time, allowing the use of specific worlds for special-case scenarios, such
     /// as rendering scenes outside the game world to a texture or editor preview windows.
-    class LUNAR_FRAMEWORK_API World : public GameObject
+    class HELIUM_FRAMEWORK_API World : public GameObject
     {
         L_DECLARE_OBJECT( World, GameObject );
 
@@ -89,4 +89,4 @@ namespace Helium
 
 #include "Framework/World.inl"
 
-#endif  // LUNAR_FRAMEWORK_WORLD_H
+#endif  // HELIUM_FRAMEWORK_WORLD_H

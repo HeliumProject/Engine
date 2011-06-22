@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H
-#define LUNAR_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H
+#ifndef HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H
+#define HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -18,4 +18,4 @@
 #include "Engine/GameObjectType.h"
 #include "Engine/Package.h"
 
-#endif  // LUNAR_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H
+#endif  // HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_PCH_H

@@ -6,7 +6,7 @@
 
 using namespace Helium;
 
-L_DEFINE_ENUMERATION( Font::ECompression, LUNAR_GRAPHICS_API );
+L_DEFINE_ENUMERATION( Font::ECompression, HELIUM_GRAPHICS_API );
 
 L_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 

@@ -6,10 +6,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOBS_ENGINE_JOBS_PCH_H
-#define LUNAR_ENGINE_JOBS_ENGINE_JOBS_PCH_H
+#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_PCH_H
+#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_PCH_H
 
 #include "EngineJobs/EngineJobs.h"
 #include "Foundation/String.h"
 
-#endif  // LUNAR_ENGINE_JOBS_ENGINE_JOBS_PCH_H
+#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_PCH_H

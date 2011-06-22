@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_IMAGE_H
-#define LUNAR_EDITOR_SUPPORT_IMAGE_H
+#ifndef HELIUM_EDITOR_SUPPORT_IMAGE_H
+#define HELIUM_EDITOR_SUPPORT_IMAGE_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -18,7 +18,7 @@ namespace Helium
     class Color;
 
     /// Base interface for loading and parsing image data loaded from disk (primarily for texture processing).
-    class LUNAR_EDITOR_SUPPORT_API Image
+    class HELIUM_EDITOR_SUPPORT_API Image
     {
     public:
         /// Color channel identifiers.
@@ -41,7 +41,7 @@ namespace Helium
         };
 
         /// Image color format.
-        class LUNAR_EDITOR_SUPPORT_API Format
+        class HELIUM_EDITOR_SUPPORT_API Format
         {
         public:
             /// @name Construction/Destruction
@@ -93,7 +93,7 @@ namespace Helium
         };
 
         /// Image initialization data.
-        struct LUNAR_EDITOR_SUPPORT_API InitParameters
+        struct HELIUM_EDITOR_SUPPORT_API InitParameters
         {
             /// Color format.
             Format format;
@@ -179,4 +179,4 @@ namespace Helium
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_IMAGE_H
+#endif  // HELIUM_EDITOR_SUPPORT_IMAGE_H

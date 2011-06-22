@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
@@ -16,7 +16,7 @@ namespace Helium
     class WindowManager;
 
     /// Interface for window manager initialization.
-    class LUNAR_FRAMEWORK_API WindowManagerInitialization
+    class HELIUM_FRAMEWORK_API WindowManagerInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -31,4 +31,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_WINDOW_MANAGER_INITIALIZATION_H

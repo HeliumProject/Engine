@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WORLD_MANAGER_H
-#define LUNAR_FRAMEWORK_WORLD_MANAGER_H
+#ifndef HELIUM_FRAMEWORK_WORLD_MANAGER_H
+#define HELIUM_FRAMEWORK_WORLD_MANAGER_H
 
 #include "Framework/World.h"
 
@@ -21,7 +21,7 @@ namespace Helium
     HELIUM_DECLARE_PTR( World );
 
     /// Manager for individual World instances.
-    class LUNAR_FRAMEWORK_API WorldManager : NonCopyable
+    class HELIUM_FRAMEWORK_API WorldManager : NonCopyable
     {
     public:
         /// Update phases.
@@ -128,4 +128,4 @@ namespace Helium
 
 #include "Framework/WorldManager.inl"
 
-#endif  // LUNAR_FRAMEWORK_WORLD_MANAGER_H
+#endif  // HELIUM_FRAMEWORK_WORLD_MANAGER_H

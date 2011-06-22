@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_ANIMATION_H
-#define LUNAR_GRAPHICS_ANIMATION_H
+#ifndef HELIUM_GRAPHICS_ANIMATION_H
+#define HELIUM_GRAPHICS_ANIMATION_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
@@ -21,7 +21,7 @@
 namespace Helium
 {
     /// Animation resource data.
-    class LUNAR_GRAPHICS_API Animation : public Resource
+    class HELIUM_GRAPHICS_API Animation : public Resource
     {
         L_DECLARE_OBJECT( Animation, Resource );
 
@@ -64,4 +64,4 @@ namespace Helium
 
 #include "Graphics/Animation.inl"
 
-#endif  // LUNAR_GRAPHICS_ANIMATION_H
+#endif  // HELIUM_GRAPHICS_ANIMATION_H

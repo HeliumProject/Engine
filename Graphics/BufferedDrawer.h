@@ -22,7 +22,7 @@ namespace Helium
     L_DECLARE_RPTR( RVertexShader );
 
     /// Buffered drawing interface.
-    class LUNAR_GRAPHICS_API BufferedDrawer : NonCopyable
+    class HELIUM_GRAPHICS_API BufferedDrawer : NonCopyable
     {
     public:
         /// Number of constant buffers to cycle through for vertex shader transform data.
@@ -319,7 +319,7 @@ namespace Helium
         } HELIUM_SIMD_ALIGN_POST;
 
         /// Glyph handler for rendering world-space text.
-        class LUNAR_GRAPHICS_API WorldSpaceTextGlyphHandler : NonCopyable
+        class HELIUM_GRAPHICS_API WorldSpaceTextGlyphHandler : NonCopyable
         {
         public:
             /// @name Construction/Destruction
@@ -360,7 +360,7 @@ namespace Helium
         };
 
         /// Glyph handler for rendering screen-space text.
-        class LUNAR_GRAPHICS_API ScreenSpaceTextGlyphHandler : NonCopyable
+        class HELIUM_GRAPHICS_API ScreenSpaceTextGlyphHandler : NonCopyable
         {
         public:
             /// @name Construction/Destruction
@@ -394,7 +394,7 @@ namespace Helium
         };
 
         /// Glyph handler for rendering projected text.
-        class LUNAR_GRAPHICS_API ProjectedTextGlyphHandler : NonCopyable
+        class HELIUM_GRAPHICS_API ProjectedTextGlyphHandler : NonCopyable
         {
         public:
             /// @name Construction/Destruction

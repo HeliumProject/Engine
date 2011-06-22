@@ -156,7 +156,7 @@ namespace Helium
 
       /// NOTE: Preferred method of doing this is ComponentType::RegisterComponentType(system, count)
       ///
-      //LUNAR_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
+      //HELIUM_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
       TypeId        RegisterType(const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data );
 
       template <class T>
@@ -177,18 +177,18 @@ namespace Helium
     }
 
     //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-    LUNAR_ENGINE_API BaseComponent*  Allocate(ComponentSet &_host, TypeId _type, void *_init_data = NULL);
+    HELIUM_ENGINE_API BaseComponent*  Allocate(ComponentSet &_host, TypeId _type, void *_init_data = NULL);
 
     //! Returns the component to its pool. Old handles to this component will no longer be valid.
-    LUNAR_ENGINE_API void        Free(ComponentSet &_host, BaseComponent &_component);
+    HELIUM_ENGINE_API void        Free(ComponentSet &_host, BaseComponent &_component);
 
     //! Check that _implementor implements _implementee
-    LUNAR_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
+    HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
 
     //! Must be called before creating any systems
-    LUNAR_ENGINE_API void Initialize();
+    HELIUM_ENGINE_API void Initialize();
 
     //! Call to tear down the component system
-    LUNAR_ENGINE_API void Cleanup();
+    HELIUM_ENGINE_API void Cleanup();
   }
 }

@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_ENGINE_H
-#define LUNAR_ENGINE_ENGINE_H
+#ifndef HELIUM_ENGINE_ENGINE_H
+#define HELIUM_ENGINE_ENGINE_H
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-    #ifdef LUNAR_ENGINE_EXPORTS
-        #define LUNAR_ENGINE_API HELIUM_API_EXPORT
+    #ifdef HELIUM_ENGINE_EXPORTS
+        #define HELIUM_ENGINE_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_ENGINE_API HELIUM_API_IMPORT
+        #define HELIUM_ENGINE_API HELIUM_API_IMPORT
     #endif
 #else
-    #define LUNAR_ENGINE_API
+    #define HELIUM_ENGINE_API
 #endif
 
-#endif  // LUNAR_ENGINE_ENGINE_H
+#endif  // HELIUM_ENGINE_ENGINE_H

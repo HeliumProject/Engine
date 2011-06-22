@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_ENTITY_H
-#define LUNAR_FRAMEWORK_ENTITY_H
+#ifndef HELIUM_FRAMEWORK_ENTITY_H
+#define HELIUM_FRAMEWORK_ENTITY_H
 
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
@@ -25,7 +25,7 @@ namespace Helium
     HELIUM_DECLARE_WPTR( World );
 
     /// Base type for in-world entities.
-    class LUNAR_FRAMEWORK_API Entity : public GameObject
+    class HELIUM_FRAMEWORK_API Entity : public GameObject
     {
         L_DECLARE_OBJECT( Entity, GameObject );
 
@@ -147,4 +147,4 @@ namespace Helium
 
 #include "Framework/Entity.inl"
 
-#endif  // LUNAR_FRAMEWORK_ENTITY_H
+#endif  // HELIUM_FRAMEWORK_ENTITY_H

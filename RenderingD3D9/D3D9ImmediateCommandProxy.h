@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H
-#define LUNAR_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H
+#define HELIUM_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RRenderCommandProxy.h"
@@ -202,4 +202,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_IMMEDIATE_COMMAND_PROXY_H

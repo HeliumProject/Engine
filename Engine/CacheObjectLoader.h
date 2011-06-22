@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CACHE_OBJECT_LOADER_H
-#define LUNAR_ENGINE_CACHE_OBJECT_LOADER_H
+#ifndef HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
+#define HELIUM_ENGINE_CACHE_OBJECT_LOADER_H
 
 #include "Engine/GameObjectLoader.h"
 
@@ -16,7 +16,7 @@ namespace Helium
     class CachePackageLoader;
 
     /// GameObject loader for loading objects from binary cached data.
-    class LUNAR_ENGINE_API CacheObjectLoader : public GameObjectLoader
+    class HELIUM_ENGINE_API CacheObjectLoader : public GameObjectLoader
     {
     public:
         /// @name Construction/Destruction
@@ -42,4 +42,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_ENGINE_CACHE_OBJECT_LOADER_H
+#endif  // HELIUM_ENGINE_CACHE_OBJECT_LOADER_H

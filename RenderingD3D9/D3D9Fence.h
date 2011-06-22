@@ -5,8 +5,8 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#ifndef LUNAR_RENDERING_D3D9_D3D9_FENCE_H
-#define LUNAR_RENDERING_D3D9_D3D9_FENCE_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_FENCE_H
+#define HELIUM_RENDERING_D3D9_D3D9_FENCE_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RFence.h"
@@ -48,4 +48,4 @@ namespace Helium
 
 #include "RenderingD3D9/D3D9Fence.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_FENCE_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_FENCE_H

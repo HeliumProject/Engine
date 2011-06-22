@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_RESOURCE_HANDLER_H
-#define LUNAR_PC_SUPPORT_RESOURCE_HANDLER_H
+#ifndef HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H
+#define HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H
 
 #include "PcSupport/PcSupport.h"
 #include "Engine/GameObject.h"
@@ -24,7 +24,7 @@ namespace Helium
     class ObjectPreprocessor;
 
     /// Interface for parsing resources and creating and caching objects based on them.
-    class LUNAR_PC_SUPPORT_API ResourceHandler : public GameObject
+    class HELIUM_PC_SUPPORT_API ResourceHandler : public GameObject
     {
         L_DECLARE_OBJECT( ResourceHandler, GameObject );
 
@@ -54,4 +54,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PC_SUPPORT_RESOURCE_HANDLER_H
+#endif  // HELIUM_PC_SUPPORT_RESOURCE_HANDLER_H

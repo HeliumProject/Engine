@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_RENDERER_TYPES_H
-#define LUNAR_RENDERING_RENDERER_TYPES_H
+#ifndef HELIUM_RENDERING_RENDERER_TYPES_H
+#define HELIUM_RENDERING_RENDERER_TYPES_H
 
 #include "Rendering/Rendering.h"
 
@@ -459,4 +459,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_RENDERER_TYPES_H
+#endif  // HELIUM_RENDERING_RENDERER_TYPES_H

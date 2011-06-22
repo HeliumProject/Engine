@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_GRAPHICS_SCENE_H
-#define LUNAR_GRAPHICS_GRAPHICS_SCENE_H
+#ifndef HELIUM_GRAPHICS_GRAPHICS_SCENE_H
+#define HELIUM_GRAPHICS_GRAPHICS_SCENE_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/GameObject.h"
@@ -27,7 +27,7 @@ namespace Helium
     L_DECLARE_RPTR( RConstantBuffer );
 
     /// Manager for a graphics scene.
-    class LUNAR_GRAPHICS_API GraphicsScene : public GameObject
+    class HELIUM_GRAPHICS_API GraphicsScene : public GameObject
     {
         L_DECLARE_OBJECT( GraphicsScene, GameObject );
 
@@ -98,7 +98,7 @@ namespace Helium
 
     private:
         /// Front-to-back sub-mesh sort comparison function
-        class LUNAR_GRAPHICS_API SubMeshFrontToBackCompare
+        class HELIUM_GRAPHICS_API SubMeshFrontToBackCompare
         {
         public:
             /// @name Construction/Destruction
@@ -124,7 +124,7 @@ namespace Helium
         };
 
         /// Material-based sub-mesh sort comparison function
-        class LUNAR_GRAPHICS_API SubMeshMaterialCompare
+        class HELIUM_GRAPHICS_API SubMeshMaterialCompare
         {
         public:
             /// @name Construction/Destruction
@@ -244,4 +244,4 @@ namespace Helium
 
 #include "Graphics/GraphicsScene.inl"
 
-#endif  // LUNAR_GRAPHICS_GRAPHICS_SCENE_H
+#endif  // HELIUM_GRAPHICS_GRAPHICS_SCENE_H

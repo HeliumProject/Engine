@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CONFIG_H
-#define LUNAR_ENGINE_CONFIG_H
+#ifndef HELIUM_ENGINE_CONFIG_H
+#define HELIUM_ENGINE_CONFIG_H
 
 #include "Engine/Engine.h"
 
@@ -32,7 +32,7 @@ namespace Helium
     HELIUM_DECLARE_PTR( Package );
 
     /// Configuration management.
-    class LUNAR_ENGINE_API Config : NonCopyable
+    class HELIUM_ENGINE_API Config : NonCopyable
     {
     public:
         /// @name General Information
@@ -101,4 +101,4 @@ namespace Helium
 
 #include "Engine/Config.inl"
 
-#endif  // LUNAR_ENGINE_CONFIG_H
+#endif  // HELIUM_ENGINE_CONFIG_H

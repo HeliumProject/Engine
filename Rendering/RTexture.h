@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_TEXTURE_H
-#define LUNAR_RENDERING_R_TEXTURE_H
+#ifndef HELIUM_RENDERING_R_TEXTURE_H
+#define HELIUM_RENDERING_R_TEXTURE_H
 
 #include "Rendering/RRenderResource.h"
 
 namespace Helium
 {
     /// Base interface to texture resources.
-    class LUNAR_RENDERING_API RTexture : public RRenderResource
+    class HELIUM_RENDERING_API RTexture : public RRenderResource
     {
     public:
         /// Texture type identifiers.
@@ -48,4 +48,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_R_TEXTURE_H
+#endif  // HELIUM_RENDERING_R_TEXTURE_H

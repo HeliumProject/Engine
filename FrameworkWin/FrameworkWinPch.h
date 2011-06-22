@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H
-#define LUNAR_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H
+#ifndef HELIUM_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H
+#define HELIUM_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H
 
 #include "FrameworkWin/FrameworkWin.h"
 
@@ -17,4 +17,4 @@
 #include "Foundation/String.h"
 #include "Framework/Framework.h"
 
-#endif  // LUNAR_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H
+#endif  // HELIUM_FRAMEWORK_WIN_FRAMEWORK_WIN_PCH_H

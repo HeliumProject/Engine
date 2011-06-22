@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_GAME_OBJECT_TYPE_H
-#define LUNAR_ENGINE_GAME_OBJECT_TYPE_H
+#ifndef HELIUM_ENGINE_GAME_OBJECT_TYPE_H
+#define HELIUM_ENGINE_GAME_OBJECT_TYPE_H
 
 #include "Engine/Engine.h"
 
@@ -24,7 +24,7 @@ namespace Helium
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
     /// Run-time type information for GameObject classes.
-    class LUNAR_ENGINE_API GameObjectType : public Reflect::Class
+    class HELIUM_ENGINE_API GameObjectType : public Reflect::Class
     {
     public:
         REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType, GameObjectType, Reflect::Class );
@@ -47,7 +47,7 @@ namespace Helium
         };
 
         /// Type iterator.
-        class LUNAR_ENGINE_API ConstIterator
+        class HELIUM_ENGINE_API ConstIterator
         {
             friend class GameObjectType;
 
@@ -137,4 +137,4 @@ namespace Helium
 
 #include "Engine/GameObjectType.inl"
 
-#endif  // LUNAR_ENGINE_GAME_OBJECT_TYPE_H
+#endif  // HELIUM_ENGINE_GAME_OBJECT_TYPE_H

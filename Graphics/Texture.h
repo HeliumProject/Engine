@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TEXTURE_H
-#define LUNAR_GRAPHICS_TEXTURE_H
+#ifndef HELIUM_GRAPHICS_TEXTURE_H
+#define HELIUM_GRAPHICS_TEXTURE_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
@@ -22,7 +22,7 @@ namespace Helium
     L_DECLARE_RPTR( RTexture );
 
     /// Base type for texture resources.
-    class LUNAR_GRAPHICS_API Texture : public Resource
+    class HELIUM_GRAPHICS_API Texture : public Resource
     {
         L_DECLARE_OBJECT( Texture, Resource );
 
@@ -51,7 +51,7 @@ namespace Helium
                 MAX,
             };
 
-            L_DECLARE_ENUMERATION( ECompression, LUNAR_GRAPHICS_API );
+            L_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -137,4 +137,4 @@ namespace Helium
 
 #include "Graphics/Texture.inl"
 
-#endif  // LUNAR_GRAPHICS_TEXTURE_H
+#endif  // HELIUM_GRAPHICS_TEXTURE_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_OBJECT_LOADER_H
-#define LUNAR_ENGINE_OBJECT_LOADER_H
+#ifndef HELIUM_ENGINE_OBJECT_LOADER_H
+#define HELIUM_ENGINE_OBJECT_LOADER_H
 
 #include "Engine/Engine.h"
 
@@ -21,7 +21,7 @@ namespace Helium
     class PackageLoader;
 
     /// Asynchronous object loading interface
-    class LUNAR_ENGINE_API GameObjectLoader : NonCopyable
+    class HELIUM_ENGINE_API GameObjectLoader : NonCopyable
     {
     public:
         /// Number of request objects to allocate in each block of the request pool.
@@ -118,7 +118,7 @@ namespace Helium
         };
 
         /// Serializer for linking object references.
-        class LUNAR_ENGINE_API Linker : public Serializer
+        class HELIUM_ENGINE_API Linker : public Serializer
         {
         public:
             /// @name Construction/Destruction
@@ -216,4 +216,4 @@ namespace Helium
 
 #include "Engine/GameObjectLoader.inl"
 
-#endif  // LUNAR_ENGINE_OBJECT_LOADER_H
+#endif  // HELIUM_ENGINE_OBJECT_LOADER_H

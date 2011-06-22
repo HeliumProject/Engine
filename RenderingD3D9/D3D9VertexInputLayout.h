@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H
-#define LUNAR_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H
+#define HELIUM_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexInputLayout.h"
@@ -41,4 +41,4 @@ namespace Helium
 
 #include "RenderingD3D9/D3D9VertexInputLayout.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_VERTEX_INPUT_LAYOUT_H

@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_GRAPHICS_CONFIG_H
-#define LUNAR_GRAPHICS_GRAPHICS_CONFIG_H
+#ifndef HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
+#define HELIUM_GRAPHICS_GRAPHICS_CONFIG_H
 
 #include "Graphics/Graphics.h"
 
 namespace Helium
 {
     /// Graphics configuration data.
-    class LUNAR_GRAPHICS_API GraphicsConfig : public GameObject
+    class HELIUM_GRAPHICS_API GraphicsConfig : public GameObject
     {
         L_DECLARE_OBJECT( GraphicsConfig, GameObject );
 
@@ -30,7 +30,7 @@ namespace Helium
                 ANISOTROPIC,
             };
 
-            L_DECLARE_ENUMERATION( ETextureFilter, LUNAR_GRAPHICS_API );
+            L_DECLARE_ENUMERATION( ETextureFilter, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -53,7 +53,7 @@ namespace Helium
                 MAX,
             };
 
-            L_DECLARE_ENUMERATION( EShadowMode, LUNAR_GRAPHICS_API );
+            L_DECLARE_ENUMERATION( EShadowMode, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -129,4 +129,4 @@ namespace Helium
 
 #include "Graphics/GraphicsConfig.inl"
 
-#endif  // LUNAR_GRAPHICS_GRAPHICS_CONFIG_H
+#endif  // HELIUM_GRAPHICS_GRAPHICS_CONFIG_H

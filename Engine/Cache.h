@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CACHE_H
-#define LUNAR_ENGINE_CACHE_H
+#ifndef HELIUM_ENGINE_CACHE_H
+#define HELIUM_ENGINE_CACHE_H
 
 #include "Engine/Engine.h"
 
@@ -18,7 +18,7 @@
 namespace Helium
 {
     /// Serialization cache interface.
-    class LUNAR_ENGINE_API Cache : NonCopyable
+    class HELIUM_ENGINE_API Cache : NonCopyable
     {
     public:
         /// Current cache file format version number.
@@ -169,4 +169,4 @@ namespace Helium
 
 #include "Engine/Cache.inl"
 
-#endif  // LUNAR_ENGINE_CACHE_H
+#endif  // HELIUM_ENGINE_CACHE_H

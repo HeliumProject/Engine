@@ -6,24 +6,24 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOBS_ENGINE_JOBS_H
-#define LUNAR_ENGINE_JOBS_ENGINE_JOBS_H
+#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_H
+#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_H
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-    #ifdef LUNAR_ENGINE_JOBS_EXPORTS
-        #define LUNAR_ENGINE_JOBS_API HELIUM_API_EXPORT
+    #ifdef HELIUM_ENGINE_JOBS_EXPORTS
+        #define HELIUM_ENGINE_JOBS_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_ENGINE_JOBS_API HELIUM_API_IMPORT
+        #define HELIUM_ENGINE_JOBS_API HELIUM_API_IMPORT
     #endif
 #else
-    #define LUNAR_ENGINE_JOBS_API
+    #define HELIUM_ENGINE_JOBS_API
 #endif
 
 namespace Helium
 {
-    LUNAR_ENGINE_JOBS_API extern void InitEngineJobsDefaultHeap();
+    HELIUM_ENGINE_JOBS_API extern void InitEngineJobsDefaultHeap();
 }
 
-#endif  // LUNAR_ENGINE_JOBS_ENGINE_JOBS_H
+#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_H

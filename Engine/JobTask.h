@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOB_TASK_H
-#define LUNAR_ENGINE_JOB_TASK_H
+#ifndef HELIUM_ENGINE_JOB_TASK_H
+#define HELIUM_ENGINE_JOB_TASK_H
 
 #include "Engine/Engine.h"
 #include "tbb/task.h"
@@ -36,4 +36,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_ENGINE_JOB_TASK_H
+#endif  // HELIUM_ENGINE_JOB_TASK_H

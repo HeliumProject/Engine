@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_VERTEX_BUFFER_H
-#define LUNAR_RENDERING_R_VERTEX_BUFFER_H
+#ifndef HELIUM_RENDERING_R_VERTEX_BUFFER_H
+#define HELIUM_RENDERING_R_VERTEX_BUFFER_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -16,7 +16,7 @@
 namespace Helium
 {
     /// Vertex buffer interface.
-    class LUNAR_RENDERING_API RVertexBuffer : public RRenderResource
+    class HELIUM_RENDERING_API RVertexBuffer : public RRenderResource
     {
     public:
         /// @name Data Access
@@ -33,4 +33,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_R_VERTEX_BUFFER_H
+#endif  // HELIUM_RENDERING_R_VERTEX_BUFFER_H

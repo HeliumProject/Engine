@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOB_POOL_H
-#define LUNAR_ENGINE_JOB_POOL_H
+#ifndef HELIUM_ENGINE_JOB_POOL_H
+#define HELIUM_ENGINE_JOB_POOL_H
 
 #include "Engine/Engine.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     /// While each thread will have its own job pool in order to minimize thread contention during job object allocation
     /// and deallocation, pools are also internally thread-safe in order to allow threads to grab available jobs from
     /// other pools.
-    class LUNAR_ENGINE_API JobPool : NonCopyable
+    class HELIUM_ENGINE_API JobPool : NonCopyable
     {
     public:
         /// @name Construction/Destruction
@@ -62,4 +62,4 @@ namespace Helium
 
 #include "Engine/JobPool.inl"
 
-#endif  // LUNAR_ENGINE_JOB_POOL_H
+#endif  // HELIUM_ENGINE_JOB_POOL_H

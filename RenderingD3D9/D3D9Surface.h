@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_SURFACE_H
-#define LUNAR_RENDERING_D3D9_D3D9_SURFACE_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_SURFACE_H
+#define HELIUM_RENDERING_D3D9_D3D9_SURFACE_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RSurface.h"
@@ -46,4 +46,4 @@ namespace Helium
 
 #include "RenderingD3D9/D3D9Surface.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_SURFACE_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_SURFACE_H

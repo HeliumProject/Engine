@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
-#define LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#ifndef HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#define HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
 
 #include "Graphics/Graphics.h"
 
@@ -29,7 +29,7 @@ namespace Helium
     L_DECLARE_RPTR( RVertexDescription );
 
     /// Manager for common render resources used by the graphics system.
-    class LUNAR_GRAPHICS_API RenderResourceManager : NonCopyable
+    class HELIUM_GRAPHICS_API RenderResourceManager : NonCopyable
     {
     public:
         /// Maximum number of texture coordinate sets allowed for meshes.
@@ -256,4 +256,4 @@ namespace Helium
 
 #include "Graphics/RenderResourceManager.inl"
 
-#endif  // LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#endif  // HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H

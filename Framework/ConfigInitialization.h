@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_CONFIG_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_CONFIG_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_CONFIG_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_CONFIG_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
 namespace Helium
 {
     /// Base class for initializing application configuration settings.
-    class LUNAR_FRAMEWORK_API ConfigInitialization
+    class HELIUM_FRAMEWORK_API ConfigInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -29,4 +29,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_CONFIG_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_CONFIG_INITIALIZATION_H

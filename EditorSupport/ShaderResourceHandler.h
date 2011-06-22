@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H
-#define LUNAR_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H
+#ifndef HELIUM_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H
+#define HELIUM_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -20,7 +20,7 @@
 namespace Helium
 {
     /// Resource handler for Shader resource types.
-    class LUNAR_EDITOR_SUPPORT_API ShaderResourceHandler : public ResourceHandler
+    class HELIUM_EDITOR_SUPPORT_API ShaderResourceHandler : public ResourceHandler
     {
         L_DECLARE_OBJECT( ShaderResourceHandler, ResourceHandler );
 
@@ -54,4 +54,4 @@ namespace Helium
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H
+#endif  // HELIUM_EDITOR_SUPPORT_SHADER_RESOURCE_HANDLER_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H
-#define LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H
+#ifndef HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H
+#define HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -16,7 +16,7 @@ namespace Helium
     class XmlPackageLoader;
 
     /// XML package loader management for object loaders.
-    class LUNAR_PC_SUPPORT_API XmlPackageLoaderMap
+    class HELIUM_PC_SUPPORT_API XmlPackageLoaderMap
     {
     public:
         /// @name Construction/Destruction
@@ -40,4 +40,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H
+#endif  // HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_MAP_H

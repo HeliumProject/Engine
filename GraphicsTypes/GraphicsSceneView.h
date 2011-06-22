@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
-#define LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#define HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -26,7 +26,7 @@ namespace Helium
     ///
     /// A view entails a given view transform, projection, and other information that may be useful (i.e. cached
     /// occlusion information)
-    HELIUM_SIMD_ALIGN_PRE class LUNAR_GRAPHICS_TYPES_API GraphicsSceneView
+    HELIUM_SIMD_ALIGN_PRE class HELIUM_GRAPHICS_TYPES_API GraphicsSceneView
     {
     public:
         /// Default horizontal field-of-view angle.
@@ -161,4 +161,4 @@ namespace Helium
 
 #include "GraphicsTypes/GraphicsSceneView.inl"
 
-#endif  // LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H

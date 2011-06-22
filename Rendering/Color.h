@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_COLOR_H
-#define LUNAR_RENDERING_COLOR_H
+#ifndef HELIUM_RENDERING_COLOR_H
+#define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
 #include "Platform/Math/MathCommon.h"
@@ -17,7 +17,7 @@ namespace Helium
     class Serializer;
 
     /// 32-bit ARGB color value.
-    class LUNAR_RENDERING_API Color
+    class HELIUM_RENDERING_API Color
     {
     public:
         /// @name Construction/Destruction
@@ -98,4 +98,4 @@ namespace Helium
 
 #include "Rendering/Color.inl"
 
-#endif  // LUNAR_RENDERING_COLOR_H
+#endif  // HELIUM_RENDERING_COLOR_H

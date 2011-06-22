@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_MESH_ENTITY_H
-#define LUNAR_FRAMEWORK_MESH_ENTITY_H
+#ifndef HELIUM_FRAMEWORK_MESH_ENTITY_H
+#define HELIUM_FRAMEWORK_MESH_ENTITY_H
 
 #include "Framework/Entity.h"
 
@@ -23,7 +23,7 @@ namespace Helium
     HELIUM_DECLARE_PTR( Material );
 
     /// Base class for mesh-based entities.
-    class LUNAR_FRAMEWORK_API MeshEntity : public Entity
+    class HELIUM_FRAMEWORK_API MeshEntity : public Entity
     {
         L_DECLARE_OBJECT( MeshEntity, Entity );
 
@@ -91,4 +91,4 @@ namespace Helium
 
 #include "Framework/MeshEntity.inl"
 
-#endif  // LUNAR_FRAMEWORK_MESH_ENTITY_H
+#endif  // HELIUM_FRAMEWORK_MESH_ENTITY_H

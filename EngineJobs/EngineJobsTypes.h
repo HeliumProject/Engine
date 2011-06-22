@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
-#define LUNAR_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
+#ifndef HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
+#define HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
 
 #include "EngineJobs/EngineJobs.h"
 
@@ -30,4 +30,4 @@ namespace Helium
     typedef void ( *SORT_SWAP_FUNC )( void* pElement0, void* pElement1 );
 }
 
-#endif  // LUNAR_ENGINE_JOBS_ENGINE_JOBS_TYPES_H
+#endif  // HELIUM_ENGINE_JOBS_ENGINE_JOBS_TYPES_H

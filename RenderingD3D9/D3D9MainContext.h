@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H
-#define LUNAR_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H
+#define HELIUM_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RRenderContext.h"
@@ -46,4 +46,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_MAIN_CONTEXT_H

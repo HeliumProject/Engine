@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H
 
 #include "Framework/RendererInitialization.h"
 
 namespace Helium
 {
     /// Renderer initializer that creates a null renderer.
-    class LUNAR_FRAMEWORK_API NullRendererInitialization : public RendererInitialization
+    class HELIUM_FRAMEWORK_API NullRendererInitialization : public RendererInitialization
     {
     public:
         /// @name Renderer Initialization
@@ -24,4 +24,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_NULL_RENDERER_INITIALIZATION_H

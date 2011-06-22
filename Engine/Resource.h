@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_RESOURCE_H
-#define LUNAR_ENGINE_RESOURCE_H
+#ifndef HELIUM_ENGINE_RESOURCE_H
+#define HELIUM_ENGINE_RESOURCE_H
 
 #include "Engine/GameObject.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     /// When dealing with object and resource data that has not been preprocessed (still stored in text packages and
     /// source asset files), objects of this type will correspond to a single resource file on disk.  Note that objects
     /// of this type may not actually hold onto the final processed resource data at runtime.
-    class LUNAR_ENGINE_API Resource : public GameObject
+    class HELIUM_ENGINE_API Resource : public GameObject
     {
         L_DECLARE_OBJECT( Resource, GameObject );
 
@@ -86,4 +86,4 @@ namespace Helium
 
 #include "Engine/Resource.inl"
 
-#endif  // LUNAR_ENGINE_RESOURCE_H
+#endif  // HELIUM_ENGINE_RESOURCE_H

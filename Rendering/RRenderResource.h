@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RENDER_RESOURCE_H
-#define LUNAR_RENDERING_R_RENDER_RESOURCE_H
+#ifndef HELIUM_RENDERING_R_RENDER_RESOURCE_H
+#define HELIUM_RENDERING_R_RENDER_RESOURCE_H
 
 #include "Rendering/Rendering.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -20,7 +20,7 @@
 namespace Helium
 {
     /// Base class for all reference-counted render resources.
-    class LUNAR_RENDERING_API RRenderResource : public AtomicRefCountBase< RRenderResource >, NonCopyable
+    class HELIUM_RENDERING_API RRenderResource : public AtomicRefCountBase< RRenderResource >, NonCopyable
     {
         friend class AtomicRefCountBase< RRenderResource >;
 
@@ -32,4 +32,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_R_RENDER_RESOURCE_H
+#endif  // HELIUM_RENDERING_R_RENDER_RESOURCE_H

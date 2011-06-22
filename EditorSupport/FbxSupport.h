@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
-#define LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
+#ifndef HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H
+#define HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -214,4 +214,4 @@ namespace Helium
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
+#endif  // HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H

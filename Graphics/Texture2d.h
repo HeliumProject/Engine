@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TEXTURE_2D_H
-#define LUNAR_GRAPHICS_TEXTURE_2D_H
+#ifndef HELIUM_GRAPHICS_TEXTURE_2D_H
+#define HELIUM_GRAPHICS_TEXTURE_2D_H
 
 #include "Graphics/Texture.h"
 
 namespace Helium
 {
     /// 2D texture resource.
-    class LUNAR_GRAPHICS_API Texture2d : public Texture
+    class HELIUM_GRAPHICS_API Texture2d : public Texture
     {
         L_DECLARE_OBJECT( Texture2d, Texture );
 
@@ -48,4 +48,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_GRAPHICS_TEXTURE_2D_H
+#endif  // HELIUM_GRAPHICS_TEXTURE_2D_H

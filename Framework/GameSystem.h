@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_GAME_SYSTEM_H
-#define LUNAR_FRAMEWORK_GAME_SYSTEM_H
+#ifndef HELIUM_FRAMEWORK_GAME_SYSTEM_H
+#define HELIUM_FRAMEWORK_GAME_SYSTEM_H
 
 #include "Framework/System.h"
 
@@ -26,7 +26,7 @@ namespace Helium
     class RendererInitialization;
 
     /// Base interface for game application systems.
-    class LUNAR_FRAMEWORK_API GameSystem : public System
+    class HELIUM_FRAMEWORK_API GameSystem : public System
     {
     public:
         /// @name Construction/Destruction
@@ -72,4 +72,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_GAME_SYSTEM_H
+#endif  // HELIUM_FRAMEWORK_GAME_SYSTEM_H

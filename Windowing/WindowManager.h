@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_WINDOWING_WINDOW_MANAGER_H
-#define LUNAR_WINDOWING_WINDOW_MANAGER_H
+#ifndef HELIUM_WINDOWING_WINDOW_MANAGER_H
+#define HELIUM_WINDOWING_WINDOW_MANAGER_H
 
 #include "Windowing/Windowing.h"
 
@@ -16,7 +16,7 @@
 namespace Helium
 {
     /// Interface for managing window creation.
-    class LUNAR_WINDOWING_API WindowManager : NonCopyable
+    class HELIUM_WINDOWING_API WindowManager : NonCopyable
     {
     public:
         /// @name Initialization
@@ -53,4 +53,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_WINDOWING_WINDOW_MANAGER_H
+#endif  // HELIUM_WINDOWING_WINDOW_MANAGER_H

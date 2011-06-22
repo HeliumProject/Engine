@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_DEPTH_STENCIL_STATE_H
-#define LUNAR_RENDERING_R_DEPTH_STENCIL_STATE_H
+#ifndef HELIUM_RENDERING_R_DEPTH_STENCIL_STATE_H
+#define HELIUM_RENDERING_R_DEPTH_STENCIL_STATE_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -16,11 +16,11 @@
 namespace Helium
 {
     /// Depth-stencil state interface.
-    class LUNAR_RENDERING_API RDepthStencilState : public RRenderResource
+    class HELIUM_RENDERING_API RDepthStencilState : public RRenderResource
     {
     public:
         /// Depth-stencil state description.
-        struct LUNAR_RENDERING_API Description
+        struct HELIUM_RENDERING_API Description
         {
             /// Depth comparison function.
             ERendererCompareFunction depthFunction;
@@ -68,4 +68,4 @@ namespace Helium
 
 #include "Rendering/RDepthStencilState.inl"
 
-#endif  // LUNAR_RENDERING_R_DEPTH_STENCIL_STATE_H
+#endif  // HELIUM_RENDERING_R_DEPTH_STENCIL_STATE_H

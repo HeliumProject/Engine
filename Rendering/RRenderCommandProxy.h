@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
-#define LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
+#ifndef HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H
+#define HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H
 
 #include "Rendering/RRenderResource.h"
 
@@ -38,7 +38,7 @@ namespace Helium
     L_DECLARE_RPTR( RRenderCommandList );
 
     /// Proxy for issuing renderer commands.
-    class LUNAR_RENDERING_API RRenderCommandProxy : public RRenderResource
+    class HELIUM_RENDERING_API RRenderCommandProxy : public RRenderResource
     {
     public:
         /// @name State Management
@@ -125,4 +125,4 @@ namespace Helium
 
 #include "Rendering/RRenderCommandProxy.inl"
 
-#endif  // LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
+#endif  // HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H

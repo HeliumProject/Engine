@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_VERTEX_SHADER_H
-#define LUNAR_RENDERING_R_VERTEX_SHADER_H
+#ifndef HELIUM_RENDERING_R_VERTEX_SHADER_H
+#define HELIUM_RENDERING_R_VERTEX_SHADER_H
 
 #include "Rendering/RShader.h"
 
@@ -19,7 +19,7 @@ namespace Helium
     L_DECLARE_RPTR( RVertexInputLayout );
 
     /// Vertex shader interface.
-    class LUNAR_RENDERING_API RVertexShader : public RShader
+    class HELIUM_RENDERING_API RVertexShader : public RShader
     {
     public:
         /// @name Type Information
@@ -47,4 +47,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_RENDERING_R_VERTEX_SHADER_H
+#endif  // HELIUM_RENDERING_R_VERTEX_SHADER_H

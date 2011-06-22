@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <joblist>
 
-    <namespace name="Lunar" />
-    <moduletokenprefix name="LUNAR_" />
+    <namespace name="Helium" />
+    <moduletokenprefix name="HELIUM_" />
 
     <inline file="Framework/WorldManagerUpdate.inl" />
 
-    <forwarddeclare namespace="Lunar" type="class Entity" />
-    <forwarddeclare namespace="Lunar" type="HELIUM_DECLARE_PTR( World )" />
+    <forwarddeclare namespace="Helium" type="class Entity" />
+    <forwarddeclare namespace="Helium" type="HELIUM_DECLARE_PTR( World )" />
 
     <job name="WorldManagerUpdate" description="WorldManager update job launcher.">
         <templateparam name="EntityUpdateJobType" />

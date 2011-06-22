@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_SYSTEM_H
-#define LUNAR_FRAMEWORK_SYSTEM_H
+#ifndef HELIUM_FRAMEWORK_SYSTEM_H
+#define HELIUM_FRAMEWORK_SYSTEM_H
 
 #include "Framework/Framework.h"
 #include "Platform/Utility.h"
@@ -17,7 +17,7 @@
 namespace Helium
 {
     /// Base interface for management of application and component initialization and the main application loop.
-    class LUNAR_FRAMEWORK_API System : NonCopyable
+    class HELIUM_FRAMEWORK_API System : NonCopyable
     {
     public:
         /// @name Initialization
@@ -48,4 +48,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_SYSTEM_H
+#endif  // HELIUM_FRAMEWORK_SYSTEM_H

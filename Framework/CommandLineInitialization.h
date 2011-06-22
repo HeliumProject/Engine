@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
 namespace Helium
 {
     /// Interface for initializing platform command-line parameters.
-    class LUNAR_FRAMEWORK_API CommandLineInitialization
+    class HELIUM_FRAMEWORK_API CommandLineInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -29,4 +29,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_COMMAND_LINE_INITIALIZATION_H

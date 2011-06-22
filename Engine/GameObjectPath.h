@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_OBJECT_PATH_H
-#define LUNAR_ENGINE_OBJECT_PATH_H
+#ifndef HELIUM_ENGINE_OBJECT_PATH_H
+#define HELIUM_ENGINE_OBJECT_PATH_H
 
 #include "Engine/Engine.h"
 
@@ -36,7 +36,7 @@
 namespace Helium
 {
     /// Hashed object path name for fast lookups and comparisons.
-    class LUNAR_ENGINE_API GameObjectPath
+    class HELIUM_ENGINE_API GameObjectPath
     {
     public:
         /// Number of object path hash table buckets (prime numbers are recommended).
@@ -159,7 +159,7 @@ namespace Helium
 {
     /// Default GameObjectPath hash.
     template<>
-    class LUNAR_ENGINE_API Hash< Helium::GameObjectPath >
+    class HELIUM_ENGINE_API Hash< Helium::GameObjectPath >
     {
     public:
         inline size_t operator()( const Helium::GameObjectPath& rKey ) const;
@@ -168,4 +168,4 @@ namespace Helium
 
 #include "Engine/GameObjectPath.inl"
 
-#endif  // LUNAR_ENGINE_OBJECT_PATH_H
+#endif  // HELIUM_ENGINE_OBJECT_PATH_H

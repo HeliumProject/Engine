@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_PC_SUPPORT_PCH_H
-#define LUNAR_PC_SUPPORT_PC_SUPPORT_PCH_H
+#ifndef HELIUM_PC_SUPPORT_PC_SUPPORT_PCH_H
+#define HELIUM_PC_SUPPORT_PC_SUPPORT_PCH_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -19,4 +19,4 @@
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"
 
-#endif  // LUNAR_PC_SUPPORT_PC_SUPPORT_PCH_H
+#endif  // HELIUM_PC_SUPPORT_PC_SUPPORT_PCH_H

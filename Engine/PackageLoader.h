@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_PACKAGE_LOADER_H
-#define LUNAR_ENGINE_PACKAGE_LOADER_H
+#ifndef HELIUM_ENGINE_PACKAGE_LOADER_H
+#define HELIUM_ENGINE_PACKAGE_LOADER_H
 
 #include "Engine/GameObjectLoader.h"
 
 namespace Helium
 {
     /// Package loader interface.
-    class LUNAR_ENGINE_API PackageLoader : NonCopyable
+    class HELIUM_ENGINE_API PackageLoader : NonCopyable
     {
     public:
         /// @name Construction/Destruction
@@ -47,4 +47,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_ENGINE_PACKAGE_LOADER_H
+#endif  // HELIUM_ENGINE_PACKAGE_LOADER_H

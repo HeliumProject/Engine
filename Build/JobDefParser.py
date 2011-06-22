@@ -357,7 +357,7 @@ interfaceHeaderFormatString = \
 #include "{MODULE}/{MODULE}.h"
 #include "Platform/Assert.h"
 {INCLUDES}
-namespace Lunar
+namespace Helium
 {{
     class JobContext;
 }}
@@ -368,7 +368,7 @@ namespace Lunar
 '''
 
 classFormatString = \
-'''{DESCRIPTION_COMMENT}{TEMPLATE_PARAM_DECL}class {JOB_EXPORT}{JOB_NAME} : Lunar::NonCopyable
+'''{DESCRIPTION_COMMENT}{TEMPLATE_PARAM_DECL}class {JOB_EXPORT}{JOB_NAME} : Helium::NonCopyable
 {{
 public:
 {CONSTANT_MEMBERS}    class Parameters
@@ -655,7 +655,7 @@ for fileName in jobDefListing:
         parent = job.parent
         if parent is None:
             formatString = classFormatString
-            parent = 'Lunar::NonCopyable'
+            parent = 'Helium::NonCopyable'
         else:
             formatString = derivedClassFormatString
 

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
-#define LUNAR_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
+#ifndef HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
+#define HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
 #include "Foundation/File/Path.h"
@@ -39,4 +39,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
+#endif  // HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H

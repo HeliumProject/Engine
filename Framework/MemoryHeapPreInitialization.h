@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
@@ -23,7 +23,7 @@ namespace Helium
     /// This implementation performs heap pre-initialization for the following modules:
     /// - EngineJobs
     /// - GraphicsJobs
-    class LUNAR_FRAMEWORK_API MemoryHeapPreInitialization
+    class HELIUM_FRAMEWORK_API MemoryHeapPreInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -38,4 +38,4 @@ namespace Helium
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_MEMORY_HEAP_PRE_INITIALIZATION_H

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_RENDERING_PCH_H
-#define LUNAR_RENDERING_RENDERING_PCH_H
+#ifndef HELIUM_RENDERING_RENDERING_PCH_H
+#define HELIUM_RENDERING_RENDERING_PCH_H
 
 #include "Rendering/Rendering.h"
 
@@ -19,4 +19,4 @@
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"
 
-#endif  // LUNAR_RENDERING_RENDERING_PCH_H
+#endif  // HELIUM_RENDERING_RENDERING_PCH_H

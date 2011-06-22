@@ -172,7 +172,7 @@ namespace Helium
         /// @name Conversion Utility Functions, Private
         //@{
         template< typename BaseT > const StrongPtr< BaseT >& ImplicitUpCast(
-            const boost::true_type& rIsProperBase ) const;
+            const std::true_type& rIsProperBase ) const;
         //@}
     };
 
@@ -233,7 +233,7 @@ namespace Helium
         /// @name Conversion Utility Functions, Private
         //@{
         template< typename BaseT > const WeakPtr< BaseT >& ImplicitUpCast(
-            const boost::true_type& rIsProperBase ) const;
+            const std::true_type& rIsProperBase ) const;
         //@}
     };
 }

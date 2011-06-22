@@ -1101,7 +1101,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
         D3DUSAGE_DEPTHSTENCIL   // RENDERER_BUFFER_USAGE_DEPTH_STENCIL
     };
 
-    BOOST_STATIC_ASSERT( HELIUM_ARRAY_COUNT( d3dUsages ) == RENDERER_BUFFER_USAGE_MAX );
+    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( d3dUsages ) == RENDERER_BUFFER_USAGE_MAX );
 
     D3DPOOL d3dPool = ( m_bExDevice || usage != RENDERER_BUFFER_USAGE_STATIC ? D3DPOOL_DEFAULT : D3DPOOL_MANAGED );
 
@@ -1531,7 +1531,7 @@ D3DFORMAT D3D9Renderer::PixelFormatToD3DFormat( ERendererPixelFormat format ) co
         D3DFMT_UNKNOWN         // RENDERER_PIXEL_FORMAT_DEPTH (dummy entry; depth formats handled manually)
     };
 
-    BOOST_STATIC_ASSERT( HELIUM_ARRAY_COUNT( d3dFormats ) == RENDERER_PIXEL_FORMAT_MAX );
+    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( d3dFormats ) == RENDERER_PIXEL_FORMAT_MAX );
 
     return d3dFormats[ format ];
 }

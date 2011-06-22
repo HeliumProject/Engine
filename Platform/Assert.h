@@ -204,13 +204,19 @@ namespace Helium
 
 #endif
 
-
 //
 // Compile time
 //
 
-#define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+#if HELIUM_CC_MSC
+# if _MSC_VER >= 1600
+#  define HELIUM_COMPILE_ASSERT(exp) static_assert(exp, #exp)
+# endif
+#endif
 
+#ifndef HELIUM_COMPILE_ASSERT
+# define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+#endif
 
 //
 // #pragma TODO("Do something!")

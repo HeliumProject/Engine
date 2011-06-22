@@ -223,7 +223,7 @@ void Helium::ObjectPool< T, Allocator >::AllocateBlock()
     // Allocate a new block.
     size_t blockSize = m_blockSize;
 
-    size_t alignment = Max< size_t >( boost::alignment_of< T >::value, boost::alignment_of< Block >::value );
+    size_t alignment = Max< size_t >( std::alignment_of< T >::value, std::alignment_of< Block >::value );
     size_t alignedBufferSize = Align( sizeof( T ) * blockSize, alignment );
 
     void* pBuffer = allocator.AllocateAligned( alignment, alignedBufferSize + sizeof( Block ) );

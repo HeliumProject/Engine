@@ -1813,7 +1813,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
         { GetSkinningSysSelectName(), Name( NULL_NAME ) }
     };
 
-    BOOST_STATIC_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
+    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( shadowSelectOptions ) == GraphicsConfig::EShadowMode::MAX );
 
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 

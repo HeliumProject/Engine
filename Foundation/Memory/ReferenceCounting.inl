@@ -372,7 +372,7 @@ template< typename T >
 template< typename BaseT >
 Helium::StrongPtr< T >::operator const Helium::StrongPtr< BaseT >&() const
 {
-    return ImplicitUpCast< BaseT >( boost::is_base_of< BaseT, T >() );
+    return ImplicitUpCast< BaseT >( std::is_base_of< BaseT, T >() );
 }
 
 /// Dereference this pointer.
@@ -531,13 +531,13 @@ bool Helium::StrongPtr< T >::operator!=( const StrongPtr& rPointer ) const
 
 /// Helper function for performing a compile-time verified up-cast of a StrongPtr.
 ///
-/// @param[in] rIsProperBase  Instance of boost::is_base_of< BaseT, T > if it inherits from boost::true_type.
+/// @param[in] rIsProperBase  Instance of std::is_base_of< BaseT, T > if it inherits from std::true_type.
 ///
 /// @return  Constant reference to the cast strong pointer.
 template< typename T >
 template< typename BaseT >
 const Helium::StrongPtr< BaseT >& Helium::StrongPtr< T >::ImplicitUpCast(
-    const boost::true_type& /*rIsProperBase*/ ) const
+    const std::true_type& /*rIsProperBase*/ ) const
 {
     return *reinterpret_cast< const StrongPtr< BaseT >* >( this );
 }
@@ -722,7 +722,7 @@ template< typename T >
 template< typename BaseT >
 Helium::WeakPtr< T >::operator const Helium::WeakPtr< BaseT >&() const
 {
-    return ImplicitUpCast< BaseT >( boost::is_base_of< BaseT, T >() );
+    return ImplicitUpCast< BaseT >( std::is_base_of< BaseT, T >() );
 }
 
 /// Dereference this pointer.
@@ -885,13 +885,13 @@ bool Helium::WeakPtr< T >::operator!=( const WeakPtr& rPointer ) const
 
 /// Helper function for performing a compile-time verified up-cast of a WeakPtr.
 ///
-/// @param[in] rIsProperBase  Instance of boost::is_base_of< BaseT, T > if it inherits from boost::true_type.
+/// @param[in] rIsProperBase  Instance of std::is_base_of< BaseT, T > if it inherits from std::true_type.
 ///
 /// @return  Constant reference to the cast weak pointer.
 template< typename T >
 template< typename BaseT >
 const Helium::WeakPtr< BaseT >& Helium::WeakPtr< T >::ImplicitUpCast(
-    const boost::true_type& /*rIsProperBase*/ ) const
+    const std::true_type& /*rIsProperBase*/ ) const
 {
     return *reinterpret_cast< const WeakPtr< BaseT >* >( this );
 }

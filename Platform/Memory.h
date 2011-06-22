@@ -506,17 +506,17 @@ namespace Helium
 
     template< typename T, typename Allocator > T* NewArrayHelper( Allocator& rAllocator, size_t count );
     template< typename T, typename Allocator > T* NewArrayHelper(
-        Allocator& rAllocator, size_t count, const boost::true_type& rHasTrivialDestructor );
+        Allocator& rAllocator, size_t count, const std::true_type& rHasTrivialDestructor );
     template< typename T, typename Allocator > T* NewArrayHelper(
         Allocator& rAllocator,
         size_t count,
-        const boost::false_type& rHasTrivialDestructor );
+        const std::false_type& rHasTrivialDestructor );
 
     template< typename T, typename Allocator > void DeleteArrayHelper( Allocator& rAllocator, T* pArray );
     template< typename T, typename Allocator > void DeleteArrayHelper(
-        Allocator& rAllocator, T* pArray, const boost::true_type& rHasTrivialDestructor );
+        Allocator& rAllocator, T* pArray, const std::true_type& rHasTrivialDestructor );
     template< typename T, typename Allocator > void DeleteArrayHelper(
-        Allocator& rAllocator, T* pArray, const boost::false_type& rHasTrivialDestructor );
+        Allocator& rAllocator, T* pArray, const std::false_type& rHasTrivialDestructor );
 
     template< typename Allocator > void* AllocateAlignmentHelper( Allocator& rAllocator, size_t size );
     //@}

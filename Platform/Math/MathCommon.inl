@@ -10,11 +10,11 @@ namespace Helium
     /// IsPowerOfTwo() implementation for signed integer types.
     ///
     /// @param[in] rValue     Signed integer value to test.
-    /// @param[in] rIsSigned  boost::true_type.
+    /// @param[in] rIsSigned  std::true_type.
     ///
     /// @return  True if the value is a power of two, false if not.
     template< typename T >
-    bool _IsPowerOfTwo( const T& rValue, const boost::true_type& /*rIsSigned*/ )
+    bool _IsPowerOfTwo( const T& rValue, const std::true_type& /*rIsSigned*/ )
     {
         T absValue = Abs( rValue );
 
@@ -24,11 +24,11 @@ namespace Helium
     /// IsPowerOfTwo() implementation for unsigned integer types.
     ///
     /// @param[in] rValue     Unsigned integer value to test.
-    /// @param[in] rIsSigned  boost::false_type.
+    /// @param[in] rIsSigned  std::false_type.
     ///
     /// @return  True if the value is a power of two, false if not.
     template< typename T >
-    bool _IsPowerOfTwo( const T& rValue, const boost::false_type& /*rIsSigned*/ )
+    bool _IsPowerOfTwo( const T& rValue, const std::false_type& /*rIsSigned*/ )
     {
         return ( ( rValue & ( rValue - 1 ) ) == 0 );
     }
@@ -203,7 +203,7 @@ namespace Helium
     template< typename T >
     bool IsPowerOfTwo( const T& rValue )
     {
-        return _IsPowerOfTwo( rValue, boost::is_signed< T >() );
+        return _IsPowerOfTwo( rValue, std::is_signed< T >() );
     }
 
     /// Compute the base-2 logarithm of an unsigned 32-bit integer.

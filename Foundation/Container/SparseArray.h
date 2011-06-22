@@ -131,8 +131,8 @@ namespace Helium
         /// Constant iterator type.
         typedef ConstSparseArrayIterator< T > ConstIterator;
 
-        typedef boost::has_trivial_copy< T > TrivialCopyElements;
-        typedef boost::has_trivial_destructor< T > TrivialDestroyElements;
+        typedef std::has_trivial_copy< T > TrivialCopyElements;
+        typedef std::has_trivial_destructor< T > TrivialDestroyElements;
 
         /// @name Construction/Destruction
         //@{
@@ -228,35 +228,35 @@ namespace Helium
         template< typename OtherAllocator > SparseArray& Assign( const SparseArray< T, OtherAllocator >& rSource );
 
         T* Allocate( size_t count );
-        T* Allocate( size_t count, const boost::true_type& rNeedsAlignment );
-        T* Allocate( size_t count, const boost::false_type& rNeedsAlignment );
+        T* Allocate( size_t count, const std::true_type& rNeedsAlignment );
+        T* Allocate( size_t count, const std::false_type& rNeedsAlignment );
 
         T* Reallocate( T* pMemory, size_t count );
-        T* Reallocate( T* pMemory, size_t count, const boost::true_type& rNeedsAlignment );
-        T* Reallocate( T* pMemory, size_t count, const boost::false_type& rNeedsAlignment );
+        T* Reallocate( T* pMemory, size_t count, const std::true_type& rNeedsAlignment );
+        T* Reallocate( T* pMemory, size_t count, const std::false_type& rNeedsAlignment );
 
         T* ResizeBuffer(
             T* pMemory, size_t elementRange, const uint32_t* pUsedElements, size_t oldCapacity, size_t newCapacity );
         T* ResizeBuffer(
             T* pMemory, size_t elementRange, const uint32_t* pUsedElements, size_t oldCapacity, size_t newCapacity,
-            const boost::true_type& rHasTrivialCopyAndDestructor );
+            const std::true_type& rHasTrivialCopyAndDestructor );
         T* ResizeBuffer(
             T* pMemory, size_t elementRange, const uint32_t* pUsedElements, size_t oldCapacity, size_t newCapacity,
-            const boost::false_type& rHasTrivialCopyAndDestructor );
+            const std::false_type& rHasTrivialCopyAndDestructor );
 
         void InPlaceDestroy( T* pMemory, size_t range, const uint32_t* pUsedElements );
         void InPlaceDestroy(
-            T* pMemory, size_t range, const uint32_t* pUsedElements, const boost::true_type& rHasTrivialDestructor );
+            T* pMemory, size_t range, const uint32_t* pUsedElements, const std::true_type& rHasTrivialDestructor );
         void InPlaceDestroy(
-            T* pMemory, size_t range, const uint32_t* pUsedElements, const boost::false_type& rHasTrivialDestructor );
+            T* pMemory, size_t range, const uint32_t* pUsedElements, const std::false_type& rHasTrivialDestructor );
 
         void UninitializedCopy( T* pDest, const T* pSource, size_t range, const uint32_t* pUsedElements );
         void UninitializedCopy(
             T* pDest, const T* pSource, size_t range, const uint32_t* pUsedElements,
-            const boost::true_type& rHasTrivialCopy );
+            const std::true_type& rHasTrivialCopy );
         void UninitializedCopy(
             T* pDest, const T* pSource, size_t range, const uint32_t* pUsedElements,
-            const boost::false_type& rHasTrivialCopy );
+            const std::false_type& rHasTrivialCopy );
         //@}
     };
 }

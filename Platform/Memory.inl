@@ -311,7 +311,7 @@ typename Helium::StackMemoryHeap< Allocator >::Block* Helium::StackMemoryHeap< A
         --m_remainingBlockCount;
     }
 
-    size_t alignedBufferSize = Align( m_blockSize, boost::alignment_of< Block >::value );
+    size_t alignedBufferSize = Align( m_blockSize, std::alignment_of< Block >::value );
 
     void* pBuffer = Allocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
     HELIUM_ASSERT( pBuffer );
@@ -404,18 +404,18 @@ void Helium::DeleteHelper( Allocator& rAllocator, T* pObject )
 template< typename T, typename Allocator >
 T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count )
 {
-    return NewArrayHelper< T >( rAllocator, count, boost::has_trivial_destructor< T >() );
+    return NewArrayHelper< T >( rAllocator, count, std::has_trivial_destructor< T >() );
 }
 
 /// Construct a new array of a type with a trivial destructor.
 ///
 /// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
 /// @param[in] count                  Number of elements in the array to create.
-/// @param[in] rHasTrivialDestructor  boost::true_type.
+/// @param[in] rHasTrivialDestructor  std::true_type.
 ///
 /// @return  Pointer to the first element in the newly constructed array.
 template< typename T, typename Allocator >
-T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const boost::true_type& /*rHasTrivialDestructor*/ )
+T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const std::true_type& /*rHasTrivialDestructor*/ )
 {
     size_t size = count * sizeof( T );
 
@@ -439,11 +439,11 @@ T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const boost::tru
 ///
 /// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
 /// @param[in] count                  Number of elements in the array to create.
-/// @param[in] rHasTrivialDestructor  boost::false_type.
+/// @param[in] rHasTrivialDestructor  std::false_type.
 ///
 /// @return  Pointer to the first element in the newly constructed array.
 template< typename T, typename Allocator >
-T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const boost::false_type& /*rHasTrivialDestructor*/ )
+T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const std::false_type& /*rHasTrivialDestructor*/ )
 {
     size_t size = count * sizeof( T );
     size_t allocationOffset = sizeof( size_t );
@@ -484,16 +484,16 @@ T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const boost::fal
 template< typename T, typename Allocator >
 void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray )
 {
-    DeleteArrayHelper< T >( rAllocator, pArray, boost::has_trivial_destructor< T >() );
+    DeleteArrayHelper< T >( rAllocator, pArray, std::has_trivial_destructor< T >() );
 }
 
 /// Delete an allocated array of a type with a trivial destructor.
 ///
 /// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
 /// @param[in] pArray                 Array to delete.
-/// @param[in] rHasTrivialDestructor  boost::true_type.
+/// @param[in] rHasTrivialDestructor  std::true_type.
 template< typename T, typename Allocator >
-void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const boost::true_type& /*rHasTrivialDestructor*/ )
+void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const std::true_type& /*rHasTrivialDestructor*/ )
 {
     rAllocator.Free( pArray );
 }
@@ -502,9 +502,9 @@ void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const boost::t
 ///
 /// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
 /// @param[in] pArray                 Array to delete.
-/// @param[in] rHasTrivialDestructor  boost::false_type.
+/// @param[in] rHasTrivialDestructor  std::false_type.
 template< typename T, typename Allocator >
-void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const boost::false_type& /*rHasTrivialDestructor*/ )
+void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const std::false_type& /*rHasTrivialDestructor*/ )
 {
     if( pArray )
     {

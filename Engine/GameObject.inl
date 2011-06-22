@@ -10,11 +10,11 @@ namespace Lunar
     /// DynamicCast() implementation for up-cast or same conversions.
     ///
     /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  boost::true_type.
+    /// @param[in] rIsUpcast  std::true_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
     template< typename TargetType, typename SourceType >
-    TargetType* _DynamicCast( SourceType* pObject, const boost::true_type& /*rIsUpcast*/ )
+    TargetType* _DynamicCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
     {
         return pObject;
     }
@@ -22,11 +22,11 @@ namespace Lunar
     /// DynamicCast() implementation for down-cast or invalid conversions.
     ///
     /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  boost::false_type.
+    /// @param[in] rIsUpcast  std::false_type.
     ///
     /// @return  Cast pointer if the conversion is valid, null if the object is not of the target type.
     template< typename TargetType, typename SourceType >
-    TargetType* _DynamicCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
+    TargetType* _DynamicCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
     {
         return ( pObject && pObject->IsClass( TargetType::GetStaticType() )
                  ? static_cast< TargetType* >( pObject )
@@ -36,11 +36,11 @@ namespace Lunar
     /// StaticCast() implementation for up-cast or same conversions.
     ///
     /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  boost::true_type.
+    /// @param[in] rIsUpcast  std::true_type.
     ///
     /// @return  Cast pointer.
     template< typename TargetType, typename SourceType >
-    TargetType* _StaticCast( SourceType* pObject, const boost::true_type& /*rIsUpcast*/ )
+    TargetType* _StaticCast( SourceType* pObject, const std::true_type& /*rIsUpcast*/ )
     {
         return pObject;
     }
@@ -48,11 +48,11 @@ namespace Lunar
     /// StaticCast() implementation for down-cast or invalid conversions.
     ///
     /// @param[in] pObject    Object to cast.
-    /// @param[in] rIsUpcast  boost::false_type.
+    /// @param[in] rIsUpcast  std::false_type.
     ///
     /// @return  Cast pointer.
     template< typename TargetType, typename SourceType >
-    TargetType* _StaticCast( SourceType* pObject, const boost::false_type& /*rIsUpcast*/ )
+    TargetType* _StaticCast( SourceType* pObject, const std::false_type& /*rIsUpcast*/ )
     {
         HELIUM_ASSERT( !pObject || pObject->IsClass( TargetType::GetStaticType() ) );
 
@@ -301,7 +301,7 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* DynamicCast( SourceType* pObject )
     {
-        return _DynamicCast< TargetType, SourceType >( pObject, boost::is_base_of< TargetType, SourceType >() );
+        return _DynamicCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
     }
 
     /// Cast an object to a given type, only checking if the object is of that type and triggering an assert if
@@ -319,6 +319,6 @@ namespace Lunar
     template< typename TargetType, typename SourceType >
     TargetType* StaticCast( SourceType* pObject )
     {
-        return _StaticCast< TargetType, SourceType >( pObject, boost::is_base_of< TargetType, SourceType >() );
+        return _StaticCast< TargetType, SourceType >( pObject, std::is_base_of< TargetType, SourceType >() );
     }
 }

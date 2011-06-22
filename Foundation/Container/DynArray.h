@@ -134,20 +134,20 @@ namespace Helium
         template< typename OtherAllocator > bool Equals( const DynArray< T, OtherAllocator >& rOther ) const;
 
         T* Allocate( size_t count );
-        T* Allocate( size_t count, const boost::true_type& rNeedsAlignment );
-        T* Allocate( size_t count, const boost::false_type& rNeedsAlignment );
+        T* Allocate( size_t count, const std::true_type& rNeedsAlignment );
+        T* Allocate( size_t count, const std::false_type& rNeedsAlignment );
 
         T* Reallocate( T* pMemory, size_t count );
-        T* Reallocate( T* pMemory, size_t count, const boost::true_type& rNeedsAlignment );
-        T* Reallocate( T* pMemory, size_t count, const boost::false_type& rNeedsAlignment );
+        T* Reallocate( T* pMemory, size_t count, const std::true_type& rNeedsAlignment );
+        T* Reallocate( T* pMemory, size_t count, const std::false_type& rNeedsAlignment );
 
         T* ResizeBuffer( T* pMemory, size_t elementCount, size_t oldCapacity, size_t newCapacity );
         T* ResizeBuffer(
             T* pMemory, size_t elementCount, size_t oldCapacity, size_t newCapacity,
-            const boost::true_type& rHasTrivialCopyAndDestructor );
+            const std::true_type& rHasTrivialCopyAndDestructor );
         T* ResizeBuffer(
             T* pMemory, size_t elementCount, size_t oldCapacity, size_t newCapacity,
-            const boost::false_type& rHasTrivialCopyAndDestructor );
+            const std::false_type& rHasTrivialCopyAndDestructor );
         //@}
     };
 }

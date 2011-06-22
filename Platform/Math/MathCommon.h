@@ -20,7 +20,7 @@
 #pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
 #endif
 
-#include "boost/type_traits.hpp"
+#include <type_traits>
 #include <cmath>
 
 #if HELIUM_CC_MSC

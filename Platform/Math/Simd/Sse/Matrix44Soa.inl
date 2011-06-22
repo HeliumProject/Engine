@@ -7,14 +7,17 @@ void Helium::Simd::Matrix44Soa::Splat( const Matrix44& rMatrix )
 {
     Register rowVec;
 
-#define SPLAT_ROW( Z, N, DATA ) \
+#define SPLAT_ROW( N ) \
     rowVec = rMatrix.GetSimdVector( N ); \
     m_matrix[ N ][ 0 ] = _mm_shuffle_ps( rowVec, rowVec, _MM_SHUFFLE( 0, 0, 0, 0 ) ); \
     m_matrix[ N ][ 1 ] = _mm_shuffle_ps( rowVec, rowVec, _MM_SHUFFLE( 1, 1, 1, 1 ) ); \
     m_matrix[ N ][ 2 ] = _mm_shuffle_ps( rowVec, rowVec, _MM_SHUFFLE( 2, 2, 2, 2 ) ); \
     m_matrix[ N ][ 3 ] = _mm_shuffle_ps( rowVec, rowVec, _MM_SHUFFLE( 3, 3, 3, 3 ) );
 
-    BOOST_PP_REPEAT( 4, SPLAT_ROW, );
+    SPLAT_ROW( 0 );
+    SPLAT_ROW( 1 );
+    SPLAT_ROW( 2 );
+    SPLAT_ROW( 3 );
 
 #undef SPLAT_ROW
 }

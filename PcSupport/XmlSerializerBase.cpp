@@ -450,7 +450,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
 
     for( size_t characterIndex = 0; characterIndex < length; ++characterIndex )
     {
-        uint32_t character = static_cast< std::make_unsigned< wchar_t >::type >( pString[ characterIndex ] );
+        uint32_t character = static_cast< wchar_t >( pString[ characterIndex ] );
 
         // Handle UTF-16 surrogate pairs.
         if( bHaveSurrogate )
@@ -475,7 +475,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
         // If writing out character data, replace special characters as appropriate.
         if( bCharacterData )
         {
-            if( character == static_cast< std::make_unsigned< wchar_t >::type >( L'"' ) )
+            if( character == static_cast< wchar_t >( L'"' ) )
             {
                 const char utf8string[] = "&quot;";
                 pStream->Write( utf8string, 1, sizeof( utf8string ) - 1 );
@@ -483,7 +483,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
                 continue;
             }
 
-            if( character == static_cast< std::make_unsigned< wchar_t >::type >( L'&' ) )
+            if( character == static_cast< wchar_t >( L'&' ) )
             {
                 const char utf8string[] = "&amp;";
                 pStream->Write( utf8string, 1, sizeof( utf8string ) - 1 );
@@ -491,7 +491,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
                 continue;
             }
 
-            if( character == static_cast< std::make_unsigned< wchar_t >::type >( L'\'' ) )
+            if( character == static_cast< wchar_t >( L'\'' ) )
             {
                 const char utf8string[] = "&apos;";
                 pStream->Write( utf8string, 1, sizeof( utf8string ) - 1 );
@@ -499,7 +499,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
                 continue;
             }
 
-            if( character == static_cast< std::make_unsigned< wchar_t >::type >( L'<' ) )
+            if( character == static_cast< wchar_t >( L'<' ) )
             {
                 const char utf8string[] = "&lt;";
                 pStream->Write( utf8string, 1, sizeof( utf8string ) - 1 );
@@ -507,7 +507,7 @@ void XmlSerializerBase::WriteStringAsUtf8( Stream* pStream, const wchar_t* pStri
                 continue;
             }
 
-            if( character == static_cast< std::make_unsigned< wchar_t >::type >( L'>' ) )
+            if( character == static_cast< wchar_t >( L'>' ) )
             {
                 const char utf8string[] = "&gt;";
                 pStream->Write( utf8string, 1, sizeof( utf8string ) - 1 );

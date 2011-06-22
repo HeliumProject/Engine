@@ -142,7 +142,6 @@ namespace Helium
         inline size_t operator()( const NameBase< TableType >& rKey ) const;
     };
 
-#pragma TODO( "Remove std::iostream Name support once we can get rid of our dependency on STL" )
     /// @defgroup nameiostream std::iostream Name Support
     //@{
 

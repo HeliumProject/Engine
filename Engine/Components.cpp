@@ -45,7 +45,7 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
   ComponentType &component_type = g_ComponentTypes.GetLast();
 
   // Set type id on static member of the class so we can easily get this data later
-  TypeId type_id = g_ComponentTypes.GetSize() - 1;
+  TypeId type_id = (uint16_t)g_ComponentTypes.GetSize() - 1;
 
   // Assert that we havn't already registered this type and then set up the data
   HELIUM_ASSERT(_type_data.TypeId == NULL_TYPE_ID);
@@ -287,7 +287,7 @@ BaseComponent* Components::Private::InternalFindFirstComponent( ComponentSet &_h
             type_iter != type.m_ImplementingTypes.end(); ++type_iter)
         {
             //TODO: Remove this assert once I know it doesn't trip
-            assert(*type_iter != _type_id);
+            HELIUM_ASSERT(*type_iter != _type_id);
             M_Components::Iterator component_iter = _host.m_Components.Find(_type_id);
             if (component_iter != _host.m_Components.End())
             {
@@ -314,7 +314,8 @@ void Components::Cleanup()
 {
   for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
   {
-    HELIUM_DELETE_A(g_ComponentAllocator, g_ComponentTypes[type_id].m_Pool);
+#pragma TODO("This does not compile in Debug/x64 -Geoff")
+    //HELIUM_DELETE_A(g_ComponentAllocator, g_ComponentTypes[type_id].m_Pool);
   }
 
   Reflect::UnregisterClassType<Components::BaseComponent>();

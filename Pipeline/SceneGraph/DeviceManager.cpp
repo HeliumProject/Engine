@@ -102,6 +102,7 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
 
         pRenderer = Lunar::Renderer::GetStaticInstance();
         HELIUM_ASSERT( pRenderer );
+        pRenderer->Initialize();
 
         Lunar::Renderer::ContextInitParameters initParameters;
         initParameters.pWindow = hwnd;

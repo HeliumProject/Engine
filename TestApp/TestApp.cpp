@@ -1173,7 +1173,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
-
     pRenderer->Initialize();
 
     Renderer::ContextInitParameters contextInitParams;

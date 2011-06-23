@@ -66,7 +66,7 @@ namespace Helium
     /// @return  Callback to execute when this window is actually destroyed.
     ///
     /// @see SetOnDestroyed()
-    const Window::OnDestroyed& Window::GetOnDestroyed() const
+    const Delegate<Window*>& Window::GetOnDestroyed() const
     {
         return m_onDestroyed;
     }

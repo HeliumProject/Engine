@@ -226,7 +226,7 @@ bool GameSystem::Initialize(
             return false;
         }
 
-        m_pMainWindow->SetOnDestroyed( boost::bind( &GameSystem::OnMainWindowDestroyed, this, _1 ) );
+        m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &GameSystem::OnMainWindowDestroyed ) );
 
         Renderer::ContextInitParameters contextInitParams;
         contextInitParams.pWindow = m_pMainWindow->GetHandle();

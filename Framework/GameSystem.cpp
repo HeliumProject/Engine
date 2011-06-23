@@ -32,8 +32,6 @@
 #include "Framework/Layer.h"
 #include "Framework/WorldManager.h"
 
-#include <boost/bind.hpp>
-
 using namespace Helium;
 
 /// Constructor.

@@ -11,7 +11,7 @@
 
 #include "Windowing/Windowing.h"
 
-#include <boost/function.hpp>
+#include "Foundation/Automation/Event.h"
 
 namespace Helium
 {
@@ -19,9 +19,6 @@ namespace Helium
     class HELIUM_WINDOWING_API Window : NonCopyable
     {
     public:
-        /// Callback to execute when a Window instance is actually destroyed.
-        typedef boost::function< void ( Window* pWindow ) > OnDestroyed;
-
         /// Creation parameters.
         struct HELIUM_WINDOWING_API Parameters
         {
@@ -57,13 +54,13 @@ namespace Helium
 
         /// @name Callback Registration
         //@{
-        void SetOnDestroyed( const OnDestroyed& rOnDestroyed );
-        inline const OnDestroyed& GetOnDestroyed() const;
+        void SetOnDestroyed( const Delegate<Window*>& rOnDestroyed );
+        inline const Delegate<Window*>& GetOnDestroyed() const;
         //@}
 
     protected:
         /// Callback to execute when this window is actually destroyed.
-        OnDestroyed m_onDestroyed;
+        Delegate<Window*> m_onDestroyed;
 
         /// Platform-dependent window handle.
         void* m_pHandle;

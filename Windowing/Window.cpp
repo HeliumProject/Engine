@@ -14,8 +14,7 @@ using namespace Helium;
 ///
 /// Initializes all members to zero-default values.
 Window::Window()
-: m_onDestroyed( NULL )
-, m_pHandle( NULL )
+: m_pHandle( NULL )
 , m_width( 0 )
 , m_height( 0 )
 , m_bFullscreen( false )
@@ -67,7 +66,7 @@ Window::~Window()
 /// @param[in] rOnDestroyed  Callback to execute when this window is actually destroyed.
 ///
 /// @see GetOnDestroyed()
-void Window::SetOnDestroyed( const OnDestroyed& rOnDestroyed )
+void Window::SetOnDestroyed( const Delegate<Window*>& rOnDestroyed )
 {
     m_onDestroyed = rOnDestroyed;
 }

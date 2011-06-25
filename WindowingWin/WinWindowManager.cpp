@@ -261,10 +261,10 @@ LRESULT CALLBACK WinWindowManager::WindowProc( HWND hWnd, UINT msg, WPARAM wPara
             HELIUM_ASSERT( pWindow );
             SetWindowLongPtr( hWnd, GWLP_USERDATA, 0 );
 
-            const Window::OnDestroyed& rOnDestroyed = pWindow->GetOnDestroyed();
-            if( rOnDestroyed )
+            const Delegate<Window*>& rOnDestroyed = pWindow->GetOnDestroyed();
+			if( rOnDestroyed.Valid() )
             {
-                rOnDestroyed( pWindow );
+				rOnDestroyed.Invoke( pWindow );
             }
 
             delete pWindow;

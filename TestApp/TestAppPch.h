@@ -67,6 +67,9 @@
 #include <tchar.h>
 #include <algorithm>
 
+#include "TestApp/gtest.h"
+#include "TestApp/GTest_Globals.h"
+
 namespace Helium
 {
     HELIUM_DECLARE_PTR( Camera );

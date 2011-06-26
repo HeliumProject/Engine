@@ -27,7 +27,7 @@ namespace Helium
     /////////////////////////////////////////////////////////////////////////////////
 
     class Host;
-    class BaseComponent;
+    class Component;
     class System;
 
     namespace Private
@@ -37,8 +37,8 @@ namespace Helium
       /// TODO: Avoid this macro by using reflect a bit more directly like AssetClasses do
       struct TypeData
       {
-          TypeData() : TypeId(NULL_TYPE_ID) { }
-          TypeId TypeId;
+          TypeData() : m_TypeId(NULL_TYPE_ID) { }
+          TypeId m_TypeId;
       };
     }
 
@@ -65,8 +65,7 @@ namespace Helium
   /* preferred method */                                          \
   static Helium::Components::TypeId RegisterComponentType()                  \
     {                                                                 \
-    return Helium::Components::RegisterType(                                    \
-    Helium::Reflect::GetClass<__Type>(),                                  \
+    return Helium::Components::Private::RegisterType<__Type>(                                    \
     __Type::GetStaticComponentTypeData(),                               \
     &__Base::GetStaticComponentTypeData(),                              \
     0);                                                           \
@@ -83,8 +82,7 @@ namespace Helium
   static Helium::Components::TypeId RegisterComponentType(                  \
   uint16_t _count)                                                     \
     {                                                                 \
-    return Helium::Components::RegisterType(                                    \
-    Helium::Reflect::GetClass<__Type>(),                                  \
+    return Helium::Components::Private::RegisterType<__Type>(                                    \
     __Type::GetStaticComponentTypeData(),                               \
     &__Base::GetStaticComponentTypeData(),                              \
     _count);                                                      \
@@ -96,8 +94,8 @@ namespace Helium
 #define OBJECT_DEFINE_ABSTRACT_COMPONENT( __Type ) \
     REFLECT_DEFINE_ABSTRACT
 
-    typedef std::vector<BaseComponent *> V_Components;
-    typedef Helium::Map<TypeId, BaseComponent *> M_Components;
+    typedef std::vector<Component *> V_Components;
+    typedef Helium::Map<TypeId, Component *> M_Components;
 
     //! Any object that can have components attached will own a ComponentSet
     struct ComponentSet
@@ -106,16 +104,16 @@ namespace Helium
     };
 
     //! All components have some data for bookkeeping
-    class BaseComponent : public Reflect::Object
+    class Component : public Reflect::Object
     {
-        REFLECT_DECLARE_ABSTRACT(BaseComponent, Reflect::Object);
-        _OBJECT_DECLARE_COMPONENT(BaseComponent);
+        REFLECT_DECLARE_ABSTRACT(Component, Reflect::Object);
+        _OBJECT_DECLARE_COMPONENT(Component);
 
         static void AcceptCompositeVisitor( Reflect::Composite& comp );
 
         TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>
-        BaseComponent*  m_Next;             //< Next component of this same type
-        BaseComponent*  m_Previous;         //< Previous component of this same type
+        Component*  m_Next;             //< Next component of this same type
+        Component*  m_Previous;         //< Previous component of this same type
         uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
         uint8_t         m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
         ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
@@ -141,16 +139,16 @@ namespace Helium
 
       //! List of our type metadata
       extern A_ComponentTypes g_ComponentTypes;
-      extern DefaultAllocator g_ComponentAllocator;
+      extern Helium::DefaultAllocator g_ComponentAllocator;
 
       // Inserts component in front the given component in its chain
-      void          InsertIntoChain(BaseComponent *_insertee, BaseComponent *_next_component);
+      void          InsertIntoChain(Component *_insertee, Component *_next_component);
 
       // Splices component out of the chain it is in
-      void          RemoveFromChain(BaseComponent *_component);
+      void          RemoveFromChain(Component *_component);
 
       // Implements find functions
-      BaseComponent*    InternalFindFirstComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
+      Component*    InternalFindFirstComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
 
       //! A component must be registered. Each component must be registered with reflect. _count indicates max instances of this type.
 
@@ -171,16 +169,16 @@ namespace Helium
     TypeId GetType()
     {
       Private::TypeData &data = T::GetStaticComponentTypeData();
-      HELIUM_ASSERT(data.TypeId != NULL_TYPE_ID);
+      HELIUM_ASSERT(data.m_TypeId != NULL_TYPE_ID);
 
-      return data.TypeId;
+      return data.m_TypeId;
     }
 
     //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-    HELIUM_ENGINE_API BaseComponent*  Allocate(ComponentSet &_host, TypeId _type, void *_init_data = NULL);
+    HELIUM_ENGINE_API Component*  Allocate(ComponentSet &_host, TypeId _type, void *_init_data = NULL);
 
     //! Returns the component to its pool. Old handles to this component will no longer be valid.
-    HELIUM_ENGINE_API void        Free(ComponentSet &_host, BaseComponent &_component);
+    HELIUM_ENGINE_API void        Free(ComponentSet &_host, Component &_component);
 
     //! Check that _implementor implements _implementee
     HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
@@ -190,5 +188,11 @@ namespace Helium
 
     //! Call to tear down the component system
     HELIUM_ENGINE_API void Cleanup();
+
+    template <class T>
+    Component*  Allocate(ComponentSet &_host, void *_init_data = NULL)
+    {
+        return Allocate(_host, GetType<T>(), _init_data);
+    }
   }
 }

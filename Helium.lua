@@ -793,14 +793,10 @@ project "TestApp"  -- DEPRECATED
 
 	files
 	{
-		"TestApp/Moon.ico",
-		"TestApp/resource.h",
-		"TestApp/TestApp.cpp",
-		"TestApp/TestApp.rc",
-		"TestApp/TestAppPch.cpp",
-		"TestApp/TestAppPch.h",
-		"TestApp/WindowProc.cpp",
-		"TestApp/WindowProc.h",
+		"TestApp/**.cpp",
+		"TestApp/**.h",
+		"TestApp/**.ico",
+		"TestApp/**.rc"
 	}
 
 	flags

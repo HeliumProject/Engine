@@ -8,9 +8,9 @@ using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
 
-REFLECT_DEFINE_ABSTRACT(BaseComponent);
+REFLECT_DEFINE_ABSTRACT(Component);
 
-void BaseComponent::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Component::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
 
 }
@@ -23,19 +23,19 @@ const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 
 // TypeId indexes into this
 Private::A_ComponentTypes         Private::g_ComponentTypes;
-DefaultAllocator                  Private::g_ComponentAllocator;
+Helium::DefaultAllocator          Private::g_ComponentAllocator;
 
 TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data )
 {
-  // Some validation of parameters/state
+    // Some validation of parameters/state
   HELIUM_ASSERT(_class);
   HELIUM_ASSERT(_count == 0 || _class->m_Creator);
   HELIUM_ASSERT(_count >= 0);
   HELIUM_ASSERT(Reflect::Registry::GetInstance());
   
   // Component must be registered already
-  HELIUM_ASSERT(BaseComponent::s_Class);
-  HELIUM_ASSERT_MSG(_class->IsType(BaseComponent::s_Class), (TXT("Component registered that does not actually extend BaseComponent")));
+  HELIUM_ASSERT(Component::s_Class);
+  HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
 
   // Add a bookkeeping struct instance for this type of component
   ComponentType component_type_temp;
@@ -48,8 +48,8 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
   TypeId type_id = (uint16_t)g_ComponentTypes.GetSize() - 1;
 
   // Assert that we havn't already registered this type and then set up the data
-  HELIUM_ASSERT(_type_data.TypeId == NULL_TYPE_ID);
-  _type_data.TypeId = type_id;
+  HELIUM_ASSERT(_type_data.m_TypeId == NULL_TYPE_ID);
+  _type_data.m_TypeId = type_id;
 
   // Update bookkeeping fields
   component_type.m_Class = _class;
@@ -61,11 +61,11 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
   // If we have a parent
   if (_base_type_data)
   {
-    std::vector<TypeId> base_implemented_types = g_ComponentTypes[_base_type_data->TypeId].m_ImplementedTypes;
+    std::vector<TypeId> base_implemented_types = g_ComponentTypes[_base_type_data->m_TypeId].m_ImplementedTypes;
 
     // Add base to implemented types, and ourselves to base's implementing types
-    component_type.m_ImplementedTypes.push_back(_base_type_data->TypeId);
-    g_ComponentTypes[_base_type_data->TypeId].m_ImplementingTypes.push_back(type_id);
+    component_type.m_ImplementedTypes.push_back(_base_type_data->m_TypeId);
+    g_ComponentTypes[_base_type_data->m_TypeId].m_ImplementingTypes.push_back(type_id);
 
     // For all the base's types, 
     for (std::vector<TypeId>::iterator iter = base_implemented_types.begin();
@@ -81,7 +81,7 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
     i < component_type.m_Roster.GetSize(); ++i)
   {
     component_type.m_Roster[i] = i;
-    BaseComponent *component = reinterpret_cast<BaseComponent *>(reinterpret_cast<char *>(component_type.m_Pool) + (i * component_type.m_InstanceSize));
+    Component *component = reinterpret_cast<Component *>(reinterpret_cast<char *>(component_type.m_Pool) + (i * component_type.m_InstanceSize));
 
     component->m_Previous = 0;
     component->m_Next = 0;
@@ -96,7 +96,7 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
   return type_id;
 }
 
-BaseComponent* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
+Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
 {
   // Make sure type id is good
   HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
@@ -114,7 +114,7 @@ BaseComponent* Components::Allocate(ComponentSet &_host, TypeId _type, void *_in
   uint16_t roster_index = type.m_FirstUnallocatedIndex++;
   uint16_t component_index = type.m_Roster[roster_index];
 
-  BaseComponent *component = reinterpret_cast<BaseComponent *>(reinterpret_cast<char *>(type.m_Pool) + (component_index * type.m_InstanceSize));
+  Component *component = reinterpret_cast<Component *>(reinterpret_cast<char *>(type.m_Pool) + (component_index * type.m_InstanceSize));
 
   // Insert into chain
   M_Components::Iterator iter = _host.m_Components.Find(_type);
@@ -137,7 +137,7 @@ BaseComponent* Components::Allocate(ComponentSet &_host, TypeId _type, void *_in
   return component;
 }
 
-void Components::Free( ComponentSet &_host, BaseComponent &_component )
+void Components::Free( ComponentSet &_host, Component &_component )
 {
   // Component is already freed or component doesn't have a good handle for some reason
   HELIUM_ASSERT(_component.m_OwningSet);
@@ -180,7 +180,7 @@ void Components::Free( ComponentSet &_host, BaseComponent &_component )
     component_type.m_Roster[freed_roster_index] = component_index;
 
     // Swap the roster index of the highest in-use component and the recently freed component
-    BaseComponent *highest_in_use_component = reinterpret_cast<BaseComponent *>(reinterpret_cast<char *>(component_type.m_Pool) + (other_component_index * component_type.m_InstanceSize));
+    Component *highest_in_use_component = reinterpret_cast<Component *>(reinterpret_cast<char *>(component_type.m_Pool) + (other_component_index * component_type.m_InstanceSize));
     _component.m_RosterIndex = freed_roster_index;
     highest_in_use_component->m_RosterIndex = used_roster_index;
   }
@@ -230,7 +230,7 @@ bool Components::TypeImplementsType( TypeId _implementor, TypeId _implementee )
 //       System Utility Methods
 ////////////////////////////////////////////////////////////////////////
 
-void Components::Private::InsertIntoChain(BaseComponent *_insertee, BaseComponent *_next_component)
+void Components::Private::InsertIntoChain(Component *_insertee, Component *_next_component)
 {
   // If we are inserting into a 0-length chain do nothing
   if (_next_component)
@@ -250,7 +250,7 @@ void Components::Private::InsertIntoChain(BaseComponent *_insertee, BaseComponen
   }
 }
 
-void Components::Private::RemoveFromChain(BaseComponent *_component)
+void Components::Private::RemoveFromChain(Component *_component)
 {
   // If we have a previous node, repoint its next pointer to our next pointer
   if (_component->m_Previous)
@@ -269,7 +269,7 @@ void Components::Private::RemoveFromChain(BaseComponent *_component)
   _component->m_Previous = NULL;
 }
 
-BaseComponent* Components::Private::InternalFindFirstComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
+Component* Components::Private::InternalFindFirstComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
 {
     // First search for this type explicitly
     {
@@ -306,8 +306,8 @@ BaseComponent* Components::Private::InternalFindFirstComponent( ComponentSet &_h
 void Components::Initialize()
 {
   // Register base component with reflect
-  Reflect::RegisterClassType<Components::BaseComponent>(TXT("BaseComponent"));
-  RegisterType<BaseComponent>(BaseComponent::GetStaticComponentTypeData(), 0, 0);
+  Reflect::RegisterClassType<Components::Component>(TXT("Component"));
+  RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
 }
 
 void Components::Cleanup()
@@ -315,10 +315,11 @@ void Components::Cleanup()
   for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
   {
 #pragma TODO("This does not compile in Debug/x64 -Geoff")
-    //HELIUM_DELETE_A(g_ComponentAllocator, g_ComponentTypes[type_id].m_Pool);
+#pragma TODO("Compiles/Links TestApp fine for me in Debug/x64 -Philip")
+    HELIUM_DELETE_A(g_ComponentAllocator, g_ComponentTypes[type_id].m_Pool);
   }
 
-  Reflect::UnregisterClassType<Components::BaseComponent>();
+  Reflect::UnregisterClassType<Components::Component>();
 }
 // 
 // void FindAllComponentsOnHost(ComponentSet &_host, TypeId _type, IVectorWrapper &_components, bool _implements)

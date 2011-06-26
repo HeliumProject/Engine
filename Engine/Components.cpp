@@ -314,9 +314,7 @@ void Components::Cleanup()
 {
   for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
   {
-#pragma TODO("This does not compile in Debug/x64 -Geoff")
-#pragma TODO("Compiles/Links TestApp fine for me in Debug/x64 -Philip")
-    HELIUM_DELETE_A(g_ComponentAllocator, g_ComponentTypes[type_id].m_Pool);
+    HELIUM_DELETE_A(g_ComponentAllocator, reinterpret_cast<char *>( g_ComponentTypes[type_id].m_Pool) );
   }
 
   Reflect::UnregisterClassType<Components::Component>();

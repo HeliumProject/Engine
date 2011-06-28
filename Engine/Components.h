@@ -7,6 +7,7 @@
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Container/Map.h"
+#include "Foundation/Memory/AutoPtr.h"
 
 
 //TODO: OnAttach/OnDetach events for components
@@ -104,7 +105,7 @@ namespace Helium
     };
 
     //! All components have some data for bookkeeping
-    class Component : public Reflect::Object
+    class HELIUM_ENGINE_API Component : public Reflect::Object
     {
         REFLECT_DECLARE_ABSTRACT(Component, Reflect::Object);
         _OBJECT_DECLARE_COMPONENT(Component);
@@ -122,6 +123,12 @@ namespace Helium
 
     namespace Private
     {
+      //! I want to generate a couple functions that require the T of the components the type contains.
+      struct IComponentTypeTCallbacks
+      {
+          virtual void DestroyComponents(struct ComponentType &_type_info) = 0;
+      };
+
       //! Registering a component type creates one of these
       struct ComponentType
       {
@@ -133,13 +140,27 @@ namespace Helium
 
         // parallel arrays
         DynArray<uint16_t>        m_Roster;                 //< List of component indeces.. first all allocated then all deallocated components
-        void *                    m_Pool;                   //< Pointer to the memory block that contains our component instances contiguously
+        void *                    m_Pool;               //< Pointer to the memory block that contains our component instances contiguously
+        IComponentTypeTCallbacks *m_TCallbacks;          //< Pointer to template object that implements a couple useful functions.. it's a raw
+                                                            //  pointer because auto ptrs can't be copied and this struct goes in a DynArray
+
       };
       typedef DynArray<ComponentType> A_ComponentTypes;
 
+      template <class T>
+      struct ComponentTypeTCallbacks : public IComponentTypeTCallbacks
+      {
+          virtual void DestroyComponents(ComponentType &_type_info)
+          {
+              HELIUM_DELETE_A(g_ComponentAllocator, static_cast<T *>(_type_info.m_Pool));
+              Private::TypeData &data = T::GetStaticComponentTypeData();
+              data.m_TypeId = NULL_TYPE_ID;
+          }
+      };
+
       //! List of our type metadata
-      extern A_ComponentTypes g_ComponentTypes;
-      extern Helium::DefaultAllocator g_ComponentAllocator;
+      HELIUM_ENGINE_API extern A_ComponentTypes g_ComponentTypes;
+      HELIUM_ENGINE_API extern Helium::DynamicMemoryHeap g_ComponentAllocator;
 
       // Inserts component in front the given component in its chain
       void          InsertIntoChain(Component *_insertee, Component *_next_component);
@@ -148,20 +169,21 @@ namespace Helium
       void          RemoveFromChain(Component *_component);
 
       // Implements find functions
-      Component*    InternalFindFirstComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
+      HELIUM_ENGINE_API Component*    InternalFindFirstComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
 
       //! A component must be registered. Each component must be registered with reflect. _count indicates max instances of this type.
 
       /// NOTE: Preferred method of doing this is ComponentType::RegisterComponentType(system, count)
       ///
       //HELIUM_ENGINE_API TypeId RegisterType(const Reflect::Class *_class, Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count);
-      TypeId        RegisterType(const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data );
+      HELIUM_ENGINE_API TypeId        RegisterType(const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callback );
 
       template <class T>
       TypeId        RegisterType(Private::TypeData &_type_data, Private::TypeData *_base_type_data, uint16_t _count)
       {
         T *components_block = HELIUM_NEW_A(g_ComponentAllocator, T, _count);
-        return RegisterType(T::s_Class, _type_data, _base_type_data, _count, components_block);
+        TypeId type_id = RegisterType(T::s_Class, _type_data, _base_type_data, _count, components_block, new ComponentTypeTCallbacks<T>());
+        return type_id;
       }
     }
 
@@ -183,6 +205,18 @@ namespace Helium
     //! Check that _implementor implements _implementee
     HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
 
+    inline Component*  FindFirstComponent(ComponentSet &_set, TypeId _type)
+    {
+        return Private::InternalFindFirstComponent(_set, _type, false);
+    }
+
+    inline Component*  FindOneComponentThatImplements(ComponentSet &_set, TypeId _type)
+    {
+        return Private::InternalFindFirstComponent(_set, _type, true);
+    }
+
+    //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynArray<Component *> _components);
+
     //! Must be called before creating any systems
     HELIUM_ENGINE_API void Initialize();
 
@@ -190,9 +224,67 @@ namespace Helium
     HELIUM_ENGINE_API void Cleanup();
 
     template <class T>
-    Component*  Allocate(ComponentSet &_host, void *_init_data = NULL)
+    T*  Allocate(ComponentSet &_host, void *_init_data = NULL)
     {
-        return Allocate(_host, GetType<T>(), _init_data);
+        return static_cast<T *>(Allocate(_host, GetType<T>(), _init_data));
     }
+
+    template <class T>
+    T*  FindFirstComponent(ComponentSet &_set)
+    {
+        return static_cast<T *>(FindFirstComponent(_set, GetType<T>()));
+    }
+
+    template <class T>
+    T*  FindOneComponentThatImplements(ComponentSet &_set)
+    {
+        return static_cast<T *>(FindOneComponentThatImplements(_set, GetType<T>()));
+    }
+
+//     template <class T>
+//     T*  FindComponentsThatImplement(ComponentSet &_set, DynArray<Component *> _components)
+//     {
+//         return FindFirstComponent(_host, GetType<T>);
+//     }
+
+
+
+    class HasComponents
+    {
+    public:
+
+        template <class T>
+        T*  Allocate(void *_init_data = NULL)
+        {
+            return Helium::Components::Allocate<T>(m_Components, _init_data);
+        }
+
+        //! Returns the component to its pool. Old handles to this component will no longer be valid.
+        void        Free(Component &_component)
+        {
+            Helium::Components::Free(m_Components, _component);
+        }
+
+        template <class T>
+        T*  FindFirstComponent()
+        {
+            return Helium::Components::FindFirstComponent<T>(m_Components);
+        }
+
+        template <class T>
+        T*  FindOneComponentThatImplements()
+        {
+            return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
+        }
+
+        //     template <class T>
+        //     T*  FindComponentsThatImplement(ComponentSet &_set, DynArray<Component *> _components)
+        //     {
+        //         return FindComponentsThatImplement(_host, GetType<T>);
+        //     }
+
+    protected:
+        ComponentSet m_Components;
+    };
   }
 }

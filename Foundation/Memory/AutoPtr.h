@@ -50,6 +50,16 @@ namespace Helium
             return m_Ptr;
         }
 
+        //pmd - Added Reset()
+        void Reset(T *_ptr)
+        {
+            if (_ptr != m_Ptr)
+            {
+                delete m_Ptr;
+            }
+            m_Ptr = _ptr;
+        }
+
     private: 
         T* m_Ptr; 
     };

@@ -168,6 +168,8 @@ namespace Helium
         {
             // retrieve the class information and unregister it from the registry
             Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetClass<T>() );
+            //pmd - Not zeroing this pointer causes assert if class is registered later
+            T::s_Class = 0;
         }
 
         typedef void EnumerateEnumFunc( Reflect::Enumeration& info );

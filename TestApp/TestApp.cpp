@@ -26,6 +26,26 @@ extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
 
+#include "Engine/Components.h"
+
+
+class TestComponentFour : public Helium::Components::Component
+{
+public:
+    TestComponentFour()
+    {
+        static int32_t next_id = 100;
+        m_Id = next_id++;
+    }
+
+    int32_t m_Id;
+
+    OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
+};
+
+OBJECT_DEFINE_COMPONENT(TestComponentFour);
+
+
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
     HELIUM_TRACE_SET_LEVEL( TRACE_DEBUG );
@@ -111,6 +131,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         //DynamicMemoryHeap::LogMemoryStats();
 #endif
     }
+
+	//pmd - Verify that classes can be registered after they've been unregistered
+    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+
 
     int argc = 0;
     char *argv = "";

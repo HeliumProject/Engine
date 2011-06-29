@@ -60,75 +60,128 @@ end
 We build monolithic wx, so ignore all the legacy non-monolithic
 #pragma comment directives (on windows only)
 --]]
-configuration "windows"
-	linkoptions
-	{
-		"/NODEFAULTLIB:wxbase29ud",
-		"/NODEFAULTLIB:wxbase29d",
-		"/NODEFAULTLIB:wxbase29u",
-		"/NODEFAULTLIB:wxbase29",
-		"/NODEFAULTLIB:wxbase29ud_net",
-		"/NODEFAULTLIB:wxbase29d_net",
-		"/NODEFAULTLIB:wxbase29u_net",
-		"/NODEFAULTLIB:wxbase29_net",
-		"/NODEFAULTLIB:wxbase29ud_xml",
-		"/NODEFAULTLIB:wxbase29d_xml",
-		"/NODEFAULTLIB:wxbase29u_xml",
-		"/NODEFAULTLIB:wxbase29_xml",
-		"/NODEFAULTLIB:wxmsw29ud_core",
-		"/NODEFAULTLIB:wxmsw29d_core",
-		"/NODEFAULTLIB:wxmsw29u_core",
-		"/NODEFAULTLIB:wxmsw29_core",
-		"/NODEFAULTLIB:wxmsw29ud_adv",
-		"/NODEFAULTLIB:wxmsw29d_adv",
-		"/NODEFAULTLIB:wxmsw29u_adv",
-		"/NODEFAULTLIB:wxmsw29_adv",
-		"/NODEFAULTLIB:wxmsw29ud_html",
-		"/NODEFAULTLIB:wxmsw29d_html",
-		"/NODEFAULTLIB:wxmsw29u_html",
-		"/NODEFAULTLIB:wxmsw29_html",
-		"/NODEFAULTLIB:wxmsw29ud_qa",
-		"/NODEFAULTLIB:wxmsw29d_qa",
-		"/NODEFAULTLIB:wxmsw29u_qa",
-		"/NODEFAULTLIB:wxmsw29_qa",
-		"/NODEFAULTLIB:wxmsw29ud_xrc",
-		"/NODEFAULTLIB:wxmsw29d_xrc",
-		"/NODEFAULTLIB:wxmsw29u_xrc",
-		"/NODEFAULTLIB:wxmsw29_xrc",
-		"/NODEFAULTLIB:wxmsw29ud_aui",
-		"/NODEFAULTLIB:wxmsw29d_aui",
-		"/NODEFAULTLIB:wxmsw29u_aui",
-		"/NODEFAULTLIB:wxmsw29_aui",
-		"/NODEFAULTLIB:wxmsw29ud_propgrid",
-		"/NODEFAULTLIB:wxmsw29d_propgrid",
-		"/NODEFAULTLIB:wxmsw29u_propgrid",
-		"/NODEFAULTLIB:wxmsw29_propgrid",
-		"/NODEFAULTLIB:wxmsw29ud_ribbon",
-		"/NODEFAULTLIB:wxmsw29d_ribbon",
-		"/NODEFAULTLIB:wxmsw29u_ribbon",
-		"/NODEFAULTLIB:wxmsw29_ribbon",
-		"/NODEFAULTLIB:wxmsw29ud_richtext",
-		"/NODEFAULTLIB:wxmsw29d_richtext",
-		"/NODEFAULTLIB:wxmsw29u_richtext",
-		"/NODEFAULTLIB:wxmsw29_richtext",
-		"/NODEFAULTLIB:wxmsw29ud_media",
-		"/NODEFAULTLIB:wxmsw29d_media",
-		"/NODEFAULTLIB:wxmsw29u_media",
-		"/NODEFAULTLIB:wxmsw29_media",
-		"/NODEFAULTLIB:wxmsw29ud_stc",
-		"/NODEFAULTLIB:wxmsw29d_stc",
-		"/NODEFAULTLIB:wxmsw29u_stc",
-		"/NODEFAULTLIB:wxmsw29_stc",
-		"/NODEFAULTLIB:wxmsw29ud_gl",
-		"/NODEFAULTLIB:wxmsw29d_gl",
-		"/NODEFAULTLIB:wxmsw29u_gl",
-		"/NODEFAULTLIB:wxmsw29_gl",
-	}
-	includedirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Include"
-	}
+if os.get() == "windows" then
+
+	configuration "windows"
+		linkoptions
+		{
+			"/NODEFAULTLIB:wxbase29ud",
+			"/NODEFAULTLIB:wxbase29d",
+			"/NODEFAULTLIB:wxbase29u",
+			"/NODEFAULTLIB:wxbase29",
+			"/NODEFAULTLIB:wxbase29ud_net",
+			"/NODEFAULTLIB:wxbase29d_net",
+			"/NODEFAULTLIB:wxbase29u_net",
+			"/NODEFAULTLIB:wxbase29_net",
+			"/NODEFAULTLIB:wxbase29ud_xml",
+			"/NODEFAULTLIB:wxbase29d_xml",
+			"/NODEFAULTLIB:wxbase29u_xml",
+			"/NODEFAULTLIB:wxbase29_xml",
+			"/NODEFAULTLIB:wxmsw29ud_core",
+			"/NODEFAULTLIB:wxmsw29d_core",
+			"/NODEFAULTLIB:wxmsw29u_core",
+			"/NODEFAULTLIB:wxmsw29_core",
+			"/NODEFAULTLIB:wxmsw29ud_adv",
+			"/NODEFAULTLIB:wxmsw29d_adv",
+			"/NODEFAULTLIB:wxmsw29u_adv",
+			"/NODEFAULTLIB:wxmsw29_adv",
+			"/NODEFAULTLIB:wxmsw29ud_html",
+			"/NODEFAULTLIB:wxmsw29d_html",
+			"/NODEFAULTLIB:wxmsw29u_html",
+			"/NODEFAULTLIB:wxmsw29_html",
+			"/NODEFAULTLIB:wxmsw29ud_qa",
+			"/NODEFAULTLIB:wxmsw29d_qa",
+			"/NODEFAULTLIB:wxmsw29u_qa",
+			"/NODEFAULTLIB:wxmsw29_qa",
+			"/NODEFAULTLIB:wxmsw29ud_xrc",
+			"/NODEFAULTLIB:wxmsw29d_xrc",
+			"/NODEFAULTLIB:wxmsw29u_xrc",
+			"/NODEFAULTLIB:wxmsw29_xrc",
+			"/NODEFAULTLIB:wxmsw29ud_aui",
+			"/NODEFAULTLIB:wxmsw29d_aui",
+			"/NODEFAULTLIB:wxmsw29u_aui",
+			"/NODEFAULTLIB:wxmsw29_aui",
+			"/NODEFAULTLIB:wxmsw29ud_propgrid",
+			"/NODEFAULTLIB:wxmsw29d_propgrid",
+			"/NODEFAULTLIB:wxmsw29u_propgrid",
+			"/NODEFAULTLIB:wxmsw29_propgrid",
+			"/NODEFAULTLIB:wxmsw29ud_ribbon",
+			"/NODEFAULTLIB:wxmsw29d_ribbon",
+			"/NODEFAULTLIB:wxmsw29u_ribbon",
+			"/NODEFAULTLIB:wxmsw29_ribbon",
+			"/NODEFAULTLIB:wxmsw29ud_richtext",
+			"/NODEFAULTLIB:wxmsw29d_richtext",
+			"/NODEFAULTLIB:wxmsw29u_richtext",
+			"/NODEFAULTLIB:wxmsw29_richtext",
+			"/NODEFAULTLIB:wxmsw29ud_media",
+			"/NODEFAULTLIB:wxmsw29d_media",
+			"/NODEFAULTLIB:wxmsw29u_media",
+			"/NODEFAULTLIB:wxmsw29_media",
+			"/NODEFAULTLIB:wxmsw29ud_stc",
+			"/NODEFAULTLIB:wxmsw29d_stc",
+			"/NODEFAULTLIB:wxmsw29u_stc",
+			"/NODEFAULTLIB:wxmsw29_stc",
+			"/NODEFAULTLIB:wxmsw29ud_gl",
+			"/NODEFAULTLIB:wxmsw29d_gl",
+			"/NODEFAULTLIB:wxmsw29u_gl",
+			"/NODEFAULTLIB:wxmsw29_gl",
+		}
+		includedirs
+		{
+			os.getenv( "DXSDK_DIR" ) .. "Include"
+		}
+
+	configuration { "windows", "x32" }
+		libdirs
+		{
+			os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+		}
 	
+		if haveGranny then
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win32",
+			}
+		end
+
+	configuration { "windows", "x64" }
+		libdirs
+		{
+			os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+		}
+	
+		if haveGranny then
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		end
+	
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+		}
+	
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+		}
+	
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+		}
+	
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+		}
+end
+
 configuration "no-unicode"
 	defines
 	{
@@ -139,57 +192,6 @@ configuration "not no-unicode"
 	defines
 	{
 		"wxUSE_UNICODE=1",
-	}
-
-configuration { "windows", "x32" }
-	libdirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
-	}
-
-	if haveGranny then
-		libdirs
-		{
-			"Integrations/Granny/granny_sdk/lib/win32",
-		}
-	end
-
-
-configuration { "windows", "x64" }
-	libdirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-	}
-
-	if haveGranny then
-		libdirs
-		{
-			"Integrations/Granny/granny_sdk/lib/win64",
-		}
-	end
-
-configuration { "windows", "x32", "Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
-	}
-
-configuration { "windows", "x32", "not Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
-	}
-
-configuration { "windows", "x64", "Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
-	}
-
-configuration { "windows", "x64", "not Debug" }
-	libdirs
-	{
-		"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
 	}
 
 project "Platform"

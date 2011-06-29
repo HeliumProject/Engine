@@ -21,7 +21,7 @@ Helium.GetSystemVersion = function()
 	if os.get() == "windows" then
         version = os.capture( "cmd /c ver" )
 	else
-        version = os.capture( "uname" )
+        version = os.capture( "uname -r" )
 	end
 	
 	return version

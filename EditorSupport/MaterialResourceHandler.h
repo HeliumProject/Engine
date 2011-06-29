@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
-#define LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
+#ifndef HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
+#define HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -15,10 +15,10 @@
 
 #include "PcSupport/ResourceHandler.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Material resource types.
-    class LUNAR_EDITOR_SUPPORT_API MaterialResourceHandler : public ResourceHandler
+    class HELIUM_EDITOR_SUPPORT_API MaterialResourceHandler : public ResourceHandler
     {
         L_DECLARE_OBJECT( MaterialResourceHandler, ResourceHandler );
 
@@ -41,4 +41,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H
+#endif  // HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H

@@ -1,6 +1,7 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveRings.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -8,10 +9,9 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveRings::PrimitiveRings(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveRings::PrimitiveRings()
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Radius = 1.0f;
     m_Steps = 36;
@@ -28,38 +28,58 @@ void PrimitiveRings::Update()
     SetElementCount( m_Steps*6 );
     m_Vertices.clear();
 
-    float stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
+    float32_t stepAngle = (float32_t)HELIUM_TWOPI / (float32_t)(m_Steps);
 
     for (uint32_t x=0; x<m_Steps; x++)
     {
-        float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector(0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius)));
-        m_Vertices.push_back(Position(SetupVector(0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius)));
+        float32_t theta = (float32_t)(x) * stepAngle;
+        Vector3 position = SetupVector( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     for (uint32_t y=0; y<m_Steps; y++)
     {
-        float theta = (float32_t)(y) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta)) * m_Radius, 0.0f, (float32_t)(sin(theta)) * m_Radius)));
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f, (float32_t)(sin(theta + stepAngle)) * m_Radius)));
+        float32_t theta = (float32_t)(y) * stepAngle;
+        Vector3 position = SetupVector( Cos( theta ) * m_Radius, 0.0f, Sin( theta ) * m_Radius );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( Cos( theta + stepAngle ) * m_Radius, 0.0f, Sin( theta + stepAngle ) * m_Radius );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     for (uint32_t z=0; z<m_Steps; z++)
     {
-        float theta = (float32_t)(z) * stepAngle;
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, 0.0f)));
-        m_Vertices.push_back(Position(SetupVector((float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius, 0.0f)));
+        float32_t theta = (float32_t)(z) * stepAngle;
+        Vector3 position = SetupVector( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, 0.0f );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+        position = SetupVector( Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius, 0.0f );
+        m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
     }
 
     Base::Update();
 }
 
-void PrimitiveRings::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveRings::Draw(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
 
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), m_Steps*3);
+    drawInterface->DrawUntextured(
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        m_Steps * 6,
+        0,
+        m_Steps * 3,
+        materialColor );
     args->m_LineCount += (m_Steps*3);
 }
 
@@ -67,7 +87,11 @@ bool PrimitiveRings::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+        const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+        Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+        Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+        if ( pick->PickSegment( position0, position1 ) )
         {
             return true;
         }

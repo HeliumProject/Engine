@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Settings.h"
 
 using namespace Helium;

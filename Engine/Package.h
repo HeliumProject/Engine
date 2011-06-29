@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_PACKAGE_H
-#define LUNAR_ENGINE_PACKAGE_H
+#ifndef HELIUM_ENGINE_PACKAGE_H
+#define HELIUM_ENGINE_PACKAGE_H
 
 #include "Engine/GameObject.h"
 
-namespace Lunar
+namespace Helium
 {
     class PackageLoader;
 
     /// GameObject package.
-    class LUNAR_ENGINE_API Package : public GameObject
+    class HELIUM_ENGINE_API Package : public GameObject
     {
         L_DECLARE_OBJECT( Package, GameObject );
 
@@ -41,4 +41,4 @@ namespace Lunar
 
 #include "Engine/Package.inl"
 
-#endif  // LUNAR_ENGINE_PACKAGE_H
+#endif  // HELIUM_ENGINE_PACKAGE_H

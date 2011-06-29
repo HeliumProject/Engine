@@ -15,19 +15,22 @@
 #include "Rendering/RRasterizerState.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RSamplerState.h"
+#include "Rendering/RSurface.h"
 #include "Rendering/RVertexDescription.h"
 #include "Graphics/Font.h"
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/Shader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 RenderResourceManager* RenderResourceManager::sm_pInstance = NULL;
 
 /// Constructor.
 RenderResourceManager::RenderResourceManager()
-: m_shadowMode( GraphicsConfig::EShadowMode::INVALID )
-, m_shadowDepthTextureUsableSize( 0 )
+    : m_shadowMode( GraphicsConfig::EShadowMode::INVALID )
+    , m_viewportWidthMax( 0 )
+    , m_viewportHeightMax( 0 )
+    , m_shadowDepthTextureUsableSize( 0 )
 {
 }
 
@@ -187,11 +190,19 @@ void RenderResourceManager::Initialize()
     vertexElements[ 2 ].semanticIndex = 0;
     vertexElements[ 2 ].bufferIndex = 0;
 
+    vertexElements[ 3 ].type = RENDERER_VERTEX_DATA_TYPE_FLOAT32_2;
+    vertexElements[ 3 ].semantic = RENDERER_VERTEX_SEMANTIC_TEXCOORD;
+    vertexElements[ 3 ].semanticIndex = 1;
+    vertexElements[ 3 ].bufferIndex = 0;
+
     m_spSimpleVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 2 );
     HELIUM_ASSERT( m_spSimpleVertexDescription );
 
     m_spSimpleTexturedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 3 );
     HELIUM_ASSERT( m_spSimpleTexturedVertexDescription );
+
+    m_spProjectedVertexDescription = pRenderer->CreateVertexDescription( vertexElements, 4 );
+    HELIUM_ASSERT( m_spProjectedVertexDescription );
 
     vertexElements[ 1 ].type = RENDERER_VERTEX_DATA_TYPE_UINT8_4_NORM;
     vertexElements[ 1 ].semantic = RENDERER_VERTEX_SEMANTIC_NORMAL;
@@ -438,6 +449,8 @@ void RenderResourceManager::Shutdown()
     m_spSimpleScreenSpaceVertexShader.Release();
     m_spPrePassVertexShader.Release();
 
+    m_spDepthStencilSurface.Release();
+
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
 
@@ -470,6 +483,7 @@ void RenderResourceManager::Shutdown()
     m_spSimpleTexturedVertexDescription.Release();
     m_spSimpleVertexDescription.Release();
     m_spScreenVertexDescription.Release();
+    m_spProjectedVertexDescription.Release();
 
     for( size_t descriptionIndex = 0;
         descriptionIndex < HELIUM_ARRAY_COUNT( m_staticMeshVertexDescriptions );
@@ -498,8 +512,19 @@ void RenderResourceManager::PostConfigUpdate()
         pLinearSamplerStates[ addressModeIndex ].Release();
     }
 
+    m_spDepthStencilSurface.Release();
+
     m_spShadowDepthTexture.Release();
     m_spSceneTexture.Release();
+
+    // Keep track of the old maximum viewport dimensions for reconstruction later.
+    uint32_t viewportWidthMax = m_viewportWidthMax;
+    uint32_t viewportHeightMax = m_viewportHeightMax;
+    m_viewportWidthMax = 0;
+    m_viewportHeightMax = 0;
+
+    m_shadowMode = GraphicsConfig::EShadowMode::NONE;
+    m_shadowDepthTextureUsableSize = 0;
 
     // Get the renderer and graphics configuration.
     Renderer* pRenderer = Renderer::GetStaticInstance();
@@ -560,12 +585,7 @@ void RenderResourceManager::PostConfigUpdate()
         HELIUM_ASSERT( pLinearSamplerStates[ addressModeIndex ] );
     }
 
-    // Create the scene color target and shadow buffer depth textures.  Due to restrictions with render target
-    // settings on certain platforms (namely when using Direct3D), these must be the same size.
-    // XXX WDI: Implement support for the NULL FOURCC format for Direct3D to avoid this restriction when possible.
-    uint32_t bufferWidth = pRenderer->GetMainContextWidth();
-    uint32_t bufferHeight = pRenderer->GetMainContextHeight();
-
+    // Store shadow buffer settings.
     GraphicsConfig::EShadowMode shadowMode = GraphicsConfig::EShadowMode::NONE;
     uint32_t shadowBufferUsableSize = 0;
 
@@ -575,42 +595,57 @@ void RenderResourceManager::PostConfigUpdate()
         if( shadowMode != GraphicsConfig::EShadowMode::INVALID && shadowMode != GraphicsConfig::EShadowMode::NONE )
         {
             shadowBufferUsableSize = spGraphicsConfig->GetShadowBufferSize();
-            if( shadowBufferUsableSize != 0 )
-            {
-                if( bufferWidth < shadowBufferUsableSize )
-                {
-                    bufferWidth = shadowBufferUsableSize;
-                }
-
-                if( bufferHeight < shadowBufferUsableSize )
-                {
-                    bufferHeight = shadowBufferUsableSize;
-                }
-
-                m_spShadowDepthTexture = pRenderer->CreateTexture2d(
-                    bufferWidth,
-                    bufferHeight,
-                    1,
-                    RENDERER_PIXEL_FORMAT_DEPTH,
-                    RENDERER_BUFFER_USAGE_DEPTH_STENCIL );
-                if( !m_spShadowDepthTexture )
-                {
-                    HELIUM_TRACE(
-                        TRACE_ERROR,
-                        ( TXT( "Failed to create shadow depth texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32
-                        TXT( ".\n" ) ),
-                        bufferWidth,
-                        bufferHeight );
-
-                    shadowMode = GraphicsConfig::EShadowMode::NONE;
-                    shadowBufferUsableSize = 0;
-                }
-            }
         }
     }
 
     m_shadowMode = shadowMode;
     m_shadowDepthTextureUsableSize = shadowBufferUsableSize;
+
+    // Recreate render and depth targets.
+    UpdateMaxViewportSize( viewportWidthMax, viewportHeightMax );
+}
+
+/// Reconstruct render resources based on the maximum render viewport size.
+///
+/// @param[in] width   Maximum viewport width, in pixels.
+/// @param[in] height  Maximum viewport height, in pixels.
+void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t height )
+{
+    if( width == m_viewportWidthMax && height == m_viewportHeightMax )
+    {
+        return;
+    }
+
+    m_spDepthStencilSurface.Release();
+
+    m_spShadowDepthTexture.Release();
+    m_spSceneTexture.Release();
+
+    Renderer* pRenderer = Renderer::GetStaticInstance();
+    if( !pRenderer )
+    {
+        m_viewportWidthMax = 0;
+        m_viewportHeightMax = 0;
+        m_shadowMode = GraphicsConfig::EShadowMode::NONE;
+        m_shadowDepthTextureUsableSize = 0;
+
+        return;
+    }
+
+    // Don't create any surfaces for zero-sized viewports.
+    if( width == 0 || height == 0 )
+    {
+        m_viewportWidthMax = 0;
+        m_viewportHeightMax = 0;
+
+        return;
+    }
+
+    // Due to restrictions with render target settings on certain platforms (namely when using Direct3D), the scene
+    // texture, depth-stencil surface, and shadow depth texture must all be the same size.
+    // XXX WDI: Implement support for the NULL FOURCC format for Direct3D to avoid this restriction when possible.
+    uint32_t bufferWidth = Max( width, m_shadowDepthTextureUsableSize );
+    uint32_t bufferHeight = Max( height, m_shadowDepthTextureUsableSize );
 
     m_spSceneTexture = pRenderer->CreateTexture2d(
         bufferWidth,
@@ -625,6 +660,39 @@ void RenderResourceManager::PostConfigUpdate()
             TXT( "Failed to create scene render texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
             bufferWidth,
             bufferHeight );
+    }
+
+    m_spDepthStencilSurface = pRenderer->CreateDepthStencilSurface(
+        bufferWidth,
+        bufferHeight,
+        RENDERER_SURFACE_FORMAT_DEPTH_STENCIL,
+        0 );
+    if( !m_spDepthStencilSurface )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "Failed to create scene depth-stencil surface of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
+            bufferWidth,
+            bufferHeight );
+    }
+
+    if( m_shadowMode != GraphicsConfig::EShadowMode::NONE && m_shadowMode != GraphicsConfig::EShadowMode::INVALID &&
+        m_shadowDepthTextureUsableSize != 0 )
+    {
+        m_spShadowDepthTexture = pRenderer->CreateTexture2d(
+            bufferWidth,
+            bufferHeight,
+            1,
+            RENDERER_PIXEL_FORMAT_DEPTH,
+            RENDERER_BUFFER_USAGE_DEPTH_STENCIL );
+        if( !m_spShadowDepthTexture )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                TXT( "Failed to create shadow depth texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
+                bufferWidth,
+                bufferHeight );
+        }
     }
 }
 
@@ -684,8 +752,8 @@ RSamplerState* RenderResourceManager::GetSamplerState(
 ///
 /// @return  SimpleVertex vertex description.
 ///
-/// @see GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 {
     return m_spSimpleVertexDescription;
@@ -695,8 +763,8 @@ RVertexDescription* RenderResourceManager::GetSimpleVertexDescription() const
 ///
 /// @return  SimpleTexturedVertex vertex description.
 ///
-/// @see GetSimpleVertexDescription(), GetScreenVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetScreenVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() const
 {
     return m_spSimpleTexturedVertexDescription;
@@ -706,11 +774,22 @@ RVertexDescription* RenderResourceManager::GetSimpleTexturedVertexDescription() 
 ///
 /// @return  ScreenVertex vertex description.
 ///
-/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetStaticMeshVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetProjectedVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 {
     return m_spScreenVertexDescription;
+}
+
+/// Get the description for ProjectedVertex vertices.
+///
+/// @return  ScreenVertex vertex description.
+///
+/// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
+///      GetStaticMeshVertexDescription(), GetSkinnedMeshVertexDescription()
+RVertexDescription* RenderResourceManager::GetProjectedVertexDescription() const
+{
+    return m_spProjectedVertexDescription;
 }
 
 /// Get the description for static mesh vertices with the specified number of texture coordinate sets.
@@ -721,7 +800,7 @@ RVertexDescription* RenderResourceManager::GetScreenVertexDescription() const
 /// @return  Vertex description.
 ///
 /// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
-///      GetSkinnedMeshVertexDescription()
+///      GetProjectedVertexDescription(), GetSkinnedMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const
 {
     HELIUM_ASSERT( textureCoordinateSetCount >= 1 );
@@ -735,7 +814,7 @@ RVertexDescription* RenderResourceManager::GetStaticMeshVertexDescription( size_
 /// @return  Skinned mesh vertex description.
 ///
 /// @see GetSimpleVertexDescription(), GetSimpleTexturedVertexDescription(), GetScreenVertexDescription(),
-///      GetStaticMeshVertexDescription()
+///      GetProjectedVertexDescription(), GetStaticMeshVertexDescription()
 RVertexDescription* RenderResourceManager::GetSkinnedMeshVertexDescription() const
 {
     return m_spSkinnedMeshVertexDescription;
@@ -759,6 +838,16 @@ RTexture2d* RenderResourceManager::GetSceneTexture() const
 RTexture2d* RenderResourceManager::GetShadowDepthTexture() const
 {
     return m_spShadowDepthTexture;
+}
+
+/// Get the main depth-stencil surface for scene rendering.
+///
+/// @return  Scene depth-stencil surface.
+///
+/// @see GetSceneTexture()
+RSurface* RenderResourceManager::GetDepthStencilSurface() const
+{
+    return m_spDepthStencilSurface;
 }
 
 /// Get the vertex shader variant resource for depth-only pre-pass rendering.

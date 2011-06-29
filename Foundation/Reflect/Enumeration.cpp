@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Enumeration.h"
 
 using namespace Helium;

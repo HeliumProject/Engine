@@ -6,12 +6,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_SHADER_PROFILES_H
-#define LUNAR_RENDERING_SHADER_PROFILES_H
+#ifndef HELIUM_RENDERING_SHADER_PROFILES_H
+#define HELIUM_RENDERING_SHADER_PROFILES_H
 
 #include "Rendering/Rendering.h"
 
-namespace Lunar
+namespace Helium
 {
     namespace ShaderProfile
     {
@@ -34,4 +34,4 @@ namespace Lunar
     }
 }
 
-#endif  // LUNAR_RENDERING_SHADER_PROFILES_H
+#endif  // HELIUM_RENDERING_SHADER_PROFILES_H

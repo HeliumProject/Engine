@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "SceneAsset.h"
 
 #include "Foundation/Reflect/ArchiveXML.h"
@@ -10,7 +11,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_OBJECT( SceneAsset );
 
-void SceneAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
+void SceneAsset::PopulateComposite( Reflect::Composite& comp )
 {
 
 }

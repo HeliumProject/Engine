@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ColorPickerWidget.h"
 
 #include <wx/panel.h>

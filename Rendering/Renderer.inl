@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the set of bit flags specifying which optional renderer features are supported by the current renderer
     /// implementation and system drivers.
@@ -42,26 +42,6 @@ namespace Lunar
     bool Renderer::SupportsAnyFeature( uint32_t featureFlags ) const
     {
         return ( ( m_featureFlags & featureFlags ) != 0 );
-    }
-
-    /// Get the width of the main display context.
-    ///
-    /// @return  Main context width, in pixels.
-    ///
-    /// @see GetMainContextHeight()
-    uint32_t Renderer::GetMainContextWidth() const
-    {
-        return m_mainContextWidth;
-    }
-
-    /// Get the height of the main display context.
-    ///
-    /// @return  Main context height, in pixels.
-    ///
-    /// @see GetMainContextHeight()
-    uint32_t Renderer::GetMainContextHeight() const
-    {
-        return m_mainContextHeight;
     }
 
     /// Constructor.

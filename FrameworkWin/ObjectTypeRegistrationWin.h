@@ -6,16 +6,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H
-#define LUNAR_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H
+#ifndef HELIUM_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H
+#define HELIUM_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/ObjectTypeRegistration.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Object type registration base class for Windows.
-    class LUNAR_FRAMEWORK_WIN_API ObjectTypeRegistrationWin : public ObjectTypeRegistration
+    class HELIUM_FRAMEWORK_WIN_API ObjectTypeRegistrationWin : public ObjectTypeRegistration
     {
     public:
         /// @name Type Registration
@@ -26,4 +26,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H
+#endif  // HELIUM_FRAMEWORK_WIN_OBJECT_TYPE_REGISTRATION_WIN_H

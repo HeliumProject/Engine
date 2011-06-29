@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #ifdef WIN32
 #include "Platform/Windows/Windows.h"
 #endif

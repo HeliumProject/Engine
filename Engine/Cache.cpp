@@ -14,7 +14,7 @@
 #include "Foundation/StringConverter.h"
 #include "Foundation/AsyncLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// TOC header magic number.
 static const uint32_t TOC_MAGIC = 0xcac4e70c;
@@ -470,7 +470,7 @@ bool Cache::CacheEntry(
                     HELIUM_ASSERT( pBufferedStream );
 
                     pBufferedStream->Write( &TOC_MAGIC, sizeof( TOC_MAGIC ), 1 );
-                    pBufferedStream->Write( &VERSION, sizeof( VERSION ), 1 );
+                    pBufferedStream->Write( &sm_Version, sizeof( sm_Version ), 1 );
 
                     uint32_t entryCount = static_cast< uint32_t >( m_entries.GetSize() );
                     pBufferedStream->Write( &entryCount, sizeof( entryCount ), 1 );
@@ -580,14 +580,14 @@ bool Cache::FinalizeTocLoad()
         return false;
     }
 
-    if( version > VERSION )
+    if( version > sm_Version )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) TPRIu32 TXT( ") exceeds the maximum " )
             TXT( "supported version (%" ) TPRIu32 TXT( ").\n" ) ),
             version,
-            VERSION );
+            sm_Version );
 
         return false;
     }

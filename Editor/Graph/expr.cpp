@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 
 /*
 Copyright (c) 2007 Andre de Leiradella

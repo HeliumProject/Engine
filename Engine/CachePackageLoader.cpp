@@ -15,7 +15,7 @@
 #include "Engine/NullLinker.h"
 #include "Engine/Resource.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 CachePackageLoader::CachePackageLoader()

@@ -414,7 +414,7 @@ void Helium::DynArray< T, Allocator >::InsertArray( size_t index, const T* pValu
 /// @param[in] index  Index from which to remove elements.
 /// @param[in] count  Number of elements to remove.
 ///
-/// @see RemoveSwap()
+/// @see RemoveSwap(), RemoveAll()
 template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::Remove( size_t index, size_t count )
 {
@@ -440,7 +440,7 @@ void Helium::DynArray< T, Allocator >::Remove( size_t index, size_t count )
 /// @param[in] index  Index from which to remove elements.
 /// @param[in] count  Number of elements to remove.
 ///
-/// @see Remove()
+/// @see Remove(), RemoveAll()
 template< typename T, typename Allocator >
 void Helium::DynArray< T, Allocator >::RemoveSwap( size_t index, size_t count )
 {
@@ -466,6 +466,15 @@ void Helium::DynArray< T, Allocator >::RemoveSwap( size_t index, size_t count )
 
     ArrayInPlaceDestroy( m_pBuffer + newSize, count );
     m_size = newSize;
+}
+
+/// Remove all elements from this array without modifying its capacity.
+///
+/// @see Remove(), RemoveAll()
+template< typename T, typename Allocator >
+void Helium::DynArray< T, Allocator >::RemoveAll()
+{
+    Remove( 0, m_size );
 }
 
 /// Get the first element in this array.
@@ -838,33 +847,33 @@ bool Helium::DynArray< T, Allocator >::Equals( const DynArray< T, OtherAllocator
 template< typename T, typename Allocator >
 T* Helium::DynArray< T, Allocator >::Allocate( size_t count )
 {
-    return Allocate( count, boost::integral_constant< bool, ( boost::alignment_of< T >::value > 8 ) >() );
+    return Allocate( count, std::integral_constant< bool, ( std::alignment_of< T >::value > 8 ) >() );
 }
 
 /// Allocate() implementation for types requiring a specific alignment.
 ///
 /// @param[in] count            Number of elements for which to allocate.
-/// @param[in] rNeedsAlignment  boost::true_type.
+/// @param[in] rNeedsAlignment  std::true_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
 /// @see Reallocate()
 template< typename T, typename Allocator >
-T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const boost::true_type& /*rNeedsAlignment*/ )
+T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const std::true_type& /*rNeedsAlignment*/ )
 {
-    return static_cast< T* >( Allocator().AllocateAligned( boost::alignment_of< T >::value, sizeof( T ) * count ) );
+    return static_cast< T* >( Allocator().AllocateAligned( std::alignment_of< T >::value, sizeof( T ) * count ) );
 }
 
 /// Allocate() implementation for types that can use the default alignment.
 ///
 /// @param[in] count            Number of elements for which to allocate.
-/// @param[in] rNeedsAlignment  boost::false_type.
+/// @param[in] rNeedsAlignment  std::false_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
 /// @see Reallocate()
 template< typename T, typename Allocator >
-T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const boost::false_type& /*rNeedsAlignment*/ )
+T* Helium::DynArray< T, Allocator >::Allocate( size_t count, const std::false_type& /*rNeedsAlignment*/ )
 {
     return static_cast< T* >( Allocator().Allocate( sizeof( T ) * count ) );
 }
@@ -883,20 +892,20 @@ T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count )
     return Reallocate(
         pMemory,
         count,
-        boost::integral_constant< bool, ( boost::alignment_of< T >::value > 8 ) >() );
+        std::integral_constant< bool, ( std::alignment_of< T >::value > 8 ) >() );
 }
 
 /// Reallocate() implementation for types requiring a specific alignment.
 ///
 /// @param[in] pMemory          Base address of the allocation to reallocate.
 /// @param[in] count            Number of elements for which to reallocate.
-/// @param[in] rNeedsAlignment  boost::true_type.
+/// @param[in] rNeedsAlignment  std::true_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
 /// @see Reallocate()
 template< typename T, typename Allocator >
-T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count, const boost::true_type& /*rNeedsAlignment*/ )
+T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count, const std::true_type& /*rNeedsAlignment*/ )
 {
     Allocator allocator;
 
@@ -905,7 +914,7 @@ T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count, const
     if( existingSize != newSize )
     {
         T* pNewMemory = static_cast< T* >( allocator.AllocateAligned(
-            boost::alignment_of< T >::value,
+            std::alignment_of< T >::value,
             newSize ) );
         HELIUM_ASSERT( pNewMemory || newSize == 0 );
         MemoryCopy( pNewMemory, pMemory, Min( existingSize, newSize ) );
@@ -920,7 +929,7 @@ T* Helium::DynArray< T, Allocator >::Reallocate( T* pMemory, size_t count, const
 ///
 /// @param[in] pMemory          Base address of the allocation to reallocate.
 /// @param[in] count            Number of elements for which to reallocate.
-/// @param[in] rNeedsAlignment  boost::false_type.
+/// @param[in] rNeedsAlignment  std::false_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
@@ -929,7 +938,7 @@ template< typename T, typename Allocator >
 T* Helium::DynArray< T, Allocator >::Reallocate(
     T* pMemory,
     size_t count,
-    const boost::false_type& /*rNeedsAlignment*/ )
+    const std::false_type& /*rNeedsAlignment*/ )
 {
     return static_cast< T* >( Allocator().Reallocate( pMemory, sizeof( T ) * count ) );
 }
@@ -954,8 +963,8 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
         elementCount,
         oldCapacity,
         newCapacity,
-        boost::integral_constant<
-            bool, boost::has_trivial_copy< T >::value && boost::has_trivial_destructor< T >::value >() );
+        std::integral_constant<
+            bool, std::has_trivial_copy< T >::value && std::has_trivial_destructor< T >::value >() );
 }
 
 /// ResizeBuffer() implementation for types with both a trivial copy constructor and trivial destructor.
@@ -964,7 +973,7 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
 /// @param[in] elementCount                  Number of elements that have actually been constructed in the buffer.
 /// @param[in] oldCapacity                   Current array capacity.
 /// @param[in] newCapacity                   New array capacity.
-/// @param[in] rHasTrivialCopyAndDestructor  boost::true_type.
+/// @param[in] rHasTrivialCopyAndDestructor  std::true_type.
 ///
 /// @return  Pointer to the resized array.
 template< typename T, typename Allocator >
@@ -973,7 +982,7 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
     size_t /*elementCount*/,
     size_t /*oldCapacity*/,
     size_t newCapacity,
-    const boost::true_type& /*rHasTrivialCopyAndDestructor*/ )
+    const std::true_type& /*rHasTrivialCopyAndDestructor*/ )
 {
     return Reallocate( pMemory, newCapacity );
 }
@@ -984,7 +993,7 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
 /// @param[in] elementCount                  Number of elements that have actually been constructed in the buffer.
 /// @param[in] oldCapacity                   Current array capacity.
 /// @param[in] newCapacity                   New array capacity.
-/// @param[in] rHasTrivialCopyAndDestructor  boost::false_type.
+/// @param[in] rHasTrivialCopyAndDestructor  std::false_type.
 ///
 /// @return  Pointer to the resized array.
 template< typename T, typename Allocator >
@@ -993,7 +1002,7 @@ T* Helium::DynArray< T, Allocator >::ResizeBuffer(
     size_t elementCount,
     size_t oldCapacity,
     size_t newCapacity,
-    const boost::false_type& /*rHasTrivialCopyAndDestructor*/ )
+    const std::false_type& /*rHasTrivialCopyAndDestructor*/ )
 {
     HELIUM_ASSERT( elementCount <= oldCapacity );
     HELIUM_ASSERT( elementCount <= newCapacity );

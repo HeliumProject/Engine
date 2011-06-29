@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "EntityInstance.h"
 #include "EntityInstanceType.h"
 #include "EntityInstancePanel.h"
@@ -23,7 +23,7 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_OBJECT(EntityInstance);
 
-void EntityInstance::AcceptCompositeVisitor( Reflect::Composite& comp )
+void EntityInstance::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &EntityInstance::m_Path,         TXT( "m_Path" ) );
     comp.AddField( &EntityInstance::m_ShowPointer,  TXT( "m_ShowPointer" ) );
@@ -428,6 +428,7 @@ void EntityInstance::Evaluate(GraphDirection direction)
 
 void EntityInstance::Render( RenderVisitor* render )
 {
+#ifdef VIEWPORT_REFACTOR
     if (IsPointerVisible())
     {
         // entity pointer is drawn normalized
@@ -466,10 +467,13 @@ void EntityInstance::Render( RenderVisitor* render )
             render->PopState();
         }
     }
+#endif
 
     // don't call Base here, it will draw big ass axes
     HierarchyNode::Render( render );
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 void EntityInstance::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
@@ -496,6 +500,8 @@ void EntityInstance::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const
     // draw class shape
     classSet->GetShape()->Draw( args, entity->m_SolidOverride ? &entity->m_Solid : NULL, entity->m_TransparentOverride ? &entity->m_Transparent : NULL );
 }
+
+#endif
 
 bool EntityInstance::Pick( PickVisitor* pick )
 {

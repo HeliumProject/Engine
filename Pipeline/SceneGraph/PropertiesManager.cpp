@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PropertiesManager.h"
 
 #include "Platform/Atomic.h"

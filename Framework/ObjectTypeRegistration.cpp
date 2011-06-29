@@ -18,7 +18,7 @@ extern void UnregisterEngineTypes();
 extern void UnregisterGraphicsTypes();
 extern void UnregisterFrameworkTypes();
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 ObjectTypeRegistration::~ObjectTypeRegistration()

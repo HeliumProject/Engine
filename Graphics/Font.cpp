@@ -1,12 +1,12 @@
 #include "GraphicsPch.h"
 #include "Graphics/Font.h"
 
-#include "Rendering/PixelUtil.h"
+#include "Rendering/RendererUtil.h"
 #include "Rendering/Renderer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
-L_DEFINE_ENUMERATION( Font::ECompression, LUNAR_GRAPHICS_API );
+L_DEFINE_ENUMERATION( Font::ECompression, HELIUM_GRAPHICS_API );
 
 L_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 
@@ -79,7 +79,7 @@ bool Font::BeginPrecacheResourceData()
     // Allocate and begin loading texture resources.
     ERendererPixelFormat format =
         ( m_textureCompression == ECompression::COLOR_COMPRESSED ? RENDERER_PIXEL_FORMAT_BC1 : RENDERER_PIXEL_FORMAT_R8 );
-    size_t blockRowCount = PixelUtil::PixelToBlockRowCount( m_textureSheetHeight, format );
+    size_t blockRowCount = RendererUtil::PixelToBlockRowCount( m_textureSheetHeight, format );
 
     uint16_t textureSheetWidth = Max< uint16_t >( m_textureSheetWidth, 1 );
     uint16_t textureSheetHeight = Max< uint16_t >( m_textureSheetHeight, 1 );

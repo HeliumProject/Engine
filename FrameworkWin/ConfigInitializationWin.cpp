@@ -10,7 +10,7 @@
 
 #include "PcSupport/ConfigPc.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc ConfigInitialization::Initialize()
 bool ConfigInitializationWin::Initialize()

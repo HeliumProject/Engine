@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
-#define LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#ifndef HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#define HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H
 
 #include "Graphics/Graphics.h"
 
@@ -15,7 +15,7 @@
 #include "Rendering/RRenderResource.h"
 #include "Graphics/GraphicsConfig.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Font );
     HELIUM_DECLARE_PTR( ShaderVariant );
@@ -24,11 +24,12 @@ namespace Lunar
     L_DECLARE_RPTR( RBlendState );
     L_DECLARE_RPTR( RDepthStencilState );
     L_DECLARE_RPTR( RSamplerState );
+    L_DECLARE_RPTR( RSurface );
     L_DECLARE_RPTR( RTexture2d );
     L_DECLARE_RPTR( RVertexDescription );
 
     /// Manager for common render resources used by the graphics system.
-    class LUNAR_GRAPHICS_API RenderResourceManager : NonCopyable
+    class HELIUM_GRAPHICS_API RenderResourceManager : NonCopyable
     {
     public:
         /// Maximum number of texture coordinate sets allowed for meshes.
@@ -133,6 +134,8 @@ namespace Lunar
         void Shutdown();
 
         void PostConfigUpdate();
+
+        void UpdateMaxViewportSize( uint32_t width, uint32_t height );
         //@}
 
         /// @name State Access
@@ -148,6 +151,7 @@ namespace Lunar
         RVertexDescription* GetSimpleVertexDescription() const;
         RVertexDescription* GetSimpleTexturedVertexDescription() const;
         RVertexDescription* GetScreenVertexDescription() const;
+        RVertexDescription* GetProjectedVertexDescription() const;
         RVertexDescription* GetStaticMeshVertexDescription( size_t textureCoordinateSetCount ) const;
         RVertexDescription* GetSkinnedMeshVertexDescription() const;
         //@}
@@ -156,6 +160,8 @@ namespace Lunar
         //@{
         RTexture2d* GetSceneTexture() const;
         RTexture2d* GetShadowDepthTexture() const;
+
+        RSurface* GetDepthStencilSurface() const;
 
         ShaderVariant* GetPrePassVertexShader() const;
         ShaderVariant* GetSimpleWorldSpaceVertexShader() const;
@@ -193,6 +199,8 @@ namespace Lunar
         RVertexDescriptionPtr m_spSimpleTexturedVertexDescription;
         /// Screen-space vertex description.
         RVertexDescriptionPtr m_spScreenVertexDescription;
+        /// Projected vertex description.
+        RVertexDescriptionPtr m_spProjectedVertexDescription;
         /// Static mesh vertex descriptions.
         RVertexDescriptionPtr m_staticMeshVertexDescriptions[ MESH_TEXTURE_COORDINATE_SET_COUNT_MAX ];
         /// Skinned mesh vertex description.
@@ -202,6 +210,9 @@ namespace Lunar
         RTexture2dPtr m_spSceneTexture;
         /// Shadow depth texture.
         RTexture2dPtr m_spShadowDepthTexture;
+
+        /// Main scene depth-stencil surface.
+        RSurfacePtr m_spDepthStencilSurface;
 
         /// Depth-only pre-pass vertex shader.
         ShaderVariantPtr m_spPrePassVertexShader;
@@ -223,6 +234,12 @@ namespace Lunar
 
         /// Effective shadow mode in use (accounting for whether a shadow buffer was allocated, etc.).
         GraphicsConfig::EShadowMode m_shadowMode;
+
+        /// Maximum viewport width.
+        uint32_t m_viewportWidthMax;
+        /// Maximum viewport height.
+        uint32_t m_viewportHeightMax;
+
         /// Shadow depth texture usable size (cached from graphics config object value).
         uint32_t m_shadowDepthTextureUsableSize;
 
@@ -239,4 +256,4 @@ namespace Lunar
 
 #include "Graphics/RenderResourceManager.inl"
 
-#endif  // LUNAR_GRAPHICS_RENDER_RESOURCE_MANAGER_H
+#endif  // HELIUM_GRAPHICS_RENDER_RESOURCE_MANAGER_H

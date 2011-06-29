@@ -1,7 +1,11 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/ObjectStlVectorData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(ObjectStlVectorData);
@@ -16,9 +20,9 @@ ObjectStlVectorData::~ObjectStlVectorData()
 
 }
 
-void ObjectStlVectorData::ConnectData(Helium::HybridPtr<void> data)
+void ObjectStlVectorData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectStlVectorData::GetSize() const 
@@ -31,7 +35,7 @@ void ObjectStlVectorData::Clear()
     return m_Data->clear(); 
 }
 
-bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
+bool ObjectStlVectorData::Set(Data* src, uint32_t flags)
 {
     const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(src);
     if (!rhs)
@@ -43,7 +47,7 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -52,14 +56,14 @@ bool ObjectStlVectorData::Set(const Data* src, uint32_t flags)
         for ( int index = 0; itr != end; ++itr )
         {
             Object* object = *itr;
-            m_Data.Ref()[index++] = ( object ? object->Clone() : NULL );
+            m_Data->at( index++ ) = ( object ? object->Clone() : NULL );
         }
     }
 
     return true;
 }
 
-bool ObjectStlVectorData::Equals(const Object* object) const
+bool ObjectStlVectorData::Equals(Object* object)
 {
     const ObjectStlVectorData* rhs = SafeCast<ObjectStlVectorData>(object);
     if (!rhs)
@@ -92,23 +96,10 @@ bool ObjectStlVectorData::Equals(const Object* object) const
     return true;
 }
 
-void ObjectStlVectorData::Serialize(Archive& archive) const
-{
-    archive.Serialize(m_Data.Get());
-}
-
-void ObjectStlVectorData::Deserialize(Archive& archive)
-{
-    // if we are referring to a real field, clear its contents
-    m_Data->clear();
-
-    archive.Deserialize(m_Data.Ref());
-}
-
 void ObjectStlVectorData::Accept(Visitor& visitor)
 {
-    std::vector< ObjectPtr >::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
-    std::vector< ObjectPtr >::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
+    std::vector< ObjectPtr >::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    std::vector< ObjectPtr >::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
     for ( ; itr != end; ++itr )
     {
         if (!itr->ReferencesObject())
@@ -123,4 +114,39 @@ void ObjectStlVectorData::Accept(Visitor& visitor)
 
         (*itr)->Accept( visitor );
     }
+}
+
+void ObjectStlVectorData::Serialize(ArchiveBinary& archive)
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+void ObjectStlVectorData::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+void ObjectStlVectorData::Serialize(ArchiveXML& archive)
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+void ObjectStlVectorData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< class ArchiveT >
+void ObjectStlVectorData::Serialize(ArchiveT& archive)
+{
+    archive.SerializeArray( *m_Data );
+}
+
+template< class ArchiveT >
+void ObjectStlVectorData::Deserialize(ArchiveT& archive)
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    archive.DeserializeArray( *m_Data );
 }

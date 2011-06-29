@@ -17,7 +17,7 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( MaterialResourceHandler, EditorSupport, 0 );
 

@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RENDER_COMMAND_LIST_H
-#define LUNAR_RENDERING_R_RENDER_COMMAND_LIST_H
+#ifndef HELIUM_RENDERING_R_RENDER_COMMAND_LIST_H
+#define HELIUM_RENDERING_R_RENDER_COMMAND_LIST_H
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Render command list interface.
-    class LUNAR_RENDERING_API RRenderCommandList : public RRenderResource
+    class HELIUM_RENDERING_API RRenderCommandList : public RRenderResource
     {
     protected:
         /// @name Construction/Destruction
@@ -24,4 +24,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_RENDER_COMMAND_LIST_H
+#endif  // HELIUM_RENDERING_R_RENDER_COMMAND_LIST_H

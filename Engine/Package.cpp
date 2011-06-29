@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/Package.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT_NOINITTYPE( Package, Engine );
 

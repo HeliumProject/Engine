@@ -1,8 +1,9 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/DynArrayData.h"
 
+#include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -80,9 +81,9 @@ SimpleDynArrayData< T >::~SimpleDynArrayData()
 }
 
 template< class T >
-void SimpleDynArrayData< T >::ConnectData(Helium::HybridPtr<void> data)
+void SimpleDynArrayData< T >::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template< class T >
@@ -116,19 +117,13 @@ DataPtr SimpleDynArrayData< T >::GetItem( size_t at )
 }
 
 template< class T >
-ConstDataPtr SimpleDynArrayData< T >::GetItem( size_t at ) const
+void SimpleDynArrayData< T >::SetItem( size_t at, Data* value )
 {
-    return Data::Bind( m_Data->GetElement( at ), m_Instance, m_Field );
+    Data::GetValue( value, m_Data->GetElement( at ) );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::SetItem( size_t at, const Data* value )
-{
-    Data::GetValue(value, m_Data->GetElement( at ) );
-}
-
-template< class T >
-void SimpleDynArrayData< T >::Insert( size_t at, const Data* value )
+void SimpleDynArrayData< T >::Insert( size_t at, Data* value )
 {
     T temp;
     Data::GetValue( value, temp );
@@ -190,7 +185,7 @@ void SimpleDynArrayData< T >::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Set( const Data* src, uint32_t flags )
+bool SimpleDynArrayData< T >::Set( Data* src, uint32_t flags )
 {
     const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( src );
     if (!rhs)
@@ -198,13 +193,13 @@ bool SimpleDynArrayData< T >::Set( const Data* src, uint32_t flags )
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Equals( const Object* object ) const
+bool SimpleDynArrayData< T >::Equals( Object* object )
 {
     const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( object );
     if (!rhs)
@@ -212,107 +207,87 @@ bool SimpleDynArrayData< T >::Equals( const Object* object ) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Serialize( Archive& archive ) const
+void SimpleDynArrayData< T >::Serialize( ArchiveBinary& archive )
 {
-    switch (archive.GetType())
+    Reflect::CharStream& stream = archive.GetStream();
+
+    size_t countActual = m_Data->GetSize();
+    HELIUM_ASSERT( countActual <= UINT32_MAX );
+    uint32_t count = static_cast< uint32_t >( countActual );
+    stream.Write( &count );
+
+    for( size_t index = 0; index < countActual; ++index )
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetIndent().Push();
-
-            // foreach datum
-            for (size_t i=0; i<m_Data->GetSize(); i++)
-            {
-                // indent
-                xml.GetIndent().Get(xml.GetStream());
-
-                // write
-                xml.GetStream() << m_Data.Get()[i];
-
-                // newline
-                xml.GetStream() << "\n";
-            }
-
-            xml.GetIndent().Pop();
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary( static_cast< ArchiveBinary& >( archive ) );
-            Reflect::CharStream& stream = binary.GetStream();
-
-            size_t countActual = m_Data->GetSize();
-            HELIUM_ASSERT( countActual <= UINT32_MAX );
-            uint32_t count = static_cast< uint32_t >( countActual );
-            stream.Write( &count );
-
-            for( size_t index = 0; index < countActual; ++index )
-            {
-#pragma TODO( "Fix support for writing out non-POD types (i.e. strings)" )
-                stream.Write( &m_Data->GetElement( index ) );
-            }
-
-            break;
-        }
+        stream.Write( &m_Data->GetElement( index ) );
     }
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Deserialize( Archive& archive )
+void SimpleDynArrayData< T >::Deserialize( ArchiveBinary& archive )
 {
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
 
-    switch (archive.GetType())
+    Reflect::CharStream& stream = archive.GetStream();
+
+    uint32_t count = 0;
+    stream.Read( &count );
+
+    m_Data->Reserve( count );
+
+    uint_fast32_t countFast = count;
+    for( uint_fast32_t index = 0; index < countFast; ++index )
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+        T* pElement = m_Data->New();
+        HELIUM_ASSERT( pElement );
+        stream.Read( pElement );
+    }
+}
 
-            T value;
-            xml.GetStream().SkipWhitespace(); 
+template< class T >
+void SimpleDynArrayData< T >::Serialize( ArchiveXML& archive )
+{
+    archive.GetIndent().Push();
 
-            while (!xml.GetStream().Done())
-            {
-                // read data
-                xml.GetStream() >> value;
+    // foreach datum
+    for (size_t i=0; i<m_Data->GetSize(); i++)
+    {
+        // indent
+        archive.GetIndent().Get(archive.GetStream());
 
-                // copy onto vector
-                m_Data->Push(value);
+        // write
+        archive.GetStream() << (*m_Data)[i];
 
-                // read to next non-whitespace char
-                xml.GetStream().SkipWhitespace(); 
-            }
-            break;
-        }
+        // newline
+        archive.GetStream() << "\n";
+    }
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary( static_cast< ArchiveBinary& >( archive ) );
-            Reflect::CharStream& stream = binary.GetStream();
+    archive.GetIndent().Pop();
+}
 
-            uint32_t count = 0;
-            stream.Read( &count );
+template< class T >
+void SimpleDynArrayData< T >::Deserialize( ArchiveXML& archive )
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->Clear();
 
-            m_Data->Reserve( count );
+    T value;
+    archive.GetStream().SkipWhitespace(); 
 
-            uint_fast32_t countFast = count;
-            for( uint_fast32_t index = 0; index < countFast; ++index )
-            {
-                T* pElement = m_Data->New();
-                HELIUM_ASSERT( pElement );
-                stream.Read( pElement );
-            }
+    while (!archive.GetStream().Done())
+    {
+        // read data
+        archive.GetStream() >> value;
 
-            break;
-        }
+        // copy onto vector
+        m_Data->Push(value);
+
+        // read to next non-whitespace char
+        archive.GetStream().SkipWhitespace(); 
     }
 }
 
@@ -346,7 +321,7 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< T, T >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< T, T >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -355,126 +330,101 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
 // Specializations
 //
 
-// keep reading the string until we run out of buffer
 template<>
-void StringDynArrayData::Serialize( Archive& archive ) const
+void StringDynArrayData::Serialize( ArchiveBinary& archive )
 {
-    switch (archive.GetType())
+    CharStream& stream = archive.GetStream();
+
+    size_t countActual = m_Data->GetSize();
+    HELIUM_ASSERT( countActual <= UINT32_MAX );
+    uint32_t count = static_cast< uint32_t >( countActual );
+    stream.Write( &count );
+
+    for( size_t index = 0; index < countActual; ++index )
     {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetIndent().Push();
-            xml.GetIndent().Get(xml.GetStream());
-
-            // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
-            xml.GetStream() << TXT("<![CDATA[\n");
-
-            for (size_t i=0; i<m_Data->GetSize(); i++)
-            {
-                xml.GetIndent().Get(xml.GetStream());
-
-                // output the escape-code free character sequence between double qutoes
-                xml.GetStream() << TXT('\"') << *m_Data.Get()[i] << TXT('\"') << s_ContainerItemDelimiter;
-            }
-
-            // end our CDATA escape section
-            xml.GetIndent().Get(xml.GetStream());
-            xml.GetStream() << TXT("]]>\n");
-
-            xml.GetIndent().Pop();
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary( static_cast< ArchiveBinary& >( archive ) );
-            CharStream& stream = binary.GetStream();
-
-            size_t countActual = m_Data->GetSize();
-            HELIUM_ASSERT( countActual <= UINT32_MAX );
-            uint32_t count = static_cast< uint32_t >( countActual );
-            stream.Write( &count );
-
-            for( size_t index = 0; index < countActual; ++index )
-            {
-                stream.WriteString( m_Data->GetElement( index ) );
-            }
-
-            break;
-        }
+        stream.WriteString( m_Data->GetElement( index ) );
     }
 }
 
-// must escape strings to account for special "evil" characters... like ", &, `, etc...
 template<>
-void StringDynArrayData::Deserialize( Archive& archive )
+void StringDynArrayData::Deserialize( ArchiveBinary& archive )
 {
     m_Data->Clear();
 
-    switch (archive.GetType())
+    CharStream& stream = archive.GetStream();
+
+    uint32_t count = 0;
+    stream.Read( &count );
+
+    m_Data->Reserve( count );
+
+    uint_fast32_t countFast = count;
+    for( uint32_t index = 0; index < countFast; index++ )
     {
-    case ArchiveTypes::XML:
+        String* element = m_Data->New();
+        HELIUM_ASSERT( element );
+        stream.ReadString( *element ); 
+    }
+}
+
+template<>
+void StringDynArrayData::Serialize( ArchiveXML& archive )
+{
+    archive.GetIndent().Push();
+    archive.GetIndent().Get(archive.GetStream());
+
+    // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
+    archive.GetStream() << TXT("<![CDATA[\n");
+
+    for (size_t i=0; i<m_Data->GetSize(); i++)
+    {
+        archive.GetIndent().Get(archive.GetStream());
+
+        // output the escape-code free character sequence between double qutoes
+        archive.GetStream() << TXT('\"') << (*m_Data)[i] << TXT('\"') << s_ContainerItemDelimiter;
+    }
+
+    // end our CDATA escape section
+    archive.GetIndent().Get(archive.GetStream());
+    archive.GetStream() << TXT("]]>\n");
+    archive.GetIndent().Pop();
+}
+
+template<>
+void StringDynArrayData::Deserialize( ArchiveXML& archive )
+{
+    archive.GetStream().SkipWhitespace(); 
+    tstring value;
+
+    while (!archive.GetStream().Done())
+    {
+        std::getline( archive.GetStream().GetInternal(), value ); 
+
+        size_t start = value.find_first_of('\"');
+        size_t end = value.find_last_of('\"');
+
+        // if we found a pair of quotes
+        if (start != std::string::npos && end != std::string::npos && start != end)
         {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream().SkipWhitespace(); 
-            tstring value;
-
-            while (!xml.GetStream().Done())
+            // if all we have are open/close quotes, push a blank string
+            String* string = m_Data->New();
+            HELIUM_ASSERT( string );
+            if (start != end-1)
             {
-                std::getline( xml.GetStream().GetInternal(), value ); 
-
-                size_t start = value.find_first_of('\"');
-                size_t end = value.find_last_of('\"');
-
-                // if we found a pair of quotes
-                if (start != std::string::npos && end != std::string::npos && start != end)
-                {
-                    // if all we have are open/close quotes, push a blank string
-                    String* string = m_Data->New();
-                    HELIUM_ASSERT( string );
-                    if (start != end-1)
-                    {
-                        *string = value.substr( start + 1, end - start - 1).c_str();
-                    }
-                }
-                else
-                {
-                    start = value.find_first_not_of( TXT( " \t\n" ) );
-
-                    if ( start != std::string::npos )
-                    {
-                        HELIUM_VERIFY( m_Data->New( value.substr(start).c_str() ) );
-                    }
-                }
-
-                xml.GetStream().SkipWhitespace(); 
+                *string = value.substr( start + 1, end - start - 1).c_str();
             }
-            break;
+        }
+        else
+        {
+            start = value.find_first_not_of( TXT( " \t\n" ) );
+
+            if ( start != std::string::npos )
+            {
+                HELIUM_VERIFY( m_Data->New( value.substr(start).c_str() ) );
+            }
         }
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary( static_cast< ArchiveBinary& >( archive ) );
-            CharStream& stream = binary.GetStream();
-
-            uint32_t count = 0;
-            stream.Read( &count );
-
-            m_Data->Reserve( count );
-
-            uint_fast32_t countFast = count;
-            for( uint32_t index = 0; index < countFast; index++ )
-            {
-                String* element = m_Data->New();
-                HELIUM_ASSERT( element );
-                stream.ReadString( *element ); 
-            }
-
-            break;
-        }
+        archive.GetStream().SkipWhitespace(); 
     }
 }
 
@@ -496,7 +446,7 @@ tistream& SimpleDynArrayData< uint8_t >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< uint8_t, uint16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< uint8_t, uint16_t >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
@@ -512,10 +462,11 @@ tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
     str.Resize( static_cast< size_t >( size ) );
     stream.read( &str[ 0 ], size );
 
-    Tokenize< int8_t, int16_t >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    Tokenize< int8_t, int16_t >( str, *m_Data, s_ContainerItemDelimiter );
 
     return stream;
 }
+
 #endif // UNICODE
 
 template SimpleDynArrayData< String >;

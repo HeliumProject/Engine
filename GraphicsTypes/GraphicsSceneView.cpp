@@ -13,7 +13,7 @@
 #include "Rendering/RRenderContext.h"
 #include "Rendering/RSurface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 const float32_t GraphicsSceneView::DEFAULT_HORIZONTAL_FOV = 70.0f;
 const float32_t GraphicsSceneView::DEFAULT_ASPECT_RATIO = 1.0f;
@@ -71,11 +71,6 @@ void GraphicsSceneView::SetDepthStencilSurface( RSurface* pSurface )
 
 /// Set the viewport dimensions for this view to use.
 ///
-/// Setting the viewport will also initialize a constant buffer to use for scaling and offsetting pixel coordinates for
-/// screen-space rendering.  Note that if the viewport settings do not change, the constant buffer will not be altered.
-/// Additionally, setting the viewport to either a width or height of zero will cause no constant buffer to be allocated
-/// (any existing constant buffer will be released).
-///
 /// @param[in] x       Horizontal pixel coordinate of the upper-left viewport corner.
 /// @param[in] y       Vertical pixel coordinate of the upper-left viewport corner.
 /// @param[in] width   Viewport width, in pixels.
@@ -87,53 +82,8 @@ void GraphicsSceneView::SetViewport( uint32_t x, uint32_t y, uint32_t width, uin
 {
     m_viewportX = x;
     m_viewportY = y;
-
-    if( m_viewportWidth != width || m_viewportHeight != height )
-    {
-        m_viewportWidth = width;
-        m_viewportHeight = height;
-
-        if( ( width | height ) == 0 )
-        {
-            m_spScreenSpaceVertexConstantBuffer.Release();
-        }
-        else
-        {
-            Renderer* pRenderer = Renderer::GetStaticInstance();
-            HELIUM_ASSERT( pRenderer || !m_spScreenSpaceVertexConstantBuffer );
-            if( pRenderer )
-            {
-                float32_t invWidth = 1.0f / static_cast< float32_t >( width );
-                float32_t invHeight = 1.0f / static_cast< float32_t >( height );
-
-                float32_t positionScaleOffset[ 4 ] =
-                {
-                    2.0f * invWidth,
-                    -2.0f * invHeight,
-                    -1.0f - invWidth,
-                    1.0f + invHeight,
-                };
-
-                if( !m_spScreenSpaceVertexConstantBuffer )
-                {
-                    m_spScreenSpaceVertexConstantBuffer = pRenderer->CreateConstantBuffer(
-                        sizeof( float32_t ) * 4,
-                        RENDERER_BUFFER_USAGE_STATIC,
-                        positionScaleOffset );
-                    HELIUM_ASSERT( m_spScreenSpaceVertexConstantBuffer );
-                }
-                else
-                {
-                    pRenderer->Flush();
-
-                    void* pMappedBuffer = m_spScreenSpaceVertexConstantBuffer->Map();
-                    HELIUM_ASSERT( pMappedBuffer );
-                    MemoryCopy( pMappedBuffer, positionScaleOffset, sizeof( float32_t ) * 4 );
-                    m_spScreenSpaceVertexConstantBuffer->Unmap();
-                }
-            }
-        }
-    }
+    m_viewportWidth = width;
+    m_viewportHeight = height;
 }
 
 /// Set the color to which the viewport color buffer should be filled at the start of each frame.

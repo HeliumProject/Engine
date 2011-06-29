@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/NullLinker.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 NullLinker::NullLinker()

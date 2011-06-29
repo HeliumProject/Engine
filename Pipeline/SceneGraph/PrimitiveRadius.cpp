@@ -1,13 +1,12 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveRadius.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveRadius::PrimitiveRadius(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveRadius::PrimitiveRadius()
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Radius = 1.0f;
     m_RadiusSteps = 36;

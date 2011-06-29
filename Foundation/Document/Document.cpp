@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Document.h"
 
 #include "Platform/Assert.h"

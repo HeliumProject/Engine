@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_SKELETAL_MESH_ENTITY_H
-#define LUNAR_FRAMEWORK_SKELETAL_MESH_ENTITY_H
+#ifndef HELIUM_FRAMEWORK_SKELETAL_MESH_ENTITY_H
+#define HELIUM_FRAMEWORK_SKELETAL_MESH_ENTITY_H
 
 #include "Framework/MeshEntity.h"
 
@@ -17,12 +17,12 @@
 #include "GrannySkeletalMeshEntityInterface.h"
 #endif
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Animation );
 
     /// In-game entity comprising of a skeletal (skinned) mesh.
-    class LUNAR_FRAMEWORK_API SkeletalMeshEntity : public MeshEntity
+    class HELIUM_FRAMEWORK_API SkeletalMeshEntity : public MeshEntity
     {
         L_DECLARE_OBJECT( SkeletalMeshEntity, MeshEntity );
 
@@ -93,4 +93,4 @@ namespace Lunar
 
 #include "Framework/SkeletalMeshEntity.inl"
 
-#endif  // LUNAR_FRAMEWORK_SKELETAL_MESH_ENTITY_H
+#endif  // HELIUM_FRAMEWORK_SKELETAL_MESH_ENTITY_H

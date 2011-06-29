@@ -6,21 +6,21 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RASTERIZER_STATE_H
-#define LUNAR_RENDERING_R_RASTERIZER_STATE_H
+#ifndef HELIUM_RENDERING_R_RASTERIZER_STATE_H
+#define HELIUM_RENDERING_R_RASTERIZER_STATE_H
 
 #include "Rendering/RRenderResource.h"
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Rasterizer state interface.
-    class LUNAR_RENDERING_API RRasterizerState : public RRenderResource
+    class HELIUM_RENDERING_API RRasterizerState : public RRenderResource
     {
     public:
         /// Rasterization state description.
-        struct LUNAR_RENDERING_API Description
+        struct HELIUM_RENDERING_API Description
         {
             /// Triangle fill mode.
             ERendererFillMode fillMode;
@@ -54,4 +54,4 @@ namespace Lunar
 
 #include "Rendering/RRasterizerState.inl"
 
-#endif  // LUNAR_RENDERING_R_RASTERIZER_STATE_H
+#endif  // HELIUM_RENDERING_R_RASTERIZER_STATE_H

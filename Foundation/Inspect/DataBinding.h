@@ -76,7 +76,8 @@ namespace Helium
             }
             else
             {
-                val->resize( size );
+				HELIUM_ASSERT(size < 0xFFFFFFFFL);
+				val->resize( tstring::size_type(size) );
                 stream.read( const_cast< tchar_t* >( val->c_str() ), size );
             }
         }
@@ -918,8 +919,8 @@ namespace Helium
             const Reflect::Field* m_Field;
 
         public:
-            MultiDataFormatter( const std::vector< Reflect::DataPtr >& serializers, const Reflect::Field* field )
-                : m_Datas( serializers )
+            MultiDataFormatter( const std::vector< Reflect::DataPtr >& datas, const Reflect::Field* field )
+                : m_Datas( datas )
                 , m_Field( field )
             {
 

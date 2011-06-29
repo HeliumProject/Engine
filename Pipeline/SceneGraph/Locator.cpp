@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Locator.h"
 
 #include "Pipeline/SceneGraph/Scene.h"
@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 REFLECT_DEFINE_ENUMERATION( LocatorShape );
 REFLECT_DEFINE_OBJECT( Locator );
 
-void Locator::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Locator::PopulateComposite( Reflect::Composite& comp )
 {
     Reflect::Field* field = comp.AddEnumerationField( &Locator::m_Shape, TXT( "m_Shape" ) );
     field->SetProperty( TXT( "HelpText" ), TXT( "Determines the shape of the locator node." ) );
@@ -105,6 +105,7 @@ void Locator::Evaluate(GraphDirection direction)
 
 void Locator::Render( RenderVisitor* render )
 {
+#ifdef VIEWPORT_REFACTOR
     // shape is drawn non-normalized
     {
         RenderEntry* entry = render->Allocate(this);
@@ -117,10 +118,13 @@ void Locator::Render( RenderVisitor* render )
             entry->m_Flags |= RenderFlags::DistanceSort;
         }
     }
+#endif
 
     // don't call Base here, it will draw big ass axes
     HierarchyNode::Render( render );
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 void Locator::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
@@ -136,6 +140,8 @@ void Locator::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNo
         prim->Draw( args, locator->m_SolidOverride ? &locator->m_Solid : NULL, locator->m_TransparentOverride ? &locator->m_Transparent : NULL );
     }
 }
+
+#endif
 
 bool Locator::Pick( PickVisitor* pick )
 {

@@ -2,6 +2,7 @@
 
 #include "Platform/Math/Simd.h"
 #include "Platform/Math/MathCommon.h"
+#include "Platform/Utility.h"
 
 namespace Helium
 {
@@ -16,6 +17,7 @@ namespace Helium
             //@{
             inline Vector3();
             inline Vector3( float32_t x, float32_t y, float32_t z );
+            inline explicit Vector3( const float32_t* pVector );
             inline explicit Vector3( float32_t s );
 #if HELIUM_SIMD_SIZE == 16
             inline explicit Vector3( const Register& rVector );

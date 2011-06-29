@@ -1,3 +1,4 @@
+#include "PlatformPch.h"
 #include "Platform/Profile.h"
 
 using namespace Helium;

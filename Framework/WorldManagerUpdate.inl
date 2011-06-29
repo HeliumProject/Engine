@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Maximum number of child jobs that can be spawned at once.
     static const size_t CHILD_JOB_COUNT_MAX = 1024;

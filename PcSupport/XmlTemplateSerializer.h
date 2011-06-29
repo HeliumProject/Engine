@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H
-#define LUNAR_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H
+#ifndef HELIUM_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H
+#define HELIUM_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H
 
 #include "PcSupport/XmlSerializerBase.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serializer for tracking of template object properties for comparison during general object serialization.
-    class LUNAR_PC_SUPPORT_API XmlTemplateSerializer : public XmlSerializerBase
+    class HELIUM_PC_SUPPORT_API XmlTemplateSerializer : public XmlSerializerBase
     {
     public:
         /// Property data.
-        class LUNAR_PC_SUPPORT_API PropertyData
+        class HELIUM_PC_SUPPORT_API PropertyData
         {
         public:
             /// @name Construction/Destruction
@@ -82,4 +82,4 @@ namespace Lunar
 
 #include "PcSupport/XmlTemplateSerializer.inl"
 
-#endif  // LUNAR_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H
+#endif  // HELIUM_PC_SUPPORT_XML_TEMPLATE_SERIALIZER_H

@@ -4,6 +4,11 @@
 
 namespace Helium
 {
+    L_DECLARE_RPTR( RVertexBuffer );
+}
+
+namespace Helium
+{
     namespace SceneGraph
     {
 
@@ -11,18 +16,32 @@ namespace Helium
         {
         public:
             static Profile::MemoryPoolHandle s_MemoryPool;
-            IDirect3DVertexBuffer9*          m_Buffer; 
+            VertexElementType m_ElementType;
+            Helium::RVertexBufferPtr m_Buffer;
 
-            VertexResource( ResourceTracker* tracker ); 
+            VertexResource();
+            virtual ~VertexResource();
 
-            IDirect3DVertexBuffer9* GetBuffer() const
+            VertexElementType GetElementType() const
+            {
+                return m_ElementType;
+            }
+
+            void SetElementType( VertexElementType type )
+            {
+                m_ElementType = type;
+                m_IsDirty = true;
+            }
+
+            Helium::RVertexBuffer* GetBuffer() const
             {
                 return m_Buffer;
             }
 
+            virtual uint32_t GetElementSize() const HELIUM_OVERRIDE;
+
             virtual uint8_t* Lock() HELIUM_OVERRIDE; 
             virtual void Unlock() HELIUM_OVERRIDE; 
-            virtual bool SetState() const HELIUM_OVERRIDE; 
 
         protected:
             virtual bool Allocate() HELIUM_OVERRIDE;

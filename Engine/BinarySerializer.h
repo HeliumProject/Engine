@@ -6,18 +6,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_BINARY_SERIALIZER_H
-#define LUNAR_ENGINE_BINARY_SERIALIZER_H
+#ifndef HELIUM_ENGINE_BINARY_SERIALIZER_H
+#define HELIUM_ENGINE_BINARY_SERIALIZER_H
 
 #include "Engine/Serializer.h"
 
 #include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/Stream/DynamicMemoryStream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// GameObject serializer for package and resource caching.
-    class LUNAR_ENGINE_API BinarySerializer : public Serializer
+    class HELIUM_ENGINE_API BinarySerializer : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -111,4 +111,4 @@ namespace Lunar
 
 #include "Engine/BinarySerializer.inl"
 
-#endif  // LUNAR_ENGINE_BINARY_SERIALIZER_H
+#endif  // HELIUM_ENGINE_BINARY_SERIALIZER_H

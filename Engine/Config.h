@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CONFIG_H
-#define LUNAR_ENGINE_CONFIG_H
+#ifndef HELIUM_ENGINE_CONFIG_H
+#define HELIUM_ENGINE_CONFIG_H
 
 #include "Engine/Engine.h"
 
@@ -26,10 +26,13 @@
 #define L_CONFIG_PLATFORM_SUFFIX L_CONFIG_PLATFORM_SUFFIX_WIN
 #endif
 
-namespace Lunar
+namespace Helium
 {
+    HELIUM_DECLARE_PTR( GameObject );
+    HELIUM_DECLARE_PTR( Package );
+
     /// Configuration management.
-    class LUNAR_ENGINE_API Config : NonCopyable
+    class HELIUM_ENGINE_API Config : NonCopyable
     {
     public:
         /// @name General Information
@@ -98,4 +101,4 @@ namespace Lunar
 
 #include "Engine/Config.inl"
 
-#endif  // LUNAR_ENGINE_CONFIG_H
+#endif  // HELIUM_ENGINE_CONFIG_H

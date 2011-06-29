@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_MATERIAL_H
-#define LUNAR_GRAPHICS_MATERIAL_H
+#ifndef HELIUM_GRAPHICS_MATERIAL_H
+#define HELIUM_GRAPHICS_MATERIAL_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
@@ -17,7 +17,7 @@
 #include "Platform/Math/Simd/Vector4.h"
 #include "Graphics/Shader.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Shader );
     HELIUM_DECLARE_PTR( ShaderVariant );
@@ -26,13 +26,13 @@ namespace Lunar
     L_DECLARE_RPTR( RConstantBuffer );
 
     /// Material resource type.
-    class LUNAR_GRAPHICS_API Material : public Resource
+    class HELIUM_GRAPHICS_API Material : public Resource
     {
         L_DECLARE_OBJECT( Material, Resource );
 
     public:
         /// Scalar floating-point parameter.
-        struct LUNAR_GRAPHICS_API Float1Parameter
+        struct HELIUM_GRAPHICS_API Float1Parameter
         {
             /// Parameter name.
             Name name;
@@ -46,7 +46,7 @@ namespace Lunar
         };
 
         /// Two-component floating-point vector parameter.
-        struct LUNAR_GRAPHICS_API Float2Parameter
+        struct HELIUM_GRAPHICS_API Float2Parameter
         {
             /// Parameter name.
             Name name;
@@ -60,7 +60,7 @@ namespace Lunar
         };
 
         /// Three-component floating-point vector parameter.
-        struct LUNAR_GRAPHICS_API Float3Parameter
+        struct HELIUM_GRAPHICS_API Float3Parameter
         {
             /// Parameter name.
             Name name;
@@ -74,7 +74,7 @@ namespace Lunar
         };
 
         /// Four-component floating-point vector parameter.
-        struct LUNAR_GRAPHICS_API Float4Parameter
+        struct HELIUM_GRAPHICS_API Float4Parameter
         {
             /// Parameter name.
             Name name;
@@ -206,4 +206,4 @@ namespace Lunar
 
 #include "Graphics/Material.inl"
 
-#endif  // LUNAR_GRAPHICS_MATERIAL_H
+#endif  // HELIUM_GRAPHICS_MATERIAL_H

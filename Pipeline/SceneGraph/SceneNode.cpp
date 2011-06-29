@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Pipeline/SceneGraph/SceneNode.h"
 
 #include "Pipeline/SceneGraph/SceneNodeType.h"
@@ -14,7 +14,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneNode );
 
-void SceneNode::AcceptCompositeVisitor( Reflect::Composite& comp )
+void SceneNode::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &SceneNode::m_ID,            TXT( "m_ID" ),             Reflect::FieldFlags::ReadOnly );
     comp.AddField( &SceneNode::m_DefaultName,   TXT( "m_DefaultName" ),    Reflect::FieldFlags::Hide );

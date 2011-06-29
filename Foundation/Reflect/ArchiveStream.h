@@ -98,25 +98,25 @@ namespace Helium
         class Stream : public Helium::RefCountBase< Stream< StreamPrimitiveT > >
         {
         public: 
-            Stream()
+            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
                 : m_Stream( NULL )
-                , m_ByteOrder( ByteOrders::LittleEndian )
-                , m_CharacterEncoding( CharacterEncodings::ASCII )
                 , m_OwnStream( false )
+                , m_ByteOrder( byteOrder )
+                , m_CharacterEncoding( characterEncoding )
             {
 
             }
 
-            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream )
+            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
                 : m_Stream( stream )
                 , m_OwnStream( ownStream )
-                , m_ByteOrder( ByteOrders::LittleEndian )
-                , m_CharacterEncoding( CharacterEncodings::ASCII )
+                , m_ByteOrder( byteOrder )
+                , m_CharacterEncoding( characterEncoding )
             {
 
             }
 
-            virtual ~Stream()
+            ~Stream()
             {
                 if ( m_OwnStream )
                 {
@@ -161,12 +161,12 @@ namespace Helium
                 return m_Stream->tellp(); 
             }
 
-            std::streamsize ObjectsRead()
+            std::streamsize ElementsRead()
             {
                 return m_Stream->gcount(); 
             }
 
-            std::streamsize ObjectsAvailable()
+            std::streamsize ElementsAvailable()
             {
                 return m_Stream->rdbuf()->in_avail();
             }
@@ -480,10 +480,10 @@ namespace Helium
             }
 
         protected: 
-            std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >*    m_Stream; 
-            ByteOrder                                                               m_ByteOrder;
-            CharacterEncoding                                                       m_CharacterEncoding;
-            bool                                                                    m_OwnStream;
+            std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >*  m_Stream; 
+            bool                                                                            m_OwnStream;
+            ByteOrder                                                                       m_ByteOrder;
+            CharacterEncoding                                                               m_CharacterEncoding;
         };
 
         template <class T, class StreamPrimitiveT>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <joblist>
 
-    <namespace name="Lunar" />
-    <moduletokenprefix name="LUNAR_" />
+    <namespace name="Helium" />
+    <moduletokenprefix name="HELIUM_" />
 
     <include file="GraphicsTypes/GraphicsSceneObject.h" />
 

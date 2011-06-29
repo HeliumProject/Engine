@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "EulerAngles.h"
 
 #include "Matrix3.h"

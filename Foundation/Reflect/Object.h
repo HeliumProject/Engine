@@ -123,7 +123,7 @@ namespace Helium
             static Reflect::Class* CreateClass( const tchar_t* name );
 
             // Enumerates member data (stub)
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             //
             // Persistence
@@ -132,13 +132,13 @@ namespace Helium
             // Specifies if the value is directly between the start and end name
             virtual bool                IsCompact() const;
 
-            // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-            virtual bool                ProcessComponent( ObjectPtr object, const tchar_t* fieldName );
+            // This the process callback for sub and primitive objects to have their data be aggregated into the parent instance
+            virtual void                ProcessUnknown( Object* object, uint32_t fieldNameCrc );
 
             // Serialize to a particular data target, just works on this
-            void                        ToXML( tstring& xml ) const;
-            void                        ToBinary( std::iostream& stream ) const;
-            void                        ToFile( const Path& path ) const;
+            void                        ToXML( tstring& xml );
+            void                        ToBinary( std::iostream& stream );
+            void                        ToFile( const Path& path );
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
             virtual ObjectPtr           GetTemplate() const;
@@ -156,7 +156,7 @@ namespace Helium
             virtual void                Accept( Visitor& visitor );
 
             // Do comparison logic against other object, checks type and field data
-            virtual bool                Equals( const Object* object ) const;
+            virtual bool                Equals( Object* object );
 
             // Copy this object's data into another object isntance
             virtual void                CopyTo( Object* object );

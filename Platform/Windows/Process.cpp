@@ -1,9 +1,8 @@
+#include "PlatformPch.h"
 #include "Platform/Process.h"
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Utility.h"
-
-#include "Windows.h"
 
 #include <sstream>
 

@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "DocumentManager.h"
 
 #include "Foundation/Reflect/Archive.h"

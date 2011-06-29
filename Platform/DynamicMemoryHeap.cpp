@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 #include "Platform/Memory.h"
 
 #include "Platform/Atomic.h"
@@ -217,7 +217,7 @@ void DynamicMemoryHeap::LogMemoryStats()
             const stdext::hash_map< void*, AllocationBacktrace >& rAllocationBacktraceMap =
                 pTrackingData->allocationBacktraceMap;
 
-#pragma TODO( "LUNAR MERGE - Remove STL string usage here once String is merged over." )
+#pragma TODO( "HELIUM MERGE - Remove STL string usage here once String is merged over." )
 //            String symbol;
             tstring symbol;
 

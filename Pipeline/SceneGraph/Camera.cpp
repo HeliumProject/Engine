@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Camera.h"
 
 // Include our Windows header data first to make sure everything is set up properly before the Direct3D includes pull it

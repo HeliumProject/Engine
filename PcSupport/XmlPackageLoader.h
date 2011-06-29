@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_H
-#define LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_H
+#ifndef HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_H
+#define HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_H
 
 #include "PcSupport/PcSupport.h"
 #include "Engine/PackageLoader.h"
@@ -20,9 +20,9 @@
 /// Directory-based XML package file name string.
 #define L_XML_PACKAGE_FILE_NAME TXT( "!package" ) L_XML_PACKAGE_FILE_EXTENSION
 
-namespace Lunar
+namespace Helium
 {
-    class LUNAR_PC_SUPPORT_API XmlPackageLoader : public PackageLoader
+    class HELIUM_PC_SUPPORT_API XmlPackageLoader : public PackageLoader
     {
         struct LinkEntry;
 
@@ -456,4 +456,4 @@ namespace Lunar
 
 #include "PcSupport/XmlPackageLoader.inl"
 
-#endif  // LUNAR_PC_SUPPORT_XML_PACKAGE_LOADER_H
+#endif  // HELIUM_PC_SUPPORT_XML_PACKAGE_LOADER_H

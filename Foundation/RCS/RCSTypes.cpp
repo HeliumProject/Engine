@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "RCSTypes.h"
 
 #include <sstream>

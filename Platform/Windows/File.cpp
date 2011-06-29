@@ -1,13 +1,9 @@
+#include "PlatformPch.h"
 #include "Platform/File.h"
-
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
-
-// i hate windows
-#undef CreateFile
 
 Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate )
 {
@@ -37,9 +33,9 @@ Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate
 
     Handle handle = InvalidHandleValue;
 #ifdef UNICODE
-    handle = CreateFileW(
+    handle = ::CreateFileW(
 #else
-    handle = CreateFileA(
+    handle = ::CreateFileA(
 #endif
         filename,
         desiredAccess,

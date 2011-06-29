@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Inspect/Controls/FileDialogButtonControl.h"
 
 using namespace Helium;

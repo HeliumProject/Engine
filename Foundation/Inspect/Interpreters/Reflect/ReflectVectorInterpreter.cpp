@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ReflectVectorInterpreter.h"
 
 #include "Foundation/Inspect/Controls/LabelControl.h"
@@ -56,7 +57,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
     // create the dimension ui
     for ( int offset = 0; offset < dimensions*4; offset += 4 )
     {
-        // create the serializers
+        // create the data objects
         std::vector<Reflect::Data*> data;
         std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
         std::vector<Reflect::Object*>::const_iterator end = instances.end();
@@ -77,7 +78,7 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
         value->a_IsReadOnly.Set( ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly );
         value->a_HelpText.Set( field->GetProperty( TXT( "HelpText" ) ) );
 
-        // bind the ui to the serializers
+        // bind the ui to the data objects
         value->Bind( new MultiStringFormatter<Data>( data ) );
     }
 }

@@ -1,45 +1,86 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveFrame.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Color.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveFrame::PrimitiveFrame(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitiveFrame::PrimitiveFrame()
 {
     SetElementCount( 9 );
-    SetElementType( ElementTypes::TransformedColored );
+    SetElementType( VertexElementTypes::ScreenVertex );
 
-    m_BorderColor = D3DCOLOR_ARGB(255, 200, 200, 200);
-    m_InnerColor = SceneGraph::Color::BlendColor(m_BorderColor, D3DCOLOR_ARGB(0, 0, 0, 0), 0.5f);
+    m_BorderColor.SetArgb( 0xffc8c8c8 );
+    m_InnerColor = SceneGraph::Color::BlendColor( m_BorderColor, Helium::Color( 0 ), 0.5f);
 }
 
 void PrimitiveFrame::Update()
 {
+    float32_t startX = static_cast< float32_t >( m_Start.x );
+    float32_t startY = static_cast< float32_t >( m_Start.y );
+    float32_t endX = static_cast< float32_t >( m_End.x );
+    float32_t endY = static_cast< float32_t >( m_End.y );
+
     m_Vertices.clear();
 
-    m_Vertices.push_back(TransformedColored ((float)m_Start.x,  (float)m_Start.y,   1.0f,   m_InnerColor));
-    m_Vertices.push_back(TransformedColored ((float)m_Start.x,  (float)m_End.y,     1.0f,   m_InnerColor));
-    m_Vertices.push_back(TransformedColored ((float)m_End.x,    (float)m_End.y,     1.0f,   m_InnerColor));
-    m_Vertices.push_back(TransformedColored ((float)m_End.x,    (float)m_Start.y,   1.0f,   m_InnerColor));
+    Helium::ScreenVertex vertex;
+    vertex.texCoords[ 0 ].packed = 0;
+    vertex.texCoords[ 1 ].packed = 0;
 
-    m_Vertices.push_back(TransformedColored ((float)m_Start.x,  (float)m_Start.y,   1.0f,   m_BorderColor));
-    m_Vertices.push_back(TransformedColored ((float)m_Start.x,  (float)m_End.y,     1.0f,   m_BorderColor));
-    m_Vertices.push_back(TransformedColored ((float)m_End.x,    (float)m_End.y,     1.0f,   m_BorderColor));
-    m_Vertices.push_back(TransformedColored ((float)m_End.x,    (float)m_Start.y,   1.0f,   m_BorderColor));
-    m_Vertices.push_back(TransformedColored ((float)m_Start.x,  (float)m_Start.y,   1.0f,   m_BorderColor));
+    vertex.color[ 0 ] = m_InnerColor.GetR();
+    vertex.color[ 1 ] = m_InnerColor.GetG();
+    vertex.color[ 2 ] = m_InnerColor.GetB();
+    vertex.color[ 3 ] = m_InnerColor.GetA();
+
+    vertex.position[ 0 ] = startX;
+    vertex.position[ 1 ] = startY;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 1 ] = endY;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 0 ] = endX;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 1 ] = startY;
+    m_Vertices.push_back( vertex );
+
+    vertex.color[ 0 ] = m_BorderColor.GetR();
+    vertex.color[ 1 ] = m_BorderColor.GetG();
+    vertex.color[ 2 ] = m_BorderColor.GetB();
+    vertex.color[ 3 ] = m_BorderColor.GetA();
+
+    vertex.position[ 0 ] = startX;
+    vertex.position[ 1 ] = startY;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 1 ] = endY;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 0 ] = endX;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 1 ] = startY;
+    m_Vertices.push_back( vertex );
+
+    vertex.position[ 0 ] = startX;
+    m_Vertices.push_back( vertex );
 
     Base::Update();
 }
 
-void PrimitiveFrame::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveFrame::Draw(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
+#ifdef VIEWPORT_REFACTOR
     D3DCULL cull;
     m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
     m_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -59,6 +100,7 @@ void PrimitiveFrame::Draw( DrawArgs* args, const bool* solid, const bool* transp
     m_Device->SetRenderState(D3DRS_CULLMODE, cull);
 
     args->m_LineCount += 4;
+#endif
 }
 
 bool PrimitiveFrame::Pick( PickVisitor* pick, const bool* solid ) const

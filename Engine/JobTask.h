@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOB_TASK_H
-#define LUNAR_ENGINE_JOB_TASK_H
+#ifndef HELIUM_ENGINE_JOB_TASK_H
+#define HELIUM_ENGINE_JOB_TASK_H
 
 #include "Engine/Engine.h"
 #include "tbb/task.h"
 
-namespace Lunar
+namespace Helium
 {
     class JobContext;
 
-    /// TBB task implementation for executing Lunar jobs.
+    /// TBB task implementation for executing Helium jobs.
     class JobTask : public tbb::task
     {
     public:
@@ -36,4 +36,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_ENGINE_JOB_TASK_H
+#endif  // HELIUM_ENGINE_JOB_TASK_H

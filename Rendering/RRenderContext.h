@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RENDER_CONTEXT_H
-#define LUNAR_RENDERING_R_RENDER_CONTEXT_H
+#ifndef HELIUM_RENDERING_R_RENDER_CONTEXT_H
+#define HELIUM_RENDERING_R_RENDER_CONTEXT_H
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     class RSurface;
 
     /// Rendering context for managing rendering to a given view.
-    class LUNAR_RENDERING_API RRenderContext : public RRenderResource
+    class HELIUM_RENDERING_API RRenderContext : public RRenderResource
     {
     public:
         /// @name Render Control
@@ -33,4 +33,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_RENDER_CONTEXT_H
+#endif  // HELIUM_RENDERING_R_RENDER_CONTEXT_H

@@ -1,4 +1,6 @@
+#include "FoundationPch.h"
 #include "Pipe.h"
+
 #include "Platform/Assert.h"
 #include "Foundation/Memory/Endian.h"
 

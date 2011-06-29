@@ -1,103 +1,73 @@
-/*#include "Precompile.h"*/
-#include "VertexResource.h" 
+#include "PipelinePch.h"
+#include "VertexResource.h"
+
+#include "Rendering/RVertexBuffer.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle VertexResource::s_MemoryPool;
 
-VertexResource::VertexResource( ResourceTracker* tracker )
-: Resource ( ResourceTypes::Vertex, tracker )
-, m_Buffer(NULL)
-, m_LockedVerts(NULL)
+VertexResource::VertexResource()
+: Resource( ResourceTypes::Vertex )
+, m_ElementType( VertexElementTypes::Unknown )
+, m_LockedVerts( NULL )
 {
 
 }
 
+VertexResource::~VertexResource()
+{
+
+}
+
+uint32_t VertexResource::GetElementSize() const
+{
+    return VertexElementSizes[ m_ElementType ];
+}
 
 uint8_t* VertexResource::Lock() 
 {
-    uint8_t* data = NULL;
-    uint32_t lockFlags = (!IsManaged() && IsDynamic()) ? D3DLOCK_DISCARD : 0;
-    HRESULT result = m_Buffer->Lock(0, 0, (void**)&data, lockFlags);
-    HELIUM_ASSERT(SUCCEEDED(result));
+    void* data = m_Buffer->Map(
+        IsDynamic() ? Helium::RENDERER_BUFFER_MAP_HINT_DISCARD : Helium::RENDERER_BUFFER_MAP_HINT_NONE );
+    HELIUM_ASSERT( data );
 
-    return data;
+    return static_cast< uint8_t* >( data );
 }
 
 void VertexResource::Unlock() 
 {
-    m_Buffer->Unlock();
-}
-
-bool VertexResource::SetState() const 
-{
-    if ( GetElementCount() > 0 )
-    {
-        if ( m_Buffer == NULL )
-        {
-            HELIUM_BREAK();
-            return false;
-        }
-
-        if ( m_Buffer != m_Tracker->GetVertices() )
-        {
-#ifdef SCENE_DEBUG_RESOURCES
-            Log::Print("Setting vertices to 0x%p\n", m_Buffer);
-#endif
-            m_Device->SetStreamSource( 0, m_Buffer, 0, (UINT)ElementSizes[ GetElementType() ] );
-            m_Tracker->SetVertices( m_Buffer );
-        }
-
-        if ( ElementFormats[ GetElementType() ] != m_Tracker->GetVertexFormat() )
-        {
-#ifdef SCENE_DEBUG_RESOURCES
-            Log::Print("Setting FVF to 0x%x\n", ElementFormats[ m_ElementType ]);
-#endif
-            m_Device->SetFVF( ElementFormats[ GetElementType() ] );
-            m_Tracker->SetVertexFormat( ElementFormats[ GetElementType() ] );
-        }
-    }
-
-    return true;
+    m_Buffer->Unmap();
 }
 
 bool VertexResource::Allocate() 
 {
-    UINT size = GetElementCount() * ElementSizes[ GetElementType() ];
-
-    if(size == 0)
+    uint32_t size = GetElementCount() * VertexElementSizes[ GetElementType() ];
+    if ( size == 0 )
     {
         return false; 
     }
 
-    DWORD usage = D3DUSAGE_WRITEONLY;
-    if (IsDynamic())
+    Helium::Renderer* pRenderer = Helium::Renderer::GetStaticInstance();
+    HELIUM_ASSERT( pRenderer );
+
+    m_Buffer = pRenderer->CreateVertexBuffer(
+        size,
+        ( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ) );
+    HELIUM_ASSERT( m_Buffer );
+    if ( m_Buffer )
     {
-        usage |= D3DUSAGE_DYNAMIC;
+        Profile::Memory::Allocate( s_MemoryPool, size );
     }
 
-    D3DFORMAT format = (D3DFORMAT)ElementFormats[ GetElementType() ];
-
-    D3DPOOL pool = IsManaged() ? D3DPOOL_MANAGED : D3DPOOL_DEFAULT;
-
-    HRESULT result = m_Device->CreateVertexBuffer( size, usage, format, pool, &m_Buffer, NULL );
-    bool success = SUCCEEDED(result);
-    HELIUM_ASSERT(success);
-
-    Profile::Memory::Allocate( s_MemoryPool, size );
-
-    return success;
-
+    return ( m_Buffer != NULL );
 }
 
 void VertexResource::Release() 
 {
-    if (m_Buffer)
+    if ( m_Buffer )
     {
-        m_Buffer->Release();
-        m_Buffer = NULL;
+        m_Buffer.Release();
+        Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * VertexElementSizes[ GetElementType() ] );
     }
-
-    Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * ElementSizes[ GetElementType() ] );
 }

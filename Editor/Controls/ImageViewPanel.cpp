@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ImageViewPanel.h"
 
 #include <wx/image.h>

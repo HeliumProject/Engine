@@ -1,9 +1,8 @@
+#include "PlatformPch.h"
 #include "Platform/Directory.h"
-
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
 
@@ -35,7 +34,9 @@ bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
     if ( handle.m_Handle == INVALID_HANDLE_VALUE )
     {
         DWORD error = GetLastError();
-        if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND ) 
+        
+        //pmd020611 - Added ERROR_ACCESS_DENIED
+        if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND || error == ERROR_ACCESS_DENIED ) 
         {
             return false;
         }

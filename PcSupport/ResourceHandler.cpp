@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ResourceHandler.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
 

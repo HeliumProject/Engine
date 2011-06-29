@@ -1,6 +1,0 @@
-sampler2D g_texture : register(s0);
-
-float4 main(in float4 uv : TEXCOORD0) : COLOR0
-{
-  return tex2D(g_texture,uv.xy);
-}

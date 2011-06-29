@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/String.h"
 
 using namespace Helium;
@@ -57,9 +58,9 @@ void CharString::Add( char character, size_t count )
 /// Note that it is not safe to append a string to itself using this function.
 ///
 /// @param[in] pString  String to append.
-void CharString::Add( const char* pString )
+void CharString::Add( const char* pString, size_t length )
 {
-    StringBase::Add( pString );
+    StringBase::Add( pString, length );
 }
 
 /// Append the contents of a string to the end of this string.
@@ -274,9 +275,9 @@ void WideString::Add( wchar_t character, size_t count )
 /// Note that it is not safe to append a string to itself using this function.
 ///
 /// @param[in] pString  String to append.
-void WideString::Add( const wchar_t* pString )
+void WideString::Add( const wchar_t* pString, size_t length )
 {
-    StringBase::Add( pString );
+    StringBase::Add( pString, length );
 }
 
 /// Append the contents of a string to the end of this string.

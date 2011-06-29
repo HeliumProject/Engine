@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H
-#define LUNAR_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H
+#ifndef HELIUM_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H
+#define HELIUM_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -18,12 +18,12 @@ namespace Helium
     class Stream;
 }
 
-namespace Lunar
+namespace Helium
 {
     class Image;
 
     /// TGA image loading support.
-    class LUNAR_EDITOR_SUPPORT_API TgaImageLoader
+    class HELIUM_EDITOR_SUPPORT_API TgaImageLoader
     {
     public:
         /// @name Loading
@@ -35,4 +35,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H
+#endif  // HELIUM_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H

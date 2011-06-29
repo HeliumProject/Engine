@@ -8,15 +8,15 @@
 #include "Graphics/Texture.h"
 #include "Graphics/GraphicsConfig.h"
 
-void Lunar::RegisterGraphicsEnums()
+void Helium::RegisterGraphicsEnums()
 {
-    Helium::Reflect::RegisterEnumType< Font::ECompression >( TXT( "Lunar::Font::ECompression" ) );
-    Helium::Reflect::RegisterEnumType< Texture::ECompression >( TXT( "Lunar::Texture::ECompression" ) );
-    Helium::Reflect::RegisterEnumType< GraphicsConfig::ETextureFilter >( TXT( "Lunar::GraphicsConfig::ETextureFilter" ) );
-    Helium::Reflect::RegisterEnumType< GraphicsConfig::EShadowMode >( TXT( "Lunar::GraphicsConfig::EShadowMode" ) );
+    Helium::Reflect::RegisterEnumType< Font::ECompression >( TXT( "Helium::Font::ECompression" ) );
+    Helium::Reflect::RegisterEnumType< Texture::ECompression >( TXT( "Helium::Texture::ECompression" ) );
+    Helium::Reflect::RegisterEnumType< GraphicsConfig::ETextureFilter >( TXT( "Helium::GraphicsConfig::ETextureFilter" ) );
+    Helium::Reflect::RegisterEnumType< GraphicsConfig::EShadowMode >( TXT( "Helium::GraphicsConfig::EShadowMode" ) );
 }
 
-void Lunar::UnregisterGraphicsEnums()
+void Helium::UnregisterGraphicsEnums()
 {
     Helium::Reflect::UnregisterEnumType< Font::ECompression >();
     Helium::Reflect::UnregisterEnumType< Texture::ECompression >();

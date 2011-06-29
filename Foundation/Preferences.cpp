@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Preferences.h"
 
 #include "Platform/Environment.h"

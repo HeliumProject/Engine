@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_INDEX_BUFFER_H
-#define LUNAR_RENDERING_R_INDEX_BUFFER_H
+#ifndef HELIUM_RENDERING_R_INDEX_BUFFER_H
+#define HELIUM_RENDERING_R_INDEX_BUFFER_H
 
 #include "Rendering/RRenderResource.h"
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Index buffer interface.
-    class LUNAR_RENDERING_API RIndexBuffer : public RRenderResource
+    class HELIUM_RENDERING_API RIndexBuffer : public RRenderResource
     {
     public:
         /// @name Data Access
@@ -31,6 +31,8 @@ namespace Lunar
         virtual ~RIndexBuffer() = 0;
         //@}
     };
+
+    typedef Helium::SmartPtr< RIndexBuffer > RIndexBufferPtr;
 }
 
-#endif  // LUNAR_RENDERING_R_INDEX_BUFFER_H
+#endif  // HELIUM_RENDERING_R_INDEX_BUFFER_H

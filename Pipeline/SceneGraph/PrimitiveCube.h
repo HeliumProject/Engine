@@ -6,12 +6,12 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveCube : public PrimitiveTemplate<Position>
+        class PrimitiveCube : public PrimitiveTemplate< Helium::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<Position> Base;
+            typedef PrimitiveTemplate< Helium::SimpleVertex > Base;
 
-            PrimitiveCube(ResourceTracker* tracker);
+            PrimitiveCube();
 
             void SetRadius( float radius )
             {
@@ -37,7 +37,10 @@ namespace Helium
             }
 
             virtual void Update() HELIUM_OVERRIDE;
-            virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
+            virtual void Draw(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
         };
     }

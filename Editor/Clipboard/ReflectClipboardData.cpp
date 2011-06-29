@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ReflectClipboardData.h"
 
 using namespace Helium;
@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_ABSTRACT( ReflectClipboardData );
 
-void ReflectClipboardData::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ReflectClipboardData::PopulateComposite( Reflect::Composite& comp )
 {
 }
 

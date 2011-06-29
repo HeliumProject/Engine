@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "LabelWidget.h"
 
 #include <wx/panel.h>

@@ -13,7 +13,7 @@
 
 #include <ShellAPI.h>
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc CommandLineInitializer::Initialize()
 bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< String >& rArguments )

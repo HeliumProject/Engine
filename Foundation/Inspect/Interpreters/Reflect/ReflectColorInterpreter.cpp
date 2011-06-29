@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ReflectColorInterpreter.h"
 
 #include "Foundation/Inspect/Container.h"

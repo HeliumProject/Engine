@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_RENDERER_INITIALIZATION_H
-#define LUNAR_FRAMEWORK_RENDERER_INITIALIZATION_H
+#ifndef HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H
+#define HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     class Renderer;
 
     /// Interface for Renderer creation during System initialization.
-    class LUNAR_FRAMEWORK_API RendererInitialization
+    class HELIUM_FRAMEWORK_API RendererInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -31,4 +31,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_RENDERER_INITIALIZATION_H
+#endif  // HELIUM_FRAMEWORK_RENDERER_INITIALIZATION_H

@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Vector3.h"
 #include "Scale.h"
 

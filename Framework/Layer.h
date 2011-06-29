@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_LAYER_H
-#define LUNAR_FRAMEWORK_LAYER_H
+#ifndef HELIUM_FRAMEWORK_LAYER_H
+#define HELIUM_FRAMEWORK_LAYER_H
 
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
@@ -16,7 +16,7 @@
 #include "Platform/Math/Simd/Vector3.h"
 #include "Framework/Entity.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( Entity );
     HELIUM_DECLARE_WPTR( World );
@@ -30,7 +30,7 @@ namespace Lunar
     /// - Dynamic layers.  These can be constructed in editor mode for use with special-case worlds (such as for a
     ///   preview window).  In runtime mode, dynamic layers can be created as necessary for various runtime-created
     ///   entities.
-    class LUNAR_FRAMEWORK_API Layer : public GameObject
+    class HELIUM_FRAMEWORK_API Layer : public GameObject
     {
         L_DECLARE_OBJECT( Layer, GameObject );
 
@@ -97,4 +97,4 @@ namespace Lunar
 
 #include "Framework/Layer.inl"
 
-#endif  // LUNAR_FRAMEWORK_LAYER_H
+#endif  // HELIUM_FRAMEWORK_LAYER_H

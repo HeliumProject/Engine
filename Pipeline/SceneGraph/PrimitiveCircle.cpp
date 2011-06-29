@@ -1,14 +1,14 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveCircle.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCircle::PrimitiveCircle(ResourceTracker* tracker)
-: PrimitiveRadius(tracker)
-, m_HackyRotateFlag( false )
+PrimitiveCircle::PrimitiveCircle()
+: m_HackyRotateFlag( false )
 {
     m_Bounds.minimum = Vector3 (0.0f, -m_Radius, -m_Radius);
     m_Bounds.maximum = Vector3 (0.0f, m_Radius, m_Radius);
@@ -30,17 +30,17 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
-            m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
         }    
     }
 
-    m_Vertices.push_back(Position (Vector3::Zero));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, 0.0f ) );
 
     for (int x=0; x<m_RadiusSteps; x++)
     {
@@ -48,22 +48,22 @@ void PrimitiveCircle::Update()
 
         if( !m_HackyRotateFlag )
         {
-            m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius));
+            m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta ) * m_Radius, Sin( theta ) * m_Radius ) );
         }
         else
         {
-            m_Vertices.push_back(Position ((float32_t)(sin(theta)) * m_Radius, (float32_t)(cos(theta)) * m_Radius, 0.0f ) );
+            m_Vertices.push_back( Helium::SimpleVertex( Sin( theta ) * m_Radius, Cos( theta ) * m_Radius, 0.0f ) );
         }
 
         if (x+1 >= m_RadiusSteps)
         {
             if( !m_HackyRotateFlag )
             {
-                m_Vertices.push_back(Position (0.0f, (float32_t)(cos(theta + stepAngle)) * m_Radius, (float32_t)(sin(theta + stepAngle)) * m_Radius));
+                m_Vertices.push_back( Helium::SimpleVertex( 0.0f, Cos( theta + stepAngle ) * m_Radius, Sin( theta + stepAngle ) * m_Radius ) );
             }
             else
             {
-                m_Vertices.push_back(Position ((float32_t)(sin(theta + stepAngle)) * m_Radius, (float32_t)(cos(theta + stepAngle)) * m_Radius, 0.0f  ) );
+                m_Vertices.push_back( Helium::SimpleVertex( Sin( theta + stepAngle ) * m_Radius, Cos( theta + stepAngle ) * m_Radius, 0.0f ) );
             }
         }
     }
@@ -71,36 +71,52 @@ void PrimitiveCircle::Update()
     Base::Update();
 }
 
-void PrimitiveCircle::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveCircle::Draw(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), m_RadiusSteps);
+    drawInterface->DrawUntextured(
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        m_RadiusSteps * 2,
+        0,
+        m_RadiusSteps,
+        materialColor,
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
 
     args->m_LineCount += m_RadiusSteps;
 }
 
-void PrimitiveCircle::DrawFill( DrawArgs* args ) const
+void PrimitiveCircle::DrawFill(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform ) const
 {
-    if (!SetState())
-        return;
-
-    D3DCULL cull;
-    m_Device->GetRenderState(D3DRS_CULLMODE, (DWORD*)&cull);
-    {
-        m_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)GetBaseIndex() + (m_RadiusSteps * 2), m_RadiusSteps);
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-    }
-    m_Device->SetRenderState(D3DRS_CULLMODE, cull);
-
+    drawInterface->DrawUntextured(
+        Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex() + m_RadiusSteps * 2,
+        m_RadiusSteps + 2,
+        0,
+        m_RadiusSteps,
+        materialColor,
+        Helium::RenderResourceManager::RASTERIZER_STATE_DOUBLE_SIDED );
     args->m_TriangleCount += m_RadiusSteps;
 }
 
 void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* camera, const Matrix4& m) const
 {
+#ifdef VIEWPORT_REFACTOR
     if (!SetState())
         return;
 
@@ -145,13 +161,14 @@ void PrimitiveCircle::DrawHiddenBack(DrawArgs* args, const SceneGraph::Camera* c
     }
 
     args->m_LineCount += count;
+#endif
 }
 
 bool PrimitiveCircle::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        if (pick->PickSegment( (const Vector3&)m_Vertices[i].position, (const Vector3&)m_Vertices[i+1].position))
         {
             return true;
         }

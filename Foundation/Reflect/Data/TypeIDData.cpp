@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/TypeIDData.h"
 
 #include "Foundation/Reflect/ArchiveBinary.h"
@@ -18,25 +19,25 @@ TypeIDData::~TypeIDData()
 
 }
 
-void TypeIDData::ConnectData(Helium::HybridPtr<void> data)
+void TypeIDData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
-bool TypeIDData::Set(const Data* s, uint32_t flags)
+bool TypeIDData::Set(Data* data, uint32_t flags)
 {
-    const TypeIDData* rhs = SafeCast<TypeIDData>(s);
+    const TypeIDData* rhs = SafeCast<TypeIDData>(data);
     if (!rhs)
     {
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
-bool TypeIDData::Equals(const Object* object) const
+bool TypeIDData::Equals(Object* object)
 {
     const TypeIDData* rhs = SafeCast<TypeIDData>(object);
     if (!rhs)
@@ -44,69 +45,47 @@ bool TypeIDData::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
-void TypeIDData::Serialize(Archive& archive) const
+void TypeIDData::Serialize(ArchiveBinary& archive)
 {
-    const Type* type = m_Data.Get();
-
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            if ( type )
-            {
-                xml.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
-            }
-
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t crc = type ? Crc32( type->m_Name ) : BeginCrc32();
-            binary.GetStream().Write(&crc); 
-            break;
-        }
-    }
+    const Type* type = *m_Data;
+    uint32_t crc = type ? Crc32( type->m_Name ) : BeginCrc32();
+    archive.GetStream().Write(&crc); 
 }
 
-void TypeIDData::Deserialize(Archive& archive)
+void TypeIDData::Deserialize(ArchiveBinary& archive)
 {
-    const Type* type = NULL;
+    uint32_t crc;
+    archive.GetStream().Read(&crc);
 
-    switch (archive.GetType())
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
-            tstring str;
-            str.resize( (size_t)size );
-            xml.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
-            type = Registry::GetInstance()->GetType( str.c_str() );
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            uint32_t crc;
-            binary.GetStream().Read(&crc);
-            type = Registry::GetInstance()->GetType( crc );
-            break;
-        }
-    }
-
+    const Type* type = Registry::GetInstance()->GetType( crc );
     if ( type )
     {
-        m_Data.Set( type );
+        *m_Data = type;
+    }
+}
+
+void TypeIDData::Serialize(ArchiveXML& archive)
+{
+    const Type* type = *m_Data;
+    if ( type )
+    {
+        archive.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
+    }
+}
+
+void TypeIDData::Deserialize(ArchiveXML& archive)
+{
+    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+    tstring str;
+    str.resize( (size_t)size );
+    archive.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
+
+    const Type* type = Registry::GetInstance()->GetType( str.c_str() );
+    if ( type )
+    {
+        *m_Data = type;
     }
 }

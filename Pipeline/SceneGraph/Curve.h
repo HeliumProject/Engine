@@ -59,7 +59,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Curve, PivotTransform );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 
@@ -141,7 +141,6 @@ namespace Helium
             float32_t CalculateCurveLength() const;
 
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-            static void Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
 
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
@@ -167,8 +166,8 @@ namespace Helium
             // Non-reflected
             PrimitiveLocator* m_Locator;
             PrimitiveCone*    m_Cone;
-            static D3DMATERIAL9     s_Material;
-            static D3DMATERIAL9     s_HullMaterial;
+            static Helium::Color     s_Material;
+            static Helium::Color     s_HullMaterial;
             VertexResourcePtr       m_Vertices;
         };
 

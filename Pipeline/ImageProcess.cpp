@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "ImageProcess.h"
 
 #include "Platform/Types.h"

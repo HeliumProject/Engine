@@ -18,12 +18,12 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Shader.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RRenderCommandProxy );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 DynamicDrawer* DynamicDrawer::sm_pInstance = NULL;
 

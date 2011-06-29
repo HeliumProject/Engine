@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/JobPool.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 JobPool::JobPool()

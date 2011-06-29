@@ -57,7 +57,7 @@ namespace Helium
         {
         private:
             REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
         public:
             ComponentBase();

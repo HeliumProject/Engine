@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
 #if L_EDITOR
     /// Get the preprocessed resource data for the specified platform.

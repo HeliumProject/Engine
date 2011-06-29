@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
@@ -9,7 +10,7 @@ using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT(Version);
 
-void Version::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Version::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Version::m_Source, TXT( "m_Source" ) );
     comp.AddField( &Version::m_SourceVersion, TXT( "m_SourceVersion" ) );

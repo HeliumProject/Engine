@@ -14,7 +14,7 @@
 /// GameObject cache name.
 #define L_OBJECT_CACHE_NAME TXT( "GameObject" )
 
-using namespace Lunar;
+using namespace Helium;
 
 GameObjectLoader* GameObjectLoader::sm_pInstance = NULL;
 

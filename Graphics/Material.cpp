@@ -12,7 +12,7 @@
 #include "Rendering/Renderer.h"
 #include "Graphics/Texture.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Material, Graphics, 0 );
 

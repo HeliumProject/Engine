@@ -17,9 +17,8 @@ namespace Helium
 
             virtual const Class* GetItemClass() const = 0;
             virtual DataPtr GetItem(size_t at) = 0;
-            virtual ConstDataPtr GetItem(size_t at) const = 0;
-            virtual void SetItem(size_t at, const Data* value) = 0;
-            virtual void Insert( size_t at, const Data* value ) = 0;
+            virtual void SetItem(size_t at, Data* value) = 0;
+            virtual void Insert( size_t at, Data* value ) = 0;
             virtual void Remove( size_t at ) = 0;
             virtual void MoveUp( std::set< size_t >& selectedIndices ) = 0;
             virtual void MoveDown( std::set< size_t >& selectedIndices ) = 0;
@@ -30,15 +29,15 @@ namespace Helium
         {
         public:
             typedef std::vector<T> DataType;
-            Data::Pointer<DataType> m_Data;
+            DataPointer<DataType> m_Data;
 
             typedef SimpleStlVectorData<T> StlVectorDataT;
             REFLECT_DECLARE_OBJECT( StlVectorDataT, StlVectorData )
 
-                SimpleStlVectorData();
-            virtual ~SimpleStlVectorData();
+            SimpleStlVectorData();
+            ~SimpleStlVectorData();
 
-            virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
+            virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void SetSize(size_t size) HELIUM_OVERRIDE;
@@ -46,21 +45,23 @@ namespace Helium
 
             virtual const Class* GetItemClass() const HELIUM_OVERRIDE;
             virtual DataPtr GetItem(size_t at) HELIUM_OVERRIDE;
-            virtual ConstDataPtr GetItem(size_t at) const HELIUM_OVERRIDE;
-            virtual void SetItem(size_t at, const Data* value) HELIUM_OVERRIDE;
-            virtual void Insert( size_t at, const Data* value ) HELIUM_OVERRIDE;
+            virtual void SetItem(size_t at, Data* value) HELIUM_OVERRIDE;
+            virtual void Insert( size_t at, Data* value ) HELIUM_OVERRIDE;
             virtual void Remove( size_t at ) HELIUM_OVERRIDE;
             virtual void MoveUp( std::set< size_t >& selectedIndices ) HELIUM_OVERRIDE;
             virtual void MoveDown( std::set< size_t >& selectedIndices ) HELIUM_OVERRIDE;
 
-            virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
+            virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
-            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
-            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            
+            virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
 
-            virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;
-            virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
+            virtual tostream& operator>>(tostream& stream) const HELIUM_OVERRIDE;
+            virtual tistream& operator<<(tistream& stream) HELIUM_OVERRIDE;
         };
 
         typedef SimpleStlVectorData<tstring> StlStringStlVectorData;

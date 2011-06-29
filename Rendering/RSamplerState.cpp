@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RSamplerState.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RSamplerState::~RSamplerState()

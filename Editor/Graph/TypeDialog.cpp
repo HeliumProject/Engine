@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 ///////////////////////////////////////////////////////////////////////////
 // C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/

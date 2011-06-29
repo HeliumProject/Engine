@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H
-#define LUNAR_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H
+#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H
+#define HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -20,4 +20,4 @@
 #include "Engine/Serializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-#endif  // LUNAR_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H
+#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_PCH_H

@@ -1,118 +1,15 @@
-// TestApp.cpp : Defines the entry point for the console application.
-//
+#include "TestAppPch.h"
 
-#include "stdafx.h"
 #include "Foundation/Reflect/Registry.h"
 #include "WindowProc.h"
 
 #include <cfloat>
 #include <ctime>
 
-using namespace Lunar;
+#include "gtest.h"
 
-class NonTrivialClass
-{
-public:
-    NonTrivialClass( float32_t value = 0.0f )
-        : m_value( value )
-    {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "NonTrivialClass::NonTrivialClass()\n" ) );
-    }
+using namespace Helium;
 
-    NonTrivialClass( const NonTrivialClass& rSource )
-        : m_value( rSource.m_value )
-    {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "NonTrivialClass::NonTrivialClass( const NonTrivialClass& )\n" ) );
-    }
-
-    ~NonTrivialClass()
-    {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "NonTrivialClass::~NonTrivialClass()\n" ) );
-    }
-
-    NonTrivialClass& operator=( const NonTrivialClass& rSource )
-    {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "NonTrivialClass::operator=( const NonTrivialClass& )\n" ) );
-        m_value = rSource.m_value;
-        return *this;
-    }
-
-    float32_t GetValue() const
-    {
-        return m_value;
-    }
-
-private:
-    float32_t m_value;
-};
-
-class TestRunnable : public Runnable
-{
-public:
-    TestRunnable( const String& rString )
-        : m_string( rString )
-    {
-    }
-
-    virtual void Run()
-    {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "%s\n" ), *m_string );
-    }
-
-private:
-    String m_string;
-};
-
-template< size_t BufferSize >
-static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], int value )
-{
-    StringFormat( buffer, BufferSize, TXT( "%u" ), value );
-    buffer[ BufferSize - 1 ] = TXT( '\0' );
-}
-
-template< size_t BufferSize >
-static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], const NonTrivialClass& rValue )
-{
-    StringFormat( buffer, BufferSize, TXT( "%f" ), rValue.GetValue() );
-    buffer[ BufferSize - 1 ] = TXT( '\0' );
-}
-
-template< typename T, typename Allocator >
-static void PrintArrayInfo( const tchar_t varName[], const DynArray< T, Allocator >& rArray )
-{
-    HELIUM_UNREF( varName );
-
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "%s.GetSize() = %Iu\n" ), varName, rArray.GetSize() );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "%s.GetCapacity() = %Iu\n" ), varName, rArray.GetCapacity() );
-
-    tchar_t valueBuffer[ 64 ];
-
-    size_t arraySize = rArray.GetSize();
-    for( size_t arrayIndex = 0; arrayIndex < arraySize; ++arrayIndex )
-    {
-        GetFormattedValue( valueBuffer, rArray[ arrayIndex ] );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "%s " ), valueBuffer );
-    }
-
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
-}
-
-static int FloatCompare( const void* pElement0, const void* pElement1 )
-{
-    float32_t element0 = *static_cast< const float32_t* >( pElement0 );
-    float32_t element1 = *static_cast< const float32_t* >( pElement1 );
-
-    return ( element0 < element1 ? -1 : ( element0 > element1 ? 1 : 0 ) );
-}
-
-class StringCompareFunction
-{
-public:
-    bool operator()( const String& rString0, const String& rString1 ) const
-    {
-        return ( StringCompare( *rString0, *rString1 ) < 0 );
-    }
-};
 
 extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
@@ -128,6 +25,26 @@ extern void UnregisterPcSupportTypes();
 extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
+
+#include "Engine/Components.h"
+
+
+class TestComponentFour : public Helium::Components::Component
+{
+public:
+    TestComponentFour()
+    {
+        static int32_t next_id = 100;
+        m_Id = next_id++;
+    }
+
+    int32_t m_Id;
+
+    OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
+};
+
+OBJECT_DEFINE_COMPONENT(TestComponentFour);
+
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
@@ -176,14 +93,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #else
     HELIUM_VERIFY( PcCacheObjectLoader::InitializeStaticInstance() );
 #endif
-    GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
-    HELIUM_ASSERT( pObjectLoader );
+    gObjectLoader = GameObjectLoader::GetStaticInstance();
+    HELIUM_ASSERT( gObjectLoader );
 
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
     {
-        pObjectLoader->Tick();
+        gObjectLoader->Tick();
     }
 
     ConfigPc::SaveUserConfig();
@@ -215,327 +132,19 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
+	//pmd - Verify that classes can be registered after they've been unregistered
+    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+
+
+    int argc = 0;
+    char *argv = "";
+    ::testing::InitGoogleTest(&argc, &argv);
+    RUN_ALL_TESTS();
+
     HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "GameObject" ) ) ) == GameObject::GetStaticType() );
-
-    {
-        Path dataDirectory;
-        HELIUM_VERIFY( File::GetDataDirectory( dataDirectory ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Data directory: %s\n" ), dataDirectory.c_str() );
-        HELIUM_UNREF( dataDirectory );
-
-        Path userDataDirectory;
-        HELIUM_VERIFY( File::GetUserDataDirectory( userDataDirectory ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "User data directory: %s\n" ), userDataDirectory.c_str() );
-        HELIUM_UNREF( userDataDirectory );
-    }
-
-    {
-        extern Package* GetEngineTypePackage();
-        HELIUM_ASSERT( GetEngineTypePackage() );
-
-        {
-            GameObjectPath testPath;
-            HELIUM_VERIFY( testPath.Set(
-                L_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );
-
-            GameObjectPtr spObject;
-            HELIUM_VERIFY( pObjectLoader->LoadObject( testPath, spObject ) );
-            HELIUM_ASSERT( spObject );
-
-            Package* pTestPackageCast = Reflect::SafeCast< Package >( spObject.Get() );
-            HELIUM_ASSERT( !pTestPackageCast );
-            HELIUM_UNREF( pTestPackageCast );
-
-            // The following line should not compile...
-//            Animation* pTestAnimationCast = Reflect::SafeCast< Animation >( pTestPackageCast );
-//            HELIUM_UNREF( pTestAnimationCast );
-
-            GameObject* pTestObjectCast = Reflect::SafeCast< GameObject >( spObject.Get() );
-            HELIUM_ASSERT( pTestObjectCast );
-            HELIUM_UNREF( pTestObjectCast );
-        }
-    }
-
-    {
-        DynArray< int > intArray;
-        intArray.Reserve( 3 );
-        intArray.Add( 4 );
-        //intArray.Add( 2 );
-        HELIUM_VERIFY( intArray.New( 2 ) );
-        intArray.Add( 8 );
-        intArray.Add( 9 );
-        intArray.Trim();
-
-        PrintArrayInfo( TXT( "intArray" ), intArray );
-    }
-
-    {
-        StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-        StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-
-        int* pInt0 = static_cast< int* >( rStackHeap.Allocate( sizeof( int ) ) );
-        *pInt0 = 7;
-
-        stackMarker.Pop();
-
-        int* pInt1 = static_cast< int* >( rStackHeap.Allocate( sizeof( int ) ) );
-        *pInt1 = -3;
-
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "*pInt0 = %d; *pInt1 = %d\n" ), *pInt0, *pInt1 );
-
-        rStackHeap.Free( pInt1 );
-    }
-
-    {
-        DynArray< NonTrivialClass > objectArray;
-        objectArray.Reserve( 3 );
-        objectArray.Add( NonTrivialClass( 4.3f ) );
-        objectArray.Add( NonTrivialClass( 12.4f ) );
-        objectArray.Add( NonTrivialClass( -3.9f ) );
-        objectArray.Add( NonTrivialClass( 0.5f ) );
-        objectArray.Add( NonTrivialClass( 2.9f ) );
-        objectArray.Add( NonTrivialClass( -15.8f ) );
-        objectArray.RemoveSwap( 1, 2 );
-        objectArray.Trim();
-
-        PrintArrayInfo( TXT( "objectArray" ), objectArray );
-    }
-
-    {
-        Map< String, uint32_t > integerMap;
-        Map< String, uint32_t >::Iterator mapIterator;
-
-        integerMap[ String( TXT( "january" ) ) ] = 31;
-        integerMap[ String( TXT( "february" ) ) ] = 28;
-        integerMap[ String( TXT( "march" ) ) ] = 31;
-        integerMap[ String( TXT( "april" ) ) ] = 30;
-        integerMap[ String( TXT( "may" ) ) ] = 31;
-        integerMap[ String( TXT( "june" ) ) ] = 30;
-        integerMap[ String( TXT( "july" ) ) ] = 31;
-        integerMap[ String( TXT( "august" ) ) ] = 31;
-        integerMap[ String( TXT( "september" ) ) ] = 30;
-        integerMap[ String( TXT( "october" ) ) ] = 31;
-
-        integerMap[ String( TXT( "november" ) ) ] = 15;
-        integerMap[ String( TXT( "november" ) ) ] = 30;
-
-        bool bSuccess = integerMap.Insert( mapIterator, Pair< String, uint32_t >( String( TXT( "december" ) ), 31 ) );
-        HELIUM_ASSERT( bSuccess );
-        bSuccess = integerMap.Insert( mapIterator, Pair< String, uint32_t >( String( TXT( "december" ) ), 25 ) );
-        HELIUM_ASSERT( !bSuccess );
-        HELIUM_UNREF( bSuccess );
-
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "june -> %" ) TPRIu32 TXT( "\n" ), integerMap[ String( TXT( "june" ) ) ] );
-
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Map contents:\n" ) );
-
-        Map< String, uint32_t >::Iterator endIterator = integerMap.End();
-        for( mapIterator = integerMap.Begin(); mapIterator != endIterator; ++mapIterator )
-        {
-            HELIUM_TRACE(
-                TRACE_DEBUG,
-                TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
-                *mapIterator->First(),
-                mapIterator->Second() );
-        }
-    }
-
-    {
-        typedef SortedMap< String, uint32_t, StringCompareFunction > IntegerMapType;
-
-        IntegerMapType integerMap;
-        IntegerMapType::Iterator mapIterator;
-
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "january" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "february" ) ) ] = 28;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "march" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "april" ) ) ] = 30;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "may" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "june" ) ) ] = 30;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "july" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "august" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "september" ) ) ] = 30;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "october" ) ) ] = 31;
-        HELIUM_ASSERT( integerMap.Verify() );
-
-        integerMap[ String( TXT( "november" ) ) ] = 15;
-        HELIUM_ASSERT( integerMap.Verify() );
-        integerMap[ String( TXT( "november" ) ) ] = 30;
-        HELIUM_ASSERT( integerMap.Verify() );
-
-        bool bSuccess = integerMap.Insert( mapIterator, Pair< String, uint32_t >( String( TXT( "december" ) ), 31 ) );
-        HELIUM_ASSERT( bSuccess );
-        HELIUM_ASSERT( integerMap.Verify() );
-        bSuccess = integerMap.Insert( mapIterator, Pair< String, uint32_t >( String( TXT( "december" ) ), 25 ) );
-        HELIUM_ASSERT( !bSuccess );
-        HELIUM_UNREF( bSuccess );
-
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "SortedMap contents:\n" ) );
-
-        IntegerMapType::Iterator mapEnd = integerMap.End();
-        for( mapIterator = integerMap.Begin(); mapIterator != mapEnd; ++mapIterator )
-        {
-            HELIUM_TRACE(
-                TRACE_DEBUG,
-                TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
-                *mapIterator->First(),
-                mapIterator->Second() );
-        }
-
-        HELIUM_VERIFY( integerMap.Remove( String( TXT( "march" ) ) ) );
-        HELIUM_ASSERT( integerMap.Verify() );
-    }
-
-    {
-        typedef SortedSet< int32_t > IntegerSetType;
-
-        IntegerSetType integerSet;
-
-        srand( static_cast< unsigned int >( time( NULL ) ) );
-        for( size_t iteration = 0; iteration < 5000; ++iteration )
-        {
-            size_t setSize = integerSet.GetSize();
-            if( !setSize || !( rand() & 0x1 ) )
-            {
-                IntegerSetType::ConstIterator iterator;
-                int32_t value = rand();
-                if( integerSet.Insert( iterator, value ) )
-                {
-                    HELIUM_TRACE(
-                        TRACE_DEBUG,
-                        TXT( "@ size %" ) TPRIuSZ TXT( ":\tInserting %" ) TPRId32 TXT( "\n" ),
-                        setSize,
-                        value );
-                }
-            }
-            else
-            {
-                size_t offset = ( static_cast< size_t >( rand() ) % setSize );
-                IntegerSetType::Iterator iterator = integerSet.Begin();
-                while( offset )
-                {
-                    --offset;
-                    ++iterator;
-                }
-
-                HELIUM_TRACE(
-                    TRACE_DEBUG,
-                    TXT( "@ size %" ) TPRIuSZ TXT( ":\tRemoving %" ) TPRId32 TXT( "\n" ),
-                    setSize,
-                    *iterator );
-
-                integerSet.Remove( iterator );
-            }
-
-            HELIUM_ASSERT( integerSet.Verify() );
-        }
-    }
-
-    {
-        String testString( TXT( "Test" ) );
-        testString = TXT( 'T' );
-        testString = TXT( "Test" );
-        testString += TXT( "String" );
-        testString += TXT( '0' );
-        testString.Add( TXT( '1' ) );
-        testString.Remove( 10 );
-        testString.Insert( 4, TXT( '-' ) );
-        HELIUM_ASSERT( testString == TXT( "Test-String1" ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "%s\n" ), *testString );
-
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "String length = %Iu\n" ), testString.GetSize() );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "String capacity = %Iu\n" ), testString.GetCapacity() );
-    }
-
-    {
-        TestRunnable* pRunnable = new TestRunnable( String( TXT( "Thread test string..." ) ) );
-        HELIUM_ASSERT( pRunnable );
-
-        RunnableThread* pThread = new RunnableThread( pRunnable, TXT( "Test Thread" ) );
-        HELIUM_ASSERT( pThread );
-        HELIUM_VERIFY( pThread->Start() );
-        HELIUM_VERIFY( pThread->Join() );
-
-        delete pThread;
-        delete pRunnable;
-    }
-
-    {
-        String tempString;
-        Path pathCopy;
-        Path path( TXT( "C:/Users/Test/File.notext.ext" ) );
-        HELIUM_TRACE( TRACE_INFO, TXT( "path: %s\n" ), path.c_str() );
-
-        pathCopy = path;
-        tempString = pathCopy.Directory().c_str();
-        pathCopy.Set( pathCopy.Directory() );
-        HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "directory name: %s\n" ), *tempString );
-
-        pathCopy = path;
-        tempString = pathCopy.Filename().c_str();
-        pathCopy.Set( pathCopy.Filename() );
-        HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "filename: %s\n" ), *tempString );
-
-        pathCopy = path;
-        tempString = pathCopy.Basename().c_str();
-        pathCopy.Set( pathCopy.Basename() );
-        HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "base name: %s\n" ), *tempString );
-
-        pathCopy = path;
-        tempString = pathCopy.Extension().c_str();
-        pathCopy.Set( pathCopy.Extension() );
-        HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "extension: %s\n" ), *tempString );
-
-    }
-
-    {
-        Path jobDefParserPath;
-        HELIUM_VERIFY( File::GetDataDirectory( jobDefParserPath ) );
-        jobDefParserPath += TXT( "..\\Build\\JobDefParser.py" );
-
-        bool bJobDefParserExists = jobDefParserPath.Exists();
-        HELIUM_UNREF( bJobDefParserExists );
-        HELIUM_ASSERT( bJobDefParserExists );
-
-        int64_t jobDefParserSize = jobDefParserPath.Size();
-        HELIUM_UNREF( jobDefParserSize );
-        HELIUM_TRACE( TRACE_INFO, ( TXT( "JobDefParser.py size: %" ) TPRIu64 TXT( "\n" ) ), jobDefParserSize );
-
-        FileStream* pJobDefFile = File::Open( jobDefParserPath, FileStream::MODE_READ );
-        HELIUM_ASSERT( pJobDefFile );
-        HELIUM_ASSERT( pJobDefFile->IsOpen() );
-        HELIUM_ASSERT( pJobDefFile->GetSize() == jobDefParserSize );
-        HELIUM_ASSERT( pJobDefFile->CanSeek() );
-        HELIUM_ASSERT( pJobDefFile->CanRead() );
-        HELIUM_ASSERT( !pJobDefFile->CanWrite() );
-        HELIUM_ASSERT( pJobDefFile->Tell() == 0 );
-        BufferedStream bufferedStream( pJobDefFile );
-        uint8_t testBuffer[ 5000 ];
-        size_t bytesRead = bufferedStream.Read( testBuffer, 1, sizeof( testBuffer ) );
-        HELIUM_UNREF( bytesRead );
-        HELIUM_ASSERT( bytesRead == sizeof( testBuffer ) || static_cast< int64_t >( bytesRead ) == jobDefParserSize );
-        HELIUM_ASSERT( bufferedStream.Tell() == static_cast< int64_t >( bytesRead ) );
-        bufferedStream.Close();
-        HELIUM_ASSERT( !pJobDefFile->CanSeek() );
-        HELIUM_ASSERT( !pJobDefFile->CanRead() );
-        HELIUM_ASSERT( !pJobDefFile->CanWrite() );
-        delete pJobDefFile;
-    }
 
     {
         HELIUM_VERIFY( GameObject::InitStaticType() );
@@ -1016,7 +625,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     windowClass.hCursor = NULL;
     windowClass.hbrBackground = NULL;
     windowClass.lpszMenuName = NULL;
-    windowClass.lpszClassName = TXT( "LunarTestAppClass" );
+    windowClass.lpszClassName = TXT( "HeliumTestAppClass" );
     windowClass.hIconSm = NULL;
     HELIUM_VERIFY( RegisterClassEx( &windowClass ) );
 
@@ -1037,8 +646,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
     HWND hMainWnd = CreateWindow(
-        TXT( "LunarTestAppClass" ),
-        TXT( "Lunar TestApp" ),
+        TXT( "HeliumTestAppClass" ),
+        TXT( "Helium TestApp" ),
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1057,8 +666,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
     HWND hSubWnd = CreateWindow(
-        TXT( "LunarTestAppClass" ),
-        TXT( "Lunar TestApp (second view)" ),
+        TXT( "HeliumTestAppClass" ),
+        TXT( "Helium TestApp (second view)" ),
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1084,7 +693,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
     HELIUM_ASSERT( pRenderer );
-
     pRenderer->Initialize();
 
     Renderer::ContextInitParameters contextInitParams;
@@ -1101,6 +709,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Initialize();
+    rRenderResourceManager.UpdateMaxViewportSize( displayWidth, displayHeight );
 
     DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
     HELIUM_VERIFY( rDynamicDrawer.Initialize() );
@@ -1149,36 +758,46 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         true ) ) );
     HELIUM_ASSERT( spSubCamera );
 
-    uint32_t mainSceneViewId = spWorld->GetMainSceneViewId();
-    if( IsValid( mainSceneViewId ) )
+    GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
+    HELIUM_ASSERT( pGraphicsScene );
+    if( pGraphicsScene )
     {
-        spMainCamera->SetSceneViewId( mainSceneViewId );
-
-        GraphicsScenePtr spGraphicsScene = spWorld->GetGraphicsScene();
-        HELIUM_ASSERT( spGraphicsScene );
-
-        uint32_t subSceneViewId = spGraphicsScene->AllocateSceneView();
-        if( IsValid( subSceneViewId ) )
+        uint32_t mainSceneViewId = pGraphicsScene->AllocateSceneView();
+        if( IsValid( mainSceneViewId ) )
         {
-            GraphicsSceneView* pMainSceneView = spGraphicsScene->GetSceneView( mainSceneViewId );
-            HELIUM_ASSERT( pMainSceneView );
-            GraphicsSceneView* pSubSceneView = spGraphicsScene->GetSceneView( subSceneViewId );
-            HELIUM_ASSERT( pSubSceneView );
+            float32_t aspectRatio =
+                static_cast< float32_t >( displayWidth ) / static_cast< float32_t >( displayHeight );
 
+            RSurface* pDepthStencilSurface = rRenderResourceManager.GetDepthStencilSurface();
+            HELIUM_ASSERT( pDepthStencilSurface );
+
+            GraphicsSceneView* pMainSceneView = pGraphicsScene->GetSceneView( mainSceneViewId );
+            HELIUM_ASSERT( pMainSceneView );
+            pMainSceneView->SetRenderContext( spMainRenderContext );
+            pMainSceneView->SetDepthStencilSurface( pDepthStencilSurface );
+            pMainSceneView->SetAspectRatio( aspectRatio );
+            pMainSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
             pMainSceneView->SetClearColor( Color( 0x00202020 ) );
 
-            pSubSceneView->SetRenderContext( spSubRenderContext );
-            pSubSceneView->SetDepthStencilSurface( pMainSceneView->GetDepthStencilSurface() );
-            pSubSceneView->SetAspectRatio(
-                static_cast< float32_t >( displayWidth ) / static_cast< float32_t >( displayHeight ) );
-            pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
-            pSubSceneView->SetClearColor( Color( 0x00202020 ) );
+            spMainCamera->SetSceneViewId( mainSceneViewId );
 
-            spSubCamera->SetSceneViewId( subSceneViewId );
+            uint32_t subSceneViewId = pGraphicsScene->AllocateSceneView();
+            if( IsValid( subSceneViewId ) )
+            {
+                GraphicsSceneView* pSubSceneView = pGraphicsScene->GetSceneView( subSceneViewId );
+                HELIUM_ASSERT( pSubSceneView );
+                pSubSceneView->SetRenderContext( spSubRenderContext );
+                pSubSceneView->SetDepthStencilSurface( pDepthStencilSurface );
+                pSubSceneView->SetAspectRatio( aspectRatio );
+                pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
+                pSubSceneView->SetClearColor( Color( 0x00202020 ) );
+
+                spSubCamera->SetSceneViewId( subSceneViewId );
+            }
         }
-
+    
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-        BufferedDrawer& rSceneDrawer = spGraphicsScene->GetSceneBufferedDrawer();
+        BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
         rSceneDrawer.DrawScreenText(
             20,
             20,
@@ -1211,7 +830,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             L_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
 
         GameObjectPtr spMeshObject;
-        HELIUM_VERIFY( pObjectLoader->LoadObject( meshPath, spMeshObject ) );
+        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
         HELIUM_ASSERT( spMeshObject );
         HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType() ) );
 
@@ -1222,7 +841,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             L_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
 
         GameObjectPtr spAnimationObject;
-        HELIUM_VERIFY( pObjectLoader->LoadObject( animationPath, spAnimationObject ) );
+        HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
         HELIUM_ASSERT( spAnimationObject );
         HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType() ) );
 
@@ -1287,8 +906,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             meshRotation += 0.01f;
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
                 const SimpleVertex sceneVertices[] =
                 {
@@ -1302,14 +920,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     1,
                 };
 
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawLines(
                     sceneVertices,
                     static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneVertices ) ),
                     sceneIndices,
                     static_cast< uint32_t >( HELIUM_ARRAY_COUNT( sceneIndices ) / 2 ) );
 
-                BufferedDrawer* pViewDrawer = pScene->GetSceneViewBufferedDrawer( 0 );
+                BufferedDrawer* pViewDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( 0 );
                 if( pViewDrawer )
                 {
                     const SimpleVertex viewVertices[] =
@@ -1334,10 +952,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawWorldText(
                     Simd::Matrix44( Simd::Matrix44::INIT_SCALING, 0.75f ),
                     String( TXT( "Debug text test!" ) ),
@@ -1347,10 +964,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-            GraphicsScene* pScene = spWorld->GetGraphicsScene();
-            if( pScene )
+            if( pGraphicsScene )
             {
-                BufferedDrawer& rSceneDrawer = pScene->GetSceneBufferedDrawer();
+                BufferedDrawer& rSceneDrawer = pGraphicsScene->GetSceneBufferedDrawer();
                 rSceneDrawer.DrawScreenText(
                     20,
                     20,
@@ -1676,7 +1292,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
     HELIUM_TRACE( TRACE_DEBUG, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- Lunar SortJob: %f msec\n" ), jobParallelAvg );
+    HELIUM_TRACE( TRACE_DEBUG, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
 
     JobManager::DestroyStaticInstance();
 
@@ -1704,7 +1320,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     GameObjectType::Shutdown();
     GameObject::Shutdown();
 
-    AsyncLoader::GetStaticInstance().Shutdown();
     AsyncLoader::DestroyStaticInstance();
 
     Reflect::Cleanup();

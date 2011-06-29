@@ -6,18 +6,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_CONFIG_PC_H
-#define LUNAR_PC_SUPPORT_CONFIG_PC_H
+#ifndef HELIUM_PC_SUPPORT_CONFIG_PC_H
+#define HELIUM_PC_SUPPORT_CONFIG_PC_H
 
 #include "PcSupport/PcSupport.h"
 
-namespace Lunar
+namespace Helium
 {
     class XmlSerializer;
     class GameObject;
 
     /// PC configuration support.
-    class LUNAR_PC_SUPPORT_API ConfigPc
+    class HELIUM_PC_SUPPORT_API ConfigPc
     {
     public:
         /// @name Configuration Saving
@@ -33,4 +33,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_PC_SUPPORT_CONFIG_PC_H
+#endif  // HELIUM_PC_SUPPORT_CONFIG_PC_H

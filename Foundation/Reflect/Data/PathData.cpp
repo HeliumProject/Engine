@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/PathData.h"
 
 #include "Foundation/Log.h"
@@ -16,12 +17,12 @@ PathData::~PathData()
 {
 }
 
-void PathData::ConnectData( Helium::HybridPtr< void > data )
+void PathData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< Helium::Path >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
-bool PathData::Set( const Data* src, uint32_t flags )
+bool PathData::Set( Data* src, uint32_t flags )
 {
     if ( GetClass() != src->GetClass() )
     {
@@ -30,12 +31,12 @@ bool PathData::Set( const Data* src, uint32_t flags )
 
     const PathData* rhs = static_cast< const PathData* >( src );
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
-bool PathData::Equals( const Object* object ) const
+bool PathData::Equals( Object* object )
 {
     const PathData* rhs = SafeCast< PathData >( object );
 
@@ -44,64 +45,40 @@ bool PathData::Equals( const Object* object ) const
         return false;
     }
 
-    return rhs->m_Data.Get() == m_Data.Get();
+    return *rhs->m_Data == *m_Data;
 }
 
-void PathData::Serialize( Archive& archive ) const
+void PathData::Serialize( ArchiveBinary& archive )
 {
-    const tstring& str = m_Data.Get().Get();
-
-    switch ( archive.GetType() )
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
-
-            xml.GetStream() << str;
-            break;
-        }
-
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            binary.GetStream().WriteString( str ); 
-            break;
-        }
-    }
+    const tstring& str = m_Data->Get();
+    archive.GetStream().WriteString( str ); 
 }
 
-void PathData::Deserialize( Archive& archive )
+void PathData::Deserialize( ArchiveBinary& archive )
 {
-    switch ( archive.GetType() )
-    {
-    case ArchiveTypes::XML:
-        {
-            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+    tstring str;
+    archive.GetStream().ReadString( str );
+    m_Data->Set( str );
+}
 
-            tstring buf;
-            std::streamsize size = xml.GetStream().ObjectsAvailable(); 
-            buf.resize( (size_t)size );
-            xml.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
-            m_Data.Ref().Set( buf );
-            break;
-        }
+void PathData::Serialize( ArchiveXML& archive )
+{
+    const tstring& str = m_Data->Get();
+    archive.GetStream() << str;
+}
 
-    case ArchiveTypes::Binary:
-        {
-            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
-
-            tstring str;
-            binary.GetStream().ReadString( str );
-            m_Data.Ref().Set( str );
-            break;
-        }
-    }
+void PathData::Deserialize( ArchiveXML& archive )
+{
+    tstring buf;
+    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+    buf.resize( (size_t)size );
+    archive.GetStream().ReadBuffer( const_cast<tchar_t*>( buf.c_str() ), size );
+    m_Data->Set( buf );
 }
 
 tostream& PathData::operator>>( tostream& stream ) const
 {
-    tstring path = m_Data.Get().Get();
+    tstring path = m_Data->Get();
     tstring temp;
     bool converted = Helium::ConvertString( path, temp );
     HELIUM_ASSERT( converted );
@@ -119,11 +96,11 @@ tistream& PathData::operator<<( tistream& stream )
 
     if ( !str.empty() )
     {
-        m_Data.Ref().Set( str );
+        m_Data->Set( str );
 
         if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
         {
-            Object* object = (Object*)m_Instance.Mutable();
+            Object* object = static_cast< Object* >( m_Instance );
             object->RaiseChanged( m_Field );
         }
     }

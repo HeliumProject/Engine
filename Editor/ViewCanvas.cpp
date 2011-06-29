@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ViewCanvas.h"
 
 #include "Editor/EditorIDs.h"
@@ -47,11 +47,6 @@ ViewCanvas::ViewCanvas( SettingsManager* settingsManager, wxWindow *parent, wxWi
 
 void ViewCanvas::OnSize(wxSizeEvent& e)
 {
-    if ( !m_Viewport.GetDevice() )
-    {
-        return;
-    }
-
     if ( e.GetSize().x > 0 && e.GetSize().y > 0 )
     {
         m_Viewport.SetSize( e.GetSize().x, e.GetSize().y );

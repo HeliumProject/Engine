@@ -26,7 +26,7 @@ namespace Helium
 
         protected:
             Type();
-            virtual ~Type();
+            ~Type();
 
         public:
             const tchar_t*                  m_Name;         // the name of this type in the codebase

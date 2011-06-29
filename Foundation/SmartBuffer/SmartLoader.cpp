@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "SmartLoader.h"
 
 #include "Platform/Assert.h"

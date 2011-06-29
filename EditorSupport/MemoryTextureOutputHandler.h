@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H
-#define LUNAR_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H
+#ifndef HELIUM_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H
+#define HELIUM_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -15,7 +15,7 @@
 
 #include <nvtt/nvtt.h>
 
-namespace Lunar
+namespace Helium
 {
     /// NVIDIA Texture Tools OutputHandler implementation for outputting texture data to a memory buffer.
     class MemoryTextureOutputHandler : public nvtt::OutputHandler
@@ -55,4 +55,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H
+#endif  // HELIUM_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H

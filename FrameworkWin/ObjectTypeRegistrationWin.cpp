@@ -7,6 +7,7 @@
 
 #include "FrameworkWinPch.h"
 #include "FrameworkWin/ObjectTypeRegistrationWin.h"
+#include "EditorSupport/FontResourceHandler.h"
 
 /// Type registration functions.
 extern void RegisterPcSupportTypes();
@@ -17,7 +18,7 @@ extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc ObjectTypeRegistration::Register()
 void ObjectTypeRegistrationWin::Register()
@@ -27,6 +28,10 @@ void ObjectTypeRegistrationWin::Register()
     RegisterPcSupportTypes();
 #if L_EDITOR
     RegisterEditorSupportTypes();
+
+    //pmd - Other resource handlers get initialized when their types are registered, but fonts don't
+    //      follow that pattern. So for now, forcing an initialize here to prevent an assert later.
+    FontResourceHandler::InitializeStaticLibrary();
 #endif
 }
 
@@ -34,6 +39,10 @@ void ObjectTypeRegistrationWin::Register()
 void ObjectTypeRegistrationWin::Unregister()
 {
 #if L_EDITOR
+    //pmd - Other resource handlers get deinitted when their types are unregistered, but fonts don't
+    //      follow that pattern. So for now, forcing a deinit here.
+    FontResourceHandler::DestroyStaticLibrary();
+
     UnregisterEditorSupportTypes();
 #endif
     UnregisterPcSupportTypes();

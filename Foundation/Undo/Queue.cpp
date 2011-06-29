@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Queue.h"
 
 #include "Exceptions.h"

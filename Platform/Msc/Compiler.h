@@ -11,11 +11,23 @@
 // This spuriously comes up on occasion with certain template class methods.
 #pragma warning( disable : 4505 ) // 'function' : unreferenced local function has been removed
 
+// Check C-runtime setttings
 #ifndef _MT
 # error Danger: MultiThreaded CRT must be used to ensure proper DLL-exported template compatibility!
 #endif
 #ifndef _DLL
 # error Danger: DLL CRT must be used to ensure proper DLL-exported template compatibility!
+#endif
+
+#if _MSC_VER < 1600
+// ceil() flawed in vs2008 headers
+#pragma warning( disable : 4985 )
+// Import tr1 into std for vs2008
+namespace std
+{
+	namespace tr1 {}
+	using namespace tr1;
+}
 #endif
 
 /// Declare a class method as overriding a virtual method of a parent class.

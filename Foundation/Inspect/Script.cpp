@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Script.h"
 
 #include "Foundation/Inspect/Container.h"

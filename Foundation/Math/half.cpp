@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "half.h"
 
 using namespace Helium;

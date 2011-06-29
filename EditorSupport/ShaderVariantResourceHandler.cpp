@@ -24,7 +24,7 @@
 #include "Rendering/ShaderProfiles.h"
 #include "PcSupport/ObjectPreprocessor.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( ShaderVariantResourceHandler, EditorSupport, 0 );
 

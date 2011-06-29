@@ -1,11 +1,8 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "DuplicateTool.h"
 
 #include "Pipeline/SceneGraph/Mesh.h"
 #include "Pipeline/SceneGraph/Scene.h"
-#include "Volume.h"
-#include "VolumeType.h"
-
 #include "Pipeline/SceneGraph/Pick.h"
 
 using namespace Helium;

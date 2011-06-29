@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RShader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RShader::~RShader()

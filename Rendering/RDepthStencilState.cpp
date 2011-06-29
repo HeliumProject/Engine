@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RDepthStencilState.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RDepthStencilState::~RDepthStencilState()

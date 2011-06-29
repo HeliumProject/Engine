@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 #include "Platform/Trace.h"
 
 #if HELIUM_ENABLE_TRACE

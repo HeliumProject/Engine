@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/BinaryDeserializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 BinaryDeserializer::BinaryDeserializer()

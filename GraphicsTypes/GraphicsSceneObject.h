@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H
-#define LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H
+#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H
+#define HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -18,7 +18,7 @@
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     class GraphicsScene;
 
@@ -29,7 +29,7 @@ namespace Lunar
     L_DECLARE_RPTR( RVertexDescription );
 
     /// Information related to a single object attached to the graphics scene.
-    HELIUM_SIMD_ALIGN_PRE class LUNAR_GRAPHICS_TYPES_API GraphicsSceneObject
+    HELIUM_SIMD_ALIGN_PRE class HELIUM_GRAPHICS_TYPES_API GraphicsSceneObject
     {
     public:
         /// Update callback function type.
@@ -51,7 +51,7 @@ namespace Lunar
         };
 
         /// Data specific to sub-meshes.
-        class LUNAR_GRAPHICS_TYPES_API SubMeshData
+        class HELIUM_GRAPHICS_TYPES_API SubMeshData
         {
         public:
             /// @name Construction/Destruction
@@ -190,4 +190,4 @@ namespace Lunar
 
 #include "GraphicsTypes/GraphicsSceneObject.inl"
 
-#endif  // LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H
+#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_OBJECT_H

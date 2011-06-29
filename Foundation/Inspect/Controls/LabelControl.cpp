@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Inspect/Controls/LabelControl.h"
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/DataBinding.h"

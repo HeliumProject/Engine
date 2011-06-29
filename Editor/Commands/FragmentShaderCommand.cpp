@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "FragmentShaderCommand.h"
 
 #include <wx/msgdlg.h>

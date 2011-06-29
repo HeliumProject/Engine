@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
-#define LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
+#ifndef HELIUM_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
+#define HELIUM_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -17,7 +17,7 @@
 
 #include "PcSupport/XmlPackageLoaderMap.h"
 
-namespace Lunar
+namespace Helium
 {
     class XmlObjectLoader;
 
@@ -38,7 +38,7 @@ namespace Lunar
 
         /// @name Static Initialization
         //@{
-        LUNAR_EDITOR_SUPPORT_API static bool InitializeStaticInstance();
+        HELIUM_EDITOR_SUPPORT_API static bool InitializeStaticInstance();
         //@}
 
     private:
@@ -58,4 +58,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H
+#endif  // HELIUM_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H

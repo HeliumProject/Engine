@@ -13,7 +13,7 @@
 #include "Rendering/RVertexDescription.h"
 #include "Graphics/Material.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 GraphicsSceneObject::GraphicsSceneObject()

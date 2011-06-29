@@ -1,6 +1,6 @@
+#include "PlatformPch.h"
 #include "Platform/Stat.h"
 
-#include "Platform/Windows/Windows.h"
 #include <sys/stat.h>
 
 bool Helium::StatPath( const tchar_t* path, Helium::Stat& stat )

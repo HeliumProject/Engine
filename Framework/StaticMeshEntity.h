@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_STATIC_MESH_ENTITY_H
-#define LUNAR_FRAMEWORK_STATIC_MESH_ENTITY_H
+#ifndef HELIUM_FRAMEWORK_STATIC_MESH_ENTITY_H
+#define HELIUM_FRAMEWORK_STATIC_MESH_ENTITY_H
 
 #include "Framework/MeshEntity.h"
 
-namespace Lunar
+namespace Helium
 {
     /// In-game entity comprising of a static (non-skinned) mesh, with optional collision data.
-    class LUNAR_FRAMEWORK_API StaticMeshEntity : public MeshEntity
+    class HELIUM_FRAMEWORK_API StaticMeshEntity : public MeshEntity
     {
         L_DECLARE_OBJECT( StaticMeshEntity, MeshEntity );
 
@@ -27,4 +27,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_STATIC_MESH_ENTITY_H
+#endif  // HELIUM_FRAMEWORK_STATIC_MESH_ENTITY_H

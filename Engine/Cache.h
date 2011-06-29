@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CACHE_H
-#define LUNAR_ENGINE_CACHE_H
+#ifndef HELIUM_ENGINE_CACHE_H
+#define HELIUM_ENGINE_CACHE_H
 
 #include "Engine/Engine.h"
 
@@ -15,14 +15,14 @@
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Serialization cache interface.
-    class LUNAR_ENGINE_API Cache : NonCopyable
+    class HELIUM_ENGINE_API Cache : NonCopyable
     {
     public:
         /// Current cache file format version number.
-        static const uint32_t VERSION = 0;
+        static const uint32_t sm_Version = 0;
 
         /// Default Entry pool block size (for use with modifiable caches on the PC).
         static const size_t ENTRY_POOL_BLOCK_SIZE = 64;
@@ -169,4 +169,4 @@ namespace Lunar
 
 #include "Engine/Cache.inl"
 
-#endif  // LUNAR_ENGINE_CACHE_H
+#endif  // HELIUM_ENGINE_CACHE_H

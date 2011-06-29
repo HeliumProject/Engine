@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ReflectStlVectorInterpreter.h"
 #include "InspectReflectInit.h"
 
@@ -85,7 +86,7 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
         buttonContainer->AddChild( downButton );
     }
 
-    // create the serializers
+    // create the data objects
     std::vector<Reflect::Object*>::const_iterator itr = instances.begin();
     std::vector<Reflect::Object*>::const_iterator end = instances.end();
     for ( ; itr != end; ++itr )
@@ -99,7 +100,7 @@ void ReflectStlVectorInterpreter::InterpretField(const Field* field, const std::
         m_Datas.push_back(s);
     }
 
-    // bind the ui to the serializers
+    // bind the ui to the data objects
     Helium::SmartPtr< MultiStringFormatter<Data> > data = new MultiStringFormatter<Reflect::Data>( (std::vector<Reflect::Data*>&)m_Datas );
     list->Bind( data );
 

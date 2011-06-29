@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_MESH_H
-#define LUNAR_FRAMEWORK_MESH_H
+#ifndef HELIUM_FRAMEWORK_MESH_H
+#define HELIUM_FRAMEWORK_MESH_H
 
 #include "Framework/Framework.h"
 #include "Engine/Resource.h"
@@ -25,7 +25,7 @@ namespace Helium
     class Simd::Matrix44;
 }
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RVertexBuffer );
     L_DECLARE_RPTR( RIndexBuffer );
@@ -33,7 +33,7 @@ namespace Lunar
     HELIUM_DECLARE_PTR( Material );
 
     /// Mesh resource type.
-    class LUNAR_FRAMEWORK_API Mesh : public Resource
+    class HELIUM_FRAMEWORK_API Mesh : public Resource
     {
         L_DECLARE_OBJECT( Mesh, Resource );
 
@@ -148,4 +148,4 @@ namespace Lunar
 
 #include "Framework/Mesh.inl"
 
-#endif  // LUNAR_FRAMEWORK_MESH_H
+#endif  // HELIUM_FRAMEWORK_MESH_H

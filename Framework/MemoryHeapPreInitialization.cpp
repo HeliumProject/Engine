@@ -11,7 +11,7 @@
 #include "EngineJobs/EngineJobs.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 MemoryHeapPreInitialization::~MemoryHeapPreInitialization()

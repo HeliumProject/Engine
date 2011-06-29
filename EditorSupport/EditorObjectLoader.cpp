@@ -18,7 +18,7 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/XmlPackageLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 EditorObjectLoader::EditorObjectLoader()

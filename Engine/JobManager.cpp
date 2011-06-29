@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/JobManager.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 JobManager* JobManager::sm_pInstance = NULL;
 

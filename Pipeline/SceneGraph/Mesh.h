@@ -3,10 +3,10 @@
 #include "Foundation/Math/CalculateBounds.h"
 #include "Foundation/Math/AlignedBox.h"
 
+#include "Pipeline/SceneGraph/VertexResource.h"
+#include "Pipeline/SceneGraph/IndexResource.h"
 #include "Pipeline/SceneGraph/PivotTransform.h"
 #include "Pipeline/SceneGraph/Shader.h"
-#include "Pipeline/SceneGraph/IndexResource.h"
-#include "Pipeline/SceneGraph/VertexResource.h"
 
 namespace Helium
 {
@@ -14,9 +14,6 @@ namespace Helium
     {
         // the shader we reference
         typedef std::vector< Shader* > V_ShaderDumbPtr;
-
-        // these gather arrayed components in the content class into a concrete vertex
-        typedef std::vector< StandardVertex > V_StandardVertex;
 
         class MeshEdge
         {
@@ -64,7 +61,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Mesh, PivotTransform );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 
@@ -80,28 +77,7 @@ namespace Helium
             virtual void Delete() HELIUM_OVERRIDE;
             virtual void Populate( PopulateArgs* args );
             virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
-
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-
-            static void SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object );
-            static void SetupFlippedObject( IDirect3DDevice9* device, const SceneNode* object );
-            static void ResetFlippedObject( IDirect3DDevice9* device, const SceneNode* object );
-
-            static void SetupNormalWire( IDirect3DDevice9* device );
-            static void DrawNormalWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-            static void DrawUnselectableWire( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
-            static void SetupUnselectableWire( IDirect3DDevice9* device );
-            static void SetupSelectedWire( IDirect3DDevice9* device );
-            static void SetupHighlightedWire( IDirect3DDevice9* device );
-            static void SetupLiveWire( IDirect3DDevice9* device );
-
-            static void SetupAlpha( IDirect3DDevice9* device );
-            static void ResetAlpha( IDirect3DDevice9* device );
-            static void SetupNormal( IDirect3DDevice9* device );
-            static void ResetNormal( IDirect3DDevice9* device );
-            static void DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
             uint32_t GetVertexCount() const
@@ -213,18 +189,16 @@ namespace Helium
 
         protected:
             // Non-reflected
-            bool                m_HasAlpha;             // does this mesh draw with alpha?
-            bool                m_HasColor;             // does this mesh have per-vertex color?
-            bool                m_HasTexture;           // does thie mesh have texture data?
-            V_ShaderDumbPtr     m_Shaders;              // the shader objects this mesh uses
-            uint32_t                 m_LineCount;            // the number of lines to draw
-            uint32_t                 m_VertexCount;          // the number of vertices
-            uint32_t                 m_TriangleCount;        // the number of triangles to draw
-            std::vector< uint32_t >  m_ShaderStartIndices;   // the start index of each shader-sorted segment of indices
-            static D3DMATERIAL9 s_WireMaterial;
-            static D3DMATERIAL9 s_FillMaterial;
-            IndexResourcePtr    m_Indices;
-            VertexResourcePtr   m_Vertices;
+            bool                    m_HasAlpha;             // does this mesh draw with alpha?
+            bool                    m_HasColor;             // does this mesh have per-vertex color?
+            bool                    m_HasTexture;           // does thie mesh have texture data?
+            V_ShaderDumbPtr         m_Shaders;              // the shader objects this mesh uses
+            uint32_t                m_LineCount;            // the number of lines to draw
+            uint32_t                m_VertexCount;          // the number of vertices
+            uint32_t                m_TriangleCount;        // the number of triangles to draw
+            std::vector< uint32_t > m_ShaderStartIndices;   // the start index of each shader-sorted segment of indices
+            IndexResourcePtr        m_Indices;
+            VertexResourcePtr       m_Vertices;
         };
         typedef Helium::StrongPtr< Mesh > MeshPtr;
     }

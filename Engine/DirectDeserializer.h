@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_DIRECT_DESERIALIZER_H
-#define LUNAR_ENGINE_DIRECT_DESERIALIZER_H
+#ifndef HELIUM_ENGINE_DIRECT_DESERIALIZER_H
+#define HELIUM_ENGINE_DIRECT_DESERIALIZER_H
 
 #include "Engine/Serializer.h"
 
@@ -18,7 +18,7 @@ namespace Helium
     template< typename CharType, typename Allocator > class StringBase;
 }
 
-namespace Lunar
+namespace Helium
 {
     /// Serializer for retrieving object properties from a direct byte dump (previously created using DirectSerializer).
     ///
@@ -27,7 +27,7 @@ namespace Lunar
     ///
     /// @note  This will serialize pointer values directly.  As such, it should only be used within the context of a
     ///        running instance of the application and never use data read from disk.
-    class LUNAR_ENGINE_API DirectDeserializer : public Serializer
+    class HELIUM_ENGINE_API DirectDeserializer : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -91,4 +91,4 @@ namespace Lunar
 
 #include "Engine/DirectDeserializer.inl"
 
-#endif  // LUNAR_ENGINE_DIRECT_DESERIALIZER_H
+#endif  // HELIUM_ENGINE_DIRECT_DESERIALIZER_H

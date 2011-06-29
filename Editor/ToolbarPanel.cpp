@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 
 #include "ToolbarPanel.h"
 #include "ArtProvider.h"

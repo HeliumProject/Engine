@@ -144,42 +144,95 @@ if os.get() == "windows" then
 			}
 		end
 
-	configuration { "windows", "x64" }
+
+configuration { "windows", "x64" }
+	libdirs
+	{
+		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+	}
+
+	if haveGranny then
 		libdirs
 		{
-			os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+			"Integrations/Granny/granny_sdk/lib/win64",
 		}
-	
-		if haveGranny then
-			libdirs
-			{
-				"Integrations/Granny/granny_sdk/lib/win64",
-			}
-		end
-	
+	end
+
+if _ACTION == "vs2005" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc8_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc8_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc8_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc8_release",
+		}
+elseif _ACTION == "vs2008" then
 	configuration { "windows", "x32", "Debug" }
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
 		}
-	
+
 	configuration { "windows", "x32", "not Debug" }
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
 		}
-	
+
 	configuration { "windows", "x64", "Debug" }
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
 		}
-	
+
 	configuration { "windows", "x64", "not Debug" }
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
 		}
+elseif _ACTION == "vs2010" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc10_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc10_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc10_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+		}
+else
+	print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
+	os.exit(1)
 end
 
 configuration "no-unicode"
@@ -193,7 +246,6 @@ configuration "not no-unicode"
 	{
 		"wxUSE_UNICODE=1",
 	}
-
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	language "C++"
@@ -210,6 +262,9 @@ project "Platform"
 		"Platform/Msc/*",
 		"Platform/X86/*",
 	}
+
+    pchheader( "PlatformPch.h" )
+    pchsource( "Platform/PlatformPch.cpp" )
 
 	configuration "windows"
 		files
@@ -260,6 +315,9 @@ project "Foundation"
 		"Foundation/**",
 	}
 
+    pchheader( "FoundationPch.h" )
+    pchsource( "Foundation/FoundationPch.cpp" )
+
 	configuration "Debug"
 		kind "SharedLib"
 
@@ -286,7 +344,7 @@ project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Engine", "ENGINE" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -300,7 +358,7 @@ project "EngineJobs"
 	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
 
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "EngineJobs", "ENGINE_JOBS" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -314,7 +372,7 @@ project "EngineJobs"
 project "Windowing"
 	uuid "B68268DF-3942-432F-89B1-DBC82C21218E"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Windowing", "WINDOWING" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -329,7 +387,7 @@ project "Windowing"
 project "Rendering"
 	uuid "3F1BD209-272C-4833-AF8E-35C317F21452"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Rendering", "RENDERING" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Rendering", "RENDERING" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -344,7 +402,7 @@ project "Rendering"
 project "GraphicsTypes"
 	uuid "4A13A4F6-6860-4F52-A217-B0C3943E7025"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "GraphicsTypes", "GRAPHICS_TYPES" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -360,7 +418,7 @@ project "GraphicsTypes"
 project "GraphicsJobs"
 	uuid "4D83346D-DCB2-40E6-AAF1-508341728E57"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "GraphicsJobs", "GRAPHICS_JOBS" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -377,7 +435,7 @@ project "GraphicsJobs"
 project "Graphics"
 	uuid "3342921C-F6C7-4A81-A6FF-1C93373AF285"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Graphics", "GRAPHICS" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -395,7 +453,7 @@ project "Graphics"
 project "Framework"
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "Framework", "FRAMEWORK" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -415,7 +473,7 @@ project "Framework"
 project "WindowingWin"
 	uuid "1D7B65F8-6A31-4E8C-AF91-C1D2FA73AD12"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "WindowingWin", "WINDOWING_WIN" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "WindowingWin", "WINDOWING_WIN" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -431,7 +489,7 @@ project "WindowingWin"
 project "RenderingD3D9"
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "RenderingD3D9", "RENDERING_D3D9" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -447,7 +505,7 @@ project "RenderingD3D9"
 project "PcSupport"
 	uuid "2B3B921A-BFF1-4A73-A9DD-3FCACA9D2916"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "PcSupport", "PC_SUPPORT" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -463,7 +521,7 @@ project "PcSupport"
 project "PreprocessingPc"
 	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "PreprocessingPc", "PREPROCESSING_PC" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -483,7 +541,7 @@ project "PreprocessingPc"
 project "EditorSupport"
 	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "EditorSupport", "EDITOR_SUPPORT" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -506,7 +564,7 @@ project "EditorSupport"
 project "FrameworkWin"
 	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "FrameworkWin", "FRAMEWORK_WIN" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -550,6 +608,9 @@ project "Pipeline"
 		"Pipeline/**.h",
 		"Pipeline/**.cpp",
 	}
+
+    pchheader( "PipelinePch.h" )
+    pchsource( "Pipeline/PipelinePch.cpp" )
 
 	configuration "windows"
 		includedirs
@@ -604,8 +665,8 @@ project "Editor"
 		"Editor/Editor.rc",
 	}
 
-    pchheader( "Precompile.h" )
-    pchsource( "Editor/Precompile.cpp" )
+    pchheader( "EditorPch.h" )
+    pchsource( "Editor/EditorPch.cpp" )
 
 	includedirs
 	{
@@ -714,7 +775,7 @@ project "Editor"
 project "TestJobs"  -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
-	Helium.DoLunarModuleProjectSettings( ".", "LUNAR", "TestJobs", "TEST_JOBS" )
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -733,14 +794,10 @@ project "TestApp"  -- DEPRECATED
 
 	files
 	{
-		"TestApp/Moon.ico",
-		"TestApp/resource.h",
-		"TestApp/stdafx.cpp",
-		"TestApp/stdafx.h",
-		"TestApp/TestApp.cpp",
-		"TestApp/TestApp.rc",
-		"TestApp/WindowProc.cpp",
-		"TestApp/WindowProc.h",
+		"TestApp/**.cpp",
+		"TestApp/**.h",
+		"TestApp/**.ico",
+		"TestApp/**.rc"
 	}
 
 	flags
@@ -769,8 +826,8 @@ project "TestApp"  -- DEPRECATED
 		"TestJobs",
 	}
 
-	pchheader( "stdafx.h" )
-	pchsource( "TestApp/stdafx.cpp" )
+	pchheader( "TestAppPch.h" )
+	pchsource( "TestApp/TestAppPch.cpp" )
 
 	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
 	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
@@ -783,7 +840,7 @@ project "TestApp"  -- DEPRECATED
 		"zlib",
 	}
 
-	Helium.DoDefaultLunarProjectSettings()
+	Helium.DoDefaultProjectSettings()
 
 	configuration "windows"
 		links
@@ -794,6 +851,7 @@ project "TestApp"  -- DEPRECATED
 			"dxguid",
 			"d3dcompiler",
 			"wininet",
+			"ws2_32",
 			"dbghelp",
 		}
 	configuration { "windows", "x32" }
@@ -827,7 +885,7 @@ project "ExampleGame"
 		"Example",
 	}
 
-	Helium.DoLunarModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
+	Helium.DoModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
 
 	--configuration "SharedLib"
 	configuration "Debug"
@@ -900,7 +958,7 @@ project "ExampleMain"
 		"zlib",
 	}
 
-	Helium.DoDefaultLunarProjectSettings()
+	Helium.DoDefaultProjectSettings()
 
 	configuration "windows"
 		links
@@ -911,6 +969,7 @@ project "ExampleMain"
 			"dxguid",
 			"d3dcompiler",
 			"wininet",
+			"ws2_32",
 			"dbghelp",
 		}
 	configuration { "windows", "x32" }

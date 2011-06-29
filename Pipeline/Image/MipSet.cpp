@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "MipSet.h"
 
 #include "Pipeline/Image/Utilities/Swizzle.h"

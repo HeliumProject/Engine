@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "BatchCommand.h"
 
 using namespace Helium::Undo;

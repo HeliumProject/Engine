@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "CoreInit.h"
 
 #include "Foundation/InitializerStack.h"
@@ -18,6 +19,7 @@ void Helium::CoreInitialize()
     {
         g_CoreInitStack.Push( &Asset::Initialize,       &Asset::Cleanup );
 
+        g_CoreInitStack.Push( Reflect::RegisterStructureType< TestStructure >( TXT( "TestStructure" ) ) );
         g_CoreInitStack.Push( Reflect::RegisterClassType< Project >( TXT( "Project" ) ) );
         g_CoreInitStack.Push( Reflect::RegisterClassType< Settings >( TXT( "Settings" ) ) ); 
         g_CoreInitStack.Push( Reflect::RegisterClassType< SettingsManager >( TXT( "SettingsManager" ) ) ); 

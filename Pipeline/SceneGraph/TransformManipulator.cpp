@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "TransformManipulator.h"
 #include "Pipeline/SceneGraph/Transform.h"
 
@@ -32,17 +32,9 @@ TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGrap
 , m_StartY (0)
 , m_Manipulating (false)
 , m_Manipulated (false)
+, m_AxisMaterial (SceneGraph::Color::BLACK)
+, m_SelectedAxisMaterial (SceneGraph::Color::YELLOW)
 {
-    ZeroMemory(&m_AxisMaterial, sizeof(m_AxisMaterial));
-    m_AxisMaterial.Ambient = SceneGraph::Color::BLACK;
-    m_AxisMaterial.Diffuse = SceneGraph::Color::BLACK;
-    m_AxisMaterial.Specular = SceneGraph::Color::BLACK;
-
-    ZeroMemory(&m_SelectedAxisMaterial, sizeof(m_SelectedAxisMaterial));
-    m_SelectedAxisMaterial.Ambient = SceneGraph::Color::YELLOW;
-    m_SelectedAxisMaterial.Diffuse = SceneGraph::Color::BLACK;
-    m_SelectedAxisMaterial.Specular = SceneGraph::Color::BLACK;
-
     m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate (this, &TransformManipulator::SelectionChanged) );
 
     SelectionChanged(m_Scene->GetSelection().GetItems());
@@ -71,35 +63,6 @@ void TransformManipulator::SelectionChanged(const SelectionChangeArgs& args)
         {
             h->ConnectManipulator(this);
         }
-    }
-}
-
-bool TransformManipulator::SetAxisMaterial(AxesFlags axes)
-{
-    if ((m_SelectedAxes & axes) != MultipleAxes::None)
-    {
-        m_View->GetDevice()->SetMaterial(&m_SelectedAxisMaterial);
-        return m_SelectedAxes != MultipleAxes::All;
-    }
-    else
-    {
-        switch (axes)
-        {
-        case MultipleAxes::X:
-            m_AxisMaterial.Ambient = SceneGraph::Color::RED;
-            break;
-
-        case MultipleAxes::Y:
-            m_AxisMaterial.Ambient = SceneGraph::Color::GREEN;
-            break;
-
-        case MultipleAxes::Z:
-            m_AxisMaterial.Ambient = SceneGraph::Color::BLUE;
-            break;
-        }
-
-        m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
-        return false;
     }
 }
 

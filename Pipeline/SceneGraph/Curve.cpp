@@ -1,11 +1,15 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Curve.h"
+
+#include "Platform/Math/Simd/Quat.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Math/CalculateCurve.h"
 #include "Foundation/Math/AngleAxis.h"
 
 #include "Foundation/Undo/PropertyCommand.h"
+
+#include "Graphics/BufferedDrawer.h"
 
 #include "Pipeline/SceneGraph/Pick.h"
 #include "Pipeline/SceneGraph/PrimitiveLocator.h"
@@ -27,10 +31,10 @@ REFLECT_DEFINE_ENUMERATION( CurveType );
 REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
 REFLECT_DEFINE_OBJECT( Curve );
 
-D3DMATERIAL9 Curve::s_Material;
-D3DMATERIAL9 Curve::s_HullMaterial;
+Helium::Color Curve::s_Material;
+Helium::Color Curve::s_HullMaterial;
 
-void Curve::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Curve::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField(            &Curve::m_Closed,               TXT( "m_Closed" ) );
     comp.AddEnumerationField( &Curve::m_Type,                 TXT( "m_Type" ) );
@@ -53,11 +57,8 @@ void Curve::InitializeType()
 {
     Reflect::RegisterClassType< Curve >( TXT( "SceneGraph::Curve" ) );
 
-    ZeroMemory(&s_Material, sizeof(s_Material));
-    s_Material.Ambient = Color::FORESTGREEN;
-
-    ZeroMemory(&s_HullMaterial, sizeof(s_HullMaterial));
-    s_HullMaterial.Ambient = Color::GRAY;
+    s_Material = Color::FORESTGREEN;
+    s_HullMaterial = Color::GRAY;
 
     PropertiesGenerator::InitializePanel( TXT( "Curve" ), CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
 }
@@ -108,16 +109,16 @@ void Curve::Initialize()
         }
     }
 
-    m_Locator = new PrimitiveLocator( m_Owner->GetViewport()->GetResources() );
+    m_Locator = new PrimitiveLocator;
     m_Locator->Update();
 
-    m_Cone = new PrimitiveCone( m_Owner->GetViewport()->GetResources() );
+    m_Cone = new PrimitiveCone;
     m_Cone->m_Radius = 0.2f;
     m_Cone->SetSolid(true);
     m_Cone->Update();
 
-    m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Vertices->SetElementType( ElementTypes::Position );
+    m_Vertices = new VertexResource;
+    m_Vertices->SetElementType( VertexElementTypes::SimpleVertex );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Curve::Populate ) );
 }
 
@@ -533,7 +534,7 @@ void Curve::Populate( PopulateArgs* args )
                 if ( vertexCount == 0 )
                     break;
 
-                Position* bufferStart = reinterpret_cast<Position*>( args->m_Buffer + args->m_Offset );
+                Helium::SimpleVertex* bufferStart = reinterpret_cast<Helium::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the control points
                 uint32_t countControlPoints = 0;
@@ -549,8 +550,15 @@ void Curve::Populate( PopulateArgs* args )
                         {
                             firstPoint = point;
                         }
-                        bufferStart[countControlPoints].m_Position = m_ObjectBounds.Test( point->GetPosition() );
-                        args->m_Offset += sizeof(Position); 
+                        Vector3 position = m_ObjectBounds.Test( point->GetPosition() );
+                        bufferStart[ countControlPoints ].position[ 0 ] = position.x;
+                        bufferStart[ countControlPoints ].position[ 1 ] = position.y;
+                        bufferStart[ countControlPoints ].position[ 2 ] = position.z;
+                        bufferStart[ countControlPoints ].color[ 0 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
+                        bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
+                        args->m_Offset += sizeof(Helium::SimpleVertex); 
                         ++countControlPoints;
                     }
                 }
@@ -558,26 +566,47 @@ void Curve::Populate( PopulateArgs* args )
                 // loop back for closed curves
                 if ( countControlPoints > 0 ) 
                 {
-                    bufferStart[countControlPoints].m_Position = m_ObjectBounds.Test( firstPoint->GetPosition() );
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( firstPoint->GetPosition() );
+                    bufferStart[ countControlPoints ].position[ 0 ] = position.x;
+                    bufferStart[ countControlPoints ].position[ 1 ] = position.y;
+                    bufferStart[ countControlPoints ].position[ 2 ] = position.z;
+                    bufferStart[ countControlPoints ].color[ 0 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 1 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 2 ] = 0xff;
+                    bufferStart[ countControlPoints ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
 
                 // reset the buffer start to its new location
-                bufferStart = reinterpret_cast<Position*>( args->m_Buffer + args->m_Offset );
+                bufferStart = reinterpret_cast<Helium::SimpleVertex*>( args->m_Buffer + args->m_Offset );
 
                 // go over the calculated curve points
                 uint32_t countCurvePoints = (uint32_t)m_Points.size();
                 for ( uint32_t i = 0; i < countCurvePoints; ++i )
                 {
-                    bufferStart[i].m_Position = m_ObjectBounds.Test( m_Points[ i ] );
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( m_Points[ i ] );
+                    bufferStart[ i ].position[ 0 ] = position.x;
+                    bufferStart[ i ].position[ 1 ] = position.y;
+                    bufferStart[ i ].position[ 2 ] = position.z;
+                    bufferStart[ i ].color[ 0 ] = 0xff;
+                    bufferStart[ i ].color[ 1 ] = 0xff;
+                    bufferStart[ i ].color[ 2 ] = 0xff;
+                    bufferStart[ i ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
 
                 // loop back for closed curves
                 if ( countCurvePoints > 0 ) 
                 {
-                    bufferStart[countCurvePoints].m_Position = m_ObjectBounds.Test( m_Points[ 0 ] );        
-                    args->m_Offset += sizeof(Position); 
+                    Vector3 position = m_ObjectBounds.Test( m_Points[ 0 ] );
+                    bufferStart[ countCurvePoints ].position[ 0 ] = position.x;
+                    bufferStart[ countCurvePoints ].position[ 1 ] = position.y;
+                    bufferStart[ countCurvePoints ].position[ 2 ] = position.z;
+                    bufferStart[ countCurvePoints ].color[ 0 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 1 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 2 ] = 0xff;
+                    bufferStart[ countCurvePoints ].color[ 3 ] = 0xff;
+                    args->m_Offset += sizeof(Helium::SimpleVertex); 
                 }
             }
             break;
@@ -766,93 +795,91 @@ void Curve::Evaluate( GraphDirection direction )
 
 void Curve::Render( RenderVisitor* render )
 {
-    RenderEntry* entry = render->Allocate(this);
+    HELIUM_ASSERT( render );
 
-    entry->m_Location = render->State().m_Matrix;
-    entry->m_Center = m_ObjectBounds.Center();
-    entry->m_Draw = &Curve::Draw;
+    DrawArgs* args = render->GetArgs();
+    HELIUM_ASSERT( args );
 
-    Base::Render( render );
-}
+    Helium::BufferedDrawer* drawInterface = render->GetDrawInterface();
+    HELIUM_ASSERT( drawInterface );
 
-void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
-{
-    const HierarchyNode* node = Reflect::AssertCast<HierarchyNode>( object );
-    const Curve* curve = Reflect::AssertCast< Curve > ( node );
+    const VertexResource* vertices = m_Vertices;
 
-    const VertexResource* vertices = curve->m_Vertices;
-
-    Viewport* view = node->GetOwner()->GetViewport();
-    Camera* camera = view->GetCamera();
-
-    uint32_t countCurvePoints    = (uint32_t)curve->m_Points.size();
-    uint32_t countControlPoints  = curve->GetNumberControlPoints();
+    uint32_t countCurvePoints    = (uint32_t)m_Points.size();
+    uint32_t countControlPoints  = GetNumberControlPoints();
 
     //
     //  Draw start end end locators
     //
 
-    curve->SetMaterial( curve->s_Material );
+    Helium::Color materialColor = GetMaterialColor( s_Material );
 
-    const Matrix4& globalTransform = curve->GetGlobalTransform();
+    Simd::Matrix44 globalTransform( GetGlobalTransform().array1d );
 
-    if ( !curve->m_Closed )
+    if ( !m_Closed )
     {
-        Matrix4 m;
+        Simd::Matrix44 m;
 
         if ( countCurvePoints > 0 )
         {
-            m = Matrix4( curve->m_Points[ 0 ] ) * globalTransform;
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Locator->Draw( args );
+            Simd::Vector3 point( &m_Points[ 0 ].x );
+            m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
+            m_Locator->Draw( drawInterface, args, materialColor, m );
         }
 
         if ( countCurvePoints > 1 )
         {
-            m = Matrix4( curve->m_Points[ countCurvePoints - 1 ] ) * globalTransform;
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Locator->Draw( args );
+            Simd::Vector3 point( &m_Points[ countCurvePoints - 1 ].x );
+            m.MultiplySet( Simd::Matrix44( Simd::Matrix44::INIT_TRANSLATION, point ), globalTransform );
+            m_Locator->Draw( drawInterface, args, materialColor, m );
 
-            Vector3 p1 = curve->m_Points[ countCurvePoints - 2 ];
-            Vector3 p2 = curve->m_Points[ countCurvePoints - 1 ];
-            Vector3 dir = (p2 - p1).Normalized();
-            m = Matrix4 ( AngleAxis::Rotation( OutVector, dir ) );
-            m.t = p2 - (dir * (curve->m_Cone->m_Length / 2.0f));
+            Simd::Vector3 p1( &m_Points[ countCurvePoints - 2 ].x );
+            Simd::Vector3 p2( &m_Points[ countCurvePoints - 1 ].x );
+            Simd::Vector3 dir = ( p2 - p1 ).GetNormalized();
+            AngleAxis angleAxis = AngleAxis::Rotation(
+                OutVector,
+                Vector3( dir.GetElement( 0 ), dir.GetElement( 1 ), dir.GetElement( 2 ) ) );
+            m.SetRotationTranslation(
+                Simd::Quat( Simd::Vector3( &angleAxis.axis.x ), angleAxis.angle ),
+                p2 - ( dir * ( m_Cone->m_Length * 0.5f ) ) );
             m *= globalTransform;
 
-            device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m );
-            curve->m_Cone->Draw( args );
+            m_Cone->Draw( drawInterface, args, materialColor, m );
         }
     }
-
-    if ( !vertices->SetState() )
-    {
-        return;
-    }
-
-    device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&globalTransform );
 
     if ( countCurvePoints > 0 ) 
     {
         //
         //  Draw Curve
         //
-        uint32_t countCurveLines = curve->m_Closed ? countCurvePoints : countCurvePoints - 1;
+        uint32_t countCurveLines = m_Closed ? countCurvePoints : countCurvePoints - 1;
 
         if ( countCurveLines > 0 )
         {
-            device->DrawPrimitive( D3DPT_LINESTRIP, (uint32_t)vertices->GetBaseIndex() + countControlPoints + 1, countCurveLines );
+            drawInterface->DrawUntextured(
+                Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                globalTransform,
+                vertices->GetBuffer(),
+                NULL,
+                vertices->GetBaseIndex() + countControlPoints + 1,
+                countCurveLines + 1,
+                0,
+                countCurveLines,
+                materialColor,
+                Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
             args->m_LineCount += countCurveLines;
         }
 
         //
         //  Draw Curve points 
         //
-        static float curvePointSize = 5.0f;
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-        device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &curvePointSize ) );
-        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + countControlPoints + 1, countCurvePoints );
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
+        drawInterface->DrawPoints(
+            globalTransform,
+            vertices->GetBuffer(),
+            vertices->GetBaseIndex() + countControlPoints + 1,
+            countCurvePoints,
+            materialColor );
     }
 
 
@@ -866,14 +893,23 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         // Draw points hull
         //
 
-        if ( curve->m_Type != CurveType::Linear )
+        if ( m_Type != CurveType::Linear )
         {
-            uint32_t countControlLines = curve->m_Closed ? countControlPoints : countControlPoints - 1;
-            device->SetMaterial( &curve->s_HullMaterial );
+            uint32_t countControlLines = m_Closed ? countControlPoints : countControlPoints - 1;
 
             if ( countControlLines > 0 )
             {
-                device->DrawPrimitive( D3DPT_LINESTRIP, (uint32_t)vertices->GetBaseIndex(), countControlLines  );
+                drawInterface->DrawUntextured(
+                    Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+                    globalTransform,
+                    vertices->GetBuffer(),
+                    NULL,
+                    vertices->GetBaseIndex(),
+                    countControlLines + 1,
+                    0,
+                    countControlLines,
+                    s_HullMaterial,
+                    Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
                 args->m_LineCount += countControlLines;
             }
         }
@@ -883,25 +919,22 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         // Draw all points
         //
 
-        static float controlPointSize = 5.0f;
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-        device->SetMaterial( &Viewport::s_ComponentMaterial );
-        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex(), countControlPoints );
+        drawInterface->DrawPoints(
+            globalTransform,
+            vertices->GetBuffer(),
+            vertices->GetBaseIndex(),
+            countControlPoints,
+            Viewport::s_ComponentMaterial );
 
 
         //
         //  Overdraw selected points
         //
         {
-            Camera* camera = curve->GetOwner()->GetViewport()->GetCamera();
-            const Matrix4& viewMatrix = camera->GetViewport();
-            const Matrix4& projMatrix = camera->GetProjection();
-            ID3DXFont* font = curve->GetOwner()->GetViewport()->GetStatistics()->GetFont();
-            DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
+            Helium::Color textColor( 0xffffffff );
 
-            device->SetMaterial( &Viewport::s_SelectedComponentMaterial );
-            OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
-            OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
+            OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
                 CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
@@ -909,16 +942,22 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                 {
                     if ( point->IsSelected() )
                     {
-                        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + i, 1 );
+                        drawInterface->DrawPoints(
+                            globalTransform,
+                            vertices->GetBuffer(),
+                            vertices->GetBaseIndex() + i,
+                            1,
+                            Viewport::s_SelectedComponentMaterial,
+                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
 
-                    if ( curve->GetControlPointLabel() != ControlPointLabel::None )
+                    if ( GetControlPointLabel() != ControlPointLabel::None )
                     {
                         tstringstream label;
-                        switch ( curve->GetControlPointLabel() )
+                        switch ( GetControlPointLabel() )
                         {
                         case ControlPointLabel::CurveAndIndex:
-                            label << curve->GetName() << TXT( "[" ) << i << TXT( "]" );
+                            label << GetName() << TXT( "[" ) << i << TXT( "]" );
                             break;
 
                         case ControlPointLabel::IndexOnly:
@@ -926,26 +965,21 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                             break;
                         }
 
-                        Vector3 position ( point->GetPosition() );
+                        Simd::Vector3 position( &point->GetPosition().x );
 
                         // local to global
-                        curve->GetGlobalTransform().TransformVertex( position );
+                        globalTransform.TransformPoint( position, position );
 
-                        // map to screen space
-                        float screenX = 0.0f;
-                        float screenY = 0.0f;
-                        camera->WorldToScreen( position, screenX, screenY );
+                        const int32_t offsetX = 0;
+                        const int32_t offsetY = 15;
 
-                        const float offsetX = 0;
-                        const float offsetY = 15;
-
-                        RECT rect;
-                        rect.top = (LONG)( screenY - offsetY );
-                        rect.left = (LONG)( screenX - offsetX );
-                        rect.right = (LONG)screenX;
-                        rect.bottom = (LONG)( screenY - 2 );
-
-                        font->DrawText( NULL, label.str().c_str(), (INT)label.str().length(), &rect, DT_NOCLIP, color );
+                        drawInterface->DrawProjectedText(
+                            position,
+                            offsetX,
+                            offsetY,
+                            String( label.str().c_str() ),
+                            textColor,
+                            Helium::RenderResourceManager::DEBUG_FONT_SIZE_SMALL );
                     }
                     ++i;
                 }
@@ -956,9 +990,8 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
         //  Overdraw highlighted points
         // 
         {
-            device->SetMaterial (&Viewport::s_HighlightedMaterial);
-            OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
-            OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
+            OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
             for ( uint32_t i = 0; childItr != childEnd; ++childItr )
             {
                 CurveControlPoint* point = Reflect::SafeCast< CurveControlPoint >( *childItr );
@@ -966,19 +999,21 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
                 {
                     if ( point->IsHighlighted() )
                     {
-                        device->DrawPrimitive( D3DPT_POINTLIST, (uint32_t)vertices->GetBaseIndex() + i, 1 );
+                        drawInterface->DrawPoints(
+                            globalTransform,
+                            vertices->GetBuffer(),
+                            vertices->GetBaseIndex() + i,
+                            1,
+                            Viewport::s_HighlightedMaterial,
+                            Helium::RenderResourceManager::DEPTH_STENCIL_STATE_NONE );
                     }
                     ++i;
                 }
             }
         }
-
-        //
-        // Restore render state
-        //
-
-        device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
     }
+
+    Base::Render( render );
 }
 
 bool Curve::Pick( PickVisitor* pick )

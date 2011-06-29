@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "TimerThread.h"
 
 #include "Platform/PlatformUtility.h"

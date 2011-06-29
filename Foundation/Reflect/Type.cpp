@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Type.h"
 #include "Registry.h"
 #include "Foundation/Reflect/Data/Data.h"

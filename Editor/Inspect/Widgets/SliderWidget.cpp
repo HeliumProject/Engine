@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "SliderWidget.h"
 
 using namespace Helium;

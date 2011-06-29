@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "VaultSearch.h"
 
 #include "VaultSearchResults.h"

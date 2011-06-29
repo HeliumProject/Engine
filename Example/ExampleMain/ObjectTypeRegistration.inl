@@ -7,7 +7,7 @@
 
 namespace Example
 {
-    /// @copydoc Lunar::GameObjectTypeRegistration::Register()
+    /// @copydoc Helium::GameObjectTypeRegistration::Register()
     template< typename ObjectTypeRegistrationBase >
     void ObjectTypeRegistration< ObjectTypeRegistrationBase >::Register()
     {
@@ -16,7 +16,7 @@ namespace Example
         RegisterExampleGameTypes();
     }
 
-    /// @copydoc Lunar::GameObjectTypeRegistration::Unregister()
+    /// @copydoc Helium::GameObjectTypeRegistration::Unregister()
     template< typename ObjectTypeRegistrationBase >
     void ObjectTypeRegistration< ObjectTypeRegistrationBase >::Unregister()
     {

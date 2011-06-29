@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Constructor.
     ///
@@ -139,7 +139,7 @@ namespace Helium
     /// @param[in] rKey  Key for which to compute a hash value.
     ///
     /// @return  Hash value.
-    size_t Hash< Lunar::GameObjectPath >::operator()( const Lunar::GameObjectPath& rKey ) const
+    size_t Hash< Helium::GameObjectPath >::operator()( const Helium::GameObjectPath& rKey ) const
     {
         return rKey.ComputeHash();
     }

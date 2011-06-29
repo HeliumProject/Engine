@@ -6,21 +6,21 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_VERTEX_DESCRIPTION_H
-#define LUNAR_RENDERING_R_VERTEX_DESCRIPTION_H
+#ifndef HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H
+#define HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H
 
 #include "Rendering/RRenderResource.h"
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Vertex layout description interface.
-    class LUNAR_RENDERING_API RVertexDescription : public RRenderResource
+    class HELIUM_RENDERING_API RVertexDescription : public RRenderResource
     {
     public:
         /// Vertex element description.
-        struct LUNAR_RENDERING_API Element
+        struct HELIUM_RENDERING_API Element
         {
             /// Data type.
             ERendererVertexDataType type;
@@ -47,4 +47,4 @@ namespace Lunar
 
 #include "Rendering/RVertexDescription.inl"
 
-#endif  // LUNAR_RENDERING_R_VERTEX_DESCRIPTION_H
+#endif  // HELIUM_RENDERING_R_VERTEX_DESCRIPTION_H

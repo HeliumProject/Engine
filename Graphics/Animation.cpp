@@ -13,7 +13,7 @@
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 

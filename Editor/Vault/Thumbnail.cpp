@@ -1,17 +1,20 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Thumbnail.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 using namespace Helium;
-using namespace Helium::Render;
 using namespace Helium::Editor;
 
 Thumbnail::Thumbnail( DeviceManager* d3dManager )
 : m_DeviceManager( d3dManager )
+#ifdef VIEWPORT_REFACTOR
 , m_Texture( NULL )
+#endif
 , m_IsFromIcon( false )
 {
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 Thumbnail::Thumbnail( DeviceManager* d3dManager, IDirect3DTexture9* texture )
 : m_DeviceManager( d3dManager )
@@ -20,13 +23,19 @@ Thumbnail::Thumbnail( DeviceManager* d3dManager, IDirect3DTexture9* texture )
 {
 }
 
+#endif
+
 Thumbnail::~Thumbnail()
 {
+#ifdef VIEWPORT_REFACTOR
   if ( m_Texture )
   {
     m_Texture->Release();
   }
+#endif
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 bool Thumbnail::FromIcon( HICON icon )
 {
@@ -77,7 +86,4 @@ bool Thumbnail::FromIcon( HICON icon )
   return m_IsFromIcon;
 }
 
-bool Thumbnail::IsFromIcon() const
-{
-  return m_IsFromIcon;
-}
+#endif

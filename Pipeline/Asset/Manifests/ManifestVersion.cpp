@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "ManifestVersion.h"
 
 using namespace Helium;
@@ -5,7 +6,7 @@ using namespace Helium::Asset;
 
 REFLECT_DEFINE_OBJECT(ManifestVersion)
 
-void ManifestVersion::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ManifestVersion::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &ManifestVersion::m_ManifestVersion, TXT( "m_ManifestVersion" ), Reflect::FieldFlags::Force );
 }

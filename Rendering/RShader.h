@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_SHADER_H
-#define LUNAR_RENDERING_R_SHADER_H
+#ifndef HELIUM_RENDERING_R_SHADER_H
+#define HELIUM_RENDERING_R_SHADER_H
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface to a low-level shader resource.
-    class LUNAR_RENDERING_API RShader : public RRenderResource
+    class HELIUM_RENDERING_API RShader : public RRenderResource
     {
     public:
         /// Shader type identifiers.
@@ -51,4 +51,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_SHADER_H
+#endif  // HELIUM_RENDERING_R_SHADER_H

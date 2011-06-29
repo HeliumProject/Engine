@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WORLD_H
-#define LUNAR_FRAMEWORK_WORLD_H
+#ifndef HELIUM_FRAMEWORK_WORLD_H
+#define HELIUM_FRAMEWORK_WORLD_H
 
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
@@ -16,7 +16,7 @@
 #include "Platform/Math/Simd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
-namespace Lunar
+namespace Helium
 {
     class Entity;
 
@@ -28,7 +28,7 @@ namespace Lunar
     /// A world contains a discrete group of entities that can be simulated within an application environment.  Multiple
     /// world instances can exist at the same time, allowing the use of specific worlds for special-case scenarios, such
     /// as rendering scenes outside the game world to a texture or editor preview windows.
-    class LUNAR_FRAMEWORK_API World : public GameObject
+    class HELIUM_FRAMEWORK_API World : public GameObject
     {
         L_DECLARE_OBJECT( World, GameObject );
 
@@ -76,7 +76,6 @@ namespace Lunar
         /// @name Scene Access
         //@{
         GraphicsScene* GetGraphicsScene() const;
-        inline uint32_t GetMainSceneViewId() const;
         //@}
 
     private:
@@ -85,11 +84,9 @@ namespace Lunar
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
-        /// Main scene view ID.
-        uint32_t m_mainSceneViewId;
     };
 }
 
 #include "Framework/World.inl"
 
-#endif  // LUNAR_FRAMEWORK_WORLD_H
+#endif  // HELIUM_FRAMEWORK_WORLD_H

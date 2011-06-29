@@ -6,22 +6,25 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class PrimitiveFrame : public PrimitiveTemplate<TransformedColored>
+        class PrimitiveFrame : public PrimitiveTemplate< Helium::ScreenVertex >
         {
         public:
-            typedef PrimitiveTemplate<TransformedColored> Base;
+            typedef PrimitiveTemplate< Helium::ScreenVertex > Base;
 
             Point m_Start;
             Point m_End;
 
-            uint32_t m_InnerColor;
-            uint32_t m_BorderColor;
+            Helium::Color m_InnerColor;
+            Helium::Color m_BorderColor;
 
         public:
-            PrimitiveFrame(ResourceTracker* tracker);
+            PrimitiveFrame();
 
             virtual void Update() HELIUM_OVERRIDE;
-            virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
+            virtual void Draw(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
         };
     }

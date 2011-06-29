@@ -6,12 +6,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
-#define LUNAR_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
+#define HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
 
 #include "RenderingD3D9/D3D9Texture2d.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Static Direct3D 9 2D texture.
     ///
@@ -57,4 +57,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_STATIC_TEXTURE_2D_H

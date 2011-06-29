@@ -5,16 +5,18 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#ifndef LUNAR_RENDERING_D3D9_D3D9_FENCE_H
-#define LUNAR_RENDERING_D3D9_D3D9_FENCE_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_FENCE_H
+#define HELIUM_RENDERING_D3D9_D3D9_FENCE_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RFence.h"
 
-namespace Lunar
+#include "RenderingD3D9/D3D9DeviceResetListener.h"
+
+namespace Helium
 {
     /// Direct3D 9 GPU command fence implementation.
-    class D3D9Fence : public RFence
+    class D3D9Fence : public RFence, public D3D9DeviceResetListener
     {
     public:
         /// @name Construction/Destruction
@@ -25,6 +27,12 @@ namespace Lunar
         /// @name Data Access
         //@{
         inline IDirect3DQuery9* GetQuery() const;
+        //@}
+
+        /// @name Device Reset Event Handlers
+        //@{
+        void OnPreReset();
+        void OnPostReset( D3D9Renderer* pRenderer );
         //@}
 
     protected:
@@ -40,4 +48,4 @@ namespace Lunar
 
 #include "RenderingD3D9/D3D9Fence.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_FENCE_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_FENCE_H

@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Pipeline/SceneGraph/Mesh.h"
 
 #include "Pipeline/SceneGraph/Pick.h"
@@ -11,14 +11,11 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-D3DMATERIAL9 Mesh::s_WireMaterial;
-D3DMATERIAL9 Mesh::s_FillMaterial;
-
 REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Mesh::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Mesh::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Mesh::m_Positions,                  TXT( "m_Positions" ) );
     comp.AddField( &Mesh::m_Normals,                    TXT( "m_Normals" ) );
@@ -37,16 +34,6 @@ void Mesh::AcceptCompositeVisitor( Reflect::Composite& comp )
 void Mesh::InitializeType()
 {
     Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
-
-    ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
-    s_WireMaterial.Ambient = Color::BLACK;
-    s_WireMaterial.Diffuse = Color::BLACK;
-    s_WireMaterial.Specular = Color::BLACK;
-
-    ZeroMemory(&s_FillMaterial, sizeof(s_FillMaterial));
-    s_FillMaterial.Ambient = Color::DARKGRAY;
-    s_FillMaterial.Diffuse = Color::DARKGRAY;
-    s_FillMaterial.Specular = Color::DARKGRAY;
 }
 
 void Mesh::CleanupType()
@@ -139,14 +126,14 @@ void Mesh::Initialize()
         count += m_ShaderTriangleCounts[i];
     }
 
-    m_Indices = new IndexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Indices->SetElementType( ElementTypes::Unsigned32 );
+    m_Indices = new IndexResource;
+    m_Indices->SetElementType( IndexElementTypes::Unsigned32 );
     m_Indices->SetElementCount( (uint32_t)(m_WireframeVertexIndices.size() + m_TriangleVertexIndices.size()) );
     m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
     m_Indices->Create();
 
-    m_Vertices = new VertexResource ( m_Owner->GetViewport()->GetResources() );
-    m_Vertices->SetElementType( ElementTypes::StandardVertex );
+    m_Vertices = new VertexResource;
+    m_Vertices->SetElementType( VertexElementTypes::SimpleVertex );
     m_Vertices->SetElementCount( (uint32_t)m_Positions.size() );
     m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
     m_Vertices->Create();
@@ -176,6 +163,7 @@ void Mesh::Delete()
 
 void Mesh::Populate(PopulateArgs* args)
 {
+#ifdef VIEWPORT_REFACTOR
     switch ( args->m_Type )
     {
     case ResourceTypes::Index:
@@ -237,6 +225,7 @@ void Mesh::Populate(PopulateArgs* args)
             break;
         }
     }
+#endif
 }
 
 void Mesh::Evaluate(GraphDirection direction)
@@ -267,6 +256,7 @@ void Mesh::Evaluate(GraphDirection direction)
 
 void Mesh::Render( RenderVisitor* render )
 {
+#ifdef VIEWPORT_REFACTOR
     RenderEntry* entry = render->Allocate(this);
 
     if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
@@ -387,9 +377,12 @@ void Mesh::Render( RenderVisitor* render )
             break;
         }
     }
+#endif
 
     Base::Render( render );
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 void Mesh::SetupNormalObject( IDirect3DDevice9* device, const SceneNode* object )
 {
@@ -575,6 +568,8 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
         HELIUM_BREAK();
     }
 }
+
+#endif
 
 bool Mesh::Pick( PickVisitor* pick )
 {

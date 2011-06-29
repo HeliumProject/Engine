@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_DYNAMIC_DRAWER_H
-#define LUNAR_GRAPHICS_DYNAMIC_DRAWER_H
+#ifndef HELIUM_GRAPHICS_DYNAMIC_DRAWER_H
+#define HELIUM_GRAPHICS_DYNAMIC_DRAWER_H
 
 #include "Graphics/Graphics.h"
 
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class Renderer;
     class RRenderCommandProxy;
@@ -30,7 +30,7 @@ namespace Lunar
     L_DECLARE_RPTR( RVertexShader );
 
     /// Dynamic drawing interface.
-    class LUNAR_GRAPHICS_API DynamicDrawer : NonCopyable
+    class HELIUM_GRAPHICS_API DynamicDrawer : NonCopyable
     {
     public:
         /// Number of vertices per dynamic buffer division.
@@ -202,4 +202,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_GRAPHICS_DYNAMIC_DRAWER_H
+#endif  // HELIUM_GRAPHICS_DYNAMIC_DRAWER_H

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ColorPicker.h"
 #include "Editor/CustomColors.h"
 #include "Editor/SimpleConfig.h"

@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/Graph/Panel.h"
 
 #include <wx/tokenzr.h>

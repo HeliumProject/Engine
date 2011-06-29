@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/SceneOutliner.h"
 #include "Pipeline/SceneGraph/Scene.h"
 #include "Pipeline/SceneGraph/SceneManager.h"

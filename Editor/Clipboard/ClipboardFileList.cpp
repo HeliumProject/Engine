@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ClipboardFileList.h"
 #include "Foundation/Container/Insert.h"
 
@@ -7,7 +7,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_OBJECT( ClipboardFileList );
 
-void ClipboardFileList::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ClipboardFileList::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &ClipboardFileList::m_Files, TXT( "m_Files" ) );
     comp.AddField( &ClipboardFileList::m_IsDirty, TXT( "m_IsDirty" ), Reflect::FieldFlags::Discard );

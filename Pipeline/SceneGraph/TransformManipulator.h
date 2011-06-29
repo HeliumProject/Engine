@@ -52,8 +52,8 @@ namespace Helium
             bool m_Manipulated;
 
             // Materials
-            D3DMATERIAL9 m_AxisMaterial;
-            D3DMATERIAL9 m_SelectedAxisMaterial;
+            Helium::Color m_AxisMaterial;
+            Helium::Color m_SelectedAxisMaterial;
 
             // Start
             M_ManipulationStart m_ManipulationStart;
@@ -82,9 +82,6 @@ namespace Helium
         protected:
             // update state with current selection
             virtual void SelectionChanged(const SelectionChangeArgs& args);
-
-            // setup the material in the render device for teh applicable axes
-            virtual bool SetAxisMaterial(AxesFlags axes);
 
             // get the normal to the provided axes, or camera direction if all
             virtual Vector3 GetAxesNormal(AxesFlags axes);

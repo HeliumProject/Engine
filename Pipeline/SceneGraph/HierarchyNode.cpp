@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "HierarchyNode.h"
 
 #include "Foundation/Reflect/Object.h"
@@ -20,16 +20,17 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNode );
 
-void HierarchyNode::AcceptCompositeVisitor( Reflect::Composite& comp )
+void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &HierarchyNode::m_ParentID, TXT( "m_ParentID" ) );
 
-    {
-        Reflect::Field* field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
-        field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
-    }
+    Reflect::Field* field = NULL;
 
-    comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
+    field = comp.AddField( &HierarchyNode::m_Hidden, TXT( "m_Hidden" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hidden or not." ) );
+
+    field = comp.AddField( &HierarchyNode::m_Live, TXT( "m_Live" ) );
+    field->SetProperty( TXT( "HelpText" ), TXT( "This determines if the node is hit tested when working with live objects only." ) );
 }
 
 void HierarchyNode::InitializeType()
@@ -716,13 +717,11 @@ bool HierarchyNode::BoundsCheck(const Matrix4& instanceMatrix) const
     return true;
 }
 
-void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
+Helium::Color HierarchyNode::GetMaterialColor( Helium::Color defaultMaterial ) const
 {
     SceneGraph::Viewport* view = m_Owner->GetViewport();
 
-    IDirect3DDevice9* device = view->GetResources()->GetDevice();
-
-    D3DMATERIAL9 material = defaultMaterial;
+    Helium::Color material = defaultMaterial;
 
     switch ( view->GetSettingsManager()->GetSettings< ViewportSettings >()->GetColorMode() )
     {
@@ -730,14 +729,18 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
         if ( m_LayerColor )
         {
             const Color3& color = m_LayerColor->GetColor();
-            material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
+            material.SetR( color.r );
+            material.SetG( color.g );
+            material.SetB( color.b );
         }
         break;
 
     case ViewColorMode::Scene:
         {
             const Color3& color = m_Owner->GetColor();
-            material.Ambient = SceneGraph::Color::ColorToColorValue( (DWORD)defaultMaterial.Ambient.a, color.r, color.g, color.b );
+            material.SetR( color.r );
+            material.SetG( color.g );
+            material.SetB( color.b );
         }
         break;
     }
@@ -763,10 +766,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
                 material = SceneGraph::Viewport::s_LiveMaterial;
             }
 
-            material.Ambient.a = defaultMaterial.Ambient.a;
-            material.Diffuse.a = defaultMaterial.Diffuse.a;
-            material.Specular.a = defaultMaterial.Specular.a;
-            material.Emissive.a = defaultMaterial.Emissive.a;
+            material.SetA( defaultMaterial.GetA() );;
         }
         else
         {
@@ -775,13 +775,10 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     else
     {
-        material.Ambient.a = defaultMaterial.Ambient.a;
-        material.Diffuse.a = defaultMaterial.Diffuse.a;
-        material.Specular.a = defaultMaterial.Specular.a;
-        material.Emissive.a = defaultMaterial.Emissive.a;
+        material.SetA( defaultMaterial.GetA() );
     }
 
-    device->SetMaterial( &material );
+    return material;
 }
 
 TraversalAction HierarchyNode::TraverseHierarchy( HierarchyTraverser* traverser )
@@ -818,6 +815,7 @@ void HierarchyNode::Render( RenderVisitor* render )
 {
     SceneGraph::Transform* transform = GetTransform();
 
+#ifdef VIEWPORT_REFACTOR
     if ( transform && IsSelected() && m_Owner->IsFocused() && render->GetViewport()->IsBoundsVisible() )
     {
         V_Vector3 vertices;
@@ -841,7 +839,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             m_ObjectBounds.GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 0, 0 );
+            material.Ambient.r = 255;
+            material.Ambient.g = 0;
+            material.Ambient.b = 0;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -859,7 +860,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             GetGlobalBounds().GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 255, 128, 128 );
+            material.Ambient.r = 255;
+            material.Ambient.g = 128;
+            material.Ambient.b = 128;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -877,7 +881,10 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             m_ObjectHierarchyBounds.GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 0, 0, 255 );
+            material.Ambient.r = 0;
+            material.Ambient.g = 0;
+            material.Ambient.b = 255;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
@@ -895,13 +902,17 @@ void HierarchyNode::Render( RenderVisitor* render )
             vertices.clear();
             GetGlobalHierarchyBounds().GetVertices(vertices);
             AlignedBox::GetWireframe( vertices, lineList );
-            material.Ambient = SceneGraph::Color::ColorToColorValue( 1, 128, 128, 255 );
+            material.Ambient.r = 128;
+            material.Ambient.g = 128;
+            material.Ambient.b = 255;
+            material.Ambient.a = 1;
             m_Owner->GetViewport()->GetDevice()->SetMaterial(&material);
             m_Owner->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Vector3));
         }
 
         m_Owner->GetViewport()->GetResources()->ResetState();
     }
+#endif
 }
 
 bool HierarchyNode::Pick(PickVisitor* pick)

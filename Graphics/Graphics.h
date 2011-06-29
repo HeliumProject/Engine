@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_GRAPHICS_H
-#define LUNAR_GRAPHICS_GRAPHICS_H
+#ifndef HELIUM_GRAPHICS_GRAPHICS_H
+#define HELIUM_GRAPHICS_GRAPHICS_H
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-    #ifdef LUNAR_GRAPHICS_EXPORTS
-        #define LUNAR_GRAPHICS_API HELIUM_API_EXPORT
+    #ifdef HELIUM_GRAPHICS_EXPORTS
+        #define HELIUM_GRAPHICS_API HELIUM_API_EXPORT
     #else
-        #define LUNAR_GRAPHICS_API HELIUM_API_IMPORT
+        #define HELIUM_GRAPHICS_API HELIUM_API_IMPORT
     #endif
 #else
-    #define LUNAR_GRAPHICS_API
+    #define HELIUM_GRAPHICS_API
 #endif
 
-#endif  // LUNAR_GRAPHICS_GRAPHICS_H
+#endif  // HELIUM_GRAPHICS_GRAPHICS_H

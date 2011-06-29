@@ -19,7 +19,7 @@
 #include "RenderingD3D9/D3D9ImmediateCommandProxy.h"
 #include "RenderingD3D9/D3D9RenderCommandList.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RRasterizerState );
     L_DECLARE_RPTR( RBlendState );
@@ -38,7 +38,7 @@ namespace Lunar
     L_DECLARE_RPTR( RFence );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 class D3D9SetRasterizerStateCommand : public D3D9RenderCommand
 {
@@ -553,6 +553,31 @@ private:
     uint32_t m_primitiveCount;
 };
 
+class D3D9DrawUnindexedCommand : public D3D9RenderCommand
+{
+public:
+    D3D9DrawUnindexedCommand( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount )
+        : m_primitiveType( primitiveType )
+        , m_baseVertexIndex( baseVertexIndex )
+        , m_primitiveCount( primitiveCount )
+    {
+    }
+
+    ~D3D9DrawUnindexedCommand()
+    {
+    }
+
+    void Execute( D3D9ImmediateCommandProxy* pCommandProxy )
+    {
+        pCommandProxy->DrawUnindexed( m_primitiveType, m_baseVertexIndex, m_primitiveType );
+    }
+
+private:
+    ERendererPrimitiveType m_primitiveType;
+    uint32_t m_baseVertexIndex;
+    uint32_t m_primitiveCount;
+};
+
 class D3D9SetFenceCommand : public D3D9RenderCommand
 {
 public:
@@ -614,15 +639,15 @@ private:
 
 #define L_DEFERRED_COMMAND_PROXY_METHOD( COMMAND, PARAM_LIST, ARGUMENT_LIST ) \
     void D3D9DeferredCommandProxy::COMMAND PARAM_LIST \
-{ \
-    if( !m_spCommandList ) \
-{ \
-    m_spCommandList = new D3D9RenderCommandList; \
-    HELIUM_ASSERT( m_spCommandList ); \
-} \
-    \
-    HELIUM_VERIFY( m_spCommandList->NewCommand< D3D9##COMMAND##Command > ARGUMENT_LIST ); \
-}
+    { \
+        if( !m_spCommandList ) \
+        { \
+            m_spCommandList = new D3D9RenderCommandList; \
+            HELIUM_ASSERT( m_spCommandList ); \
+        } \
+        \
+        HELIUM_VERIFY( m_spCommandList->NewCommand< D3D9##COMMAND##Command > ARGUMENT_LIST ); \
+    }
 
 /// Constructor.
 D3D9DeferredCommandProxy::D3D9DeferredCommandProxy()
@@ -635,113 +660,118 @@ D3D9DeferredCommandProxy::~D3D9DeferredCommandProxy()
 }
 
 L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetRasterizerState,
-                                ( RRasterizerState* pState ),
-                                ( pState ) )
+    SetRasterizerState,
+    ( RRasterizerState* pState ),
+    ( pState ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetBlendState,
-                                ( RBlendState* pState ),
-                                ( pState ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetBlendState,
+    ( RBlendState* pState ),
+    ( pState ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetDepthStencilState,
-                                ( RDepthStencilState* pState, uint8_t stencilReferenceValue ),
-                                ( pState, stencilReferenceValue ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetDepthStencilState,
+    ( RDepthStencilState* pState, uint8_t stencilReferenceValue ),
+    ( pState, stencilReferenceValue ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetSamplerStates,
-                                ( size_t startIndex, size_t samplerCount, RSamplerState* const* ppStates ),
-                                ( startIndex, samplerCount, ppStates ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetSamplerStates,
+    ( size_t startIndex, size_t samplerCount, RSamplerState* const* ppStates ),
+    ( startIndex, samplerCount, ppStates ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetRenderSurfaces,
-                                ( RSurface* pRenderTargetSurface, RSurface* pDepthStencilSurface ),
-                                ( pRenderTargetSurface, pDepthStencilSurface ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetRenderSurfaces,
+    ( RSurface* pRenderTargetSurface, RSurface* pDepthStencilSurface ),
+    ( pRenderTargetSurface, pDepthStencilSurface ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetViewport,
-                                ( uint32_t x, uint32_t y, uint32_t width, uint32_t height ),
-                                ( x, y, width, height ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetViewport,
+    ( uint32_t x, uint32_t y, uint32_t width, uint32_t height ),
+    ( x, y, width, height ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                BeginScene,
-                                (),
-                                () )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    BeginScene,
+    (),
+    () )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                EndScene,
-                                (),
-                                () )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    EndScene,
+    (),
+    () )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                Clear,
-                                ( uint32_t clearFlags, const Color& rColor, float32_t depth, uint8_t stencil ),
-                                ( clearFlags, rColor, depth, stencil ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    Clear,
+    ( uint32_t clearFlags, const Color& rColor, float32_t depth, uint8_t stencil ),
+    ( clearFlags, rColor, depth, stencil ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetIndexBuffer,
-                                ( RIndexBuffer* pBuffer ),
-                                ( pBuffer ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetIndexBuffer,
+    ( RIndexBuffer* pBuffer ),
+    ( pBuffer ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetVertexBuffers,
-                                ( size_t startIndex, size_t bufferCount, RVertexBuffer* const* ppBuffers, uint32_t* pStrides, uint32_t* pOffsets ),
-                                ( startIndex, bufferCount, ppBuffers, pStrides, pOffsets ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetVertexBuffers,
+    ( size_t startIndex, size_t bufferCount, RVertexBuffer* const* ppBuffers, uint32_t* pStrides, uint32_t* pOffsets ),
+    ( startIndex, bufferCount, ppBuffers, pStrides, pOffsets ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetVertexInputLayout,
-                                ( RVertexInputLayout* pLayout ),
-                                ( pLayout ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetVertexInputLayout,
+    ( RVertexInputLayout* pLayout ),
+    ( pLayout ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetVertexShader,
-                                ( RVertexShader* pShader ),
-                                ( pShader ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetVertexShader,
+    ( RVertexShader* pShader ),
+    ( pShader ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetPixelShader,
-                                ( RPixelShader* pShader ),
-                                ( pShader ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetPixelShader,
+    ( RPixelShader* pShader ),
+    ( pShader ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetVertexConstantBuffers,
-                                ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
-                                ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetVertexConstantBuffers,
+    ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
+    ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetPixelConstantBuffers,
-                                ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
-                                ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetPixelConstantBuffers,
+    ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
+    ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetTexture,
-                                ( size_t samplerIndex, RTexture* pTexture ),
-                                ( samplerIndex, pTexture ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetTexture,
+    ( size_t samplerIndex, RTexture* pTexture ),
+    ( samplerIndex, pTexture ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                DrawIndexed,
-                                ( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
-                                uint32_t startIndex, uint32_t primitiveCount ),
-                                ( primitiveType, baseVertexIndex, minIndex, usedVertexCount, startIndex, primitiveCount ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    DrawIndexed,
+    ( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
+      uint32_t startIndex, uint32_t primitiveCount ),
+    ( primitiveType, baseVertexIndex, minIndex, usedVertexCount, startIndex, primitiveCount ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                SetFence,
-                                ( RFence* pFence ),
-                                ( pFence ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    DrawUnindexed,
+    ( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount ),
+    ( primitiveType, baseVertexIndex, primitiveCount ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                UnbindResources,
-                                (),
-                                () )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    SetFence,
+    ( RFence* pFence ),
+    ( pFence ) )
 
-                                L_DEFERRED_COMMAND_PROXY_METHOD(
-                                ExecuteCommandList,
-                                ( RRenderCommandList* pCommandList ),
-                                ( pCommandList ) )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    UnbindResources,
+    (),
+    () )
 
-                                /// @copydoc D3D9DeferredCommandProxy::FinishCommandList()
-                                void D3D9DeferredCommandProxy::FinishCommandList( RRenderCommandListPtr& rspCommandList )
+L_DEFERRED_COMMAND_PROXY_METHOD(
+    ExecuteCommandList,
+    ( RRenderCommandList* pCommandList ),
+    ( pCommandList ) )
+
+/// @copydoc D3D9DeferredCommandProxy::FinishCommandList()
+void D3D9DeferredCommandProxy::FinishCommandList( RRenderCommandListPtr& rspCommandList )
 {
     rspCommandList = m_spCommandList;
     if( !rspCommandList )

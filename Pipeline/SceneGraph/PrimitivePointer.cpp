@@ -1,6 +1,7 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitivePointer.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 #include "Orientation.h"
@@ -8,11 +9,10 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitivePointer::PrimitivePointer(ResourceTracker* tracker)
-: PrimitiveTemplate(tracker)
+PrimitivePointer::PrimitivePointer()
 {
     SetElementCount( 12 );
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Bounds.minimum = SetupVector(-1, 0, -2);
     m_Bounds.maximum = SetupVector( 1, 1,  0);
@@ -22,28 +22,54 @@ void PrimitivePointer::Update()
 {
     m_Vertices.clear();
 
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 1, -2)));
-    m_Vertices.push_back(Position(SetupVector( 0, 0,  0)));
-    m_Vertices.push_back(Position(SetupVector(-1, 0, -2)));
-    m_Vertices.push_back(Position(SetupVector( 1, 0, -2)));
+    Vector3 position;
+
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 1.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 1.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 0.0f, 0.0f, 0.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( -1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
+    position = SetupVector( 1.0f, 0.0f, -2.0f );
+    m_Vertices.push_back( Helium::SimpleVertex( position.x, position.y, position.z ) );
 
     Base::Update();
 }
 
-void PrimitivePointer::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitivePointer::Draw(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
+    HELIUM_ASSERT( drawInterface );
 
-    m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 6);
+    drawInterface->DrawUntextured(
+        Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+        transform,
+        m_Buffer,
+        NULL,
+        GetBaseIndex(),
+        12,
+        0,
+        6,
+        materialColor,
+        Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
     args->m_LineCount += 6;
 }
 
@@ -51,7 +77,11 @@ bool PrimitivePointer::Pick( PickVisitor* pick, const bool* solid ) const
 {
     for (size_t i=0; i<m_Vertices.size(); i+=2)
     {
-        if (pick->PickSegment(m_Vertices[i].m_Position, m_Vertices[i+1].m_Position))
+        const Helium::SimpleVertex& vertex0 = m_Vertices[ i ];
+        const Helium::SimpleVertex& vertex1 = m_Vertices[ i + 1 ];
+        Vector3 position0( vertex0.position[ 0 ], vertex0.position[ 1 ], vertex0.position[ 2 ] );
+        Vector3 position1( vertex1.position[ 0 ], vertex1.position[ 1 ], vertex1.position[ 2 ] );
+        if ( pick->PickSegment( position0, position1 ) )
         {
             return true;
         }

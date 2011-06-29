@@ -1,10 +1,8 @@
+#include "PlatformPch.h"
 #include "Platform/Platform.h"
-
-#if HELIUM_OS_WIN
-
 #include "Platform/Assert.h"
 
-#include "Platform/Windows/Windows.h"
+#if HELIUM_OS_WIN
 
 #ifdef _MANAGED
 # using <System.dll>

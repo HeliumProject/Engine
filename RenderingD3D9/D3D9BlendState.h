@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_BLEND_STATE_H
-#define LUNAR_RENDERING_D3D9_D3D9_BLEND_STATE_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_BLEND_STATE_H
+#define HELIUM_RENDERING_D3D9_D3D9_BLEND_STATE_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RBlendState.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 blend state object.
     class D3D9BlendState : public RBlendState
@@ -47,4 +47,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_BLEND_STATE_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_BLEND_STATE_H

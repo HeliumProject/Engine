@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H
-#define LUNAR_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H
+#ifndef HELIUM_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H
+#define HELIUM_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -21,4 +21,4 @@
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H
+#endif  // HELIUM_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H

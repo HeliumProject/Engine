@@ -1,7 +1,11 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/ObjectDynArrayData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
+using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_OBJECT( ObjectDynArrayData );
@@ -14,9 +18,9 @@ ObjectDynArrayData::~ObjectDynArrayData()
 {
 }
 
-void ObjectDynArrayData::ConnectData( Helium::HybridPtr< void > data )
+void ObjectDynArrayData::ConnectData( void* data )
 {
-    m_Data.Connect( Helium::HybridPtr< DataType >( data.Address(), data.State() ) );
+    m_Data.Connect( data );
 }
 
 size_t ObjectDynArrayData::GetSize() const 
@@ -29,7 +33,7 @@ void ObjectDynArrayData::Clear()
     return m_Data->Clear(); 
 }
 
-bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
+bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
 {
     const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >(src);
     if (!rhs)
@@ -42,7 +46,7 @@ bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
 
     if( flags & DataFlags::Shallow )
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -58,7 +62,7 @@ bool ObjectDynArrayData::Set( const Data* src, uint32_t flags )
     return true;
 }
 
-bool ObjectDynArrayData::Equals( const Object* object ) const
+bool ObjectDynArrayData::Equals( Object* object )
 {
     const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >( object );
     if (!rhs)
@@ -91,19 +95,6 @@ bool ObjectDynArrayData::Equals( const Object* object ) const
     return true;
 }
 
-void ObjectDynArrayData::Serialize( Archive& archive ) const
-{
-    archive.Serialize( m_Data.Get() );
-}
-
-void ObjectDynArrayData::Deserialize( Archive& archive )
-{
-    // if we are referring to a real field, clear its contents
-    m_Data->Clear();
-
-    archive.Deserialize( m_Data.Ref() );
-}
-
 void ObjectDynArrayData::Accept( Visitor& visitor )
 {
     DynArray< ObjectPtr >::Iterator itr = m_Data->Begin();
@@ -123,4 +114,39 @@ void ObjectDynArrayData::Accept( Visitor& visitor )
 
         object->Accept( visitor );
     }
+}
+
+void ObjectDynArrayData::Serialize( ArchiveBinary& archive )
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+void ObjectDynArrayData::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+void ObjectDynArrayData::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+void ObjectDynArrayData::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< class ArchiveT >
+void ObjectDynArrayData::Serialize( ArchiveT& archive )
+{
+    archive.SerializeArray( *m_Data );
+}
+
+template< class ArchiveT >
+void ObjectDynArrayData::Deserialize( ArchiveT& archive )
+{
+    // if we are referring to a real field, clear its contents
+    m_Data->Clear();
+
+    archive.DeserializeArray( *m_Data );
 }

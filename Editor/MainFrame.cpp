@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "MainFrame.h"
 
 #include "Platform/Platform.h"
@@ -16,7 +16,6 @@
 #include "Pipeline/SceneGraph/DuplicateTool.h"
 #include "Pipeline/SceneGraph/EntityInstanceCreateTool.h"
 #include "Pipeline/SceneGraph/LocatorCreateTool.h"
-#include "Pipeline/SceneGraph/VolumeCreateTool.h"
 #include "Pipeline/SceneGraph/ScaleManipulator.h"
 #include "Pipeline/SceneGraph/RotateManipulator.h"
 #include "Pipeline/SceneGraph/TranslateManipulator.h"
@@ -1502,7 +1501,6 @@ void MainFrame::OnExport(wxCommandEvent& event)
                         {
                             Reflect::ArchivePtr archive = Reflect::GetArchive( file );
                             archive->e_Status.AddMethod( m_SceneManager.GetCurrentScene(), &Scene::ArchiveStatus );
-                            archive->d_Exception.Set( m_SceneManager.GetCurrentScene(), &Scene::ArchiveException );
                             archive->Put( elements );
                             archive->Close();
                         }
@@ -1716,10 +1714,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::LocatorCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
-    else if ( event.GetId() == m_ToolbarPanel->m_VolumeToolButton->GetId() )
-    {
-        m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::VolumeCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
-    }
     else if ( event.GetId() == m_ToolbarPanel->m_DuplicateToolButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::DuplicateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
@@ -1881,10 +1875,6 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
         {
             selectedTool = m_ToolbarPanel->m_EntityToolButton->GetId();
-        }
-        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::VolumeCreateTool >() )
-        {
-            selectedTool = m_ToolbarPanel->m_VolumeToolButton->GetId();
         }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {
@@ -2090,7 +2080,7 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
         m_SceneManager.GetCurrentScene()->GetSelectedTransforms(transforms);
 
         Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = new Reflect::Matrix4StlVectorData();
-        data->m_Data.Set( transforms );
+        (*data->m_Data) = transforms;
 
         tstring xml;
         data->ToXML( xml );
@@ -2129,7 +2119,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             Helium::StrongPtr<Reflect::Matrix4StlVectorData> data = Reflect::SafeCast< Reflect::Matrix4StlVectorData >( *itr );
             if ( data.ReferencesObject() )
             {
-                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms(data->m_Data.Get()) );
+                m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->SetSelectedTransforms( *data->m_Data ) );
                 break;
             }
         }

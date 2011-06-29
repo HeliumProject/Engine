@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Component.h"
 #include "ComponentCollection.h"
 
@@ -6,9 +7,9 @@ using namespace Helium::Component;
 
 REFLECT_DEFINE_ABSTRACT(ComponentBase)
 
-void ComponentBase::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ComponentBase::PopulateComposite( Reflect::Composite& comp )
 {
-    Reflect::Field* fieldEnabled = comp.AddField( &ComponentBase::m_IsEnabled, TXT( "m_IsEnabled" ) );
+    comp.AddField( &ComponentBase::m_IsEnabled, TXT( "m_IsEnabled" ) );
 }
 
 ComponentBase::ComponentBase()

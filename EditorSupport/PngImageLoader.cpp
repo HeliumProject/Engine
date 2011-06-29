@@ -19,7 +19,7 @@
 #define PNG_USER_MEM_SUPPORTED
 #include <png.h>
 
-using namespace Lunar;
+using namespace Helium;
 
 /// libpng memory allocation callback.
 ///

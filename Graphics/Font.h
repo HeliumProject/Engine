@@ -3,16 +3,17 @@
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
+#include "Platform/Trace.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RTexture2d );
 
     /// Font resource.
-    class LUNAR_GRAPHICS_API Font : public Resource
+    class HELIUM_GRAPHICS_API Font : public Resource
     {
         L_DECLARE_OBJECT( Font, Resource );
 
@@ -28,7 +29,7 @@ namespace Lunar
                 COLOR_COMPRESSED,
             };
 
-            L_DECLARE_ENUMERATION( ECompression, LUNAR_GRAPHICS_API );
+            L_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -58,7 +59,7 @@ namespace Lunar
         static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
-        struct LUNAR_GRAPHICS_API Character
+        struct HELIUM_GRAPHICS_API Character
         {
             /// Unicode code point value.
             uint32_t codePoint;
@@ -103,7 +104,7 @@ namespace Lunar
 
         /// Single-byte to wide-character string conversion support for ProcessText().
         template<>
-        class LUNAR_GRAPHICS_API ProcessTextConverter< char >
+        class HELIUM_GRAPHICS_API ProcessTextConverter< char >
         {
         public:
             /// Maximum length for converted strings.
@@ -129,7 +130,7 @@ namespace Lunar
 
         /// Wide-character to wide-character (dummy) string conversion support for ProcessText().
         template<>
-        class LUNAR_GRAPHICS_API ProcessTextConverter< wchar_t >
+        class HELIUM_GRAPHICS_API ProcessTextConverter< wchar_t >
         {
         public:
             /// @name Construction/Destruction

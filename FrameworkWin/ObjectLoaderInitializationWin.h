@@ -6,16 +6,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
-#define LUNAR_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
+#ifndef HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
+#define HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/ObjectLoaderInitialization.h"
 
-namespace Lunar
+namespace Helium
 {
     /// GameObjectLoader initialization implementation for Windows.
-    class LUNAR_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization
+    class HELIUM_FRAMEWORK_WIN_API ObjectLoaderInitializationWin : public ObjectLoaderInitialization
     {
     public:
         /// @name GameObjectLoader Initialization
@@ -26,4 +26,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H
+#endif  // HELIUM_FRAMEWORK_WIN_OBJECT_LOADER_INITIALIZATION_WIN_H

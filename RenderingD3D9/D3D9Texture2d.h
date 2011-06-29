@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_TEXTURE_2D_H
-#define LUNAR_RENDERING_D3D9_D3D9_TEXTURE_2D_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_TEXTURE_2D_H
+#define HELIUM_RENDERING_D3D9_D3D9_TEXTURE_2D_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RTexture2d.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 2D texture implementation.
     class D3D9Texture2d : public RTexture2d
@@ -52,11 +52,11 @@ namespace Lunar
 
         /// @name Construction/Destruction
         //@{
-        ~D3D9Texture2d();
+        virtual ~D3D9Texture2d();
         //@}
     };
 }
 
 #include "RenderingD3D9/D3D9Texture2d.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_TEXTURE_2D_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_TEXTURE_2D_H

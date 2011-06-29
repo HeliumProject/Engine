@@ -19,7 +19,7 @@
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
 

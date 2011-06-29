@@ -1,6 +1,9 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/StlSetData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -76,9 +79,9 @@ SimpleStlSetData<DataT, DataClassT>::~SimpleStlSetData()
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleStlSetData<DataT, DataClassT>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class DataT, class DataClassT >
@@ -100,19 +103,19 @@ const Class* SimpleStlSetData<DataT, DataClassT>::GetItemClass() const
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::GetItems(std::vector< ConstDataPtr >& items) const
+void SimpleStlSetData<DataT, DataClassT>::GetItems(std::vector< DataPtr >& items) const
 {
     items.resize( m_Data->size() );
     DataType::const_iterator itr = m_Data->begin();
     DataType::const_iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index] = static_cast< const ConstDataPtr& >( Data::Bind( *itr, m_Instance, m_Field ) );
+        items[index] = Data::Bind( const_cast< DataT& >( *itr ), m_Instance, m_Field );
     }
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::AddItem(const Data* value)
+void SimpleStlSetData<DataT, DataClassT>::AddItem(Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -120,7 +123,7 @@ void SimpleStlSetData<DataT, DataClassT>::AddItem(const Data* value)
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::RemoveItem(const Data* value)
+void SimpleStlSetData<DataT, DataClassT>::RemoveItem(Data* value)
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -128,7 +131,7 @@ void SimpleStlSetData<DataT, DataClassT>::RemoveItem(const Data* value)
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
+bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(Data* value) const
 {
     DataT dataValue;
     Data::GetValue(value, dataValue);
@@ -136,7 +139,7 @@ bool SimpleStlSetData<DataT, DataClassT>::ContainsItem(const Data* value) const
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
+bool SimpleStlSetData<DataT, DataClassT>::Set(Data* src, uint32_t flags)
 {
     const StlSetDataT* rhs = SafeCast<StlSetDataT>(src);
     if (!rhs)
@@ -144,13 +147,13 @@ bool SimpleStlSetData<DataT, DataClassT>::Set(const Data* src, uint32_t flags)
         return false;
     }
 
-    m_Data.Set( rhs->m_Data.Get() );
+    *m_Data = *rhs->m_Data;
 
     return true;
 }
 
 template < class DataT, class DataClassT >
-bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
+bool SimpleStlSetData<DataT, DataClassT>::Equals(Object* object)
 {
     const StlSetDataT* rhs = SafeCast<StlSetDataT>(object);
     if (!rhs)
@@ -158,11 +161,68 @@ bool SimpleStlSetData<DataT, DataClassT>::Equals(const Object* object) const
         return false;
     }
 
-    return m_Data.Get() == rhs->m_Data.Get();
+    return *m_Data == *rhs->m_Data;
 }
 
 template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveBinary& archive )
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveBinary& archive )
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveXML& archive )
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+template < class DataT, class DataClassT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveXML& archive )
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template < class DataT, class DataClassT >
+tostream& SimpleStlSetData<DataT, DataClassT>::operator>>(tostream& stream) const
+{
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( ; itr != end; ++itr )
+    {
+        if ( itr != m_Data->begin() )
+        {
+            stream << s_ContainerItemDelimiter;
+        }
+
+        stream << *itr;
+    }
+
+    return stream;
+}
+
+template < class DataT, class DataClassT >
+tistream& SimpleStlSetData<DataT, DataClassT>::operator<<(tistream& stream)
+{
+    m_Data->clear();
+
+    tstring str;
+    std::streamsize size = stream.rdbuf()->in_avail();
+    str.resize( (size_t) size);
+    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
+
+    Tokenize< DataT >( str, *m_Data, s_ContainerItemDelimiter );
+
+    return stream;
+}
+
+template < class DataT, class DataClassT > template< class ArchiveT >
+void SimpleStlSetData<DataT, DataClassT>::Serialize( ArchiveT& archive )
 {
     int i = 0;
     std::vector< ObjectPtr > components;
@@ -186,7 +246,7 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
         }
     }
 
-    archive.Serialize(components);
+    archive.SerializeArray( components );
 
     std::vector< ObjectPtr >::iterator itr = components.begin();
     std::vector< ObjectPtr >::iterator end = components.end();
@@ -199,11 +259,11 @@ void SimpleStlSetData<DataT, DataClassT>::Serialize(Archive& archive) const
     }
 }
 
-template < class DataT, class DataClassT >
-void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
+template < class DataT, class DataClassT > template < class ArchiveT >
+void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveT& archive )
 {
     std::vector< ObjectPtr > components;
-    archive.Deserialize(components);
+    archive.DeserializeArray(components);
 
     // if we are referring to a real field, clear its contents
     m_Data->clear();
@@ -218,42 +278,9 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize(Archive& archive)
             throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
         }
 
-        m_Data->insert(data->m_Data.Get());
+        m_Data->insert( *data->m_Data );
     }
 }
-
-template < class DataT, class DataClassT >
-tostream& SimpleStlSetData<DataT, DataClassT>::operator>> (tostream& stream) const
-{
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( ; itr != end; ++itr )
-    {
-        if ( itr != m_Data->begin() )
-        {
-            stream << s_ContainerItemDelimiter;
-        }
-
-        stream << *itr;
-    }
-
-    return stream;
-}
-
-template < class DataT, class DataClassT >
-tistream& SimpleStlSetData<DataT, DataClassT>::operator<< (tistream& stream)
-{
-    m_Data->clear();
-
-    tstring str;
-    std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( (size_t) size);
-    stream.read( const_cast< tchar_t* >( str.c_str() ), size );
-
-    Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
-
-    return stream;
-}  
 
 template SimpleStlSetData< tstring, StlStringData >;
 template SimpleStlSetData< uint32_t, UInt32Data >;

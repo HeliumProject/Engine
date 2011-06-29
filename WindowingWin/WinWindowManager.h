@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_WINDOWING_WIN_WIN_WINDOW_MANAGER_H
-#define LUNAR_WINDOWING_WIN_WIN_WINDOW_MANAGER_H
+#ifndef HELIUM_WINDOWING_WIN_WIN_WINDOW_MANAGER_H
+#define HELIUM_WINDOWING_WIN_WIN_WINDOW_MANAGER_H
 
 #include "WindowingWin/WindowingWin.h"
 #include "Windowing/WindowManager.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Windows(R) WindowManager implementation.
     class WinWindowManager : public WindowManager
@@ -20,7 +20,7 @@ namespace Lunar
     public:
         /// @name Initialization
         //@{
-        LUNAR_WINDOWING_WIN_API bool Initialize( HINSTANCE hInstance, int nCmdShow );
+        HELIUM_WINDOWING_WIN_API bool Initialize( HINSTANCE hInstance, int nCmdShow );
         void Shutdown();
         //@}
 
@@ -38,7 +38,7 @@ namespace Lunar
 
         /// @name Static Initialization
         //@{
-        LUNAR_WINDOWING_WIN_API static WinWindowManager* CreateStaticInstance();
+        HELIUM_WINDOWING_WIN_API static WinWindowManager* CreateStaticInstance();
         //@}
 
     protected:
@@ -64,4 +64,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_WINDOWING_WIN_WIN_WINDOW_MANAGER_H
+#endif  // HELIUM_WINDOWING_WIN_WIN_WINDOW_MANAGER_H

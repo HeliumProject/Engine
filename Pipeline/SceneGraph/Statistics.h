@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Pipeline/SceneGraph/Viewport.h"
-#include "Resource.h"
 
 namespace Helium
 {
@@ -10,8 +9,6 @@ namespace Helium
         class Statistics
         {
         private:
-            IDirect3DDevice9* m_Device;
-            ID3DXFont* m_Font;
             uint64_t m_Previous;
 
         public:
@@ -61,11 +58,9 @@ namespace Helium
             int32_t m_NodeCount;
 
         public:
-            Statistics(IDirect3DDevice9* device);
+            Statistics();
 
             ~Statistics();
-
-            ID3DXFont* GetFont() { return m_Font; }
 
             void Reset();
             void Update();

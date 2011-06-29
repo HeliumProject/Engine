@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_CORE_MATH_COMMON_H
-#define LUNAR_CORE_MATH_COMMON_H
+#ifndef HELIUM_CORE_MATH_COMMON_H
+#define HELIUM_CORE_MATH_COMMON_H
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
@@ -20,7 +20,7 @@
 #pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
 #endif
 
-#include "boost/type_traits.hpp"
+#include <type_traits>
 #include <cmath>
 
 #if HELIUM_CC_MSC
@@ -127,4 +127,4 @@ namespace Helium
 
 #include "Platform/Math/MathCommon.inl"
 
-#endif  // LUNAR_CORE_MATH_COMMON_H
+#endif  // HELIUM_CORE_MATH_COMMON_H

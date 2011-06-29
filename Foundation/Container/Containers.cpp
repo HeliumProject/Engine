@@ -1,3 +1,5 @@
+#include "FoundationPch.h"
+
 // Ensure that inline containers build when building Foundation.
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Container/ConcurrentHashMap.h"

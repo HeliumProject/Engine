@@ -11,7 +11,7 @@
 #include "Engine/Config.h"
 #include "Engine/GameObjectLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 ConfigInitialization::~ConfigInitialization()

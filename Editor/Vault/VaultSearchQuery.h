@@ -38,7 +38,7 @@ namespace Helium
 
         public:
             REFLECT_DECLARE_OBJECT( VaultSearchQuery, Reflect::Object );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE; 
 
         private:

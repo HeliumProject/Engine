@@ -10,7 +10,7 @@
 
 #include "Engine/JobContext.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 
 /// Constructor.

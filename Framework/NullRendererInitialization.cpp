@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/NullRendererInitialization.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// @copydoc RendererInitialization::Initialize()
 bool NullRendererInitialization::Initialize()

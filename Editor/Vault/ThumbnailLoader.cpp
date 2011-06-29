@@ -1,14 +1,13 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ThumbnailLoader.h"
 
 #include "Foundation/File/Directory.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 #include "Pipeline/SceneGraph/Render.h"
 
 using namespace Helium;
-using namespace Helium::Render;
 using namespace Helium::SceneGraph;
 using namespace Helium::Editor;
 
@@ -27,6 +26,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             break;
         }
 
+#ifdef VIEWPORT_REFACTOR
         // the device is gone, our glorious benefactor is probably cleaning up
         IDirect3DDevice9* device = m_Loader.m_DeviceManager->GetD3DDevice();
         if ( !device )
@@ -48,6 +48,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             wxThread::Sleep( 100 );
             continue;
         }
+#endif
 
         if ( m_Loader.m_Quit )
         {
@@ -83,6 +84,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         args.m_Path = path;
         args.m_Cancelled = false;
 
+#ifdef VIEWPORT_REFACTOR
         if ( SceneGraph::IsSupportedTexture( path.Get() ) )
         {
             IDirect3DTexture9* texture = NULL;
@@ -93,6 +95,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
         }
         else
+#endif
         {
 #pragma TODO( "When we store the thumbnail in the asset file, fix this." )
 
@@ -102,12 +105,14 @@ void* ThumbnailLoader::LoadThread::Entry()
 
                 if ( thumbnailPath.Exists() )
                 {
+#ifdef VIEWPORT_REFACTOR
                     IDirect3DTexture9* texture = NULL;
                     if ( texture = LoadTexture( device, thumbnailPath.Get() ) )
                     {
                         ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
                         args.m_Textures.push_back( thumbnail );
                     }
+#endif
                 }
             }
             // Include the color map of a shader as a possible thumbnail image
@@ -128,6 +133,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                     Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
                     if ( colorMap.ReferencesObject() )
                     {
+#ifdef VIEWPORT_REFACTOR
                         if ( colorMap->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
                         {
                             IDirect3DTexture9* texture = NULL;
@@ -137,6 +143,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                                 args.m_Textures.push_back( thumbnail );
                             }
                         }
+#endif
                     }
                 }
             }
@@ -155,6 +162,7 @@ void* ThumbnailLoader::LoadThread::Entry()
 
                 if ( textureAsset.ReferencesObject() )
                 {
+#ifdef VIEWPORT_REFACTOR
                     if ( textureAsset->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
                     {
                         IDirect3DTexture9* texture = NULL;
@@ -164,6 +172,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                             args.m_Textures.push_back( thumbnail );
                         }
                     }
+#endif
                 }
             }
         }

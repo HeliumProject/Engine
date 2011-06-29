@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H
-#define LUNAR_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H
+#define HELIUM_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RRenderCommandProxy.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( D3D9RenderCommandList );
 
@@ -68,6 +68,7 @@ namespace Lunar
         void DrawIndexed(
             ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
             uint32_t startIndex, uint32_t primitiveCount );
+        void DrawUnindexed( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount );
         //@}
 
         /// @name Fence Commands
@@ -98,4 +99,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_DEFERRED_COMMAND_PROXY_H

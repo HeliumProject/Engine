@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Update/UpdateManager.h"
 
 #include "Platform/PlatformUtility.h"

@@ -7,13 +7,14 @@
 
 #include "Foundation/Undo/Queue.h"
 
+#include "Rendering/Color.h"
+
 #include "Pipeline/API.h"
 #include "Pipeline/SettingsManager.h"
 #include "Pipeline/SceneGraph/Render.h"
 #include "Pipeline/SceneGraph/Camera.h"
-#include "Pipeline/SceneGraph/Resource.h"
 #include "Pipeline/SceneGraph/ViewportSettings.h"
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {
@@ -202,21 +203,18 @@ namespace Helium
         class PIPELINE_API Viewport
         {
         public:
-            static D3DMATERIAL9 s_LiveMaterial;
-            static D3DMATERIAL9 s_SelectedMaterial;
-            static D3DMATERIAL9 s_ReactiveMaterial;
-            static D3DMATERIAL9 s_HighlightedMaterial;
-            static D3DMATERIAL9 s_UnselectableMaterial;
-            static D3DMATERIAL9 s_ComponentMaterial;
-            static D3DMATERIAL9 s_SelectedComponentMaterial;
+            static const Helium::Color s_LiveMaterial;
+            static const Helium::Color s_SelectedMaterial;
+            static const Helium::Color s_ReactiveMaterial;
+            static const Helium::Color s_HighlightedMaterial;
+            static const Helium::Color s_UnselectableMaterial;
+            static const Helium::Color s_ComponentMaterial;
+            static const Helium::Color s_SelectedComponentMaterial;
 
-            static D3DMATERIAL9 s_RedMaterial;
-            static D3DMATERIAL9 s_YellowMaterial;
-            static D3DMATERIAL9 s_GreenMaterial;
-            static D3DMATERIAL9 s_BlueMaterial;
-
-            static void InitializeType();
-            static void CleanupType();
+            static const Helium::Color s_RedMaterial;
+            static const Helium::Color s_YellowMaterial;
+            static const Helium::Color s_GreenMaterial;
+            static const Helium::Color s_BlueMaterial;
 
             Viewport( HWND wnd, SettingsManager* settingsManager );
             ~Viewport();
@@ -231,19 +229,9 @@ namespace Helium
                 m_Size = size;
             }
 
-            inline IDirect3DDevice9* GetDevice() const
-            {
-                return m_DeviceManager.GetD3DDevice();
-            }
-
             SettingsManager* GetSettingsManager() const
             {
                 return m_SettingsManager;
-            }
-
-            ResourceTracker* GetResources() const
-            {
-                return m_ResourceTracker;
             }
 
             Statistics* GetStatistics() const
@@ -367,8 +355,6 @@ namespace Helium
 
         private:
             // callbacks
-            void ReleaseResources( const Render::DeviceStateArgs& args );
-            void AllocateResources( const Render::DeviceStateArgs& args );
             void CameraMoved( const CameraMovedArgs& args );
 
             // 
@@ -468,13 +454,12 @@ namespace Helium
 
         private:
             HWND                    m_Window;
-            Point             m_Size;
+            Point                   m_Size;
             bool                    m_Focused;
 
             SettingsManager*        m_SettingsManager;
 
-            Render::DeviceManager   m_DeviceManager;
-            ResourceTracker*        m_ResourceTracker;
+            DeviceManager           m_DeviceManager;
             RenderVisitor           m_RenderVisitor;
 
             Tool*                   m_Tool;
@@ -485,8 +470,8 @@ namespace Helium
             GeometryMode            m_GeometryMode;
 
             DragMode                m_DragMode;
-            Point             m_Start;
-            Point             m_End;
+            Point                   m_Start;
+            Point                   m_End;
 
             bool                    m_Highlighting;
             bool                    m_AxesVisible;

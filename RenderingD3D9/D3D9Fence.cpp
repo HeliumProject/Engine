@@ -8,7 +8,7 @@
 #include "RenderingD3D9Pch.h"
 #include "RenderingD3D9/D3D9Fence.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///
@@ -24,5 +24,24 @@ D3D9Fence::D3D9Fence( IDirect3DQuery9* pD3DQuery )
 /// Destructor.
 D3D9Fence::~D3D9Fence()
 {
-    m_pQuery->Release();
+    if( m_pQuery )
+    {
+        m_pQuery->Release();
+    }
+}
+
+/// @copydoc D3D9DeviceResetListener::OnPreReset()
+void D3D9Fence::OnPreReset()
+{
+    if( m_pQuery )
+    {
+        m_pQuery->Release();
+        m_pQuery = NULL;
+    }
+}
+
+/// @copydoc D3D9DeviceResetListener::OnPostReset()
+void D3D9Fence::OnPostReset( D3D9Renderer* /*pRenderer*/ )
+{
+    // Don't recreate fences on device reset.
 }

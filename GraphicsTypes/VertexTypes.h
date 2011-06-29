@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TYPES_VERTEX_TYPES_H
-#define LUNAR_GRAPHICS_TYPES_VERTEX_TYPES_H
+#ifndef HELIUM_GRAPHICS_TYPES_VERTEX_TYPES_H
+#define HELIUM_GRAPHICS_TYPES_VERTEX_TYPES_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -17,14 +17,14 @@
 #include "Engine/Serializer.h"
 #include "Rendering/Color.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Maximum number of bones influencing vertices per skinned mesh (must match the same constant in
     /// Data/Shaders/Common.inl).
     static const size_t BONE_COUNT_MAX = 75;
 
     /// Simple vertex type (position and color only).
-    struct LUNAR_GRAPHICS_TYPES_API SimpleVertex
+    struct HELIUM_GRAPHICS_TYPES_API SimpleVertex
     {
         /// Position.
         float32_t position[ 3 ];
@@ -47,7 +47,7 @@ namespace Lunar
     };
 
     /// Simple textured vertex type (position, color, and single texture coordinate set only).
-    struct LUNAR_GRAPHICS_TYPES_API SimpleTexturedVertex
+    struct HELIUM_GRAPHICS_TYPES_API SimpleTexturedVertex
     {
         /// Position.
         float32_t position[ 3 ];
@@ -74,7 +74,7 @@ namespace Lunar
     };
 
     /// Vertex with position values specified as 2D screen coordinates.
-    struct LUNAR_GRAPHICS_TYPES_API ScreenVertex
+    struct HELIUM_GRAPHICS_TYPES_API ScreenVertex
     {
         /// Position.
         float32_t position[ 2 ];
@@ -91,6 +91,36 @@ namespace Lunar
             uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
         inline ScreenVertex(
             const Simd::Vector2& rPosition, const Simd::Vector2& rTexCoords,
+            const Color& rColor = Color( 0xffffffff ) );
+        //@}
+
+        /// @name Serialization
+        //@{
+        inline void Serialize( Serializer& s );
+        //@}
+    };
+
+    /// Vertex with world position and screen coordinate offset values.
+    struct HELIUM_GRAPHICS_TYPES_API ProjectedVertex
+    {
+        /// World position.
+        float32_t position[ 3 ];
+        /// Color.
+        uint8_t color[ 4 ];
+        /// Texture coordinates.
+        Float16 texCoords[ 2 ];
+        /// Screen offset.
+        float32_t screenOffset[ 2 ];
+
+        /// @name Construction/Destruction
+        //@{
+        inline ProjectedVertex();
+        inline ProjectedVertex(
+            float32_t positionX, float32_t positionY, float32_t positionZ, float32_t screenOffsetX,
+            float32_t screenOffsetY, Float16 texCoordU, Float16 texCoordV, uint8_t colorRed = 0xff,
+            uint8_t colorGreen = 0xff, uint8_t colorBlue = 0xff, uint8_t colorAlpha = 0xff );
+        inline ProjectedVertex(
+            const Simd::Vector3& rPosition, const Simd::Vector2& rScreenOffset, const Simd::Vector2& rTexCoords,
             const Color& rColor = Color( 0xffffffff ) );
         //@}
 
@@ -125,7 +155,7 @@ namespace Lunar
     ///
     /// Note that no vertex coloring and only one texture coordinate set are supported.  This is done in order to
     /// maintain a size no greater than 32 bytes.
-    struct LUNAR_GRAPHICS_TYPES_API SkinnedMeshVertex
+    struct HELIUM_GRAPHICS_TYPES_API SkinnedMeshVertex
     {
         /// Position.
         float32_t position[ 3 ];
@@ -149,4 +179,4 @@ namespace Lunar
 
 #include "GraphicsTypes/VertexTypes.inl"
 
-#endif  // LUNAR_GRAPHICS_TYPES_VERTEX_TYPES_H
+#endif  // HELIUM_GRAPHICS_TYPES_VERTEX_TYPES_H

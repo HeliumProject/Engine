@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Pipeline/SceneGraph/Manipulator.h"
 
 using namespace Helium;

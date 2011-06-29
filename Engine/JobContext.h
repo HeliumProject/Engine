@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_JOB_CONTEXT_H
-#define LUNAR_ENGINE_JOB_CONTEXT_H
+#ifndef HELIUM_ENGINE_JOB_CONTEXT_H
+#define HELIUM_ENGINE_JOB_CONTEXT_H
 
 #include "Engine/Engine.h"
 
@@ -22,17 +22,17 @@ namespace tbb
     class task;
 }
 
-namespace Lunar
+namespace Helium
 {
     /// Context associated with a running job instance.
-    class LUNAR_ENGINE_API JobContext : NonCopyable
+    class HELIUM_ENGINE_API JobContext : NonCopyable
     {
     public:
         /// Job execution callback type.
         typedef void ( JOB_EXECUTE_CALLBACK )( void* pJob, JobContext* pContext );
 
         /// Job context attachment data.
-        class LUNAR_ENGINE_API AttachData
+        class HELIUM_ENGINE_API AttachData
         {
         public:
             /// @name Construction/Destruction
@@ -147,4 +147,4 @@ namespace Lunar
 
 #include "Engine/JobContext.inl"
 
-#endif  // LUNAR_ENGINE_JOB_CONTEXT_H
+#endif  // HELIUM_ENGINE_JOB_CONTEXT_H

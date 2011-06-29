@@ -23,7 +23,7 @@
 #include "RenderingD3D9/D3D9VertexInputLayout.h"
 #include "RenderingD3D9/D3D9VertexShader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///
@@ -767,8 +767,10 @@ void D3D9ImmediateCommandProxy::DrawIndexed(
 {
     HELIUM_ASSERT( static_cast< size_t >( primitiveType ) < static_cast< size_t >( RENDERER_PRIMITIVE_TYPE_MAX ) );
 
-    static const D3DPRIMITIVETYPE d3dPrimitiveTypes[ RENDERER_PRIMITIVE_TYPE_MAX ] =
+    static const D3DPRIMITIVETYPE d3dPrimitiveTypes[] =
     {
+        // RENDERER_PRIMITIVE_TYPE_POINT_LIST
+        D3DPT_POINTLIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_LIST
         D3DPT_LINELIST,
         // RENDERER_PRIMITIVE_TYPE_LINE_STRIP
@@ -776,8 +778,12 @@ void D3D9ImmediateCommandProxy::DrawIndexed(
         // RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST
         D3DPT_TRIANGLELIST,
         // RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP
-        D3DPT_TRIANGLESTRIP
+        D3DPT_TRIANGLESTRIP,
+        // RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN
+        D3DPT_TRIANGLEFAN,
     };
+
+    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( d3dPrimitiveTypes ) == RENDERER_PRIMITIVE_TYPE_MAX );
 
     m_vertexConstantManager.Push( m_pDevice );
     m_pixelConstantManager.Push( m_pDevice );
@@ -789,6 +795,38 @@ void D3D9ImmediateCommandProxy::DrawIndexed(
         usedVertexCount,
         startIndex,
         primitiveCount ) );
+}
+
+/// @copydoc RRenderCommandProxy::DrawUnindexed()
+void D3D9ImmediateCommandProxy::DrawUnindexed(
+    ERendererPrimitiveType primitiveType,
+    uint32_t baseVertexIndex,
+    uint32_t primitiveCount )
+{
+    HELIUM_ASSERT( static_cast< size_t >( primitiveType ) < static_cast< size_t >( RENDERER_PRIMITIVE_TYPE_MAX ) );
+
+    static const D3DPRIMITIVETYPE d3dPrimitiveTypes[] =
+    {
+        // RENDERER_PRIMITIVE_TYPE_POINT_LIST
+        D3DPT_POINTLIST,
+        // RENDERER_PRIMITIVE_TYPE_LINE_LIST
+        D3DPT_LINELIST,
+        // RENDERER_PRIMITIVE_TYPE_LINE_STRIP
+        D3DPT_LINESTRIP,
+        // RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST
+        D3DPT_TRIANGLELIST,
+        // RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP
+        D3DPT_TRIANGLESTRIP,
+        // RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN
+        D3DPT_TRIANGLEFAN,
+    };
+
+    HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( d3dPrimitiveTypes ) == RENDERER_PRIMITIVE_TYPE_MAX );
+
+    m_vertexConstantManager.Push( m_pDevice );
+    m_pixelConstantManager.Push( m_pDevice );
+
+    L_D3D9_VERIFY( m_pDevice->DrawPrimitive( d3dPrimitiveTypes[ primitiveType ], baseVertexIndex, primitiveCount ) );
 }
 
 /// @copydoc RRenderCommandProxy::SetFence()

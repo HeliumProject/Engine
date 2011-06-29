@@ -71,7 +71,7 @@ namespace Helium
             bool m_BackFaceCulling; 
 
         public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
+            static void PopulateComposite( Reflect::Composite& comp )
             {
                 comp.AddEnumerationField( &CameraSettings::m_CameraMode, TXT( "Camera Mode" ) );
                 comp.AddEnumerationField( &CameraSettings::m_ShadingMode, TXT( "Shading Mode" ) );

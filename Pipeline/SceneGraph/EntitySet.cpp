@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "EntitySet.h"
 
 #include "Foundation/Log.h"
@@ -65,7 +65,7 @@ void EntitySet::LoadAssetClass()
             SceneGraph::PrimitiveCube* cube;
             if ( !m_Shape )
             {
-                cube = new SceneGraph::PrimitiveCube (m_Type->GetScene()->GetViewport()->GetResources());
+                cube = new SceneGraph::PrimitiveCube ();
                 cube->Update();
 
                 m_Shape = cube;

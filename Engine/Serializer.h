@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_SERIALIZER_H
-#define LUNAR_ENGINE_SERIALIZER_H
+#ifndef HELIUM_ENGINE_SERIALIZER_H
+#define HELIUM_ENGINE_SERIALIZER_H
 
 #include "Engine/Engine.h"
 
@@ -16,6 +16,34 @@
 #include "Foundation/Reflect/Enumeration.h"
 
 #include "boost/preprocessor/seq.hpp"
+#include "boost/preprocessor/wstringize.hpp"
+#include "boost/preprocessor/stringize.hpp"
+
+/// Convert the expanded result of a macro to a char string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_STRINGIZE( X ) BOOST_PP_STRINGIZE( X )
+
+/// Convert the expanded result of a macro to a wchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_WSTRINGIZE( X ) BOOST_PP_WSTRINGIZE( X )
+
+#if HELIUM_UNICODE
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_WSTRINGIZE( X )
+
+#else  // HELIUM_UNICODE
+
+/// Convert the expanded result of a macro to a tchar_t string.
+///
+/// @param[in] X  Macro to expand and stringize.
+#define HELIUM_TSTRINGIZE( X ) HELIUM_STRINGIZE( X )
+
+#endif  // HELIUM_UNICODE
 
 // Helper macro for defining serializable enumerated values.
 #define L_ENUM_VALUE_OP( R, PREFIX, VALUE ) BOOST_PP_CAT( PREFIX, VALUE )
@@ -28,34 +56,34 @@
 /// Tag and serialize a variable.
 ///
 /// @param[in] X  Variable to serialize.
-#define L_TAGGED( X ) Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << ( X )
+#define L_TAGGED( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << ( X )
 
 /// Tag and serialize a struct.
 ///
 /// @param[in] X  Struct to serialize.
-#define L_TAGGED_STRUCT( X ) Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Lunar::Serializer::WrapStruct( X )
+#define L_TAGGED_STRUCT( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStruct( X )
 
 /// Tag and serialize an array.
 ///
 /// @param[in] X  Array to serialize.
-#define L_TAGGED_ARRAY( X ) Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Lunar::Serializer::WrapArray( X )
+#define L_TAGGED_ARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapArray( X )
 
 /// Tag and serialize a dynamic array.
 ///
 /// @param[in] X  Dynamic array to serialize.
-#define L_TAGGED_DYNARRAY( X ) Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Lunar::Serializer::WrapDynArray( X )
+#define L_TAGGED_DYNARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapDynArray( X )
 
 /// Tag and serialize an array of structs.
 ///
 /// @param[in] X  Array of structs to serialize.
 #define L_TAGGED_STRUCT_ARRAY( X ) \
-    Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Lunar::Serializer::WrapStructArray( X )
+    Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructArray( X )
 
 /// Tag and serialize a dynamic array of structs.
 ///
 /// @param[in] X  Dynamic array of structs to serialize.
 #define L_TAGGED_STRUCT_DYNARRAY( X ) \
-    Lunar::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Lunar::Serializer::WrapStructDynArray( X )
+    Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructDynArray( X )
 
 /// Serialize the parent class properties within a group named after the class.
 ///
@@ -71,11 +99,11 @@
 
 #define L_DECLARE_ENUMERATION( ENUMERATION, MODULE_API ) \
 REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
-    friend MODULE_API Lunar::Serializer& operator<<( Lunar::Serializer& s, ENUMERATION& rEnum );
+    friend MODULE_API Helium::Serializer& operator<<( Helium::Serializer& s, ENUMERATION& rEnum );
 
 #define L_DEFINE_ENUMERATION( ENUMERATION, MODULE_API ) \
 REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
-    MODULE_API Lunar::Serializer& Lunar::operator<<( Lunar::Serializer& s, ENUMERATION& rEnum ) \
+    MODULE_API Helium::Serializer& Helium::operator<<( Helium::Serializer& s, ENUMERATION& rEnum ) \
     { \
         s.SerializeEnum( reinterpret_cast< int32_t& >( rEnum ), ENUMERATION::s_Enumeration ); \
         return s; \
@@ -96,7 +124,7 @@ REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
         PREFIX##_LAST = PREFIX##_MAX - 1 \
     }; \
     \
-    class NAME : public Lunar::Serializer::Enum< NAME, NAME##_Value > \
+    class NAME : public Helium::Serializer::Enum< NAME, NAME##_Value > \
     { \
     public: \
         NAME() \
@@ -104,7 +132,7 @@ REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
         } \
         \
         NAME( NAME##_Value value ) \
-            : Lunar::Serializer::Enum< NAME, NAME##_Value >( value ) \
+            : Helium::Serializer::Enum< NAME, NAME##_Value >( value ) \
         { \
         } \
         \
@@ -145,7 +173,7 @@ namespace Helium
     class WideString;
 }
 
-namespace Lunar
+namespace Helium
 {
     class GameObjectType;
 
@@ -252,7 +280,7 @@ namespace Lunar
     };
 
     /// Base interface for GameObject serialization.
-    class LUNAR_ENGINE_API Serializer : NonCopyable
+    class HELIUM_ENGINE_API Serializer : NonCopyable
     {
     public:
         /// Serialization modes.
@@ -311,7 +339,7 @@ namespace Lunar
         };
 
         /// Property tag.
-        class LUNAR_ENGINE_API Tag
+        class HELIUM_ENGINE_API Tag
         {
         public:
             /// @name Construction/Destruction
@@ -468,4 +496,4 @@ namespace Lunar
 
 #include "Engine/Serializer.inl"
 
-#endif  // LUNAR_ENGINE_SERIALIZER_H
+#endif  // HELIUM_ENGINE_SERIALIZER_H

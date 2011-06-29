@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "HierarchyNodeType.h"
 
 #include "Foundation/Reflect/Object.h" 
@@ -30,16 +30,6 @@ HierarchyNodeType::HierarchyNodeType( SceneGraph::Scene* scene, const Reflect::C
 
   m_Visible = true;
   m_Selectable = true;
-
-  ZeroMemory(&m_WireMaterial, sizeof(m_WireMaterial));
-  m_WireMaterial.Ambient = SceneGraph::Color::BLACK;
-  m_WireMaterial.Diffuse = SceneGraph::Color::BLACK;
-  m_WireMaterial.Specular = SceneGraph::Color::BLACK;
-
-  ZeroMemory(&m_SolidMaterial, sizeof(m_SolidMaterial));
-  m_SolidMaterial.Ambient = SceneGraph::Color::DARKGRAY;
-  m_SolidMaterial.Diffuse = SceneGraph::Color::DARKGRAY;
-  m_SolidMaterial.Specular = SceneGraph::Color::DARKGRAY;
 }
 
 void HierarchyNodeType::Create()

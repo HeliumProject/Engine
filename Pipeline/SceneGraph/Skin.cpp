@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Skin.h"
 
 #include "Pipeline/SceneGraph/Scene.h"
@@ -10,7 +10,7 @@ using namespace Helium::SceneGraph;
 
 REFLECT_DEFINE_OBJECT( Influence );
 
-void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Influence::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Influence::m_Objects,           TXT( "m_Objects" ) );
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
@@ -18,7 +18,7 @@ void Influence::AcceptCompositeVisitor( Reflect::Composite& comp )
 
 REFLECT_DEFINE_OBJECT( Skin );
 
-void Skin::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Skin::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Skin::m_MeshID,                 TXT( "m_MeshID" ) );
     comp.AddField( &Skin::m_Influences,             TXT( "m_Influences" ) );

@@ -10,7 +10,7 @@
 
 #include "Engine/Serializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Serialize a Color.
 ///
@@ -18,7 +18,7 @@ using namespace Lunar;
 /// @param[in,out] rValue  Color to serialize.
 ///
 /// @return  Reference to the given serializer.
-Serializer& Lunar::operator<<( Serializer& s, Color& rValue )
+Serializer& Helium::operator<<( Serializer& s, Color& rValue )
 {
     s.BeginStruct( Serializer::STRUCT_TAG_COLOR );
     s << Serializer::Tag( TXT( "r" ) ) << rValue.m_color.components.r;

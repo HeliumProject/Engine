@@ -6,13 +6,14 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
-#define LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
+#define HELIUM_RENDERING_D3D9_D3D9_RENDERER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/Renderer.h"
 
 #include "Platform/Assert.h"
+#include "Foundation/Container/DynArray.h"
 
 #include <d3d9.h>
 
@@ -37,7 +38,7 @@
         if( FAILED( d3dResult ) ) \
         { \
             tchar_t messageBuffer[ 512 ]; \
-            Lunar::StringFormat( \
+            Helium::StringFormat( \
                 messageBuffer, \
                 HELIUM_ARRAY_COUNT( messageBuffer ), \
                 TXT( "Direct3D result failed (0x%x)" ), \
@@ -68,8 +69,10 @@
 
 //@}
 
-namespace Lunar
+namespace Helium
 {
+    class D3D9DeviceResetListener;
+
     L_DECLARE_RPTR( D3D9ImmediateCommandProxy );
     L_DECLARE_RPTR( D3D9MainContext );
 
@@ -89,9 +92,13 @@ namespace Lunar
         /// @name Display Initialization
         //@{
         bool CreateMainContext( const ContextInitParameters& rInitParameters );
+        bool ResetMainContext( const ContextInitParameters& rInitParameters );
         RRenderContext* GetMainContext();
 
         RRenderContext* CreateSubContext( const ContextInitParameters& rInitParameters );
+
+        EStatus GetStatus();
+        EStatus Reset();
         //@}
 
         /// @name State Object Creation
@@ -142,8 +149,17 @@ namespace Lunar
         //@{
         inline IDirect3D9* GetD3D() const;
         inline IDirect3DDevice9* GetD3DDevice() const;
+        inline bool IsExDevice() const;
 
         inline D3DFORMAT GetDepthTextureFormat() const;
+
+        void NotifyLost();
+        //@}
+
+        /// @name Device Reset Listening
+        //@{
+        void RegisterDeviceResetListener( D3D9DeviceResetListener* pListener );
+        void UnregisterDeviceResetListener( D3D9DeviceResetListener* pListener );
         //@}
 
         /// @name Static Texture Mapping Support
@@ -155,12 +171,15 @@ namespace Lunar
 
         /// @name Utility Functions
         //@{
+        bool GetPresentParameters(
+            const ContextInitParameters& rContextInitParameters, D3DPRESENT_PARAMETERS& rParameters,
+            D3DDISPLAYMODEEX& rFullscreenDisplayMode ) const;
         D3DFORMAT PixelFormatToD3DFormat( ERendererPixelFormat format ) const;
         //@}
 
         /// @name Static Initialization
         //@{
-        LUNAR_RENDERING_D3D9_API static bool CreateStaticInstance();
+        HELIUM_RENDERING_D3D9_API static bool CreateStaticInstance();
         //@}
 
         /// @name Static Data Access
@@ -178,13 +197,21 @@ namespace Lunar
         IDirect3D9* m_pD3D;
         /// Direct3D device.
         IDirect3DDevice9* m_pD3DDevice;
-        /// True if the Direct3D device is a Direct3D 9Ex device.
+        /// True if the Direct3D interface and device are a Direct3D 9Ex interface and device.
         bool m_bExDevice;
+
+        /// True if the device has been signaled that it has been lost (NotifyLost() has been called).
+        bool m_bLost;
 
         /// Immediate render command proxy.
         D3D9ImmediateCommandProxyPtr m_spImmediateCommandProxy;
         /// Main rendering context.
         D3D9MainContextPtr m_spMainContext;
+
+        /// Cached presentation parameters for the main context.
+        D3DPRESENT_PARAMETERS m_presentParameters;
+        /// Cached fullscreen display mode information for the main context (9Ex only).
+        D3DDISPLAYMODEEX m_fullscreenDisplayMode;
 
         /// Static texture map target pools for each supported texture pixel format at varying resolutions.
         DynArray< IDirect3DTexture9* >
@@ -192,6 +219,9 @@ namespace Lunar
 
         /// Depth texture format (for shadow mapping support).
         D3DFORMAT m_depthTextureFormat;
+
+        /// Device reset listener list head.
+        D3D9DeviceResetListener* m_pDeviceResetListenerHead;
 
         /// GUID associated with engine-specific private data stored in Direct3D resources.
         static const GUID sm_privateDataGuid;
@@ -204,8 +234,7 @@ namespace Lunar
 
         /// @name Private Utility Functions
         //@{
-        void GetPresentParameters(
-            D3DPRESENT_PARAMETERS& rParameters, const ContextInitParameters& rContextInitParameters ) const;
+        HRESULT ResetDevice( D3DPRESENT_PARAMETERS& rPresentParameters, D3DDISPLAYMODEEX& rFullscreenDisplayMode );
         //@}
 
         /// @name Private Static Utility Functions
@@ -219,4 +248,4 @@ namespace Lunar
 
 #include "RenderingD3D9/D3D9Renderer.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_RENDERER_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_RENDERER_H

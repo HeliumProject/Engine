@@ -1,11 +1,6 @@
-//----------------------------------------------------------------------------------------------------------------------
-// File.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
+#include "FoundationPch.h"
+#include "File.h"
 
-#include "Foundation/File/File.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/AppInfo.h"
 

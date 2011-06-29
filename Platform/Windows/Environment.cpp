@@ -1,5 +1,5 @@
+#include "PlatformPch.h"
 #include "Platform/Environment.h"
-#include "Platform/Windows/Windows.h"
 
 #include <ShlObj.h>
 

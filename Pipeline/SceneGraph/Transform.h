@@ -17,7 +17,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Transform, HierarchyNode );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 
@@ -144,10 +144,6 @@ namespace Helium
 
             // render to viewport
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-
-            // issue draw commands
-            static void DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-            static void DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
 
             // do intersection testing
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;

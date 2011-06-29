@@ -6,24 +6,21 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_WINDOWING_WINDOW_H
-#define LUNAR_WINDOWING_WINDOW_H
+#ifndef HELIUM_WINDOWING_WINDOW_H
+#define HELIUM_WINDOWING_WINDOW_H
 
 #include "Windowing/Windowing.h"
 
-#include <boost/function.hpp>
+#include "Foundation/Automation/Event.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface to a window.
-    class LUNAR_WINDOWING_API Window : NonCopyable
+    class HELIUM_WINDOWING_API Window : NonCopyable
     {
     public:
-        /// Callback to execute when a Window instance is actually destroyed.
-        typedef boost::function< void ( Window* pWindow ) > OnDestroyed;
-
         /// Creation parameters.
-        struct LUNAR_WINDOWING_API Parameters
+        struct HELIUM_WINDOWING_API Parameters
         {
             /// Window title.
             const tchar_t* pTitle;
@@ -57,13 +54,13 @@ namespace Lunar
 
         /// @name Callback Registration
         //@{
-        void SetOnDestroyed( const OnDestroyed& rOnDestroyed );
-        inline const OnDestroyed& GetOnDestroyed() const;
+        void SetOnDestroyed( const Delegate<Window*>& rOnDestroyed );
+        inline const Delegate<Window*>& GetOnDestroyed() const;
         //@}
 
     protected:
         /// Callback to execute when this window is actually destroyed.
-        OnDestroyed m_onDestroyed;
+        Delegate<Window*> m_onDestroyed;
 
         /// Platform-dependent window handle.
         void* m_pHandle;
@@ -88,4 +85,4 @@ namespace Lunar
 
 #include "Windowing/Window.inl"
 
-#endif  // LUNAR_WINDOWING_WINDOW_H
+#endif  // HELIUM_WINDOWING_WINDOW_H

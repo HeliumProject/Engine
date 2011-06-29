@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/StaticMeshEntity.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
 

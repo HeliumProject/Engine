@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "InstanceSet.h"
 #include "Instance.h"
 #include "InstanceType.h"

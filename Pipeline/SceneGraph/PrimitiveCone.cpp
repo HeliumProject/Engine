@@ -1,15 +1,15 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "PrimitiveCone.h"
 
+#include "Graphics/BufferedDrawer.h"
 #include "Pipeline/SceneGraph/Pick.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-PrimitiveCone::PrimitiveCone(ResourceTracker* m_Tracker)
-: PrimitiveTemplate(m_Tracker)
+PrimitiveCone::PrimitiveCone()
 {
-    SetElementType( ElementTypes::Position );
+    SetElementType( VertexElementTypes::SimpleVertex );
 
     m_Length = 1.0f;
     m_Radius = 0.5f;
@@ -58,22 +58,24 @@ void PrimitiveCone::Update()
     // Wire
     //
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(0.f)) * m_Radius, (float32_t)(sin(0.f)) * m_Radius, -m_Length/2.0f));
+    float32_t halfLength = m_Length * 0.5f;
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI_2)) * m_Radius, (float32_t)(sin(HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( m_Radius, 0.0f, -halfLength ) );
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(HELIUM_PI)) * m_Radius, (float32_t)(sin(HELIUM_PI)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, m_Radius, -halfLength ) );
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
-    m_Vertices.push_back(Position ((float32_t)(cos(-HELIUM_PI_2)) * m_Radius, (float32_t)(sin(-HELIUM_PI_2)) * m_Radius, -m_Length/2.0f));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( -m_Radius, 0.0f, -halfLength ) );
+
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, -m_Radius, -halfLength ) );
 
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
 
@@ -81,57 +83,88 @@ void PrimitiveCone::Update()
     // Poly
     //
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, m_Length/2.0f));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, halfLength ) );
     for (int x=0; x<=m_Steps; x++)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
-    m_Vertices.push_back(Position (0.0f, 0.0f, -m_Length/2.0f));
+    m_Vertices.push_back( Helium::SimpleVertex( 0.0f, 0.0f, -halfLength ) );
     for (int x=m_Steps; x>=0; x--)
     {
         float theta = (float32_t)(x) * stepAngle;
-        m_Vertices.push_back(Position ((float32_t)(cos(theta)) * m_Radius, (float32_t)(sin(theta)) * m_Radius, -m_Length/2.0f));
+        m_Vertices.push_back( Helium::SimpleVertex( Cos( theta ) * m_Radius, Sin( theta ) * m_Radius, -halfLength ) );
     }
 
     Base::Update();
 }
 
-void PrimitiveCone::Draw( DrawArgs* args, const bool* solid, const bool* transparent ) const
+void PrimitiveCone::Draw(
+    Helium::BufferedDrawer* drawInterface,
+    DrawArgs* args,
+    Helium::Color materialColor,
+    const Simd::Matrix44& transform,
+    const bool* solid,
+    const bool* transparent ) const
 {
-    if (!SetState())
-        return;
-
     if (transparent ? *transparent : m_IsTransparent)
     {
-        D3DMATERIAL9 m;
-        ZeroMemory(&m, sizeof(m));
-
-        m_Device->GetMaterial(&m);
-        m.Ambient.a = m.Ambient.a < 0.0001 ? 0.5f : m.Ambient.a;
-        m.Diffuse = m.Ambient;
-        m_Device->SetMaterial(&m);
-
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+        if( materialColor.GetA() == 0 )
+        {
+            materialColor.SetA( 0x80 );
+        }
     }
 
     if (solid ? *solid : m_IsSolid)
     {
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)GetBaseIndex()+m_WireVertCount, m_Steps);
-        m_Device->DrawPrimitive(D3DPT_TRIANGLEFAN, (UINT)GetBaseIndex()+m_WireVertCount+m_Steps+2, m_Steps);
+        drawInterface->DrawUntextured(
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + m_WireVertCount,
+            m_Steps + 2,
+            0,
+            m_Steps,
+            materialColor );
+        drawInterface->DrawUntextured(
+            Helium::RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + m_WireVertCount + m_Steps + 2,
+            m_Steps + 2,
+            0,
+            m_Steps,
+            materialColor );
         args->m_TriangleCount += (m_Steps*2);
     }
     else
     {
-        m_Device->DrawPrimitive(D3DPT_LINELIST, (UINT)GetBaseIndex(), 4);
-        m_Device->DrawPrimitive(D3DPT_LINESTRIP, (UINT)GetBaseIndex()+8, m_Steps+1);
+        drawInterface->DrawUntextured(
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_LIST,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex(),
+            8,
+            0,
+            4,
+            materialColor,
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
+        drawInterface->DrawUntextured(
+            Helium::RENDERER_PRIMITIVE_TYPE_LINE_STRIP,
+            transform,
+            m_Buffer,
+            NULL,
+            GetBaseIndex() + 8,
+            m_Steps + 2,
+            0,
+            m_Steps + 1,
+            materialColor,
+            Helium::RenderResourceManager::RASTERIZER_STATE_WIREFRAME_DOUBLE_SIDED );
         args->m_TriangleCount += (m_Steps*2);
-    }
-
-    if (transparent ? *transparent : m_IsTransparent)
-    {
-        m_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
     }
 }
 

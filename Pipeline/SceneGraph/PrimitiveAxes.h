@@ -2,38 +2,49 @@
 
 #include "Primitive.h"
 
+#include "GraphicsTypes/VertexTypes.h"
+
 namespace Helium
 {
     class Matrix4;
 
     namespace SceneGraph
     {
-        class PrimitiveAxes : public PrimitiveTemplate<PositionColored>
+        class PrimitiveAxes : public PrimitiveTemplate< Helium::SimpleVertex >
         {
         public:
-            typedef PrimitiveTemplate<PositionColored> Base;
+            typedef PrimitiveTemplate< Helium::SimpleVertex > Base;
 
         private:
-            uint32_t m_ColorX;
-            uint32_t m_ColorY;
-            uint32_t m_ColorZ;
+            Helium::Color m_ColorX;
+            Helium::Color m_ColorY;
+            Helium::Color m_ColorZ;
 
         public:
-            float m_Length;
+            float32_t m_Length;
 
         public:
-            SceneGraph::PrimitiveAxes(ResourceTracker* tracker);
+            PrimitiveAxes();
 
-            void SetColor(AxesFlags axis, uint32_t c);
-            void SetColor(uint32_t c);
+            void SetColor( AxesFlags axis, Helium::Color c );
+            void SetColor( Helium::Color c );
             void SetRGB();
 
             virtual void Update() HELIUM_OVERRIDE;
-            virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
-            virtual void DrawAxes(DrawArgs* args, AxesFlags axes) const;
-            virtual void DrawViewport(DrawArgs* args, const SceneGraph::Camera* camera) const;
+            virtual void Draw(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const HELIUM_OVERRIDE;
+            virtual void DrawAxes(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, AxesFlags axes,
+                Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
+            virtual void DrawViewport(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, const SceneGraph::Camera* camera,
+                Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY ) const;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
-            AxesFlags PickAxis(const Matrix4& transform, Line pick, float err);
+            AxesFlags PickAxis( const Matrix4& transform, Line pick, float32_t err );
         };
     }
 }

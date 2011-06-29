@@ -15,7 +15,7 @@
 #include "Rendering/Color.h"
 #include "EditorSupport/Image.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Main loop for reading TGA image pixel data.
 template< typename ImageReader >

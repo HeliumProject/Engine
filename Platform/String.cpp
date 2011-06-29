@@ -1,3 +1,4 @@
+#include "PlatformPch.h"
 #include "Platform/String.h"
 
 #ifndef __GNUC__

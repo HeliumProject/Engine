@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Inspect/Interpreter.h"
 #include "Foundation/Inspect/Controls.h"

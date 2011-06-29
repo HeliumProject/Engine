@@ -96,17 +96,17 @@ namespace Helium
 #define HELIUM_TRIGGER_ASSERT_HANDLER( EXP, ... ) \
     { \
         HELIUM_DISABLEABLE_CODE_BLOCK( \
-            Helium::Assert::EResult result = Helium::Assert::Trigger( \
+            Helium::Assert::EResult _result = Helium::Assert::Trigger( \
                 EXP, \
                 HELIUM_FUNCTION_NAME, \
                 __FILE__, \
                 __LINE__, \
                 __VA_ARGS__ ); \
-            if( result == Helium::Assert::RESULT_BREAK ) \
+            if( _result == Helium::Assert::RESULT_BREAK ) \
             { \
                 HELIUM_ISSUE_BREAK(); \
             } \
-            else if( result == Helium::Assert::RESULT_ABORT ) \
+            else if( _result == Helium::Assert::RESULT_ABORT ) \
             { \
                 Helium::FatalExit( -1 ); \
             } ) \
@@ -204,13 +204,19 @@ namespace Helium
 
 #endif
 
-
 //
 // Compile time
 //
 
-#define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+#if HELIUM_CC_MSC
+# if _MSC_VER >= 1600
+#  define HELIUM_COMPILE_ASSERT(exp) static_assert(exp, #exp)
+# endif
+#endif
 
+#ifndef HELIUM_COMPILE_ASSERT
+# define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+#endif
 
 //
 // #pragma TODO("Do something!")

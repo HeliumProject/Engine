@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
-#define LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
+#ifndef HELIUM_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
+#define HELIUM_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -16,10 +16,10 @@
 #include "PcSupport/ResourceHandler.h"
 #include "Foundation/File/Path.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Texture2d resource types.
-    class LUNAR_EDITOR_SUPPORT_API Texture2dResourceHandler : public ResourceHandler
+    class HELIUM_EDITOR_SUPPORT_API Texture2dResourceHandler : public ResourceHandler
     {
         L_DECLARE_OBJECT( Texture2dResourceHandler, ResourceHandler );
 
@@ -43,4 +43,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H
+#endif  // HELIUM_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H

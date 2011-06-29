@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "ReverseChildrenCommand.h"
 
 using namespace Helium;

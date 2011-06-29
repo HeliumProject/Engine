@@ -11,7 +11,7 @@
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"
 
-#include "Pipeline/Render/DeviceManager.h"
+#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {
@@ -189,10 +189,12 @@ namespace Helium
             void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename );
 
             bool Draw();
+#ifdef VIEWPORT_REFACTOR
             void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
             void DrawTileOverlays( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
             void DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& tileCorners, DWORD color );
             void DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail );
+#endif
 
             void OnPaint( wxPaintEvent& args );
 
@@ -228,8 +230,8 @@ namespace Helium
 
             void OnVaultPanelClosing( wxCloseEvent& args );
 
-            void OnReleaseResources( const Render::DeviceStateArgs& args );
-            void OnAllocateResources( const Render::DeviceStateArgs& args );
+            void OnReleaseResources( const DeviceStateArgs& args );
+            void OnAllocateResources( const DeviceStateArgs& args );
 
         private:
             static const float s_NearClipDistance;
@@ -244,7 +246,7 @@ namespace Helium
             static const float s_MinThumbnailSize;
             static const float s_MaxThumbnailSize;
 
-            Render::DeviceManager m_DeviceManager;
+            DeviceManager m_DeviceManager;
             float m_LabelFontHeight;
             ID3DXFont* m_LabelFont;
             ID3DXFont* m_TypeFont;

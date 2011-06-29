@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Constructor.
     ///
@@ -352,7 +352,7 @@ namespace Lunar
     template< typename T, size_t Size >
     Serializer& Serializer::operator<<( const ArraySerializeProxy< T, Size >& rValue )
     {
-        BOOST_STATIC_ASSERT( Size <= static_cast< size_t >( UINT32_MAX ) );
+        HELIUM_COMPILE_ASSERT( Size <= static_cast< size_t >( UINT32_MAX ) );
         BeginArray( static_cast< uint32_t >( Size ) );
 
         for( size_t index = 0; index < Size; ++index )
@@ -404,7 +404,7 @@ namespace Lunar
     template< typename T, size_t Size >
     Serializer& Serializer::operator<<( const StructArraySerializeProxy< T, Size >& rValue )
     {
-        BOOST_STATIC_ASSERT( Size <= static_cast< size_t >( UINT32_MAX ) );
+        HELIUM_COMPILE_ASSERT( Size <= static_cast< size_t >( UINT32_MAX ) );
         BeginArray( static_cast< uint32_t >( Size ) );
 
         for( size_t index = 0; index < Size; ++index )

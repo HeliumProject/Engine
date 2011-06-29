@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Platform/API.h"
-
 #include "Platform/Types.h"
+#include "Platform/Platform.h"
 
-#ifdef WIN32
+#ifdef HELIUM_OS_WIN
 # include "Platform/Windows/File.h"
 #else
 # include "Platform/POSIX/File.h"
@@ -43,12 +43,12 @@ namespace Helium
     };
     typedef FileModes::FileMode FileMode;
 
-    Handle PLATFORM_API CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
-    bool PLATFORM_API CloseHandle( Handle& handle );
-    bool PLATFORM_API ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
-    bool PLATFORM_API WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
-    bool PLATFORM_API FlushFile( Handle& handle );
-    int64_t PLATFORM_API Seek( Handle& handle, int64_t offset, SeekOrigin origin );
-    int64_t PLATFORM_API Tell( const Handle& handle );
-    int64_t PLATFORM_API GetSize( const Handle& handle );
+    PLATFORM_API Handle CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
+    PLATFORM_API bool CloseHandle( Handle& handle );
+    PLATFORM_API bool ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
+    PLATFORM_API bool WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
+    PLATFORM_API bool FlushFile( Handle& handle );
+    PLATFORM_API int64_t Seek( Handle& handle, int64_t offset, SeekOrigin origin );
+    PLATFORM_API int64_t Tell( const Handle& handle );
+    PLATFORM_API int64_t GetSize( const Handle& handle );
 }

@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Decode.h"
 #include "Pipeline/Image/Formats/DXT.h"
 

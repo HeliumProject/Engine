@@ -10,7 +10,7 @@
 
 #include "Platform/Math/Simd/VectorConversion.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( Camera, Framework, 0 );
 

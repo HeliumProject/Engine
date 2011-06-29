@@ -10,7 +10,7 @@
 
 #include "RenderingD3D9/D3D9Surface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///
@@ -133,7 +133,7 @@ uint32_t D3D9Texture2d::GetHeight( uint32_t mipLevel ) const
         HELIUM_TRACE(
             TRACE_ERROR,
             ( TXT( "D3D9Texture2d::GetHeight(): Failed to get surface description for mip level %" ) TPRIu32
-            TXT( " (error code 0x%x).\n" ) ),
+              TXT( " (error code 0x%x).\n" ) ),
             mipLevel,
             result );
 
@@ -162,8 +162,8 @@ RSurface* D3D9Texture2d::GetSurface( uint32_t mipLevel )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            ( TXT( "D3D9Texture2d::GetSurface(): Failed to get surface for mip level %" ) TPRIu32 TXT( " (error " )
-            TXT( "code 0x%x).\n" ) ),
+            ( TXT( "D3D9Texture2d::GetSurface(): Failed to get surface for mip level %" ) TPRIu32 TXT( " (error code " )
+              TXT( "0x%x).\n" ) ),
             mipLevel,
             result );
 

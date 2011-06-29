@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "DOM.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
@@ -5,8 +6,20 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 REFLECT_DEFINE_ABSTRACT( DocumentNode );
+
 REFLECT_DEFINE_OBJECT( DocumentAttribute );
+void DocumentAttribute::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &This::m_Name, TXT( "Name" ) );
+    comp.AddField( &This::m_Value, TXT( "Value" ) );
+}
+
 REFLECT_DEFINE_OBJECT( DocumentObject );
+void DocumentObject::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &This::m_Children, TXT( "Children" ) );
+}
+
 REFLECT_DEFINE_OBJECT( Document );
 
 void DocumentNode::SetDocument( Document* document )

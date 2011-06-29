@@ -1,7 +1,6 @@
+#include "PlatformPch.h"
 #include "Platform/Profile.h"
 #include "Platform/PlatformUtility.h"
-#include "Platform/Windows/Windows.h"
-
 #include "Platform/Windows/MemoryProfiler.h"
 
 #include <stdio.h>

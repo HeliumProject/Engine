@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Get the platform-specific handle associated with this window.
     ///
@@ -66,7 +66,7 @@ namespace Lunar
     /// @return  Callback to execute when this window is actually destroyed.
     ///
     /// @see SetOnDestroyed()
-    const Window::OnDestroyed& Window::GetOnDestroyed() const
+    const Delegate<Window*>& Window::GetOnDestroyed() const
     {
         return m_onDestroyed;
     }

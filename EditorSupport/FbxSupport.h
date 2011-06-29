@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
-#define LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
+#ifndef HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H
+#define HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H
 
 #include "EditorSupport/EditorSupport.h"
 
@@ -33,7 +33,7 @@
 // long-standing bugs with the FBX SDK attempting to free allocations returned by CRT functions, i.e. strdup()).
 #define L_ENABLE_FBX_MEMORY_ALLOCATOR 0
 
-namespace Lunar
+namespace Helium
 {
 #if L_ENABLE_FBX_MEMORY_ALLOCATOR
     /// Custom FBX memory allocator.
@@ -214,4 +214,4 @@ namespace Lunar
 
 #endif  // L_EDITOR
 
-#endif  // LUNAR_EDITOR_SUPPORT_FBX_SUPPORT_H
+#endif  // HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H

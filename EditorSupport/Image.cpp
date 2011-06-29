@@ -13,7 +13,7 @@
 
 #include "Rendering/Color.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // Pixel value reader for one-byte pixel sizes.
 class PixelValueReader1
@@ -754,13 +754,13 @@ void Image::Unload()
 /// @param[in] rImage  Image with which to swap.
 void Image::Swap( Image& rImage )
 {
-    Lunar::Swap( m_pPixelData, rImage.m_pPixelData );
+    Helium::Swap( m_pPixelData, rImage.m_pPixelData );
 
-    Lunar::Swap( m_width, rImage.m_width );
-    Lunar::Swap( m_height, rImage.m_height );
-    Lunar::Swap( m_pitch, rImage.m_pitch );
+    Helium::Swap( m_width, rImage.m_width );
+    Helium::Swap( m_height, rImage.m_height );
+    Helium::Swap( m_pitch, rImage.m_pitch );
 
-    Lunar::Swap( m_format, rImage.m_format );
+    Helium::Swap( m_format, rImage.m_format );
 }
 
 /// Convert this image to the given format and store in the destination image object.

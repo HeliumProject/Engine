@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_WINDOWING_WIN_WIN_WINDOW_H
-#define LUNAR_WINDOWING_WIN_WIN_WINDOW_H
+#ifndef HELIUM_WINDOWING_WIN_WIN_WINDOW_H
+#define HELIUM_WINDOWING_WIN_WIN_WINDOW_H
 
 #include "WindowingWin/WindowingWin.h"
 #include "Windowing/Window.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Windows(R) Window implementation.
     class WinWindow : public Window
@@ -36,4 +36,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_WINDOWING_WIN_WIN_WINDOW_H
+#endif  // HELIUM_WINDOWING_WIN_WIN_WINDOW_H

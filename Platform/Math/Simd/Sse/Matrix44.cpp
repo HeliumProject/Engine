@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "PlatformPch.h"
 #include "Platform/Math/Simd.h"
 
 #if HELIUM_SIMD_SSE

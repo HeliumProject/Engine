@@ -11,7 +11,7 @@
 #include "Engine/Config.h"
 #include "PcSupport/XmlPackageLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 PcCacheObjectLoader::PcCacheObjectLoader()

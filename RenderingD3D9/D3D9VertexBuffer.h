@@ -6,13 +6,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H
-#define LUNAR_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H
+#ifndef HELIUM_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H
+#define HELIUM_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H
 
 #include "RenderingD3D9/RenderingD3D9.h"
 #include "Rendering/RVertexBuffer.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Direct3D 9 vertex buffer implementation.
     class D3D9VertexBuffer : public RVertexBuffer
@@ -31,17 +31,17 @@ namespace Lunar
         inline IDirect3DVertexBuffer9* GetD3DBuffer() const;
         //@}
 
-    private:
+    protected:
         /// Vertex buffer instance.
         IDirect3DVertexBuffer9* m_pBuffer;
 
         /// @name Construction/Destruction
         //@{
-        ~D3D9VertexBuffer();
+        virtual ~D3D9VertexBuffer();
         //@}
     };
 }
 
 #include "RenderingD3D9/D3D9VertexBuffer.inl"
 
-#endif  // LUNAR_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H
+#endif  // HELIUM_RENDERING_D3D9_D3D9_VERTEX_BUFFER_H

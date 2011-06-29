@@ -15,7 +15,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( SceneAsset, AssetClass );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const HELIUM_OVERRIDE;
         };

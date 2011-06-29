@@ -82,18 +82,13 @@ namespace Helium
             DocumentObject*    m_Parent;
             DocumentNode*       m_Next;
             DocumentNode*       m_Previous;
-
-        public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-
-            }
         };
 
         class FOUNDATION_API DocumentAttribute : public DocumentNode
         {
         public:
             REFLECT_DECLARE_OBJECT( DocumentAttribute, DocumentNode );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             virtual const tstring& GetName()
             {
@@ -129,13 +124,6 @@ namespace Helium
         protected:
             tstring m_Name;
             tstring m_Value;
-
-        public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-                comp.AddField( &This::m_Name, TXT( "Name" ) );
-                comp.AddField( &This::m_Value, TXT( "Value" ) );
-            }
         };
 
         struct DocumentHierarchyChangeArgs
@@ -172,6 +160,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( DocumentObject, DocumentNode );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             DocumentObject()
             {
@@ -258,12 +247,6 @@ namespace Helium
             DocumentHierarchyChangedSignature::Event    m_ChildAdded;
             DocumentHierarchyChangingSignature::Event   m_ChildRemoving;
             DocumentHierarchyChangedSignature::Event    m_ChildRemoved;
-
-        public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-                comp.AddField( &This::m_Children, TXT( "Children" ) );
-            }
         };
 
         class FOUNDATION_API Document : public DocumentObject
@@ -274,12 +257,6 @@ namespace Helium
             void Initialize()
             {
                 Base::Initialize( this, this, NULL, NULL );
-            }
-
-        public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-
             }
         };
 

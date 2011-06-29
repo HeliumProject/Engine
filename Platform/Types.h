@@ -2,16 +2,9 @@
 
 #include "Platform/Platform.h"
 
-#include "boost/preprocessor/wstringize.hpp"
-#include "boost/preprocessor/stringize.hpp"
-
 //
 // Register types
 //
-
-#ifndef NULL
-#define NULL (0)
-#endif
 
 #if HELIUM_CC_MSC
 
@@ -451,16 +444,6 @@ typedef double float64_t;
 # endif
 #endif
 
-/// Convert the expanded result of a macro to a char string.
-///
-/// @param[in] X  Macro to expand and stringize.
-#define HELIUM_STRINGIZE( X ) BOOST_PP_STRINGIZE( X )
-
-/// Convert the expanded result of a macro to a wchar_t string.
-///
-/// @param[in] X  Macro to expand and stringize.
-#define HELIUM_WSTRINGIZE( X ) BOOST_PP_WSTRINGIZE( X )
-
 #if HELIUM_UNICODE
 
 /// Default character type.
@@ -469,11 +452,6 @@ typedef wchar_t tchar_t;
 /// Prefix for declaring string and character literals of the default character type.
 #define TXT( X ) L##X
 
-/// Convert the expanded result of a macro to a tchar_t string.
-///
-/// @param[in] X  Macro to expand and stringize.
-#define HELIUM_TSTRINGIZE( X ) HELIUM_WSTRINGIZE( X )
-
 #else  // HELIUM_UNICODE
 
 /// Default character type.
@@ -481,11 +459,6 @@ typedef char tchar_t;
 
 /// Prefix for declaring string and character literals of the default character type.
 #define TXT( X ) X
-
-/// Convert the expanded result of a macro to a tchar_t string.
-///
-/// @param[in] X  Macro to expand and stringize.
-#define HELIUM_TSTRINGIZE( X ) HELIUM_STRINGIZE( X )
 
 #endif  // HELIUM_UNICODE
 

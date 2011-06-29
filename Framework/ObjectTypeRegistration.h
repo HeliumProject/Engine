@@ -6,12 +6,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H
-#define LUNAR_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H
+#ifndef HELIUM_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H
+#define HELIUM_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H
 
 #include "Framework/Framework.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Base class for GameObject type registration support.
     ///
@@ -19,7 +19,7 @@ namespace Lunar
     /// - Engine
     /// - Graphics
     /// - Framework
-    class LUNAR_FRAMEWORK_API ObjectTypeRegistration
+    class HELIUM_FRAMEWORK_API ObjectTypeRegistration
     {
     public:
         /// @name Construction/Destruction
@@ -35,4 +35,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H
+#endif  // HELIUM_FRAMEWORK_OBJECT_TYPE_REGISTRATION_H

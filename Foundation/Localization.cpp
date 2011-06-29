@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Localization.h"
 
 using namespace Helium;

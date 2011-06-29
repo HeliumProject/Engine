@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ClipboardElementArray.h"
 
 using namespace Helium;
@@ -6,7 +6,7 @@ using namespace Helium::Editor;
 
 REFLECT_DEFINE_OBJECT( ClipboardElementArray );
 
-void ClipboardElementArray::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ClipboardElementArray::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &ClipboardElementArray::m_CommonBaseClass, TXT( "m_CommonBaseClass" ) );
     comp.AddField( &ClipboardElementArray::m_Elements, TXT( "m_Elements" ) );

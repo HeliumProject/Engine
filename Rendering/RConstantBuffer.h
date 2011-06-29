@@ -6,17 +6,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_CONSTANT_BUFFER_H
-#define LUNAR_RENDERING_R_CONSTANT_BUFFER_H
+#ifndef HELIUM_RENDERING_R_CONSTANT_BUFFER_H
+#define HELIUM_RENDERING_R_CONSTANT_BUFFER_H
 
 #include "Rendering/RRenderResource.h"
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Shader constant buffer interface.
-    class LUNAR_RENDERING_API RConstantBuffer : public RRenderResource
+    class HELIUM_RENDERING_API RConstantBuffer : public RRenderResource
     {
     public:
         /// @name Data Access
@@ -33,4 +33,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_CONSTANT_BUFFER_H
+#endif  // HELIUM_RENDERING_R_CONSTANT_BUFFER_H

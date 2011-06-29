@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Lunar
+namespace Helium
 {
     /// Update this scene view if an update is needed and clear the dirty flag.
     void GraphicsSceneView::ConditionalUpdate()
@@ -152,14 +152,6 @@ namespace Lunar
     const Simd::Frustum& GraphicsSceneView::GetFrustum() const
     {
         return m_frustum;
-    }
-
-    /// Get the constant buffer providing parameters used by the vertex shader for screen-space rendering.
-    ///
-    /// @return  Vertex shader constant buffer for screen-space rendering.
-    RConstantBuffer* GraphicsSceneView::GetScreenSpaceVertexConstantBuffer() const
-    {
-        return m_spScreenSpaceVertexConstantBuffer;
     }
 
     /// Get the distance from the camera at which shadows should no longer be rendered.

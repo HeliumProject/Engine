@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RIndexBuffer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RIndexBuffer::~RIndexBuffer()

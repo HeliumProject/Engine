@@ -23,7 +23,7 @@ namespace Helium
 
             REFLECT_DECLARE_OBJECT(Influence, Reflect::Object);
 
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
         };
 
         typedef Helium::StrongPtr<Influence> InfluencePtr;
@@ -33,7 +33,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Skin, SceneNode );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 

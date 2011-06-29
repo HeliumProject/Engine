@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Image.h"
 
 #include "Platform/Exception.h"

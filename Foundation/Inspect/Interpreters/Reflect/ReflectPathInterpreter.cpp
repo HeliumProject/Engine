@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "ReflectPathInterpreter.h"
 
 #include "Foundation/Inspect/Inspect.h"

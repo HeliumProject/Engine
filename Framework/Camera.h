@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_CAMERA_H
-#define LUNAR_FRAMEWORK_CAMERA_H
+#ifndef HELIUM_FRAMEWORK_CAMERA_H
+#define HELIUM_FRAMEWORK_CAMERA_H
 
 #include "Framework/Entity.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Camera entity.
-    class LUNAR_FRAMEWORK_API Camera : public Entity
+    class HELIUM_FRAMEWORK_API Camera : public Entity
     {
         L_DECLARE_OBJECT( Camera, Entity );
 
@@ -63,4 +63,4 @@ namespace Lunar
 
 #include "Framework/Camera.inl"
 
-#endif  // LUNAR_FRAMEWORK_CAMERA_H
+#endif  // HELIUM_FRAMEWORK_CAMERA_H

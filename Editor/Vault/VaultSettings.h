@@ -16,6 +16,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( VaultSettings, Reflect::Object );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             VaultSettings( VaultViewMode viewVaultMode = VaultViewMode::Details, uint32_t thumbnailSize = VaultThumbnailsSizes::Medium );
             ~VaultSettings();
@@ -23,17 +24,6 @@ namespace Helium
         public:
             VaultViewMode         m_VaultViewMode;
             uint32_t                   m_ThumbnailSize;
-
-        public:
-            static void AcceptCompositeVisitor( Reflect::Composite& comp )
-            {
-                comp.AddEnumerationField( &VaultSettings::m_VaultViewMode, TXT( "Vault View Mode" ) );
-
-                {
-                    Reflect::Field* field = comp.AddField( &VaultSettings::m_ThumbnailSize, TXT( "Thumbnail Size" ) );
-                    field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
-                }
-            }
         };
 
         typedef Helium::SmartPtr< VaultSettings > VaultSettingsPtr;

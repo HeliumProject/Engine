@@ -15,18 +15,17 @@
 #include "Framework/Entity.h"
 #include "Framework/Layer.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( World );
 }
 
-using namespace Lunar;
+using namespace Helium;
 
 L_IMPLEMENT_OBJECT( World, Framework, 0 );
 
 /// Constructor.
 World::World()
-: m_mainSceneViewId( Invalid< uint32_t >() )
 {
 }
 
@@ -46,7 +45,6 @@ bool World::Initialize()
 {
     HELIUM_ASSERT( m_layers.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
-    HELIUM_ASSERT( IsInvalid( m_mainSceneViewId ) );
 
     // Create the main graphics scene.
     const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
@@ -60,70 +58,7 @@ bool World::Initialize()
         return false;
     }
 
-    GraphicsScene* pGraphicsScene = m_spGraphicsScene;
-    HELIUM_ASSERT( pGraphicsScene );
-
-    Renderer* pRenderer = Renderer::GetStaticInstance();
-    if( pRenderer )
-    {
-        // Allocate and initialize a view for the scene.
-        m_mainSceneViewId = pGraphicsScene->AllocateSceneView();
-        HELIUM_ASSERT( IsValid( m_mainSceneViewId ) );
-        if( IsInvalid( m_mainSceneViewId ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "World::Initialize(): Failed to allocate a primary graphics scene view.\n" ) );
-
-            Shutdown();
-
-            return false;
-        }
-
-        RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-        RTexture2dPtr spSceneTexture = rRenderResourceManager.GetSceneTexture();
-        HELIUM_ASSERT( spSceneTexture );
-
-        uint32_t sceneTextureWidth = spSceneTexture->GetWidth();
-        uint32_t sceneTextureHeight = spSceneTexture->GetHeight();
-
-        RSurfacePtr spDepthStencilSurface = pRenderer->CreateDepthStencilSurface(
-            sceneTextureWidth,
-            sceneTextureHeight,
-            RENDERER_SURFACE_FORMAT_DEPTH_STENCIL,
-            0 );
-        HELIUM_ASSERT( spDepthStencilSurface );
-        if( !spDepthStencilSurface )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                ( TXT( "World::Initialize(): Failed to create depth-stencil surface for the main graphics " )
-                TXT( "scene.\n" ) ) );
-
-            Shutdown();
-
-            return false;
-        }
-
-        uint32_t displayWidth = pRenderer->GetMainContextWidth();
-        uint32_t displayHeight = pRenderer->GetMainContextHeight();
-
-        float32_t aspectRatio = 1.0f;
-        if( displayWidth != 0 && displayHeight != 0 )
-        {
-            aspectRatio = static_cast< float32_t >( displayWidth ) / static_cast< float32_t >( displayHeight );
-        }
-
-        RRenderContext* pMainRenderContext = pRenderer->GetMainContext();
-        HELIUM_ASSERT( pMainRenderContext );
-
-        GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_mainSceneViewId );
-        HELIUM_ASSERT( pSceneView );
-        pSceneView->SetRenderContext( pMainRenderContext );
-        pSceneView->SetDepthStencilSurface( spDepthStencilSurface );
-        pSceneView->SetAspectRatio( aspectRatio );
-        pSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
-    }
+    HELIUM_ASSERT( m_spGraphicsScene );
 
     return true;
 }
@@ -141,19 +76,8 @@ void World::Shutdown()
         HELIUM_VERIFY( RemoveLayer( pLayer ) );
     }
 
-    // Release all scene views and scenes.
-    GraphicsScene* pGraphicsScene = m_spGraphicsScene;
-    if( pGraphicsScene )
-    {
-        if( IsValid( m_mainSceneViewId ) )
-        {
-            pGraphicsScene->ReleaseSceneView( m_mainSceneViewId );
-        }
-
-        m_spGraphicsScene.Release();
-    }
-
-    SetInvalid( m_mainSceneViewId );
+    // Release the graphics scene for the world.
+    m_spGraphicsScene.Release();
 }
 
 /// Update the graphics scene for this world for the current frame.

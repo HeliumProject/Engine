@@ -11,10 +11,10 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-namespace Lunar
+namespace Helium
 {
     /// Resource handler for Font resource types.
-    class LUNAR_EDITOR_SUPPORT_API FontResourceHandler : public ResourceHandler
+    class HELIUM_EDITOR_SUPPORT_API FontResourceHandler : public ResourceHandler
     {
         L_DECLARE_OBJECT( FontResourceHandler, ResourceHandler );
 

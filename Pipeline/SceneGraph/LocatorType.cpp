@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "LocatorType.h"
 
 #include "Pipeline/SceneGraph/Locator.h"
@@ -26,10 +26,10 @@ void LocatorType::CleanupType()
 LocatorType::LocatorType( Scene* scene, const Reflect::Class* instanceClass )
 : InstanceType( scene, instanceClass )
 {
-    m_Locator = new PrimitiveLocator( scene->GetViewport()->GetResources() );
+    m_Locator = new PrimitiveLocator;
     m_Locator->Update();
 
-    m_Cube = new PrimitiveCube( scene->GetViewport()->GetResources() );
+    m_Cube = new PrimitiveCube;
     m_Cube->Update();
 }
 

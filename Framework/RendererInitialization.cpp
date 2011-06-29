@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/RendererInitialization.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RendererInitialization::~RendererInitialization()

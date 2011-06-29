@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "ShaderAsset.h"
 
 #include "Foundation/Log.h"
@@ -11,7 +12,7 @@ using namespace Helium::Asset;
 REFLECT_DEFINE_ENUMERATION( AlphaType );
 REFLECT_DEFINE_OBJECT( ShaderAsset );
 
-void ShaderAsset::AcceptCompositeVisitor( Reflect::Composite& comp )
+void ShaderAsset::PopulateComposite( Reflect::Composite& comp )
 {
     comp.SetProperty( AssetProperties::FileFilter, TXT( "*.shader.*" ) );
 

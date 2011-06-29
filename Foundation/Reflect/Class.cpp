@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "Class.h"
 #include "Object.h"
 #include "Registry.h"

@@ -6,16 +6,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_COLOR_H
-#define LUNAR_RENDERING_COLOR_H
+#ifndef HELIUM_RENDERING_COLOR_H
+#define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
 #include "Platform/Math/MathCommon.h"
 
-namespace Lunar
+namespace Helium
 {
+    class Serializer;
+
     /// 32-bit ARGB color value.
-    class LUNAR_RENDERING_API Color
+    class HELIUM_RENDERING_API Color
     {
     public:
         /// @name Construction/Destruction
@@ -47,6 +49,12 @@ namespace Lunar
         inline void SetFloatG( float32_t g );
         inline void SetFloatB( float32_t b );
         inline void SetFloatA( float32_t a );
+        //@}
+
+        /// @name Overloaded Operators
+        //@{
+        inline bool operator==( const Color& rOther ) const;
+        inline bool operator!=( const Color& rOther ) const;
         //@}
 
         /// @name Friend Functions
@@ -90,4 +98,4 @@ namespace Lunar
 
 #include "Rendering/Color.inl"
 
-#endif  // LUNAR_RENDERING_COLOR_H
+#endif  // HELIUM_RENDERING_COLOR_H

@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "TranslateManipulator.h"
 
 #include "Pipeline/SceneGraph/Pick.h"
@@ -52,21 +52,21 @@ TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, co
     m_ShowCones = mode == ManipulatorModes::Translate;
     m_Factor = 1.0f;
 
-    m_Axes = new SceneGraph::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
+    m_Axes = new SceneGraph::PrimitiveAxes ();
     m_Axes->Update();
 
-    m_Ring = new SceneGraph::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
+    m_Ring = new SceneGraph::PrimitiveCircle ();
     m_Ring->Update();
 
-    m_XCone = new SceneGraph::PrimitiveCone (m_Scene->GetViewport()->GetResources());
+    m_XCone = new SceneGraph::PrimitiveCone ();
     m_XCone->SetSolid( true );
     m_XCone->Update();
 
-    m_YCone = new SceneGraph::PrimitiveCone (m_Scene->GetViewport()->GetResources());
+    m_YCone = new SceneGraph::PrimitiveCone ();
     m_YCone->SetSolid( true );
     m_YCone->Update();
 
-    m_ZCone = new SceneGraph::PrimitiveCone (m_Scene->GetViewport()->GetResources());
+    m_ZCone = new SceneGraph::PrimitiveCone ();
     m_ZCone->SetSolid( true );
     m_ZCone->Update();
 
@@ -243,7 +243,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
     // build vertex list
     bool done = false;
     float dist = 0.0f;
-    std::vector<Position> vertices;
+    std::vector<Vector3> vertices;
     while ( !done )
     {
         // build next grid point
@@ -347,7 +347,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
 
         if (!done)
         {
-            vertices.push_back( Position (next) );
+            vertices.push_back( next );
         }
     }
 
@@ -359,6 +359,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
     if (!vertices.empty())
     {
         static float pointSize = 4.0f;
+#ifdef VIEWPORT_REFACTOR
         m_View->GetDevice()->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
         m_View->GetDevice()->SetRenderState(D3DRS_POINTSIZE, *((DWORD*)&(pointSize)));
         m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
@@ -366,6 +367,7 @@ void TranslateManipulator::DrawPoints(AxesFlags axis)
         m_View->GetDevice()->DrawPrimitiveUP(D3DPT_POINTLIST, (UINT)vertices.size(), &vertices.front(), sizeof(Position));
         m_View->GetDevice()->SetRenderState(D3DRS_POINTSPRITEENABLE, FALSE);
         m_View->GetResources()->ResetState();
+#endif
     }
 }
 
@@ -384,13 +386,16 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
     AxesFlags parallelAxis = m_View->GetCamera()->ParallelAxis(frame, HELIUM_CRITICAL_DOT_PRODUCT);
 
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&frame);
-
     m_Axes->DrawAxes(args, (AxesFlags)(~parallelAxis & MultipleAxes::All));
+#endif
 
     if (parallelAxis != MultipleAxes::X)
     {
+#ifdef VIEWPORT_REFACTOR
         SetAxisMaterial(MultipleAxes::X);
+#endif
 
         if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
@@ -399,14 +404,18 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
+#ifdef VIEWPORT_REFACTOR
             m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateY( static_cast< float32_t >( HELIUM_PI_2 ) ) * Matrix4 (m_XPosition) * frame));
             m_XCone->Draw(args);
+#endif
         }
     }
 
     if (parallelAxis != MultipleAxes::Y)
     {
+#ifdef VIEWPORT_REFACTOR
         SetAxisMaterial(MultipleAxes::Y);
+#endif
 
         if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
@@ -415,14 +424,18 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
+#ifdef VIEWPORT_REFACTOR
             m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4::RotateX( static_cast< float32_t >( -HELIUM_PI_2 ) ) * Matrix4 (m_YPosition) * frame));
             m_YCone->Draw(args);
+#endif
         }
     }
 
     if (parallelAxis != MultipleAxes::Z)
     {
+#ifdef VIEWPORT_REFACTOR
         SetAxisMaterial(MultipleAxes::Z);
+#endif
 
         if (GetSnappingMode() == TranslateSnappingMode::Offset || GetSnappingMode() == TranslateSnappingMode::Grid)
         {
@@ -431,18 +444,20 @@ void TranslateManipulator::Draw( DrawArgs* args )
 
         if (m_ShowCones)
         {
+#ifdef VIEWPORT_REFACTOR
             m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&(Matrix4 (m_ZPosition) * frame));
             m_ZCone->Draw(args);
+#endif
         }
     }
 
     if (m_SelectedAxes == MultipleAxes::All)
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::YELLOW;
+        m_AxisMaterial = SceneGraph::Color::YELLOW;
     }
     else
     {
-        m_AxisMaterial.Ambient = SceneGraph::Color::LIGHTGRAY;
+        m_AxisMaterial = SceneGraph::Color::LIGHTGRAY;
     }
 
     Vector3 cameraPosition;
@@ -450,9 +465,11 @@ void TranslateManipulator::Draw( DrawArgs* args )
     Matrix4 border = Matrix4 (AngleAxis::Rotation(Vector3::BasisX, cameraPosition - position)) * Matrix4 (position);
 
     // render sphere border m_Ring
+#ifdef VIEWPORT_REFACTOR
     m_View->GetDevice()->SetMaterial(&m_AxisMaterial);
     m_View->GetDevice()->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&border);
     m_Ring->Draw(args);
+#endif
 }
 
 bool TranslateManipulator::Pick( PickVisitor* pick )
@@ -545,7 +562,7 @@ bool TranslateManipulator::Pick( PickVisitor* pick )
 
         if (m_SelectedAxes != MultipleAxes::None && !m_ShowCones)
         {
-            m_Axes->SetColor(m_SelectedAxes, SceneGraph::Color::ColorValueToColor(SceneGraph::Color::YELLOW));
+            m_Axes->SetColor(m_SelectedAxes, SceneGraph::Color::YELLOW);
         }
 
         m_Axes->Update();

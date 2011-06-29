@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "BasicBuffer.h"
 
 #include "Platform/Exception.h"

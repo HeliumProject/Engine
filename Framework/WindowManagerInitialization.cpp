@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/WindowManagerInitialization.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 WindowManagerInitialization::~WindowManagerInitialization()

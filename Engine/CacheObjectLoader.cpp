@@ -10,7 +10,7 @@
 
 #include "Engine/CachePackageLoader.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 CacheObjectLoader::CacheObjectLoader()

@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 PlatformPreprocessor::~PlatformPreprocessor()

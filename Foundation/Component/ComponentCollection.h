@@ -34,7 +34,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             ComponentCollection();
             ComponentCollection( const ComponentPtr& attr );
@@ -109,7 +109,7 @@ namespace Helium
             virtual void ComponentChanged( const ComponentBase* attr = NULL );
 
         protected:
-            // this is a callback called by elements being changed by procedurally generated UI (EditorProperties)
+            // this is a callback called by objects being changed by procedurally generated UI (EditorProperties)
             void ComponentChanged( const Reflect::ObjectChangeArgs& args )
             {
                 // call into the virtual prototype in case it gets overridden in a derived class
@@ -165,9 +165,6 @@ namespace Helium
             //
 
         public:
-            // migrate legacy attributes
-            virtual bool ProcessComponent(Reflect::ObjectPtr element, const tchar_t* fieldName) HELIUM_OVERRIDE;
-
             // setup changed callback
             virtual void PreSerialize( const Reflect::Field* field ) HELIUM_OVERRIDE;
             virtual void PostDeserialize( const Reflect::Field* field ) HELIUM_OVERRIDE;

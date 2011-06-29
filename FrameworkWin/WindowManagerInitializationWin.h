@@ -6,18 +6,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
-#define LUNAR_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
+#ifndef HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
+#define HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/WindowManagerInitialization.h"
 
 #include "Platform/Windows/Windows.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Window manager factory implementation for Windows.
-    class LUNAR_FRAMEWORK_WIN_API WindowManagerInitializationWin : public WindowManagerInitialization
+    class HELIUM_FRAMEWORK_WIN_API WindowManagerInitializationWin : public WindowManagerInitialization
     {
     public:
         /// @name Construction/Destruction
@@ -38,4 +38,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
+#endif  // HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H

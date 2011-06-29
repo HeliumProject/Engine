@@ -14,7 +14,7 @@
 #include "PcSupport/XmlPackageLoader.h"
 #include "PcSupport/XmlSerializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Save the user configuration settings.
 ///

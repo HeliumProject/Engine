@@ -8,7 +8,7 @@
 #include "RenderingPch.h"
 #include "Rendering/RVertexBuffer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Destructor.
 RVertexBuffer::~RVertexBuffer()

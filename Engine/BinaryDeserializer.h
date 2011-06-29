@@ -6,18 +6,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_BINARY_DESERIALIZER_H
-#define LUNAR_ENGINE_BINARY_DESERIALIZER_H
+#ifndef HELIUM_ENGINE_BINARY_DESERIALIZER_H
+#define HELIUM_ENGINE_BINARY_DESERIALIZER_H
 
 #include "Engine/Serializer.h"
 
 #include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/Stream/ExternalMemoryStream.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Binary object property deserializer.
-    class LUNAR_ENGINE_API BinaryDeserializer : public Serializer
+    class HELIUM_ENGINE_API BinaryDeserializer : public Serializer
     {
     public:
         /// @name Construction/Destruction
@@ -108,4 +108,4 @@ namespace Lunar
 
 #include "Engine/BinaryDeserializer.inl"
 
-#endif  // LUNAR_ENGINE_BINARY_DESERIALIZER_H
+#endif  // HELIUM_ENGINE_BINARY_DESERIALIZER_H

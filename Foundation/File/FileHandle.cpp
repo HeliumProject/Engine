@@ -1,6 +1,5 @@
+#include "FoundationPch.h"
 #include "FileHandle.h"
-
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
 

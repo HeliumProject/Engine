@@ -1,4 +1,4 @@
-//#include "CorePch.h"
+#include "FoundationPch.h"
 
 #include "Platform/Assert.h"
 #include "Foundation/Checksum/Crc32.h"

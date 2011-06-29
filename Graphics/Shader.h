@@ -6,22 +6,22 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_SHADER_H
-#define LUNAR_GRAPHICS_SHADER_H
+#ifndef HELIUM_GRAPHICS_SHADER_H
+#define HELIUM_GRAPHICS_SHADER_H
 
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
 #include "Rendering/RShader.h"
 
-namespace Lunar
+namespace Helium
 {
     HELIUM_DECLARE_PTR( ShaderVariant );
 
     L_DECLARE_RPTR( RShader );
 
     /// Shader constant information.
-    struct LUNAR_GRAPHICS_API ShaderConstantInfo
+    struct HELIUM_GRAPHICS_API ShaderConstantInfo
     {
         /// Constant name.
         Name name;
@@ -39,7 +39,7 @@ namespace Lunar
     };
 
     /// Constant buffer information.
-    struct LUNAR_GRAPHICS_API ShaderConstantBufferInfo
+    struct HELIUM_GRAPHICS_API ShaderConstantBufferInfo
     {
         /// Constant buffer name.
         Name name;
@@ -57,7 +57,7 @@ namespace Lunar
     };
 
     /// Constant buffer information set.
-    struct LUNAR_GRAPHICS_API ShaderConstantBufferInfoSet
+    struct HELIUM_GRAPHICS_API ShaderConstantBufferInfoSet
     {
         /// Constant buffers.
         DynArray< ShaderConstantBufferInfo > buffers;
@@ -69,7 +69,7 @@ namespace Lunar
     };
 
     /// Shader sampler input information.
-    struct LUNAR_GRAPHICS_API ShaderSamplerInfo
+    struct HELIUM_GRAPHICS_API ShaderSamplerInfo
     {
         /// Sampler name.
         Name name;
@@ -83,7 +83,7 @@ namespace Lunar
     };
 
     /// Shader sampler input information set.
-    struct LUNAR_GRAPHICS_API ShaderSamplerInfoSet
+    struct HELIUM_GRAPHICS_API ShaderSamplerInfoSet
     {
         /// Sampler inputs.
         DynArray< ShaderSamplerInfo > inputs;
@@ -95,7 +95,7 @@ namespace Lunar
     };
 
     /// Shader texture input information.
-    struct LUNAR_GRAPHICS_API ShaderTextureInfo
+    struct HELIUM_GRAPHICS_API ShaderTextureInfo
     {
         /// Texture variable name.
         Name name;
@@ -109,7 +109,7 @@ namespace Lunar
     };
 
     /// Shader texture input information set.
-    struct LUNAR_GRAPHICS_API ShaderTextureInfoSet
+    struct HELIUM_GRAPHICS_API ShaderTextureInfoSet
     {
         /// Texture inputs.
         DynArray< ShaderTextureInfo > inputs;
@@ -121,7 +121,7 @@ namespace Lunar
     };
 
     /// Graphics shader resource.
-    class LUNAR_GRAPHICS_API Shader : public Resource
+    class HELIUM_GRAPHICS_API Shader : public Resource
     {
         L_DECLARE_OBJECT( Shader, Resource );
 
@@ -136,7 +136,7 @@ namespace Lunar
             void* pCallbackData, size_t loadId, ShaderVariantPtr& rspVariant );
 
         /// Shader preprocessor toggle.
-        struct LUNAR_GRAPHICS_API Toggle
+        struct HELIUM_GRAPHICS_API Toggle
         {
             /// Toggle name.
             Name name;
@@ -150,7 +150,7 @@ namespace Lunar
         };
 
         /// Shader preprocessor selection.
-        struct LUNAR_GRAPHICS_API Select
+        struct HELIUM_GRAPHICS_API Select
         {
             /// Selection name.
             Name name;
@@ -183,7 +183,7 @@ namespace Lunar
         };
 
         /// Preprocessor shader options.
-        class LUNAR_GRAPHICS_API Options
+        class HELIUM_GRAPHICS_API Options
         {
         public:
             /// @name Data Access
@@ -223,7 +223,7 @@ namespace Lunar
         };
 
         /// Persistent shader resource data.
-        class LUNAR_GRAPHICS_API PersistentResourceData
+        class HELIUM_GRAPHICS_API PersistentResourceData
         {
         public:
             /// @name Data Access
@@ -317,7 +317,7 @@ namespace Lunar
     };
 
     /// Single variation of a shader.
-    class LUNAR_GRAPHICS_API ShaderVariant : public Resource
+    class HELIUM_GRAPHICS_API ShaderVariant : public Resource
     {
         L_DECLARE_OBJECT( ShaderVariant, Resource );
 
@@ -390,4 +390,4 @@ namespace Lunar
 
 #include "Graphics/Shader.inl"
 
-#endif  // LUNAR_GRAPHICS_SHADER_H
+#endif  // HELIUM_GRAPHICS_SHADER_H

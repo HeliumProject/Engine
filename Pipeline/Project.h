@@ -3,15 +3,26 @@
 #include "Pipeline/API.h"
 #include "Foundation/Automation/Attribute.h"
 #include "Foundation/Document/Document.h"
-#include "Foundation/Reflect/DOM.h"
+#include "Foundation/Reflect/Structure.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {
+    struct TestStructure
+    {
+        TestStructure();
+
+        float32_t           m_Float32;
+        tstring             m_String;
+        Reflect::ObjectPtr  m_Object;
+
+        REFLECT_DECLARE_BASE_STRUCTURE( TestStructure );
+        static void PopulateComposite( Reflect::Composite& comp );
+    };
+
     class PIPELINE_API Project : public Reflect::Object
     {
     public:
-        REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
-
         Project( const Path& path = TXT( "" ) );
         virtual ~Project();
 
@@ -39,6 +50,8 @@ namespace Helium
         Helium::Event< const Path& > e_PathAdded;
         Helium::Event< const Path& > e_PathRemoved;
 
+        TestStructure m_Test;
+
         mutable DocumentObjectChangedSignature::Event e_HasChanged;
 
     protected:
@@ -49,11 +62,8 @@ namespace Helium
         void OnChildDocumentPathChanged( const DocumentPathChangedArgs& args );
 
     public:
-        static void AcceptCompositeVisitor( Reflect::Composite& comp )
-        {
-            comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
-            comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
-        }
+        REFLECT_DECLARE_OBJECT( Project, Reflect::Object );
+        static void PopulateComposite( Reflect::Composite& comp );
     };
 
     typedef Helium::StrongPtr<Project> ProjectPtr;

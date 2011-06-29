@@ -1,3 +1,4 @@
+#include "FoundationPch.h"
 #include "CommandQueue.h"
 
 using namespace Helium;

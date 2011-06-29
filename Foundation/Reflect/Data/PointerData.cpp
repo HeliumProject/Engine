@@ -1,4 +1,8 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/PointerData.h"
+
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -15,14 +19,14 @@ PointerData::~PointerData()
 
 }
 
-void PointerData::ConnectData(Helium::HybridPtr<void> data)
+void PointerData::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
-bool PointerData::Set(const Data* s, uint32_t flags)
+bool PointerData::Set(Data* data, uint32_t flags)
 {
-    const PointerData* rhs = SafeCast<PointerData>(s);
+    const PointerData* rhs = SafeCast<PointerData>(data);
     if (!rhs)
     {
         return false;
@@ -30,17 +34,17 @@ bool PointerData::Set(const Data* s, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Set( rhs->m_Data.Get() );
+        *m_Data = *rhs->m_Data;
     }
     else
     {
-        m_Data.Set( rhs->m_Data.Get().ReferencesObject() ? rhs->m_Data.Get()->Clone() : NULL );
+        *m_Data = (*rhs->m_Data).ReferencesObject() ? (*rhs->m_Data)->Clone() : NULL;
     }
 
     return true;
 }
 
-bool PointerData::Equals(const Object* object) const
+bool PointerData::Equals(Object* object)
 {
     const PointerData* rhs = SafeCast<PointerData>(object);
     
@@ -50,41 +54,63 @@ bool PointerData::Equals(const Object* object) const
     }
 
     // if the pointers are equal we are done
-    if ( m_Data.Get() == rhs->m_Data.Get() )
+    if ( *m_Data == *rhs->m_Data )
     {
         return true;
     }
     // if they are not equal but one is null we are done
-    else if (!m_Data.Get().ReferencesObject() || !rhs->m_Data.Get().ReferencesObject())
+    else if ( (*m_Data).ReferencesObject() || !(*rhs->m_Data).ReferencesObject() )
     {
         return false;
     }
 
     // pointers aren't equal so we have to do deep equality test
-    return m_Data.Get()->Equals( rhs->m_Data.Get() );
+    return (*m_Data)->Equals( *rhs->m_Data );
 }
 
 void PointerData::Accept(Visitor& visitor)
 {
-    if (!visitor.VisitPointer(*(ObjectPtr*)(m_Data.Ptr())))
+    if ( !visitor.VisitPointer( *m_Data ) )
     {
         return;
     }
 
-    if ( m_Data.Get() )
+    if ( *m_Data )
     {
-        m_Data.Get()->Accept( visitor );
+        (*m_Data)->Accept( visitor );
     }
 }
 
-void PointerData::Serialize(Archive& archive) const
+void PointerData::Serialize(ArchiveBinary& archive)
 {
-    archive.Serialize(m_Data.Get());
+    Serialize<ArchiveBinary>( archive );
 }
 
-void PointerData::Deserialize(Archive& archive)
+void PointerData::Deserialize(ArchiveBinary& archive)
 {
-    m_Data.Set( NULL );
+    Deserialize<ArchiveBinary>( archive );
+}
 
-    archive.Deserialize(m_Data.Ref());
+void PointerData::Serialize(ArchiveXML& archive)
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+void PointerData::Deserialize(ArchiveXML& archive)
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template< class ArchiveT >
+void PointerData::Serialize(ArchiveT& archive)
+{
+    archive.SerializeInstance( *m_Data );
+}
+
+template< class ArchiveT >
+void PointerData::Deserialize(ArchiveT& archive)
+{
+    *m_Data = NULL;
+
+    archive.DeserializeInstance( *m_Data );
 }

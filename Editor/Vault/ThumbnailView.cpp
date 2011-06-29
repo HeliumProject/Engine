@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ThumbnailView.h"
 #include "VaultSearchResults.h"
 #include "ThumbnailLoadedEvent.h"
@@ -105,8 +105,10 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     m_ViewMatrix = Matrix4( pivot * -1 ) * m_Orientation * Matrix4( Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_DeviceManager.Init( GetHwnd(), 64, 64 );
-    m_DeviceManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_DeviceManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+#ifdef VIEWPORT_REFACTOR
+    m_DeviceManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+#endif
     CreateResources();
 
     m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
@@ -124,6 +126,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
+#ifdef VIEWPORT_REFACTOR
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     Path processPath( GetProcessPath() );
@@ -134,6 +137,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "fbx" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "tga" ), tstring( processPath.Directory() + TXT( "Icons/128x128/filesystem/File.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "dat" ), tstring( processPath.Directory() + TXT( "Icons/16x16/mimetypes/Binary.png" ) ).c_str() );
+#endif
 
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
@@ -150,8 +154,10 @@ ThumbnailView::~ThumbnailView()
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
-    m_DeviceManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_DeviceManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+#ifdef VIEWPORT_REFACTOR
+    m_DeviceManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_DeviceManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+#endif
 
     if ( m_LabelFont )
     {
@@ -180,8 +186,10 @@ ThumbnailView::~ThumbnailView()
 void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tstring& filename )
 {
 #pragma TODO( "reimplement icons as resources" )
+#ifdef VIEWPORT_REFACTOR
     Helium::StdInsert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_DeviceManager, LoadTexture( device, filename ) ) ) );
     HELIUM_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -593,6 +601,7 @@ void ThumbnailView::UpdateProjectionMatrix()
 // 
 void ThumbnailView::CreateResources()
 {
+#ifdef VIEWPORT_REFACTOR
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
     if ( !device )
     {
@@ -711,6 +720,7 @@ void ThumbnailView::CreateResources()
         m_TextureBlankFile = new Thumbnail( &m_DeviceManager, LoadTexture( device, file ) );
         HELIUM_ASSERT( m_TextureBlankFile->GetTexture() );
     }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1105,6 +1115,8 @@ bool ThumbnailView::Draw()
         return false;
     }
 
+#ifdef VIEWPORT_REFACTOR
+
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
     // Begin Scene
@@ -1201,8 +1213,12 @@ bool ThumbnailView::Draw()
         return false;
     }
 
+#endif
+
     return true;
 }
+
+#ifdef VIEWPORT_REFACTOR
 
 ///////////////////////////////////////////////////////////////////////////////
 // Draws a single result tile at the specified position.  Returns true if the
@@ -1210,6 +1226,7 @@ bool ThumbnailView::Draw()
 // 
 void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly )
 {
+
     // Calculate position
     Vector3 tileCorners[CORNER_COUNT];
     GetTileCorners( tile, tileCorners );
@@ -1481,6 +1498,8 @@ void ThumbnailView::DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& t
     }
 }
 
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 // Draw to the D3D device during paint messages.
 // 
@@ -1497,6 +1516,8 @@ void ThumbnailView::OnPaint( wxPaintEvent& args )
 // 
 void ThumbnailView::OnSize( wxSizeEvent& args )
 {
+#ifdef VIEWPORT_REFACTOR
+
     if ( !m_DeviceManager.GetD3DDevice() )
     {
         return;
@@ -1509,6 +1530,8 @@ void ThumbnailView::OnSize( wxSizeEvent& args )
         AdjustScrollBar( true );
         m_DeviceManager.Resize( args.GetSize().x, args.GetSize().y );
     }
+
+#endif
 
     Refresh();
 }
@@ -1999,7 +2022,7 @@ void ThumbnailView::OnVaultPanelClosing( wxCloseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is lost, clean up any D3D resources that we created.
 // 
-void ThumbnailView::OnReleaseResources( const Render::DeviceStateArgs& args )
+void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
 {
     DeleteResources();
 
@@ -2011,7 +2034,7 @@ void ThumbnailView::OnReleaseResources( const Render::DeviceStateArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is found, reset any D3D resources that are needed.
 // 
-void ThumbnailView::OnAllocateResources( const Render::DeviceStateArgs& args )
+void ThumbnailView::OnAllocateResources( const DeviceStateArgs& args )
 {
     CreateResources();
 }

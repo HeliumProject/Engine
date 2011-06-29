@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_CACHE_MANAGER_H
-#define LUNAR_ENGINE_CACHE_MANAGER_H
+#ifndef HELIUM_ENGINE_CACHE_MANAGER_H
+#define HELIUM_ENGINE_CACHE_MANAGER_H
 
 #include "Engine/Cache.h"
 
@@ -18,10 +18,10 @@
 /// Cache file extension.
 #define L_CACHE_EXTENSION TXT( "cache" )
 
-namespace Lunar
+namespace Helium
 {
     /// Manager for object and resource serialization caches.
-    class LUNAR_ENGINE_API CacheManager : NonCopyable
+    class HELIUM_ENGINE_API CacheManager : NonCopyable
     {
     public:
         /// Number of cache objects per cache pool block.
@@ -69,4 +69,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_ENGINE_CACHE_MANAGER_H
+#endif  // HELIUM_ENGINE_CACHE_MANAGER_H

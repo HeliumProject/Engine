@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_ENGINE_ENGINE_PCH_H
-#define LUNAR_ENGINE_ENGINE_PCH_H
+#ifndef HELIUM_ENGINE_ENGINE_PCH_H
+#define HELIUM_ENGINE_ENGINE_PCH_H
 
 #include "Engine/Engine.h"
 
@@ -19,4 +19,4 @@
 #include "Engine/Package.h"
 #include "Engine/Serializer.h"
 
-#endif  // LUNAR_ENGINE_ENGINE_PCH_H
+#endif  // HELIUM_ENGINE_ENGINE_PCH_H

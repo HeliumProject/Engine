@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "ThumbnailSorter.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Natural.h"

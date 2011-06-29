@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_PIXEL_SHADER_H
-#define LUNAR_RENDERING_R_PIXEL_SHADER_H
+#ifndef HELIUM_RENDERING_R_PIXEL_SHADER_H
+#define HELIUM_RENDERING_R_PIXEL_SHADER_H
 
 #include "Rendering/RShader.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Pixel shader interface.
-    class LUNAR_RENDERING_API RPixelShader : public RShader
+    class HELIUM_RENDERING_API RPixelShader : public RShader
     {
     public:
         /// @name Type Information
@@ -30,4 +30,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_PIXEL_SHADER_H
+#endif  // HELIUM_RENDERING_R_PIXEL_SHADER_H

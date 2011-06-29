@@ -8,10 +8,10 @@
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsConfig.h"
 
-using namespace Lunar;
+using namespace Helium;
 
-L_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, LUNAR_GRAPHICS_API );
-L_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, LUNAR_GRAPHICS_API );
+L_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, HELIUM_GRAPHICS_API );
+L_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, HELIUM_GRAPHICS_API );
 L_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
 
 /// Constructor.

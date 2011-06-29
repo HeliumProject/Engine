@@ -6,12 +6,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_RENDERER_TYPES_H
-#define LUNAR_RENDERING_RENDERER_TYPES_H
+#ifndef HELIUM_RENDERING_RENDERER_TYPES_H
+#define HELIUM_RENDERING_RENDERER_TYPES_H
 
 #include "Rendering/Rendering.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Maximum simultaneous render targets supported by the engine (note that the render device may support less).
     static const size_t SIMULTANEOUS_RENDER_TARGET_COUNT_MAX = 16;
@@ -337,8 +337,8 @@ namespace Lunar
 
     /// Surface pixel formats.
     ///
-    /// When adding, removing, or modifying formats, make sure to update the PixelUtil functions as well as the texture
-    /// creation functions (Renderer::CreateTexture2d()) as appropriate.
+    /// When adding, removing, or modifying formats, make sure to update the RendererUtil functions as well as the
+    /// texture creation functions (Renderer::CreateTexture2d()) as appropriate.
     enum ERendererPixelFormat
     {
         RENDERER_PIXEL_FORMAT_FIRST   =  0,
@@ -441,6 +441,8 @@ namespace Lunar
         RENDERER_PRIMITIVE_TYPE_FIRST   =  0,
         RENDERER_PRIMITIVE_TYPE_INVALID = -1,
 
+        /// Point list.
+        RENDERER_PRIMITIVE_TYPE_POINT_LIST,
         /// Line list.
         RENDERER_PRIMITIVE_TYPE_LINE_LIST,
         /// Line strip.
@@ -449,10 +451,12 @@ namespace Lunar
         RENDERER_PRIMITIVE_TYPE_TRIANGLE_LIST,
         /// Triangle strip.
         RENDERER_PRIMITIVE_TYPE_TRIANGLE_STRIP,
+        /// Triangle fan.
+        RENDERER_PRIMITIVE_TYPE_TRIANGLE_FAN,
 
         RENDERER_PRIMITIVE_TYPE_MAX,
         RENDERER_PRIMITIVE_TYPE_LAST = RENDERER_PRIMITIVE_TYPE_MAX - 1
     };
 }
 
-#endif  // LUNAR_RENDERING_RENDERER_TYPES_H
+#endif  // HELIUM_RENDERING_RENDERER_TYPES_H

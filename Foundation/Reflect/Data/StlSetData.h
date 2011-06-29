@@ -17,10 +17,10 @@ namespace Helium
             REFLECT_DECLARE_ABSTRACT( StlSetData, ContainerData );
 
             virtual const Class* GetItemClass() const = 0;
-            virtual void GetItems(std::vector< ConstDataPtr >& items) const = 0;
-            virtual void AddItem(const Data* value) = 0;
-            virtual void RemoveItem(const Data* value) = 0;
-            virtual bool ContainsItem(const Data* value) const = 0;
+            virtual void GetItems(std::vector< DataPtr >& items) const = 0;
+            virtual void AddItem(Data* value) = 0;
+            virtual void RemoveItem(Data* value) = 0;
+            virtual bool ContainsItem(Data* value) const = 0;
         };
 
         template <class DataT, class DataClassT>
@@ -28,34 +28,43 @@ namespace Helium
         {
         public:
             typedef std::set<DataT> DataType;
-            Data::Pointer<DataType> m_Data;
+            DataPointer<DataType> m_Data;
 
             typedef SimpleStlSetData<DataT, DataClassT> StlSetDataT;
             REFLECT_DECLARE_OBJECT( StlSetDataT, StlSetData )
 
             SimpleStlSetData();
-            virtual ~SimpleStlSetData();
+            ~SimpleStlSetData();
 
-            virtual void ConnectData(Helium::HybridPtr<void> data) HELIUM_OVERRIDE;
+            virtual void ConnectData(void* data) HELIUM_OVERRIDE;
 
             virtual size_t GetSize() const HELIUM_OVERRIDE;
             virtual void Clear() HELIUM_OVERRIDE;
 
             virtual const Class* GetItemClass() const HELIUM_OVERRIDE;
-            virtual void GetItems(std::vector< ConstDataPtr >& items) const HELIUM_OVERRIDE;
-            virtual void AddItem(const Data* value) HELIUM_OVERRIDE;
-            virtual void RemoveItem(const Data* value) HELIUM_OVERRIDE;
-            virtual bool ContainsItem(const Data* value) const HELIUM_OVERRIDE;
+            virtual void GetItems(std::vector< DataPtr >& items) const HELIUM_OVERRIDE;
+            virtual void AddItem(Data* value) HELIUM_OVERRIDE;
+            virtual void RemoveItem(Data* value) HELIUM_OVERRIDE;
+            virtual bool ContainsItem(Data* value) const HELIUM_OVERRIDE;
 
-            virtual bool Set(const Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
-            virtual bool Equals(const Object* object) const HELIUM_OVERRIDE;
+            virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
-            virtual void Serialize(Archive& archive) const HELIUM_OVERRIDE;
-            virtual void Deserialize(Archive& archive) HELIUM_OVERRIDE;
+            virtual void Serialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveBinary& archive ) HELIUM_OVERRIDE;
 
-            virtual tostream& operator>> (tostream& stream) const HELIUM_OVERRIDE;
-            virtual tistream& operator<< (tistream& stream) HELIUM_OVERRIDE;
-        };
+            virtual void Serialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+            virtual void Deserialize( ArchiveXML& archive ) HELIUM_OVERRIDE;
+
+            virtual tostream& operator>>(tostream& stream) const HELIUM_OVERRIDE;
+            virtual tistream& operator<<(tistream& stream) HELIUM_OVERRIDE;
+
+		private:
+			template< class ArchiveT >
+            void Serialize( ArchiveT& archive );
+			template< class ArchiveT >
+            void Deserialize( ArchiveT& archive );
+		};
 
         typedef SimpleStlSetData<tstring, StlStringData> StlStringStlSetData;
         typedef SimpleStlSetData<uint32_t, UInt32Data> UInt32StlSetData;

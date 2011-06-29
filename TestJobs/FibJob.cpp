@@ -11,7 +11,7 @@
 #include "Platform/Assert.h"
 #include "Engine/JobContext.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 void FibJob::Run( JobContext* pContext )
 {

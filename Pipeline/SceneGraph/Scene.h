@@ -634,7 +634,6 @@ namespace Helium
         public:
             // for status and error reporting from Reflect::Archive events
             void ArchiveStatus( const Reflect::ArchiveStatus& info );
-            void ArchiveException( const Reflect::ArchiveExceptionInfo& info );
 
             // Saves this scene to its current file location. 
             // (get and change the scene editor file to switch the destination)

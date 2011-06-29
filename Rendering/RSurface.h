@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_SURFACE_H
-#define LUNAR_RENDERING_R_SURFACE_H
+#ifndef HELIUM_RENDERING_R_SURFACE_H
+#define HELIUM_RENDERING_R_SURFACE_H
 
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     /// Interface for a renderable surface.
-    class LUNAR_RENDERING_API RSurface : public RRenderResource
+    class HELIUM_RENDERING_API RSurface : public RRenderResource
     {
     protected:
         /// @name Construction/Destruction
@@ -24,4 +24,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_SURFACE_H
+#endif  // HELIUM_RENDERING_R_SURFACE_H

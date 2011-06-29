@@ -6,19 +6,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_TEXTURE_2D_H
-#define LUNAR_RENDERING_R_TEXTURE_2D_H
+#ifndef HELIUM_RENDERING_R_TEXTURE_2D_H
+#define HELIUM_RENDERING_R_TEXTURE_2D_H
 
 #include "Rendering/RTexture.h"
 
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class RSurface;
 
     /// Low-level 2D texture interface.
-    class LUNAR_RENDERING_API RTexture2d : public RTexture
+    class HELIUM_RENDERING_API RTexture2d : public RTexture
     {
     public:
         /// 2D texture initialization data for a single mip level.  This is used when initializing a texture upon
@@ -61,4 +61,4 @@ namespace Lunar
     };
 }
 
-#endif  // LUNAR_RENDERING_R_TEXTURE_2D_H
+#endif  // HELIUM_RENDERING_R_TEXTURE_2D_H

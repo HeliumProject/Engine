@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "VaultSearchQuery.h"
 
 #include "Editor/App.h"
@@ -53,7 +53,7 @@ const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*
 
 ///////////////////////////////////////////////////////////////////////////////
 REFLECT_DEFINE_OBJECT( VaultSearchQuery );
-void VaultSearchQuery::AcceptCompositeVisitor( Reflect::Composite& comp )
+void VaultSearchQuery::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &VaultSearchQuery::m_QueryString, TXT( "m_QueryString" ) );
 }

@@ -1,3 +1,5 @@
+#include "PipelinePch.h"
+
 /*    
 Nate Robins, 1997, 2000
 nate@pobox.com, http://www.pobox.com/~nate

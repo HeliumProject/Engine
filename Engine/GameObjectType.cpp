@@ -11,7 +11,7 @@
 #include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Reflect/Registry.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 PackagePtr GameObjectType::sm_spTypePackage;
 GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;

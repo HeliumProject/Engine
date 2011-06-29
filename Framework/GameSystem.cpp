@@ -15,6 +15,7 @@
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"
+#include "Engine/CacheManager.h"
 #include "Windowing/WindowManager.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RSurface.h"
@@ -31,9 +32,7 @@
 #include "Framework/Layer.h"
 #include "Framework/WorldManager.h"
 
-#include <boost/bind.hpp>
-
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 GameSystem::GameSystem()
@@ -98,6 +97,7 @@ bool GameSystem::Initialize(
     }
 #endif
 
+
     // Initialize the async loading thread.
     bool bAsyncLoaderInitSuccess = AsyncLoader::GetStaticInstance().Initialize();
     HELIUM_ASSERT( bAsyncLoaderInitSuccess );
@@ -107,6 +107,16 @@ bool GameSystem::Initialize(
 
         return false;
     }
+
+    //pmd - Initialize the cache manager
+    Path baseDirectory;
+    if ( !File::GetBaseDirectory( baseDirectory ) )
+    {
+      HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+      return false;
+    }
+
+    HELIUM_VERIFY( CacheManager::InitializeStaticInstance( baseDirectory ) );
 
     // Initialize the reflection type registry and register GameObject-based types.
     Reflect::Initialize();
@@ -200,7 +210,7 @@ bool GameSystem::Initialize(
         bool bVsync = spGraphicsConfig->GetVsync();
 
         Window::Parameters windowParameters;
-        windowParameters.pTitle = TXT( "Lunar" );
+        windowParameters.pTitle = TXT( "Helium" );
         windowParameters.width = displayWidth;
         windowParameters.height = displayHeight;
         windowParameters.bFullscreen = bFullscreen;
@@ -214,7 +224,7 @@ bool GameSystem::Initialize(
             return false;
         }
 
-        m_pMainWindow->SetOnDestroyed( boost::bind( &GameSystem::OnMainWindowDestroyed, this, _1 ) );
+        m_pMainWindow->SetOnDestroyed( Delegate<Window*>( this, &GameSystem::OnMainWindowDestroyed ) );
 
         Renderer::ContextInitParameters contextInitParams;
         contextInitParams.pWindow = m_pMainWindow->GetHandle();

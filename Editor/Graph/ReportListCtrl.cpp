@@ -1,4 +1,4 @@
-#include "Precompile.h"
+#include "EditorPch.h"
 #include "Editor/Graph/ReportListCtrl.h"
 
 #include <wx/imaglist.h>

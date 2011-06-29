@@ -1189,33 +1189,33 @@ Helium::SparseArray< T, Allocator >& Helium::SparseArray< T, Allocator >::Assign
 template< typename T, typename Allocator >
 T* Helium::SparseArray< T, Allocator >::Allocate( size_t count )
 {
-    return Allocate( count, boost::integral_constant< bool, ( boost::alignment_of< T >::value > 8 ) >() );
+    return Allocate( count, std::integral_constant< bool, ( std::alignment_of< T >::value > 8 ) >() );
 }
 
 /// Allocate() implementation for types requiring a specific alignment.
 ///
 /// @param[in] count            Number of elements for which to allocate.
-/// @param[in] rNeedsAlignment  boost::true_type.
+/// @param[in] rNeedsAlignment  std::true_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
 /// @see Reallocate()
 template< typename T, typename Allocator >
-T* Helium::SparseArray< T, Allocator >::Allocate( size_t count, const boost::true_type& /*rNeedsAlignment*/ )
+T* Helium::SparseArray< T, Allocator >::Allocate( size_t count, const std::true_type& /*rNeedsAlignment*/ )
 {
-    return static_cast< T* >( m_allocator.AllocateAligned( boost::alignment_of< T >::value, sizeof( T ) * count ) );
+    return static_cast< T* >( m_allocator.AllocateAligned( std::alignment_of< T >::value, sizeof( T ) * count ) );
 }
 
 /// Allocate() implementation for types that can use the default alignment.
 ///
 /// @param[in] count            Number of elements for which to allocate.
-/// @param[in] rNeedsAlignment  boost::false_type.
+/// @param[in] rNeedsAlignment  std::false_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
 /// @see Reallocate()
 template< typename T, typename Allocator >
-T* Helium::SparseArray< T, Allocator >::Allocate( size_t count, const boost::false_type& /*rNeedsAlignment*/ )
+T* Helium::SparseArray< T, Allocator >::Allocate( size_t count, const std::false_type& /*rNeedsAlignment*/ )
 {
     return static_cast< T* >( m_allocator.Allocate( sizeof( T ) * count ) );
 }
@@ -1234,14 +1234,14 @@ T* Helium::SparseArray< T, Allocator >::Reallocate( T* pMemory, size_t count )
     return Reallocate(
         pMemory,
         count,
-        boost::integral_constant< bool, ( boost::alignment_of< T >::value > 8 ) >() );
+        std::integral_constant< bool, ( std::alignment_of< T >::value > 8 ) >() );
 }
 
 /// Reallocate() implementation for types requiring a specific alignment.
 ///
 /// @param[in] pMemory          Base address of the allocation to reallocate.
 /// @param[in] count            Number of elements for which to reallocate.
-/// @param[in] rNeedsAlignment  boost::true_type.
+/// @param[in] rNeedsAlignment  std::true_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
@@ -1250,14 +1250,14 @@ template< typename T, typename Allocator >
 T* Helium::SparseArray< T, Allocator >::Reallocate(
     T* pMemory,
     size_t count,
-    const boost::true_type& /*rNeedsAlignment*/ )
+    const std::true_type& /*rNeedsAlignment*/ )
 {
     size_t existingSize = m_allocator.GetMemorySize( pMemory );
     size_t newSize = sizeof( T ) * count;
     if( existingSize != newSize )
     {
         T* pNewMemory = static_cast< T* >( m_allocator.AllocateAligned(
-            boost::alignment_of< T >::value,
+            std::alignment_of< T >::value,
             newSize ) );
         HELIUM_ASSERT( pNewMemory || newSize == 0 );
         MemoryCopy( pNewMemory, pMemory, Min( existingSize, newSize ) );
@@ -1272,7 +1272,7 @@ T* Helium::SparseArray< T, Allocator >::Reallocate(
 ///
 /// @param[in] pMemory          Base address of the allocation to reallocate.
 /// @param[in] count            Number of elements for which to reallocate.
-/// @param[in] rNeedsAlignment  boost::false_type.
+/// @param[in] rNeedsAlignment  std::false_type.
 ///
 /// @return  Pointer to the allocated memory.
 ///
@@ -1281,7 +1281,7 @@ template< typename T, typename Allocator >
 T* Helium::SparseArray< T, Allocator >::Reallocate(
     T* pMemory,
     size_t count,
-    const boost::false_type& /*rNeedsAlignment*/ )
+    const std::false_type& /*rNeedsAlignment*/ )
 {
     return static_cast< T* >( m_allocator.Reallocate( pMemory, sizeof( T ) * count ) );
 }
@@ -1309,8 +1309,8 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
         pUsedElements,
         oldCapacity,
         newCapacity,
-        boost::integral_constant<
-            bool, boost::has_trivial_copy< T >::value && boost::has_trivial_destructor< T >::value >() );
+        std::integral_constant<
+            bool, std::has_trivial_copy< T >::value && std::has_trivial_destructor< T >::value >() );
 }
 
 /// ResizeBuffer() implementation for types with both a trivial copy constructor and trivial destructor.
@@ -1320,7 +1320,7 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
 /// @param[in] pUsedElements                 Bit array specifying which elements are in use.
 /// @param[in] oldCapacity                   Current array capacity.
 /// @param[in] newCapacity                   New array capacity.
-/// @param[in] rHasTrivialCopyAndDestructor  boost::true_type.
+/// @param[in] rHasTrivialCopyAndDestructor  std::true_type.
 ///
 /// @return  Pointer to the resized array.
 template< typename T, typename Allocator >
@@ -1330,7 +1330,7 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
     const uint32_t* /*pUsedElements*/,
     size_t /*oldCapacity*/,
     size_t newCapacity,
-    const boost::true_type& /*rHasTrivialCopyAndDestructor*/ )
+    const std::true_type& /*rHasTrivialCopyAndDestructor*/ )
 {
     return Reallocate( pMemory, newCapacity );
 }
@@ -1342,7 +1342,7 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
 /// @param[in] pUsedElements                 Bit array specifying which elements are in use.
 /// @param[in] oldCapacity                   Current array capacity.
 /// @param[in] newCapacity                   New array capacity.
-/// @param[in] rHasTrivialCopyAndDestructor  boost::false_type.
+/// @param[in] rHasTrivialCopyAndDestructor  std::false_type.
 ///
 /// @return  Pointer to the resized array.
 template< typename T, typename Allocator >
@@ -1352,7 +1352,7 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
     const uint32_t* pUsedElements,
     size_t oldCapacity,
     size_t newCapacity,
-    const boost::false_type& /*rHasTrivialCopyAndDestructor*/ )
+    const std::false_type& /*rHasTrivialCopyAndDestructor*/ )
 {
     HELIUM_ASSERT( elementRange <= oldCapacity );
     HELIUM_ASSERT( elementRange <= newCapacity );
@@ -1384,7 +1384,7 @@ T* Helium::SparseArray< T, Allocator >::ResizeBuffer(
 template< typename T, typename Allocator >
 void Helium::SparseArray< T, Allocator >::InPlaceDestroy( T* pMemory, size_t range, const uint32_t* pUsedElements )
 {
-    InPlaceDestroy( pMemory, range, pUsedElements, boost::has_trivial_destructor< T >() );
+    InPlaceDestroy( pMemory, range, pUsedElements, std::has_trivial_destructor< T >() );
 }
 
 /// InPlaceDestroy() implementation for types with a trivial destructor.
@@ -1392,13 +1392,13 @@ void Helium::SparseArray< T, Allocator >::InPlaceDestroy( T* pMemory, size_t ran
 /// @param[in] pMemory                Base address of the array of objects being destroyed.
 /// @param[in] range                  Range of elements in use.
 /// @param[in] pUsedElements          Bit array specifying which elements are in use.
-/// @param[in] rHasTrivialDestructor  boost::true_type.
+/// @param[in] rHasTrivialDestructor  std::true_type.
 template< typename T, typename Allocator >
 void Helium::SparseArray< T, Allocator >::InPlaceDestroy(
     T* /*pMemory*/,
     size_t /*range*/,
     const uint32_t* /*pUsedElements*/,
-    const boost::true_type& /*rHasTrivialDestructor*/ )
+    const std::true_type& /*rHasTrivialDestructor*/ )
 {
     // Nothing needs to be done...
 }
@@ -1408,13 +1408,13 @@ void Helium::SparseArray< T, Allocator >::InPlaceDestroy(
 /// @param[in] pMemory                Base address of the array of objects being destroyed.
 /// @param[in] range                  Range of elements in use.
 /// @param[in] pUsedElements          Bit array specifying which elements are in use.
-/// @param[in] rHasTrivialDestructor  boost::false_type.
+/// @param[in] rHasTrivialDestructor  std::false_type.
 template< typename T, typename Allocator >
 void Helium::SparseArray< T, Allocator >::InPlaceDestroy(
     T* pMemory,
     size_t range,
     const uint32_t* pUsedElements,
-    const boost::false_type& /*rHasTrivialDestructor*/ )
+    const std::false_type& /*rHasTrivialDestructor*/ )
 {
     HELIUM_ASSERT( pMemory || range == 0 );
     HELIUM_ASSERT( pUsedElements || range == 0 );
@@ -1462,7 +1462,7 @@ void Helium::SparseArray< T, Allocator >::UninitializedCopy(
     size_t range,
     const uint32_t* pUsedElements )
 {
-    UninitializedCopy( pDest, pSource, range, pUsedElements, boost::has_trivial_copy< T >() );
+    UninitializedCopy( pDest, pSource, range, pUsedElements, std::has_trivial_copy< T >() );
 }
 
 /// UninitializedCopy() implementation for types with a trivial copy constructor.
@@ -1471,14 +1471,14 @@ void Helium::SparseArray< T, Allocator >::UninitializedCopy(
 /// @param[in] pSource          Source array from which to copy.
 /// @param[in] range            Range of elements in use in the source array.
 /// @param[in] pUsedElements    Bit array specifying which elements are in use in the source array.
-/// @param[in] rHasTrivialCopy  boost::true_type().
+/// @param[in] rHasTrivialCopy  std::true_type().
 template< typename T, typename Allocator >
 void Helium::SparseArray< T, Allocator >::UninitializedCopy(
     T* pDest,
     const T* pSource,
     size_t range,
     const uint32_t* /*pUsedElements*/,
-    const boost::true_type& /*rHasTrivialCopy*/ )
+    const std::true_type& /*rHasTrivialCopy*/ )
 {
     HELIUM_ASSERT( pDest || range == 0 );
     HELIUM_ASSERT( pSource || range == 0 );
@@ -1492,14 +1492,14 @@ void Helium::SparseArray< T, Allocator >::UninitializedCopy(
 /// @param[in] pSource          Source array from which to copy.
 /// @param[in] range            Range of elements in use in the source array.
 /// @param[in] pUsedElements    Bit array specifying which elements are in use in the source array.
-/// @param[in] rHasTrivialCopy  boost::false_type().
+/// @param[in] rHasTrivialCopy  std::false_type().
 template< typename T, typename Allocator >
 void Helium::SparseArray< T, Allocator >::UninitializedCopy(
     T* pDest,
     const T* pSource,
     size_t range,
     const uint32_t* pUsedElements,
-    const boost::false_type& /*rHasTrivialCopy*/ )
+    const std::false_type& /*rHasTrivialCopy*/ )
 {
     HELIUM_ASSERT( pDest || range == 0 );
     HELIUM_ASSERT( pSource || range == 0 );

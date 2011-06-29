@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "TextureEnums.h"
 
 using namespace Helium;

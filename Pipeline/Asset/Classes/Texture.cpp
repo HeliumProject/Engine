@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "Texture.h"
 
 using namespace Helium;
@@ -8,7 +9,7 @@ REFLECT_DEFINE_ENUMERATION( Asset::TextureFilter );
 REFLECT_DEFINE_ENUMERATION( Asset::TextureCoordinateWrapMode );
 REFLECT_DEFINE_OBJECT( Texture );
 
-void Texture::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Texture::PopulateComposite( Reflect::Composite& comp )
 {
     comp.SetProperty( AssetProperties::FileFilter, TXT( "*.tga;*.png;*.jpg;*.bmp" ) );
 

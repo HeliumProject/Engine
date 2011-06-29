@@ -30,7 +30,7 @@ namespace Helium
         {
         public:
             REFLECT_DECLARE_OBJECT( Locator, Instance );
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();
 
@@ -45,10 +45,7 @@ namespace Helium
             void SetShape( int shape );
 
             virtual void Evaluate(GraphDirection direction) HELIUM_OVERRIDE;
-
             virtual void Render( RenderVisitor* render ) HELIUM_OVERRIDE;
-            static void DrawShape( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-
             virtual bool Pick( PickVisitor* pick ) HELIUM_OVERRIDE;
 
             virtual bool ValidatePanel(const tstring& name) HELIUM_OVERRIDE;

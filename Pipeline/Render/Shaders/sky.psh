@@ -1,7 +1,0 @@
-samplerCUBE g_sky		: register(s0);
-float4  g_exposure		: register(c0);
-
-float4 main(in float3 uv : TEXCOORD1) : COLOR0
-{
-  return texCUBE(g_sky,uv)*g_exposure.x;
-}

@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
-#define LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#ifndef HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#define HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -16,7 +16,7 @@
 #include "Rendering/Color.h"
 #include "Rendering/RRenderResource.h"
 
-namespace Lunar
+namespace Helium
 {
     L_DECLARE_RPTR( RConstantBuffer );
     L_DECLARE_RPTR( RRenderContext );
@@ -26,7 +26,7 @@ namespace Lunar
     ///
     /// A view entails a given view transform, projection, and other information that may be useful (i.e. cached
     /// occlusion information)
-    HELIUM_SIMD_ALIGN_PRE class LUNAR_GRAPHICS_TYPES_API GraphicsSceneView
+    HELIUM_SIMD_ALIGN_PRE class HELIUM_GRAPHICS_TYPES_API GraphicsSceneView
     {
     public:
         /// Default horizontal field-of-view angle.
@@ -126,10 +126,6 @@ namespace Lunar
         /// Depth-stencil surface for this view.
         RSurfacePtr m_spDepthStencilSurface;
 
-        /// Constant buffer specifying scale and offset values to apply to pixel coordinates during screen-space
-        /// rendering.
-        RConstantBufferPtr m_spScreenSpaceVertexConstantBuffer;
-
         /// Horizontal pixel coordinate of the upper-left corner of this view.
         uint32_t m_viewportX;
         /// Vertical pixel coordinate of the upper-left corner of this view.
@@ -165,4 +161,4 @@ namespace Lunar
 
 #include "GraphicsTypes/GraphicsSceneView.inl"
 
-#endif  // LUNAR_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H
+#endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_SCENE_VIEW_H

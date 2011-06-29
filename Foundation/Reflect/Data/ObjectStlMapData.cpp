@@ -1,6 +1,9 @@
+#include "FoundationPch.h"
 #include "Foundation/Reflect/Data/ObjectStlMapData.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -20,9 +23,9 @@ SimpleObjectStlMapData<KeyT>::~SimpleObjectStlMapData()
 }
 
 template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::ConnectData(Helium::HybridPtr<void> data)
+void SimpleObjectStlMapData<KeyT>::ConnectData(void* data)
 {
-    m_Data.Connect( Helium::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( data );
 }
 
 template < class KeyT >
@@ -51,26 +54,13 @@ void SimpleObjectStlMapData<KeyT>::GetItems(V_ValueType& items)
     DataType::iterator end = m_Data->end();
     for ( size_t index=0; itr != end; ++itr, ++index )
     {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
+        items[index].first = Data::Bind( const_cast< KeyT& >( itr->first ), m_Instance, m_Field );
         items[index].second = &itr->second;
     }
 }
 
 template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::GetItems(V_ConstValueType& items) const
-{
-    items.resize(m_Data->size());
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( size_t index=0; itr != end; ++itr, ++index )
-    {
-        items[index].first = static_cast< const ConstDataPtr& >( Data::Bind( itr->first, m_Instance, m_Field ) );
-        items[index].second = &itr->second;
-    }
-}
-
-template < class KeyT >
-ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(const Data* key)
+ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
@@ -85,41 +75,24 @@ ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(const Data* key)
 }
 
 template < class KeyT >
-const ObjectPtr* SimpleObjectStlMapData<KeyT>::GetItem(const Data* key) const
+void SimpleObjectStlMapData<KeyT>::SetItem(Data* key, Object* value)
+{
+    KeyT keyValue;
+    Data::GetValue(key, keyValue);
+    (*m_Data)[keyValue] = value;
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::RemoveItem(Data* key)
 {
     KeyT keyValue;
     Data::GetValue(key, keyValue);
 
-    DataType::const_iterator found = m_Data->find( keyValue );
-    if ( found != m_Data->end() )
-    {
-        return &found->second;
-    }
-
-    return NULL;
+    (*m_Data).erase(keyValue);
 }
 
 template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::SetItem(const Data* key, const Object* value)
-{
-    KeyT keyValue;
-    Data::GetValue(key, keyValue);
-
-#pragma TODO( "Fix const correctness." )
-    (m_Data.Ref())[keyValue] = const_cast< Object* >( value );
-}
-
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::RemoveItem(const Data* key)
-{
-    KeyT keyValue;
-    Data::GetValue(key, keyValue);
-
-    (m_Data.Ref()).erase(keyValue);
-}
-
-template < class KeyT >
-bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
+bool SimpleObjectStlMapData<KeyT>::Set(Data* src, uint32_t flags)
 {
     const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>(src);
     if (!rhs)
@@ -131,7 +104,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 
     if (flags & DataFlags::Shallow)
     {
-        m_Data.Ref() = rhs->m_Data.Ref();
+        *m_Data = *rhs->m_Data;
     }
     else
     {
@@ -140,7 +113,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
         for ( ; itr != end; ++itr )
         {
             Object* object = itr->second;
-            m_Data.Ref()[itr->first] = ( object ? object->Clone() : NULL );
+            (*m_Data)[itr->first] = ( object ? object->Clone() : NULL );
         }
     }
 
@@ -148,7 +121,7 @@ bool SimpleObjectStlMapData<KeyT>::Set(const Data* src, uint32_t flags)
 }
 
 template < class KeyT >
-bool SimpleObjectStlMapData<KeyT>::Equals(const Object* object) const
+bool SimpleObjectStlMapData<KeyT>::Equals(Object* object)
 {
     const ObjectStlMapDataT* rhs = SafeCast<ObjectStlMapDataT>( object );
     if (!rhs)
@@ -182,7 +155,52 @@ bool SimpleObjectStlMapData<KeyT>::Equals(const Object* object) const
 }
 
 template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
+void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
+{
+    DataType::iterator itr = const_cast<DataPointer<DataType>&>(m_Data)->begin();
+    DataType::iterator end = const_cast<DataPointer<DataType>&>(m_Data)->end();
+    for ( ; itr != end; ++itr )
+    {
+        if (!itr->second.ReferencesObject())
+        {
+            continue;
+        }
+
+        if (!visitor.VisitPointer(itr->second))
+        {
+            continue;
+        }
+
+        itr->second->Accept( visitor );
+    }
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveBinary& archive)
+{
+    Serialize<ArchiveBinary>( archive );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveBinary& archive)
+{
+    Deserialize<ArchiveBinary>( archive );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveXML& archive)
+{
+    Serialize<ArchiveXML>( archive );
+}
+
+template < class KeyT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveXML& archive)
+{
+    Deserialize<ArchiveXML>( archive );
+}
+
+template < class KeyT > template< class ArchiveT >
+void SimpleObjectStlMapData<KeyT>::Serialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
     components.resize(m_Data->size() * 2);
@@ -202,7 +220,7 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
         }
     }
 
-    archive.Serialize(components);
+    archive.SerializeArray( components );
 
     {
         std::vector< ObjectPtr >::iterator itr = components.begin();
@@ -218,11 +236,11 @@ void SimpleObjectStlMapData<KeyT>::Serialize(Archive& archive) const
     }
 }
 
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
+template < class KeyT > template< class ArchiveT >
+void SimpleObjectStlMapData<KeyT>::Deserialize(ArchiveT& archive)
 {
     std::vector< ObjectPtr > components;
-    archive.Deserialize(components, ArchiveFlags::Sparse);
+    archive.DeserializeArray(components, ArchiveFlags::Sparse);
 
     if (components.size() % 2 != 0)
     {
@@ -242,29 +260,8 @@ void SimpleObjectStlMapData<KeyT>::Deserialize(Archive& archive)
         {
             KeyT k;
             Data::GetValue( key, k );
-            m_Data.Ref()[ k ] = value;
+            (*m_Data)[ k ] = value;
         }
-    }
-}
-
-template < class KeyT >
-void SimpleObjectStlMapData<KeyT>::Accept(Visitor& visitor)
-{
-    DataType::iterator itr = const_cast<Data::Pointer<DataType>&>(m_Data)->begin();
-    DataType::iterator end = const_cast<Data::Pointer<DataType>&>(m_Data)->end();
-    for ( ; itr != end; ++itr )
-    {
-        if (!itr->second.ReferencesObject())
-        {
-            continue;
-        }
-
-        if (!visitor.VisitPointer(itr->second))
-        {
-            continue;
-        }
-
-        itr->second->Accept( visitor );
     }
 }
 

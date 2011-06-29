@@ -10,7 +10,7 @@
 
 #include "RenderingD3D9/D3D9Surface.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 ///
@@ -56,5 +56,23 @@ void D3D9MainContext::Swap()
     m_spBackBufferSurface.Release();
 
     // Present the scene.
-    L_D3D9_VERIFY( m_pDevice->Present( NULL, NULL, NULL, NULL ) );
+    HRESULT result = m_pDevice->Present( NULL, NULL, NULL, NULL );
+    if( result == D3DERR_DEVICELOST )
+    {
+        D3D9Renderer* pRenderer = static_cast< D3D9Renderer* >( Renderer::GetStaticInstance() );
+        HELIUM_ASSERT( pRenderer );
+        pRenderer->NotifyLost();
+    }
+    else
+    {
+        L_D3D9_ASSERT( result );
+    }
+}
+
+/// Release this context's reference to the back buffer surface.
+///
+/// This is typically called during device resets, where the back buffer surface may need to be recreated.
+void D3D9MainContext::ReleaseBackBufferSurface()
+{
+    m_spBackBufferSurface.Release();
 }

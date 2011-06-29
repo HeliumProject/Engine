@@ -6,15 +6,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
-#define LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
+#ifndef HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H
+#define HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H
 
 #include "Rendering/RRenderResource.h"
 
 #include "Rendering/Color.h"
 #include "Rendering/RendererTypes.h"
 
-namespace Lunar
+namespace Helium
 {
     class RRasterizerState;
     class RBlendState;
@@ -38,7 +38,7 @@ namespace Lunar
     L_DECLARE_RPTR( RRenderCommandList );
 
     /// Proxy for issuing renderer commands.
-    class LUNAR_RENDERING_API RRenderCommandProxy : public RRenderResource
+    class HELIUM_RENDERING_API RRenderCommandProxy : public RRenderResource
     {
     public:
         /// @name State Management
@@ -94,6 +94,8 @@ namespace Lunar
         virtual void DrawIndexed(
             ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
             uint32_t startIndex, uint32_t primitiveCount ) = 0;
+        virtual void DrawUnindexed(
+            ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount ) = 0;
         //@}
 
         /// @name Fence Commands
@@ -123,4 +125,4 @@ namespace Lunar
 
 #include "Rendering/RRenderCommandProxy.inl"
 
-#endif  // LUNAR_RENDERING_R_RENDER_COMMAND_PROXY_H
+#endif  // HELIUM_RENDERING_R_RENDER_COMMAND_PROXY_H

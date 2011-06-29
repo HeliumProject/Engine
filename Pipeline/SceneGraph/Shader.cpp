@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Shader.h"
 
 #include "Foundation/Log.h"
@@ -15,7 +15,7 @@ REFLECT_DEFINE_OBJECT( Shader );
 
 #pragma TODO("Data-hide public reflected fields")
 
-void Shader::AcceptCompositeVisitor( Reflect::Composite& comp )
+void Shader::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Shader::m_WrapU,      TXT( "m_WrapU" ) );
     comp.AddField( &Shader::m_WrapV,      TXT( "m_WrapV" ) );

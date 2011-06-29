@@ -1,11 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WindowProc.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
-#include "stdafx.h"
+#include "TestAppPch.h"
 #include "WindowProc.h"
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )

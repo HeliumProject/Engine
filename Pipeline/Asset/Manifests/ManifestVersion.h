@@ -21,7 +21,7 @@ namespace Helium
 
             REFLECT_DECLARE_OBJECT(ManifestVersion, Reflect::Version);
 
-            static void AcceptCompositeVisitor( Reflect::Composite& comp );
+            static void PopulateComposite( Reflect::Composite& comp );
 
             ManifestVersion();
 

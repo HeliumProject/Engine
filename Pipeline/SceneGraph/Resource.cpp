@@ -1,4 +1,4 @@
-/*#include "Precompile.h"*/
+#include "PipelinePch.h"
 #include "Resource.h"
 #include "Statistics.h"
 
@@ -15,69 +15,6 @@ using Helium::Insert;
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
-: m_Device (device)
-{
-    if (!IndexResource::s_MemoryPool.Valid())
-    {
-        IndexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Index Data" ) );
-    }
-
-    if (!VertexResource::s_MemoryPool.Valid())
-    {
-        VertexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Vertex Data" ) );
-    }
-}
-
-ResourceTracker::~ResourceTracker()
-{
-
-}
-
-void ResourceTracker::ResetState()
-{
-    m_Indices = NULL;
-    m_Vertices = NULL;
-    m_VertexFormat = ElementFormats[ ElementTypes::Unknown ];
-}
-
-void ResourceTracker::Register(Resource* resource)
-{
-    StdInsert<S_Resource>::Result inserted = m_Resources.insert( resource );
-    HELIUM_ASSERT(inserted.second);
-}
-
-void ResourceTracker::Release(Resource* resource)
-{
-    m_Resources.erase( resource );
-}
-
-void ResourceTracker::DeviceLost()
-{
-    S_Resource::const_iterator itr = m_Resources.begin();
-    S_Resource::const_iterator end = m_Resources.end();
-    for ( ; itr != end ; ++itr )
-    {
-        if ( !(*itr)->IsManaged() )
-        {
-            (*itr)->Delete();
-        }
-    }
-}
-
-void ResourceTracker::DeviceReset()
-{
-    S_Resource::const_iterator itr = m_Resources.begin();
-    S_Resource::const_iterator end = m_Resources.end();
-    for ( ; itr != end ; ++itr )
-    {
-        if ( !(*itr)->IsManaged() )
-        {
-            (*itr)->Create();
-        }
-    }
-}
 
 void Resource::Create()
 {
@@ -106,7 +43,7 @@ void Resource::Update()
 {
     if (m_IsCreated)
     {
-        if (m_IsDirty || IsManaged())
+        if (m_IsDirty || !IsDynamic())
         {
             Delete();
             Create();
@@ -134,7 +71,7 @@ void Resource::Populate()
 
             m_Populator.Invoke( &args );
 
-            HELIUM_ASSERT( args.m_Offset == ( offset + ElementSizes[ m_ElementType ] * m_ElementCount ) );
+            HELIUM_ASSERT( args.m_Offset == ( offset + GetElementSize() * m_ElementCount ) );
 
             Unlock();
         }

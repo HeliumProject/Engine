@@ -15,16 +15,19 @@ namespace Helium
             mutable int32_t m_PolyVertCount;
 
         public:
-            int m_LengthSteps;
+            int32_t m_LengthSteps;
 
         public:
-            PrimitiveSphere(ResourceTracker* tracker);
+            PrimitiveSphere();
 
-            int GetWireVertCount() const;
-            int GetPolyVertCount() const;
+            int32_t GetWireVertCount() const;
+            int32_t GetPolyVertCount() const;
 
             virtual void Update() HELIUM_OVERRIDE;
-            virtual void Draw( DrawArgs* args, const bool* solid = NULL, const bool* transparent = NULL ) const HELIUM_OVERRIDE;
+            virtual void Draw(
+                Helium::BufferedDrawer* drawInterface, DrawArgs* args, Helium::Color materialColor = Color::WHITE,
+                const Simd::Matrix44& transform = Simd::Matrix44::IDENTITY, const bool* solid = NULL,
+                const bool* transparent = NULL ) const HELIUM_OVERRIDE;
             virtual bool Pick( PickVisitor* pick, const bool* solid = NULL ) const HELIUM_OVERRIDE;
         };
     }

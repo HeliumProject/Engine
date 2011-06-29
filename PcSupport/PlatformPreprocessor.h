@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef LUNAR_PC_SUPPORT_PLATFORM_PREPROCESSOR_H
-#define LUNAR_PC_SUPPORT_PLATFORM_PREPROCESSOR_H
+#ifndef HELIUM_PC_SUPPORT_PLATFORM_PREPROCESSOR_H
+#define HELIUM_PC_SUPPORT_PLATFORM_PREPROCESSOR_H
 
 #include "PcSupport/PcSupport.h"
 
@@ -15,14 +15,14 @@
 
 #include "Foundation/File/Path.h"
 
-namespace Lunar
+namespace Helium
 {
     struct ShaderConstantBufferInfo;
     struct ShaderSamplerInfo;
     struct ShaderTextureInfo;
 
     /// Platform object and resource preprocessing interface.
-    class LUNAR_PC_SUPPORT_API PlatformPreprocessor
+    class HELIUM_PC_SUPPORT_API PlatformPreprocessor
     {
     public:
         /// Byte order identifiers.
@@ -41,7 +41,7 @@ namespace Lunar
         };
 
         /// Shader preprocessor token.
-        struct LUNAR_PC_SUPPORT_API ShaderToken
+        struct HELIUM_PC_SUPPORT_API ShaderToken
         {
             /// Token name.
             CharString name;
@@ -83,4 +83,4 @@ namespace Lunar
 
 #include "PcSupport/PlatformPreprocessor.inl"
 
-#endif  // LUNAR_PC_SUPPORT_PLATFORM_PREPROCESSOR_H
+#endif  // HELIUM_PC_SUPPORT_PLATFORM_PREPROCESSOR_H

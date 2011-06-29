@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/BinarySerializer.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 /// Constructor.
 BinarySerializer::BinarySerializer()

@@ -2,8 +2,8 @@
 
 #include "Graphics/Graphics.h"
 
-namespace Lunar
+namespace Helium
 {
-    LUNAR_GRAPHICS_API void RegisterGraphicsEnums();
-    LUNAR_GRAPHICS_API void UnregisterGraphicsEnums();
+    HELIUM_GRAPHICS_API void RegisterGraphicsEnums();
+    HELIUM_GRAPHICS_API void UnregisterGraphicsEnums();
 }

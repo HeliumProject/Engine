@@ -1,3 +1,4 @@
+#include "PipelinePch.h"
 #include "MeshAssetFactory.h"
 
 #include "Foundation/File/Path.h"

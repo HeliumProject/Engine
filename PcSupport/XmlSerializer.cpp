@@ -13,7 +13,7 @@
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 
-using namespace Lunar;
+using namespace Helium;
 
 // XML file header (UTF-8 string).
 static const char XML_FILE_HEADER[] =

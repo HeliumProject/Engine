@@ -68,6 +68,7 @@ namespace Helium
                 float32_t translateX, float32_t translateY, float32_t translateZ, float32_t translateW );
             inline Matrix44(
                 const Vector4& rXAxis, const Vector4& rYAxis, const Vector4& rZAxis, const Vector4& rTranslate );
+            inline explicit Matrix44( const float32_t* pMatrix );
             inline Matrix44( EInitRotation, const Quat& rRotation );
             inline Matrix44( EInitTranslation, const Vector3& rTranslation );
             inline Matrix44( EInitTranslation, const Vector4& rTranslation );

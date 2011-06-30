@@ -13,7 +13,7 @@ Helium.BuildWxWidgets = function()
 			print("VCINSTALLDIR is not detected in your environment")
 			os.exit(1)
 		end
-				
+
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
 
 		local result
@@ -55,10 +55,12 @@ Helium.BuildWxWidgets = function()
 			os.mkdir( dirName )
 			os.chdir( dirName )
 
-			local result
-			result = os.execute( "../configure " .. flags )
-			if result ~= 0 then
-				os.exit( 1 )
+			if not os.isfile( "Makefile" ) then
+				local result
+				result = os.execute( "../configure " .. flags )
+				if result ~= 0 then
+					os.exit( 1 )
+				end
 			end
 
 			result = os.execute( "make" )		

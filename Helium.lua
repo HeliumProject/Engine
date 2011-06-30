@@ -143,7 +143,7 @@ if os.get() == "windows" then
 				"Integrations/Granny/granny_sdk/lib/win32",
 			}
 		end
-
+end
 
 configuration { "windows", "x64" }
 	libdirs
@@ -246,6 +246,7 @@ configuration "not no-unicode"
 	{
 		"wxUSE_UNICODE=1",
 	}
+
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	language "C++"
@@ -356,7 +357,6 @@ project "Engine"
 
 project "EngineJobs"
 	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
-
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 

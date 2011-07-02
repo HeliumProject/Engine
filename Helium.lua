@@ -262,11 +262,21 @@ end
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	language "C++"
+
+	kind "StaticLib"
+	if os.get() == "windows" then
+		configuration "Debug"
+			kind "SharedLib"
+		configuration "not Debug"
+			kind "StaticLib"
+	end
+
 	defines
 	{
 		"PLATFORM_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
+
 	files
 	{
 		"Platform/*",
@@ -301,14 +311,7 @@ project "Platform"
 			"Platform/POSIX/*",
 		}
 
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
-		kind "StaticLib"
-
-	--configuration { "windows", "SharedLib" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib" }
 		links
 		{
 			"ws2_32",
@@ -317,6 +320,15 @@ project "Platform"
 project "Foundation"
 	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
 	language "C++"
+
+	kind "StaticLib"
+	if os.get() == "windows" then
+		configuration "Debug"
+			kind "SharedLib"
+		configuration "not Debug"
+			kind "StaticLib"
+	end
+
 	defines
 	{
 		"FOUNDATION_EXPORTS",
@@ -330,12 +342,6 @@ project "Foundation"
 
     pchheader( "FoundationPch.h" )
     pchsource( "Foundation/FoundationPch.cpp" )
-
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
-		kind "StaticLib"
 
 	configuration "SharedLib"
 		links
@@ -586,6 +592,15 @@ project "FrameworkWin"
 project "Pipeline"
 	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
 	language "C++"
+
+	kind "StaticLib"
+	if os.get() == "windows" then
+		configuration "Debug"
+			kind "SharedLib"
+		configuration "not Debug"
+			kind "StaticLib"
+	end
+
 	defines
 	{
 		"PIPELINE_EXPORTS",
@@ -613,12 +628,6 @@ project "Pipeline"
 		{
 			"Dependencies/nvtt/project/vc8",
 		}
-
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
-		kind "StaticLib"
 
 	configuration "SharedLib"
 		links
@@ -648,10 +657,12 @@ project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
 	language "C++"
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
 	}
+
 	files
 	{
 		"Editor/**.h",
@@ -702,6 +713,7 @@ project "Editor"
 		"d3dx9",
 		"ws2_32",
 	}
+
 	flags
 	{
 		"WinMain"
@@ -775,7 +787,6 @@ project "TestJobs" -- DEPRECATED
 
 project "TestApp" -- DEPRECATED
 	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
-
 	kind "WindowedApp"
 
 	files
@@ -879,7 +890,6 @@ project "ExampleGame"
 
 project "ExampleMain"
 	uuid "2FF096F2-B7D3-4009-A409-3C2C6B57B56E"
-
 	kind "WindowedApp"
 
 	files

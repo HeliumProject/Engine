@@ -429,6 +429,18 @@ end
 -- Common settings for modules.
 Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
+	kind "StaticLib"	
+	if os.get() == "windows" then
+		configuration "Debug"
+			kind "SharedLib"
+			defines
+			{
+				tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
+			}
+		configuration "not Debug"
+			kind "StaticLib"
+	end
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
@@ -448,15 +460,5 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
 
 	Helium.DoDefaultProjectSettings()
-
-	configuration "Debug"
-		kind "SharedLib"
-		defines
-		{
-			tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
-		}
-
-	configuration "not Debug"
-		kind "StaticLib"
 
 end

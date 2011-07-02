@@ -143,20 +143,20 @@ if os.get() == "windows" then
 				"Integrations/Granny/granny_sdk/lib/win32",
 			}
 		end
-end
 
-configuration { "windows", "x64" }
-	libdirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-	}
-
-	if haveGranny then
+	configuration { "windows", "x64" }
 		libdirs
 		{
-			"Integrations/Granny/granny_sdk/lib/win64",
+			os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
 		}
-	end
+	
+		if haveGranny then
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		end
+end
 
 if _ACTION == "vs2005" then
 	configuration { "windows", "x32", "Debug" }
@@ -229,6 +229,30 @@ elseif _ACTION == "vs2010" then
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+		}
+elseif _ACTION == "xcode3" or _ACTION == "xcode4" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_release",
 		}
 else
 	print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")

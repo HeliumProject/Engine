@@ -28,14 +28,7 @@ Helium.GetSystemVersion = function()
 end
 
 Helium.Build64Bit = function()
-    if os.get() == "windows" then
-        return string.find( os.getenv("PATH"), "x64" )
-    elseif os.get() == "macosx" then
-    	return true;
-    else
-		print("Implement support for " .. os.get() .. " to Helium.Build64Bit()")
-		os.exit(1)
-    end
+    return os.is64bit()
 end
 
 Helium.GetFbxSdkLocation = function()
@@ -143,21 +136,22 @@ Helium.Publish = function( files )
 		local path = v.source .. "/" .. v.file			
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
-		
-		-- cull existing files
-		if os.isfile( destination ) then
-			local delCommand = ''
-			if ( os.get() == "windows" ) then
-                delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
-            else
-                delCommand = "rm \"" .. destination .. "\""
-            end
-			os.execute( delCommand )
-		end
 
-		-- do the file copy
+		-- do the hard link
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
+			-- delete target
+			if os.isfile( destination ) then
+				local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
+				os.execute( delCommand )
+			end
+
+			-- if deleting the target failed, bail
+			if result ~= 0 then
+				os.exit( 1 )
+			end
+
+			-- check system version, do appropriate command line
             local versionString = Helium.GetSystemVersion()
             if ( string.find( versionString, "6\.%d+\.%d+" ) ) then -- vista/windows 7
                 linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
@@ -165,22 +159,14 @@ Helium.Publish = function( files )
                 linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
             end
    		else
-            linkCommand = "ln \"" .. path .. "\" \"" .. destination .. "\""
+   			-- hooray simplicity in *nix
+            linkCommand = "ln -f \"" .. path .. "\" \"" .. destination .. "\""
 		end
 		local result = os.execute( linkCommand )
 
-		-- If creating a hardlink failed, attempt a normal copy
+		-- if creating a hardlink failed, bail
 		if result ~= 0 then
-			local copyCommand = ''
-			if ( os.get() == "windows" ) then
-				copyCommand = "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y"
-			else
-				copyCommand = "cp " .. path .. " " .. destination
-			end
-			os.execute( copyCommand )
-			if result ~= 0 then
-				os.exit( 1 )
-			end
+			os.exit( 1 )
 		end
 
 		-- the files were copied, complete this entry

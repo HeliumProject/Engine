@@ -1,5 +1,6 @@
 Helium = {}
 
+Helium.RequiredPremakeVersion = '4.4-beta1'
 Helium.RequiredCLVersion = 150030729
 Helium.RequiredFBXVersion = '2011.3.1'
 
@@ -63,6 +64,11 @@ end
 Helium.CheckEnvironment = function()
 
     print("\nChecking Environment...\n")
+    
+    if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
+		print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
+		os.exit( 1 )
+	end
 
     if os.get() == "windows" then
     
@@ -143,12 +149,12 @@ Helium.Publish = function( files )
 			-- delete target
 			if os.isfile( destination ) then
 				local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
-				os.execute( delCommand )
-			end
 
-			-- if deleting the target failed, bail
-			if result ~= 0 then
-				os.exit( 1 )
+				-- if deleting the target failed, bail
+				if os.execute( delCommand ) ~= 0 then
+					print( "Deleting destination file: " .. destination .. " failed." )
+					os.exit( 1 )
+				end
 			end
 
 			-- check system version, do appropriate command line
@@ -162,10 +168,10 @@ Helium.Publish = function( files )
    			-- hooray simplicity in *nix
             linkCommand = "ln -f \"" .. path .. "\" \"" .. destination .. "\""
 		end
-		local result = os.execute( linkCommand )
 
 		-- if creating a hardlink failed, bail
-		if result ~= 0 then
+		if os.execute( linkCommand ) ~= 0 then
+			print( "Creating hardlink: " .. destination .. " failed." )
 			os.exit( 1 )
 		end
 
@@ -199,44 +205,6 @@ Helium.PublishIcons = function( bin )
             os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x64/Release/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
         end
     end
-
-end
-
--- Pre-build script execution.
-Helium.Prebuild = function()
-
-	local python = "python"
-	
-	if os.get() == "windows" then
-		python = python .. ".exe"
-    else
-		python = python .. "3"
-    end
-
-	local pythonPath = os.pathsearch( python, os.getenv( 'PATH' ) )
-	if pythonPath == nil then
-		error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
-	end
-
-	local commands =
-	{
-		python .. " Build/JobDefParser.py JobDefinitions . .",
-		python .. " Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
-		python .. " Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
-	}
-
-	local result = 0
-
-	for i, commandString in ipairs( commands ) do
-		result = os.execute( commandString )
-		if result ~= 0 then
-			break
-		end
-	end
-
-	if result ~= 0 then
-		error( "An error occurred processing the pre-build scripts." )
-	end
 
 end
 
@@ -401,11 +369,9 @@ Helium.DoDefaultProjectSettings = function()
 		--"ExtraWarnings", -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
 		"FatalWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
-		"NoRTTI",
 	}
 
-	--configuration "SharedLib or *App"
-	configuration "Debug"
+	configuration "SharedLib or *App"
 		links
 		{
 			"Expat",
@@ -415,8 +381,7 @@ Helium.DoDefaultProjectSettings = function()
 			"zlib",
 		}
 
-	--configuration { "windows", "SharedLib or *App" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib or *App" }
 		links
 		{
 			"d3d9",
@@ -427,37 +392,32 @@ Helium.DoDefaultProjectSettings = function()
 			"wininet",
 		}
 
-	--configuration { "windows", "Debug", "SharedLib or *App" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "Debug", "SharedLib or *App" }
 		links
 		{
 			"dbghelp",
 		}
 
-	--configuration { "windows", "x32", "SharedLib or *App" }
-	configuration { "windows", "x32", "Debug" }
+	configuration { "windows", "x32", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1",
 		}
 
-	--configuration { "windows", "x64", "SharedLib or *App" }
-	configuration { "windows", "x64", "Debug" }
+	configuration { "windows", "x64", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1_amd64",
 		}
 
 	if haveGranny then
-		--configuration { "x32", "SharedLib or *App" }
-		configuration { "x32", "Debug" }
+		configuration { "x32", "SharedLib or *App" }
 			links
 			{
 				"granny2",
 			}
 
-		--configuration { "x64", "SharedLib or *App" }
-		configuration { "x64", "Debug" }
+		configuration { "x64", "SharedLib or *App" }
 			links
 			{
 				"granny2_x64",
@@ -472,6 +432,11 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+	}
+
+	flags
+	{
+		"NoRTTI",
 	}
 
 	files

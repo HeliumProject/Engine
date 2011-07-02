@@ -18,7 +18,7 @@ using namespace Helium;
 /// @copydoc ObjectLoaderInitialization::Initialize()
 GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
 {
-#if L_EDITOR && 1
+#if L_EDITOR
     if( !EditorObjectLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(

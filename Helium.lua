@@ -337,8 +337,7 @@ project "Foundation"
 	configuration "not Debug"
 		kind "StaticLib"
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -346,8 +345,7 @@ project "Foundation"
 			"zlib",
 		}
 
-	--configuration { "windows", "SharedLib" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib" }
 		links
 		{
 			"ws2_32",
@@ -359,8 +357,7 @@ project "Engine"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -372,8 +369,7 @@ project "EngineJobs"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -386,8 +382,7 @@ project "Windowing"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -401,8 +396,7 @@ project "Rendering"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Rendering", "RENDERING" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -416,8 +410,7 @@ project "GraphicsTypes"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -432,8 +425,7 @@ project "GraphicsJobs"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -449,8 +441,7 @@ project "Graphics"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -467,8 +458,7 @@ project "Framework"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -487,8 +477,7 @@ project "WindowingWin"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "WindowingWin", "WINDOWING_WIN" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -503,8 +492,7 @@ project "RenderingD3D9"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -519,8 +507,7 @@ project "PcSupport"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -535,8 +522,7 @@ project "PreprocessingPc"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -555,8 +541,7 @@ project "EditorSupport"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -578,8 +563,7 @@ project "FrameworkWin"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -636,8 +620,7 @@ project "Pipeline"
 	configuration "not Debug"
 		kind "StaticLib"
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -679,6 +662,8 @@ project "Editor"
 
     pchheader( "EditorPch.h" )
     pchsource( "Editor/EditorPch.cpp" )
+
+	Helium.DoDefaultProjectSettings()
 
 	includedirs
 	{
@@ -774,13 +759,12 @@ project "Editor"
 			"Dependencies/p4api/lib/x64/Release",
 		}
 
-project "TestJobs"  -- DEPRECATED
+project "TestJobs" -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -789,7 +773,7 @@ project "TestJobs"  -- DEPRECATED
 			"EngineJobs",
 		}
 
-project "TestApp"  -- DEPRECATED
+project "TestApp" -- DEPRECATED
 	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
 
 	kind "WindowedApp"
@@ -830,17 +814,6 @@ project "TestApp"  -- DEPRECATED
 
 	pchheader( "TestAppPch.h" )
 	pchsource( "TestApp/TestAppPch.cpp" )
-
-	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
-	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
-	links
-	{
-		"Expat",
-		"freetype",
-		"nvtt",
-		"png",
-		"zlib",
-	}
 
 	Helium.DoDefaultProjectSettings()
 
@@ -889,8 +862,7 @@ project "ExampleGame"
 
 	Helium.DoModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -948,17 +920,6 @@ project "ExampleMain"
 
 	pchheader( "ExampleMainPch.h" )
 	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
-
-	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
-	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
-	links
-	{
-		"Expat",
-		"freetype",
-		"nvtt",
-		"png",
-		"zlib",
-	}
 
 	Helium.DoDefaultProjectSettings()
 

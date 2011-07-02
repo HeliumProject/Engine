@@ -1,4 +1,5 @@
 require "Base"
+require "Prebuild"
 require "FBX"
 require "TBB"
 require "WxWidgets"

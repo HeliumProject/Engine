@@ -82,7 +82,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     FontResourceHandler::InitializeStaticLibrary();
 #endif
 
-#if L_EDITOR && 1
+#if L_EDITOR
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();

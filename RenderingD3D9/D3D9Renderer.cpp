@@ -33,12 +33,12 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RFence );
+    HELIUM_DECLARE_RPTR( RFence );
 
-    L_DECLARE_RPTR( D3D9RasterizerState );
-    L_DECLARE_RPTR( D3D9BlendState );
-    L_DECLARE_RPTR( D3D9DepthStencilState );
-    L_DECLARE_RPTR( D3D9SamplerState );
+    HELIUM_DECLARE_RPTR( D3D9RasterizerState );
+    HELIUM_DECLARE_RPTR( D3D9BlendState );
+    HELIUM_DECLARE_RPTR( D3D9DepthStencilState );
+    HELIUM_DECLARE_RPTR( D3D9SamplerState );
 }
 
 using namespace Helium;

@@ -18,18 +18,18 @@
 //@{
 
 /// Package delimiter character.
-#define L_PACKAGE_PATH_CHAR TXT( '/' )
+#define HELIUM_PACKAGE_PATH_CHAR TXT( '/' )
 /// GameObject delimiter character.
-#define L_OBJECT_PATH_CHAR TXT( ':' )
+#define HELIUM_OBJECT_PATH_CHAR TXT( ':' )
 /// GameObject instance index delimiter character.
-#define L_INSTANCE_PATH_CHAR TXT( '*' )
+#define HELIUM_INSTANCE_PATH_CHAR TXT( '*' )
 
 /// Package delimiter character string.
-#define L_PACKAGE_PATH_CHAR_STRING TXT( "/" )
+#define HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "/" )
 /// GameObject delimiter character string.
-#define L_OBJECT_PATH_CHAR_STRING TXT( ":" )
+#define HELIUM_OBJECT_PATH_CHAR_STRING TXT( ":" )
 /// GameObject instance index delimiter character.
-#define L_INSTANCE_PATH_CHAR_STRING TXT( "*" )
+#define HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "*" )
 
 //@}
 

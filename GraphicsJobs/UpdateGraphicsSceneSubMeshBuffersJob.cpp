@@ -11,7 +11,7 @@
 #include "Engine/JobManager.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannySceneObjectInterface.h"
 #endif
 
@@ -49,7 +49,7 @@ void UpdateGraphicsSceneSubMeshBuffersJob::Run( JobContext* /*pContext*/ )
 
         const Simd::Matrix44* pBonePalette = rSceneObject.GetBonePalette();
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         const void* pBoneData = rSceneObject.GetBoneData();
         HELIUM_ASSERT( pBoneData );
 
@@ -76,7 +76,7 @@ void UpdateGraphicsSceneSubMeshBuffersJob::Run( JobContext* /*pContext*/ )
             float32_t* pSkinningMatrix43 = pConstantBuffer + skinningPaletteIndex * 12;
 
             const Simd::Matrix44& rBoneTransform = pBonePalette[ boneIndex ];
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
             Granny::GetInverseBoneReferencePose( inverseBoneReferencePose, pBoneData, boneIndex );
             skinningMatrix.MultiplySet( inverseBoneReferencePose, rBoneTransform );
 #else

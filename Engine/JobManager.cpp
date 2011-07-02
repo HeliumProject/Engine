@@ -43,7 +43,7 @@ void JobManager::Shutdown()
 {
     m_poolTls.SetPointer( NULL );
 
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
     HELIUM_TRACE( TRACE_INFO, TXT( "Job pool allocation stats:\n" ) );
     HELIUM_TRACE( TRACE_INFO, TXT( "Pool index\tLocal hits\tStolen hits\tMisses\n" ) );
     uint32_t nodeIndex = 0;
@@ -52,7 +52,7 @@ void JobManager::Shutdown()
     PoolNode* pNode = m_pHeadPool;
     while( pNode )
     {
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
         HELIUM_TRACE(
             TRACE_INFO,
             TXT( "%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\n" ),
@@ -68,7 +68,7 @@ void JobManager::Shutdown()
         pNode = pNext;
     }
 
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
     HELIUM_TRACE( TRACE_INFO, TXT( "\n" ) );
 #endif
 
@@ -95,7 +95,7 @@ void* JobManager::AllocateJobUninitialized( size_t size )
     void* pJob = pLocalNode->pool.AcquireUninitialized( size );
     if( pJob )
     {
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
         ++pLocalNode->localHits;
 #endif
 
@@ -109,7 +109,7 @@ void* JobManager::AllocateJobUninitialized( size_t size )
         pJob = pNode->pool.AcquireUninitialized( size );
         if( pJob )
         {
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
             ++pLocalNode->stolenHits;
 #endif
 
@@ -123,7 +123,7 @@ void* JobManager::AllocateJobUninitialized( size_t size )
         pJob = pNode->pool.AcquireUninitialized( size );
         if( pJob )
         {
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
             ++pLocalNode->stolenHits;
 #endif
 
@@ -135,7 +135,7 @@ void* JobManager::AllocateJobUninitialized( size_t size )
     pJob = JobPool::NewJobUninitialized( size );
     HELIUM_ASSERT( pJob );
 
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
     ++pLocalNode->misses;
 #endif
 
@@ -203,7 +203,7 @@ JobManager::PoolNode* JobManager::GetThreadLocalPoolNode()
         HELIUM_ASSERT( pNode );
         m_poolTls.SetPointer( pNode );
 
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
         pNode->localHits = 0;
         pNode->stolenHits = 0;
         pNode->misses = 0;

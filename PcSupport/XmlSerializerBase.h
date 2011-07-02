@@ -16,9 +16,9 @@
 
 // Output newline character.
 #if HELIUM_OS_WIN
-#define L_XML_NEWLINE "\r\n"
+#define HELIUM_XML_NEWLINE "\r\n"
 #else
-#define L_XML_NEWLINE "\n"
+#define HELIUM_XML_NEWLINE "\n"
 #endif
 
 namespace Helium

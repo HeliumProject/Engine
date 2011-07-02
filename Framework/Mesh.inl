@@ -58,14 +58,14 @@ namespace Helium
     /// @return  True if this is a skinned mesh, false if not.
     bool Mesh::IsSkinned() const
     {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         return m_grannyData.IsSkinned();
 #else
         return ( m_boneCount != 0 );
 #endif
     }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 
     /// Get the Granny-specific data associated with this mesh.
     ///
@@ -75,7 +75,7 @@ namespace Helium
         return m_grannyData;
     }
 
-#else  // L_USE_GRANNY_ANIMATION
+#else  // HELIUM_USE_GRANNY_ANIMATION
 
     /// Get the number of bones to which this mesh is weighted.
     ///
@@ -111,7 +111,7 @@ namespace Helium
         return m_pReferencePose;
     }
 
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 
     /// Get the number of materials assigned to this mesh's default material set.
     ///

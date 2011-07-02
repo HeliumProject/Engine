@@ -13,7 +13,7 @@
 
 #include "Graphics/Animation.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannySkeletalMeshEntityInterface.h"
 #endif
 
@@ -24,9 +24,9 @@ namespace Helium
     /// In-game entity comprising of a skeletal (skinned) mesh.
     class HELIUM_FRAMEWORK_API SkeletalMeshEntity : public MeshEntity
     {
-        L_DECLARE_OBJECT( SkeletalMeshEntity, MeshEntity );
+        HELIUM_DECLARE_OBJECT( SkeletalMeshEntity, MeshEntity );
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         friend class Granny::SkeletalMeshEntityData;
 #endif
 
@@ -58,7 +58,7 @@ namespace Helium
         void SetAnimation( Animation* pAnimation );
         inline Animation* GetAnimation() const;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         inline const Granny::SkeletalMeshEntityData& GetGrannyData() const;
 #endif
         //@}
@@ -84,7 +84,7 @@ namespace Helium
         /// Active animation.
         AnimationPtr m_spAnimation;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         /// Granny-specific data.
         Granny::SkeletalMeshEntityData m_grannyData;
 #endif

@@ -27,7 +27,7 @@ namespace Helium
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API Entity : public GameObject
     {
-        L_DECLARE_OBJECT( Entity, GameObject );
+        HELIUM_DECLARE_OBJECT( Entity, GameObject );
 
     public:
         /// Valid entity update phase flags.

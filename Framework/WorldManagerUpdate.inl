@@ -18,7 +18,7 @@ namespace Helium
     {
         HELIUM_ASSERT( pContext );
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 #endif
 
@@ -46,11 +46,11 @@ namespace Helium
                 {
                     Entity* pEntity = pLayer->GetEntity( entityIndex );
                     HELIUM_ASSERT( pEntity );
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
                     rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
 #endif
                     bool bUpdate = pEntity->NeedsAsynchronousUpdate();
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
                     rWorldManager.SetCurrentThreadUpdateEntity( NULL );
 #endif
                     if( bUpdate )

@@ -30,7 +30,7 @@ namespace Helium
     /// as rendering scenes outside the game world to a texture or editor preview windows.
     class HELIUM_FRAMEWORK_API World : public GameObject
     {
-        L_DECLARE_OBJECT( World, GameObject );
+        HELIUM_DECLARE_OBJECT( World, GameObject );
 
     public:
         /// @name Construction/Destruction

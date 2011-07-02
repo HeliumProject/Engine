@@ -17,16 +17,16 @@ using namespace Helium;
 
 // XML file header (UTF-8 string).
 static const char XML_FILE_HEADER[] =
-"<?xml version=\"1.0\" encoding=\"utf-8\"?>" L_XML_NEWLINE "<package>" L_XML_NEWLINE;
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>" HELIUM_XML_NEWLINE "<package>" HELIUM_XML_NEWLINE;
 // XML file footer (UTF-8 string).
-static const char XML_FILE_FOOTER[] = "</package>" L_XML_NEWLINE;
+static const char XML_FILE_FOOTER[] = "</package>" HELIUM_XML_NEWLINE;
 
 // GameObject tag strings.
 static const char OBJECT_TAG_START_A[] = "    <object name=\"";
 static const char OBJECT_TAG_START_B[] = "\" type=\"";
 static const char OBJECT_TAG_START_C[] = "\" template=\"";
-static const char OBJECT_TAG_START_D[] = "\">" L_XML_NEWLINE;
-static const char OBJECT_TAG_END[] = "    </object>" L_XML_NEWLINE;
+static const char OBJECT_TAG_START_D[] = "\">" HELIUM_XML_NEWLINE;
+static const char OBJECT_TAG_END[] = "    </object>" HELIUM_XML_NEWLINE;
 
 /// Constructor.
 XmlSerializer::XmlSerializer()

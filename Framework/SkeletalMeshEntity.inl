@@ -19,7 +19,7 @@ namespace Helium
         return m_spAnimation;
     }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     /// Get the Granny-specific data for this entity.
     ///
     /// @return  Granny-specific data.
@@ -27,5 +27,5 @@ namespace Helium
     {
         return m_grannyData;
     }
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 }

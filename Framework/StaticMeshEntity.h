@@ -16,7 +16,7 @@ namespace Helium
     /// In-game entity comprising of a static (non-skinned) mesh, with optional collision data.
     class HELIUM_FRAMEWORK_API StaticMeshEntity : public MeshEntity
     {
-        L_DECLARE_OBJECT( StaticMeshEntity, MeshEntity );
+        HELIUM_DECLARE_OBJECT( StaticMeshEntity, MeshEntity );
 
     public:
         /// @name Construction/Destruction

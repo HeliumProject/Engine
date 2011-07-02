@@ -46,9 +46,9 @@
 #endif  // HELIUM_UNICODE
 
 // Helper macro for defining serializable enumerated values.
-#define L_ENUM_VALUE_OP( R, PREFIX, VALUE ) BOOST_PP_CAT( PREFIX, VALUE )
+#define HELIUM_ENUM_VALUE_OP( R, PREFIX, VALUE ) BOOST_PP_CAT( PREFIX, VALUE )
 // Helper macro for defining and stringizing serializable enumerated values.
-#define L_ENUM_VALUE_STRING_OP( R, PREFIX, VALUE ) HELIUM_TSTRINGIZE( BOOST_PP_CAT( PREFIX, VALUE ) )
+#define HELIUM_ENUM_VALUE_STRING_OP( R, PREFIX, VALUE ) HELIUM_TSTRINGIZE( BOOST_PP_CAT( PREFIX, VALUE ) )
 
 /// @defgroup serializationmacros Serialization Support Macros
 //@{
@@ -56,39 +56,39 @@
 /// Tag and serialize a variable.
 ///
 /// @param[in] X  Variable to serialize.
-#define L_TAGGED( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << ( X )
+#define HELIUM_TAGGED( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << ( X )
 
 /// Tag and serialize a struct.
 ///
 /// @param[in] X  Struct to serialize.
-#define L_TAGGED_STRUCT( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStruct( X )
+#define HELIUM_TAGGED_STRUCT( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStruct( X )
 
 /// Tag and serialize an array.
 ///
 /// @param[in] X  Array to serialize.
-#define L_TAGGED_ARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapArray( X )
+#define HELIUM_TAGGED_ARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapArray( X )
 
 /// Tag and serialize a dynamic array.
 ///
 /// @param[in] X  Dynamic array to serialize.
-#define L_TAGGED_DYNARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapDynArray( X )
+#define HELIUM_TAGGED_DYNARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapDynArray( X )
 
 /// Tag and serialize an array of structs.
 ///
 /// @param[in] X  Array of structs to serialize.
-#define L_TAGGED_STRUCT_ARRAY( X ) \
+#define HELIUM_TAGGED_STRUCT_ARRAY( X ) \
     Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructArray( X )
 
 /// Tag and serialize a dynamic array of structs.
 ///
 /// @param[in] X  Dynamic array of structs to serialize.
-#define L_TAGGED_STRUCT_DYNARRAY( X ) \
+#define HELIUM_TAGGED_STRUCT_DYNARRAY( X ) \
     Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructDynArray( X )
 
 /// Serialize the parent class properties within a group named after the class.
 ///
 /// @param[in] S  Serializer instance.
-#define L_SERIALIZE_BASE( S ) \
+#define HELIUM_SERIALIZE_BASE( S ) \
     { \
         const GameObjectType* pBaseType = Base::GetStaticType(); \
         HELIUM_ASSERT( pBaseType ); \
@@ -97,11 +97,11 @@
         ( S ).EndPropertyGroup(); \
     }
 
-#define L_DECLARE_ENUMERATION( ENUMERATION, MODULE_API ) \
+#define HELIUM_DECLARE_ENUMERATION( ENUMERATION, MODULE_API ) \
 REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
     friend MODULE_API Helium::Serializer& operator<<( Helium::Serializer& s, ENUMERATION& rEnum );
 
-#define L_DEFINE_ENUMERATION( ENUMERATION, MODULE_API ) \
+#define HELIUM_DEFINE_ENUMERATION( ENUMERATION, MODULE_API ) \
 REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
     MODULE_API Helium::Serializer& Helium::operator<<( Helium::Serializer& s, ENUMERATION& rEnum ) \
     { \
@@ -114,12 +114,12 @@ REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
 /// @param[in] NAME    Enumeration type name.
 /// @param[in] PREFIX  Prefix for enumerated values (should not include a trailing underscore).
 /// @param[in] VALUES  Sequence of value identifiers (prefix should be excluded).
-#define L_ENUM( NAME, PREFIX, VALUES ) \
+#define HELIUM_ENUM( NAME, PREFIX, VALUES ) \
     enum NAME##_Value \
     { \
         PREFIX##_FIRST   =  0, \
         PREFIX##_INVALID = -1, \
-        BOOST_PP_SEQ_ENUM( BOOST_PP_SEQ_TRANSFORM( L_ENUM_VALUE_OP, PREFIX##_, VALUES ) ), \
+        BOOST_PP_SEQ_ENUM( BOOST_PP_SEQ_TRANSFORM( HELIUM_ENUM_VALUE_OP, PREFIX##_, VALUES ) ), \
         PREFIX##_MAX, \
         PREFIX##_LAST = PREFIX##_MAX - 1 \
     }; \
@@ -140,7 +140,7 @@ REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
         { \
             static const tchar_t* ppValueNames[] = \
             { \
-                BOOST_PP_SEQ_ENUM( BOOST_PP_SEQ_TRANSFORM( L_ENUM_VALUE_STRING_OP, PREFIX##_, VALUES ) ) \
+                BOOST_PP_SEQ_ENUM( BOOST_PP_SEQ_TRANSFORM( HELIUM_ENUM_VALUE_STRING_OP, PREFIX##_, VALUES ) ) \
             }; \
             \
             return ppValueNames; \

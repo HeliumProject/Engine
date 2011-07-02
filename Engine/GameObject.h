@@ -27,7 +27,7 @@
 ///
 /// @param[in] TYPE    GameObject type.
 /// @param[in] PARENT  Parent object type.
-#define L_DECLARE_OBJECT( TYPE, PARENT ) \
+#define HELIUM_DECLARE_OBJECT( TYPE, PARENT ) \
         REFLECT_DECLARE_OBJECT( TYPE, PARENT ) \
     public: \
         virtual const Helium::GameObjectType* GetGameObjectType() const; \
@@ -43,7 +43,7 @@
 ///
 /// @param[in] TYPE    GameObject type.
 /// @param[in] MODULE  Module to which the type belongs.
-#define L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
+#define HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     REFLECT_DEFINE_OBJECT( TYPE ) \
     \
     const Helium::GameObjectType* TYPE::GetGameObjectType() const \
@@ -92,8 +92,8 @@
 /// @param[in] TYPE        GameObject type.
 /// @param[in] MODULE      Module to which the type belongs.
 /// @param[in] TYPE_FLAGS  Type flags.
-#define L_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
-    L_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
+#define HELIUM_IMPLEMENT_OBJECT( TYPE, MODULE, TYPE_FLAGS ) \
+    HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( TYPE, MODULE ) \
     \
     const Helium::GameObjectType* TYPE::InitStaticType() \
     { \
@@ -245,7 +245,7 @@ namespace Helium
         virtual void FinalizeLoad();
         inline void ConditionalFinalizeLoad();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         virtual void PostSave();
 #endif
 

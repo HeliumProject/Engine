@@ -4,7 +4,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RVertexBuffer );
+    HELIUM_DECLARE_RPTR( RVertexBuffer );
 }
 
 namespace Helium

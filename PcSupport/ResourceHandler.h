@@ -26,7 +26,7 @@ namespace Helium
     /// Interface for parsing resources and creating and caching objects based on them.
     class HELIUM_PC_SUPPORT_API ResourceHandler : public GameObject
     {
-        L_DECLARE_OBJECT( ResourceHandler, GameObject );
+        HELIUM_DECLARE_OBJECT( ResourceHandler, GameObject );
 
     public:
         /// @name Construction/Destruction
@@ -40,7 +40,7 @@ namespace Helium
         virtual const GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
 #endif

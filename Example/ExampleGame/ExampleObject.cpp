@@ -10,7 +10,7 @@
 
 namespace Example
 {
-    L_IMPLEMENT_OBJECT( ExampleObject, ExampleGame, 0 );
+    HELIUM_IMPLEMENT_OBJECT( ExampleObject, ExampleGame, 0 );
 
     /// Constructor.
     ExampleObject::ExampleObject()

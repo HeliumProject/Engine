@@ -967,7 +967,7 @@ T* Helium::SparseArray< T, Allocator >::New()
     return pElement;
 }
 
-#define L_IMPLEMENT_SPARSEARRAY_NEW_Z( Z, N, DATA ) \
+#define HELIUM_IMPLEMENT_SPARSEARRAY_NEW_Z( Z, N, DATA ) \
 template< typename T, typename Allocator > \
 template< BOOST_PP_ENUM_PARAMS_Z( Z, N, typename Param ) > \
 T* Helium::SparseArray< T, Allocator >::New( BOOST_PP_ENUM_BINARY_PARAMS_Z( Z, N, const Param, &rParam ) ) \
@@ -981,9 +981,9 @@ T* Helium::SparseArray< T, Allocator >::New( BOOST_PP_ENUM_BINARY_PARAMS_Z( Z, N
     return pElement; \
 }
 
-BOOST_PP_REPEAT_FROM_TO( 1, 17, L_IMPLEMENT_SPARSEARRAY_NEW_Z, )
+BOOST_PP_REPEAT_FROM_TO( 1, 17, HELIUM_IMPLEMENT_SPARSEARRAY_NEW_Z, )
 
-#undef L_IMPLEMENT_SPARSEARRAY_NEW_Z
+#undef HELIUM_IMPLEMENT_SPARSEARRAY_NEW_Z
 
 /// Set this array to the contents of the given array.
 ///

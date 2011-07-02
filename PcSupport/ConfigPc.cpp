@@ -42,7 +42,7 @@ bool ConfigPc::SaveUserConfig()
 
     GameObjectPath configPackagePath = pConfigPackage->GetPath();
 
-    Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + L_XML_PACKAGE_FILE_EXTENSION );
+    Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
 
     HELIUM_TRACE( TRACE_INFO, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
 

@@ -18,7 +18,7 @@ namespace Helium
 {
     HELIUM_DECLARE_PTR( ShaderVariant );
 
-    L_DECLARE_RPTR( RShader );
+    HELIUM_DECLARE_RPTR( RShader );
 
     /// Shader constant information.
     struct HELIUM_GRAPHICS_API ShaderConstantInfo
@@ -123,7 +123,7 @@ namespace Helium
     /// Graphics shader resource.
     class HELIUM_GRAPHICS_API Shader : public Resource
     {
-        L_DECLARE_OBJECT( Shader, Resource );
+        HELIUM_DECLARE_OBJECT( Shader, Resource );
 
         friend class ShaderResourceHandler;
 
@@ -259,7 +259,7 @@ namespace Helium
 
         virtual void FinalizeLoad();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         virtual void PostSave();
 #endif
         //@}
@@ -319,7 +319,7 @@ namespace Helium
     /// Single variation of a shader.
     class HELIUM_GRAPHICS_API ShaderVariant : public Resource
     {
-        L_DECLARE_OBJECT( ShaderVariant, Resource );
+        HELIUM_DECLARE_OBJECT( ShaderVariant, Resource );
 
     public:
         /// @name Construction/Destruction

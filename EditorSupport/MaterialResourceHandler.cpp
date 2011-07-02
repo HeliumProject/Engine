@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/MaterialResourceHandler.h"
 
@@ -19,7 +19,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( MaterialResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( MaterialResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 MaterialResourceHandler::MaterialResourceHandler()
@@ -289,4 +289,4 @@ bool MaterialResourceHandler::CacheResource(
     return true;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

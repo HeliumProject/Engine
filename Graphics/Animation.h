@@ -14,7 +14,7 @@
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyAnimationInterface.h"
 #endif
 
@@ -23,7 +23,7 @@ namespace Helium
     /// Animation resource data.
     class HELIUM_GRAPHICS_API Animation : public Resource
     {
-        L_DECLARE_OBJECT( Animation, Resource );
+        HELIUM_DECLARE_OBJECT( Animation, Resource );
 
     public:
         /// @name Construction/Destruction
@@ -49,13 +49,13 @@ namespace Helium
 
         /// @name Data Access
         //@{
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         inline const Granny::AnimationData& GetGrannyData() const;
 #endif
         //@}
 
     private:
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         /// Granny-specific animation data.
         Granny::AnimationData m_grannyData;
 #endif

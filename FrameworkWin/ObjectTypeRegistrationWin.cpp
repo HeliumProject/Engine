@@ -13,7 +13,7 @@
 extern void RegisterPcSupportTypes();
 extern void UnregisterPcSupportTypes();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
@@ -26,7 +26,7 @@ void ObjectTypeRegistrationWin::Register()
     ObjectTypeRegistration::Register();
 
     RegisterPcSupportTypes();
-#if L_EDITOR
+#if HELIUM_EDITOR
     RegisterEditorSupportTypes();
 
     //pmd - Other resource handlers get initialized when their types are registered, but fonts don't
@@ -38,7 +38,7 @@ void ObjectTypeRegistrationWin::Register()
 /// @copydoc ObjectTypeRegistration::Unregister()
 void ObjectTypeRegistrationWin::Unregister()
 {
-#if L_EDITOR
+#if HELIUM_EDITOR
     //pmd - Other resource handlers get deinitted when their types are unregistered, but fonts don't
     //      follow that pattern. So for now, forcing a deinit here.
     FontResourceHandler::DestroyStaticLibrary();

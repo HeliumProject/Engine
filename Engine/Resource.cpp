@@ -13,12 +13,12 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Resource, Engine, 0 );
+HELIUM_IMPLEMENT_OBJECT( Resource, Engine, 0 );
 
 /// Constructor.
 Resource::Resource()
 {
-#if L_EDITOR
+#if HELIUM_EDITOR
     for( size_t preprocessedDataIndex = 0;
         preprocessedDataIndex < HELIUM_ARRAY_COUNT( m_preprocessedData );
         ++preprocessedDataIndex )
@@ -59,7 +59,7 @@ size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
 {
     CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // Check for in-memory data first.
     Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
     const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
@@ -104,7 +104,7 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
 
     CacheManager& rCacheManager = CacheManager::GetStaticInstance();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // Check for in-memory data first.
     Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
     const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
@@ -162,7 +162,7 @@ bool Resource::TryFinishLoadSubData( size_t loadId )
 {
     HELIUM_ASSERT( IsValid( loadId ) );
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // If the load request was an in-memory request, we don't need to sync as they are performed immediately.
     if( loadId == static_cast< size_t >( -2 ) )
     {

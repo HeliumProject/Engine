@@ -38,10 +38,10 @@ static const size_t SCENE_VIEW_BUFFERED_DRAWER_POOL_BLOCK_SIZE = 4;
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RRenderCommandProxy );
+    HELIUM_DECLARE_RPTR( RRenderCommandProxy );
 }
 
-L_IMPLEMENT_OBJECT( GraphicsScene, Graphics, 0 );
+HELIUM_IMPLEMENT_OBJECT( GraphicsScene, Graphics, 0 );
 
 /// Constructor.
 GraphicsScene::GraphicsScene()

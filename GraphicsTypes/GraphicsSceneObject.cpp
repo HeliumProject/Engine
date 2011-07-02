@@ -17,7 +17,7 @@ using namespace Helium;
 
 /// Constructor.
 GraphicsSceneObject::GraphicsSceneObject()
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 : m_pBoneData( NULL )
 #else
 : m_pInverseReferencePose( NULL )
@@ -79,7 +79,7 @@ void GraphicsSceneObject::SetIndexBuffer( RIndexBuffer* pIndexBuffer )
     m_spIndexBuffer = pIndexBuffer;
 }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 
 /// Set the core bone data for skinned meshes.
 ///
@@ -95,7 +95,7 @@ void GraphicsSceneObject::SetBoneData( const void* pBoneData, uint8_t boneCount 
     m_boneCount = boneCount;
 }
 
-#else  // L_USE_GRANNY_ANIMATION
+#else  // HELIUM_USE_GRANNY_ANIMATION
 
 /// Set the core bone data for skinned meshes.
 ///
@@ -111,7 +111,7 @@ void GraphicsSceneObject::SetBoneData( const Simd::Matrix44* pInverseReferencePo
     m_boneCount = boneCount;
 }
 
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 
 /// Update the bone transform palette for skinned mesh rendering.
 ///

@@ -10,7 +10,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
 
 /// Constructor.
 StaticMeshEntity::StaticMeshEntity()

@@ -14,7 +14,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( D3D9Surface );
+    HELIUM_DECLARE_RPTR( D3D9Surface );
 
     /// Interface to the main Direct3D 9 render context (that managed directly by the IDirect3DDevice9 instance).
     class D3D9MainContext : public RRenderContext

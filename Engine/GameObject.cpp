@@ -461,12 +461,12 @@ void GameObject::FinalizeLoad()
 {
 }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 /// Perform any work immediately after saving/caching an object in the editor.
 void GameObject::PostSave()
 {
 }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 /// Get whether this object is transient.
 ///
@@ -931,7 +931,7 @@ void GameObject::Shutdown()
     }
 #endif  // HELIUM_ENABLE_MEMORY_TRACKING
 
-#if !L_RELEASE
+#if !HELIUM_RELEASE
     size_t objectCountActual = sm_objects.GetUsedSize();
     if( objectCountActual != 0 )
     {
@@ -957,7 +957,7 @@ void GameObject::Shutdown()
             HELIUM_TRACE( TRACE_ERROR, TXT( "- %s\n" ), *pObject->GetPath().ToString() );
         }
     }
-#endif  // !L_RELEASE
+#endif  // !HELIUM_RELEASE
 
     sm_objects.Clear();
     sm_wpFirstTopLevelObject.Release();

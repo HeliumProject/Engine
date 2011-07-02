@@ -14,7 +14,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Material, Graphics, 0 );
+HELIUM_IMPLEMENT_OBJECT( Material, Graphics, 0 );
 
 /// Constructor.
 Material::Material()
@@ -27,7 +27,7 @@ Material::Material()
         SetInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] );
     }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     m_bLoadedOptions = false;
 #endif
 }
@@ -40,11 +40,11 @@ Material::~Material()
 /// @copydoc GameObject::Serialize()
 void Material::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_spShader );
+    s << HELIUM_TAGGED( m_spShader );
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     if( s.CanResolveTags() )
     {
         m_userOptions.Resize( 0 );
@@ -127,10 +127,10 @@ void Material::Serialize( Serializer& s )
         }
 
         // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-        s << L_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
-        s << L_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
-        s << L_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
-        s << L_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
+        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
+        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
+        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
+        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
 
         s.PopPropertyFlags();
 
@@ -146,7 +146,7 @@ void Material::Serialize( Serializer& s )
 #endif
 
     // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-    s << L_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
+    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
@@ -158,7 +158,7 @@ bool Material::NeedsPrecacheResourceData() const
 /// @copydoc GameObject::BeginPrecacheResourceData()
 bool Material::BeginPrecacheResourceData()
 {
-#if L_EDITOR
+#if HELIUM_EDITOR
     // Convert shader options to variant indices if we just loaded a set of options.
     if( m_bLoadedOptions )
     {
@@ -311,7 +311,7 @@ bool Material::TryFinishPrecacheResourceData()
         SetInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] );
     }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // Synchronize shader constant parameters with those exposed by the shader variant resources.
     SynchronizeShaderParameters();
 #endif
@@ -343,7 +343,7 @@ Name Material::GetParameterConstantBufferName()
     return parameterConstantBufferName;
 }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 /// Synchronize the shader parameter list with those provided by the selected shader variant.
 ///
 /// @see SynchronizeFloatVectorParameters(), SynchronizeTextureParameters()
@@ -650,14 +650,14 @@ void Material::SynchronizeShaderParameters()
     m_textureParameters.Swap( newTextureParameters );
     newTextureParameters.Clear();
 }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 /// Serialize this struct.
 ///
 /// @param[in] s  Serializer with which to serialize.
 void Material::Float1Parameter::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
+    s << HELIUM_TAGGED( name );
 
     // Serialize the value as a struct with only an "x" component to mimic the serialization layout of the vector
     // float parameter structs.
@@ -672,8 +672,8 @@ void Material::Float1Parameter::Serialize( Serializer& s )
 /// @param[in] s  Serializer with which to serialize.
 void Material::Float2Parameter::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
-    s << L_TAGGED( value );
+    s << HELIUM_TAGGED( name );
+    s << HELIUM_TAGGED( value );
 }
 
 /// Serialize this struct.
@@ -681,8 +681,8 @@ void Material::Float2Parameter::Serialize( Serializer& s )
 /// @param[in] s  Serializer with which to serialize.
 void Material::Float3Parameter::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
-    s << L_TAGGED( value );
+    s << HELIUM_TAGGED( name );
+    s << HELIUM_TAGGED( value );
 }
 
 /// Serialize this struct.
@@ -690,8 +690,8 @@ void Material::Float3Parameter::Serialize( Serializer& s )
 /// @param[in] s  Serializer with which to serialize.
 void Material::Float4Parameter::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
-    s << L_TAGGED( value );
+    s << HELIUM_TAGGED( name );
+    s << HELIUM_TAGGED( value );
 }
 
 /// Serialize this struct.
@@ -699,6 +699,6 @@ void Material::Float4Parameter::Serialize( Serializer& s )
 /// @param[in] s  Serializer with which to serialize.
 void Material::TextureParameter::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
-    s << L_TAGGED( value );
+    s << HELIUM_TAGGED( name );
+    s << HELIUM_TAGGED( value );
 }

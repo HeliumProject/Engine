@@ -25,13 +25,13 @@ void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     rWorldManager.SetCurrentThreadUpdateEntity( pEntity );
 #endif
 
     pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     rWorldManager.SetCurrentThreadUpdateEntity( NULL );
 #endif
 

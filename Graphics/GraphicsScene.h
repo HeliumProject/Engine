@@ -24,12 +24,12 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RConstantBuffer );
+    HELIUM_DECLARE_RPTR( RConstantBuffer );
 
     /// Manager for a graphics scene.
     class HELIUM_GRAPHICS_API GraphicsScene : public GameObject
     {
-        L_DECLARE_OBJECT( GraphicsScene, GameObject );
+        HELIUM_DECLARE_OBJECT( GraphicsScene, GameObject );
 
     public:
         /// @name Construction/Destruction

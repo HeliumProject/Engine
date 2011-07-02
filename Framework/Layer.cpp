@@ -12,7 +12,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Layer, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Layer, Framework, 0 );
 
 /// Constructor.
 Layer::Layer()
@@ -29,9 +29,9 @@ Layer::~Layer()
 /// @copydoc GameObject::Serialize()
 void Layer::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_spPackage );
+    s << HELIUM_TAGGED( m_spPackage );
 
     // Serialize entities manually when linking so that we can update their layer references at the same time.
     s << Serializer::Tag( TXT( "m_entities" ) );
@@ -65,7 +65,7 @@ void Layer::Serialize( Serializer& s )
         s << Serializer::WrapDynArray( m_entities );
     }
 
-#if L_DEBUG
+#if HELIUM_DEBUG
     size_t entityCount = m_entities.GetSize();
     HELIUM_UNREF( entityCount );
     StripNonPackageEntities();

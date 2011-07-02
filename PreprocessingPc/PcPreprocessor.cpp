@@ -120,7 +120,7 @@ bool PcPreprocessor::CompileShader(
     {
     case RShader::TYPE_VERTEX:
         {
-            macro.Name = "L_TYPE_VERTEX";
+            macro.Name = "HELIUM_TYPE_VERTEX";
             macro.Definition = "1";
             defines.Push( macro );
 
@@ -129,7 +129,7 @@ bool PcPreprocessor::CompileShader(
 
     case RShader::TYPE_PIXEL:
         {
-            macro.Name = "L_TYPE_PIXEL";
+            macro.Name = "HELIUM_TYPE_PIXEL";
             macro.Definition = "1";
             defines.Push( macro );
 

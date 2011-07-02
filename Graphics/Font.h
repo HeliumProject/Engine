@@ -10,12 +10,12 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RTexture2d );
+    HELIUM_DECLARE_RPTR( RTexture2d );
 
     /// Font resource.
     class HELIUM_GRAPHICS_API Font : public Resource
     {
-        L_DECLARE_OBJECT( Font, Resource );
+        HELIUM_DECLARE_OBJECT( Font, Resource );
 
     public:
 
@@ -29,7 +29,7 @@ namespace Helium
                 COLOR_COMPRESSED,
             };
 
-            L_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
+            HELIUM_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -40,7 +40,7 @@ namespace Helium
 
         /*
         /// Font texture sheet compression options.
-        L_ENUM( ECompression, COMPRESSION,
+        HELIUM_ENUM( ECompression, COMPRESSION,
             ( GRAYSCALE_UNCOMPRESSED )  // Grayscale only, no compression (8 bits per pixel).
             ( COLOR_COMPRESSED ) );     // Block compression (DXT1).
         */

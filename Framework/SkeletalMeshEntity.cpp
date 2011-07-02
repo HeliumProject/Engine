@@ -8,13 +8,13 @@
 #include "FrameworkPch.h"
 #include "Framework/SkeletalMeshEntity.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannySkeletalMeshEntityInterface.cpp.inl"
 #endif
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( SkeletalMeshEntity, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( SkeletalMeshEntity, Framework, 0 );
 
 /// Constructor.
 SkeletalMeshEntity::SkeletalMeshEntity()
@@ -31,7 +31,7 @@ void SkeletalMeshEntity::Attach()
 {
     Base::Attach();
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.Attach( this );
 #endif
 }
@@ -39,7 +39,7 @@ void SkeletalMeshEntity::Attach()
 /// @copydoc Entity::Detach()
 void SkeletalMeshEntity::Detach()
 {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.Detach( this );
 #endif
 
@@ -49,7 +49,7 @@ void SkeletalMeshEntity::Detach()
 /// @copydoc Entity::SynchronousUpdate()
 void SkeletalMeshEntity::SynchronousUpdate( float32_t deltaSeconds )
 {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.SynchronousUpdate( this, deltaSeconds );
 #else
     HELIUM_UNREF( deltaSeconds );
@@ -59,9 +59,9 @@ void SkeletalMeshEntity::SynchronousUpdate( float32_t deltaSeconds )
 /// @copydoc GameObject::Serialize()
 void SkeletalMeshEntity::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_spAnimation );
+    s << HELIUM_TAGGED( m_spAnimation );
 }
 
 /// Assign an animation to this entity.
@@ -89,7 +89,7 @@ void SkeletalMeshEntity::ActivateAssignedAnimation()
 {
     VerifySafety();
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.ActivateAssignedAnimation( this );
 #endif
 }
@@ -101,7 +101,7 @@ void SkeletalMeshEntity::DeactivateAssignedAnimation()
 {
     VerifySafety();
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.DeactivateAssignedAnimation( this );
 #endif
 }
@@ -136,7 +136,7 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
         Mesh* pMesh = pThis->m_spMesh;
         if( pMesh )
         {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
             Granny::SkeletalMeshEntityData::SetSceneObjectBoneData( pMesh, pSceneObject );
 #else
 #pragma TODO( "Helium::Mesh needs to be updated to store the inverse reference pose, which should be used here." )
@@ -174,7 +174,7 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
         }
     }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     pThis->m_grannyData.SetSceneObjectBonePalette( pSceneObject );
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 }

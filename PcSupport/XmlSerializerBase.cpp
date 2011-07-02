@@ -11,23 +11,23 @@
 using namespace Helium;
 
 // Structure tag strings.
-static const char STRUCT_TAG_START[] = "<struct>" L_XML_NEWLINE;
-static const char STRUCT_TAG_END[] = "</struct>" L_XML_NEWLINE;
+static const char STRUCT_TAG_START[] = "<struct>" HELIUM_XML_NEWLINE;
+static const char STRUCT_TAG_END[] = "</struct>" HELIUM_XML_NEWLINE;
 
 // Array tag strings.
-static const char ARRAY_TAG_START[] = "<array>" L_XML_NEWLINE;
-static const char ARRAY_TAG_END[] = "</array>" L_XML_NEWLINE;
+static const char ARRAY_TAG_START[] = "<array>" HELIUM_XML_NEWLINE;
+static const char ARRAY_TAG_END[] = "</array>" HELIUM_XML_NEWLINE;
 
 // Property tag strings.
 static const char PROPERTY_TAG_START_A[] = "<property";
 static const char PROPERTY_TAG_START_B[] = " name=\"";
 static const char PROPERTY_TAG_START_C[] = "\"";
 static const char PROPERTY_TAG_START_D[] = ">";
-static const char PROPERTY_TAG_END[] = "</property>" L_XML_NEWLINE;
+static const char PROPERTY_TAG_END[] = "</property>" HELIUM_XML_NEWLINE;
 
 // General strings.
 static const char TAB_STRING[] = "    ";
-static const char NEWLINE_STRING[] = L_XML_NEWLINE;
+static const char NEWLINE_STRING[] = HELIUM_XML_NEWLINE;
 
 /// Constructor.
 XmlSerializerBase::XmlSerializerBase()

@@ -80,7 +80,7 @@ bool WorldManager::Initialize()
 /// @see Initialize()
 void WorldManager::Shutdown()
 {
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     m_currentEntityTls.SetPointer( NULL );
 #endif
 

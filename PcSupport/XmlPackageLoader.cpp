@@ -151,7 +151,7 @@ static void XMLCALL XmlPackageStartElementHandler(
 
             if( StringCompare( pAttName, TXT( "name" ) ) == 0 )
             {
-                objectName = L_OBJECT_PATH_CHAR;
+                objectName = HELIUM_OBJECT_PATH_CHAR;
                 objectName += pAttValue;
 
                 continue;
@@ -851,13 +851,13 @@ bool XmlPackageLoader::Initialize( GameObjectPath packagePath )
 
     Path basePackageFilePath( dataDirectory + packagePath.ToFilePathString().GetData() );
 
-    m_packageFilePath.Set( basePackageFilePath.Get() + TXT( "/" ) + L_XML_PACKAGE_FILE_NAME );
+    m_packageFilePath.Set( basePackageFilePath.Get() + TXT( "/" ) + HELIUM_XML_PACKAGE_FILE_NAME );
 
     if( !m_packageFilePath.Exists() )
     {
         // Fall back onto the non-directory based package file.
         m_packageFilePath = basePackageFilePath;
-        m_packageFilePath += L_XML_PACKAGE_FILE_EXTENSION;
+        m_packageFilePath += HELIUM_XML_PACKAGE_FILE_EXTENSION;
     }
 
     // Retrieve the size of the package file.  Note that we still keep around the loader even if the package file
@@ -1455,7 +1455,7 @@ void XmlPackageLoader::TickPreload()
 
     HELIUM_ASSERT( pPackage->GetLoader() == this );
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // Add all resource objects that exist in the package directory.
     DynArray< ResourceHandler* > resourceHandlers;
     ResourceHandler::GetAllResourceHandlers( resourceHandlers );
@@ -1562,7 +1562,7 @@ void XmlPackageLoader::TickPreload()
         }
     }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
     // Package preloading is now complete.
     pPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );

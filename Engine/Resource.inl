@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-#if L_EDITOR
+#if HELIUM_EDITOR
     /// Get the preprocessed resource data for the specified platform.
     ///
     /// This data is only valid if the bLoaded flag in the returned structure is set.
@@ -35,5 +35,5 @@ namespace Helium
 
         return m_preprocessedData[ platform ];
     }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 }

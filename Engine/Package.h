@@ -18,7 +18,7 @@ namespace Helium
     /// GameObject package.
     class HELIUM_ENGINE_API Package : public GameObject
     {
-        L_DECLARE_OBJECT( Package, GameObject );
+        HELIUM_DECLARE_OBJECT( Package, GameObject );
 
     public:
         /// @name Construction/Destruction

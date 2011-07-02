@@ -14,7 +14,7 @@
 #include "Platform/Thread.h"
 
 /// Non-zero to enable debug verification of methods called on Entity-based instances during world updates.
-#define L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING ( !L_RELEASE )
+#define HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING ( !HELIUM_RELEASE )
 
 namespace Helium
 {
@@ -72,7 +72,7 @@ namespace Helium
         /// @name Data Access
         //@{
         inline EUpdatePhase GetUpdatePhase() const;
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         inline const Entity* GetCurrentThreadUpdateEntity() const;
         inline void SetCurrentThreadUpdateEntity( const Entity* pEntity );
 #endif
@@ -102,7 +102,7 @@ namespace Helium
         /// Current world update phase.
         EUpdatePhase m_updatePhase;
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         /// Thread-local storage for the entity currently being updated on a given thread.
         ThreadLocalPointer m_currentEntityTls;
 #endif

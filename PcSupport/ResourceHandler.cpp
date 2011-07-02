@@ -10,7 +10,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
 
 /// Constructor.
 ResourceHandler::ResourceHandler()
@@ -40,7 +40,7 @@ void ResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions,
     rExtensionCount = 0;
 }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 /// Preprocess and cache the resource data for the given resource for all enabled target platforms.
 ///
 /// @param[in] pObjectPreprocessor  GameObject preprocessor instance.
@@ -55,7 +55,7 @@ bool ResourceHandler::CacheResource(
 {
     return false;
 }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 /// Gather all existing resource handlers.
 ///

@@ -2,7 +2,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "PcSupport/ResourceHandler.h"
 
@@ -16,7 +16,7 @@ namespace Helium
     /// Resource handler for Font resource types.
     class HELIUM_EDITOR_SUPPORT_API FontResourceHandler : public ResourceHandler
     {
-        L_DECLARE_OBJECT( FontResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_OBJECT( FontResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -54,4 +54,4 @@ namespace Helium
     };
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

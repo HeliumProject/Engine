@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "PcSupport/ResourceHandler.h"
 
@@ -23,7 +23,7 @@ namespace Helium
     /// Resource handler for Shader resource types.
     class HELIUM_EDITOR_SUPPORT_API ShaderVariantResourceHandler : public ResourceHandler
     {
-        L_DECLARE_OBJECT( ShaderVariantResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_OBJECT( ShaderVariantResourceHandler, ResourceHandler );
 
     public:
         /// Load request pool block size.
@@ -110,6 +110,6 @@ namespace Helium
     };
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_SHADER_VARIANT_RESOURCE_HANDLER_H

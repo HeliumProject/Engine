@@ -54,7 +54,7 @@
 #include "Framework/WorldManager.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 #include "PcSupport/ObjectPreprocessor.h"
 #include "EditorSupport/EditorObjectLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
@@ -76,6 +76,6 @@ namespace Helium
     HELIUM_DECLARE_PTR( SkeletalMeshEntity );
     HELIUM_DECLARE_PTR( StaticMeshEntity );
 
-    L_DECLARE_RPTR( RRenderContext );
-    L_DECLARE_RPTR( RSurface );
+    HELIUM_DECLARE_RPTR( RRenderContext );
+    HELIUM_DECLARE_RPTR( RSurface );
 }

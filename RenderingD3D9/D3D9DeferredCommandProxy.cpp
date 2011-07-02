@@ -21,21 +21,21 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RRasterizerState );
-    L_DECLARE_RPTR( RBlendState );
-    L_DECLARE_RPTR( RDepthStencilState );
+    HELIUM_DECLARE_RPTR( RRasterizerState );
+    HELIUM_DECLARE_RPTR( RBlendState );
+    HELIUM_DECLARE_RPTR( RDepthStencilState );
 
-    L_DECLARE_RPTR( RSurface );
+    HELIUM_DECLARE_RPTR( RSurface );
 
-    L_DECLARE_RPTR( RIndexBuffer );
-    L_DECLARE_RPTR( RVertexInputLayout );
+    HELIUM_DECLARE_RPTR( RIndexBuffer );
+    HELIUM_DECLARE_RPTR( RVertexInputLayout );
 
-    L_DECLARE_RPTR( RVertexShader );
-    L_DECLARE_RPTR( RPixelShader );
+    HELIUM_DECLARE_RPTR( RVertexShader );
+    HELIUM_DECLARE_RPTR( RPixelShader );
 
-    L_DECLARE_RPTR( RTexture );
+    HELIUM_DECLARE_RPTR( RTexture );
 
-    L_DECLARE_RPTR( RFence );
+    HELIUM_DECLARE_RPTR( RFence );
 }
 
 using namespace Helium;
@@ -637,7 +637,7 @@ private:
     RRenderCommandListPtr m_spCommandList;
 };
 
-#define L_DEFERRED_COMMAND_PROXY_METHOD( COMMAND, PARAM_LIST, ARGUMENT_LIST ) \
+#define HELIUM_DEFERRED_COMMAND_PROXY_METHOD( COMMAND, PARAM_LIST, ARGUMENT_LIST ) \
     void D3D9DeferredCommandProxy::COMMAND PARAM_LIST \
     { \
         if( !m_spCommandList ) \
@@ -659,113 +659,113 @@ D3D9DeferredCommandProxy::~D3D9DeferredCommandProxy()
 {
 }
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetRasterizerState,
     ( RRasterizerState* pState ),
     ( pState ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetBlendState,
     ( RBlendState* pState ),
     ( pState ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetDepthStencilState,
     ( RDepthStencilState* pState, uint8_t stencilReferenceValue ),
     ( pState, stencilReferenceValue ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetSamplerStates,
     ( size_t startIndex, size_t samplerCount, RSamplerState* const* ppStates ),
     ( startIndex, samplerCount, ppStates ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetRenderSurfaces,
     ( RSurface* pRenderTargetSurface, RSurface* pDepthStencilSurface ),
     ( pRenderTargetSurface, pDepthStencilSurface ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetViewport,
     ( uint32_t x, uint32_t y, uint32_t width, uint32_t height ),
     ( x, y, width, height ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     BeginScene,
     (),
     () )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     EndScene,
     (),
     () )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     Clear,
     ( uint32_t clearFlags, const Color& rColor, float32_t depth, uint8_t stencil ),
     ( clearFlags, rColor, depth, stencil ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetIndexBuffer,
     ( RIndexBuffer* pBuffer ),
     ( pBuffer ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetVertexBuffers,
     ( size_t startIndex, size_t bufferCount, RVertexBuffer* const* ppBuffers, uint32_t* pStrides, uint32_t* pOffsets ),
     ( startIndex, bufferCount, ppBuffers, pStrides, pOffsets ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetVertexInputLayout,
     ( RVertexInputLayout* pLayout ),
     ( pLayout ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetVertexShader,
     ( RVertexShader* pShader ),
     ( pShader ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetPixelShader,
     ( RPixelShader* pShader ),
     ( pShader ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetVertexConstantBuffers,
     ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
     ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetPixelConstantBuffers,
     ( size_t startIndex, size_t bufferCount, RConstantBuffer* const* ppBuffers, const size_t* pLimitSizes ),
     ( startIndex, bufferCount, ppBuffers, pLimitSizes ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetTexture,
     ( size_t samplerIndex, RTexture* pTexture ),
     ( samplerIndex, pTexture ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     DrawIndexed,
     ( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t minIndex, uint32_t usedVertexCount,
       uint32_t startIndex, uint32_t primitiveCount ),
     ( primitiveType, baseVertexIndex, minIndex, usedVertexCount, startIndex, primitiveCount ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     DrawUnindexed,
     ( ERendererPrimitiveType primitiveType, uint32_t baseVertexIndex, uint32_t primitiveCount ),
     ( primitiveType, baseVertexIndex, primitiveCount ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     SetFence,
     ( RFence* pFence ),
     ( pFence ) )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     UnbindResources,
     (),
     () )
 
-L_DEFERRED_COMMAND_PROXY_METHOD(
+HELIUM_DEFERRED_COMMAND_PROXY_METHOD(
     ExecuteCommandList,
     ( RRenderCommandList* pCommandList ),
     ( pCommandList ) )

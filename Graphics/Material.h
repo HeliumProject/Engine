@@ -23,12 +23,12 @@ namespace Helium
     HELIUM_DECLARE_PTR( ShaderVariant );
     HELIUM_DECLARE_PTR( Texture );
 
-    L_DECLARE_RPTR( RConstantBuffer );
+    HELIUM_DECLARE_RPTR( RConstantBuffer );
 
     /// Material resource type.
     class HELIUM_GRAPHICS_API Material : public Resource
     {
-        L_DECLARE_OBJECT( Material, Resource );
+        HELIUM_DECLARE_OBJECT( Material, Resource );
 
     public:
         /// Scalar floating-point parameter.
@@ -137,7 +137,7 @@ namespace Helium
         inline size_t GetTextureParameterCount() const;
         inline const TextureParameter& GetTextureParameter( size_t index ) const;
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         inline const DynArray< Shader::SelectPair >& GetUserOptions() const;
 
         inline size_t GetFloat1ParameterCount() const;
@@ -162,7 +162,7 @@ namespace Helium
     protected:
         /// @name Protected Utility Functions
         //@{
-#if L_EDITOR
+#if HELIUM_EDITOR
         void SynchronizeShaderParameters();
 #endif
         //@}
@@ -186,7 +186,7 @@ namespace Helium
         /// Shader texture parameters.
         DynArray< TextureParameter > m_textureParameters;
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         /// User options cached during loading.
         DynArray< Shader::SelectPair > m_userOptions;
         /// Shader scalar float parameters.

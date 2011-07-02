@@ -6,9 +6,9 @@
 
 using namespace Helium;
 
-L_DEFINE_ENUMERATION( Font::ECompression, HELIUM_GRAPHICS_API );
+HELIUM_DEFINE_ENUMERATION( Font::ECompression, HELIUM_GRAPHICS_API );
 
-L_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
+HELIUM_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 
 /// Constructor.
 Font::Font()
@@ -41,14 +41,14 @@ Font::~Font()
 /// @copydoc GameObject::Serialize()
 void Font::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_pointSize );
-    s << L_TAGGED( m_dpi );
-    s << L_TAGGED( m_textureSheetWidth );
-    s << L_TAGGED( m_textureSheetHeight );
-    s << L_TAGGED( m_textureCompression );
-    s << L_TAGGED( m_bAntialiased );
+    s << HELIUM_TAGGED( m_pointSize );
+    s << HELIUM_TAGGED( m_dpi );
+    s << HELIUM_TAGGED( m_textureSheetWidth );
+    s << HELIUM_TAGGED( m_textureSheetHeight );
+    s << HELIUM_TAGGED( m_textureCompression );
+    s << HELIUM_TAGGED( m_bAntialiased );
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()

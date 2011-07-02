@@ -24,9 +24,9 @@ namespace Helium
 
     HELIUM_DECLARE_PTR( Material );
 
-    L_DECLARE_RPTR( RVertexBuffer );
-    L_DECLARE_RPTR( RIndexBuffer );
-    L_DECLARE_RPTR( RVertexDescription );
+    HELIUM_DECLARE_RPTR( RVertexBuffer );
+    HELIUM_DECLARE_RPTR( RIndexBuffer );
+    HELIUM_DECLARE_RPTR( RVertexDescription );
 
     /// Information related to a single object attached to the graphics scene.
     HELIUM_SIMD_ALIGN_PRE class HELIUM_GRAPHICS_TYPES_API GraphicsSceneObject
@@ -112,7 +112,7 @@ namespace Helium
         void SetVertexData( RVertexBuffer* pVertexBuffer, RVertexDescription* pVertexDescription, uint32_t vertexStride );
         void SetIndexBuffer( RIndexBuffer* pIndexBuffer );
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         void SetBoneData( const void* pBoneData, uint8_t boneCount );
 #else
         void SetBoneData( const Simd::Matrix44* pInverseReferencePose, uint8_t boneCount );
@@ -127,7 +127,7 @@ namespace Helium
         inline uint32_t GetVertexStride() const;
         inline RIndexBuffer* GetIndexBuffer() const;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         inline const void* GetBoneData() const;
 #else
         inline const Simd::Matrix44* GetInverseReferencePose() const;
@@ -162,7 +162,7 @@ namespace Helium
         /// Index buffer.
         RIndexBufferPtr m_spIndexBuffer;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         /// Mesh bone data.
         const void* m_pBoneData;
 #else

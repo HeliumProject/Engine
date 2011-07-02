@@ -21,13 +21,13 @@ namespace Helium
 
     class RenderResourceManager;
 
-    L_DECLARE_RPTR( RFence );
-    L_DECLARE_RPTR( RIndexBuffer );
-    L_DECLARE_RPTR( RPixelShader );
-    L_DECLARE_RPTR( RTexture2d );
-    L_DECLARE_RPTR( RVertexBuffer );
-    L_DECLARE_RPTR( RVertexDescription );
-    L_DECLARE_RPTR( RVertexShader );
+    HELIUM_DECLARE_RPTR( RFence );
+    HELIUM_DECLARE_RPTR( RIndexBuffer );
+    HELIUM_DECLARE_RPTR( RPixelShader );
+    HELIUM_DECLARE_RPTR( RTexture2d );
+    HELIUM_DECLARE_RPTR( RVertexBuffer );
+    HELIUM_DECLARE_RPTR( RVertexDescription );
+    HELIUM_DECLARE_RPTR( RVertexShader );
 
     /// Dynamic drawing interface.
     class HELIUM_GRAPHICS_API DynamicDrawer : NonCopyable

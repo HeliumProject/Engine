@@ -284,12 +284,10 @@ Helium.DoDefaultSolutionSettings = function()
 		defines
 		{
 			"_DEBUG",
+			"TBB_USE_DEBUG=1",
 			"HELIUM_DEBUG=1",
 			"HELIUM_SHARED=1",
-			"TBB_USE_DEBUG=1",
-			"L_DEBUG=1",
-			"L_EDITOR=1",
-			"L_SHARED=1",
+			"HELIUM_EDITOR=1",
 		}
 		flags
 		{
@@ -301,9 +299,7 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"HELIUM_INTERMEDIATE=1",
 			"HELIUM_STATIC=1",
-			"L_INTERMEDIATE=1",
-			"L_EDITOR=1",
-			"L_STATIC=1",
+			"HELIUM_EDITOR=1",
 		}
 		flags
 		{
@@ -318,8 +314,6 @@ Helium.DoDefaultSolutionSettings = function()
 			"NDEBUG",
 			"HELIUM_PROFILE=1",
 			"HELIUM_STATIC=1",
-			"L_PROFILE=1",
-			"L_STATIC=1",
 		}
 		flags
 		{
@@ -334,8 +328,6 @@ Helium.DoDefaultSolutionSettings = function()
 			"NDEBUG",
 			"HELIUM_RELEASE=1",
 			"HELIUM_STATIC=1",
-			"L_RELEASE=1",
-			"L_STATIC=1",
 		}
 		flags
 		{

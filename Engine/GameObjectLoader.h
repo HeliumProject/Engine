@@ -50,7 +50,7 @@ namespace Helium
 
         bool LoadObject( GameObjectPath path, GameObjectPtr& rspObject );
 
-#if L_EDITOR
+#if HELIUM_EDITOR
         virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData = true );
 #endif
 

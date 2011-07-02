@@ -10,7 +10,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT_NOINITTYPE( Package, Engine );
+HELIUM_IMPLEMENT_OBJECT_NOINITTYPE( Package, Engine );
 
 /// Constructor.
 Package::Package()

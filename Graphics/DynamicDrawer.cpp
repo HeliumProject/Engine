@@ -20,7 +20,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RRenderCommandProxy );
+    HELIUM_DECLARE_RPTR( RRenderCommandProxy );
 }
 
 using namespace Helium;

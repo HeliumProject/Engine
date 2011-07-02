@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include <nvtt/nvtt.h>
 
@@ -53,6 +53,6 @@ namespace Helium
 
 #include "EditorSupport/MemoryTextureOutputHandler.inl"
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_MEMORY_TEXTURE_OUTPUT_HANDLER_H

@@ -20,15 +20,15 @@ Config::Config()
 : m_bLoadingConfigPackage( false )
 {
     HELIUM_VERIFY( m_configContainerPackagePath.Set(
-        Name( L_CONFIG_CONTAINER_PACKAGE ),
+        Name( HELIUM_CONFIG_CONTAINER_PACKAGE ),
         true,
         GameObjectPath( NULL_NAME ) ) );
     HELIUM_VERIFY( m_defaultConfigPackagePath.Set(
-        Name( L_CONFIG_DEFAULT_PACKAGE_BASE L_CONFIG_PLATFORM_SUFFIX ),
+        Name( HELIUM_CONFIG_DEFAULT_PACKAGE_BASE HELIUM_CONFIG_PLATFORM_SUFFIX ),
         true,
         m_configContainerPackagePath ) );
     HELIUM_VERIFY( m_userConfigPackagePath.Set(
-        Name( L_CONFIG_USER_PACKAGE_BASE ),
+        Name( HELIUM_CONFIG_USER_PACKAGE_BASE ),
         true,
         m_configContainerPackagePath ) );
 }

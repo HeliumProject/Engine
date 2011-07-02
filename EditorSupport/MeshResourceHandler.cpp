@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/MeshResourceHandler.h"
 
@@ -20,13 +20,13 @@
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshResourceHandlerInterface.h"
 #endif
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( MeshResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( MeshResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 MeshResourceHandler::MeshResourceHandler()
@@ -104,7 +104,7 @@ bool MeshResourceHandler::CacheResource(
 
     size_t boneCountActual = bones.GetSize();
     HELIUM_ASSERT( boneCountActual <= UINT8_MAX );
-#if !L_USE_GRANNY_ANIMATION
+#if !HELIUM_USE_GRANNY_ANIMATION
     uint8_t boneCount = static_cast< uint8_t >( boneCountActual );
 #endif
 
@@ -122,10 +122,10 @@ bool MeshResourceHandler::CacheResource(
         }
     }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     Granny::MeshCachingData grannyMeshCachingData;
     grannyMeshCachingData.BuildResourceData( bones );
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 
     // Cache the data for each supported platform.
     BinarySerializer serializer;
@@ -157,7 +157,7 @@ bool MeshResourceHandler::CacheResource(
         serializer << triangleCount;
         serializer << bounds;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         grannyMeshCachingData.CachePlatformResourceData( pPreprocessor, serializer );
 #else
         serializer << boneCount;
@@ -295,4 +295,4 @@ bool MeshResourceHandler::CacheResource(
     return true;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

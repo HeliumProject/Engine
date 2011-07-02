@@ -15,7 +15,7 @@
 /// Forward declare a render resource smart pointer type.
 ///
 /// @param[in] CLASS  Class for which to declare the smart pointer type.
-#define L_DECLARE_RPTR( CLASS ) class CLASS; typedef Helium::SmartPtr< CLASS > CLASS##Ptr;
+#define HELIUM_DECLARE_RPTR( CLASS ) class CLASS; typedef Helium::SmartPtr< CLASS > CLASS##Ptr;
 
 namespace Helium
 {

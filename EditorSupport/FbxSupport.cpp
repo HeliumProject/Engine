@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/FbxSupport.h"
 
@@ -107,7 +107,7 @@ static void GetLayerElementValue(
     }
 }
 
-#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+#if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
 /// Constructor.
 FbxMemoryAllocator::FbxMemoryAllocator()
     : KFbxMemoryAllocator(
@@ -242,7 +242,7 @@ size_t FbxMemoryAllocator::MsizeDebug( void* pMemory, int )
 {
     return Msize( pMemory );
 }
-#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+#endif  // HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
 
 /// Constructor.
 FbxSupport::FbxSupport()
@@ -526,9 +526,9 @@ void FbxSupport::LazyInitialize()
     m_pSdkManager = KFbxSdkManager::Create();
     HELIUM_ASSERT( m_pSdkManager );
 
-#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+#if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
     m_pSdkManager->SetMemoryAllocator( &m_memoryAllocator );
-#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+#endif  // HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
 
     m_pIoSettings = KFbxIOSettings::Create( m_pSdkManager, IOSROOT );
     HELIUM_ASSERT( m_pIoSettings );
@@ -1927,4 +1927,4 @@ const char* FbxSupport::StripNamespace( const char* pString )
     return pString;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

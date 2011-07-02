@@ -17,8 +17,8 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
-L_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 Shader::BEGIN_LOAD_VARIANT_FUNC* Shader::sm_pBeginLoadVariantOverride = NULL;
 Shader::TRY_FINISH_LOAD_VARIANT_FUNC* Shader::sm_pTryFinishLoadVariantOverride = NULL;
@@ -103,9 +103,9 @@ Shader::~Shader()
 /// @copydoc GameObject::Serialize()
 void Shader::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_bPrecacheAllVariants );
+    s << HELIUM_TAGGED( m_bPrecacheAllVariants );
 }
 
 /// @copydoc GameObject::FinalizeLoad()
@@ -133,7 +133,7 @@ void Shader::FinalizeLoad()
     }
 }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 /// @copydoc GameObject::PostSave()
 void Shader::PostSave()
 {
@@ -168,7 +168,7 @@ void Shader::PostSave()
         }
     }
 }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 /// @copydoc Resource::SerializePersistentResourceData()
 void Shader::SerializePersistentResourceData( Serializer& s )
@@ -336,8 +336,8 @@ void Shader::Select::Serialize( Serializer& s )
 /// @param[in] s  Serializer with which to serialize.
 void Shader::SelectPair::Serialize( Serializer& s )
 {
-    s << L_TAGGED( name );
-    s << L_TAGGED( choice );
+    s << HELIUM_TAGGED( name );
+    s << HELIUM_TAGGED( choice );
 }
 
 /// Serialize this set of shader preprocessor options.

@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RRenderContext );
+    HELIUM_DECLARE_RPTR( RRenderContext );
 }
 
 namespace Helium

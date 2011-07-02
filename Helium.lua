@@ -47,12 +47,12 @@ if haveGranny then
 
 	defines
 	{
-		"L_HAVE_GRANNY=1",
+		"HELIUM_HAVE_GRANNY=1",
 	}
 else
 	defines
 	{
-		"L_HAVE_GRANNY=0",
+		"HELIUM_HAVE_GRANNY=0",
 	}
 end
 

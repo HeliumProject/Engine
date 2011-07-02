@@ -17,13 +17,6 @@ if _ACTION then
 		execute = Helium.Prebuild
 	}
 
-	-- Custom option to set the global Unicode (wchar_t/UTF-16,32)) vs. ASCII (char/UTF-8)
-	newoption
-	{
-		trigger = "no-unicode",
-		description = "Disable Unicode support"
-	}
-
 	if _ACTION ~= "prebuild" then
 
 		if _ACTION ~= "clean" then

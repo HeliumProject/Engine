@@ -267,16 +267,21 @@ Helium.DoDefaultSolutionSettings = function()
 	
 	defines
 	{
-		"XML_STATIC=1",
+		"UNICODE=1",
 		"KFBX_DLLINFO=1",
+		"LITESQL_UNICODE=1",
+		"XML_STATIC=1",
+		"XML_UNICODE_WCHAR_T=1",
+		"HELIUM_UNICODE=1",
 	}
 
 	flags
 	{
+		"Unicode",
 		"EnableSSE2",
 		"NoMinimalRebuild",
 	}
-		
+
 	if os.getenv( 'CL' ) then
 		buildoptions { os.getenv( 'CL' ) }
 	end
@@ -289,25 +294,6 @@ Helium.DoDefaultSolutionSettings = function()
 			"__SSE2__",
 		}
 
-	configuration "no-unicode"
-		defines
-		{
-			"HELIUM_UNICODE=0",
-		}
-	
-	configuration "not no-unicode"
-		defines
-		{
-			"HELIUM_UNICODE=1",
-			"UNICODE=1",
-			"LITESQL_UNICODE=1",
-			"XML_UNICODE_WCHAR_T=1",
-		}
-		flags
-		{
-			"Unicode",
-		}
-	
 	for i, platform in ipairs( platforms() ) do
 		for j, config in ipairs( configurations() ) do
 			configuration( { config, platform } )
@@ -320,8 +306,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "windows"
 		defines
 		{
-			"_WIN32",
 			"WIN32",
+			"_WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
 		}
@@ -329,8 +315,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Debug"
 		defines
 		{
-			"HELIUM_DEBUG=1",
 			"_DEBUG",
+			"HELIUM_DEBUG=1",
 			"HELIUM_SHARED=1",
 			"TBB_USE_DEBUG=1",
 			"L_DEBUG=1",
@@ -361,8 +347,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Profile"
 		defines
 		{
-			"HELIUM_PROFILE=1",
 			"NDEBUG",
+			"HELIUM_PROFILE=1",
 			"HELIUM_STATIC=1",
 			"L_PROFILE=1",
 			"L_STATIC=1",
@@ -377,8 +363,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Release"
 		defines
 		{
-			"HELIUM_RELEASE=1",
 			"NDEBUG",
+			"HELIUM_RELEASE=1",
 			"HELIUM_STATIC=1",
 			"L_RELEASE=1",
 			"L_STATIC=1",
@@ -412,8 +398,7 @@ Helium.DoDefaultProjectSettings = function()
 
 	flags
 	{
-	    -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
-		--"ExtraWarnings",
+		--"ExtraWarnings", -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
 		"FatalWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
 		"NoRTTI",

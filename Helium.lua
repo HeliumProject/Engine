@@ -259,18 +259,6 @@ else
 	os.exit(1)
 end
 
-configuration "no-unicode"
-	defines
-	{
-		"wxUSE_UNICODE=0",
-	}
-	
-configuration "not no-unicode"
-	defines
-	{
-		"wxUSE_UNICODE=1",
-	}
-
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 	language "C++"
@@ -753,22 +741,12 @@ project "Editor"
 		}
 		
 	-- per configuration
-	configuration { "windows", "Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29d"
-		}
-	configuration { "windows", "not Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29"
-		}
-	configuration { "windows", "Debug", "not no-unicode" }
+	configuration { "windows", "Debug" }
 		links
 		{
 			"wxmsw29ud"
 		}
-	configuration { "windows", "not Debug", "not no-unicode" }
+	configuration { "windows", "not Debug" }
 		links
 		{
 			"wxmsw29u"

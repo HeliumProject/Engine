@@ -416,6 +416,7 @@ Helium.DoDefaultProjectSettings = function()
 			}
 	end
 
+	configuration {}
 end
 
 -- Common settings for modules.

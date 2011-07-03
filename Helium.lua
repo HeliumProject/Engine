@@ -354,7 +354,6 @@ project "Foundation"
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
-
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
 
 	configuration "SharedLib"
@@ -647,7 +646,7 @@ project "Pipeline"
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
-	language "C++"
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",

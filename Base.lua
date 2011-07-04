@@ -356,6 +356,8 @@ Helium.DoDefaultProjectSettings = function()
 
 	language "C++"
 
+	configuration {}
+
 	flags
 	{
 		--"ExtraWarnings", -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
@@ -422,6 +424,8 @@ end
 -- Common settings for modules.
 Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
+	configuration {}
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
@@ -442,14 +446,19 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	Helium.DoDefaultProjectSettings()
 
-	configuration "Debug"
+	configuration "not windows"
+		kind "StaticLib"
+
+	configuration { "windows", "Debug" }
 		kind "SharedLib"
 		defines
 		{
 			tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
 		}
 
-	configuration "not Debug"
+	configuration { "windows", "not Debug" }
 		kind "StaticLib"
+
+	configuration {}
 
 end

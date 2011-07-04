@@ -264,7 +264,6 @@ project "Platform"
 	language "C++"
 	defines
 	{
-		"PLATFORM_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
 	files
@@ -301,10 +300,17 @@ project "Platform"
 			"Platform/POSIX/*",
 		}
 
-	configuration "Debug"
-		kind "SharedLib"
+	configuration "not windows"
+		kind "StaticLib"
 
-	configuration "not Debug"
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"PLATFORM_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
 		kind "StaticLib"
 
 	--configuration { "windows", "SharedLib" }
@@ -319,7 +325,6 @@ project "Foundation"
 	language "C++"
 	defines
 	{
-		"FOUNDATION_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
 	files
@@ -331,12 +336,19 @@ project "Foundation"
     pchheader( "FoundationPch.h" )
     pchsource( "Foundation/FoundationPch.cpp" )
 
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
+	configuration "not windows"
 		kind "StaticLib"
 
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"FOUNDATION_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
+		kind "StaticLib"
+	
 	configuration "SharedLib"
 		links
 		{
@@ -587,7 +599,6 @@ project "Pipeline"
 	language "C++"
 	defines
 	{
-		"PIPELINE_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
 	}
 	includedirs
@@ -613,12 +624,19 @@ project "Pipeline"
 			"Dependencies/nvtt/project/vc8",
 		}
 
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
+	configuration "not windows"
 		kind "StaticLib"
 
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"PIPELINE_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
+		kind "StaticLib"
+	
 	configuration "SharedLib"
 		links
 		{

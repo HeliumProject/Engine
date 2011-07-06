@@ -50,6 +50,11 @@ namespace Helium
             return m_Ptr;
         }
 
+        T &operator*()
+        {
+            return *m_Ptr;
+        }
+
         //pmd - Added Reset()
         void Reset(T *_ptr)
         {

@@ -123,6 +123,7 @@ Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_d
     if (iter != _host.m_Components.End())
     {
         InsertIntoChain(component, iter->Second());
+        iter->Second() = component;
     }
     else
     {
@@ -279,7 +280,7 @@ void Components::Private::RemoveFromChain(Component *_component)
     _component->m_Previous = NULL;
 }
 
-Component* Components::Private::InternalFindFirstComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
+Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
 {
     // First search for this type explicitly
     {
@@ -298,11 +299,58 @@ Component* Components::Private::InternalFindFirstComponent( ComponentSet &_host,
         {
             //TODO: Remove this assert once I know it doesn't trip
             HELIUM_ASSERT(*type_iter != _type_id);
-            M_Components::Iterator component_iter = _host.m_Components.Find(_type_id);
-            if (component_iter != _host.m_Components.End())
+            Component *c = InternalFindOneComponent(_host, *type_iter, false);
+            if (c)
             {
-                return component_iter->Second();
+                return c;
             }
+            //M_Components::Iterator component_iter = _host.m_Components.Find(*type_iter);
+            //if (component_iter != _host.m_Components.End())
+            //{
+            //    return component_iter->Second();
+            //}
+        }
+    }
+
+    return 0;
+}
+
+Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+{
+    // First search for this type explicitly
+    {
+        M_Components::Iterator iter = _host.m_Components.Find(_type_id);
+        if (iter != _host.m_Components.End())
+        {
+            Component *c = iter->Second();
+            while (c)
+            {
+                _components.Add(c);
+                c = c->m_Next;
+            }
+        }
+    }
+
+    if (_implements)
+    {
+        ComponentType &type = g_ComponentTypes[_type_id];
+        for (std::vector<uint16_t>::iterator type_iter = type.m_ImplementingTypes.begin();
+            type_iter != type.m_ImplementingTypes.end(); ++type_iter)
+        {
+            //TODO: Remove this assert once I know it doesn't trip
+            HELIUM_ASSERT(*type_iter != _type_id);
+            InternalFindAllComponents(_host, *type_iter, false, _components);
+
+            //M_Components::Iterator iter = _host.m_Components.Find(*type_iter);
+            //if (iter != _host.m_Components.End())
+            //{
+            //    Component *c = iter->Second();
+            //    while (c)
+            //    {
+            //        _components.Add(c);
+            //        c = c->m_Next;
+            //    }
+            //}
         }
     }
 

@@ -139,9 +139,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
 
 
-    int argc = 0;
-    char *argv = "";
-    ::testing::InitGoogleTest(&argc, &argv);
+    int argc = 2;
+    char *argv[2] = {"TestApp.exe", "--gtest_break_on_failure"};
+    ::testing::InitGoogleTest(&argc, argv);
     RUN_ALL_TESTS();
 
     HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "GameObject" ) ) ) == GameObject::GetStaticType() );

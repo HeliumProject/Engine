@@ -10,14 +10,11 @@
 #include "Foundation/Memory/AutoPtr.h"
 
 
-//TODO: OnAttach/OnDetach events for components
+//TODO: OnAttach/OnDetach events for components?
 //TODO: API for systems to iterate over allocated components
-//TODO: Smart pointer for handles
 //TODO: Review compiled code to make sure that iterators, function objects, etc.
 //      are getting inlined properly
-//TODO: FreeAll could be more optimized
-//TODO: Our instances are new'ed X times and pointers are added to vector. We should
-//      probably do a vector of instances instead of vector of pointers to instances
+//TODO: Smart pointer
 namespace Helium
 {
   namespace Components
@@ -168,8 +165,47 @@ namespace Helium
       // Splices component out of the chain it is in
       void          RemoveFromChain(Component *_component);
 
+      struct IComponentContainerAdapter
+      {
+          virtual void Add(Component *_component) = 0;
+      };
+
+      template <class T>
+      IComponentContainerAdapter *CreateComponentContainerAdapter(T &_container);
+
+      template <class T>
+      IComponentContainerAdapter *CreateComponentContainerAdapter(DynArray<T*> &_container)
+      {
+        class DynArrayAdapter : public IComponentContainerAdapter
+        {
+        public:
+            virtual ~DynArrayAdapter() { }
+            DynArrayAdapter(DynArray<T*> &_array)
+                : m_Array(_array)
+            {
+                
+            }
+
+          virtual void Add(Component *_component)
+          {
+            T *typed_component = Reflect::AssertCast<T>(_component);
+            m_Array.Add(typed_component);
+          }
+
+        private:
+            DynArray<T*> &m_Array;
+        };
+
+        return new DynArrayAdapter(_container);
+      }
+
+
       // Implements find functions
-      HELIUM_ENGINE_API Component*    InternalFindFirstComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
+      HELIUM_ENGINE_API Component*    InternalFindOneComponent(ComponentSet &_host, TypeId _type_id, bool _implements);
+
+      HELIUM_ENGINE_API Component*    InternalFindAllComponents(ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components);
+
+      
 
       //! A component must be registered. Each component must be registered with reflect. _count indicates max instances of this type.
 
@@ -205,19 +241,37 @@ namespace Helium
     //! Check that _implementor implements _implementee
     HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
 
-    inline Component*  FindFirstComponent(ComponentSet &_set, TypeId _type)
+    inline Component*  FindOneComponent(ComponentSet &_set, TypeId _type)
     {
-        return Private::InternalFindFirstComponent(_set, _type, false);
+        return Private::InternalFindOneComponent(_set, _type, false);
     }
 
     inline Component*  FindOneComponentThatImplements(ComponentSet &_set, TypeId _type)
     {
-        return Private::InternalFindFirstComponent(_set, _type, true);
+        return Private::InternalFindOneComponent(_set, _type, true);
+    }
+
+    inline void        FindAllComponents(ComponentSet &_set, TypeId _type, DynArray<Component *> &_components)
+    {
+        //AutoPtr<Private::IComponentContainerAdapter> container;
+        Private::IComponentContainerAdapter *container;
+        container = Private::CreateComponentContainerAdapter(_components);
+        Private::InternalFindAllComponents(_set, _type, false, *container);
+        delete container;
+    }
+
+    inline void        FindAllComponentsThatImplement(ComponentSet &_set, TypeId _type, DynArray<Component *> &_components)
+    {
+        //AutoPtr<Private::IComponentContainerAdapter> container;
+        Private::IComponentContainerAdapter *container;
+        container = Private::CreateComponentContainerAdapter(_components);
+        Private::InternalFindAllComponents(_set, _type, true, *container);
+        delete container;
     }
 
     //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynArray<Component *> _components);
 
-    //! Must be called before creating any systems
+    //! Must be called before creating any systemsb
     HELIUM_ENGINE_API void Initialize();
 
     //! Call to tear down the component system
@@ -230,9 +284,9 @@ namespace Helium
     }
 
     template <class T>
-    T*  FindFirstComponent(ComponentSet &_set)
+    T*  FindOneComponent(ComponentSet &_set)
     {
-        return static_cast<T *>(FindFirstComponent(_set, GetType<T>()));
+        return static_cast<T *>(FindOneComponent(_set, GetType<T>()));
     }
 
     template <class T>
@@ -241,10 +295,30 @@ namespace Helium
         return static_cast<T *>(FindOneComponentThatImplements(_set, GetType<T>()));
     }
 
+    template <class T>
+    void FindAllComponents(ComponentSet &_set, DynArray<T *> &_components)
+    {
+        //AutoPtr<Private::IComponentContainerAdapter> container;
+        Private::IComponentContainerAdapter *container;
+        container = Private::CreateComponentContainerAdapter<T>(_components);
+        Private::InternalFindAllComponents(_set, GetType<T>(), false, *container);
+        delete container;
+    }
+
+    template <class T>
+    void FindAllComponentsThatImplement(ComponentSet &_set, DynArray<T *> &_components)
+    {
+        //AutoPtr<Private::IComponentContainerAdapter> container;
+        Private::IComponentContainerAdapter *container;
+        container = Private::CreateComponentContainerAdapter<T>(_components);
+        Private::InternalFindAllComponents(_set, GetType<T>(), true, *container);
+        delete container;
+    }
+
 //     template <class T>
 //     T*  FindComponentsThatImplement(ComponentSet &_set, DynArray<Component *> _components)
 //     {
-//         return FindFirstComponent(_host, GetType<T>);
+//         return FindOneComponent(_host, GetType<T>);
 //     }
 
 
@@ -266,15 +340,27 @@ namespace Helium
         }
 
         template <class T>
-        T*  FindFirstComponent()
+        T*  FindOneComponent()
         {
-            return Helium::Components::FindFirstComponent<T>(m_Components);
+            return Helium::Components::FindOneComponent<T>(m_Components);
         }
 
         template <class T>
         T*  FindOneComponentThatImplements()
         {
             return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
+        }
+
+        template <class T>
+        void FindAllComponents(DynArray<T *> &_components)
+        {
+            Helium::Components::FindAllComponents<T>(m_Components, _components);
+        }
+
+        template <class T>
+        void FindAllComponentsThatImplement(DynArray<T *> &_components)
+        {
+            Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
         }
 
         //     template <class T>

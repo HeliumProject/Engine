@@ -1702,7 +1702,11 @@ inline bool operator!=(const GTEST_10_TUPLE_(T)& t,
 
 # if defined(_MSC_VER) || defined(__BORLANDC__)
 // These two compilers are known to support SEH.
-#  define GTEST_HAS_SEH 1
+//pmd - In my opinion this SEH crap is not useful for the way we are using gtest.
+//      SEH obscures where the problems are.. I'd rather the application just crash
+//      so that the debugger takes me directly to the problem
+//#  define GTEST_HAS_SEH 1
+#  define GTEST_HAS_SEH 0
 # else
 // Assume no SEH.
 #  define GTEST_HAS_SEH 0

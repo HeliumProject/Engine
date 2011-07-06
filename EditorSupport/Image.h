@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 namespace Helium
 {
@@ -177,6 +177,6 @@ namespace Helium
 
 #include "EditorSupport/Image.inl"
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_IMAGE_H

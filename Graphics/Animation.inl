@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     /// Get the Granny-specific animation data.
     ///
     /// @return  Granny animation data.
@@ -15,5 +15,5 @@ namespace Helium
     {
         return m_grannyData;
     }
-#endif  // L_USE_GRANNY_ANIMATION
+#endif  // HELIUM_USE_GRANNY_ANIMATION
 }

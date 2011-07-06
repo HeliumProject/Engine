@@ -32,7 +32,7 @@ namespace Helium
     ///   entities.
     class HELIUM_FRAMEWORK_API Layer : public GameObject
     {
-        L_DECLARE_OBJECT( Layer, GameObject );
+        HELIUM_DECLARE_OBJECT( Layer, GameObject );
 
     public:
         /// @name Construction/Destruction

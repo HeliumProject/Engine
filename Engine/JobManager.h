@@ -13,10 +13,10 @@
 
 #include "Platform/Thread.h"
 
-#ifndef L_TRACK_JOB_POOL_HITS
+#ifndef HELIUM_TRACK_JOB_POOL_HITS
 /// Set to non-zero to track stats on which job allocations pull from an already pooled job object and which require a
 /// new job allocation.
-#define L_TRACK_JOB_POOL_HITS ( L_DEBUG )
+#define HELIUM_TRACK_JOB_POOL_HITS ( HELIUM_DEBUG )
 #endif
 
 namespace Helium
@@ -54,7 +54,7 @@ namespace Helium
             JobPool pool;
             /// Next pool in the list.
             PoolNode* volatile pNext;
-#if L_TRACK_JOB_POOL_HITS
+#if HELIUM_TRACK_JOB_POOL_HITS
             /// Hits on jobs pulled from the local thread's pool.
             uint32_t localHits;
             /// Hits on jobs pulled from other threads' pools.

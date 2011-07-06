@@ -16,9 +16,9 @@
 #include "Foundation/File/Path.h"
 
 /// XML package file extension string.
-#define L_XML_PACKAGE_FILE_EXTENSION TXT( ".xml" )
+#define HELIUM_XML_PACKAGE_FILE_EXTENSION TXT( ".xml" )
 /// Directory-based XML package file name string.
-#define L_XML_PACKAGE_FILE_NAME TXT( "!package" ) L_XML_PACKAGE_FILE_EXTENSION
+#define HELIUM_XML_PACKAGE_FILE_NAME TXT( "!package" ) HELIUM_XML_PACKAGE_FILE_EXTENSION
 
 namespace Helium
 {

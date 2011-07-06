@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
@@ -26,7 +26,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( ShaderVariantResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( ShaderVariantResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 ShaderVariantResourceHandler::ShaderVariantResourceHandler()
@@ -821,4 +821,4 @@ bool ShaderVariantResourceHandler::LoadRequestEquals::operator()(
         pRequest0->shaderType == pRequest1->shaderType );
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

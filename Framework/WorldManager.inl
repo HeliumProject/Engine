@@ -51,7 +51,7 @@ namespace Helium
         return m_updatePhase;
     }
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     /// Get the entity being updated by the current thread.
     ///
     /// @return  Current entity being updated.

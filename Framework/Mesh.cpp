@@ -15,18 +15,18 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Mesh::Mesh()
 :
-#if !L_USE_GRANNY_ANIMATION
+#if !HELIUM_USE_GRANNY_ANIMATION
 m_pBoneNames( NULL )
 , m_pParentBoneIndices( NULL )
 , m_pReferencePose( NULL )
@@ -36,7 +36,7 @@ m_vertexCount( 0 )
 , m_triangleCount( 0 )
 , m_vertexBufferLoadId( Invalid< size_t >() )
 , m_indexBufferLoadId( Invalid< size_t >() )
-#if !L_USE_GRANNY_ANIMATION
+#if !HELIUM_USE_GRANNY_ANIMATION
 , m_boneCount( 0 )
 #endif
 {
@@ -50,7 +50,7 @@ Mesh::~Mesh()
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
     HELIUM_ASSERT( IsInvalid( m_indexBufferLoadId ) );
 
-#if !L_USE_GRANNY_ANIMATION
+#if !HELIUM_USE_GRANNY_ANIMATION
     delete [] m_pBoneNames;
     delete [] m_pParentBoneIndices;
     delete [] m_pReferencePose;
@@ -72,9 +72,9 @@ void Mesh::PreDestroy()
 /// @copydoc GameObject::Serialize()
 void Mesh::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED_DYNARRAY( m_materials );
+    s << HELIUM_TAGGED_DYNARRAY( m_materials );
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
@@ -253,7 +253,7 @@ void Mesh::SerializePersistentResourceData( Serializer& s )
     s << m_triangleCount;
     s << m_bounds;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.SerializePersistentResourceData( s );
 #else
     s << m_boneCount;
@@ -316,7 +316,7 @@ const uint8_t* Mesh::GetSectionSkinningPaletteMap( size_t sectionIndex ) const
 {
     HELIUM_ASSERT( sectionIndex < m_sectionTriangleCounts.GetSize() );
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     size_t boneCount = m_grannyData.GetBoneCount();
 #else
     size_t boneCount = m_boneCount;

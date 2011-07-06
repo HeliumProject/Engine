@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( D3D9Surface );
+    HELIUM_DECLARE_RPTR( D3D9Surface );
 
     /// Dynamic Direct3D 9 2D texture.
     ///

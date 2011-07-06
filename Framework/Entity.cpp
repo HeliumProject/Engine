@@ -12,7 +12,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Entity, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Entity, Framework, 0 );
 
 /// Constructor.
 Entity::Entity()
@@ -35,11 +35,11 @@ Entity::~Entity()
 /// @copydoc GameObject::Serialize()
 void Entity::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_position );
-    s << L_TAGGED( m_rotation );
-    s << L_TAGGED( m_scale );
+    s << HELIUM_TAGGED( m_position );
+    s << HELIUM_TAGGED( m_rotation );
+    s << HELIUM_TAGGED( m_scale );
 }
 
 /// Perform any necessary work upon attaching this entity to the world.
@@ -90,7 +90,7 @@ void Entity::DeferredReattach()
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     WorldManager::EUpdatePhase updatePhase = rWorldManager.GetUpdatePhase();
 
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
     // This function can only be called during asynchronous updating if this entity is the one being updated.
     const Entity* pCurrentEntity = rWorldManager.GetCurrentThreadUpdateEntity();
     HELIUM_ASSERT_MSG(

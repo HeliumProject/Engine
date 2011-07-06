@@ -73,8 +73,8 @@ namespace Helium
 {
     class D3D9DeviceResetListener;
 
-    L_DECLARE_RPTR( D3D9ImmediateCommandProxy );
-    L_DECLARE_RPTR( D3D9MainContext );
+    HELIUM_DECLARE_RPTR( D3D9ImmediateCommandProxy );
+    HELIUM_DECLARE_RPTR( D3D9MainContext );
 
     /// Direct3D 9 renderer implementation.
     class D3D9Renderer : public Renderer

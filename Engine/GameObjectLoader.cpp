@@ -12,7 +12,7 @@
 #include "Engine/PackageLoader.h"
 
 /// GameObject cache name.
-#define L_OBJECT_CACHE_NAME TXT( "GameObject" )
+#define HELIUM_OBJECT_CACHE_NAME TXT( "GameObject" )
 
 using namespace Helium;
 
@@ -21,7 +21,7 @@ GameObjectLoader* GameObjectLoader::sm_pInstance = NULL;
 /// Constructor.
 GameObjectLoader::GameObjectLoader()
 : m_loadRequestPool( LOAD_REQUEST_POOL_BLOCK_SIZE )
-, m_cacheName( L_OBJECT_CACHE_NAME )
+, m_cacheName( HELIUM_OBJECT_CACHE_NAME )
 {
 }
 
@@ -192,7 +192,7 @@ bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject
     return true;
 }
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 /// Cache an object if it has been modified on disk.
 ///
 /// The object will be cached based on the current timestamp of its source package file and, if one exists, its
@@ -215,7 +215,7 @@ bool GameObjectLoader::CacheObject( GameObject* /*pObject*/, bool /*bEvictPlatfo
     // Caching only supported when using the editor object loader.
     return false;
 }
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 /// Update object loading.
 void GameObjectLoader::Tick()

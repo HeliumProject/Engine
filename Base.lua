@@ -1,5 +1,6 @@
 Helium = {}
 
+Helium.RequiredPremakeVersion = '4.4-beta1'
 Helium.RequiredCLVersion = 150030729
 Helium.RequiredFBXVersion = '2011.3.1'
 
@@ -21,21 +22,14 @@ Helium.GetSystemVersion = function()
 	if os.get() == "windows" then
         version = os.capture( "cmd /c ver" )
 	else
-        version = os.capture( "uname" )
+        version = os.capture( "uname -r" )
 	end
 	
 	return version
 end
 
 Helium.Build64Bit = function()
-    if os.get() == "windows" then
-        return string.find( os.getenv("PATH"), "x64" )
-    elseif os.get() == "macosx" then
-    	return true;
-    else
-		print("Implement support for " .. os.get() .. " to Helium.Build64Bit()")
-		os.exit(1)
-    end
+    return os.is64bit()
 end
 
 Helium.GetFbxSdkLocation = function()
@@ -70,6 +64,11 @@ end
 Helium.CheckEnvironment = function()
 
     print("\nChecking Environment...\n")
+    
+    if _PREMAKE_VERSION < Helium.RequiredPremakeVersion then
+		print( "You must be running at least Premake " .. Helium.RequiredPremakeVersion .. "." )
+		os.exit( 1 )
+	end
 
     if os.get() == "windows" then
     
@@ -143,21 +142,22 @@ Helium.Publish = function( files )
 		local path = v.source .. "/" .. v.file			
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
-		
-		-- cull existing files
-		if os.isfile( destination ) then
-			local delCommand = ''
-			if ( os.get() == "windows" ) then
-                delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
-            else
-                delCommand = "rm \"" .. destination .. "\""
-            end
-			os.execute( delCommand )
-		end
 
-		-- do the file copy
+		-- do the hard link
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then
+			-- delete target
+			if os.isfile( destination ) then
+				local delCommand = "del /q \"" .. string.gsub( destination, "/", "\\" ) .. "\""
+
+				-- if deleting the target failed, bail
+				if os.execute( delCommand ) ~= 0 then
+					print( "Deleting destination file: " .. destination .. " failed." )
+					os.exit( 1 )
+				end
+			end
+
+			-- check system version, do appropriate command line
             local versionString = Helium.GetSystemVersion()
             if ( string.find( versionString, "6\.%d+\.%d+" ) ) then -- vista/windows 7
                 linkCommand = "mklink /H \"" .. destination .. "\" \"" .. path .. "\""
@@ -165,22 +165,14 @@ Helium.Publish = function( files )
                 linkCommand = "fsutil hardlink create \"" .. destination .. "\" \"" .. path .. "\""
             end
    		else
-            linkCommand = "ln \"" .. path .. "\" \"" .. destination .. "\""
+   			-- hooray simplicity in *nix
+            linkCommand = "ln -f \"" .. path .. "\" \"" .. destination .. "\""
 		end
-		local result = os.execute( linkCommand )
 
-		-- If creating a hardlink failed, attempt a normal copy
-		if result ~= 0 then
-			local copyCommand = ''
-			if ( os.get() == "windows" ) then
-				copyCommand = "xcopy \"" .. path .. "\" \"" .. v.target .. "\" /d /f /r /y"
-			else
-				copyCommand = "cp " .. path .. " " .. destination
-			end
-			os.execute( copyCommand )
-			if result ~= 0 then
-				os.exit( 1 )
-			end
+		-- if creating a hardlink failed, bail
+		if os.execute( linkCommand ) ~= 0 then
+			print( "Creating hardlink: " .. destination .. " failed." )
+			os.exit( 1 )
 		end
 
 		-- the files were copied, complete this entry
@@ -216,44 +208,6 @@ Helium.PublishIcons = function( bin )
 
 end
 
--- Pre-build script execution.
-Helium.Prebuild = function()
-
-	local python = "python"
-	
-	if os.get() == "windows" then
-		python = python .. ".exe"
-    else
-		python = python .. "3"
-    end
-
-	local pythonPath = os.pathsearch( python, os.getenv( 'PATH' ) )
-	if pythonPath == nil then
-		error( "\n\nYou must have Python 3.x installed and in your PATH to continue." )
-	end
-
-	local commands =
-	{
-		python .. " Build/JobDefParser.py JobDefinitions . .",
-		python .. " Build/TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
-		python .. " Build/TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
-	}
-
-	local result = 0
-
-	for i, commandString in ipairs( commands ) do
-		result = os.execute( commandString )
-		if result ~= 0 then
-			break
-		end
-	end
-
-	if result ~= 0 then
-		error( "An error occurred processing the pre-build scripts." )
-	end
-
-end
-
 Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
@@ -281,16 +235,21 @@ Helium.DoDefaultSolutionSettings = function()
 	
 	defines
 	{
-		"XML_STATIC=1",
+		"UNICODE=1",
 		"KFBX_DLLINFO=1",
+		"LITESQL_UNICODE=1",
+		"XML_STATIC=1",
+		"XML_UNICODE_WCHAR_T=1",
+		"HELIUM_UNICODE=1",
 	}
 
 	flags
 	{
+		"Unicode",
 		"EnableSSE2",
 		"NoMinimalRebuild",
 	}
-		
+
 	if os.getenv( 'CL' ) then
 		buildoptions { os.getenv( 'CL' ) }
 	end
@@ -303,25 +262,6 @@ Helium.DoDefaultSolutionSettings = function()
 			"__SSE2__",
 		}
 
-	configuration "no-unicode"
-		defines
-		{
-			"HELIUM_UNICODE=0",
-		}
-	
-	configuration "not no-unicode"
-		defines
-		{
-			"HELIUM_UNICODE=1",
-			"UNICODE=1",
-			"LITESQL_UNICODE=1",
-			"XML_UNICODE_WCHAR_T=1",
-		}
-		flags
-		{
-			"Unicode",
-		}
-	
 	for i, platform in ipairs( platforms() ) do
 		for j, config in ipairs( configurations() ) do
 			configuration( { config, platform } )
@@ -334,8 +274,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "windows"
 		defines
 		{
-			"_WIN32",
 			"WIN32",
+			"_WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
 		}
@@ -343,13 +283,11 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Debug"
 		defines
 		{
-			"HELIUM_DEBUG=1",
 			"_DEBUG",
-			"HELIUM_SHARED=1",
 			"TBB_USE_DEBUG=1",
-			"L_DEBUG=1",
-			"L_EDITOR=1",
-			"L_SHARED=1",
+			"HELIUM_DEBUG=1",
+			"HELIUM_SHARED=1",
+			"HELIUM_EDITOR=1",
 		}
 		flags
 		{
@@ -361,9 +299,7 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"HELIUM_INTERMEDIATE=1",
 			"HELIUM_STATIC=1",
-			"L_INTERMEDIATE=1",
-			"L_EDITOR=1",
-			"L_STATIC=1",
+			"HELIUM_EDITOR=1",
 		}
 		flags
 		{
@@ -375,11 +311,9 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Profile"
 		defines
 		{
-			"HELIUM_PROFILE=1",
 			"NDEBUG",
+			"HELIUM_PROFILE=1",
 			"HELIUM_STATIC=1",
-			"L_PROFILE=1",
-			"L_STATIC=1",
 		}
 		flags
 		{
@@ -391,11 +325,9 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration "Release"
 		defines
 		{
-			"HELIUM_RELEASE=1",
 			"NDEBUG",
+			"HELIUM_RELEASE=1",
 			"HELIUM_STATIC=1",
-			"L_RELEASE=1",
-			"L_STATIC=1",
 		}
 		flags
 		{
@@ -424,17 +356,16 @@ Helium.DoDefaultProjectSettings = function()
 
 	language "C++"
 
+	configuration {}
+
 	flags
 	{
-	    -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
-		--"ExtraWarnings",
+		--"ExtraWarnings", -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
 		"FatalWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
-		"NoRTTI",
 	}
 
-	--configuration "SharedLib or *App"
-	configuration "Debug"
+	configuration "SharedLib or *App"
 		links
 		{
 			"Expat",
@@ -444,8 +375,7 @@ Helium.DoDefaultProjectSettings = function()
 			"zlib",
 		}
 
-	--configuration { "windows", "SharedLib or *App" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib or *App" }
 		links
 		{
 			"d3d9",
@@ -456,51 +386,54 @@ Helium.DoDefaultProjectSettings = function()
 			"wininet",
 		}
 
-	--configuration { "windows", "Debug", "SharedLib or *App" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "Debug", "SharedLib or *App" }
 		links
 		{
 			"dbghelp",
 		}
 
-	--configuration { "windows", "x32", "SharedLib or *App" }
-	configuration { "windows", "x32", "Debug" }
+	configuration { "windows", "x32", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1",
 		}
 
-	--configuration { "windows", "x64", "SharedLib or *App" }
-	configuration { "windows", "x64", "Debug" }
+	configuration { "windows", "x64", "SharedLib or *App" }
 		links
 		{
 			"fbxsdk_20113_1_amd64",
 		}
 
 	if haveGranny then
-		--configuration { "x32", "SharedLib or *App" }
-		configuration { "x32", "Debug" }
+		configuration { "x32", "SharedLib or *App" }
 			links
 			{
 				"granny2",
 			}
 
-		--configuration { "x64", "SharedLib or *App" }
-		configuration { "x64", "Debug" }
+		configuration { "x64", "SharedLib or *App" }
 			links
 			{
 				"granny2_x64",
 			}
 	end
 
+	configuration {}
 end
 
 -- Common settings for modules.
 Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleName, moduleNameUpper )
 
+	configuration {}
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+	}
+
+	flags
+	{
+		"NoRTTI",
 	}
 
 	files
@@ -513,14 +446,19 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	Helium.DoDefaultProjectSettings()
 
-	configuration "Debug"
+	configuration "not windows"
+		kind "StaticLib"
+
+	configuration { "windows", "Debug" }
 		kind "SharedLib"
 		defines
 		{
 			tokenPrefix .. "_" .. moduleNameUpper .. "_EXPORTS",
 		}
 
-	configuration "not Debug"
+	configuration { "windows", "not Debug" }
 		kind "StaticLib"
+
+	configuration {}
 
 end

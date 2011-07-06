@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/MemoryTextureOutputHandler.h"
 
@@ -135,4 +135,4 @@ bool MemoryTextureOutputHandler::writeData( const void* pData, int size )
     return true;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

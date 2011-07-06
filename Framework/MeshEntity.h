@@ -25,7 +25,7 @@ namespace Helium
     /// Base class for mesh-based entities.
     class HELIUM_FRAMEWORK_API MeshEntity : public Entity
     {
-        L_DECLARE_OBJECT( MeshEntity, Entity );
+        HELIUM_DECLARE_OBJECT( MeshEntity, Entity );
 
     public:
         /// @name Construction/Destruction

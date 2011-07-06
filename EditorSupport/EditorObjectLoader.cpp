@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/EditorObjectLoader.h"
 
@@ -218,4 +218,4 @@ void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pO
     }
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

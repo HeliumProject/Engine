@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/AnimationResourceHandler.h"
 
@@ -18,14 +18,14 @@
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyAnimationResourceHandlerInterface.h"
 #include "EditorSupport/GrannyStreamWriter.h"
 #endif
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 AnimationResourceHandler::AnimationResourceHandler()
@@ -65,7 +65,7 @@ bool AnimationResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     Animation* pAnimation = Reflect::AssertCast< Animation >( pResource );
 
     bool bCacheResult = Granny::CacheAnimationResourceData(
@@ -92,4 +92,4 @@ bool AnimationResourceHandler::CacheResource(
 #endif
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

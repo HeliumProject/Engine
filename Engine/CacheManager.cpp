@@ -64,7 +64,7 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
 
     const String& rPlatformDataDirectory = GetPlatformDataDirectory( platform );
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     // If the cache directory doesn't exist, attempt to create it.
     Path platformDataPath( rPlatformDataDirectory.GetData() );
     platformDataPath.MakePath();
@@ -74,9 +74,9 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
     cacheFileName += *name;
 
     String tocFileName = cacheFileName;
-    tocFileName += TXT( "." ) L_CACHE_TOC_EXTENSION;
+    tocFileName += TXT( "." ) HELIUM_CACHE_TOC_EXTENSION;
 
-    cacheFileName += TXT( "." ) L_CACHE_EXTENSION;
+    cacheFileName += TXT( "." ) HELIUM_CACHE_EXTENSION;
 
     if( !pCache->Initialize( name, platform, *tocFileName, *cacheFileName ) )
     {

@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( D3D9Surface );
+    HELIUM_DECLARE_RPTR( D3D9Surface );
 
     /// Interface to the a Direct3D 9 render sub-context (one managed through additional swap chains of the main D3D
     /// device).

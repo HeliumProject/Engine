@@ -22,6 +22,6 @@
 #endif
 
 /// Non-zero to enable Granny integration for animations, zero to disable.
-#define L_USE_GRANNY_ANIMATION ( L_HAVE_GRANNY )
+#define HELIUM_USE_GRANNY_ANIMATION ( HELIUM_HAVE_GRANNY )
 
 #endif  // HELIUM_GRAPHICS_TYPES_GRAPHICS_TYPES_H

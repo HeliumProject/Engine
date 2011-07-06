@@ -517,14 +517,14 @@ void GameObjectPath::Shutdown()
 /// @param[in]  rPackagePath  GameObject path string to convert (can be the same as the output file path).
 void GameObjectPath::ConvertStringToFilePath( String& rFilePath, const String& rPackagePath )
 {
-#if L_PACKAGE_PATH_CHAR != L_PATH_SEPARATOR_CHAR && L_PACKAGE_PATH_CHAR != L_ALT_PATH_SEPARATOR_CHAR
+#if HELIUM_PACKAGE_PATH_CHAR != HELIUM_PATH_SEPARATOR_CHAR && HELIUM_PACKAGE_PATH_CHAR != HELIUM_ALT_PATH_SEPARATOR_CHAR
     size_t pathLength = rPackagePath.GetSize();
     if( &rFilePath == &rPackagePath )
     {
         for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
         {
             tchar_t& rCharacter = rFilePath[ characterIndex ];
-            if( rCharacter == L_PACKAGE_PATH_CHAR || rCharacter == L_OBJECT_PATH_CHAR )
+            if( rCharacter == HELIUM_PACKAGE_PATH_CHAR || rCharacter == HELIUM_OBJECT_PATH_CHAR )
             {
                 rCharacter = Helium::s_InternalPathSeparator;
             }
@@ -538,7 +538,7 @@ void GameObjectPath::ConvertStringToFilePath( String& rFilePath, const String& r
         for( size_t characterIndex = 0; characterIndex < pathLength; ++characterIndex )
         {
             tchar_t character = rPackagePath[ characterIndex ];
-            if( character == L_PACKAGE_PATH_CHAR || character == L_OBJECT_PATH_CHAR )
+            if( character == HELIUM_PACKAGE_PATH_CHAR || character == HELIUM_OBJECT_PATH_CHAR )
             {
                 character = Helium::s_InternalPathSeparator;
             }
@@ -616,7 +616,7 @@ bool GameObjectPath::Parse(
     rPackageCount = 0;
 
     // Make sure the entry specifies an absolute path.
-    if( pString[ 0 ] != L_PACKAGE_PATH_CHAR && pString[ 0 ] != L_OBJECT_PATH_CHAR )
+    if( pString[ 0 ] != HELIUM_PACKAGE_PATH_CHAR && pString[ 0 ] != HELIUM_OBJECT_PATH_CHAR )
     {
         HELIUM_TRACE(
             TRACE_WARNING,
@@ -648,7 +648,7 @@ bool GameObjectPath::Parse(
             break;
         }
 
-        if( character == L_PACKAGE_PATH_CHAR )
+        if( character == HELIUM_PACKAGE_PATH_CHAR )
         {
             if( packageCount != nameCount )
             {
@@ -673,7 +673,7 @@ bool GameObjectPath::Parse(
 
             pNameStartPos = pTestCharacter + 1;
         }
-        else if( character == L_OBJECT_PATH_CHAR )
+        else if( character == HELIUM_OBJECT_PATH_CHAR )
         {
             ++nameCount;
 
@@ -712,7 +712,7 @@ bool GameObjectPath::Parse(
     for( ; ; )
     {
         tchar_t character = *pTestCharacter;
-        if( character != L_PACKAGE_PATH_CHAR && character != L_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
+        if( character != HELIUM_PACKAGE_PATH_CHAR && character != HELIUM_OBJECT_PATH_CHAR && character != TXT( '\0' ) )
         {
             // Make sure the character is a valid number when parsing the instance index.
             if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )
@@ -725,7 +725,7 @@ bool GameObjectPath::Parse(
                 return false;
             }
 
-            if( bParsingName && character == L_INSTANCE_PATH_CHAR )
+            if( bParsingName && character == HELIUM_INSTANCE_PATH_CHAR )
             {
                 // Encountered a separator for the instance index, so begin parsing it.
                 *pTempNameCharacter = TXT( '\0' );
@@ -887,7 +887,7 @@ void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
         EntryToString( *pParent, rString );
     }
 
-    rString += ( rEntry.bPackage ? L_PACKAGE_PATH_CHAR : L_OBJECT_PATH_CHAR );
+    rString += ( rEntry.bPackage ? HELIUM_PACKAGE_PATH_CHAR : HELIUM_OBJECT_PATH_CHAR );
     rString += rEntry.name.Get();
     if( IsValid( rEntry.instanceIndex ) )
     {
@@ -895,7 +895,7 @@ void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
         StringFormat(
             instanceIndexString,
             HELIUM_ARRAY_COUNT( instanceIndexString ),
-            L_INSTANCE_PATH_CHAR_STRING TXT( "%" ) TPRIu32,
+            HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) TPRIu32,
             rEntry.instanceIndex );
         instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );
 
@@ -931,8 +931,8 @@ size_t GameObjectPath::ComputeEntryStringHash( const Entry& rEntry )
     hash = ( ( hash * 33 ) ^ rEntry.instanceIndex );
     hash = ( ( hash * 33 ) ^
         ( rEntry.bPackage
-        ? static_cast< size_t >( L_PACKAGE_PATH_CHAR )
-        : static_cast< size_t >( L_OBJECT_PATH_CHAR ) ) );
+        ? static_cast< size_t >( HELIUM_PACKAGE_PATH_CHAR )
+        : static_cast< size_t >( HELIUM_OBJECT_PATH_CHAR ) ) );
 
     Entry* pParent = rEntry.pParent;
     if( pParent )

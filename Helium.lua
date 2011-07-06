@@ -47,12 +47,12 @@ if haveGranny then
 
 	defines
 	{
-		"L_HAVE_GRANNY=1",
+		"HELIUM_HAVE_GRANNY=1",
 	}
 else
 	defines
 	{
-		"L_HAVE_GRANNY=0",
+		"HELIUM_HAVE_GRANNY=0",
 	}
 end
 
@@ -60,113 +60,103 @@ end
 We build monolithic wx, so ignore all the legacy non-monolithic
 #pragma comment directives (on windows only)
 --]]
-configuration "windows"
-	linkoptions
-	{
-		"/NODEFAULTLIB:wxbase29ud",
-		"/NODEFAULTLIB:wxbase29d",
-		"/NODEFAULTLIB:wxbase29u",
-		"/NODEFAULTLIB:wxbase29",
-		"/NODEFAULTLIB:wxbase29ud_net",
-		"/NODEFAULTLIB:wxbase29d_net",
-		"/NODEFAULTLIB:wxbase29u_net",
-		"/NODEFAULTLIB:wxbase29_net",
-		"/NODEFAULTLIB:wxbase29ud_xml",
-		"/NODEFAULTLIB:wxbase29d_xml",
-		"/NODEFAULTLIB:wxbase29u_xml",
-		"/NODEFAULTLIB:wxbase29_xml",
-		"/NODEFAULTLIB:wxmsw29ud_core",
-		"/NODEFAULTLIB:wxmsw29d_core",
-		"/NODEFAULTLIB:wxmsw29u_core",
-		"/NODEFAULTLIB:wxmsw29_core",
-		"/NODEFAULTLIB:wxmsw29ud_adv",
-		"/NODEFAULTLIB:wxmsw29d_adv",
-		"/NODEFAULTLIB:wxmsw29u_adv",
-		"/NODEFAULTLIB:wxmsw29_adv",
-		"/NODEFAULTLIB:wxmsw29ud_html",
-		"/NODEFAULTLIB:wxmsw29d_html",
-		"/NODEFAULTLIB:wxmsw29u_html",
-		"/NODEFAULTLIB:wxmsw29_html",
-		"/NODEFAULTLIB:wxmsw29ud_qa",
-		"/NODEFAULTLIB:wxmsw29d_qa",
-		"/NODEFAULTLIB:wxmsw29u_qa",
-		"/NODEFAULTLIB:wxmsw29_qa",
-		"/NODEFAULTLIB:wxmsw29ud_xrc",
-		"/NODEFAULTLIB:wxmsw29d_xrc",
-		"/NODEFAULTLIB:wxmsw29u_xrc",
-		"/NODEFAULTLIB:wxmsw29_xrc",
-		"/NODEFAULTLIB:wxmsw29ud_aui",
-		"/NODEFAULTLIB:wxmsw29d_aui",
-		"/NODEFAULTLIB:wxmsw29u_aui",
-		"/NODEFAULTLIB:wxmsw29_aui",
-		"/NODEFAULTLIB:wxmsw29ud_propgrid",
-		"/NODEFAULTLIB:wxmsw29d_propgrid",
-		"/NODEFAULTLIB:wxmsw29u_propgrid",
-		"/NODEFAULTLIB:wxmsw29_propgrid",
-		"/NODEFAULTLIB:wxmsw29ud_ribbon",
-		"/NODEFAULTLIB:wxmsw29d_ribbon",
-		"/NODEFAULTLIB:wxmsw29u_ribbon",
-		"/NODEFAULTLIB:wxmsw29_ribbon",
-		"/NODEFAULTLIB:wxmsw29ud_richtext",
-		"/NODEFAULTLIB:wxmsw29d_richtext",
-		"/NODEFAULTLIB:wxmsw29u_richtext",
-		"/NODEFAULTLIB:wxmsw29_richtext",
-		"/NODEFAULTLIB:wxmsw29ud_media",
-		"/NODEFAULTLIB:wxmsw29d_media",
-		"/NODEFAULTLIB:wxmsw29u_media",
-		"/NODEFAULTLIB:wxmsw29_media",
-		"/NODEFAULTLIB:wxmsw29ud_stc",
-		"/NODEFAULTLIB:wxmsw29d_stc",
-		"/NODEFAULTLIB:wxmsw29u_stc",
-		"/NODEFAULTLIB:wxmsw29_stc",
-		"/NODEFAULTLIB:wxmsw29ud_gl",
-		"/NODEFAULTLIB:wxmsw29d_gl",
-		"/NODEFAULTLIB:wxmsw29u_gl",
-		"/NODEFAULTLIB:wxmsw29_gl",
-	}
-	includedirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Include"
-	}
-	
-configuration "no-unicode"
-	defines
-	{
-		"wxUSE_UNICODE=0",
-	}
-	
-configuration "not no-unicode"
-	defines
-	{
-		"wxUSE_UNICODE=1",
-	}
+if os.get() == "windows" then
 
-configuration { "windows", "x32" }
-	libdirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
-	}
+	configuration "windows"
+		linkoptions
+		{
+			"/NODEFAULTLIB:wxbase29ud",
+			"/NODEFAULTLIB:wxbase29d",
+			"/NODEFAULTLIB:wxbase29u",
+			"/NODEFAULTLIB:wxbase29",
+			"/NODEFAULTLIB:wxbase29ud_net",
+			"/NODEFAULTLIB:wxbase29d_net",
+			"/NODEFAULTLIB:wxbase29u_net",
+			"/NODEFAULTLIB:wxbase29_net",
+			"/NODEFAULTLIB:wxbase29ud_xml",
+			"/NODEFAULTLIB:wxbase29d_xml",
+			"/NODEFAULTLIB:wxbase29u_xml",
+			"/NODEFAULTLIB:wxbase29_xml",
+			"/NODEFAULTLIB:wxmsw29ud_core",
+			"/NODEFAULTLIB:wxmsw29d_core",
+			"/NODEFAULTLIB:wxmsw29u_core",
+			"/NODEFAULTLIB:wxmsw29_core",
+			"/NODEFAULTLIB:wxmsw29ud_adv",
+			"/NODEFAULTLIB:wxmsw29d_adv",
+			"/NODEFAULTLIB:wxmsw29u_adv",
+			"/NODEFAULTLIB:wxmsw29_adv",
+			"/NODEFAULTLIB:wxmsw29ud_html",
+			"/NODEFAULTLIB:wxmsw29d_html",
+			"/NODEFAULTLIB:wxmsw29u_html",
+			"/NODEFAULTLIB:wxmsw29_html",
+			"/NODEFAULTLIB:wxmsw29ud_qa",
+			"/NODEFAULTLIB:wxmsw29d_qa",
+			"/NODEFAULTLIB:wxmsw29u_qa",
+			"/NODEFAULTLIB:wxmsw29_qa",
+			"/NODEFAULTLIB:wxmsw29ud_xrc",
+			"/NODEFAULTLIB:wxmsw29d_xrc",
+			"/NODEFAULTLIB:wxmsw29u_xrc",
+			"/NODEFAULTLIB:wxmsw29_xrc",
+			"/NODEFAULTLIB:wxmsw29ud_aui",
+			"/NODEFAULTLIB:wxmsw29d_aui",
+			"/NODEFAULTLIB:wxmsw29u_aui",
+			"/NODEFAULTLIB:wxmsw29_aui",
+			"/NODEFAULTLIB:wxmsw29ud_propgrid",
+			"/NODEFAULTLIB:wxmsw29d_propgrid",
+			"/NODEFAULTLIB:wxmsw29u_propgrid",
+			"/NODEFAULTLIB:wxmsw29_propgrid",
+			"/NODEFAULTLIB:wxmsw29ud_ribbon",
+			"/NODEFAULTLIB:wxmsw29d_ribbon",
+			"/NODEFAULTLIB:wxmsw29u_ribbon",
+			"/NODEFAULTLIB:wxmsw29_ribbon",
+			"/NODEFAULTLIB:wxmsw29ud_richtext",
+			"/NODEFAULTLIB:wxmsw29d_richtext",
+			"/NODEFAULTLIB:wxmsw29u_richtext",
+			"/NODEFAULTLIB:wxmsw29_richtext",
+			"/NODEFAULTLIB:wxmsw29ud_media",
+			"/NODEFAULTLIB:wxmsw29d_media",
+			"/NODEFAULTLIB:wxmsw29u_media",
+			"/NODEFAULTLIB:wxmsw29_media",
+			"/NODEFAULTLIB:wxmsw29ud_stc",
+			"/NODEFAULTLIB:wxmsw29d_stc",
+			"/NODEFAULTLIB:wxmsw29u_stc",
+			"/NODEFAULTLIB:wxmsw29_stc",
+			"/NODEFAULTLIB:wxmsw29ud_gl",
+			"/NODEFAULTLIB:wxmsw29d_gl",
+			"/NODEFAULTLIB:wxmsw29u_gl",
+			"/NODEFAULTLIB:wxmsw29_gl",
+		}
+		includedirs
+		{
+			os.getenv( "DXSDK_DIR" ) .. "Include"
+		}
 
-	if haveGranny then
+	configuration { "windows", "x32" }
 		libdirs
 		{
-			"Integrations/Granny/granny_sdk/lib/win32",
+			os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
 		}
-	end
+	
+		if haveGranny then
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win32",
+			}
+		end
 
-
-configuration { "windows", "x64" }
-	libdirs
-	{
-		os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-	}
-
-	if haveGranny then
+	configuration { "windows", "x64" }
 		libdirs
 		{
-			"Integrations/Granny/granny_sdk/lib/win64",
+			os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
 		}
-	end
+	
+		if haveGranny then
+			libdirs
+			{
+				"Integrations/Granny/granny_sdk/lib/win64",
+			}
+		end
+end
 
 if _ACTION == "vs2005" then
 	configuration { "windows", "x32", "Debug" }
@@ -240,6 +230,30 @@ elseif _ACTION == "vs2010" then
 		{
 			"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
 		}
+elseif _ACTION == "xcode3" or _ACTION == "xcode4" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_release",
+		}
 else
 	print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
 	os.exit(1)
@@ -250,7 +264,6 @@ project "Platform"
 	language "C++"
 	defines
 	{
-		"PLATFORM_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
 	}
 	files
@@ -287,10 +300,17 @@ project "Platform"
 			"Platform/POSIX/*",
 		}
 
-	configuration "Debug"
-		kind "SharedLib"
+	configuration "not windows"
+		kind "StaticLib"
 
-	configuration "not Debug"
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"PLATFORM_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
 		kind "StaticLib"
 
 	--configuration { "windows", "SharedLib" }
@@ -305,7 +325,6 @@ project "Foundation"
 	language "C++"
 	defines
 	{
-		"FOUNDATION_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
 	}
 	files
@@ -317,14 +336,20 @@ project "Foundation"
     pchheader( "FoundationPch.h" )
     pchsource( "Foundation/FoundationPch.cpp" )
 
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
+	configuration "not windows"
 		kind "StaticLib"
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"FOUNDATION_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
+		kind "StaticLib"
+	
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -332,8 +357,7 @@ project "Foundation"
 			"zlib",
 		}
 
-	--configuration { "windows", "SharedLib" }
-	configuration { "windows", "Debug" }
+	configuration { "windows", "SharedLib" }
 		links
 		{
 			"ws2_32",
@@ -342,11 +366,9 @@ project "Foundation"
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
-
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -356,11 +378,9 @@ project "Engine"
 project "EngineJobs"
 	uuid "65CFFE89-3111-4D58-95DC-5DB6D3F28935"
 
-
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -373,8 +393,7 @@ project "Windowing"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -388,8 +407,7 @@ project "Rendering"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Rendering", "RENDERING" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -403,8 +421,7 @@ project "GraphicsTypes"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -419,8 +436,7 @@ project "GraphicsJobs"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -436,8 +452,7 @@ project "Graphics"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -454,8 +469,7 @@ project "Framework"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -474,8 +488,7 @@ project "WindowingWin"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "WindowingWin", "WINDOWING_WIN" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -490,8 +503,7 @@ project "RenderingD3D9"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -506,8 +518,7 @@ project "PcSupport"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -522,8 +533,7 @@ project "PreprocessingPc"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -542,8 +552,7 @@ project "EditorSupport"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -565,8 +574,7 @@ project "FrameworkWin"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -591,7 +599,6 @@ project "Pipeline"
 	language "C++"
 	defines
 	{
-		"PIPELINE_EXPORTS",
 		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
 	}
 	includedirs
@@ -617,14 +624,20 @@ project "Pipeline"
 			"Dependencies/nvtt/project/vc8",
 		}
 
-	configuration "Debug"
-		kind "SharedLib"
-
-	configuration "not Debug"
+	configuration "not windows"
 		kind "StaticLib"
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"PIPELINE_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
+		kind "StaticLib"
+	
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -651,7 +664,7 @@ project "Pipeline"
 project "Editor"
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
-	language "C++"
+
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
@@ -666,6 +679,8 @@ project "Editor"
 
     pchheader( "EditorPch.h" )
     pchsource( "Editor/EditorPch.cpp" )
+
+	Helium.DoDefaultProjectSettings()
 
 	includedirs
 	{
@@ -728,22 +743,12 @@ project "Editor"
 		}
 		
 	-- per configuration
-	configuration { "windows", "Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29d"
-		}
-	configuration { "windows", "not Debug", "no-unicode" }
-		links
-		{
-			"wxmsw29"
-		}
-	configuration { "windows", "Debug", "not no-unicode" }
+	configuration { "windows", "Debug" }
 		links
 		{
 			"wxmsw29ud"
 		}
-	configuration { "windows", "not Debug", "not no-unicode" }
+	configuration { "windows", "not Debug" }
 		links
 		{
 			"wxmsw29u"
@@ -771,13 +776,12 @@ project "Editor"
 			"Dependencies/p4api/lib/x64/Release",
 		}
 
-project "TestJobs"  -- DEPRECATED
+project "TestJobs" -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -786,7 +790,7 @@ project "TestJobs"  -- DEPRECATED
 			"EngineJobs",
 		}
 
-project "TestApp"  -- DEPRECATED
+project "TestApp" -- DEPRECATED
 	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
 
 	kind "WindowedApp"
@@ -827,17 +831,6 @@ project "TestApp"  -- DEPRECATED
 
 	pchheader( "TestAppPch.h" )
 	pchsource( "TestApp/TestAppPch.cpp" )
-
-	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
-	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
-	links
-	{
-		"Expat",
-		"freetype",
-		"nvtt",
-		"png",
-		"zlib",
-	}
 
 	Helium.DoDefaultProjectSettings()
 
@@ -886,8 +879,7 @@ project "ExampleGame"
 
 	Helium.DoModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
 
-	--configuration "SharedLib"
-	configuration "Debug"
+	configuration "SharedLib"
 		links
 		{
 			"Platform",
@@ -945,17 +937,6 @@ project "ExampleMain"
 
 	pchheader( "ExampleMainPch.h" )
 	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
-
-	-- XXX TMC: Remove the following sets of "links" commands once Premake bug 3138377
-	-- (https://sourceforge.net/tracker/?func=detail&aid=3138377&group_id=71616&atid=531878) is actually fixed.
-	links
-	{
-		"Expat",
-		"freetype",
-		"nvtt",
-		"png",
-		"zlib",
-	}
 
 	Helium.DoDefaultProjectSettings()
 

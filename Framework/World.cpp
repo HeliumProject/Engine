@@ -22,7 +22,7 @@ namespace Helium
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( World, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( World, Framework, 0 );
 
 /// Constructor.
 World::World()

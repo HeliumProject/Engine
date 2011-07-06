@@ -1,6 +1,6 @@
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/FontResourceHandler.h"
 
@@ -128,7 +128,7 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
 /// FreeType memory management routines.
 static FT_MemoryRec_ s_freeTypeMemory = { NULL, FreeTypeAllocate, FreeTypeFree, FreeTypeReallocate };
 
-L_IMPLEMENT_OBJECT( FontResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( FontResourceHandler, EditorSupport, 0 );
 
 FT_Library FontResourceHandler::sm_pLibrary = NULL;
 
@@ -693,4 +693,4 @@ void FontResourceHandler::CompressTexture(
     *pOutputSheet = rMipLevels[ 0 ];
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

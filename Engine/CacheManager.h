@@ -14,9 +14,9 @@
 #include "Foundation/File/Path.h"
 
 /// Cache table of contents file extension.
-#define L_CACHE_TOC_EXTENSION TXT( "cachetoc" )
+#define HELIUM_CACHE_TOC_EXTENSION TXT( "cachetoc" )
 /// Cache file extension.
-#define L_CACHE_EXTENSION TXT( "cache" )
+#define HELIUM_CACHE_EXTENSION TXT( "cache" )
 
 namespace Helium
 {

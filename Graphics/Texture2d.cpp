@@ -14,7 +14,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Texture2d::Texture2d()

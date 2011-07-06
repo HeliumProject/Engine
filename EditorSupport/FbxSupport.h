@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "Platform/Math/Simd/Matrix44.h"
 #include "Platform/Math/Simd/Quat.h"
@@ -31,11 +31,11 @@
 
 // Non-zero to enable wrapping of the FBX memory allocator with our own allocator (currently disabled due to
 // long-standing bugs with the FBX SDK attempting to free allocations returned by CRT functions, i.e. strdup()).
-#define L_ENABLE_FBX_MEMORY_ALLOCATOR 0
+#define HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR 0
 
 namespace Helium
 {
-#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+#if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
     /// Custom FBX memory allocator.
     class FbxMemoryAllocator : public KFbxMemoryAllocator
     {
@@ -60,7 +60,7 @@ namespace Helium
         static size_t MsizeDebug( void* pMemory, int );
         //@}
     };
-#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+#endif  // HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
 
     /// FBX SDK support.
     class FbxSupport : NonCopyable
@@ -160,10 +160,10 @@ namespace Helium
         /// Import handler.
         KFbxImporter* m_pImporter;
 
-#if L_ENABLE_FBX_MEMORY_ALLOCATOR
+#if HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
         /// Memory allocation handler.
         FbxMemoryAllocator m_memoryAllocator;
-#endif  // L_ENABLE_FBX_MEMORY_ALLOCATOR
+#endif  // HELIUM_ENABLE_FBX_MEMORY_ALLOCATOR
 
         /// Reference count.
         volatile int32_t m_referenceCount;
@@ -212,6 +212,6 @@ namespace Helium
     };
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H

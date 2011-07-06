@@ -12,18 +12,18 @@
 #include "Engine/Engine.h"
 
 /// Configuration container package name.
-#define L_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
+#define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
 /// Default configuration base name.
-#define L_CONFIG_DEFAULT_PACKAGE_BASE TXT( "Default" )
+#define HELIUM_CONFIG_DEFAULT_PACKAGE_BASE TXT( "Default" )
 /// User configuration base name.
-#define L_CONFIG_USER_PACKAGE_BASE TXT( "User" )
+#define HELIUM_CONFIG_USER_PACKAGE_BASE TXT( "User" )
 
 /// Windows platform configuration suffix.
-#define L_CONFIG_PLATFORM_SUFFIX_WIN TXT( "Win" )
+#define HELIUM_CONFIG_PLATFORM_SUFFIX_WIN TXT( "Win" )
 
 /// Current platform configuration suffix.
 #if HELIUM_OS_WIN
-#define L_CONFIG_PLATFORM_SUFFIX L_CONFIG_PLATFORM_SUFFIX_WIN
+#define HELIUM_CONFIG_PLATFORM_SUFFIX HELIUM_CONFIG_PLATFORM_SUFFIX_WIN
 #endif
 
 namespace Helium

@@ -77,7 +77,7 @@ namespace Helium
         return m_spIndexBuffer;
     }
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 
     /// Get the Granny bone information for this mesh.
     ///

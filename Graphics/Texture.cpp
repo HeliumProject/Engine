@@ -12,8 +12,8 @@
 
 using namespace Helium;
 
-L_DEFINE_ENUMERATION( Texture::ECompression, HELIUM_GRAPHICS_API );
-L_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_DEFINE_ENUMERATION( Texture::ECompression, HELIUM_GRAPHICS_API );
+HELIUM_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Texture::Texture()
@@ -40,12 +40,12 @@ void Texture::PreDestroy()
 /// @copydoc GameObject::Serialize()
 void Texture::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_compression );
-    s << L_TAGGED( m_bSrgb );
-    s << L_TAGGED( m_bCreateMipmaps );
-    s << L_TAGGED( m_bIgnoreAlpha );
+    s << HELIUM_TAGGED( m_compression );
+    s << HELIUM_TAGGED( m_bSrgb );
+    s << HELIUM_TAGGED( m_bCreateMipmaps );
+    s << HELIUM_TAGGED( m_bIgnoreAlpha );
 }
 
 /// Get the render resource as a RTexture2d if this is a 2D texture.

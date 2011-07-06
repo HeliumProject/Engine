@@ -12,7 +12,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Camera, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Camera, Framework, 0 );
 
 const float32_t Camera::DEFAULT_FOV = 70.0f;
 
@@ -31,9 +31,9 @@ Camera::~Camera()
 /// @copydoc GameObject::Serialize()
 void Camera::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_fov );
+    s << HELIUM_TAGGED( m_fov );
 }
 
 /// @copydoc Entity::Attach()

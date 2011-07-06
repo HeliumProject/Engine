@@ -7,12 +7,12 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/GrannyStreamWriter.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyStreamWriterImplementation.cpp.inl"
 #endif
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

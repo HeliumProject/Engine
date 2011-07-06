@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/Texture2dResourceHandler.h"
 
@@ -29,7 +29,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Texture2dResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( Texture2dResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 Texture2dResourceHandler::Texture2dResourceHandler()
@@ -346,4 +346,4 @@ bool Texture2dResourceHandler::CacheResource(
     return true;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "PcSupport/ResourceHandler.h"
 #include "Foundation/File/Path.h"
@@ -21,7 +21,7 @@ namespace Helium
     /// Resource handler for Texture2d resource types.
     class HELIUM_EDITOR_SUPPORT_API Texture2dResourceHandler : public ResourceHandler
     {
-        L_DECLARE_OBJECT( Texture2dResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_OBJECT( Texture2dResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -41,6 +41,6 @@ namespace Helium
     };
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_TEXTURE_2D_RESOURCE_HANDLER_H

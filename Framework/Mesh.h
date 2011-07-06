@@ -16,7 +16,7 @@
 #include "GraphicsTypes/GraphicsTypes.h"
 #include "Graphics/Material.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshInterface.h"
 #endif
 
@@ -27,15 +27,15 @@ namespace Helium
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RVertexBuffer );
-    L_DECLARE_RPTR( RIndexBuffer );
+    HELIUM_DECLARE_RPTR( RVertexBuffer );
+    HELIUM_DECLARE_RPTR( RIndexBuffer );
 
     HELIUM_DECLARE_PTR( Material );
 
     /// Mesh resource type.
     class HELIUM_FRAMEWORK_API Mesh : public Resource
     {
-        L_DECLARE_OBJECT( Mesh, Resource );
+        HELIUM_DECLARE_OBJECT( Mesh, Resource );
 
     public:
         /// @name Construction/Destruction
@@ -76,7 +76,7 @@ namespace Helium
         const uint8_t* GetSectionSkinningPaletteMap( size_t sectionIndex ) const;
 
         inline bool IsSkinned() const;
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         inline const Granny::MeshData& GetGrannyData() const;
 #else
         inline uint8_t GetBoneCount() const;
@@ -108,7 +108,7 @@ namespace Helium
         /// Skinning palette map (split by mesh section).
         DynArray< uint8_t > m_skinningPaletteMap;
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
         /// Granny-specific mesh data.
         Granny::MeshData m_grannyData;
 #else
@@ -138,7 +138,7 @@ namespace Helium
         /// Asynchronous load ID for the index buffer data.
         size_t m_indexBufferLoadId;
 
-#if !L_USE_GRANNY_ANIMATION
+#if !HELIUM_USE_GRANNY_ANIMATION
         /// Bone count (if the mesh is a skinned mesh).  Note we place this variable separate from the other skinned
         /// mesh data in order to reduce overhead from padding member variables.
         uint8_t m_boneCount;

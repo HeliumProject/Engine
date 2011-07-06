@@ -107,7 +107,7 @@ if not stat.S_ISDIR( pathStat.st_mode ):
 
 # Parse each module specified.
 typeScopeRegExp = re.compile( r'\b(namespace|class\s+\w+_API|class)\s+(\w+)\b' )
-objectDeclRegExp = re.compile( r'\b(?<!#define )L_DECLARE_OBJECT\(\s*\w+\s*,\s*[\w:]+\s*\)' )
+objectDeclRegExp = re.compile( r'\b(?<!#define )HELIUM_DECLARE_OBJECT\(\s*\w+\s*,\s*[\w:]+\s*\)' )
 
 sourceFormatString0 = \
 '''//----------------------------------------------------------------------------------------------------------------------
@@ -304,7 +304,7 @@ for module in moduleList:
                             bInEditorBlock = False
                         else:
                             editorBlockIfLevel -= 1
-                elif entryLine.startswith( '#if L_EDITOR' ):
+                elif entryLine.startswith( '#if HELIUM_EDITOR' ):
                     bInEditorBlock = True
 
             # Strip out comment blocks.
@@ -337,7 +337,7 @@ for module in moduleList:
 
                 break
 
-            # Parse the current line for namespace declarations, class declarations, braces, and L_DECLARE_OBJECT()
+            # Parse the current line for namespace declarations, class declarations, braces, and HELIUM_DECLARE_OBJECT()
             # macro calls.
             while entryLine != '':
                 searchEndIndex = len( entryLine )
@@ -435,7 +435,7 @@ for module in moduleList:
     for ( classPath, bInEditorBlock ) in classPathNames:
         if bInEditorBlock:
             if not bWasInEditorBlock:
-                typeRegFileContents += '#if L_EDITOR\n'
+                typeRegFileContents += '#if HELIUM_EDITOR\n'
         elif bWasInEditorBlock:
             typeRegFileContents += '#endif\n'
 
@@ -455,7 +455,7 @@ for module in moduleList:
     for ( classPath, bInEditorBlock ) in classPathNames:
         if bInEditorBlock:
             if not bWasInEditorBlock:
-                typeRegFileContents += '#if L_EDITOR\n'
+                typeRegFileContents += '#if HELIUM_EDITOR\n'
         elif bWasInEditorBlock:
             typeRegFileContents += '#endif\n'
 

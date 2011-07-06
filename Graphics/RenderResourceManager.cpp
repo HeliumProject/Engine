@@ -291,7 +291,7 @@ void RenderResourceManager::Initialize()
 
     GameObjectPath prePassShaderPath;
     HELIUM_VERIFY( prePassShaderPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "PrePass.hlsl" ) ) );
 
     GameObjectPtr spPrePassShader;
     HELIUM_VERIFY( pObjectLoader->LoadObject( prePassShaderPath, spPrePassShader ) );
@@ -318,7 +318,7 @@ void RenderResourceManager::Initialize()
     Shader* pShader;
 
     HELIUM_VERIFY( shaderPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
@@ -348,7 +348,7 @@ void RenderResourceManager::Initialize()
     }
 
     HELIUM_VERIFY( shaderPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenSpaceTexture.hlsl" ) ) );
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
@@ -378,7 +378,7 @@ void RenderResourceManager::Initialize()
     }
 
     HELIUM_VERIFY( shaderPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) L_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "ScreenText.hlsl" ) ) );
 
     HELIUM_VERIFY( pObjectLoader->LoadObject( shaderPath, spShader ) );
 
@@ -413,19 +413,19 @@ void RenderResourceManager::Initialize()
     GameObjectPtr spFont;
 
     HELIUM_VERIFY( fontPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugSmall" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_SMALL ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugMedium" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_MEDIUM ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();
 
     HELIUM_VERIFY( fontPath.Set(
-        L_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) L_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
+        HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Fonts" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "DebugLarge" ) ) );
     HELIUM_VERIFY( pObjectLoader->LoadObject( fontPath, spFont ) );
     m_debugFonts[ DEBUG_FONT_SIZE_LARGE ] = Reflect::SafeCast< Font >( spFont.Get() );
     spFont.Release();

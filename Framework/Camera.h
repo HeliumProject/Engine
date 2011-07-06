@@ -16,7 +16,7 @@ namespace Helium
     /// Camera entity.
     class HELIUM_FRAMEWORK_API Camera : public Entity
     {
-        L_DECLARE_OBJECT( Camera, Entity );
+        HELIUM_DECLARE_OBJECT( Camera, Entity );
 
     public:
         /// Default field-of-view angle.

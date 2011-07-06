@@ -21,7 +21,7 @@ extern void UnregisterGraphicsTypes();
 extern void UnregisterFrameworkTypes();
 extern void UnregisterPcSupportTypes();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
@@ -70,7 +70,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     RegisterGraphicsEnums();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
-#if L_EDITOR
+#if HELIUM_EDITOR
     RegisterEditorSupportTypes();
 #endif
 
@@ -78,11 +78,11 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     InitGraphicsJobsDefaultHeap();
     InitTestJobsDefaultHeap();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     FontResourceHandler::InitializeStaticLibrary();
 #endif
 
-#if L_EDITOR && 1
+#if HELIUM_EDITOR
     HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
@@ -827,7 +827,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     {
         GameObjectPath meshPath;
         HELIUM_VERIFY( meshPath.Set(
-            L_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
+            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
 
         GameObjectPtr spMeshObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
@@ -838,7 +838,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         GameObjectPath animationPath;
         HELIUM_VERIFY( animationPath.Set(
-            L_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) L_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
+            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Animations" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull_anim.fbx" ) ) );
 
         GameObjectPtr spAnimationObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
@@ -1298,17 +1298,17 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Config::DestroyStaticInstance();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     ObjectPreprocessor::DestroyStaticInstance();
 #endif
     GameObjectLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     FontResourceHandler::DestroyStaticLibrary();
 #endif
 
-#if L_EDITOR
+#if HELIUM_EDITOR
     UnregisterEditorSupportTypes();
 #endif
     UnregisterPcSupportTypes();

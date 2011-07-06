@@ -17,7 +17,7 @@ namespace Example
     /// Example object derived type.
     class EXAMPLE_EXAMPLE_GAME_API ExampleObject : public Helium::GameObject
     {
-        L_DECLARE_OBJECT( ExampleObject, Helium::GameObject );
+        HELIUM_DECLARE_OBJECT( ExampleObject, Helium::GameObject );
 
     public:
         /// @name Construction/Destruction

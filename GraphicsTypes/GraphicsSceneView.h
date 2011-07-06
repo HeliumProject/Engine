@@ -18,9 +18,9 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( RConstantBuffer );
-    L_DECLARE_RPTR( RRenderContext );
-    L_DECLARE_RPTR( RSurface );
+    HELIUM_DECLARE_RPTR( RConstantBuffer );
+    HELIUM_DECLARE_RPTR( RRenderContext );
+    HELIUM_DECLARE_RPTR( RSurface );
 
     /// Information related to a given view within a GraphicsScene.
     ///

@@ -14,7 +14,7 @@
 
 namespace Helium
 {
-    L_DECLARE_RPTR( D3D9RenderCommandList );
+    HELIUM_DECLARE_RPTR( D3D9RenderCommandList );
 
     /// Render command proxy for building command lists for deferred issuing of rendering commands to the GPU command
     /// buffer.

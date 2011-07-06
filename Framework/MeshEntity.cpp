@@ -16,7 +16,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( MeshEntity, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( MeshEntity, Framework, 0 );
 
 /// Constructor.
 MeshEntity::MeshEntity()
@@ -33,10 +33,10 @@ MeshEntity::~MeshEntity()
 /// @copydoc GameObject::Serialize()
 void MeshEntity::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_spMesh );
-    s << L_TAGGED_DYNARRAY( m_overrideMaterials );
+    s << HELIUM_TAGGED( m_spMesh );
+    s << HELIUM_TAGGED_DYNARRAY( m_overrideMaterials );
 }
 
 /// @copydoc Entity::Attach()

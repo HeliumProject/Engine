@@ -19,12 +19,12 @@ namespace Helium
 {
     class RTexture2d;
 
-    L_DECLARE_RPTR( RTexture );
+    HELIUM_DECLARE_RPTR( RTexture );
 
     /// Base type for texture resources.
     class HELIUM_GRAPHICS_API Texture : public Resource
     {
-        L_DECLARE_OBJECT( Texture, Resource );
+        HELIUM_DECLARE_OBJECT( Texture, Resource );
 
     public:
         class ECompression
@@ -51,7 +51,7 @@ namespace Helium
                 MAX,
             };
 
-            L_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
+            HELIUM_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -68,7 +68,7 @@ namespace Helium
         /// Target texture compression schemes.  Note that compression schemes that yield lower memory usage may be used
         /// when appropriate if the visual result is not compromised (i.e. DXT1 may be used to compress a texture with
         /// COLOR_SMOOTH_ALPHA selected if the image has no alpha channel).
-        L_ENUM( ECompression, COMPRESSION,
+        HELIUM_ENUM( ECompression, COMPRESSION,
             /// No compression (32-bit RGBA).
             ( NONE )
             /// Color with optional premultiplied alpha masking (DXT1/DXT1a).

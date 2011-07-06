@@ -16,7 +16,7 @@ namespace Helium
     /// Graphics configuration data.
     class HELIUM_GRAPHICS_API GraphicsConfig : public GameObject
     {
-        L_DECLARE_OBJECT( GraphicsConfig, GameObject );
+        HELIUM_DECLARE_OBJECT( GraphicsConfig, GameObject );
 
     public:
         /// Texture filtering mode.
@@ -30,7 +30,7 @@ namespace Helium
                 ANISOTROPIC,
             };
 
-            L_DECLARE_ENUMERATION( ETextureFilter, HELIUM_GRAPHICS_API );
+            HELIUM_DECLARE_ENUMERATION( ETextureFilter, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -53,7 +53,7 @@ namespace Helium
                 MAX,
             };
 
-            L_DECLARE_ENUMERATION( EShadowMode, HELIUM_GRAPHICS_API );
+            HELIUM_DECLARE_ENUMERATION( EShadowMode, HELIUM_GRAPHICS_API );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -65,9 +65,9 @@ namespace Helium
 
         /*
         /// Texture filtering mode.
-        L_ENUM( ETextureFilter, TEXTURE_FILTER, ( BILINEAR ) ( TRILINEAR ) ( ANISOTROPIC ) );
+        HELIUM_ENUM( ETextureFilter, TEXTURE_FILTER, ( BILINEAR ) ( TRILINEAR ) ( ANISOTROPIC ) );
         /// Shadow mode.
-        L_ENUM( EShadowMode, SHADOW_MODE, ( NONE ) ( SIMPLE ) ( PCF_DITHERED ) );
+        HELIUM_ENUM( EShadowMode, SHADOW_MODE, ( NONE ) ( SIMPLE ) ( PCF_DITHERED ) );
         */
 
         /// Default display width.

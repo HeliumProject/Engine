@@ -20,13 +20,13 @@ namespace Helium
     HELIUM_DECLARE_PTR( Font );
     HELIUM_DECLARE_PTR( ShaderVariant );
 
-    L_DECLARE_RPTR( RRasterizerState );
-    L_DECLARE_RPTR( RBlendState );
-    L_DECLARE_RPTR( RDepthStencilState );
-    L_DECLARE_RPTR( RSamplerState );
-    L_DECLARE_RPTR( RSurface );
-    L_DECLARE_RPTR( RTexture2d );
-    L_DECLARE_RPTR( RVertexDescription );
+    HELIUM_DECLARE_RPTR( RRasterizerState );
+    HELIUM_DECLARE_RPTR( RBlendState );
+    HELIUM_DECLARE_RPTR( RDepthStencilState );
+    HELIUM_DECLARE_RPTR( RSamplerState );
+    HELIUM_DECLARE_RPTR( RSurface );
+    HELIUM_DECLARE_RPTR( RTexture2d );
+    HELIUM_DECLARE_RPTR( RVertexDescription );
 
     /// Manager for common render resources used by the graphics system.
     class HELIUM_GRAPHICS_API RenderResourceManager : NonCopyable

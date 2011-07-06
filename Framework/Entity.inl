@@ -60,7 +60,7 @@ namespace Helium
     /// This will verify that this entity can be accessed in a read-only fashion from any entity's update.
     void Entity::VerifySafety() const
     {
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         WorldManager& rWorldManager = WorldManager::GetStaticInstance();
         WorldManager::EUpdatePhase updatePhase = rWorldManager.GetUpdatePhase();
         if( updatePhase == WorldManager::UPDATE_PHASE_POST )
@@ -86,7 +86,7 @@ namespace Helium
     /// This will verify that this entity can be accessed in a write-allowed fashion from any entity's update.
     void Entity::VerifySafety()
     {
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         WorldManager& rWorldManager = WorldManager::GetStaticInstance();
         WorldManager::EUpdatePhase updatePhase = rWorldManager.GetUpdatePhase();
         HELIUM_ASSERT_MSG(
@@ -120,7 +120,7 @@ namespace Helium
     /// update only.
     void Entity::VerifySafetySelfOnly() const
     {
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         WorldManager& rWorldManager = WorldManager::GetStaticInstance();
         WorldManager::EUpdatePhase updatePhase = rWorldManager.GetUpdatePhase();
         if( updatePhase != WorldManager::UPDATE_PHASE_INVALID )
@@ -145,7 +145,7 @@ namespace Helium
     /// This will verify that this entity can be accessed in a write-allowed fashion from its own update only.
     void Entity::VerifySafetySelfOnly()
     {
-#if L_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
         WorldManager& rWorldManager = WorldManager::GetStaticInstance();
         WorldManager::EUpdatePhase updatePhase = rWorldManager.GetUpdatePhase();
         HELIUM_ASSERT_MSG(

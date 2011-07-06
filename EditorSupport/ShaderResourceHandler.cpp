@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "EditorSupport/ShaderResourceHandler.h"
 
@@ -23,7 +23,7 @@
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( ShaderResourceHandler, EditorSupport, 0 );
+HELIUM_IMPLEMENT_OBJECT( ShaderResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 ShaderResourceHandler::ShaderResourceHandler()
@@ -389,4 +389,4 @@ bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, cons
     return false;
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR

@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if L_EDITOR
+#if HELIUM_EDITOR
 
 #include "PcSupport/ResourceHandler.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     /// Resource handler for Material resource types.
     class HELIUM_EDITOR_SUPPORT_API MaterialResourceHandler : public ResourceHandler
     {
-        L_DECLARE_OBJECT( MaterialResourceHandler, ResourceHandler );
+        HELIUM_DECLARE_OBJECT( MaterialResourceHandler, ResourceHandler );
 
     public:
         /// @name Construction/Destruction
@@ -39,6 +39,6 @@ namespace Helium
     };
 }
 
-#endif  // L_EDITOR
+#endif  // HELIUM_EDITOR
 
 #endif  // HELIUM_EDITOR_SUPPORT_MATERIAL_RESOURCE_HANDLER_H

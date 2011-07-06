@@ -15,8 +15,8 @@ namespace Helium
 {
     class Renderer;
 
-    L_DECLARE_RPTR( RVertexDescription );
-    L_DECLARE_RPTR( RVertexInputLayout );
+    HELIUM_DECLARE_RPTR( RVertexDescription );
+    HELIUM_DECLARE_RPTR( RVertexInputLayout );
 
     /// Vertex shader interface.
     class HELIUM_RENDERING_API RVertexShader : public RShader

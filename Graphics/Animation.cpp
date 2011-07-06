@@ -8,14 +8,14 @@
 #include "GraphicsPch.h"
 #include "Graphics/Animation.h"
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyAnimationInterface.h"
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
 using namespace Helium;
 
-L_IMPLEMENT_OBJECT( Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
 /// Constructor.
 Animation::Animation()
@@ -30,9 +30,9 @@ Animation::~Animation()
 /// @copydoc GameObject::Serialize()
 void Animation::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.Serialize( s );
 #endif
 }
@@ -40,7 +40,7 @@ void Animation::Serialize( Serializer& s )
 /// @copydoc Resource::SerializePersistentResourceData()
 void Animation::SerializePersistentResourceData( Serializer& s )
 {
-#if L_USE_GRANNY_ANIMATION
+#if HELIUM_USE_GRANNY_ANIMATION
     m_grannyData.SerializePersistentResourceData( s );
 #else
     HELIUM_UNREF( s );

@@ -10,9 +10,9 @@
 
 using namespace Helium;
 
-L_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, HELIUM_GRAPHICS_API );
-L_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, HELIUM_GRAPHICS_API );
-L_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
+HELIUM_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, HELIUM_GRAPHICS_API );
+HELIUM_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, HELIUM_GRAPHICS_API );
+HELIUM_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
 
 /// Constructor.
 GraphicsConfig::GraphicsConfig()
@@ -35,18 +35,18 @@ GraphicsConfig::~GraphicsConfig()
 /// @copydoc GameObject::Serialize()
 void GraphicsConfig::Serialize( Serializer& s )
 {
-    L_SERIALIZE_BASE( s );
+    HELIUM_SERIALIZE_BASE( s );
 
-    s << L_TAGGED( m_width );
-    s << L_TAGGED( m_height );
+    s << HELIUM_TAGGED( m_width );
+    s << HELIUM_TAGGED( m_height );
 
-    s << L_TAGGED( m_bFullscreen );
+    s << HELIUM_TAGGED( m_bFullscreen );
 
-    s << L_TAGGED( m_bVsync );
+    s << HELIUM_TAGGED( m_bVsync );
 
-    s << L_TAGGED( m_textureFiltering );
-    s << L_TAGGED( m_maxAnisotropy );
+    s << HELIUM_TAGGED( m_textureFiltering );
+    s << HELIUM_TAGGED( m_maxAnisotropy );
 
-    s << L_TAGGED( m_shadowMode );
-    s << L_TAGGED( m_shadowBufferSize );
+    s << HELIUM_TAGGED( m_shadowMode );
+    s << HELIUM_TAGGED( m_shadowBufferSize );
 }

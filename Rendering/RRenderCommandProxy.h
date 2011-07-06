@@ -31,11 +31,11 @@ namespace Helium
 
     class RFence;
 
-    L_DECLARE_RPTR( RSamplerState );
-    L_DECLARE_RPTR( RVertexBuffer );
-    L_DECLARE_RPTR( RConstantBuffer );
+    HELIUM_DECLARE_RPTR( RSamplerState );
+    HELIUM_DECLARE_RPTR( RVertexBuffer );
+    HELIUM_DECLARE_RPTR( RConstantBuffer );
 
-    L_DECLARE_RPTR( RRenderCommandList );
+    HELIUM_DECLARE_RPTR( RRenderCommandList );
 
     /// Proxy for issuing renderer commands.
     class HELIUM_RENDERING_API RRenderCommandProxy : public RRenderResource

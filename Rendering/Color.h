@@ -10,7 +10,7 @@
 #define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
-#include "Platform/Math/MathCommon.h"
+#include "Math/Common.h"
 
 namespace Helium
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/Math/Constants.h"
-#include "Foundation/Math/Vector3.h"
-#include "Foundation/Math/AlignedBox.h"
+#include "Math/Axes.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuAlignedBox.h"
 #include "Foundation/Reflect/Enumeration.h"
 
 #include "Foundation/Undo/Queue.h"

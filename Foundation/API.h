@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
-//#include "Foundation/Profile.h"
 
 #if HELIUM_SHARED
 # ifdef FOUNDATION_EXPORTS
-#  define FOUNDATION_API __declspec(dllexport)
+#  define FOUNDATION_API HELIUM_API_EXPORT
 # else
-#  define FOUNDATION_API __declspec(dllimport)
+#  define FOUNDATION_API HELIUM_API_IMPORT
 # endif
 #else
 #define FOUNDATION_API

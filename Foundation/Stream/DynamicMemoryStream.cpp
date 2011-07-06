@@ -3,6 +3,8 @@
 
 #include "Platform/Trace.h"
 
+#include "Math/Common.h"
+
 using namespace Helium;
 
 /// Constructor.

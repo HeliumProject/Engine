@@ -3,10 +3,10 @@
 #include "Platform/Types.h"
 
 #include "Foundation/Automation/Event.h" 
-#include "Foundation/Math/Vector2.h"
-#include "Foundation/Math/Vector3.h"
-#include "Foundation/Math/Vector4.h"
-#include "Foundation/Math/Matrix4.h"
+#include "Math/FpuVector2.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuVector4.h"
+#include "Math/FpuMatrix4.h"
 
 #include "Rendering/Renderer.h"
 

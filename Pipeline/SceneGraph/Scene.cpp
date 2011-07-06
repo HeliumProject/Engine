@@ -14,7 +14,7 @@
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/Undo/PropertyCommand.h"
 #include "Foundation/String/Utilities.h"
-#include "Foundation/Math/AngleAxis.h"
+#include "Math/FpuAngleAxis.h"
 #include "Foundation/Log.h"
 
 #include "Pipeline/Asset/Classes/Entity.h"

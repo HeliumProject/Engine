@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "Editor/Graph/LuaInputStream.h"
 
-#include "Platform/Math/MathCommon.h"
+#include "Math/Common.h"
 
 #include "Editor/Graph/Debug.h"
 

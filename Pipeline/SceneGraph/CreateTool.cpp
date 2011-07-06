@@ -8,7 +8,7 @@
 
 #include "Pipeline/SceneGraph/Pick.h"
 
-#include "Foundation/Math/AngleAxis.h"
+#include "Math/FpuAngleAxis.h"
 #include "Orientation.h"
 
 #include "PrimitiveCircle.h"

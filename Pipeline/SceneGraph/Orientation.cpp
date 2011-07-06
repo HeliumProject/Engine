@@ -1,7 +1,7 @@
 #include "PipelinePch.h"
 #include "Orientation.h"
 
-#include "Foundation/Math/Constants.h"
+#include "Math/Axes.h"
 
 using namespace Helium;
 

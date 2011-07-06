@@ -2,8 +2,8 @@
 
 #include "Pipeline/API.h"
 
-#include "Foundation/Math/Line.h"
-#include "Foundation/Math/Frustum.h"
+#include "Math/FpuLine.h"
+#include "Math/FpuFrustum.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 

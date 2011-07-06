@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Settings.h"
 
-#include "Foundation/Math/Color3.h"
+#include "Math/FpuColor3.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 

@@ -20,7 +20,7 @@ changes by Geoff Evans:
 - RenderMesh class w/ Draw functions
 */
 
-#include "Platform/Math/MathCommon.h"
+#include "Math/Common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,11 +30,9 @@ changes by Geoff Evans:
 
 #define MAX_SHININESS 100.0 /* for Poser */
 
-#include "OBJMesh.h"
-
-#include "Foundation/Log.h"
-#include "Foundation/Math/Constants.h"
 #include "Platform/String.h"
+#include "Foundation/Log.h"
+#include "Pipeline/Importers/OBJMesh.h"
 
 using namespace Helium;
 using namespace Helium::Importers;

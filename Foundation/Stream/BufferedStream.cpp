@@ -3,6 +3,8 @@
 
 #include "Platform/Memory.h"
 
+#include "Math/Common.h"
+
 using namespace Helium;
 
 /// Constructor.

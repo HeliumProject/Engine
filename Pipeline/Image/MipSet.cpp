@@ -8,7 +8,7 @@
 
 #include "Foundation/Profile.h" 
 #include "Foundation/Log.h"
-#include "Foundation/Math/Vector4.h"
+#include "Math/FpuVector4.h"
 
 #include "Pipeline/Image/Formats/DDS.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/API.h"
-#include "Foundation/Math/Point.h"
+#include "Math/FpuPoint.h"
 #include "Foundation/Flags.h"
 
 namespace Helium

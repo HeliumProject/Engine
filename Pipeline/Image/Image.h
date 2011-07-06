@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/Math/MathCommon.h"
+#include "Math/Common.h"
 #include <string>
 #include <vector>
 #include <list>

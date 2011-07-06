@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Undo/Command.h"
-#include "Foundation/Math/Matrix4.h"
+#include "Math/FpuMatrix4.h"
 
 namespace Helium
 {

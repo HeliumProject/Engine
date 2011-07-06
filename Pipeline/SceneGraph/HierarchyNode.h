@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Math/AlignedBox.h"
+#include "Math/FpuAlignedBox.h"
 #include "Foundation/Container/OrderedSet.h"
 
 #include "Pipeline/API.h"

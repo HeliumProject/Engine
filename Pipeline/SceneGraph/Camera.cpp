@@ -5,8 +5,8 @@
 // in.
 #include "Platform/Windows/Windows.h"
 
-#include "Foundation/Math/AngleAxis.h"
-#include "Foundation/Math/Matrix3.h"
+#include "Math/FpuAngleAxis.h"
+#include "Math/FpuMatrix3.h"
 
 #include "Pipeline/SceneGraph/Orientation.h"
 

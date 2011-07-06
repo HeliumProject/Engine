@@ -1,10 +1,13 @@
 #pragma once
 
-#include "Foundation/API.h"
 #include "Platform/Utility.h"
 #include "Platform/Memory.h"
 #include "Platform/Assert.h"
+
+#include "Foundation/API.h"
 #include "Foundation/Container/ArrayIterator.h"
+
+#include "Math/Common.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"
 #include "boost/preprocessor/repetition/enum_binary_params.hpp"

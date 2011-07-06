@@ -1,11 +1,11 @@
 #include "PipelinePch.h"
 #include "Curve.h"
 
-#include "Platform/Math/Simd/Quat.h"
+#include "Math/SimdQuat.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Math/CalculateCurve.h"
-#include "Foundation/Math/AngleAxis.h"
+#include "Math/FpuCalculateCurve.h"
+#include "Math/FpuAngleAxis.h"
 
 #include "Foundation/Undo/PropertyCommand.h"
 

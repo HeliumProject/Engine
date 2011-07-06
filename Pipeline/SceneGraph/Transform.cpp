@@ -1,8 +1,8 @@
 #include "PipelinePch.h"
 #include "Pipeline/SceneGraph/Transform.h"
 
-#include "Foundation/Math/EulerAngles.h"
-#include "Foundation/Math/Constants.h"
+#include "Math/FpuEulerAngles.h"
+#include "Math/Axes.h"
 
 #include "Pipeline/SceneGraph/Manipulator.h"
 #include "Foundation/Undo/PropertyCommand.h"

@@ -1,9 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Platform/Math/Simd.h"
 #include "Platform/Utility.h"
-#include "Platform/Math/MathCommon.h"
 #include <new>
 
 /// @defgroup defaultheapmacro Default Module Memory Heap Declaration
@@ -137,6 +135,16 @@
 #endif
 
 //@}
+
+/// Size of SIMD vectors, in bytes.
+#define HELIUM_SIMD_SIZE ( 16 )
+/// Alignment of SIMD vectors, in bytes.
+#define HELIUM_SIMD_ALIGNMENT ( 16 )
+
+/// Prefix macro for declaring SIMD type or variable.
+#define HELIUM_SIMD_ALIGN_PRE HELIUM_ALIGN_PRE( 16 )
+/// Suffix macro for declaring SIMD type or variable alignment.
+#define HELIUM_SIMD_ALIGN_POST HELIUM_ALIGN_POST( 16 )
 
 namespace Helium
 {
@@ -352,7 +360,7 @@ namespace Helium
     /// StackMemoryHeap is not thread-safe.  Its primary purpose is to provide a method for performing moderately
     /// efficient allocations, often with a short lifetime.
     ///
-    /// Note that the base address of all blocks are aligned to HELIUM_SIMD_ALIGNMENT.
+    /// Note that the base address of all blocks are aligned to HELIUM_SIMD_ALIGNMENT by default.
     template< typename Allocator = DefaultAllocator >
     class StackMemoryHeap : public MemoryHeap
     {

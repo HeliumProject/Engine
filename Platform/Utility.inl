@@ -465,7 +465,7 @@ void Helium::ArrayUninitializedFill( T* pDest, const T& rValue, size_t count )
 template< typename T >
 T Helium::Align( const T& rValue, size_t alignment )
 {
-    HELIUM_ASSERT( IsPowerOfTwo( alignment ) );
+    HELIUM_ASSERT( ( alignment & ( alignment - 1 ) ) == 0 ); // affirm power of two
 
     return _Align( rValue, alignment, std::is_pointer< T >() );
 }

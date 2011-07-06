@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Foundation/Math/Line.h"
-#include "Foundation/Math/Frustum.h"
-#include "Foundation/Math/Vector3.h"
-#include "Foundation/Math/Matrix4.h"
-#include "Foundation/Math/Point.h"
+#include "Math/FpuLine.h"
+#include "Math/FpuFrustum.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuMatrix4.h"
+#include "Math/FpuPoint.h"
 #include "Foundation/Input.h"
 
 #include "Pipeline/API.h"

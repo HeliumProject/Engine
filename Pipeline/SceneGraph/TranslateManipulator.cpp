@@ -12,11 +12,11 @@
 
 #include "Pipeline/SceneGraph/SceneManager.h"
 #include "Pipeline/SceneGraph/Scene.h"
-#include "SceneSettings.h"
+#include "Pipeline/SceneGraph/SceneSettings.h"
 #include "Pipeline/SceneGraph/Mesh.h"
 
-#include "Foundation/Math/AngleAxis.h"
-#include "Foundation/Math/Utils.h"
+#include "Math/Common.h"
+#include "Math/FpuAngleAxis.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

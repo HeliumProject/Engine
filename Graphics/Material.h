@@ -12,9 +12,9 @@
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
-#include "Platform/Math/Simd/Vector2.h"
-#include "Platform/Math/Simd/Vector3.h"
-#include "Platform/Math/Simd/Vector4.h"
+#include "Math/SimdVector2.h"
+#include "Math/SimdVector3.h"
+#include "Math/SimdVector4.h"
 #include "Graphics/Shader.h"
 
 namespace Helium

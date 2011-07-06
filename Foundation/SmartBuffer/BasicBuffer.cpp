@@ -2,11 +2,12 @@
 #include "BasicBuffer.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Log.h"
 
-#include "Foundation/Math/Vector3.h"
-#include "Foundation/Math/Vector4.h"
-#include "Foundation/Math/Half.h"
+#include "Math/Float16.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuVector4.h"
+
+#include "Foundation/Log.h"
 
 using namespace Helium;
 
@@ -337,11 +338,11 @@ uint32_t BasicBuffer::AddU64( uint64_t val, const tchar_t* dbgStr, ... )
 
 uint32_t BasicBuffer::AddF16( float32_t val, const tchar_t* dbgStr, ... )
 {
-    int16_t half = FloatToHalf( val );
+    uint16_t half = FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
     half = ConvertEndian(half,IsPlatformBigEndian());
-    return AddBuffer( (uint8_t*)&half, sizeof( int16_t ) );
+    return AddBuffer( (uint8_t*)&half, sizeof( uint16_t ) );
 }
 
 uint32_t BasicBuffer::AddF32( float32_t val, const tchar_t* dbgStr, ... )

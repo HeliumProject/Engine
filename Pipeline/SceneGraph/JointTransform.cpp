@@ -1,7 +1,7 @@
 #include "PipelinePch.h"
 #include "JointTransform.h"
 
-#include "Foundation/Math/EulerAngles.h"
+#include "Math/FpuEulerAngles.h"
 #include "Foundation/Undo/PropertyCommand.h"
 
 #include "Pipeline/SceneGraph/Color.h"

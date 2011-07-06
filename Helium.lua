@@ -320,6 +320,38 @@ project "Platform"
 			"ws2_32",
 		}
 
+project "Math"
+	uuid "129267DC-66C7-489B-8538-ADF1B6EA4160"
+	language "C++"
+
+	files
+	{
+		"Math/**",
+		"Math/**",
+	}
+
+    pchheader( "MathPch.h" )
+    pchsource( "Math/MathPch.cpp" )
+
+	configuration "not windows"
+		kind "StaticLib"
+
+	configuration { "windows", "Debug" }
+		kind "SharedLib"
+		defines
+		{
+			"MATH_EXPORTS",
+		}
+
+	configuration { "windows", "not Debug" }
+		kind "StaticLib"
+	
+	configuration "SharedLib"
+		links
+		{
+			"Platform",
+		}
+
 project "Foundation"
 	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
 	language "C++"
@@ -353,6 +385,7 @@ project "Foundation"
 		links
 		{
 			"Platform",
+			"Math",
 			"Expat",
 			"zlib",
 		}
@@ -372,6 +405,7 @@ project "Engine"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 		}
 
@@ -384,6 +418,7 @@ project "EngineJobs"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 		}
@@ -397,6 +432,7 @@ project "Windowing"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -411,6 +447,7 @@ project "Rendering"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -425,6 +462,7 @@ project "GraphicsTypes"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -440,6 +478,7 @@ project "GraphicsJobs"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -456,6 +495,7 @@ project "Graphics"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -473,6 +513,7 @@ project "Framework"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -492,6 +533,7 @@ project "WindowingWin"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -507,6 +549,7 @@ project "RenderingD3D9"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -522,6 +565,7 @@ project "PcSupport"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -537,6 +581,7 @@ project "PreprocessingPc"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -556,6 +601,7 @@ project "EditorSupport"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -578,6 +624,7 @@ project "FrameworkWin"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -641,6 +688,7 @@ project "Pipeline"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -693,6 +741,7 @@ project "Editor"
 	links
 	{
 		"Platform",
+		"Math",
 		"Foundation",
 		"Engine",
 		"EngineJobs",
@@ -811,6 +860,7 @@ project "TestApp" -- DEPRECATED
 	links
 	{
 		"Platform",
+		"Math",
 		"Foundation",
 		"Engine",
 		"EngineJobs",
@@ -883,6 +933,7 @@ project "ExampleGame"
 		links
 		{
 			"Platform",
+			"Math",
 			"Foundation",
 			"Engine",
 			"EngineJobs",
@@ -912,6 +963,7 @@ project "ExampleMain"
 	links
 	{
 		"Platform",
+		"Math",
 		"Foundation",
 		"Engine",
 		"EngineJobs",

@@ -12,8 +12,8 @@
 #include "EditorSupport/MeshResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
-#include "Platform/Math/Simd/Matrix44.h"
-#include "Platform/Math/Simd/VectorConversion.h"
+#include "Math/SimdMatrix44.h"
+#include "Math/SimdVectorConversion.h"
 #include "Engine/BinarySerializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 #include "PcSupport/ObjectPreprocessor.h"

@@ -1,7 +1,7 @@
 #include "GraphicsPch.h"
 #include "Graphics/BufferedDrawer.h"
 
-#include "Platform/Math/Simd/Matrix44.h"
+#include "Math/SimdMatrix44.h"
 #include "Foundation/StringConverter.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RendererUtil.h"

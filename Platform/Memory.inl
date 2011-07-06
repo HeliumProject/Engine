@@ -127,11 +127,11 @@ Helium::StackMemoryHeap< Allocator >::StackMemoryHeap(
     size_t blockSize,
     size_t blockCountMax,
     size_t defaultAlignment )
-    : m_blockSize( Max< size_t >( blockSize, 1 ) )
-    , m_defaultAlignment( Max< size_t >( defaultAlignment, 1 ) )
-    , m_remainingBlockCount( Max< size_t >( blockCountMax, 1 ) )
+    : m_blockSize( blockSize > 1 ? blockSize : 1 )
+    , m_defaultAlignment( defaultAlignment > 1 ? defaultAlignment : 1 )
+    , m_remainingBlockCount( blockCountMax > 1 ? blockCountMax : 1 )
 {
-    HELIUM_ASSERT( IsPowerOfTwo( m_defaultAlignment ) );
+    HELIUM_ASSERT( ( m_defaultAlignment & ( m_defaultAlignment - 1 ) ) == 0 ); // affirm power of two
 
     Block* pBlock = AllocateBlock();
     HELIUM_ASSERT( pBlock );
@@ -185,7 +185,7 @@ void* Helium::StackMemoryHeap< Allocator >::Reallocate( void* /*pMemory*/, size_
 template< typename Allocator >
 void* Helium::StackMemoryHeap< Allocator >::AllocateAligned( size_t alignment, size_t size )
 {
-    HELIUM_ASSERT( IsPowerOfTwo( alignment ) );
+    HELIUM_ASSERT( ( alignment & ( alignment - 1 ) ) == 0 ); // affirm power of two
 
     // Check whether the allocation will fit within the current block.
     Block* pBlock = m_pCurrentBlock;
@@ -544,7 +544,7 @@ template< typename Allocator > void* Helium::AllocateAlignmentHelper( Allocator&
 {
     HELIUM_ASSERT( size != 0 );
 
-    if( size >= HELIUM_SIMD_SIZE )
+    if ( size >= HELIUM_SIMD_SIZE )
     {
         return rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
     }

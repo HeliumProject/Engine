@@ -3,7 +3,7 @@
 #include "Foundation/API.h"
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
-#include "Platform/Math/MathCommon.h"
+#include "Math/Common.h"
 
 namespace Helium
 {

@@ -12,7 +12,7 @@
 #include "Framework/Framework.h"
 #include "Engine/Resource.h"
 
-#include "Platform/Math/Simd/AaBox.h"
+#include "Math/SimdAaBox.h"
 #include "GraphicsTypes/GraphicsTypes.h"
 #include "Graphics/Material.h"
 

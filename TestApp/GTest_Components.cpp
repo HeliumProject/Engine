@@ -88,14 +88,14 @@ TEST_F(Components, HostFindOne)
 {
     TestHost test_host;
 
-    std::vector<TestComponentOne *> component_list_1;
-    std::vector<TestComponentTwo *> component_list_2;
-    std::vector<TestComponentThree *> component_list_3;
+    DynArray<TestComponentOne *> component_list_1;
+    DynArray<TestComponentTwo *> component_list_2;
+    DynArray<TestComponentThree *> component_list_3;
 
     // Nothing is attached
-    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentOne>() == 0);
-    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentTwo>() == 0);
-    EXPECT_TRUE(test_host.FindFirstComponent<TestComponentThree>() == 0);
+    EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
+    EXPECT_TRUE(test_host.FindOneComponent<TestComponentTwo>() == 0);
+    EXPECT_TRUE(test_host.FindOneComponent<TestComponentThree>() == 0);
 
     // Nothing is attached
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() == 0);
@@ -110,42 +110,48 @@ TEST_F(Components, HostFindOne)
     TestComponentThree *c3_2 = test_host.Allocate<TestComponentThree>();
 
     // FindOne should return the exact component
-    //     EXPECT_EQ(test_host.FindOneComponent<TestComponentOne>(), c1);
-    //     EXPECT_EQ(test_host.FindOneComponent<TestComponentTwo>(), c2);
-    //     EXPECT_EQ(test_host.FindOneComponent<TestComponentThree>(), c3);
+    EXPECT_EQ(test_host.FindOneComponent<TestComponentOne>(), c1);
+    //EXPECT_EQ(test_host.FindOneComponent<TestComponentTwo>(), c2);
+    //EXPECT_EQ(test_host.FindOneComponent<TestComponentThree>(), c3);
 
     // FindOneThatImplements should now return *something* for each type
-    //     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
-    //     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentTwo>() != 0);
-    //     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentThree>() != 0);
+    EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
+    EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentTwo>() != 0);
+    EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentThree>() != 0);
 
-    //     Components::FindAllComponents<TestComponentOne>(component_list_1);
-    //     Components::FindAllComponents<TestComponentTwo>(component_list_2);
-    //     Components::FindAllComponents<TestComponentThree>(component_list_3);
+    test_host.FindAllComponents<TestComponentOne>(component_list_1);
+    test_host.FindAllComponents<TestComponentTwo>(component_list_2);
+    test_host.FindAllComponents<TestComponentThree>(component_list_3);
 
-    //     EXPECT_TRUE(component_list_1.size() == 1);
-    //     EXPECT_TRUE(component_list_2.size() == 1);
-    //     EXPECT_TRUE(component_list_3.size() == 1);
+    EXPECT_TRUE(component_list_1.GetSize() == 1);
+    EXPECT_TRUE(component_list_2.GetSize() == 2);
+    EXPECT_TRUE(component_list_3.GetSize() == 2);
 
     // Take out the base component
     test_host.Free(*c1);
     test_host.Free(*c2_1);
-    test_host.Free(*c2_2);
+    //test_host.Free(*c2_2);
     test_host.Free(*c3_2);
-    test_host.Free(*c3_1);
+    //test_host.Free(*c3_1);
 
     // Now asking directly for c1 should fail, but an implementor of c1 should pass (returns c2 or c3)
-    //     EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
-    //     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
-    // 
-    //     Components::FindAllComponents<TestComponentOne>(component_list_1);
-    //     EXPECT_TRUE(component_list_1.size() == 0);
-    // 
-    //     Components::FindAllComponentsThatImplement<TestComponentOne>(component_list_1);
-    //     EXPECT_TRUE(component_list_1.size() == 2);
-    // 
-    //     Components::FindAllComponentsThatImplement<TestComponentTwo>(component_list_2);
-    //     EXPECT_TRUE(component_list_2.size() == 1);
+    EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
+    EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
+    
+    component_list_1.Clear();
+    test_host.FindAllComponents<TestComponentOne>(component_list_1);
+    EXPECT_TRUE(component_list_1.GetSize() == 0);
+
+    component_list_1.Clear();
+    test_host.FindAllComponentsThatImplement<TestComponentOne>(component_list_1);
+    EXPECT_TRUE(component_list_1.GetSize() == 2);
+
+    component_list_2.Clear();
+    test_host.FindAllComponentsThatImplement<TestComponentTwo>(component_list_2);
+    EXPECT_TRUE(component_list_2.GetSize() == 1);
+
+    test_host.Free(*c2_2);
+    test_host.Free(*c3_1);
 }
 
 TEST_F(Components, HostAttachDetachIterate)

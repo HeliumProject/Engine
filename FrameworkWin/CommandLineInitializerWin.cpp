@@ -1,14 +1,6 @@
-//----------------------------------------------------------------------------------------------------------------------
-// CommandLineInitializationWin.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkWinPch.h"
-#include "FrameworkWin/CommandLineInitializationWin.h"
+#include "CommandLineInitializationWin.h"
 
-#include "Platform/Windows/Windows.h"
 #include "Foundation/StringConverter.h"
 
 #include <ShellAPI.h>

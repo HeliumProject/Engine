@@ -4,8 +4,8 @@
 #include <vector>
 #include <exception>
 
+#include "Platform/Debug.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Debug.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Automation/Event.h"

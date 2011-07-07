@@ -2,6 +2,8 @@
 #include "Pipe.h"
 
 #include "Platform/Assert.h"
+#include "Platform/Print.h"
+
 #include "Foundation/Memory/Endian.h"
 
 #include <stdio.h>
@@ -114,7 +116,7 @@ void PipeConnection::ServerThread()
             }
             else
             {
-                Helium::Sleep(100);
+                Thread::Sleep(100);
             }
         }
 
@@ -162,7 +164,7 @@ void PipeConnection::ClientThread()
             }
             else
             {
-                Helium::Sleep(100);
+                Thread::Sleep(100);
             }
         }
 

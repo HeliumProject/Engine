@@ -2,12 +2,10 @@
 #include "Process.h"
 
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Pipe.h"
 #include "Foundation/CommandLine/Utilities.h"
-
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
 

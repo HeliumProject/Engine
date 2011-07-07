@@ -1,7 +1,7 @@
 #pragma once
 
-#ifdef WIN32
-# include "Windows/Socket.h"
+#ifdef HELIUM_OS_WIN
+# include "Platform/SocketWin.h"
 #else
 # include "POSIX/Socket.h"
 #endif

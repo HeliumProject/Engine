@@ -4,9 +4,8 @@
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 #include "Platform/Environment.h"
-#include "Platform/Windows/MemoryProfiler.h"
-#include "Platform/Windows/Console.h"
-#include "Platform/Windows/Windows.h"
+#include "Platform/ProfileMemory.h"
+#include "Platform/Console.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"

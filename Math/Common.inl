@@ -134,7 +134,7 @@ namespace Helium
     int64_t Abs( int64_t value )
     {
 #if HELIUM_OS_WIN
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
         return ::_abs64( value );
 #else
         return llabs( value );
@@ -217,7 +217,7 @@ namespace Helium
     {
         HELIUM_ASSERT( value != 0 );
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
         unsigned long bitIndex = 0;
         HELIUM_VERIFY( _BitScanReverse( &bitIndex, value ) );
 
@@ -254,7 +254,7 @@ namespace Helium
     {
         HELIUM_ASSERT( value );
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
         unsigned long bitIndex = 0;
 
 #if HELIUM_WORDSIZE == 64

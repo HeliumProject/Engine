@@ -1,11 +1,6 @@
 #pragma once
 
-//
-// Win32
-//
-#define _CRT_RAND_S // required for rand_s, must be declared before including stdlib.h
-
-#include "Platform/Windows/Windows.h"
+#include "Platform/Platform.h"
 
 //
 // Std Library
@@ -57,6 +52,5 @@
 #define D3D_DEBUG_INFO
 #endif
 
-#undef DrawText
 #include <d3d9.h>
 #include <d3dx9.h>

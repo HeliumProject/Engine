@@ -3,7 +3,6 @@
 
 #include "Foundation/Log.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
 

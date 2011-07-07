@@ -1,5 +1,5 @@
 #include "PlatformPch.h"
-#include "Platform/Windows/Console.h"
+#include "Console.h"
 
 using namespace Helium;
 

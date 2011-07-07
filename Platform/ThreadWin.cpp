@@ -1,10 +1,11 @@
 #include "PlatformPch.h"
-#include "Platform/Error.h"
-#include "Platform/Thread.h"
-#include "Platform/PlatformUtility.h"
+#include "Thread.h"
+
 #include "Platform/Assert.h"
-#include "Platform/String.h"
+#include "Platform/Error.h"
+#include "Platform/Print.h"
 #include "Platform/Memory.h"
+#include "Platform/String.h"
 
 #include <process.h>
 

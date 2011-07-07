@@ -2,6 +2,7 @@
 #include "Connection.h"
 
 #include "Platform/Assert.h"
+#include "Platform/Print.h"
 
 #include <string.h>
 

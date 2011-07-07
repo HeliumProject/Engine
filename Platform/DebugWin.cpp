@@ -1,4 +1,6 @@
 #include "PlatformPch.h"
+#include "Debug.h"
+
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
@@ -7,7 +9,6 @@
 #include "Platform/Debug.h"
 #include "Platform/Trace.h"
 #include "Platform/Process.h"
-#include "Platform/Windows/Debug.h"
 
 #include <map>
 #include <time.h>

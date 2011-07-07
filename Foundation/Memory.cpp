@@ -3,11 +3,11 @@
 #include "Profile.h"
 #include "Log.h"
 
-#include "Platform/PlatformUtility.h"
-#include "Platform/Profile.h"
-#include "Platform/Thread.h"
 #include "Platform/Assert.h"
 #include "Platform/Memory.h"
+#include "Platform/Profile.h"
+#include "Platform/ProfileMemory.h"
+#include "Platform/Thread.h"
 
 #include <stdlib.h>
 
@@ -121,7 +121,7 @@ static void MemoryReportThread(void*)
 
         while (timer.Elapsed() < 5000 && !g_MemoryReportThreadTerminate)
         {
-            Helium::Sleep(10);
+            Thread::Sleep(10);
         }
     }
 }

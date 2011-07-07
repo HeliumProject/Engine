@@ -1,12 +1,9 @@
 #pragma once
 
 #include "Platform/Platform.h"
-
-#if HELIUM_OS_WIN
-# include "Platform/Windows/Windows.h"
-#endif
-
+#include "Platform/Socket.h"
 #include "Platform/Trace.h"
+#include "Platform/Timer.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
@@ -15,14 +12,12 @@
 #include "Foundation/Container/Map.h"
 #include "Foundation/Container/SortedMap.h"
 #include "Foundation/Container/SortedSet.h"
-#include "Platform/Timer.h"
 #include "Math/SimdMatrix44.h"
 #include "Math/SimdQuat.h"
 #include "Math/SimdMatrix44Soa.h"
 #include "Math/SimdQuatSoa.h"
 #include "Math/SimdAaBox.h"
 #include "Math/Float16.h"
-#include "Platform/Socket.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/Package.h"
 #include "Engine/JobManager.h"

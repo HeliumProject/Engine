@@ -2,8 +2,8 @@
 
 #include "Message.h"
 
-#include "Platform/PlatformUtility.h"
 #include "Platform/Condition.h"
+#include "Platform/Runtime.h"
 #include "Platform/Thread.h"
 
 #include "Foundation/Localization.h"

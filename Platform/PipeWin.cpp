@@ -1,9 +1,9 @@
 #include "PlatformPch.h"
-#include "Platform/Windows/Pipe.h"
-#include "Platform/Pipe.h"
+#include "Pipe.h"
+
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
-#include "Platform/PlatformUtility.h"
+#include "Platform/Print.h"
 
 using namespace Helium;
 

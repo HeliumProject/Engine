@@ -780,13 +780,13 @@ bool GameObjectPath::Parse(
                 }
 
 #if HELIUM_UNICODE
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
                 int parseCount = swscanf_s( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
 #else
                 int parseCount = swscanf( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
 #endif
 #else
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
                 int parseCount = sscanf_s( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
 #else
                 int parseCount = sscanf( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );

@@ -9,7 +9,7 @@
 
 #include "Platform/Debug.h"
 #include "Platform/Process.h"
-#include "Platform/Windows/Console.h"
+#include "Platform/Console.h"
 #include "Platform/Exception.h"
 
 #include "Foundation/Log.h"

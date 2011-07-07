@@ -4,7 +4,6 @@
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
 #include "Foundation/Log.h"
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
 

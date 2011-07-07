@@ -3,6 +3,8 @@
 
 #include "Platform/Assert.h"
 #include "Platform/String.h"
+#include "Platform/Print.h"
+
 #include "Foundation/Memory/Endian.h"
 
 #include <string.h>
@@ -129,7 +131,7 @@ void TCPConnection::ServerThread()
             }
             else
             {
-                Helium::Sleep( 100 );
+                Thread::Sleep( 100 );
             }
         }
 
@@ -248,7 +250,7 @@ void TCPConnection::ClientThread()
             {
                 Helium::CloseSocket(m_WriteSocket);
                 Helium::CloseSocket(m_ReadSocket);
-                Helium::Sleep( 100 );
+                Thread::Sleep( 100 );
                 socketsCreated = false;
             }
         }

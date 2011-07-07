@@ -6,13 +6,9 @@
 
 #include "Platform/Atomic.h"
 
-#if HELIUM_OS_WIN
-#include "Platform/Windows/Windows.h"
-#endif
-
-#if HELIUM_CC_MSC
-#  define SNPRINTF( BUFFER, FORMAT, ... )           _sntprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
-#  define VSNPRINTF( BUFFER, FORMAT, FMT, ARGS )    _vsntprintf_s( BUFFER, _TRUNCATE, FORMAT, FMT, ARGS )
+#if HELIUM_CC_CL
+# define SNPRINTF( BUFFER, FORMAT, ... )           _sntprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
+# define VSNPRINTF( BUFFER, FORMAT, FMT, ARGS )    _vsntprintf_s( BUFFER, _TRUNCATE, FORMAT, FMT, ARGS )
 #else
 # if HELIUM_UNICODE
 #  define SNPRINTF( BUFFER, FORMAT, ... ) { swprintf( BUFFER, HELIUM_ARRAY_COUNT( BUFFER ) - 1, FORMAT, __VA_ARGS__ ); BUFFER[ HELIUM_BUFFER_ARRAY_COUNT( BUFFER ) - 1 ] = L'\0'; }

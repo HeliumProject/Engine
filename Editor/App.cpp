@@ -6,7 +6,7 @@
 #include "Platform/Exception.h"
 #include "Platform/Trace.h"
 #include "Platform/Timer.h"
-#include "Platform/Windows/Console.h"
+#include "Platform/Console.h"
 #include "Platform/Timer.h"
 
 #include "Math/Common.h"

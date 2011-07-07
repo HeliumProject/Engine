@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/API.h"
-#include "Types.h"
+#include "Platform/Types.h"
 
 //
 // Setup state
@@ -22,7 +22,7 @@
 
 #define HELIUM_DISABLEABLE_CODE_BLOCK(x) { static bool code_block_enabled = true; if (code_block_enabled) {x} }
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 # ifdef _MANAGED
 #  define HELIUM_ISSUE_BREAK() System::Diagnostics::Debugger::Break()
 # else //_MANAGED
@@ -208,7 +208,7 @@ namespace Helium
 // Compile time
 //
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 # if _MSC_VER >= 1600
 #  define HELIUM_COMPILE_ASSERT(exp) static_assert(exp, #exp)
 # endif
@@ -222,7 +222,7 @@ namespace Helium
 // #pragma TODO("Do something!")
 //
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #define TODO_STRING2(x) #x
 #define TODO_STRING(x) TODO_STRING2(x)
 #define TODO(msg) message (__FILE__ "(" TODO_STRING(__LINE__) ") : TODO: " msg)

@@ -3,7 +3,6 @@
 
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
-#include "Platform/PlatformUtility.h"
 
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
@@ -414,6 +413,6 @@ void PropertiesManager::SyncThreads()
 {
     while ( IsActive() )
     {
-        Helium::Sleep( 1 );
+        Thread::Sleep( 1 );
     }
 }

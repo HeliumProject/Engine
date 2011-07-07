@@ -1,11 +1,9 @@
 #pragma once
 
-//
-// Insomniac standard include for windows.h
-//  * Try at all costs not to include this in a header
-//  * Including this in a header for a frequently used library is BAD
-//  * Typically you should include this in your precompiled header file, or at the top of your code file
-//
+// Temporary workaround for bug in Visual C++ 2008 with including intrin.h and math.h simultaneously
+// (see http://connect.microsoft.com/VisualStudio/feedback/details/381422/warning-of-attributes-not-present-on-previous-declaration-on-ceil-using-both-math-h-and-intrin-h).
+#pragma warning( push )
+#pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
 
 #ifdef _WINDOWS_
 #error Windows already included
@@ -46,11 +44,17 @@
 #include <tchar.h>
 #include <windows.h>
 #include <winsock2.h>
+#include <intrin.h>
 
 // poison incompatible APIs
 #define GetThreadId GetThreadId_doesnt_work_with_Windows_XP_32_bit_and_is_not_protected_by_a_preprocessor_guard
 
+// undefine dumb macros
 #undef CreateFile
 #undef CreateDirectory
 #undef GetObject
+#undef GetUserName
 #undef GetEnvironmentVariable
+#undef DrawText
+
+#pragma warning( pop )

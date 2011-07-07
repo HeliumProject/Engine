@@ -1,7 +1,8 @@
 #include "PlatformPch.h"
+#include "Condition.h"
+
 #include "Platform/Error.h"
-#include "Platform/Condition.h"
-#include "Platform/PlatformUtility.h"
+#include "Platform/Print.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;

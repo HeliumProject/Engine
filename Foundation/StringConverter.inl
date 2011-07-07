@@ -19,7 +19,7 @@ size_t Helium::StringConverter< char, wchar_t >::Convert(
 {
     HELIUM_ASSERT( pSourceString );
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     size_t charactersConverted = 0;
     errno_t result = mbstowcs_s(
         &charactersConverted,
@@ -149,7 +149,7 @@ size_t Helium::StringConverter< wchar_t, char >::Convert(
 {
     HELIUM_ASSERT( pSourceString );
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     size_t charactersConverted = 0;
     errno_t result = wcstombs_s(
         &charactersConverted,

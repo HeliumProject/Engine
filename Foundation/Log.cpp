@@ -4,8 +4,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Mutex.h"
 #include "Platform/Thread.h"
-#include "Platform/Windows/Windows.h"
-#include "Platform/Windows/Console.h"
+#include "Platform/Console.h"
 
 #include <cstdio>
 #include <fstream>

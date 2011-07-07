@@ -6,7 +6,6 @@
 
 #include "Platform/Timer.h"
 #include "Platform/Assert.h"
-#include "Platform/Windows/Windows.h"
 
 using namespace Helium;
 

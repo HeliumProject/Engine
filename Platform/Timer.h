@@ -3,7 +3,7 @@
 #include "Platform/Platform.h"
 
 #if HELIUM_OS_WIN
-# include "Platform/Windows/Timer.h"
+# include "Platform/TimerWin.h"
 #endif
 
 namespace Helium
@@ -27,5 +27,5 @@ namespace Helium
 }
 
 #if HELIUM_OS_WIN
-# include "Platform/Windows/Timer.inl"
+# include "Platform/TimerWin.inl"
 #endif

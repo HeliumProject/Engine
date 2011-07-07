@@ -1,6 +1,11 @@
 #pragma once
 
-#include "API.h"
+#include "Platform/API.h"
+#include "Platform/Types.h"
+
+#ifdef HELIUM_OS_WIN
+# include "Platform/DebugWin.h"
+#endif
 
 namespace Helium
 {

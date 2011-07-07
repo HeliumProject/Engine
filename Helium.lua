@@ -269,35 +269,28 @@ project "Platform"
 	files
 	{
 		"Platform/*",
-		"Platform/Gcc/*",
-		"Platform/Math/*",
-		"Platform/Msc/*",
-		"Platform/X86/*",
 	}
 
     pchheader( "PlatformPch.h" )
     pchsource( "Platform/PlatformPch.cpp" )
 
 	configuration "windows"
-		files
+		excludes
 		{
-			"Platform/Math/Simd/*",
-			"Platform/Math/Simd/Sse/*",
-			"Platform/Windows/*",
+			"Platform/*Mac.*",
+			"Platform/*Lin.*",
 		}
 	configuration "macosx"
-		files
+		excludes
 		{
-			"Platform/Math/Simd/*",
-			"Platform/Math/Simd/Sse/*",
-			"Platform/POSIX/*",
+			"Platform/*Win.*",
+			"Platform/*Lin.*",
 		}
 	configuration "linux"
-		files
+		excludes
 		{
-			"Platform/Math/Simd/*",
-			"Platform/Math/Simd/Sse/*",
-			"Platform/POSIX/*",
+			"Platform/*Win.*",
+			"Platform/*Mac.*",
 		}
 
 	configuration "not windows"

@@ -5,7 +5,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Platform.h"
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( push )
 #pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
 // Temporary workaround for bug in Visual C++ 2008 with including intrin.h and math.h simultaneously
@@ -15,7 +15,7 @@
 
 #include <type_traits>
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( pop )
 #endif
 

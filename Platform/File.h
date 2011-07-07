@@ -5,7 +5,7 @@
 #include "Platform/Platform.h"
 
 #ifdef HELIUM_OS_WIN
-# include "Platform/Windows/File.h"
+# include "Platform/FileWin.h"
 #else
 # include "Platform/POSIX/File.h"
 #endif

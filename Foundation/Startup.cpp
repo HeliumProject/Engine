@@ -2,11 +2,10 @@
 #include "Startup.h"
 
 #include "Platform/Assert.h"
-#include "Platform/PlatformUtility.h"
-#include "Platform/Process.h"
 #include "Platform/Debug.h"
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
+#include "Platform/Process.h"
+#include "Platform/Runtime.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"

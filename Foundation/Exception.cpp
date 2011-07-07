@@ -3,9 +3,8 @@
 
 #include "Platform/Assert.h"
 #include "Platform/String.h"
-#include "Platform/Windows/Console.h"
-#include "Platform/Windows/MemoryProfiler.h"
-#include "Platform/Windows/Windows.h"
+#include "Platform/Console.h"
+#include "Platform/ProfileMemory.h"
 
 #include "Foundation/Log.h"
 

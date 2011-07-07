@@ -4,7 +4,7 @@
 #include "Platform/Types.h"
 
 #ifdef WIN32
-# include "Platform/Windows/Path.h"
+# include "Platform/PathWin.h"
 #else
 # include "Platform/POSIX/Path.h"
 #endif

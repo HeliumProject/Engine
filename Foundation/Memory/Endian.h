@@ -41,7 +41,7 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
+#if defined( HELIUM_CC_CL ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov eax,DWORD PTR [val];
             _asm mov ebx,DWORD PTR [val+4];
             _asm bswap eax;
@@ -95,7 +95,7 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
+#if defined( HELIUM_CC_CL ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov eax,val;
             _asm bswap eax;
             _asm mov val,eax;
@@ -146,7 +146,7 @@ namespace Helium
     {
         if (endian)
         {
-#if defined( HELIUM_CC_MSC ) && defined ( HELIUM_CPU_X86_32 )
+#if defined( HELIUM_CC_CL ) && defined ( HELIUM_CPU_X86_32 )
             _asm mov ax,val;
             _asm xchg al,ah;
             _asm mov val,ax;

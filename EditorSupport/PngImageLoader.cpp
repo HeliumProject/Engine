@@ -175,7 +175,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
     }
 
     // Handle longjmp() calls that may be made by libpng later on if an error occurs.
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     // XXX TMC: The only C++ object we create locally is the Image::InitParameters struct, which has a non-trivial
     // constructor, but needs only a trivial destructor (no data is cleared or memory freed on destruction).  Either way, we
     // declare it at the top of the function just to be safe.
@@ -190,7 +190,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
 
         return false;
     }
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( pop )
 #endif
 

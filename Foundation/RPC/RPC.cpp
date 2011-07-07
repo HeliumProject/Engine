@@ -1,12 +1,9 @@
 #include "FoundationPch.h"
-#ifdef WIN32
-#include "Platform/Windows/Windows.h"
-#endif
+#include "RPC.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/IPC/Connection.h"
 
-#include "RPC.h"
+#include "Foundation/IPC/Connection.h"
 
 #include <string.h>
 

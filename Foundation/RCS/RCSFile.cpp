@@ -5,9 +5,6 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
 
-#include "Platform/Windows/Windows.h"
-#undef GetUserName
-
 using namespace Helium::RCS;
 
 void File::GetInfo( const GetInfoFlag flags )

@@ -407,5 +407,5 @@ namespace Helium
 }
 
 #if HELIUM_OS_WIN
-#include "Platform/Windows/Atomic.inl"
+#include "Platform/AtomicWin.inl"
 #endif

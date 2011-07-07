@@ -43,7 +43,4 @@ namespace Helium
     }
 
     PLATFORM_API void EnableCPPErrorHandling( bool enable );
-
-    PLATFORM_API void Print(const tchar_t* fmt, ...);
-    PLATFORM_API void Sleep(int millis);
 }

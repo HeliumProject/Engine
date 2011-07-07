@@ -1,6 +1,5 @@
 #include "PlatformPch.h"
-#include "Platform/PlatformUtility.h"
-#include "Platform/Assert.h"
+#include "Runtime.h"
 
 #include <eh.h>
 #include <new.h>
@@ -9,6 +8,11 @@
 
 using namespace Helium;
 using namespace Helium::Platform;
+
+Platform::Type Platform::GetType()
+{
+    return Types::Windows;
+}
 
 static int NewHandler( size_t size )
 {
@@ -74,22 +78,4 @@ void Helium::EnableCPPErrorHandling( bool enable )
     {
         _set_invalid_parameter_handler( NULL );
     }
-}
-
-Platform::Type Platform::GetType()
-{
-    return Types::Windows;
-}
-
-void Helium::Print(const tchar_t* fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    _vtprintf(fmt, args);
-    va_end(args);
-}
-
-void Helium::Sleep(int millis)
-{
-    ::Sleep(millis);
 }

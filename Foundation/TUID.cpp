@@ -1,10 +1,9 @@
 #include "FoundationPch.h"
 #include "TUID.h"
-#include "GUID.h"
 
 #include "Platform/Exception.h"
 #include "Foundation/Memory/Endian.h"
-#include "Platform/Windows/Windows.h"
+#include "Foundation/GUID.h"
 
 #include <time.h>
 #include <iphlpapi.h>

@@ -6,7 +6,7 @@
 // Register types
 //
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 
 /// @defgroup inttypes Integer Types
 /// We use the integer types defined in stdint.h on platforms where it is available.  If it is not available, then we
@@ -397,13 +397,13 @@ typedef uint64_t uint_fast64_t;
 
 //@}
 
-#else  // HELIUM_CC_MSC
+#else  // HELIUM_CC_CL
 
 // Use inttypes.h where available; we simply try to provide relevant type definitions for platforms that don't provide
 // it.
 #include <inttypes.h>
 
-#endif  // HELIUM_CC_MSC
+#endif  // HELIUM_CC_CL
 
 /// @defgroup floattypes Floating-point Types
 /// While these may not be particularly necessary, they do provide some level of consistency with the integer types.

@@ -12,7 +12,7 @@
 //   - HELIUM_CPU_X86_64: 64-bit Intel x86
 
 // Compiler (HELIUM_CC_*) macros:
-// - HELIUM_CC_MSC: Microsoft Visual C++
+// - HELIUM_CC_CL: Microsoft Visual C++
 // - HELIUM_CC_GCC: GCC
 // - HELIUM_CC_SNC: SNC (PS3)
 
@@ -38,7 +38,7 @@
 # if ( _MSC_FULL_VER < 150030729 )
 #  error Helium requires at least VS2008 with SP1 applied to compile.  Please update your compiler.
 # endif
-# define HELIUM_CC_MSC 1
+# define HELIUM_CC_CL 1
 #elif defined( __GNUC__ )
 # define HELIUM_CC_GCC 1
 #elif defined( __SNC__ )
@@ -47,16 +47,16 @@
 # error Unsupported compiler.
 #endif
 
-#if HELIUM_CC_MSC
-# include "Platform/Msc/Compiler.h"
+#if HELIUM_CC_CL
+# include "Platform/CompilerCl.h"
 #elif HELIUM_CC_GCC
-# include "Platform/Gcc/Compiler.h"
+# include "Platform/CompilerGcc.h"
 #endif
 
 #if HELIUM_CPU_X86
-# include "Platform/X86/Cpu.h"
+# include "Platform/CpuX86.h"
 #endif
 
 #if HELIUM_OS_WIN
-# include "Platform/Windows/Platform.h"
+# include "Platform/PlatformWin.h"
 #endif

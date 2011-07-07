@@ -268,7 +268,7 @@ namespace Helium
 /// @see MemoryMove(), ArrayCopy()
 void Helium::MemoryCopy( void* pDest, const void* pSource, size_t size )
 {
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     memcpy_s( pDest, size, pSource, size );
 #else
     memcpy( pDest, pSource, size );
@@ -284,7 +284,7 @@ void Helium::MemoryCopy( void* pDest, const void* pSource, size_t size )
 /// @see MemoryCopy(), ArrayMove()
 void Helium::MemoryMove( void* pDest, const void* pSource, size_t size )
 {
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     memmove_s( pDest, size, pSource, size );
 #else
     memmove( pDest, pSource, size );
@@ -621,7 +621,7 @@ int Helium::StringFormat( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pF
     return result;
 }
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 // We don't use the secure CRT versions of vsnprintf() and _vsnwprintf() here since we can't use them to compute the
 // size that would be needed for a format string if it doesn't fit (vsnprintf_s() and _vsnwprintf_s() simply return -1
 // if the string doesn't fit, even if _TRUNCATE is specified for the character count).
@@ -665,7 +665,7 @@ int Helium::StringFormatVa( wchar_t* pBuffer, size_t bufferSize, const wchar_t* 
     int result = _vsnwprintf( pBuffer, bufferSize, pFormat, argList );
     return result;
 }
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( pop )
 #endif
 

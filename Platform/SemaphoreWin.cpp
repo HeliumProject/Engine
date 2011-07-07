@@ -1,8 +1,9 @@
 #include "PlatformPch.h"
-#include "Platform/Semaphore.h"
-#include "Platform/Error.h"
-#include "Platform/PlatformUtility.h"
+#include "Semaphore.h"
+
 #include "Platform/Assert.h"
+#include "Platform/Error.h"
+#include "Platform/Print.h"
 
 using namespace Helium;
 

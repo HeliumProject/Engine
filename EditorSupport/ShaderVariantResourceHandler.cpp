@@ -102,13 +102,13 @@ bool ShaderVariantResourceHandler::CacheResource(
     ++pVariantNameString;
     int parseResult;
 #if HELIUM_UNICODE
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     parseResult = swscanf_s( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
 #else
     parseResult = swscanf( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
 #endif
 #else
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
     parseResult = sscanf_s( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
 #else
     parseResult = sscanf( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );

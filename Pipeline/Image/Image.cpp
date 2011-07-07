@@ -2,7 +2,6 @@
 #include "Image.h"
 
 #include "Platform/Exception.h"
-#include "Platform/Windows/Windows.h"
 
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"

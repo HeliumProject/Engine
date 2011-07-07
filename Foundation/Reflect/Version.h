@@ -16,8 +16,6 @@ namespace Helium
             Version(const tchar_t* source, const tchar_t* sourceVersion);
 
             virtual bool IsCurrent();
-            bool ConvertToInts( int* ints );
-            void DetectVersion();
 
             tstring m_Source;
             tstring m_SourceVersion;

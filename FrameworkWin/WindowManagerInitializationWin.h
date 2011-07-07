@@ -1,18 +1,7 @@
-//----------------------------------------------------------------------------------------------------------------------
-// WindowManagerInitializationWin.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
-#define HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H
 
 #include "FrameworkWin/FrameworkWin.h"
 #include "Framework/WindowManagerInitialization.h"
-
-#include "Platform/Windows/Windows.h"
 
 namespace Helium
 {
@@ -37,5 +26,3 @@ namespace Helium
         int m_nCmdShow;
     };
 }
-
-#endif  // HELIUM_FRAMEWORK_WIN_WINDOW_MANAGER_INITIALIZATION_WIN_H

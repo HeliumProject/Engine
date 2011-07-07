@@ -2,12 +2,10 @@
 
 #include "Condition.h"
 
-#ifdef __GNUC__
-# include "POSIX/Pipe.h"
-#elif defined( WIN32 )
-# include "Windows/Pipe.h"
+#ifdef HELIUM_OS_WIN
+# include "Platform/PipeWin.h"
 #else
-#  pragma TODO( "Emit an error here..." )
+# include "POSIX/Pipe.h"
 #endif
 
 const static uint32_t IPC_PIPE_BUFFER_SIZE = 8192;

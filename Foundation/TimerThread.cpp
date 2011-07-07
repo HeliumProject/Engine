@@ -1,8 +1,6 @@
 #include "FoundationPch.h"
 #include "TimerThread.h"
 
-#include "Platform/PlatformUtility.h"
-
 using namespace Helium;
 
 TimerThread::~TimerThread()
@@ -15,7 +13,6 @@ TimerThread::~TimerThread()
     }
 }
 
-
 void TimerThread::ThreadEntryPoint( TimerThreadArgs& args )
 {
     HELIUM_ASSERT( args.m_TimerInstance != NULL );
@@ -23,7 +20,7 @@ void TimerThread::ThreadEntryPoint( TimerThreadArgs& args )
 
     while( args.m_TimerInstance->IsAlive() )
     {
-        Helium::Sleep( args.m_Interval );
+        Thread::Sleep( args.m_Interval );
         args.m_TimerInstance->Fire();
     }
 }

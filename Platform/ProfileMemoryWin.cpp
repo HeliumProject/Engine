@@ -1,11 +1,8 @@
 #include "PlatformPch.h"
-#include "Platform/Windows/MemoryProfiler.h"
+#include "ProfileMemory.h"
 
+#include "Platform/Print.h"
 #include "Platform/Profile.h"
-#include "Platform/PlatformUtility.h"
-#include "Platform/Windows/Windows.h"
-
-#include <exception>
 
 using namespace Helium;
 using namespace Helium::Profile; 

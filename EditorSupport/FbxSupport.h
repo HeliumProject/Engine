@@ -17,7 +17,7 @@
 #include "Math/SimdQuat.h"
 #include "GraphicsTypes/VertexTypes.h"
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( push )
 #pragma warning( disable : 4100 ) // 'identifier' : unreferenced formal parameter
 #pragma warning( disable : 4512 ) // 'class' : assignment operator could not be generated
@@ -25,7 +25,7 @@
 
 #include <fbxsdk.h>
 
-#if HELIUM_CC_MSC
+#if HELIUM_CC_CL
 #pragma warning( pop )
 #endif
 

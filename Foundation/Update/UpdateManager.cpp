@@ -1,7 +1,7 @@
 #include "FoundationPch.h"
-#include "Foundation/Update/UpdateManager.h"
+#include "UpdateManager.h"
 
-#include "Platform/PlatformUtility.h"
+#include "Platform/Thread.h"
 
 using namespace Helium;
 
@@ -74,7 +74,7 @@ void UpdateManager::Start()
                 }
 
                 // yield
-                Helium::Sleep( 0 );
+                Thread::Sleep( 0 );
             }
         }
 

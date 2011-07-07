@@ -18,13 +18,6 @@
 #define abs64 labs
 #endif
 
-// Define the memory heap for the current module and include the "new"/"delete" operator implementations.
-HELIUM_DEFINE_DEFAULT_MODULE_HEAP( Foundation );
-
-#if HELIUM_SHARED
-#include "Platform/NewDelete.h"
-#endif
-
 using namespace Helium;
 using namespace Helium::Profile; 
 

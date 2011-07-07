@@ -277,16 +277,25 @@ project "Platform"
 	configuration "windows"
 		excludes
 		{
+			"Platform/*Posix.*",
 			"Platform/*Mac.*",
 			"Platform/*Lin.*",
 		}
 	configuration "macosx"
+		files
+		{
+			"Platform/*Posix.*",
+		}
 		excludes
 		{
 			"Platform/*Win.*",
 			"Platform/*Lin.*",
 		}
 	configuration "linux"
+		files
+		{
+			"Platform/*Posix.*",
+		}
 		excludes
 		{
 			"Platform/*Win.*",

@@ -10,8 +10,8 @@
 #include "Foundation/Undo/Command.h"
 #include "Editor/ArtProvider.h"
 
-#include "Pipeline/SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
-#include "Pipeline/SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
+#include "SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
+#include "SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
 
 #include "Platform/Process.h"
 

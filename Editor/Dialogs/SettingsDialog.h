@@ -2,8 +2,7 @@
 
 #include <map>
 
-#include "Pipeline/SettingsManager.h"
-
+#include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Inspect/Interpreter.h"
 

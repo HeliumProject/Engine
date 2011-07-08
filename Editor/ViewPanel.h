@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Foundation/SettingsManager.h"
+
 #include "Editor/EditorGenerated.h"
 #include "Editor/ViewCanvas.h"
-
-#include "Pipeline/SettingsManager.h"
 
 namespace Helium
 {

@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "Editor/SceneOutliner.h"
-#include "Pipeline/SceneGraph/Scene.h"
-#include "Pipeline/SceneGraph/SceneManager.h"
+#include "SceneGraph/Scene.h"
+#include "SceneGraph/SceneManager.h"
 #include "Foundation/Undo/PropertyCommand.h"
 
 using namespace Helium;

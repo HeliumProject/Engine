@@ -6,7 +6,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 
-#include "Pipeline/SceneGraph/DeviceManager.h"
+#include "SceneGraph/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 

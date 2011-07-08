@@ -431,11 +431,6 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
-	flags
-	{
-		"NoRTTI",
-	}
-
 	files
 	{
 		baseDirectory .. "/" .. moduleName .. "/*",
@@ -445,6 +440,12 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
 
 	Helium.DoDefaultProjectSettings()
+
+	configuration "not Debug"
+		flags
+		{
+			"NoRTTI",
+		}
 
 	configuration "not windows"
 		kind "StaticLib"

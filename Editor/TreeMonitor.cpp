@@ -1,9 +1,9 @@
 #include "EditorPch.h"
 #include "TreeMonitor.h"
 
-#include "Pipeline/SceneGraph/Scene.h"
-#include "Pipeline/SceneGraph/SceneManager.h"
-#include "Pipeline/SceneGraph/SceneNode.h"
+#include "SceneGraph/Scene.h"
+#include "SceneGraph/SceneManager.h"
+#include "SceneGraph/SceneNode.h"
 
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
 

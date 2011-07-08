@@ -643,6 +643,34 @@ project "FrameworkWin"
 			"EditorSupport",
 		}
 
+project "SceneGraph"
+	uuid "4EAB668E-2382-40d9-AA6B-7FB0BB163E7F"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "SceneGraph", "SCENE_GRAPH" )
+
+	configuration "SharedLib"
+		links
+		{
+			"Platform",
+			"Math",
+			"Foundation",
+			"Engine",
+			"EngineJobs",
+			"Windowing",
+			"Rendering",
+			"GraphicsTypes",
+			"GraphicsJobs",
+			"Graphics",
+			"Framework",
+			"WindowingWin",
+			"RenderingD3D9",
+			"PcSupport",
+			"PreprocessingPc",
+			"EditorSupport",
+			"d3d9",
+			"d3dx9",
+		}
+
 project "Pipeline"
 	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
 	language "C++"
@@ -705,6 +733,7 @@ project "Pipeline"
 			"PcSupport",
 			"PreprocessingPc",
 			"EditorSupport",
+			"SceneGraph",
 			"nvtt",
 			"tiff",
 			"d3d9",
@@ -758,6 +787,7 @@ project "Editor"
 		"PcSupport",
 		"PreprocessingPc",
 		"EditorSupport",
+		"SceneGraph",
 		"Pipeline",
 		"Expat",
 		"zlib",

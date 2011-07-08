@@ -1,9 +1,8 @@
 #pragma once
 
+#include "Foundation/SettingsManager.h"
+
 #include "Editor/API.h"
-#include "Pipeline/Settings.h"
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
 
 class wxAuiManager;
 

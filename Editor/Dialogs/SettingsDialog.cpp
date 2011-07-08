@@ -4,8 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Pipeline/Settings.h"
-
+#include "Foundation/SettingsManager.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Helium;

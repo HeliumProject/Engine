@@ -3,7 +3,7 @@
 #include "DirectoryPanel.h"
 
 #include "MainFrame.h"
-#include "Pipeline/SceneGraph/SceneManager.h"
+#include "SceneGraph/SceneManager.h"
 #include "EditorIDs.h"
 
 using namespace Helium;
@@ -25,22 +25,6 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
     hierarchyTree->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
     m_HierarchyPanel->GetSizer()->Add( hierarchyTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( hierarchyTree );
-
-    // Entities
-    m_EntityOutline = new EntityAssetOutliner( m_SceneManager );
-    SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_EntitiesPanel, wxID_ANY );
-    entityTree->SetHelpText( TXT( "This is the entity tree, it allows you to see all the entities placed in the scene." ) );
-    entityTree->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
-    m_EntitiesPanel->GetSizer()->Add( entityTree, 1, wxEXPAND );
-    m_TreeMonitor->AddTree( entityTree );
-
-    // Types
-    m_TypeOutline = new NodeTypeOutliner( m_SceneManager );
-    SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_TypesPanel, EventIds::ID_TypeOutlineControl );
-    typeTree->SetHelpText( TXT( "This is the type tree, it allows you to see all the different types in the scene." ) );
-    typeTree->SetImageList( GlobalFileIconsTable().GetSmallImageList() );
-    m_TypesPanel->GetSizer()->Add( typeTree, 1, wxEXPAND );
-    m_TreeMonitor->AddTree( typeTree );
 #endif
 
 }
@@ -48,8 +32,6 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 DirectoryPanel::~DirectoryPanel()
 {
 #ifndef EDITOR_SCENE_DISABLE_OUTLINERS
-    delete m_TypeOutline;
-    delete m_EntityOutline;
     delete m_HierarchyOutline;
 #endif
 }
@@ -57,8 +39,6 @@ DirectoryPanel::~DirectoryPanel()
 void DirectoryPanel::SaveState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
 {
 #ifndef EDITOR_SCENE_DISABLE_OUTLINERS
-    m_TypeOutline->SaveState( typesState );
-    m_EntityOutline->SaveState( entityState );
     m_HierarchyOutline->SaveState( hierarchyState );
 #endif
 }
@@ -66,8 +46,6 @@ void DirectoryPanel::SaveState( SceneOutlinerState& hierarchyState, SceneOutline
 void DirectoryPanel::RestoreState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
 {
 #ifndef EDITOR_SCENE_DISABLE_OUTLINERS
-    m_TypeOutline->RestoreState( typesState );
-    m_EntityOutline->RestoreState( entityState );
     m_HierarchyOutline->RestoreState( hierarchyState );
 #endif
 }

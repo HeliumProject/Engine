@@ -2,9 +2,9 @@
 
 #include "Platform/Types.h"
 
-#include "Pipeline/SceneGraph/Scene.h"
-#include "Pipeline/SceneGraph/SceneManager.h"
-#include "Pipeline/SceneGraph/Selection.h"
+#include "SceneGraph/Scene.h"
+#include "SceneGraph/SceneManager.h"
+#include "SceneGraph/Selection.h"
 #include "Foundation/Reflect/Object.h"
 
 #include "Editor/API.h"

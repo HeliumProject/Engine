@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Pipeline/SceneGraph/PropertiesManager.h"
-#include "Pipeline/SceneGraph/PropertiesGenerator.h"
+#include "SceneGraph/PropertiesManager.h"
+#include "SceneGraph/PropertiesGenerator.h"
 
 #include "Editor/CommandQueue.h"
 #include "Editor/EditorGenerated.h"

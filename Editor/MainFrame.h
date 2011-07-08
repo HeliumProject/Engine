@@ -1,23 +1,14 @@
 #pragma once
 
-#include "Editor/EditorGenerated.h"
+#include "Foundation/SettingsManager.h"
 
-#include "DirectoryPanel.h"
-#include "HelpPanel.h"
-#include "ProjectPanel.h"
-#include "LayersPanel.h"
-#include "PropertiesPanel.h"
-#include "ToolbarPanel.h"
-#include "ViewPanel.h"
+#include "SceneGraph/PropertiesManager.h"
+#include "SceneGraph/Scene.h"
+#include "SceneGraph/SceneManager.h"
+
+#include "Pipeline/Project.h"
 
 #include "Editor/Vault/VaultPanel.h"
-
-#include "Pipeline/SettingsManager.h"
-
-#include "Pipeline/SceneGraph/PropertiesManager.h"
-#include "Pipeline/SceneGraph/Scene.h"
-#include "Pipeline/SceneGraph/SceneManager.h"
-
 #include "Editor/DragDrop/DropTarget.h"
 
 #include "Editor/MRU/MenuMRU.h"
@@ -25,10 +16,16 @@
 #include "Editor/MessageDisplayer.h"
 #include "Editor/Dialogs/FileDialogDisplayer.h"
 
+#include "Editor/EditorGenerated.h"
+#include "Editor/DirectoryPanel.h"
+#include "Editor/HelpPanel.h"
+#include "Editor/ProjectPanel.h"
+#include "Editor/LayersPanel.h"
+#include "Editor/PropertiesPanel.h"
+#include "Editor/ToolbarPanel.h"
+#include "Editor/ViewPanel.h"
 #include "Editor/Inspect/TreeCanvas.h"
 #include "Editor/Inspect/StripCanvas.h"
-
-#include "Pipeline/Project.h"
 
 namespace Helium
 {
@@ -94,34 +91,31 @@ namespace Helium
         private:
             // Stores information about the state of each outliner for each scene
             // that is open.  Restores the state when switching between scenes.
-            M_OutlinerStates            m_OutlinerStates;
+            M_OutlinerStates					m_OutlinerStates;
 
-            HelpPanel*                  m_HelpPanel;
-            ProjectPanel*               m_ProjectPanel;
-            LayersPanel*                m_LayersPanel;
-            ViewPanel*                  m_ViewPanel;
-            ToolbarPanel*               m_ToolbarPanel;
-            DirectoryPanel*             m_DirectoryPanel;
-            PropertiesPanel*            m_PropertiesPanel;
+            HelpPanel*							m_HelpPanel;
+            ProjectPanel*						m_ProjectPanel;
+            LayersPanel*						m_LayersPanel;
+            ViewPanel*							m_ViewPanel;
+            ToolbarPanel*						m_ToolbarPanel;
+            DirectoryPanel*						m_DirectoryPanel;
+            PropertiesPanel*					m_PropertiesPanel;
 
-            VaultPanel*                 m_VaultPanel;
+            VaultPanel*							m_VaultPanel;
 
-            ProjectPtr                  m_Project;
+            ProjectPtr							m_Project;
 
-            MessageDisplayer            m_MessageDisplayer;
-            FileDialogDisplayer         m_FileDialogDisplayer;
-            DocumentManager             m_DocumentManager;
-            SceneGraph::SceneManager    m_SceneManager;
+            MessageDisplayer					m_MessageDisplayer;
+            FileDialogDisplayer					m_FileDialogDisplayer;
+            DocumentManager						m_DocumentManager;
+            SceneGraph::SceneManager			m_SceneManager;
+            SettingsManager*		m_SettingsManager;
 
-            SettingsManager*            m_SettingsManager;
+            MenuMRUPtr							m_MenuMRU;
+            M_IDToColorMode						m_ColorModeLookup;
+            SceneGraph::V_HierarchyNodeDumbPtr	m_OrderedContextItems;
 
-            MenuMRUPtr                  m_MenuMRU;
-            M_IDToColorMode             m_ColorModeLookup;
-
-            //context items ordered by name  
-            SceneGraph::V_HierarchyNodeDumbPtr m_OrderedContextItems;
-
-            TreeMonitor                 m_TreeMonitor;
+            TreeMonitor							m_TreeMonitor;
 
         private:
             bool ValidateDrag( const Editor::DragArgs& args );
@@ -212,7 +206,6 @@ namespace Helium
             void OnSettings( wxCommandEvent& event );
 
             void OnManifestContextMenu(wxCommandEvent& event);
-            void OnTypeContextMenu(wxCommandEvent& event);
 
             void OnSelectTool( wxCommandEvent& event );
             void OnTranslateTool( wxCommandEvent& event );
@@ -237,13 +230,8 @@ namespace Helium
             void SelectSimilarItemsInScene( wxCommandEvent& event );
 
             void OpenManifestContextMenu( const SceneGraph::SelectArgs& args );
-            void OpenTypeContextMenu( const SceneGraph::SelectArgs& args );
-
-            void SetupTypeContextMenu( const SceneGraph::HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  uint32_t& numMenuItems );
-            void SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* entityMenu, uint32_t& numMenuItems );
 
             static bool SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs ); 
-            static bool SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph::SceneNodeType* rhs );
         };
     }
 }

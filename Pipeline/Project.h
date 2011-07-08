@@ -8,18 +8,6 @@
 
 namespace Helium
 {
-    struct TestStructure
-    {
-        TestStructure();
-
-        float32_t           m_Float32;
-        tstring             m_String;
-        Reflect::ObjectPtr  m_Object;
-
-        REFLECT_DECLARE_BASE_STRUCTURE( TestStructure );
-        static void PopulateComposite( Reflect::Composite& comp );
-    };
-
     class PIPELINE_API Project : public Reflect::Object
     {
     public:
@@ -49,8 +37,6 @@ namespace Helium
         Helium::Attribute< Path >    a_Path;
         Helium::Event< const Path& > e_PathAdded;
         Helium::Event< const Path& > e_PathRemoved;
-
-        TestStructure m_Test;
 
         mutable DocumentObjectChangedSignature::Event e_HasChanged;
 

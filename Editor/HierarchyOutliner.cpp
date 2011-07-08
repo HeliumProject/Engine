@@ -3,8 +3,8 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Controls/Tree/SortTreeCtrl.h"
-#include "Pipeline/SceneGraph/ParentCommand.h"
-#include "Pipeline/SceneGraph/Scene.h"
+#include "SceneGraph/ParentCommand.h"
+#include "SceneGraph/Scene.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -117,7 +117,7 @@ void HierarchyOutliner::AddHierarchyNode( SceneGraph::HierarchyNode* node )
 
     node->AddParentChangedListener( ParentChangedSignature::Delegate ( this, &HierarchyOutliner::ParentChanged ) );
 
-    AddItem( parentItem, node->GetName(), node->GetImageIndex(), new HierarchyOutlinerItemData( node ), node->IsSelected() );
+    AddItem( parentItem, node->GetName(), -1, new HierarchyOutlinerItemData( node ), node->IsSelected() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

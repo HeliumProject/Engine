@@ -3,28 +3,12 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_BASE_STRUCTURE( TestStructure );
-
-void TestStructure::PopulateComposite( Reflect::Composite& comp )
-{
-    comp.AddField( &This::m_Float32, TXT( "Float" ) );
-    comp.AddField( &This::m_String, TXT( "String" ) );
-    comp.AddField( &This::m_Object, TXT( "Object" ) );
-}
-
-TestStructure::TestStructure()
-: m_Float32( 0.f )
-{
-
-}
-
 REFLECT_DEFINE_OBJECT( Project );
 
 void Project::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
-    //comp.AddStructureField( &This::m_Test, TXT( "m_Test" ) );
 }
 
 Project::Project( const Path& path )

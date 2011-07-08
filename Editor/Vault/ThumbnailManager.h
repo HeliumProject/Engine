@@ -2,7 +2,7 @@
 
 #include "Platform/Mutex.h"
 
-#include "Pipeline/SceneGraph/DeviceManager.h"
+#include "SceneGraph/DeviceManager.h"
 
 #include "Editor/Vault/Thumbnail.h"
 #include "Editor/Vault/ThumbnailLoader.h"

@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Editor/EditorGenerated.h"
+#include "SceneGraph/SceneManager.h"
 
-#include "Pipeline/SceneGraph/SceneManager.h"
-#include "Editor/EntityAssetOutliner.h"
+#include "Editor/EditorGenerated.h"
 #include "Editor/HierarchyOutliner.h"
-#include "Editor/NodeTypeOutliner.h"
 #include "Editor/TreeMonitor.h"
 
 namespace Helium
@@ -22,11 +20,9 @@ namespace Helium
             void RestoreState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState );
 
         private:
-            SceneGraph::SceneManager*  m_SceneManager;
-            TreeMonitor*         m_TreeMonitor;
-            EntityAssetOutliner* m_EntityOutline;
-            HierarchyOutliner*   m_HierarchyOutline;
-            NodeTypeOutliner*    m_TypeOutline;
+            SceneGraph::SceneManager*	m_SceneManager;
+            TreeMonitor*				m_TreeMonitor;
+            HierarchyOutliner*			m_HierarchyOutline;
         };
     }
 }

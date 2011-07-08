@@ -1,11 +1,10 @@
 #pragma once
 
-#include "VaultMenuIDs.h"
-#include "VaultSearchQuery.h"
-
-#include "Pipeline/Settings.h"
-
+#include "Foundation/SettingsManager.h"
 #include "Foundation/Container/OrderedSet.h"
+
+#include "Editor/Vault/VaultMenuIDs.h"
+#include "Editor/Vault/VaultSearchQuery.h"
 #include "Editor/Settings/WindowSettings.h"
 
 namespace Helium

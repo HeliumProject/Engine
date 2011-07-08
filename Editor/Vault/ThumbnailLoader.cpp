@@ -4,8 +4,8 @@
 #include "Foundation/File/Directory.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/SceneGraph/DeviceManager.h"
-#include "Pipeline/SceneGraph/Render.h"
+#include "SceneGraph/DeviceManager.h"
+#include "SceneGraph/Render.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

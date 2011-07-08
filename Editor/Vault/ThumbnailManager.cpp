@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
-#include "Pipeline/SceneGraph/DeviceManager.h"
+#include "SceneGraph/DeviceManager.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

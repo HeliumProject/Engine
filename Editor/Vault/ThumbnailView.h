@@ -11,7 +11,7 @@
 #include "Math/FpuMatrix4.h"
 #include "Math/FpuFrustum.h"
 
-#include "Pipeline/SceneGraph/DeviceManager.h"
+#include "SceneGraph/DeviceManager.h"
 
 namespace Helium
 {

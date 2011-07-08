@@ -1,10 +1,10 @@
 #include "PipelinePch.h"
-#include "Pipeline/Importers/OBJImporter.h"
-
-#include "Pipeline/SceneGraph/Mesh.h"
-#include "Pipeline/SceneGraph/Shader.h"
+#include "OBJImporter.h"
 
 #include "Platform/String.h"
+
+#include "SceneGraph/Mesh.h"
+#include "SceneGraph/Shader.h"
 
 #include <map>
 

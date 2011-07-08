@@ -5,20 +5,17 @@
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
+#include "SceneGraph/Scene.h"
+#include "SceneGraph/TransformManipulator.h"
+#include "SceneGraph/CurveCreateTool.h"
+#include "SceneGraph/CurveEditTool.h"
+#include "SceneGraph/DuplicateTool.h"
+#include "SceneGraph/LocatorCreateTool.h"
+#include "SceneGraph/ScaleManipulator.h"
+#include "SceneGraph/RotateManipulator.h"
+#include "SceneGraph/TranslateManipulator.h"
+
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/SceneGraph/Scene.h"
-#include "Pipeline/SceneGraph/InstanceSet.h"
-#include "Pipeline/SceneGraph/EntityInstanceType.h"
-#include "Pipeline/SceneGraph/EntitySet.h"
-#include "Pipeline/SceneGraph/TransformManipulator.h"
-#include "Pipeline/SceneGraph/CurveCreateTool.h"
-#include "Pipeline/SceneGraph/CurveEditTool.h"
-#include "Pipeline/SceneGraph/DuplicateTool.h"
-#include "Pipeline/SceneGraph/EntityInstanceCreateTool.h"
-#include "Pipeline/SceneGraph/LocatorCreateTool.h"
-#include "Pipeline/SceneGraph/ScaleManipulator.h"
-#include "Pipeline/SceneGraph/RotateManipulator.h"
-#include "Pipeline/SceneGraph/TranslateManipulator.h"
 
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
@@ -94,16 +91,12 @@ class ContextCallbackData: public wxObject
 public:
     ContextCallbackData()
         : m_ContextCallbackType( ContextCallbackTypes::All )
-        , m_NodeType( NULL )
         , m_Nodes( NULL )
-        , m_InstanceSet( NULL )
     {
 
     }
 
     ContextCallbackTypes::ContextCallbackType m_ContextCallbackType;
-    const SceneGraph::SceneNodeType* m_NodeType;
-    const SceneGraph::InstanceSet* m_InstanceSet;
     SceneGraph::SceneNode* m_Nodes;
 };
 
@@ -172,7 +165,6 @@ MainFrame::MainFrame( SettingsManager* settingsManager, wxWindow* parent, wxWind
     m_ToolbarPanel->m_DuplicateToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_LocatorToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_VolumeToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
-    m_ToolbarPanel->m_EntityToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
     m_ToolbarPanel->m_CurveToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );   
     m_ToolbarPanel->m_CurveEditToolButton->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainFrame::OnToolSelected ), NULL, this );
 
@@ -1283,8 +1275,6 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
         case EventIds::ID_ViewShowAllGeometry:
             {
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, false ) );
                 break;
             }
 
@@ -1296,7 +1286,6 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
         case EventIds::ID_ViewShowSelectedGeometry:
             {
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
                 break;
             }
 
@@ -1321,8 +1310,6 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
         case EventIds::ID_ViewHideAllGeometry:
             {
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, false ) );
                 break;
             }
 
@@ -1334,7 +1321,6 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
         case EventIds::ID_ViewHideSelectedGeometry:
             {
-                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
                 break;
             }
 
@@ -1589,33 +1575,19 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
             m_DirectoryPanel->RestoreState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
         }
 
-        // Iterate over the node types looking for the layer node type
-        HM_StrToSceneNodeTypeSmartPtr::const_iterator nodeTypeItr = args.m_Scene->GetNodeTypesByName().begin();
-        HM_StrToSceneNodeTypeSmartPtr::const_iterator nodeTypeEnd = args.m_Scene->GetNodeTypesByName().end();
-        for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
+        //Begin batching
+        m_LayersPanel->BeginBatch();
+
+        // iterate over all the layer instances and add them to the layer grid UI.
+        for ( HM_SceneNodeSmartPtr::const_iterator instItr = args.m_Scene->GetNodes().begin(), instEnd = args.m_Scene->GetNodes().end(); instItr != instEnd; ++instItr )
         {
-            const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
-            if ( nodeType->GetInstanceClass()->IsType( Reflect::GetClass< SceneGraph::Layer >() ) )
-            {
-                // Now that we have the layer node type, iterate over all the layer instances and
-                // add them to the layer grid UI.
-                HM_SceneNodeSmartPtr::const_iterator instItr = nodeTypeItr->second->GetInstances().begin();
-                HM_SceneNodeSmartPtr::const_iterator instEnd = nodeTypeItr->second->GetInstances().end();
-
-                //Begin batching
-                m_LayersPanel->BeginBatch();
-
-                for ( ; instItr != instEnd; ++instItr )
-                {
-                    const SceneNodePtr& dependNode    = instItr->second;
-                    SceneGraph::Layer*        lunaLayer     = Reflect::AssertCast< SceneGraph::Layer >( dependNode );
-                    m_LayersPanel->AddLayer( lunaLayer );
-                }
-
-                //End batching
-                m_LayersPanel->EndBatch();
-            } 
+            const SceneNodePtr& dependNode    = instItr->second;
+            SceneGraph::Layer*        lunaLayer     = Reflect::AssertCast< SceneGraph::Layer >( dependNode );
+            m_LayersPanel->AddLayer( lunaLayer );
         }
+
+        //End batching
+        m_LayersPanel->EndBatch();
 
 #pragma TODO( "Change the selection or display changes in the Project view" )
 
@@ -1705,10 +1677,6 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     else if ( event.GetId() == m_ToolbarPanel->m_ScaleButton->GetId() )
     {
         m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::ScaleManipulator( m_SettingsManager, ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()));
-    }
-    else if ( event.GetId() == m_ToolbarPanel->m_EntityToolButton->GetId() )
-    {
-        m_SceneManager.GetCurrentScene()->SetTool(new SceneGraph::EntityInstanceCreateTool( m_SceneManager.GetCurrentScene(), &m_ToolbarPanel->GetPropertiesGenerator()) );
     }
     else if ( event.GetId() == m_ToolbarPanel->m_LocatorToolButton->GetId() )
     {
@@ -1872,10 +1840,6 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
                 break;
             }
         }
-        else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::EntityInstanceCreateTool >() )
-        {
-            selectedTool = m_ToolbarPanel->m_EntityToolButton->GetId();
-        }
         else if ( args.m_NewTool->GetClass() == Reflect::GetClass< SceneGraph::LocatorCreateTool >() )
         {
             selectedTool = m_ToolbarPanel->m_LocatorToolButton->GetId();
@@ -1997,8 +1961,8 @@ void MainFrame::OnSelectAll( wxCommandEvent& event )
 
     OS_SceneNodeDumbPtr selection;
 
-    HM_SceneNodeDumbPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
-    HM_SceneNodeDumbPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
+    HM_SceneNodeSmartPtr::const_iterator itr = m_SceneManager.GetCurrentScene()->GetNodes().begin();
+    HM_SceneNodeSmartPtr::const_iterator end = m_SceneManager.GetCurrentScene()->GetNodes().end();
     for ( ; itr != end; ++itr )
     {
         SceneGraph::SceneNode* sceneNode = itr->second;
@@ -2289,60 +2253,6 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Opens the context menu with items separated by type
-//
-void MainFrame::OnTypeContextMenu(wxCommandEvent &event)
-{
-    ContextCallbackData* data = static_cast<ContextCallbackData*>(event.m_callbackUserData);
-    OS_SceneNodeDumbPtr newSelection;
-
-    switch( data->m_ContextCallbackType )
-    {
-    case ContextCallbackTypes::All:
-        {
-            const HM_SceneNodeSmartPtr& instances( data->m_NodeType->GetInstances() );
-
-            if( !instances.empty() )
-            {    
-                HM_SceneNodeSmartPtr::const_iterator itr = instances.begin();
-                HM_SceneNodeSmartPtr::const_iterator end = instances.end();
-                for( ; itr != end; ++itr )
-                {
-                    newSelection.Append( itr->second );
-                }              
-            }
-            break;
-        }
-
-    case ContextCallbackTypes::Item:
-        {
-            newSelection.Append( static_cast< SceneGraph::HierarchyNode* >( data->m_Nodes ) );
-            break;
-        }
-
-    case ContextCallbackTypes::Instance:
-        {
-            const S_InstanceDumbPtr& instances( data->m_InstanceSet->GetInstances() );
-
-            S_InstanceDumbPtr::const_iterator itr = instances.begin();
-            S_InstanceDumbPtr::const_iterator end = instances.end();
-
-            for( ; itr != end; ++itr )
-            {
-                newSelection.Append( *itr );
-            }
-
-            break;
-        }
-    }
-
-    if( !newSelection.Empty() )
-    {
-        m_SceneManager.GetCurrentScene()->Push( m_SceneManager.GetCurrentScene()->GetSelection().SetItems( newSelection ) );
-    }
-}
-
 void MainFrame::OnSelectTool( wxCommandEvent& event )
 {
     if ( !m_ViewPanel->HasFocus() )
@@ -2504,12 +2414,6 @@ void MainFrame::Select(const SelectArgs& args)
         //if we are using manifest select
         switch( args.m_Mode )
         {
-        case SelectionModes::Type:
-            {
-                OpenTypeContextMenu( args );
-                break;
-            }
-
         case SelectionModes::Manifest:
             {
                 OpenManifestContextMenu( args );      
@@ -2645,207 +2549,8 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Opens up a context menu that allows selection basd on type
-//
-void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
-{
-    wxMenu contextMenu;
-    uint32_t numMenuItems = 0;
-
-    // simple select functionality
-    if (m_SceneManager.GetCurrentScene()->HasHighlighted())
-    {
-        // need to provide the select args if needed
-        DataObject<const SelectArgs*>* data = new DataObject<const SelectArgs*> ( &args );
-        GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectItemInScene ), data, this );
-        contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
-        ++numMenuItems;
-    }
-
-    if (!m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Empty())
-    {
-        GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectSimilarItemsInScene ), NULL, this );
-        contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select Similar" ) );
-        ++numMenuItems;
-    }
-
-    if (numMenuItems > 0)
-    {
-        contextMenu.AppendSeparator();
-    }
-
-    // populate this with the appropriate types
-    const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes = m_SceneManager.GetCurrentScene()->GetNodeTypesByName();
-
-    if( !sceneNodeTypes.empty() )
-    {   
-        SetupTypeContextMenu( sceneNodeTypes, contextMenu, numMenuItems );
-    }
-
-    // set the current event handler on the context menu and pop it up
-    contextMenu.SetEventHandler( GetEventHandler() );
-    PopupMenu( &contextMenu );
-
-    // this must be done piecemeal because the range version of Disconnect() will only disconnect the ranged version Connect()
-    for ( uint32_t i = EventIds::ID_SelectContextMenu; i < EventIds::ID_SelectContextMenu + numMenuItems; i++ )
-    {
-        // clean up, disconnect any id that was set up for any of the items
-        GetEventHandler()->Disconnect( i, wxEVT_COMMAND_MENU_SELECTED );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Populates the context menu with selections from the various types
-//
-void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes, wxMenu& contextMenu, uint32_t& numMenuItems )
-{
-    V_SceneNodeTypeDumbPtr orderedTypes;
-
-    {
-        HM_StrToSceneNodeTypeSmartPtr::const_iterator itr = sceneNodeTypes.begin();
-        HM_StrToSceneNodeTypeSmartPtr::const_iterator end = sceneNodeTypes.end();
-
-        for( ;itr != end ;++itr )
-        {
-            orderedTypes.push_back( itr->second );
-        }
-    }
-
-    V_SceneNodeTypeDumbPtr::iterator itr = orderedTypes.begin();
-    V_SceneNodeTypeDumbPtr::iterator end = orderedTypes.end();
-
-    std::sort( itr, end, MainFrame::SortTypeItemsByName );
-
-    // iterate over the scene node types, making a new sub menu for each
-    for( ; itr != end; ++itr )
-    {
-        const SceneGraph::SceneNodeType* type( *itr );
-        const HM_SceneNodeSmartPtr& typeInstances( type->GetInstances() );
-
-        if( !typeInstances.empty() )
-        {
-            wxMenu* subMenu = new wxMenu;
-
-            // add selection for all items
-            ContextCallbackData* data = new ContextCallbackData;
-            data->m_ContextCallbackType = ContextCallbackTypes::All;
-            data->m_NodeType = type;
-
-            GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-            subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select All" ) );
-            ++numMenuItems;
-
-            // add selection for individual items
-            {   
-                wxMenu* itemMenu = new wxMenu;
-
-                HM_SceneNodeSmartPtr::const_iterator inst_itr = typeInstances.begin();
-                HM_SceneNodeSmartPtr::const_iterator inst_end = typeInstances.end();
-
-                V_SceneNodeDumbPtr ordered;
-
-                // push the instances into a vector for sorting purposes
-                for( ; inst_itr != inst_end; ++inst_itr )
-                {
-                    ordered.push_back( inst_itr->second );
-                }  
-
-                V_SceneNodeDumbPtr::iterator ord_itr = ordered.begin();
-                V_SceneNodeDumbPtr::iterator ord_end = ordered.end();
-
-                std::sort( ord_itr, ord_end, SortContextItemsByName );
-
-                // setting up the menu item for each of the items
-                for( ;ord_itr != ord_end; ++ord_itr )
-                {    
-                    ContextCallbackData* data = new ContextCallbackData;
-                    data->m_ContextCallbackType = ContextCallbackTypes::Item;
-                    data->m_Nodes = *ord_itr;
-
-                    GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                    itemMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, (*ord_itr)->GetName().c_str() );
-                    ++numMenuItems;
-                }
-
-                // add the items menu to the sub menu
-                subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select Single" ), itemMenu );
-                ++numMenuItems;
-
-                // if this is an entity, then we need to check if it has art classes
-                const SceneGraph::EntityInstanceType* entity = Reflect::SafeCast< SceneGraph::EntityInstanceType >( type );
-
-                // if this is an instance, then we need to check if it has code classes
-                const SceneGraph::InstanceType* instance = Reflect::SafeCast< SceneGraph::InstanceType >( type );
-
-                if (entity)
-                {
-                    // set up for entity types
-                    SetupEntityTypeMenus( entity, subMenu, numMenuItems );
-                }
-            }
-            contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
-            ++numMenuItems;
-        }
-    }
-}
-
-void MainFrame::SetupEntityTypeMenus( const SceneGraph::EntityInstanceType* entity, wxMenu* subMenu, uint32_t& numMenuItems )
-{
-    const M_InstanceSetSmartPtr& sets = entity->GetSets();
-
-    if( !sets.empty() )
-    {
-        bool added = false;
-
-        wxMenu* menu = new wxMenu;
-
-        M_InstanceSetSmartPtr::const_iterator itr = sets.begin();
-        M_InstanceSetSmartPtr::const_iterator end = sets.end();
-        for( ;itr != end; ++itr )
-        {
-            const SceneGraph::EntitySet* art = Reflect::SafeCast< SceneGraph::EntitySet >( itr->second );
-            if (art && art->GetEntity() && !art->GetEntity()->GetSourcePath().empty())
-            {
-                ContextCallbackData* data = new ContextCallbackData;
-                data->m_ContextCallbackType = ContextCallbackTypes::Instance;
-                data->m_InstanceSet = art;
-
-                GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, art->GetEntity()->GetSourcePath().c_str() );
-                ++numMenuItems;
-                added = true;
-            }
-        }
-
-        if (added)
-        {
-            subMenu->AppendSeparator();
-            subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Art Class" ), menu );
-            ++numMenuItems;
-        }
-        else
-        {
-            delete menu;
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Static function used to sort context items by name
 bool MainFrame::SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::SceneNode* rhs )
-{
-    tstring lname( lhs->GetName() );
-    tstring rname( rhs->GetName() );
-
-    toUpper( lname );
-    toUpper( rname );
-
-    return lname < rname;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static function used to sort type items by name
-bool MainFrame::SortTypeItemsByName( SceneGraph::SceneNodeType* lhs, SceneGraph::SceneNodeType* rhs )
 {
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );

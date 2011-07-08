@@ -2,11 +2,9 @@
 
 #include "Platform/Thread.h"
 
-#include "Foundation/Document/DocumentManager.h"
-
-#include "Pipeline/SettingsManager.h"
-
 #include "Foundation/InitializerStack.h"
+#include "Foundation/SettingsManager.h"
+#include "Foundation/Document/DocumentManager.h"
 
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker/Tracker.h"

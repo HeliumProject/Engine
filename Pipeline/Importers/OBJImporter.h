@@ -2,8 +2,9 @@
 
 #include "Pipeline/API.h"
 
-#include "Pipeline/SceneGraph/Mesh.h"
 #include "Foundation/File/Path.h"
+
+#include "SceneGraph/Mesh.h"
 
 namespace Helium
 {

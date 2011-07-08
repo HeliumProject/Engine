@@ -3,18 +3,19 @@
 #include "Math/Axes.h"
 #include "Math/FpuVector3.h"
 #include "Math/FpuAlignedBox.h"
-#include "Foundation/Reflect/Enumeration.h"
 
+#include "Foundation/SettingsManager.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Undo/Queue.h"
 
+#include "SceneGraph/Render.h"
+#include "SceneGraph/Camera.h"
+#include "SceneGraph/Resource.h"
+#include "SceneGraph/Viewport.h"
+#include "SceneGraph/ViewportSettings.h"
+#include "SceneGraph/DeviceManager.h"
+
 #include "Editor/API.h"
-#include "Pipeline/SettingsManager.h"
-#include "Pipeline/SceneGraph/Render.h"
-#include "Pipeline/SceneGraph/Camera.h"
-#include "Pipeline/SceneGraph/Resource.h"
-#include "Pipeline/SceneGraph/Viewport.h"
-#include "Pipeline/SceneGraph/ViewportSettings.h"
-#include "Pipeline/SceneGraph/DeviceManager.h"
 
 namespace Helium
 {

@@ -14,6 +14,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
+#include "Foundation/SettingsManager.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/AsyncLoader.h"
 #include "Foundation/CommandLine/Option.h"
@@ -49,6 +50,8 @@
 #include "EditorSupport/EditorObjectLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 
+#include "SceneGraph/SceneGraphInit.h"
+
 #include "Pipeline/CoreInit.h"
 
 #include "Editor/ArtProvider.h"
@@ -56,10 +59,8 @@
 #include "Editor/EditorGenerated.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/ProjectViewModel.h"
-#include "Pipeline/Settings.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
-
 #include "Editor/Tracker/Tracker.h"
 #include "Editor/Task/TaskInit.h"
 #include "Editor/Perforce/Perforce.h"
@@ -296,6 +297,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+    m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( CoreInitialize, CoreCleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
@@ -566,7 +568,6 @@ void App::LoadSettings()
     SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path, Reflect::ArchiveTypes::XML );
     if ( settingsManager.ReferencesObject() )
     {
-        settingsManager->m_Test.m_Float32 = 5.0f;
         settingsManager->Clean();
         m_SettingsManager = settingsManager;
     }

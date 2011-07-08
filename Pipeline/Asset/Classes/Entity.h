@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Pipeline/API.h"
-
 #include <hash_map>
 
+#include "Pipeline/API.h"
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Manifests/EntityManifest.h"
 
 namespace Helium
 {

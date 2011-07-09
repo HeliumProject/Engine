@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API Script
+        class HELIUM_FOUNDATION_API Script
         {
         public:
             static void Initialize();

@@ -28,9 +28,9 @@ namespace Helium
     }
     typedef ConsoleColors::ConsoleColor ConsoleColor;    
 
-    PLATFORM_API void Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...);
+    HELIUM_PLATFORM_API void Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...);
 
-    PLATFORM_API void PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_list args);
+    HELIUM_PLATFORM_API void PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_list args);
 
-    PLATFORM_API void PrintString(ConsoleColor color, FILE* stream, const tstring& tstring);
+    HELIUM_PLATFORM_API void PrintString(ConsoleColor color, FILE* stream, const tstring& tstring);
 }

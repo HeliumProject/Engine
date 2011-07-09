@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    class PLATFORM_API Semaphore
+    class HELIUM_PLATFORM_API Semaphore
     {
     public:
 

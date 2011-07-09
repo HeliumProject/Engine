@@ -165,7 +165,7 @@ namespace Helium
         virtual bool DoFixup( const DumbBufferLocation& source_location );
     };
 
-    class FOUNDATION_API SmartBuffer : public Helium::RefCountBase<SmartBuffer>
+    class HELIUM_FOUNDATION_API SmartBuffer : public Helium::RefCountBase<SmartBuffer>
     {
     public:
         typedef std::map< uint32_t, FixupPtr >           M_OffsetToFixup;

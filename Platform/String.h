@@ -21,9 +21,9 @@ namespace Helium
         return true;
     }
 
-    PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
-    PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
+    HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
+    HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 #endif
 
-    PLATFORM_API tstring GetEncoding();
+    HELIUM_PLATFORM_API tstring GetEncoding();
 }

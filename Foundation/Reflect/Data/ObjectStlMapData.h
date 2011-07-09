@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ObjectStlMapData : public ContainerData
+        class HELIUM_FOUNDATION_API ObjectStlMapData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( ObjectStlMapData, ContainerData );
@@ -27,7 +27,7 @@ namespace Helium
         };
 
         template <class KeyT>
-        class FOUNDATION_API SimpleObjectStlMapData : public ObjectStlMapData
+        class HELIUM_FOUNDATION_API SimpleObjectStlMapData : public ObjectStlMapData
         {
         public:
             typedef std::map<KeyT, ObjectPtr> DataType;

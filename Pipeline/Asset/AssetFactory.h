@@ -13,7 +13,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API AssetFactory
+        class HELIUM_PIPELINE_API AssetFactory
         {
         public:
             AssetFactory()

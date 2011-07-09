@@ -50,7 +50,7 @@ namespace Helium
         };
         typedef Helium::Signature< const PickLinkArgs&> PickLinkSignature;
 
-        class FOUNDATION_API ContainerStackPointer : public ThreadLocalPointer
+        class HELIUM_FOUNDATION_API ContainerStackPointer : public ThreadLocalPointer
         {
         public:
             ContainerStackPointer();
@@ -62,7 +62,7 @@ namespace Helium
             static std::multimap< uint32_t, std::stack< ContainerPtr >* > s_Stacks;
         };
 
-        class FOUNDATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object
+        class HELIUM_FOUNDATION_API Interpreter HELIUM_ABSTRACT : public Reflect::Object
         {
         public:
             Interpreter (Container* container)

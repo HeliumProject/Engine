@@ -30,7 +30,7 @@ namespace Helium
 
     namespace InspectReflect
     {
-        FOUNDATION_API void Initialize();
-        FOUNDATION_API void Cleanup();
+        HELIUM_FOUNDATION_API void Initialize();
+        HELIUM_FOUNDATION_API void Cleanup();
     }
 }

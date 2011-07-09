@@ -104,7 +104,7 @@ namespace Helium
         // Archive base class
         //
 
-        class FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
+        class HELIUM_FOUNDATION_API Archive : public Helium::RefCountBase< Archive >
         {
         protected:
             friend class RefCountBase< Archive >;
@@ -220,10 +220,10 @@ namespace Helium
         typedef Helium::SmartPtr< Archive > ArchivePtr;
 
         // Get parser for a file
-        FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_FOUNDATION_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_FOUNDATION_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_FOUNDATION_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
         Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )

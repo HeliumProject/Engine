@@ -31,7 +31,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API MeshProcessingComponent : public Component::ComponentBase
+        class HELIUM_PIPELINE_API MeshProcessingComponent : public Component::ComponentBase
         {
         public:
             Helium::Attribute< float32_t >              a_ScalingFactor;

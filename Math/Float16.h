@@ -72,8 +72,8 @@ namespace Helium
         } components;
     };
 
-    MATH_API Float16 Float32To16( Float32 value );
-    MATH_API Float32 Float16To32( Float16 value );
+    HELIUM_MATH_API Float16 Float32To16( Float32 value );
+    HELIUM_MATH_API Float32 Float16To32( Float16 value );
 
     inline uint16_t FloatToHalf( float32_t f )
     {

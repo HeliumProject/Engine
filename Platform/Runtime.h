@@ -39,8 +39,8 @@ namespace Helium
             }
         }
 
-        PLATFORM_API Type GetType();
+        HELIUM_PLATFORM_API Type GetType();
     }
 
-    PLATFORM_API void EnableCPPErrorHandling( bool enable );
+    HELIUM_PLATFORM_API void EnableCPPErrorHandling( bool enable );
 }

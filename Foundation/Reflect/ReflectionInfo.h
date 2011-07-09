@@ -54,7 +54,7 @@ namespace Helium
         // A block of string-based properties
         //
 
-        class FOUNDATION_API PropertyCollection
+        class HELIUM_FOUNDATION_API PropertyCollection
         {
         protected:
             mutable std::map< tstring, tstring > m_Properties;
@@ -124,7 +124,7 @@ namespace Helium
         // This lets us safely cast between reflection class pointers
         //
 
-        class FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase< ReflectionInfo >, public PropertyCollection
+        class HELIUM_FOUNDATION_API ReflectionInfo : public Helium::AtomicRefCountBase< ReflectionInfo >, public PropertyCollection
         {
         public:
             REFLECTION_BASE(ReflectionTypes::Invalid, ReflectionInfo);

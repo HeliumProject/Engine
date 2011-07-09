@@ -119,7 +119,7 @@ namespace Helium
     //@}
 
     /// Non-copyable base class.
-    class PLATFORM_API NonCopyable
+    class HELIUM_PLATFORM_API NonCopyable
     {
     public:
         /// @name Construction/Destruction

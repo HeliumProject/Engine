@@ -15,7 +15,7 @@ namespace Helium
         /// coefficients (@c A, @c B, @c C, or @c D) of the following plane equation:
         ///
         ///     <code>Ax + By + Cz + D = 0</code>
-        HELIUM_SIMD_ALIGN_PRE class MATH_API PlaneSoa
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API PlaneSoa
         {
         public:
             /// A coefficients.

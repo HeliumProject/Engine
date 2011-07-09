@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API EnumerationElement
+        class HELIUM_FOUNDATION_API EnumerationElement
         {
         public:
             EnumerationElement();
@@ -20,7 +20,7 @@ namespace Helium
             tstring     m_HelpText; // the help text for the object
         };
 
-        class FOUNDATION_API Enumeration : public Type
+        class HELIUM_FOUNDATION_API Enumeration : public Type
         {
         public:
             REFLECTION_TYPE( ReflectionTypes::Enumeration, Enumeration, Type );

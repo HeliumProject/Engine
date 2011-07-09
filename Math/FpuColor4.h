@@ -10,7 +10,7 @@
 
 namespace Helium
 {
-    class MATH_API Color4
+    class HELIUM_MATH_API Color4
     {
     public:
         uint8_t r, g, b, a;
@@ -68,8 +68,8 @@ namespace Helium
             va = a / 255.0f;
         }
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Color4& color);
-        friend MATH_API tistream& operator>>(tistream& inStream, Color4& color);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Color4& color);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Color4& color);
     };
 
     typedef std::vector< Color4 > V_Color4;

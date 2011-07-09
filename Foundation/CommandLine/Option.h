@@ -13,7 +13,7 @@ namespace Helium
     namespace CommandLine
     {
 		///////////////////////////////////////////////////////////////////////
-        class FOUNDATION_API Option : public Helium::RefCountBase< Option >
+        class HELIUM_FOUNDATION_API Option : public Helium::RefCountBase< Option >
         {
 		protected:
 			tstring m_Token;
@@ -172,7 +172,7 @@ namespace Helium
 
 
 		///////////////////////////////////////////////////////////////////////
-		class FOUNDATION_API FlagOption : public SimpleOption<bool>
+		class HELIUM_FOUNDATION_API FlagOption : public SimpleOption<bool>
         {
 		protected:
 			bool* m_Data;
@@ -198,7 +198,7 @@ namespace Helium
         };
 
 		///////////////////////////////////////////////////////////////////////
-		//class FOUNDATION_API DelimitedListOption : public SimpleOption< std::vector< tstring > >
+		//class HELIUM_FOUNDATION_API DelimitedListOption : public SimpleOption< std::vector< tstring > >
 		//{
 		//protected:
 		//	std::vector< tstring >* m_Data;
@@ -254,7 +254,7 @@ namespace Helium
 		//};
 
 		///////////////////////////////////////////////////////////////////////
-		class FOUNDATION_API OptionsMap
+		class HELIUM_FOUNDATION_API OptionsMap
 		{
 		public:
 			mutable tstring m_Usage;

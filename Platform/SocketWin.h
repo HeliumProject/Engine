@@ -11,7 +11,7 @@ namespace Helium
 {
 #pragma warning( push )
 #pragma warning( disable : 4201 ) // warning C4201: nonstandard extension used : nameless struct/union
-    struct PLATFORM_API Socket
+    struct HELIUM_PLATFORM_API Socket
     {
         SOCKET m_Handle;
         struct Overlapped

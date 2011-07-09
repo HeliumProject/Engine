@@ -43,12 +43,12 @@ namespace Helium
     };
     typedef FileModes::FileMode FileMode;
 
-    PLATFORM_API Handle CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
-    PLATFORM_API bool CloseHandle( Handle& handle );
-    PLATFORM_API bool ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
-    PLATFORM_API bool WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
-    PLATFORM_API bool FlushFile( Handle& handle );
-    PLATFORM_API int64_t Seek( Handle& handle, int64_t offset, SeekOrigin origin );
-    PLATFORM_API int64_t Tell( const Handle& handle );
-    PLATFORM_API int64_t GetSize( const Handle& handle );
+    HELIUM_PLATFORM_API Handle CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
+    HELIUM_PLATFORM_API bool CloseHandle( Handle& handle );
+    HELIUM_PLATFORM_API bool ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
+    HELIUM_PLATFORM_API bool WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
+    HELIUM_PLATFORM_API bool FlushFile( Handle& handle );
+    HELIUM_PLATFORM_API int64_t Seek( Handle& handle, int64_t offset, SeekOrigin origin );
+    HELIUM_PLATFORM_API int64_t Tell( const Handle& handle );
+    HELIUM_PLATFORM_API int64_t GetSize( const Handle& handle );
 }

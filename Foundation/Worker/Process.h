@@ -23,7 +23,7 @@ namespace Helium
         //  - Worker's Worker::Initialize function will wait for a connection with the Manager process
         const static int DefaultWorkerTimeout = 10000;
 
-        struct FOUNDATION_API Args
+        struct HELIUM_FOUNDATION_API Args
         {
             static const tchar_t* Worker;
             static const tchar_t* Debug;
@@ -42,7 +42,7 @@ namespace Helium
         const static uint32_t ConsoleOutputMessage = 0;
 #pragma warning ( default: 4200 )
 
-        class FOUNDATION_API Process : public Helium::RefCountBase<Process>
+        class HELIUM_FOUNDATION_API Process : public Helium::RefCountBase<Process>
         {
         private:
             // the file to execute

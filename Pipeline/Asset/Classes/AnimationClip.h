@@ -29,7 +29,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API AnimationClip : public AssetClass
+        class HELIUM_PIPELINE_API AnimationClip : public AssetClass
         {
         private:
             bool                m_Compressed;

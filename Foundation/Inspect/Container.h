@@ -26,7 +26,7 @@ namespace Helium
         ///////////////////////////////////////////////////////////////////////
         // Contains other controls and distributes layout logic
         //
-        class FOUNDATION_API Container : public Control
+        class HELIUM_FOUNDATION_API Container : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( Container, Control );

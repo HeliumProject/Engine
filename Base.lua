@@ -360,8 +360,8 @@ Helium.DoDefaultProjectSettings = function()
 
 	flags
 	{
-		--"ExtraWarnings", -- pmd061211 - Removing extra warnings as #including foundation/platform code is otherwise extremely painful since it is not /w4 friendly
-		"FatalWarnings",
+		--"FatalWarnings",
+		"ExtraWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
 	}
 
@@ -378,6 +378,7 @@ Helium.DoDefaultProjectSettings = function()
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
+			"ws2_32",
 			"d3d9",
 			"d3dx9",
 			"d3d11",
@@ -429,11 +430,6 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	defines
 	{
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
-	}
-
-	files
-	{
-		baseDirectory .. "/" .. moduleName .. "/*",
 	}
 
 	pchheader( moduleName .. "Pch.h" )

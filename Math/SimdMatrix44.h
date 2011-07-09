@@ -11,7 +11,7 @@ namespace Helium
         class Quat;
 
         /// Single-precision floating-point 4x4 matrix.  Note that this is SIMD aligned.
-        HELIUM_SIMD_ALIGN_PRE class MATH_API Matrix44
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API Matrix44
         {
         public:
             /// Identity matrix.

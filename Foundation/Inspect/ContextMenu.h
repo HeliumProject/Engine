@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API Control;
+        class HELIUM_FOUNDATION_API Control;
 
 
         //
@@ -42,7 +42,7 @@ namespace Helium
         // Dynamic context menu support
         //
 
-        class FOUNDATION_API ContextMenu;
+        class HELIUM_FOUNDATION_API ContextMenu;
         typedef Helium::SmartPtr<ContextMenu> ContextMenuPtr;
 
         // popup-time context menu setup delegate
@@ -53,7 +53,7 @@ namespace Helium
         // The menu class
         //
 
-        class FOUNDATION_API ContextMenu : public Helium::RefCountBase<ContextMenu>
+        class HELIUM_FOUNDATION_API ContextMenu : public Helium::RefCountBase<ContextMenu>
         {
         public:
             ContextMenu(Control* control);

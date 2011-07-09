@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class MATH_API Scale
+    class HELIUM_MATH_API Scale
     {
     public:
         float32_t x, y, z;

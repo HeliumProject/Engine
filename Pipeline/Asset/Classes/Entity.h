@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API Entity : public AssetClass
+        class HELIUM_PIPELINE_API Entity : public AssetClass
         {
         private:
 

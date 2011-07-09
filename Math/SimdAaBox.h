@@ -10,7 +10,7 @@ namespace Helium
         class Matrix44;
 
         /// Axis-aligned bounding box.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API AaBox
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API AaBox
         {
         public:
             /// @name Construction/Destruction

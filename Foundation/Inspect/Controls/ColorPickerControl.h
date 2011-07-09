@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API ColorPicker : public Control
+        class HELIUM_FOUNDATION_API ColorPicker : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( ColorPicker, Control );

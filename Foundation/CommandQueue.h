@@ -13,7 +13,7 @@ namespace Helium
     //  commands to coexist easier with issuing commands in callbacks
     //
 
-    class FOUNDATION_API CommandQueue
+    class HELIUM_FOUNDATION_API CommandQueue
     {
     public:
         CommandQueue();

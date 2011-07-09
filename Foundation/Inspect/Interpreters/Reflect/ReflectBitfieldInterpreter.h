@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API ReflectBitfieldInterpreter : public ReflectFieldInterpreter
+        class HELIUM_FOUNDATION_API ReflectBitfieldInterpreter : public ReflectFieldInterpreter
         {
         public:
             ReflectBitfieldInterpreter( Container* container );

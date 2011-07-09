@@ -135,7 +135,7 @@ namespace Helium
   };
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  struct PIPELINE_API ImageGenerationSettings
+  struct HELIUM_PIPELINE_API ImageGenerationSettings
   {
     //
     // Channels could be partitioned arbitrarily and processed separately before combining them for compression
@@ -236,7 +236,7 @@ namespace Helium
   // Options to use when generating a mipset from a texture
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  struct PIPELINE_API MipGenOptions
+  struct HELIUM_PIPELINE_API MipGenOptions
   {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor to set suitable defaults
@@ -294,7 +294,7 @@ namespace Helium
   //  ps3 (linear/normalized UVs, swizzled vs linear) and are ignored by the PC.
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class PIPELINE_API MipSet
+  class HELIUM_PIPELINE_API MipSet
   {
   public:
     struct MipInfo
@@ -307,7 +307,7 @@ namespace Helium
 
     // currently this entire structure is ignored on the PC, all texture state is specified
     // in the shader and is managed at runtime
-    struct PIPELINE_API RuntimeSettings
+    struct HELIUM_PIPELINE_API RuntimeSettings
     {
       UVAddressMode           m_wrap_u;
       UVAddressMode           m_wrap_v;

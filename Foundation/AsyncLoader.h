@@ -32,7 +32,7 @@
 namespace Helium
 {
     /// Async loading manager.
-    class FOUNDATION_API AsyncLoader : NonCopyable
+    class HELIUM_FOUNDATION_API AsyncLoader : NonCopyable
     {
     public:
         /// Request pool block size.

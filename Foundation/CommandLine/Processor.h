@@ -40,7 +40,7 @@ namespace Helium
 {
     namespace CommandLine
     {
-		class FOUNDATION_API Processor
+		class HELIUM_FOUNDATION_API Processor
         {
         protected:
 			tstring m_Token;

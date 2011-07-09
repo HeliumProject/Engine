@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace IPC
     {
-        class FOUNDATION_API MessageHeader
+        class HELIUM_FOUNDATION_API MessageHeader
         {
         public:
             uint32_t m_ID;
@@ -40,7 +40,7 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API Message : private MessageHeader
+        class HELIUM_FOUNDATION_API Message : private MessageHeader
         {
             friend class Connection;
             friend class MessageQueue;
@@ -99,7 +99,7 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API MessageQueue
+        class HELIUM_FOUNDATION_API MessageQueue
         {
         private:
             Message* m_Head;    // pointer to head message 

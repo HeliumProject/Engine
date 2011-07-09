@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class MATH_API Point
+    class HELIUM_MATH_API Point
     {
     public:
         int32_t x, y;

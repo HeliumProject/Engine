@@ -10,7 +10,7 @@ namespace Helium
         const static tchar_t SLIDER_ATTR_MIN[] = TXT( "min" );
         const static tchar_t SLIDER_ATTR_MAX[] = TXT( "max" );
 
-        class FOUNDATION_API Slider : public Control
+        class HELIUM_FOUNDATION_API Slider : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( Slider, Control );

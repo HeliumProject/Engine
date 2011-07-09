@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class MATH_API Shear
+    class HELIUM_MATH_API Shear
     {
     public:
         float32_t yz, xz, xy;

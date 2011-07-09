@@ -35,13 +35,13 @@ namespace Helium
 #endif
 
         // Init/Cleanup
-        FOUNDATION_API bool IsInitialized();
-        FOUNDATION_API void Initialize();
-        FOUNDATION_API void Cleanup();
+        HELIUM_FOUNDATION_API bool IsInitialized();
+        HELIUM_FOUNDATION_API void Initialize();
+        HELIUM_FOUNDATION_API void Cleanup();
 
-        FOUNDATION_API Profile::MemoryPoolHandle MemoryPool();
+        HELIUM_FOUNDATION_API Profile::MemoryPoolHandle MemoryPool();
 
-        class FOUNDATION_API Registry
+        class HELIUM_FOUNDATION_API Registry
         {
         private:
             friend void Reflect::Initialize();

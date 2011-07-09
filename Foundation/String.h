@@ -153,7 +153,7 @@ namespace Helium
     };
 
     /// 8-bit character string class.
-    class FOUNDATION_API CharString : public StringBase< char, DefaultAllocator >
+    class HELIUM_FOUNDATION_API CharString : public StringBase< char, DefaultAllocator >
     {
     public:
         /// @name Construction/Destruction
@@ -193,7 +193,7 @@ namespace Helium
     };
 
     /// Wide character string class.
-    class FOUNDATION_API WideString : public StringBase< wchar_t, DefaultAllocator >
+    class HELIUM_FOUNDATION_API WideString : public StringBase< wchar_t, DefaultAllocator >
     {
     public:
         /// @name Construction/Destruction
@@ -234,7 +234,7 @@ namespace Helium
 
     /// Default CharString hash.
     template<>
-    class FOUNDATION_API Hash< CharString >
+    class HELIUM_FOUNDATION_API Hash< CharString >
     {
     public:
         size_t operator()( const CharString& rKey ) const;
@@ -242,7 +242,7 @@ namespace Helium
 
     /// Default WideString hash.
     template<>
-    class FOUNDATION_API Hash< WideString >
+    class HELIUM_FOUNDATION_API Hash< WideString >
     {
     public:
         size_t operator()( const WideString& rKey ) const;

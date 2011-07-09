@@ -19,7 +19,7 @@ namespace Helium
         //
 
         // installs unhandled exception filter into the C-runtime (for worker threads)
-        FOUNDATION_API void EnableExceptionFilter(bool enable);
+        HELIUM_FOUNDATION_API void EnableExceptionFilter(bool enable);
 
         //
         // Breakpoint Hit
@@ -40,39 +40,39 @@ namespace Helium
             mutable int             m_Result;
         };
         typedef Helium::Signature< const BreakpointArgs& > BreakpointSignature;
-        extern FOUNDATION_API BreakpointSignature::Delegate g_BreakpointOccurred;
+        extern HELIUM_FOUNDATION_API BreakpointSignature::Delegate g_BreakpointOccurred;
 
         //
         // Exception Event (raised when an exception occurs)
         //
 
         typedef Helium::Signature< const ExceptionArgs& > ExceptionSignature;
-        extern FOUNDATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
+        extern HELIUM_FOUNDATION_API ExceptionSignature::Delegate g_ExceptionOccurred;
 
         //
         // Termination Event (raised before process termination after a fatal exception)
         //
 
-        struct FOUNDATION_API TerminateArgs {};
+        struct HELIUM_FOUNDATION_API TerminateArgs {};
         typedef Helium::Signature< const TerminateArgs& > TerminateSignature;
-        extern FOUNDATION_API TerminateSignature::Event g_Terminating;
+        extern HELIUM_FOUNDATION_API TerminateSignature::Event g_Terminating;
 
         //
         // Exception reporting
         //
 
         // prepare and dispatch a report for a C++ exception
-        FOUNDATION_API void ProcessException( const Helium::Exception& ex,
+        HELIUM_FOUNDATION_API void ProcessException( const Helium::Exception& ex,
             bool print = false,
             bool fatal = false );
 
         // prepare and dispatch a report for a C++ exception
-        FOUNDATION_API void ProcessException( const std::exception& ex,
+        HELIUM_FOUNDATION_API void ProcessException( const std::exception& ex,
             bool print = false,
             bool fatal = false );
 
         // prepare and dispatch a report for an SEH exception such as divide by zero, page fault from a invalid memory access, or even breakpoint instructions
-        FOUNDATION_API uint32_t ProcessException( LPEXCEPTION_POINTERS info,
+        HELIUM_FOUNDATION_API uint32_t ProcessException( LPEXCEPTION_POINTERS info,
             bool print = false,
             bool fatal = false );
     };

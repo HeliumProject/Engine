@@ -14,7 +14,7 @@ namespace Helium
 
     /// String "equals" function.
     template<>
-    class FOUNDATION_API Equals< char* >
+    class HELIUM_FOUNDATION_API Equals< char* >
     {
     public:
         bool operator()( const char* pA, const char* pB ) const;
@@ -22,7 +22,7 @@ namespace Helium
 
     /// Wide-character string "equals" function.
     template<>
-    class FOUNDATION_API Equals< wchar_t* >
+    class HELIUM_FOUNDATION_API Equals< wchar_t* >
     {
     public:
         bool operator()( const wchar_t* pA, const wchar_t* pB ) const;
@@ -30,7 +30,7 @@ namespace Helium
 
     /// String "equals" function.
     template<>
-    class FOUNDATION_API Equals< const char* >
+    class HELIUM_FOUNDATION_API Equals< const char* >
     {
     public:
         bool operator()( const char* pA, const char* pB ) const;
@@ -38,7 +38,7 @@ namespace Helium
 
     /// Wide-character string "equals" function.
     template<>
-    class FOUNDATION_API Equals< const wchar_t* >
+    class HELIUM_FOUNDATION_API Equals< const wchar_t* >
     {
     public:
         bool operator()( const wchar_t* pA, const wchar_t* pB ) const;
@@ -54,7 +54,7 @@ namespace Helium
 
     /// String "less-than" function.
     template<>
-    class FOUNDATION_API Less< char* >
+    class HELIUM_FOUNDATION_API Less< char* >
     {
     public:
         bool operator()( const char* pA, const char* pB ) const;
@@ -62,7 +62,7 @@ namespace Helium
 
     /// Wide-character string "less-than" function.
     template<>
-    class FOUNDATION_API Less< wchar_t* >
+    class HELIUM_FOUNDATION_API Less< wchar_t* >
     {
     public:
         bool operator()( const wchar_t* pA, const wchar_t* pB ) const;
@@ -70,7 +70,7 @@ namespace Helium
 
     /// String "less-than" function.
     template<>
-    class FOUNDATION_API Less< const char* >
+    class HELIUM_FOUNDATION_API Less< const char* >
     {
     public:
         bool operator()( const char* pA, const char* pB ) const;
@@ -78,7 +78,7 @@ namespace Helium
 
     /// Wide-character string "less-than" function.
     template<>
-    class FOUNDATION_API Less< const wchar_t* >
+    class HELIUM_FOUNDATION_API Less< const wchar_t* >
     {
     public:
         bool operator()( const wchar_t* pA, const wchar_t* pB ) const;

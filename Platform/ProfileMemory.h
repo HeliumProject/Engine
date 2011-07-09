@@ -11,7 +11,7 @@ namespace Helium
         // Status Data
         //
 
-        class PLATFORM_API MemoryStatus
+        class HELIUM_PLATFORM_API MemoryStatus
         {
         public:
             uintptr_t m_TotalReserve;
@@ -33,7 +33,7 @@ namespace Helium
         // Profiler, drop this on the stack to profile memory consumption
         //
 
-        class PLATFORM_API MemoryProfiler
+        class HELIUM_PLATFORM_API MemoryProfiler
         {
         private:
             static bool s_Enabled;
@@ -50,7 +50,7 @@ namespace Helium
         // Query status
         //
 
-        PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
-        PLATFORM_API void GetMemoryStatus(tchar_t* buffer, size_t bufSize);
+        HELIUM_PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
+        HELIUM_PLATFORM_API void GetMemoryStatus(tchar_t* buffer, size_t bufSize);
     }
 }

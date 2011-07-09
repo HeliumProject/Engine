@@ -65,7 +65,7 @@ namespace Helium
     };
 
     /// Trace interface.
-    class PLATFORM_API Trace
+    class HELIUM_PLATFORM_API Trace
     {
     public:
         /// Default size for formatted trace message buffers without requiring dynamic memory allocation.
@@ -110,7 +110,7 @@ namespace Helium
     };
 
     /// Global trace instance.
-    PLATFORM_API extern Trace g_Trace;
+    HELIUM_PLATFORM_API extern Trace g_Trace;
 }
 
 #else  // HELIUM_ENABLE_TRACE

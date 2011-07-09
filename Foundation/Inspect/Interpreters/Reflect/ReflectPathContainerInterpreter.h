@@ -16,7 +16,7 @@ namespace Helium
         class List;
         struct FilteredDropTargetArgs;
 
-        class FOUNDATION_API PathContainerInterpreter : public ReflectFieldInterpreter
+        class HELIUM_FOUNDATION_API PathContainerInterpreter : public ReflectFieldInterpreter
         {
         public:
             PathContainerInterpreter (Container* container);

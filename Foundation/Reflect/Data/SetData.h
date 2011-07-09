@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API SetData : public ContainerData
+        class HELIUM_FOUNDATION_API SetData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( SetData, ContainerData );
@@ -24,7 +24,7 @@ namespace Helium
         };
 
         template< typename KeyT, typename EqualKeyT = Equals< KeyT >, typename AllocatorT = DefaultAllocator >
-        class FOUNDATION_API SimpleSetData : public SetData
+        class HELIUM_FOUNDATION_API SimpleSetData : public SetData
         {
         public:
             typedef Helium::Set< KeyT, EqualKeyT, AllocatorT > DataType;

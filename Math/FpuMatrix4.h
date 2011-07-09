@@ -20,7 +20,7 @@ namespace Helium
     class EulerAngles;
     class AngleAxis;
 
-    class MATH_API Matrix4
+    class HELIUM_MATH_API Matrix4
     {
     public: 
         union
@@ -210,9 +210,9 @@ namespace Helium
 
         Matrix4&              RowScale( const Vector4& scaleVector );
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Matrix4& vector);
-        friend MATH_API tistream& operator>>(tistream& inStream, Matrix4& vector);
-        friend class MATH_API Matrix3;
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Matrix4& vector);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Matrix4& vector);
+        friend class HELIUM_MATH_API Matrix3;
     };
 
     typedef std::vector< Matrix4 >   V_Matrix4;

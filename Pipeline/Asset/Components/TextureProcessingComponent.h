@@ -41,7 +41,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API TextureProcessingComponent : public Component::ComponentBase
+        class HELIUM_PIPELINE_API TextureProcessingComponent : public Component::ComponentBase
         {
         private:
             uint64_t            m_MaxTextureResolution;

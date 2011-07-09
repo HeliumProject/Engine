@@ -35,20 +35,20 @@ namespace Helium
     {
         namespace Settings
         {
-            FOUNDATION_API bool Enabled();
-            FOUNDATION_API bool MemoryProfilingEnabled();
+            HELIUM_FOUNDATION_API bool Enabled();
+            HELIUM_FOUNDATION_API bool MemoryProfilingEnabled();
         }
 
         const static int MAX_DESCRIPTION = 256;
 
-        FOUNDATION_API void Initialize(); 
-        FOUNDATION_API void Cleanup(); 
+        HELIUM_FOUNDATION_API void Initialize(); 
+        HELIUM_FOUNDATION_API void Cleanup(); 
 
         //
         // Accumulates information over multiple calls
         //
 
-        class FOUNDATION_API Accumulator
+        class HELIUM_FOUNDATION_API Accumulator
         {
         public:
             uint32_t   m_Hits; 
@@ -74,7 +74,7 @@ namespace Helium
         // Scope timer prints or logs information
         //
 
-        class FOUNDATION_API ScopeTimer
+        class HELIUM_FOUNDATION_API ScopeTimer
         {
         public: 
             ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const char* desc = NULL); 
@@ -137,7 +137,7 @@ namespace Helium
             ScopeExitPacket  m_ScopeExitPacket; 
         };
 
-        class FOUNDATION_API Context
+        class HELIUM_FOUNDATION_API Context
         {
         public:
             Helium::TraceFile m_TraceFile; 

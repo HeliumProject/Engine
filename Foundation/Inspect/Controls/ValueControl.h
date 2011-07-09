@@ -22,7 +22,7 @@ namespace Helium
         };
         typedef Justifications::Justification Justification;
 
-        class FOUNDATION_API Value : public Control
+        class HELIUM_FOUNDATION_API Value : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( Value, Control );

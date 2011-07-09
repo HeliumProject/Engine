@@ -8,7 +8,7 @@
 namespace Helium
 {
     /// Application timer support.
-    class PLATFORM_API TimerPlatformData
+    class HELIUM_PLATFORM_API TimerPlatformData
     {
     protected:
         /// Performance counter frequency.

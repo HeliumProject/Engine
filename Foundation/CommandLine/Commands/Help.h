@@ -9,7 +9,7 @@ namespace Helium
     {
 		class Processor;
 
-        class FOUNDATION_API Help : public Command
+        class HELIUM_FOUNDATION_API Help : public Command
         {
 		protected:
 			Processor* m_Owner;

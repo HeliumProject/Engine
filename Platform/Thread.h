@@ -18,7 +18,7 @@ namespace Helium
     /// This class should be implemented to provide the code to be executed by a thread.  When a Thread instance starts,
     /// it will call the Run() method within the context of the running thread.  The Thread instance can be checked to
     /// determine whether or not a thread is still running.
-    class PLATFORM_API Runnable
+    class HELIUM_PLATFORM_API Runnable
     {
     public:
         /// @name Construction/Destruction
@@ -33,7 +33,7 @@ namespace Helium
     };
 
     /// Thread interface.
-    class PLATFORM_API Thread : NonCopyable
+    class HELIUM_PLATFORM_API Thread : NonCopyable
     {
     public:
 #if HELIUM_OS_WIN
@@ -121,7 +121,7 @@ namespace Helium
     };
 
     /// Thread interface for creating threads that execute a Runnable object.
-    class PLATFORM_API RunnableThread : public Thread
+    class HELIUM_PLATFORM_API RunnableThread : public Thread
     {
     public:
         /// @name Construction/Destruction
@@ -147,7 +147,7 @@ namespace Helium
     };
 
     /// Thread interface for easily creating threads based on a C function or C++ member function pointer.
-    class PLATFORM_API CallbackThread : public Thread
+    class HELIUM_PLATFORM_API CallbackThread : public Thread
     {
     public:
         /// Thread callback type.
@@ -202,7 +202,7 @@ namespace Helium
         //@}
     };
 
-    class PLATFORM_API ThreadLocalPointer
+    class HELIUM_PLATFORM_API ThreadLocalPointer
     {
     public:
         ThreadLocalPointer();
@@ -219,8 +219,8 @@ namespace Helium
 #endif
     };
 
-    PLATFORM_API uint32_t GetMainThreadID();
-    PLATFORM_API uint32_t GetCurrentThreadID();
+    HELIUM_PLATFORM_API uint32_t GetMainThreadID();
+    HELIUM_PLATFORM_API uint32_t GetCurrentThreadID();
 
     inline bool IsMainThread()
     {

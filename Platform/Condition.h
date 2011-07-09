@@ -15,7 +15,7 @@ namespace Helium
     ///
     /// A condition is a type of synchronization mechanism that allows one or more threads to sleep until a signal is
     /// triggered by another thread.
-    class PLATFORM_API Condition
+    class HELIUM_PLATFORM_API Condition
     {
     public:
 #if HELIUM_OS_WIN

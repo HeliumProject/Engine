@@ -18,7 +18,7 @@ namespace Helium
     class FileStream;
 
     /// Low-level file utilities
-    class FOUNDATION_API File
+    class HELIUM_FOUNDATION_API File
     {
     public:
 

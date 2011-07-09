@@ -15,7 +15,7 @@ namespace Helium
     ///
     /// For efficiency, locking is only guaranteed to be functional within the context of the process in which the
     /// read-write lock was created.
-    class PLATFORM_API ReadWriteLock
+    class HELIUM_PLATFORM_API ReadWriteLock
     {
     public:
         /// @name Construction/Destruction

@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API StlSetData : public ContainerData
+        class HELIUM_FOUNDATION_API StlSetData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( StlSetData, ContainerData );
@@ -24,7 +24,7 @@ namespace Helium
         };
 
         template <class DataT, class DataClassT>
-        class FOUNDATION_API SimpleStlSetData : public StlSetData
+        class HELIUM_FOUNDATION_API SimpleStlSetData : public StlSetData
         {
         public:
             typedef std::set<DataT> DataType;

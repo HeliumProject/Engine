@@ -48,7 +48,7 @@
 
 namespace Helium
 {
-    PLATFORM_API void FatalExit( int exitCode );
+    HELIUM_PLATFORM_API void FatalExit( int exitCode );
 }
 
 #if HELIUM_ASSERT_ENABLED
@@ -56,7 +56,7 @@ namespace Helium
 namespace Helium
 {
     /// Assert utility functions.
-    class PLATFORM_API Assert
+    class HELIUM_PLATFORM_API Assert
     {
     public:
         /// Assertion handler result.

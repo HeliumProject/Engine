@@ -11,7 +11,7 @@ namespace Helium
     {
         /// Single-precision floating-point 3-component vector.  Note that this is padded to 16 bytes (4 components) for
         /// SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API Vector3
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API Vector3
         {
         public:
             /// @name Construction/Destruction

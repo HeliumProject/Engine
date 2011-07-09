@@ -45,7 +45,7 @@ namespace Helium
         ///////////////////////////////////////////////////////////////////////////
         // Button control that opens a file browser dialog.
         // 
-        class FOUNDATION_API FileDialogButton : public Inspect::Button
+        class HELIUM_FOUNDATION_API FileDialogButton : public Inspect::Button
         {
         public:
             REFLECT_DECLARE_OBJECT( FileDialogButton, Inspect::Button );

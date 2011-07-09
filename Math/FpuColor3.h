@@ -12,7 +12,7 @@ namespace Helium
 {
     class Color4;
 
-    class MATH_API Color3
+    class HELIUM_MATH_API Color3
     {
     public:
         uint8_t r, g, b;
@@ -76,8 +76,8 @@ namespace Helium
 
         void Clamp ( const Color3 &min, const Color3 &mar );
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Color3& color);
-        friend MATH_API tistream& operator>>(tistream& inStream, Color3& color);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Color3& color);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Color3& color);
     };
 
     typedef std::vector< Color3 > V_Color3;

@@ -12,7 +12,7 @@ namespace Helium
         // This is a tuple of commands for making multiple changes to multiple objects in a single command
         //
 
-        class FOUNDATION_API BatchCommand : public Command
+        class HELIUM_FOUNDATION_API BatchCommand : public Command
         {
         protected:
             bool m_IsSignificant;

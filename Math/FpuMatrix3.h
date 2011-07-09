@@ -18,7 +18,7 @@ namespace Helium
     class EulerAngles;
     class AngleAxis;
 
-    class MATH_API Matrix3
+    class HELIUM_MATH_API Matrix3
     {
     public:
         union
@@ -163,9 +163,9 @@ namespace Helium
         static Matrix3        RotateY (float32_t theta);
         static Matrix3        RotateZ (float32_t theta);
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
-        friend MATH_API tistream& operator>>(tistream& inStream, Matrix3& vector);
-        friend class MATH_API Matrix4;
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Matrix3& vector);
+        friend class HELIUM_MATH_API Matrix4;
     };
 
     typedef std::vector<Matrix3> V_Matrix3;

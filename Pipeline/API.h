@@ -1,11 +1,11 @@
 #pragma once
 
 #if HELIUM_SHARED
-# ifdef PIPELINE_EXPORTS
-#  define PIPELINE_API __declspec (dllexport)
+# ifdef HELIUM_PIPELINE_EXPORTS
+#  define HELIUM_PIPELINE_API __declspec (dllexport)
 # else
-#  define PIPELINE_API __declspec (dllimport)
+#  define HELIUM_PIPELINE_API __declspec (dllimport)
 # endif
 #else
-# define PIPELINE_API
+# define HELIUM_PIPELINE_API
 #endif

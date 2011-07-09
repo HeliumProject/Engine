@@ -31,8 +31,8 @@ namespace Helium
         Stat         m_Stat;
     };
 
-    PLATFORM_API bool FindFirst( DirectoryHandle& handle, FileFindData& data );
-    PLATFORM_API bool FindNext( DirectoryHandle& handle, FileFindData& data );
-    PLATFORM_API bool GetExtendedData( DirectoryHandle& handle, FileFindData& );
-    PLATFORM_API bool CloseFind( DirectoryHandle& handle );
+    HELIUM_PLATFORM_API bool FindFirst( DirectoryHandle& handle, FileFindData& data );
+    HELIUM_PLATFORM_API bool FindNext( DirectoryHandle& handle, FileFindData& data );
+    HELIUM_PLATFORM_API bool GetExtendedData( DirectoryHandle& handle, FileFindData& );
+    HELIUM_PLATFORM_API bool CloseFind( DirectoryHandle& handle );
 }

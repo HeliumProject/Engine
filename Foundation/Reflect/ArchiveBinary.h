@@ -49,7 +49,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ArchiveBinary : public Archive
+        class HELIUM_FOUNDATION_API ArchiveBinary : public Archive
         {
         public: 
             static const uint32_t CURRENT_VERSION; 

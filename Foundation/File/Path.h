@@ -16,7 +16,7 @@ namespace Helium
 {
     const static tchar_t s_InternalPathSeparator = '/';
 
-    class FOUNDATION_API Path : public Helium::RefCountBase< Path >
+    class HELIUM_FOUNDATION_API Path : public Helium::RefCountBase< Path >
     {
     private:
         tstring m_Path;
@@ -123,10 +123,10 @@ namespace Helium
             return m_Path;
         }
 
-        friend FOUNDATION_API tostream& operator<<( tostream& outStream, const Path& p );
-        friend FOUNDATION_API tistream& operator>>( tistream& inStream, Path& p );
-        friend FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const Path& p );
-        friend FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, Path& p );
+        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& outStream, const Path& p );
+        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& inStream, Path& p );
+        friend HELIUM_FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const Path& p );
+        friend HELIUM_FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, Path& p );
     };
 
     inline tostream& operator<<( tostream& outStream, const Path& p )

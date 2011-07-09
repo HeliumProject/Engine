@@ -86,7 +86,7 @@ namespace Helium
         //  an address in memory to serialize/deserialize data to/from
         //
 
-        class FOUNDATION_API Data : public Object
+        class HELIUM_FOUNDATION_API Data : public Object
         {
         protected:
             // the instance we are processing, if any

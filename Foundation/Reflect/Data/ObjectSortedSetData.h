@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ObjectSortedSetData : public ContainerData
+        class HELIUM_FOUNDATION_API ObjectSortedSetData : public ContainerData
         {
         public:
             typedef SortedSet< ObjectPtr > DataType;

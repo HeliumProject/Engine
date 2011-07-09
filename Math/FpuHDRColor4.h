@@ -12,7 +12,7 @@
 
 namespace Helium
 {
-    class MATH_API HDRColor4 : public Color4
+    class HELIUM_MATH_API HDRColor4 : public Color4
     {
     public:
         float32_t s; // scale, for HDR
@@ -62,8 +62,8 @@ namespace Helium
         void ToLinearFloat( float32_t& r, float32_t& g, float32_t& b, float32_t& a );
         void Clamp ( const HDRColor4 &min, const HDRColor4 &mar );
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const HDRColor4& color);
-        friend MATH_API tistream& operator>>(tistream& inStream, HDRColor4& color);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const HDRColor4& color);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, HDRColor4& color);
     };
 
     typedef std::vector< HDRColor4 > V_HDRColor4;

@@ -8,7 +8,7 @@ namespace Helium
     namespace Simd
     {
         /// SIMD-optimized structure-of-arrays 3-component vector.
-        HELIUM_SIMD_ALIGN_PRE class MATH_API Vector3Soa
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API Vector3Soa
         {
         public:
             /// X components.

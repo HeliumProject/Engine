@@ -9,7 +9,7 @@
 namespace Helium
 {
     /// Application timer support.
-    class PLATFORM_API Timer : public TimerPlatformData
+    class HELIUM_PLATFORM_API Timer : public TimerPlatformData
     {
     public:
         /// @name Static Timing Support

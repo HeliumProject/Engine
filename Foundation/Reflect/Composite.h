@@ -49,7 +49,7 @@ namespace Helium
         // Field (an object of a composite)
         //
 
-        class FOUNDATION_API Field : public PropertyCollection
+        class HELIUM_FOUNDATION_API Field : public PropertyCollection
         {
         public:
             Field();
@@ -80,7 +80,7 @@ namespace Helium
         // Composite (struct or class)
         //
 
-        class FOUNDATION_API Composite : public Type
+        class HELIUM_FOUNDATION_API Composite : public Type
         {
         public:
             REFLECTION_TYPE( ReflectionTypes::Composite, Composite, Type );

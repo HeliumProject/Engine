@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API MeshAssetFactory : public AssetFactory
+        class HELIUM_PIPELINE_API MeshAssetFactory : public AssetFactory
         {
         public:
             MeshAssetFactory()

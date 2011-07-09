@@ -9,9 +9,9 @@
 
 namespace Helium
 {
-    class MATH_API Matrix4;
+    class HELIUM_MATH_API Matrix4;
 
-    class MATH_API Vector4
+    class HELIUM_MATH_API Vector4
     {
     public:
         float32_t x, y, z, w;
@@ -69,8 +69,8 @@ namespace Helium
 
         void              Transform (const Matrix4& m);
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Vector4& vector);
-        friend MATH_API tistream& operator>>(tistream& inStream, Vector4& vector);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Vector4& vector);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Vector4& vector);
     };
 
     typedef std::vector< Vector4 > V_Vector4;

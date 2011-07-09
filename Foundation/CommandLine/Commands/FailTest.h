@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace CommandLine
     {
-        class FOUNDATION_API FailTest : public Command
+        class HELIUM_FOUNDATION_API FailTest : public Command
         {
         public:
             FailTest();

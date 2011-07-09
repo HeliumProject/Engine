@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-	class FOUNDATION_API Settings : public Reflect::Object
+	class HELIUM_FOUNDATION_API Settings : public Reflect::Object
 	{
 	public:
 		Settings()
@@ -32,7 +32,7 @@ namespace Helium
 
 	typedef std::map< Reflect::TypeID, SettingsPtr > M_Settings;
 
-	class FOUNDATION_API SettingsManager : public Reflect::Object
+	class HELIUM_FOUNDATION_API SettingsManager : public Reflect::Object
 	{
 	public:
 		REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );

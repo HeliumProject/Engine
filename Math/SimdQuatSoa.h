@@ -8,7 +8,7 @@ namespace Helium
     namespace Simd
     {
         /// SIMD-optimized structure-of-arrays quaternion.
-        HELIUM_SIMD_ALIGN_PRE class MATH_API QuatSoa
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API QuatSoa
         {
         public:
             /// Identity quaternion.

@@ -5,5 +5,5 @@
 
 namespace Helium
 {
-    PLATFORM_API void Print(const tchar_t* fmt, ...);
+    HELIUM_PLATFORM_API void Print(const tchar_t* fmt, ...);
 }

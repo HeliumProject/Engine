@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class MATH_API Frustum
+    class HELIUM_MATH_API Frustum
     {
     public:
         Plane top;

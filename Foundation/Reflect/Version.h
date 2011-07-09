@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API Version : public Object
+        class HELIUM_FOUNDATION_API Version : public Object
         {
         public:
             REFLECT_DECLARE_OBJECT( Version, Object );

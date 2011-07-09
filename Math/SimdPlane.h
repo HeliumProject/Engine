@@ -16,7 +16,7 @@ namespace Helium
         ///     <code>Ax + By + Cz + D = 0</code>
         ///
         /// Note that this is aligned to 16 bytes for SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API Plane
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API Plane
         {
         public:
             /// @name Construction/Destruction

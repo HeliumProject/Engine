@@ -12,7 +12,7 @@ namespace Helium
 {
     namespace CommandLine
     {
-        class FOUNDATION_API Command
+        class HELIUM_FOUNDATION_API Command
         {
         protected:
 			tstring m_Token;

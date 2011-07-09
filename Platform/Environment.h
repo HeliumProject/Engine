@@ -67,11 +67,11 @@ namespace Helium
         return false;
     }
 
-    PLATFORM_API bool GetUsername( tstring& username );
+    HELIUM_PLATFORM_API bool GetUsername( tstring& username );
 
     // this one is not named very well, but it's to avoid conflicts on windows with GetComputerName defines
-    PLATFORM_API bool GetComputer( tstring& computername );
+    HELIUM_PLATFORM_API bool GetComputer( tstring& computername );
 
-    PLATFORM_API bool GetPreferencesDirectory( tstring& preferencesDirectory );
-    PLATFORM_API bool GetGameDataDirectory( tstring& gameDataDirectory );
+    HELIUM_PLATFORM_API bool GetPreferencesDirectory( tstring& preferencesDirectory );
+    HELIUM_PLATFORM_API bool GetGameDataDirectory( tstring& gameDataDirectory );
 }

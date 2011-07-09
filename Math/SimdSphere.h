@@ -9,7 +9,7 @@ namespace Helium
     namespace Simd
     {
         /// Sphere representation.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API Sphere
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API Sphere
         {
         public:
             /// @name Construction/Destruction

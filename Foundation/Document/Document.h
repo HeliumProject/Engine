@@ -78,7 +78,7 @@ namespace Helium
     // Wraps all files manipulated by editors in Editor.  Handles all interaction
     // with revision control.
     // 
-    class FOUNDATION_API Document : public Helium::RefCountBase< Document >
+    class HELIUM_FOUNDATION_API Document : public Helium::RefCountBase< Document >
     {
     public:
         Document( const tstring& path );

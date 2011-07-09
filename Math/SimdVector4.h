@@ -9,7 +9,7 @@ namespace Helium
     namespace Simd
     {
         /// Single-precision floating-point 4-component vector.  Note that this is aligned to 16 bytes for SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API Vector4
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API Vector4
         {
         public:
             /// @name Construction/Destruction

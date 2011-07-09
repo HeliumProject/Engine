@@ -35,7 +35,7 @@ namespace Helium
 
     typedef int64_t FileLocation;
 
-    class FOUNDATION_API FileHandle : public Helium::RefCountBase< FileHandle >
+    class HELIUM_FOUNDATION_API FileHandle : public Helium::RefCountBase< FileHandle >
     {
     public:
         FileHandle( const tstring& path, const tchar_t* mode = TXT( "r" ) );

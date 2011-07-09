@@ -13,7 +13,7 @@ namespace Helium
 {
     namespace IPC
     {
-        class FOUNDATION_API PipeConnection : public Connection
+        class HELIUM_FOUNDATION_API PipeConnection : public Connection
         {
         private:
             tchar_t              m_PipeName[256];                // name of the pipe passed in by the user

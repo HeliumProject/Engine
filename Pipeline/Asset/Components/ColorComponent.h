@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API ColorComponent : public Component::ComponentBase
+        class HELIUM_PIPELINE_API ColorComponent : public Component::ComponentBase
         {
         private:
             HDRColor4 m_ColorHDR;

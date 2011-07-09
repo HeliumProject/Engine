@@ -32,7 +32,7 @@ namespace Helium
         typedef std::set<AssetClassPtr> S_AssetClass;
         typedef Helium::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
 
-        class PIPELINE_API AssetClass HELIUM_ABSTRACT : public Component::ComponentCollection
+        class HELIUM_PIPELINE_API AssetClass HELIUM_ABSTRACT : public Component::ComponentCollection
         {
         private:
             Helium::Path m_SourcePath;   // optional path where this asset was deserialized from

@@ -21,7 +21,7 @@ namespace Helium
         };
         typedef Helium::Signature< const CanvasShowArgs&> CanvasShowSignature;
 
-        class FOUNDATION_API Canvas : public Container
+        class HELIUM_FOUNDATION_API Canvas : public Container
         {
         public:
             REFLECT_DECLARE_ABSTRACT( Canvas, Container );

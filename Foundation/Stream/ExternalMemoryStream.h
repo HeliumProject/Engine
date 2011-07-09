@@ -5,7 +5,7 @@
 namespace Helium
 {
     /// Stream for reading from and writing to a pre-allocated memory buffer.
-    class FOUNDATION_API ExternalMemoryStream : public Stream
+    class HELIUM_FOUNDATION_API ExternalMemoryStream : public Stream
     {
     public:
         /// @name Construction/Destruction

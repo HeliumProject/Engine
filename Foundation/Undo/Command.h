@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Undo
     {
-        class FOUNDATION_API Command : public Helium::RefCountBase<Command>
+        class HELIUM_FOUNDATION_API Command : public Helium::RefCountBase<Command>
         {
         public:
             //

@@ -12,7 +12,7 @@ namespace Helium
 {
     class Scale;
 
-    class MATH_API Vector3
+    class HELIUM_MATH_API Vector3
     {
     public:
         float32_t x, y, z;
@@ -69,8 +69,8 @@ namespace Helium
         Vector3           Cross (const Vector3& v) const;
         void              Clamp ( const Vector3 &min, const Vector3 &max );
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Vector3& vector);
-        friend MATH_API tistream& operator>>(tistream& inStream, Vector3& vector);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Vector3& vector);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Vector3& vector);
     };
 
     typedef std::vector< Vector3 > V_Vector3;
@@ -182,5 +182,5 @@ namespace Helium
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     typedef std::multimap<int32_t, int32_t> MM_i32;
-    int32_t MATH_API LookupPosInArray( const Vector3& pos, int32_t min_key, int32_t max_key, V_Vector3& pos_array, MM_i32& pos_lookup , float32_t threshold);
+    int32_t HELIUM_MATH_API LookupPosInArray( const Vector3& pos, int32_t min_key, int32_t max_key, V_Vector3& pos_array, MM_i32& pos_lookup , float32_t threshold);
 }

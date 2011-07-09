@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API PathData : public Data
+        class HELIUM_FOUNDATION_API PathData : public Data
         {
         public:
             typedef Helium::Path DataType;

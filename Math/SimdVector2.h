@@ -9,7 +9,7 @@ namespace Helium
     {
         /// Single-precision floating-point 2-component vector.  Note that unlike Vector3 and Vector4, this is not aligned
         /// or padded for SIMD use.
-        class MATH_API Vector2
+        class HELIUM_MATH_API Vector2
         {
         public:
             /// @name Construction/Destruction

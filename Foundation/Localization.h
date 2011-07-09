@@ -19,9 +19,9 @@ namespace Helium
         typedef std::map< StringId, tstring > IdToStringMap;
         typedef std::map< LanguageId, IdToStringMap > LanguageToStringTableMap;
 
-        const FOUNDATION_API tstring& GetString( const TableId& tableId, const StringId& stringId, const LanguageId& languageId = "" );
+        const HELIUM_FOUNDATION_API tstring& GetString( const TableId& tableId, const StringId& stringId, const LanguageId& languageId = "" );
 
-        class FOUNDATION_API Statement
+        class HELIUM_FOUNDATION_API Statement
         {
         public:
             Statement( const TableId& tableId = "", const StringId& stringId = "", const LanguageId& languageId = "" )
@@ -59,7 +59,7 @@ namespace Helium
             tstring m_Buffer;
         };
 
-        class FOUNDATION_API StringTable
+        class HELIUM_FOUNDATION_API StringTable
         {
         public:
             StringTable( const TableId& tableId )
@@ -100,7 +100,7 @@ namespace Helium
             LanguageToStringTableMap m_Languages;
         };
 
-        class FOUNDATION_API Localizer
+        class HELIUM_FOUNDATION_API Localizer
         {
         public:
             Localizer()
@@ -152,8 +152,8 @@ namespace Helium
             std::map< TableId, const StringTable* > m_Tables;
         };
 
-        FOUNDATION_API Localizer& GlobalLocalizer();
-        FOUNDATION_API void Initialize();
-        FOUNDATION_API void Cleanup();
+        HELIUM_FOUNDATION_API Localizer& GlobalLocalizer();
+        HELIUM_FOUNDATION_API void Initialize();
+        HELIUM_FOUNDATION_API void Cleanup();
     }
 }

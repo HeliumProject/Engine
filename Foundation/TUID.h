@@ -27,7 +27,7 @@ namespace Helium
 {
     class GUID;
 
-    class FOUNDATION_API TUID
+    class HELIUM_FOUNDATION_API TUID
     {
     protected:
         tuid m_ID;
@@ -70,8 +70,8 @@ namespace Helium
             return base << TXT( "0x" ) << std::setfill( TXT( '0' ) ) << std::setw(16) << std::right << std::hex << std::uppercase;
         }
 
-        friend FOUNDATION_API tostream& operator<<( tostream& stream, const TUID& id );
-        friend FOUNDATION_API tistream& operator>>( tistream& stream, TUID& id );
+        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& stream, const TUID& id );
+        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& stream, TUID& id );
     };
 
     inline TUID::TUID()
@@ -138,7 +138,7 @@ namespace Helium
         m_ID = 0x0;
     }
 
-    FOUNDATION_API inline tostream& operator<<(tostream& stream, const TUID& id)
+    HELIUM_FOUNDATION_API inline tostream& operator<<(tostream& stream, const TUID& id)
     {
         tstring s;
         id.ToString(s);
@@ -146,7 +146,7 @@ namespace Helium
         return stream;
     }
 
-    FOUNDATION_API inline tistream& operator>>(tistream& stream, TUID& id)
+    HELIUM_FOUNDATION_API inline tistream& operator>>(tistream& stream, TUID& id)
     {
         tstring s;
         stream >> s;

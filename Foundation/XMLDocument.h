@@ -12,7 +12,7 @@ namespace Helium
 {
     class XMLDocument;
 
-    class FOUNDATION_API XMLElement
+    class HELIUM_FOUNDATION_API XMLElement
     {
     public:
         typedef Map< Name, String >             AttributeMap;
@@ -41,7 +41,7 @@ namespace Helium
         int32_t         m_NextSibling;
     };
 
-    class FOUNDATION_API XMLDocument
+    class HELIUM_FOUNDATION_API XMLDocument
     {
     public:
         class Iterator

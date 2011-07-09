@@ -43,7 +43,7 @@ namespace Helium
             };
         }
 
-        struct FOUNDATION_API Args
+        struct HELIUM_FOUNDATION_API Args
         {
             Host* m_Host;
             uint32_t   m_Flags;
@@ -110,7 +110,7 @@ namespace Helium
         // Interface is a named group of invokers
         //
 
-        class FOUNDATION_API Interface
+        class HELIUM_FOUNDATION_API Interface
         {
         public:
             Interface(const char* name);
@@ -144,7 +144,7 @@ namespace Helium
         // Host is the endpoint for communication and local store of interfaces
         //
 
-        class FOUNDATION_API Host
+        class HELIUM_FOUNDATION_API Host
         {
         public:
             Host();
@@ -212,7 +212,7 @@ namespace Helium
                 int32_t               m_ReplyTransaction;
             };
 
-            class FOUNDATION_API Stack
+            class HELIUM_FOUNDATION_API Stack
             {
             public:
                 Stack();

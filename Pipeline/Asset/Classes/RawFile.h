@@ -11,7 +11,7 @@ namespace Helium
 {
 	namespace Asset
 	{
-		class PIPELINE_API RawFile : public AssetClass
+		class HELIUM_PIPELINE_API RawFile : public AssetClass
 		{
 		public:
 

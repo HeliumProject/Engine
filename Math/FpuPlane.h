@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    class MATH_API Plane
+    class HELIUM_MATH_API Plane
     {
     public:
         Vector4 p;

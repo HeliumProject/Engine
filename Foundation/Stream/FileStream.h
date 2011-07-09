@@ -7,7 +7,7 @@
 namespace Helium
 {
     /// File stream base class.
-    class FOUNDATION_API FileStream : public Stream
+    class HELIUM_FOUNDATION_API FileStream : public Stream
     {
     public:
         /// File access mode flags.

@@ -56,7 +56,7 @@ namespace Helium
         // ClientData, this could be toolkit OR interpreter client data, there are two pointer in Control
         //
 
-        class FOUNDATION_API ClientData : public Reflect::Object
+        class HELIUM_FOUNDATION_API ClientData : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_ABSTRACT( ClientData, Reflect::Object );
@@ -96,7 +96,7 @@ namespace Helium
         // Widget, a base class for a GUI system implementation-specific Widget classes
         //
 
-        class FOUNDATION_API Widget : public Reflect::Object
+        class HELIUM_FOUNDATION_API Widget : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_ABSTRACT( Widget, Reflect::Object );
@@ -132,7 +132,7 @@ namespace Helium
         //  Widgets are allocated to a Control when Realized, and deleted when Unrealized
         //
 
-        class FOUNDATION_API Control : public Reflect::Object
+        class HELIUM_FOUNDATION_API Control : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_ABSTRACT( Control, Reflect::Object );
@@ -435,8 +435,8 @@ namespace Helium
         }
 
 #ifdef PROFILE_ACCUMULATION
-        FOUNDATION_API extern Profile::Accumulator g_RealizeAccumulator;
-        FOUNDATION_API extern Profile::Accumulator g_UnrealizeAccumulator;
+        HELIUM_FOUNDATION_API extern Profile::Accumulator g_RealizeAccumulator;
+        HELIUM_FOUNDATION_API extern Profile::Accumulator g_UnrealizeAccumulator;
 #endif
     }
 }

@@ -10,6 +10,6 @@ namespace Helium
 {
     namespace Importers
     {
-        PIPELINE_API SceneGraph::Mesh* ImportOBJ( const Path& path, bool flipWinding = false );
+        HELIUM_PIPELINE_API SceneGraph::Mesh* ImportOBJ( const Path& path, bool flipWinding = false );
     }
 }

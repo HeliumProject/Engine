@@ -6,7 +6,7 @@
 
 namespace Helium
 {
-    class FOUNDATION_API Input
+    class HELIUM_FOUNDATION_API Input
     {
     public:
         Input()
@@ -62,7 +62,7 @@ namespace Helium
         };
     }
 
-    class FOUNDATION_API MouseInput : public Input
+    class HELIUM_FOUNDATION_API MouseInput : public Input
     {
     public:
         MouseInput()
@@ -125,7 +125,7 @@ namespace Helium
         Point m_Position; // the position of the cursor on the screen (always set)
     };
 
-    class FOUNDATION_API MouseMoveInput : public MouseInput
+    class HELIUM_FOUNDATION_API MouseMoveInput : public MouseInput
     {
     public:
         bool Dragging() const
@@ -134,7 +134,7 @@ namespace Helium
         }
     };
 
-    class FOUNDATION_API MouseButtonInput : public MouseInput
+    class HELIUM_FOUNDATION_API MouseButtonInput : public MouseInput
     {
     public:
         MouseButtonInput()
@@ -183,7 +183,7 @@ namespace Helium
         uint32_t                 m_Button;       // to which button?
     };
 
-    class FOUNDATION_API MouseScrollInput : public MouseInput
+    class HELIUM_FOUNDATION_API MouseScrollInput : public MouseInput
     {
     public:
         MouseScrollInput()
@@ -371,7 +371,7 @@ namespace Helium
         };
     }
 
-    class FOUNDATION_API KeyboardInput : public Input
+    class HELIUM_FOUNDATION_API KeyboardInput : public Input
     {
     public:
         KeyboardInput( KeyCode code = (KeyCode)0x0, short modifier = 0x0 )

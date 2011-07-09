@@ -30,7 +30,7 @@ namespace Helium
 
         typedef Helium::Signature< const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
-        class FOUNDATION_API ComponentCollection : public Reflect::Object
+        class HELIUM_FOUNDATION_API ComponentCollection : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);

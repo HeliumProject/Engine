@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API SortedSetData : public ContainerData
+        class HELIUM_FOUNDATION_API SortedSetData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( SortedSetData, ContainerData );
@@ -24,7 +24,7 @@ namespace Helium
         };
 
         template< typename KeyT, typename CompareKeyT = Less< KeyT >, typename AllocatorT = DefaultAllocator >
-        class FOUNDATION_API SimpleSortedSetData : public SortedSetData
+        class HELIUM_FOUNDATION_API SimpleSortedSetData : public SortedSetData
         {
         public:
             typedef SortedSet< KeyT, CompareKeyT, AllocatorT > DataType;

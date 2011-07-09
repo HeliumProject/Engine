@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API MapData : public ContainerData
+        class HELIUM_FOUNDATION_API MapData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( MapData, ContainerData );
@@ -28,7 +28,7 @@ namespace Helium
         };
 
         template< typename KeyT, typename ValueT, typename EqualKeyT = Equals< KeyT >, typename AllocatorT = DefaultAllocator >
-        class FOUNDATION_API SimpleMapData : public MapData
+        class HELIUM_FOUNDATION_API SimpleMapData : public MapData
         {
         public:
             typedef Map< KeyT, ValueT, EqualKeyT, AllocatorT > DataType;

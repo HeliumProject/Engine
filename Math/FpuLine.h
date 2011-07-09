@@ -9,7 +9,7 @@ namespace Helium
     class Matrix4;
     class Plane;
 
-    class MATH_API Line
+    class HELIUM_MATH_API Line
     {
     public:
         Vector3 m_Origin;

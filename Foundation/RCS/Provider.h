@@ -12,7 +12,7 @@ namespace Helium
         // Abstract base class for a revision control provider
         //
 
-        class FOUNDATION_API Provider
+        class HELIUM_FOUNDATION_API Provider
         {
         public:
             Provider();

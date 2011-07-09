@@ -15,7 +15,7 @@ namespace Helium
     /// performance than a full-scale mutex, making it a more desirable alternative for general use.
     ///
     /// If a mutex is needed for synchronization across processes, ProcessMutex should be used instead.
-    class PLATFORM_API Mutex : NonCopyable
+    class HELIUM_PLATFORM_API Mutex : NonCopyable
     {
     public:
 #if HELIUM_OS_WIN

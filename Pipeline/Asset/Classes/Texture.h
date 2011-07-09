@@ -74,7 +74,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API Texture : public AssetClass
+        class HELIUM_PIPELINE_API Texture : public AssetClass
         {
         private:
             TextureFormat               m_Format;

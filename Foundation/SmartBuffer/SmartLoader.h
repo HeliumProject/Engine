@@ -70,8 +70,8 @@ namespace Helium
     //
     // Loading API
     //
-    FOUNDATION_API bool LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_size );
-    FOUNDATION_API bool ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size, void* data_to_fixup, uint32_t data_to_fixup_size );
-    FOUNDATION_API bool ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size );
-    FOUNDATION_API bool FindChunkHeader( const ChunkFile& chunk_file, ChunkHeader*& chunk_header, uint32_t chunk_type );
+    HELIUM_FOUNDATION_API bool LoadChunkHeaders( ChunkFile& chunk_file, void* data, uint32_t data_size );
+    HELIUM_FOUNDATION_API bool ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size, void* data_to_fixup, uint32_t data_to_fixup_size );
+    HELIUM_FOUNDATION_API bool ParseChunkedData( ChunkFile& chunk_file, void* data, uint32_t data_size );
+    HELIUM_FOUNDATION_API bool FindChunkHeader( const ChunkFile& chunk_file, ChunkHeader*& chunk_header, uint32_t chunk_type );
 }

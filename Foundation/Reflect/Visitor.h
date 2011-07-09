@@ -13,7 +13,7 @@ namespace Helium
         class Structure;
         class Field;
 
-        class FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >, NonCopyable
+        class HELIUM_FOUNDATION_API Visitor : public Helium::AtomicRefCountBase< Visitor >, NonCopyable
         {
         public:
             virtual bool VisitObject(Object* /*object*/)
@@ -34,7 +34,7 @@ namespace Helium
 
         typedef Helium::SmartPtr<Visitor> VisitorPtr;
 
-        class FOUNDATION_API FindByTypeVisitor : public Visitor
+        class HELIUM_FOUNDATION_API FindByTypeVisitor : public Visitor
         {
         public:
             const Reflect::Class* m_Class;
@@ -46,7 +46,7 @@ namespace Helium
             virtual bool VisitObject(Object* object) HELIUM_OVERRIDE;
         };
 
-        class FOUNDATION_API FindByTypeSetVisitor : public Visitor
+        class HELIUM_FOUNDATION_API FindByTypeSetVisitor : public Visitor
         {
         public:
             const std::set< const Reflect::Class* >& m_Classes;

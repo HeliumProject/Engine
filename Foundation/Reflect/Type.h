@@ -19,7 +19,7 @@ namespace Helium
         // Type, fully qualified type information
         //
 
-        class FOUNDATION_API Type HELIUM_ABSTRACT : public ReflectionInfo
+        class HELIUM_FOUNDATION_API Type HELIUM_ABSTRACT : public ReflectionInfo
         {
         public:
             REFLECTION_BASE( ReflectionTypes::Type, Type );

@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API CheckBox : public Control
+        class HELIUM_FOUNDATION_API CheckBox : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( CheckBox, Control );

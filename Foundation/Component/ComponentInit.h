@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Component
     {
-        void FOUNDATION_API Initialize(); 
-        void FOUNDATION_API Cleanup(); 
+        void HELIUM_FOUNDATION_API Initialize(); 
+        void HELIUM_FOUNDATION_API Cleanup(); 
     }
 }

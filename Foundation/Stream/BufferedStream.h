@@ -9,7 +9,7 @@ namespace Helium
     /// @note  A BufferedStream should never wrap a ByteSwappingStream.  Doing so will invalidate proper byte swapping,
     ///        as the information needed to properly perform byte swapping is not retained by the BufferedStream.  A
     ///        ByteSwappingStream can be safely used to wrap access to a BufferedStream, though.
-    class FOUNDATION_API BufferedStream : public Stream
+    class HELIUM_FOUNDATION_API BufferedStream : public Stream
     {
     public:
         /// Default buffer size, in bytes.

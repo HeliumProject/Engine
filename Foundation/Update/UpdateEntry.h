@@ -14,7 +14,7 @@ namespace Helium
     class UpdateEntry;
     typedef void (UpdateCallback)( UpdateEntry* updateEntry, float64_t deltaTime, float64_t time );
 
-    class FOUNDATION_API UpdateEntry
+    class HELIUM_FOUNDATION_API UpdateEntry
     {
     public:
         typedef std::set< tuid > DependencySet;

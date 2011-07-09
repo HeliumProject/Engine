@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API ReflectInterpreter : public Interpreter
+        class HELIUM_FOUNDATION_API ReflectInterpreter : public Interpreter
         {
         public:
             ReflectInterpreter (Container* container);
@@ -25,7 +25,7 @@ namespace Helium
 
         typedef Helium::StrongPtr<ReflectInterpreter> ReflectInterpreterPtr;
 
-        class FOUNDATION_API ReflectFieldInterpreterFactory
+        class HELIUM_FOUNDATION_API ReflectFieldInterpreterFactory
         {
         public:
             template< class T >

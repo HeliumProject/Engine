@@ -11,7 +11,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API SceneAsset : public AssetClass
+        class HELIUM_PIPELINE_API SceneAsset : public AssetClass
         {
         public:
             REFLECT_DECLARE_OBJECT( SceneAsset, AssetClass );

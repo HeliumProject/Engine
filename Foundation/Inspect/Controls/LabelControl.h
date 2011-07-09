@@ -9,7 +9,7 @@ namespace Helium
     {
         const static tchar_t LABEL_ATTR_TEXT[] = TXT( "text" );
 
-        class FOUNDATION_API Label : public Control
+        class HELIUM_FOUNDATION_API Label : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( Label, Control );

@@ -16,7 +16,7 @@ namespace Helium
     ///
     /// Note that recursive locking is not supported.  If a thread attempts to acquire a lock while it already has one,
     /// a deadlock will occur.
-    class PLATFORM_API SpinLock
+    class HELIUM_PLATFORM_API SpinLock
     {
     public:
         /// @name Construction/Destruction

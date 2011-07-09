@@ -12,7 +12,7 @@ namespace Helium
         class QuatSoa;
 
         /// SIMD-optimized structure-of-arrays 4x4 matrix.
-        HELIUM_SIMD_ALIGN_PRE class MATH_API Matrix44Soa
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API Matrix44Soa
         {
         public:
             /// Identity matrix.

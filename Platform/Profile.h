@@ -21,7 +21,7 @@ typedef struct _iobuf FILE;
 
 namespace Helium
 {
-    class PLATFORM_API SimpleTimer : NonCopyable
+    class HELIUM_PLATFORM_API SimpleTimer : NonCopyable
     {
     public:
         SimpleTimer()
@@ -39,7 +39,7 @@ namespace Helium
         uint64_t m_StartTime;
     };
 
-    class PLATFORM_API TraceFile
+    class HELIUM_PLATFORM_API TraceFile
     {
     private:
         FILE_HANDLE m_FileHandle;
@@ -60,10 +60,10 @@ namespace Helium
         static const tchar_t* GetFilePath();
     };
 
-    PLATFORM_API uint64_t TimerGetClock();
-    PLATFORM_API float CyclesToMillis(uint64_t cycles);
-    PLATFORM_API float TimeTaken(uint64_t start_time);
-    PLATFORM_API void ReportTime(const tchar_t* segment, uint64_t start_time, double& total_millis);
+    HELIUM_PLATFORM_API uint64_t TimerGetClock();
+    HELIUM_PLATFORM_API float CyclesToMillis(uint64_t cycles);
+    HELIUM_PLATFORM_API float TimeTaken(uint64_t start_time);
+    HELIUM_PLATFORM_API void ReportTime(const tchar_t* segment, uint64_t start_time, double& total_millis);
 
-    PLATFORM_API uint64_t GetTotalMemory();
+    HELIUM_PLATFORM_API uint64_t GetTotalMemory();
 }

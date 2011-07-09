@@ -159,7 +159,7 @@ namespace Helium
     /// space (physical memory if possible).  Typically, most application will not use this directly, but will instead
     /// allocate using one of the provided heap allocators, which provide better management for most runtime
     /// allocations.
-    class PLATFORM_API PhysicalMemory
+    class HELIUM_PLATFORM_API PhysicalMemory
     {
     public:
         /// @name Memory Allocation
@@ -189,7 +189,7 @@ namespace Helium
     /// - Reallocate() should behave just as if Free() was called on the memory address provided if the size is null.
     /// - The alignment parameter of AllocateAligned() should be expected to be a power of two.
     /// - Free() should run with no ill effects if a null pointer is provided for the memory address to free.
-    class PLATFORM_API MemoryHeap : NonCopyable
+    class HELIUM_PLATFORM_API MemoryHeap : NonCopyable
     {
     public:
         /// @name Allocation Interface
@@ -208,7 +208,7 @@ namespace Helium
     /// from the system using PhysicalMemory::Allocate() and PhysicalMemory::Free(), and allocations within these blocks
     /// are managed internally using nedmalloc (http://www.nedprod.com/programs/portable/nedmalloc/) to provide
     /// efficient scalability across multiple threads.
-    class PLATFORM_API DynamicMemoryHeap : public MemoryHeap
+    class HELIUM_PLATFORM_API DynamicMemoryHeap : public MemoryHeap
     {
     public:
 #if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
@@ -460,7 +460,7 @@ namespace Helium
     /// This provides an interface to a StackMemoryHeap instance specifically for the current thread.  This heap is a
     /// growable heap that can be used for various temporary allocations.  Note that since jobs can be run on any
     /// thread, you should never attempt to leave an allocation around for another job to free.
-    class PLATFORM_API ThreadLocalStackAllocator
+    class HELIUM_PLATFORM_API ThreadLocalStackAllocator
     {
     public:
         /// Size of each stack block.
@@ -499,12 +499,12 @@ namespace Helium
     extern DynamicMemoryHeap& HELIUM_MODULE_HEAP_FUNCTION();
 #else
     /// Get the default heap to use for dynamic allocations.
-    PLATFORM_API DynamicMemoryHeap& GetDefaultHeap();
+    HELIUM_PLATFORM_API DynamicMemoryHeap& GetDefaultHeap();
 #endif
 
 #if HELIUM_USE_EXTERNAL_HEAP
     /// Get the default heap to use for dynamic allocations from external libraries.
-    PLATFORM_API DynamicMemoryHeap& GetExternalHeap();
+    HELIUM_PLATFORM_API DynamicMemoryHeap& GetExternalHeap();
 #endif
 
     /// @defgroup newdeletehelper "new"/"delete" Helper Functions

@@ -21,7 +21,7 @@ namespace Helium
         const uint32_t Default = 0;
     }
 
-    struct FOUNDATION_API DirectoryItem
+    struct HELIUM_FOUNDATION_API DirectoryItem
     {
         DirectoryItem()
             : m_CreateTime ( 0x0 )
@@ -45,7 +45,7 @@ namespace Helium
         uint64_t  m_Size;
     };
 
-    class FOUNDATION_API Directory
+    class HELIUM_FOUNDATION_API Directory
     {
     public:
         Directory();
@@ -75,5 +75,5 @@ namespace Helium
 
     typedef Helium::Signature< const DirectoryItem& > DirectoryItemSignature;
 
-    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const Path& path, uint32_t flags = DirectoryFlags::Default);
+    HELIUM_FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const Path& path, uint32_t flags = DirectoryFlags::Default);
 }

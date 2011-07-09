@@ -32,7 +32,7 @@ namespace Helium
 #if HELIUM_WORDSIZE == 32
     /// Default 64-bit signed integer hash function.
     template<>
-    class FOUNDATION_API Hash< int64_t >
+    class HELIUM_FOUNDATION_API Hash< int64_t >
     {
     public:
         inline size_t operator()( int64_t value ) const;
@@ -40,7 +40,7 @@ namespace Helium
 
     /// Default 64-bit unsigned integer hash function.
     template<>
-    class FOUNDATION_API Hash< uint64_t >
+    class HELIUM_FOUNDATION_API Hash< uint64_t >
     {
     public:
         inline size_t operator()( uint64_t value ) const;
@@ -49,7 +49,7 @@ namespace Helium
 
     /// Default 32-bit floating-point hash function.
     template<>
-    class FOUNDATION_API Hash< float32_t >
+    class HELIUM_FOUNDATION_API Hash< float32_t >
     {
     public:
         inline size_t operator()( float32_t key ) const;
@@ -57,7 +57,7 @@ namespace Helium
 
     /// Default 64-bit floating-point hash function.
     template<>
-    class FOUNDATION_API Hash< float64_t >
+    class HELIUM_FOUNDATION_API Hash< float64_t >
     {
     public:
         inline size_t operator()( float64_t key ) const;
@@ -65,7 +65,7 @@ namespace Helium
 
     /// Default string hash.
     template<>
-    class FOUNDATION_API Hash< char* >
+    class HELIUM_FOUNDATION_API Hash< char* >
     {
     public:
         size_t operator()( const char* pKey ) const;
@@ -73,7 +73,7 @@ namespace Helium
 
     /// Default wide-character string hash.
     template<>
-    class FOUNDATION_API Hash< wchar_t* >
+    class HELIUM_FOUNDATION_API Hash< wchar_t* >
     {
     public:
         size_t operator()( const wchar_t* pKey ) const;
@@ -81,7 +81,7 @@ namespace Helium
 
     /// Default string hash.
     template<>
-    class FOUNDATION_API Hash< const char* >
+    class HELIUM_FOUNDATION_API Hash< const char* >
     {
     public:
         size_t operator()( const char* pKey ) const;
@@ -89,7 +89,7 @@ namespace Helium
 
     /// Default wide-character string hash.
     template<>
-    class FOUNDATION_API Hash< const wchar_t* >
+    class HELIUM_FOUNDATION_API Hash< const wchar_t* >
     {
     public:
         size_t operator()( const wchar_t* pKey ) const;

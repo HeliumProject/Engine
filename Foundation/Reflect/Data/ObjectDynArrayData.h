@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API ObjectDynArrayData : public ContainerData
+        class HELIUM_FOUNDATION_API ObjectDynArrayData : public ContainerData
         {
         public:
             typedef DynArray< ObjectPtr > DataType;

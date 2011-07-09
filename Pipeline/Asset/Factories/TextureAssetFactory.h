@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API TextureAssetFactory : public AssetFactory
+        class HELIUM_PIPELINE_API TextureAssetFactory : public AssetFactory
         {
         public:
             TextureAssetFactory()

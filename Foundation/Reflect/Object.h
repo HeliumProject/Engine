@@ -28,7 +28,7 @@ namespace Helium
         // ObjectRefCountSupport provides the support interface for managing reference counting data
         //
 
-        class FOUNDATION_API ObjectRefCountSupport
+        class HELIUM_FOUNDATION_API ObjectRefCountSupport
         {
         public:
             /// Base type of reference counted object.
@@ -85,7 +85,7 @@ namespace Helium
         // Object is the abstract base class of a serializable class
         //
 
-        class FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
+        class HELIUM_FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
         protected:
             HELIUM_DECLARE_REF_COUNT( Object, ObjectRefCountSupport );

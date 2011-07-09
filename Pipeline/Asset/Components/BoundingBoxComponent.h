@@ -7,7 +7,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API BoundingBoxComponent : public Component::ComponentBase
+        class HELIUM_PIPELINE_API BoundingBoxComponent : public Component::ComponentBase
         {
         private:
             Vector3 m_Extents;

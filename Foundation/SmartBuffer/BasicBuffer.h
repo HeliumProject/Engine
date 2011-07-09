@@ -39,7 +39,7 @@ namespace Helium
     // a special file, it can probably follow that format...
     //
     //////////////////////////////////////////////////////////////////////////
-    class FOUNDATION_API BasicBufferDebugInfo
+    class HELIUM_FOUNDATION_API BasicBufferDebugInfo
     {
     public:
 
@@ -74,7 +74,7 @@ namespace Helium
     // BasicBuffer is the most simple implementation of a SmartBuffer 
     //
 
-    class FOUNDATION_API BasicBuffer : public SmartBuffer
+    class HELIUM_FOUNDATION_API BasicBuffer : public SmartBuffer
     {
         friend class BufferCollection;
 

@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API TypeIDData : public Data
+        class HELIUM_FOUNDATION_API TypeIDData : public Data
         {
         public:
             typedef TypeID DataType;

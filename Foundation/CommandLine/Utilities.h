@@ -15,21 +15,21 @@ namespace Helium
     //
 
     // std delims
-    FOUNDATION_API extern const tchar_t* CmdLineDelimiters;
+    HELIUM_FOUNDATION_API extern const tchar_t* CmdLineDelimiters;
 
     // get/set the command line
-    FOUNDATION_API void SetCmdLine( int argc, const tchar_t** argv );
-    FOUNDATION_API const tchar_t* GetCmdLine();
-    FOUNDATION_API void ReleaseCmdLine();
+    HELIUM_FOUNDATION_API void SetCmdLine( int argc, const tchar_t** argv );
+    HELIUM_FOUNDATION_API const tchar_t* GetCmdLine();
+    HELIUM_FOUNDATION_API void ReleaseCmdLine();
 
     // convert from flat string to argc/argv
-    FOUNDATION_API void ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& argv);
+    HELIUM_FOUNDATION_API void ProcessCmdLine(const tchar_t* command, int& argc, const tchar_t**& argv);
 
     // get an arg by index
-    FOUNDATION_API const tchar_t** GetCmdLine( int& argc );
+    HELIUM_FOUNDATION_API const tchar_t** GetCmdLine( int& argc );
 
     // get an arg by string
-    FOUNDATION_API const tchar_t* GetCmdLineArg( const tchar_t* arg );
+    HELIUM_FOUNDATION_API const tchar_t* GetCmdLineArg( const tchar_t* arg );
 
     template<class T>
     inline bool GetCmdLineArg( const tstring& cmdArgName, T& cmdArgValue )
@@ -83,5 +83,5 @@ namespace Helium
         return false;
     }
 
-    FOUNDATION_API bool GetCmdLineFlag( const tchar_t* arg );
+    HELIUM_FOUNDATION_API bool GetCmdLineFlag( const tchar_t* arg );
 }

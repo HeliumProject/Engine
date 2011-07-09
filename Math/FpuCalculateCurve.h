@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    class MATH_API CurveGenerator
+    class HELIUM_MATH_API CurveGenerator
     {
     public:
         enum Type

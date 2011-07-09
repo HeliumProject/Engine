@@ -87,7 +87,7 @@ namespace Helium
     };
 
     /// CharString name table.
-    class FOUNDATION_API CharNameTable
+    class HELIUM_FOUNDATION_API CharNameTable
     {
         friend class NameBase< CharNameTable >;
 
@@ -105,7 +105,7 @@ namespace Helium
     };
 
     /// WideString name table.
-    class FOUNDATION_API WideNameTable
+    class HELIUM_FOUNDATION_API WideNameTable
     {
         friend class NameBase< WideNameTable >;
 

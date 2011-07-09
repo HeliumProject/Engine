@@ -9,8 +9,8 @@ namespace Helium
 {
     namespace Debug
     {
-        FOUNDATION_API void InitializeExceptionListener();
-        FOUNDATION_API void CleanupExceptionListener();
+        HELIUM_FOUNDATION_API void InitializeExceptionListener();
+        HELIUM_FOUNDATION_API void CleanupExceptionListener();
 
         class ExceptionReport
         {

@@ -77,7 +77,7 @@ namespace Helium
         }
         typedef ActionData::ActionDatum ActionDatum;
 
-        class FOUNDATION_API Action : public Helium::RefCountBase< Action >
+        class HELIUM_FOUNDATION_API Action : public Helium::RefCountBase< Action >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
@@ -136,7 +136,7 @@ namespace Helium
         }
         typedef FileData::FileDatum FileDatum;
 
-        class FOUNDATION_API File : public Helium::RefCountBase< File >
+        class HELIUM_FOUNDATION_API File : public Helium::RefCountBase< File >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly

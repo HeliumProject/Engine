@@ -13,7 +13,7 @@ namespace Helium
         // Version information for scene classes
         //
 
-        class PIPELINE_API ManifestVersion : public Reflect::Version
+        class HELIUM_PIPELINE_API ManifestVersion : public Reflect::Version
         {
         public:
             tstring m_ManifestVersion;

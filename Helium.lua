@@ -4,9 +4,6 @@ configuration {}
 
 defines
 {
-	"PLATFORM_DLL=1",
-	"FOUNDATION_DLL=1",
-	"PIPELINE_DLL=1",
 	"WXUSINGDLL=1",
 	"wxNO_EXPAT_LIB=1",
 	"wxNO_JPEG_LIB=1",
@@ -15,28 +12,40 @@ defines
 	"wxNO_ZLIB_LIB=1",
 }
 
-flags
-{
-	"FatalWarnings",
-}
-
 includedirs
 {
 	".",
 	"Dependencies/boost",
 	"Dependencies/Expat",
 	"Dependencies/freetype/include",
+	"Dependencies/LiteSQL/include",
+	"Dependencies/lua/src",
+	"Dependencies/nvtt",
 	"Dependencies/nvtt/src",
+	"Dependencies/nvtt/src/nvtt/squish",
+	"Dependencies/p4api/include",
 	"Dependencies/png",
+	"Dependencies/tiff",
+	"Dependencies/tiff/libtiff",
 	"Dependencies/tbb/include",
+	"Dependencies/wxWidgets/include",
 	"Dependencies/zlib",
+
 	Helium.GetFbxSdkLocation() .. "/include",
 }
 
-libdirs
-{
-	Helium.GetFbxSdkLocation() .. "/lib/vs2008",
-}
+configuration "windows"
+	includedirs
+	{
+		"Dependencies/nvtt/project/vc8",
+		"Dependencies/wxWidgets/include/msvc",
+	}
+	libdirs
+	{
+		Helium.GetFbxSdkLocation() .. "/lib/vs2008",
+	}
+
+configuration {}
 
 if haveGranny then
 	includedirs
@@ -261,18 +270,13 @@ end
 
 project "Platform"
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
-	language "C++"
-	defines
-	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetPlatformDefaultHeap",
-	}
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Platform", "PLATFORM" )
+
 	files
 	{
 		"Platform/*",
 	}
-
-    pchheader( "PlatformPch.h" )
-    pchsource( "Platform/PlatformPch.cpp" )
 
 	configuration "windows"
 		excludes
@@ -281,73 +285,31 @@ project "Platform"
 			"Platform/*Mac.*",
 			"Platform/*Lin.*",
 		}
+
 	configuration "macosx"
-		files
-		{
-			"Platform/*Posix.*",
-		}
 		excludes
 		{
 			"Platform/*Win.*",
 			"Platform/*Lin.*",
 		}
+
 	configuration "linux"
-		files
-		{
-			"Platform/*Posix.*",
-		}
 		excludes
 		{
 			"Platform/*Win.*",
 			"Platform/*Mac.*",
 		}
 
-	configuration "not windows"
-		kind "StaticLib"
-
-	configuration { "windows", "Debug" }
-		kind "SharedLib"
-		defines
-		{
-			"PLATFORM_EXPORTS",
-		}
-
-	configuration { "windows", "not Debug" }
-		kind "StaticLib"
-
-	--configuration { "windows", "SharedLib" }
-	configuration { "windows", "Debug" }
-		links
-		{
-			"ws2_32",
-		}
-
 project "Math"
 	uuid "129267DC-66C7-489B-8538-ADF1B6EA4160"
-	language "C++"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Math", "MATH" )
 
 	files
 	{
-		"Math/**",
-		"Math/**",
+		"Math/*",
 	}
 
-    pchheader( "MathPch.h" )
-    pchsource( "Math/MathPch.cpp" )
-
-	configuration "not windows"
-		kind "StaticLib"
-
-	configuration { "windows", "Debug" }
-		kind "SharedLib"
-		defines
-		{
-			"MATH_EXPORTS",
-		}
-
-	configuration { "windows", "not Debug" }
-		kind "StaticLib"
-	
 	configuration "SharedLib"
 		links
 		{
@@ -356,33 +318,17 @@ project "Math"
 
 project "Foundation"
 	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
-	language "C++"
-	defines
-	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetFoundationDefaultHeap",
-	}
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Foundation", "FOUNDATION" )
+
 	files
 	{
-		"Foundation/**",
 		"Foundation/**",
 	}
 
     pchheader( "FoundationPch.h" )
     pchsource( "Foundation/FoundationPch.cpp" )
 
-	configuration "not windows"
-		kind "StaticLib"
-
-	configuration { "windows", "Debug" }
-		kind "SharedLib"
-		defines
-		{
-			"FOUNDATION_EXPORTS",
-		}
-
-	configuration { "windows", "not Debug" }
-		kind "StaticLib"
-	
 	configuration "SharedLib"
 		links
 		{
@@ -392,16 +338,15 @@ project "Foundation"
 			"zlib",
 		}
 
-	configuration { "windows", "SharedLib" }
-		links
-		{
-			"ws2_32",
-		}
-
 project "Engine"
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Engine", "ENGINE" )
+
+	files
+	{
+		"Engine/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -416,6 +361,11 @@ project "EngineJobs"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EngineJobs", "ENGINE_JOBS" )
 
+	files
+	{
+		"EngineJobs/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -429,6 +379,11 @@ project "Windowing"
 	uuid "B68268DF-3942-432F-89B1-DBC82C21218E"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Windowing", "WINDOWING" )
+
+	files
+	{
+		"Windowing/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -445,6 +400,11 @@ project "Rendering"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Rendering", "RENDERING" )
 
+	files
+	{
+		"Rendering/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -459,6 +419,11 @@ project "GraphicsTypes"
 	uuid "4A13A4F6-6860-4F52-A217-B0C3943E7025"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsTypes", "GRAPHICS_TYPES" )
+
+	files
+	{
+		"GraphicsTypes/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -475,6 +440,11 @@ project "GraphicsJobs"
 	uuid "4D83346D-DCB2-40E6-AAF1-508341728E57"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "GraphicsJobs", "GRAPHICS_JOBS" )
+
+	files
+	{
+		"GraphicsJobs/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -493,6 +463,11 @@ project "Graphics"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Graphics", "GRAPHICS" )
 
+	files
+	{
+		"Graphics/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -510,6 +485,11 @@ project "Framework"
 	uuid "6DB6B383-76E6-4361-8CFE-F08F1CFE24BE"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "Framework", "FRAMEWORK" )
+
+	files
+	{
+		"Framework/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -531,6 +511,11 @@ project "WindowingWin"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "WindowingWin", "WINDOWING_WIN" )
 
+	files
+	{
+		"WindowingWin/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -546,6 +531,11 @@ project "RenderingD3D9"
 	uuid "4BE28ED4-950D-469B-A6F8-88C09BA479E5"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "RenderingD3D9", "RENDERING_D3D9" )
+
+	files
+	{
+		"RenderingD3D9/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -563,6 +553,11 @@ project "PcSupport"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PcSupport", "PC_SUPPORT" )
 
+	files
+	{
+		"PcSupport/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -578,6 +573,11 @@ project "PreprocessingPc"
 	uuid "94E6A151-FC28-41EE-A5F3-D8629F6B8B3B"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "PreprocessingPc", "PREPROCESSING_PC" )
+
+	files
+	{
+		"PreprocessingPc/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -598,6 +598,11 @@ project "EditorSupport"
 	uuid "82F12FF0-CA4E-42E5-84A7-92A5C1A8AE26"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "EditorSupport", "EDITOR_SUPPORT" )
+
+	files
+	{
+		"EditorSupport/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -621,6 +626,11 @@ project "FrameworkWin"
 	uuid "8F1B5E58-BDA5-447D-9FD4-36A3B23221B8"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "FrameworkWin", "FRAMEWORK_WIN" )
+
+	files
+	{
+		"FrameworkWin/*",
+	}
 
 	configuration "SharedLib"
 		links
@@ -648,6 +658,11 @@ project "SceneGraph"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "SceneGraph", "SCENE_GRAPH" )
 
+	files
+	{
+		"SceneGraph/*",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -673,47 +688,14 @@ project "SceneGraph"
 
 project "Pipeline"
 	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
-	language "C++"
-	defines
-	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetPipelineDefaultHeap",
-	}
-	includedirs
-	{
-		"Dependencies/nvtt",
-		"Dependencies/nvtt/src",
-		"Dependencies/nvtt/src/nvtt/squish",
-		"Dependencies/tiff",
-		"Dependencies/tiff/libtiff",
-	}
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Pipeline", "PIPELINE" )
+
 	files
 	{
-		"Pipeline/**.h",
-		"Pipeline/**.cpp",
+		"Pipeline/**",
 	}
 
-    pchheader( "PipelinePch.h" )
-    pchsource( "Pipeline/PipelinePch.cpp" )
-
-	configuration "windows"
-		includedirs
-		{
-			"Dependencies/nvtt/project/vc8",
-		}
-
-	configuration "not windows"
-		kind "StaticLib"
-
-	configuration { "windows", "Debug" }
-		kind "SharedLib"
-		defines
-		{
-			"PIPELINE_EXPORTS",
-		}
-
-	configuration { "windows", "not Debug" }
-		kind "StaticLib"
-	
 	configuration "SharedLib"
 		links
 		{
@@ -761,14 +743,6 @@ project "Editor"
 
 	Helium.DoDefaultProjectSettings()
 
-	includedirs
-	{
-		"Editor",
-		"Dependencies/wxWidgets/include",
-		"Dependencies/LiteSQL/include",
-		"Dependencies/p4api/include",
-		"Dependencies/lua/src",
-	}
 	links
 	{
 		"Platform",
@@ -805,12 +779,6 @@ project "Editor"
 		"WinMain"
 	}
 
-	configuration "windows"
-		includedirs
-		{
-			"Dependencies/wxWidgets/include/msvc",
-		}
-		
 	-- per architecture
 	configuration { "windows", "x32" }
 		libdirs

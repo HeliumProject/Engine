@@ -27,7 +27,7 @@ namespace Helium
         };
         typedef Helium::Signature< const AddItemArgs& > AddItemSignature;
 
-        class FOUNDATION_API List : public Control
+        class HELIUM_FOUNDATION_API List : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( List, Control );

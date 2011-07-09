@@ -24,7 +24,7 @@ namespace Helium
         class DocumentObject;
         typedef Helium::StrongPtr< DocumentObject > DocumentObjectPtr;
 
-        class FOUNDATION_API DocumentNode : public Reflect::Object
+        class HELIUM_FOUNDATION_API DocumentNode : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_ABSTRACT( DocumentNode, Object );
@@ -84,7 +84,7 @@ namespace Helium
             DocumentNode*       m_Previous;
         };
 
-        class FOUNDATION_API DocumentAttribute : public DocumentNode
+        class HELIUM_FOUNDATION_API DocumentAttribute : public DocumentNode
         {
         public:
             REFLECT_DECLARE_OBJECT( DocumentAttribute, DocumentNode );
@@ -156,7 +156,7 @@ namespace Helium
         typedef Helium::Signature< const DocumentHierarchyChangingArgs& > DocumentHierarchyChangingSignature;
         typedef Helium::Signature< const DocumentHierarchyChangeArgs& > DocumentHierarchyChangedSignature;
 
-        class FOUNDATION_API DocumentObject : public DocumentNode
+        class HELIUM_FOUNDATION_API DocumentObject : public DocumentNode
         {
         public:
             REFLECT_DECLARE_OBJECT( DocumentObject, DocumentNode );
@@ -249,7 +249,7 @@ namespace Helium
             DocumentHierarchyChangedSignature::Event    m_ChildRemoved;
         };
 
-        class FOUNDATION_API Document : public DocumentObject
+        class HELIUM_FOUNDATION_API Document : public DocumentObject
         {
         public:
             REFLECT_DECLARE_OBJECT( Document, DocumentObject );

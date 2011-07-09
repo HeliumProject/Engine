@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API AssetManifest : public Reflect::Object
+        class HELIUM_PIPELINE_API AssetManifest : public Reflect::Object
         {
         public:
             Vector3 m_BoundingBoxMin;

@@ -53,7 +53,7 @@ namespace Helium
         // Abstract Base Class - Subclass this for structured attribute data you can add to a collection
         //
 
-        class FOUNDATION_API ComponentBase : public Reflect::Object
+        class HELIUM_FOUNDATION_API ComponentBase : public Reflect::Object
         {
         private:
             REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );

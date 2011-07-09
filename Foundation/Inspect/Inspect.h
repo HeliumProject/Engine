@@ -9,8 +9,8 @@ namespace Helium
 {
     namespace Inspect
     {
-        FOUNDATION_API void Initialize();
-        FOUNDATION_API void Cleanup();
+        HELIUM_FOUNDATION_API void Initialize();
+        HELIUM_FOUNDATION_API void Cleanup();
 
         struct EditFilePathArgs
         {
@@ -24,6 +24,6 @@ namespace Helium
         };
         typedef Helium::Signature< const EditFilePathArgs&> EditFilePathSignature;
 
-        extern FOUNDATION_API EditFilePathSignature::Event g_EditFilePath;
+        extern HELIUM_FOUNDATION_API EditFilePathSignature::Event g_EditFilePath;
     }
 }

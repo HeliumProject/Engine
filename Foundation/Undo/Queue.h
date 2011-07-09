@@ -37,7 +37,7 @@ namespace Helium
         typedef Helium::Signature< const QueueChangingArgs& > QueueChangingSignature;
         typedef Helium::Signature< const QueueChangeArgs& > QueueChangeSignature;
 
-        class FOUNDATION_API Queue
+        class HELIUM_FOUNDATION_API Queue
         {
             //
             // Members

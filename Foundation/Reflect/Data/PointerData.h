@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API PointerData : public Data
+        class HELIUM_FOUNDATION_API PointerData : public Data
         {
         public:
             typedef ObjectPtr DataType;

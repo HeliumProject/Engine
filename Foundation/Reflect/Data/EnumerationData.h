@@ -6,7 +6,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API EnumerationData : public Data
+        class HELIUM_FOUNDATION_API EnumerationData : public Data
         {
         public:
             typedef uint32_t DataType;

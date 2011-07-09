@@ -12,7 +12,7 @@ namespace Helium
         class Sphere;
 
         /// View frustum.
-        HELIUM_SIMD_ALIGN_PRE class MATH_API Frustum
+        HELIUM_SIMD_ALIGN_PRE class HELIUM_MATH_API Frustum
         {
         public:
             /// Frustum planes.

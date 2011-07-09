@@ -27,7 +27,7 @@ namespace Helium
   // Subclasses define the filtering operation for each pixel.
   //
 
-  class PIPELINE_API ImageFilter
+  class HELIUM_PIPELINE_API ImageFilter
   {
   public:
     ImageFilter(unsigned int width, unsigned int flags);
@@ -71,7 +71,7 @@ namespace Helium
   // from the undefined pixels.
   //
 
-  class PIPELINE_API FillImageFilter : public ImageFilter
+  class HELIUM_PIPELINE_API FillImageFilter : public ImageFilter
   {
   public:
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding
@@ -97,7 +97,7 @@ namespace Helium
   // in the filter.
   //
 
-  class PIPELINE_API BoxImageFilter : public ImageFilter
+  class HELIUM_PIPELINE_API BoxImageFilter : public ImageFilter
   {
   public:
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding

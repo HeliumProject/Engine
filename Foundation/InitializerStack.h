@@ -19,7 +19,7 @@ namespace Helium
 
     typedef std::stack< CleanupFunc > InitCleanupStack;
 
-    class FOUNDATION_API InitializerStack
+    class HELIUM_FOUNDATION_API InitializerStack
     {
     private:
         InitCleanupStack    m_InitCleanupStack;

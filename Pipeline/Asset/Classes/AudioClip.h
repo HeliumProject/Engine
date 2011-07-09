@@ -29,7 +29,7 @@ namespace Helium
             }
         };
 
-        class PIPELINE_API AudioClip : public AssetClass
+        class HELIUM_PIPELINE_API AudioClip : public AssetClass
         {
         private:
             AudioClipMode     m_Mode;

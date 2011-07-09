@@ -8,7 +8,7 @@
 namespace Helium
 {
     /// Byte stream interface.
-    class FOUNDATION_API Stream : NonCopyable
+    class HELIUM_FOUNDATION_API Stream : NonCopyable
     {
     public:
 

@@ -8,7 +8,7 @@
 
 namespace Helium
 {
-    class PIPELINE_API Project : public Reflect::Object
+    class HELIUM_PIPELINE_API Project : public Reflect::Object
     {
     public:
         Project( const Path& path = TXT( "" ) );

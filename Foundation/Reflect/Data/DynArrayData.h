@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API DynArrayData : public ContainerData
+        class HELIUM_FOUNDATION_API DynArrayData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( DynArrayData, ContainerData );
@@ -26,7 +26,7 @@ namespace Helium
         };
 
         template< class T >
-        class FOUNDATION_API SimpleDynArrayData : public DynArrayData
+        class HELIUM_FOUNDATION_API SimpleDynArrayData : public DynArrayData
         {
         public:
             typedef DynArray< T > DataType;

@@ -10,7 +10,7 @@ namespace Helium
     namespace Simd
     {
         /// Quaternion.  Note that this is aligned to 16 bytes for SIMD support.
-        HELIUM_ALIGN_PRE( 16 ) class MATH_API Quat
+        HELIUM_ALIGN_PRE( 16 ) class HELIUM_MATH_API Quat
         {
         public:
             /// Identity quaternion.

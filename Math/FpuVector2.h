@@ -8,7 +8,7 @@
 
 namespace Helium
 {
-    class MATH_API Vector2
+    class HELIUM_MATH_API Vector2
     {
     public:
         float32_t x, y;
@@ -54,8 +54,8 @@ namespace Helium
 
         float32_t               Dot (const Vector2& v) const { return (x * v.x + y * v.y); }
 
-        friend MATH_API tostream& operator<<(tostream& outStream, const Vector2& v);
-        friend MATH_API tistream& operator>>(tistream& inStream, Vector2& v);
+        friend HELIUM_MATH_API tostream& operator<<(tostream& outStream, const Vector2& v);
+        friend HELIUM_MATH_API tistream& operator>>(tistream& inStream, Vector2& v);
     };
 
     typedef std::vector< Vector2 > V_Vector2;

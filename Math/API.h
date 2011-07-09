@@ -3,13 +3,13 @@
 #include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
 
 #if HELIUM_SHARED
-# ifdef MATH_EXPORTS
-#  define MATH_API HELIUM_API_EXPORT
+# ifdef HELIUM_MATH_EXPORTS
+#  define HELIUM_MATH_API HELIUM_API_EXPORT
 # else
-#  define MATH_API HELIUM_API_IMPORT
+#  define HELIUM_MATH_API HELIUM_API_IMPORT
 # endif
 #else
-#define MATH_API
+#define HELIUM_MATH_API
 #endif
 
 // profiling

@@ -15,7 +15,7 @@ namespace Helium
     {
         const static uint32_t IPC_TCP_BUFFER_SIZE = 32 << 10;
 
-        class FOUNDATION_API TCPConnection : public Connection
+        class HELIUM_FOUNDATION_API TCPConnection : public Connection
         {
         private:
             tchar_t             m_IP[64];                       // ip of the server

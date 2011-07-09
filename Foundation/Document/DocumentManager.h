@@ -29,7 +29,7 @@ namespace Helium
     // Manages a group of documents, providing convenience functions for saving,
     // closing, etc. all of them at once.
     // 
-    class FOUNDATION_API DocumentManager
+    class HELIUM_FOUNDATION_API DocumentManager
     {
     public:
         DocumentManager( MessageSignature::Delegate displayMessage, FileDialogSignature::Delegate fileDialog );

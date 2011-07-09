@@ -13,7 +13,7 @@ namespace Helium
     class Matrix4;
     class AngleAxis;
 
-    class MATH_API EulerAngles
+    class HELIUM_MATH_API EulerAngles
     {
     public:
         Vector3 angles;

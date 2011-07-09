@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Reflect
     {
-        class FOUNDATION_API StlVectorData : public ContainerData
+        class HELIUM_FOUNDATION_API StlVectorData : public ContainerData
         {
         public:
             REFLECT_DECLARE_ABSTRACT( StlVectorData, ContainerData );
@@ -25,7 +25,7 @@ namespace Helium
         };
 
         template <class T>
-        class FOUNDATION_API SimpleStlVectorData : public StlVectorData
+        class HELIUM_FOUNDATION_API SimpleStlVectorData : public StlVectorData
         {
         public:
             typedef std::vector<T> DataType;

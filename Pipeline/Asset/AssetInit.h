@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace Asset
     {
-        void PIPELINE_API Initialize();
-        void PIPELINE_API Cleanup();
+        void HELIUM_PIPELINE_API Initialize();
+        void HELIUM_PIPELINE_API Cleanup();
     }
 }

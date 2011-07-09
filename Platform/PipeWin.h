@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-    struct PLATFORM_API Pipe
+    struct HELIUM_PLATFORM_API Pipe
     {
         void* m_Handle;
         struct Overlapped

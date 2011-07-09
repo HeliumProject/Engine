@@ -5,5 +5,5 @@
 
 namespace Helium
 {
-    FOUNDATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
+    HELIUM_FOUNDATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
 }

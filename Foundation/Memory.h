@@ -46,7 +46,7 @@ namespace Helium
             }
         };
 
-        class FOUNDATION_API Memory
+        class HELIUM_FOUNDATION_API Memory
         {
         private:
             static uint32_t s_InitCount;

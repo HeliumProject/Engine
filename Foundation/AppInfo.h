@@ -5,7 +5,7 @@
 namespace Helium
 {
     /// General application information.
-    class FOUNDATION_API AppInfo
+    class HELIUM_FOUNDATION_API AppInfo
     {
     public:
         /// @name Information Access

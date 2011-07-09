@@ -25,7 +25,7 @@ namespace Helium
     namespace Simd
     {
         /// Vector filled with the default floating-point epsilon.
-        MATH_API extern const Register EPSILON;
+        HELIUM_MATH_API extern const Register EPSILON;
 
         /// @name Memory Operations
         //@{

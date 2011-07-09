@@ -12,7 +12,7 @@ namespace Helium
         class Button;
         class Container;
 
-        class FOUNDATION_API ReflectStlSetInterpreter : public ReflectFieldInterpreter
+        class HELIUM_FOUNDATION_API ReflectStlSetInterpreter : public ReflectFieldInterpreter
         {
         public:
             ReflectStlSetInterpreter( Container* container );

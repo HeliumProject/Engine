@@ -19,7 +19,7 @@ namespace Helium
   // Create a 2D texture in the specified format
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class PIPELINE_API Image
+  class HELIUM_PIPELINE_API Image
   {
   public:
     enum ImageType

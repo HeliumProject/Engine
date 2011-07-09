@@ -24,7 +24,7 @@ namespace Helium
         //
 
         template <class T>
-        class FOUNDATION_API SimpleData : public Data
+        class HELIUM_FOUNDATION_API SimpleData : public Data
         {
         public:
             typedef T DataType;

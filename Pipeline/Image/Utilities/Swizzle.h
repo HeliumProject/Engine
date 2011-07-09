@@ -64,7 +64,7 @@ namespace Helium
   //  seemingly random order.
   //
   //////////////////////////////////////////////////////////////////////////////////////////////// 
-  class PIPELINE_API Swizzler 
+  class HELIUM_PIPELINE_API Swizzler 
   {
   public:
     // Dimensions of the texture
@@ -311,7 +311,7 @@ namespace Helium
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  PIPELINE_API void UnswizzleBox
+  HELIUM_PIPELINE_API void UnswizzleBox
     (
     uint8_t*       src,          // The source buffer (swizzled data)
     uint8_t*       dst,          // The destination buffer
@@ -322,7 +322,7 @@ namespace Helium
     );
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  PIPELINE_API void SwizzleBox
+  HELIUM_PIPELINE_API void SwizzleBox
     (
     uint8_t*         src,          // The source buffer (linear data)
     uint8_t*         dst,          // The destination buffer (swizzled data)

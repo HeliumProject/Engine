@@ -15,7 +15,7 @@ namespace Helium
         class List;
         typedef Helium::StrongPtr<Button> ButtonPtr;
 
-        class FOUNDATION_API ReflectStlVectorInterpreter : public ReflectFieldInterpreter
+        class HELIUM_FOUNDATION_API ReflectStlVectorInterpreter : public ReflectFieldInterpreter
         {
         public:
             ReflectStlVectorInterpreter (Container* container);

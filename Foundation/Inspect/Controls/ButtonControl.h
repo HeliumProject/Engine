@@ -25,7 +25,7 @@ namespace Helium
         };
         typedef Helium::Signature< const ButtonClickedArgs& > ButtonClickedSignature;
 
-        class FOUNDATION_API Button : public Control
+        class HELIUM_FOUNDATION_API Button : public Control
         {
         public:
             REFLECT_DECLARE_OBJECT( Button, Control );

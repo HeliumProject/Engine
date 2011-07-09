@@ -88,7 +88,7 @@ namespace Helium
         // Printing event API allows for in-process APIs to handle print events themselves
         //
 
-        struct FOUNDATION_API Statement
+        struct HELIUM_FOUNDATION_API Statement
         {
             tstring     m_String;
             Stream      m_Stream;
@@ -121,7 +121,7 @@ namespace Helium
         // Printing event
         //
 
-        struct FOUNDATION_API PrintingArgs : NonCopyable
+        struct HELIUM_FOUNDATION_API PrintingArgs : NonCopyable
         {
             const Statement&  m_Statement;
             bool              m_Skip;
@@ -136,15 +136,15 @@ namespace Helium
 
         typedef Helium::Signature< PrintingArgs&, Helium::AtomicRefCountBase > PrintingSignature;
 
-        FOUNDATION_API void AddPrintingListener(const PrintingSignature::Delegate& listener);
-        FOUNDATION_API void RemovePrintingListener(const PrintingSignature::Delegate& listener);
+        HELIUM_FOUNDATION_API void AddPrintingListener(const PrintingSignature::Delegate& listener);
+        HELIUM_FOUNDATION_API void RemovePrintingListener(const PrintingSignature::Delegate& listener);
 
 
         //
         // Printed event
         //
 
-        struct FOUNDATION_API PrintedArgs : NonCopyable
+        struct HELIUM_FOUNDATION_API PrintedArgs : NonCopyable
         {
             const Statement&  m_Statement;
 
@@ -157,8 +157,8 @@ namespace Helium
 
         typedef Helium::Signature< PrintedArgs&, Helium::AtomicRefCountBase > PrintedSignature;
 
-        FOUNDATION_API void AddPrintedListener(const PrintedSignature::Delegate& listener);
-        FOUNDATION_API void RemovePrintedListener(const PrintedSignature::Delegate& listener);
+        HELIUM_FOUNDATION_API void AddPrintedListener(const PrintedSignature::Delegate& listener);
+        HELIUM_FOUNDATION_API void RemovePrintedListener(const PrintedSignature::Delegate& listener);
 
 
         //
@@ -166,8 +166,8 @@ namespace Helium
         //
 
         // the trace file gets everything Console delivers to the console and more
-        FOUNDATION_API bool AddTraceFile( const tstring& fileName, Stream stream, uint32_t threadId = -1, bool append = false );
-        FOUNDATION_API void RemoveTraceFile( const tstring& fileName );
+        HELIUM_FOUNDATION_API bool AddTraceFile( const tstring& fileName, Stream stream, uint32_t threadId = -1, bool append = false );
+        HELIUM_FOUNDATION_API void RemoveTraceFile( const tstring& fileName );
 
         template <bool (*AddFunc)(const tstring& fileName, Stream stream, uint32_t threadId, bool append), void (*RemoveFunc)(const tstring& fileName)>
         class FileHandle
@@ -206,10 +206,10 @@ namespace Helium
         //
 
         // indent all output
-        FOUNDATION_API void Indent(int col = -1);
+        HELIUM_FOUNDATION_API void Indent(int col = -1);
 
         // unindent all output
-        FOUNDATION_API void UnIndent(int col = -1);
+        HELIUM_FOUNDATION_API void UnIndent(int col = -1);
 
 
         //
@@ -217,27 +217,27 @@ namespace Helium
         //
 
         // verbosity setting
-        FOUNDATION_API Level GetLevel();
-        FOUNDATION_API void SetLevel(Level level);
+        HELIUM_FOUNDATION_API Level GetLevel();
+        HELIUM_FOUNDATION_API void SetLevel(Level level);
 
         // enable stream calls
-        FOUNDATION_API bool IsStreamEnabled( Stream stream );
-        FOUNDATION_API void EnableStream( Stream stream, bool enable );
+        HELIUM_FOUNDATION_API bool IsStreamEnabled( Stream stream );
+        HELIUM_FOUNDATION_API void EnableStream( Stream stream, bool enable );
 
         // get the print color for the given stream
-        FOUNDATION_API Color GetStreamColor(Stream stream);
+        HELIUM_FOUNDATION_API Color GetStreamColor(Stream stream);
 
         // get the current counts
-        FOUNDATION_API int GetErrorCount();
-        FOUNDATION_API int GetWarningCount();
+        HELIUM_FOUNDATION_API int GetErrorCount();
+        HELIUM_FOUNDATION_API int GetWarningCount();
 
         // reset the counts to zero
-        FOUNDATION_API void ResetErrorCount();
-        FOUNDATION_API void ResetWarningCount();
+        HELIUM_FOUNDATION_API void ResetErrorCount();
+        HELIUM_FOUNDATION_API void ResetWarningCount();
 
         // enter/leave this library's section
-        FOUNDATION_API void LockMutex();
-        FOUNDATION_API void UnlockMutex();
+        HELIUM_FOUNDATION_API void LockMutex();
+        HELIUM_FOUNDATION_API void UnlockMutex();
 
 
         //
@@ -245,7 +245,7 @@ namespace Helium
         //
 
         // main printing function used by all prototypes
-        FOUNDATION_API void PrintString(const tchar_t* string,                // the string to print
+        HELIUM_FOUNDATION_API void PrintString(const tchar_t* string,                // the string to print
             Stream stream = Streams::Normal,   // the stream its going into
             Level level = Levels::Default,     // the verbosity level
             Color color = Colors::Auto,        // the color to use (None for auto)
@@ -254,36 +254,36 @@ namespace Helium
             uint32_t outputSize = 0);               // the size of the output buffer
 
         // print a persisted print statment
-        FOUNDATION_API void PrintStatement(const Statement& statement);
+        HELIUM_FOUNDATION_API void PrintStatement(const Statement& statement);
 
         // print several statements
-        FOUNDATION_API void PrintStatements(const V_Statement& statements, uint32_t streams = Streams::All);
+        HELIUM_FOUNDATION_API void PrintStatements(const V_Statement& statements, uint32_t streams = Streams::All);
 
         // simple way to print a particular color
-        FOUNDATION_API void PrintColor(Color color, const tchar_t* fmt, ...);
+        HELIUM_FOUNDATION_API void PrintColor(Color color, const tchar_t* fmt, ...);
 
         // make a print statement
-        FOUNDATION_API void Print(const tchar_t *fmt,...);
-        FOUNDATION_API void Print(Level level, const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Print(const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Print(Level level, const tchar_t *fmt,...);
 
         // make a debug-only statement
-        FOUNDATION_API void Debug(const tchar_t *fmt,...);
-        FOUNDATION_API void Debug(Level level, const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Debug(const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Debug(Level level, const tchar_t *fmt,...);
 
         // make a profile-only statement
-        FOUNDATION_API void Profile(const tchar_t *fmt,...);
-        FOUNDATION_API void Profile(Level level, const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Profile(const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Profile(Level level, const tchar_t *fmt,...);
 
         // warn the user, increments warning count
-        FOUNDATION_API void Warning(const tchar_t *fmt,...);
-        FOUNDATION_API void Warning(Level level, const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Warning(const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Warning(Level level, const tchar_t *fmt,...);
 
         // give an error, increments error count
-        FOUNDATION_API void Error(const tchar_t *fmt,...);
-        FOUNDATION_API void Error(Level level, const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Error(const tchar_t *fmt,...);
+        HELIUM_FOUNDATION_API void Error(Level level, const tchar_t *fmt,...);
 
         // stack-based indention helper object indents all output while on the stack
-        class FOUNDATION_API Indentation
+        class HELIUM_FOUNDATION_API Indentation
         {
         public:
             Indentation()
@@ -298,7 +298,7 @@ namespace Helium
         };
 
         // like an indentation, but prints to the basic output stream the name of the heading
-        class FOUNDATION_API Heading
+        class HELIUM_FOUNDATION_API Heading
         {
         public:
             Heading(const tchar_t *fmt, ...);
@@ -306,7 +306,7 @@ namespace Helium
         };
 
         // like a heading but preceeded with a delimiter (o, *, -, etc...)
-        class FOUNDATION_API Bullet
+        class HELIUM_FOUNDATION_API Bullet
         {
         private:
             Stream m_Stream;
@@ -324,9 +324,9 @@ namespace Helium
         };
 
         // grab the path to the current bullet
-        FOUNDATION_API tstring GetOutlineState();
+        HELIUM_FOUNDATION_API tstring GetOutlineState();
 
-        class FOUNDATION_API Listener
+        class HELIUM_FOUNDATION_API Listener
         {
         public:
             Listener( uint32_t throttle = Log::Streams::All, uint32_t* errorCount = NULL, uint32_t* warningCount = NULL, Log::V_Statement* consoleOutput = NULL );

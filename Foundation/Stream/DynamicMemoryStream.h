@@ -7,7 +7,7 @@
 namespace Helium
 {
     /// Stream for reading from and writing to a dynamic memory buffer (backed using a DynArray of bytes).
-    class FOUNDATION_API DynamicMemoryStream : public Stream
+    class HELIUM_FOUNDATION_API DynamicMemoryStream : public Stream
     {
     public:
         /// @name Construction/Destruction

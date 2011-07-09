@@ -8,7 +8,7 @@
 namespace Helium
 {
     /// Constant bit array element proxy.
-    class FOUNDATION_API ConstBitArrayElementProxy
+    class HELIUM_FOUNDATION_API ConstBitArrayElementProxy
     {
     public:
         /// @name Construction/Destruction
@@ -40,7 +40,7 @@ namespace Helium
     };
 
     /// Bit array element proxy.
-    class FOUNDATION_API BitArrayElementProxy : public ConstBitArrayElementProxy
+    class HELIUM_FOUNDATION_API BitArrayElementProxy : public ConstBitArrayElementProxy
     {
     public:
         /// @name Construction/Destruction
@@ -61,7 +61,7 @@ namespace Helium
     };
 
     /// Constant bit array iterator.
-    class FOUNDATION_API ConstBitArrayIterator
+    class HELIUM_FOUNDATION_API ConstBitArrayIterator
     {
     public:
         /// Type for iterator values.
@@ -116,7 +116,7 @@ namespace Helium
     };
 
     /// Bit array iterator.
-    class FOUNDATION_API BitArrayIterator : public ConstBitArrayIterator
+    class HELIUM_FOUNDATION_API BitArrayIterator : public ConstBitArrayIterator
     {
     public:
         /// Type for iterator values.

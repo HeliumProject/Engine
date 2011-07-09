@@ -4,6 +4,6 @@
 
 namespace Helium
 {
-    PIPELINE_API void CoreInitialize();
-    PIPELINE_API void CoreCleanup();
+    HELIUM_PIPELINE_API void CoreInitialize();
+    HELIUM_PIPELINE_API void CoreCleanup();
 }

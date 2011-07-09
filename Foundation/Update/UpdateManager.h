@@ -5,7 +5,7 @@
 
 namespace Helium
 {
-    class FOUNDATION_API UpdateManager
+    class HELIUM_FOUNDATION_API UpdateManager
     {
     public:
 

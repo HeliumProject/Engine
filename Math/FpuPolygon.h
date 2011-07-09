@@ -195,7 +195,7 @@ namespace Helium
     };
 
     template <class V>
-    class MATH_API DynamicPolygon
+    class HELIUM_MATH_API DynamicPolygon
     {
     public:
         std::vector<V> m_Vertices;

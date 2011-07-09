@@ -39,7 +39,7 @@ namespace Helium
         };
 
         // Base class for all shader types
-        class PIPELINE_API ShaderAsset : public AssetClass
+        class HELIUM_PIPELINE_API ShaderAsset : public AssetClass
         {
         public:
             Helium::Path m_ColorMapPath;

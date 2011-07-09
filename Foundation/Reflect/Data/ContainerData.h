@@ -11,7 +11,7 @@ namespace Helium
         // string representation may not show up properly.
         static const tchar_t* s_ContainerItemDelimiter = TXT("\n");
 
-        class FOUNDATION_API ContainerData : public Data
+        class HELIUM_FOUNDATION_API ContainerData : public Data
         {
         public:
             REFLECT_DECLARE_ABSTRACT( ContainerData, Data )

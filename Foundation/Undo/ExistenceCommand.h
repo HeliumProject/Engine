@@ -25,7 +25,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undoable command for adding or removing an item.
         //
-        class FOUNDATION_API ExistenceCommand : public Command
+        class HELIUM_FOUNDATION_API ExistenceCommand : public Command
         {
         private:
             ExistenceAction m_Action;

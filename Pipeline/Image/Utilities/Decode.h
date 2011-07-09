@@ -15,7 +15,7 @@
 namespace Helium
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class PIPELINE_API DecodeMips
+  class HELIUM_PIPELINE_API DecodeMips
   {
   public:
     DecodeMips(MipSet* mips);

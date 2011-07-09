@@ -13,7 +13,7 @@ namespace Helium
 
     namespace Worker
     {
-        struct FOUNDATION_API Client
+        struct HELIUM_FOUNDATION_API Client
         {
             // initialize connection
             static bool Initialize( bool debug = false, bool wait = false );

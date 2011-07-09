@@ -7,7 +7,7 @@ namespace Helium
     template< typename T > class ObjectBuffer;
     template< typename T > class ObjectArrayBuffer;
 
-    class FOUNDATION_API BufferSerializer
+    class HELIUM_FOUNDATION_API BufferSerializer
     {
         // Profile interface
 #ifdef PROFILE_ACCUMULATION

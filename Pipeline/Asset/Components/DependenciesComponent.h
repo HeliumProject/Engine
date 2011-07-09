@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Asset
     {
-        class PIPELINE_API DependenciesComponent : public Component::ComponentBase
+        class HELIUM_PIPELINE_API DependenciesComponent : public Component::ComponentBase
         {
         public:
 

@@ -5,7 +5,7 @@
 namespace Helium
 {
     /// Stream wrapper that swaps the byte order of chunks of data read from or written to the stream.
-    class FOUNDATION_API ByteSwappingStream : public Stream
+    class HELIUM_FOUNDATION_API ByteSwappingStream : public Stream
     {
     public:
         /// @name Construction/Destruction

@@ -22,7 +22,7 @@ namespace Helium
     }
     typedef FileModeFlags::FileModeFlag FileModeFlag;
 
-    struct PLATFORM_API Stat
+    struct HELIUM_PLATFORM_API Stat
     {
         uint32_t     m_Mode;
         int64_t      m_Size;
@@ -40,5 +40,5 @@ namespace Helium
         }
     };
 
-    PLATFORM_API bool StatPath( const tchar_t* path, Stat& stat );
+    HELIUM_PLATFORM_API bool StatPath( const tchar_t* path, Stat& stat );
 }

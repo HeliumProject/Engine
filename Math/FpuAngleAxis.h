@@ -10,7 +10,7 @@ namespace Helium
     class Matrix4;
     class EulerAngles;
 
-    class MATH_API AngleAxis
+    class HELIUM_MATH_API AngleAxis
     {
     public:
         float32_t angle;

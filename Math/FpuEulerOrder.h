@@ -103,7 +103,7 @@ namespace Helium
         };
     }
 
-    class MATH_API EulerOrder
+    class HELIUM_MATH_API EulerOrder
     {
     public:
         EulerOrders::EulerOrder o;

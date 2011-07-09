@@ -21,7 +21,7 @@ namespace Helium
     // Wrapper for Microsoft GUID/Uuid - requires RPCRT4.LIB
     //
 
-    class FOUNDATION_API GUID
+    class HELIUM_FOUNDATION_API GUID
     {
     public:
         // The null ID
@@ -56,11 +56,11 @@ namespace Helium
         // Generates a unique ID
         static void Generate( GUID& uid );
 
-        friend FOUNDATION_API tostream& operator<<( tostream& stream, const GUID& id );
-        friend FOUNDATION_API tistream& operator>>( tistream& stream, GUID& id );
+        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& stream, const GUID& id );
+        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& stream, GUID& id );
     };
 
-    FOUNDATION_API inline tostream& operator<<( tostream& stream, const GUID& id )
+    HELIUM_FOUNDATION_API inline tostream& operator<<( tostream& stream, const GUID& id )
     {
         tstring s;
         id.ToString( s );
@@ -68,7 +68,7 @@ namespace Helium
         return stream;
     }
 
-    FOUNDATION_API inline tistream& operator>>( tistream& stream, GUID& id )
+    HELIUM_FOUNDATION_API inline tistream& operator>>( tistream& stream, GUID& id )
     {
         tstring s;
         stream >> s;

@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace Inspect
     {
-        class FOUNDATION_API ReflectColorInterpreter : public ReflectFieldInterpreter
+        class HELIUM_FOUNDATION_API ReflectColorInterpreter : public ReflectFieldInterpreter
         {
         public:
             ReflectColorInterpreter( Container* container );

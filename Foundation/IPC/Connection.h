@@ -35,7 +35,7 @@ namespace Helium
         }
         typedef MessageTypes::MessageType MessageType;
 
-        class FOUNDATION_API Connection
+        class HELIUM_FOUNDATION_API Connection
         {
         protected:
             static Localization::StringTable s_StringTable;

@@ -88,10 +88,6 @@ TEST_F(Components, HostFindOne)
 {
     TestHost test_host;
 
-    DynArray<TestComponentOne *> component_list_1;
-    DynArray<TestComponentTwo *> component_list_2;
-    DynArray<TestComponentThree *> component_list_3;
-
     // Nothing is attached
     EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
     EXPECT_TRUE(test_host.FindOneComponent<TestComponentTwo>() == 0);
@@ -119,39 +115,83 @@ TEST_F(Components, HostFindOne)
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentTwo>() != 0);
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentThree>() != 0);
 
-    test_host.FindAllComponents<TestComponentOne>(component_list_1);
-    test_host.FindAllComponents<TestComponentTwo>(component_list_2);
-    test_host.FindAllComponents<TestComponentThree>(component_list_3);
+    {
+        DynArray<TestComponentOne *> component_list_1;
+        DynArray<TestComponentTwo *> component_list_2;
+        DynArray<TestComponentThree *> component_list_3;
 
-    EXPECT_TRUE(component_list_1.GetSize() == 1);
-    EXPECT_TRUE(component_list_2.GetSize() == 2);
-    EXPECT_TRUE(component_list_3.GetSize() == 2);
+        test_host.FindAllComponents<TestComponentOne>(component_list_1);
+        test_host.FindAllComponents<TestComponentTwo>(component_list_2);
+        test_host.FindAllComponents<TestComponentThree>(component_list_3);
 
-    // Take out the base component
-    test_host.Free(*c1);
-    test_host.Free(*c2_1);
-    //test_host.Free(*c2_2);
-    test_host.Free(*c3_2);
-    //test_host.Free(*c3_1);
+        EXPECT_TRUE(component_list_1.GetSize() == 1);
+        EXPECT_TRUE(component_list_2.GetSize() == 2);
+        EXPECT_TRUE(component_list_3.GetSize() == 2);
+    }
+
+    c1->MarkForDeletion();
+    c2_1->MarkForDeletion();
+    c3_2->MarkForDeletion();
+
+    {
+        DynArray<TestComponentOne *> component_list_1;
+        DynArray<TestComponentTwo *> component_list_2;
+        DynArray<TestComponentThree *> component_list_3;
+
+        test_host.FindAllComponents<TestComponentOne>(component_list_1);
+        test_host.FindAllComponents<TestComponentTwo>(component_list_2);
+        test_host.FindAllComponents<TestComponentThree>(component_list_3);
+
+        EXPECT_TRUE(component_list_1.GetSize() == 1);
+        EXPECT_TRUE(component_list_2.GetSize() == 2);
+        EXPECT_TRUE(component_list_3.GetSize() == 2);
+    }
+
+    Helium::Components::ProcessPendingDeletes();
 
     // Now asking directly for c1 should fail, but an implementor of c1 should pass (returns c2 or c3)
     EXPECT_TRUE(test_host.FindOneComponent<TestComponentOne>() == 0);
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
-    
-    component_list_1.Clear();
-    test_host.FindAllComponents<TestComponentOne>(component_list_1);
-    EXPECT_TRUE(component_list_1.GetSize() == 0);
 
-    component_list_1.Clear();
-    test_host.FindAllComponentsThatImplement<TestComponentOne>(component_list_1);
-    EXPECT_TRUE(component_list_1.GetSize() == 2);
+    {
+        DynArray<TestComponentOne *> component_list_1;
+        DynArray<TestComponentTwo *> component_list_2;
+        DynArray<TestComponentThree *> component_list_3;
 
-    component_list_2.Clear();
-    test_host.FindAllComponentsThatImplement<TestComponentTwo>(component_list_2);
-    EXPECT_TRUE(component_list_2.GetSize() == 1);
+        test_host.FindAllComponents<TestComponentOne>(component_list_1);
+        test_host.FindAllComponents<TestComponentTwo>(component_list_2);
+        test_host.FindAllComponents<TestComponentThree>(component_list_3);
 
-    test_host.Free(*c2_2);
-    test_host.Free(*c3_1);
+        EXPECT_TRUE(component_list_1.GetSize() == 0);
+        EXPECT_TRUE(component_list_2.GetSize() == 1);
+        EXPECT_TRUE(component_list_3.GetSize() == 1);
+    }
+
+    {
+        DynArray<TestComponentOne *> component_list;
+        test_host.FindAllComponents<TestComponentOne>(component_list);
+        EXPECT_TRUE(component_list.GetSize() == 0);
+    }
+
+    {
+        DynArray<TestComponentOne *> component_list;
+        test_host.FindAllComponentsThatImplement<TestComponentOne>(component_list);
+        EXPECT_TRUE(component_list.GetSize() == 2);
+    }
+
+    {
+        DynArray<TestComponentTwo *> component_list;
+        test_host.FindAllComponentsThatImplement<TestComponentTwo>(component_list);
+        EXPECT_TRUE(component_list.GetSize() == 1);
+    }
+
+    //test_host.Free(*c2_2);
+    //test_host.Free(*c3_1);
+
+    c2_2->MarkForDeletion();
+    c3_1->MarkForDeletion();
+
+    Helium::Components::ProcessPendingDeletes();
 }
 
 TEST_F(Components, HostAttachDetachIterate)
@@ -268,7 +308,55 @@ TEST_F(Components, HostAttachDetachIterate)
 
     for (size_t i = 0; i < all_components.GetSize(); ++i)
     {
-        test_host.Free(*all_components[i]);
+        all_components[i]->MarkForDeletion();
     }
     all_components.Clear();
+    Helium::Components::ProcessPendingDeletes();
+}
+
+TEST_F(Components, SmartPtr)
+{
+    TestHost test_host;
+
+    {
+        // Make the ptr
+        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        EXPECT_TRUE(component.IsGood());
+
+        // Handle pending deletes and check our component is still around
+        Helium::Components::ProcessPendingDeletes();
+        EXPECT_TRUE(component.IsGood());
+
+        // Delete the component and check that it is not around AFTER the pending delete is processed
+        component->MarkForDeletion();
+        EXPECT_TRUE(component.IsGood());
+        Helium::Components::ProcessPendingDeletes();
+
+        // Is good should fail here because the generation doesn't match
+        EXPECT_FALSE(component.IsGood());
+    }
+
+    {
+        // Make the ptr
+        ComponentPtr<TestComponentTwo> component = test_host.Allocate<TestComponentTwo>();
+        EXPECT_TRUE(component.IsGood());
+
+        // Handle pending deletes and check our component is still around
+        Helium::Components::ProcessPendingDeletes();
+        EXPECT_TRUE(component.IsGood());
+
+        // Delete the component and check that it is not around AFTER the pending delete is processed
+        component->MarkForDeletion();
+        EXPECT_TRUE(component.IsGood());
+
+        for (int i = 0; i < 256; ++i)
+        {
+            Helium::Components::ProcessPendingDeletes();
+        }
+
+        // The component pointer should be wiped out BEFORE this call
+        EXPECT_FALSE(component.IsGood());
+    }
+
+
 }

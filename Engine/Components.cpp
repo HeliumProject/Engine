@@ -10,9 +10,14 @@ using namespace Helium::Components::Private;
 
 REFLECT_DEFINE_ABSTRACT(Component);
 
+inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
+{
+    return reinterpret_cast<Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
+}
+
 void Component::AcceptCompositeVisitor( Reflect::Composite& comp )
 {
-
+    HELIUM_UNREF(comp);
 }
 
 const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
@@ -21,9 +26,16 @@ const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
 //       System Implementation
 ////////////////////////////////////////////////////////////////////////
 
-// TypeId indexes into this
-Private::A_ComponentTypes         Private::g_ComponentTypes;
 Helium::DynamicMemoryHeap         Private::g_ComponentAllocator;
+
+// TypeId indexes into this
+namespace
+{
+    int32_t g_ComponentsInitCount = 0;
+    Private::A_ComponentTypes         g_ComponentTypes;
+    ComponentPtrBase*                 g_ComponentPtrRegistry[COMPONENT_PTR_CHECK_FREQUENCY];
+    uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
+}
 
 TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
 {
@@ -83,14 +95,14 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
         i < component_type.m_Roster.GetSize(); ++i)
     {
         component_type.m_Roster[i] = i;
-        Component *component = reinterpret_cast<Component *>(reinterpret_cast<char *>(component_type.m_Pool) + (i * component_type.m_InstanceSize));
+        Component *component = GetComponentFromIndex(component_type, i);
         component->m_TypeId = type_id;
         component->m_Previous = 0;
         component->m_Next = 0;
         component->m_RosterIndex = i;
         component->m_Generation = 0;
         component->m_OwningSet = 0;
-        component->m_ShouldDeallocate = false;
+        component->m_PendingDelete = false;
     }
 
     // Return the component type's id
@@ -100,6 +112,8 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
 
 Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
 {
+    HELIUM_UNREF(_init_data);
+
     // Make sure type id is good
     HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
     ComponentType &type = g_ComponentTypes[_type];
@@ -108,7 +122,7 @@ Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_d
     if (type.m_FirstUnallocatedIndex >= type.m_Roster.GetSize())
     {
         // Could not allocate the component because we ran out..
-        HELIUM_ASSERT_MSG(false, TXT("Could not allocate component of type %d for host %d"), _type, _host);
+        HELIUM_ASSERT_MSG(type.m_FirstUnallocatedIndex < type.m_Roster.GetSize(), TXT("Could not allocate component of type %d for host %d"), _type, _host);
         return 0;
     }
 
@@ -116,7 +130,7 @@ Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_d
     uint16_t roster_index = type.m_FirstUnallocatedIndex++;
     uint16_t component_index = type.m_Roster[roster_index];
 
-    Component *component = reinterpret_cast<Component *>(reinterpret_cast<char *>(type.m_Pool) + (component_index * type.m_InstanceSize));
+    Component *component = GetComponentFromIndex(type, component_index);
 
     // Insert into chain
     M_Components::Iterator iter = _host.m_Components.Find(_type);
@@ -137,10 +151,12 @@ Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_d
     // Not going to as we have this callback on the host, and the host
     // will pass itself
 
+    HELIUM_ASSERT(!component->m_PendingDelete);
+
     return component;
 }
 
-void Components::Free( ComponentSet &_host, Component &_component )
+void Components::Private::Free( Component &_component )
 {
     // Component is already freed or component doesn't have a good handle for some reason
     HELIUM_ASSERT(_component.m_OwningSet);
@@ -177,39 +193,17 @@ void Components::Free( ComponentSet &_host, Component &_component )
         // - component index: this component's roster index
         // - other component's index: highest in-use component's roster index
         //   - i.e. used_roster_index < freed_roster_index
-        int component_index = component_type.m_Roster[used_roster_index];
-        int other_component_index = component_type.m_Roster[freed_roster_index];
+        uint16_t component_index = component_type.m_Roster[used_roster_index];
+        uint16_t other_component_index = component_type.m_Roster[freed_roster_index];
         component_type.m_Roster[used_roster_index] = other_component_index;
         component_type.m_Roster[freed_roster_index] = component_index;
 
         // Swap the roster index of the highest in-use component and the recently freed component
-        Component *highest_in_use_component = reinterpret_cast<Component *>(reinterpret_cast<char *>(component_type.m_Pool) + (other_component_index * component_type.m_InstanceSize));
+        Component *highest_in_use_component = GetComponentFromIndex(component_type, other_component_index);
         _component.m_RosterIndex = freed_roster_index;
         highest_in_use_component->m_RosterIndex = used_roster_index;
     }
 }
-// 
-// void Components::FreeAll( ComponentSet &_host )
-// {
-//   Handle handle = _host.FirstHandle;
-//   while (handle != NULL_HANDLE)
-//   {
-//     ComponentInstance &ci = ResolveComponentInstance(handle);
-//     handle = ci.NextHandle;
-// 
-//     Free(_host, *ci.Component);
-//   }
-// }
-// 
-// Component* Components::FindOneComponent( ComponentSet &_host, TypeId _type )
-// {
-//   return InternalFindFirstComponent(_host, _type, false);
-// }
-// 
-// Component* Components::FindOneComponentThatImplements( ComponentSet &_host, TypeId _type )
-// {
-//   return InternalFindFirstComponent(_host, _type, true);
-// }
 
 bool Components::TypeImplementsType( TypeId _implementor, TypeId _implementee )
 {
@@ -361,28 +355,24 @@ Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, 
 //       System Functions
 ////////////////////////////////////////////////////////////////////////
 
-namespace
-{
-    int32_t m_ComponentsInitCount = 0;
-}
 
 void Components::Initialize()
 {
     // Register base component with reflect
-    if (!m_ComponentsInitCount)
+    if (!g_ComponentsInitCount)
     {
         Reflect::RegisterClassType<Components::Component>(TXT("Component"));
         RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
     }
 
-    ++m_ComponentsInitCount;
+    ++g_ComponentsInitCount;
 }
 
 void Components::Cleanup()
 {
-    --m_ComponentsInitCount;
+    --g_ComponentsInitCount;
 
-    if (!m_ComponentsInitCount)
+    if (!g_ComponentsInitCount)
     {
         for (TypeId type_id = 0; type_id < g_ComponentTypes.GetSize(); ++type_id)
         {
@@ -397,6 +387,58 @@ void Components::Cleanup()
         g_ComponentTypes.Clear();
     }
 }
+
+HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
+{
+    ++g_ComponentProcessPendingDeletesCallCount;
+
+    // Delete all components that have m_PendingDelete flag set to true
+    for (DynArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
+        iter != g_ComponentTypes.End(); ++iter)
+    {
+        // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence
+        // in memory. Going for naive first approach because it's less fancy and more direct. If we usually
+        // have close to 100% component utilization the other way might be better (it's cache friendly)
+        for (int i = iter->m_FirstUnallocatedIndex - 1; i >= 0; --i)
+        {
+            Component *c = GetComponentFromIndex(*iter, iter->m_Roster[i]);
+            if (c->m_PendingDelete)
+            {
+                // NOTE: component knows about its owning set so we are removing it from that set by calling Free
+                Helium::Components::Private::Free(*c);
+                c->m_PendingDelete = false;
+            }
+        }
+    }
+
+    // Look at our registry of component ptrs, we may need to force some of them to invalidate (a ptr must be checked
+    // at least once every 256 frames in case the generation counter overlaps)
+    uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
+    ComponentPtrBase *component_ptr = g_ComponentPtrRegistry[registry_index];
+
+    while (component_ptr)
+    {
+        // Don't do the check until we get our next pointer, as a failed check will splice out the ptr from our doubly
+        // linked list.
+        ComponentPtrBase *component_ptr_to_check = component_ptr;
+        component_ptr = component_ptr->GetNextComponetPtr();
+        component_ptr_to_check->Check();
+    }
+}
+
+void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )
+{
+    uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
+    _ptr_base.m_Next = g_ComponentPtrRegistry[registry_index];
+    
+    if (_ptr_base.m_Next)
+    {
+        _ptr_base.m_Next->m_Previous = &_ptr_base;
+    }
+
+    g_ComponentPtrRegistry[registry_index] = &_ptr_base;
+}
+
 // 
 // void FindAllComponentsOnHost(ComponentSet &_host, TypeId _type, IVectorWrapper &_components, bool _implements)
 // {

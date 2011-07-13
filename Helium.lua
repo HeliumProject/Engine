@@ -829,6 +829,11 @@ project "TestJobs" -- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 
 	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestJobs", "TEST_JOBS" )
+	
+	files
+	{
+		"TestJobs/**",
+	}
 
 	configuration "SharedLib"
 		links

@@ -220,7 +220,9 @@ void ArchiveXML::SerializeInstance(Object* object, const tchar_t* fieldName)
     *m_Stream << TXT( "<Object Type=\"" );
     if ( object )
     {
-        *m_Stream << object->GetClass()->m_Name;
+        const Class *c = object->GetClass();
+        HELIUM_ASSERT(c);
+        *m_Stream << c->m_Name;
     }
 
     *m_Stream << TXT( "\"" );

@@ -315,7 +315,7 @@ bool Helium::StrongPtr< T >::ReferencesObject() const
 template< typename T >
 void Helium::StrongPtr< T >::SetLinkIndex( uint32_t index )
 {
-    reinterpret_cast< uintptr_t& >( m_pProxy ) = index;
+    m_LinkIndex = index;
 }
 
 /// Get the object link table index stored in this smart pointer.
@@ -333,7 +333,7 @@ void Helium::StrongPtr< T >::SetLinkIndex( uint32_t index )
 template< typename T >
 uint32_t Helium::StrongPtr< T >::GetLinkIndex() const
 {
-    return static_cast< uint32_t >( reinterpret_cast< const uintptr_t& >( m_pProxy ) );
+    return static_cast< uint32_t >( m_LinkIndex );
 }
 
 /// Clear out the link table index stored in this smart pointer.

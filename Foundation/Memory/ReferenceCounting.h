@@ -167,7 +167,11 @@ namespace Helium
     private:
         /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared
         /// types).
-        RefCountProxyBase* m_pProxy;
+        union
+        {
+            RefCountProxyBase* m_pProxy; // Almost always, a smart ptr is actually a pointer
+            uintptr_t m_LinkIndex;       // But when linking game objects, we may "tag" a reference with an index
+        };
 
         /// @name Conversion Utility Functions, Private
         //@{

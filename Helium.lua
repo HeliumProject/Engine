@@ -923,12 +923,17 @@ project "TestApp" -- DEPRECATED
 project "ExampleGame"
 	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"
 
+	Helium.DoModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
+
+	files
+	{
+		"Example/ExampleGame/*",
+	}
+
 	includedirs
 	{
 		"Example",
 	}
-
-	Helium.DoModuleProjectSettings( "Example", "EXAMPLE", "ExampleGame", "EXAMPLE_GAME" )
 
 	configuration "SharedLib"
 		links

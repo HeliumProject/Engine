@@ -440,10 +440,12 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	Helium.DoDefaultProjectSettings()
 
 	configuration "not Debug"
+		--[[
 		flags
 		{
 			"NoRTTI",
 		}
+		--]]
 
 	configuration "not windows"
 		kind "StaticLib"

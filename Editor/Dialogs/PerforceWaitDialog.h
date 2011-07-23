@@ -1,9 +1,8 @@
 #pragma once
 
-#include "PerforceGenerated.h"
-
 #include "Foundation/Profile.h"
 #include "Editor/Perforce/P4Provider.h"
+#include "Editor/PerforceGenerated.h"
 
 #include <wx/dialog.h>
 #include <wx/timer.h>

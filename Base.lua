@@ -361,7 +361,7 @@ Helium.DoDefaultProjectSettings = function()
 	flags
 	{
 		--"FatalWarnings",
-		"ExtraWarnings",
+		--"ExtraWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
 	}
 
@@ -438,10 +438,12 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	Helium.DoDefaultProjectSettings()
 
 	configuration "not Debug"
+		--[[
 		flags
 		{
 			"NoRTTI",
 		}
+		--]]
 
 	configuration "not windows"
 		kind "StaticLib"

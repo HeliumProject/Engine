@@ -747,6 +747,8 @@ bool ShaderVariantResourceHandler::CompileShader(
         rCompiledCodeBuffer
 #if HELIUM_ENABLE_TRACE
         , &errorMessages
+#else
+        , NULL
 #endif
         );
     if( !bCompileResult )

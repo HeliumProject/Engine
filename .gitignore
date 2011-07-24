@@ -23,5 +23,5 @@ Dependencies/tbb/build/macos_*
 Dependencies/wxWidgets/build/msw/vc_*
 Dependencies/wxWidgets/lib/vc_*
 Dependencies/wxWidgets/macbuild*
-Intermediate/*
 Premake/*
+Build/*

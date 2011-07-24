@@ -1,4 +1,4 @@
-require "Base"
+require "Helium"
 
 Helium.PublishFBX = function( bin )
 

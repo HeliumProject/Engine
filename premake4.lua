@@ -1,4 +1,4 @@
-require "Base"
+require "Helium"
 require "Prebuild"
 require "FBX"
 require "TBB"
@@ -34,13 +34,9 @@ if _ACTION then
 			Helium.CleanTBB()
 		end
 
-		solution "Dependencies"
-		Helium.DoDefaultSolutionSettings()
 		dofile "Dependencies.lua"
-
-		solution "Helium"
-		Helium.DoDefaultSolutionSettings()
-		dofile "Helium.lua"
+		dofile "Runtime.lua"
+		dofile "Tools.lua"
 	end
 	
 end

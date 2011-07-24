@@ -106,10 +106,6 @@ Helium.CheckEnvironment = function()
             end
         end
         
-        if os.getenv( 'CL' ) == nil or not string.match( os.getenv( 'CL' ), '\/MP' ) then
-            print( "\n\n  SUGGESTION: You should consider setting the 'CL' environment variable to contain '/MP' to take advantage of multiple cores/hyperthreading to help improve Helium build times.\n\n\n" )
-        end
-        
         if os.getenv( "DXSDK_DIR" ) == nil then
             print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
             failed = 1
@@ -250,10 +246,6 @@ Helium.DoDefaultSolutionSettings = function()
 		"NoMinimalRebuild",
 	}
 
-	if os.getenv( 'CL' ) then
-		buildoptions { os.getenv( 'CL' ) }
-	end
-
 	configuration "x64"
 		defines
 		{
@@ -334,6 +326,12 @@ Helium.DoDefaultSolutionSettings = function()
 			"NoEditAndContinue",
 		}
 
+	configuration "windows"
+		buildoptions
+		{
+			"/MP",
+		}
+	
 	configuration { "windows", "Debug" }
 		buildoptions
 		{

@@ -8,7 +8,7 @@ TEST(Engine, Jobs)
     {
         Path jobDefParserPath;
         HELIUM_VERIFY( File::GetDataDirectory( jobDefParserPath ) );
-        jobDefParserPath += TXT( "..\\Build\\JobDefParser.py" );
+        jobDefParserPath += TXT( "..\\Prebuild\\JobDefParser.py" );
 
         bool bJobDefParserExists = jobDefParserPath.Exists();
         HELIUM_UNREF( bJobDefParserExists );

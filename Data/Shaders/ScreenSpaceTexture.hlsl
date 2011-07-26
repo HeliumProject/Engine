@@ -17,7 +17,7 @@ struct VertexOutput
 #endif
 };
 
-#if L_TYPE_VERTEX
+#if HELIUM_TYPE_VERTEX
 
 struct VertexInput
 {
@@ -38,9 +38,9 @@ float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
 	return vIn.position;
 }
 
-#endif  // L_TYPE_VERTEX
+#endif  // HELIUM_TYPE_VERTEX
 
-#if L_TYPE_PIXEL
+#if HELIUM_TYPE_PIXEL
 
 #if TEXTURED
 // Texture to render.
@@ -57,4 +57,4 @@ float4 main( VertexOutput vOut ) : SV_Target
 	return color;
 }
 
-#endif  // L_TYPE_PIXEL
+#endif  // HELIUM_TYPE_PIXEL

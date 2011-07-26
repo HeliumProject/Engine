@@ -5,7 +5,7 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#if !L_PROFILE_PC_SM4
+#if !HELIUM_PROFILE_PC_SM4
 #define SV_Target COLOR
 #endif
 

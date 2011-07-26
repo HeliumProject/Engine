@@ -15,7 +15,7 @@ struct VertexOutput
     float2 texCoord : TEXCOORD0;
 };
 
-#if L_TYPE_VERTEX
+#if HELIUM_TYPE_VERTEX
 
 struct VertexInput
 {
@@ -58,9 +58,9 @@ float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
     return screenPos;
 }
 
-#endif  // L_TYPE_VERTEX
+#endif  // HELIUM_TYPE_VERTEX
 
-#if L_TYPE_PIXEL
+#if HELIUM_TYPE_PIXEL
 
 // Texture to render.
 Texture2D DiffuseMap;
@@ -73,4 +73,4 @@ float4 main( VertexOutput vOut ) : SV_Target
     return color;
 }
 
-#endif  // L_TYPE_PIXEL
+#endif  // HELIUM_TYPE_PIXEL

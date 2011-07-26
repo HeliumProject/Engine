@@ -73,12 +73,12 @@ bool PcPreprocessor::CompileShader(
     {
     case ShaderProfile::PC_SM2b:
         {
-            macro.Name = "L_PROFILE_PC_SM2b";
+            macro.Name = "HELIUM_PROFILE_PC_SM2b";
             macro.Definition = "1";
             defines.Push( macro );
 
-            // Also define L_PROFILE_PC_SM2 for consistency and legacy support.
-            macro.Name = "L_PROFILE_PC_SM2";
+            // Also define HELIUM_PROFILE_PC_SM2 for consistency and legacy support.
+            macro.Name = "HELIUM_PROFILE_PC_SM2";
             defines.Push( macro );
 
             pProfile = ( type == RShader::TYPE_VERTEX ? "vs_2_0" : "ps_2_b" );
@@ -88,7 +88,7 @@ bool PcPreprocessor::CompileShader(
 
     case ShaderProfile::PC_SM3:
         {
-            macro.Name = "L_PROFILE_PC_SM3";
+            macro.Name = "HELIUM_PROFILE_PC_SM3";
             macro.Definition = "1";
             defines.Push( macro );
 
@@ -99,7 +99,7 @@ bool PcPreprocessor::CompileShader(
 
     case ShaderProfile::PC_SM4:
         {
-            macro.Name = "L_PROFILE_PC_SM4";
+            macro.Name = "HELIUM_PROFILE_PC_SM4";
             macro.Definition = "1";
             defines.Push( macro );
 

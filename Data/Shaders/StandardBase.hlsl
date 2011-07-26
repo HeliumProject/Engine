@@ -34,7 +34,7 @@ struct VertexOutput
 #endif
 };
 
-#if L_TYPE_VERTEX
+#if HELIUM_TYPE_VERTEX
 
 struct VertexInput
 {
@@ -130,9 +130,9 @@ float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
     return outPosition;
 }
 
-#endif  // L_TYPE_VERTEX
+#endif  // HELIUM_TYPE_VERTEX
 
-#if L_TYPE_PIXEL
+#if HELIUM_TYPE_PIXEL
 
 // Diffuse map texture.
 Texture2D DiffuseMap;
@@ -154,7 +154,7 @@ Texture2D SpecularMap;
 
 #if SHADOWS
 // Directional light shadow map.
-#if L_PROFILE_PC_SM4
+#if HELIUM_PROFILE_PC_SM4
 Texture2D _ShadowMap;
 SamplerComparisonState ShadowSamplerState
 {
@@ -165,7 +165,7 @@ SamplerComparisonState ShadowSamplerState
     ComparisonFunc = LESS;
     ComparisonFilter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
 };
-#else  // L_PROFILE_PC_SM4
+#else  // HELIUM_PROFILE_PC_SM4
 Texture2D _ShadowMapTexture;
 sampler _ShadowMap = sampler_state
 {
@@ -176,7 +176,7 @@ sampler _ShadowMap = sampler_state
 	AddressU = CLAMP;
 	AddressV = CLAMP;
 };
-#endif  // L_PROFILE_PC_SM4
+#endif  // HELIUM_PROFILE_PC_SM4
 #endif  // SHADOWS
 
 cbuffer ViewPassData
@@ -231,7 +231,7 @@ float4 main( VertexOutput vOut ) : SV_Target
 
 	half shadow = 1.0;
 #if SHADOWS_SIMPLE
-#if L_PROFILE_PC_SM4
+#if HELIUM_PROFILE_PC_SM4
 	shadow = half( _ShadowMap.SampleCmpLevelZero( ShadowSamplerState, vOut.shadowPos.xy, vOut.shadowPos.z ) );
 #else
 	shadow = half( tex2Dproj( _ShadowMap, half4( vOut.shadowPos.xyz, 1 ) ).r );
@@ -251,7 +251,7 @@ float4 main( VertexOutput vOut ) : SV_Target
 	pcfOffsets[ 0 ] *= invShadowMapResSplat;
 	pcfOffsets[ 1 ] *= invShadowMapResSplat;
 
-#if L_PROFILE_PC_SM4
+#if HELIUM_PROFILE_PC_SM4
 	half4 shadowComponents = half4(
 		half( _ShadowMap.SampleCmpLevelZero( ShadowSamplerState, vOut.shadowPos.xy + pcfOffsets[ 0 ].xy, vOut.shadowPos.z ) ),
 		half( _ShadowMap.SampleCmpLevelZero( ShadowSamplerState, vOut.shadowPos.xy + pcfOffsets[ 0 ].zw, vOut.shadowPos.z ) ),
@@ -295,4 +295,4 @@ float4 main( VertexOutput vOut ) : SV_Target
     return float4( color );
 }
 
-#endif  // L_TYPE_PIXEL
+#endif  // HELIUM_TYPE_PIXEL

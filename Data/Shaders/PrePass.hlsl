@@ -9,7 +9,7 @@
 
 #include "Common.inl"
 
-#if L_TYPE_VERTEX
+#if HELIUM_TYPE_VERTEX
 
 struct VertexInput
 {
@@ -55,13 +55,13 @@ float4 main( VertexInput vIn ) : POSITION
 	return mul( worldInvViewProjection, vIn.position );
 }
 
-#endif  // L_TYPE_VERTEX
+#endif  // HELIUM_TYPE_VERTEX
 
-#if L_TYPE_PIXEL
+#if HELIUM_TYPE_PIXEL
 
 float4 main() : SV_Target
 {
 	return float4( 0, 0, 0, 0 );
 }
 
-#endif  // L_TYPE_PIXEL
+#endif  // HELIUM_TYPE_PIXEL

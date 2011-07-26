@@ -6,7 +6,7 @@ Helium.DoDefaultSolutionSettings()
 
 defines
 {
-	"HELIUM_EDITOR=0",
+	"HELIUM_EDITOR=1",
 }
 
 dofile "Shared.lua"

@@ -8,7 +8,7 @@
 #include "Foundation/File/Directory.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Pipeline/Project.h"
+#include "SceneGraph/Project.h"
 
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"

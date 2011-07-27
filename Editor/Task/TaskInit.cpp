@@ -1,7 +1,6 @@
 #include "EditorPch.h"
 #include "TaskInit.h"
 
-#include "Pipeline/Asset/AssetInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Object.h"
@@ -15,7 +14,7 @@ void Editor::TaskInitialize()
 {
     if ( g_TaskInitStack.Increment() == 1 )
     {
-        g_TaskInitStack.Push( Asset::Initialize, Asset::Cleanup );
+
     }
 }
 

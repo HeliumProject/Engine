@@ -1,8 +1,7 @@
 #include "EditorPch.h"
-
 #include "VaultSearchResults.h"
 
-#include "Pipeline/Asset/AssetClass.h"
+#include "Foundation/Container/Insert.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -12,8 +11,6 @@ bool Helium::Editor::operator<( const TrackedFile& lhs, const TrackedFile& rhs )
     return lhs.mPath.value() < rhs.mPath.value();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Ctor/Dtor
 VaultSearchResults::VaultSearchResults( uint32_t vaultSearchID )
 : m_VaultSearchID( vaultSearchID )
 {

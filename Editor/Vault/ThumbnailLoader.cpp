@@ -2,8 +2,6 @@
 #include "ThumbnailLoader.h"
 
 #include "Foundation/File/Directory.h"
-#include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "SceneGraph/DeviceManager.h"
 #include "SceneGraph/Render.h"
 
@@ -118,62 +116,31 @@ void* ThumbnailLoader::LoadThread::Entry()
             // Include the color map of a shader as a possible thumbnail image
             else if ( path.Extension() == TXT( "HeliumShader" ) )
             {
-                Asset::ShaderAssetPtr shader = NULL;
-                try
-                {
-                    shader = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( path );
-                }
-                catch( const Exception& )
-                {
-                    shader = NULL;
-                }
-
-                if ( shader )
-                {
-                    Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
-                    if ( colorMap.ReferencesObject() )
-                    {
 #ifdef VIEWPORT_REFACTOR
-                        if ( colorMap->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
-                        {
-                            IDirect3DTexture9* texture = NULL;
-                            if ( texture = LoadTexture( device, colorMap->GetContentPath().Get() ) )
-                            {
-                                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
-                                args.m_Textures.push_back( thumbnail );
-                            }
-                        }
-#endif
+                if ( colorMap->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( colorMap->GetContentPath().Get() ) )
+                {
+                    IDirect3DTexture9* texture = NULL;
+                    if ( texture = LoadTexture( device, colorMap->GetContentPath().Get() ) )
+                    {
+                        ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
+                        args.m_Textures.push_back( thumbnail );
                     }
                 }
+#endif
             }
             else if ( path.Extension() == TXT( "HeliumTexture" ) )
             {
-                Asset::TexturePtr textureAsset = NULL;
-                
-                try
-                {
-                    textureAsset = Asset::AssetClass::LoadAssetClass< Asset::Texture >( path );
-                }
-                catch( const Exception& )
-                {
-                    textureAsset = NULL;
-                }
-
-                if ( textureAsset.ReferencesObject() )
-                {
 #ifdef VIEWPORT_REFACTOR
-                    if ( textureAsset->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
+                if ( textureAsset->GetContentPath().Exists() && SceneGraph::IsSupportedTexture( textureAsset->GetContentPath().Get() ) )
+                {
+                    IDirect3DTexture9* texture = NULL;
+                    if ( texture = LoadTexture( device, textureAsset->GetContentPath().Get() ) )
                     {
-                        IDirect3DTexture9* texture = NULL;
-                        if ( texture = LoadTexture( device, textureAsset->GetContentPath().Get() ) )
-                        {
-                            ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
-                            args.m_Textures.push_back( thumbnail );
-                        }
+                        ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_DeviceManager, texture );
+                        args.m_Textures.push_back( thumbnail );
                     }
-#endif
                 }
+#endif
             }
         }
 

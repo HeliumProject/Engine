@@ -7,7 +7,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/File/Directory.h"
 #include "Platform/Thread.h"
-#include "Pipeline/Project.h"
+#include "SceneGraph/Project.h"
 
 namespace Helium
 {

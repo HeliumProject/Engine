@@ -15,8 +15,6 @@
 #include "SceneGraph/RotateManipulator.h"
 #include "SceneGraph/TranslateManipulator.h"
 
-#include "Pipeline/Asset/AssetClass.h"
-
 #include "Editor/App.h"
 #include "Editor/EditorIDs.h"
 #include "Editor/Dialogs/FileDialog.h"
@@ -629,6 +627,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 {
     bool canHandleArgs = false;
 
+#ifdef ASSET_REFACTOR
     std::set< tstring > supportedExtensions;
     Asset::AssetClass::GetExtensions( supportedExtensions ); 
 
@@ -653,6 +652,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
             }
         }
     }
+#endif
 
     return canHandleArgs;
 }

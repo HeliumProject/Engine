@@ -6,7 +6,7 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
 
-#include "Pipeline/Project.h"
+#include "SceneGraph/Project.h"
 
 #include "Editor/Vault/VaultPanel.h"
 #include "Editor/DragDrop/DropTarget.h"

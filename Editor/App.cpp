@@ -52,8 +52,6 @@
 
 #include "SceneGraph/SceneGraphInit.h"
 
-#include "Pipeline/CoreInit.h"
-
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
 #include "Editor/EditorGenerated.h"
@@ -298,7 +296,6 @@ bool App::OnInit()
     m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
     m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
-    m_InitializerStack.Push( CoreInitialize, CoreCleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
     // inspect

@@ -1,18 +1,14 @@
 #include "EditorPch.h"
 
-#include "ProjectPanel.h"
-#include "ArtProvider.h"
-
 #include "Platform/Timer.h"
 
-#include "Pipeline/Asset/AssetClass.h"
-
 #include "Editor/App.h"
+#include "Editor/ArtProvider.h"
+#include "Editor/MainFrame.h"
+#include "Editor/ProjectPanel.h"
 #include "Editor/Controls/MenuButton.h"
 #include "Editor/Dialogs/FileDialog.h"
 #include "Editor/Settings/EditorSettings.h"
-#include "Editor/MainFrame.h"
-
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -480,6 +476,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
+#ifdef ASSET_REFACTOR
     Asset::AssetClassPtr asset = Asset::AssetClass::Create( path );
 
     if ( asset.ReferencesObject() )
@@ -487,6 +484,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         m_Project->AddPath( asset->GetSourcePath() );
     }
     else
+#endif
     {
         // we could not create a known asset type for this file, ask if they'd like to add it anyway
         int32_t result = wxMessageBox( wxT( "You've dragged a type of file into the project that we don't know how to handle.\n\nThat's ok, we can still add the file to the project and it will get included with the game, you just won't be able to do much else with it.\n\nWould you still like to add the file to the project?" ), wxT( "Unknown File Type" ), wxYES_NO | wxICON_QUESTION );

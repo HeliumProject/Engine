@@ -31,6 +31,7 @@
 #include "SceneGraph/SceneManifest.h"
 #include "SceneGraph/GridSettings.h"
 #include "SceneGraph/Primitive.h"
+#include "SceneGraph/Project.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -105,7 +106,9 @@ void SceneGraph::Initialize()
         Reflect::GetClass< SceneGraph::SceneSettings >()->SetProperty( TXT( "UIName" ), TXT( "Scene Settings" ) );
 
         g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneManifest >( TXT( "SceneGraph::SceneManifest" ) ) );
-	}
+
+        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< Project >( TXT( "Project" ) ) );
+    }
 }
 
 void SceneGraph::Cleanup()

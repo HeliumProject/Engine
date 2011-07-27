@@ -5,7 +5,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Document/Document.h"
 #include "Foundation/Document/DocumentManager.h"
-#include "Pipeline/Project.h"
+#include "SceneGraph/Project.h"
 
 #include "Editor/EditorGenerated.h"
 #include "Editor/DragDrop/FileDropTarget.h"

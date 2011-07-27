@@ -13,6 +13,28 @@ dofile "Shared.lua"
 
 local prefix = solution().name .. '.'
 
+project( prefix .. "Image" )
+	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Image", "IMAGE" )
+
+	files
+	{
+		"Image/**",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Math",
+			prefix .. "Foundation",
+			"nvtt",
+			"tiff",
+			"d3d9",
+			"d3dx9",
+		}
+
 project( prefix .. "SceneGraph" )
 	uuid "4EAB668E-2382-40d9-AA6B-7FB0BB163E7F"
 
@@ -42,42 +64,6 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
-			"d3d9",
-			"d3dx9",
-		}
-
-project( prefix .. "Pipeline" )
-	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Pipeline", "PIPELINE" )
-
-	files
-	{
-		"Pipeline/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Math",
-			prefix .. "Foundation",
-			prefix .. "Engine",
-			prefix .. "EngineJobs",
-			prefix .. "Windowing",
-			prefix .. "Rendering",
-			prefix .. "GraphicsTypes",
-			prefix .. "GraphicsJobs",
-			prefix .. "Graphics",
-			prefix .. "Framework",
-			prefix .. "WindowingWin",
-			prefix .. "RenderingD3D9",
-			prefix .. "PcSupport",
-			prefix .. "PreprocessingPc",
-			prefix .. "EditorSupport",
-			prefix .. "SceneGraph",
-			"nvtt",
-			"tiff",
 			"d3d9",
 			"d3dx9",
 		}
@@ -122,7 +108,7 @@ project( prefix .. "Editor" )
 		prefix .. "PreprocessingPc",
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
-		prefix .. "Pipeline",
+		prefix .. "Image",
 		"Expat",
 		"zlib",
 		"LiteSQL",

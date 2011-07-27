@@ -1,7 +1,6 @@
 #include "EditorPch.h"
 #include "Tracker.h"
 
-#include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Component/SearchableProperties.h"
 #include "Foundation/String/Wildcard.h"
@@ -218,6 +217,7 @@ void Tracker::TrackEverything()
 
                 if ( WildcardMatch( TXT( "Helium*" ), assetFilePath.Extension().c_str() ) )
                 {
+#ifdef ASSET_REFACTOR
                     const Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetFilePath );
                     if ( assetClass.ReferencesObject() )
                     {
@@ -249,6 +249,7 @@ void Tracker::TrackEverything()
                             assetTrackedFile.fileReferences().link( fileRefTrackedFile );
                         }
                     }
+#endif
                 }
 
                 assetTrackedFile.mBroken = 0;

@@ -627,7 +627,6 @@ bool MainFrame::SaveAll( tstring& error )
 
 bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 {
-#pragma TODO( "This whole function is kind of fucked..." )
     bool canHandleArgs = false;
 
     std::set< tstring > supportedExtensions;

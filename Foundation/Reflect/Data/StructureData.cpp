@@ -80,10 +80,14 @@ void StructureData::Serialize(ArchiveBinary& archive)
 
 void StructureData::Deserialize(ArchiveBinary& archive)
 {
-    const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
-    HELIUM_ASSERT( structure );
+#pragma TODO("This is not lossless, data is being discarded")
+    if ( m_Field )
+    {
+        const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
+        HELIUM_ASSERT( structure );
 
-    archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
+        archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
+    }
 }
 
 void StructureData::Serialize(ArchiveXML& archive)
@@ -96,8 +100,12 @@ void StructureData::Serialize(ArchiveXML& archive)
 
 void StructureData::Deserialize(ArchiveXML& archive)
 {
-    const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
-    HELIUM_ASSERT( structure );
+#pragma TODO("This is not lossless, data is being discarded")
+    if ( m_Field )
+    {
+        const Structure* structure = ReflectionCast< Structure >( m_Field->m_Type );
+        HELIUM_ASSERT( structure );
 
-    archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
+        archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
+    }
 }

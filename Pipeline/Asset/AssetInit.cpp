@@ -25,9 +25,6 @@
 #include "Pipeline/Asset/Factories/MeshAssetFactory.h"
 #include "Pipeline/Asset/Factories/TextureAssetFactory.h"
 
-#include "Pipeline/Asset/Manifests/AssetManifest.h"
-#include "Pipeline/Asset/Manifests/ManifestVersion.h"
-
 using namespace Helium;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
@@ -92,8 +89,6 @@ void Asset::Initialize()
         //
 
         g_AssetInitStack.Push( Reflect::RegisterClassType< AssetClass >( TXT( "Asset::AssetClass" ) ) );
-        g_AssetInitStack.Push( Reflect::RegisterClassType< ManifestVersion >( TXT( "Asset::ManifestVersion" ) ) );
-        g_AssetInitStack.Push( Reflect::RegisterClassType< AssetManifest >( TXT( "Asset::AssetManifest" ) ) );
 
         //
         // Components

@@ -20,7 +20,7 @@
 #include "Foundation/Reflect/ArchiveStream.h" 
 
 // enable verbose archive printing
-#define REFLECT_ARCHIVE_VERBOSE
+//#define REFLECT_ARCHIVE_VERBOSE
 
 namespace Helium
 {

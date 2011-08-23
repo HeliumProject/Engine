@@ -37,6 +37,7 @@ GameObject::GameObject()
     , m_flags( 0 )
     , m_path( NULL_NAME )
     , m_pCustomDestroyCallback( NULL )
+    , m_pendingLinkCount( 0 )
 {
 }
 
@@ -47,6 +48,12 @@ GameObject::~GameObject()
         GetAnyFlagSet( GameObject::FLAG_PREDESTROYED ),
         TXT( "GameObject::PreDestroy() not called prior to destruction." ) );
 }
+
+void GameObject::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField(            &GameObject::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
+}
+
 
 /// Modify the name, owner, or instance index of this object.
 ///
@@ -611,12 +618,16 @@ bool GameObject::CreateObject(
     pObject->m_spTemplate = pTemplate;
 
     // Initialize the object based on its default.
+    /*
     sm_serializationBuffer.Resize( 0 );
     DirectSerializer templateSerializer( sm_serializationBuffer );
     HELIUM_VERIFY( templateSerializer.Serialize( pObjectTemplate ) );
 
     DirectDeserializer templateDeserializer( sm_serializationBuffer );
     HELIUM_VERIFY( templateDeserializer.Serialize( pObject ) );
+    */
+    // PMDTODO: Do a clone
+    pObjectTemplate->CopyTo(pObject);
 
     // Attempt to register the object and set its name.
     RenameParameters nameParameters;
@@ -646,48 +657,50 @@ bool GameObject::CreateObject(
 /// @return  Pointer to the object if found, null pointer if not found.
 GameObject* GameObject::FindObject( GameObjectPath path )
 {
-    // Make sure the path isn't empty.
-    if( path.IsEmpty() )
-    {
-        return NULL;
-    }
+//     // Make sure the path isn't empty.
+//     if( path.IsEmpty() )
+//     {
+//         return NULL;
+//     }
+// 
+//     // Assemble a list of object names and instance indices, from the top level on down.
+//     size_t pathDepth = 0;
+//     size_t packageDepth = 0;
+//     for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+//     {
+//         ++pathDepth;
+// 
+//         if( testPath.IsPackage() )
+//         {
+//             ++packageDepth;
+//         }
+//     }
+// 
+//     StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+//     StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+// 
+//     Name* pPathNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * pathDepth ) );
+//     HELIUM_ASSERT( pPathNames );
+// 
+//     uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * pathDepth ) );
+//     HELIUM_ASSERT( pInstanceIndices );
+// 
+//     size_t pathIndex = pathDepth;
+//     for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+//     {
+//         HELIUM_ASSERT( pathIndex != 0 );
+//         --pathIndex;
+// 
+//         pPathNames[ pathIndex ] = testPath.GetName();
+//         pInstanceIndices[ pathIndex ] = testPath.GetInstanceIndex();
+//     }
+// 
+//     HELIUM_ASSERT( pathIndex == 0 );
+// 
+//     // Search from the root.
+//     return FindChildOf( NULL, pPathNames, pInstanceIndices, pathDepth, packageDepth );
 
-    // Assemble a list of object names and instance indices, from the top level on down.
-    size_t pathDepth = 0;
-    size_t packageDepth = 0;
-    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        ++pathDepth;
-
-        if( testPath.IsPackage() )
-        {
-            ++packageDepth;
-        }
-    }
-
-    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-
-    Name* pPathNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * pathDepth ) );
-    HELIUM_ASSERT( pPathNames );
-
-    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * pathDepth ) );
-    HELIUM_ASSERT( pInstanceIndices );
-
-    size_t pathIndex = pathDepth;
-    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-    {
-        HELIUM_ASSERT( pathIndex != 0 );
-        --pathIndex;
-
-        pPathNames[ pathIndex ] = testPath.GetName();
-        pInstanceIndices[ pathIndex ] = testPath.GetInstanceIndex();
-    }
-
-    HELIUM_ASSERT( pathIndex == 0 );
-
-    // Search from the root.
-    return FindChildOf( NULL, pPathNames, pInstanceIndices, pathDepth, packageDepth );
+    return path.GetObjectPtr();
 }
 
 /// Search for a direct child of the specified object with the given name.
@@ -1016,22 +1029,26 @@ const GameObjectType* GameObject::InitStaticType()
         spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        s_Class = GameObjectType::Create(
+        GameObjectType *gameObjectType = GameObjectType::Create(
             nameObject,
             pEnginePackage,
             NULL,
             spObjectTemplate,
             GameObject::ReleaseStaticType,
             GameObjectType::FLAG_ABSTRACT );
+        s_Class = gameObjectType;
         HELIUM_ASSERT( s_Class );
+        GameObject::PopulateComposite(*gameObjectType);
 
-        HELIUM_VERIFY( GameObjectType::Create(
+        GameObjectType *packageType = GameObjectType::Create(
             namePackage,
             pEnginePackage,
             static_cast< const GameObjectType* >( s_Class ),
             spPackageTemplate,
             Package::ReleaseStaticType,
-            0 ) );
+            0 );
+        HELIUM_VERIFY(packageType);
+        Package::PopulateComposite(*packageType);
 
         // Force initialization of Package so it can report its static type information.
         HELIUM_VERIFY( Package::InitStaticType() );

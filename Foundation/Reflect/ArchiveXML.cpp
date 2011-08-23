@@ -6,6 +6,7 @@
 #include "Foundation/Reflect/Structure.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Log.h"
+#include "Foundation/Memory/AutoPtr.h"
 
 #include <strstream>
 #include <expat.h>
@@ -224,7 +225,7 @@ void ArchiveXML::SerializeInstance(Object* object, const tchar_t* fieldName)
         HELIUM_ASSERT(c);
         *m_Stream << c->m_Name;
     }
-
+    
     *m_Stream << TXT( "\"" );
 
     if ( fieldName )
@@ -769,8 +770,13 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
 
     tstringstream strStream;
     strStream << xml;
-    archive.m_Stream = new Reflect::TCharStream(&strStream, false); 
-    archive.Read();
+
+    {
+        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
+        archive.OpenStream(stream.Release(), false);
+        archive.Read();
+        archive.Close();
+    }
 
     std::vector< ObjectPtr >::iterator itr = archive.m_Objects.begin();
     std::vector< ObjectPtr >::iterator end = archive.m_Objects.end();
@@ -790,9 +796,14 @@ void ArchiveXML::ToString( const std::vector< ObjectPtr >& objects, tstring& xml
     ArchiveXML archive;
     tstringstream strStream;
 
-    archive.m_Stream = new Reflect::TCharStream( &strStream, false ); 
     archive.m_Objects = objects;
-    archive.Write();
+
+    {
+        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
+        archive.OpenStream(stream.Release(), true);
+        archive.Write();
+        archive.Close();
+    }
 
     xml = strStream.str();
 }
@@ -802,9 +813,13 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& objec
     ArchiveXML archive;
     tstringstream strStream;
     strStream << xml;
-
-    archive.m_Stream = new Reflect::TCharStream( &strStream, false );
-    archive.Read();
+    
+    {
+        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
+        archive.OpenStream(stream.Release(), false);
+        archive.Read();
+        archive.Close();
+    }
 
     objects = archive.m_Objects;
 }

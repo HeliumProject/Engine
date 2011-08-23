@@ -8,6 +8,14 @@
 
 #include "gtest.h"
 
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Engine/GameObject.h"
+
+#include "TestGameObject.h"
+#include "Engine/ArchiveObjectLoader.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+
+
 using namespace Helium;
 
 
@@ -34,16 +42,31 @@ class TestComponentFour : public Helium::Components::Component
 public:
     TestComponentFour()
     {
-        static int32_t next_id = 100;
-        m_Id = next_id++;
+        //static int32_t next_id = 100;
+        //m_Id = next_id++;
     }
 
-    int32_t m_Id;
+    //int32_t m_Id;
+    Helium::Color4 m_Color;
 
     OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
+
+    static void PopulateComposite( Reflect::Composite& comp );
 };
 
 OBJECT_DEFINE_COMPONENT(TestComponentFour);
+
+void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
+}
+
+
+
+//class TestGameObject : public GameObject
+//{
+//    LUNAR_DECLARE_OB
+//};
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -66,8 +89,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Reflect::Initialize();
 
     RegisterEngineTypes();
-    RegisterGraphicsTypes();
     RegisterGraphicsEnums();
+    RegisterGraphicsTypes();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
 #if HELIUM_EDITOR
@@ -83,7 +106,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
 
 #if HELIUM_EDITOR
-    HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
+    //HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
+    HELIUM_VERIFY( ArchiveObjectLoader::InitializeStaticInstance() );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
     HELIUM_ASSERT( pObjectPreprocessor );
@@ -95,6 +119,44 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
+
+    Helium::StrongPtr<GraphicsConfig> config;
+    GraphicsConfig::Create<GraphicsConfig>(config, Name( TXT("TestConfigObject")), NULL);
+    config->m_width = 320;
+    config->m_height = 240;
+    
+    tstring str;
+    Reflect::ArchiveXML::ToString(config, str);
+    const tchar_t *raw_data = str.data();
+
+    {
+        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+        pFileStream->Write(str.c_str(), 2, str.length());
+        //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+        //// Write the XML header.
+        //m_pStream->Write( str.c_str(), 1, str.length() );
+        //m_pStream->Close();
+        pFileStream->Close();
+        //delete m_pStream;
+        delete pFileStream;
+    }
+
+    {
+        char *buffer = new char[2 * str.length()];
+        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_READ, true );
+        pFileStream->Read(buffer, 2, str.length());
+        //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+        //// Write the XML header.
+        //m_pStream->Write( str.c_str(), 1, str.length() );
+        //m_pStream->Close();
+        pFileStream->Close();
+        //delete m_pStream;
+        delete pFileStream;
+        delete[] buffer;
+    }
+
+
+
 
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
@@ -132,12 +194,98 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
-	//pmd - Verify that classes can be registered after they've been unregistered
-    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
-    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
-    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
-    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+    //pmd - Verify that classes can be registered after they've been unregistered
+//     Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+//     Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+//     Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+//     //Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+// 
+//     //Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
+//     Helium::Reflect::RegisterClassType<TestComponentFour>(TXT("TestComponentFour"));
 
+
+//     TestComponentFour tc4_1;
+//     tc4_1.m_Color = Color4(1.0f, 0.5f, 0.25f, 0.9f);
+// 
+//     TestComponentFour *tc4_2 = static_cast<TestComponentFour *>(tc4_1.CreateObject()
+// 
+//     tstring xml_data_1;
+//     tc4_1.ToXML(xml_data_1);
+// 
+//     tstring xml_data_2;
+//     tc4_2->ToXML(xml_data_2);
+// 
+//     Helium::Reflect::UnregisterClassType<TestComponentFour>();
+//     Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+
+    Reflect::RegisterClassType<TestGameObject>(TXT("TestGameObject"));
+
+    GameObjectPtr spTestGameObject1;
+    GameObjectPtr spTestGameObject2;
+    GameObject::CreateObject(spTestGameObject1, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject")), NULL);
+    TestGameObject *tgo1 = Reflect::AssertCast<TestGameObject>(spTestGameObject1.Get());
+    tgo1->m_TestValue1 = 5.0f;
+    tgo1->m_TestValue2 = 6.0f;
+    GameObject::CreateObject(spTestGameObject2, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject2")), NULL, spTestGameObject1.Get());
+    TestGameObject *tgo2 = Reflect::AssertCast<TestGameObject>(spTestGameObject2.Get());
+
+//     Engine::PackageLoader *package_loader = gObjectLoader->GetPackageLoader("TestPackage");
+//     package_loader->
+
+    GameObjectPath testPath;
+    testPath.Set(TXT("/EngineTest"));
+    Helium::GameObjectPtr package_ptr;
+    gObjectLoader->LoadObject(testPath, package_ptr);
+
+
+    GameObjectPath testPath2;
+    testPath2.Set(TXT( "/EngineTest:TestObject" ));
+    Helium::GameObjectPtr go_ptr;
+    gObjectLoader->LoadObject( testPath2, go_ptr );
+
+    GameObjectPath testPath3;
+    testPath3.Set(TXT( "/EngineTest/ChildPackage:ChildTestObject" ));
+    Helium::GameObjectPtr go_ptr2;
+    gObjectLoader->LoadObject( testPath3, go_ptr2 );
+    
+    Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
+    GameObject *test_object = Reflect::SafeCast< GameObject >( go_ptr.Get() );
+    GameObject *test_object2 = Reflect::SafeCast< GameObject >( go_ptr2.Get() );
+
+    Reflect::UnregisterClassType<TestGameObject>();
+
+    GameObject *game_object = package->GetFirstChild();
+    DynArray<GameObject *> go_iter_stack;
+    bool returned_from_child = false;
+    while (game_object)
+    {
+        if (!returned_from_child)
+        {
+            if (GameObject *child = game_object->GetFirstChild())
+            {
+                go_iter_stack.Push(game_object);
+                game_object = child;
+                continue;
+            }
+        }
+        else
+        {
+            returned_from_child = false;
+        }
+
+        HELIUM_TRACE( TRACE_INFO, TXT( "Found object %s" ), *game_object->GetName());
+
+        game_object = game_object->GetNextSibling();
+
+        if (!game_object && !go_iter_stack.IsEmpty())
+        {
+            game_object = go_iter_stack.GetLast();
+            go_iter_stack.Pop();
+            returned_from_child = true;
+        }
+    }
+    
+    
 
     int argc = 2;
     char *argv[2] = {"TestApp.exe", "--gtest_break_on_failure"};

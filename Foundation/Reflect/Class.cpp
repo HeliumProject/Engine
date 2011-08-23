@@ -4,6 +4,7 @@
 #include "Registry.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
+#include "Foundation/Reflect/Data/PointerData.h"
 
 #include "Foundation/Log.h"
 
@@ -41,4 +42,9 @@ Class::~Class()
 Class* Class::Create()
 {
     return new Class();
+}
+
+const Class *Class::GetPointerDataClass() const
+{
+    return PointerData::s_Class;
 }

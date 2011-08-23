@@ -10,11 +10,13 @@
 
 #include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Engine/GameObjectPointerData.h"
 
 using namespace Helium;
 
 PackagePtr GameObjectType::sm_spTypePackage;
 GameObjectType::LookupMap* GameObjectType::sm_pLookupMap = NULL;
+CleanupFunc GameObjectType::sm_GameObjectPointerDataCleanupCallback = NULL;
 
 /// Constructor.
 GameObjectType::GameObjectType()
@@ -54,12 +56,19 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-const GameObjectType* GameObjectType::Create(
+// PMD: Removing const because:
+// - Objects must be able to have properties of the same type as the outer type (i.e. GameObject has reference to GameObject that is the template)
+// - So, s_Class must be set before calling PopulateComposite
+// - So, this function must return a pointer that PopulateComposite can work on, rather than calling PopulateComposite directly
+//   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
+// - To prevent un-consting parameter to PopulateComposite, making GameObjectType return non-const
+GameObjectType* GameObjectType::Create(
     Name name,
     Package* pTypePackage,
     const GameObjectType* pParent,
     GameObject* pTemplate,
     RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback,
+    CreateObjectFunc pCreator,
     uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
@@ -115,6 +124,7 @@ const GameObjectType* GameObjectType::Create(
     pType->m_cachedName = name;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;
+    pType->m_Creator = pCreator;
 
     if( pParent )
     {
@@ -127,6 +137,12 @@ const GameObjectType* GameObjectType::Create(
     {
         sm_pLookupMap = new LookupMap;
         HELIUM_ASSERT( sm_pLookupMap );
+    }
+
+    // Initialize new pointer data type specific for game objects
+    if (!GameObjectPointerData::s_Class)
+    {
+        sm_GameObjectPointerDataCleanupCallback = Reflect::RegisterClassType<GameObjectPointerData>( TXT( "GameObjectPointer" ) );
     }
 
     // Register the type (note that a type with the same name should not already exist in the lookup map).
@@ -251,8 +267,18 @@ void GameObjectType::Shutdown()
     delete sm_pLookupMap;
     sm_pLookupMap = NULL;
 
+    if (sm_GameObjectPointerDataCleanupCallback)
+    {
+        sm_GameObjectPointerDataCleanupCallback();
+    }
+
     // Release the reference to the main "Types" package.
     sm_spTypePackage.Release();
 
     HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectType registration shutdown complete.\n" ) );
+}
+
+const Reflect::Class *GameObjectType::GetPointerDataClass() const
+{
+    return GameObjectPointerData::s_Class;
 }

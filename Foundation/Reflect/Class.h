@@ -50,6 +50,8 @@ namespace Helium
                 return info;
             }
 
+            virtual const Class *GetPointerDataClass() const;
+
         public:
             CreateObjectFunc        m_Creator;  // factory function for creating instances of this class
             StrongPtr< Object >     m_Default;  // the template for this class (by default, the default instance)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TestApp/TestApp.h"
+
 #include "Platform/Platform.h"
 #include "Platform/Socket.h"
 #include "Platform/Trace.h"

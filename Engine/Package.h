@@ -33,6 +33,11 @@ namespace Helium
         void SetLoader( PackageLoader* pLoader );
         //@}
 
+        /// @name Package Serialization
+        //@{
+        void SavePackage();
+        //@}
+
     private:
         /// Package loader.
         PackageLoader* m_pLoader;

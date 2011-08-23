@@ -10,10 +10,23 @@
 
 #include "Foundation/File/Path.h"
 
+#include "Foundation/Memory/ReferenceCounting.h"
+#include "Engine/GameObject.h"
+
+struct Helium::GameObjectPath::PendingLink
+{
+    PendingLink *rpNext;
+    //struct Entry *pObjectPath;
+    GameObjectWPtr wpOwner;
+    // TODO: Maybe this ought to be a relative pointer from pObjectPath's instance?
+    GameObjectPtr *rpPointerToLink;
+};
+
 using namespace Helium;
 
 GameObjectPath::TableBucket* GameObjectPath::sm_pTable = NULL;
 StackMemoryHeap<>* GameObjectPath::sm_pEntryMemoryHeap = NULL;
+ObjectPool<GameObjectPath::PendingLink> *GameObjectPath::sm_pPendingLinksPool = NULL;
 
 /// Parse the object path in the specified string and store it in this object.
 ///
@@ -91,6 +104,8 @@ bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, u
     entry.name = name;
     entry.instanceIndex = instanceIndex;
     entry.bPackage = bPackage;
+    entry.instance = NULL;
+    entry.rpFirstPendingLink = NULL;
 
     // Look up/add the entry.
     m_pEntry = Add( entry );
@@ -504,6 +519,9 @@ void GameObjectPath::Shutdown()
     delete sm_pEntryMemoryHeap;
     sm_pEntryMemoryHeap = NULL;
 
+    delete sm_pPendingLinksPool;
+    sm_pPendingLinksPool = NULL;
+
     HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectPath table shutdown complete.\n" ) );
 }
 
@@ -852,6 +870,9 @@ GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
         sm_pEntryMemoryHeap = new StackMemoryHeap<>( STACK_HEAP_BLOCK_SIZE );
         HELIUM_ASSERT( sm_pEntryMemoryHeap );
 
+        sm_pPendingLinksPool = new ObjectPool<PendingLink>( PENDING_LINKS_POOL_BLOCK_SIZE );
+        HELIUM_ASSERT( sm_pPendingLinksPool );
+
         HELIUM_ASSERT( !sm_pTable );
         sm_pTable = new TableBucket [ TABLE_BUCKET_COUNT ];
         HELIUM_ASSERT( sm_pTable );
@@ -1026,4 +1047,69 @@ GameObjectPath::Entry* GameObjectPath::TableBucket::Add( const Entry& rEntry, si
     m_entries.Push( pNewEntry );
 
     return pNewEntry;
+}
+
+void Helium::GameObjectPath::SetObjectPtr(GameObject *_object)
+{
+    m_pEntry->instance = _object;
+    if (_object)
+    {
+        PendingLink *pending_link = AtomicExchange<PendingLink>(m_pEntry->rpFirstPendingLink, reinterpret_cast<PendingLink *>(m_pEntry));
+
+        if (pending_link == reinterpret_cast<PendingLink *>(m_pEntry))
+        {
+            // We should only be setting an object pointer to a path once, but apparently we already did this
+            HELIUM_BREAK();
+        }
+
+        // Go through all the pending links.. make the link, decrement link count, and release the pending link object
+        while (pending_link)
+        {
+            // If this trips, something deleted an object while it was trying to be linked
+            HELIUM_ASSERT(pending_link->wpOwner.ReferencesObject());
+            pending_link->rpPointerToLink->Set(_object);
+            pending_link->wpOwner->DecrementPendingLinkCount();
+            PendingLink *previous_pending_link = pending_link;
+            pending_link = pending_link->rpNext;
+            sm_pPendingLinksPool->Release(previous_pending_link);
+        }
+    }
+}
+
+bool Helium::GameObjectPath::AddPendingLink( GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer )
+{
+    // The easy, no-tripping-memory-barriers early out.
+    if (m_pEntry->instance)
+    {
+        _game_object_pointer = m_pEntry->instance;
+        return true;
+    }
+
+    // Have to do it the hard, thread-safe way..
+    PendingLink *link = sm_pPendingLinksPool->Allocate();
+    HELIUM_ASSERT(link);
+
+    link->wpOwner.Set(&_outer);
+    link->rpPointerToLink = &_game_object_pointer;
+
+    while (true)
+    {
+        link->rpNext = m_pEntry->rpFirstPendingLink;
+        PendingLink *rpFirstPendingLink = AtomicCompareExchange<PendingLink>(m_pEntry->rpFirstPendingLink, link, link->rpNext);
+
+        if (rpFirstPendingLink == link)
+        {
+            // Our insertion was a success, and we should return
+            return false;
+        }
+        else if (rpFirstPendingLink == reinterpret_cast<PendingLink *>(m_pEntry))
+        {
+            // instance is now set, so we can immediately link
+            _game_object_pointer = m_pEntry->instance;
+            sm_pPendingLinksPool->Release(link);
+            return true;
+        }
+
+        // Otherwise, some other thread has added to the pending link list.. try again
+    }
 }

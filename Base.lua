@@ -361,7 +361,7 @@ Helium.DoDefaultProjectSettings = function()
 	flags
 	{
 		--"FatalWarnings",
-		"ExtraWarnings",
+		--"ExtraWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
 	}
 

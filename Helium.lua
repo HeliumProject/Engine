@@ -847,6 +847,7 @@ project "TestJobs" -- DEPRECATED
 project "TestApp" -- DEPRECATED
 	uuid "CB5427DC-CE08-4FA6-B060-F35A902806BA"
 
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "TestApp", "TEST_APP" )
 	kind "WindowedApp"
 
 	files
@@ -883,11 +884,6 @@ project "TestApp" -- DEPRECATED
 		"FrameworkWin",
 		"TestJobs",
 	}
-
-	pchheader( "TestAppPch.h" )
-	pchsource( "TestApp/TestAppPch.cpp" )
-
-	Helium.DoDefaultProjectSettings()
 
 	configuration "windows"
 		links

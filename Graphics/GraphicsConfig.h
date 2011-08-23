@@ -84,9 +84,10 @@ namespace Helium
         virtual ~GraphicsConfig();
         //@}
 
+        static void PopulateComposite( Reflect::Composite& comp );
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
         //@}
 
         /// @name Data Access
@@ -104,7 +105,7 @@ namespace Helium
         inline bool GetVsync() const;
         //@}
 
-    private:
+    public:
         /// Display width.
         uint32_t m_width;
         /// Display height.

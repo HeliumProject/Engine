@@ -31,8 +31,8 @@ ObjectTypeRegistration::~ObjectTypeRegistration()
 void ObjectTypeRegistration::Register()
 {
     RegisterEngineTypes();
-    RegisterGraphicsTypes();
     RegisterGraphicsEnums();
+    RegisterGraphicsTypes();
     RegisterFrameworkTypes();
 }
 
@@ -42,7 +42,7 @@ void ObjectTypeRegistration::Register()
 void ObjectTypeRegistration::Unregister()
 {
     UnregisterFrameworkTypes();
-    UnregisterGraphicsEnums();
     UnregisterGraphicsTypes();
+    UnregisterGraphicsEnums();
     UnregisterEngineTypes();
 }

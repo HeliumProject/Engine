@@ -65,6 +65,14 @@ namespace Helium
             m_Ptr = _ptr;
         }
 
+        //pmd - Added Release
+        T* Release()
+        {
+            T *return_value = m_Ptr;
+            m_Ptr = NULL;
+            return return_value;
+        }
+
     private: 
         T* m_Ptr; 
     };

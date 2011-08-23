@@ -244,11 +244,14 @@ namespace Helium
             template < class CompositeT, class ObjectT >
             inline Reflect::Field* AddField( StrongPtr< ObjectT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
+                const Reflect::Class *pointer_data_class = Reflect::GetClass<ObjectT>()->GetPointerDataClass();
+                HELIUM_ASSERT(pointer_data_class);
+
                 return AddField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetClass<Reflect::PointerData>(),
+                    pointer_data_class,
                     Reflect::GetClass<ObjectT>(),
                     flags );
             }
@@ -256,11 +259,14 @@ namespace Helium
             template < class CompositeT, class ObjectT >
             inline Reflect::Field* AddField( Attribute< StrongPtr< ObjectT > > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
+                const Reflect::Class *pointer_data_class = Reflect::GetClass<ObjectT>()->GetPointerDataClass();
+                HELIUM_ASSERT(pointer_data_class);
+
                 return AddField(
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetClass<Reflect::PointerData>(),
+                    pointer_data_class,
                     Reflect::GetClass<ObjectT>(),
                     flags );
             }

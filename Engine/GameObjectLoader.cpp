@@ -225,7 +225,9 @@ void GameObjectLoader::Tick()
 
     // Build the list of object load requests to update this tick, incrementing the request count on each to prevent
     // them from being released while we don't have a lock on the request hash map.
-    HELIUM_ASSERT( m_loadRequestTickArray.IsEmpty() );
+    //HELIUM_ASSERT( m_loadRequestTickArray.IsEmpty() );
+    /// List of load requests to update in the current tick.
+    DynArray< LoadRequest* > m_loadRequestTickArray;
 
     ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
     if( m_loadRequestMap.First( loadRequestConstAccessor ) )
@@ -272,7 +274,7 @@ void GameObjectLoader::Tick()
         }
     }
 
-    m_loadRequestTickArray.Resize( 0 );
+    //m_loadRequestTickArray.Resize( 0 );
 }
 
 /// Get the global object loader instance.
@@ -836,4 +838,17 @@ void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* p
             rspObject = pObject;
         }
     }
+}
+
+void Helium::GameObjectLoader::HandleLinkDependency( GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer, GameObjectPath &_path )
+{
+    if (!_path.AddPendingLink(_outer, _game_object_pointer))
+    {
+        _outer.IncrementPendingLinkCount();
+    }
+}
+
+void Helium::GameObjectLoader::FinalizeLink( GameObject *_game_object )
+{
+
 }

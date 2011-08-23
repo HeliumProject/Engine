@@ -91,6 +91,8 @@ namespace Helium
         virtual ~GameObjectType();
         //@}
 
+        virtual const Class *GetPointerDataClass() const;
+
         /// @name Data Access
         //@{
         inline Name GetName() const;
@@ -105,9 +107,10 @@ namespace Helium
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static const GameObjectType* Create(
+        static GameObjectType* Create(
             Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
-            RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
+            RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, CreateObjectFunc pCreator, uint32_t flags );
+        
         static void Unregister( const GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );
@@ -132,6 +135,7 @@ namespace Helium
         static PackagePtr sm_spTypePackage;
         /// Type lookup hash map instance.
         static LookupMap* sm_pLookupMap;
+        static CleanupFunc sm_GameObjectPointerDataCleanupCallback;
     };
 }
 

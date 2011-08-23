@@ -68,6 +68,10 @@ namespace Helium
         static void DestroyStaticInstance();
         //@}
 
+        static void HandleLinkDependency(GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer, GameObjectPath &_path);
+
+        static void FinalizeLink(GameObject *_game_object);
+
     protected:
         /// Load status flags.
         enum ELoadFlag
@@ -184,8 +188,6 @@ namespace Helium
         ConcurrentHashMap< GameObjectPath, LoadRequest* > m_loadRequestMap;
         /// Load request pool.
         ObjectPool< LoadRequest > m_loadRequestPool;
-        /// List of load requests to update in the current tick.
-        DynArray< LoadRequest* > m_loadRequestTickArray;
 
         /// Singleton instance.
         static GameObjectLoader* sm_pInstance;

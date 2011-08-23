@@ -42,6 +42,9 @@ namespace Helium
 
         public:
             ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+            
+            // PMD: Added to give more control to caller to step through objects one-by-one.
+            ArchiveXML( TCharStream *stream, bool write = false );
             ~ArchiveXML();
 
         private:
@@ -56,6 +59,8 @@ namespace Helium
 				return *stream;
             }
 
+            virtual void Close() HELIUM_OVERRIDE; 
+
         protected:
             // The type
             virtual ArchiveType GetType() const
@@ -65,7 +70,6 @@ namespace Helium
 
             virtual void Open( bool write = false ) HELIUM_OVERRIDE;
             void OpenStream(TCharStream* stream, bool write = false );
-            virtual void Close() HELIUM_OVERRIDE; 
 
             // Begins parsing the InputStream
             virtual void Read() HELIUM_OVERRIDE;
@@ -106,6 +110,23 @@ namespace Helium
             void DeserializeFields( void* object, const Structure* type );
             void DeserializeArray( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
             void DeserializeArray( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
+
+        public:
+            void WriteFileHeader();
+            void WriteFileFooter();
+
+            void WriteSingleObject(Object& object);
+
+            // Only pass false for _reparse if you know that something else has caused ParseStream to be called
+            // since the stream was last changed. For example, Read() does this internally before calling ReadFileHeader, 
+            // so it passes false. Client code will almost always want to reparse.
+            void ReadFileHeader(bool _reparse = true);
+            void ReadFileFooter();
+
+            bool BeginReadingSingleObjects();
+            bool ReadSingleObject(ObjectPtr& object);
+
+            void ParseStream();
 
         protected:
             // Helpers

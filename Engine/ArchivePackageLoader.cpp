@@ -25,10 +25,22 @@
 //#include "PcSupport/ObjectPreprocessor.h"
 //#include "PcSupport/ResourceHandler.h"
 #include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "expat.h"
 
 using namespace Helium;
+
+REFLECT_DEFINE_OBJECT(ObjectDescriptor);
+
+void Helium::ObjectDescriptor::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField(&ObjectDescriptor::m_Name, TXT("m_Name"));
+    comp.AddField(&ObjectDescriptor::m_TypeName, TXT("m_TypeName"));
+    comp.AddField(&ObjectDescriptor::m_OwnerPath, TXT("m_OwnerPath"));
+    comp.AddField(&ObjectDescriptor::m_TemplatePath, TXT("m_TemplatePath"));
+}
+
 
 /// Constructor.
 ArchivePackageLoader::ArchivePackageLoader()

@@ -70,9 +70,23 @@ ArchiveXML::ArchiveXML()
 
 }
 
+ArchiveXML::ArchiveXML( TCharStream *stream, bool write /*= false */ )
+: Archive()
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
+, m_Body( NULL )
+{
+    HELIUM_ASSERT(stream);
+    OpenStream(stream, write);
+}
+
 ArchiveXML::~ArchiveXML()
 {
-
+    if (m_Stream)
+    {
+        Close();
+    }
 }
 
 void ArchiveXML::Open( bool write )
@@ -117,46 +131,8 @@ void ArchiveXML::Read()
 
     m_Abort = false;
 
-    // determine the size of the input stream
-    m_Stream->SeekRead(0, std::ios_base::end);
-    m_Size = m_Stream->TellRead();
-    m_Stream->SeekRead(0, std::ios_base::beg);
-
-    // fail on an empty input stream
-    if ( m_Size == 0 )
-    {
-        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
-    }
-
-    // while there is data, parse buffer
-    {
-        REFLECT_SCOPE_TIMER( ("Parse XML") );
-
-        long step = 0;
-        const unsigned bufferSizeInBytes = 4096;
-        char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
-        while (!m_Stream->Fail() && !m_Abort)
-        {
-            m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)m_Size) * 100.0f);
-
-            // divide by the character size so wide char builds don't override the allocation
-            //  stream objects read characters, not byte-by-byte
-            m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
-            int bytesRead = static_cast<int>(m_Stream->ElementsRead());
-
-            m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
-        }
-    }
-
-    m_Iterator.SetCurrent( m_Document.GetRoot() );
-
-    // read file format version attribute
-    const String* version = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
-    if ( version )
-    {
-        tstringstream str ( version->GetData() );
-        str >> m_Version;
-    }
+    ParseStream();
+    ReadFileHeader(false);
 
     // deserialize main file objects
     {
@@ -179,13 +155,8 @@ void ArchiveXML::Write()
     ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
 
-#ifdef UNICODE
-    uint16_t feff = 0xfeff;
-    m_Stream->Write( &feff ); // byte order mark
-#endif
 
-    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
-    *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
+    WriteFileHeader();
 
     // serialize main file objects
     {
@@ -193,7 +164,7 @@ void ArchiveXML::Write()
         SerializeArray(m_Objects, ArchiveFlags::Status);
     }
 
-    *m_Stream << TXT( "</Reflect>\n\0" );
+    WriteFileFooter();
 
     info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
@@ -764,19 +735,14 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
     {
         searchClass = Reflect::GetClass<Object>();
     }
-
-    ArchiveXML archive;
-    archive.m_SearchClass = searchClass;
-
+    
     tstringstream strStream;
     strStream << xml;
 
-    {
-        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
-        archive.OpenStream(stream.Release(), false);
-        archive.Read();
-        archive.Close();
-    }
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), false);
+    archive.m_SearchClass = searchClass;
+    archive.Read();
+    archive.Close();
 
     std::vector< ObjectPtr >::iterator itr = archive.m_Objects.begin();
     std::vector< ObjectPtr >::iterator end = archive.m_Objects.end();
@@ -793,33 +759,117 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
 
 void ArchiveXML::ToString( const std::vector< ObjectPtr >& objects, tstring& xml )
 {
-    ArchiveXML archive;
+    //ArchiveXML archive;
     tstringstream strStream;
 
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), true);
     archive.m_Objects = objects;
-
-    {
-        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
-        archive.OpenStream(stream.Release(), true);
-        archive.Write();
-        archive.Close();
-    }
-
+    archive.Write();
+    archive.Close();
     xml = strStream.str();
 }
 
 void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& objects )
 {
-    ArchiveXML archive;
+    //ArchiveXML archive;
     tstringstream strStream;
     strStream << xml;
-    
-    {
-        Helium::AutoPtr<TCharStream> stream(new Reflect::TCharStream(&strStream, false));
-        archive.OpenStream(stream.Release(), false);
-        archive.Read();
-        archive.Close();
-    }
+
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), false);
+    archive.Read();
+    archive.Close();
 
     objects = archive.m_Objects;
+}
+
+void Helium::Reflect::ArchiveXML::WriteFileHeader()
+{
+#ifdef UNICODE
+    uint16_t feff = 0xfeff;
+    m_Stream->Write( &feff ); // byte order mark
+#endif
+
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
+    *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
+}
+
+void Helium::Reflect::ArchiveXML::WriteFileFooter()
+{
+    *m_Stream << TXT( "</Reflect>\n\0" );
+}
+
+void Helium::Reflect::ArchiveXML::ReadFileHeader(bool _reparse)
+{
+    if (_reparse)
+    {
+        ParseStream();
+    }
+
+    // read file format version attribute
+    const String* version = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
+    if ( version )
+    {
+        tstringstream str ( version->GetData() );
+        str >> m_Version;
+    }
+}
+
+void Helium::Reflect::ArchiveXML::ReadFileFooter()
+{
+
+}
+
+void Helium::Reflect::ArchiveXML::ParseStream()
+{
+    // determine the size of the input stream
+    m_Stream->SeekRead(0, std::ios_base::end);
+    m_Size = m_Stream->TellRead();
+    m_Stream->SeekRead(0, std::ios_base::beg);
+
+    // fail on an empty input stream
+    if ( m_Size == 0 )
+    {
+        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
+    }
+
+    // while there is data, parse buffer
+    {
+        REFLECT_SCOPE_TIMER( ("Parse XML") );
+
+        long step = 0;
+        const unsigned bufferSizeInBytes = 4096;
+        char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
+        while (!m_Stream->Fail() && !m_Abort)
+        {
+            m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)m_Size) * 100.0f);
+
+            // divide by the character size so wide char builds don't override the allocation
+            //  stream objects read characters, not byte-by-byte
+            m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
+            int bytesRead = static_cast<int>(m_Stream->ElementsRead());
+
+            m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
+        }
+    }
+
+    m_Iterator.SetCurrent( m_Document.GetRoot() );
+}
+
+void Helium::Reflect::ArchiveXML::WriteSingleObject( Object& object )
+{
+    SerializeInstance(&object);
+}
+
+bool Helium::Reflect::ArchiveXML::BeginReadingSingleObjects()
+{
+    bool return_value = m_Iterator.GetCurrent()->GetFirstChild() != NULL;
+    m_Iterator.Advance();
+    return return_value;
+}
+
+bool Helium::Reflect::ArchiveXML::ReadSingleObject( ObjectPtr& object )
+{
+    bool return_value = m_Iterator.GetCurrent()->GetNextSibling() != NULL;
+    DeserializeInstance(object);
+    return return_value;
 }

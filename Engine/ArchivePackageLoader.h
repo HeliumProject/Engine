@@ -22,6 +22,18 @@
 
 namespace Helium
 {
+    struct HELIUM_ENGINE_API ObjectDescriptor : public Reflect::Object
+    {
+        REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
+
+        tstring m_Name;
+        tstring m_TypeName;
+        tstring m_TemplatePath;
+        tstring m_OwnerPath;
+
+        static void PopulateComposite( Reflect::Composite& comp );
+    };
+    
     class HELIUM_ENGINE_API ArchivePackageLoader : public PackageLoader
     {
         struct LinkEntry;

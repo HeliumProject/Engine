@@ -21,11 +21,13 @@ using namespace Helium;
 /// Constructor.
 ArchiveObjectLoader::ArchiveObjectLoader()
 {
+    Reflect::RegisterClassType<ObjectDescriptor>(TXT("ObjectDescriptor"));
 }
 
 /// Destructor.
 ArchiveObjectLoader::~ArchiveObjectLoader()
 {
+    Reflect::UnregisterClassType<ObjectDescriptor>();
 }
 
 /// Initialize the static object loader instance as an ArchiveObjectLoader.

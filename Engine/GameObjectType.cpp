@@ -68,7 +68,6 @@ GameObjectType* GameObjectType::Create(
     const GameObjectType* pParent,
     GameObject* pTemplate,
     RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback,
-    CreateObjectFunc pCreator,
     uint32_t flags )
 {
     HELIUM_ASSERT( !name.IsEmpty() );
@@ -124,7 +123,6 @@ GameObjectType* GameObjectType::Create(
     pType->m_cachedName = name;
     pType->m_pReleaseStaticTypeCallback = pReleaseStaticTypeCallback;
     pType->m_flags = flags;
-    pType->m_Creator = pCreator;
 
     if( pParent )
     {

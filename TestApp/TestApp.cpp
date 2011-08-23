@@ -14,6 +14,7 @@
 #include "TestGameObject.h"
 #include "Engine/ArchiveObjectLoader.h"
 #include "Foundation/Reflect/ArchiveXML.h"
+#include "Engine/ArchivePackageLoader.h"
 
 
 using namespace Helium;
@@ -120,41 +121,93 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     gObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
 
-    Helium::StrongPtr<GraphicsConfig> config;
-    GraphicsConfig::Create<GraphicsConfig>(config, Name( TXT("TestConfigObject")), NULL);
-    config->m_width = 320;
-    config->m_height = 240;
-    
+
     tstring str;
-    Reflect::ArchiveXML::ToString(config, str);
-    const tchar_t *raw_data = str.data();
-
+    tstringstream strStream;
     {
-        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
-        pFileStream->Write(str.c_str(), 2, str.length());
-        //BufferedStream *m_pStream = new BufferedStream( pFileStream );
-        //// Write the XML header.
-        //m_pStream->Write( str.c_str(), 1, str.length() );
-        //m_pStream->Close();
-        pFileStream->Close();
-        //delete m_pStream;
-        delete pFileStream;
+        ObjectDescriptor os;
+        os.m_Name = TXT("ObjectName");
+        os.m_TypeName = TXT("GraphicsConfig");
+        os.m_TemplatePath = TXT("TemplatePath");
+        os.m_OwnerPath = TXT("");
+
+        Helium::StrongPtr<GraphicsConfig> config;
+        GraphicsConfig::Create<GraphicsConfig>(config, Name( TXT("TestConfigObject")), NULL);
+        config->m_width = 320;
+        config->m_height = 240;
+
+        Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&strStream, false), true);
+        xml_out.WriteFileHeader();
+        xml_out.WriteSingleObject(os);
+        xml_out.WriteSingleObject(*config);
+        xml_out.WriteFileFooter();
+        xml_out.Close();
+
+
+        //Reflect::ArchiveXML::
+        //Reflect::ArchiveXML::ToString(config, str);
+        str = strStream.str();
+        const tchar_t *raw_data = str.data();
+
+        {
+            FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+            pFileStream->Write(str.c_str(), 2, str.length());
+            //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+            //// Write the XML header.
+            //m_pStream->Write( str.c_str(), 1, str.length() );
+            //m_pStream->Close();
+            pFileStream->Close();
+            //delete m_pStream;
+            delete pFileStream;
+        }
+
+        if (str.length())
+        {
+            char *buffer = new char[2 * str.length()];
+            FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_READ, true );
+            pFileStream->Read(buffer, 2, str.length());
+            //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+            //// Write the XML header.
+            //m_pStream->Write( str.c_str(), 1, str.length() );
+            //m_pStream->Close();
+            pFileStream->Close();
+            //delete m_pStream;
+            delete pFileStream;
+            delete[] buffer;
+        }
     }
 
-    {
-        char *buffer = new char[2 * str.length()];
-        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_READ, true );
-        pFileStream->Read(buffer, 2, str.length());
-        //BufferedStream *m_pStream = new BufferedStream( pFileStream );
-        //// Write the XML header.
-        //m_pStream->Write( str.c_str(), 1, str.length() );
-        //m_pStream->Close();
-        pFileStream->Close();
-        //delete m_pStream;
-        delete pFileStream;
-        delete[] buffer;
-    }
+    Reflect::ObjectPtr od_ptr(new ObjectDescriptor());
+    Reflect::ObjectPtr config_ptr;
 
+    GraphicsConfig *config = 0;
+
+    {
+        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&strStream, false), false);
+        xml_in.ReadFileHeader();
+        xml_in.BeginReadingSingleObjects();
+        xml_in.ReadSingleObject(od_ptr);
+
+        ObjectDescriptor *od = Reflect::AssertCast<ObjectDescriptor>(od_ptr.Get());
+        //const Reflect::Class *class_to_create = Reflect::Registry::GetInstance()->GetClass(od->m_ClassName.c_str());
+
+        GameObjectType *got = GameObjectType::Find(Name(od->m_TypeName.c_str()));
+
+        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+
+        if (got)
+        {
+            GameObjectPtr game_object_ptr;
+            GameObject::CreateObject(game_object_ptr, got, Name(od->m_Name.c_str()), pTypesPackageObject);
+            config_ptr.Set(game_object_ptr.Ptr());
+        }
+        
+        xml_in.ReadSingleObject(config_ptr);
+        xml_in.ReadFileFooter();
+        xml_in.Close();
+
+        config = Reflect::AssertCast<GraphicsConfig>(config_ptr.Get());
+    }
 
 
 

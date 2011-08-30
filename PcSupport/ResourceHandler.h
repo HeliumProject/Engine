@@ -40,7 +40,7 @@ namespace Helium
         virtual const GameObjectType* GetResourceType() const;
         virtual void GetSourceExtensions( const tchar_t* const*& rppExtensions, size_t& rExtensionCount ) const;
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
 #endif

@@ -1,6 +1,6 @@
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/FontResourceHandler.h"
 
@@ -693,4 +693,4 @@ void FontResourceHandler::CompressTexture(
     *pOutputSheet = rMipLevels[ 0 ];
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

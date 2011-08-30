@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/FbxSupport.h"
 
@@ -1927,4 +1927,4 @@ const char* FbxSupport::StripNamespace( const char* pString )
     return pString;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

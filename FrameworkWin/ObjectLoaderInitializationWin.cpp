@@ -18,7 +18,7 @@ using namespace Helium;
 /// @copydoc ObjectLoaderInitialization::Initialize()
 GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
 {
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     if( !EditorObjectLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(
@@ -53,7 +53,7 @@ GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
 /// @copydoc ObjectLoaderInitialization::Shutdown()
 void ObjectLoaderInitializationWin::Shutdown()
 {
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     ObjectPreprocessor::DestroyStaticInstance();
 #endif
 

@@ -2,7 +2,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "PcSupport/ResourceHandler.h"
 
@@ -54,4 +54,4 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

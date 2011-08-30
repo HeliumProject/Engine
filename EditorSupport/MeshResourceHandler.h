@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "PcSupport/ResourceHandler.h"
 
@@ -48,6 +48,6 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_EDITOR_SUPPORT_MESH_RESOURCE_HANDLER_H

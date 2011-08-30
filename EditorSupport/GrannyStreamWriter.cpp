@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/GrannyStreamWriter.h"
 
@@ -15,4 +15,4 @@
 #include "GrannyStreamWriterImplementation.cpp.inl"
 #endif
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

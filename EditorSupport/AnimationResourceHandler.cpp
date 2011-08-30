@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/AnimationResourceHandler.h"
 
@@ -92,4 +92,4 @@ bool AnimationResourceHandler::CacheResource(
 #endif
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

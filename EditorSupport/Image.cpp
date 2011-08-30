@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/Image.h"
 
@@ -1083,4 +1083,4 @@ bool Image::Format::Validate() const
     return true;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

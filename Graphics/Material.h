@@ -137,7 +137,7 @@ namespace Helium
         inline size_t GetTextureParameterCount() const;
         inline const TextureParameter& GetTextureParameter( size_t index ) const;
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         inline const DynArray< Shader::SelectPair >& GetUserOptions() const;
 
         inline size_t GetFloat1ParameterCount() const;
@@ -162,7 +162,7 @@ namespace Helium
     protected:
         /// @name Protected Utility Functions
         //@{
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         void SynchronizeShaderParameters();
 #endif
         //@}
@@ -186,7 +186,7 @@ namespace Helium
         /// Shader texture parameters.
         DynArray< TextureParameter > m_textureParameters;
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         /// User options cached during loading.
         DynArray< Shader::SelectPair > m_userOptions;
         /// Shader scalar float parameters.

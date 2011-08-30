@@ -49,7 +49,7 @@
 #include "Framework/WorldManager.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 #include "PcSupport/ObjectPreprocessor.h"
 #include "EditorSupport/EditorObjectLoader.h"
 #include "EditorSupport/FontResourceHandler.h"

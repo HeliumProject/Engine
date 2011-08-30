@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/ShaderResourceHandler.h"
 
@@ -389,4 +389,4 @@ bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, cons
     return false;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

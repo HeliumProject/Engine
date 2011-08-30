@@ -259,7 +259,7 @@ namespace Helium
 
         virtual void FinalizeLoad();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         virtual void PostSave();
 #endif
         //@}

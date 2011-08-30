@@ -64,7 +64,7 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
 
     const String& rPlatformDataDirectory = GetPlatformDataDirectory( platform );
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     // If the cache directory doesn't exist, attempt to create it.
     Path platformDataPath( rPlatformDataDirectory.GetData() );
     platformDataPath.MakePath();

@@ -1,0 +1,1 @@
+@Utilities\Win32\premake4.exe %*

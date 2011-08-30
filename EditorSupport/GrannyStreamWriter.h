@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
@@ -19,6 +19,6 @@
 #include "GrannyStreamWriterImplementation.h"
 #endif
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_EDITOR_SUPPORT_GRANNY_STREAM_WRITER_H

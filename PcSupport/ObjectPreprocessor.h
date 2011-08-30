@@ -65,7 +65,7 @@ namespace Helium
 
         /// @name Private Utility Functions
         //@{
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         bool LoadCachedResourceData( Resource* pResource, Cache::EPlatform platform );
         bool PreprocessResource( Resource* pResource, const String& rSourceFilePath );
 #endif

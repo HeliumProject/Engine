@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "Math/SimdMatrix44.h"
 #include "Math/SimdQuat.h"
@@ -212,6 +212,6 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_EDITOR_SUPPORT_FBX_SUPPORT_H

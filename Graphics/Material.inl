@@ -75,7 +75,7 @@ namespace Helium
         return m_textureParameters[ index ];
     }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     /// Get the array of user options loaded for this material from the non-preprocessed XML data.
     ///
     /// @return  Non-preprocessed user option set.
@@ -195,5 +195,5 @@ namespace Helium
 
         return m_float4Parameters[ index ];
     }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 }

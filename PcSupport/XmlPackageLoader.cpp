@@ -1,11 +1,11 @@
-////----------------------------------------------------------------------------------------------------------------------
-//// XmlPackageLoader.cpp
+//////----------------------------------------------------------------------------------------------------------------------
+////// XmlPackageLoader.cpp
+//////
+////// Copyright (C) 2010 WhiteMoon Dreams, Inc.
+////// All Rights Reserved
+//////----------------------------------------------------------------------------------------------------------------------
 ////
-//// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-//// All Rights Reserved
-////----------------------------------------------------------------------------------------------------------------------
-//
-#include "PcSupportPch.h"
+//#include "PcSupportPch.h"
 //#include "PcSupport/XmlPackageLoader.h"
 //
 //#include "Foundation/File/File.h"
@@ -1455,7 +1455,7 @@
 //
 //    HELIUM_ASSERT( pPackage->GetLoader() == this );
 //
-//#if HELIUM_EDITOR
+//#if HELIUM_TOOLS
 //    // Add all resource objects that exist in the package directory.
 //    DynArray< ResourceHandler* > resourceHandlers;
 //    ResourceHandler::GetAllResourceHandlers( resourceHandlers );
@@ -1562,7 +1562,7 @@
 //        }
 //    }
 //
-//#endif  // HELIUM_EDITOR
+//#endif  // HELIUM_TOOLS
 //
 //    // Package preloading is now complete.
 //    pPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );

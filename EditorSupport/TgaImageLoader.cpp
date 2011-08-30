@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/TgaImageLoader.h"
 
@@ -742,4 +742,4 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     return true;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

@@ -136,7 +136,7 @@ void Shader::FinalizeLoad()
     }
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// @copydoc GameObject::PostSave()
 void Shader::PostSave()
 {
@@ -171,7 +171,7 @@ void Shader::PostSave()
         }
     }
 }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 ///// @copydoc Resource::SerializePersistentResourceData()
 //void Shader::SerializePersistentResourceData( Serializer& s )

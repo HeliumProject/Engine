@@ -25,7 +25,7 @@ namespace Helium
         HELIUM_DECLARE_OBJECT( Resource, GameObject );
 
     public:
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         /// In-memory preprocessed resource data for a specific platform cache.
         ///
         /// For resources modified in-memory in the editor, this is used to keep track of preprocessed resource data
@@ -60,7 +60,7 @@ namespace Helium
         virtual Name GetCacheName() const;
         //@}
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         /// @name Editor Support
         //@{
         inline PreprocessedData& GetPreprocessedData( Cache::EPlatform platform );
@@ -77,7 +77,7 @@ namespace Helium
         //@}
 
     private:
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         /// In-memory preprocessed resource data for each platform.
         PreprocessedData m_preprocessedData[ Cache::PLATFORM_MAX ];
 #endif

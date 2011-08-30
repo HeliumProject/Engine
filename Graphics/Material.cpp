@@ -27,7 +27,7 @@ Material::Material()
         SetInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] );
     }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     m_bLoadedOptions = false;
 #endif
 }
@@ -44,7 +44,7 @@ Material::~Material()
 //
 //    s << HELIUM_TAGGED( m_spShader );
 //
-//#if HELIUM_EDITOR
+//#if HELIUM_TOOLS
 //    if( s.CanResolveTags() )
 //    {
 //        m_userOptions.Resize( 0 );
@@ -158,7 +158,7 @@ bool Material::NeedsPrecacheResourceData() const
 /// @copydoc GameObject::BeginPrecacheResourceData()
 bool Material::BeginPrecacheResourceData()
 {
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     // Convert shader options to variant indices if we just loaded a set of options.
     if( m_bLoadedOptions )
     {
@@ -311,7 +311,7 @@ bool Material::TryFinishPrecacheResourceData()
         SetInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] );
     }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     // Synchronize shader constant parameters with those exposed by the shader variant resources.
     SynchronizeShaderParameters();
 #endif
@@ -343,7 +343,7 @@ Name Material::GetParameterConstantBufferName()
     return parameterConstantBufferName;
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// Synchronize the shader parameter list with those provided by the selected shader variant.
 ///
 /// @see SynchronizeFloatVectorParameters(), SynchronizeTextureParameters()
@@ -650,8 +650,8 @@ void Material::SynchronizeShaderParameters()
     m_textureParameters.Swap( newTextureParameters );
     newTextureParameters.Clear();
 }
-#endif  // HELIUM_EDITOR
-//
+#endif  // HELIUM_TOOLS
+
 ///// Serialize this struct.
 /////
 ///// @param[in] s  Serializer with which to serialize.

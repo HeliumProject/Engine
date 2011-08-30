@@ -487,12 +487,12 @@ void GameObject::FinalizeLoad()
 {
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// Perform any work immediately after saving/caching an object in the editor.
 void GameObject::PostSave()
 {
 }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 /// Get whether this object is transient.
 ///

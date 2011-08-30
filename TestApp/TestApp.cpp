@@ -30,7 +30,7 @@ extern void UnregisterGraphicsTypes();
 extern void UnregisterFrameworkTypes();
 extern void UnregisterPcSupportTypes();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
@@ -90,7 +90,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     RegisterGraphicsTypes();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     RegisterEditorSupportTypes();
 #endif
     RegisterTestAppTypes();
@@ -99,14 +99,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     InitGraphicsJobsDefaultHeap();
     InitTestJobsDefaultHeap();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     FontResourceHandler::InitializeStaticLibrary();
 #endif
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     //HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
     HELIUM_VERIFY( ArchiveObjectLoader::InitializeStaticInstance() );
-
+    
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
     HELIUM_ASSERT( pObjectPreprocessor );
     PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;
@@ -1555,17 +1555,17 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Config::DestroyStaticInstance();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     ObjectPreprocessor::DestroyStaticInstance();
 #endif
     GameObjectLoader::DestroyStaticInstance();
     CacheManager::DestroyStaticInstance();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     FontResourceHandler::DestroyStaticLibrary();
 #endif
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
     UnregisterEditorSupportTypes();
 #endif
     UnregisterPcSupportTypes();

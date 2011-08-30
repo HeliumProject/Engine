@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 namespace Helium
 {
@@ -33,6 +33,6 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_EDITOR_SUPPORT_TGA_IMAGE_LOADER_H

@@ -4,9 +4,10 @@ solution "Runtime"
 
 Helium.DoDefaultSolutionSettings()
 
+print( "Temporarily defining HELIUM_TOOLS in Runtime" )
 defines
 {
-	"HELIUM_EDITOR=1",
+	"HELIUM_TOOLS=1",
 }
 
 dofile "Shared.lua"

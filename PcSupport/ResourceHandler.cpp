@@ -40,7 +40,7 @@ void ResourceHandler::GetSourceExtensions( const tchar_t* const*& rppExtensions,
     rExtensionCount = 0;
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// Preprocess and cache the resource data for the given resource for all enabled target platforms.
 ///
 /// @param[in] pObjectPreprocessor  GameObject preprocessor instance.
@@ -55,7 +55,7 @@ bool ResourceHandler::CacheResource(
 {
     return false;
 }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 /// Gather all existing resource handlers.
 ///

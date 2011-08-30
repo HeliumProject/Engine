@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
@@ -825,4 +825,4 @@ bool ShaderVariantResourceHandler::LoadRequestEquals::operator()(
         pRequest0->shaderType == pRequest1->shaderType );
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

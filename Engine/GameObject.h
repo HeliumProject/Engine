@@ -256,7 +256,7 @@ namespace Helium
         virtual void FinalizeLoad();
         inline void ConditionalFinalizeLoad();
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
         virtual void PostSave();
 #endif
 

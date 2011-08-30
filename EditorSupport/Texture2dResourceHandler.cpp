@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/Texture2dResourceHandler.h"
 
@@ -347,4 +347,4 @@ bool Texture2dResourceHandler::CacheResource(
     return true;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

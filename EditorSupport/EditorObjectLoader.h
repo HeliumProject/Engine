@@ -11,7 +11,7 @@
 
 #include "EditorSupport/EditorSupport.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "Engine/GameObjectLoader.h"
 
@@ -56,6 +56,6 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 #endif  // HELIUM_EDITOR_SUPPORT_EDITOR_OBJECT_LOADER_H

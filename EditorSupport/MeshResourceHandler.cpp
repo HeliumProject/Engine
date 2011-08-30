@@ -7,7 +7,7 @@
 
 #include "EditorSupportPch.h"
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
 #include "EditorSupport/MeshResourceHandler.h"
 
@@ -296,4 +296,4 @@ bool MeshResourceHandler::CacheResource(
     return true;
 }
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

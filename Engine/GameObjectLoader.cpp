@@ -194,7 +194,7 @@ bool GameObjectLoader::LoadObject( GameObjectPath path, GameObjectPtr& rspObject
     return true;
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// Cache an object if it has been modified on disk.
 ///
 /// The object will be cached based on the current timestamp of its source package file and, if one exists, its
@@ -217,7 +217,7 @@ bool GameObjectLoader::CacheObject( GameObject* /*pObject*/, bool /*bEvictPlatfo
     // Caching only supported when using the editor object loader.
     return false;
 }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 
 /// Update object loading.
 void GameObjectLoader::Tick()

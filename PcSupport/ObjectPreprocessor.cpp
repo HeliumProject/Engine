@@ -76,7 +76,7 @@ bool ObjectPreprocessor::CacheObject(
     int64_t timestamp,
     bool bEvictPlatformPreprocessedResourceData )
 {
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
     HELIUM_ASSERT( pObject );
 
@@ -279,7 +279,7 @@ bool ObjectPreprocessor::CacheObject(
 
     return !bCacheFailure;
 
-#else  // HELIUM_EDITOR
+#else  // HELIUM_TOOLS
 
     HELIUM_UNREF( pObject );
     HELIUM_UNREF( timestamp );
@@ -287,7 +287,7 @@ bool ObjectPreprocessor::CacheObject(
 
     return false;
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 }
 
 /// Load data for the specified resource into memory, preprocessing it from source data if it is out-of-date.
@@ -298,7 +298,7 @@ bool ObjectPreprocessor::CacheObject(
 ///                             data.
 void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTimestamp )
 {
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 
     HELIUM_ASSERT( pResource );
 
@@ -411,12 +411,12 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
             *resourcePath.ToString() );
     }
 
-#else  // HELIUM_EDITOR
+#else  // HELIUM_TOOLS
 
     HELIUM_UNREF( pResource );
     HELIUM_UNREF( objectTimestamp );
 
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS
 }
 
 /// Load the persistent resource data for the specified resource from the object cache.
@@ -667,7 +667,7 @@ ObjectPreprocessor* ObjectPreprocessor::GetStaticInstance()
     return sm_pInstance;
 }
 
-#if HELIUM_EDITOR
+#if HELIUM_TOOLS
 /// Helper function for loading the cached resource data for a specific platform.
 ///
 /// @param[in] pResource  Resource to load.  The data will be loaded into the proper Resource::PreprocessedData
@@ -894,4 +894,4 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
 
     return true;
 }
-#endif  // HELIUM_EDITOR
+#endif  // HELIUM_TOOLS

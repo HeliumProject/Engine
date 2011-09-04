@@ -31,7 +31,9 @@ git://github.com/nocturnal/Helium.git
 Prerequisites
 =============
 
-Visual Studio 2008 + SP1 (SP1 is required for regex and compiler fixes)
+Visual Studio 2010
+ - Visual Studio 2008 + SP1 may work but is untested (SP1 is required for 
+   regex and compiler fixes)
 DirectX SDK (installed to default location)
 Python 3
 FBX SDK (http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=7478532)

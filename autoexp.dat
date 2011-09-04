@@ -3008,6 +3008,93 @@ tagPROPVARIANT|tagVARIANT|PROPVARIANT|VARIANT{
 	)
 }
 
+; ========================== BEGIN HELIUM CUSTOM VISUALIZERS ============================
+
+Helium::HashMap<*>{
+	preview (
+		#(
+			"[",
+			$c.m_size,
+			"]"
+		)
+	)
+	
+	children (
+		#(
+            [raw members]: [$c,!],
+            [size]: [$c.m_size, i],
+			#array (
+                expr : ($c.m_pBuckets)[$i],
+                size : $c.m_bucketCount
+            ) : #(
+				#array (
+					expr: $e.m_pBuffer[$i],
+					size: $e.m_size
+				)
+			)
+		)
+	)
+}
+
+Helium::Pair<*>{
+	preview (
+		#( "(",
+			$e.m_first,
+			", ",
+			$e.m_second,
+			")"
+		)
+	)
+
+	children (
+		#(
+			#(first : $c.m_first),
+			#(second : $c.m_second)
+		)
+	)
+}
+
+Helium::Map<*>{
+	preview (
+		#(
+			"[",
+			$c.m_elements.m_size,
+			"](",
+			#array(
+				expr: $c.m_elements.m_pBuffer[$i],
+				size: $c.m_elements.m_size
+			),
+			")"
+		)
+	)
+	children (
+	    #(
+            [raw members]: [$c,!],
+            [size]: [$c.m_elements.m_size, i],
+            #array (
+                expr: $c.m_elements.m_pBuffer[$i],
+                size: $c.m_elements.m_size
+            )
+        )
+	)
+}
+
+; Shows game object paths in an unfortunate backwards notation, but it's better than nothing
+Helium::GameObjectPath{
+	preview (
+		#(
+			"Path=",			
+			#list(
+				head: *$e.m_pEntry,
+				next: pParent
+			) : [$e.name.m_pEntry, su],
+			" Instance=", 
+			$e.m_pEntry->instanceIndex,
+
+		)
+	)
+}
+
 Helium::DynArray<*>{
 	children
 	(
@@ -3238,6 +3325,7 @@ Helium::WeakPtr<*>{
 	)
 }
 
+; ========================== END HELIUM CUSTOM VISUALIZERS ============================
 
 ; This section lets you define your own errors for the HRESULT display.
 ; You need to list the error code in unsigned decimal, followed by the message.

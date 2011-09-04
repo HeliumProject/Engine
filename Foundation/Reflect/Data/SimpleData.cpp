@@ -117,27 +117,31 @@ tistream& SimpleData<T>::operator<<(tistream& stream)
 template <>
 void StlStringData::Serialize(ArchiveBinary& archive)
 {
-    archive.GetStream().WriteString( *m_Data ); 
+    //archive.GetStream().WriteString( *m_Data ); 
+    archive.WriteString( *m_Data );
 }
 
 template <>
 void StlStringData::Deserialize(ArchiveBinary& archive)
 {
-    archive.GetStream().ReadString( *m_Data );
+    //archive.GetStream().ReadString( *m_Data );
+    archive.ReadString( *m_Data );
 }
 
 template <>
 void StlStringData::Serialize(ArchiveXML& archive)
 {
-    archive.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
+    //archive.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
+    archive.WriteString( *m_Data );
 }
 
 template <>
 void StlStringData::Deserialize(ArchiveXML& archive)
 {
-    std::streamsize size = archive.GetStream().ElementsAvailable(); 
-    m_Data->resize( (size_t)size );
-    archive.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
+    archive.ReadString( *m_Data );
+//     std::streamsize size = archive.GetStream().ElementsAvailable(); 
+//     m_Data->resize( (size_t)size );
+//     archive.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
 }
 
 template<>

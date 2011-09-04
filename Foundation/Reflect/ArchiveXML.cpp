@@ -873,3 +873,15 @@ bool Helium::Reflect::ArchiveXML::ReadSingleObject( ObjectPtr& object )
     DeserializeInstance(object);
     return return_value;
 }
+
+void Helium::Reflect::ArchiveXML::ReadString( tstring &str )
+{
+    std::streamsize size = GetStream().ElementsAvailable(); 
+    str.resize( (size_t)size );
+    GetStream().ReadBuffer( const_cast<tchar_t*>( (str).c_str() ), size );
+}
+
+void Helium::Reflect::ArchiveXML::WriteString( const tstring &str )
+{
+    GetStream() << TXT( "<![CDATA[" ) << str << TXT( "]]>" );
+}

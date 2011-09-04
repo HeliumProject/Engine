@@ -10,8 +10,8 @@ namespace Helium
     /// Get the package file path.
     ///
     /// @return  Package file path.
-    const Path& ArchivePackageLoader::GetPackageFilePath() const
+    const Path& ArchivePackageLoader::GetPackageFileSystemPath() const
     {
-        return m_packageFilePath;
+        return m_packageDirPath;
     }
 }

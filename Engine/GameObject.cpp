@@ -68,6 +68,14 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     GameObject* pOwner = rParameters.spOwner;
     uint32_t instanceIndex = rParameters.instanceIndex;
 
+    HELIUM_TRACE(
+        TRACE_DEBUG,
+        TXT("GameObject::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
+        *m_name,
+        *rParameters.name,
+        m_spOwner.ReferencesObject() ? *m_spOwner->GetPath().ToString() : TXT("[none]"),
+        rParameters.spOwner.ReferencesObject() ? *rParameters.spOwner->GetPath().ToString() : TXT("[none]"));
+
     // Only allow setting an empty name if no owner or instance index are given and this object has no children.
     if( name.IsEmpty() )
     {
@@ -303,6 +311,18 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     }
 
     return true;
+}
+
+Helium::Reflect::ObjectPtr Helium::GameObject::Clone()
+{
+    GameObjectPtr gop;
+    CreateObject(gop, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
+    return gop;
+}
+
+bool Helium::GameObject::CloneGameObject(GameObjectPtr _game_object_ptr)
+{
+    return CreateObject(_game_object_ptr, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
 }
 
 /// Set all object flags covered by the given mask.
@@ -570,6 +590,13 @@ bool GameObject::CreateObject(
 {
     HELIUM_ASSERT( pType );
 
+    HELIUM_TRACE(
+        TRACE_DEBUG,
+        TXT( "GameObject::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
+        *name,
+        *pType->GetName(),
+        !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
     rspObject.Release();
 
     // Get the appropriate template object.
@@ -638,8 +665,29 @@ bool GameObject::CreateObject(
         nameParameters.instanceIndex = INSTANCE_INDEX_AUTO;
     }
 
-    if( !RegisterObject( pObject ) || !pObject->Rename( nameParameters ) )
+    if ( !RegisterObject( pObject ) )
+    {            
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObject::CreateObject(): RegisterObject() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            *name,
+            !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
+        HELIUM_ASSERT_FALSE();
+
+        rspObject.Release();
+
+        return false;
+    }
+
+    if( !pObject->Rename( nameParameters ) )
     {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObject::CreateObject(): Rename() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            *name,
+            !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
         HELIUM_ASSERT_FALSE();
 
         rspObject.Release();
@@ -657,50 +705,48 @@ bool GameObject::CreateObject(
 /// @return  Pointer to the object if found, null pointer if not found.
 GameObject* GameObject::FindObject( GameObjectPath path )
 {
-//     // Make sure the path isn't empty.
-//     if( path.IsEmpty() )
-//     {
-//         return NULL;
-//     }
-// 
-//     // Assemble a list of object names and instance indices, from the top level on down.
-//     size_t pathDepth = 0;
-//     size_t packageDepth = 0;
-//     for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-//     {
-//         ++pathDepth;
-// 
-//         if( testPath.IsPackage() )
-//         {
-//             ++packageDepth;
-//         }
-//     }
-// 
-//     StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
-//     StackMemoryHeap<>::Marker stackMarker( rStackHeap );
-// 
-//     Name* pPathNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * pathDepth ) );
-//     HELIUM_ASSERT( pPathNames );
-// 
-//     uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * pathDepth ) );
-//     HELIUM_ASSERT( pInstanceIndices );
-// 
-//     size_t pathIndex = pathDepth;
-//     for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
-//     {
-//         HELIUM_ASSERT( pathIndex != 0 );
-//         --pathIndex;
-// 
-//         pPathNames[ pathIndex ] = testPath.GetName();
-//         pInstanceIndices[ pathIndex ] = testPath.GetInstanceIndex();
-//     }
-// 
-//     HELIUM_ASSERT( pathIndex == 0 );
-// 
-//     // Search from the root.
-//     return FindChildOf( NULL, pPathNames, pInstanceIndices, pathDepth, packageDepth );
+    // Make sure the path isn't empty.
+    if( path.IsEmpty() )
+    {
+        return NULL;
+    }
 
-    return path.GetObjectPtr();
+    // Assemble a list of object names and instance indices, from the top level on down.
+    size_t pathDepth = 0;
+    size_t packageDepth = 0;
+    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+    {
+        ++pathDepth;
+
+        if( testPath.IsPackage() )
+        {
+            ++packageDepth;
+        }
+    }
+
+    StackMemoryHeap<>& rStackHeap = ThreadLocalStackAllocator::GetMemoryHeap();
+    StackMemoryHeap<>::Marker stackMarker( rStackHeap );
+
+    Name* pPathNames = static_cast< Name* >( rStackHeap.Allocate( sizeof( Name ) * pathDepth ) );
+    HELIUM_ASSERT( pPathNames );
+
+    uint32_t* pInstanceIndices = static_cast< uint32_t* >( rStackHeap.Allocate( sizeof( uint32_t ) * pathDepth ) );
+    HELIUM_ASSERT( pInstanceIndices );
+
+    size_t pathIndex = pathDepth;
+    for( GameObjectPath testPath = path; !testPath.IsEmpty(); testPath = testPath.GetParent() )
+    {
+        HELIUM_ASSERT( pathIndex != 0 );
+        --pathIndex;
+
+        pPathNames[ pathIndex ] = testPath.GetName();
+        pInstanceIndices[ pathIndex ] = testPath.GetInstanceIndex();
+    }
+
+    HELIUM_ASSERT( pathIndex == 0 );
+
+    // Search from the root.
+    return FindChildOf( NULL, pPathNames, pInstanceIndices, pathDepth, packageDepth );
 }
 
 /// Search for a direct child of the specified object with the given name.

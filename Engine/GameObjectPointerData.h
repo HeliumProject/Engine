@@ -22,11 +22,11 @@ namespace Helium
         //virtual bool Equals(Object* object) HELIUM_OVERRIDE;
         //virtual void Accept(Visitor& visitor) HELIUM_OVERRIDE;
 
-        //virtual void Serialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
-        //virtual void Deserialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
+        virtual void Serialize(Reflect::ArchiveBinary& archive) HELIUM_OVERRIDE;
+        virtual void Deserialize(Reflect::ArchiveBinary& archive) HELIUM_OVERRIDE;
 
-        //virtual void Serialize(ArchiveXML& archive) HELIUM_OVERRIDE;
-        //virtual void Deserialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+        virtual void Serialize(Reflect::ArchiveXML& archive) HELIUM_OVERRIDE;
+        virtual void Deserialize(Reflect::ArchiveXML& archive) HELIUM_OVERRIDE;
 
     private:
         template< class ArchiveT >

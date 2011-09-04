@@ -142,6 +142,13 @@ namespace Helium
             // Reading and writing multiple elements from string data
             static void       ToString( const std::vector< ObjectPtr >& elements, tstring& xml );
             static void       FromString( const tstring& xml, std::vector< ObjectPtr >& elements );
+
+        public:
+            // Blindly read/write a string to xml stream. Allows Data implementations to write strings
+            // the same way.
+            void ReadString(tstring &str);
+            void WriteString(const tstring &str);
+
         };
     }
 }

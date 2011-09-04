@@ -942,3 +942,13 @@ void ArchiveBinary::FromStream( std::iostream& stream, std::vector< ObjectPtr >&
 
     objects = archive.m_Objects;
 }
+
+void Helium::Reflect::ArchiveBinary::ReadString( tstring &str )
+{
+    GetStream().ReadString( str );
+}
+
+void Helium::Reflect::ArchiveBinary::WriteString( const tstring &str )
+{
+    GetStream().WriteString( str ); 
+}

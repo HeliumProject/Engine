@@ -204,6 +204,10 @@ namespace Helium
         inline GameObject* GetOwner() const;
         inline uint32_t GetInstanceIndex() const;
         bool Rename( const RenameParameters& rParameters );
+        
+        // Override for Object::Clone
+        virtual Reflect::ObjectPtr Clone();
+        virtual bool CloneGameObject(GameObjectPtr _game_object_ptr);
 
         inline uint32_t GetId() const;
 

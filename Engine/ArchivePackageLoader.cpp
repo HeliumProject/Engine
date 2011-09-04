@@ -17,6 +17,7 @@
 //#include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
+#include "Engine/GameObjectPointerData.h"
 //#include "Engine/DirectDeserializer.h"
 //#include "Engine/DirectSerializer.h"
 #include "Engine/NullLinker.h"
@@ -37,7 +38,6 @@ void Helium::ObjectDescriptor::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField(&ObjectDescriptor::m_Name, TXT("m_Name"));
     comp.AddField(&ObjectDescriptor::m_TypeName, TXT("m_TypeName"));
-    comp.AddField(&ObjectDescriptor::m_OwnerPath, TXT("m_OwnerPath"));
     comp.AddField(&ObjectDescriptor::m_TemplatePath, TXT("m_TemplatePath"));
 }
 
@@ -48,6 +48,9 @@ ArchivePackageLoader::ArchivePackageLoader()
     , m_preloadedCounter( 0 )
     , m_loadRequestPool( LOAD_REQUEST_POOL_BLOCK_SIZE )
     , m_parentPackageLoadId( Invalid< size_t >() )
+    , m_pTocLoadBuffer( 0 )
+    , m_tocAsyncLoadId( Invalid<size_t>() )
+    , m_packageTocFileSize( 0 )
 {
 }
 
@@ -159,57 +162,68 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
         }
     }
 
-    m_packageFilePath = dataDirectory + packagePath.ToFilePathString().GetData() + TXT("/");
-    if (!m_packageFilePath.IsDirectory())
+    // Set up to read the TOC (which may not exist)
+    SetInvalid( m_packageTocFileSize );
+
+    // First do this check without a trailing "/" so that Path has to actually look at the file system
+    Path package_dir = dataDirectory + packagePath.ToFilePathString().GetData();
+    if (!package_dir.IsDirectory())
     {
-        return false;
+        // We have no TOC, but this package loader is still functional (i.e. to handle Types packages)
+        return true;
     }
+
+    // We know it's a directory, so add the "/" for convenience
+    m_packageDirPath = package_dir + TXT("/");
+    m_packageTocFilePath = m_packageDirPath + HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME;
     
-    // Retrieve the size of the package file.  Note that we still keep around the loader even if the package file
-    // isn't found so as to allow for memory-only packages or the creation of new packages at editor runtime.
-    //SetInvalid( m_packageFileSize );
+    if (!m_packageTocFilePath.IsFile())
+    {
+        HELIUM_TRACE(
+            TRACE_WARNING,
+            TXT( "ArchivePackageLoader::Initialize(): No TOC file for package \"%s\". Expected file location: \"%s\"\n" ),
+            *m_packagePath.ToString(),
+            *m_packageDirPath);
+    }
+    else
+    {
+        int64_t packageFileSize = m_packageTocFilePath.Size();
 
-    //int64_t packageFileSize = m_packageFilePath.Size();
-    //if( packageFileSize == -1 )
-    //{
-    //    HELIUM_TRACE(
-    //        TRACE_WARNING,
-    //        TXT( "ArchivePackageLoader::Initialize(): Failed to locate a valid package file for package \"%s\".\n" ),
-    //        *m_packageFilePath,
-    //        *packagePath.ToString() );
-    //}
-    //else if( packageFileSize == 0 )
-    //{
-    //    HELIUM_TRACE(
-    //        TRACE_WARNING,
-    //        TXT( "ArchivePackageLoader::Initialize(): Package file \"%s\" for package \"%s\" is empty.\n" ),
-    //        *m_packageFilePath,
-    //        *packagePath.ToString() );
-    //}
-    //else if( static_cast< uint64_t >( packageFileSize ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
-    //{
-    //    HELIUM_TRACE(
-    //        TRACE_ERROR,
-    //        ( TXT( "ArchivePackageLoader::Initialize(): Package file \"%s\" exceeds the maximum size supported by " )
-    //        TXT( "the current platform (package: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
-    //        TXT( " bytes).\n" ) ),
-    //        *packagePath.ToString(),
-    //        static_cast< uint64_t >( packageFileSize ),
-    //        ~static_cast< size_t >( 0 ) );
+        if( packageFileSize == -1 )
+        {
+            HELIUM_TRACE(
+                TRACE_WARNING,
+                TXT( "ArchivePackageLoader::Initialize(): Could not get file size for TOC of package \"%s\". Expected file location: \"%s\"\n" ),
+                *m_packagePath.ToString(),
+                *m_packageDirPath );
+        }
+        else if( packageFileSize == 0 )
+        {
+            HELIUM_TRACE(
+                TRACE_WARNING,
+                TXT( "ArchivePackageLoader::Initialize(): Package TOC file \"%s\" for package \"%s\" is empty.\n" ),
+                *m_packageTocFilePath,
+                *packagePath.ToString() );
+        }
+        else if( static_cast< uint64_t >( packageFileSize ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
+        {
+            HELIUM_TRACE(
+                TRACE_ERROR,
+                ( TXT( "ArchivePackageLoader::Initialize(): Package TOC file \"%s\" exceeds the maximum size supported by " )
+                TXT( "the current platform (package: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
+                TXT( " bytes).\n" ) ),
+                m_packageTocFilePath.c_str(),
+                static_cast< uint64_t >( packageFileSize ),
+                ~static_cast< size_t >( 0 ) );
+            return false;
+        }
+        else
+        {
+            // We know the TOC exists now, so set up the load
+            m_packageTocFileSize = static_cast< size_t >( packageFileSize );
+        }
 
-    //    if( pPackage )
-    //    {
-    //        pPackage->SetLoader( NULL );
-    //    }
-
-    //    m_spPackage.Release();
-
-    //    return false;
-    //}
-    //else
-    //{
-    //    m_packageFileSize = static_cast< size_t >( packageFileSize );
-    //}
+    }
 
     return true;
 }
@@ -256,7 +270,7 @@ void ArchivePackageLoader::Shutdown()
 
     m_loadRequests.Clear();
 
-    m_packageFilePath.Clear();
+    m_packageDirPath.Clear();
 }
 
 /// Begin asynchronous pre-loading of package information.
@@ -283,27 +297,38 @@ bool ArchivePackageLoader::BeginPreload()
         }
     }
 
-    //PMD: Changed to walk through all files and load them in
-    AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
-    
-    Directory packageDirectory( m_packageFilePath );
-    for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+    if ( IsValid( m_packageTocFileSize ) )
     {
-        const DirectoryItem& item = packageDirectory.GetItem();
-        if (item.m_Path.Extension() == TXT("object"))
-        {
-            FileReadRequest *request = m_fileReadRequests.New();
-            request->expectedSize = item.m_Size;
+        HELIUM_ASSERT( !m_pTocLoadBuffer );
+        m_pTocLoadBuffer = DefaultAllocator().Allocate( m_packageTocFileSize );
+        HELIUM_ASSERT( m_pTocLoadBuffer );
 
-            // Create a buffer for the file to be read into temporarily
-            request->pLoadBuffer = DefaultAllocator().Allocate( item.m_Size );
-            HELIUM_ASSERT( request->pLoadBuffer );
-
-            // Queue up the read
-            request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, item.m_Size );
-            HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
-        }
+        AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
+        m_tocAsyncLoadId = rAsyncLoader.QueueRequest( m_pTocLoadBuffer, String(m_packageTocFilePath.c_str()), 0, m_packageTocFileSize );
+        HELIUM_ASSERT( IsValid(m_tocAsyncLoadId) );
     }
+
+    //AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
+    //rAsyncLoader.
+    
+//     Directory packageDirectory( m_packageFilePath );
+//     for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
+//     {
+//         const DirectoryItem& item = packageDirectory.GetItem();
+//         if (item.m_Path.Extension() == TXT("object"))
+//         {
+//             FileReadRequest *request = m_fileReadRequests.New();
+//             request->expectedSize = item.m_Size;
+// 
+//             // Create a buffer for the file to be read into temporarily
+//             request->pLoadBuffer = DefaultAllocator().Allocate( item.m_Size );
+//             HELIUM_ASSERT( request->pLoadBuffer );
+// 
+//             // Queue up the read
+//             request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, item.m_Size );
+//             HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
+//         }
+//     }
 
     AtomicExchangeRelease( m_startPreloadCounter, 1 );
 
@@ -320,6 +345,11 @@ bool ArchivePackageLoader::TryFinishPreload()
 size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
 {
     MutexScopeLock scopeLock( m_accessLock );
+
+    HELIUM_TRACE(
+        TRACE_DEBUG,
+        TXT( "ArchivePackageLoader::BeginLoadObject: Beginning load for path \"%s\".\n"),
+        *path.ToString());
 
     // Make sure preloading has completed.
     HELIUM_ASSERT( m_preloadedCounter != 0 );
@@ -347,6 +377,9 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
         SetInvalid( pRequest->persistentResourceDataLoadId );
         pRequest->pCachedObjectDataBuffer = NULL;
         pRequest->cachedObjectDataBufferSize = 0;
+        SetInvalid( pRequest->asyncFileLoadId );
+        pRequest->pAsyncFileLoadBuffer = NULL;
+        pRequest->asyncFileLoadBufferSize = 0;
 
         pRequest->flags = LOAD_FLAG_PRELOADED;
 
@@ -425,6 +458,9 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
     SetInvalid( pRequest->persistentResourceDataLoadId );
     pRequest->pCachedObjectDataBuffer = NULL;
     pRequest->cachedObjectDataBufferSize = 0;
+    SetInvalid( pRequest->asyncFileLoadId );
+    pRequest->pAsyncFileLoadBuffer = NULL;
+    pRequest->asyncFileLoadBufferSize = 0;
 
     pRequest->flags = 0;
 
@@ -639,9 +675,12 @@ bool ArchivePackageLoader::IsSourcePackageFile() const
 /// @copydoc PackageLoader::GetFileTimestamp()
 int64_t ArchivePackageLoader::GetFileTimestamp() const
 {
-    int64_t timestamp =  m_packageFilePath.ModifiedTime();
+    // TODO: Implement this!
+    //int64_t timestamp =  m_packageDirPath.ModifiedTime();
 
-    return timestamp;
+    //return timestamp;
+
+    return 0;
 }
 
 /// Update during the package preload process.
@@ -650,59 +689,151 @@ void ArchivePackageLoader::TickPreload()
     HELIUM_ASSERT( m_startPreloadCounter != 0 );
     HELIUM_ASSERT( m_preloadedCounter == 0 );
 
-    // Test whether loading has completed.
     AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
 
-    //PMDTODO: Handle the asynch load requests we gave for all the files
-    // Walk through every load request
-    for (size_t i = 0; i < m_fileReadRequests.GetSize();)
+    // First, try to finish reading in the TOC
+    if ( IsValid( m_tocAsyncLoadId ) )
     {
-        FileReadRequest &rRequest = m_fileReadRequests[i];
-        HELIUM_ASSERT(rRequest.asyncLoadId);
-        HELIUM_ASSERT(rRequest.pLoadBuffer);
-
+        // If the async request for the TOC isn't finished, bail and try again next tick
         size_t bytes_read = 0;
-        if (!rAsyncLoader.TrySyncRequest(rRequest.asyncLoadId, bytes_read))
+        if (!rAsyncLoader.TrySyncRequest( m_tocAsyncLoadId, bytes_read ))
         {
-            // Havn't finished reading yet, move on to next entry
-            ++i;
-            continue;
+            return;
         }
 
-        HELIUM_ASSERT(bytes_read == rRequest.expectedSize);
+        // Sanity checks for TOC file load, then success path
+        HELIUM_ASSERT( bytes_read == m_packageTocFileSize );
         if( IsInvalid( bytes_read ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
                 TXT( "ArchivePackageLoader: Failed to read the contents of async load request \"%d\".\n" ),
-                rRequest.asyncLoadId );
+                m_tocAsyncLoadId );
         }
-        else if( bytes_read != rRequest.expectedSize)
+        else if( bytes_read != m_packageTocFileSize )
         {
             HELIUM_TRACE(
                 TRACE_WARNING,
-                ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package file \"%s\", " )
+                ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package TOC file \"%s\", " )
                 TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
-                rRequest.expectedSize,
+                m_packageTocFileSize,
+                m_packageTocFilePath,
                 bytes_read );
         }
         else
         {
-            // TODO: Read it in
-            //tstringstream ss;
-            //ss << (tchar_t *)rRequest.pLoadBuffer;
+            // Succeeded loading TOC file. Turn the bytes into xml, parse, and read in objects
             tstring str;
-            str.assign((tchar_t *)rRequest.pLoadBuffer, rRequest.expectedSize / sizeof(tchar_t));
-            Helium::Reflect::ObjectPtr object = Reflect::ArchiveXML::FromString(str);
+            str.assign((tchar_t *)m_pTocLoadBuffer, m_packageTocFileSize / sizeof(tchar_t));
+
+            std::vector<Reflect::ObjectPtr> object_descriptors;
+            Reflect::ArchiveXML::FromString(str, object_descriptors);
+
+            // For every object we found in the xml
+            for (std::vector<Reflect::ObjectPtr>::iterator iter = object_descriptors.begin();
+                iter != object_descriptors.end(); ++iter)
+            {
+                // Verify object is not null
+                HELIUM_ASSERT( iter->Get() );
+                if ( !iter->Get() )
+                {
+                    HELIUM_TRACE(
+                        TRACE_WARNING,
+                        ( TXT( "ArchivePackageLoader: An null object was read from a package TOC file \"%s\"" )
+                        TXT( ".\n" ) ),
+                        m_packageTocFilePath);
+
+                    continue;
+                }
+
+                // Verify object is an object descriptor
+                HELIUM_ASSERT((*iter)->IsClass(ObjectDescriptor::s_Class));
+                if ( !(*iter)->IsClass(ObjectDescriptor::s_Class) )
+                {
+                    HELIUM_TRACE(
+                        TRACE_WARNING,
+                        ( TXT( "ArchivePackageLoader: An object that is not an ObjectDescriptor was read from a package TOC file \"%s\"" )
+                        TXT( ".\n" ) ),
+                        m_packageTocFilePath);
+
+                    continue;
+                }
+
+                // Cast to object descriptor and copy into a new SerializedObjectData
+                ObjectDescriptor *object_descriptor = Reflect::AssertCast<ObjectDescriptor>( iter->Get() );
+                Name object_name;
+                object_name.Set(object_descriptor->m_Name.c_str());
+                
+                // TODO: Consider changing tstring to String
+                Name type_name;
+                type_name.Set(object_descriptor->m_TypeName.c_str());
+
+                SerializedObjectData* pObjectData = m_objects.New();
+                HELIUM_ASSERT( pObjectData );
+                HELIUM_VERIFY( pObjectData->objectPath.Set( object_name, false, m_packagePath ) );
+                pObjectData->templatePath.Set(object_descriptor->m_TemplatePath.c_str());
+                pObjectData->typeName = type_name;
+
+                // TODO: Validate this data with timestamp if HELIUM_TOOLS
+            }
         }
 
-        // We're finished with this load, so deallocate memory and get rid of the request
-        DefaultAllocator().Free( rRequest.pLoadBuffer );
-        rRequest.pLoadBuffer = NULL;
-        SetInvalid(rRequest.asyncLoadId);
-        m_fileReadRequests.RemoveSwap(i);
-
+        // For good or bad, the TOC file load is finished
+        DefaultAllocator().Free( m_pTocLoadBuffer );
+        m_pTocLoadBuffer = NULL;
+        SetInvalid( m_tocAsyncLoadId );
     }
+
+    //PMDTODO: Handle the asynch load requests we gave for all the files
+    // Walk through every load request
+//     for (size_t i = 0; i < m_fileReadRequests.GetSize();)
+//     {
+//         FileReadRequest &rRequest = m_fileReadRequests[i];
+//         HELIUM_ASSERT(rRequest.asyncLoadId);
+//         HELIUM_ASSERT(rRequest.pLoadBuffer);
+// 
+//         size_t bytes_read = 0;
+//         if (!rAsyncLoader.TrySyncRequest(rRequest.asyncLoadId, bytes_read))
+//         {
+//             // Havn't finished reading yet, move on to next entry
+//             ++i;
+//             continue;
+//         }
+// 
+//         HELIUM_ASSERT(bytes_read == rRequest.expectedSize);
+//         if( IsInvalid( bytes_read ) )
+//         {
+//             HELIUM_TRACE(
+//                 TRACE_ERROR,
+//                 TXT( "ArchivePackageLoader: Failed to read the contents of async load request \"%d\".\n" ),
+//                 rRequest.asyncLoadId );
+//         }
+//         else if( bytes_read != rRequest.expectedSize)
+//         {
+//             HELIUM_TRACE(
+//                 TRACE_WARNING,
+//                 ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package file \"%s\", " )
+//                 TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
+//                 rRequest.expectedSize,
+//                 bytes_read );
+//         }
+//         else
+//         {
+//             // TODO: Read it in
+//             //tstringstream ss;
+//             //ss << (tchar_t *)rRequest.pLoadBuffer;
+//             tstring str;
+//             str.assign((tchar_t *)rRequest.pLoadBuffer, rRequest.expectedSize / sizeof(tchar_t));
+//             Helium::Reflect::ObjectPtr object = Reflect::ArchiveXML::FromString(str);
+//         }
+// 
+//         // We're finished with this load, so deallocate memory and get rid of the request
+//         DefaultAllocator().Free( rRequest.pLoadBuffer );
+//         rRequest.pLoadBuffer = NULL;
+//         SetInvalid(rRequest.asyncLoadId);
+//         m_fileReadRequests.RemoveSwap(i);
+// 
+//     }
 
     // Wait for the parent package to finish loading.
     GameObjectPtr spParentPackage;
@@ -873,6 +1004,9 @@ void ArchivePackageLoader::TickLoadRequests()
             }
         }
 
+        //TODO: Investigate removing need to preload properties first. Probably need to have the
+        //      restriction as TickPersistentResourcePreload assumes the object exists.. but this
+        //      may not be the best place to put this 
         if( !( pRequest->flags & LOAD_FLAG_PERSISTENT_RESOURCE_PRELOADED ) )
         {
             if( !TickPersistentResourcePreload( pRequest ) )
@@ -881,6 +1015,55 @@ void ArchivePackageLoader::TickLoadRequests()
             }
         }
     }
+}
+
+namespace Helium
+{
+    class BuildLinkTableFromObjectVisitor : public Reflect::Visitor
+    {
+    private:
+        DynArray<ArchivePackageLoader::LinkEntry>& m_LinkTable;
+        
+    public:
+        BuildLinkTableFromObjectVisitor(DynArray<ArchivePackageLoader::LinkEntry> &_link_table)
+            : m_LinkTable( _link_table )
+        {
+        }
+
+        virtual ~BuildLinkTableFromObjectVisitor()
+        {
+        }
+
+        virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
+        {
+            if ( field->m_DataClass == Reflect::GetClass< GameObjectPointerData >() )
+            {
+                Reflect::DataPtr go_data_untyped = field->CreateData( instance );
+                GameObjectPointerData *go_data = Reflect::AssertCast<GameObjectPointerData>(go_data_untyped.Get());
+                if (go_data && go_data->m_Data->HasLinkIndex())
+                {
+                    size_t link_index = go_data->m_Data->GetLinkIndex();
+                        ArchivePackageLoader::LinkEntry *entry = m_LinkTable.New();
+                        HELIUM_ASSERT(entry);
+
+                    // Extract the load request Id from the link index, then point
+                    // the link index against our sequential list of load requests. The prior
+                    // implementation would have serializer code directly add link entries
+                    // which included a path (so one request per path.) It's much more awkward
+                    // for us to do that, but if we don't worry about duplicate requests this
+                    // is a pretty straightforward method
+                    entry->loadRequestId = link_index;
+                    go_data->m_Data->SetLinkIndex(static_cast<uint32_t>(m_LinkTable.GetSize() - 1));
+                }
+            }
+
+            // We never want to visit fields because
+            // - The data we need can be found by just looking at the field and data
+            // - In this case, the game object pointers are link indices so we will crash if we try
+            //   to visit them
+            return false;
+        }
+    };
 }
 
 /// Update processing of object property preloading for a given load request.
@@ -977,64 +1160,201 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( !pOwner || pOwner->IsFullyLoaded() );
     HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
-    // If we already had an existing object, make sure the type and template match.
-    if( pObject )
+    AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
+    Path object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT(".xml.object");
+
+    size_t object_file_size = 0;
+    if ( !IsValid( pRequest->asyncFileLoadId ) )
     {
-        const GameObjectType* pExistingType = pObject->GetGameObjectType();
-        HELIUM_ASSERT( pExistingType );
-        if( pExistingType != pType )
+        if (!object_file_path.IsFile())
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
-                ( TXT( "ArchivePackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
-                TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
+                TRACE_WARNING,
+                TXT( "ArchivePackageLoader::TickDeserialize(): No object file found for object \"%s\". Expected file location: \"%s\"\n" ),
                 *rObjectData.objectPath.ToString(),
-                *pExistingType->GetName(),
-                *pType->GetName() );
+                *object_file_path);
+        }
+        else
+        {
+            int64_t i64_object_file_size = object_file_path.Size();
 
-            pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
-            pObject->ConditionalFinalizeLoad();
+            if( i64_object_file_size == -1 )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    TXT( "ArchivePackageLoader::TickDeserialize(): Could not get file size for object file of object \"%s\". Expected file location: \"%s\"\n" ),
+                    *rObjectData.objectPath.ToString(),
+                    *object_file_path );
+            }
+            else if( i64_object_file_size == 0 )
+            {
+                HELIUM_TRACE(
+                    TRACE_WARNING,
+                    TXT( "ArchivePackageLoader::TickDeserialize(): Object file \"%s\" for objct \"%s\" is empty.\n" ),
+                    *object_file_path,
+                    *rObjectData.objectPath.ToString() );
+            }
+            else if( static_cast< uint64_t >( i64_object_file_size ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    ( TXT( "ArchivePackageLoader::TickDeserialize(): Object file \"%s\" exceeds the maximum size supported by " )
+                    TXT( "the current platform (file size: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
+                    TXT( " bytes).\n" ) ),
+                    object_file_path.c_str(),
+                    static_cast< uint64_t >( i64_object_file_size ),
+                    ~static_cast< size_t >( 0 ) );
+            }
+            else
+            {
+                object_file_size = static_cast< size_t >(i64_object_file_size);
+            }
+        }
 
+        if (!object_file_size)
+        {
             pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
-
             return true;
         }
+        
+        HELIUM_ASSERT( !pRequest->pAsyncFileLoadBuffer );
+        pRequest->pAsyncFileLoadBuffer = DefaultAllocator().Allocate( object_file_size );
+        HELIUM_ASSERT( pRequest->pAsyncFileLoadBuffer );
+
+        pRequest->asyncFileLoadBufferSize = object_file_size;
+
+        pRequest->asyncFileLoadId = rAsyncLoader.QueueRequest(
+            pRequest->pAsyncFileLoadBuffer,
+            String(object_file_path.c_str()),
+            0,
+            pRequest->asyncFileLoadBufferSize);
+    }
+
+    HELIUM_ASSERT( IsValid( pRequest->asyncFileLoadId ) );
+    size_t bytesRead = 0;
+
+    if ( !rAsyncLoader.TrySyncRequest( pRequest->asyncFileLoadId, bytesRead ) )
+    {
+        return false;
+    }
+
+    SetInvalid(pRequest->asyncFileLoadId);
+    bool read_successful = false;
+    
+    // Sanity checks for file load, then success path
+    HELIUM_ASSERT( bytesRead == pRequest->asyncFileLoadBufferSize );
+    if( IsInvalid( bytesRead ) )
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "ArchivePackageLoader: Failed to read the contents of object file \"%s\" in async load request \"%d\".\n" ),
+            object_file_path.c_str(),
+            m_tocAsyncLoadId );
+    }
+    else if( bytesRead != pRequest->asyncFileLoadBufferSize )
+    {
+        HELIUM_TRACE(
+            TRACE_WARNING,
+            ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from object file \"%s\", " )
+            TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
+            pRequest->asyncFileLoadBufferSize,
+            object_file_path.c_str(),
+            bytesRead );
     }
     else
     {
-        // Create the object.
-        bool bCreateResult = GameObject::CreateObject(
-            pRequest->spObject,
-            pType,
-            rObjectData.objectPath.GetName(),
-            pOwner,
-            pTemplate );
-        if( !bCreateResult )
+        // Succeeded loading file. Turn the bytes into xml, parse, and read in objects
+        tstring str;
+        str.assign((tchar_t *)pRequest->pAsyncFileLoadBuffer, pRequest->asyncFileLoadBufferSize / sizeof(tchar_t));
+        tstringstream strStream;
+        strStream << str;
+
+        Reflect::ObjectPtr od_ptr(new ObjectDescriptor());
+
+        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&strStream, false), false);
+        xml_in.ReadFileHeader();
+        xml_in.BeginReadingSingleObjects();
+        xml_in.ReadSingleObject(od_ptr);
+
+        ObjectDescriptor *od = Reflect::AssertCast<ObjectDescriptor>(od_ptr.Get());
+        //TODO: We can add asserts here that the descriptor in this file match our expectations
+        
+        read_successful = true;
+
+        // If we already had an existing object, make sure the type and template match.
+        if( pObject )
         {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "ArchivePackageLoader: Failed to create \"%s\" during loading.\n" ),
-                *rObjectData.objectPath.ToString() );
+            const GameObjectType* pExistingType = pObject->GetGameObjectType();
+            HELIUM_ASSERT( pExistingType );
+            if( pExistingType != pType )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    ( TXT( "ArchivePackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
+                    TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
+                    *rObjectData.objectPath.ToString(),
+                    *pExistingType->GetName(),
+                    *pType->GetName() );
 
-            pRequest->flags |= LOAD_FLAG_PRELOADED | LOAD_FLAG_ERROR;
+                pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
+                pObject->ConditionalFinalizeLoad();
+                
+                read_successful = false;
+            }
+        }
+        else
+        {
+            // Create the object.
+            bool bCreateResult = GameObject::CreateObject(
+                pRequest->spObject,
+                pType,
+                rObjectData.objectPath.GetName(),
+                pOwner,
+                pTemplate );
+            if( !bCreateResult )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    TXT( "ArchivePackageLoader: Failed to create \"%s\" during loading.\n" ),
+                    *rObjectData.objectPath.ToString() );
+                
+                read_successful = false;
+            }
 
-            return true;
+            pObject = pRequest->spObject;
+            HELIUM_ASSERT( pObject );
         }
 
-        pObject = pRequest->spObject;
-        HELIUM_ASSERT( pObject );
+        // Now that we have an object instance with the proper type, name, template, etc. we can finally read in properties
+        if (read_successful)
+        {
+            //GameObject *old_object_ptr = pObject;
+            Reflect::ObjectPtr object_ptr;
+            object_ptr.Set(pRequest->spObject.Get());
+
+            xml_in.ReadSingleObject(object_ptr);
+
+            HELIUM_ASSERT(object_ptr.Get());
+            HELIUM_ASSERT(object_ptr.Get() == pRequest->spObject.Get());
+
+            pObject = Reflect::AssertCast<GameObject>(object_ptr.Get());
+            pRequest->spObject.Set(pObject);
+        }
+
+        xml_in.ReadFileFooter();
+        xml_in.Close();
     }
 
-    // Load the object properties.
-    // PMDTODO: Fix this
-    //Deserializer deserializer;
-    //deserializer.Prepare( &rObjectData, &pRequest->linkTable );
-    //bool bResult = deserializer.Serialize( pObject );
-    bool bResult = false;
+    DefaultAllocator().Free(pRequest->pAsyncFileLoadBuffer);
+    pRequest->pAsyncFileLoadBuffer = NULL;
+    pRequest->asyncFileLoadBufferSize = 0;
 
+    BuildLinkTableFromObjectVisitor build_link_table_visitor(pRequest->linkTable);
+    pObject->Accept(build_link_table_visitor);
+    
     pRequest->flags |= LOAD_FLAG_PROPERTY_PRELOADED;
 
-    if( !bResult )
+    if( !read_successful )
     {
         HELIUM_TRACE(
             TRACE_ERROR,

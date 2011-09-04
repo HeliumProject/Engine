@@ -185,7 +185,8 @@ namespace Helium
 
             Stream& ReadBuffer(void* t, std::streamsize streamObjectCount)
             {
-                PROFILE_SCOPE_ACCUM(g_StreamRead); 
+                //TODO: Figure out why we couldn't link this
+                //PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
                 m_Stream->read((StreamPrimitiveT*)t, streamObjectCount); 
 
@@ -210,7 +211,8 @@ namespace Helium
 
             Stream& WriteBuffer(const void* t, std::streamsize streamObjectCount)
             {
-                PROFILE_SCOPE_ACCUM(g_StreamWrite); 
+                //TODO: Figure out why we couldn't link this
+                //PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
                 m_Stream->write( (const StreamPrimitiveT*)t, streamObjectCount );
 

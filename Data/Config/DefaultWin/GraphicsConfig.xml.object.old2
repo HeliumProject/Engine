@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-16"?>
-<Reflect FileFormatVersion="4">
- <Object Type="GraphicsConfig">
-  <Object Type="UInt32" Name="m_Width">320</Object>
-  <Object Type="UInt32" Name="m_Height">240</Object>
- </Object>
-</Reflect>

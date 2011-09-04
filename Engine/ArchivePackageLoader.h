@@ -16,9 +16,9 @@
 #include "Foundation/File/Path.h"
 
 /// XML package file extension string.
-#define HELIUM_ARCHIVE_PACKAGE_FILE_EXTENSION TXT( ".xml" )
+#define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )
 /// Directory-based XML package file name string.
-#define HELIUM_ARCHIVE_PACKAGE_FILE_NAME TXT( "!archive_package" ) HELIUM_ARCHIVE_PACKAGE_FILE_EXTENSION
+#define HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME TXT( "!toc.xml" )
 
 namespace Helium
 {
@@ -29,10 +29,11 @@ namespace Helium
         tstring m_Name;
         tstring m_TypeName;
         tstring m_TemplatePath;
-        tstring m_OwnerPath;
 
         static void PopulateComposite( Reflect::Composite& comp );
     };
+
+    class BuildLinkTableFromObjectVisitor;
     
     class HELIUM_ENGINE_API ArchivePackageLoader : public PackageLoader
     {
@@ -94,7 +95,7 @@ namespace Helium
         Package* GetPackage() const;
         GameObjectPath GetPackagePath() const;
 
-        inline const Path& GetPackageFilePath() const;
+        inline const Path& GetPackageFileSystemPath() const;
         //@}
 
         /// @name Package File Information
@@ -123,10 +124,11 @@ namespace Helium
         struct LinkEntry
         {
             /// GameObject path.
-            GameObjectPath path;
+            //GameObjectPath path;
             /// Load request ID.
             size_t loadRequestId;
         };
+        friend class Helium::BuildLinkTableFromObjectVisitor;
 
         /// GameObject load request data.
         struct LoadRequest
@@ -157,6 +159,11 @@ namespace Helium
             /// Size of the cached object data buffer.
             uint32_t cachedObjectDataBufferSize;
 
+            /// Async load for object file
+            size_t asyncFileLoadId;
+            void* pAsyncFileLoadBuffer;
+            size_t asyncFileLoadBufferSize;
+
             /// Load flags.
             uint32_t flags;
         };
@@ -180,15 +187,16 @@ namespace Helium
         ObjectPool< LoadRequest > m_loadRequestPool;
 
         /// Package file path name.
-        Path m_packageFilePath;
+        Path m_packageDirPath;
+        Path m_packageTocFilePath;
         /// Size of the package data file.
-        size_t m_packageFileSize;
+        size_t m_packageTocFileSize;
 
         /// Destination buffer for async loading.
-        //void* m_pLoadBuffer;
+        void* m_pTocLoadBuffer;
         /// Async loading ID.
-        //size_t m_asyncLoadId;
-
+        size_t m_tocAsyncLoadId;
+        
         struct FileReadRequest
         {
             void* pLoadBuffer;

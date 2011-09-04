@@ -342,7 +342,7 @@ namespace Helium
         Package* GetPackage() const;
         GameObjectPath GetPackagePath() const;
 
-        inline const Path& GetPackageFilePath() const;
+        inline const Path& GetPackageFileSystemPath() const;
         //@}
 
         /// @name Package File Information

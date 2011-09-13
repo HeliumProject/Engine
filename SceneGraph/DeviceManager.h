@@ -4,62 +4,11 @@
 #include "Rendering/Renderer.h"
 #include "SceneGraph/API.h"
 
+#define MAX_DEVICE_COUNT 32
+
 namespace Helium
 {
     HELIUM_DECLARE_RPTR( RRenderContext );
-}
-
-namespace Helium
-{
-    enum
-    {
-        INIT_FLAG_REFRAST = 0x00000001,
-    };
-
-    enum
-    {
-        VERTEX_SHADER_SCREENSPACE = 0,
-        VERTEX_SHADER_WORLD_SPACE,
-        VERTEX_SHADER_OBJECT_SPACE,
-        VERTEX_SHADER_MESH_NORMAL,
-        VERTEX_SHADER_MESH_DEBUG_COLOR,
-        VERTEX_SHADER_MESH_DEBUG_CONSTCOLOR,
-        VERTEX_SHADER_MESH_DEBUG_NORMAL,
-        VERTEX_SHADER_MESH_DEBUG_TANGENT,
-        VERTEX_SHADER_MESH_DEBUG_UV,
-
-        __VERTEX_SHADER_LAST__
-    };
-
-    enum
-    {
-        PIXEL_SHADER_DIFFUSE = 0,
-        PIXEL_SHADER_DIFFUSE_GPI,
-        PIXEL_SHADER_COLOR,
-        PIXEL_SHADER_TEXTURE,
-        PIXEL_SHADER_TEXTURE_GREEN,
-        PIXEL_SHADER_TEXTURE_ALPHA,
-        PIXEL_SHADER_SKY,
-
-        __PIXEL_SHADER_LAST__
-    };
-
-    enum
-    {
-        VERTEX_DECL_DEBUG = 0,
-        VERTEX_DECL_MESH,
-        VERTEX_DECL_SCREENSPACE,
-
-        __VERTEX_DECL_LAST__
-    };
-
-    enum
-    {
-        DEFPOOL_RELEASE,
-        DEFPOOL_CREATE,
-    };
-
-#define __MAX_CLIENTS__ 32
 
     namespace DeviceStates
     {
@@ -105,35 +54,35 @@ namespace Helium
 
         inline uint32_t GetWidth()
         {
-            return m_width;
+            return m_Width;
         }
 
         inline uint32_t GetHeight()
         {
-            return m_height;
+            return m_Height;
         }
 
     private:
         /// Window to which rendering is performed.
-        HWND m_hWnd;
+        HWND                                    m_hWnd;
         /// Render context.
-        Helium::RRenderContextPtr m_spRenderContext;
+        Helium::RRenderContextPtr               m_spRenderContext;
 
-        bool                                  m_using_swapchain;
-        uint32_t                              m_width;
-        uint32_t                              m_height;
+        bool                                    m_UsingSwapchain;
+        uint32_t                                m_Width;
+        uint32_t                                m_Height;
 
         /// Main render context.
-        static Helium::RRenderContextPtr sm_spMainRenderContext;
+        static Helium::RRenderContextPtr        sm_spMainRenderContext;
         /// Main render context window handle.
-        static HWND sm_hMainRenderContextWnd;
+        static HWND                             sm_hMainRenderContextWnd;
         /// Main render context width.
-        static uint32_t sm_mainRenderContextWidth;
+        static uint32_t                         sm_mainRenderContextWidth;
         /// Main render context heigth.
-        static uint32_t sm_mainRenderContextHeight;
+        static uint32_t                         sm_mainRenderContextHeight;
 
-        static bool                           m_unique;
-        static uint32_t                       m_master_count;
-        static DeviceManager*                 m_clients[__MAX_CLIENTS__];
+        static bool                             m_Unique;
+        static uint32_t                         m_InitCount;
+        static DeviceManager*                   m_Clients[MAX_DEVICE_COUNT];
     };
 }

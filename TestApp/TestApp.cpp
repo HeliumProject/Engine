@@ -122,12 +122,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         HELIUM_TRACE( TRACE_DEBUG, TXT( "SkeletalMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( SkeletalMeshEntity ) );
         HELIUM_TRACE( TRACE_DEBUG, TXT( "Mesh size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Mesh ) );
         HELIUM_TRACE( TRACE_DEBUG, TXT( "GraphicsSceneObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject ) );
-        HELIUM_TRACE(
-            TRACE_DEBUG,
-            TXT( "GraphicsSceneObject::SubMeshData size: %" ) TPRIuSZ TXT( "\n" ),
-            sizeof( GraphicsSceneObject::SubMeshData ) );
+        HELIUM_TRACE( TRACE_DEBUG, TXT( "GraphicsSceneObject::SubMeshData size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject::SubMeshData ) );
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
+#pragma TODO("Why is this just commented out? Speed? -Geoff")
         //DynamicMemoryHeap::LogMemoryStats();
 #endif
     }

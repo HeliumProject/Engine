@@ -7,46 +7,45 @@
 
 using namespace Helium;
 
-bool                        DeviceManager::m_unique = false;
-uint32_t                    DeviceManager::m_master_count = 0;
-DeviceManager*              DeviceManager::m_clients[__MAX_CLIENTS__] = {0};
-Helium::RRenderContextPtr    DeviceManager::sm_spMainRenderContext;
-HWND                        DeviceManager::sm_hMainRenderContextWnd;
-uint32_t                    DeviceManager::sm_mainRenderContextWidth;
-uint32_t                    DeviceManager::sm_mainRenderContextHeight;
+bool                DeviceManager::m_Unique = false;
+uint32_t            DeviceManager::m_InitCount = 0;
+DeviceManager*      DeviceManager::m_Clients[MAX_DEVICE_COUNT] = {0};
+RRenderContextPtr   DeviceManager::sm_spMainRenderContext;
+HWND                DeviceManager::sm_hMainRenderContextWnd;
+uint32_t            DeviceManager::sm_mainRenderContextWidth;
+uint32_t            DeviceManager::sm_mainRenderContextHeight;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::DeviceManager()
 : m_hWnd( NULL )
+, m_Width( 0 )
+, m_Height( 0 )
+, m_UsingSwapchain( false )
 {
-    m_width = 0;
-    m_height = 0;
-    m_using_swapchain = false;
-
     //record the this pointer in the client array so we can call back to free/recreate default pool resources
     // first look for empty entries in the client array
     size_t clientIndex;
-    for ( clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
+    for ( clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_Clients ); ++clientIndex )
     {
-        if ( !m_clients[ clientIndex ] )
+        if ( !m_Clients[ clientIndex ] )
         {
-            m_clients[ clientIndex ] = this;
-            ++m_master_count;
+            m_Clients[ clientIndex ] = this;
+            ++m_InitCount;
 
             break;
         }
     }
 
-    HELIUM_ASSERT( clientIndex < HELIUM_ARRAY_COUNT( m_clients ) );
+    HELIUM_ASSERT( clientIndex < HELIUM_ARRAY_COUNT( m_Clients ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 DeviceManager::~DeviceManager()
 {
-    --m_master_count;
+    --m_InitCount;
 
     // this is the last client, we need to free up the global resources before we free the device
-    if ( m_master_count == 0 )
+    if ( m_InitCount == 0 )
     {
         sm_spMainRenderContext.Release();
     }
@@ -54,11 +53,11 @@ DeviceManager::~DeviceManager()
     m_spRenderContext.Release();
 
     // go through all the clients and remove ourself
-    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_clients ); ++clientIndex )
+    for ( size_t clientIndex = 0; clientIndex < HELIUM_ARRAY_COUNT( m_Clients ); ++clientIndex )
     {
-        if ( m_clients[ clientIndex ] == this )
+        if ( m_Clients[ clientIndex ] == this )
         {
-            m_clients[ clientIndex ] = NULL;
+            m_Clients[ clientIndex ] = NULL;
             break;
         }
     }
@@ -69,7 +68,7 @@ void DeviceManager::SetUnique()
 {
     if ( !sm_spMainRenderContext )
     {
-        m_unique = true;
+        m_Unique = true;
     }
 }
 
@@ -86,7 +85,7 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
             return false;
         }
 
-        if ( m_unique )
+        if ( m_Unique )
         {
             sm_hMainRenderContextWnd = hwnd;
             sm_mainRenderContextWidth = back_buffer_width;
@@ -120,7 +119,7 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
         sm_spMainRenderContext = pRenderer->GetMainContext();
         HELIUM_ASSERT( sm_spMainRenderContext );
 
-        if ( m_unique )
+        if ( m_Unique )
         {
             m_spRenderContext = sm_spMainRenderContext;
         }
@@ -128,8 +127,8 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
     else
     {
         // if we get to here it must be a second instance and when running unique that is not allowed.
-        HELIUM_ASSERT( !m_unique );
-        if ( m_unique )
+        HELIUM_ASSERT( !m_Unique );
+        if ( m_Unique )
         {
             return false;
         }
@@ -138,7 +137,7 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
         HELIUM_ASSERT( pRenderer );
     }
 
-    if ( !m_unique )
+    if ( !m_Unique )
     {
         // Create an additional render context.
         Helium::Renderer::ContextInitParameters initParameters;
@@ -155,13 +154,12 @@ bool DeviceManager::Init( HWND hwnd, uint32_t back_buffer_width, uint32_t back_b
             return false;
         }
 
-        m_using_swapchain = true;
+        m_UsingSwapchain = true;
     }
 
     m_hWnd = hwnd;
-
-    m_width = back_buffer_width;
-    m_height = back_buffer_height;
+    m_Width = back_buffer_width;
+    m_Height = back_buffer_height;
 
     return true;
 }
@@ -211,13 +209,13 @@ bool DeviceManager::ResizeDevice( uint32_t width, uint32_t height )
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool DeviceManager::Resize( uint32_t width, uint32_t height )
 {
-    if ( m_using_swapchain )
+    if ( m_UsingSwapchain )
     {
         return ResizeSwapChain( width, height );
     }
 
     // this will currently only be used in 'unique' mode
-    HELIUM_ASSERT( m_unique );
+    HELIUM_ASSERT( m_Unique );
     return ResizeDevice( width, height );
 }
 

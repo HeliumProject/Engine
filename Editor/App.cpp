@@ -65,7 +65,6 @@
 #include "Editor/Dialogs/PerforceWaitDialog.h"
 #include "Editor/Vault/VaultSettings.h"
 
-//#include "Editor/Commands/BuildCommand.h"
 #include "Editor/Commands/ProfileDumpCommand.h"
 #include "Editor/Commands/RebuildCommand.h"
 
@@ -223,11 +222,7 @@ App::~App()
 // 
 bool App::OnInit()
 {
-    Timer::StaticInitialize();
-
     SetVendorName( HELIUM_APP_NAME );
-
-    //parse.SetLogo( wxT( "Editor (c) 2010 - "HELIUM_APP_NAME"\n" ) );
 
     Timer::StaticInitialize();
 
@@ -557,10 +552,10 @@ void App::LoadSettings()
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 
-	if ( !path.Exists() )
-	{
-		return;
-	}
+    if ( !path.Exists() )
+    {
+        return;
+    }
 
     SettingsManagerPtr settingsManager = Reflect::FromArchive< SettingsManager >( path, Reflect::ArchiveTypes::XML );
     if ( settingsManager.ReferencesObject() )
@@ -583,7 +578,7 @@ static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar_t*
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-int Main ( int argc, const tchar_t** argv )
+int Main( int argc, const tchar_t** argv )
 {
     // print physical memory
     MEMORYSTATUSEX status;
@@ -603,12 +598,7 @@ int Main ( int argc, const tchar_t** argv )
     bool success = true;
     tstring error; 
 
-
     Processor processor( TXT( "luna" ), TXT( "[COMMAND <ARGS>]" ), TXT( "Editor (c) 2010 - Helium" ) );
-
-    //BuildCommand buildCommand;
-    //success &= buildCommand.Initialize( error );
-    //success &= processor.RegisterCommand( &buildCommand, error );
 
     ProfileDumpCommand profileDumpCommand;
     success &= profileDumpCommand.Initialize( error );
@@ -710,7 +700,6 @@ int Main ( int argc, const tchar_t** argv )
         }
         else
         {
-            //buildCommand.Cleanup();
             rebuildCommand.Cleanup();
 
 #ifndef _DEBUG
@@ -721,7 +710,6 @@ int Main ( int argc, const tchar_t** argv )
         }
     }
 
-    //buildCommand.Cleanup();
     rebuildCommand.Cleanup();
 
     if ( !success && !error.empty() )

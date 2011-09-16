@@ -255,4 +255,37 @@ namespace Helium
     {
         return ( m_color.packed != rOther.m_color.packed );
     }
+    
+//     inline tostream& operator<<(tostream& outStream, const Color& color)
+//     {
+//         outStream 
+//             << (int32_t) color.m_color.components.r << ", " 
+//             << (int32_t) color.m_color.components.g << ", " 
+//             << (int32_t) color.m_color.components.b << ", " 
+//             << (int32_t) color.m_color.components.a;  
+// 
+//         return outStream;
+//     }
+// 
+//     inline tistream& operator>>(tistream& inStream, Color& color)
+//     {
+//         int32_t r, g, b, a;
+//         inStream >> r;
+//         inStream.ignore();
+// 
+//         inStream >> g;
+//         inStream.ignore();
+//         
+//         inStream >> b;
+//         inStream.ignore();
+//         
+//         inStream >> a;
+// 
+//         color.m_color.components.r = r;
+//         color.m_color.components.g = g;
+//         color.m_color.components.b = b;
+//         color.m_color.components.a = a;
+// 
+//         return inStream;
+//     }
 }

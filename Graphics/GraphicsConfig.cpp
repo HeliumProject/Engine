@@ -12,8 +12,8 @@
 
 using namespace Helium;
 
-HELIUM_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter, HELIUM_GRAPHICS_API );
-HELIUM_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode, HELIUM_GRAPHICS_API );
+REFLECT_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter );
+REFLECT_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode );
 HELIUM_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
 
 /// Constructor.

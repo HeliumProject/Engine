@@ -100,10 +100,6 @@ namespace Helium
         static void ConvertStringToFilePath( String& rFilePath, const String& rPackagePath );
         //@}
 
-        inline Helium::GameObject *GetObjectPtr() const;
-        inline void SetObjectPtr(Helium::GameObject *_game_object);
-        inline bool AddPendingLink(GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer);
-
     private:
 
         struct PendingLink;

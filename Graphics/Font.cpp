@@ -6,7 +6,7 @@
 
 using namespace Helium;
 
-HELIUM_DEFINE_ENUMERATION( Font::ECompression, HELIUM_GRAPHICS_API );
+REFLECT_DEFINE_ENUMERATION( Font::ECompression );
 
 HELIUM_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
 
@@ -38,18 +38,19 @@ Font::~Font()
     delete [] m_pTextureLoadIds;
 }
 
-/// @copydoc GameObject::Serialize()
-void Font::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_pointSize );
-    s << HELIUM_TAGGED( m_dpi );
-    s << HELIUM_TAGGED( m_textureSheetWidth );
-    s << HELIUM_TAGGED( m_textureSheetHeight );
-    s << HELIUM_TAGGED( m_textureCompression );
-    s << HELIUM_TAGGED( m_bAntialiased );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Font::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_pointSize );
+//    s << HELIUM_TAGGED( m_dpi );
+//    s << HELIUM_TAGGED( m_textureSheetWidth );
+//    s << HELIUM_TAGGED( m_textureSheetHeight );
+//    s << HELIUM_TAGGED( m_textureCompression );
+//    s << HELIUM_TAGGED( m_bAntialiased );
+//}
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
 bool Font::NeedsPrecacheResourceData() const
@@ -180,86 +181,87 @@ bool Font::TryFinishPrecacheResourceData()
     return bLoadComplete;
 }
 
-/// @copydoc Resource::SerializePersistentResourceData()
-void Font::SerializePersistentResourceData( Serializer& s )
-{
-    s << m_ascender;
-    s << m_descender;
-    s << m_height;
-    s << m_maxAdvance;
-
-    s << m_characterCount;
-    s << m_textureCount;
-
-    uint_fast32_t characterCount = m_characterCount;
-    uint_fast8_t textureCount = m_textureCount;
-
-    if( s.GetMode() == Serializer::MODE_LOAD )
-    {
-        delete [] m_pCharacters;
-        m_pCharacters = NULL;
-
-        delete [] m_pspTextures;
-        m_pspTextures = NULL;
-
-        delete [] m_pTextureLoadIds;
-        m_pTextureLoadIds = NULL;
-
-        if( characterCount != 0 )
-        {
-            m_pCharacters = new Character [ characterCount ];
-            HELIUM_ASSERT( m_pCharacters );
-        }
-
-        if( textureCount != 0 )
-        {
-            m_pspTextures = new RTexture2dPtr [ textureCount ];
-            HELIUM_ASSERT( m_pspTextures );
-
-            if( m_pspTextures )
-            {
-                m_pTextureLoadIds = new size_t [ textureCount ];
-                HELIUM_ASSERT( m_pTextureLoadIds );
-
-                if( m_pTextureLoadIds )
-                {
-                    MemorySet(
-                        m_pTextureLoadIds,
-                        0xff,
-                        static_cast< size_t >( textureCount ) * sizeof( m_pTextureLoadIds[ 0 ] ) );
-                }
-                else
-                {
-                    delete [] m_pspTextures;
-                    m_pspTextures = NULL;
-                }
-            }
-
-            if( !m_pspTextures )
-            {
-                m_textureCount = 0;
-            }
-        }
-    }
-
-    if( m_pCharacters )
-    {
-        for( uint_fast32_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-        {
-            m_pCharacters[ characterIndex ].Serialize( s );
-        }
-    }
-    else
-    {
-        Character dummy;
-        for( uint_fast32_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-        {
-            dummy.Serialize( s );
-        }
-
-        m_characterCount = 0;
-    }
-}
+//PMDTODO: Implement this
+///// @copydoc Resource::SerializePersistentResourceData()
+//void Font::SerializePersistentResourceData( Serializer& s )
+//{
+//    s << m_ascender;
+//    s << m_descender;
+//    s << m_height;
+//    s << m_maxAdvance;
+//
+//    s << m_characterCount;
+//    s << m_textureCount;
+//
+//    uint_fast32_t characterCount = m_characterCount;
+//    uint_fast8_t textureCount = m_textureCount;
+//
+//    if( s.GetMode() == Serializer::MODE_LOAD )
+//    {
+//        delete [] m_pCharacters;
+//        m_pCharacters = NULL;
+//
+//        delete [] m_pspTextures;
+//        m_pspTextures = NULL;
+//
+//        delete [] m_pTextureLoadIds;
+//        m_pTextureLoadIds = NULL;
+//
+//        if( characterCount != 0 )
+//        {
+//            m_pCharacters = new Character [ characterCount ];
+//            HELIUM_ASSERT( m_pCharacters );
+//        }
+//
+//        if( textureCount != 0 )
+//        {
+//            m_pspTextures = new RTexture2dPtr [ textureCount ];
+//            HELIUM_ASSERT( m_pspTextures );
+//
+//            if( m_pspTextures )
+//            {
+//                m_pTextureLoadIds = new size_t [ textureCount ];
+//                HELIUM_ASSERT( m_pTextureLoadIds );
+//
+//                if( m_pTextureLoadIds )
+//                {
+//                    MemorySet(
+//                        m_pTextureLoadIds,
+//                        0xff,
+//                        static_cast< size_t >( textureCount ) * sizeof( m_pTextureLoadIds[ 0 ] ) );
+//                }
+//                else
+//                {
+//                    delete [] m_pspTextures;
+//                    m_pspTextures = NULL;
+//                }
+//            }
+//
+//            if( !m_pspTextures )
+//            {
+//                m_textureCount = 0;
+//            }
+//        }
+//    }
+//
+//    if( m_pCharacters )
+//    {
+//        for( uint_fast32_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+//        {
+//            m_pCharacters[ characterIndex ].Serialize( s );
+//        }
+//    }
+//    else
+//    {
+//        Character dummy;
+//        for( uint_fast32_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+//        {
+//            dummy.Serialize( s );
+//        }
+//
+//        m_characterCount = 0;
+//    }
+//}
 
 /// @copydoc Resource::GetCacheName()
 Name Font::GetCacheName() const
@@ -269,23 +271,24 @@ Name Font::GetCacheName() const
     return cacheName;
 }
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Font::Character::Serialize( Serializer& s )
-{
-    s << codePoint;
-
-    s << imageX;
-    s << imageY;
-    s << imageWidth;
-    s << imageHeight;
-
-    s << width;
-    s << height;
-    s << bearingX;
-    s << bearingY;
-    s << advance;
-
-    s << texture;
-}
+//PMDTODO: Implement this
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Font::Character::Serialize( Serializer& s )
+//{
+//    s << codePoint;
+//
+//    s << imageX;
+//    s << imageY;
+//    s << imageWidth;
+//    s << imageHeight;
+//
+//    s << width;
+//    s << height;
+//    s << bearingX;
+//    s << bearingY;
+//    s << advance;
+//
+//    s << texture;
+//}

@@ -1,114 +1,13 @@
+
 #include "FoundationPch.h"
-#include "Foundation/Reflect/Data/SimpleData.h"
 
-#include "Foundation/Memory/Endian.h"
-#include "Foundation/Reflect/ArchiveBinary.h"
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "SimpleData.h"
 
-using namespace Helium;
-using namespace Helium::Reflect;
-
-template <class T>
-SimpleData<T>::SimpleData()
-{
-
-}
-
-template <class T>
-SimpleData<T>::~SimpleData()
-{
-
-}
-
-template <class T>
-void SimpleData<T>::ConnectData(void* data)
-{
-    m_Data.Connect( data );
-}
-
-template <class T>
-bool SimpleData<T>::Set(Data* src, uint32_t flags)
-{
-    const SimpleDataT* rhs = SafeCast<SimpleDataT>(src);
-    if (!rhs)
-    {
-        return false;
-    }
-
-    *m_Data = *rhs->m_Data;
-
-    return true;
-}
-
-template <class T>
-bool SimpleData<T>::Equals(Object* object)
-{
-    const SimpleDataT* rhs = SafeCast<SimpleDataT>(object);
-    if (!rhs)
-    {
-        return false;
-    }
-
-    return *rhs->m_Data == *m_Data;
-}
-
-template <class T>
-void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
-{
-    T val = *m_Data;
-
-    Helium::Swizzle( val, buffer->GetByteOrder() != Helium::ByteOrders::LittleEndian );
-
-    buffer->AddBuffer( (const uint8_t*)&val, sizeof(T), debugStr );
-}
-
-template <class T>
-void SimpleData<T>::Serialize(ArchiveBinary& archive)
-{
-    const T* data = m_Data;
-    archive.GetStream().Write( data ); 
-}
-
-template <class T>
-void SimpleData<T>::Deserialize(ArchiveBinary& archive)
-{
-    T* data = m_Data;
-    archive.GetStream().Read( data ); 
-}
-
-template <class T>
-void SimpleData<T>::Serialize(ArchiveXML& archive)
-{
-    archive.GetStream() << *m_Data;
-}
-
-template <class T>
-void SimpleData<T>::Deserialize(ArchiveXML& archive)
-{
-    archive.GetStream() >> *m_Data;
-}
-
-template <class T>
-tostream& SimpleData<T>::operator>>(tostream& stream) const
-{
-    stream << *m_Data;
-
-    return stream;
-}
-
-template <class T>
-tistream& SimpleData<T>::operator<<(tistream& stream)
-{
-    stream >> *m_Data;
-
-    if ( m_Instance && m_Field && m_Field->m_Composite->GetReflectionType() == ReflectionTypes::Class )
-    {
-        Object* object = static_cast< Object* >( m_Instance );
-        object->RaiseChanged( m_Field );
-    }
-
-    return stream;
-}
+#define API_DEFINE HELIUM_FOUNDATION_API
+#define TEMPLATE_NAME SimpleData
+#include "Foundation/Reflect/Data/SimpleDataTemplate.cpp.inl"
+#undef API_DEFINE
+#undef TEMPLATE_NAME
 
 //
 // Specializations
@@ -117,21 +16,18 @@ tistream& SimpleData<T>::operator<<(tistream& stream)
 template <>
 void StlStringData::Serialize(ArchiveBinary& archive)
 {
-    //archive.GetStream().WriteString( *m_Data ); 
     archive.WriteString( *m_Data );
 }
 
 template <>
 void StlStringData::Deserialize(ArchiveBinary& archive)
 {
-    //archive.GetStream().ReadString( *m_Data );
     archive.ReadString( *m_Data );
 }
 
 template <>
 void StlStringData::Serialize(ArchiveXML& archive)
 {
-    //archive.GetStream() << TXT( "<![CDATA[" ) << *m_Data << TXT( "]]>" );
     archive.WriteString( *m_Data );
 }
 
@@ -139,9 +35,6 @@ template <>
 void StlStringData::Deserialize(ArchiveXML& archive)
 {
     archive.ReadString( *m_Data );
-//     std::streamsize size = archive.GetStream().ElementsAvailable(); 
-//     m_Data->resize( (size_t)size );
-//     archive.GetStream().ReadBuffer( const_cast<tchar_t*>( (*m_Data).c_str() ), size );
 }
 
 template<>

@@ -33,11 +33,6 @@ namespace Helium
         return ( m_pEntry ? m_pEntry->name : Name( NULL_NAME ) );
     }
 
-    GameObject *Helium::GameObjectPath::GetObjectPtr() const
-    {
-        return ( m_pEntry ? m_pEntry->instance : NULL );
-    }
-
     /// Get the instance index associated with the object.
     ///
     /// @return  Instance index.

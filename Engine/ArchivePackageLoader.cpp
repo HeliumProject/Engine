@@ -747,8 +747,8 @@ void ArchivePackageLoader::TickPreload()
                 }
 
                 // Verify object is an object descriptor
-                HELIUM_ASSERT((*iter)->IsClass(ObjectDescriptor::s_Class));
-                if ( !(*iter)->IsClass(ObjectDescriptor::s_Class) )
+                HELIUM_ASSERT((*iter)->IsClass(Reflect::GetClass<ObjectDescriptor>()));
+                if ( !(*iter)->IsClass(Reflect::GetClass<ObjectDescriptor>()) )
                 {
                     HELIUM_TRACE(
                         TRACE_WARNING,
@@ -1064,6 +1064,42 @@ namespace Helium
             return false;
         }
     };
+
+    // Called it something bad happens during deserialization
+    class ClearLinkIndicesFromObject : public Reflect::Visitor
+    {
+    private:
+        DynArray<ArchivePackageLoader::LinkEntry>& m_LinkTable;
+        
+    public:
+        ClearLinkIndicesFromObject(DynArray<ArchivePackageLoader::LinkEntry> &_link_table)
+            : m_LinkTable( _link_table )
+        {
+        }
+
+        virtual ~ClearLinkIndicesFromObject()
+        {
+        }
+
+        virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
+        {
+            if ( field->m_DataClass == Reflect::GetClass< GameObjectPointerData >() )
+            {
+                Reflect::DataPtr go_data_untyped = field->CreateData( instance );
+                GameObjectPointerData *go_data = Reflect::AssertCast<GameObjectPointerData>(go_data_untyped.Get());
+                if (go_data && go_data->m_Data->HasLinkIndex())
+                {
+                    go_data->m_Data->ClearLinkIndex();
+                }
+            }
+
+            // We never want to visit fields because
+            // - The data we need can be found by just looking at the field and data
+            // - In this case, the game object pointers are link indices so we will crash if we try
+            //   to visit them
+            return false;
+        }
+    };
 }
 
 /// Update processing of object property preloading for a given load request.
@@ -1362,7 +1398,12 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             *rObjectData.objectPath.ToString() );
 
         // Clear out object references (object can now be considered fully loaded as well).
-        NullLinker().Serialize( pObject );
+        //NullLinker().Serialize( pObject );
+
+
+
+
+
         pObject->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED );
         pObject->ConditionalFinalizeLoad();
 

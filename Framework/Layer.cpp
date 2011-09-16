@@ -26,52 +26,53 @@ Layer::~Layer()
     HELIUM_ASSERT( !m_spWorld );
 }
 
-/// @copydoc GameObject::Serialize()
-void Layer::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_spPackage );
-
-    // Serialize entities manually when linking so that we can update their layer references at the same time.
-    s << Serializer::Tag( TXT( "m_entities" ) );
-
-    bool bLinking = ( s.GetMode() == Serializer::MODE_LINK );
-    if( bLinking )
-    {
-        s.BeginDynArray();
-
-        uint32_t entityCount = static_cast< uint32_t >( m_entities.GetSize() );
-        s << entityCount;
-        HELIUM_ASSERT( entityCount == m_entities.GetSize() );
-
-        for( uint32_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
-        {
-            EntityPtr& rspEntity = m_entities[ entityIndex ];
-            s << rspEntity;
-
-            Entity* pEntity = rspEntity;
-            if( pEntity )
-            {
-                HELIUM_ASSERT( pEntity->GetLayer().Get() == NULL );
-                pEntity->SetLayerInfo( this, entityIndex );
-            }
-        }
-
-        s.EndDynArray();
-    }
-    else
-    {
-        s << Serializer::WrapDynArray( m_entities );
-    }
-
-#if HELIUM_DEBUG
-    size_t entityCount = m_entities.GetSize();
-    HELIUM_UNREF( entityCount );
-    StripNonPackageEntities();
-    HELIUM_ASSERT_MSG( entityCount == m_entities.GetSize(), TXT( "Layer contained non-package entities." ) );
-#endif
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Layer::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_spPackage );
+//
+//    // Serialize entities manually when linking so that we can update their layer references at the same time.
+//    s << Serializer::Tag( TXT( "m_entities" ) );
+//
+//    bool bLinking = ( s.GetMode() == Serializer::MODE_LINK );
+//    if( bLinking )
+//    {
+//        s.BeginDynArray();
+//
+//        uint32_t entityCount = static_cast< uint32_t >( m_entities.GetSize() );
+//        s << entityCount;
+//        HELIUM_ASSERT( entityCount == m_entities.GetSize() );
+//
+//        for( uint32_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
+//        {
+//            EntityPtr& rspEntity = m_entities[ entityIndex ];
+//            s << rspEntity;
+//
+//            Entity* pEntity = rspEntity;
+//            if( pEntity )
+//            {
+//                HELIUM_ASSERT( pEntity->GetLayer().Get() == NULL );
+//                pEntity->SetLayerInfo( this, entityIndex );
+//            }
+//        }
+//
+//        s.EndDynArray();
+//    }
+//    else
+//    {
+//        s << Serializer::WrapDynArray( m_entities );
+//    }
+//
+//#if HELIUM_DEBUG
+//    size_t entityCount = m_entities.GetSize();
+//    HELIUM_UNREF( entityCount );
+//    StripNonPackageEntities();
+//    HELIUM_ASSERT_MSG( entityCount == m_entities.GetSize(), TXT( "Layer contained non-package entities." ) );
+//#endif
+//}
 
 /// Bind a package with this layer.
 ///

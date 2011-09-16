@@ -128,169 +128,170 @@ bool MeshResourceHandler::CacheResource(
 #endif  // HELIUM_USE_GRANNY_ANIMATION
 
     // Cache the data for each supported platform.
-    BinarySerializer serializer;
-    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-            static_cast< Cache::EPlatform >( platformIndex ) );
-        if( !pPreprocessor )
-        {
-            continue;
-        }
-
-        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
-            static_cast< Cache::EPlatform >( platformIndex ) );
-
-        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
-        rSubDataBuffers.Reserve( 2 );
-        rSubDataBuffers.Resize( 2 );
-        rSubDataBuffers.Trim();
-
-        serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-
-        // Serialize the buffer sizes and mesh bounds first.
-        serializer.BeginSerialize();
-        serializer << Serializer::WrapDynArray( sectionVertexCounts );
-        serializer << Serializer::WrapDynArray( sectionTriangleCounts );
-        serializer << Serializer::WrapDynArray( skinningPaletteMap );
-        serializer << vertexCount;
-        serializer << triangleCount;
-        serializer << bounds;
-
-#if HELIUM_USE_GRANNY_ANIMATION
-        grannyMeshCachingData.CachePlatformResourceData( pPreprocessor, serializer );
-#else
-        serializer << boneCount;
-
-        for( size_t boneIndex = 0; boneIndex < boneCount; ++boneIndex )
-        {
-            FbxSupport::BoneData& rBoneData = bones[ boneIndex ];
-            serializer << rBoneData.name;
-            serializer << rBoneData.parentIndex;
-            serializer << rBoneData.referenceTransform;
-        }
-#endif
-
-        serializer.EndSerialize();
-
-        rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
-
-        // Serialize the vertex buffer.  If the mesh is a skinned mesh, the vertices will need to be converted to
-        // and serialized as an array of SkinnedMeshVertex structs.
-        serializer.BeginSerialize();
-
-        if( boneCountActual == 0 )
-        {
-            for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
-            {
-                vertices[ vertexIndex ].Serialize( serializer );
-            }
-        }
-        else
-        {
-            HELIUM_ASSERT( vertexBlendData.GetSize() == vertexCountActual );
-
-            SkinnedMeshVertex vertex;
-            for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
-            {
-                const StaticMeshVertex< 1 >& rStaticVertex = vertices[ vertexIndex ];
-                const FbxSupport::BlendData& rBlendData = vertexBlendData[ vertexIndex ];
-
-                MemoryCopy( vertex.position, rStaticVertex.position, sizeof( vertex.position ) );
-
-                vertex.blendWeights[ 0 ] = static_cast< uint8_t >( Clamp(
-                    rBlendData.weights[ 0 ] * 255.0f + 0.5f,
-                    0.0f,
-                    255.0f ) );
-                vertex.blendWeights[ 1 ] = static_cast< uint8_t >( Clamp(
-                    rBlendData.weights[ 1 ] * 255.0f + 0.5f,
-                    0.0f,
-                    255.0f ) );
-                vertex.blendWeights[ 2 ] = static_cast< uint8_t >( Clamp(
-                    rBlendData.weights[ 2 ] * 255.0f + 0.5f,
-                    0.0f,
-                    255.0f ) );
-                vertex.blendWeights[ 3 ] = static_cast< uint8_t >( Clamp(
-                    rBlendData.weights[ 3 ] * 255.0f + 0.5f,
-                    0.0f,
-                    255.0f ) );
-
-                // Tweak the blend weights to ensure they still add up to 255 (1.0 when normalized by the GPU).
-                size_t blendWeightTotal =
-                    static_cast< size_t >( vertex.blendWeights[ 0 ] ) +
-                    static_cast< size_t >( vertex.blendWeights[ 1 ] ) +
-                    static_cast< size_t >( vertex.blendWeights[ 2 ] ) +
-                    static_cast< size_t >( vertex.blendWeights[ 3 ] );
-                if( blendWeightTotal != 0 && blendWeightTotal != 255 )
-                {
-                    if( blendWeightTotal > 255 )
-                    {
-                        // Total blend weight is too large, so decrease blend weights, starting from the lowest
-                        // non-zero weight.
-                        size_t weightAdjustIndex = 0;
-                        do
-                        {
-                            do
-                            {
-                                weightAdjustIndex = ( weightAdjustIndex + 3 ) % 4;
-                            } while( vertex.blendWeights[ weightAdjustIndex ] == 0 );
-
-                            --vertex.blendWeights[ weightAdjustIndex ];
-                            --blendWeightTotal;
-                        } while( blendWeightTotal > 255 );
-                    }
-                    else
-                    {
-                        // Total blend weight is too small, so increase blend weights, starting from the highest
-                        // non-zero blend weight.  Note that we should not have to check whether the blend weight is
-                        // already at its max, as that would mean our total blend weight would have to already be at
-                        // least 255.
-                        size_t weightAdjustIndex = 3;
-                        do
-                        {
-                            do
-                            {
-                                weightAdjustIndex = ( weightAdjustIndex + 1 ) % 4;
-                            } while( vertex.blendWeights[ weightAdjustIndex ] == 0 );
-
-                            HELIUM_ASSERT( vertex.blendWeights[ weightAdjustIndex ] != 255 );
-
-                            ++vertex.blendWeights[ weightAdjustIndex ];
-                            ++blendWeightTotal;
-                        } while( blendWeightTotal < 255 );
-                    }
-
-                    HELIUM_ASSERT( blendWeightTotal == 255 );
-                }
-
-                MemoryCopy( vertex.blendIndices, rBlendData.indices, sizeof( vertex.blendIndices ) );
-
-                MemoryCopy( vertex.normal, rStaticVertex.normal, sizeof( vertex.normal ) );
-                MemoryCopy( vertex.tangent, rStaticVertex.tangent, sizeof( vertex.tangent ) );
-                MemoryCopy( vertex.texCoords, rStaticVertex.texCoords[ 0 ], sizeof( vertex.texCoords ) );
-
-                vertex.Serialize( serializer );
-            }
-        }
-
-        serializer.EndSerialize();
-
-        rSubDataBuffers[ 0 ] = serializer.GetPropertyStreamBuffer();
-
-        // Serialize the index buffer.
-        serializer.BeginSerialize();
-        for( size_t indexIndex = 0; indexIndex < indexCount; ++indexIndex )
-        {
-            serializer << indices[ indexIndex ];
-        }
-
-        serializer.EndSerialize();
-
-        rSubDataBuffers[ 1 ] = serializer.GetPropertyStreamBuffer();
-
-        // Platform data is now loaded.
-        rPreprocessedData.bLoaded = true;
-    }
+    //PMDTODO: Implement
+//    BinarySerializer serializer;
+//    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+//    {
+//        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+//            static_cast< Cache::EPlatform >( platformIndex ) );
+//        if( !pPreprocessor )
+//        {
+//            continue;
+//        }
+//
+//        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
+//            static_cast< Cache::EPlatform >( platformIndex ) );
+//
+//        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+//        rSubDataBuffers.Reserve( 2 );
+//        rSubDataBuffers.Resize( 2 );
+//        rSubDataBuffers.Trim();
+//
+//        serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
+//
+//        // Serialize the buffer sizes and mesh bounds first.
+//        serializer.BeginSerialize();
+//        serializer << Serializer::WrapDynArray( sectionVertexCounts );
+//        serializer << Serializer::WrapDynArray( sectionTriangleCounts );
+//        serializer << Serializer::WrapDynArray( skinningPaletteMap );
+//        serializer << vertexCount;
+//        serializer << triangleCount;
+//        serializer << bounds;
+//
+//#if HELIUM_USE_GRANNY_ANIMATION
+//        grannyMeshCachingData.CachePlatformResourceData( pPreprocessor, serializer );
+//#else
+//        serializer << boneCount;
+//
+//        for( size_t boneIndex = 0; boneIndex < boneCount; ++boneIndex )
+//        {
+//            FbxSupport::BoneData& rBoneData = bones[ boneIndex ];
+//            serializer << rBoneData.name;
+//            serializer << rBoneData.parentIndex;
+//            serializer << rBoneData.referenceTransform;
+//        }
+//#endif
+//
+//        serializer.EndSerialize();
+//
+//        rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+//
+//        // Serialize the vertex buffer.  If the mesh is a skinned mesh, the vertices will need to be converted to
+//        // and serialized as an array of SkinnedMeshVertex structs.
+//        serializer.BeginSerialize();
+//
+//        if( boneCountActual == 0 )
+//        {
+//            for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
+//            {
+//                vertices[ vertexIndex ].Serialize( serializer );
+//            }
+//        }
+//        else
+//        {
+//            HELIUM_ASSERT( vertexBlendData.GetSize() == vertexCountActual );
+//
+//            SkinnedMeshVertex vertex;
+//            for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
+//            {
+//                const StaticMeshVertex< 1 >& rStaticVertex = vertices[ vertexIndex ];
+//                const FbxSupport::BlendData& rBlendData = vertexBlendData[ vertexIndex ];
+//
+//                MemoryCopy( vertex.position, rStaticVertex.position, sizeof( vertex.position ) );
+//
+//                vertex.blendWeights[ 0 ] = static_cast< uint8_t >( Clamp(
+//                    rBlendData.weights[ 0 ] * 255.0f + 0.5f,
+//                    0.0f,
+//                    255.0f ) );
+//                vertex.blendWeights[ 1 ] = static_cast< uint8_t >( Clamp(
+//                    rBlendData.weights[ 1 ] * 255.0f + 0.5f,
+//                    0.0f,
+//                    255.0f ) );
+//                vertex.blendWeights[ 2 ] = static_cast< uint8_t >( Clamp(
+//                    rBlendData.weights[ 2 ] * 255.0f + 0.5f,
+//                    0.0f,
+//                    255.0f ) );
+//                vertex.blendWeights[ 3 ] = static_cast< uint8_t >( Clamp(
+//                    rBlendData.weights[ 3 ] * 255.0f + 0.5f,
+//                    0.0f,
+//                    255.0f ) );
+//
+//                // Tweak the blend weights to ensure they still add up to 255 (1.0 when normalized by the GPU).
+//                size_t blendWeightTotal =
+//                    static_cast< size_t >( vertex.blendWeights[ 0 ] ) +
+//                    static_cast< size_t >( vertex.blendWeights[ 1 ] ) +
+//                    static_cast< size_t >( vertex.blendWeights[ 2 ] ) +
+//                    static_cast< size_t >( vertex.blendWeights[ 3 ] );
+//                if( blendWeightTotal != 0 && blendWeightTotal != 255 )
+//                {
+//                    if( blendWeightTotal > 255 )
+//                    {
+//                        // Total blend weight is too large, so decrease blend weights, starting from the lowest
+//                        // non-zero weight.
+//                        size_t weightAdjustIndex = 0;
+//                        do
+//                        {
+//                            do
+//                            {
+//                                weightAdjustIndex = ( weightAdjustIndex + 3 ) % 4;
+//                            } while( vertex.blendWeights[ weightAdjustIndex ] == 0 );
+//
+//                            --vertex.blendWeights[ weightAdjustIndex ];
+//                            --blendWeightTotal;
+//                        } while( blendWeightTotal > 255 );
+//                    }
+//                    else
+//                    {
+//                        // Total blend weight is too small, so increase blend weights, starting from the highest
+//                        // non-zero blend weight.  Note that we should not have to check whether the blend weight is
+//                        // already at its max, as that would mean our total blend weight would have to already be at
+//                        // least 255.
+//                        size_t weightAdjustIndex = 3;
+//                        do
+//                        {
+//                            do
+//                            {
+//                                weightAdjustIndex = ( weightAdjustIndex + 1 ) % 4;
+//                            } while( vertex.blendWeights[ weightAdjustIndex ] == 0 );
+//
+//                            HELIUM_ASSERT( vertex.blendWeights[ weightAdjustIndex ] != 255 );
+//
+//                            ++vertex.blendWeights[ weightAdjustIndex ];
+//                            ++blendWeightTotal;
+//                        } while( blendWeightTotal < 255 );
+//                    }
+//
+//                    HELIUM_ASSERT( blendWeightTotal == 255 );
+//                }
+//
+//                MemoryCopy( vertex.blendIndices, rBlendData.indices, sizeof( vertex.blendIndices ) );
+//
+//                MemoryCopy( vertex.normal, rStaticVertex.normal, sizeof( vertex.normal ) );
+//                MemoryCopy( vertex.tangent, rStaticVertex.tangent, sizeof( vertex.tangent ) );
+//                MemoryCopy( vertex.texCoords, rStaticVertex.texCoords[ 0 ], sizeof( vertex.texCoords ) );
+//
+//                vertex.Serialize( serializer );
+//            }
+//        }
+//
+//        serializer.EndSerialize();
+//
+//        rSubDataBuffers[ 0 ] = serializer.GetPropertyStreamBuffer();
+//
+//        // Serialize the index buffer.
+//        serializer.BeginSerialize();
+//        for( size_t indexIndex = 0; indexIndex < indexCount; ++indexIndex )
+//        {
+//            serializer << indices[ indexIndex ];
+//        }
+//
+//        serializer.EndSerialize();
+//
+//        rSubDataBuffers[ 1 ] = serializer.GetPropertyStreamBuffer();
+//
+//        // Platform data is now loaded.
+//        rPreprocessedData.bLoaded = true;
+//    }
 
     return true;
 }

@@ -51,7 +51,7 @@ namespace Helium
                 MAX,
             };
 
-            HELIUM_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
+            REFLECT_DECLARE_ENUMERATION( ECompression );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -96,7 +96,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
         //@}
 
         /// @name Data Access

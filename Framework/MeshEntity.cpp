@@ -30,14 +30,15 @@ MeshEntity::~MeshEntity()
     HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
 }
 
-/// @copydoc GameObject::Serialize()
-void MeshEntity::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_spMesh );
-    s << HELIUM_TAGGED_DYNARRAY( m_overrideMaterials );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void MeshEntity::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_spMesh );
+//    s << HELIUM_TAGGED_DYNARRAY( m_overrideMaterials );
+//}
 
 /// @copydoc Entity::Attach()
 void MeshEntity::Attach()

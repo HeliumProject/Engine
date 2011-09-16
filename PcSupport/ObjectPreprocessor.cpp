@@ -10,6 +10,8 @@
 
 #include "Platform/Stat.h"
 #include "Foundation/Stream/BufferedStream.h"
+#include "Foundation/Stream/DynamicMemoryStream.h"
+#include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
@@ -82,8 +84,8 @@ bool ObjectPreprocessor::CacheObject(
 
     DynArray< uint8_t > objectStreamBuffer;
 
-    DynamicMemoryStream directStream;
-    ByteSwappingStream byteSwappingStream( &directStream );
+    Helium::DynamicMemoryStream directStream;
+    Helium::ByteSwappingStream byteSwappingStream( &directStream );
 
     GameObjectPath objectPath = pObject->GetPath();
 
@@ -141,11 +143,12 @@ bool ObjectPreprocessor::CacheObject(
         rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
 
         // Serialize the property data.
-        BinarySerializer serializer;
-        serializer.SetByteSwapping( bSwapBytes );
-        serializer.Serialize( pObject );
+        //PMDTODO: Fix me
+        //BinarySerializer serializer;
+        //serializer.SetByteSwapping( bSwapBytes );
+        //serializer.Serialize( pObject );
 
-        serializer.WriteToStream( &rObjectStream );
+        //serializer.WriteToStream( &rObjectStream );
 
         // Update the property data size for resources.
         size_t propertyDataSizeActual = objectStreamBuffer.GetSize() - sizeof( propertyDataSize );
@@ -864,29 +867,30 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     }
 
     // Reserialize the current platform's persistent resource data.
-    CacheManager& rCacheManager = CacheManager::GetStaticInstance();
-    Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
-    HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
-    PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];
-    if( pPlatformPreprocessor )
-    {
-        const Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
-        if( rPreprocessedData.bLoaded )
-        {
-            const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
-            size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
-            if( persistentDataBufferSize != 0 )
-            {
-                BinaryDeserializer deserializer;
-                deserializer.Prepare( rPersistentDataBuffer.GetData(), persistentDataBufferSize );
-                deserializer.SetByteSwapping( pPlatformPreprocessor->SwapBytes() );
-
-                deserializer.BeginSerialize();
-                pResource->SerializePersistentResourceData( deserializer );
-                HELIUM_VERIFY( deserializer.EndSerialize() );
-            }
-        }
-    }
+    // PMDTODO: Fix me
+//     CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+//     Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+//     HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
+//     PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];
+//     if( pPlatformPreprocessor )
+//     {
+//         const Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
+//         if( rPreprocessedData.bLoaded )
+//         {
+//             const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
+//             size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
+//             if( persistentDataBufferSize != 0 )
+//             {
+//                 BinaryDeserializer deserializer;
+//                 deserializer.Prepare( rPersistentDataBuffer.GetData(), persistentDataBufferSize );
+//                 deserializer.SetByteSwapping( pPlatformPreprocessor->SwapBytes() );
+// 
+//                 deserializer.BeginSerialize();
+//                 pResource->SerializePersistentResourceData( deserializer );
+//                 HELIUM_VERIFY( deserializer.EndSerialize() );
+//             }
+//         }
+//     }
 
     return true;
 }

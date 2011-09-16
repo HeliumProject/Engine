@@ -32,15 +32,16 @@ Entity::~Entity()
     HELIUM_ASSERT( !m_spLayer );
 }
 
-/// @copydoc GameObject::Serialize()
-void Entity::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_position );
-    s << HELIUM_TAGGED( m_rotation );
-    s << HELIUM_TAGGED( m_scale );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Entity::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_position );
+//    s << HELIUM_TAGGED( m_rotation );
+//    s << HELIUM_TAGGED( m_scale );
+//}
 
 /// Perform any necessary work upon attaching this entity to the world.
 ///

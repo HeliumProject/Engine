@@ -28,13 +28,14 @@ Camera::~Camera()
 {
 }
 
-/// @copydoc GameObject::Serialize()
-void Camera::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_fov );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Camera::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_fov );
+//}
 
 /// @copydoc Entity::Attach()
 void Camera::Attach()

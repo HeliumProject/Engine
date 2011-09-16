@@ -7,6 +7,7 @@
 #include "Foundation/StringConverter.h"
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
+#include "Foundation/Reflect/Enumeration.h"
 
 namespace Helium
 {
@@ -29,7 +30,7 @@ namespace Helium
                 COLOR_COMPRESSED,
             };
 
-            HELIUM_DECLARE_ENUMERATION( ECompression, HELIUM_GRAPHICS_API );
+            REFLECT_DECLARE_ENUMERATION( ECompression );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -92,7 +93,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -159,7 +160,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();
@@ -168,7 +169,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support

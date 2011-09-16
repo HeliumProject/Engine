@@ -36,118 +36,118 @@ Material::Material()
 Material::~Material()
 {
 }
-
-/// @copydoc GameObject::Serialize()
-void Material::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_spShader );
-
-#if HELIUM_EDITOR
-    if( s.CanResolveTags() )
-    {
-        m_userOptions.Resize( 0 );
-
-        Serializer::EMode serializerMode = s.GetMode();
-        bool bSaving = ( serializerMode == Serializer::MODE_SAVE );
-        bool bLoading = ( serializerMode == Serializer::MODE_LOAD );
-
-        if( bSaving )
-        {
-            // Aggregate all user options from the resource information into the single "m_userOptions" array.
-            Shader* pShader = m_spShader;
-            if( pShader )
-            {
-                const Shader::Options& rUserOptions = pShader->GetUserOptions();
-
-                DynArray< Name > enabledToggles;
-                rUserOptions.GetOptionSetFromIndex(
-                    RShader::TYPE_FIRST,
-                    m_shaderVariantIndices[ 0 ],
-                    enabledToggles,
-                    m_userOptions );
-
-                size_t enabledToggleCount = enabledToggles.GetSize();
-
-                Shader::SelectPair optionPair;
-
-                Name enabledChoice( TXT( "1" ) );
-                Name disabledChoice( TXT( "0" ) );
-
-                const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
-                size_t userToggleCount = rUserToggles.GetSize();
-                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
-                {
-                    optionPair.name = rUserToggles[ userToggleIndex ].name;
-
-                    size_t enabledToggleIndex;
-                    for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
-                    {
-                        if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
-                        {
-                            break;
-                        }
-                    }
-
-                    optionPair.choice =
-                        ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
-
-                    m_userOptions.Push( optionPair );
-                }
-            }
-        }
-        else if( bLoading )
-        {
-            DynArray< String > propertyTagNames;
-            s.GetPropertyTagNames( propertyTagNames );
-
-            Shader::SelectPair optionPair;
-            optionPair.choice.Clear();
-
-            size_t propertyTagCount = propertyTagNames.GetSize();
-            for( size_t tagIndex = 0; tagIndex < propertyTagCount; ++tagIndex )
-            {
-                const String& rTagName = propertyTagNames[ tagIndex ];
-                if( !rTagName.Contains( TXT( '.' ) ) )
-                {
-                    optionPair.name.Set( rTagName );
-                    m_userOptions.Push( optionPair );
-                }
-            }
-        }
-
-        s.PushPropertyFlags( Serializer::FLAG_EDITOR_ONLY );
-
-        size_t userOptionCount = m_userOptions.GetSize();
-        for( size_t optionIndex = 0; optionIndex < userOptionCount; ++optionIndex )
-        {
-            Shader::SelectPair& rOptionPair = m_userOptions[ optionIndex ];
-            s << Serializer::Tag( *rOptionPair.name ) << rOptionPair.choice;
-        }
-
-        // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
-
-        s.PopPropertyFlags();
-
-        if( bSaving )
-        {
-            m_userOptions.Clear();
-        }
-        else if( bLoading )
-        {
-            m_bLoadedOptions = true;
-        }
-    }
-#endif
-
-    // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
-}
+//
+///// @copydoc GameObject::Serialize()
+//void Material::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_spShader );
+//
+//#if HELIUM_EDITOR
+//    if( s.CanResolveTags() )
+//    {
+//        m_userOptions.Resize( 0 );
+//
+//        Serializer::EMode serializerMode = s.GetMode();
+//        bool bSaving = ( serializerMode == Serializer::MODE_SAVE );
+//        bool bLoading = ( serializerMode == Serializer::MODE_LOAD );
+//
+//        if( bSaving )
+//        {
+//            // Aggregate all user options from the resource information into the single "m_userOptions" array.
+//            Shader* pShader = m_spShader;
+//            if( pShader )
+//            {
+//                const Shader::Options& rUserOptions = pShader->GetUserOptions();
+//
+//                DynArray< Name > enabledToggles;
+//                rUserOptions.GetOptionSetFromIndex(
+//                    RShader::TYPE_FIRST,
+//                    m_shaderVariantIndices[ 0 ],
+//                    enabledToggles,
+//                    m_userOptions );
+//
+//                size_t enabledToggleCount = enabledToggles.GetSize();
+//
+//                Shader::SelectPair optionPair;
+//
+//                Name enabledChoice( TXT( "1" ) );
+//                Name disabledChoice( TXT( "0" ) );
+//
+//                const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+//                size_t userToggleCount = rUserToggles.GetSize();
+//                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
+//                {
+//                    optionPair.name = rUserToggles[ userToggleIndex ].name;
+//
+//                    size_t enabledToggleIndex;
+//                    for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
+//                    {
+//                        if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
+//                        {
+//                            break;
+//                        }
+//                    }
+//
+//                    optionPair.choice =
+//                        ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
+//
+//                    m_userOptions.Push( optionPair );
+//                }
+//            }
+//        }
+//        else if( bLoading )
+//        {
+//            DynArray< String > propertyTagNames;
+//            s.GetPropertyTagNames( propertyTagNames );
+//
+//            Shader::SelectPair optionPair;
+//            optionPair.choice.Clear();
+//
+//            size_t propertyTagCount = propertyTagNames.GetSize();
+//            for( size_t tagIndex = 0; tagIndex < propertyTagCount; ++tagIndex )
+//            {
+//                const String& rTagName = propertyTagNames[ tagIndex ];
+//                if( !rTagName.Contains( TXT( '.' ) ) )
+//                {
+//                    optionPair.name.Set( rTagName );
+//                    m_userOptions.Push( optionPair );
+//                }
+//            }
+//        }
+//
+//        s.PushPropertyFlags( Serializer::FLAG_EDITOR_ONLY );
+//
+//        size_t userOptionCount = m_userOptions.GetSize();
+//        for( size_t optionIndex = 0; optionIndex < userOptionCount; ++optionIndex )
+//        {
+//            Shader::SelectPair& rOptionPair = m_userOptions[ optionIndex ];
+//            s << Serializer::Tag( *rOptionPair.name ) << rOptionPair.choice;
+//        }
+//
+//        // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
+//
+//        s.PopPropertyFlags();
+//
+//        if( bSaving )
+//        {
+//            m_userOptions.Clear();
+//        }
+//        else if( bLoading )
+//        {
+//            m_bLoadedOptions = true;
+//        }
+//    }
+//#endif
+//
+//    // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
+//    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
+//}
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
 bool Material::NeedsPrecacheResourceData() const
@@ -319,11 +319,11 @@ bool Material::TryFinishPrecacheResourceData()
     return true;
 }
 
-/// @copydoc Resource::SerializePersistentResourceData()
-void Material::SerializePersistentResourceData( Serializer& s )
-{
-    s << Serializer::WrapArray( m_shaderVariantIndices );
-}
+///// @copydoc Resource::SerializePersistentResourceData()
+//void Material::SerializePersistentResourceData( Serializer& s )
+//{
+//    s << Serializer::WrapArray( m_shaderVariantIndices );
+//}
 
 /// @copydoc Resource::GetCacheName()
 Name Material::GetCacheName() const
@@ -651,54 +651,54 @@ void Material::SynchronizeShaderParameters()
     newTextureParameters.Clear();
 }
 #endif  // HELIUM_EDITOR
-
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float1Parameter::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-
-    // Serialize the value as a struct with only an "x" component to mimic the serialization layout of the vector
-    // float parameter structs.
-    s << Serializer::Tag( TXT( "value" ) );
-    s.BeginStruct();
-    s << Serializer::Tag( TXT( "x" ) ) << value;
-    s.EndStruct();
-}
-
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float2Parameter::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
-}
-
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float3Parameter::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
-}
-
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float4Parameter::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
-}
-
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::TextureParameter::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
-}
+//
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Material::Float1Parameter::Serialize( Serializer& s )
+//{
+//    s << HELIUM_TAGGED( name );
+//
+//    // Serialize the value as a struct with only an "x" component to mimic the serialization layout of the vector
+//    // float parameter structs.
+//    s << Serializer::Tag( TXT( "value" ) );
+//    s.BeginStruct();
+//    s << Serializer::Tag( TXT( "x" ) ) << value;
+//    s.EndStruct();
+//}
+//
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Material::Float2Parameter::Serialize( Serializer& s )
+//{
+//    s << HELIUM_TAGGED( name );
+//    s << HELIUM_TAGGED( value );
+//}
+//
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Material::Float3Parameter::Serialize( Serializer& s )
+//{
+//    s << HELIUM_TAGGED( name );
+//    s << HELIUM_TAGGED( value );
+//}
+//
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Material::Float4Parameter::Serialize( Serializer& s )
+//{
+//    s << HELIUM_TAGGED( name );
+//    s << HELIUM_TAGGED( value );
+//}
+//
+///// Serialize this struct.
+/////
+///// @param[in] s  Serializer with which to serialize.
+//void Material::TextureParameter::Serialize( Serializer& s )
+//{
+//    s << HELIUM_TAGGED( name );
+//    s << HELIUM_TAGGED( value );
+//}

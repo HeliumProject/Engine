@@ -637,47 +637,49 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     }
 
     // Load the object properties.
-    BinaryDeserializer deserializer;
-    deserializer.Prepare(
-        pRequest->pSerializedData,
-        static_cast< size_t >( pRequest->pPropertyStreamEnd - pRequest->pSerializedData ) );
+    // PMDTODO: Serializer has been removed, so this need to be reimplemented, probably using binary reflect
+    HELIUM_ASSERT_FALSE();
+    //BinaryDeserializer deserializer;
+    //deserializer.Prepare(
+    //    pRequest->pSerializedData,
+    //    static_cast< size_t >( pRequest->pPropertyStreamEnd - pRequest->pSerializedData ) );
 
-    if( !deserializer.Serialize( pObject ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
-            *pCacheEntry->path.ToString() );
+    //if( !deserializer.Serialize( pObject ) )
+    //{
+    //    HELIUM_TRACE(
+    //        TRACE_ERROR,
+    //        TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
+    //        *pCacheEntry->path.ToString() );
 
-        // Clear out object references (object can now be considered fully loaded as well).
-        NullLinker().Serialize( pObject );
-        pObject->SetFlags( GameObject::FLAG_LINKED );
-        pObject->ConditionalFinalizeLoad();
+    //    // Clear out object references (object can now be considered fully loaded as well).
+    //    NullLinker().Serialize( pObject );
+    //    pObject->SetFlags( GameObject::FLAG_LINKED );
+    //    pObject->ConditionalFinalizeLoad();
 
-        pRequest->flags |= LOAD_FLAG_ERROR;
-    }
-    else if( !pObject->IsDefaultTemplate() )
-    {
-        // Load persistent resource data.
-        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
-        if( pResource )
-        {
-            deserializer.Prepare(
-                pRequest->pPropertyStreamEnd,
-                static_cast< size_t >( pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd ) );
+    //    pRequest->flags |= LOAD_FLAG_ERROR;
+    //}
+    //else if( !pObject->IsDefaultTemplate() )
+    //{
+    //    // Load persistent resource data.
+    //    Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+    //    if( pResource )
+    //    {
+    //        deserializer.Prepare(
+    //            pRequest->pPropertyStreamEnd,
+    //            static_cast< size_t >( pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd ) );
 
-            deserializer.BeginSerialize();
-            pResource->SerializePersistentResourceData( deserializer );
-            if( !deserializer.EndSerialize() )
-            {
-                HELIUM_TRACE(
-                    TRACE_ERROR,
-                    ( TXT( "CachePackageLoader: End of stream reached when deserializing persistent resource " )
-                    TXT( "data for \"%s\".\n" ) ),
-                    *pCacheEntry->path.ToString() );
-            }
-        }
-    }
+    //        deserializer.BeginSerialize();
+    //        pResource->SerializePersistentResourceData( deserializer );
+    //        if( !deserializer.EndSerialize() )
+    //        {
+    //            HELIUM_TRACE(
+    //                TRACE_ERROR,
+    //                ( TXT( "CachePackageLoader: End of stream reached when deserializing persistent resource " )
+    //                TXT( "data for \"%s\".\n" ) ),
+    //                *pCacheEntry->path.ToString() );
+    //        }
+    //    }
+    //}
 
     DefaultAllocator().Free( pRequest->pAsyncLoadBuffer );
     pRequest->pAsyncLoadBuffer = NULL;

@@ -143,40 +143,6 @@ namespace Helium
         return ( ( m_flags & flagMask ) == flagMask );
     }
 
-    /// Increment the pending link cout
-    ///
-    /// This function is thread safe
-    ///
-    /// @see DecrementPendingLinkCount(), GetPendingLinkCount(), m_pendingLinkCount
-    void GameObject::IncrementPendingLinkCount()
-    {
-        AtomicIncrement(m_pendingLinkCount);
-    }
-
-    /// Decrement the pending link cout
-    ///
-    /// This function is thread safe
-    ///
-    /// @see IncrementPendingLinkCount(), GetPendingLinkCount(), m_pendingLinkCount
-    void GameObject::DecrementPendingLinkCount()
-    {
-        int32_t value = AtomicDecrement(m_pendingLinkCount);
-        if (!value)
-        {
-            GameObjectLoader::FinalizeLink(this);
-        }
-    }
-
-    /// Increment the pending link cout
-    ///
-    /// This function is thread safe
-    ///
-    /// @see IncrementPendingLinkCount(), DecrementPendingLinkCount(), m_pendingLinkCount
-    int32_t GameObject::GetPendingLinkCount()
-    {
-        return m_pendingLinkCount;
-    }
-
     /// Get the first object in the list of objects of which this object is the immediate parent.
     ///
     /// @return  First object in the child object list.

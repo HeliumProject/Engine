@@ -12,10 +12,16 @@
 #include "Rendering/Rendering.h"
 #include "Math/Common.h"
 
+#include "Foundation/Reflect/Data/SimpleData.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+
+
+
+
+
+
 namespace Helium
 {
-    class Serializer;
-
     /// 32-bit ARGB color value.
     class HELIUM_RENDERING_API Color
     {
@@ -59,8 +65,11 @@ namespace Helium
 
         /// @name Friend Functions
         //@{
-        friend Serializer& operator<<( Serializer& s, Color& rValue );
+        //friend Serializer& operator<<( Serializer& s, Color& rValue );
         //@}
+        
+//         friend HELIUM_RENDERING_API tostream& operator<<(tostream& outStream, const Color& v);
+//         friend HELIUM_RENDERING_API tistream& operator>>(tistream& inStream, Color& v);
 
     private:
         /// Color data.
@@ -94,6 +103,33 @@ namespace Helium
             } components;
         } m_color;
     };
+    
+//////////////// #if HELIUM_SHARED && !defined(HELIUM_RENDERING_EXPORTS)
+////////////////         
+//////////////// #ifdef _MSC_VER
+//////////////// #pragma warning( push )
+//////////////// #pragma warning( disable : 4231 )  // nonstandard extension used : 'extern' before template explicit instantiation
+//////////////// #endif
+//////////////// 
+////////////////             extern template HELIUM_RENDERING_API SimpleData<HDRColor4>;
+////////////////         
+//////////////// #ifdef _MSC_VER
+//////////////// #pragma warning( pop )
+//////////////// #endif
+//////////////// 
+//////////////// #endif
+//////////////// 
+////////////////     typedef Helium::Reflect::SimpleData<Color> RendererColorData;
+
+
+
+#define API_DEFINE HELIUM_RENDERING_API
+#define TEMPLATE_NAME RenderingSimpleData
+#include "Foundation/Reflect/Data/SimpleDataTemplate.h.inl"
+#undef API_DEFINE
+#undef TEMPLATE_NAME
+
+        //typedef Helium::RenderingSimpleData<Color> RenderingColorData;
 }
 
 #include "Rendering/Color.inl"

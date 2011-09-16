@@ -15,7 +15,7 @@
 
 #include "Engine/GameObjectLoader.h"
 
-#include "PcSupport/XmlPackageLoaderMap.h"
+#include "Engine/ArchivePackageLoaderMap.h"
 
 namespace Helium
 {
@@ -43,7 +43,7 @@ namespace Helium
 
     private:
         /// XML package loader map.
-        XmlPackageLoaderMap m_packageLoaderMap;
+        ArchivePackageLoaderMap m_packageLoaderMap;
 
         /// @name Loading Implementation
         //@{

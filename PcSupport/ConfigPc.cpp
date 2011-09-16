@@ -42,32 +42,33 @@ bool ConfigPc::SaveUserConfig()
 
     GameObjectPath configPackagePath = pConfigPackage->GetPath();
 
-    Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
+    //Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
+    //HELIUM_TRACE( TRACE_INFO, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
 
-    XmlSerializer serializer;
-    if( !serializer.Initialize( packageFilePath.c_str() ) )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "ConfigPc: Failed to initialize package serializer for writing to \"%s\".\n" ),
-            *packageFilePath );
+    //PMDTODO: Fix this
+    //XmlSerializer serializer;
+    //if( !serializer.Initialize( packageFilePath.c_str() ) )
+    //{
+    //    HELIUM_TRACE(
+    //        TRACE_ERROR,
+    //        TXT( "ConfigPc: Failed to initialize package serializer for writing to \"%s\".\n" ),
+    //        *packageFilePath );
 
-        return false;
-    }
+    //    return false;
+    //}
 
-    for( GameObject* pConfigObject = pConfigPackage->GetFirstChild();
-         pConfigObject != NULL;
-         pConfigObject = pConfigObject->GetNextSibling() )
-    {
-        if( !pConfigObject->IsPackage() )
-        {
-            RecursiveSerializeObject( serializer, pConfigObject );
-        }
-    }
+    //for( GameObject* pConfigObject = pConfigPackage->GetFirstChild();
+    //     pConfigObject != NULL;
+    //     pConfigObject = pConfigObject->GetNextSibling() )
+    //{
+    //    if( !pConfigObject->IsPackage() )
+    //    {
+    //        RecursiveSerializeObject( serializer, pConfigObject );
+    //    }
+    //}
 
-    serializer.Shutdown();
+    //serializer.Shutdown();
 
     HELIUM_TRACE( TRACE_INFO, TXT( "ConfigPc: User configuration saved.\n" ) );
 
@@ -78,20 +79,20 @@ bool ConfigPc::SaveUserConfig()
 ///
 /// @param[in] rSerializer  Serializer to use for serialization.
 /// @param[in] pObject      GameObject to serialize.
-void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject )
-{
-    HELIUM_ASSERT( pObject );
-    HELIUM_ASSERT( !pObject->IsPackage() );
-
-    rSerializer.Serialize( pObject );
-
-    for( GameObject* pChildObject = pObject->GetFirstChild();
-         pChildObject != NULL;
-         pChildObject = pChildObject->GetNextSibling() )
-    {
-        if( !pChildObject->IsPackage() )
-        {
-            RecursiveSerializeObject( rSerializer, pChildObject );
-        }
-    }
-}
+//void ConfigPc::RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject )
+//{
+//    HELIUM_ASSERT( pObject );
+//    HELIUM_ASSERT( !pObject->IsPackage() );
+//
+//    rSerializer.Serialize( pObject );
+//
+//    for( GameObject* pChildObject = pObject->GetFirstChild();
+//         pChildObject != NULL;
+//         pChildObject = pChildObject->GetNextSibling() )
+//    {
+//        if( !pChildObject->IsPackage() )
+//        {
+//            RecursiveSerializeObject( rSerializer, pChildObject );
+//        }
+//    }
+//}

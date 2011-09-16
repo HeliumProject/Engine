@@ -43,7 +43,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
         //@}
 
         /// @name Dynamic Package Binding

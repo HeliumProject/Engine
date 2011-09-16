@@ -339,7 +339,8 @@ Helium.DoDefaultSolutionSettings = function()
 	configuration { "windows", "Debug" }
 		buildoptions
 		{
-			"/Ob0",
+			"/Ob0", 
+			"/Zm256"
 		}
 
 	configuration { "windows", "not Debug" }
@@ -347,6 +348,7 @@ Helium.DoDefaultSolutionSettings = function()
 		{
 			"/Ob2",
 			"/Oi",
+			"/Zm256"
 		}
 
 end

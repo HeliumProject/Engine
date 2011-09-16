@@ -51,7 +51,7 @@ typedef HRESULT ( WINAPI DIRECT3DCREATE9EX_FUNC )( UINT, IDirect3D9Ex** );
 
 // GUID associated with engine-specific private data associated with Direct3D resources.
 // {E4EC0248-A917-4163-A56C-A8962C9362F2}
-const GUID D3D9Renderer::sm_privateDataGuid =
+const ::GUID D3D9Renderer::sm_privateDataGuid =
 {
     0xe4ec0248,
     0xa917,

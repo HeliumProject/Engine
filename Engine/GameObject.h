@@ -218,13 +218,6 @@ namespace Helium
         uint32_t ClearFlags( uint32_t flagMask );
         uint32_t ToggleFlags( uint32_t flagMask );
 
-        /// @name Link Count
-        //@{
-        inline void IncrementPendingLinkCount();
-        inline void DecrementPendingLinkCount();
-        inline int32_t GetPendingLinkCount();
-        //@}
-
         Reflect::ObjectPtr GetTemplate() const;
 
         inline const GameObjectWPtr& GetFirstChild() const;
@@ -329,10 +322,6 @@ namespace Helium
         uint32_t m_id;
         /// Object flags.
         volatile uint32_t m_flags;
-        /// When we preload an object any references to shared game objects must be linked. These may
-        /// occur asynchronously. As they are satisfied, the link count will be reduced. As soon as preload
-        /// is complete and pending link count is zero, the object is considered to be linked
-        volatile int32_t m_pendingLinkCount;
         /// Override object template (null if using the type's default object).
         GameObjectPtr m_spTemplate;
 

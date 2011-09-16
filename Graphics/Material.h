@@ -41,7 +41,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -55,7 +55,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -69,7 +69,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -83,7 +83,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -97,7 +97,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -109,7 +109,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();
@@ -118,7 +118,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support

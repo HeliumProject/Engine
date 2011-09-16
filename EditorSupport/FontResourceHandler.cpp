@@ -501,39 +501,40 @@ bool FontResourceHandler::CacheResource(
     HELIUM_ASSERT( textureCountActual < UINT8_MAX );
     uint8_t textureCount = static_cast< uint8_t >( textureCountActual );
 
-    BinarySerializer persistentDataSerializer;
-    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-            static_cast< Cache::EPlatform >( platformIndex ) );
-        if( !pPreprocessor )
-        {
-            continue;
-        }
+    //PMDTODO: Implement this
+    //BinarySerializer persistentDataSerializer;
+    //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    //{
+    //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+    //        static_cast< Cache::EPlatform >( platformIndex ) );
+    //    if( !pPreprocessor )
+    //    {
+    //        continue;
+    //    }
 
-        persistentDataSerializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-        persistentDataSerializer.BeginSerialize();
+    //    persistentDataSerializer.SetByteSwapping( pPreprocessor->SwapBytes() );
+    //    persistentDataSerializer.BeginSerialize();
 
-        persistentDataSerializer << ascender;
-        persistentDataSerializer << descender;
-        persistentDataSerializer << height;
-        persistentDataSerializer << maxAdvance;
-        persistentDataSerializer << characterCount;
-        persistentDataSerializer << textureCount;
+    //    persistentDataSerializer << ascender;
+    //    persistentDataSerializer << descender;
+    //    persistentDataSerializer << height;
+    //    persistentDataSerializer << maxAdvance;
+    //    persistentDataSerializer << characterCount;
+    //    persistentDataSerializer << textureCount;
 
-        for( size_t characterIndex = 0; characterIndex < characterCountActual; ++characterIndex )
-        {
-            characters[ characterIndex ].Serialize( persistentDataSerializer );
-        }
+    //    for( size_t characterIndex = 0; characterIndex < characterCountActual; ++characterIndex )
+    //    {
+    //        characters[ characterIndex ].Serialize( persistentDataSerializer );
+    //    }
 
-        persistentDataSerializer.EndSerialize();
+    //    persistentDataSerializer.EndSerialize();
 
-        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
-            static_cast< Cache::EPlatform >( platformIndex ) );
-        rPreprocessedData.persistentDataBuffer = persistentDataSerializer.GetPropertyStreamBuffer();
-        rPreprocessedData.subDataBuffers = textureSheets;
-        rPreprocessedData.bLoaded = true;
-    }
+    //    Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
+    //        static_cast< Cache::EPlatform >( platformIndex ) );
+    //    rPreprocessedData.persistentDataBuffer = persistentDataSerializer.GetPropertyStreamBuffer();
+    //    rPreprocessedData.subDataBuffers = textureSheets;
+    //    rPreprocessedData.bLoaded = true;
+    //}
 
     return true;
 }

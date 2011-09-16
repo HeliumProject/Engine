@@ -30,7 +30,7 @@ namespace Helium
                 ANISOTROPIC,
             };
 
-            HELIUM_DECLARE_ENUMERATION( ETextureFilter, HELIUM_GRAPHICS_API );
+            REFLECT_DECLARE_ENUMERATION( ETextureFilter );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {
@@ -53,7 +53,7 @@ namespace Helium
                 MAX,
             };
 
-            HELIUM_DECLARE_ENUMERATION( EShadowMode, HELIUM_GRAPHICS_API );
+            REFLECT_DECLARE_ENUMERATION( EShadowMode );
 
             static void EnumerateEnum( Helium::Reflect::Enumeration& info )
             {

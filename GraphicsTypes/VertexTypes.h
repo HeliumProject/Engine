@@ -42,7 +42,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        inline void Serialize( Serializer& s );
+        //inline void Serialize( Serializer& s );
         //@}
     };
 
@@ -69,7 +69,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        inline void Serialize( Serializer& s );
+        //inline void Serialize( Serializer& s );
         //@}
     };
 
@@ -96,7 +96,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        inline void Serialize( Serializer& s );
+        //inline void Serialize( Serializer& s );
         //@}
     };
 
@@ -126,7 +126,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        inline void Serialize( Serializer& s );
+        //inline void Serialize( Serializer& s );
         //@}
     };
 
@@ -147,7 +147,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
@@ -172,7 +172,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        inline void Serialize( Serializer& s );
+        //inline void Serialize( Serializer& s );
         //@}
     };
 }

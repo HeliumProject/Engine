@@ -732,212 +732,199 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
     return true;
 }
 
-/// Constructor.
-GameObjectLoader::Linker::Linker()
-: m_pLinkEntries( NULL )
-, m_linkEntryCount( 0 )
-, m_bError( false )
-{
-}
-
-/// Destructor.
-GameObjectLoader::Linker::~Linker()
-{
-}
-
-/// Prepare for linking object references based on the given link table.
-///
-/// @param[in] pLinkEntries    Array of link table entries.
-/// @param[in] linkEntryCount  Number of entries in the link table.
-void GameObjectLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
-{
-    HELIUM_ASSERT( pLinkEntries || linkEntryCount == 0 );
-
-    m_pLinkEntries = pLinkEntries;
-    m_linkEntryCount = linkEntryCount;
-}
-
-/// @copydoc Serializer::Serialize()
-bool GameObjectLoader::Linker::Serialize( GameObject* pObject )
-{
-    HELIUM_ASSERT( pObject );
-
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
-
-    HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
-
-    m_bError = false;
-    pObject->Serialize( *this );
-
-    return !m_bError;
-}
-
-/// @copydoc Serializer::GetMode()
-Serializer::EMode GameObjectLoader::Linker::GetMode() const
-{
-    return MODE_LINK;
-}
-
-/// @copydoc Serializer::SerializeTag()
-void GameObjectLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
-{
-}
-
-/// @copydoc Serializer::CanResolveTags()
-bool GameObjectLoader::Linker::CanResolveTags() const
-{
-    return false;
-}
-
-/// @name Serializer::SerializeBool()
-void GameObjectLoader::Linker::SerializeBool( bool& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeInt8()
-void GameObjectLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeUint8()
-void GameObjectLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeInt16()
-void GameObjectLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeUint16()
-void GameObjectLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeInt32()
-void GameObjectLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeUint32()
-void GameObjectLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeInt64()
-void GameObjectLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeUint64()
-void GameObjectLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeFloat32()
-void GameObjectLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeFloat64()
-void GameObjectLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeBuffer()
-void GameObjectLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
-{
-}
-
-/// @name Serializer::SerializeEnum()
-void GameObjectLoader::Linker::SerializeEnum(
-    int32_t& /*rValue*/,
-    uint32_t /*nameCount*/,
-    const tchar_t* const* /*ppNames*/ )
-{
-}
-
-/// @name Serializer::SerializeEnum()
-void GameObjectLoader::Linker::SerializeEnum(
-    int32_t& /*rValue*/,
-    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
-{
-}
-
-/// @name Serializer::SerializeCharName()
-void GameObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeWideName()
-void GameObjectLoader::Linker::SerializeWideName( WideName& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeCharString()
-void GameObjectLoader::Linker::SerializeCharString( CharString& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeWideString()
-void GameObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
-{
-}
-
-/// @name Serializer::SerializeObjectReference()
-void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
-{
-    HELIUM_ASSERT( pType );
-
-    uint32_t linkIndex = rspObject.GetLinkIndex();
-    rspObject.ClearLinkIndex();
-
-    if( IsInvalid( linkIndex ) )
-    {
-        return;
-    }
-
-    if( linkIndex >= m_linkEntryCount )
-    {
-        HELIUM_TRACE(
-            TRACE_ERROR,
-            TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-            linkIndex );
-
-        m_bError = true;
-
-        return;
-    }
-
-    GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
-    if( pObject )
-    {
-        if( !pObject->IsClass( pType ) )
-        {
-            HELIUM_TRACE(
-                TRACE_ERROR,
-                TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
-                *pObject->GetPath().ToString(),
-                *pType->GetName() );
-
-            m_bError = true;
-        }
-        else
-        {
-            rspObject = pObject;
-        }
-    }
-}
-
-void Helium::GameObjectLoader::HandleLinkDependency( GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer, GameObjectPath &_path )
-{
-    if (!_path.AddPendingLink(_outer, _game_object_pointer))
-    {
-        _outer.IncrementPendingLinkCount();
-    }
-}
-
-void Helium::GameObjectLoader::FinalizeLink( GameObject *_game_object )
-{
-
-}
+///// Constructor.
+//GameObjectLoader::Linker::Linker()
+//: m_pLinkEntries( NULL )
+//, m_linkEntryCount( 0 )
+//, m_bError( false )
+//{
+//}
+//
+///// Destructor.
+//GameObjectLoader::Linker::~Linker()
+//{
+//}
+//
+///// Prepare for linking object references based on the given link table.
+/////
+///// @param[in] pLinkEntries    Array of link table entries.
+///// @param[in] linkEntryCount  Number of entries in the link table.
+//void GameObjectLoader::Linker::Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount )
+//{
+//    HELIUM_ASSERT( pLinkEntries || linkEntryCount == 0 );
+//
+//    m_pLinkEntries = pLinkEntries;
+//    m_linkEntryCount = linkEntryCount;
+//}
+//
+///// @copydoc Serializer::Serialize()
+//bool GameObjectLoader::Linker::Serialize( GameObject* pObject )
+//{
+//    HELIUM_ASSERT( pObject );
+//
+//    HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
+//
+//    HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
+//
+//    m_bError = false;
+//    pObject->Serialize( *this );
+//
+//    return !m_bError;
+//}
+//
+///// @copydoc Serializer::GetMode()
+//Serializer::EMode GameObjectLoader::Linker::GetMode() const
+//{
+//    return MODE_LINK;
+//}
+//
+///// @copydoc Serializer::SerializeTag()
+//void GameObjectLoader::Linker::SerializeTag( const Tag& /*rTag*/ )
+//{
+//}
+//
+///// @copydoc Serializer::CanResolveTags()
+//bool GameObjectLoader::Linker::CanResolveTags() const
+//{
+//    return false;
+//}
+//
+///// @name Serializer::SerializeBool()
+//void GameObjectLoader::Linker::SerializeBool( bool& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeInt8()
+//void GameObjectLoader::Linker::SerializeInt8( int8_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeUint8()
+//void GameObjectLoader::Linker::SerializeUint8( uint8_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeInt16()
+//void GameObjectLoader::Linker::SerializeInt16( int16_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeUint16()
+//void GameObjectLoader::Linker::SerializeUint16( uint16_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeInt32()
+//void GameObjectLoader::Linker::SerializeInt32( int32_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeUint32()
+//void GameObjectLoader::Linker::SerializeUint32( uint32_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeInt64()
+//void GameObjectLoader::Linker::SerializeInt64( int64_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeUint64()
+//void GameObjectLoader::Linker::SerializeUint64( uint64_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeFloat32()
+//void GameObjectLoader::Linker::SerializeFloat32( float32_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeFloat64()
+//void GameObjectLoader::Linker::SerializeFloat64( float64_t& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeBuffer()
+//void GameObjectLoader::Linker::SerializeBuffer( void* /*pBuffer*/, size_t /*elementSize*/, size_t /*count*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeEnum()
+//void GameObjectLoader::Linker::SerializeEnum(
+//    int32_t& /*rValue*/,
+//    uint32_t /*nameCount*/,
+//    const tchar_t* const* /*ppNames*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeEnum()
+//void GameObjectLoader::Linker::SerializeEnum(
+//    int32_t& /*rValue*/,
+//    const Helium::Reflect::Enumeration* /*pEnumeration*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeCharName()
+//void GameObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeWideName()
+//void GameObjectLoader::Linker::SerializeWideName( WideName& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeCharString()
+//void GameObjectLoader::Linker::SerializeCharString( CharString& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeWideString()
+//void GameObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
+//{
+//}
+//
+///// @name Serializer::SerializeObjectReference()
+//void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject )
+//{
+//    HELIUM_ASSERT( pType );
+//
+//    uint32_t linkIndex = rspObject.GetLinkIndex();
+//    rspObject.ClearLinkIndex();
+//
+//    if( IsInvalid( linkIndex ) )
+//    {
+//        return;
+//    }
+//
+//    if( linkIndex >= m_linkEntryCount )
+//    {
+//        HELIUM_TRACE(
+//            TRACE_ERROR,
+//            TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+//            linkIndex );
+//
+//        m_bError = true;
+//
+//        return;
+//    }
+//
+//    GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
+//    if( pObject )
+//    {
+//        if( !pObject->IsClass( pType ) )
+//        {
+//            HELIUM_TRACE(
+//                TRACE_ERROR,
+//                TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
+//                *pObject->GetPath().ToString(),
+//                *pType->GetName() );
+//
+//            m_bError = true;
+//        }
+//        else
+//        {
+//            rspObject = pObject;
+//        }
+//    }
+//}

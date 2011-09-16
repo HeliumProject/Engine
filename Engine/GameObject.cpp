@@ -37,7 +37,6 @@ GameObject::GameObject()
     , m_flags( 0 )
     , m_path( NULL_NAME )
     , m_pCustomDestroyCallback( NULL )
-    , m_pendingLinkCount( 0 )
 {
 }
 

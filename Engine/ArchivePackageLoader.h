@@ -34,6 +34,7 @@ namespace Helium
     };
 
     class BuildLinkTableFromObjectVisitor;
+    class ClearLinkIndicesFromObject;
     
     class HELIUM_ENGINE_API ArchivePackageLoader : public PackageLoader
     {
@@ -129,6 +130,7 @@ namespace Helium
             size_t loadRequestId;
         };
         friend class Helium::BuildLinkTableFromObjectVisitor;
+        friend class Helium::ClearLinkIndicesFromObject;
 
         /// GameObject load request data.
         struct LoadRequest

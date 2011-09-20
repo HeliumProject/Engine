@@ -416,6 +416,9 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
     uint32_t registry_index = g_ComponentProcessPendingDeletesCallCount % COMPONENT_PTR_CHECK_FREQUENCY;
     ComponentPtrBase *component_ptr = g_ComponentPtrRegistry[registry_index];
 
+    // Double-check that the component head index is set
+    HELIUM_ASSERT(!component_ptr || component_ptr->m_ComponentPtrRegistryHeadIndex == registry_index);
+
     while (component_ptr)
     {
         // Don't do the check until we get our next pointer, as a failed check will splice out the ptr from our doubly
@@ -424,6 +427,12 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
         component_ptr = component_ptr->GetNextComponetPtr();
         component_ptr_to_check->Check();
     }
+    
+    // Even after we evict components, we still need to verify that we either have no component or the head component
+    // has a properly set index
+    HELIUM_ASSERT(
+        !g_ComponentPtrRegistry[registry_index] || 
+        g_ComponentPtrRegistry[registry_index]->m_ComponentPtrRegistryHeadIndex == registry_index);
 }
 
 void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_base )
@@ -433,115 +442,46 @@ void Helium::Components::Private::RegisterComponentPtr( ComponentPtrBase &_ptr_b
     
     if (_ptr_base.m_Next)
     {
+        // Make the current head component's previous pointer point to the new component, and clear the head component index
+        HELIUM_ASSERT(_ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex == registry_index);
         _ptr_base.m_Next->m_Previous = &_ptr_base;
+        _ptr_base.m_Next->m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
     }
 
+    _ptr_base.m_ComponentPtrRegistryHeadIndex = registry_index;
     g_ComponentPtrRegistry[registry_index] = &_ptr_base;
 }
 
-// 
-// void FindAllComponentsOnHost(ComponentSet &_host, TypeId _type, IVectorWrapper &_components, bool _implements)
-// {
-//   Private::ComplexHandle handle;
-//   handle.Whole = _host.FirstHandle;
-// 
-//   ComponentInstance *instance = 0;
-// 
-//   while (handle.Whole != NULL_HANDLE)
-//   {
-//     instance = &ResolveComponentInstance(handle.Whole);
-// 
-//     if (_type == handle.Part.TypeId ||
-//       _implements && Components::TypeImplementsType(handle.Part.TypeId, _type))
-//     {
-//       _components.PushBack(instance->Component);
-//     }
-// 
-//     handle.Whole = instance->NextHandle;
-//   }
-// }
-// 
-// void Components::Private::FindAllComponents( ComponentSet &_host, TypeId _type, IVectorWrapper &_components )
-// {
-//   FindAllComponentsOnHost(_host, _type, _components, false);
-// }
-// 
-// void Components::Private::FindAllComponentsThatImplement( ComponentSet &_host, TypeId _type, IVectorWrapper &_components )
-// {
-//   FindAllComponentsOnHost(_host, _type, _components, true);
-// }
-// 
-// void Components::Private::FindAllComponents( TypeId _type, IVectorWrapper &_components )
-// {
-//   HELIUM_ASSERT(_type < g_ComponentTypes.size());
-//   ComponentType &component_type = g_ComponentTypes[_type];
-// 
-//   // Resize the vector and add components to it
-//   _components.Resize(component_type.m_FirstUnallocatedIndex);
-//   if (component_type.m_FirstUnallocatedIndex == 0)
-//   {
-//     return;
-//   }
-// 
-//   Component **components = _components.GetFirst();
-// 
-//   for (uint16_t index = 0; index < component_type.m_FirstUnallocatedIndex; ++index)
-//   {
-//     components[index] = component_type.m_Instances[component_type.m_Roster[index]].Component;
-//   }
-// }
-// 
-// void Components::Private::FindAllComponentsThatImplement( TypeId _type, IVectorWrapper &_components )
-// {
-//   HELIUM_ASSERT(_type < g_ComponentTypes.size());
-// 
-//   uint32_t component_count = 0;
-//   uint32_t current_index = 0;
-// 
-//   ComponentType &this_component_type = g_ComponentTypes[_type];
-// 
-//   // Count all the components that implement the given type
-//   component_count += this_component_type.m_FirstUnallocatedIndex;
-// 
-//   for (std::vector<TypeId>::iterator iter = g_ComponentTypes[_type].m_ImplementingTypes.begin();
-//     iter != g_ComponentTypes[_type].m_ImplementingTypes.end(); ++iter)
-//   {
-//     ComponentType &component_type = g_ComponentTypes[*iter];
-//     component_count += component_type.m_FirstUnallocatedIndex;
-//   }
-// 
-//   // Resize the vector to contain all components
-//   _components.Resize(component_count);
-//   if (component_count == 0)
-//   {
-//     return;
-//   }
-// 
-//   Component **components = _components.GetFirst();
-// 
-//   for (uint16_t roster_index = 0; roster_index < this_component_type.m_FirstUnallocatedIndex; ++roster_index)
-//   {
-//     components[current_index] = this_component_type.m_Instances[this_component_type.m_Roster[roster_index]].Component;
-//     ++current_index;
-//   }
-// 
-//   // Put components in the vector, loop over each type, then each component of that type
-//   for (std::vector<TypeId>::iterator iter = g_ComponentTypes[_type].m_ImplementingTypes.begin();
-//     iter != g_ComponentTypes[_type].m_ImplementingTypes.end(); ++iter)
-//   {  
-//     ComponentType &component_type = g_ComponentTypes[*iter];
-//     for (uint16_t roster_index = 0; roster_index < component_type.m_FirstUnallocatedIndex; ++roster_index)
-//     {
-//       components[current_index] = component_type.m_Instances[component_type.m_Roster[roster_index]].Component;
-//       ++current_index;
-//     }
-//   }
-// }
-// 
-// Private::ComponentInstance & Components::Private::ResolveComponentInstance( Handle _handle )
-// {
-//   Private::ComplexHandle handle;
-//   handle.Whole = _handle;
-// 
-//   return g_ComponentTypes[handle.Part.TypeId].m_Instances[handle.Part.Index];
-// }
+void Helium::Components::ComponentPtrBase::Unlink()
+{
+    // If we are the head node in the component ptr registry, we need to point it to the new head
+    if (m_ComponentPtrRegistryHeadIndex != Helium::Invalid<uint32_t>())
+    {
+        HELIUM_ASSERT(!m_Previous);
+
+        // Assign new head node
+        g_ComponentPtrRegistry[m_ComponentPtrRegistryHeadIndex] = m_Next;
+
+        // If this new node is legit, mark it as a head node
+        if (m_Next)
+        {
+            m_Next->m_ComponentPtrRegistryHeadIndex = m_ComponentPtrRegistryHeadIndex;
+        }
+
+        // Unmark ourself as a head node
+        m_ComponentPtrRegistryHeadIndex = Helium::Invalid<uint32_t>();
+    } 
+    // Unlink ourself from doubly linked list of component ptrs
+    else if (m_Previous)
+    {
+        m_Previous->m_Next = m_Next;
+    }
+
+    if (m_Next)
+    {
+        m_Next->m_Previous = m_Previous;
+    }
+
+    m_Previous = 0;
+    m_Next = 0;
+}

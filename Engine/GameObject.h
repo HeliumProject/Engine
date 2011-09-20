@@ -109,7 +109,7 @@
             Helium::StrongPtr< TYPE > spTemplate = new TYPE; \
             HELIUM_ASSERT( spTemplate ); \
             \
-            GameObjectType *type = Helium::GameObjectType::Create( \
+            Helium::GameObjectType *type = Helium::GameObjectType::Create( \
                 Helium::Name( TXT( #TYPE ) ), \
                 pTypePackage, \
                 pParentType, \

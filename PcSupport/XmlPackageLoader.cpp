@@ -5,7 +5,7 @@
 ////// All Rights Reserved
 //////----------------------------------------------------------------------------------------------------------------------
 ////
-//#include "PcSupportPch.h"
+#include "PcSupportPch.h"
 //#include "PcSupport/XmlPackageLoader.h"
 //
 //#include "Foundation/File/File.h"

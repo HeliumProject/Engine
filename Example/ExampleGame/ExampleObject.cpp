@@ -6,6 +6,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "ExampleGamePch.h"
+
+#include "Engine/GameObjectType.h"
+
 #include "ExampleGame/ExampleObject.h"
 
 namespace Example

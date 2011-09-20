@@ -78,6 +78,15 @@ project( prefix .. "TestApp" )-- DEPRECATED
 
 	Helium.DoDefaultProjectSettings()
 
+	-- TestApp is a bit odd because it includes custom game objects and a main().
+	-- So we need the dll export #defines. But calling DoModuleProjectSettings(...) above
+	-- seems to blow away the libs we try to import when we call DoDefaultProjectSettings()
+	configuration { "windows", "Debug" }
+	defines
+	{
+		"HELIUM_TEST_APP_EXPORTS",
+	}
+
 	configuration "windows"
 		links
 		{

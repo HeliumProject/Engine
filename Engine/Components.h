@@ -9,7 +9,6 @@
 #include "Foundation/Container/Map.h"
 #include "Foundation/Memory/AutoPtr.h"
 
-
 //TODO: OnAttach/OnDetach events for components?
 //TODO: API for systems to iterate over allocated components
 //TODO: Review compiled code to make sure that iterators, function objects, etc.
@@ -336,7 +335,7 @@ namespace Helium
         //     }
 
         // Code that need not be template aware goes here
-        class ComponentPtrBase
+        class HELIUM_ENGINE_API ComponentPtrBase
         {
         public:
             void Check()
@@ -361,22 +360,7 @@ namespace Helium
                 return (m_Component != NULL);
             }
 
-            void Unlink()
-            {
-                // Unlink ourself from doubly linked list of component ptrs
-                if (m_Previous)
-                {
-                    m_Previous->m_Next = m_Next;
-                }
-
-                if (m_Next)
-                {
-                    m_Next->m_Previous = m_Previous;
-                }
-
-                m_Previous = 0;
-                m_Next = 0;
-            }
+            void Unlink();
 
             void AssignComponent(Component *_component)
             {
@@ -392,18 +376,20 @@ namespace Helium
                 if (m_Component)
                 {
                     m_Generation = m_Component->m_Generation;
+                    Helium::Components::Private::RegisterComponentPtr(*this);
                 }
-                Helium::Components::Private::RegisterComponentPtr(*this);
             }
 
             ComponentPtrBase *GetNextComponetPtr() { return m_Next; }
             friend void Helium::Components::Private::RegisterComponentPtr(ComponentPtrBase &);
+            friend void Helium::Components::ProcessPendingDeletes();
 
         protected:
             ComponentPtrBase()
             : m_Next(0),
               m_Previous(0),
-              m_Component(0)
+              m_Component(0),
+              m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint32_t>())
             { }            
             
             // Component we point to. NOTE: This will ALWAYS be a type T component because 
@@ -418,6 +404,11 @@ namespace Helium
             
             // We set this generation when a component is assigned
             GenerationIndex m_Generation;
+
+            // If not assigned to Helium::Invalid<uint32_t>(), this node is head of
+            // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
+            // Ptr will automatically fix that reference.
+            uint32_t m_ComponentPtrRegistryHeadIndex;
         };
 
         // Code that uses T goes here

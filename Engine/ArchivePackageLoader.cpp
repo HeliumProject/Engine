@@ -14,7 +14,7 @@
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 #include "Foundation/AsyncLoader.h"
-//#include "Engine/BinaryDeserializer.h"
+#include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/GameObjectPointerData.h"
@@ -1547,21 +1547,21 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
 
                 // Deserialize the persistent resource data.
                 // PMDTODO: Fix this
-                //BinaryDeserializer deserializer;
-                //deserializer.Prepare( pCachedObjectData, bytesRemaining );
+                BinaryDeserializer deserializer;
+                deserializer.Prepare( pCachedObjectData, bytesRemaining );
 
-                //deserializer.BeginSerialize();
-                //pResource->SerializePersistentResourceData( deserializer );
-                //if( !deserializer.EndSerialize() )
-                //{
-                //    HELIUM_TRACE(
-                //        TRACE_ERROR,
-                //        ( TXT( "ArchivePackageLoader: Attempted to read past the end of the cached data stream when " )
-                //        TXT( "deserializing persistent resource data for \"%s\".\n" ) ),
-                //        *pResource->GetPath().ToString() );
+                deserializer.BeginSerialize();
+                pResource->SerializePersistentResourceData( deserializer );
+                if( !deserializer.EndSerialize() )
+                {
+                    HELIUM_TRACE(
+                        TRACE_ERROR,
+                        ( TXT( "ArchivePackageLoader: Attempted to read past the end of the cached data stream when " )
+                        TXT( "deserializing persistent resource data for \"%s\".\n" ) ),
+                        *pResource->GetPath().ToString() );
 
-                //    pRequest->flags |= LOAD_FLAG_ERROR;
-                //}
+                    pRequest->flags |= LOAD_FLAG_ERROR;
+                }
             }
         }
     }

@@ -118,7 +118,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support

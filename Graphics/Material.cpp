@@ -319,11 +319,11 @@ bool Material::TryFinishPrecacheResourceData()
     return true;
 }
 
-///// @copydoc Resource::SerializePersistentResourceData()
-//void Material::SerializePersistentResourceData( Serializer& s )
-//{
-//    s << Serializer::WrapArray( m_shaderVariantIndices );
-//}
+/// @copydoc Resource::SerializePersistentResourceData()
+void Material::SerializePersistentResourceData( Serializer& s )
+{
+    s << Serializer::WrapArray( m_shaderVariantIndices );
+}
 
 /// @copydoc Resource::GetCacheName()
 Name Material::GetCacheName() const

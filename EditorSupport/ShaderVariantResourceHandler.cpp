@@ -573,12 +573,12 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
         const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 
         //PMDTODO: Implmenet this
-        //BinaryDeserializer deserializer;
-        //deserializer.Prepare( rPersistentDataBuffer.GetData(), rPersistentDataBuffer.GetSize() );
-        //deserializer.BeginSerialize();
-        //pVariant->SerializePersistentResourceData( deserializer );
-        //deserializer.EndSerialize();
-        //pVariant->BeginPrecacheResourceData();
+        BinaryDeserializer deserializer;
+        deserializer.Prepare( rPersistentDataBuffer.GetData(), rPersistentDataBuffer.GetSize() );
+        deserializer.BeginSerialize();
+        pVariant->SerializePersistentResourceData( deserializer );
+        deserializer.EndSerialize();
+        pVariant->BeginPrecacheResourceData();
     }
 
     size_t loadId = m_loadRequestPool.GetIndex( pLoadRequest );

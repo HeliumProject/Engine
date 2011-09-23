@@ -148,60 +148,60 @@ bool Texture2d::TryFinishPrecacheResourceData()
     return true;
 }
 //PMDTODO: Implement this
-///// @copydoc Resource::SerializePersistentResourceData()
-//void Texture2d::SerializePersistentResourceData( Serializer& s )
-//{
-//    uint32_t baseLevelWidth = 0;
-//    uint32_t baseLevelHeight = 0;
-//    uint32_t mipCount = 0;
-//    int32_t pixelFormatIndex = RENDERER_PIXEL_FORMAT_INVALID;
-//
-//    RTexture2d* pTexture2d = static_cast< RTexture2d* >( m_spTexture.Get() );
-//    if( pTexture2d )
-//    {
-//        baseLevelWidth = pTexture2d->GetWidth();
-//        baseLevelHeight = pTexture2d->GetHeight();
-//        mipCount = pTexture2d->GetMipCount();
-//        pixelFormatIndex = pTexture2d->GetPixelFormat();
-//    }
-//
-//    s << baseLevelWidth;
-//    s << baseLevelHeight;
-//    s << mipCount;
-//    s << pixelFormatIndex;
-//
-//    if( s.GetMode() == Serializer::MODE_LOAD )
-//    {
-//        m_spTexture.Release();
-//
-//        Renderer* pRenderer = Renderer::GetStaticInstance();
-//        if( pRenderer &&
-//            baseLevelWidth != 0 &&
-//            baseLevelHeight != 0 &&
-//            mipCount != 0 &&
-//            static_cast< uint32_t >( pixelFormatIndex ) < static_cast< uint32_t >( RENDERER_PIXEL_FORMAT_MAX ) )
-//        {
-//            m_spTexture = pRenderer->CreateTexture2d(
-//                baseLevelWidth,
-//                baseLevelHeight,
-//                mipCount,
-//                static_cast< ERendererPixelFormat >( pixelFormatIndex ),
-//                RENDERER_BUFFER_USAGE_STATIC );
-//            if( !m_spTexture )
-//            {
-//                HELIUM_TRACE(
-//                    TRACE_ERROR,
-//                    ( TXT( "Texture2d::SerializePersistentResourceData(): Failed to create texture render " )
-//                    TXT( "resource (width: %" ) TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; mip count: %" )
-//                    TPRIu32 TXT( "; pixel format index: %" ) TPRId32 TXT( ").\n" ) ),
-//                    baseLevelWidth,
-//                    baseLevelHeight,
-//                    mipCount,
-//                    pixelFormatIndex );
-//            }
-//        }
-//    }
-//}
+/// @copydoc Resource::SerializePersistentResourceData()
+void Texture2d::SerializePersistentResourceData( Serializer& s )
+{
+    uint32_t baseLevelWidth = 0;
+    uint32_t baseLevelHeight = 0;
+    uint32_t mipCount = 0;
+    int32_t pixelFormatIndex = RENDERER_PIXEL_FORMAT_INVALID;
+
+    RTexture2d* pTexture2d = static_cast< RTexture2d* >( m_spTexture.Get() );
+    if( pTexture2d )
+    {
+        baseLevelWidth = pTexture2d->GetWidth();
+        baseLevelHeight = pTexture2d->GetHeight();
+        mipCount = pTexture2d->GetMipCount();
+        pixelFormatIndex = pTexture2d->GetPixelFormat();
+    }
+
+    s << baseLevelWidth;
+    s << baseLevelHeight;
+    s << mipCount;
+    s << pixelFormatIndex;
+
+    if( s.GetMode() == Serializer::MODE_LOAD )
+    {
+        m_spTexture.Release();
+
+        Renderer* pRenderer = Renderer::GetStaticInstance();
+        if( pRenderer &&
+            baseLevelWidth != 0 &&
+            baseLevelHeight != 0 &&
+            mipCount != 0 &&
+            static_cast< uint32_t >( pixelFormatIndex ) < static_cast< uint32_t >( RENDERER_PIXEL_FORMAT_MAX ) )
+        {
+            m_spTexture = pRenderer->CreateTexture2d(
+                baseLevelWidth,
+                baseLevelHeight,
+                mipCount,
+                static_cast< ERendererPixelFormat >( pixelFormatIndex ),
+                RENDERER_BUFFER_USAGE_STATIC );
+            if( !m_spTexture )
+            {
+                HELIUM_TRACE(
+                    TRACE_ERROR,
+                    ( TXT( "Texture2d::SerializePersistentResourceData(): Failed to create texture render " )
+                    TXT( "resource (width: %" ) TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; mip count: %" )
+                    TPRIu32 TXT( "; pixel format index: %" ) TPRId32 TXT( ").\n" ) ),
+                    baseLevelWidth,
+                    baseLevelHeight,
+                    mipCount,
+                    pixelFormatIndex );
+            }
+        }
+    }
+}
 
 /// @copydoc Texture::GetRenderResource2d()
 RTexture2d* Texture2d::GetRenderResource2d() const

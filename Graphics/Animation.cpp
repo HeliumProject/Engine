@@ -27,7 +27,7 @@ Animation::~Animation()
 {
 }
 
-//PMDTODO: Implement this
+////PMDTODO: Implement this
 ///// @copydoc GameObject::Serialize()
 //void Animation::Serialize( Serializer& s )
 //{
@@ -37,16 +37,16 @@ Animation::~Animation()
 //    m_grannyData.Serialize( s );
 //#endif
 //}
-//
-///// @copydoc Resource::SerializePersistentResourceData()
-//void Animation::SerializePersistentResourceData( Serializer& s )
-//{
-//#if HELIUM_USE_GRANNY_ANIMATION
-//    m_grannyData.SerializePersistentResourceData( s );
-//#else
-//    HELIUM_UNREF( s );
-//#endif
-//}
+
+/// @copydoc Resource::SerializePersistentResourceData()
+void Animation::SerializePersistentResourceData( Serializer& s )
+{
+#if HELIUM_USE_GRANNY_ANIMATION
+    m_grannyData.SerializePersistentResourceData( s );
+#else
+    HELIUM_UNREF( s );
+#endif
+}
 
 /// @copydoc Resource::GetCacheName()
 Name Animation::GetCacheName() const

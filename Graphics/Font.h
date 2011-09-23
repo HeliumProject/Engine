@@ -93,7 +93,8 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            //void Serialize( Serializer& s );
+            //PMDTODO: HACK - Remove Serialize()
+            void Serialize( Serializer& s );
             //@}
         };
 
@@ -169,7 +170,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support

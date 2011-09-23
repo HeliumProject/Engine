@@ -34,7 +34,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -52,7 +52,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -64,7 +64,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -78,7 +78,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -90,7 +90,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -104,7 +104,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -116,7 +116,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        //void Serialize( Serializer& s );
+        void Serialize( Serializer& s );
         //@}
     };
 
@@ -145,7 +145,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            //void Serialize( Serializer& s );
+            void Serialize( Serializer& s );
             //@}
         };
 
@@ -164,7 +164,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            //void Serialize( Serializer& s );
+            void Serialize( Serializer& s );
             //@}
         };
 
@@ -178,7 +178,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            //void Serialize( Serializer& s );
+            void Serialize( Serializer& s );
             //@}
         };
 
@@ -197,7 +197,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            //void Serialize( Serializer& s );
+            void Serialize( Serializer& s );
             //@}
 
             /// @name Variant Identification
@@ -236,8 +236,10 @@ namespace Helium
             //@}
 
             /// @name Serialization
+            
+            //PMDTODO: HACK - Remove Serialize()
             //@{
-            //void Serialize( Serializer& s );
+            void Serialize( Serializer& s );
             //@}
 
         private:
@@ -266,7 +268,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support
@@ -342,7 +344,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual void SerializePersistentResourceData( Serializer& s );
         //@}
 
         /// @name Resource Caching Support

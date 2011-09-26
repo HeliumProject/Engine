@@ -50,6 +50,8 @@
 #include "EditorSupport/EditorObjectLoader.h"
 #include "EditorSupport/FontResourceHandler.h"
 
+#include "Framework/WorldManager.h"
+
 #include "SceneGraph/SceneGraphInit.h"
 
 #include "Editor/ArtProvider.h"
@@ -201,12 +203,17 @@ namespace Helium
     }
 }
 
+BEGIN_EVENT_TABLE( App, wxApp )
+EVT_IDLE( App::OnIdle )
+END_EVENT_TABLE()
+
 App::App()
-#pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
-: m_AppVersion( HELIUM_APP_VERSION )
+: m_Running( false )
+, m_AppVersion( HELIUM_APP_VERSION )
 , m_AppName( HELIUM_APP_NAME )
 , m_AppVerName( HELIUM_APP_VER_NAME )
 , m_SettingsManager( new SettingsManager() )
+#pragma TODO("This needs fixing otherwise dialogs will not be modal -Geoff")
 , m_Frame( NULL )
 {
 }
@@ -400,7 +407,16 @@ bool App::OnInit()
         }
     }
 
+    wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
+
     return true;
+}
+
+int App::OnRun()
+{
+    m_Running = true;
+
+    return wxApp::OnRun();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -486,6 +502,15 @@ void App::OnChar( wxKeyEvent& event )
             return;
             break;
         }
+    }
+}
+
+void App::OnIdle( wxIdleEvent& event )
+{
+    if ( m_Running )
+    {
+        WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+        rWorldManager.Update();
     }
 }
 

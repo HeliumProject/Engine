@@ -27,8 +27,12 @@ namespace Helium
             ~App();
 
             virtual bool OnInit() HELIUM_OVERRIDE;
+            virtual int OnRun() HELIUM_OVERRIDE;
             virtual int OnExit() HELIUM_OVERRIDE;
-            virtual void OnChar( wxKeyEvent& event );
+
+            void OnChar( wxKeyEvent& event );
+            void OnIdle( wxIdleEvent& event );
+            
             virtual void OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) HELIUM_OVERRIDE;
             virtual void OnUnhandledException() HELIUM_OVERRIDE;
             virtual bool OnExceptionInMainLoop() HELIUM_OVERRIDE;
@@ -58,7 +62,8 @@ namespace Helium
 
         protected:
             Helium::InitializerStack m_InitializerStack;
-            
+            bool m_Running;
+
             tstring m_AppVersion;
             tstring m_AppName;
             tstring m_AppVerName;           
@@ -66,6 +71,8 @@ namespace Helium
             SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
             Tracker m_Tracker;
+
+            DECLARE_EVENT_TABLE();
         };
 
         DECLARE_APP( App );

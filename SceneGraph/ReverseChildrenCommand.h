@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API ReverseChildrenCommand : public Undo::Command
+        class SCENE_GRAPH_API ReverseChildrenCommand : public UndoCommand
         {
         private:
             HierarchyNodePtr m_Node;

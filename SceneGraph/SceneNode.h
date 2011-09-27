@@ -298,7 +298,7 @@ namespace Helium
             void SetState( const Reflect::ObjectPtr& state );
 
             // Get undo command for this object's state (uses GetState/SetState above)
-            virtual Undo::CommandPtr SnapShot( Reflect::Object* newState = NULL );
+            virtual UndoCommandPtr SnapShot( Reflect::Object* newState = NULL );
 
             //
             // Selected state

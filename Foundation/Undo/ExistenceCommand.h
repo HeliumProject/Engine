@@ -1,44 +1,32 @@
 #pragma once
 
-#include "Foundation/API.h"
-#include "Command.h"
-#include "FunctionCaller.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 namespace Helium
 {
-    namespace Undo
+    namespace ExistenceActions
     {
-        /////////////////////////////////////////////////////////////////////////////
-        // Defines whether you want to Add or Remove an item.
-        // 
-        namespace ExistenceActions
+        enum ExistenceAction
         {
-            enum ExistenceAction
-            {
-                Add,
-                Remove
-            };
-        }
-        typedef ExistenceActions::ExistenceAction ExistenceAction;
-
-
-        /////////////////////////////////////////////////////////////////////////////
-        // Undoable command for adding or removing an item.
-        //
-        class HELIUM_FOUNDATION_API ExistenceCommand : public Command
-        {
-        private:
-            ExistenceAction m_Action;
-            FunctionCallerPtr m_Add;
-            FunctionCallerPtr m_Remove;
-
-        public:
-            // Constructor
-            ExistenceCommand( ExistenceAction action, FunctionCallerPtr add, FunctionCallerPtr remove, bool redo = true );
-            virtual ~ExistenceCommand();
-            virtual void Undo() HELIUM_OVERRIDE;
-            virtual void Redo() HELIUM_OVERRIDE;
+            Add,
+            Remove
         };
-        typedef Helium::SmartPtr< ExistenceCommand > ExistenceCommandPtr;
     }
+    typedef ExistenceActions::ExistenceAction ExistenceAction;
+
+    class HELIUM_FOUNDATION_API ExistenceCommand : public UndoCommand
+    {
+    private:
+        ExistenceAction     m_Action;
+        FunctionCallerPtr   m_Add;
+        FunctionCallerPtr   m_Remove;
+
+    public:
+        ExistenceCommand( ExistenceAction action, FunctionCallerPtr add, FunctionCallerPtr remove, bool redo = true );
+        ~ExistenceCommand();
+
+        virtual void Undo() HELIUM_OVERRIDE;
+        virtual void Redo() HELIUM_OVERRIDE;
+    };
+    typedef Helium::SmartPtr< ExistenceCommand > ExistenceCommandPtr;
 }

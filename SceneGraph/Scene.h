@@ -260,14 +260,14 @@ namespace Helium
 
         struct UndoCommandArgs
         {
-            UndoCommandArgs( SceneGraph::Scene* scene, Undo::CommandPtr command )
+            UndoCommandArgs( SceneGraph::Scene* scene, UndoCommandPtr command )
                 : m_Scene( scene )
                 , m_Command( command )
             {
             }
 
             SceneGraph::Scene* m_Scene;
-            Undo::CommandPtr   m_Command;
+            UndoCommandPtr   m_Command;
         };
         typedef Helium::Signature< const UndoCommandArgs& > UndoCommandSignature; 
 
@@ -578,15 +578,15 @@ namespace Helium
             bool Load( const Helium::Path& path ); 
 
             // Import data into this scene, possibly merging with existing nodes.
-            Undo::CommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
-            Undo::CommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
-            Undo::CommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
+            UndoCommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
+            UndoCommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
+            UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
 
         private:
             // loading helpers
             void Reset();
 
-            Undo::CommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
+            UndoCommandPtr ImportSceneNode( const Reflect::ObjectPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL  );
 
             /// @brief If this node has been remapped from another node, return the source nodes ID
             /// When we copy elements, we give them a new UniqueID. If we need information related
@@ -684,7 +684,7 @@ namespace Helium
             // Undo/Redo support
             //
 
-            bool Push(const Undo::CommandPtr& command);
+            bool Push(const UndoCommandPtr& command);
 
         protected:
             void UndoingOrRedoing( const Undo::QueueChangingArgs& args );
@@ -734,30 +734,30 @@ namespace Helium
             void GetFlattenedHierarchy(SceneGraph::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
             void GetSelectedTransforms( V_Matrix4& transforms );
-            Undo::CommandPtr SetSelectedTransforms( const V_Matrix4& transforms );
+            UndoCommandPtr SetSelectedTransforms( const V_Matrix4& transforms );
 
-            Undo::CommandPtr SetHiddenSelected( bool hidden );
-            Undo::CommandPtr SetHiddenUnrelated( bool hidden );
-            Undo::CommandPtr ShowLastHidden();
-            Undo::CommandPtr SelectSimilar();
-            Undo::CommandPtr DeleteSelected();
-            Undo::CommandPtr ParentSelected();
-            Undo::CommandPtr UnparentSelected();
-            Undo::CommandPtr GroupSelected();
-            Undo::CommandPtr UngroupSelected();
-            Undo::CommandPtr CenterSelected();
-            Undo::CommandPtr DuplicateSelected();
-            Undo::CommandPtr SmartDuplicateSelected();
-            Undo::CommandPtr SnapSelectedToCamera();
-            Undo::CommandPtr SnapCameraToSelected();
+            UndoCommandPtr SetHiddenSelected( bool hidden );
+            UndoCommandPtr SetHiddenUnrelated( bool hidden );
+            UndoCommandPtr ShowLastHidden();
+            UndoCommandPtr SelectSimilar();
+            UndoCommandPtr DeleteSelected();
+            UndoCommandPtr ParentSelected();
+            UndoCommandPtr UnparentSelected();
+            UndoCommandPtr GroupSelected();
+            UndoCommandPtr UngroupSelected();
+            UndoCommandPtr CenterSelected();
+            UndoCommandPtr DuplicateSelected();
+            UndoCommandPtr SmartDuplicateSelected();
+            UndoCommandPtr SnapSelectedToCamera();
+            UndoCommandPtr SnapCameraToSelected();
 
             void FrameSelected();
 
             void MeasureDistance();
 
-            Undo::CommandPtr PickWalkUp();
-            Undo::CommandPtr PickWalkDown();
-            Undo::CommandPtr PickWalkSibling(bool forward);
+            UndoCommandPtr PickWalkUp();
+            UndoCommandPtr PickWalkDown();
+            UndoCommandPtr PickWalkSibling(bool forward);
 
         private:
             void ViewPreferencesChanged( const Reflect::ObjectChangeArgs& args );
@@ -801,7 +801,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Command for importing nodes into the scene
         // 
-        class SceneImportCommand : public Undo::Command
+        class SceneImportCommand : public UndoCommand
         {
         public:
             SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
@@ -843,7 +843,7 @@ namespace Helium
             ImportAction                m_ImportAction;
             uint32_t                    m_ImportFlags;
             SceneGraph::HierarchyNode*  m_ImportRoot;
-            Undo::CommandPtr            m_UndoCommand;
+            UndoCommandPtr            m_UndoCommand;
             const Reflect::Class*       m_ImportReflectType;
         };
 
@@ -851,7 +851,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Command for selecting nodes in the scene
         // 
-        class SceneSelectCommand : public Undo::Command
+        class SceneSelectCommand : public UndoCommand
         {
 
         public:

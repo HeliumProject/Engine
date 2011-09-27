@@ -3,7 +3,7 @@
 
 #include "Queue.h"
 
-using namespace Helium::Undo;
+using namespace Helium;
 
 class Test
 {

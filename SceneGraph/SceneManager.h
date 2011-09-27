@@ -89,7 +89,7 @@ namespace Helium
             bool CanRedo();
             void Undo();
             void Redo();
-            void Push( Undo::Queue* queue );
+            void Push( UndoQueue* queue );
 
         private:
             SceneGraph::Scene* FindFirstNonNestedScene() const;

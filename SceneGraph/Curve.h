@@ -107,13 +107,13 @@ namespace Helium
             int32_t GetIndexForControlPoint( CurveControlPoint* pc );
 
             // insert new control point
-            Undo::CommandPtr InsertControlPointAtIndex( uint32_t index, CurveControlPoint* pc );
+            UndoCommandPtr InsertControlPointAtIndex( uint32_t index, CurveControlPoint* pc );
 
             // remove existing control point
-            Undo::CommandPtr RemoveControlPointAtIndex( uint32_t index );
+            UndoCommandPtr RemoveControlPointAtIndex( uint32_t index );
 
             // reverse curve direction
-            Undo::CommandPtr ReverseControlPoints();
+            UndoCommandPtr ReverseControlPoints();
 
             void ProjectPointOnCurve( const Vector3& point, Vector3& projectedPoint ) const;
             float32_t DistanceSqrToCurve( const Vector3& point ) const;
@@ -132,7 +132,7 @@ namespace Helium
             // Evaluate/Render/Pick
             //
 
-            virtual Undo::CommandPtr CenterTransform() HELIUM_OVERRIDE;
+            virtual UndoCommandPtr CenterTransform() HELIUM_OVERRIDE;
 
             virtual void Evaluate( GraphDirection direction ) HELIUM_OVERRIDE;
             float32_t CalculateCurveLength() const;

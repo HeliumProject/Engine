@@ -53,16 +53,6 @@ bool SimpleData<T>::Equals(Object* object)
 }
 
 template <class T>
-void SimpleData<T>::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
-{
-    T val = *m_Data;
-
-    Helium::Swizzle( val, buffer->GetByteOrder() != Helium::ByteOrders::LittleEndian );
-
-    buffer->AddBuffer( (const uint8_t*)&val, sizeof(T), debugStr );
-}
-
-template <class T>
 void SimpleData<T>::Serialize(ArchiveBinary& archive)
 {
     const T* data = m_Data;

@@ -405,7 +405,7 @@ void SceneNode::SetState( const Reflect::ObjectPtr& state )
     }
 }
 
-Undo::CommandPtr SceneNode::SnapShot( Reflect::Object* newState )
+UndoCommandPtr SceneNode::SnapShot( Reflect::Object* newState )
 {
     if ( newState == NULL )
     {

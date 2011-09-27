@@ -368,7 +368,7 @@ int32_t Curve::GetIndexForControlPoint( CurveControlPoint* pc )
     return index;
 }
 
-Undo::CommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
+UndoCommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
 {
     OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
     OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
@@ -379,7 +379,7 @@ Undo::CommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
         {
             if ( i == index )
             {
-                Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Owner, point );
+                UndoCommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Owner, point );
                 Dirty();
                 return command;
             }
@@ -389,7 +389,7 @@ Undo::CommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
     return NULL;
 }
 
-Undo::CommandPtr Curve::InsertControlPointAtIndex( uint32_t index, CurveControlPoint* pc )
+UndoCommandPtr Curve::InsertControlPointAtIndex( uint32_t index, CurveControlPoint* pc )
 {
     HierarchyNode* previous = NULL;
     HierarchyNode* next = NULL;
@@ -414,12 +414,12 @@ Undo::CommandPtr Curve::InsertControlPointAtIndex( uint32_t index, CurveControlP
     pc->SetNext( next );
     pc->SetParent( this );
 
-    Undo::CommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Owner, pc );
+    UndoCommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Owner, pc );
     Dirty();
     return command;
 }
 
-Undo::CommandPtr Curve::ReverseControlPoints()
+UndoCommandPtr Curve::ReverseControlPoints()
 {
     return new ReverseChildrenCommand( this );
 }
@@ -601,7 +601,7 @@ void Curve::Populate( PopulateArgs* args )
     }
 }
 
-Undo::CommandPtr Curve::CenterTransform()
+UndoCommandPtr Curve::CenterTransform()
 {
     Undo::BatchCommandPtr batch = new Undo::BatchCommand();
 

@@ -1,76 +1,72 @@
 #pragma once
 
-#include "Command.h"
-
 #include "Foundation/Automation/Property.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 namespace Helium
 {
-    namespace Undo
+    //
+    // UndoCommand to get/set property data
+    //
+
+    template <class V>
+    class PropertyCommand : public UndoCommand
     {
-        //
-        // Command to get/set property data
-        //
+    private:
+        // the property object we will get/set through
+        Helium::SmartPtr< Helium::Property<V> > m_Property;
 
-        template <class V>
-        class PropertyCommand : public Command
+        // the latent data value
+        V m_Value;
+
+        bool m_Significant; 
+
+    public:
+        PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property)
+            : m_Property (property)
+            , m_Significant( true )
         {
-        private:
-            // the property object we will get/set through
-            Helium::SmartPtr< Helium::Property<V> > m_Property;
+            m_Value = m_Property->Get();
+        }
 
-            // the latent data value
-            V m_Value;
+        PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property, const V& val)
+            : m_Property (property)
+            , m_Value (val)
+            , m_Significant( true )
+        {
+            Swap();
+        }
 
-            bool m_Significant; 
+        void SetSignificant(bool significant)
+        {
+            m_Significant = significant; 
+        }
 
-        public:
-            PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property)
-                : m_Property (property)
-                , m_Significant( true )
-            {
-                m_Value = m_Property->Get();
-            }
+        virtual bool IsSignificant() const
+        {
+            return m_Significant; 
+        }
 
-            PropertyCommand(const Helium::SmartPtr< Helium::Property<V> >& property, const V& val)
-                : m_Property (property)
-                , m_Value (val)
-                , m_Significant( true )
-            {
-                Swap();
-            }
+        virtual void Undo() HELIUM_OVERRIDE
+        {
+            Swap();
+        }
 
-            void SetSignificant(bool significant)
-            {
-                m_Significant = significant; 
-            }
+        virtual void Redo() HELIUM_OVERRIDE
+        {
+            Swap();
+        }
 
-            virtual bool IsSignificant() const
-            {
-                return m_Significant; 
-            }
+        void Swap()
+        {
+            // read the existing value
+            V old = m_Property->Get();
 
-            virtual void Undo() HELIUM_OVERRIDE
-            {
-                Swap();
-            }
+            // set the stored value
+            m_Property->Set(m_Value);
 
-            virtual void Redo() HELIUM_OVERRIDE
-            {
-                Swap();
-            }
-
-            void Swap()
-            {
-                // read the existing value
-                V old = m_Property->Get();
-
-                // set the stored value
-                m_Property->Set(m_Value);
-
-                // save the previous one
-                m_Value = old;
-            }
-        };
-    }
+            // save the previous one
+            m_Value = old;
+        }
+    };
 }

@@ -199,9 +199,9 @@ Matrix4 Transform::GetTranslateComponent() const
     return Matrix4 (m_Translate);
 }
 
-Undo::CommandPtr Transform::ResetTransform()
+UndoCommandPtr Transform::ResetTransform()
 {
-    Undo::CommandPtr command = new Undo::PropertyCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
+    UndoCommandPtr command = new Undo::PropertyCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
 
     m_Scale = Scale::Identity;
     m_Rotate = EulerAngles::Zero;
@@ -212,9 +212,9 @@ Undo::CommandPtr Transform::ResetTransform()
     return command;
 }
 
-Undo::CommandPtr Transform::ComputeObjectComponents()
+UndoCommandPtr Transform::ComputeObjectComponents()
 {
-    Undo::CommandPtr command = ResetTransform();
+    UndoCommandPtr command = ResetTransform();
 
     Scale scale;
     EulerAngles rotate;
@@ -240,13 +240,13 @@ Undo::CommandPtr Transform::ComputeObjectComponents()
     return command;
 }
 
-Undo::CommandPtr Transform::CenterTransform()
+UndoCommandPtr Transform::CenterTransform()
 {
     // copy global matrix
     Matrix4 transform = m_GlobalTransform;
 
     // reset the transform state
-    Undo::CommandPtr command = ResetTransform();
+    UndoCommandPtr command = ResetTransform();
 
     // set the global matrix (will re-localize)
     SetGlobalTransform(transform);

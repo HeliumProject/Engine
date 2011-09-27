@@ -43,8 +43,6 @@ namespace Helium
             virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
             virtual bool Equals(Object* object) HELIUM_OVERRIDE;
 
-            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const HELIUM_OVERRIDE;
-
             virtual void Serialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
             virtual void Deserialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
 

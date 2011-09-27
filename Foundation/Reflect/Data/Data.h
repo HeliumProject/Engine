@@ -6,7 +6,6 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Archive.h"
-#include "Foundation/SmartBuffer/BasicBuffer.h"
 
 namespace Helium
 {
@@ -180,9 +179,6 @@ namespace Helium
 
             // is this data worth serializing? (perhaps its an empty container?)
             virtual bool ShouldSerialize();
-
-            // data serialization (extract to smart buffer)
-            virtual void Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const;
 
             // binary serialization
             virtual void Serialize(ArchiveBinary& archive) = 0;

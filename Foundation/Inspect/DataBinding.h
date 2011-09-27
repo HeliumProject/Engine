@@ -6,7 +6,7 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Automation/Property.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include <iomanip>
 
@@ -238,7 +238,7 @@ namespace Helium
 
             virtual void Refresh() = 0;
 
-            virtual Undo::CommandPtr GetUndoCommand() const = 0;
+            virtual UndoCommandPtr GetUndoCommand() const = 0;
 
         protected: 
             bool m_Significant; 
@@ -301,7 +301,7 @@ namespace Helium
                 Set( temp );
             }
 
-            virtual Undo::CommandPtr GetUndoCommand() const HELIUM_OVERRIDE
+            virtual UndoCommandPtr GetUndoCommand() const HELIUM_OVERRIDE
             {
                 return new DataBindingCommand<T>( this );
             }
@@ -333,12 +333,12 @@ namespace Helium
         };
 
         //
-        // Command object for DataBinding Undo/Redo
+        // UndoCommand object for DataBinding Undo/Redo
         //  Store state of object(s) bound by data
         //
 
         template<class T>
-        class DataBindingCommand : public Undo::Command
+        class DataBindingCommand : public UndoCommand
         {
         protected:
             // the data object that is used to read/write from the client objects

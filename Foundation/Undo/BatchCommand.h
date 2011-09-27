@@ -1,35 +1,33 @@
 #pragma once
 
-#include "Foundation/API.h"
-
-#include "Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 namespace Helium
 {
-    namespace Undo
+    //
+    // This is a tuple of commands for making multiple changes to multiple objects in a single command
+    //
+
+    class HELIUM_FOUNDATION_API BatchCommand : public UndoCommand
     {
-        //
-        // This is a tuple of commands for making multiple changes to multiple objects in a single command
-        //
+    protected:
+        V_UndoCommandSmartPtr   m_Commands;
+        bool                    m_IsSignificant;
 
-        class HELIUM_FOUNDATION_API BatchCommand : public Command
-        {
-        protected:
-            bool m_IsSignificant;
-            V_CommandSmartPtr m_Commands;
+    public:
+        BatchCommand();
+        BatchCommand(const V_UndoCommandSmartPtr& objects);
+        virtual ~BatchCommand();
+            
+        void Set(const V_UndoCommandSmartPtr& commands);
+        void Push(const UndoCommandPtr& command);
 
-        public:
-            BatchCommand();
-            BatchCommand(const V_CommandSmartPtr& objects);
-            virtual ~BatchCommand();
-            void Set(const V_CommandSmartPtr& commands);
-            void Push(const CommandPtr& command);
-            virtual void Undo() HELIUM_OVERRIDE;
-            virtual void Redo() HELIUM_OVERRIDE;
-            virtual bool IsSignificant() const HELIUM_OVERRIDE;
-            virtual bool IsEmpty() const;
-        };
+        virtual void Undo() HELIUM_OVERRIDE;
+        virtual void Redo() HELIUM_OVERRIDE;
 
-        typedef Helium::SmartPtr<BatchCommand> BatchCommandPtr;
-    }
+        virtual bool IsSignificant() const HELIUM_OVERRIDE;
+        virtual bool IsEmpty() const;
+    };
+
+    typedef Helium::SmartPtr<BatchCommand> BatchCommandPtr;
 }

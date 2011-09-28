@@ -1,8 +1,9 @@
 #include "EditorPch.h"
 #include "Editor/SceneOutliner.h"
+
+#include "Foundation/Undo/UndoCommand.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
-#include "Foundation/Undo/PropertyCommand.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -458,7 +459,7 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
             if ( node->GetName() != newName )
             {
                 // Create an undoable command to rename the object
-                m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Helium::MemberProperty<SceneGraph::SceneNode, tstring> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
+                m_CurrentScene->Push( new PropertyUndoCommand<tstring>( new Helium::MemberProperty<SceneGraph::SceneNode, tstring> (node, &SceneGraph::SceneNode::GetName, &SceneGraph::SceneNode::SetGivenName), newName) );
                 m_CurrentScene->Execute( false );
 
                 // Sort

@@ -230,7 +230,7 @@ void HierarchyOutliner::OnEndDrag( wxTreeEvent& args )
         SceneGraph::HierarchyNode* newParent = GetTreeItemData( dropItem )->GetHierarchyNode();
         HELIUM_ASSERT( newParent );
 
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
         const OS_SceneNodeDumbPtr& selection = m_CurrentScene->GetSelection().GetItems();
         OS_SceneNodeDumbPtr::Iterator selItr = selection.Begin();

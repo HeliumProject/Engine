@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Undo/BatchCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 namespace Helium
 {
@@ -43,8 +42,8 @@ namespace Helium
 
     private:
         // The undo and redo stacks
-        V_UndoCommandSmartPtr m_Undo;
-        V_UndoCommandSmartPtr m_Redo;
+        std::vector<UndoCommandPtr> m_Undo;
+        std::vector<UndoCommandPtr> m_Redo;
 
         // is the queue active, we don't want to modify the queue while we are commiting a change
         bool m_Active;
@@ -56,7 +55,7 @@ namespace Helium
         int m_BatchState;
 
         // the batch
-        BatchCommandPtr m_Batch;
+        BatchUndoCommandPtr m_Batch;
 
 
         //

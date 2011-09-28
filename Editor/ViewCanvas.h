@@ -6,7 +6,7 @@
 
 #include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Enumeration.h"
-#include "Foundation/Undo/Queue.h"
+#include "Foundation/Undo/UndoQueue.h"
 
 #include "SceneGraph/Render.h"
 #include "SceneGraph/Camera.h"

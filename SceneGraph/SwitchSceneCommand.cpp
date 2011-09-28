@@ -5,7 +5,6 @@
 #include "SceneGraph/SceneManager.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Undo/Exceptions.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -14,7 +13,7 @@ using namespace Helium::SceneGraph;
 // Constructor
 // 
 SwitchSceneCommand::SwitchSceneCommand( SceneGraph::SceneManager* manager, SceneGraph::Scene* newScene )
-: Undo::PropertyCommand< SceneGraph::Scene* >( new Helium::MemberProperty< SceneGraph::SceneManager, SceneGraph::Scene* >( manager, &SceneGraph::SceneManager::GetCurrentScene, &SceneGraph::SceneManager::SetCurrentScene ) )
+: PropertyUndoCommand< SceneGraph::Scene* >( new Helium::MemberProperty< SceneGraph::SceneManager, SceneGraph::Scene* >( manager, &SceneGraph::SceneManager::GetCurrentScene, &SceneGraph::SceneManager::SetCurrentScene ) )
 , m_SceneManager( manager )
 , m_OldScene( manager->GetCurrentScene() )
 , m_NewScene( newScene )

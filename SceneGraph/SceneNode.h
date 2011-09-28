@@ -2,9 +2,10 @@
 
 #include <hash_map>
 
+#include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/Reflect/Object.h"
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 

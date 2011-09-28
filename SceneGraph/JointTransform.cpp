@@ -2,7 +2,7 @@
 #include "JointTransform.h"
 
 #include "Math/FpuEulerAngles.h"
-#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/Color.h"
 #include "SceneGraph/PrimitiveAxes.h"

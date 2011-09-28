@@ -4,7 +4,7 @@
 #include "Math/FpuEulerAngles.h"
 #include "Math/Axes.h"
 
-#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/Manipulator.h"
 #include "SceneGraph/PrimitiveAxes.h"
@@ -201,7 +201,7 @@ Matrix4 Transform::GetTranslateComponent() const
 
 UndoCommandPtr Transform::ResetTransform()
 {
-    UndoCommandPtr command = new Undo::PropertyCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
+    UndoCommandPtr command = new PropertyUndoCommand<Matrix4>( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &Transform::GetObjectTransform, &Transform::SetObjectTransform) );
 
     m_Scale = Scale::Identity;
     m_Rotate = EulerAngles::Zero;

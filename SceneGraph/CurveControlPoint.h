@@ -66,7 +66,7 @@ namespace Helium
 
             virtual UndoCommandPtr SetValue( const Vector3& v ) override
             {
-                return new Undo::PropertyCommand<Vector3> ( new Helium::MemberProperty<CurveControlPoint, Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
+                return new PropertyUndoCommand<Vector3> ( new Helium::MemberProperty<CurveControlPoint, Vector3> (m_Point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition), v);
             }
         };
 

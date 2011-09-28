@@ -7,7 +7,7 @@
 #include "Foundation/String/Utilities.h"
 #include "Editor/UpdateStatusEvent.h"
 #include "Editor/DragDrop/DropSource.h"
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 #include "Editor/ArtProvider.h"
 
 #include "SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?

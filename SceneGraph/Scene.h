@@ -8,8 +8,7 @@
 
 #include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Canvas.h"
-#include "Foundation/Undo/ExistenceCommand.h"
-#include "Foundation/Undo/Queue.h"
+#include "Foundation/Undo/UndoQueue.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"
@@ -612,12 +611,12 @@ namespace Helium
             // just selected nodes.  Optionally maintain hiearchy or dependencies.
             bool Export( const Path& path, const ExportArgs& args );
             bool ExportXML( tstring& xml, const ExportArgs& args );
-            bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes );
+            bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes );
 
         private:
             // saving helpers
-            void ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes );
-            void ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren = true );
+            void ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes );
+            void ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, Helium::S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren = true );
 
 
             //
@@ -645,8 +644,8 @@ namespace Helium
 
         public:
             // insert a node into the scene
-            void AddObject( const SceneNodePtr& node );
-            void RemoveObject( const SceneNodePtr& node );
+            void AddObject( SceneNodePtr node );
+            void RemoveObject( SceneNodePtr node );
 
         protected:
             // nitty gritty helpers for AddObject/RemoveObject
@@ -687,8 +686,8 @@ namespace Helium
             bool Push(const UndoCommandPtr& command);
 
         protected:
-            void UndoingOrRedoing( const Undo::QueueChangingArgs& args );
-            void UndoQueueCommandPushed( const Undo::QueueChangeArgs& args );
+            void UndoingOrRedoing( const UndoQueueChangingArgs& args );
+            void UndoQueueCommandPushed( const UndoQueueChangeArgs& args );
 
             //
             // Query interfaces
@@ -789,11 +788,14 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Command for adding and removing nodes from a scene.
         // 
-        class SceneNodeExistenceCommand : public Undo::ExistenceCommand
+        class SceneNodeExistenceCommand : public ExistenceUndoCommand< SceneNodePtr >
         {
         public:
-            SceneNodeExistenceCommand( Undo::ExistenceAction action, SceneGraph::Scene* scene, const SceneNodePtr& node, bool redo = true )
-                : Undo::ExistenceCommand( action, new Undo::MemberFunctionConstRef< SceneGraph::Scene, SceneNodePtr >( scene, node, &SceneGraph::Scene::AddObject ), new Undo::MemberFunctionConstRef< SceneGraph::Scene, SceneNodePtr >( scene, node, &SceneGraph::Scene::RemoveObject ), redo )
+            SceneNodeExistenceCommand( ExistenceAction action, SceneGraph::Scene* scene, const SceneNodePtr& node, bool redo = true )
+                : ExistenceUndoCommand( action, node,
+                                    Delegate< SceneNodePtr >( scene, &SceneGraph::Scene::AddObject ),
+                                    Delegate< SceneNodePtr >( scene, &SceneGraph::Scene::RemoveObject ),
+                                    redo )
             {
             }
         };

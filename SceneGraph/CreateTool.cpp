@@ -531,7 +531,7 @@ void CreateTool::AddToScene()
         m_Scene->RemoveObject( m_Instance );
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     if (!m_Created)
     {
@@ -544,7 +544,7 @@ void CreateTool::AddToScene()
     {
         SCENE_GRAPH_SCOPE_TIMER( ("Push Undo Command Adding Instance Into Batch") );
 
-        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, m_Instance ) );
+        batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, m_Instance ) );
     }
 
     {

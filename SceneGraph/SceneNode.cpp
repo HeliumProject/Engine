@@ -409,10 +409,10 @@ UndoCommandPtr SceneNode::SnapShot( Reflect::Object* newState )
 {
     if ( newState == NULL )
     {
-        return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
+        return new PropertyUndoCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState) );
     }
 
-    return new Undo::PropertyCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ObjectPtr( newState ) );
+    return new PropertyUndoCommand<Reflect::ObjectPtr>( new Helium::MemberProperty<SceneNode, Reflect::ObjectPtr> (this, &SceneNode::GetState, &SceneNode::SetState), Reflect::ObjectPtr( newState ) );
 }
 
 bool SceneNode::IsSelectable() const

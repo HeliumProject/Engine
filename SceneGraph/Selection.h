@@ -4,7 +4,7 @@
 
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Reflect/Object.h"
-#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"
@@ -50,11 +50,11 @@ namespace Helium
             // Command for item changes
             //
 
-            class SelectionChangeCommand : public Undo::PropertyCommand< OS_SceneNodeDumbPtr >
+            class SelectionChangeCommand : public PropertyUndoCommand< OS_SceneNodeDumbPtr >
             {
             public:
                 SelectionChangeCommand( Selection* selection )
-                    : Undo::PropertyCommand< OS_SceneNodeDumbPtr >( new Helium::MemberProperty< Selection, OS_SceneNodeDumbPtr > (selection, &Selection::GetUndo, &Selection::SetUndo) )
+                    : PropertyUndoCommand< OS_SceneNodeDumbPtr >( new Helium::MemberProperty< Selection, OS_SceneNodeDumbPtr > (selection, &Selection::GetUndo, &Selection::SetUndo) )
                 {
 
                 }

@@ -283,7 +283,7 @@ void LayersPanel::LayerSelectedItems( bool addToLayer )
     if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
     {
         //Log::Debug( "LayerSelectedItems\n" );
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
         OS_SceneNodeDumbPtr::Iterator nodeItr = selectedNodes.Begin();
         OS_SceneNodeDumbPtr::Iterator nodeEnd = selectedNodes.End();
@@ -401,7 +401,7 @@ void LayersPanel::OnNewLayer( wxCommandEvent& event )
         LayerPtr layer = new Layer();
         layer->SetOwner( m_Scene );
         layer->Initialize();
-        m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
+        m_Scene->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, layer ) );
         m_Scene->Execute( false ); 
     }
 }
@@ -418,7 +418,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
             return;
         }
 
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
         LayerPtr layer = new Layer();
         layer->SetOwner( m_Scene );
         layer->Initialize();
@@ -426,7 +426,7 @@ void LayersPanel::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         // Generate a name for this layer
         GenerateLayerName(layer);
 
-        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
+        batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, layer ) );
 
         // Step 2: add all the selected items to the layer
         const OS_SceneNodeDumbPtr& selection = m_Scene->GetSelection().GetItems();
@@ -471,7 +471,7 @@ void LayersPanel::DeleteSelectedLayers()
         LayerSelectedItems( false );
 
         // Begin undo batch
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
         // Get an ordered list of the selected rows, and traverse the list in reverse order.
         // This makes sure that removing an item doesn't change the row number of another
@@ -510,7 +510,7 @@ void LayersPanel::DeleteSelectedLayers()
                 }
 
                 // Push the command to delete the layer
-                batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Scene, layer ) );
+                batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Remove, m_Scene, layer ) );
             }
         }
 
@@ -782,7 +782,7 @@ void LayersPanel::RowRenamed( const GridRowRenamedArgs& args )
     if ( found != m_Layers.end() )
     {
         Layer* layer = found->second;
-        layer->GetOwner()->Push( new Undo::PropertyCommand< tstring >( new Helium::MemberProperty< Layer, tstring >( layer, &Layer::GetName, &Layer::SetGivenName ), args.m_NewName ) );
+        layer->GetOwner()->Push( new PropertyUndoCommand< tstring >( new Helium::MemberProperty< Layer, tstring >( layer, &Layer::GetName, &Layer::SetGivenName ), args.m_NewName ) );
     }
 }
 

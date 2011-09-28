@@ -148,7 +148,7 @@ void ScaleManipulator::SetResult()
                 }
                 else
                 {
-                    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+                    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
                     for each (ScaleManipulatorAdapter* accessor in CompleteSet<ScaleManipulatorAdapter>())
                     {

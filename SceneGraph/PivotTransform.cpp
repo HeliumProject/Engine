@@ -3,8 +3,7 @@
 
 #include "Math/FpuEulerAngles.h"
 #include "Math/Axes.h"
-#include "Foundation/Undo/PropertyCommand.h"
-
+#include "Foundation/Undo/UndoCommand.h"
 #include "SceneGraph/Scene.h"
 
 using namespace Helium;
@@ -393,7 +392,7 @@ UndoCommandPtr PivotTransform::ComputeObjectComponents()
 
 UndoCommandPtr PivotTransform::CenterTransform()
 {
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
+    BatchUndoCommandPtr batch = new BatchUndoCommand();
 
     batch->Push( Base::CenterTransform() );
 
@@ -420,7 +419,7 @@ UndoCommandPtr PivotTransform::CenterTransform()
         }
     }
 
-    batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
+    batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
 
     Evaluate(GraphDirections::Downstream);
 

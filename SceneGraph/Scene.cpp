@@ -12,7 +12,6 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Canvas.h"
-#include "Foundation/Undo/PropertyCommand.h"
 #include "Foundation/String/Utilities.h"
 #include "Math/FpuAngleAxis.h"
 #include "Foundation/Log.h"
@@ -347,7 +346,7 @@ UndoCommandPtr Scene::ImportSceneNodes( std::vector< Reflect::ObjectPtr >& eleme
     // Load Elements
     // 
 
-    Undo::BatchCommandPtr command = new Undo::BatchCommand ();
+    BatchUndoCommandPtr command = new BatchUndoCommand ();
 
     V_SceneNodeSmartPtr createdNodes;
     createdNodes.reserve( elements.size() );
@@ -585,7 +584,7 @@ UndoCommandPtr Scene::ImportSceneNode( const Reflect::ObjectPtr& element, V_Scen
             createdNodes.push_back( sceneNode );
 
             // add object to the scene
-            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, sceneNode );
+            return new SceneNodeExistenceCommand( ExistenceActions::Add, this, sceneNode );
         }
     }
 
@@ -645,7 +644,7 @@ void Scene::ArchiveStatus( const Reflect::ArchiveStatus& info )
     }
 }
 
-bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, Undo::BatchCommand* changes )
+bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes )
 {
     bool result = true;
 
@@ -737,7 +736,7 @@ bool Scene::Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArg
     return result;
 }
 
-void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -789,7 +788,7 @@ void Scene::ExportSceneNode( SceneGraph::SceneNode* node, std::vector< Reflect::
     }
 }
 
-void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( SceneGraph::HierarchyNode* node, std::vector< Reflect::ObjectPtr >& elements, S_TUID& exported, const ExportArgs& args, BatchUndoCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -857,7 +856,7 @@ bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
         e_StatusChanged.Raise( str.str() );
     }
 
-    Undo::BatchCommandPtr changes = new Undo::BatchCommand();
+    BatchUndoCommandPtr changes = new BatchUndoCommand();
 
     std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
@@ -917,7 +916,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
         e_StatusChanged.Raise( str.str() );
     }
 
-    Undo::BatchCommandPtr changes = new Undo::BatchCommand();
+    BatchUndoCommandPtr changes = new BatchUndoCommand();
 
     std::vector< Reflect::ObjectPtr > spool;
     result = Export( spool, args, changes );
@@ -1133,7 +1132,7 @@ void Scene::Rename( SceneGraph::SceneNode* sceneNode, const tstring& newName, ts
     }
 }
 
-void Scene::AddObject( const SceneNodePtr& node )
+void Scene::AddObject( SceneNodePtr node )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -1152,7 +1151,7 @@ void Scene::AddObject( const SceneNodePtr& node )
     }
 }
 
-void Scene::RemoveObject( const SceneNodePtr& node )
+void Scene::RemoveObject( SceneNodePtr node )
 {
     SCENE_GRAPH_SCOPE_TIMER( ("") );
 
@@ -2009,7 +2008,7 @@ UndoCommandPtr Scene::SetSelectedTransforms( const V_Matrix4& transforms )
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2051,7 +2050,7 @@ UndoCommandPtr Scene::SetHiddenSelected( bool hidden )
         m_LastHidden.clear();
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2065,8 +2064,8 @@ UndoCommandPtr Scene::SetHiddenSelected( bool hidden )
                 m_LastHidden.insert( hierarchyNode->GetID() );
             }
 
-            Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ) ; 
+            PropertyUndoCommand<bool>* command = 
+                new PropertyUndoCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ) ; 
 
             command->SetSignificant( false ); 
             batch->Push(command); 
@@ -2122,7 +2121,7 @@ UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
     // Set visibility of the entire scene
     //
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     for ( HM_SceneNodeSmartPtr::const_iterator itr = m_Nodes.begin(), end = m_Nodes.end(); itr != end; ++itr )
     {
@@ -2135,8 +2134,8 @@ UndoCommandPtr Scene::SetHiddenUnrelated( bool hidden )
                 m_LastHidden.insert( node->GetID() );
             }
 
-            Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (node, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ); 
+            PropertyUndoCommand<bool>* command = 
+                new PropertyUndoCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (node, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), hidden ); 
             command->SetSignificant(false); 
             batch->Push( command ); 
 
@@ -2155,7 +2154,7 @@ UndoCommandPtr Scene::ShowLastHidden()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     std::set<TUID>::const_iterator itr = m_LastHidden.begin();
     std::set<TUID>::const_iterator end = m_LastHidden.end();
@@ -2164,8 +2163,8 @@ UndoCommandPtr Scene::ShowLastHidden()
         SceneGraph::HierarchyNode* hierarchyNode = Reflect::SafeCast<SceneGraph::HierarchyNode>( FindNode( *itr ) );
         if ( hierarchyNode )
         {
-            Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), false ); 
+            PropertyUndoCommand<bool>* command = 
+                new PropertyUndoCommand<bool> ( new Helium::MemberProperty<SceneGraph::HierarchyNode, bool> (hierarchyNode, &SceneGraph::HierarchyNode::IsHidden, &SceneGraph::HierarchyNode::SetHidden), false ); 
 
             command->SetSignificant(false); 
             batch->Push( command );
@@ -2215,7 +2214,7 @@ UndoCommandPtr Scene::DeleteSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
+    BatchUndoCommandPtr batch = new BatchUndoCommand();
 
     batch->Push( m_Selection.Clear() );
 
@@ -2226,7 +2225,7 @@ UndoCommandPtr Scene::DeleteSelected()
         SceneNodePtr node = Reflect::SafeCast< SceneGraph::SceneNode >( *itr );
         if ( node )
         {
-            batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, node ) ); 
+            batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Remove, this, node ) ); 
         }
     }
 
@@ -2267,7 +2266,7 @@ UndoCommandPtr Scene::ParentSelected()
     SceneGraph::HierarchyNode* parent = children.back();
     children.resize( children.size() - 1 );
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     // Reparent the selected items under the parent node (last selected one)
     for each (SceneGraph::HierarchyNode* hierarchyNode in children)
@@ -2299,7 +2298,7 @@ UndoCommandPtr Scene::UnparentSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     // Reparent the selected items under the root
     for each (SceneGraph::HierarchyNode* hierarchyNode in children)
@@ -2349,7 +2348,7 @@ UndoCommandPtr Scene::GroupSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     Vector3 pos;
     const SceneGraph::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
@@ -2379,7 +2378,7 @@ UndoCommandPtr Scene::GroupSelected()
     // Update the object
     group->Evaluate( GraphDirections::Downstream );
 
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, group ) );
+    batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, this, group ) );
 
     // Reparent the selected items under the new group
     for each (SceneGraph::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
@@ -2400,7 +2399,7 @@ UndoCommandPtr Scene::UngroupSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     OS_SceneNodeDumbPtr newSelection;
 
@@ -2436,7 +2435,7 @@ UndoCommandPtr Scene::UngroupSelected()
             }
 
             // Delete the group
-            batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, group ) );
+            batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Remove, this, group ) );
         }
         else
         {
@@ -2464,7 +2463,7 @@ UndoCommandPtr Scene::CenterSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     OS_SceneNodeDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
     OS_SceneNodeDumbPtr::Iterator end = m_Selection.GetItems().End();
@@ -2496,7 +2495,7 @@ UndoCommandPtr Scene::DuplicateSelected()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     OS_SceneNodeDumbPtr newSelection;
 
@@ -2515,7 +2514,7 @@ UndoCommandPtr Scene::DuplicateSelected()
 
         newSelection.Append(duplicate);
 
-        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
+        batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, this, duplicate ) );
 
         duplicate->SetParent( node->GetParent() );
 
@@ -2569,7 +2568,7 @@ UndoCommandPtr Scene::SmartDuplicateSelected()
 
     SceneGraph::Transform* transform = Reflect::AssertCast<SceneGraph::Transform>( duplicate );
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     // transform the duplicate based off of the previous duplicate matrix
     Matrix4 matrix = transform->GetGlobalTransform() * m_SmartDuplicateMatrix.Inverted() * transform->GetGlobalTransform();
@@ -2578,13 +2577,13 @@ UndoCommandPtr Scene::SmartDuplicateSelected()
     m_SmartDuplicateMatrix = transform->GetGlobalTransform();
 
     // add the duplicate to the scene
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
+    batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, this, duplicate ) );
 
     // parent it to the original nodes' parent
     batch->Push( new ParentCommand( duplicate, node->GetParent() ) );
 
     // set the global transform for the duplicate object
-    batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
+    batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), matrix ) );
 
     // make sure the new nodes are initialized
     duplicate->InitializeHierarchy();
@@ -2605,7 +2604,7 @@ UndoCommandPtr Scene::SnapSelectedToCamera()
         return NULL;
     }
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     Matrix4 m = Matrix4 ( AngleAxis( static_cast< float32_t >( HELIUM_PI ), Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
 
@@ -2617,7 +2616,7 @@ UndoCommandPtr Scene::SnapSelectedToCamera()
 
         if (transform)
         {
-            batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), m ) );
+            batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (transform, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), m ) );
         }
     }
 

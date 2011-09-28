@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 #include "Foundation/Memory/ReferenceCounting.h"

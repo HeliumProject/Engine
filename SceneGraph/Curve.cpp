@@ -7,7 +7,7 @@
 #include "Math/FpuCalculateCurve.h"
 #include "Math/FpuAngleAxis.h"
 
-#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "Graphics/BufferedDrawer.h"
 
@@ -379,7 +379,7 @@ UndoCommandPtr Curve::RemoveControlPointAtIndex( uint32_t index )
         {
             if ( i == index )
             {
-                UndoCommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Owner, point );
+                UndoCommandPtr command = new SceneNodeExistenceCommand( ExistenceActions::Remove, m_Owner, point );
                 Dirty();
                 return command;
             }
@@ -414,7 +414,7 @@ UndoCommandPtr Curve::InsertControlPointAtIndex( uint32_t index, CurveControlPoi
     pc->SetNext( next );
     pc->SetParent( this );
 
-    UndoCommandPtr command = new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Owner, pc );
+    UndoCommandPtr command = new SceneNodeExistenceCommand( ExistenceActions::Add, m_Owner, pc );
     Dirty();
     return command;
 }
@@ -603,7 +603,7 @@ void Curve::Populate( PopulateArgs* args )
 
 UndoCommandPtr Curve::CenterTransform()
 {
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
+    BatchUndoCommandPtr batch = new BatchUndoCommand();
 
     batch->Push( Base::CenterTransform() );
 
@@ -667,7 +667,7 @@ UndoCommandPtr Curve::CenterTransform()
 
                 m.TransformVertex( p );
 
-                batch->Push( new Undo::PropertyCommand< Vector3 >( new Helium::MemberProperty< CurveControlPoint, Vector3 >( point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition ), p ) );
+                batch->Push( new PropertyUndoCommand< Vector3 >( new Helium::MemberProperty< CurveControlPoint, Vector3 >( point, &CurveControlPoint::GetPosition, &CurveControlPoint::SetPosition ), p ) );
             }
         }
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Undo/PropertyCommand.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 
@@ -16,10 +16,10 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undo command for switching the current scene.
         // 
-        class SCENE_GRAPH_API SwitchSceneCommand : public Undo::PropertyCommand< SceneGraph::Scene* >
+        class SCENE_GRAPH_API SwitchSceneCommand : public PropertyUndoCommand< SceneGraph::Scene* >
         {
         public:
-            typedef Undo::PropertyCommand< SceneGraph::Scene* > Base;
+            typedef PropertyUndoCommand< SceneGraph::Scene* > Base;
 
         private:
             SceneGraph::SceneManager* m_SceneManager;

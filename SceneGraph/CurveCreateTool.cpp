@@ -154,7 +154,7 @@ void CurveCreateTool::AddToScene()
     // remove temp reference
     m_Scene->RemoveObject( m_Instance );
 
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
     if ( !m_Created )
     {
@@ -170,7 +170,7 @@ void CurveCreateTool::AddToScene()
     }
 
     // add the existence of this object to the batch
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, m_Instance ) );
+    batch->Push( new SceneNodeExistenceCommand( ExistenceActions::Add, m_Scene, m_Instance ) );
 
     // initialize
     m_Instance->SetOwner( m_Scene );

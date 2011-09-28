@@ -5,7 +5,7 @@
 #include "Math/FpuVector3.h"
 #include "Math/FpuMatrix4.h"
 
-#include "Foundation/Undo/Queue.h"
+#include "Foundation/Undo/UndoQueue.h"
 
 #include "SceneGraph/Tool.h"
 #include "SceneGraph/Scene.h"

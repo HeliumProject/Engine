@@ -65,7 +65,7 @@ void UndoQueue::BeginBatch()
 {
     if ( ++m_BatchState == 1 )
     {
-        m_Batch = new BatchCommand();
+        m_Batch = new BatchUndoCommand();
     }
 }
 

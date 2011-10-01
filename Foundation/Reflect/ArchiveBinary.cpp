@@ -55,6 +55,15 @@ ArchiveBinary::ArchiveBinary( const Path& path, ByteOrder byteOrder )
 {
 }
 
+ArchiveBinary::ArchiveBinary( CharStream *stream, bool write /*= false */ )
+: Archive()
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
+{
+    OpenStream(stream, write);
+}
+
 ArchiveBinary::ArchiveBinary()
 : Archive()
 , m_Version( CURRENT_VERSION )
@@ -499,6 +508,33 @@ void ArchiveBinary::SerializeArray( ConstIteratorType begin, ConstIteratorType e
 
     const int32_t terminator = -1;
     m_Stream->Write(&terminator); 
+}
+
+void Helium::Reflect::ArchiveBinary::ReadSingleObject( ObjectPtr& object )
+{
+    if (!object.ReferencesObject())
+    {
+        object = Allocate();
+    }
+    else
+    {
+        // consume crc
+        uint32_t typeCrc = Helium::BeginCrc32();
+        m_Stream->Read(&typeCrc);
+
+        const Class* type = NULL;
+        if ( typeCrc != 0 )
+        {
+            type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+            HELIUM_ASSERT(type == object->GetClass());
+        }
+
+        // consume length
+        uint32_t length = 0;
+        m_Stream->Read(&length);
+    }
+
+    DeserializeInstance(object);
 }
 
 void ArchiveBinary::DeserializeInstance(ObjectPtr& object)

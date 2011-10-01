@@ -86,6 +86,11 @@ namespace Helium
 
         public:
             ArchiveBinary( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+            
+            // PMD: Added to give more control to caller to step through objects one-by-one.
+            ArchiveBinary( CharStream *stream, bool write = false );
+            
+            virtual void Close() HELIUM_OVERRIDE; 
 
         private:
             ArchiveBinary();
@@ -110,7 +115,6 @@ namespace Helium
 
             virtual void Open( bool write = false ) HELIUM_OVERRIDE;
             void OpenStream( CharStream* stream, bool write = false );
-            virtual void Close() HELIUM_OVERRIDE; 
 
             // Begins parsing the InputStream
             virtual void Read() HELIUM_OVERRIDE;
@@ -140,6 +144,16 @@ namespace Helium
             void DeserializeFields( void* object, const Structure* type );
             void DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
             void DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
+
+        public:
+            // This function exists to support deserialization of an object into an existing object. 
+            // DeserializeInstance reads a CRC and size if no object is passed in, otherwise it 
+            // assumes that the CRC/Size header doesn't exist. In this use case, that header is there
+            // and we want to skip it (and verify the object we are passing in is the expected type.) So
+            // this function chomps the header if an object is already provided, or uses that header to
+            // create an object if no object is passed in. Then, we call DeserializeInstance to read
+            // data onto that object per normal behavior.
+            void ReadSingleObject(ObjectPtr& object);
 
         protected:
             // Helpers

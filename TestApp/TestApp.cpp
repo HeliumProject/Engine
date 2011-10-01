@@ -14,6 +14,7 @@
 #include "TestGameObject.h"
 #include "Engine/ArchiveObjectLoader.h"
 #include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Engine/ArchivePackageLoader.h"
 
 
@@ -119,25 +120,67 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_ASSERT( gObjectLoader );
 
 
-//     tstring str;
-//     tstringstream strStream;
-//     {
-//         ObjectDescriptor os;
-//         os.m_Name = TXT("ObjectName");
-//         os.m_TypeName = TXT("GraphicsConfig");
-//         os.m_TemplatePath = TXT("TemplatePath");
-// 
-//         Helium::StrongPtr<GraphicsConfig> config;
-//         GraphicsConfig::Create<GraphicsConfig>(config, Name( TXT("TestConfigObject")), NULL);
-//         config->m_width = 320;
-//         config->m_height = 240;
-// 
-//         Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&strStream, false), true);
-//         xml_out.WriteFileHeader();
-//         xml_out.WriteSingleObject(os);
-//         xml_out.WriteSingleObject(*config);
-//         xml_out.WriteFileFooter();
-//         xml_out.Close();
+    //std::string str;
+    std::stringstream ss_out;
+    {
+        ObjectDescriptor os;
+        os.m_Name = TXT("ObjectName");
+        os.m_TypeName = TXT("GraphicsConfig");
+        os.m_TemplatePath = TXT("TemplatePath");
+
+        Helium::StrongPtr<GraphicsConfig> config;
+        GraphicsConfig::Create<GraphicsConfig>(config, Name( TXT("TestConfigObject")), NULL);
+        config->m_width = 320;
+        config->m_height = 240;
+
+        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+        binary_out.SerializeInstance(&os);
+        binary_out.SerializeInstance(config.Get());
+
+        std::string str;
+        str = ss_out.str();
+
+        std::stringstream ss_in;
+        ss_in.str(str);
+
+        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+
+        Helium::Reflect::ObjectPtr os_obj_ptr_in;
+        Helium::Reflect::ObjectPtr gc_obj_ptr_in;
+
+
+        binary_in.ReadSingleObject(os_obj_ptr_in);
+        //binary_in.DeserializeInstance(gc_obj_ptr_in);
+
+        ObjectDescriptor *os_in = Reflect::SafeCast<ObjectDescriptor>(os_obj_ptr_in.Get());
+        //GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(gc_obj_ptr_in.Get());
+
+        GameObjectType *got = GameObjectType::Find(Name(os_in->m_TypeName.c_str()));
+
+        Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+
+        if (got)
+        {
+            GameObjectPtr game_object_ptr;
+            GameObject::CreateObject(game_object_ptr, got, Name(os_in->m_Name.c_str()), pTypesPackageObject);
+            gc_obj_ptr_in.Set(game_object_ptr.Ptr());
+            binary_in.ReadSingleObject(gc_obj_ptr_in);
+
+            GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(game_object_ptr.Get());
+        }
+
+
+
+         //xml_out.WriteFileHeader();
+         //xml_out.WriteSingleObject(os);
+         //xml_out.WriteSingleObject(*config);
+         //xml_out.WriteFileFooter();
+         //xml_out.
+         //xml_out.Close();
+
+         //std::
+         //Reflect::ArchiveBinary 
+     }
 // 
 // 
 //         //Reflect::ArchiveXML::
@@ -204,6 +247,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 // 
 //         config = Reflect::AssertCast<GraphicsConfig>(config_ptr.Get());
 //     }
+
 
 
 

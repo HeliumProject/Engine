@@ -4,7 +4,7 @@
 #include "CommandQueue.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Foundation/Undo/Queue.h"
+#include "Foundation/Undo/UndoQueue.h"
 
 #include <wx/timer.h>
 
@@ -27,7 +27,7 @@ namespace Helium
             virtual bool CanRedo();
             virtual void Undo();
             virtual void Redo();
-            virtual void Push( const Undo::CommandPtr& command );
+            virtual void Push( const UndoCommandPtr& command );
 
         protected:
             uint32_t CreatePanelsMenu( wxMenu* menu );
@@ -43,7 +43,7 @@ namespace Helium
             M_MenuIdToPanel m_Panels;
 
         protected:
-            Undo::Queue     m_UndoQueue;
+            UndoQueue     m_UndoQueue;
             wxAuiManager    m_FrameManager;
 
             std::set<wxString> m_ExcludeFromPanelsMenu;

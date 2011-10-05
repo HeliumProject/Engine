@@ -321,11 +321,6 @@ bool Data::ShouldSerialize()
     return true;
 }
 
-void Data::Serialize(const Helium::BasicBufferPtr& buffer, const tchar_t* debugStr) const
-{
-    HELIUM_BREAK();
-}
-
 tostream& Data::operator>>(tostream& stream) const
 { 
     HELIUM_BREAK(); 

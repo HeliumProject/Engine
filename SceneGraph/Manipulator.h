@@ -104,7 +104,7 @@ namespace Helium
 
             virtual Scale GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const Scale& v) = 0;
+            virtual UndoCommandPtr SetValue(const Scale& v) = 0;
         };
 
         class SCENE_GRAPH_API RotateManipulatorAdapter : public ManipulatorAdapter
@@ -121,7 +121,7 @@ namespace Helium
 
             virtual EulerAngles GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const EulerAngles& v) = 0;
+            virtual UndoCommandPtr SetValue(const EulerAngles& v) = 0;
         };
 
         class SCENE_GRAPH_API TranslateManipulatorAdapter : public ManipulatorAdapter
@@ -138,7 +138,7 @@ namespace Helium
 
             virtual Vector3 GetValue() = 0;
 
-            virtual Undo::CommandPtr SetValue(const Vector3& v) = 0;
+            virtual UndoCommandPtr SetValue(const Vector3& v) = 0;
         };
 
         class SCENE_GRAPH_API ManiuplatorAdapterCollection HELIUM_ABSTRACT

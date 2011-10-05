@@ -88,7 +88,7 @@ void Frame::Redo()
     m_UndoQueue.Redo();
 }
 
-void Frame::Push( const Undo::CommandPtr& command )
+void Frame::Push( const UndoCommandPtr& command )
 {
     m_UndoQueue.Push( command );
 }

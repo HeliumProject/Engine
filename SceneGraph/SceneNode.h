@@ -2,9 +2,10 @@
 
 #include <hash_map>
 
+#include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/Reflect/Object.h"
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 
@@ -298,7 +299,7 @@ namespace Helium
             void SetState( const Reflect::ObjectPtr& state );
 
             // Get undo command for this object's state (uses GetState/SetState above)
-            virtual Undo::CommandPtr SnapShot( Reflect::Object* newState = NULL );
+            virtual UndoCommandPtr SnapShot( Reflect::Object* newState = NULL );
 
             //
             // Selected state

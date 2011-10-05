@@ -169,7 +169,7 @@ void TranslateManipulator::SetResult()
                 }
                 else
                 {
-                    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+                    BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
                     for each (TranslateManipulatorAdapter* accessor in CompleteSet<TranslateManipulatorAdapter>())
                     {

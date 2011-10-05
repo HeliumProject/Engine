@@ -3,8 +3,7 @@
 
 #include "Math/FpuEulerAngles.h"
 #include "Math/Axes.h"
-#include "Foundation/Undo/PropertyCommand.h"
-
+#include "Foundation/Undo/UndoCommand.h"
 #include "SceneGraph/Scene.h"
 
 using namespace Helium;
@@ -221,10 +220,10 @@ Matrix4 PivotTransform::GetTranslateComponent() const
     return Base::GetTranslateComponent();
 }
 
-Undo::CommandPtr PivotTransform::ResetTransform()
+UndoCommandPtr PivotTransform::ResetTransform()
 {
     // we need to snapshot here to save pivot state
-    Undo::CommandPtr command = SnapShot();
+    UndoCommandPtr command = SnapShot();
 
     // disregard the base class' command, its not complete
     Base::ResetTransform ();
@@ -320,7 +319,7 @@ void MatrixDecomposeFixedPivots(Scale& scale, Shear& shear,
     translate = finalTrans; 
 }
 
-Undo::CommandPtr PivotTransform::ComputeObjectComponents()
+UndoCommandPtr PivotTransform::ComputeObjectComponents()
 {
     const Matrix4& parentGlobalTransform = m_Parent->GetTransform()->GetGlobalTransform();
     const Matrix4& parentInverseGlobalTransform = m_Parent->GetTransform()->GetInverseGlobalTransform();
@@ -340,7 +339,7 @@ Undo::CommandPtr PivotTransform::ComputeObjectComponents()
     // decomposing to include shear 
     // 
 
-    Undo::CommandPtr command = ResetTransform();
+    UndoCommandPtr command = ResetTransform();
 
     Scale scale;
     Shear shear; 
@@ -391,9 +390,9 @@ Undo::CommandPtr PivotTransform::ComputeObjectComponents()
     return command;
 }
 
-Undo::CommandPtr PivotTransform::CenterTransform()
+UndoCommandPtr PivotTransform::CenterTransform()
 {
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
+    BatchUndoCommandPtr batch = new BatchUndoCommand();
 
     batch->Push( Base::CenterTransform() );
 
@@ -420,7 +419,7 @@ Undo::CommandPtr PivotTransform::CenterTransform()
         }
     }
 
-    batch->Push( new Undo::PropertyCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
+    batch->Push( new PropertyUndoCommand<Matrix4> ( new Helium::MemberProperty<SceneGraph::Transform, Matrix4> (this, &SceneGraph::Transform::GetGlobalTransform, &SceneGraph::Transform::SetGlobalTransform), Matrix4 (pos) ) );
 
     Evaluate(GraphDirections::Downstream);
 

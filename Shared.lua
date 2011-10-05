@@ -655,7 +655,6 @@ project( prefix .. "FrameworkWin" )
 			prefix .. "EditorSupport",
 		}
 		
-		
 project( prefix .. "TestJobs" )-- DEPRECATED
 	uuid "12106586-0EB1-4D4C-9DFE-E3C63D3E4013"
 

@@ -1261,7 +1261,7 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
         switch ( event.GetId() )
         {
@@ -1463,7 +1463,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
                 SceneStatusChanged( str.str() );
             }
 
-            Undo::BatchCommandPtr changes = new Undo::BatchCommand();
+            BatchUndoCommandPtr changes = new BatchUndoCommand();
 
             std::vector< Reflect::ObjectPtr > elements;
             bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
@@ -2389,7 +2389,7 @@ bool MainFrame::Paste( SceneGraph::Scene* scene )
     if ( !xml.empty() )
     {
         // Create a batch to add the objects to the scene
-        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        BatchUndoCommandPtr batch = new BatchUndoCommand ();
 
         // Import the data as children of the paste root
         batch->Push( scene->ImportXML( xml, ImportFlags::Select ) );

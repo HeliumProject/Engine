@@ -6,7 +6,7 @@
 
 #include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Enumeration.h"
-#include "Foundation/Undo/Queue.h"
+#include "Foundation/Undo/UndoQueue.h"
 
 #include "Rendering/Color.h"
 
@@ -463,7 +463,7 @@ namespace Helium
 
             Tool*                   m_Tool;
             Camera                  m_Cameras[CameraMode::Count];
-            Undo::Queue             m_CameraHistory[CameraMode::Count];
+            UndoQueue               m_CameraHistory[CameraMode::Count];
 
             CameraMode              m_CameraMode;
             GeometryMode            m_GeometryMode;

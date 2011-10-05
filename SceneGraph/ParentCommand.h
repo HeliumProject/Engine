@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Foundation/Undo/BatchCommand.h"
-
 #include "SceneGraph/API.h"
 #include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/Undo/UndoCommand.h"
 
 namespace Helium
 {
@@ -12,10 +11,10 @@ namespace Helium
         class HierarchyNode;
         typedef Helium::StrongPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
 
-        class SCENE_GRAPH_API ParentCommand : public Undo::BatchCommand
+        class SCENE_GRAPH_API ParentCommand : public BatchUndoCommand
         {
         public:
-            typedef Undo::BatchCommand Base;
+            typedef BatchUndoCommand Base;
 
         private:
             HierarchyNodePtr m_Node;

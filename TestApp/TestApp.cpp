@@ -107,7 +107,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
     //HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
     HELIUM_VERIFY( ArchiveObjectLoader::InitializeStaticInstance() );
-    
+
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
     HELIUM_ASSERT( pObjectPreprocessor );
     PlatformPreprocessor* pPlatformPreprocessor = new PcPreprocessor;

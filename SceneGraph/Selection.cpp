@@ -31,7 +31,7 @@ const OS_SceneNodeDumbPtr& Selection::GetItems() const
     return m_Items;
 }
 
-Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (m_Items.Empty())
     {
@@ -42,7 +42,7 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
 
     SimpleTimer timer;
 
-    Undo::CommandPtr command;
+    UndoCommandPtr command;
 
     OS_SceneNodeDumbPtr empty;
     SelectionChangingArgs args ( empty );
@@ -68,7 +68,7 @@ Undo::CommandPtr Selection::Clear(const SelectionChangingSignature::Delegate& em
     return command;
 }
 
-Undo::CommandPtr Selection::SetItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::SetItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (item == NULL)
     {
@@ -82,7 +82,7 @@ Undo::CommandPtr Selection::SetItem(SceneNode* item, const SelectionChangingSign
     return SetItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if (items.Empty())
     {
@@ -107,7 +107,7 @@ Undo::CommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const Sel
         }
     }
 
-    Undo::CommandPtr command;
+    UndoCommandPtr command;
 
     SelectionChangingArgs args ( items );
     m_SelectionChanging.RaiseWithEmitter( args , emitterChanging);
@@ -143,7 +143,7 @@ Undo::CommandPtr Selection::SetItems(const OS_SceneNodeDumbPtr& items, const Sel
     return command;
 }
 
-Undo::CommandPtr Selection::AddItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::AddItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if ( item == NULL )
     {
@@ -157,7 +157,7 @@ Undo::CommandPtr Selection::AddItem(SceneNode* item, const SelectionChangingSign
     return AddItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     if ( items.Empty() )
     {
@@ -180,7 +180,7 @@ Undo::CommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const Sel
         }
     }
 
-    Undo::CommandPtr command;
+    UndoCommandPtr command;
 
     if ( !temp.Empty() )
     {
@@ -208,7 +208,7 @@ Undo::CommandPtr Selection::AddItems(const OS_SceneNodeDumbPtr &items, const Sel
     return command;
 }
 
-Undo::CommandPtr Selection::RemoveItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::RemoveItem(SceneNode* item, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no item to remove or no items to remove from
     if ( item == NULL || m_Items.Empty() )
@@ -223,7 +223,7 @@ Undo::CommandPtr Selection::RemoveItem(SceneNode* item, const SelectionChangingS
     return RemoveItems(temp, emitterChanging, emitterChanged);
 }
 
-Undo::CommandPtr Selection::RemoveItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
+UndoCommandPtr Selection::RemoveItems(const OS_SceneNodeDumbPtr& items, const SelectionChangingSignature::Delegate& emitterChanging, const SelectionChangedSignature::Delegate& emitterChanged)
 {
     // no selected items
     if ( m_Items.Empty() )
@@ -247,7 +247,7 @@ Undo::CommandPtr Selection::RemoveItems(const OS_SceneNodeDumbPtr& items, const 
         }
     }
 
-    Undo::CommandPtr command;
+    UndoCommandPtr command;
 
     SelectionChangingArgs args ( temp );
     m_SelectionChanging.RaiseWithEmitter( args, emitterChanging );

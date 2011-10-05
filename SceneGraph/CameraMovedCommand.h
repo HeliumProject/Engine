@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Undo/Command.h"
+#include "Foundation/Undo/UndoCommand.h"
 #include "Math/FpuMatrix4.h"
 
 namespace Helium
@@ -12,7 +12,7 @@ namespace Helium
 
         /// @class CameraMovedCommand
         /// @breif Used to implement a Undo/Redo queue for camera movement in the scene editor
-        class CameraMovedCommand : public Undo::Command
+        class CameraMovedCommand : public UndoCommand
         {
         private:
             SceneGraph::Camera*         m_Camera;

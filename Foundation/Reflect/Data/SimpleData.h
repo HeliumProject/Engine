@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Foundation/API.h"
 #include "Foundation/Reflect/Data/Data.h"
 #include "Math/FpuVector2.h"
 #include "Math/FpuVector3.h"
@@ -14,8 +13,6 @@
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
 
-
-
 namespace Helium
 {
     namespace Reflect
@@ -26,11 +23,35 @@ namespace Helium
         //  has constant size and support for iostream insertion and extraction
         //
 
-#define API_DEFINE HELIUM_FOUNDATION_API
-#define TEMPLATE_NAME SimpleData
-#include "SimpleDataTemplate.h.inl"
-#undef API_DEFINE
-#undef TEMPLATE_NAME
+        template <class T>
+        class HELIUM_FOUNDATION_API SimpleData : public Data
+        {
+        public:
+            typedef T DataType;
+            DataPointer<DataType> m_Data;
+
+            typedef SimpleData<DataType> SimpleDataT;
+            REFLECT_DECLARE_OBJECT( SimpleDataT, Data );
+
+            SimpleData ();
+            ~SimpleData();
+
+            virtual bool IsCompact() const HELIUM_OVERRIDE { return true; }
+
+            virtual void ConnectData(void* data) HELIUM_OVERRIDE;
+
+            virtual bool Set(Data* src, uint32_t flags = 0) HELIUM_OVERRIDE;
+            virtual bool Equals(Object* object) HELIUM_OVERRIDE;
+
+            virtual void Serialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
+            virtual void Deserialize(ArchiveBinary& archive) HELIUM_OVERRIDE;
+
+            virtual void Serialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+            virtual void Deserialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+
+            virtual tostream& operator>>(tostream& stream) const HELIUM_OVERRIDE;
+            virtual tistream& operator<<(tistream& stream);
+        };
 
         typedef SimpleData<tstring> StlStringData;
         typedef SimpleData<bool> BoolData;
@@ -57,6 +78,5 @@ namespace Helium
         typedef SimpleData<Color4> Color4Data;
         typedef SimpleData<HDRColor3> HDRColor3Data;
         typedef SimpleData<HDRColor4> HDRColor4Data;
-
     }
 }

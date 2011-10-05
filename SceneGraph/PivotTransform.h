@@ -85,13 +85,13 @@ namespace Helium
             virtual Matrix4 GetTranslateComponent() const HELIUM_OVERRIDE;
 
             // resets transform to identity
-            virtual Undo::CommandPtr ResetTransform() HELIUM_OVERRIDE;
+            virtual UndoCommandPtr ResetTransform() HELIUM_OVERRIDE;
 
             // recomputes local components from the global matrix
-            virtual Undo::CommandPtr ComputeObjectComponents() HELIUM_OVERRIDE;
+            virtual UndoCommandPtr ComputeObjectComponents() HELIUM_OVERRIDE;
 
             // repositions group nodes WRT thier children
-            virtual Undo::CommandPtr CenterTransform() HELIUM_OVERRIDE;
+            virtual UndoCommandPtr CenterTransform() HELIUM_OVERRIDE;
 
         protected:
             Shear         m_Shear;                    // shear values

@@ -28,6 +28,8 @@ namespace Helium
 
             virtual void Serialize(ArchiveXML& archive) HELIUM_OVERRIDE;
             virtual void Deserialize(ArchiveXML& archive) HELIUM_OVERRIDE;
+
+            void AllocateForArrayEntry(void *instance, const Field *field);
         };
 
         typedef Helium::SmartPtr<StructureData> AggregateDataPtr;

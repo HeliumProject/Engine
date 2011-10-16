@@ -644,15 +644,6 @@ bool GameObject::CreateObject(
     pObject->m_spTemplate = pTemplate;
 
     // Initialize the object based on its default.
-    /*
-    sm_serializationBuffer.Resize( 0 );
-    DirectSerializer templateSerializer( sm_serializationBuffer );
-    HELIUM_VERIFY( templateSerializer.Serialize( pObjectTemplate ) );
-
-    DirectDeserializer templateDeserializer( sm_serializationBuffer );
-    HELIUM_VERIFY( templateDeserializer.Serialize( pObject ) );
-    */
-    // PMDTODO: Do a clone
     pObjectTemplate->CopyTo(pObject);
 
     // Attempt to register the object and set its name.

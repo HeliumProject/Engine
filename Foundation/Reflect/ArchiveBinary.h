@@ -175,6 +175,26 @@ namespace Helium
             // the same way.
             void ReadString(tstring &str);
             void WriteString(const tstring &str);
+
+        public:
+            struct DeserializingField
+            {
+                void* m_Instance;
+                const Field* m_Field;
+            };
+            
+            const DeserializingField *GetDeserializingField()
+            {
+                if (!m_DeserializingFieldStack.IsEmpty())
+                {
+                    return &m_DeserializingFieldStack.GetLast();
+                }
+
+                return NULL;
+            }
+       
+        private:
+            DynArray<DeserializingField> m_DeserializingFieldStack;
         };
     }
 }

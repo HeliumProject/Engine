@@ -22,6 +22,7 @@
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 
 using namespace Helium;
 
@@ -136,29 +137,19 @@ bool ObjectPreprocessor::CacheObject(
         bool bSwapBytes = pPreprocessor->SwapBytes();
         Stream& rObjectStream =
             ( bSwapBytes ? static_cast< Stream& >( byteSwappingStream ) : static_cast< Stream& >( directStream ) );
+        
+        std::stringstream ss_out;
+        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+        binary_out.SerializeInstance( pObject );
 
-        // Set aside 4 bytes at the beginning of the data stream for the size of the property data itself so that we
-        // can know how much data we can skip to get directly to the persistent resource data for resource objects.
-        uint32_t propertyDataSize = 0;
-        rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
+        std::string str_out = ss_out.str();
+        const char *cstr_out = str_out.c_str();
 
-        // Serialize the property data.
-        //PMDTODO: Fix me
-        //BinarySerializer serializer;
-        //serializer.SetByteSwapping( bSwapBytes );
-        //serializer.Serialize( pObject );
 
-        //serializer.WriteToStream( &rObjectStream );
-
-        // Update the property data size for resources.
-        size_t propertyDataSizeActual = objectStreamBuffer.GetSize() - sizeof( propertyDataSize );
-        HELIUM_ASSERT( propertyDataSizeActual <= UINT32_MAX );
-
-        propertyDataSize = static_cast< uint32_t >( propertyDataSizeActual );
-        rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_BEGIN );
-        rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
-        rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_END );
-
+        rObjectStream.Write(cstr_out, 1, str_out.size());
+        //binary_out.SerializeInstance( pCached
+		//PMDTODO: I've forgotten why i no longer need to write the property length here.. I need to figure that out.
+		
         // Serialize persistent resource data and the number of chunks of sub-data.
         if( pResource )
         {
@@ -867,30 +858,32 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     }
 
     // Reserialize the current platform's persistent resource data.
-    // PMDTODO: Fix me
-//     CacheManager& rCacheManager = CacheManager::GetStaticInstance();
-//     Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
-//     HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
-//     PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];
-//     if( pPlatformPreprocessor )
-//     {
-//         const Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
-//         if( rPreprocessedData.bLoaded )
-//         {
-//             const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
-//             size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
-//             if( persistentDataBufferSize != 0 )
-//             {
-//                 BinaryDeserializer deserializer;
-//                 deserializer.Prepare( rPersistentDataBuffer.GetData(), persistentDataBufferSize );
-//                 deserializer.SetByteSwapping( pPlatformPreprocessor->SwapBytes() );
-// 
-//                 deserializer.BeginSerialize();
-//                 pResource->SerializePersistentResourceData( deserializer );
-//                 HELIUM_VERIFY( deserializer.EndSerialize() );
-//             }
-//         }
-//     }
+    CacheManager& rCacheManager = CacheManager::GetStaticInstance();
+    Cache::EPlatform platform = rCacheManager.GetCurrentPlatform();
+    HELIUM_ASSERT( static_cast< size_t >( platform ) < HELIUM_ARRAY_COUNT( m_pPlatformPreprocessors ) );
+    PlatformPreprocessor* pPlatformPreprocessor = m_pPlatformPreprocessors[ platform ];
+    if( pPlatformPreprocessor )
+    {
+        const Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
+        if( rPreprocessedData.bLoaded )
+        {
+            const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
+            size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
+            if( persistentDataBufferSize != 0 )
+            {
+                // Deserialize the persistent resource data.
+                // Having to do this copy is unfortunate.. maybe we can revisit this later
+                std::stringstream ss_in;
+                ss_in.write(reinterpret_cast<const char *>(&rPersistentDataBuffer[0]), persistentDataBufferSize);
+
+                Reflect::ArchiveBinary archive(new Reflect::CharStream(&ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+               
+                Reflect::ObjectPtr persistent_data;
+                archive.ReadSingleObject(persistent_data);
+                pResource->LoadPersistentResourceObject(persistent_data);
+            }
+        }
+    }
 
     return true;
 }

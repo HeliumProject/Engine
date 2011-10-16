@@ -40,7 +40,7 @@
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/Material.h"
 #include "Graphics/RenderResourceManager.h"
-#include "Graphics/GraphicsEnumRegistration.h"
+#include "Graphics/GraphicsCustomTypeRegistration.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Framework/Camera.h"
 #include "Framework/Layer.h"

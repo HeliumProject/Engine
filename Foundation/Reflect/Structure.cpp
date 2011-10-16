@@ -6,7 +6,6 @@ using namespace Helium::Reflect;
 
 Structure::Structure ()
 {
-
 }
 
 Structure::~Structure ()

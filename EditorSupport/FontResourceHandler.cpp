@@ -163,6 +163,8 @@ bool FontResourceHandler::CacheResource(
     Resource* pResource,
     const String& rSourceFilePath )
 {
+	//PMDTODO: Need to make this work
+    return true;
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
@@ -456,28 +458,29 @@ bool FontResourceHandler::CacheResource(
 
         // Store the character information in our character array.
         Font::Character* pCharacter = characters.New();
-        HELIUM_ASSERT( pCharacter );
-        pCharacter->codePoint = static_cast< uint32_t >( codePoint );
+        // PMDTODO: Verify that this stuff should be commented out 
+    //    HELIUM_ASSERT( pCharacter );
+    //    pCharacter->codePoint = static_cast< uint32_t >( codePoint );
 
-        pCharacter->imageX = penX;
-        pCharacter->imageY = penY;
-        pCharacter->imageWidth = static_cast< uint16_t >( glyphWidth );
-        pCharacter->imageHeight = static_cast< uint16_t >( glyphRowCount );
+    //    pCharacter->imageX = penX;
+    //    pCharacter->imageY = penY;
+    //    pCharacter->imageWidth = static_cast< uint16_t >( glyphWidth );
+    //    pCharacter->imageHeight = static_cast< uint16_t >( glyphRowCount );
 
-        pCharacter->width = pGlyph->metrics.width;
-        pCharacter->height = pGlyph->metrics.height;
-        pCharacter->bearingX = pGlyph->metrics.horiBearingX;
-        pCharacter->bearingY = pGlyph->metrics.horiBearingY;
-        pCharacter->advance = pGlyph->metrics.horiAdvance;
+    //    pCharacter->width = pGlyph->metrics.width;
+    //    pCharacter->height = pGlyph->metrics.height;
+    //    pCharacter->bearingX = pGlyph->metrics.horiBearingX;
+    //    pCharacter->bearingY = pGlyph->metrics.horiBearingY;
+    //    pCharacter->advance = pGlyph->metrics.horiAdvance;
 
-        HELIUM_ASSERT( textureSheets.GetSize() < UINT8_MAX );
-        pCharacter->texture = static_cast< uint8_t >( static_cast< uint8_t >( textureSheets.GetSize() ) );
+    //    HELIUM_ASSERT( textureSheets.GetSize() < UINT8_MAX );
+    //    pCharacter->texture = static_cast< uint8_t >( static_cast< uint8_t >( textureSheets.GetSize() ) );
 
-        // Update the pen location as well as the maximum line height as appropriate based on the current line height.
-        penX += static_cast< uint16_t >( glyphWidth ) + 1;
+    //    // Update the pen location as well as the maximum line height as appropriate based on the current line height.
+    //    penX += static_cast< uint16_t >( glyphWidth ) + 1;
 
-        HELIUM_ASSERT( glyphRowCount <= UINT16_MAX );
-        lineHeight = Max< uint16_t >( lineHeight, static_cast< uint16_t >( glyphRowCount ) );
+    //    HELIUM_ASSERT( glyphRowCount <= UINT16_MAX );
+    //    lineHeight = Max< uint16_t >( lineHeight, static_cast< uint16_t >( glyphRowCount ) );
     }
 
     // Compress and store the last texture in the sheet.

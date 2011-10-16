@@ -109,3 +109,15 @@ void StructureData::Deserialize(ArchiveXML& archive)
         archive.DeserializeInstance( m_Data.Get( structure->m_Size ), structure );
     }
 }
+
+void Helium::Reflect::StructureData::AllocateForArrayEntry( void *instance, const Field *field )
+{
+    
+    const Structure* structure = ReflectionCast< Structure >( field->m_Type );
+    HELIUM_ASSERT( structure );
+
+    structure->Copy(structure->m_Default, m_Data.Get(structure->m_Size));
+    m_Instance = instance;
+    m_Field = field;
+
+}

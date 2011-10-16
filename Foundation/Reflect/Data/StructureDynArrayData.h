@@ -9,16 +9,17 @@ namespace Helium
 {
     namespace Reflect
     {
-        class HELIUM_FOUNDATION_API ObjectDynArrayData : public DynArrayData
+
+        class HELIUM_FOUNDATION_API StructureDynArrayData : public DynArrayData
         {
         public:
-            typedef DynArray< ObjectPtr > DataType;
-            DataPointer< DataType > m_Data;
+            typedef void DataType;
+            VoidDataPointer m_Data;
 
-            REFLECT_DECLARE_OBJECT( ObjectDynArrayData, DynArrayData )
+            REFLECT_DECLARE_OBJECT( StructureDynArrayData, DynArrayData )
 
-            ObjectDynArrayData();
-            ~ObjectDynArrayData();
+            StructureDynArrayData();
+            ~StructureDynArrayData();
 
             //DynArrayData Interface
             
@@ -52,7 +53,11 @@ namespace Helium
             void Serialize( ArchiveT& archive );
 			template< class ArchiveT >
             void Deserialize( ArchiveT& archive );
+
+            const Structure* GetInternalStructure();
+
+            void *GetInternalPtr(const Structure* structure);
         };
-        typedef Helium::SmartPtr< ObjectDynArrayData > ObjectDynArrayDataPtr;
+        typedef Helium::SmartPtr< StructureDynArrayData > StructureDynArrayDataPtr;
     }
 }

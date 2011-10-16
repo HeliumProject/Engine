@@ -210,6 +210,8 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color4DynArrayData>( TXT( "Color4DynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3DynArrayData>( TXT( "HDRColor3DynArray" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4DynArrayData>( TXT( "HDRColor4DynArray" ) ) );
+        
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StructureDynArrayData>( TXT( "StructureDynArrayData" ) ) );
 
         // SetData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<SetData>( TXT( "Set" ) ) );

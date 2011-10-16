@@ -26,6 +26,7 @@
 //#include "PcSupport/ObjectPreprocessor.h"
 //#include "PcSupport/ResourceHandler.h"
 #include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 #include "expat.h"
@@ -1546,18 +1547,20 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
                 bytesRemaining -= sizeof( uint32_t );
 
                 // Deserialize the persistent resource data.
-                // PMDTODO: Fix this
-                BinaryDeserializer deserializer;
-                deserializer.Prepare( pCachedObjectData, bytesRemaining );
+                // Having to do this copy is unfortunate.. maybe we can revisit this later
+                std::stringstream ss_in;
+                ss_in.write(reinterpret_cast<char *>(pCachedObjectData), bytesRemaining);
 
-                deserializer.BeginSerialize();
-                pResource->SerializePersistentResourceData( deserializer );
-                if( !deserializer.EndSerialize() )
+                Reflect::ArchiveBinary archive(new Reflect::CharStream(&ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+               
+                Reflect::ObjectPtr persistent_data;
+                archive.ReadSingleObject(persistent_data);
+
+                if (!pResource->LoadPersistentResourceObject(persistent_data))
                 {
                     HELIUM_TRACE(
                         TRACE_ERROR,
-                        ( TXT( "ArchivePackageLoader: Attempted to read past the end of the cached data stream when " )
-                        TXT( "deserializing persistent resource data for \"%s\".\n" ) ),
+                        ( TXT( "ArchivePackageLoader: Failed to load persistent resource object for \"%s\".\n" ) ),
                         *pResource->GetPath().ToString() );
 
                     pRequest->flags |= LOAD_FLAG_ERROR;

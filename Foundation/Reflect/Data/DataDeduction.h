@@ -31,6 +31,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathData );
 //
 
 #include "Foundation/Reflect/Data/ContainerData.h"
+#include "Foundation/Reflect/Data/StructureDynArrayData.h"
 
 #include "Foundation/Reflect/Data/SimpleData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringData );

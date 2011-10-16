@@ -187,6 +187,7 @@ Helium::Reflect::DataPtr Helium::Reflect::Data::Create(const T& value)
     return ser;
 }
 
+// See also special implementation for Data::BindStructure in .cpp
 template <class T>
 Helium::Reflect::DataPtr Helium::Reflect::Data::Bind(T& value, void* instance, const Field* field)
 {
@@ -194,9 +195,11 @@ Helium::Reflect::DataPtr Helium::Reflect::Data::Bind(T& value, void* instance, c
 
     if (ser.ReferencesObject())
     {
-        ser->ConnectData( &value );
+        // pmd - ConnectData might require the instance/field, so moving that above the ConnectData call. (Structures
+        // definitely require this, but FYI should use BindStructure).
         ser->m_Instance = instance;
         ser->m_Field = field;
+        ser->ConnectData( &value );
     }
 
     return ser;

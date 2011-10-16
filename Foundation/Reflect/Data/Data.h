@@ -138,6 +138,9 @@ namespace Helium
 
             template <class T>
             inline static DataPtr Bind(T& value, void* instance, const Field* field);
+            
+            // Not inline because this requires StructureData, so must be in .cpp
+            static DataPtr BindStructure(void* value, void* instance, const Field* field);
 
             //
             // Value templates

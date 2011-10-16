@@ -8,6 +8,7 @@
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
 #include "Foundation/Reflect/Enumeration.h"
+#include "Foundation/Reflect/Structure.h"
 
 namespace Helium
 {
@@ -60,8 +61,34 @@ namespace Helium
         static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
-        struct HELIUM_GRAPHICS_API Character
+        //TODO: Would be nice if we had good structure support for DynArrays so we didn't have to make this an Object
+        struct HELIUM_GRAPHICS_API Character //: public Object
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Font::Character);
+            //REFLECT_DECLARE_OBJECT(Font::Character, Reflect::Object);
+
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            bool                  operator== (const Character& rhs) const
+            {
+                return (codePoint == rhs.codePoint && 
+                    imageX == rhs.imageX &&
+                    imageY == rhs.imageY &&
+                    imageWidth == rhs.imageWidth &&
+                    imageHeight == rhs.imageHeight &&
+                    width == rhs.width &&
+                    height == rhs.height &&
+                    bearingX == rhs.bearingX &&
+                    bearingY == rhs.bearingY &&
+                    advance == rhs.advance &&
+                    texture == rhs.texture); 
+            }
+
+            bool                  operator!= (const Character& rhs) const
+            {
+                return !(*this == rhs);
+            }
+
             /// Unicode code point value.
             uint32_t codePoint;
 
@@ -90,13 +117,46 @@ namespace Helium
 
             /// Texture sheet index.
             uint8_t texture;
-
-            /// @name Serialization
-            //@{
-            //PMDTODO: HACK - Remove Serialize()
-            void Serialize( Serializer& s );
-            //@}
+// 
+//             /// @name Serialization
+//             //@{
+//             //PMDTODO: HACK - Remove Serialize()
+//             void Serialize( Serializer& s );
+//             //@}
         };
+        //typedef Helium::StrongPtr<Character> CharacterPtr;
+        
+        struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
+        {
+            REFLECT_DECLARE_OBJECT(Font::PersistentResourceData, Reflect::Object);
+
+            PersistentResourceData();
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            /// Cached ascender height, in pixels (26.6 fixed-point value).
+            int32_t m_ascender;
+            /// Cached descender depth, in pixels (26.6 fixed-point value).
+            int32_t m_descender;
+            /// Cached font height, in pixels (26.6 fixed-point value).
+            int32_t m_height;
+            /// Maximum advance width when rendering text, in pixels (26.6 fixed-point value).
+            int32_t m_maxAdvance;
+
+            /// Array of characters (ordered by code point value to allow for binary searching).
+            //DynArray<CharacterPtr> m_characters;
+            DynArray<Character> m_characters;
+
+            /// Array of texture sheets.
+            RTexture2dPtr* m_pspTextures;
+            /// Texture sheet load IDs.
+            size_t* m_pTextureLoadIds;
+            /// Number of texture sheets.
+            uint8_t m_textureCount;
+        };
+        
+        /// Persistent shader resource data.
+        PersistentResourceData m_persistentResourceData;
+
 
         /// Base template type for handling conversions to wide-character strings as needed for ProcessText().
         template< typename CharType >
@@ -162,6 +222,8 @@ namespace Helium
         /// @name Serialization
         //@{
         //virtual void Serialize( Serializer& s );
+        
+        static void PopulateComposite( Reflect::Composite& comp );
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();
@@ -169,8 +231,9 @@ namespace Helium
         //@}
 
         /// @name Resource Serialization
-        //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //@{    
+        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 
         /// @name Resource Caching Support
@@ -246,28 +309,7 @@ namespace Helium
 
         /// Texture compression scheme.
         ECompression m_textureCompression;
-
-        /// Cached ascender height, in pixels (26.6 fixed-point value).
-        int32_t m_ascender;
-        /// Cached descender depth, in pixels (26.6 fixed-point value).
-        int32_t m_descender;
-        /// Cached font height, in pixels (26.6 fixed-point value).
-        int32_t m_height;
-        /// Maximum advance width when rendering text, in pixels (26.6 fixed-point value).
-        int32_t m_maxAdvance;
-
-        /// Array of characters (ordered by code point value to allow for binary searching).
-        Character* m_pCharacters;
-        /// Character count.
-        uint32_t m_characterCount;
-
-        /// Array of texture sheets.
-        RTexture2dPtr* m_pspTextures;
-        /// Texture sheet load IDs.
-        size_t* m_pTextureLoadIds;
-        /// Number of texture sheets.
-        uint8_t m_textureCount;
-
+        
         /// True if this font should use anti-aliasing to smooth edges, false if not.
         bool m_bAntialiased;
 

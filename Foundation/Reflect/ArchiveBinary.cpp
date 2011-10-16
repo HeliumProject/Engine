@@ -566,6 +566,12 @@ void ArchiveBinary::DeserializeInstance(ObjectPtr& object)
 
         if ( data )
         {
+            const DeserializingField *deserializing_field = GetDeserializingField();
+            if (deserializing_field)
+            {
+                data->ConnectField(deserializing_field->m_Instance, deserializing_field->m_Field);
+            }
+
             data->Deserialize(*this);
         }
         else
@@ -600,7 +606,10 @@ void ArchiveBinary::DeserializeFields(Object* object)
 {
     int32_t fieldCount = -1;
     m_Stream->Read(&fieldCount); 
-
+    
+    DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+    HELIUM_ASSERT(deserializing_field);
+    deserializing_field->m_Instance = object;
     for (int i=0; i<fieldCount; i++)
     {
         uint32_t fieldNameCrc = BeginCrc32();
@@ -612,6 +621,7 @@ void ArchiveBinary::DeserializeFields(Object* object)
         ObjectPtr unknown;
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
+        deserializing_field->m_Field = field;
         if ( field )
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -703,6 +713,8 @@ void ArchiveBinary::DeserializeFields(Object* object)
         m_Indent.Pop();
 #endif
     }
+
+    m_DeserializingFieldStack.Pop();
 
     int32_t terminator = -1;
     m_Stream->Read(&terminator); 

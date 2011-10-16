@@ -28,10 +28,89 @@ size_t ObjectDynArrayData::GetSize() const
     return m_Data->GetSize(); 
 }
 
+void ObjectDynArrayData::SetSize( size_t size )
+{
+    return m_Data->Resize( size );
+}
+
 void ObjectDynArrayData::Clear()
 { 
     return m_Data->Clear(); 
 }
+
+const Class* ObjectDynArrayData::GetItemClass() const
+{
+    return Reflect::GetDataClass< Reflect::Object >();
+}
+
+DataPtr ObjectDynArrayData::GetItem( size_t at )
+{
+    return Data::Bind( m_Data->GetElement( at ), m_Instance, m_Field );
+}
+
+void ObjectDynArrayData::SetItem( size_t at, Data* value )
+{
+    Data::GetValue( value, m_Data->GetElement( at ) );
+}
+
+void ObjectDynArrayData::Insert( size_t at, Data* value )
+{
+    ObjectPtr temp;
+    Data::GetValue( value, temp );
+    m_Data->Insert( at, temp );
+}
+
+void ObjectDynArrayData::Remove( size_t at )
+{
+    m_Data->Remove( at );
+}
+
+void ObjectDynArrayData::MoveUp( std::set< size_t >& selectedIndices )
+{
+    std::set< size_t > newSelectedIndices;
+
+    std::set< size_t >::const_iterator itr = selectedIndices.begin();
+    std::set< size_t >::const_iterator end = selectedIndices.end();
+
+    for( ; itr != end; ++itr )
+    {
+        if ( (*itr) == 0 || ( newSelectedIndices.find( (*itr) - 1 ) != newSelectedIndices.end() ) )
+        {
+            newSelectedIndices.insert( *itr );
+            continue;
+        }
+
+        Swap( m_Data->GetElement( *itr - 1 ), m_Data->GetElement( *itr ) );
+
+        newSelectedIndices.insert( *itr - 1 );
+    }
+
+    selectedIndices = newSelectedIndices;
+}
+
+void ObjectDynArrayData::MoveDown( std::set< size_t >& selectedIndices )
+{
+    std::set< size_t > newSelectedIndices;
+
+    std::set< size_t >::const_reverse_iterator itr = selectedIndices.rbegin();
+    std::set< size_t >::const_reverse_iterator end = selectedIndices.rend();
+
+    for( ; itr != end; ++itr )
+    {
+        if ( ( (*itr) == m_Data->GetSize() - 1 ) || ( newSelectedIndices.find( (*itr) + 1 ) != newSelectedIndices.end() ) )
+        {
+            newSelectedIndices.insert( *itr );
+            continue;
+        }
+
+        Swap( m_Data->GetElement( *itr + 1 ), m_Data->GetElement( *itr ) );
+
+        newSelectedIndices.insert( *itr + 1 );
+    }
+
+    selectedIndices = newSelectedIndices;
+}
+
 
 bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
 {

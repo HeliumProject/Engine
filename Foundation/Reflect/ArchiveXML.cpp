@@ -378,11 +378,24 @@ void ArchiveXML::DeserializeInstance(ObjectPtr& object)
             tstringstream stringStream ( body );
             TCharStream stream ( &stringStream, false );
 
+            const DeserializingField *deserializing_field = GetDeserializingField();
+            if (deserializing_field)
+            {
+                //data->ConnectField(deserializing_field->m_Instance, deserializing_field->m_Field);
+            }
+
+            Helium::XMLElement *element = m_Iterator.GetCurrent();
+
             m_Body = &stream;
             data->Deserialize(*this);
             m_Body = NULL;
 
-            m_Iterator.Advance( true );
+            // I don't like doing this change, but structures/objects call DeserializeInstance
+            // but simple data doesn't.
+            if (m_Iterator.GetCurrent() == element)
+            {
+                m_Iterator.Advance();
+            }
         }
         else
         {
@@ -405,6 +418,8 @@ void ArchiveXML::DeserializeInstance( void* structure, const Structure* type )
     m_Indent.Push();
 #endif
 
+    // pmd - Step into the structure field
+    m_Iterator.Advance();
     DeserializeFields(structure, type);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -418,7 +433,10 @@ void ArchiveXML::DeserializeFields(Object* object)
     {
         // advance to the first child
         m_Iterator.Advance();
-
+        
+        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        HELIUM_ASSERT(deserializing_field);
+        deserializing_field->m_Instance = object;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -431,6 +449,7 @@ void ArchiveXML::DeserializeFields(Object* object)
 
             ObjectPtr unknown;
             const Field* field = type->FindFieldByName(fieldNameCrc);
+            deserializing_field->m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -522,6 +541,7 @@ void ArchiveXML::DeserializeFields(Object* object)
             m_Indent.Pop();
 #endif
         }
+        m_DeserializingFieldStack.Pop();
     }
     else
     {
@@ -537,6 +557,9 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
         // advance to the first child
         m_Iterator.Advance();
 
+        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        HELIUM_ASSERT(deserializing_field);
+        deserializing_field->m_Instance = structure;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -545,6 +568,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
             const Field* field = type->FindFieldByName(fieldNameCrc);
+            deserializing_field->m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -607,6 +631,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             m_Indent.Pop();
 #endif
         }
+        m_DeserializingFieldStack.Pop();
     }
     else
     {
@@ -643,11 +668,25 @@ void ArchiveXML::DeserializeArray( ArrayPusher& push, uint32_t flags )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-            ObjectPtr object;
-            DeserializeInstance(object);
-
+            ObjectPtr object = Allocate();
             if (object.ReferencesObject())
             {
+                // A bit of a hack to handle structs.
+                StructureData* structure_data = SafeCast<StructureData>(object);
+                if ( structure_data )
+                {
+                    //deserializing_field->m_Instance = structure_data->m_Data.Get(deserializing_field->m_Field->m_Size);
+                    const DeserializingField *deserializing_field = GetDeserializingField();
+                    HELIUM_ASSERT(deserializing_field);
+                    structure_data->AllocateForArrayEntry(deserializing_field->m_Instance, deserializing_field->m_Field);
+                }
+                else
+                {
+                    //deserializing_field->m_Instance = object.Get();
+                }
+
+                DeserializeInstance(object);
+
                 if ( object->IsClass( m_SearchClass ) )
                 {
                     m_Skip = true;

@@ -321,11 +321,11 @@ bool FbxSupport::LoadMesh(
     LazyInitialize();
 
     // Convert the source file path to a UTF-8 string readable by the FBX SDK.
-#if HELIUM_UNICODE
-    KFBX_WIDECHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
-#else
     char* pConvertedFilePath = NULL;
-    KFBX_ANSI_to_UTF8( *rSourceFilePath, pConvertedFilePath );
+#if HELIUM_UNICODE
+    KFbxWideCharToUTF8( *rSourceFilePath, pConvertedFilePath );
+#else
+    KFbxAnsiToUTF8( *rSourceFilePath, pConvertedFilePath );
 #endif
     if( !pConvertedFilePath )
     {
@@ -416,11 +416,11 @@ bool FbxSupport::LoadAnimation(
     LazyInitialize();
 
     // Convert the source file path to a UTF-8 string readable by the FBX SDK.
-#if HELIUM_UNICODE
-    KFBX_WIDECHAR_to_UTF8( *rSourceFilePath, pConvertedFilePath );
-#else
     char* pConvertedFilePath = NULL;
-    KFBX_ANSI_to_UTF8( *rSourceFilePath, pConvertedFilePath );
+#if HELIUM_UNICODE
+    KFbxWideCharToUTF8( *rSourceFilePath, pConvertedFilePath );
+#else
+    KFbxAnsiToUTF8( *rSourceFilePath, pConvertedFilePath );
 #endif
     if( !pConvertedFilePath )
     {

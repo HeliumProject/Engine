@@ -104,16 +104,18 @@ project( prefix .. "ExampleMain" )
 			"ws2_32",
 			"dbghelp",
 		}
-	configuration { "windows", "x32" }
+		
+	configuration { "windows", "Debug" }
 		links
 		{
-			"fbxsdk_20113_1",
+			"fbxsdk-2012.2d",
 		}
-	configuration { "windows", "x64" }
+	configuration { "windows", "not Debug" }
 		links
 		{
-			"fbxsdk_20113_1_amd64",
+			"fbxsdk-2012.2",
 		}
+		
 	if haveGranny then
 		configuration "x32"
 			links

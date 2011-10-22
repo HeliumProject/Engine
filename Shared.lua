@@ -40,9 +40,16 @@ configuration "windows"
 		"Dependencies/nvtt/project/vc8",
 		"Dependencies/wxWidgets/include/msvc",
 	}
+	
+configuration { "windows", "x32" }
 	libdirs
 	{
-		Helium.GetFbxSdkLocation() .. "/lib/vs2008",
+		Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86",
+	}
+configuration { "windows", "x64" }
+	libdirs
+	{
+		Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64",
 	}
 
 configuration {}
@@ -740,16 +747,18 @@ project( prefix .. "TestApp" )-- DEPRECATED
 			"ws2_32",
 			"dbghelp",
 		}
-	configuration { "windows", "x32" }
+
+	configuration { "windows", "Debug" }
 		links
 		{
-			"fbxsdk_20113_1",
+			"fbxsdk-2012.2d",
 		}
-	configuration { "windows", "x64" }
+	configuration { "windows", "not Debug" }
 		links
 		{
-			"fbxsdk_20113_1_amd64",
+			"fbxsdk-2012.2",
 		}
+		
 	if haveGranny then
 		configuration "x32"
 			links

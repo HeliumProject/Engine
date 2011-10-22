@@ -40,9 +40,16 @@ configuration "windows"
 		"Dependencies/nvtt/project/vc8",
 		"Dependencies/wxWidgets/include/msvc",
 	}
+	
+configuration { "windows", "x32" }
 	libdirs
 	{
-		Helium.GetFbxSdkLocation() .. "/lib/vs2008",
+		Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86",
+	}
+configuration { "windows", "x64" }
+	libdirs
+	{
+		Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64",
 	}
 
 configuration {}

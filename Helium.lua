@@ -2,7 +2,7 @@ Helium = {}
 
 Helium.RequiredPremakeVersion = '4.4-beta1'
 Helium.RequiredCLVersion = 150030729
-Helium.RequiredFBXVersion = '2011.3.1'
+Helium.RequiredFBXVersion = '2012.2'
 
 os.capture = function( cmd, raw )
     local f = assert( io.popen( cmd, 'r' ) )
@@ -38,9 +38,7 @@ Helium.GetFbxSdkLocation = function()
         if os.get() == "windows" then
             fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
         elseif os.get() == "macosx" then
-        	if Helium.RequiredFBXVersion == '2011.3.1' then
- 		       	fbxLocation = "/Applications/Autodesk/FBXSDK20113_1"
- 		   	end
+	       	fbxLocation = "/Applications/Autodesk/FBXSDK" .. Helium.RequiredFBXVersion
         else
             print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
             os.exit(1)
@@ -114,15 +112,10 @@ Helium.CheckEnvironment = function()
         local fbxDir = Helium.GetFbxSdkLocation()
         if not fbxDir or not os.isdir( fbxDir ) then
             print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
-            print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\2011.3.1" )
+            print( " -> Make sure to point the FBX_SDK environment variable at the FBX install location, eg: C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion )
             failed = 1
         end
-        
-        if fbxDir and not string.match( fbxDir, '2011\.3\.1$' ) then
-            print( " -> Currently, Helium only supports version 2011.3.1 of the FBX SDK.  Please download that specific version and make sure your FBX_SDK environment variable points to the proper install location." )
-            failed = 1
-        end
-        
+
         if failed == 1 then
             print( "\nCannot proceed until your environment is valid." )
             os.exit( 1 )
@@ -138,6 +131,8 @@ Helium.Publish = function( files )
 		local path = v.source .. "/" .. v.file			
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
+
+print( path )
 
 		-- do the hard link
 		local linkCommand = ''
@@ -232,7 +227,7 @@ Helium.DoDefaultSolutionSettings = function()
 	defines
 	{
 		"UNICODE=1",
-		"KFBX_DLLINFO=1",
+		"FBXSDK_SHARED=1",
 		"LITESQL_UNICODE=1",
 		"XML_STATIC=1",
 		"XML_UNICODE_WCHAR_T=1",
@@ -389,22 +384,21 @@ Helium.DoDefaultProjectSettings = function()
 			"wininet",
 		}
 
-	configuration { "windows", "Debug", "SharedLib or *App" }
+	configuration { "windows", "SharedLib or *App" }
 		links
 		{
 			"dbghelp",
 		}
 
-	configuration { "windows", "x32", "SharedLib or *App" }
+	configuration { "windows", "Debug", "SharedLib or *App" }
 		links
 		{
-			"fbxsdk_20113_1",
+			"fbxsdk-2012.2d",
 		}
-
-	configuration { "windows", "x64", "SharedLib or *App" }
+	configuration { "windows", "not Debug", "SharedLib or *App" }
 		links
 		{
-			"fbxsdk_20113_1_amd64",
+			"fbxsdk-2012.2",
 		}
 
 	if haveGranny then

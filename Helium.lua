@@ -288,9 +288,9 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"OptimizeSpeed",
 			"NoEditAndContinue",
-			"Symbols",
 		}
 		
 	configuration "Profile"
@@ -302,6 +302,7 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"NoFramePointer",
 			"OptimizeSpeed",
 			"NoEditAndContinue",
@@ -316,6 +317,7 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"NoFramePointer",
 			"OptimizeSpeed",
 			"NoEditAndContinue",

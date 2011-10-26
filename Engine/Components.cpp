@@ -4,11 +4,11 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Components::Component );
+
 using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
-
-REFLECT_DEFINE_ABSTRACT(Component);
 
 inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
 {

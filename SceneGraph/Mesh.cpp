@@ -7,10 +7,10 @@
 #include "SceneGraph/Shader.h"
 #include "SceneGraph/Transform.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Mesh );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 

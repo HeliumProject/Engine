@@ -7,11 +7,11 @@
 #include "SceneGraph/PrimitiveLocator.h"
 #include "SceneGraph/PrimitiveCube.h"
 
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::LocatorShape );
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Locator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ENUMERATION( LocatorShape );
-REFLECT_DEFINE_OBJECT( Locator );
 
 void Locator::PopulateComposite( Reflect::Composite& comp )
 {

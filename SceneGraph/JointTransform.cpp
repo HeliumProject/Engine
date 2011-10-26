@@ -9,10 +9,10 @@
 #include "SceneGraph/PrimitiveRings.h"
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::JointTransform );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( JointTransform );
 
 void JointTransform::PopulateComposite( Reflect::Composite& comp )
 {

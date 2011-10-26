@@ -11,10 +11,10 @@
 #include "SceneGraph/Orientation.h"
 #include "SceneGraph/PrimitiveCircle.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CreateTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::CreateTool);
 
 IntersectionPlane CreateTool::s_PlaneSnap = IntersectionPlanes::Ground;
 

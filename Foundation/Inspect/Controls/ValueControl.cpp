@@ -2,10 +2,10 @@
 #include "Foundation/Inspect/Controls/ValueControl.h"
 #include "Foundation/Inspect/Canvas.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::Value );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::Value );
 
 Value::Value()
 : a_Justification( Justifications::Left )

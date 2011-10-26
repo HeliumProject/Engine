@@ -11,10 +11,10 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Color.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT( SceneGraph::Transform );
 
 struct ScaleColorInfo
 {

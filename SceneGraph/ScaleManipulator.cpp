@@ -13,10 +13,10 @@
 #include "SceneGraph/SceneManager.h"
 #include "SceneSettings.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::ScaleManipulator);
 
 void ScaleManipulator::InitializeType()
 {

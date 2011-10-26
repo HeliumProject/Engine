@@ -14,9 +14,9 @@
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
 
-using namespace Helium;
+REFLECT_DEFINE_OBJECT( Helium::GameObject )
 
-REFLECT_DEFINE_OBJECT( GameObject )
+using namespace Helium;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;

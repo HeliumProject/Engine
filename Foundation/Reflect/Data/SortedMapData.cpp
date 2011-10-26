@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::SortedMapData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( SortedMapData )
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
@@ -458,27 +458,27 @@ template SimpleSortedMapData< Helium::GUID, Matrix4 >;
 template SimpleSortedMapData< Helium::TUID, uint32_t >;
 template SimpleSortedMapData< Helium::TUID, Matrix4 >;
 
-REFLECT_DEFINE_OBJECT( StringStringSortedMapData );
-REFLECT_DEFINE_OBJECT( StringBoolSortedMapData );
-REFLECT_DEFINE_OBJECT( StringUInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( StringInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringStringSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringBoolSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringInt32SortedMapData );
 
-REFLECT_DEFINE_OBJECT( UInt32StringSortedMapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( UInt32Int32SortedMapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt64SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StringSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32Int32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32UInt64SortedMapData );
 
-REFLECT_DEFINE_OBJECT( Int32StringSortedMapData );
-REFLECT_DEFINE_OBJECT( Int32UInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( Int32Int32SortedMapData );
-REFLECT_DEFINE_OBJECT( Int32UInt64SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32StringSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32Int32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32UInt64SortedMapData );
 
-REFLECT_DEFINE_OBJECT( UInt64StringSortedMapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt64SortedMapData );
-REFLECT_DEFINE_OBJECT( UInt64Matrix4SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StringSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt64SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64Matrix4SortedMapData );
 
-REFLECT_DEFINE_OBJECT( GUIDUInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( GUIDMatrix4SortedMapData );
-REFLECT_DEFINE_OBJECT( TUIDUInt32SortedMapData );
-REFLECT_DEFINE_OBJECT( TUIDMatrix4SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDMatrix4SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDUInt32SortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDMatrix4SortedMapData );

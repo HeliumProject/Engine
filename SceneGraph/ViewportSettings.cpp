@@ -1,12 +1,12 @@
 #include "SceneGraphPch.h"
 #include "ViewportSettings.h"
 
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::GeometryMode );
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::ViewColorMode );
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::ViewportSettings );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ENUMERATION( GeometryMode );
-REFLECT_DEFINE_ENUMERATION( ViewColorMode );
-REFLECT_DEFINE_OBJECT( ViewportSettings );
 
 ViewportSettings::ViewportSettings()
 : m_CameraMode (CameraMode::Orbit)

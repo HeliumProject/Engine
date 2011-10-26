@@ -9,10 +9,10 @@
 #include "Foundation/Flags.h"
 #include "Foundation/String/Units.h"
 
+REFLECT_DEFINE_ENUMERATION( Helium::Editor::ProjectMenuID );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_ENUMERATION( ProjectMenuID );
 
 const tchar_t* ProjectMenuID::s_Labels[COUNT] =
 {

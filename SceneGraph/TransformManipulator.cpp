@@ -6,10 +6,10 @@
 #include "SceneGraph/Camera.h"
 #include "Color.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TransformManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::TransformManipulator);
 
 void TransformManipulator::InitializeType()
 {

@@ -24,7 +24,7 @@ bool Button::Process( const tstring& key, const tstring& value )
         a_Label.Set( value );
         return true;
     }
-    
+
     if ( key == BUTTON_ATTR_ICON )
     {
         a_Icon.Set( value );

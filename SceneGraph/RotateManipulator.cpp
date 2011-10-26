@@ -13,10 +13,10 @@
 
 #include "Math/FpuAngleAxis.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::RotateManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::RotateManipulator);
 
 void RotateManipulator::InitializeType()
 {

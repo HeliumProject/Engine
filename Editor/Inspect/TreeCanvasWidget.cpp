@@ -4,10 +4,10 @@
 
 #include "Editor/FileIconsTable.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::TreeCanvasWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( TreeCanvasWidget );
 
 TreeCanvasWidget::TreeCanvasWidget( Inspect::Container* container )
 : m_ContainerControl( container )

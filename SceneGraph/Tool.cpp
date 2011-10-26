@@ -2,10 +2,10 @@
 #include "SceneGraph/Tool.h"
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Tool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::Tool);
 
 void Tool::InitializeType()
 {

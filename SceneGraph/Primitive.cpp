@@ -1,10 +1,10 @@
 #include "SceneGraphPch.h"
 #include "Primitive.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Primitive );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::Primitive);
 
 void Primitive::InitializeType()
 {

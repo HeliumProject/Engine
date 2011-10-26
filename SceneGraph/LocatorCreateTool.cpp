@@ -6,12 +6,12 @@
 #include "SceneGraph/Locator.h"
 #include "SceneGraph/Pick.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::LocatorCreateTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 LocatorShape LocatorCreateTool::s_Shape = LocatorShape::Cross;
-
-REFLECT_DEFINE_ABSTRACT(LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {

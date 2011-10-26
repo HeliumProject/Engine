@@ -1,6 +1,8 @@
 #include "EditorPch.h"
 #include "SliderWidget.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::SliderWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -41,8 +43,6 @@ void SliderWindow::OnScrollChanged( wxScrollEvent& e )
     e.Skip();
     m_SliderWidget->End();
 }
-
-REFLECT_DEFINE_OBJECT( SliderWidget );
 
 SliderWidget::SliderWidget( Inspect::Slider* slider )
 : m_SliderControl( slider )

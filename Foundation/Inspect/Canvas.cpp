@@ -3,10 +3,10 @@
 #include "Foundation/Inspect/Interpreter.h"
 #include "Foundation/Inspect/Controls.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::Canvas );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::Canvas );
 
 Canvas::Canvas ()
 {

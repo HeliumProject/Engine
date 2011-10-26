@@ -4,10 +4,10 @@
 
 //#define SCENE_DEBUG_EVALUATE
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Graph );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( Graph );
 
 void Graph::InitializeType()
 {

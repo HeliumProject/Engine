@@ -133,7 +133,7 @@ bool ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
 
             *error = tstring( TXT( "Component '" ) ) + componentName + TXT( "' is not valid for collection '" ) + collectionName + TXT( "': " ) + errorMessage;
         }
-        
+
         return false;
     }
 

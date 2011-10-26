@@ -5,6 +5,8 @@
 #include <wx/panel.h>
 #include <wx/filedlg.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::FileDialogButtonWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -12,8 +14,6 @@ FileDialogButtonWindow::FileDialogButtonWindow( wxWindow* parent, FileDialogButt
 : ButtonWindow( parent, buttonWidget )
 {
 }
-
-REFLECT_DEFINE_OBJECT( FileDialogButtonWidget );
 
 FileDialogButtonWidget::FileDialogButtonWidget( Inspect::FileDialogButton* button )
 {

@@ -4,6 +4,8 @@
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::CheckBoxWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -22,8 +24,6 @@ void CheckBoxWindow::OnChecked( wxCommandEvent& )
         m_CheckBoxWidget->GetControl()->Write();
     }
 }
-
-REFLECT_DEFINE_OBJECT( CheckBoxWidget );
 
 CheckBoxWidget::CheckBoxWidget( Inspect::CheckBox* checkBox )
 : m_CheckBoxControl( checkBox )

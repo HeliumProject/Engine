@@ -6,12 +6,12 @@
 #include "SceneGraph/Render.h"
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Shader );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
 Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
-
-REFLECT_DEFINE_OBJECT( Shader );
 
 #pragma TODO("Data-hide public reflected fields")
 

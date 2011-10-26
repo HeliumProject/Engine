@@ -7,10 +7,10 @@
 #include "SceneGraph/Curve.h"
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CurveEditTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {

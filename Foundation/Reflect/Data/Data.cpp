@@ -6,10 +6,10 @@
 #include "Foundation/Numeric.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::Data )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( Data )
 
 Data::Data()
 : m_Field( NULL )

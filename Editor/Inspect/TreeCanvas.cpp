@@ -4,10 +4,10 @@
 #include "Editor/FileIconsTable.h"
 #include "Editor/Inspect/TreeCanvasWidget.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::TreeCanvas );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( TreeCanvas );
 
 const static int SCROLL_INCREMENT = 8;
 

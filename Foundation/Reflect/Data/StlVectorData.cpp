@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::StlVectorData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT(StlVectorData)
 
 // If you use this and your data can have spaces, you must make an explicit
 // instantiation.  See the the string example below.
@@ -524,29 +524,29 @@ template SimpleStlVectorData<Color4>;
 template SimpleStlVectorData<HDRColor3>;
 template SimpleStlVectorData<HDRColor4>;
 
-REFLECT_DEFINE_OBJECT(StlStringStlVectorData);
-REFLECT_DEFINE_OBJECT(BoolStlVectorData);
-REFLECT_DEFINE_OBJECT(UInt8StlVectorData);
-REFLECT_DEFINE_OBJECT(Int8StlVectorData);
-REFLECT_DEFINE_OBJECT(UInt16StlVectorData);
-REFLECT_DEFINE_OBJECT(Int16StlVectorData);
-REFLECT_DEFINE_OBJECT(UInt32StlVectorData);
-REFLECT_DEFINE_OBJECT(Int32StlVectorData);
-REFLECT_DEFINE_OBJECT(UInt64StlVectorData);
-REFLECT_DEFINE_OBJECT(Int64StlVectorData);
-REFLECT_DEFINE_OBJECT(Float32StlVectorData);
-REFLECT_DEFINE_OBJECT(Float64StlVectorData);
-REFLECT_DEFINE_OBJECT(GUIDStlVectorData);
-REFLECT_DEFINE_OBJECT(TUIDStlVectorData);
-REFLECT_DEFINE_OBJECT( PathStlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolStlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int8StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt16StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int16StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDStlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDStlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathStlVectorData  );
 
-REFLECT_DEFINE_OBJECT(Vector2StlVectorData);
-REFLECT_DEFINE_OBJECT(Vector3StlVectorData);
-REFLECT_DEFINE_OBJECT(Vector4StlVectorData);
-REFLECT_DEFINE_OBJECT(Matrix3StlVectorData);
-REFLECT_DEFINE_OBJECT(Matrix4StlVectorData);
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector2StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector3StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector4StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Matrix3StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Matrix4StlVectorData );
 
-REFLECT_DEFINE_OBJECT(Color3StlVectorData);
-REFLECT_DEFINE_OBJECT(Color4StlVectorData);
-REFLECT_DEFINE_OBJECT(HDRColor3StlVectorData);
-REFLECT_DEFINE_OBJECT(HDRColor4StlVectorData);
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Color3StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Color4StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::HDRColor3StlVectorData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::HDRColor4StlVectorData );

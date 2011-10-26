@@ -3,10 +3,10 @@
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/DataBinding.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::Label );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::Label );
 
 Label::Label()
 : a_Ellipsize( true )

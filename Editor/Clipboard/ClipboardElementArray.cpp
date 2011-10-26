@@ -1,10 +1,10 @@
 #include "EditorPch.h"
 #include "ClipboardElementArray.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardElementArray );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( ClipboardElementArray );
 
 void ClipboardElementArray::PopulateComposite( Reflect::Composite& comp )
 {

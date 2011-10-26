@@ -2,10 +2,10 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Version );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT(Version);
 
 void Version::PopulateComposite( Reflect::Composite& comp )
 {

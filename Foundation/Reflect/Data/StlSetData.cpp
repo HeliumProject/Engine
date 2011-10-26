@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::StlSetData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT(StlSetData)
 
 // If you use this and your data can have spaces, you must make an explicit
 // instantiation.  See the the string example below.
@@ -289,9 +289,9 @@ template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
-REFLECT_DEFINE_OBJECT( StlStringStlSetData );
-REFLECT_DEFINE_OBJECT( UInt32StlSetData );
-REFLECT_DEFINE_OBJECT( UInt64StlSetData );
-REFLECT_DEFINE_OBJECT( GUIDStlSetData );
-REFLECT_DEFINE_OBJECT( TUIDStlSetData );
-REFLECT_DEFINE_OBJECT( PathStlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDStlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDStlSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathStlSetData );

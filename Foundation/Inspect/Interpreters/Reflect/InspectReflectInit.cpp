@@ -15,10 +15,10 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathContainerInterpreter.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Inspect::ClientDataFilter );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_ABSTRACT( Inspect::ClientDataFilter );
 
 static Helium::InitializerStack g_InspectReflectInitStack;
 

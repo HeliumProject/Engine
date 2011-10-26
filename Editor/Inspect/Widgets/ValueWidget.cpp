@@ -4,6 +4,8 @@
 #include <wx/panel.h>
 #include <wx/stattext.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ValueWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -64,8 +66,6 @@ void ValueWindow::OnKeyDown(wxKeyEvent& e)
         e.Skip();
     }
 }
-
-REFLECT_DEFINE_OBJECT( ValueWidget );
 
 ValueWidget::ValueWidget( Inspect::Value* value )
 : m_ValueControl( value )

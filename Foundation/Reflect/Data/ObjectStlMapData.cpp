@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::ObjectStlMapData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( ObjectStlMapData );
 
 template < class KeyT >
 SimpleObjectStlMapData<KeyT>::SimpleObjectStlMapData()
@@ -274,11 +274,11 @@ template SimpleObjectStlMapData<int64_t>;
 template SimpleObjectStlMapData<Helium::GUID>;
 template SimpleObjectStlMapData<Helium::TUID>;
 
-REFLECT_DEFINE_OBJECT(TypeIDObjectStlMapData);
-REFLECT_DEFINE_OBJECT(StlStringObjectStlMapData);
-REFLECT_DEFINE_OBJECT(UInt32ObjectStlMapData);
-REFLECT_DEFINE_OBJECT(Int32ObjectStlMapData);
-REFLECT_DEFINE_OBJECT(UInt64ObjectStlMapData);
-REFLECT_DEFINE_OBJECT(Int64ObjectStlMapData);
-REFLECT_DEFINE_OBJECT(GUIDObjectStlMapData);
-REFLECT_DEFINE_OBJECT(TUIDObjectStlMapData);
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TypeIDObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32ObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32ObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64ObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64ObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDObjectStlMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDObjectStlMapData );

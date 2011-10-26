@@ -7,10 +7,10 @@
 
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Layer );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( Layer );
 
 void Layer::PopulateComposite( Reflect::Composite& comp )
 {

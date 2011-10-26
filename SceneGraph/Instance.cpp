@@ -5,10 +5,10 @@
 
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Instance );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(Instance);
 
 void Instance::PopulateComposite( Reflect::Composite& comp )
 {

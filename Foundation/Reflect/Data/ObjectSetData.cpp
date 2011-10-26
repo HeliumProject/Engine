@@ -5,9 +5,9 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
-using namespace Helium::Reflect;
+REFLECT_DEFINE_OBJECT( Helium::Reflect::ObjectSetData );
 
-REFLECT_DEFINE_OBJECT( ObjectSetData );
+using namespace Helium::Reflect;
 
 ObjectSetData::ObjectSetData()
 {

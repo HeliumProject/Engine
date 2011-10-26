@@ -4,6 +4,8 @@
 #include <wx/panel.h>
 #include <wx/stattext.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::LabelWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -13,8 +15,6 @@ LabelWindow::LabelWindow( wxWindow* parent, LabelWidget* labelWidget, bool ellip
 {
 
 }
-
-REFLECT_DEFINE_OBJECT( LabelWidget );
 
 LabelWidget::LabelWidget( Inspect::Label* label )
 : m_LabelControl( label )

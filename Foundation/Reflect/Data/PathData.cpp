@@ -5,9 +5,9 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
-using namespace Helium::Reflect;
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathData );
 
-REFLECT_DEFINE_OBJECT( PathData );
+using namespace Helium::Reflect;
 
 PathData::PathData()
 {

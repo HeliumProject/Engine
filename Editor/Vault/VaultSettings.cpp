@@ -2,10 +2,10 @@
 #include "VaultSettings.h"
 #include "Editor/Vault/VaultPanel.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::VaultSettings );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( VaultSettings );
 
 void VaultSettings::PopulateComposite( Reflect::Composite& comp )
 {

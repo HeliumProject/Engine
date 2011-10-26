@@ -1,6 +1,8 @@
 #include "FoundationPch.h"
 #include "Enumeration.h"
 
+#include "Foundation/Log.h"
+
 using namespace Helium;
 using namespace Helium::Reflect;
 
@@ -26,6 +28,19 @@ Enumeration::Enumeration()
 Enumeration::~Enumeration()
 {
 
+}
+
+void Enumeration::Report() const
+{
+    Type::Report();
+
+    uint32_t computedSize = 0;
+    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    for ( ; itr != end; ++itr )
+    {
+        Log::Debug( TXT( "  Value: %8d, Name: %s\n" ), itr->m_Value, itr->m_Name.c_str() );
+    }
 }
 
 void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring& helpText )

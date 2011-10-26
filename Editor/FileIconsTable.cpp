@@ -21,8 +21,6 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using Helium::Insert; 
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // GlobalFileIconsTable (using wxModule FileIconsTableModule)

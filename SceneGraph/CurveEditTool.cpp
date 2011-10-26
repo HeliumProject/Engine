@@ -14,12 +14,12 @@ REFLECT_DEFINE_ABSTRACT(CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {
-    Reflect::RegisterClassType< CurveEditTool >( TXT( "SceneGraph::CurveEditTool" ) );
+
 }
 
 void CurveEditTool::CleanupType()
 {
-    Reflect::UnregisterClassType< CurveEditTool >();
+
 }
 
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;

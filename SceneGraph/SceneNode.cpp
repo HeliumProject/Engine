@@ -22,12 +22,12 @@ void SceneNode::PopulateComposite( Reflect::Composite& comp )
 
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::SceneNode >( TXT( "SceneGraph::SceneNode" ) );
+
 }
 
 void SceneNode::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::SceneNode >();
+
 }
 
 SceneNode::SceneNode()

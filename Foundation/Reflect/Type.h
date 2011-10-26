@@ -35,5 +35,41 @@ namespace Helium
             virtual void Report() const;
             virtual void Unregister() const;
         };
+
+        namespace RegistrarTypes
+        {
+            enum RegistrarType
+            {
+                Enumeration,
+                Structure,
+                Class,
+                Count,
+            };
+        }
+        typedef RegistrarTypes::RegistrarType RegistrarType;
+
+        class HELIUM_FOUNDATION_API TypeRegistrar
+        {
+        public:
+            TypeRegistrar(const tchar_t* name);
+
+            virtual void Register() = 0;
+            virtual void Unregister() = 0;
+
+            static void AddToList( RegistrarType type, TypeRegistrar* registrar );
+            static void RemoveFromList( RegistrarType type, TypeRegistrar* registrar );
+
+            static void RegisterTypes( RegistrarType type );
+            static void UnregisterTypes( RegistrarType type );
+
+            static void AddTypeToRegistry( Type* type );
+            static void RemoveTypeFromRegistry( const Type* type );
+
+        private:
+            const tchar_t*          m_Name;
+            TypeRegistrar*          m_Next;
+            static TypeRegistrar*   s_Head[ RegistrarTypes::Count ];
+            static TypeRegistrar*   s_Tail[ RegistrarTypes::Count ];
+        };
     }
 }

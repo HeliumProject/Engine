@@ -41,6 +41,8 @@ namespace Helium
                 return info;
             }
 
+            virtual void Report() const HELIUM_OVERRIDE;
+
             void AddElement(uint32_t value, const tstring& name, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
             bool IsValid(uint32_t value) const;
 
@@ -66,6 +68,17 @@ namespace Helium
         public:
             DynArray< EnumerationElement >  m_Elements;
         };
+
+        template< class EnumT >
+        class EnumerationRegistrar : public TypeRegistrar
+        {
+        public:
+            EnumerationRegistrar(const tchar_t* name);
+            ~EnumerationRegistrar();
+
+            virtual void Register();
+            virtual void Unregister();
+        };
     }
 }
 
@@ -77,19 +90,21 @@ ENUMERATION() : m_Value() {} \
 ENUMERATION( const ENUMERATION& e ) : m_Value( e.m_Value ) {} \
 ENUMERATION( const Enum& e ) : m_Value( e ) {} \
 operator const Enum&() const { return m_Value; } \
-static Helium::Reflect::Enumeration* CreateEnumeration( const tchar_t* name ); \
-static const Helium::Reflect::Enumeration* s_Enumeration;
+static Helium::Reflect::Enumeration* CreateEnumeration(); \
+static const Helium::Reflect::Enumeration* s_Enumeration; \
+static Helium::Reflect::EnumerationRegistrar< ENUMERATION > s_Registrar;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
-Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration( const tchar_t* name ) \
+Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration() \
 { \
     HELIUM_ASSERT( s_Enumeration == NULL ); \
-    Reflect::Enumeration* type = Reflect::Enumeration::Create< ENUMERATION >( name ); \
+    Reflect::Enumeration* type = Reflect::Enumeration::Create< ENUMERATION >( TXT( #ENUMERATION ) ); \
     s_Enumeration = type; \
     return type; \
 } \
-const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL;
+const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL; \
+Helium::Reflect::EnumerationRegistrar< ENUMERATION > ENUMERATION::s_Registrar( TXT( #ENUMERATION ) );
 
 // declares an enumeration
 #define REFLECT_DECLARE_ENUMERATION( ENUMERATION ) \
@@ -98,3 +113,5 @@ const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL;
 // defines an enumeration
 #define REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
     _REFLECT_DEFINE_ENUMERATION( ENUMERATION )
+
+#include "Foundation/Reflect/Enumeration.inl"

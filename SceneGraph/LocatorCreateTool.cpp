@@ -15,12 +15,12 @@ REFLECT_DEFINE_ABSTRACT(LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< LocatorCreateTool >( TXT( "SceneGraph::LocatorCreateTool" ) );
+
 }
 
 void LocatorCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< LocatorCreateTool >();
+
 }
 
 LocatorCreateTool::LocatorCreateTool(Scene* scene, PropertiesGenerator* generator)

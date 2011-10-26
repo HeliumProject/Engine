@@ -37,6 +37,7 @@ struct ObjectRefCountSupport::StaticData
 ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
 const Class* Object::s_Class = NULL;
+ClassRegistrar< Object, void > Object::s_Registrar( TXT("Object") );
 
 /// Retrieve a reference count proxy from the global pool.
 ///
@@ -207,10 +208,10 @@ bool Object::IsClass( const Reflect::Class* type ) const
     return thisType->IsType( type );
 }
 
-Reflect::Class* Object::CreateClass( const tchar_t* name )
+Reflect::Class* Object::CreateClass()
 {
     HELIUM_ASSERT( s_Class == NULL );
-    Reflect::Class* type = Class::Create<Object>( name, NULL );
+    Reflect::Class* type = Class::Create<Object>( TXT("Object"), NULL );
     s_Class = type;
     return type;
 }

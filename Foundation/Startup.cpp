@@ -170,8 +170,17 @@ void Helium::Startup( int argc, const tchar_t** argv )
             Log::SetLevel( Log::Levels::Verbose );
         }
 
+#ifdef HELIUM_DEBUG
+        Log::EnableStream( Log::Streams::Debug, true );
+#else
         Log::EnableStream( Log::Streams::Debug, Helium::GetCmdLineFlag( StartupArgs::Debug ) );
+#endif
+
+#ifdef HELIUM_PROFILE
+        Log::EnableStream( Log::Streams::Profile, true );
+#else
         Log::EnableStream( Log::Streams::Profile, Helium::GetCmdLineFlag( StartupArgs::Profile ) );
+#endif
 
         if( Helium::GetCmdLineFlag( StartupArgs::Debug ) )
         {

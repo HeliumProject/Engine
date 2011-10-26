@@ -8,12 +8,12 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::Primitive);
 
 void Primitive::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::Primitive >( TXT( "SceneGraph::Primitive" ) );
+
 }
 
 void Primitive::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::Primitive >();
+
 }
 
 Primitive::Primitive()

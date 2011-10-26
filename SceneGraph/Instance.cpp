@@ -20,12 +20,12 @@ void Instance::PopulateComposite( Reflect::Composite& comp )
 
 void Instance::InitializeType()
 {
-    Reflect::RegisterClassType< Instance >( TXT( "SceneGraph::Instance" ) );
+
 }
 
 void Instance::CleanupType()
 {
-    Reflect::UnregisterClassType< Instance >();
+
 }
 
 Instance::Instance()

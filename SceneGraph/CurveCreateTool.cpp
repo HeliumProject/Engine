@@ -18,12 +18,12 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::CurveCreateTool);
 
 void CurveCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::CurveCreateTool >( TXT( "SceneGraph::CurveCreateTool" ) );
+
 }
 
 void CurveCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::CurveCreateTool >();
+
 }
 
 CurveCreateTool::CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator )

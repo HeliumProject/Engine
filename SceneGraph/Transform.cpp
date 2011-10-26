@@ -37,12 +37,12 @@ void Transform::PopulateComposite( Reflect::Composite& comp )
 
 void Transform::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::Transform >( TXT( "SceneGraph::Transform" ) );
+
 }
 
 void Transform::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::Transform >();
+
 }
 
 Transform::Transform()

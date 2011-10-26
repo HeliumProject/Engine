@@ -10,6 +10,22 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
+Class::Class()
+: m_Creator (NULL)
+{
+
+}
+
+Class::~Class()
+{
+
+}
+
+Class* Class::Create()
+{
+    return new Class();
+}
+
 template<>
 Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
 {
@@ -25,20 +41,4 @@ Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, Cr
     HELIUM_ASSERT( baseName == NULL );
 
     return info;
-}
-
-Class::Class()
-: m_Creator (NULL)
-{
-
-}
-
-Class::~Class()
-{
-
-}
-
-Class* Class::Create()
-{
-    return new Class();
 }

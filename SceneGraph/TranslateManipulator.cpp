@@ -26,12 +26,12 @@ REFLECT_DEFINE_ABSTRACT( TranslateManipulator );
 
 void TranslateManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::TranslateManipulator >( TXT( "SceneGraph::TranslateManipulator" ) );
+
 }
 
 void TranslateManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::TranslateManipulator >();
+
 }
 
 TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

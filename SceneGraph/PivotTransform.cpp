@@ -24,12 +24,12 @@ void PivotTransform::PopulateComposite( Reflect::Composite& comp )
 
 void PivotTransform::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::PivotTransform >( TXT( "SceneGraph::PivotTransform" ) );
+
 }
 
 void PivotTransform::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::PivotTransform >();
+
 }
 
 PivotTransform::PivotTransform() 

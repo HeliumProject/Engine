@@ -54,15 +54,13 @@ public:
 
 void Curve::InitializeType()
 {
-    Reflect::RegisterClassType< Curve >( TXT( "SceneGraph::Curve" ) );
-
     s_Material = Color::FORESTGREEN;
     s_HullMaterial = Color::GRAY;
 }
 
 void Curve::CleanupType()
 {
-    Reflect::UnregisterClassType< Curve >();
+
 }
 
 Curve::Curve()

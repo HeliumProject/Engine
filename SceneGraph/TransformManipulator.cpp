@@ -13,12 +13,12 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::TransformManipulator);
 
 void TransformManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::TransformManipulator >( TXT( "SceneGraph::TransformManipulator" ) );
+
 }
 
 void TransformManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::TransformManipulator >();
+
 }
 
 TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

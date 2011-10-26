@@ -32,12 +32,12 @@ void Mesh::PopulateComposite( Reflect::Composite& comp )
 
 void Mesh::InitializeType()
 {
-    Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
+
 }
 
 void Mesh::CleanupType()
 {
-    Reflect::UnregisterClassType< Mesh >();
+
 }
 
 Mesh::Mesh()

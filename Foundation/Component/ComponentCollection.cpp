@@ -4,13 +4,11 @@
 
 #include "Foundation/Container/Insert.h" 
 
-using Helium::Insert; 
+REFLECT_DEFINE_OBJECT( Helium::Component::ComponentCollection );
 
 using namespace Helium;
 using namespace Helium::Component;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT(ComponentCollection)
 
 void ComponentCollection::PopulateComposite( Reflect::Composite& comp )
 {

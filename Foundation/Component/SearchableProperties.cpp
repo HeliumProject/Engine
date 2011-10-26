@@ -3,13 +3,6 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_ABSTRACT( SearchableProperties );
-
-void SearchableProperties::PopulateComposite( Reflect::Composite& comp )
-{
-    comp.AddField( &SearchableProperties::m_StringProperties, TXT( "m_StringProperties" ) );
-}
-
 SearchableProperties::SearchableProperties()
 {
 }

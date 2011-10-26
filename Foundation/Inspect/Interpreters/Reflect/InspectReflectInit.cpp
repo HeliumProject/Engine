@@ -28,9 +28,6 @@ void InspectReflect::Initialize()
     {
         g_InspectReflectInitStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "Inspect::ClientData" ) ) );
-        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
-
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetClass<Reflect::BitfieldData>() );
         ReflectFieldInterpreterFactory::Register<ReflectVectorInterpreter>( Reflect::GetClass<Reflect::Vector2Data>() );

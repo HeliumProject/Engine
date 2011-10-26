@@ -1,10 +1,10 @@
 #include "FoundationPch.h"
 #include "Foundation/Inspect/Controls/FileDialogButtonControl.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::FileDialogButton );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::FileDialogButton );
 
 bool FileDialogButton::Process(const tstring& key, const tstring& value)
 {

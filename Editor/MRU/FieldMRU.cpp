@@ -4,8 +4,6 @@
 
 #include <wx/ctrlsub.h>
 
-using Helium::Insert; 
-
 using namespace Helium;
 using namespace Helium::Editor;
 

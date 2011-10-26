@@ -10,7 +10,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT( Layer );
+REFLECT_DEFINE_OBJECT( Layer );
 
 void Layer::PopulateComposite( Reflect::Composite& comp )
 {
@@ -22,12 +22,12 @@ void Layer::PopulateComposite( Reflect::Composite& comp )
 
 void Layer::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::Layer >( TXT( "SceneGraph::Layer" ) );
+
 }
 
 void Layer::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::Layer >();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

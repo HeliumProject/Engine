@@ -361,7 +361,6 @@ void Components::Initialize()
     // Register base component with reflect
     if (!g_ComponentsInitCount)
     {
-        Reflect::RegisterClassType<Components::Component>(TXT("Component"));
         RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
     }
 
@@ -383,7 +382,6 @@ void Components::Cleanup()
             g_ComponentTypes[type_id].m_TCallbacks = 0;
         }
 
-        Reflect::UnregisterClassType<Components::Component>();
         g_ComponentTypes.Clear();
     }
 }

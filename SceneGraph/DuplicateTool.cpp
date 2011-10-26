@@ -12,12 +12,12 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::DuplicateTool);
 
 void DuplicateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::DuplicateTool >( TXT( "SceneGraph::DuplicateTool" ) );
+
 }
 
 void DuplicateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::DuplicateTool >();
+
 }
 
 DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)

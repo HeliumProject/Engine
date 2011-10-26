@@ -21,12 +21,12 @@ void JointTransform::PopulateComposite( Reflect::Composite& comp )
 
 void JointTransform::InitializeType()
 {
-    Reflect::RegisterClassType< JointTransform >( TXT( "SceneGraph::JointTransform" ) );
+
 }
 
 void JointTransform::CleanupType()
 {
-    Reflect::UnregisterClassType< JointTransform >();
+
 }
 
 JointTransform::JointTransform()

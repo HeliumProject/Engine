@@ -20,12 +20,12 @@ REFLECT_DEFINE_ABSTRACT(SceneGraph::RotateManipulator);
 
 void RotateManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::RotateManipulator >( TXT( "SceneGraph::RotateManipulator" ) );
+
 }
 
 void RotateManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::RotateManipulator >();
+
 }
 
 RotateManipulator::RotateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

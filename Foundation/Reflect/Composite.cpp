@@ -112,7 +112,7 @@ Composite::~Composite()
 
 void Composite::Report() const
 {
-    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, m_Name, Crc32( m_Name ) );
+    Type::Report();
 
     uint32_t computedSize = 0;
     DynArray< Field >::ConstIterator itr = m_Fields.Begin();
@@ -125,7 +125,7 @@ void Composite::Report() const
 
     if (computedSize != m_Size)
     {
-        Log::Debug( TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
+        Log::Debug( TXT( " %d bytes of hidden fields and padding\n" ), m_Size - computedSize );
     }
 }
 

@@ -16,12 +16,12 @@ void CurveControlPoint::PopulateComposite( Reflect::Composite& comp )
 
 void CurveControlPoint::InitializeType()
 {
-    Reflect::RegisterClassType< CurveControlPoint >( TXT( "SceneGraph::CurveControlPoint" ) );
+
 }
 
 void CurveControlPoint::CleanupType()
 {
-    Reflect::UnregisterClassType< CurveControlPoint >();
+
 }
 
 CurveControlPoint::CurveControlPoint() 

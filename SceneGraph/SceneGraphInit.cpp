@@ -4,7 +4,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Foundation/Component/ComponentInit.h"
 
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/Tool.h"
@@ -44,10 +43,6 @@ void SceneGraph::Initialize()
     {
         // core library initiailization
         g_SceneGraphInitStack.Push( Reflect::Initialize, Reflect::Cleanup );
-        g_SceneGraphInitStack.Push( Component::Initialize, Component::Cleanup );
-
-		g_SceneGraphInitStack.Push( Reflect::RegisterClassType< Settings >( TXT( "Settings" ) ) ); 
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SettingsManager >( TXT( "SettingsManager" ) ) ); 
         g_SceneGraphInitStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 
         g_SceneGraphInitStack.Push( Primitive::InitializeType, Primitive::CleanupType );
@@ -56,9 +51,7 @@ void SceneGraph::Initialize()
         g_SceneGraphInitStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
         g_SceneGraphInitStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
 
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ManipulatorSpace>( TXT( "SceneGraph::ManipulatorSpace" ) ) ); 
         g_SceneGraphInitStack.Push( TransformManipulator::InitializeType, TransformManipulator::CleanupType );
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<TranslateSnappingMode>( TXT( "SceneGraph::TranslateSnappingMode" ) ) ); 
         g_SceneGraphInitStack.Push( TranslateManipulator::InitializeType, TranslateManipulator::CleanupType );
         g_SceneGraphInitStack.Push( RotateManipulator::InitializeType, RotateManipulator::CleanupType );
         g_SceneGraphInitStack.Push( ScaleManipulator::InitializeType, ScaleManipulator::CleanupType );
@@ -75,8 +68,6 @@ void SceneGraph::Initialize()
         g_SceneGraphInitStack.Push( Mesh::InitializeType, Mesh::CleanupType );
         g_SceneGraphInitStack.Push( Skin::InitializeType, Skin::CleanupType );
 
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<CurveType>( TXT( "SceneGraph::CurveType" ) ) );
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ControlPointLabel>( TXT( "SceneGraph::ControlPointLabel" ) ) );
         g_SceneGraphInitStack.Push( CurveControlPoint::InitializeType, CurveControlPoint::CleanupType );
         g_SceneGraphInitStack.Push( Curve::InitializeType, Curve::CleanupType );
         g_SceneGraphInitStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
@@ -84,30 +75,8 @@ void SceneGraph::Initialize()
 
         g_SceneGraphInitStack.Push( Instance::InitializeType, Instance::CleanupType );
 
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<LocatorShape>( TXT( "SceneGraph::LocatorShape" ) ) );
         g_SceneGraphInitStack.Push( Locator::InitializeType, Locator::CleanupType );
         g_SceneGraphInitStack.Push( LocatorCreateTool::InitializeType, LocatorCreateTool::CleanupType );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<CameraMode>( TXT( "SceneGraph::CameraMode" ) ) ); 
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ShadingMode>( TXT( "SceneGraph::ShadingMode" ) ) );
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::CameraSettings >( TXT("SceneGraph::CameraSettings") ) );
-        Reflect::GetClass< SceneGraph::CameraSettings >()->SetProperty( TXT( "UIName" ), TXT( "Camera Settings" ) );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GeometryMode>( TXT( "SceneGraph::GeometryMode" ) ) ); 
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<ViewColorMode>( TXT( "SceneGraph::ViewColorMode" ) ) ); 
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::ViewportSettings >( TXT("SceneGraph::ViewportSettings") ) ); 
-        Reflect::GetClass< SceneGraph::ViewportSettings >()->SetProperty( TXT( "UIName" ), TXT( "Viewport Settings" ) );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterEnumType<GridUnit>( TXT( "SceneGraph::GridUnit" ) ) ); 
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::GridSettings >( TXT("SceneGraph::GridSettings") ) );
-        Reflect::GetClass< SceneGraph::GridSettings >()->SetProperty( TXT( "UIName" ), TXT( "Grid Settings" ) );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneGraph::SceneSettings >( TXT("SceneGraph::SceneSettings") ) );
-        Reflect::GetClass< SceneGraph::SceneSettings >()->SetProperty( TXT( "UIName" ), TXT( "Scene Settings" ) );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< SceneManifest >( TXT( "SceneGraph::SceneManifest" ) ) );
-
-        g_SceneGraphInitStack.Push( Reflect::RegisterClassType< Project >( TXT( "Project" ) ) );
     }
 }
 

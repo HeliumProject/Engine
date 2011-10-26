@@ -21,12 +21,12 @@ void Locator::PopulateComposite( Reflect::Composite& comp )
 
 void Locator::InitializeType()
 {
-    Reflect::RegisterClassType< Locator >( TXT( "SceneGraph::Locator" ) );
+
 }
 
 void Locator::CleanupType()
 {
-    Reflect::UnregisterClassType< Locator >();
+
 }
 
 Locator::Locator()

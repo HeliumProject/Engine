@@ -33,12 +33,12 @@ void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
 
 void HierarchyNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::HierarchyNode >( TXT( "SceneGraph::HierarchyNode" ) );
+
 }
 
 void HierarchyNode::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::HierarchyNode >();
+
 }
 
 HierarchyNode::HierarchyNode() 

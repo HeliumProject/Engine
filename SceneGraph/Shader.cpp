@@ -27,14 +27,12 @@ void Shader::PopulateComposite( Reflect::Composite& comp )
 
 void Shader::InitializeType()
 {
-    Reflect::RegisterClassType< Shader >( TXT( "SceneGraph::Shader" ) );
-
     g_ShaderTextureMemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Texture Data" ) );
 }
 
 void Shader::CleanupType()
 {
-    Reflect::UnregisterClassType< Shader >();
+
 }
 
 Shader::Shader() 

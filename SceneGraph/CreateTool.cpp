@@ -46,12 +46,12 @@ float CreateTool::s_PaintJitter = 1.0f;
 
 void CreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::CreateTool >( TXT( "SceneGraph::CreateTool" ) );
+
 }
 
 void CreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::CreateTool >();
+
 }
 
 CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)

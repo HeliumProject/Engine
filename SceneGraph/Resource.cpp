@@ -11,8 +11,6 @@
 
 #include <algorithm>
 
-using Helium::Insert; 
-
 using namespace Helium;
 using namespace Helium::SceneGraph;
 

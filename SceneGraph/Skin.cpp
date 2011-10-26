@@ -28,14 +28,12 @@ void Skin::PopulateComposite( Reflect::Composite& comp )
 
 void Skin::InitializeType()
 {
-    Reflect::RegisterClassType< Influence >( TXT( "SceneGraph::Influence" ) );
-    Reflect::RegisterClassType< Skin >( TXT( "SceneGraph::Skin" ) );
+
 }
 
 void Skin::CleanupType()
 {
-    Reflect::UnregisterClassType< Influence >();
-    Reflect::UnregisterClassType< Skin >();
+
 }
 
 Skin::Skin()

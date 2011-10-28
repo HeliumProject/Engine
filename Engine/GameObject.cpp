@@ -979,63 +979,62 @@ void GameObject::Shutdown()
 /// @return  Static "GameObject" type.
 const GameObjectType* GameObject::InitStaticType()
 {
-    if( !s_Class )
-    {
-        // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
-        // package, its type, etc.), we will create and register all the dependencies here manually as well.
-        Name nameObject( TXT( "GameObject" ) );
-        Name namePackage( TXT( "Package" ) );
+    HELIUM_ASSERT( s_Class );
 
-        RenameParameters nameParamsObject, nameParamsPackage, nameParamsEngine, nameParamsTypes;
-        nameParamsEngine.name.Set( TXT( "Engine" ) );
-        nameParamsTypes.name.Set( TXT( "Types" ) );
+    // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
+    // package, its type, etc.), we will create and register all the dependencies here manually as well.
+    Name nameObject( TXT( "GameObject" ) );
+    Name namePackage( TXT( "Package" ) );
 
-        Package* pTypesPackage = new Package();
-        HELIUM_ASSERT( pTypesPackage );
-        HELIUM_VERIFY( RegisterObject( pTypesPackage ) );
-        HELIUM_VERIFY( pTypesPackage->Rename( nameParamsTypes ) );
+    RenameParameters nameParamsObject, nameParamsPackage, nameParamsEngine, nameParamsTypes;
+    nameParamsEngine.name.Set( TXT( "Engine" ) );
+    nameParamsTypes.name.Set( TXT( "Types" ) );
 
-        GameObjectType::SetTypePackage( pTypesPackage );
+    Package* pTypesPackage = new Package();
+    HELIUM_ASSERT( pTypesPackage );
+    HELIUM_VERIFY( RegisterObject( pTypesPackage ) );
+    HELIUM_VERIFY( pTypesPackage->Rename( nameParamsTypes ) );
 
-        nameParamsEngine.spOwner = pTypesPackage;
+    GameObjectType::SetTypePackage( pTypesPackage );
 
-        Package* pEnginePackage = new Package();
-        HELIUM_ASSERT( pEnginePackage );
-        HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
-        HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
+    nameParamsEngine.spOwner = pTypesPackage;
 
-        // Don't set up templates here; they're initialized during type registration.
-        GameObjectPtr spObjectTemplate = new GameObject();
-        HELIUM_ASSERT( spObjectTemplate );
+    Package* pEnginePackage = new Package();
+    HELIUM_ASSERT( pEnginePackage );
+    HELIUM_VERIFY( RegisterObject( pEnginePackage ) );
+    HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
 
-        PackagePtr spPackageTemplate = new Package();
-        HELIUM_ASSERT( spPackageTemplate );
+    // Don't set up templates here; they're initialized during type registration.
+    GameObjectPtr spObjectTemplate = new GameObject();
+    HELIUM_ASSERT( spObjectTemplate );
 
-        // Package flag is set automatically by the Package constructor, but it shouldn't be set for the Package
-        // type template.
-        spPackageTemplate->ClearFlags( FLAG_PACKAGE );
+    PackagePtr spPackageTemplate = new Package();
+    HELIUM_ASSERT( spPackageTemplate );
 
-        // Initialize and register all types.
-        s_Class = GameObjectType::Create(
-            nameObject,
-            pEnginePackage,
-            NULL,
-            spObjectTemplate,
-            GameObject::ReleaseStaticType,
-            GameObjectType::FLAG_ABSTRACT );
-        HELIUM_ASSERT( s_Class );
+    // Package flag is set automatically by the Package constructor, but it shouldn't be set for the Package
+    // type template.
+    spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
-        HELIUM_VERIFY( GameObjectType::Create(
-            namePackage,
-            pEnginePackage,
-            static_cast< const GameObjectType* >( s_Class ),
-            spPackageTemplate,
-            Package::ReleaseStaticType,
-            0 ) );
+    // Initialize and register all types.
+    s_Class = GameObjectType::Create(
+        nameObject,
+        pEnginePackage,
+        NULL,
+        spObjectTemplate,
+        GameObject::ReleaseStaticType,
+        GameObjectType::FLAG_ABSTRACT );
+    HELIUM_ASSERT( s_Class );
 
-        // Force initialization of Package so it can report its static type information.
-        HELIUM_VERIFY( Package::InitStaticType() );
-    }
+    HELIUM_VERIFY( GameObjectType::Create(
+        namePackage,
+        pEnginePackage,
+        static_cast< const GameObjectType* >( s_Class ),
+        spPackageTemplate,
+        Package::ReleaseStaticType,
+        0 ) );
+
+    // Force initialization of Package so it can report its static type information.
+    HELIUM_VERIFY( Package::InitStaticType() );
 
     return static_cast< const GameObjectType* >( s_Class );
 }

@@ -98,7 +98,7 @@ Composite::Composite()
 : m_Base( NULL )
 , m_FirstDerived( NULL )
 , m_NextSibling( NULL )
-, m_Accept( NULL )
+, m_Populate( NULL )
 , m_Default( NULL )
 {
 

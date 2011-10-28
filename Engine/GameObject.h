@@ -97,27 +97,25 @@
     \
     const Helium::GameObjectType* TYPE::InitStaticType() \
     { \
-        if( !s_Class ) \
-        { \
-            extern Helium::Package* Get##MODULE##TypePackage(); \
-            Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
-            HELIUM_ASSERT( pTypePackage ); \
-            \
-            const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
-            HELIUM_ASSERT( pParentType ); \
-            \
-            Helium::StrongPtr< TYPE > spTemplate = new TYPE; \
-            HELIUM_ASSERT( spTemplate ); \
-            \
-            s_Class = Helium::GameObjectType::Create( \
-                Helium::Name( TXT( #TYPE ) ), \
-                pTypePackage, \
-                pParentType, \
-                spTemplate, \
-                TYPE::ReleaseStaticType, \
-                TYPE_FLAGS ); \
-            HELIUM_ASSERT( s_Class ); \
-        } \
+        HELIUM_ASSERT( s_Class ); \
+        extern Helium::Package* Get##MODULE##TypePackage(); \
+        Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
+        HELIUM_ASSERT( pTypePackage ); \
+        \
+        const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
+        HELIUM_ASSERT( pParentType ); \
+        \
+        Helium::StrongPtr< TYPE > spTemplate = new TYPE; \
+        HELIUM_ASSERT( spTemplate ); \
+        \
+        s_Class = Helium::GameObjectType::Create( \
+            Helium::Name( TXT( #TYPE ) ), \
+            pTypePackage, \
+            pParentType, \
+            spTemplate, \
+            TYPE::ReleaseStaticType, \
+            TYPE_FLAGS ); \
+        HELIUM_ASSERT( s_Class ); \
         \
         return static_cast< const Helium::GameObjectType* >( s_Class ); \
     }

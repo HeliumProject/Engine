@@ -31,7 +31,7 @@ namespace Helium
     namespace Reflect
     {
         class Composite;
-        typedef void (*AcceptVisitor)( Composite& );
+        typedef void (*PopulateCompositeFunc)( Composite& );
 
         namespace FieldFlags
         {
@@ -91,7 +91,7 @@ namespace Helium
 
         public:
             template< class CompositeT >
-            static void Create( const tchar_t* name, const tchar_t* baseName, AcceptVisitor accept, Composite* info )
+            static void Create( const tchar_t* name, const tchar_t* baseName, PopulateCompositeFunc populate, Composite* info )
             {
                 // the size
                 info->m_Size = sizeof( CompositeT );
@@ -120,7 +120,7 @@ namespace Helium
                     {
                         if (base)
                         {
-                            baseAccept = base->m_Accept && base->m_Accept == accept;
+                            baseAccept = base->m_Populate && base->m_Populate == populate;
                             base = base->m_Base;
                         }
                         else
@@ -135,13 +135,13 @@ namespace Helium
                 if ( !baseAccept )
                 {
                     // the accept function will populate our field data
-                    info->m_Accept = accept;
+                    info->m_Populate = populate;
                 }
 
                 // populate reflection information
-                if ( info->m_Accept )
+                if ( info->m_Populate )
                 {
-                    info->m_Accept( *info );
+                    info->m_Populate( *info );
                 }
             }
 
@@ -414,8 +414,8 @@ namespace Helium
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
             DynArray< Field >                       m_Fields;               // fields in this composite
-            AcceptVisitor                           m_Accept;               // function to populate this structure
-            void*                                   m_Default;             // default instance
+            PopulateCompositeFunc                   m_Populate;             // function to populate this structure
+            void*                                   m_Default;              // default instance
         };
     }
 }

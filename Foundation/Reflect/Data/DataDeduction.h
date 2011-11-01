@@ -57,6 +57,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color3Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color4Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4Data );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameData );
 
 #include "Foundation/Reflect/Data/StlVectorData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlVectorData );

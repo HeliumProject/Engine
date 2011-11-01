@@ -9,6 +9,8 @@
 #ifndef HELIUM_ENGINE_CACHE_H
 #define HELIUM_ENGINE_CACHE_H
 
+#define USE_XML_FOR_CACHE_DATA 1
+
 #include "Engine/Engine.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"

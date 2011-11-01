@@ -14,6 +14,13 @@
 #include "Engine/GameObjectLoader.h"
 #include "Engine/NullLinker.h"
 #include "Engine/Resource.h"
+#include "Engine/ObjectLoaderVisitors.h"
+
+#if USE_XML_FOR_CACHE_DATA
+#include "Foundation/Reflect/ArchiveXML.h"
+#else
+#include "Foundation/Reflect/ArchiveBinary.h"
+#endif
 
 using namespace Helium;
 
@@ -635,48 +642,97 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         pObject = pRequest->spObject;
         HELIUM_ASSERT( pObject );
     }
+        
+    Reflect::ObjectPtr cached_object;
 
-    // Load the object properties.
-    // PMDTODO: Serializer has been removed, so this need to be reimplemented, probably using binary reflect
-    HELIUM_ASSERT_FALSE();
-    BinaryDeserializer deserializer;
-    deserializer.Prepare(
-        pRequest->pSerializedData,
-        static_cast< size_t >( pRequest->pPropertyStreamEnd - pRequest->pSerializedData ) );
-
-    //if( !deserializer.Serialize( pObject ) )
-    //{
-    //    HELIUM_TRACE(
-    //        TRACE_ERROR,
-    //        TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
-    //        *pCacheEntry->path.ToString() );
-
-    //    // Clear out object references (object can now be considered fully loaded as well).
-    //    NullLinker().Serialize( pObject );
-    //    pObject->SetFlags( GameObject::FLAG_LINKED );
-    //    pObject->ConditionalFinalizeLoad();
-
-    //    pRequest->flags |= LOAD_FLAG_ERROR;
-    //}
-    /*else */if( !pObject->IsDefaultTemplate() )
+#if USE_XML_FOR_CACHE_DATA
     {
-        // Load persistent resource data.
-        Resource* pResource = Reflect::SafeCast< Resource >( pObject );
-        if( pResource )
-        {
-            deserializer.Prepare(
-                pRequest->pPropertyStreamEnd,
-                static_cast< size_t >( pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd ) );
+        tstringstream xml_ss_in;
+        xml_ss_in.write((tchar_t *)pRequest->pSerializedData, (pRequest->pPropertyStreamEnd - pRequest->pSerializedData) / sizeof(tchar_t));
+        //xml_ss_in.str(xml_str);
 
-            deserializer.BeginSerialize();
-            pResource->SerializePersistentResourceData( deserializer );
-            if( !deserializer.EndSerialize() )
+        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
+        xml_in.ReadFileHeader();
+        xml_in.BeginReadingSingleObjects();
+        
+        xml_in.ReadSingleObject(cached_object);
+    }
+
+#else
+    {
+        std::stringstream binary_ss_in;
+        binary_ss_in.write((char *)pRequest->pSerializedData, (pRequest->pPropertyStreamEnd - pRequest->pSerializedData));
+
+        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+        
+        binary_in.ReadSingleObject(cached_object);
+    }
+
+#endif
+
+    if (!cached_object.ReferencesObject())
+    {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
+            *pCacheEntry->path.ToString() );
+
+        // Clear out object references (object can now be considered fully loaded as well).
+        // pmd - Not sure that we need to do this.. but if we do, just use this visitor
+        //ClearLinkIndicesFromObject clifo_visitor;
+        //pObject->Accept(clifo_visitor);
+        pObject->SetFlags( GameObject::FLAG_LINKED );
+        pObject->ConditionalFinalizeLoad();
+
+        pRequest->flags |= LOAD_FLAG_ERROR;
+    }
+    else
+    {
+        cached_object->CopyTo(pObject);
+                
+        if( !pObject->IsDefaultTemplate() )
+        {
+            // Load persistent resource data.
+            Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+            if( pResource )
             {
-                HELIUM_TRACE(
-                    TRACE_ERROR,
-                    ( TXT( "CachePackageLoader: End of stream reached when deserializing persistent resource " )
-                    TXT( "data for \"%s\".\n" ) ),
-                    *pCacheEntry->path.ToString() );
+                Reflect::ObjectPtr cached_prd;
+                
+#if USE_XML_FOR_CACHE_DATA
+                {
+                    tstringstream xml_ss_in;
+                    xml_ss_in.write((tchar_t *)pRequest->pPropertyStreamEnd, (pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd) / sizeof(tchar_t));
+                    //xml_ss_in.str(xml_str);
+
+                    Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
+                    xml_in.ReadFileHeader();
+                    xml_in.BeginReadingSingleObjects();
+        
+                    xml_in.ReadSingleObject(cached_prd);
+                }
+#else
+                {
+                    std::stringstream binary_ss_in;
+                    binary_ss_in.write((char *)pRequest->pPropertyStreamEnd, (pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd));
+
+                    Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+        
+                    binary_in.ReadSingleObject(cached_prd);
+                }
+#endif
+
+                if (!cached_prd.ReferencesObject())
+                {
+                    HELIUM_TRACE(
+                        TRACE_ERROR,
+                        ( TXT( "CachePackageLoader: Failed to deserialize persistent resource " )
+                        TXT( "data for \"%s\".\n" ) ),
+                        *pCacheEntry->path.ToString() );
+                }
+                else
+                {
+                    pResource->LoadPersistentResourceObject(cached_prd);
+                }
             }
         }
     }

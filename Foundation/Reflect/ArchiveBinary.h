@@ -45,6 +45,8 @@
 //    };
 //
 
+#define REFLECT_ARCHIVE_VERBOSE
+
 namespace Helium
 {
     namespace Reflect

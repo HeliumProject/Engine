@@ -17,16 +17,16 @@ REFLECT_DEFINE_BASE_STRUCTURE( Font::Character );
 void Font::Character::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Character::codePoint,       TXT( "codePoint" ) );
-//    comp.AddField( &Character::imageX,          TXT( "imageX" ) );
-//     comp.AddField( &Character::imageY,          TXT( "imageY" ) );
-//     comp.AddField( &Character::imageWidth,      TXT( "imageWidth" ) );
-//     comp.AddField( &Character::imageHeight,     TXT( "imageHeight" ) );
-//     comp.AddField( &Character::width,           TXT( "width" ) );
-//     comp.AddField( &Character::height,          TXT( "height" ) );
-//     comp.AddField( &Character::bearingX,        TXT( "bearingX" ) );
-//     comp.AddField( &Character::bearingY,        TXT( "bearingY" ) );
-//     comp.AddField( &Character::advance,         TXT( "advance" ) );
-//     comp.AddField( &Character::texture,         TXT( "texture" ) );
+    comp.AddField( &Character::imageX,          TXT( "imageX" ) );
+    comp.AddField( &Character::imageY,          TXT( "imageY" ) );
+    comp.AddField( &Character::imageWidth,      TXT( "imageWidth" ) );
+    comp.AddField( &Character::imageHeight,     TXT( "imageHeight" ) );
+    comp.AddField( &Character::width,           TXT( "width" ) );
+    comp.AddField( &Character::height,          TXT( "height" ) );
+    comp.AddField( &Character::bearingX,        TXT( "bearingX" ) );
+    comp.AddField( &Character::bearingY,        TXT( "bearingY" ) );
+    comp.AddField( &Character::advance,         TXT( "advance" ) );
+    comp.AddField( &Character::texture,         TXT( "texture" ) );
 }
 
 
@@ -46,10 +46,10 @@ Font::PersistentResourceData::PersistentResourceData()
 
 void Font::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
 {
-//    comp.AddField( &PersistentResourceData::m_ascender,         TXT( "m_ascender" ) );
-//     comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
-//     comp.AddField( &PersistentResourceData::m_height,           TXT( "m_height" ) );
-//     comp.AddField( &PersistentResourceData::m_maxAdvance,       TXT( "m_maxAdvance" ) );
+    comp.AddField( &PersistentResourceData::m_ascender,         TXT( "m_ascender" ) );
+    comp.AddField( &PersistentResourceData::m_descender,        TXT( "m_descender" ) );
+    comp.AddField( &PersistentResourceData::m_height,           TXT( "m_height" ) );
+    comp.AddField( &PersistentResourceData::m_maxAdvance,       TXT( "m_maxAdvance" ) );
     comp.AddStructureField( &PersistentResourceData::m_characters,       TXT( "m_characters" ) );
     comp.AddField( &PersistentResourceData::m_textureCount,     TXT( "m_textureCount" ) );
 }
@@ -220,7 +220,7 @@ bool Helium::Font::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
         return false;
     }
 
-    //_object->CopyTo(&m_persistentResourceData);
+    _object->CopyTo(&m_persistentResourceData);
 
     uint_fast32_t characterCount = static_cast<uint_fast32_t>(m_persistentResourceData.m_characters.GetSize());
     uint_fast8_t textureCount = m_persistentResourceData.m_textureCount;

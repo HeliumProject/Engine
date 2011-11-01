@@ -13,6 +13,7 @@
 #include "Math/FpuHDRColor4.h"
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
+#include "Foundation/Name.h"
 
 
 
@@ -57,6 +58,8 @@ namespace Helium
         typedef SimpleData<Color4> Color4Data;
         typedef SimpleData<HDRColor3> HDRColor3Data;
         typedef SimpleData<HDRColor4> HDRColor4Data;
+        
+        typedef SimpleData<Name> NameData;
 
     }
 }

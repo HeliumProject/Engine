@@ -22,7 +22,12 @@
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+
+#if USE_XML_FOR_CACHE_DATA
+#include "Foundation/Reflect/ArchiveXML.h"
+#else
 #include "Foundation/Reflect/ArchiveBinary.h"
+#endif
 
 using namespace Helium;
 
@@ -138,17 +143,58 @@ bool ObjectPreprocessor::CacheObject(
         Stream& rObjectStream =
             ( bSwapBytes ? static_cast< Stream& >( byteSwappingStream ) : static_cast< Stream& >( directStream ) );
         
-        std::stringstream ss_out;
-        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
-        binary_out.SerializeInstance( pObject );
+        //std::string str_out;
+        //std::string str_out;
+        const char *data = NULL;
+        size_t data_size = 0;
 
-        std::string str_out = ss_out.str();
-        const char *cstr_out = str_out.c_str();
+#if USE_XML_FOR_CACHE_DATA
+        DynArray<char> object_buffer;
+        {
+            tstringstream xml_out_ss;
+
+            Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
+            xml_out.WriteFileHeader();
+            xml_out.WriteSingleObject(*pObject);
+            //xml_out.SerializeInstance(object_ptr);
+            xml_out.WriteFileFooter();
+            xml_out.Close();
+            
+            tstring xml_str;
+            xml_str = xml_out_ss.str();
+
+            if (xml_str.size() > 0)
+            {
+                object_buffer.Resize(xml_str.size() * sizeof(tchar_t));
+                memcpy(&object_buffer[0], xml_str.data(), xml_str.size() * sizeof(tchar_t));
+            }
+        }
+
+        if (object_buffer.GetSize() > 0)
+        {
+            data = &object_buffer[0];
+            data_size = object_buffer.GetSize();
+        }
+#else
+        std::string str_out;
+        {
+            std::stringstream ss_out;
+            Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+            binary_out.SerializeInstance( pObject );
+
+            str_out = ss_out.str();
+        }
+
+        if (!str_out.empty())
+        {
+            data = str_out.c_str();
+            data_size = str_out.length();
+        }
+#endif
 
 
-        rObjectStream.Write(cstr_out, 1, str_out.size());
-        //binary_out.SerializeInstance( pCached
-		//PMDTODO: I've forgotten why i no longer need to write the property length here.. I need to figure that out.
+        rObjectStream.Write(&data_size, sizeof(size_t), 1);
+        rObjectStream.Write(data, sizeof(char), data_size);
 		
         // Serialize persistent resource data and the number of chunks of sub-data.
         if( pResource )
@@ -871,6 +917,20 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
             size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
             if( persistentDataBufferSize != 0 )
             {
+                Reflect::ObjectPtr persistent_data;
+                
+#if USE_XML_FOR_CACHE_DATA
+
+                tstringstream xml_ss_in;
+                xml_ss_in.write(reinterpret_cast<const tchar_t *>(&rPersistentDataBuffer[0]), persistentDataBufferSize);
+
+                Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
+                xml_in.ReadFileHeader();
+                xml_in.BeginReadingSingleObjects();
+        
+                Reflect::ObjectPtr xml_in_ptr;
+                xml_in.ReadSingleObject(xml_in_ptr);
+#else
                 // Deserialize the persistent resource data.
                 // Having to do this copy is unfortunate.. maybe we can revisit this later
                 std::stringstream ss_in;
@@ -878,8 +938,10 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
 
                 Reflect::ArchiveBinary archive(new Reflect::CharStream(&ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
                
-                Reflect::ObjectPtr persistent_data;
                 archive.ReadSingleObject(persistent_data);
+#endif
+
+
                 pResource->LoadPersistentResourceObject(persistent_data);
             }
         }

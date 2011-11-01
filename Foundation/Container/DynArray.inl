@@ -840,7 +840,7 @@ bool Helium::DynArray< T, Allocator >::Equals( const DynArray< T, OtherAllocator
     const T* pOtherBuffer = rOther.m_pBuffer;
     for( size_t index = 0; index < size; ++index )
     {
-        if( pThisBuffer[ index ] != pOtherBuffer[ index ] )
+        if( !( pThisBuffer[ index ] == pOtherBuffer[ index ] ) )
         {
             return false;
         }

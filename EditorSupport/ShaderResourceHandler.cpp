@@ -156,28 +156,23 @@ bool ShaderResourceHandler::CacheResource(
     allocator.Free( pShaderData );
 
     // Serialize the persistent shader resource data for each platform.
-    //PMDTODO: Implement this
-    //BinarySerializer persistentDataSerializer;
-    //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    //{
-    //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
-    //    if( !pPreprocessor )
-    //    {
-    //        continue;
-    //    }
+    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    {
+        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        if( !pPreprocessor )
+        {
+            continue;
+        }
 
-    //    persistentDataSerializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-    //    persistentDataSerializer.BeginSerialize();
-    //    resourceData.Serialize( persistentDataSerializer );
-    //    persistentDataSerializer.EndSerialize();
+        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        SaveObjectToPersistentDataBuffer(&resourceData, rPreprocessedData.persistentDataBuffer);
+        rPreprocessedData.subDataBuffers.Resize( 0 );
+        rPreprocessedData.bLoaded = true;
+    }
 
-    //    Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
-    //    rPreprocessedData.persistentDataBuffer = persistentDataSerializer.GetPropertyStreamBuffer();
-    //    rPreprocessedData.subDataBuffers.Resize( 0 );
-    //    rPreprocessedData.bLoaded = true;
-    //}
+    
 
     return true;
 }

@@ -239,37 +239,33 @@ bool ShaderVariantResourceHandler::CacheResource(
 
     uint32_t systemOptionSetCount32 = static_cast< uint32_t >( systemOptionSetCount );
 
-    //PMDTODO: Implement this
-    //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    //{
-    //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
-    //    if( !pPreprocessor )
-    //    {
-    //        continue;
-    //    }
+    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    {
+        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        if( !pPreprocessor )
+        {
+            continue;
+        }
 
-    //    Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
+        Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        
+        ShaderVariant::PersistentResourceData persistentResourceData;
+        persistentResourceData.m_resourceCount = systemOptionSetCount32;
+        SaveObjectToPersistentDataBuffer(&persistentResourceData, rPreprocessedData.persistentDataBuffer);
 
-    //    BinarySerializer serializer;
-    //    serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-    //    serializer.BeginSerialize();
-    //    serializer << systemOptionSetCount32;
-    //    serializer.EndSerialize();
-    //    rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+        size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
+        size_t shaderCount = shaderProfileCount * systemOptionSetCount;
 
-    //    size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
-    //    size_t shaderCount = shaderProfileCount * systemOptionSetCount;
+        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+        rSubDataBuffers.Reserve( shaderCount );
+        rSubDataBuffers.Resize( 0 );
+        rSubDataBuffers.Resize( shaderCount );
+        rSubDataBuffers.Trim();
 
-    //    DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
-    //    rSubDataBuffers.Reserve( shaderCount );
-    //    rSubDataBuffers.Resize( 0 );
-    //    rSubDataBuffers.Resize( shaderCount );
-    //    rSubDataBuffers.Trim();
-
-    //    rPreprocessedData.bLoaded = true;
-    //}
+        rPreprocessedData.bLoaded = true;
+    }
 
     DynArray< uint8_t > compiledCodeBuffer;
     DynArray< ShaderConstantBufferInfo > constantBuffers, pcSm4ConstantBuffers;

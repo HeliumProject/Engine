@@ -8,6 +8,17 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ResourceHandler.h"
 
+#if HELIUM_TOOLS
+
+#if USE_XML_FOR_CACHE_DATA
+#include "Foundation/Reflect/ArchiveXML.h"
+#else
+#include "Foundation/Reflect/ArchiveBinary.h"
+#endif
+
+#endif
+
+
 using namespace Helium;
 
 HELIUM_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
@@ -54,6 +65,56 @@ bool ResourceHandler::CacheResource(
                                     const String& /*rSourceFilePath*/ )
 {
     return false;
+}
+#endif  // HELIUM_TOOLS
+
+
+#if HELIUM_TOOLS
+void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object *_object, DynArray< uint8_t > &_buffer )
+{
+    _buffer.Resize(0);
+    if (!_object)
+    {
+        return;
+    }
+
+#if USE_XML_FOR_CACHE_DATA
+        {
+            tstringstream xml_out_ss;
+
+            Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
+            xml_out.WriteFileHeader();
+            xml_out.WriteSingleObject(*_object);
+            xml_out.WriteFileFooter();
+            xml_out.Close();
+            
+            tstring xml_str;
+            xml_str = xml_out_ss.str();
+
+            if (xml_str.size() > 0)
+            {
+                _buffer.Resize(xml_str.size() * sizeof(tchar_t));
+                memcpy(&_buffer[0], xml_str.data(), xml_str.size() * sizeof(tchar_t));
+            }
+        }
+#else
+        {
+            std::stringstream ss_out;
+            Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+            binary_out.SerializeInstance( _object );
+
+            // This is not an efficient way to do this
+            std::string str_out;
+            str_out = ss_out.str();
+
+            if (!str_out.empty())
+            {
+                _buffer.Resize(str_out.size());
+                memcpy(&_buffer[0], str_out.data(), str_out.size());
+            }
+        }
+#endif
+
 }
 #endif  // HELIUM_TOOLS
 

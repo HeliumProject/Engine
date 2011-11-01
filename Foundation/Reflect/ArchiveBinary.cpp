@@ -569,7 +569,7 @@ void ArchiveBinary::DeserializeInstance(ObjectPtr& object)
             const DeserializingField *deserializing_field = GetDeserializingField();
             if (deserializing_field)
             {
-                data->ConnectField(deserializing_field->m_Instance, deserializing_field->m_Field);
+                //data->ConnectField(deserializing_field->m_Instance, deserializing_field->m_Field);
             }
 
             data->Deserialize(*this);
@@ -595,6 +595,8 @@ void ArchiveBinary::DeserializeInstance( void* structure, const Structure* type 
     m_Indent.Push();
 #endif
 
+    // Inserting a dummy allocate call here to read through the header for the struct type
+    //Allocate();
     DeserializeFields(structure, type);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -727,7 +729,11 @@ void ArchiveBinary::DeserializeFields(Object* object)
 void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
 {
     int32_t fieldCount = -1;
-    m_Stream->Read(&fieldCount); 
+    m_Stream->Read(&fieldCount);    
+
+        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        HELIUM_ASSERT(deserializing_field);
+        deserializing_field->m_Instance = structure;
 
     for (int i=0; i<fieldCount; i++)
     {
@@ -735,6 +741,8 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
         m_Stream->Read( &fieldNameCrc );
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
+
+        deserializing_field->m_Field = field;
         if ( field )
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -798,6 +806,8 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
 #endif
     }
 
+    m_DeserializingFieldStack.Pop();
+
     int32_t terminator = -1;
     m_Stream->Read(&terminator); 
     if (terminator != -1)
@@ -834,7 +844,25 @@ void ArchiveBinary::DeserializeArray( ArrayPusher& push, uint32_t flags )
     {
         for (int i=0; i<element_count && !m_Abort; i++)
         {
-            ObjectPtr object;
+            ObjectPtr object = Allocate();
+
+                // A bit of a hack to handle structs.
+                StructureData* structure_data = SafeCast<StructureData>(object);
+                if ( structure_data )
+                {
+                    //deserializing_field->m_Instance = structure_data->m_Data.Get(deserializing_field->m_Field->m_Size);
+                    const DeserializingField *deserializing_field = GetDeserializingField();
+                    HELIUM_ASSERT(deserializing_field);
+                    structure_data->AllocateForArrayEntry(deserializing_field->m_Instance, deserializing_field->m_Field);
+                    
+    // Inserting a dummy allocate call here to read through the header for the struct type
+    Allocate();
+                }
+                else
+                {
+                    //deserializing_field->m_Instance = object.Get();
+                }
+
             DeserializeInstance(object);
 
             if (object.ReferencesObject())
@@ -891,10 +919,12 @@ ObjectPtr ArchiveBinary::Allocate()
     m_Stream->Read(&typeCrc);
 
     // A null type name CRC indicates that a null reference was serialized, so no type lookup needs to be performed.
-    const Class* type = NULL;
+    const Class* reflect_class = NULL;
+    const Type* reflect_type = NULL;
     if ( typeCrc != 0 )
     {
-        type = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+        reflect_class = Reflect::Registry::GetInstance()->GetClass( typeCrc );
+        reflect_type = Reflect::Registry::GetInstance()->GetType( typeCrc );
     }
 
     // read length info if we have it
@@ -908,23 +938,30 @@ ObjectPtr ArchiveBinary::Allocate()
     }
     else
     {
-        if (type)
+        if (reflect_class)
         {
             // allocate instance by name
-            object = Registry::GetInstance()->CreateInstance( type );
+            object = Registry::GetInstance()->CreateInstance( reflect_class );
         }
 
         // if we failed
         if (!object.ReferencesObject())
         {
-            // skip it, but account for already reading the length from the stream
-            m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
+            if (!reflect_class && reflect_type)
+            {
+                // It's a struct, don't worry about it
+            }
+            else
+            {
+                // skip it, but account for already reading the length from the stream
+                m_Stream->SeekRead(length - sizeof(uint32_t), std::ios_base::cur);
 
-            // if you see this, then data is being lost because:
-            //  1 - a type was completely removed from the codebase
-            //  2 - a type was not found because its type library is not registered
-            Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), type ? type->m_Name : TXT("Unknown"), length);
-#pragma TODO("Support blind data")
+                // if you see this, then data is being lost because:
+                //  1 - a type was completely removed from the codebase
+                //  2 - a type was not found because its type library is not registered
+                Log::Debug( TXT( "Unable to create object of type %s, size %d, skipping...\n" ), reflect_class ? reflect_class->m_Name : TXT("Unknown"), length);
+    #pragma TODO("Support blind data")
+            }
         }
     }
 

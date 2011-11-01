@@ -7,6 +7,151 @@
 
 namespace Helium
 {
+    bool ShaderConstantInfo::operator==( const ShaderConstantInfo& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            offset == _rhs.offset &&
+            size == _rhs.size &&
+            usedSize == _rhs.usedSize
+            );
+    }
+
+    bool ShaderConstantInfo::operator!=( const ShaderConstantInfo& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+        
+    bool ShaderConstantBufferInfo::operator==( const ShaderConstantBufferInfo& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            constants == _rhs.constants &&
+            index == _rhs.index &&
+            size == _rhs.size
+            );
+    }
+
+    bool ShaderConstantBufferInfo::operator!=( const ShaderConstantBufferInfo& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+      
+    bool ShaderSamplerInfo::operator==( const ShaderSamplerInfo& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            bindIndex == _rhs.bindIndex
+            );
+    }
+
+    bool ShaderSamplerInfo::operator!=( const ShaderSamplerInfo& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+
+    bool ShaderTextureInfo::operator==( const ShaderTextureInfo& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            bindIndex == _rhs.bindIndex
+            );
+    }
+
+    bool ShaderTextureInfo::operator!=( const ShaderTextureInfo& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+        
+    bool ShaderConstantBufferInfoSet::operator==( const ShaderConstantBufferInfoSet& _rhs ) const
+    {
+        return ( 
+            buffers == _rhs.buffers
+            );
+    }
+
+    bool ShaderConstantBufferInfoSet::operator!=( const ShaderConstantBufferInfoSet& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+            
+    bool ShaderSamplerInfoSet::operator==( const ShaderSamplerInfoSet& _rhs ) const
+    {
+        return ( 
+            inputs == _rhs.inputs
+            );
+    }
+
+    bool ShaderSamplerInfoSet::operator!=( const ShaderSamplerInfoSet& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }     
+
+    bool ShaderTextureInfoSet::operator==( const ShaderTextureInfoSet& _rhs ) const
+    {
+        return ( 
+            inputs == _rhs.inputs
+            );
+    }
+
+    bool ShaderTextureInfoSet::operator!=( const ShaderTextureInfoSet& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }    
+    ///////////////////////
+    bool Shader::Toggle::operator==( const Shader::Toggle& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            shaderTypeFlags == _rhs.shaderTypeFlags
+            );
+    }
+
+    bool Shader::Toggle::operator!=( const Shader::Toggle& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }    
+
+    bool Shader::Select::operator==( const Shader::Select& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            choices == _rhs.choices &&
+            allFlags == _rhs.allFlags
+            );
+    }
+
+    bool Shader::Select::operator!=( const Shader::Select& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }    
+
+    bool Shader::SelectPair::operator==( const Shader::SelectPair& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            choice == _rhs.choice
+            );
+    }
+
+    bool Shader::SelectPair::operator!=( const Shader::SelectPair& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }    
+
+    bool Shader::Options::operator==( const Shader::Options& _rhs ) const
+    {
+        return ( 
+            m_toggles == _rhs.m_toggles &&
+            m_selects == _rhs.m_selects
+            );
+    }
+
+    bool Shader::Options::operator!=( const Shader::Options& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+
     /// Get whether all variants of this shader should be precached by the resource preprocessing.
     ///
     /// @return  True if all variants of this shader should be precached, false if not.

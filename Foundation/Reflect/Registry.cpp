@@ -124,6 +124,7 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Color4Data>( TXT( "Color4" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor3Data>( TXT( "HDRColor3" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<HDRColor4Data>( TXT( "HDRColor4" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<NameData>( TXT( "NameData" ) ) );
 
         // StlVectorData
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<StlVectorData>( TXT( "StlVector" ) ) );

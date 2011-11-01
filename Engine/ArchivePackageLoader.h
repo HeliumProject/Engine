@@ -18,7 +18,7 @@
 /// XML package file extension string.
 #define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )
 /// Directory-based XML package file name string.
-#define HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME TXT( "!toc.xml" )
+//#define HELIUM_ARCHIVE_PACKAGE_TOC_FILENAME TXT( "!toc.xml" )
 
 namespace Helium
 {
@@ -190,17 +190,18 @@ namespace Helium
 
         /// Package file path name.
         Path m_packageDirPath;
-        Path m_packageTocFilePath;
+        //Path m_packageTocFilePath;
         /// Size of the package data file.
-        size_t m_packageTocFileSize;
+        //size_t m_packageTocFileSize;
 
         /// Destination buffer for async loading.
-        void* m_pTocLoadBuffer;
+        //void* m_pTocLoadBuffer;
         /// Async loading ID.
-        size_t m_tocAsyncLoadId;
+        //size_t m_tocAsyncLoadId;
         
         struct FileReadRequest
         {
+            Helium::Path filePath; // Used only to give good error messages
             void* pLoadBuffer;
             size_t asyncLoadId;
             uint64_t expectedSize;

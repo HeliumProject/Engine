@@ -5,8 +5,8 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "EnginePch.h"
-#include "Engine/ArchivePackageLoader.h"
+#include "PcSupportPch.h"
+#include "PcSupport/ArchivePackageLoader.h"
 
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"

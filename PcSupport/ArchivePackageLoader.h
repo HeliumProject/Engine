@@ -6,8 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H
-#define HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H
+#ifndef HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_H
+#define HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_H
 
 #include "Engine/Engine.h"
 #include "Engine/PackageLoader.h"
@@ -22,7 +22,7 @@
 
 namespace Helium
 {
-    struct HELIUM_ENGINE_API ObjectDescriptor : public Reflect::Object
+    struct HELIUM_PC_SUPPORT_API ObjectDescriptor : public Reflect::Object
     {
         REFLECT_DECLARE_OBJECT( ObjectDescriptor, Reflect::Object );
 
@@ -36,7 +36,7 @@ namespace Helium
     class BuildLinkTableFromObjectVisitor;
     class ClearLinkIndicesFromObject;
     
-    class HELIUM_ENGINE_API ArchivePackageLoader : public PackageLoader
+    class HELIUM_PC_SUPPORT_API ArchivePackageLoader : public PackageLoader
     {
         struct LinkEntry;
 
@@ -226,6 +226,6 @@ namespace Helium
     };
 }
 
-#include "Engine/ArchivePackageLoader.inl"
+#include "PcSupport/ArchivePackageLoader.inl"
 
 #endif  // HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H

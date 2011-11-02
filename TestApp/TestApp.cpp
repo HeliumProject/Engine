@@ -12,10 +12,10 @@
 #include "Engine/GameObject.h"
 
 #include "TestGameObject.h"
-#include "Engine/ArchiveObjectLoader.h"
+#include "PcSupport/ArchiveObjectLoader.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
-#include "Engine/ArchivePackageLoader.h"
+#include "PcSupport/ArchivePackageLoader.h"
 
 
 using namespace Helium;

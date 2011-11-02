@@ -2,10 +2,10 @@
 // ArchivePackageLoaderMap.cpp
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "EnginePch.h"
-#include "Engine/ArchivePackageLoaderMap.h"
+#include "PcSupportPch.h"
+#include "PcSupport/ArchivePackageLoaderMap.h"
 
-#include "Engine/ArchivePackageLoader.h"
+#include "PcSupport/ArchivePackageLoader.h"
 
 namespace Helium
 {

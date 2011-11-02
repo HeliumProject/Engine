@@ -164,6 +164,23 @@ namespace Helium
         //void Serialize( Serializer& s );
         //@}
     };
+    
+    struct HELIUM_GRAPHICS_API CompiledShaderData : Reflect::Object
+    {
+        REFLECT_DECLARE_OBJECT(Helium::CompiledShaderData, Reflect::Object);
+        static void PopulateComposite( Reflect::Composite& comp );
+
+        CompiledShaderData();
+        virtual ~CompiledShaderData();
+        
+        inline bool operator==( const CompiledShaderData& _rhs ) const;
+        inline bool operator!=( const CompiledShaderData& _rhs ) const;
+        
+        DynArray< uint8_t > compiledCodeBuffer;
+        DynArray< ShaderConstantBufferInfo > constantBuffers;
+        DynArray< ShaderSamplerInfo > samplerInputs;
+        DynArray< ShaderTextureInfo > textureInputs;
+    };
 
     /// Graphics shader resource.
     class HELIUM_GRAPHICS_API Shader : public Resource

@@ -7,6 +7,21 @@
 
 namespace Helium
 {
+    bool CompiledShaderData::operator==( const CompiledShaderData& _rhs ) const
+    {
+        return ( 
+            compiledCodeBuffer == _rhs.compiledCodeBuffer &&
+            constantBuffers == _rhs.constantBuffers &&
+            samplerInputs == _rhs.samplerInputs &&
+            textureInputs == _rhs.textureInputs
+            );
+    }
+
+    bool CompiledShaderData::operator!=( const CompiledShaderData& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+
     bool ShaderConstantInfo::operator==( const ShaderConstantInfo& _rhs ) const
     {
         return ( 

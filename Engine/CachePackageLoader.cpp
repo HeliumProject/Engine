@@ -16,12 +16,6 @@
 #include "Engine/Resource.h"
 #include "Engine/ObjectLoaderVisitors.h"
 
-#if USE_XML_FOR_CACHE_DATA
-#include "Foundation/Reflect/ArchiveXML.h"
-#else
-#include "Foundation/Reflect/ArchiveBinary.h"
-#endif
-
 using namespace Helium;
 
 /// Constructor.
@@ -643,32 +637,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         HELIUM_ASSERT( pObject );
     }
         
-    Reflect::ObjectPtr cached_object;
-
-#if USE_XML_FOR_CACHE_DATA
-    {
-        tstringstream xml_ss_in;
-        xml_ss_in.write((tchar_t *)pRequest->pSerializedData, (pRequest->pPropertyStreamEnd - pRequest->pSerializedData) / sizeof(tchar_t));
-        //xml_ss_in.str(xml_str);
-
-        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
-        xml_in.ReadFileHeader();
-        xml_in.BeginReadingSingleObjects();
-        
-        xml_in.ReadSingleObject(cached_object);
-    }
-
-#else
-    {
-        std::stringstream binary_ss_in;
-        binary_ss_in.write((char *)pRequest->pSerializedData, (pRequest->pPropertyStreamEnd - pRequest->pSerializedData));
-
-        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
-        
-        binary_in.ReadSingleObject(cached_object);
-    }
-
-#endif
+    Reflect::ObjectPtr cached_object = Cache::ReadCacheObjectFromBuffer(pRequest->pSerializedData, 0, pRequest->pPropertyStreamEnd - pRequest->pSerializedData);
 
     if (!cached_object.ReferencesObject())
     {
@@ -696,30 +665,10 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
             Resource* pResource = Reflect::SafeCast< Resource >( pObject );
             if( pResource )
             {
-                Reflect::ObjectPtr cached_prd;
-                
-#if USE_XML_FOR_CACHE_DATA
-                {
-                    tstringstream xml_ss_in;
-                    xml_ss_in.write((tchar_t *)pRequest->pPropertyStreamEnd, (pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd) / sizeof(tchar_t));
-                    //xml_ss_in.str(xml_str);
-
-                    Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
-                    xml_in.ReadFileHeader();
-                    xml_in.BeginReadingSingleObjects();
-        
-                    xml_in.ReadSingleObject(cached_prd);
-                }
-#else
-                {
-                    std::stringstream binary_ss_in;
-                    binary_ss_in.write((char *)pRequest->pPropertyStreamEnd, (pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd));
-
-                    Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
-        
-                    binary_in.ReadSingleObject(cached_prd);
-                }
-#endif
+                Reflect::ObjectPtr cached_prd = Cache::ReadCacheObjectFromBuffer(
+                    pRequest->pPropertyStreamEnd, 
+                    0, 
+                    (pRequest->pPersistentResourceStreamEnd - pRequest->pPropertyStreamEnd));
 
                 if (!cached_prd.ReferencesObject())
                 {

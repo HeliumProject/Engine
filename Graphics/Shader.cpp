@@ -40,7 +40,27 @@ Shader::BEGIN_LOAD_VARIANT_FUNC* Shader::sm_pBeginLoadVariantOverride = NULL;
 Shader::TRY_FINISH_LOAD_VARIANT_FUNC* Shader::sm_pTryFinishLoadVariantOverride = NULL;
 void* Shader::sm_pVariantLoadOverrideData = NULL;
 
-//PMDTODO: There are a lot of Serialize functions in here that need to be implemented
+
+CompiledShaderData::CompiledShaderData()
+{
+
+}
+
+CompiledShaderData::~CompiledShaderData()
+{
+
+}
+
+REFLECT_DEFINE_OBJECT( Helium::CompiledShaderData );
+
+void CompiledShaderData::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &CompiledShaderData::compiledCodeBuffer, TXT( "compiledCodeBuffer" ) );
+    comp.AddField( &CompiledShaderData::constantBuffers,    TXT( "constantBuffers" ) );
+    comp.AddField( &CompiledShaderData::samplerInputs,      TXT( "samplerInputs" ) );
+    comp.AddField( &CompiledShaderData::textureInputs,      TXT( "textureInputs" ) );
+}
+
 
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantInfo );
 
@@ -851,35 +871,36 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
 
         SetInvalid( rLoadData.id );
 
-        // Serialize the constant buffer information.
-        //TODO: Implement this
-        //BinaryDeserializer deserializer;
-        //deserializer.Prepare( rLoadData.pData, rLoadData.size );
-        //deserializer.BeginSerialize();
-        //m_constantBufferSets[ loadRequestIndex ].Serialize( deserializer );
-        //m_samplerInputSets[ loadRequestIndex ].Serialize( deserializer );
-        //m_textureInputSets[ loadRequestIndex ].Serialize( deserializer );
-        //size_t dataOffset = deserializer.GetCurrentOffset();
-        //deserializer.EndSerialize();
-        size_t dataOffset = 0; // This line is temporary to get it to compile
+        CompiledShaderData *compiled_shader_data = NULL;
+        Reflect::ObjectPtr object_ptr;
 
-        // Apply padding for shader code alignment.
-        dataOffset = Min( Align( dataOffset, sizeof( uint32_t ) ), rLoadData.size );
-
-        // Create the shader resource.
-        size_t shaderSize = rLoadData.size - dataOffset;
-        const void* pShaderData = static_cast< const uint8_t* >( rLoadData.pData ) + dataOffset;
-
+        object_ptr = Cache::ReadCacheObjectFromBuffer((uint8_t*) rLoadData.pData, 0, rLoadData.size);
+        compiled_shader_data = Reflect::SafeCast<CompiledShaderData>(object_ptr.Get());
+        
         RShaderPtr spShaderBase;
-        if( shaderType == RShader::TYPE_VERTEX )
-        {
-            spShaderBase = pRenderer->CreateVertexShader( shaderSize, pShaderData );
-        }
-        else
-        {
-            spShaderBase = pRenderer->CreatePixelShader( shaderSize, pShaderData );
-        }
 
+        HELIUM_ASSERT(compiled_shader_data);
+        if (compiled_shader_data)
+        {
+            m_constantBufferSets[loadRequestIndex].buffers = compiled_shader_data->constantBuffers;
+            m_samplerInputSets[loadRequestIndex].inputs = compiled_shader_data->samplerInputs;
+            m_textureInputSets[loadRequestIndex].inputs = compiled_shader_data->textureInputs;
+
+            HELIUM_ASSERT(!compiled_shader_data->compiledCodeBuffer.IsEmpty());
+            if( shaderType == RShader::TYPE_VERTEX )
+            {
+                spShaderBase = pRenderer->CreateVertexShader( 
+                    compiled_shader_data->compiledCodeBuffer.GetSize(), 
+                    &compiled_shader_data->compiledCodeBuffer[0]);
+            }
+            else
+            {
+                spShaderBase = pRenderer->CreatePixelShader( 
+                    compiled_shader_data->compiledCodeBuffer.GetSize(), 
+                    &compiled_shader_data->compiledCodeBuffer[0] );
+            }
+        }
+        
         if( !spShaderBase )
         {
             HELIUM_TRACE(

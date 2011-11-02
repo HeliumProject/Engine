@@ -14,6 +14,12 @@
 #include "Foundation/StringConverter.h"
 #include "Foundation/AsyncLoader.h"
 
+#if USE_XML_FOR_CACHE_DATA
+#include "Foundation/Reflect/ArchiveXML.h"
+#else
+#include "Foundation/Reflect/ArchiveBinary.h"
+#endif
+
 using namespace Helium;
 
 /// TOC header magic number.
@@ -798,4 +804,89 @@ size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
     hash = ( ( rKey.subDataIndex * 33 ) ^ hash );
 
     return hash;
+}
+
+#if HELIUM_TOOLS
+void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynArray< uint8_t > &_buffer )
+{
+#if USE_XML_FOR_CACHE_DATA
+    {
+        tstringstream xml_out_ss;
+
+        Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
+        xml_out.WriteFileHeader();
+        xml_out.WriteSingleObject(_object);
+        xml_out.WriteFileFooter();
+        xml_out.Close();
+            
+        tstring xml_str;
+        xml_str = xml_out_ss.str();
+
+        if (xml_str.size() > 0)
+        {
+            _buffer.Resize(xml_str.size() * sizeof(tchar_t));
+            memcpy(&_buffer[0], xml_str.data(), xml_str.size() * sizeof(tchar_t));
+        }
+    }
+#else
+    {
+        std::stringstream ss_out;
+        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&ss_out, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+        binary_out.SerializeInstance( &_object );
+
+        // This is not an efficient way to do this
+        std::string str_out;
+        str_out = ss_out.str();
+
+        if (!str_out.empty())
+        {
+            _buffer.Resize(str_out.size());
+            memcpy(&_buffer[0], str_out.data(), str_out.size());
+        }
+    }
+#endif
+}
+#endif
+
+Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynArray< uint8_t > &_buffer )
+{
+    if (_buffer.GetSize() == 0)
+    {
+        Reflect::ObjectPtr null_object;
+        return null_object;
+    }
+
+    return ReadCacheObjectFromBuffer(&_buffer[0], 0, _buffer.GetSize());
+}
+
+Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count )
+{
+    Reflect::ObjectPtr cached_object;
+
+#if USE_XML_FOR_CACHE_DATA
+    {
+        tstringstream xml_ss_in;
+        xml_ss_in.write((tchar_t *)(_buffer + _offset), _count / sizeof(tchar_t));
+        //xml_ss_in.str(xml_str);
+
+        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
+        xml_in.ReadFileHeader();
+        xml_in.BeginReadingSingleObjects();
+        
+        xml_in.ReadSingleObject(cached_object);
+    }
+
+#else
+    {
+        std::stringstream binary_ss_in;
+        binary_ss_in.write((char *)(_buffer + _offset), _count);
+
+        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+        
+        binary_in.ReadSingleObject(cached_object);
+    }
+
+#endif
+
+    return cached_object;
 }

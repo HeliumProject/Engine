@@ -1,8 +1,7 @@
 #pragma once
 
+#include "Platform/Condition.h"
 #include "Platform/ScopeLock.h"
-
-#include "tbb/reader_writer_lock.h"
 
 namespace Helium
 {
@@ -34,8 +33,13 @@ namespace Helium
         //@}
 
     private:
-        /// Reader-writer mutex instance.
-        tbb::interface5::reader_writer_lock m_lock;
+        /// Number of threads with read access, or -1 if write access is currently being held.
+        volatile int32_t m_readLockCount;
+
+        /// Read-lock release event.
+        Condition m_readReleaseCondition;
+        /// Write-lock release event.
+        Condition m_writeReleaseCondition;
     };
 
     /// Scope-based read-locking mechanism for ReadWriteLock objects.

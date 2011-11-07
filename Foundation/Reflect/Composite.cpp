@@ -106,13 +106,11 @@ Composite::Composite()
 
 Composite::~Composite()
 {
-    HELIUM_ASSERT( m_FirstDerived == NULL );
-    HELIUM_ASSERT( m_NextSibling == NULL );
 }
 
-void Composite::Report() const
+void Composite::Register() const
 {
-    Type::Report();
+    Type::Register();
 
     uint32_t computedSize = 0;
     DynArray< Field >::ConstIterator itr = m_Fields.Begin();
@@ -131,10 +129,7 @@ void Composite::Report() const
 
 void Composite::Unregister() const
 {
-    if ( m_Base )
-    {
-        m_Base->RemoveDerived( this );
-    }
+    Type::Unregister();
 }
 
 bool Composite::IsType(const Composite* type) const

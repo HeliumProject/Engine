@@ -170,7 +170,8 @@ bool Registry::RegisterType(Type* type)
         return false;
     }
 
-    type->Report();
+    type->Register();
+
     return true;
 }
 

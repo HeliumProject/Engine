@@ -1,12 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DirectSerializer.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/DirectSerializer.h"
+
+#include "Engine/GameObjectType.h"
+#include "Engine/Package.h"
 
 using namespace Helium;
 

@@ -1,14 +1,6 @@
-//----------------------------------------------------------------------------------------------------------------------
-// CachePackageLoader.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H
-#define HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H
 
+#include "Engine/GameObjectType.h"
 #include "Engine/PackageLoader.h"
 
 #include "Engine/Cache.h"
@@ -134,5 +126,3 @@ namespace Helium
 }
 
 #include "Engine/CachePackageLoader.inl"
-
-#endif  // HELIUM_ENGINE_CACHE_PACKAGE_LOADER_H

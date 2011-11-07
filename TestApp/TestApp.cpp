@@ -67,7 +67,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     RegisterEngineTypes();
     RegisterGraphicsTypes();
-    RegisterGraphicsEnums();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
 #if HELIUM_TOOLS
@@ -130,19 +129,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
 
-	//pmd - Verify that classes can be registered after they've been unregistered
-    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
-    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
-    Helium::Reflect::RegisterClassType<Helium::Components::Component>(TXT("Component"));
-    Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
-
-
     int argc = 2;
     char *argv[2] = {"TestApp.exe", "--gtest_break_on_failure"};
     ::testing::InitGoogleTest(&argc, argv);
     RUN_ALL_TESTS();
 
-    HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "GameObject" ) ) ) == GameObject::GetStaticType() );
+    HELIUM_ASSERT( GameObjectType::Find( Name( TXT( "Helium::GameObject" ) ) ) == GameObject::GetStaticType() );
 
     {
         HELIUM_VERIFY( GameObject::InitStaticType() );
@@ -830,7 +822,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         GameObjectPtr spMeshObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
         HELIUM_ASSERT( spMeshObject );
-        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType() ) );
+        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
 
         spMeshEntity->SetMesh( Reflect::AssertCast< Mesh >( spMeshObject.Get() ) );
 
@@ -841,7 +833,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         GameObjectPtr spAnimationObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( animationPath, spAnimationObject ) );
         HELIUM_ASSERT( spAnimationObject );
-        HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType() ) );
+        HELIUM_ASSERT( spAnimationObject->IsClass( Animation::GetStaticType()->GetClass() ) );
 
         spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
     }
@@ -1311,7 +1303,6 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     UnregisterPcSupportTypes();
     UnregisterFrameworkTypes();
-    UnregisterGraphicsEnums();
     UnregisterGraphicsTypes();
     UnregisterEngineTypes();
 

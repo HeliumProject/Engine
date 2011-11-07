@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/ReadWriteLock.h"
+
 #include "Foundation/Container/DynArray.h"
 
 namespace Helium

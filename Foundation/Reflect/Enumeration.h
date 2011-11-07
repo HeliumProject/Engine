@@ -41,7 +41,8 @@ namespace Helium
                 return info;
             }
 
-            virtual void Report() const HELIUM_OVERRIDE;
+            virtual void Register() const HELIUM_OVERRIDE;
+            virtual void Unregister() const HELIUM_OVERRIDE;
 
             void AddElement(uint32_t value, const tstring& name, const tstring& helpText = TXT( "FIXME: SET THE HELP TEXT FOR THIS ENUMERATION ELEMENT" ) );
             bool IsValid(uint32_t value) const;

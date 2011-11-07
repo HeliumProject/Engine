@@ -275,7 +275,7 @@ namespace Helium
         {
             const GameObjectType* pType = T::GetStaticType();
             HELIUM_ASSERT( pType );
-            if( !pObject->IsClass( pType ) )
+            if( !pObject->IsClass( pType->GetClass() ) )
             {
                 pObject = NULL;
             }

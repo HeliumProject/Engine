@@ -11,7 +11,6 @@ const tchar_t* ReflectionTypes::Strings[ ReflectionTypes::Count ] =
     TXT("Composite"),
     TXT("Structure"),
     TXT("Class"),
-    TXT("GameObjectType"),
 };
 
 ReflectionInfo::ReflectionInfo()

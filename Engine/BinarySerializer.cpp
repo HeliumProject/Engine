@@ -1,12 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// BinarySerializer.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/BinarySerializer.h"
+
+#include "Engine/GameObjectType.h"
+#include "Engine/Package.h"
 
 using namespace Helium;
 

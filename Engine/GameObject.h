@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObject.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_OBJECT_H
-#define HELIUM_ENGINE_OBJECT_H
 
 #include "Engine/Engine.h"
 #include "Foundation/Reflect/Object.h"
@@ -76,7 +67,7 @@
     { \
         if( s_Class ) \
         { \
-            Helium::GameObjectType::Unregister( static_cast< const Helium::GameObjectType* >( s_Class ) ); \
+            Helium::GameObjectType::Unregister( static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ) ); \
             s_Class = NULL; \
         } \
     } \
@@ -84,7 +75,7 @@
     const Helium::GameObjectType* TYPE::GetStaticType() \
     { \
         HELIUM_ASSERT( s_Class ); \
-        return static_cast< const Helium::GameObjectType* >( s_Class ); \
+        return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ); \
     }
 
 /// Utility macro for implementing standard GameObject-class variables and functions.
@@ -98,26 +89,28 @@
     const Helium::GameObjectType* TYPE::InitStaticType() \
     { \
         HELIUM_ASSERT( s_Class ); \
-        extern Helium::Package* Get##MODULE##TypePackage(); \
-        Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
-        HELIUM_ASSERT( pTypePackage ); \
+        if ( !s_Class->m_Tag ) \
+        { \
+            extern Helium::Package* Get##MODULE##TypePackage(); \
+            Helium::Package* pTypePackage = Get##MODULE##TypePackage(); \
+            HELIUM_ASSERT( pTypePackage ); \
+            \
+            const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
+            HELIUM_ASSERT( pParentType ); \
+            \
+            Helium::StrongPtr< TYPE > spTemplate = Helium::Reflect::AssertCast< TYPE >( s_Class->m_Default ); \
+            HELIUM_ASSERT( spTemplate ); \
+            \
+            Helium::GameObjectType::Create( \
+                Reflect::GetClass< TYPE >(), \
+                pTypePackage, \
+                pParentType, \
+                spTemplate, \
+                TYPE_FLAGS ); \
+            HELIUM_ASSERT( s_Class ); \
+        } \
         \
-        const Helium::GameObjectType* pParentType = Base::InitStaticType(); \
-        HELIUM_ASSERT( pParentType ); \
-        \
-        Helium::StrongPtr< TYPE > spTemplate = new TYPE; \
-        HELIUM_ASSERT( spTemplate ); \
-        \
-        s_Class = Helium::GameObjectType::Create( \
-            Helium::Name( TXT( #TYPE ) ), \
-            pTypePackage, \
-            pParentType, \
-            spTemplate, \
-            TYPE::ReleaseStaticType, \
-            TYPE_FLAGS ); \
-        HELIUM_ASSERT( s_Class ); \
-        \
-        return static_cast< const Helium::GameObjectType* >( s_Class ); \
+        return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ); \
     }
 
 //@}
@@ -130,8 +123,6 @@ namespace Helium
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
     HELIUM_DECLARE_PTR( GameObject );
-    HELIUM_DECLARE_PTR( Package );
-
     HELIUM_DECLARE_WPTR( GameObject );
 
     /// Base class for the engine's game object system.
@@ -368,5 +359,3 @@ namespace Helium
 }
 
 #include "Engine/GameObject.inl"
-
-#endif  // HELIUM_ENGINE_OBJECT_H

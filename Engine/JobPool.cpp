@@ -1,12 +1,7 @@
-//----------------------------------------------------------------------------------------------------------------------
-// JobPool.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/JobPool.h"
+
+#include "Platform/Atomic.h"
 
 using namespace Helium;
 

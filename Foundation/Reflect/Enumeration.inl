@@ -28,5 +28,6 @@ void Helium::Reflect::EnumerationRegistrar< EnumerationT >::Unregister()
     if( EnumerationT::s_Enumeration != NULL )
     {
         RemoveTypeFromRegistry( EnumerationT::s_Enumeration );
+        EnumerationT::s_Enumeration = NULL;
     }
 }

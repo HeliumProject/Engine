@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObjectType.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_GAME_OBJECT_TYPE_H
-#define HELIUM_ENGINE_GAME_OBJECT_TYPE_H
 
 #include "Engine/Engine.h"
 
@@ -17,23 +8,21 @@
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"
+#include "Engine/Package.h"
 
 namespace Helium
 {
+    HELIUM_DECLARE_PTR( Package );
+
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
     /// Run-time type information for GameObject classes.
-    class HELIUM_ENGINE_API GameObjectType : public Reflect::Class
+    class HELIUM_ENGINE_API GameObjectType : public Helium::AtomicRefCountBase< GameObjectType >
     {
     public:
-        REFLECTION_TYPE( Reflect::ReflectionTypes::GameObjectType, GameObjectType, Reflect::Class );
-
         /// Type lookup hash map.
         typedef HashMap< Name, GameObjectTypePtr > LookupMap;
-
-        /// Static type release callback.
-        typedef void ( RELEASE_STATIC_TYPE_CALLBACK )();
 
         /// General type flags.
         enum EFlag
@@ -94,6 +83,7 @@ namespace Helium
         /// @name Data Access
         //@{
         inline Name GetName() const;
+        inline const Reflect::Class* GetClass() const;
         inline const GameObjectType* GetBaseType() const;
         inline GameObject* GetTemplate() const;
 
@@ -105,9 +95,7 @@ namespace Helium
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static const GameObjectType* Create(
-            Name name, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate,
-            RELEASE_STATIC_TYPE_CALLBACK* pReleaseStaticTypeCallback, uint32_t flags );
+        static const GameObjectType* Create( const Reflect::Class* pClass, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
         static void Unregister( const GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );
@@ -119,12 +107,10 @@ namespace Helium
         //@}
 
     private:
-        /// Cached from the null-terminated name string in Type.
-        mutable Name m_cachedName;
-
-        /// Static type release callback.
-        RELEASE_STATIC_TYPE_CALLBACK* m_pReleaseStaticTypeCallback;
-
+        /// Reflection class information.
+        const Reflect::Class* m_class;
+        /// Name table entry for this type.
+        Name m_name;
         /// Type flags.
         uint32_t m_flags;
 
@@ -136,5 +122,3 @@ namespace Helium
 }
 
 #include "Engine/GameObjectType.inl"
-
-#endif  // HELIUM_ENGINE_GAME_OBJECT_TYPE_H

@@ -10,7 +10,8 @@ using namespace Helium::Reflect;
 Helium::Mutex g_TypeMutex;
 
 Type::Type()
-: m_Name( NULL )
+: m_Tag( NULL )
+, m_Name( NULL )
 , m_Size( 0 )
 {
 
@@ -21,7 +22,7 @@ Type::~Type()
 
 }
 
-void Type::Report() const
+void Type::Register() const
 {
     const tchar_t* type = ReflectionTypes::Strings[ GetReflectionType() ];
     Log::Debug( TXT( "Reflect %s: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), type, this, m_Size, m_Name, Crc32( m_Name ) );

@@ -1,14 +1,6 @@
-//----------------------------------------------------------------------------------------------------------------------
-// BinarySerializer.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_BINARY_SERIALIZER_H
-#define HELIUM_ENGINE_BINARY_SERIALIZER_H
 
+#include "Engine/GameObjectPath.h"
 #include "Engine/Serializer.h"
 
 #include "Foundation/Stream/ByteSwappingStream.h"
@@ -110,5 +102,3 @@ namespace Helium
 }
 
 #include "Engine/BinarySerializer.inl"
-
-#endif  // HELIUM_ENGINE_BINARY_SERIALIZER_H

@@ -29,6 +29,7 @@ void Helium::Reflect::ClassRegistrar< ClassT, BaseT >::Unregister()
     if ( ClassT::s_Class != NULL )
     {
         RemoveTypeFromRegistry( ClassT::s_Class );
+        ClassT::s_Class = NULL;
     }
 }
 
@@ -62,5 +63,6 @@ void Helium::Reflect::ClassRegistrar< ClassT, void >::Unregister()
     if ( ClassT::s_Class != NULL )
     {
         RemoveTypeFromRegistry( ClassT::s_Class );
+        ClassT::s_Class = NULL;
     }
 }

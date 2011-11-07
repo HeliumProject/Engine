@@ -1,12 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// DirectDeserializer.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/DirectDeserializer.h"
+
+#include "Engine/GameObjectType.h"
+#include "Engine/GameObject.h"
+#include "Engine/Package.h"
 
 using namespace Helium;
 
@@ -245,7 +242,7 @@ void DirectDeserializer::SerializeObjectReference( const GameObjectType* pType, 
         return;
     }
 
-    HELIUM_ASSERT( !pObject || pObject->IsClass( pType ) );
+    HELIUM_ASSERT( !pObject || pObject->IsClass( pType->GetClass() ) );
     rspObject = pObject;
 }
 

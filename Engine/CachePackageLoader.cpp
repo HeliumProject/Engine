@@ -715,7 +715,7 @@ void CachePackageLoader::ResolvePackage( GameObjectPtr& rspPackage, GameObjectPa
             packagePath.GetName(),
             spParent ) );
         HELIUM_ASSERT( rspPackage );
-        HELIUM_ASSERT( rspPackage->IsClass( Package::GetStaticType() ) );
+        HELIUM_ASSERT( rspPackage->IsClass( Package::GetStaticType()->GetClass() ) );
     }
 
     rspPackage->SetFlags( GameObject::FLAG_PRELOADED | GameObject::FLAG_LINKED | GameObject::FLAG_LOADED );

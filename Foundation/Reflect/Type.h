@@ -29,10 +29,11 @@ namespace Helium
             ~Type();
 
         public:
+            mutable const void*             m_Tag;          // tag (client) data
             const tchar_t*                  m_Name;         // the name of this type in the codebase
             uint32_t                        m_Size;         // the size of the object in bytes
 
-            virtual void Report() const;
+            virtual void Register() const;
             virtual void Unregister() const;
         };
 

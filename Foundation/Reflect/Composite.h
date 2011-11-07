@@ -146,7 +146,7 @@ namespace Helium
             }
 
             // Overloaded functions from Type
-            virtual void Report() const HELIUM_OVERRIDE;
+            virtual void Register() const HELIUM_OVERRIDE;
             virtual void Unregister() const HELIUM_OVERRIDE;
 
             // Inheritance Hierarchy

@@ -1,14 +1,10 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObjectLoader.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/GameObjectLoader.h"
 
 #include "Platform/Thread.h"
+#include "Engine/GameObjectType.h"
+#include "Engine/GameObject.h"
+#include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 
 /// GameObject cache name.
@@ -821,7 +817,7 @@ void GameObjectLoader::Linker::SerializeObjectReference( const GameObjectType* p
     GameObject* pObject = m_pLinkEntries[ linkIndex ].spObject;
     if( pObject )
     {
-        if( !pObject->IsClass( pType ) )
+        if( !pObject->IsClass( pType->GetClass() ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,

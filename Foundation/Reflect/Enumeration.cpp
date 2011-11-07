@@ -30,9 +30,9 @@ Enumeration::~Enumeration()
 
 }
 
-void Enumeration::Report() const
+void Enumeration::Register() const
 {
-    Type::Report();
+    Type::Register();
 
     uint32_t computedSize = 0;
     DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
@@ -41,6 +41,11 @@ void Enumeration::Report() const
     {
         Log::Debug( TXT( "  Value: %8d, Name: %s\n" ), itr->m_Value, itr->m_Name.c_str() );
     }
+}
+
+void Enumeration::Unregister() const
+{
+    Type::Unregister();
 }
 
 void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring& helpText )

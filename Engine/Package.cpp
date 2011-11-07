@@ -1,12 +1,8 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Package.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/Package.h"
+
+#include "Foundation/Reflect/Class.h"
+#include "Engine/GameObjectType.h"
 
 using namespace Helium;
 
@@ -30,17 +26,15 @@ Package::~Package()
 /// @return  Static "Package" type.
 const GameObjectType* Package::InitStaticType()
 {
-    if( !s_Class )
+    HELIUM_ASSERT( s_Class )
+    if ( !s_Class->m_Tag )
     {
         // Package type is registered manually during GameObject type initialization, so retrieve the type info from the
         // existing registered data.
         HELIUM_VERIFY( GameObject::InitStaticType() );
-
-        s_Class = GameObjectType::Find( Name( TXT( "Package" ) ) );
-        HELIUM_ASSERT( s_Class );
     }
 
-    return static_cast< const GameObjectType* >( s_Class );
+    return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag );
 }
 
 /// Set the loader for this package.

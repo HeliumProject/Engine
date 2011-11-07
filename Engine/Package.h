@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Package.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_PACKAGE_H
-#define HELIUM_ENGINE_PACKAGE_H
 
 #include "Engine/GameObject.h"
 
@@ -40,5 +31,3 @@ namespace Helium
 }
 
 #include "Engine/Package.inl"
-
-#endif  // HELIUM_ENGINE_PACKAGE_H

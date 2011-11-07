@@ -41,10 +41,19 @@ namespace Helium
                 // setup factory function
                 info->m_Creator = creator;
 
-                // create the default instance
-                if ( info->m_Creator )
+                // fetch a potential default instance from the composite
+                ClassT* instance = static_cast< ClassT* >( info->Composite::m_Default );
+                if ( instance )
                 {
-                    info->Composite::m_Default = info->m_Default = info->m_Creator();
+                    info->m_Default = instance;
+                }
+                else
+                {
+                    // create the default instance
+                    if ( info->m_Creator )
+                    {
+                        info->Composite::m_Default = info->m_Default = info->m_Creator();
+                    }
                 }
 
                 return info;

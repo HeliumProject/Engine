@@ -17,7 +17,10 @@
 //
 
 #include <wx/wx.h>
-#include <wx/msw/private.h>
+
+#ifdef HELIUM_OS_WIN
+# include <wx/msw/private.h>
+#endif
 
 #include <wx/artprov.h>
 #include <wx/aui/aui.h>
@@ -48,9 +51,25 @@
 // D3D
 //
 
-#ifdef _DEBUG
-#define D3D_DEBUG_INFO
+#ifdef HELIUM_OS_WIN
+# ifdef _DEBUG
+#  define D3D_DEBUG_INFO
+# endif
+# include <d3d9.h>
+# include <d3dx9.h>
 #endif
 
-#include <d3d9.h>
-#include <d3dx9.h>
+//
+// Helium
+//
+
+#include "Platform/Assert.h"
+#include "Platform/Memory.h"
+#include "Platform/Trace.h"
+
+#if 0
+use /Zm128+
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#endif

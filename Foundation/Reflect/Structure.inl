@@ -29,6 +29,7 @@ void Helium::Reflect::StructureRegistrar< StructureT, BaseT >::Unregister()
     if ( StructureT::s_Structure != NULL )
     {
         RemoveTypeFromRegistry( StructureT::s_Structure );
+        StructureT::s_Structure = NULL;
     }
 }
 
@@ -62,5 +63,6 @@ void Helium::Reflect::StructureRegistrar< StructureT, void >::Unregister()
     if ( StructureT::s_Structure != NULL )
     {
         RemoveTypeFromRegistry( StructureT::s_Structure );
+        StructureT::s_Structure = NULL;
     }
 }

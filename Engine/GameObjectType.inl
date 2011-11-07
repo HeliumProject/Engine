@@ -5,196 +5,194 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace Helium
+/// Get the name of this type.
+///
+/// @return  Type name.
+Helium::Name Helium::GameObjectType::GetName() const
 {
-    /// Get the name of this type.
-    ///
-    /// @return  Type name.
-    Name GameObjectType::GetName() const
-    {
-        if ( m_cachedName.IsEmpty() )
-        {
-            m_cachedName.Set( m_Name );
-        }
+    return m_name;
+}
 
-        return m_cachedName;
-    }
+/// Get the name of this type.
+///
+/// @return  Type name.
+const Helium::Reflect::Class* Helium::GameObjectType::GetClass() const
+{
+    return m_class;
+}
 
-    /// Get the parent of this type, cast to a GameObjectType.
-    ///
-    /// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
-    ///          "GameObject" type itself).
-    const GameObjectType* GameObjectType::GetBaseType() const
-    {
-        const Reflect::Composite* pBase = m_Base;
-        HELIUM_ASSERT( pBase );
-        return ( pBase->GetReflectionType() == Reflect::ReflectionTypes::GameObjectType
-                 ? static_cast< const GameObjectType* >( pBase )
-                 : NULL );
-    }
+/// Get the parent of this type, cast to a GameObjectType.
+///
+/// @return  Base type, or null if the parent is not a GameObjectType type (should only be the case with the
+///          "GameObject" type itself).
+const Helium::GameObjectType* Helium::GameObjectType::GetBaseType() const
+{
+    const Reflect::Composite* pBase = m_class->m_Base;
+    HELIUM_ASSERT( pBase );
+    return static_cast< const GameObjectType* >( pBase->m_Tag );
+}
 
-    /// Get the default template object for this type.
-    ///
-    /// @return  Type template object.
-    GameObject* GameObjectType::GetTemplate() const
-    {
-        return const_cast< GameObject* >( static_cast< const GameObject* >( m_Default.Get() ) );
-    }
+/// Get the default template object for this type.
+///
+/// @return  Type template object.
+Helium::GameObject* Helium::GameObjectType::GetTemplate() const
+{
+    return const_cast< GameObject* >( static_cast< const GameObject* >( m_class->m_Default.Get() ) );
+}
 
-    /// Get the flags associated with this type.
-    ///
-    /// @return  Type flags.
-    uint32_t GameObjectType::GetFlags() const
-    {
-        return m_flags;
-    }
+/// Get the flags associated with this type.
+///
+/// @return  Type flags.
+uint32_t Helium::GameObjectType::GetFlags() const
+{
+    return m_flags;
+}
 
-    /// Get the package in which all template object packages are stored.
-    ///
-    /// @return  Main type package.
-    ///
-    /// @see SetTypePackage()
-    Package* GameObjectType::GetTypePackage()
-    {
-        return sm_spTypePackage;
-    }
+/// Get the package in which all template object packages are stored.
+///
+/// @return  Main type package.
+///
+/// @see SetTypePackage()
+Helium::Package* Helium::GameObjectType::GetTypePackage()
+{
+    return sm_spTypePackage;
+}
 
-    /// Constructor.
-    ///
-    /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
-    GameObjectType::ConstIterator::ConstIterator()
-    {
-    }
+/// Constructor.
+///
+/// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
+Helium::GameObjectType::ConstIterator::ConstIterator()
+{
+}
 
-    /// Constructor.
-    ///
-    /// @param[in] iterator  Type map iterator from which to initialize this iterator.
-    GameObjectType::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
-        : m_iterator( iterator )
-    {
-    }
+/// Constructor.
+///
+/// @param[in] iterator  Type map iterator from which to initialize this iterator.
+Helium::GameObjectType::ConstIterator::ConstIterator( LookupMap::ConstIterator iterator )
+    : m_iterator( iterator )
+{
+}
 
-    /// Get the type referenced by this iterator.
-    ///
-    /// @return  Reference to the referenced type.
-    const GameObjectType& GameObjectType::ConstIterator::operator*() const
-    {
-        GameObjectType* pType = m_iterator->Second();
-        HELIUM_ASSERT( pType );
+/// Get the type referenced by this iterator.
+///
+/// @return  Reference to the referenced type.
+const Helium::GameObjectType& Helium::GameObjectType::ConstIterator::operator*() const
+{
+    GameObjectType* pType = m_iterator->Second();
+    HELIUM_ASSERT( pType );
 
-        return *pType;
-    }
+    return *pType;
+}
 
-    /// Get the type referenced by this iterator.
-    ///
-    /// @return  Pointer to the referenced type.
-    const GameObjectType* GameObjectType::ConstIterator::operator->() const
-    {
-        GameObjectType* pType = m_iterator->Second();
-        HELIUM_ASSERT( pType );
+/// Get the type referenced by this iterator.
+///
+/// @return  Pointer to the referenced type.
+const Helium::GameObjectType* Helium::GameObjectType::ConstIterator::operator->() const
+{
+    GameObjectType* pType = m_iterator->Second();
+    HELIUM_ASSERT( pType );
 
-        return pType;
-    }
+    return pType;
+}
 
-    /// Advance this iterator to the next type.
-    ///
-    /// @return  Reference to this iterator.
-    GameObjectType::ConstIterator& GameObjectType::ConstIterator::operator++()
-    {
-        ++m_iterator;
+/// Advance this iterator to the next type.
+///
+/// @return  Reference to this iterator.
+Helium::GameObjectType::ConstIterator& Helium::GameObjectType::ConstIterator::operator++()
+{
+    ++m_iterator;
 
-        return *this;
-    }
+    return *this;
+}
 
-    /// Advance this iterator to the next type.
-    ///
-    /// @return  Copy of this iterator prior to advancing.
-    GameObjectType::ConstIterator GameObjectType::ConstIterator::operator++( int )
-    {
-        ConstIterator result = *this;
-        ++m_iterator;
+/// Advance this iterator to the next type.
+///
+/// @return  Copy of this iterator prior to advancing.
+Helium::GameObjectType::ConstIterator Helium::GameObjectType::ConstIterator::operator++( int )
+{
+    ConstIterator result = *this;
+    ++m_iterator;
 
-        return result;
-    }
+    return result;
+}
 
-    /// Move this iterator back to the previous type.
-    ///
-    /// @return  Reference to this iterator.
-    GameObjectType::ConstIterator& GameObjectType::ConstIterator::operator--()
-    {
-        --m_iterator;
+/// Move this iterator back to the previous type.
+///
+/// @return  Reference to this iterator.
+Helium::GameObjectType::ConstIterator& Helium::GameObjectType::ConstIterator::operator--()
+{
+    --m_iterator;
 
-        return *this;
-    }
+    return *this;
+}
 
-    /// Move this iterator back to the previous type.
-    ///
-    /// @return  Copy of this iterator prior to decrementing.
-    GameObjectType::ConstIterator GameObjectType::ConstIterator::operator--( int )
-    {
-        ConstIterator result = *this;
-        --m_iterator;
+/// Move this iterator back to the previous type.
+///
+/// @return  Copy of this iterator prior to decrementing.
+Helium::GameObjectType::ConstIterator Helium::GameObjectType::ConstIterator::operator--( int )
+{
+    ConstIterator result = *this;
+    --m_iterator;
 
-        return result;
-    }
+    return result;
+}
 
-    /// Get whether this iterator is referencing the same type entry as the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator and the given iterator match, false if not.
-    bool GameObjectType::ConstIterator::operator==( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator == rOther.m_iterator );
-    }
+/// Get whether this iterator is referencing the same type entry as the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator and the given iterator match, false if not.
+bool Helium::GameObjectType::ConstIterator::operator==( const ConstIterator& rOther ) const
+{
+    return ( m_iterator == rOther.m_iterator );
+}
 
-    /// Get whether this iterator is not referencing the same type entry as the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator and the given iterator do not match, false if they do match.
-    bool GameObjectType::ConstIterator::operator!=( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator != rOther.m_iterator );
-    }
+/// Get whether this iterator is not referencing the same type entry as the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator and the given iterator do not match, false if they do match.
+bool Helium::GameObjectType::ConstIterator::operator!=( const ConstIterator& rOther ) const
+{
+    return ( m_iterator != rOther.m_iterator );
+}
 
-    /// Get whether this iterator is referencing a type entry prior to the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator is referencing a type entry prior to the given iterator, false if not.
-    bool GameObjectType::ConstIterator::operator<( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator < rOther.m_iterator );
-    }
+/// Get whether this iterator is referencing a type entry prior to the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator is referencing a type entry prior to the given iterator, false if not.
+bool Helium::GameObjectType::ConstIterator::operator<( const ConstIterator& rOther ) const
+{
+    return ( m_iterator < rOther.m_iterator );
+}
 
-    /// Get whether this iterator is referencing a type entry after the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator is referencing a type entry after the given iterator, false if not.
-    bool GameObjectType::ConstIterator::operator>( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator > rOther.m_iterator );
-    }
+/// Get whether this iterator is referencing a type entry after the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator is referencing a type entry after the given iterator, false if not.
+bool Helium::GameObjectType::ConstIterator::operator>( const ConstIterator& rOther ) const
+{
+    return ( m_iterator > rOther.m_iterator );
+}
 
-    /// Get whether this iterator is referencing a type entry prior to or the same as the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator is referencing the same or a prior type entry, false if not.
-    bool GameObjectType::ConstIterator::operator<=( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator <= rOther.m_iterator );
-    }
+/// Get whether this iterator is referencing a type entry prior to or the same as the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator is referencing the same or a prior type entry, false if not.
+bool Helium::GameObjectType::ConstIterator::operator<=( const ConstIterator& rOther ) const
+{
+    return ( m_iterator <= rOther.m_iterator );
+}
 
-    /// Get whether this iterator is referencing a type entry after or the same as the given iterator.
-    ///
-    /// @param[in] rOther  Iterator with which to compare.
-    ///
-    /// @return  True if this iterator is referencing the same or a later type entry, false if not.
-    bool GameObjectType::ConstIterator::operator>=( const ConstIterator& rOther ) const
-    {
-        return ( m_iterator >= rOther.m_iterator );
-    }
+/// Get whether this iterator is referencing a type entry after or the same as the given iterator.
+///
+/// @param[in] rOther  Iterator with which to compare.
+///
+/// @return  True if this iterator is referencing the same or a later type entry, false if not.
+bool Helium::GameObjectType::ConstIterator::operator>=( const ConstIterator& rOther ) const
+{
+    return ( m_iterator >= rOther.m_iterator );
 }

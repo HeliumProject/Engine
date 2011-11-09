@@ -18,7 +18,10 @@ Helium.Prebuild = function()
 
 	local commands =
 	{
-		python .. " Prebuild-JobDefParser.py JobDefinitions . .",
+		python .. " Prebuild-JobDefParser.py EngineJobs . .",
+		python .. " Prebuild-JobDefParser.py Framework . .",
+		python .. " Prebuild-JobDefParser.py GraphicsJobs . .",
+		python .. " Prebuild-JobDefParser.py TestJobs . .",
 		python .. " Prebuild-TypeParser.py D3D9Rendering EditorSupport Engine EngineJobs Framework FrameworkWin Graphics GraphicsJobs GraphicsTypes PcSupport PreprocessingPc Rendering TestJobs WinWindowing Windowing",
 		python .. " Prebuild-TypeParser.py -i Example -s Example -p EXAMPLE_ ExampleGame ExampleMain",
 	}

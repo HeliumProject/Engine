@@ -1,0 +1,22 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": ["*.sublime*"],
+			"folder_exclude_patterns": ["Bin", "Data", "DataPC", "Build", "Utilities"]
+		}
+	],
+    "settings":
+    {
+        "word_wrap": false,
+        "tab_size": 4
+    },
+    "build_systems":
+    [
+        {
+            "name": "List",
+            "cmd": ["ls"]
+        }
+    ]	
+}

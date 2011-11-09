@@ -28,8 +28,20 @@ Helium.GetSystemVersion = function()
 	return version
 end
 
+Helium.Build32Bit = function()
+	if ( _OPTIONS[ "build32and64" ] ) then
+		return true
+	else
+    	return not os.is64bit()
+    end
+end
+
 Helium.Build64Bit = function()
-    return os.is64bit()
+	if ( _OPTIONS[ "build32and64" ] ) then
+		return true
+	else
+	    return os.is64bit()
+	end
 end
 
 Helium.GetFbxSdkLocation = function()
@@ -203,17 +215,22 @@ Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
 
-	if Helium.Build64Bit() then
+    if _OPTIONS[ "build32and64" ] then
         platforms
         {
             "x32",
        		"x64",
-       	}
-    else
+        } 
+	elseif Helium.Build32Bit() then
         platforms
         {
             "x32",
-        } 
+       	}
+    elseif Helium.Build64Bit() then
+        platforms
+        {
+       		"x64",
+       	}
     end
 
 	configurations

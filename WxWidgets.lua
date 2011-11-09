@@ -18,10 +18,12 @@ Helium.BuildWxWidgets = function()
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
 
 		local result
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"" )
-		if result ~= 0 then os.exit( 1 ) end
+		if Helium.Build32Bit() then
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug\"" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release\"" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
 		if Helium.Build64Bit() then
 			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug\"" )
 			if result ~= 0 then os.exit( 1 ) end
@@ -62,8 +64,11 @@ Helium.BuildWxWidgets = function()
 		end
 
 		local result
-		Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
-		Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
+
+		if Helium.Build32Bit() then
+			Build( "macbuild-debug-unicode-32", "--enable-debug --enable-unicode" .. flags .. archFlags32 )
+			Build( "macbuild-release-unicode-32", "--enable-unicode" .. flags .. archFlags32 )
+		end
 		if Helium.Build64Bit() then
 			Build( "macbuild-debug-unicode-64", "--enable-debug --enable-unicode" .. flags .. archFlags64 )
 			Build( "macbuild-release-unicode-64", "--enable-unicode" .. flags .. archFlags64 )
@@ -95,25 +100,32 @@ Helium.CleanWxWidgets = function()
 		os.chdir( "Dependencies/wxWidgets/build/msw" );
 
 		local result
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
-		result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
-		if result ~= 0 then os.exit( 1 ) end
+		if Helium.Build32Bit() then
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=debug UNICODE=1\"" )
+			if result ~= 0 then os.exit( 1 ) end
+			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86 && " .. make .. " BUILD=release UNICODE=1\"" )
+			if result ~= 0 then os.exit( 1 ) end
+		end
 		if Helium.Build64Bit() then
 			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=debug UNICODE=1\"" )
 			if result ~= 0 then os.exit( 1 ) end
 			result = os.execute( "cmd.exe /c \"call \"%VCINSTALLDIR%\"\\vcvarsall.bat x86_amd64 && " .. make .. " TARGET_CPU=AMD64 BUILD=release UNICODE=1\"" )
 			if result ~= 0 then os.exit( 1 ) end
 		end
+
 	elseif os.get() == "macosx" then
-		os.rmdir( "Dependencies/wxWidgets/macbuild-debug-32" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-release-32" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-debug-64" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-release-64" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-debug-unicode-32" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-release-unicode-32" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-debug-unicode-64" )
-		os.rmdir( "Dependencies/wxWidgets/macbuild-release-unicode-64" )
+		if Helium.Build32Bit() then
+			os.rmdir( "Dependencies/wxWidgets/macbuild-debug-32" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-release-32" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-debug-unicode-32" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-release-unicode-32" )
+		end
+		if Helium.Build64Bit() then
+			os.rmdir( "Dependencies/wxWidgets/macbuild-debug-64" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-release-64" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-debug-unicode-64" )
+			os.rmdir( "Dependencies/wxWidgets/macbuild-release-unicode-64" )
+		end
 	else
 		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")
 		os.exit(1)
@@ -128,42 +140,46 @@ Helium.PublishWxWidgets = function( bin )
 	local files = {}
 
 	if os.get() == "windows" then
-		files[1] = { file="wxmsw291ud_vc_custom.dll",  source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Debug" }
-		files[2] = { file="wxmsw291ud_vc_custom.pdb",  source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Debug" }
-		files[3] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Intermediate" }
-		files[4] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Intermediate" }
-		files[5] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Profile" }
-		files[6] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Profile" }
-		files[7] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Release" }
-		files[8] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Release" }
+		if Helium.Build32Bit() then
+			table.insert( files, { file="wxmsw291ud_vc_custom.dll",  source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw291ud_vc_custom.pdb",  source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Release" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_dll", 			target=bin .. "/x32/Release" } )
+		end
 		if Helium.Build64Bit() then
-			files[09] = { file="wxmsw291ud_vc_custom.dll",  source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Debug" }
-			files[10] = { file="wxmsw291ud_vc_custom.pdb",  source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Debug" }
-			files[11] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Intermediate" }
-			files[12] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Intermediate" }
-			files[13] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Profile" }
-			files[14] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Profile" }
-			files[15] = { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Release" }
-			files[16] = { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Release" }
+			table.insert( files, { file="wxmsw291ud_vc_custom.dll",  source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw291ud_vc_custom.pdb",  source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.dll",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Release" } )
+			table.insert( files, { file="wxmsw291u_vc_custom.pdb",   source="Dependencies/wxWidgets/lib/vc_amd64_dll", 		target=bin .. "/x64/Release" } )
 		end       
     elseif os.get() == "macosx" then
-		files[1] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",  		source="Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" }
-		files[2] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  	source="Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" }
-		files[3] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" }
-		files[4] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" }
-		files[5] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" }
-		files[6] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" }
-		files[7] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" }
-		files[8] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" }
+		if Helium.Build32Bit() then
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",  	source="Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-debug-unicode-32/lib",		target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-32/lib",	target=bin .. "/x32/Release" } )
+		end
 		if Helium.Build64Bit() then
-			files[09] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",  	source="Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" }
-			files[10] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  	source="Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" }
-			files[11] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" }
-			files[12] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" }
-			files[13] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" }
-			files[14] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" }
-			files[15] = { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" }
-			files[16] = { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",   source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" }
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",  	source="Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-debug-unicode-64/lib",		target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libwx_osx_cocoau-2.9.1.0.0.dylib",   	source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libwx_osx_cocoau_gl-2.9.1.0.0.dylib",  source="Dependencies/wxWidgets/macbuild-release-unicode-64/lib",	target=bin .. "/x64/Release" } )
 		end       
 	else
 		print("Implement support for " .. os.get() .. " to PublishWxWidgets()")

@@ -609,9 +609,13 @@ void ArchiveBinary::DeserializeFields(Object* object)
     int32_t fieldCount = -1;
     m_Stream->Read(&fieldCount); 
     
-    DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
-    HELIUM_ASSERT(deserializing_field);
-    deserializing_field->m_Instance = object;
+    size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+    //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+    m_DeserializingFieldStack.New();
+    //HELIUM_ASSERT(deserializing_field);
+    HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+    //deserializing_field->m_Instance = structure;
+    m_DeserializingFieldStack[deserializing_field_index].m_Instance = object;
     for (int i=0; i<fieldCount; i++)
     {
         uint32_t fieldNameCrc = BeginCrc32();
@@ -623,7 +627,8 @@ void ArchiveBinary::DeserializeFields(Object* object)
         ObjectPtr unknown;
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
-        deserializing_field->m_Field = field;
+        //deserializing_field->m_Field = field;
+        m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
         if ( field )
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -731,9 +736,13 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
     int32_t fieldCount = -1;
     m_Stream->Read(&fieldCount);    
 
-        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
-        HELIUM_ASSERT(deserializing_field);
-        deserializing_field->m_Instance = structure;
+    size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+    //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+    m_DeserializingFieldStack.New();
+    //HELIUM_ASSERT(deserializing_field);
+    HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+    //deserializing_field->m_Instance = structure;
+    m_DeserializingFieldStack[deserializing_field_index].m_Instance = structure;
 
     for (int i=0; i<fieldCount; i++)
     {
@@ -742,7 +751,8 @@ void ArchiveBinary::DeserializeFields( void* structure, const Structure* type )
 
         const Field* field = type->FindFieldByName(fieldNameCrc);
 
-        deserializing_field->m_Field = field;
+        //deserializing_field->m_Field = field;
+        m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
         if ( field )
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE

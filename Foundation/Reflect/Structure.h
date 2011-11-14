@@ -90,7 +90,7 @@ namespace Helium
                 DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
                 DynArray<T> *src_t = static_cast<DynArray<T> *>(src);
 
-                dyn_array_t = src_t;
+                *dyn_array_t = *src_t;
                 return true;
             }
             

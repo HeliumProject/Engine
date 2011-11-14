@@ -118,7 +118,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
-
+    /*
     //std::string str;
     {
 //         ObjectDescriptor os;
@@ -306,7 +306,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 // 
 //         config = Reflect::AssertCast<GraphicsConfig>(config_ptr.Get());
 //     }
-
+*/
 
 
 
@@ -318,7 +318,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     ConfigPc::SaveUserConfig();
-
+    /*
     JobManager& rJobManager = JobManager::GetStaticInstance();
     HELIUM_VERIFY( rJobManager.Initialize() );
 
@@ -956,12 +956,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             rBoxMaximum.GetElement( 2 ) );
 #endif
     }
-
+    */
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;
     bool bVsync;
-
+    
     {
         StrongPtr< GraphicsConfig > spGraphicsConfig(
             rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );

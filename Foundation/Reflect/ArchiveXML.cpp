@@ -434,9 +434,13 @@ void ArchiveXML::DeserializeFields(Object* object)
         // advance to the first child
         m_Iterator.Advance();
         
-        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
-        HELIUM_ASSERT(deserializing_field);
-        deserializing_field->m_Instance = object;
+        size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+        //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        m_DeserializingFieldStack.New();
+        //HELIUM_ASSERT(deserializing_field);
+        HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+        //deserializing_field->m_Instance = structure;
+        m_DeserializingFieldStack[deserializing_field_index].m_Instance = object;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -449,7 +453,8 @@ void ArchiveXML::DeserializeFields(Object* object)
 
             ObjectPtr unknown;
             const Field* field = type->FindFieldByName(fieldNameCrc);
-            deserializing_field->m_Field = field;
+            //deserializing_field->m_Field = field;
+            m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -557,9 +562,13 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
         // advance to the first child
         m_Iterator.Advance();
 
-        DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
-        HELIUM_ASSERT(deserializing_field);
-        deserializing_field->m_Instance = structure;
+        size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+        //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        m_DeserializingFieldStack.New();
+        //HELIUM_ASSERT(deserializing_field);
+        HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+        //deserializing_field->m_Instance = structure;
+        m_DeserializingFieldStack[deserializing_field_index].m_Instance = structure;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -568,7 +577,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
             const Field* field = type->FindFieldByName(fieldNameCrc);
-            deserializing_field->m_Field = field;
+            m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -631,6 +640,9 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             m_Indent.Pop();
 #endif
         }
+        // else skip this entire node
+        //
+        //
         m_DeserializingFieldStack.Pop();
     }
     else

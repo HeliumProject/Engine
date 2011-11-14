@@ -6,7 +6,7 @@
 namespace Helium
 {
     // Called it something bad happens during deserialization
-    class ClearLinkIndicesFromObject : public Helium::Reflect::Visitor
+    class HELIUM_ENGINE_API ClearLinkIndicesFromObject : public Helium::Reflect::Visitor
     {        
     public:
         ClearLinkIndicesFromObject();

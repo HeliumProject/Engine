@@ -856,11 +856,17 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynArray< uin
         return null_object;
     }
 
-    return ReadCacheObjectFromBuffer(&_buffer[0], 0, _buffer.GetSize());
+    return ReadCacheObjectFromBuffer(_buffer.GetData(), 0, _buffer.GetSize());
 }
 
 Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count )
 {
+    if (_count == 0)
+    {
+        Reflect::ObjectPtr null_object;
+        return null_object;
+    }
+
     Reflect::ObjectPtr cached_object;
 
 #if USE_XML_FOR_CACHE_DATA
@@ -868,6 +874,12 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
         tstringstream xml_ss_in;
         xml_ss_in.write((tchar_t *)(_buffer + _offset), _count / sizeof(tchar_t));
         //xml_ss_in.str(xml_str);
+
+        tstring str = xml_ss_in.str();
+        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+        pFileStream->Write(str.c_str(), sizeof(tchar_t), str.size());
+        pFileStream->Close();
+        delete pFileStream;
 
         Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
         xml_in.ReadFileHeader();

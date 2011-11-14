@@ -22,6 +22,8 @@
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+#include "Foundation/Numeric.h"
+
 
 using namespace Helium;
 
@@ -142,14 +144,15 @@ bool ObjectPreprocessor::CacheObject(
 
         if (!data_buffer.IsEmpty())
         {
-            size_t data_size = data_buffer.GetSize();
-            rObjectStream.Write(&data_size, sizeof(size_t), 1);
-            rObjectStream.Write(&data_buffer[0], sizeof(char), data_size);
+            HELIUM_ASSERT(data_buffer.GetSize() <= Helium::NumericLimits<uint32_t>::Maximum);
+            uint32_t data_size = static_cast<uint32_t>(data_buffer.GetSize());
+            rObjectStream.Write(&data_size, sizeof(data_size), 1);
+            rObjectStream.Write(&data_buffer[0], sizeof(data_buffer[0]), data_size);
         }
         else
         {
-            size_t data_size = 0;
-            rObjectStream.Write(&data_size, sizeof(size_t), 1);
+            uint32_t data_size = 0;
+            rObjectStream.Write(&data_size, sizeof(data_size), 1);
         }
 		
         // Serialize persistent resource data and the number of chunks of sub-data.

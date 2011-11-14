@@ -432,7 +432,9 @@ namespace Helium
         class HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
         {
         public:
-            REFLECT_DECLARE_OBJECT(Shader::PersistentResourceData, Reflect::Object);
+            PersistentResourceData();
+
+            REFLECT_DECLARE_OBJECT(ShaderVariant::PersistentResourceData, Reflect::Object);
             static void PopulateComposite( Reflect::Composite& comp );
 
             uint32_t m_resourceCount;

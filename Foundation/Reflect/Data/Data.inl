@@ -111,6 +111,8 @@ void Helium::Reflect::VoidDataPointer::Allocate( uint32_t size ) const
 #ifdef REFLECT_CHECK_MEMORY
     m_Size = size;
 #endif
+
+    Helium::MemoryZero(m_Target, m_Size);
 }
 
 void Helium::Reflect::VoidDataPointer::Deallocate() const

@@ -12,6 +12,7 @@
 #include "Math/FpuHDRColor4.h"
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
+#include "Foundation/Name.h"
 
 namespace Helium
 {
@@ -53,6 +54,7 @@ namespace Helium
             virtual tistream& operator<<(tistream& stream);
         };
 
+        typedef SimpleData<Name> NameData;
         typedef SimpleData<tstring> StlStringData;
         typedef SimpleData<bool> BoolData;
         typedef SimpleData<uint8_t> UInt8Data;

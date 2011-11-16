@@ -362,6 +362,18 @@ namespace Helium
             }
 
             template < class CompositeT, class FieldT >
+            inline Reflect::Field* AddStructureField( DynArray< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            {
+                return AddField(
+                    name,
+                    GetOffset(field),
+                    sizeof(DynArray< FieldT >),
+                    Reflect::GetClass<Reflect::StructureDynArrayData>(),
+                    Reflect::GetStructure<FieldT>(),
+                    flags );
+            }
+
+            template < class CompositeT, class FieldT >
             inline Reflect::Field* AddEnumerationField( FieldT CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(

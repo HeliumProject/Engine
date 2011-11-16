@@ -87,6 +87,8 @@ namespace Helium
         void Pop();
 
         void Swap( DynArray& rArray );
+
+        uint32_t GetIndexOfPointer(const T *_ptr) const;
         //@}
 
         /// @name In-place Object Creation

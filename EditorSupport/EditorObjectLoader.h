@@ -15,7 +15,7 @@
 
 #include "Engine/GameObjectLoader.h"
 
-#include "Engine/ArchivePackageLoaderMap.h"
+#include "PcSupport/ArchivePackageLoaderMap.h"
 
 namespace Helium
 {

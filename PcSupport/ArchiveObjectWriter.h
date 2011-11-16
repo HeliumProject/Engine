@@ -14,16 +14,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_ENGINE_ARCHIVE_OBJECT_WRITER_H
-#define HELIUM_ENGINE_ARCHIVE_OBJECT_WRITER_H
+#ifndef HELIUM_PC_SUPPORT_ARCHIVE_OBJECT_WRITER_H
+#define HELIUM_PC_SUPPORT_ARCHIVE_OBJECT_WRITER_H
 
-#include "Engine/Engine.h"
+#include "PcSupport/PcSupport.h"
 
 #if HELIUM_EDITOR
 
 namespace Helium
 {
-    class HELIUM_ENGINE_API ArchiveObjectWriter : public NonCopyable
+    class HELIUM_PC_SUPPORT_API ArchiveObjectWriter : public NonCopyable
     {
         //static void 
     };

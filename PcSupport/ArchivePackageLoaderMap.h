@@ -6,10 +6,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_MAP_H
-#define HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_MAP_H
+#ifndef HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_MAP_H
+#define HELIUM_PC_SUPPORT_ARCHIVE_PACKAGE_LOADER_MAP_H
 
-#include "Engine/Engine.h"
+#include "PcSupport/PcSupport.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 
@@ -20,7 +20,7 @@ namespace Helium
     class ArchivePackageLoader;
 
     /// Archive package loader management for object loaders.
-    class HELIUM_ENGINE_API ArchivePackageLoaderMap
+    class HELIUM_PC_SUPPORT_API ArchivePackageLoaderMap
     {
     public:
         /// @name Construction/Destruction

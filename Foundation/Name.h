@@ -133,6 +133,20 @@ namespace Helium
 #else
     typedef CharName Name;
 #endif
+  
+    HELIUM_FOUNDATION_API inline tostream& operator<<( tostream& stream, const Name& id )
+    {
+        stream << id.Get();
+        return stream;
+    }
+
+    HELIUM_FOUNDATION_API inline tistream& operator>>( tistream& stream, Name& id )
+    {
+        tstring str;
+        stream >> str;
+        id.Set(str.c_str());
+        return stream;
+    }
 
     /// Default Name hash.
     template< typename TableType >

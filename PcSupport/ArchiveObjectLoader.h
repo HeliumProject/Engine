@@ -6,23 +6,23 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_ENGINE_ARCHIVE_OBJECT_LOADER_H
-#define HELIUM_ENGINE_ARCHIVE_OBJECT_LOADER_H
+#ifndef HELIUM_PC_SUPPORT_ARCHIVE_OBJECT_LOADER_H
+#define HELIUM_PC_SUPPORT_ARCHIVE_OBJECT_LOADER_H
 
-#include "Engine/Engine.h"
+#include "PcSupport/PcSupport.h"
 
 //#if HELIUM_EDITOR
 
 #include "Engine/GameObjectLoader.h"
 
-#include "Engine/ArchivePackageLoaderMap.h"
+#include "PcSupport/ArchivePackageLoaderMap.h"
 
 namespace Helium
 {
     class ArchiveObjectLoader;
 
     /// Archive-based object loader.
-    class ArchiveObjectLoader : public GameObjectLoader
+    class HELIUM_PC_SUPPORT_API ArchiveObjectLoader : public GameObjectLoader
     {
     public:
         /// @name Construction/Destruction
@@ -33,12 +33,12 @@ namespace Helium
 
         /// @name Loading Interface
         //@{
-        //virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData );
+        virtual bool CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData );
         //@}
 
         /// @name Static Initialization
         //@{
-        HELIUM_ENGINE_API static bool InitializeStaticInstance();
+        static bool InitializeStaticInstance();
         //@}
 
     private:
@@ -50,8 +50,8 @@ namespace Helium
         virtual PackageLoader* GetPackageLoader( GameObjectPath path );
         virtual void TickPackageLoaders();
 
-        //virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
-        //virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader );
+        virtual void OnLoadComplete( GameObjectPath path, GameObject* pObject, PackageLoader* pPackageLoader );
         //@}
     };
 }

@@ -1,15 +1,13 @@
 //----------------------------------------------------------------------------------------------------------------------
-// EditorObjectLoader.cpp
+// ArchiveObjectLoader.cpp
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "EditorSupportPch.h"
+#include "PcSupportPch.h"
 
-#if HELIUM_TOOLS
-
-#include "EditorSupport/EditorObjectLoader.h"
+#include "PcSupport/ArchiveObjectLoader.h"
 
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
@@ -21,17 +19,97 @@
 using namespace Helium;
 
 /// Constructor.
-EditorObjectLoader::EditorObjectLoader()
+ArchiveObjectLoader::ArchiveObjectLoader()
 {
 }
 
 /// Destructor.
-EditorObjectLoader::~EditorObjectLoader()
+ArchiveObjectLoader::~ArchiveObjectLoader()
 {
 }
 
+/// Initialize the static object loader instance as an ArchiveObjectLoader.
+///
+/// @return  True if the loader was initialized successfully, false if not or another object loader instance already
+///          exists.
+bool ArchiveObjectLoader::InitializeStaticInstance()
+{
+    if( sm_pInstance )
+    {
+        return false;
+    }
+
+    sm_pInstance = new ArchiveObjectLoader;
+    HELIUM_ASSERT( sm_pInstance );
+
+    return true;
+}
+
+/// @copydoc GameObjectLoader::GetPackageLoader()
+PackageLoader* ArchiveObjectLoader::GetPackageLoader( GameObjectPath path )
+{
+    ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+
+    return pLoader;
+}
+
+/// @copydoc GameObjectLoader::TickPackageLoaders()
+void ArchiveObjectLoader::TickPackageLoaders()
+{
+    m_packageLoaderMap.TickPackageLoaders();
+}
+
+/// @copydoc GameObjectLoader::OnLoadComplete()
+void ArchiveObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
+{
+    if( pObject )
+    {
+        CacheObject( pObject, true );
+    }
+}
+
+/// @copydoc GameObjectLoader::OnPrecacheReady()
+ void ArchiveObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
+ {
+     HELIUM_ASSERT( pObject );
+     HELIUM_ASSERT( pPackageLoader );
+ 
+     // The default template object for a given type never has its resource data preprocessed, so there's no need to
+     // precache default template objects.
+     if( pObject->IsDefaultTemplate() )
+     {
+         return;
+     }
+ 
+     // Retrieve the object preprocessor if it exists.
+     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
+     if( !pObjectPreprocessor )
+     {
+         HELIUM_TRACE(
+             TRACE_WARNING,
+             ( TXT( "ArchiveObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
+             TXT( "preprocessing.\n" ) ) );
+ 
+         return;
+     }
+ 
+     // We only need to do precache handling for resources, so skip non-resource types.
+     Resource* pResource = Reflect::SafeCast< Resource >( pObject );
+     if( !pResource )
+     {
+         return;
+     }
+ 
+     // Grab the package timestamp.
+     HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
+     int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
+ 
+     // Attempt to load the resource data.
+     pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
+ }
+
 /// @copydoc GameObjectLoader::CacheObject()
-bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
+bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPreprocessedResourceData )
 {
     HELIUM_ASSERT( pObject );
 
@@ -47,7 +125,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
     {
         HELIUM_TRACE(
             TRACE_WARNING,
-            TXT( "EditorObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
+            TXT( "ArchiveObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
 
         return false;
     }
@@ -107,7 +185,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
             {
                 HELIUM_TRACE(
                     TRACE_WARNING,
-                    TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
+                    TXT( "ArchiveObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
                 return false;
             }
@@ -131,91 +209,9 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
     {
         HELIUM_TRACE(
             TRACE_ERROR,
-            TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ),
+            TXT( "ArchiveObjectLoader: Failed to cache object \"%s\".\n" ),
             *objectPath.ToString() );
     }
 
     return bSuccess;
 }
-
-/// Initialize the static object loader instance as an EditorObjectLoader.
-///
-/// @return  True if the loader was initialized successfully, false if not or another object loader instance already
-///          exists.
-bool EditorObjectLoader::InitializeStaticInstance()
-{
-    if( sm_pInstance )
-    {
-        return false;
-    }
-
-    sm_pInstance = new EditorObjectLoader;
-    HELIUM_ASSERT( sm_pInstance );
-
-    return true;
-}
-
-/// @copydoc GameObjectLoader::GetPackageLoader()
-PackageLoader* EditorObjectLoader::GetPackageLoader( GameObjectPath path )
-{
-    ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
-
-    return pLoader;
-}
-
-/// @copydoc GameObjectLoader::TickPackageLoaders()
-void EditorObjectLoader::TickPackageLoaders()
-{
-    m_packageLoaderMap.TickPackageLoaders();
-}
-
-/// @copydoc GameObjectLoader::OnPrecacheReady()
-void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pPackageLoader )
-{
-    HELIUM_ASSERT( pObject );
-    HELIUM_ASSERT( pPackageLoader );
-
-    // The default template object for a given type never has its resource data preprocessed, so there's no need to
-    // precache default template objects.
-    if( pObject->IsDefaultTemplate() )
-    {
-        return;
-    }
-
-    // Retrieve the object preprocessor if it exists.
-    ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::GetStaticInstance();
-    if( !pObjectPreprocessor )
-    {
-        HELIUM_TRACE(
-            TRACE_WARNING,
-            ( TXT( "EditorObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
-            TXT( "preprocessing.\n" ) ) );
-
-        return;
-    }
-
-    // We only need to do precache handling for resources, so skip non-resource types.
-    Resource* pResource = Reflect::SafeCast< Resource >( pObject );
-    if( !pResource )
-    {
-        return;
-    }
-
-    // Grab the package timestamp.
-    HELIUM_ASSERT( pPackageLoader->IsSourcePackageFile() );
-    int64_t objectTimestamp = pPackageLoader->GetFileTimestamp();
-
-    // Attempt to load the resource data.
-    pObjectPreprocessor->LoadResourceData( pResource, objectTimestamp );
-}
-
-/// @copydoc GameObjectLoader::OnLoadComplete()
-void EditorObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* pObject, PackageLoader* /*pPackageLoader*/ )
-{
-    if( pObject )
-    {
-        CacheObject( pObject, true );
-    }
-}
-
-#endif  // HELIUM_TOOLS

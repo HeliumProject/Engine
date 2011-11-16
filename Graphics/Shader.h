@@ -14,6 +14,9 @@
 
 #include "Rendering/RShader.h"
 
+#include "Foundation/Reflect/Enumeration.h"
+#include "Foundation/Reflect/Structure.h"
+
 namespace Helium
 {
     HELIUM_DECLARE_PTR( ShaderVariant );
@@ -23,6 +26,12 @@ namespace Helium
     /// Shader constant information.
     struct HELIUM_GRAPHICS_API ShaderConstantInfo
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantInfo);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderConstantInfo& _rhs ) const;
+        inline bool operator!=( const ShaderConstantInfo& _rhs ) const;
+
         /// Constant name.
         Name name;
         /// Offset of the constant within the buffer, in bytes.
@@ -34,13 +43,19 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Constant buffer information.
     struct HELIUM_GRAPHICS_API ShaderConstantBufferInfo
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantBufferInfo);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderConstantBufferInfo& _rhs ) const;
+        inline bool operator!=( const ShaderConstantBufferInfo& _rhs ) const;
+
         /// Constant buffer name.
         Name name;
         /// Shader constants.
@@ -52,25 +67,37 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Constant buffer information set.
     struct HELIUM_GRAPHICS_API ShaderConstantBufferInfoSet
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderConstantBufferInfoSet);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderConstantBufferInfoSet& _rhs ) const;
+        inline bool operator!=( const ShaderConstantBufferInfoSet& _rhs ) const;
+
         /// Constant buffers.
         DynArray< ShaderConstantBufferInfo > buffers;
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Shader sampler input information.
     struct HELIUM_GRAPHICS_API ShaderSamplerInfo
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderSamplerInfo);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderSamplerInfo& _rhs ) const;
+        inline bool operator!=( const ShaderSamplerInfo& _rhs ) const;
+
         /// Sampler name.
         Name name;
         /// Bind point index.
@@ -78,25 +105,37 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Shader sampler input information set.
     struct HELIUM_GRAPHICS_API ShaderSamplerInfoSet
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderSamplerInfoSet);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderSamplerInfoSet& _rhs ) const;
+        inline bool operator!=( const ShaderSamplerInfoSet& _rhs ) const;
+
         /// Sampler inputs.
         DynArray< ShaderSamplerInfo > inputs;
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Shader texture input information.
     struct HELIUM_GRAPHICS_API ShaderTextureInfo
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderTextureInfo);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderTextureInfo& _rhs ) const;
+        inline bool operator!=( const ShaderTextureInfo& _rhs ) const;
+
         /// Texture variable name.
         Name name;
         /// Bind point index.
@@ -104,20 +143,43 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
     };
 
     /// Shader texture input information set.
     struct HELIUM_GRAPHICS_API ShaderTextureInfoSet
     {
+        REFLECT_DECLARE_BASE_STRUCTURE(Helium::ShaderTextureInfoSet);
+        static void PopulateComposite( Reflect::Composite& comp );
+        
+        inline bool operator==( const ShaderTextureInfoSet& _rhs ) const;
+        inline bool operator!=( const ShaderTextureInfoSet& _rhs ) const;
+
         /// Texture inputs.
         DynArray< ShaderTextureInfo > inputs;
 
         /// @name Serialization
         //@{
-        void Serialize( Serializer& s );
+        //void Serialize( Serializer& s );
         //@}
+    };
+    
+    struct HELIUM_GRAPHICS_API CompiledShaderData : Reflect::Object
+    {
+        REFLECT_DECLARE_OBJECT(Helium::CompiledShaderData, Reflect::Object);
+        static void PopulateComposite( Reflect::Composite& comp );
+
+        CompiledShaderData();
+        virtual ~CompiledShaderData();
+        
+        inline bool operator==( const CompiledShaderData& _rhs ) const;
+        inline bool operator!=( const CompiledShaderData& _rhs ) const;
+        
+        DynArray< uint8_t > compiledCodeBuffer;
+        DynArray< ShaderConstantBufferInfo > constantBuffers;
+        DynArray< ShaderSamplerInfo > samplerInputs;
+        DynArray< ShaderTextureInfo > textureInputs;
     };
 
     /// Graphics shader resource.
@@ -138,6 +200,12 @@ namespace Helium
         /// Shader preprocessor toggle.
         struct HELIUM_GRAPHICS_API Toggle
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Shader::Toggle);
+            static void PopulateComposite( Reflect::Composite& comp );
+            
+            inline bool operator==( const Toggle& _rhs ) const;
+            inline bool operator!=( const Toggle& _rhs ) const;
+
             /// Toggle name.
             Name name;
             /// Applicable shader type flags.
@@ -145,32 +213,51 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
         /// Shader preprocessor selection.
         struct HELIUM_GRAPHICS_API Select
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Shader::Select);
+            static void PopulateComposite( Reflect::Composite& comp );
+            
+            inline bool operator==( const Select& _rhs ) const;
+            inline bool operator!=( const Select& _rhs ) const;
+
             /// Selection name.
             Name name;
             /// Selection choices.
             DynArray< Name > choices;
 
-            /// Applicable shader type flags.
-            uint32_t shaderTypeFlags : 31;
-            /// Non-zero if this selection is optional.
-            uint32_t bOptional : 1;
+            union
+            {
+                struct
+                {
+                    /// Applicable shader type flags.
+                    uint32_t shaderTypeFlags : 31;
+                    /// Non-zero if this selection is optional.
+                    uint32_t bOptional : 1;
+                };
+                uint32_t allFlags;
+            };
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
         /// Selection name/choice pair.
         struct SelectPair
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Shader::SelectPair);
+            static void PopulateComposite( Reflect::Composite& comp );
+            
+            inline bool operator==( const SelectPair& _rhs ) const;
+            inline bool operator!=( const SelectPair& _rhs ) const;
+
             /// Selection name.
             Name name;
             /// Selection choice.
@@ -178,7 +265,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
         };
 
@@ -186,6 +273,13 @@ namespace Helium
         class HELIUM_GRAPHICS_API Options
         {
         public:
+
+            REFLECT_DECLARE_BASE_STRUCTURE(Shader::Options);
+            static void PopulateComposite( Reflect::Composite& comp );
+            
+            inline bool operator==( const Options& _rhs ) const;
+            inline bool operator!=( const Options& _rhs ) const;
+
             /// @name Data Access
             //@{
             inline DynArray< Toggle >& GetToggles();
@@ -197,7 +291,7 @@ namespace Helium
 
             /// @name Serialization
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
 
             /// @name Variant Identification
@@ -223,9 +317,12 @@ namespace Helium
         };
 
         /// Persistent shader resource data.
-        class HELIUM_GRAPHICS_API PersistentResourceData
+        class HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
         {
         public:
+            REFLECT_DECLARE_OBJECT(Shader::PersistentResourceData, Reflect::Object);
+            static void PopulateComposite( Reflect::Composite& comp );
+
             /// @name Data Access
             //@{
             inline Options& GetSystemOptions();
@@ -239,7 +336,7 @@ namespace Helium
             
             //PMDTODO: HACK - Remove Serialize()
             //@{
-            void Serialize( Serializer& s );
+            //void Serialize( Serializer& s );
             //@}
 
         private:
@@ -268,7 +365,8 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 
         /// @name Resource Caching Support
@@ -329,6 +427,20 @@ namespace Helium
         ShaderVariant();
         virtual ~ShaderVariant();
         //@}
+        
+        /// Persistent shader resource data.
+        class HELIUM_GRAPHICS_API PersistentResourceData : public Reflect::Object
+        {
+        public:
+            PersistentResourceData();
+
+            REFLECT_DECLARE_OBJECT(ShaderVariant::PersistentResourceData, Reflect::Object);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            uint32_t m_resourceCount;
+        };
+
+        PersistentResourceData m_persistentResourceData;
 
         /// @name GameObject Interface
         //@{
@@ -344,7 +456,8 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 
         /// @name Resource Caching Support

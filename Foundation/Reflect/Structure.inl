@@ -53,7 +53,7 @@ void Helium::Reflect::StructureRegistrar< StructureT, void >::Register()
 {
     if ( StructureT::s_Structure == NULL )
     {
-        AddTypeToRegistry( StructureT::CreateStructure );
+        AddTypeToRegistry( StructureT::CreateStructure() );
     }
 }
 

@@ -40,10 +40,6 @@ Tracker::Tracker()
 , m_Total( 0 )
 , m_CurrentProgress( 0 )
 {
-    if ( ++s_InitCount == 1 )
-    {
-        //s_InitializerStack.Push( Reflect::RegisterClassType< AssetIndexData >( TXT( "Editor::AssetIndexData" ) ) );
-    }
 }
 
 Tracker::~Tracker()

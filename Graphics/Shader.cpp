@@ -15,81 +15,142 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexShader.h"
 
+#include "Foundation/Reflect/Data/DataDeduction.h"
+
 using namespace Helium;
 
 HELIUM_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 HELIUM_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+REFLECT_DEFINE_OBJECT( Shader::PersistentResourceData );
+
+void Shader::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddStructureField(&Shader::PersistentResourceData::m_systemOptions, TXT("systemOptions"));
+    comp.AddStructureField(&Shader::PersistentResourceData::m_userOptions, TXT("userOptions"));
+}
+
+REFLECT_DEFINE_OBJECT( ShaderVariant::PersistentResourceData );
+
+void ShaderVariant::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField(&ShaderVariant::PersistentResourceData::m_resourceCount, TXT("m_resourceCount"));
+}
 
 Shader::BEGIN_LOAD_VARIANT_FUNC* Shader::sm_pBeginLoadVariantOverride = NULL;
 Shader::TRY_FINISH_LOAD_VARIANT_FUNC* Shader::sm_pTryFinishLoadVariantOverride = NULL;
 void* Shader::sm_pVariantLoadOverrideData = NULL;
 
-//PMDTODO: There are a lot of Serialize functions in here that need to be implemented
 
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderConstantInfo::Serialize( Serializer& s )
-//{
-//    s << name;
-//    s << offset;
-//    s << size;
-//    s << usedSize;
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderConstantBufferInfo::Serialize( Serializer& s )
-//{
-//    s << name;
-//    s << Serializer::WrapStructDynArray( constants );
-//    s << index;
-//    s << size;
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderConstantBufferInfoSet::Serialize( Serializer& s )
-//{
-//    s << Serializer::WrapStructDynArray( buffers );
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderSamplerInfo::Serialize( Serializer& s )
-//{
-//    s << name;
-//    s << bindIndex;
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderSamplerInfoSet::Serialize( Serializer& s )
-//{
-//    s << Serializer::WrapStructDynArray( inputs );
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderTextureInfo::Serialize( Serializer& s )
-//{
-//    s << name;
-//    s << bindIndex;
-//}
-//
-///// Serialize this structure.
-/////
-///// @param[in] s  Serializer with which to serialize.
-//void ShaderTextureInfoSet::Serialize( Serializer& s )
-//{
-//    s << Serializer::WrapStructDynArray( inputs );
-//}
+CompiledShaderData::CompiledShaderData()
+{
+
+}
+
+CompiledShaderData::~CompiledShaderData()
+{
+
+}
+
+REFLECT_DEFINE_OBJECT( Helium::CompiledShaderData );
+
+void CompiledShaderData::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &CompiledShaderData::compiledCodeBuffer, TXT( "compiledCodeBuffer" ) );
+    comp.AddStructureField( &CompiledShaderData::constantBuffers,    TXT( "constantBuffers" ) );
+    comp.AddStructureField( &CompiledShaderData::samplerInputs,      TXT( "samplerInputs" ) );
+    comp.AddStructureField( &CompiledShaderData::textureInputs,      TXT( "textureInputs" ) );
+}
+
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantInfo );
+
+void ShaderConstantInfo::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &ShaderConstantInfo::name,       TXT( "name" ) );
+    comp.AddField( &ShaderConstantInfo::offset,     TXT( "offset" ) );
+    comp.AddField( &ShaderConstantInfo::size,       TXT( "size" ) );
+    comp.AddField( &ShaderConstantInfo::usedSize,   TXT( "usedSize" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantBufferInfo );
+
+void ShaderConstantBufferInfo::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &ShaderConstantBufferInfo::name,         TXT( "name" ) );
+    comp.AddStructureField( &ShaderConstantBufferInfo::constants,    TXT( "constants" ) );
+    comp.AddField( &ShaderConstantBufferInfo::index,        TXT( "index" ) );
+    comp.AddField( &ShaderConstantBufferInfo::size,         TXT( "size" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderConstantBufferInfoSet );
+
+void ShaderConstantBufferInfoSet::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddStructureField( &ShaderConstantBufferInfoSet::buffers,  TXT( "buffers" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderSamplerInfo );
+
+void ShaderSamplerInfo::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &ShaderSamplerInfo::name,       TXT( "name" ) );
+    comp.AddField( &ShaderSamplerInfo::bindIndex,  TXT( "bindIndex" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderSamplerInfoSet );
+
+void ShaderSamplerInfoSet::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddStructureField( &ShaderSamplerInfoSet::inputs,  TXT( "inputs" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderTextureInfo );
+
+void ShaderTextureInfo::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &ShaderTextureInfo::name,       TXT( "name" ) );
+    comp.AddField( &ShaderTextureInfo::bindIndex,  TXT( "bindIndex" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::ShaderTextureInfoSet );
+
+void ShaderTextureInfoSet::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddStructureField( &ShaderTextureInfoSet::inputs,  TXT( "inputs" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Toggle );
+
+void Shader::Toggle::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &Shader::Toggle::name,  TXT( "name" ) );
+    comp.AddField( &Shader::Toggle::shaderTypeFlags,  TXT( "shaderTypeFlags" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Select );
+
+void Shader::Select::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &Shader::Select::name,           TXT( "name" ) );
+    comp.AddField( &Shader::Select::allFlags,       TXT( "allFlags" ) );
+    comp.AddField( &Shader::Select::choices,        TXT( "choices" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::SelectPair );
+
+void Shader::SelectPair::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &Shader::SelectPair::name,   TXT( "name" ) );
+    comp.AddField( &Shader::SelectPair::choice, TXT( "choice" ) );
+}
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Shader::Options );
+
+void Shader::Options::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddStructureField( &Shader::Options::m_toggles,  TXT( "m_toggles" ) );
+    comp.AddStructureField( &Shader::Options::m_selects,  TXT( "m_selects" ) );
+}
 
 /// Constructor.
 Shader::Shader()
@@ -172,12 +233,6 @@ void Shader::PostSave()
     }
 }
 #endif  // HELIUM_TOOLS
-
-/// @copydoc Resource::SerializePersistentResourceData()
-void Shader::SerializePersistentResourceData( Serializer& s )
-{
-    m_persistentResourceData.Serialize( s );
-}
 
 /// @copydoc Resource::GetCacheName()
 Name Shader::GetCacheName() const
@@ -305,51 +360,6 @@ void Shader::SetVariantLoadOverride(
     sm_pBeginLoadVariantOverride = pBeginLoadVariantOverride;
     sm_pTryFinishLoadVariantOverride = pTryFinishLoadVariantOverride;
     sm_pVariantLoadOverrideData = pVariantLoadOverrideData;
-}
-
-//    s << typeFlags;
-//    shaderTypeFlags = typeFlags;
-/// Serialize this shader preprocessor toggle information.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Shader::Toggle::Serialize( Serializer& s )
-{
-    s << name;
-    s << shaderTypeFlags;
-}
-
-/// Serialize this shader preprocessor selection information.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Shader::Select::Serialize( Serializer& s )
-{
-    s << name;
-
-    uint32_t typeFlags = shaderTypeFlags;
-
-    bool bOptionalValue = bOptional;
-    s << bOptionalValue;
-    bOptional = ( bOptionalValue ? 1 : 0 );
-
-    s << Serializer::WrapDynArray( choices );
-}
-
-/// Serialize this select option name/choice pair.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Shader::SelectPair::Serialize( Serializer& s )
-{
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( choice );
-}
-
-/// Serialize this set of shader preprocessor options.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Shader::Options::Serialize( Serializer& s )
-{
-    s << Serializer::WrapStructDynArray( m_toggles );
-    s << Serializer::WrapStructDynArray( m_selects );
 }
 
 /// Get a unique index associated with a specific set of shader preprocessor options.
@@ -679,15 +689,6 @@ size_t Shader::Options::ComputeOptionSetCount( RShader::EType shaderType ) const
     return optionSetCount;
 }
 
-/// Serialize this set of persistent shader resource data.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Shader::PersistentResourceData::Serialize( Serializer& s )
-{
-    s << Serializer::WrapStruct( m_systemOptions );
-    s << Serializer::WrapStruct( m_userOptions );
-}
-
 /// Constructor.
 ShaderVariant::ShaderVariant()
 : m_pRenderResourceLoadBuffer( NULL )
@@ -870,35 +871,36 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
 
         SetInvalid( rLoadData.id );
 
-        // Serialize the constant buffer information.
-        //TODO: Implement this
-        //BinaryDeserializer deserializer;
-        //deserializer.Prepare( rLoadData.pData, rLoadData.size );
-        //deserializer.BeginSerialize();
-        //m_constantBufferSets[ loadRequestIndex ].Serialize( deserializer );
-        //m_samplerInputSets[ loadRequestIndex ].Serialize( deserializer );
-        //m_textureInputSets[ loadRequestIndex ].Serialize( deserializer );
-        //size_t dataOffset = deserializer.GetCurrentOffset();
-        //deserializer.EndSerialize();
-        size_t dataOffset = 0; // This line is temporary to get it to compile
+        CompiledShaderData *compiled_shader_data = NULL;
+        Reflect::ObjectPtr object_ptr;
 
-        // Apply padding for shader code alignment.
-        dataOffset = Min( Align( dataOffset, sizeof( uint32_t ) ), rLoadData.size );
-
-        // Create the shader resource.
-        size_t shaderSize = rLoadData.size - dataOffset;
-        const void* pShaderData = static_cast< const uint8_t* >( rLoadData.pData ) + dataOffset;
-
+        object_ptr = Cache::ReadCacheObjectFromBuffer((uint8_t*) rLoadData.pData, 0, rLoadData.size);
+        compiled_shader_data = Reflect::SafeCast<CompiledShaderData>(object_ptr.Get());
+        
         RShaderPtr spShaderBase;
-        if( shaderType == RShader::TYPE_VERTEX )
-        {
-            spShaderBase = pRenderer->CreateVertexShader( shaderSize, pShaderData );
-        }
-        else
-        {
-            spShaderBase = pRenderer->CreatePixelShader( shaderSize, pShaderData );
-        }
 
+        HELIUM_ASSERT(compiled_shader_data);
+        if (compiled_shader_data)
+        {
+            m_constantBufferSets[loadRequestIndex].buffers = compiled_shader_data->constantBuffers;
+            m_samplerInputSets[loadRequestIndex].inputs = compiled_shader_data->samplerInputs;
+            m_textureInputSets[loadRequestIndex].inputs = compiled_shader_data->textureInputs;
+
+            HELIUM_ASSERT(!compiled_shader_data->compiledCodeBuffer.IsEmpty());
+            if( shaderType == RShader::TYPE_VERTEX )
+            {
+                spShaderBase = pRenderer->CreateVertexShader( 
+                    compiled_shader_data->compiledCodeBuffer.GetSize(), 
+                    &compiled_shader_data->compiledCodeBuffer[0]);
+            }
+            else
+            {
+                spShaderBase = pRenderer->CreatePixelShader( 
+                    compiled_shader_data->compiledCodeBuffer.GetSize(), 
+                    &compiled_shader_data->compiledCodeBuffer[0] );
+            }
+        }
+        
         if( !spShaderBase )
         {
             HELIUM_TRACE(
@@ -926,39 +928,52 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
     return true;
 }
 
-/// @copydoc Resource::SerializePersistentResourceData()
-void ShaderVariant::SerializePersistentResourceData( Serializer& s )
+bool Helium::Shader::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 {
-    size_t existingRenderResourceCount = m_renderResources.GetSize();
-    HELIUM_ASSERT( existingRenderResourceCount <= UINT32_MAX );
-
-    uint32_t renderResourceCount = static_cast< uint32_t >( existingRenderResourceCount );
-    s << renderResourceCount;
-
-    if( s.GetMode() == Serializer::MODE_LOAD )
+    HELIUM_ASSERT(_object.ReferencesObject());
+    if (!_object.ReferencesObject())
     {
-        // Reserve space for the resource data that will be loaded later.
-        for( size_t resourceIndex = 0; resourceIndex < existingRenderResourceCount; ++resourceIndex )
-        {
-            m_renderResources[ resourceIndex ].Release();
-        }
-
-        m_renderResources.Reserve( renderResourceCount );
-        m_renderResources.Resize( renderResourceCount );
-        m_renderResources.Trim();
-
-        m_constantBufferSets.Reserve( renderResourceCount );
-        m_constantBufferSets.Resize( renderResourceCount );
-        m_constantBufferSets.Trim();
-
-        m_samplerInputSets.Reserve( renderResourceCount );
-        m_samplerInputSets.Resize( renderResourceCount );
-        m_samplerInputSets.Trim();
-
-        m_textureInputSets.Reserve( renderResourceCount );
-        m_textureInputSets.Resize( renderResourceCount );
-        m_textureInputSets.Trim();
+        return false;
     }
+
+    _object->CopyTo(&m_persistentResourceData);
+
+    return true;
+}
+
+bool Helium::ShaderVariant::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
+{
+    HELIUM_ASSERT(_object.ReferencesObject());
+    if (!_object.ReferencesObject())
+    {
+        return false;
+    }
+
+    _object->CopyTo(&m_persistentResourceData);
+
+    // Reserve space for the resource data that will be loaded later.
+    for( size_t resourceIndex = 0; resourceIndex < m_renderResources.GetSize(); ++resourceIndex )
+    {
+        m_renderResources[ resourceIndex ].Release();
+    }
+
+    m_renderResources.Reserve( m_persistentResourceData.m_resourceCount );
+    m_renderResources.Resize( m_persistentResourceData.m_resourceCount );
+    m_renderResources.Trim();
+
+    m_constantBufferSets.Reserve( m_persistentResourceData.m_resourceCount );
+    m_constantBufferSets.Resize( m_persistentResourceData.m_resourceCount );
+    m_constantBufferSets.Trim();
+
+    m_samplerInputSets.Reserve( m_persistentResourceData.m_resourceCount );
+    m_samplerInputSets.Resize( m_persistentResourceData.m_resourceCount );
+    m_samplerInputSets.Trim();
+
+    m_textureInputSets.Reserve( m_persistentResourceData.m_resourceCount );
+    m_textureInputSets.Resize( m_persistentResourceData.m_resourceCount );
+    m_textureInputSets.Trim();
+
+    return true;
 }
 
 /// @copydoc Resource::GetCacheName()
@@ -967,4 +982,10 @@ Name ShaderVariant::GetCacheName() const
     static Name cacheName( TXT( "Shader" ) );
 
     return cacheName;
+}
+
+Helium::ShaderVariant::PersistentResourceData::PersistentResourceData()
+    : m_resourceCount(0)
+{
+
 }

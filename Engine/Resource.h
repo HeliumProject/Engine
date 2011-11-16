@@ -38,6 +38,7 @@ namespace Helium
             /// Persistent resource data.
             DynArray< uint8_t > persistentDataBuffer;
             /// Non-persistent sub-resource data.
+            /// pmd: Not sure that this is non-persitent anymore. See pResourceCache->CacheEntry call in ObjectPreprocessor::CacheObject
             DynArray< DynArray< uint8_t > > subDataBuffers;
             /// True if this data is loaded (even if the buffers are empty).
             bool bLoaded;
@@ -52,7 +53,9 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
+        //PMDTODO: Remove SerializePersistentResourceData and make LoadPersistentResourceObject pure virtual
         virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object) { return false; }
         //@}
 
         /// @name Resource Caching Support

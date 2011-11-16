@@ -269,6 +269,7 @@ template SimpleData<HDRColor3>;
 template SimpleData<Color4>;
 template SimpleData<HDRColor4>;
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::NameData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8Data );

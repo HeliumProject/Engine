@@ -43,6 +43,8 @@ namespace Helium
 #if HELIUM_TOOLS
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
+        
+        void SaveObjectToPersistentDataBuffer(Reflect::Object *_object, DynArray< uint8_t > &_buffer);
 #endif
         //@}
 

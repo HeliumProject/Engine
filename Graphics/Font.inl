@@ -67,7 +67,7 @@ bool Helium::Font::GetAntialiased() const
 /// @see GetAscenderFloat(), GetDescenderFixed(), GetHeightFixed(), GetMaxAdvanceFixed()
 int32_t Helium::Font::GetAscenderFixed() const
 {
-    return m_ascender;
+    return m_persistentResourceData.m_ascender;
 }
 
 /// Get the maximum descender depth of this font in pixels, as a 26.6 fixed-point value.
@@ -77,7 +77,7 @@ int32_t Helium::Font::GetAscenderFixed() const
 /// @see GetDescenderFloat(), GetAscenderFixed(), GetHeightFixed(), GetMaxAdvanceFixed()
 int32_t Helium::Font::GetDescenderFixed() const
 {
-    return m_descender;
+    return m_persistentResourceData.m_descender;
 }
 
 /// Get the maximum height of characters in this font in pixels, as a 26.6 fixed-point value.
@@ -87,7 +87,7 @@ int32_t Helium::Font::GetDescenderFixed() const
 /// @see GetHeightFloat(), GetAscenderFixed(), GetDescenderFixed(), GetMaxAdvanceFixed()
 int32_t Helium::Font::GetHeightFixed() const
 {
-    return m_height;
+    return m_persistentResourceData.m_height;
 }
 
 /// Get the maximum amount by which to advance the pen when rendering characters in pixels, as a 26.6 fixed-point value.
@@ -97,7 +97,7 @@ int32_t Helium::Font::GetHeightFixed() const
 /// @see GetMaxAdvanceFloat(), GetAscenderFixed(), GetDescenderFixed(), GetHeightFixed()
 int32_t Helium::Font::GetMaxAdvanceFixed() const
 {
-    return m_maxAdvance;
+    return m_persistentResourceData.m_maxAdvance;
 }
 
 /// Get the maximum ascender height of this font in pixels, as a floating-point value.
@@ -107,7 +107,7 @@ int32_t Helium::Font::GetMaxAdvanceFixed() const
 /// @see GetAscenderFixed(), GetDescenderFloat(), GetHeightFloat(), GetMaxAdvanceFloat()
 float32_t Helium::Font::GetAscenderFloat() const
 {
-    return Fixed26x6ToFloat32( m_ascender );
+    return Fixed26x6ToFloat32( m_persistentResourceData.m_ascender );
 }
 
 /// Get the maximum descender depth of this font in pixels, as a floating-point value.
@@ -117,7 +117,7 @@ float32_t Helium::Font::GetAscenderFloat() const
 /// @see GetDescenderFixed(), GetAscenderFloat(), GetHeightFloat(), GetMaxAdvanceFloat()
 float32_t Helium::Font::GetDescenderFloat() const
 {
-    return Fixed26x6ToFloat32( m_descender );
+    return Fixed26x6ToFloat32( m_persistentResourceData.m_descender );
 }
 
 /// Get the maximum height of characters in this font in pixels, as a floating-point value.
@@ -127,7 +127,7 @@ float32_t Helium::Font::GetDescenderFloat() const
 /// @see GetHeightFixed(), GetAscenderFloat(), GetDescenderFloat(), GetMaxAdvanceFloat()
 float32_t Helium::Font::GetHeightFloat() const
 {
-    return Fixed26x6ToFloat32( m_height );
+    return Fixed26x6ToFloat32( m_persistentResourceData.m_height );
 }
 
 /// Get the maximum amount by which to advance the pen when rendering characters in pixels, as a floating-point value.
@@ -137,7 +137,7 @@ float32_t Helium::Font::GetHeightFloat() const
 /// @see GetMaxAdvanceFixed(), GetAscenderFloat(), GetDescenderFloat(), GetHeightFloat()
 float32_t Helium::Font::GetMaxAdvanceFloat() const
 {
-    return Fixed26x6ToFloat32( m_maxAdvance );
+    return Fixed26x6ToFloat32( m_persistentResourceData.m_maxAdvance );
 }
 
 /// Get the number of characters in this font.
@@ -147,7 +147,7 @@ float32_t Helium::Font::GetMaxAdvanceFloat() const
 /// @see GetCharacter(), GetCharacterIndex(), FindCharacter()
 uint32_t Helium::Font::GetCharacterCount() const
 {
-    return m_characterCount;
+    return static_cast<uint32_t>(m_persistentResourceData.m_characters.GetSize());
 }
 
 /// Get the data for the character associated with the specified index.
@@ -161,9 +161,9 @@ uint32_t Helium::Font::GetCharacterCount() const
 /// @see GetCharacterCount(), GetCharacterIndex(), FindCharacter()
 const Helium::Font::Character& Helium::Font::GetCharacter( uint32_t index ) const
 {
-    HELIUM_ASSERT( index < m_characterCount );
+    HELIUM_ASSERT( index < m_persistentResourceData.m_characters.GetSize() );
 
-    return m_pCharacters[ index ];
+    return m_persistentResourceData.m_characters[ index ];
 }
 
 /// Get the index associated with the specified character data.
@@ -173,10 +173,7 @@ const Helium::Font::Character& Helium::Font::GetCharacter( uint32_t index ) cons
 /// @return  Index associated with the given character data.
 uint32_t Helium::Font::GetCharacterIndex( const Character* pCharacter ) const
 {
-    HELIUM_ASSERT( pCharacter >= m_pCharacters );
-    HELIUM_ASSERT( pCharacter < m_pCharacters + m_characterCount );
-
-    return static_cast< uint32_t >( pCharacter - m_pCharacters );
+    return static_cast<uint32_t>(m_persistentResourceData.m_characters.GetIndexOfPointer(pCharacter));
 }
 
 /// Find the character data for the given Unicode character code point.
@@ -192,13 +189,13 @@ uint32_t Helium::Font::GetCharacterIndex( const Character* pCharacter ) const
 const Helium::Font::Character* Helium::Font::FindCharacter( uint32_t codePoint ) const
 {
     uint32_t baseIndex = 0;
-    uint32_t searchCount = m_characterCount;
+    uint32_t searchCount = static_cast<uint32_t>(m_persistentResourceData.m_characters.GetSize());
     while( searchCount != 0 )
     {
         uint32_t testOffset = searchCount / 2;
         uint32_t testIndex = baseIndex + testOffset;
 
-        const Character& rCharacter = m_pCharacters[ testIndex ];
+        const Character& rCharacter = m_persistentResourceData.m_characters[ testIndex ];
         uint32_t testCodePoint = rCharacter.codePoint;
         if( codePoint < testCodePoint )
         {
@@ -225,7 +222,7 @@ const Helium::Font::Character* Helium::Font::FindCharacter( uint32_t codePoint )
 /// @see GetTextureSheet()
 uint8_t Helium::Font::GetTextureSheetCount() const
 {
-    return m_textureCount;
+    return m_persistentResourceData.m_textureCount;
 }
 
 /// Retrieve the resource for the texture sheet associated with the specified index.
@@ -237,10 +234,10 @@ uint8_t Helium::Font::GetTextureSheetCount() const
 /// @see GetTextureSheetCount()
 Helium::RTexture2d* Helium::Font::GetTextureSheet( uint8_t index ) const
 {
-    HELIUM_ASSERT( index < m_textureCount );
-    HELIUM_ASSERT( m_pspTextures );
+    HELIUM_ASSERT( index < m_persistentResourceData.m_textureCount );
+    HELIUM_ASSERT( m_persistentResourceData.m_pspTextures );
 
-    return m_pspTextures[ index ];
+    return m_persistentResourceData.m_pspTextures[ index ];
 }
 
 /// Parse a string and pass valid character information to a custom handler.

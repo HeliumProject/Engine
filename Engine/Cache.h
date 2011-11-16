@@ -9,11 +9,14 @@
 #ifndef HELIUM_ENGINE_CACHE_H
 #define HELIUM_ENGINE_CACHE_H
 
+#define USE_XML_FOR_CACHE_DATA 1
+
 #include "Engine/Engine.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
+#include "Foundation/Reflect/Object.h"
 
 namespace Helium
 {
@@ -93,6 +96,12 @@ namespace Helium
 
         bool CacheEntry( GameObjectPath path, uint32_t subDataIndex, const void* pData, int64_t timestamp, uint32_t size );
         //@}
+
+#if HELIUM_TOOLS
+        static void WriteCacheObjectToBuffer( Helium::Reflect::Object &_object, DynArray< uint8_t > &_buffer );
+#endif
+        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const DynArray< uint8_t > &_buffer );
+        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count );
 
     private:
         /// Value read callback.

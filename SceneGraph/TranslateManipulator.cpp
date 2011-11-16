@@ -15,8 +15,8 @@
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/Mesh.h"
 
-#include "Math/Common.h"
-#include "Math/FpuAngleAxis.h"
+#include "Foundation/Math/Common.h"
+#include "Foundation/Math/FpuAngleAxis.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

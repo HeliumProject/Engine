@@ -9,7 +9,7 @@
 #include "Platform/Console.h"
 #include "Platform/Timer.h"
 
-#include "Math/Common.h"
+#include "Foundation/Math/Common.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"

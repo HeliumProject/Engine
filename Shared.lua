@@ -302,22 +302,6 @@ project( prefix .. "Platform" )
 			"Platform/*Mac.*",
 		}
 
-project( prefix .. "Math" )
-	uuid "129267DC-66C7-489B-8538-ADF1B6EA4160"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Math", "MATH" )
-
-	files
-	{
-		"Math/*",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-		}
-
 project( prefix .. "Foundation" )
 	uuid "9708463D-9698-4BB6-A911-37354AF0E21E"
 
@@ -335,7 +319,6 @@ project( prefix .. "Foundation" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			"Expat",
 			"zlib",
 		}
@@ -354,7 +337,6 @@ project( prefix .. "Engine" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 		}
 
@@ -372,7 +354,6 @@ project( prefix .. "EngineJobs" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 		}
@@ -391,7 +372,6 @@ project( prefix .. "Windowing" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -411,7 +391,6 @@ project( prefix .. "Rendering" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -431,7 +410,6 @@ project( prefix .. "GraphicsTypes" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -452,7 +430,6 @@ project( prefix .. "GraphicsJobs" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -474,7 +451,6 @@ project( prefix .. "Graphics" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -497,7 +473,6 @@ project( prefix .. "Framework" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -522,7 +497,6 @@ project( prefix .. "WindowingWin" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -543,7 +517,6 @@ project( prefix .. "RenderingD3D9" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -564,7 +537,6 @@ project( prefix .. "PcSupport" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -585,7 +557,6 @@ project( prefix .. "PreprocessingPc" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -610,7 +581,6 @@ project( prefix .. "EditorSupport" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -638,7 +608,6 @@ project( prefix .. "FrameworkWin" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -696,7 +665,6 @@ project( prefix .. "TestApp" )-- DEPRECATED
 	links
 	{
 		prefix .. "Platform",
-		prefix .. "Math",
 		prefix .. "Foundation",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",

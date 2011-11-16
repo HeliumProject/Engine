@@ -1,8 +1,8 @@
 #include "SceneGraphPch.h"
 #include "Camera.h"
 
-#include "Math/FpuAngleAxis.h"
-#include "Math/FpuMatrix3.h"
+#include "Foundation/Math/FpuAngleAxis.h"
+#include "Foundation/Math/FpuMatrix3.h"
 
 #include "SceneGraph/Orientation.h"
 

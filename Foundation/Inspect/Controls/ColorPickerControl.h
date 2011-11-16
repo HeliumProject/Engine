@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Math/FpuColor3.h"
-#include "Math/FpuColor4.h"
+#include "Foundation/Math/FpuColor3.h"
+#include "Foundation/Math/FpuColor4.h"
 #include "Foundation/Reflect/Class.h"
 
 #include "Foundation/API.h"

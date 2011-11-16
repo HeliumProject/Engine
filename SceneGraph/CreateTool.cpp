@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "CreateTool.h"
 
-#include "Math/FpuAngleAxis.h"
+#include "Foundation/Math/FpuAngleAxis.h"
 
 #include "SceneGraph/Mesh.h"
 #include "SceneGraph/Scene.h"

@@ -2,8 +2,8 @@
 
 #include <hash_map>
 
-#include "Math/FpuVector3.h"
-#include "Math/FpuMatrix4.h"
+#include "Foundation/Math/FpuVector3.h"
+#include "Foundation/Math/FpuMatrix4.h"
 
 #include "Foundation/Undo/Queue.h"
 

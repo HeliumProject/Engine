@@ -8,13 +8,13 @@
 #include "EnginePch.h"
 #include "Engine/Serializer.h"
 
-#include "Math/SimdVector2.h"
-#include "Math/SimdVector3.h"
-#include "Math/SimdVector4.h"
-#include "Math/SimdQuat.h"
-#include "Math/SimdMatrix44.h"
-#include "Math/SimdAaBox.h"
-#include "Math/Float16.h"
+#include "Foundation/Math/SimdVector2.h"
+#include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Math/SimdVector4.h"
+#include "Foundation/Math/SimdQuat.h"
+#include "Foundation/Math/SimdMatrix44.h"
+#include "Foundation/Math/SimdAaBox.h"
+#include "Foundation/Math/Float16.h"
 
 using namespace Helium;
 

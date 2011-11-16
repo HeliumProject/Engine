@@ -9,7 +9,7 @@
 #include "Framework/Mesh.h"
 
 #include "Foundation/AsyncLoader.h"
-#include "Math/SimdMatrix44.h"
+#include "Foundation/Math/SimdMatrix44.h"
 #include "Engine/CacheManager.h"
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"

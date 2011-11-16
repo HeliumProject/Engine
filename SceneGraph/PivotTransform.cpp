@@ -1,8 +1,8 @@
 #include "SceneGraphPch.h"
 #include "PivotTransform.h"
 
-#include "Math/FpuEulerAngles.h"
-#include "Math/Axes.h"
+#include "Foundation/Math/FpuEulerAngles.h"
+#include "Foundation/Math/Axes.h"
 #include "Foundation/Undo/PropertyCommand.h"
 
 #include "SceneGraph/Scene.h"

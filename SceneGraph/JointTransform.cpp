@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "JointTransform.h"
 
-#include "Math/FpuEulerAngles.h"
+#include "Foundation/Math/FpuEulerAngles.h"
 #include "Foundation/Undo/PropertyCommand.h"
 
 #include "SceneGraph/Color.h"

@@ -163,8 +163,6 @@ bool FontResourceHandler::CacheResource(
     Resource* pResource,
     const String& rSourceFilePath )
 {
-	//PMDTODO: Need to make this work
-    return true;
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 

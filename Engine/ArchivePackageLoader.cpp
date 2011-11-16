@@ -17,6 +17,7 @@
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
+#include "Engine/GameObjectType.h"
 #include "Engine/GameObjectPointerData.h"
 //#include "Engine/DirectDeserializer.h"
 //#include "Engine/DirectSerializer.h"

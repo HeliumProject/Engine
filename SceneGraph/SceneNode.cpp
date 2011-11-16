@@ -7,10 +7,10 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Statistics.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::SceneNode );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT( SceneNode );
 
 void SceneNode::PopulateComposite( Reflect::Composite& comp )
 {
@@ -22,12 +22,12 @@ void SceneNode::PopulateComposite( Reflect::Composite& comp )
 
 void SceneNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::SceneNode >( TXT( "SceneGraph::SceneNode" ) );
+
 }
 
 void SceneNode::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::SceneNode >();
+
 }
 
 SceneNode::SceneNode()

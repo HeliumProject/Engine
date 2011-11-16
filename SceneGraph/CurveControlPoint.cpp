@@ -4,10 +4,10 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/PropertiesGenerator.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::CurveControlPoint );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( CurveControlPoint );
 
 void CurveControlPoint::PopulateComposite( Reflect::Composite& comp )
 {
@@ -16,12 +16,12 @@ void CurveControlPoint::PopulateComposite( Reflect::Composite& comp )
 
 void CurveControlPoint::InitializeType()
 {
-    Reflect::RegisterClassType< CurveControlPoint >( TXT( "SceneGraph::CurveControlPoint" ) );
+
 }
 
 void CurveControlPoint::CleanupType()
 {
-    Reflect::UnregisterClassType< CurveControlPoint >();
+
 }
 
 CurveControlPoint::CurveControlPoint() 

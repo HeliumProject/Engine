@@ -2,7 +2,6 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/InitializerStack.h"
 #include "Foundation/Memory.h"
 #include "Foundation/Checksum/Crc32.h"
 #include "Foundation/Container/SortedMap.h"
@@ -91,7 +90,6 @@ namespace Helium
 
         private:
             M_HashToType        m_TypesByHash;
-            InitializerStack    m_InitializerStack;
         };
 
         //
@@ -101,100 +99,22 @@ namespace Helium
         template<class T>
         inline const Class* GetClass()
         {
-            const Class* type = T::s_Class;
-            HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            return type;
+            T::s_Registrar.Register();
+            return T::s_Class;
         }
 
         template<class T>
         inline const Structure* GetStructure()
         {
-            const Structure* type = T::s_Structure;
-            HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            return type;
+            T::s_Registrar.Register();
+            return T::s_Structure;
         }
 
         template<class T>
         inline const Enumeration* GetEnumeration()
         {
-            const Enumeration* type = T::s_Enumeration;
-            HELIUM_ASSERT(type); // if you hit this then your type is not registered
-            return type;
-        }
-
-        //
-        // Registration templates, these help with creating and registering classes with the registry
-        //
-
-        typedef void (*UnregisterFunc)();
-
-        template< class T >
-        inline UnregisterFunc RegisterStructureType( const tchar_t* name )
-        {
-            // create the type information and register it with the registry
-            if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateStructure( name ) ) )
-            {
-                // this function will unregister the type we just registered
-                return &UnregisterStructureType< T >;
-            }
-
-            // there was a problem
-            return NULL;
-        }
-
-        template<class T>
-        inline void UnregisterStructureType()
-        {
-            // retrieve the class information and unregister it from the registry
-            Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetStructure<T>() );
-        }
-
-        template< class T >
-        inline UnregisterFunc RegisterClassType( const tchar_t* name )
-        {
-            // create the type information and register it with the registry
-            if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( name ) ) )
-            {
-                // this function will unregister the type we just registered
-                return &UnregisterClassType< T >;
-            }
-
-            // there was a problem
-            return NULL;
-        }
-
-        template<class T>
-        inline void UnregisterClassType()
-        {
-            // retrieve the class information and unregister it from the registry
-            Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetClass<T>() );
-            //pmd - Not zeroing this pointer causes assert if class is registered later
-            T::s_Class = 0;
-        }
-
-        typedef void EnumerateEnumFunc( Reflect::Enumeration& info );
-
-        template< class T >
-        inline UnregisterFunc RegisterEnumType( const tchar_t* name )
-        {
-            Reflect::Enumeration* enumeration = T::CreateEnumeration( name );
-
-            // create the type information and register it with the registry
-            if ( Reflect::Registry::GetInstance()->RegisterType( enumeration ) )
-            {
-                // this function will unregister the type we just registered
-                return &UnregisterEnumType< T >;
-            }
-
-            // there was a problem
-            return NULL;
-        }
-
-        template<class T>
-        inline void UnregisterEnumType()
-        {
-            // retrieve the class information and unregister it from the registry
-            Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetEnumeration<T>() );
+            T::s_Registrar.Register();
+            return T::s_Enumeration;
         }
     }
 }

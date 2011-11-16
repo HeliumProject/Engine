@@ -4,10 +4,10 @@
 #include "Editor/FileIconsTable.h"
 #include "Editor/Inspect/StripCanvasWidget.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::StripCanvas );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( StripCanvas );
 
 StripCanvas::StripCanvas( int orientation )
 : m_Orientation( orientation )

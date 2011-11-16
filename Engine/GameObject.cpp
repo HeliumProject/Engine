@@ -14,9 +14,9 @@
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
 
-using namespace Helium;
+REFLECT_DEFINE_OBJECT( Helium::GameObject )
 
-REFLECT_DEFINE_OBJECT( GameObject )
+using namespace Helium;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;
@@ -908,15 +908,19 @@ void GameObject::UnregisterObject( GameObject* pObject )
         return;
     }
 
-    HELIUM_ASSERT( sm_objects.IsElementValid( objectId ) );
-    HELIUM_ASSERT( sm_objects[ objectId ].HasObjectProxy( pObject ) );
+    if ( sm_objects.GetSize() ) // will be empty if already shutdown
+    {
+        HELIUM_ASSERT( sm_objects.IsElementValid( objectId ) );
+        HELIUM_ASSERT( sm_objects[ objectId ].HasObjectProxy( pObject ) );
 
-    HELIUM_ASSERT( pObject->m_name.IsEmpty() );
-    HELIUM_ASSERT( !pObject->m_spOwner );
-    HELIUM_ASSERT( IsInvalid( pObject->m_instanceIndex ) );
+        HELIUM_ASSERT( pObject->m_name.IsEmpty() );
+        HELIUM_ASSERT( !pObject->m_spOwner );
+        HELIUM_ASSERT( IsInvalid( pObject->m_instanceIndex ) );
 
-    // Remove the object from the global list.
-    sm_objects.Remove( objectId );
+        // Remove the object from the global list.
+        sm_objects.Remove( objectId );
+    }
+
     SetInvalid( pObject->m_id );
 }
 
@@ -1037,7 +1041,8 @@ void GameObject::Shutdown()
 /// @return  Static "GameObject" type.
 const GameObjectType* GameObject::InitStaticType()
 {
-    if( !s_Class )
+    HELIUM_ASSERT( s_Class );
+    if ( !s_Class->m_Tag )
     {
         // To resolve interdependencies between the GameObject type information and other objects (i.e. the owner
         // package, its type, etc.), we will create and register all the dependencies here manually as well.
@@ -1063,7 +1068,7 @@ const GameObjectType* GameObject::InitStaticType()
         HELIUM_VERIFY( pEnginePackage->Rename( nameParamsEngine ) );
 
         // Don't set up templates here; they're initialized during type registration.
-        GameObjectPtr spObjectTemplate = new GameObject();
+        GameObjectPtr spObjectTemplate = Helium::Reflect::AssertCast< GameObject >( s_Class->m_Default );
         HELIUM_ASSERT( spObjectTemplate );
 
         PackagePtr spPackageTemplate = new Package();
@@ -1074,32 +1079,25 @@ const GameObjectType* GameObject::InitStaticType()
         spPackageTemplate->ClearFlags( FLAG_PACKAGE );
 
         // Initialize and register all types.
-        GameObjectType *gameObjectType = GameObjectType::Create(
-            nameObject,
+        GameObjectType::Create(
+            Reflect::GetClass< GameObject >(),
             pEnginePackage,
             NULL,
             spObjectTemplate,
-            GameObject::ReleaseStaticType,
             GameObjectType::FLAG_ABSTRACT );
-        s_Class = gameObjectType;
-        HELIUM_ASSERT( s_Class );
-        GameObject::PopulateComposite(*gameObjectType);
 
-        GameObjectType *packageType = GameObjectType::Create(
-            namePackage,
+        HELIUM_VERIFY( GameObjectType::Create(
+            Reflect::GetClass< Package >(),
             pEnginePackage,
-            static_cast< const GameObjectType* >( s_Class ),
+            static_cast< const GameObjectType* >( s_Class->m_Tag ),
             spPackageTemplate,
-            Package::ReleaseStaticType,
-            0 );
-        HELIUM_VERIFY(packageType);
-        Package::PopulateComposite(*packageType);
+            0 ) );
 
         // Force initialization of Package so it can report its static type information.
         HELIUM_VERIFY( Package::InitStaticType() );
     }
 
-    return static_cast< const GameObjectType* >( s_Class );
+    return static_cast< const GameObjectType* >( s_Class->m_Tag );
 }
 
 /// Release static type information for this class.
@@ -1107,7 +1105,7 @@ void GameObject::ReleaseStaticType()
 {
     if( s_Class )
     {
-        GameObjectType::Unregister( static_cast< const GameObjectType* >( s_Class ) );
+        GameObjectType::Unregister( static_cast< const GameObjectType* >( s_Class->m_Tag ) );
         s_Class = NULL;
     }
 }
@@ -1118,7 +1116,7 @@ void GameObject::ReleaseStaticType()
 const GameObjectType* GameObject::GetStaticType()
 {
     HELIUM_ASSERT( s_Class );
-    return static_cast< const GameObjectType* >( s_Class );
+    return static_cast< const GameObjectType* >( s_Class->m_Tag );
 }
 
 /// Set the custom destruction callback for this object.

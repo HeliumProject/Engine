@@ -2,12 +2,12 @@
 #include "Foundation/Inspect/Control.h"
 #include "Foundation/Inspect/Canvas.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Inspect::ClientData );
+REFLECT_DEFINE_ABSTRACT( Helium::Inspect::Widget );
+REFLECT_DEFINE_ABSTRACT( Helium::Inspect::Control );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_ABSTRACT( Inspect::ClientData );
-REFLECT_DEFINE_ABSTRACT( Inspect::Widget );
-REFLECT_DEFINE_ABSTRACT( Inspect::Control );
 
 #ifdef PROFILE_ACCUMULATION
 Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator" );

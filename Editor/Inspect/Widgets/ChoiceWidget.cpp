@@ -4,6 +4,8 @@
 #include <wx/ctrlsub.h>
 #include <wx/settings.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ChoiceWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -49,8 +51,6 @@ void ChoiceWindow::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
-
-REFLECT_DEFINE_OBJECT( ChoiceWidget );
 
 ChoiceWidget::ChoiceWidget( Inspect::Choice* choice )
 : m_ChoiceControl( choice )

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Foundation/API.h" 
+#include <map>
 
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Platform/Types.h"
+
+#include "Foundation/API.h" 
 
 namespace Helium
 {
-    class HELIUM_FOUNDATION_API SearchableProperties : public Reflect::Object
+    class HELIUM_FOUNDATION_API SearchableProperties
     {
     private:
         std::multimap< tstring, tstring > m_StringProperties;
@@ -24,10 +26,6 @@ namespace Helium
         //bool Find( const tstring& propName, tstring& value );
         //bool Find( const tstring& propName, std::set< tstring >& value );
         //void Erase( const tstring& propName );
-        
-    public:
-        REFLECT_DECLARE_ABSTRACT( SearchableProperties, Reflect::Object );
-        static void PopulateComposite( Reflect::Composite& comp );
     };
 }
     

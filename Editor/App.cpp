@@ -39,8 +39,6 @@
 
 #include "GraphicsJobs/GraphicsJobs.h"
 
-#include "Graphics/GraphicsEnumRegistration.h"
-
 #include "PcSupport/ConfigPc.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
@@ -300,52 +298,11 @@ bool App::OnInit()
     m_InitializerStack.Push( SceneGraph::Initialize,  SceneGraph::Cleanup );
     m_InitializerStack.Push( TaskInitialize, TaskCleanup );
 
-    // inspect
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Widget >( TXT("Editor::Widget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::DrawerWidget >( TXT("Editor::DrawerWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::LabelWidget >( TXT("Editor::LabelWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ValueWidget >( TXT("Editor::ValueWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::SliderWidget >( TXT("Editor::SliderWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ChoiceWidget >( TXT("Editor::ChoiceWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::CheckBoxWidget >( TXT("Editor::CheckBoxWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ColorPickerWidget >( TXT("Editor::ColorPickerWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ListWidget >( TXT("Editor::ListWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::ButtonWidget >(TXT("Editor::ButtonWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::FileDialogButtonWidget >( TXT("Editor::FileDialogButtonWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::Canvas >( TXT("Editor::Canvas") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvas >( TXT("Editor::TreeCanvas") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::TreeCanvasWidget >( TXT("Editor::TreeCanvasWidget") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvas >( TXT("Editor::StripCanvas") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< Editor::StripCanvasWidget >( TXT("Editor::StripCanvasWidget") ) );
-
-    // clipboard
-    m_InitializerStack.Push( Reflect::RegisterClassType< ReflectClipboardData >( TXT("Editor::ReflectClipboardData") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardDataWrapper >( TXT("Editor::ClipboardDataWrapper") ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< ClipboardFileList >( TXT("Editor::ClipboardFileList") ) );
-
-    // vault
-    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSearchQuery >( TXT( "Editor::VaultSearchQuery" ) ) );   
-    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::VaultViewMode >( TXT( "Editor::VaultViewMode" ) ) );
-
-    // settings
-    m_InitializerStack.Push( Reflect::RegisterEnumType< IconSize >( TXT( "Editor::IconSize" ) ) );
-    m_InitializerStack.Push( Reflect::RegisterClassType< EditorSettings >( TXT( "Editor::EditorSettings" ) ) );
-    Reflect::GetClass< EditorSettings >()->SetProperty( TXT( "UIName" ), TXT( "Editor Settings" ) );
-
-    m_InitializerStack.Push( Reflect::RegisterClassType< VaultSettings >( TXT( "Editor::VaultSettings" ) ) );
-    Reflect::GetClass< VaultSettings >()->SetProperty( TXT( "UIName" ), TXT( "Vault Settings" ) );
-
-    m_InitializerStack.Push( Reflect::RegisterClassType< WindowSettings >( TXT( "Editor::WindowSettings" ) ) );
-    Reflect::GetClass< WindowSettings >()->SetProperty( TXT( "UIName" ), TXT( "Window Settings" ) );
-
-    m_InitializerStack.Push( Reflect::RegisterEnumType< Editor::ProjectMenuID >( TXT( "Editor::ProjectMenuID" ) ) );
-
     // Engine type registration.
     m_InitializerStack.Push( GameObject::Shutdown );
     m_InitializerStack.Push( GameObjectType::Shutdown );
     m_InitializerStack.Push( RegisterEngineTypes, UnregisterEngineTypes );
     m_InitializerStack.Push( RegisterGraphicsTypes, UnregisterGraphicsTypes );
-    m_InitializerStack.Push( RegisterGraphicsEnums, UnregisterGraphicsEnums );
     m_InitializerStack.Push( RegisterFrameworkTypes, UnregisterFrameworkTypes );
     m_InitializerStack.Push( RegisterPcSupportTypes, UnregisterPcSupportTypes );
     m_InitializerStack.Push( RegisterEditorSupportTypes, UnregisterEditorSupportTypes );

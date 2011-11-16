@@ -410,8 +410,7 @@ TEST(Engine, PackageObjectTest)
 
     {
         GameObjectPath testPath;
-        HELIUM_VERIFY( testPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );
+        HELIUM_VERIFY( testPath.Set( HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "EngineTest" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestObject" ) ) );
 
         GameObjectPtr spObject;
         HELIUM_VERIFY( gObjectLoader->LoadObject( testPath, spObject ) );

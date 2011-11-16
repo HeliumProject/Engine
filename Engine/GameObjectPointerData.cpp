@@ -3,6 +3,7 @@
 
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
+#include "Engine/GameObject.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

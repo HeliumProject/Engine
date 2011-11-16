@@ -15,10 +15,10 @@
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathInterpreter.h"
 #include "Foundation/Inspect/Interpreters/Reflect/ReflectPathContainerInterpreter.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Inspect::ClientDataFilter );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_ABSTRACT( Inspect::ClientDataFilter );
 
 static Helium::InitializerStack g_InspectReflectInitStack;
 
@@ -27,9 +27,6 @@ void InspectReflect::Initialize()
     if ( g_InspectReflectInitStack.Increment() == 1 )
     {
         g_InspectReflectInitStack.Push( Inspect::Initialize, Inspect::Cleanup );
-
-        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientData>( TXT( "Inspect::ClientData" ) ) );
-        g_InspectReflectInitStack.Push( Reflect::RegisterClassType<ClientDataFilter>( TXT( "Inspect::ClientDataFilter" ) ) );
 
         // scalars
         ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetClass<Reflect::BitfieldData>() );

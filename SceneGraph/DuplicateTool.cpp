@@ -5,19 +5,19 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Pick.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::DuplicateTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::DuplicateTool);
-
 void DuplicateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::DuplicateTool >( TXT( "SceneGraph::DuplicateTool" ) );
+
 }
 
 void DuplicateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::DuplicateTool >();
+
 }
 
 DuplicateTool::DuplicateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)

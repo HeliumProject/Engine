@@ -1,20 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObjectPath.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_OBJECT_PATH_H
-#define HELIUM_ENGINE_OBJECT_PATH_H
-
-#include "Engine/Engine.h"
 
 #include "Platform/ReadWriteLock.h"
+
 #include "Foundation/Name.h"
 #include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Memory/ReferenceCounting.h"
+
+#include "Engine/Engine.h"
 
 /// @defgroup objectpathdelims GameObject Path Delimiter Characters
 //@{
@@ -190,5 +182,3 @@ namespace Helium
 }
 
 #include "Engine/GameObjectPath.inl"
-
-#endif  // HELIUM_ENGINE_OBJECT_PATH_H

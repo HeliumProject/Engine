@@ -4,10 +4,10 @@
 
 #include "Foundation/String/Tokenize.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::List );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::List );
 
 List::List()
 : a_IsSorted( false )
@@ -44,6 +44,6 @@ bool List::Process(const tstring& key, const tstring& value)
 
 void List::SetToDefault(const ContextMenuEventArgs& event)
 {
-  event.m_Control->SetDefault();
-  event.m_Control->Read();
+    event.m_Control->SetDefault();
+    event.m_Control->Read();
 }

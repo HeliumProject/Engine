@@ -11,23 +11,6 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-template<>
-Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
-{
-    Class* info = Class::Create();
-
-    info->m_Size = sizeof( Object );
-    info->m_Name = name;
-
-    // object should have no creator
-    HELIUM_ASSERT( creator == NULL );
-
-    // object should have no base class
-    HELIUM_ASSERT( baseName == NULL );
-
-    return info;
-}
-
 Class::Class()
 : m_Creator (NULL)
 {
@@ -44,7 +27,19 @@ Class* Class::Create()
     return new Class();
 }
 
-const Class *Class::GetPointerDataClass() const
+template<>
+Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
 {
-    return PointerData::s_Class;
+    Class* info = Class::Create();
+
+    info->m_Size = sizeof( Object );
+    info->m_Name = name;
+
+    // object should have no creator
+    HELIUM_ASSERT( creator == NULL );
+
+    // object should have no base class
+    HELIUM_ASSERT( baseName == NULL );
+
+    return info;
 }

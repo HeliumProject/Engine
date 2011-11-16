@@ -11,10 +11,10 @@
 #include "SceneGraph/Orientation.h"
 #include "SceneGraph/PrimitiveCircle.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CreateTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT(SceneGraph::CreateTool);
 
 IntersectionPlane CreateTool::s_PlaneSnap = IntersectionPlanes::Ground;
 
@@ -46,12 +46,12 @@ float CreateTool::s_PaintJitter = 1.0f;
 
 void CreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::CreateTool >( TXT( "SceneGraph::CreateTool" ) );
+
 }
 
 void CreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::CreateTool >();
+
 }
 
 CreateTool::CreateTool(SceneGraph::Scene* scene, PropertiesGenerator* generator)

@@ -3,6 +3,7 @@
 *.user
 *.tags
 *.session
+*.sublime-workspace
 *.db
 *.BASE.*
 *.LOCAL.*

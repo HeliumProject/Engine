@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Engine.h"
+
 #include "Foundation/Reflect/Data/Data.h"
 #include "Foundation/Reflect/Data/PointerData.h"
 

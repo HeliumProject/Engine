@@ -6,10 +6,10 @@
 #include "Foundation/Undo/UndoCommand.h"
 #include "SceneGraph/Scene.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::PivotTransform );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( PivotTransform );
 
 void PivotTransform::PopulateComposite( Reflect::Composite& comp )
 {
@@ -24,12 +24,12 @@ void PivotTransform::PopulateComposite( Reflect::Composite& comp )
 
 void PivotTransform::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::PivotTransform >( TXT( "SceneGraph::PivotTransform" ) );
+
 }
 
 void PivotTransform::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::PivotTransform >();
+
 }
 
 PivotTransform::PivotTransform() 

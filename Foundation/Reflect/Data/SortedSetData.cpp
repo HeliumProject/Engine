@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::SortedSetData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( SortedSetData )
 
 // If you use this and your data can have spaces, you must make an explicit
 // instantiation.  See the the string example below.
@@ -293,9 +293,9 @@ template SimpleSortedSetData< Helium::GUID >;
 template SimpleSortedSetData< Helium::TUID >;
 template SimpleSortedSetData< Helium::Path >;
 
-REFLECT_DEFINE_OBJECT( StringSortedSetData );
-REFLECT_DEFINE_OBJECT( UInt32SortedSetData );
-REFLECT_DEFINE_OBJECT( UInt64SortedSetData );
-REFLECT_DEFINE_OBJECT( GUIDSortedSetData );
-REFLECT_DEFINE_OBJECT( TUIDSortedSetData );
-REFLECT_DEFINE_OBJECT( PathSortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringSortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32SortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64SortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDSortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDSortedSetData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathSortedSetData );

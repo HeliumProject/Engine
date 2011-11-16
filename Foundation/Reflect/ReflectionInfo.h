@@ -45,8 +45,10 @@ namespace Helium
                 Composite,
                 Structure,
                 Class,
-                GameObjectType,
+                Count,
             };
+
+            extern const tchar_t* Strings[ ReflectionTypes::Count ];
         }
         typedef ReflectionTypes::ReflectionType ReflectionType;
 

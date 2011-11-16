@@ -1,15 +1,7 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Config.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef HELIUM_ENGINE_CONFIG_H
-#define HELIUM_ENGINE_CONFIG_H
 
 #include "Engine/Engine.h"
+#include "Engine/GameObjectPath.h"
 
 /// Configuration container package name.
 #define HELIUM_CONFIG_CONTAINER_PACKAGE TXT( "Config" )
@@ -100,5 +92,3 @@ namespace Helium
 }
 
 #include "Engine/Config.inl"
-
-#endif  // HELIUM_ENGINE_CONFIG_H

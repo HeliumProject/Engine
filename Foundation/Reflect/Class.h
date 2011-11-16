@@ -41,16 +41,23 @@ namespace Helium
                 // setup factory function
                 info->m_Creator = creator;
 
-                // create the default instance
-                if ( info->m_Creator )
+                // fetch a potential default instance from the composite
+                ClassT* instance = static_cast< ClassT* >( info->Composite::m_Default );
+                if ( instance )
                 {
-                    info->Composite::m_Default = info->m_Default = info->m_Creator();
+                    info->m_Default = instance;
+                }
+                else
+                {
+                    // create the default instance
+                    if ( info->m_Creator )
+                    {
+                        info->Composite::m_Default = info->m_Default = info->m_Creator();
+                    }
                 }
 
                 return info;
             }
-
-            virtual const Class *GetPointerDataClass() const;
 
         public:
             CreateObjectFunc        m_Creator;  // factory function for creating instances of this class
@@ -60,7 +67,32 @@ namespace Helium
         typedef Helium::SmartPtr< Class > ClassPtr;
         typedef Helium::SmartPtr< const Class > ConstClassPtr;
 
+        // Object, the most base class needs explicit implementation
         template<>
         Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator );
+
+        template< class ClassT, class BaseT >
+        class ClassRegistrar : public TypeRegistrar
+        {
+        public:
+            ClassRegistrar(const tchar_t* name);
+            ~ClassRegistrar();
+
+            virtual void Register();
+            virtual void Unregister();
+        };
+
+        template< class ClassT >
+        class ClassRegistrar< ClassT, void > : public TypeRegistrar
+        {
+        public:
+            ClassRegistrar(const tchar_t* name);
+            ~ClassRegistrar();
+
+            virtual void Register();
+            virtual void Unregister();
+        };
     }
 }
+
+#include "Foundation/Reflect/Class.inl"

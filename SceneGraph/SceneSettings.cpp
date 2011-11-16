@@ -3,10 +3,10 @@
 
 #include "Foundation/Preferences.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneSettings );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( SceneSettings );
 
 SceneSettings::SceneSettings()
 : m_ScaleManipulatorSize( 0.3f )

@@ -4,11 +4,11 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Components::Component );
+
 using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
-
-REFLECT_DEFINE_ABSTRACT(Component);
 
 inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
 {
@@ -361,7 +361,6 @@ void Components::Initialize()
     // Register base component with reflect
     if (!g_ComponentsInitCount)
     {
-        Reflect::RegisterClassType<Components::Component>(TXT("Component"));
         RegisterType<Component>(Component::GetStaticComponentTypeData(), 0, 0);
     }
 
@@ -383,7 +382,6 @@ void Components::Cleanup()
             g_ComponentTypes[type_id].m_TCallbacks = 0;
         }
 
-        Reflect::UnregisterClassType<Components::Component>();
         g_ComponentTypes.Clear();
     }
 }

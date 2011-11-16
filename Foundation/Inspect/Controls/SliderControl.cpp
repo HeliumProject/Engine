@@ -2,18 +2,18 @@
 #include "Foundation/Inspect/Controls/SliderControl.h"
 #include "Foundation/Inspect/Canvas.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::Slider );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::Slider );
 
 Slider::Slider()
 : a_Min( 0.0f )
 , a_Max( 100.0f )
 , a_AutoAdjustMinMax( true )
 {
-  m_ContextMenu = new ContextMenu (this);
-  m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &Slider::SetToDefault));
+    m_ContextMenu = new ContextMenu (this);
+    m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &Slider::SetToDefault));
 }
 
 bool Slider::Process( const tstring& key, const tstring& value )
@@ -39,6 +39,6 @@ bool Slider::Process( const tstring& key, const tstring& value )
 
 void Slider::SetToDefault(const ContextMenuEventArgs& event)
 {
-  event.m_Control->SetDefault();
-  event.m_Control->Read();
+    event.m_Control->SetDefault();
+    event.m_Control->Read();
 }

@@ -2,10 +2,10 @@
 #include "Component.h"
 #include "ComponentCollection.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
+
 using namespace Helium;
 using namespace Helium::Component;
-
-REFLECT_DEFINE_ABSTRACT(ComponentBase)
 
 void ComponentBase::PopulateComposite( Reflect::Composite& comp )
 {

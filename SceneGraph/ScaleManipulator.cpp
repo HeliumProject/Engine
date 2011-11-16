@@ -13,19 +13,19 @@
 #include "SceneGraph/SceneManager.h"
 #include "SceneSettings.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::ScaleManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::ScaleManipulator);
-
 void ScaleManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::ScaleManipulator >( TXT( "SceneGraph::ScaleManipulator" ) );
+
 }
 
 void ScaleManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::ScaleManipulator >();
+
 }
 
 ScaleManipulator::ScaleManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

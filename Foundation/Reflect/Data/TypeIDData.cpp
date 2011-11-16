@@ -4,10 +4,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TypeIDData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT( TypeIDData );
 
 TypeIDData::TypeIDData()
 {

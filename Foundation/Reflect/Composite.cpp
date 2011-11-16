@@ -98,7 +98,7 @@ Composite::Composite()
 : m_Base( NULL )
 , m_FirstDerived( NULL )
 , m_NextSibling( NULL )
-, m_Accept( NULL )
+, m_Populate( NULL )
 , m_Default( NULL )
 {
 
@@ -106,13 +106,11 @@ Composite::Composite()
 
 Composite::~Composite()
 {
-    HELIUM_ASSERT( m_FirstDerived == NULL );
-    HELIUM_ASSERT( m_NextSibling == NULL );
 }
 
-void Composite::Report() const
+void Composite::Register() const
 {
-    Log::Debug( TXT( "Reflect Type: 0x%p, Size: %4d, Name: %s (0x%08x)\n" ), this, m_Size, m_Name, Crc32( m_Name ) );
+    Type::Register();
 
     uint32_t computedSize = 0;
     DynArray< Field >::ConstIterator itr = m_Fields.Begin();
@@ -125,16 +123,13 @@ void Composite::Report() const
 
     if (computedSize != m_Size)
     {
-        Log::Debug( TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize );
+        Log::Debug( TXT( " %d bytes of hidden fields and padding\n" ), m_Size - computedSize );
     }
 }
 
 void Composite::Unregister() const
 {
-    if ( m_Base )
-    {
-        m_Base->RemoveDerived( this );
-    }
+    Type::Unregister();
 }
 
 bool Composite::IsType(const Composite* type) const

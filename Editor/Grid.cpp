@@ -4,8 +4,6 @@
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 
-using Helium::Insert; 
-
 using namespace Helium;
 using namespace Helium::Editor;
 

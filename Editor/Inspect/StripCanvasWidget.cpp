@@ -4,10 +4,10 @@
 #include "Editor/FileIconsTable.h"
 #include "Editor/Inspect/StripCanvas.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::StripCanvasWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( StripCanvasWidget );
 
 StripCanvasWidget::StripCanvasWidget( Inspect::Container* container, int orientation )
 : m_ContainerControl( container )

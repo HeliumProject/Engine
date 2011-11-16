@@ -5,18 +5,17 @@
 #include "SceneGraph/Transform.h"
 #include "SceneGraph/Mesh.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Influence );
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Skin );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( Influence );
 
 void Influence::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Influence::m_Objects,           TXT( "m_Objects" ) );
     comp.AddField( &Influence::m_Weights,           TXT( "m_Weights" ) );
 }
-
-REFLECT_DEFINE_OBJECT( Skin );
 
 void Skin::PopulateComposite( Reflect::Composite& comp )
 {
@@ -28,14 +27,12 @@ void Skin::PopulateComposite( Reflect::Composite& comp )
 
 void Skin::InitializeType()
 {
-    Reflect::RegisterClassType< Influence >( TXT( "SceneGraph::Influence" ) );
-    Reflect::RegisterClassType< Skin >( TXT( "SceneGraph::Skin" ) );
+
 }
 
 void Skin::CleanupType()
 {
-    Reflect::UnregisterClassType< Influence >();
-    Reflect::UnregisterClassType< Skin >();
+
 }
 
 Skin::Skin()

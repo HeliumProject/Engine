@@ -11,6 +11,10 @@
 
 #include "Engine/Engine.h"
 
+#include "Foundation/Container/ConcurrentHashMap.h"
+
+#include "Engine/GameObjectPath.h"
+
 namespace Helium
 {
     class ArchivePackageLoader;

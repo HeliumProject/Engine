@@ -10,6 +10,7 @@
 #define HELIUM_ENGINE_ARCHIVE_PACKAGE_LOADER_H
 
 #include "Engine/Engine.h"
+#include "Engine/Package.h"
 #include "Engine/PackageLoader.h"
 //#include "Engine/Serializer.h"
 

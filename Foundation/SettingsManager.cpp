@@ -3,10 +3,10 @@
 
 #include "Platform/Debug.h"
 
-using namespace Helium;
+REFLECT_DEFINE_OBJECT( Helium::Settings );
+REFLECT_DEFINE_OBJECT( Helium::SettingsManager );
 
-REFLECT_DEFINE_OBJECT( Settings );
-REFLECT_DEFINE_OBJECT( SettingsManager );
+using namespace Helium;
 
 void SettingsManager::PopulateComposite( Reflect::Composite& comp )
 {

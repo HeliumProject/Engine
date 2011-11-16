@@ -7,10 +7,10 @@
 #include "SceneGraph/Shader.h"
 #include "SceneGraph/Transform.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Mesh );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT( Mesh );
 
 #pragma TODO("Data-hide public reflected fields")
 
@@ -32,12 +32,12 @@ void Mesh::PopulateComposite( Reflect::Composite& comp )
 
 void Mesh::InitializeType()
 {
-    Reflect::RegisterClassType< Mesh >( TXT( "SceneGraph::Mesh" ) );
+
 }
 
 void Mesh::CleanupType()
 {
-    Reflect::UnregisterClassType< Mesh >();
+
 }
 
 Mesh::Mesh()

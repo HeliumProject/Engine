@@ -1,13 +1,4 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ExampleObject.h
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #pragma once
-#ifndef EXAMPLE_EXAMPLE_GAME_EXAMPLE_OBJECT_H
-#define EXAMPLE_EXAMPLE_GAME_EXAMPLE_OBJECT_H
 
 #include "ExampleGame/ExampleGame.h"
 #include "Engine/GameObject.h"
@@ -27,5 +18,3 @@ namespace Example
         //@}
     };
 }
-
-#endif  // EXAMPLE_EXAMPLE_GAME_EXAMPLE_OBJECT_H

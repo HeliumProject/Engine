@@ -3,10 +3,10 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::ContainerData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( ContainerData )
 
 ContainerData::ContainerData()
 {

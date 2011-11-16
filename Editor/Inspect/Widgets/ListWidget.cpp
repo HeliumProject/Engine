@@ -3,13 +3,13 @@
 
 #include "Foundation/String/Tokenize.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ListWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
 BEGIN_EVENT_TABLE(ListWindow, wxListBox)
 END_EVENT_TABLE();
-
-REFLECT_DEFINE_OBJECT( ListWidget );
 
 ListWidget::ListWidget( Inspect::List* list )
 : m_ListControl( list )

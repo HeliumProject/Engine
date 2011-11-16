@@ -3,7 +3,7 @@
 
 using namespace Helium;
 
-REFLECT_DEFINE_OBJECT( Project );
+REFLECT_DEFINE_OBJECT( Helium::Project );
 
 void Project::PopulateComposite( Reflect::Composite& comp )
 {

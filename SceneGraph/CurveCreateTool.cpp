@@ -7,6 +7,8 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::CurveCreateTool );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
@@ -14,16 +16,14 @@ CurveType CurveCreateTool::s_CurveType = CurveType::BSpline;
 bool CurveCreateTool::s_SurfaceSnap = false;
 bool CurveCreateTool::s_ObjectSnap = false;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::CurveCreateTool);
-
 void CurveCreateTool::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::CurveCreateTool >( TXT( "SceneGraph::CurveCreateTool" ) );
+
 }
 
 void CurveCreateTool::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::CurveCreateTool >();
+
 }
 
 CurveCreateTool::CurveCreateTool( SceneGraph::Scene* scene, PropertiesGenerator* generator )

@@ -18,20 +18,20 @@
 #include "Math/Common.h"
 #include "Math/FpuAngleAxis.h"
 
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::TranslateSnappingMode );
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ENUMERATION( TranslateSnappingMode );
-REFLECT_DEFINE_ABSTRACT( TranslateManipulator );
-
 void TranslateManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::TranslateManipulator >( TXT( "SceneGraph::TranslateManipulator" ) );
+
 }
 
 void TranslateManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::TranslateManipulator >();
+
 }
 
 TranslateManipulator::TranslateManipulator( SettingsManager* settingsManager, const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

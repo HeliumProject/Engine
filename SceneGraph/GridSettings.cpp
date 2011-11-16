@@ -3,11 +3,11 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::GridUnit );
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::GridSettings );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ENUMERATION( GridUnit );
-REFLECT_DEFINE_OBJECT( GridSettings );
 
 GridSettings::GridSettings( const tstring& version,
                                   GridUnit units,

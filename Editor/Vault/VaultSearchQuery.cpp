@@ -9,6 +9,8 @@
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Log.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::VaultSearchQuery );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -52,7 +54,6 @@ const tchar_t* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s
 const tchar_t* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 ///////////////////////////////////////////////////////////////////////////////
-REFLECT_DEFINE_OBJECT( VaultSearchQuery );
 void VaultSearchQuery::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &VaultSearchQuery::m_QueryString, TXT( "m_QueryString" ) );

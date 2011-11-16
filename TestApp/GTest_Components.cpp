@@ -55,9 +55,6 @@ public:
     void SetUp()
     {
         m_InitStack.Push(Helium::Components::Initialize, Helium::Components::Cleanup);
-        m_InitStack.Push(Reflect::RegisterClassType<TestComponentOne>(TXT("TestComponentOne")));
-        m_InitStack.Push(Reflect::RegisterClassType<TestComponentTwo>(TXT("TestComponentTwo")));
-        m_InitStack.Push(Reflect::RegisterClassType<TestComponentThree>(TXT("TestComponentThree")));
 
         m_ComponentOneTypeId = TestComponentOne::RegisterComponentType(10);
         m_ComponentTwoTypeId = TestComponentTwo::RegisterComponentType(10);

@@ -16,11 +16,10 @@
 #include "Editor/Inspect/Widgets/SliderWidget.h"
 #include "Editor/Inspect/Widgets/ValueWidget.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::Canvas );
 
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( Canvas );
 
 Canvas::Canvas()
 : m_Window( NULL )

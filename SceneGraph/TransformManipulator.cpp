@@ -6,19 +6,19 @@
 #include "SceneGraph/Camera.h"
 #include "Color.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TransformManipulator );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-REFLECT_DEFINE_ABSTRACT(SceneGraph::TransformManipulator);
-
 void TransformManipulator::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::TransformManipulator >( TXT( "SceneGraph::TransformManipulator" ) );
+
 }
 
 void TransformManipulator::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::TransformManipulator >();
+
 }
 
 TransformManipulator::TransformManipulator(const ManipulatorMode mode, SceneGraph::Scene* scene, PropertiesGenerator* generator)

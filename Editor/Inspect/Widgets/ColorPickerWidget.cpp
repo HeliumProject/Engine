@@ -3,6 +3,8 @@
 
 #include <wx/panel.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ColorPickerWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -25,8 +27,6 @@ void ColorPickerWindow::OnChanged( wxCommandEvent& )
 {
     m_ColorPickerWidget->GetControl()->Write();
 }
-
-REFLECT_DEFINE_OBJECT( ColorPickerWidget );
 
 ColorPickerWidget::ColorPickerWidget( Inspect::ColorPicker* colorPicker )
 : m_ColorPickerControl( colorPicker )

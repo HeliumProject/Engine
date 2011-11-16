@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::MapData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( MapData )
 
 // Tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
@@ -479,27 +479,27 @@ template SimpleMapData< Helium::GUID, Matrix4 >;
 template SimpleMapData< Helium::TUID, uint32_t >;
 template SimpleMapData< Helium::TUID, Matrix4 >;
 
-REFLECT_DEFINE_OBJECT( StringStringMapData );
-REFLECT_DEFINE_OBJECT( StringBoolMapData );
-REFLECT_DEFINE_OBJECT( StringUInt32MapData );
-REFLECT_DEFINE_OBJECT( StringInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringStringMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringBoolMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringUInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringInt32MapData );
 
-REFLECT_DEFINE_OBJECT( UInt32StringMapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt32MapData );
-REFLECT_DEFINE_OBJECT( UInt32Int32MapData );
-REFLECT_DEFINE_OBJECT( UInt32UInt64MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StringMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32UInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32Int32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32UInt64MapData );
 
-REFLECT_DEFINE_OBJECT( Int32StringMapData );
-REFLECT_DEFINE_OBJECT( Int32UInt32MapData );
-REFLECT_DEFINE_OBJECT( Int32Int32MapData );
-REFLECT_DEFINE_OBJECT( Int32UInt64MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32StringMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32UInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32Int32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32UInt64MapData );
 
-REFLECT_DEFINE_OBJECT( UInt64StringMapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt32MapData );
-REFLECT_DEFINE_OBJECT( UInt64UInt64MapData );
-REFLECT_DEFINE_OBJECT( UInt64Matrix4MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StringMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt64MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64Matrix4MapData );
 
-REFLECT_DEFINE_OBJECT( GUIDUInt32MapData );
-REFLECT_DEFINE_OBJECT( GUIDMatrix4MapData );
-REFLECT_DEFINE_OBJECT( TUIDUInt32MapData );
-REFLECT_DEFINE_OBJECT( TUIDMatrix4MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDUInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDMatrix4MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDUInt32MapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDMatrix4MapData );

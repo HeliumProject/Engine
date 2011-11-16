@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Structure.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StructureData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT( StructureData );
 
 StructureData::StructureData()
 {

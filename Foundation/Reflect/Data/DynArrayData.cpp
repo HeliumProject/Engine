@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::DynArrayData )
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( DynArrayData )
 
 // If you use this and your data can have spaces, you must make an explicit
 // instantiation.  See the the string example below.
@@ -496,29 +496,29 @@ template SimpleDynArrayData< Color4 >;
 template SimpleDynArrayData< HDRColor3 >;
 template SimpleDynArrayData< HDRColor4 >;
 
-REFLECT_DEFINE_OBJECT( StringDynArrayData );
-REFLECT_DEFINE_OBJECT( BoolDynArrayData );
-REFLECT_DEFINE_OBJECT( UInt8DynArrayData );
-REFLECT_DEFINE_OBJECT( Int8DynArrayData );
-REFLECT_DEFINE_OBJECT( UInt16DynArrayData );
-REFLECT_DEFINE_OBJECT( Int16DynArrayData );
-REFLECT_DEFINE_OBJECT( UInt32DynArrayData );
-REFLECT_DEFINE_OBJECT( Int32DynArrayData );
-REFLECT_DEFINE_OBJECT( UInt64DynArrayData );
-REFLECT_DEFINE_OBJECT( Int64DynArrayData );
-REFLECT_DEFINE_OBJECT( Float32DynArrayData );
-REFLECT_DEFINE_OBJECT( Float64DynArrayData );
-REFLECT_DEFINE_OBJECT( GUIDDynArrayData );
-REFLECT_DEFINE_OBJECT( TUIDDynArrayData );
-REFLECT_DEFINE_OBJECT( PathDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int8DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt16DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int16DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathDynArrayData );
 
-REFLECT_DEFINE_OBJECT( Vector2DynArrayData );
-REFLECT_DEFINE_OBJECT( Vector3DynArrayData );
-REFLECT_DEFINE_OBJECT( Vector4DynArrayData );
-REFLECT_DEFINE_OBJECT( Matrix3DynArrayData );
-REFLECT_DEFINE_OBJECT( Matrix4DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector2DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector3DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Vector4DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Matrix3DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Matrix4DynArrayData );
 
-REFLECT_DEFINE_OBJECT( Color3DynArrayData );
-REFLECT_DEFINE_OBJECT( Color4DynArrayData );
-REFLECT_DEFINE_OBJECT( HDRColor3DynArrayData );
-REFLECT_DEFINE_OBJECT( HDRColor4DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Color3DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Color4DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::HDRColor3DynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::HDRColor4DynArrayData );

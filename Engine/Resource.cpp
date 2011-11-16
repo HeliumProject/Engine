@@ -1,15 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Resource.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/Resource.h"
 
 #include "Foundation/AsyncLoader.h"
+#include "Foundation/Reflect/Class.h"
+#include "Engine/GameObjectType.h"
 #include "Engine/CacheManager.h"
+#include "Engine/Package.h"
 
 using namespace Helium;
 

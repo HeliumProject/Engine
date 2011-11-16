@@ -11,10 +11,10 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Color.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT( SceneGraph::Transform );
 
 struct ScaleColorInfo
 {
@@ -37,12 +37,12 @@ void Transform::PopulateComposite( Reflect::Composite& comp )
 
 void Transform::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::Transform >( TXT( "SceneGraph::Transform" ) );
+
 }
 
 void Transform::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::Transform >();
+
 }
 
 Transform::Transform()

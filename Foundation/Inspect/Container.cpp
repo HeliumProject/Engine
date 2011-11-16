@@ -2,10 +2,10 @@
 #include "Foundation/Inspect/Container.h"
 #include "Foundation/Inspect/Canvas.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Inspect::Container );
+
 using namespace Helium;
 using namespace Helium::Inspect;
-
-REFLECT_DEFINE_OBJECT( Inspect::Container );
 
 Container::Container()
 : m_UIHints( UIHint::Default )

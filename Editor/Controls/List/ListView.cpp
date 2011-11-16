@@ -8,8 +8,6 @@
 #include <map>
 #include <wx/wx.h>
 
-using Helium::Insert; 
-
 using namespace Helium;
 using namespace Helium::Editor;
 

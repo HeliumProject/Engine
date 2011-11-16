@@ -13,7 +13,6 @@
 
 using namespace Helium;
 using namespace Helium::Editor;
-using Helium::Insert; 
 
 wxSize ArtProvider::DefaultIconSize( 24, 24 );
 

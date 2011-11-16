@@ -36,6 +36,28 @@ namespace Helium
                 return info;
             }
         };
+
+        template< class ClassT, class BaseT >
+        class StructureRegistrar : public TypeRegistrar
+        {
+        public:
+            StructureRegistrar(const tchar_t* name);
+            ~StructureRegistrar();
+
+            virtual void Register();
+            virtual void Unregister();
+        };
+
+        template< class ClassT >
+        class StructureRegistrar< ClassT, void > : public TypeRegistrar
+        {
+        public:
+            StructureRegistrar(const tchar_t* name);
+            ~StructureRegistrar();
+
+            virtual void Register();
+            virtual void Unregister();
+        };
     }
 }
 
@@ -44,14 +66,16 @@ namespace Helium
 public: \
 typedef STRUCTURE This; \
 static Helium::Reflect::Structure* CreateStructure( const tchar_t* name ); \
-static const Helium::Reflect::Structure* s_Structure;
+static const Helium::Reflect::Structure* s_Structure; \
+static Helium::Reflect::StructureRegistrar< STRUCTURE, void > s_Registrar;
 
 #define _REFLECT_DECLARE_DERIVED_STRUCTURE( STRUCTURE, BASE ) \
 public: \
 typedef BASE Base; \
 typedef STRUCTURE This; \
 static Helium::Reflect::Structure* CreateStructure( const tchar_t* name ); \
-static const Helium::Reflect::Structure* s_Structure;
+static const Helium::Reflect::Structure* s_Structure; \
+static Helium::Reflect::StructureRegistrar< STRUCTURE, BASE > s_Registrar;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_BASE_STRUCTURE( STRUCTURE ) \
@@ -62,7 +86,8 @@ Helium::Reflect::Structure* STRUCTURE::CreateStructure( const tchar_t* name ) \
     s_Structure = type; \
     return type; \
 } \
-const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL;
+const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL; \
+Helium::Reflect::StructureRegistrar< STRUCTURE, void > STRUCTURE::s_Registrar( TXT( #STRUCTURE ) );
 
 #define _REFLECT_DEFINE_DERIVED_STRUCTURE( STRUCTURE ) \
 Helium::Reflect::Structure* STRUCTURE::CreateStructure( const tchar_t* name ) \
@@ -73,7 +98,8 @@ Helium::Reflect::Structure* STRUCTURE::CreateStructure( const tchar_t* name ) \
     s_Structure = type; \
     return type; \
 } \
-const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL;
+const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL; \
+Helium::Reflect::StructureRegistrar< STRUCTURE, BASE > STRUCTURE::s_Registrar( TXT( #STRUCTURE ) );
 
 // declares a concrete object with creator
 #define REFLECT_DECLARE_BASE_STRUCTURE( STRUCTURE ) \
@@ -88,3 +114,5 @@ const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL;
 
 #define REFLECT_DEFINE_DERIVED_STRUCTURE( STRUCTURE ) \
     _REFLECT_DEFINE_DERIVED_STRUCTURE( STRUCTURE  )
+
+#include "Foundation/Reflect/Structure.inl"

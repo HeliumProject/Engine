@@ -28,8 +28,20 @@ Helium.GetSystemVersion = function()
 	return version
 end
 
+Helium.Build32Bit = function()
+	if ( _OPTIONS[ "build32and64" ] ) then
+		return true
+	else
+    	return not os.is64bit()
+    end
+end
+
 Helium.Build64Bit = function()
-    return os.is64bit()
+	if ( _OPTIONS[ "build32and64" ] ) then
+		return true
+	else
+	    return os.is64bit()
+	end
 end
 
 Helium.GetFbxSdkLocation = function()
@@ -174,15 +186,15 @@ end
 Helium.PublishIcons = function( bin )
 
     if os.get() == "windows" then
-        os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Debug\\Icons\" *.png")
-        os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Intermediate\\Icons\" *.png")
-        os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Profile\\Icons\" *.png")
-        os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Release\\Icons\" *.png")
+        os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Debug\\Icons\" *.png")
+        os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Intermediate\\Icons\" *.png")
+        os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Profile\\Icons\" *.png")
+        os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x32\\Release\\Icons\" *.png")
         if Helium.Build64Bit() then
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Debug\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Intermediate\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Profile\\Icons\" *.png")
-            os.execute("robocopy /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Release\\Icons\" *.png")
+            os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Debug\\Icons\" *.png")
+            os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Intermediate\\Icons\" *.png")
+            os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Profile\\Icons\" *.png")
+            os.execute("robocopy /njs /nfl /ndl /nc /ns /np /MIR \"Editor\\Icons\\Helium\" \"" .. bin .. "\\x64\\Release\\Icons\" *.png")
         end
     else
         os.execute("rsync -a --delete Editor/Icons/Helium/ " .. bin .. "/x32/Debug/Icons/ --filter='+ */' --filter '+ *.png' --filter='- *'")
@@ -203,17 +215,22 @@ Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
 
-	if Helium.Build64Bit() then
+    if _OPTIONS[ "build32and64" ] then
         platforms
         {
             "x32",
        		"x64",
-       	}
-    else
+        } 
+	elseif Helium.Build32Bit() then
         platforms
         {
             "x32",
-        } 
+       	}
+    elseif Helium.Build64Bit() then
+        platforms
+        {
+       		"x64",
+       	}
     end
 
 	configurations
@@ -288,9 +305,9 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"OptimizeSpeed",
 			"NoEditAndContinue",
-			"Symbols",
 		}
 		
 	configuration "Profile"
@@ -302,6 +319,7 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"NoFramePointer",
 			"OptimizeSpeed",
 			"NoEditAndContinue",
@@ -316,6 +334,7 @@ Helium.DoDefaultSolutionSettings = function()
 		}
 		flags
 		{
+			"Symbols",
 			"NoFramePointer",
 			"OptimizeSpeed",
 			"NoEditAndContinue",

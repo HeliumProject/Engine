@@ -4,11 +4,11 @@
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
+REFLECT_DEFINE_ENUMERATION( Helium::Editor::IconSize );
+REFLECT_DEFINE_OBJECT( Helium::Editor::EditorSettings );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_ENUMERATION( IconSize );
-REFLECT_DEFINE_OBJECT( EditorSettings );
 
 EditorSettings::EditorSettings()
 : m_ReopenLastProjectOnStartup( true )

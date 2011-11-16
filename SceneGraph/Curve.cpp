@@ -23,12 +23,12 @@
 
 #include <algorithm>
 
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::CurveType );
+REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::ControlPointLabel );
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Curve );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ENUMERATION( CurveType );
-REFLECT_DEFINE_ENUMERATION( ControlPointLabel );
-REFLECT_DEFINE_OBJECT( Curve );
 
 Helium::Color Curve::s_Material;
 Helium::Color Curve::s_HullMaterial;
@@ -54,15 +54,13 @@ public:
 
 void Curve::InitializeType()
 {
-    Reflect::RegisterClassType< Curve >( TXT( "SceneGraph::Curve" ) );
-
     s_Material = Color::FORESTGREEN;
     s_HullMaterial = Color::GRAY;
 }
 
 void Curve::CleanupType()
 {
-    Reflect::UnregisterClassType< Curve >();
+
 }
 
 Curve::Curve()

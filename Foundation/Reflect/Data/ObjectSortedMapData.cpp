@@ -5,10 +5,10 @@
 #include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::ObjectSortedMapData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_ABSTRACT( ObjectSortedMapData );
 
 template< typename KeyT, typename CompareKeyT, typename AllocatorT >
 SimpleObjectSortedMapData< KeyT, CompareKeyT, AllocatorT >::SimpleObjectSortedMapData()
@@ -284,11 +284,11 @@ template SimpleObjectSortedMapData< int64_t >;
 template SimpleObjectSortedMapData< Helium::GUID >;
 template SimpleObjectSortedMapData< Helium::TUID >;
 
-REFLECT_DEFINE_OBJECT( TypeIDObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( StringObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( UInt32ObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( Int32ObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( UInt64ObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( Int64ObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( GUIDObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( TUIDObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TypeIDObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32ObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32ObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64ObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64ObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDObjectSortedMapData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDObjectSortedMapData );

@@ -21,6 +21,7 @@ namespace Helium
         class Composite;
         class Structure;
         class Class;
+        template< class ClassT, class BaseT > class ClassRegistrar;
         class Object;
         class Data;
 
@@ -112,15 +113,17 @@ namespace Helium
             // Type checking
             //
 
-            // Retrieves the reflection data for this instance
             static const Class* s_Class;
+            static ClassRegistrar< Object, void > s_Registrar;
+
+            // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;
 
             // Deduces type membership for this instance
             bool IsClass( const Reflect::Class* type ) const;
 
             // Create class data block for this type
-            static Reflect::Class* CreateClass( const tchar_t* name );
+            static Reflect::Class* CreateClass();
 
             // Enumerates member data (stub)
             static void PopulateComposite( Reflect::Composite& comp );
@@ -227,8 +230,9 @@ public: \
 typedef BASE Base; \
 typedef OBJECT This; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
-static Helium::Reflect::Class* CreateClass( const tchar_t* name ); \
-static const Helium::Reflect::Class* s_Class;
+static Helium::Reflect::Class* CreateClass(); \
+static const Helium::Reflect::Class* s_Class; \
+static Helium::Reflect::ClassRegistrar< OBJECT, BASE > s_Registrar;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_OBJECT( OBJECT, CREATOR ) \
@@ -237,15 +241,16 @@ const Helium::Reflect::Class* OBJECT::GetClass() const \
     return s_Class; \
 } \
 \
-Helium::Reflect::Class* OBJECT::CreateClass( const tchar_t* name ) \
+Helium::Reflect::Class* OBJECT::CreateClass() \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( OBJECT::Base::s_Class != NULL ); \
-    Helium::Reflect::Class* type = Helium::Reflect::Class::Create<OBJECT>(name, OBJECT::Base::s_Class->m_Name, CREATOR); \
+    Helium::Reflect::Class* type = Helium::Reflect::Class::Create< OBJECT >( TXT( #OBJECT ), OBJECT::Base::s_Class->m_Name, CREATOR); \
     s_Class = type; \
     return type; \
 } \
-const Helium::Reflect::Class* OBJECT::s_Class = NULL;
+const Helium::Reflect::Class* OBJECT::s_Class = NULL; \
+Helium::Reflect::ClassRegistrar< OBJECT, OBJECT::Base > OBJECT::s_Registrar( TXT( #OBJECT ) );
 
 // declares an abstract object (an object that either A: cannot be instantiated or B: is never actually serialized)
 #define REFLECT_DECLARE_ABSTRACT( OBJECT, BASE ) \
@@ -258,7 +263,7 @@ const Helium::Reflect::Class* OBJECT::s_Class = NULL;
 // declares a concrete object with creator
 #define REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
     _REFLECT_DECLARE_OBJECT( OBJECT, BASE ) \
-    _REFLECT_DECLARE_CREATOR( OBJECT)
+    _REFLECT_DECLARE_CREATOR( OBJECT )
 
 // defines a concrete object
 #define REFLECT_DEFINE_OBJECT( OBJECT ) \

@@ -4,6 +4,8 @@
 #include <wx/button.h>
 #include <wx/panel.h>
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ButtonWidget );
+
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -50,8 +52,6 @@ void ButtonWindow::SetLabel( const tstring& label )
 
     Layout();
 }
-
-REFLECT_DEFINE_OBJECT( ButtonWidget );
 
 ButtonWidget::ButtonWidget( Inspect::Button* button )
 : m_ButtonControl( button )

@@ -13,10 +13,10 @@
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/SceneVisitor.h"
 
+REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::HierarchyNode );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_ABSTRACT( SceneGraph::HierarchyNode );
 
 void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
 {
@@ -33,12 +33,12 @@ void HierarchyNode::PopulateComposite( Reflect::Composite& comp )
 
 void HierarchyNode::InitializeType()
 {
-    Reflect::RegisterClassType< SceneGraph::HierarchyNode >( TXT( "SceneGraph::HierarchyNode" ) );
+
 }
 
 void HierarchyNode::CleanupType()
 {
-    Reflect::UnregisterClassType< SceneGraph::HierarchyNode >();
+
 }
 
 HierarchyNode::HierarchyNode() 

@@ -1,10 +1,10 @@
 #include "SceneGraphPch.h"
 #include "SceneManifest.h"
 
+REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneManifest );
+
 using namespace Helium;
 using namespace Helium::SceneGraph;
-
-REFLECT_DEFINE_OBJECT(SceneManifest);
 
 void SceneManifest::PopulateComposite( Reflect::Composite& comp )
 {

@@ -2,10 +2,10 @@
 #include "ClipboardFileList.h"
 #include "Foundation/Container/Insert.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardFileList );
+
 using namespace Helium;
 using namespace Helium::Editor;
-
-REFLECT_DEFINE_OBJECT( ClipboardFileList );
 
 void ClipboardFileList::PopulateComposite( Reflect::Composite& comp )
 {

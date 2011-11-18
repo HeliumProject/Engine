@@ -127,9 +127,12 @@ namespace Helium
     /// Base class for the engine's game object system.
     class HELIUM_ENGINE_API GameObject : public Helium::Reflect::Object
     {
-        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object )
-
     public:
+        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object );
+
+        /// Pointer serialization override.
+        static const Reflect::Class** s_PointerDataClass;
+
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
 

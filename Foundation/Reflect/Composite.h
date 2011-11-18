@@ -248,7 +248,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetClass<PointerData>(),
+                    *ObjectT::s_PointerDataClass,
                     Reflect::GetClass<ObjectT>(),
                     flags );
             }
@@ -260,7 +260,7 @@ namespace Helium
                     name,
                     GetOffset(field),
                     sizeof(uintptr_t),
-                    Reflect::GetClass<PointerData>(),
+                    *ObjectT::s_PointerDataClass,
                     Reflect::GetClass<ObjectT>(),
                     flags );
             }

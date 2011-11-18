@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObject.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/GameObject.h"
 
@@ -13,10 +6,13 @@
 #include "Engine/Package.h"
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
+#include "Engine/GameObjectPointerData.h"
 
 REFLECT_DEFINE_OBJECT( Helium::GameObject )
 
 using namespace Helium;
+
+const Reflect::Class** GameObject::s_PointerDataClass = &GameObjectPointerData::s_Class;
 
 SparseArray< GameObjectWPtr > GameObject::sm_objects;
 GameObjectWPtr GameObject::sm_wpFirstTopLevelObject;

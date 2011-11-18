@@ -113,8 +113,12 @@ namespace Helium
             // Type checking
             //
 
+            // Reflection data
             static const Class* s_Class;
             static ClassRegistrar< Object, void > s_Registrar;
+
+            // Pointer serialization
+            static const Class** s_PointerDataClass;
 
             // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;

@@ -38,6 +38,7 @@ ObjectRefCountSupport::StaticData* ObjectRefCountSupport::sm_pStaticData = NULL;
 
 const Class* Object::s_Class = NULL;
 ClassRegistrar< Object, void > Object::s_Registrar( TXT("Object") );
+const Class** Object::s_PointerDataClass = &PointerData::s_Class;
 
 /// Retrieve a reference count proxy from the global pool.
 ///

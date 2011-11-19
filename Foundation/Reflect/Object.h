@@ -86,6 +86,8 @@ namespace Helium
         // Object is the abstract base class of a serializable class
         //
 
+        class PointerData;
+
         class HELIUM_FOUNDATION_API Object HELIUM_ABSTRACT : NonCopyable
         {
         protected:
@@ -118,7 +120,7 @@ namespace Helium
             static ClassRegistrar< Object, void > s_Registrar;
 
             // Pointer serialization
-            static const Class** s_PointerDataClass;
+            typedef PointerData PointerDataClass;
 
             // Retrieves the reflection data for this instance
             virtual const Reflect::Class* GetClass() const;
@@ -127,7 +129,7 @@ namespace Helium
             bool IsClass( const Reflect::Class* type ) const;
 
             // Create class data block for this type
-            static Reflect::Class* CreateClass();
+            static const Reflect::Class* CreateClass();
 
             // Enumerates member data (stub)
             static void PopulateComposite( Reflect::Composite& comp );
@@ -234,7 +236,7 @@ public: \
 typedef BASE Base; \
 typedef OBJECT This; \
 virtual const Helium::Reflect::Class* GetClass() const HELIUM_OVERRIDE; \
-static Helium::Reflect::Class* CreateClass(); \
+static const Helium::Reflect::Class* CreateClass(); \
 static const Helium::Reflect::Class* s_Class; \
 static Helium::Reflect::ClassRegistrar< OBJECT, BASE > s_Registrar;
 
@@ -245,13 +247,12 @@ const Helium::Reflect::Class* OBJECT::GetClass() const \
     return s_Class; \
 } \
 \
-Helium::Reflect::Class* OBJECT::CreateClass() \
+const Helium::Reflect::Class* OBJECT::CreateClass() \
 { \
     HELIUM_ASSERT( s_Class == NULL ); \
     HELIUM_ASSERT( OBJECT::Base::s_Class != NULL ); \
-    Helium::Reflect::Class* type = Helium::Reflect::Class::Create< OBJECT >( TXT( #OBJECT ), OBJECT::Base::s_Class->m_Name, CREATOR); \
-    s_Class = type; \
-    return type; \
+    Helium::Reflect::Class::Create< OBJECT >( s_Class, TXT( #OBJECT ), OBJECT::Base::s_Class->m_Name, CREATOR); \
+    return s_Class; \
 } \
 const Helium::Reflect::Class* OBJECT::s_Class = NULL; \
 Helium::Reflect::ClassRegistrar< OBJECT, OBJECT::Base > OBJECT::s_Registrar( TXT( #OBJECT ) );

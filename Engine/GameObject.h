@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Engine.h"
-#include "Foundation/Reflect/Object.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
@@ -9,7 +8,10 @@
 #include "Foundation/Container/SparseArray.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/Object.h"
+
 #include "Engine/GameObjectPath.h"
+#include "Engine/GameObjectPointerData.h"
 
 /// @defgroup objectmacros Common "GameObject"-class Macros
 //@{
@@ -131,7 +133,7 @@ namespace Helium
         REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object );
 
         /// Pointer serialization override.
-        static const Reflect::Class** s_PointerDataClass;
+        typedef GameObjectPointerData PointerDataClass;
 
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );

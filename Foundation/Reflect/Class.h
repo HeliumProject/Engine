@@ -31,32 +31,31 @@ namespace Helium
             static Class* Create();
 
             template< class ClassT >
-            static Class* Create( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator = NULL )
+            static void Create( Class const*& pointer, const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator = NULL )
             {
-                Class* info = Class::Create();
+                Class* type = Class::Create();
+                pointer = type;
 
                 // populate reflection information
-                Composite::Create< ClassT >( name, baseName, &ClassT::PopulateComposite, info );
+                Composite::Create< ClassT >( name, baseName, &ClassT::PopulateComposite, type );
 
                 // setup factory function
-                info->m_Creator = creator;
+                type->m_Creator = creator;
 
                 // fetch a potential default instance from the composite
-                ClassT* instance = static_cast< ClassT* >( info->Composite::m_Default );
+                ClassT* instance = static_cast< ClassT* >( type->Composite::m_Default );
                 if ( instance )
                 {
-                    info->m_Default = instance;
+                    type->m_Default = instance;
                 }
                 else
                 {
                     // create the default instance
-                    if ( info->m_Creator )
+                    if ( pointer->m_Creator )
                     {
-                        info->Composite::m_Default = info->m_Default = info->m_Creator();
+                        type->Composite::m_Default = type->m_Default = type->m_Creator();
                     }
                 }
-
-                return info;
             }
 
         public:
@@ -69,7 +68,7 @@ namespace Helium
 
         // Object, the most base class needs explicit implementation
         template<>
-        Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator );
+        void Class::Create< Object >( Class const*& pointer, const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator );
 
         template< class ClassT, class BaseT >
         class ClassRegistrar : public TypeRegistrar

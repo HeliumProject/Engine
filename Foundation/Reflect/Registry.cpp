@@ -157,7 +157,7 @@ Registry* Registry::GetInstance()
     return g_Registry;
 }
 
-bool Registry::RegisterType(Type* type)
+bool Registry::RegisterType(const Type* type)
 {
     HELIUM_ASSERT( IsMainThread() );
 

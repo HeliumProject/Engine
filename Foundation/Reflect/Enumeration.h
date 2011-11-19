@@ -29,16 +29,15 @@ namespace Helium
             ~Enumeration();
 
             template<class T>
-            static Enumeration* Create( const tchar_t* name )
+            static void Create( Enumeration const*& pointer, const tchar_t* name )
             {
-                Enumeration* info = new Enumeration();
+                Enumeration* type = new Enumeration();
+                pointer = type;
 
-                info->m_Size = sizeof(T);
-                info->m_Name = name;
+                type->m_Size = sizeof(T);
+                type->m_Name = name;
 
-                T::EnumerateEnum( *info );
-
-                return info;
+                T::EnumerateEnum( *type );
             }
 
             virtual void Register() const HELIUM_OVERRIDE;
@@ -91,18 +90,17 @@ ENUMERATION() : m_Value() {} \
 ENUMERATION( const ENUMERATION& e ) : m_Value( e.m_Value ) {} \
 ENUMERATION( const Enum& e ) : m_Value( e ) {} \
 operator const Enum&() const { return m_Value; } \
-static Helium::Reflect::Enumeration* CreateEnumeration(); \
+static const Helium::Reflect::Enumeration* CreateEnumeration(); \
 static const Helium::Reflect::Enumeration* s_Enumeration; \
 static Helium::Reflect::EnumerationRegistrar< ENUMERATION > s_Registrar;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_ENUMERATION( ENUMERATION ) \
-Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration() \
+const Helium::Reflect::Enumeration* ENUMERATION::CreateEnumeration() \
 { \
     HELIUM_ASSERT( s_Enumeration == NULL ); \
-    Reflect::Enumeration* type = Reflect::Enumeration::Create< ENUMERATION >( TXT( #ENUMERATION ) ); \
-    s_Enumeration = type; \
-    return type; \
+    Reflect::Enumeration::Create< ENUMERATION >( s_Enumeration, TXT( #ENUMERATION ) ); \
+    return s_Enumeration; \
 } \
 const Helium::Reflect::Enumeration* ENUMERATION::s_Enumeration = NULL; \
 Helium::Reflect::EnumerationRegistrar< ENUMERATION > ENUMERATION::s_Registrar( TXT( #ENUMERATION ) );

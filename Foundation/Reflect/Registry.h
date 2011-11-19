@@ -58,7 +58,7 @@ namespace Helium
             bool IsInitThread();
 
             // register type with registry with type id only
-            bool RegisterType( Type* type );
+            bool RegisterType( const Type* type );
             void UnregisterType( const Type* type );
 
             // give a type an alias (for legacy considerations)

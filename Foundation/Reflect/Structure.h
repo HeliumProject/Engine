@@ -135,17 +135,16 @@ namespace Helium
             static Structure* Create();
 
             template< class StructureT >
-            static Structure* Create( const tchar_t* name, const tchar_t* baseName )
+            static void Create( Structure const*& pointer, const tchar_t* name, const tchar_t* baseName )
             {
-                Structure* info = Structure::Create();
+                Structure* type = Structure::Create();
+                pointer = type;
 
                 // populate reflection information
-                Composite::Create< StructureT >( name, baseName, &StructureT::PopulateComposite, info );
+                Composite::Create< StructureT >( name, baseName, &StructureT::PopulateComposite, type );
 
-                info->m_Default = new StructureT;
-                info->m_DynArrayAdapter.Reset(new StructureDynArrayAdapter<StructureT>());
-
-                return info;
+                type->m_Default = new StructureT;
+                type->m_DynArrayAdapter.Reset(new StructureDynArrayAdapter<StructureT>());
             }
 
             Helium::AutoPtr<IStructureDynArrayAdapter> m_DynArrayAdapter;
@@ -179,7 +178,7 @@ namespace Helium
 #define _REFLECT_DECLARE_BASE_STRUCTURE( STRUCTURE ) \
 public: \
 typedef STRUCTURE This; \
-static Helium::Reflect::Structure* CreateStructure(); \
+static const Helium::Reflect::Structure* CreateStructure(); \
 static const Helium::Reflect::Structure* s_Structure; \
 static Helium::Reflect::StructureRegistrar< STRUCTURE, void > s_Registrar;
 
@@ -187,30 +186,28 @@ static Helium::Reflect::StructureRegistrar< STRUCTURE, void > s_Registrar;
 public: \
 typedef BASE Base; \
 typedef STRUCTURE This; \
-static Helium::Reflect::Structure* CreateStructure(); \
+static const Helium::Reflect::Structure* CreateStructure(); \
 static const Helium::Reflect::Structure* s_Structure; \
 static Helium::Reflect::StructureRegistrar< STRUCTURE, BASE > s_Registrar;
 
 // defines the static type info vars
 #define _REFLECT_DEFINE_BASE_STRUCTURE( STRUCTURE ) \
-Helium::Reflect::Structure* STRUCTURE::CreateStructure() \
+const Helium::Reflect::Structure* STRUCTURE::CreateStructure() \
 { \
     HELIUM_ASSERT( s_Structure == NULL ); \
-    Helium::Reflect::Structure* type = Helium::Reflect::Structure::Create<STRUCTURE>( TXT( #STRUCTURE ), NULL ); \
-    s_Structure = type; \
-    return type; \
+    Helium::Reflect::Structure::Create<STRUCTURE>( s_Structure, TXT( #STRUCTURE ), NULL ); \
+    return s_Structure; \
 } \
 const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL; \
 Helium::Reflect::StructureRegistrar< STRUCTURE, void > STRUCTURE::s_Registrar( TXT( #STRUCTURE ) );
 
 #define _REFLECT_DEFINE_DERIVED_STRUCTURE( STRUCTURE ) \
-Helium::Reflect::Structure* STRUCTURE::CreateStructure() \
+const Helium::Reflect::Structure* STRUCTURE::CreateStructure() \
 { \
     HELIUM_ASSERT( s_Structure == NULL ); \
     HELIUM_ASSERT( STRUCTURE::Base::s_Structure != NULL ); \
-    Helium::Reflect::Structure* type = Helium::Reflect::Structure::Create<STRUCTURE>( TXT( #STRUCTURE ), STRUCTURE::Base::s_Structure->m_Name ); \
-    s_Structure = type; \
-    return type; \
+    Helium::Reflect::Structure::Create<STRUCTURE>( s_Structure, TXT( #STRUCTURE ), STRUCTURE::Base::s_Structure->m_Name ); \
+    return s_Structure; \
 } \
 const Helium::Reflect::Structure* STRUCTURE::s_Structure = NULL; \
 Helium::Reflect::StructureRegistrar< STRUCTURE, BASE > STRUCTURE::s_Registrar( TXT( #STRUCTURE ) );

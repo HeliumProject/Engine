@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Math/Axes.h"
-#include "Math/FpuVector3.h"
+#include "Foundation/Math/Axes.h"
+#include "Foundation/Math/FpuVector3.h"
 
 namespace Helium
 {

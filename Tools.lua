@@ -27,7 +27,6 @@ project( prefix .. "Image" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			"nvtt",
 			"tiff",
@@ -49,7 +48,6 @@ project( prefix .. "SceneGraph" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -92,7 +90,6 @@ project( prefix .. "Editor" )
 	links
 	{
 		prefix .. "Platform",
-		prefix .. "Math",
 		prefix .. "Foundation",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",

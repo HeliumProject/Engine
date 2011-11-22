@@ -11,9 +11,9 @@
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
-#include "Math/SimdAaBox.h"
-#include "Math/SimdMatrix44.h"
-#include "Math/SimdSphere.h"
+#include "Foundation/Math/SimdAaBox.h"
+#include "Foundation/Math/SimdMatrix44.h"
+#include "Foundation/Math/SimdSphere.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"

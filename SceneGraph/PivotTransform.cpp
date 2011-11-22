@@ -1,9 +1,10 @@
 #include "SceneGraphPch.h"
 #include "PivotTransform.h"
 
-#include "Math/FpuEulerAngles.h"
-#include "Math/Axes.h"
+#include "Foundation/Math/FpuEulerAngles.h"
+#include "Foundation/Math/Axes.h"
 #include "Foundation/Undo/UndoCommand.h"
+
 #include "SceneGraph/Scene.h"
 
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::PivotTransform );

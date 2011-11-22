@@ -1089,34 +1089,32 @@ namespace Helium
         {
         }
 
-        virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
+        virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
         {
-            if ( field->m_DataClass == Reflect::GetClass< GameObjectPointerData >() )
+            if (_pointer.HasLinkIndex())
             {
-                Reflect::DataPtr go_data_untyped = field->CreateData( instance );
-                GameObjectPointerData *go_data = Reflect::AssertCast<GameObjectPointerData>(go_data_untyped.Get());
-                if (go_data && go_data->m_Data->HasLinkIndex())
-                {
-                    size_t link_index = go_data->m_Data->GetLinkIndex();
-                        ArchivePackageLoader::LinkEntry *entry = m_LinkTable.New();
-                        HELIUM_ASSERT(entry);
+                size_t link_index = _pointer.GetLinkIndex();
+                ArchivePackageLoader::LinkEntry *entry = m_LinkTable.New();
+                HELIUM_ASSERT(entry);
 
-                    // Extract the load request Id from the link index, then point
-                    // the link index against our sequential list of load requests. The prior
-                    // implementation would have serializer code directly add link entries
-                    // which included a path (so one request per path.) It's much more awkward
-                    // for us to do that, but if we don't worry about duplicate requests this
-                    // is a pretty straightforward method
-                    entry->loadRequestId = link_index;
-                    go_data->m_Data->SetLinkIndex(static_cast<uint32_t>(m_LinkTable.GetSize() - 1));
-                }
+                // Extract the load request Id from the link index, then point
+                // the link index against our sequential list of load requests. The prior
+                // implementation would have serializer code directly add link entries
+                // which included a path (so one request per path.) It's much more awkward
+                // for us to do that, but if we don't worry about duplicate requests this
+                // is a pretty straightforward method
+                entry->loadRequestId = link_index;
+                _pointer.SetLinkIndex(static_cast<uint32_t>(m_LinkTable.GetSize() - 1));
+
+                return false;
             }
 
-            // We never want to visit fields because
-            // - The data we need can be found by just looking at the field and data
-            // - In this case, the game object pointers are link indices so we will crash if we try
-            //   to visit them
-            return false;
+            return true;
+        }
+
+        virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
+        {
+            return true;
         }
     };
 }

@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/Camera.h"
 
-#include "Math/SimdVectorConversion.h"
+#include "Foundation/Math/SimdVectorConversion.h"
 
 using namespace Helium;
 

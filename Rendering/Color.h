@@ -10,7 +10,7 @@
 #define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
-#include "Math/Common.h"
+#include "Foundation/Math/Common.h"
 
 #include "Foundation/Reflect/Data/SimpleData.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"

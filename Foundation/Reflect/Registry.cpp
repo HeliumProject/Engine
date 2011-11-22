@@ -8,6 +8,12 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/DOM.h"
 
+#include "Foundation/Math/SimdVector2.h"
+#include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Math/SimdVector4.h"
+#include "Foundation/Math/SimdAaBox.h"
+#include "Foundation/Math/SimdMatrix44.h"
+
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
 

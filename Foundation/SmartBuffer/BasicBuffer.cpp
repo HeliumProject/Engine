@@ -3,9 +3,9 @@
 
 #include "Platform/Exception.h"
 
-#include "Math/Float16.h"
-#include "Math/FpuVector3.h"
-#include "Math/FpuVector4.h"
+#include "Foundation/Math/Float16.h"
+#include "Foundation/Math/FpuVector3.h"
+#include "Foundation/Math/FpuVector4.h"
 
 #include "Foundation/Log.h"
 

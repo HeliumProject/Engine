@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/FpuColor3.h"
+#include "Foundation/Math/FpuColor3.h"
 
 #include "Foundation/SettingsManager.h"
 

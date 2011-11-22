@@ -16,7 +16,7 @@ namespace Helium
     /// @see GetSectionVertexCount(), GetSectionTriangleCount(), GetSectionSkinningPaletteMap()
     size_t Mesh::GetSectionCount() const
     {
-        return m_sectionTriangleCounts.GetSize();
+        return m_persistentResourceData.m_sectionTriangleCounts.GetSize();
     }
 
     /// Get the number of vertices addressed by a specific mesh section.
@@ -31,9 +31,9 @@ namespace Helium
     /// @see GetSectionTriangleCount(), GetSectionSkinningPaletteMap(), GetSectionCount()
     uint32_t Mesh::GetSectionVertexCount( size_t sectionIndex ) const
     {
-        HELIUM_ASSERT( sectionIndex < m_sectionVertexCounts.GetSize() );
+        HELIUM_ASSERT( sectionIndex < m_persistentResourceData.m_sectionVertexCounts.GetSize() );
 
-        return m_sectionVertexCounts[ sectionIndex ];
+        return m_persistentResourceData.m_sectionVertexCounts[ sectionIndex ];
     }
 
     /// Get the number of triangles in a specific mesh section.
@@ -48,9 +48,9 @@ namespace Helium
     /// @see GetSectionVertexCount(), GetSectionSkinningPaletteMap(), GetSectionCount()
     uint32_t Mesh::GetSectionTriangleCount( size_t sectionIndex ) const
     {
-        HELIUM_ASSERT( sectionIndex < m_sectionTriangleCounts.GetSize() );
+        HELIUM_ASSERT( sectionIndex <m_persistentResourceData. m_sectionTriangleCounts.GetSize() );
 
-        return m_sectionTriangleCounts[ sectionIndex ];
+        return m_persistentResourceData.m_sectionTriangleCounts[ sectionIndex ];
     }
 
     /// Get whether this mesh is a skinned mesh.
@@ -61,7 +61,7 @@ namespace Helium
 #if HELIUM_USE_GRANNY_ANIMATION
         return m_grannyData.IsSkinned();
 #else
-        return ( m_boneCount != 0 );
+        return ( m_persistentResourceData.m_boneCount != 0 );
 #endif
     }
 
@@ -84,7 +84,7 @@ namespace Helium
     /// @see IsSkinned()
     uint8_t Mesh::GetBoneCount() const
     {
-        return m_boneCount;
+        return m_persistentResourceData.m_boneCount;
     }
 
     /// Get the array of bone names for this mesh.
@@ -92,7 +92,12 @@ namespace Helium
     /// @return  Pointer to the bone name array, or null if this mesh is not a skinned mesh.
     const Name* Mesh::GetBoneNames() const
     {
-        return m_pBoneNames;
+        if (m_persistentResourceData.m_pBoneNames.IsEmpty())
+        {
+            return NULL;
+        }
+
+        return m_persistentResourceData.m_pBoneNames.GetData();
     }
 
     /// Get the array containing the indices of the parent bone for each bone.
@@ -100,15 +105,25 @@ namespace Helium
     /// @return  Pointer to the parent bone index array, or null if this mesh is not a skinned mesh.
     const uint8_t* Mesh::GetParentBoneIndices() const
     {
-        return m_pParentBoneIndices;
+        if (m_persistentResourceData.m_pParentBoneIndices.IsEmpty())
+        {
+            return NULL;
+        }
+
+        return m_persistentResourceData.m_pParentBoneIndices.GetData();
     }
 
     /// Get the array of reference pose bone transforms for this mesh.
     ///
     /// @return  Pointer to the array of reference pose bone transforms, or null if this mesh is not a skinned mesh.
     const Simd::Matrix44* Mesh::GetReferencePose() const
-    {
-        return m_pReferencePose;
+    {        
+        if (m_persistentResourceData.m_pReferencePose.IsEmpty())
+        {
+            return NULL;
+        }
+
+        return m_persistentResourceData.m_pReferencePose.GetData();
     }
 
 #endif  // HELIUM_USE_GRANNY_ANIMATION
@@ -142,7 +157,7 @@ namespace Helium
     /// @see GetTriangleCount()
     uint32_t Mesh::GetVertexCount() const
     {
-        return m_vertexCount;
+        return m_persistentResourceData.m_vertexCount;
     }
 
     /// Get the number of triangles in this mesh.
@@ -152,7 +167,7 @@ namespace Helium
     /// @see GetVertexCount()
     uint32_t Mesh::GetTriangleCount() const
     {
-        return m_triangleCount;
+        return m_persistentResourceData.m_triangleCount;
     }
 
     /// Get the bounds of this mesh.
@@ -160,7 +175,7 @@ namespace Helium
     /// @return  Axis-aligned bounding box encompassing this mesh.
     const Simd::AaBox& Mesh::GetBounds() const
     {
-        return m_bounds;
+        return m_persistentResourceData.m_bounds;
     }
 
     /// Get the vertex buffer for this mesh.

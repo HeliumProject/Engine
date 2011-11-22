@@ -11,7 +11,7 @@
 #include "SceneGraph/Scene.h"
 #include "SceneSettings.h"
 
-#include "Math/FpuAngleAxis.h"
+#include "Foundation/Math/FpuAngleAxis.h"
 
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::RotateManipulator );
 

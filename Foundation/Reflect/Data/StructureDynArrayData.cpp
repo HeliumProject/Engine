@@ -203,7 +203,7 @@ bool StructureDynArrayData::Equals( Object* object )
 void StructureDynArrayData::Accept( Visitor& visitor )
 {
     const Structure *structure = GetInternalStructure();
-    structure->m_DynArrayAdapter->Accept(structure, m_Instance, visitor);
+    structure->m_DynArrayAdapter->Accept(structure, GetInternalPtr(structure), visitor);
 }
 
 void StructureDynArrayData::Serialize( ArchiveBinary& archive )

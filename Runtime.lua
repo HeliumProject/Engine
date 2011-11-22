@@ -33,7 +33,6 @@ project( prefix .. "ExampleGame" )
 		links
 		{
 			prefix .. "Platform",
-			prefix .. "Math",
 			prefix .. "Foundation",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
@@ -63,7 +62,6 @@ project( prefix .. "ExampleMain" )
 	links
 	{
 		prefix .. "Platform",
-		prefix .. "Math",
 		prefix .. "Foundation",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",

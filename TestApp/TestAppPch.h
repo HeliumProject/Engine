@@ -49,6 +49,7 @@
 #include "Framework/StaticMeshEntity.h"
 #include "Framework/World.h"
 #include "Framework/WorldManager.h"
+#include "Framework/FrameworkCustomTypeRegistration.h"
 #include "RenderingD3D9/D3D9Renderer.h"
 
 #if HELIUM_TOOLS

@@ -8,6 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/ObjectTypeRegistration.h"
 #include "Graphics/GraphicsCustomTypeRegistration.h"
+#include "Framework/FrameworkCustomTypeRegistration.h"
 
 // Type registration functions.
 extern void RegisterEngineTypes();
@@ -33,6 +34,7 @@ void ObjectTypeRegistration::Register()
     RegisterEngineTypes();
     PreRegisterGraphicsTypes();
     RegisterGraphicsTypes();
+    PreRegisterFrameworkTypes();
     RegisterFrameworkTypes();
 }
 
@@ -42,6 +44,7 @@ void ObjectTypeRegistration::Register()
 void ObjectTypeRegistration::Unregister()
 {
     UnregisterFrameworkTypes();
+    PostRegisterFrameworkTypes();
     UnregisterGraphicsTypes();
     PostRegisterGraphicsTypes();
     UnregisterEngineTypes();

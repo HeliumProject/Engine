@@ -2,6 +2,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Reflect/Structure.h"
 
 namespace Helium
 {
@@ -13,6 +14,12 @@ namespace Helium
         HELIUM_ALIGN_PRE( 16 ) class HELIUM_FOUNDATION_API AaBox
         {
         public:
+            REFLECT_DECLARE_BASE_STRUCTURE(AaBox);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator== (const AaBox& rhs) const;
+            inline bool operator!= (const AaBox& rhs) const;
+
             /// @name Construction/Destruction
             //@{
             AaBox();

@@ -8,6 +8,12 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Reflect/DOM.h"
 
+#include "Foundation/Math/SimdVector2.h"
+#include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Math/SimdVector4.h"
+#include "Foundation/Math/SimdAaBox.h"
+#include "Foundation/Math/SimdMatrix44.h"
+
 #include "Platform/Atomic.h"
 #include "Platform/Thread.h"
 
@@ -311,6 +317,12 @@ void Reflect::Initialize()
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<Int64ObjectSortedMapData>( TXT( "Int64ObjectSortedMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<GUIDObjectSortedMapData>( TXT( "GUIDObjectSortedMap" ) ) );
         g_Registry->m_InitializerStack.Push( Reflect::RegisterClassType<TUIDObjectSortedMapData>( TXT( "TUIDObjectSortedMap" ) ) );
+        
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterStructureType<Helium::Simd::Matrix44>( TXT( "Simd::Matrix44" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterStructureType<Helium::Simd::Vector2>( TXT( "Simd::Vector2" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterStructureType<Helium::Simd::Vector3>( TXT( "Simd::Vector3" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterStructureType<Helium::Simd::Vector4>( TXT( "Simd::Vector4" ) ) );
+        g_Registry->m_InitializerStack.Push( Reflect::RegisterStructureType<Helium::Simd::AaBox>( TXT( "Simd::AaBox" ) ) );
 
         //
         // Build Casting Table

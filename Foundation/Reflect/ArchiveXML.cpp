@@ -16,6 +16,8 @@ using namespace Helium::Reflect;
 
 const uint32_t ArchiveXML::CURRENT_VERSION = 4;
 
+#define REFLECT_ARCHIVE_VERBOSE
+
 #pragma TODO("Structures still have an extra <Object Type=\"StructureType\">, eliminate that with removing the type check for Data")
 
 class StlVectorPusher : NonCopyable

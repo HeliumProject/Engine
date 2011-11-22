@@ -16,6 +16,9 @@ namespace Helium
         public:
             /// Identity matrix.
             static const Matrix44 IDENTITY;
+            
+            REFLECT_DECLARE_BASE_STRUCTURE(Matrix44);
+            static void PopulateComposite( Reflect::Composite& comp );
 
             /// Rotation matrix initialization identifier.
             enum EInitRotation
@@ -216,16 +219,25 @@ namespace Helium
             //@}
 
         private:
+            union {
 #if HELIUM_SIMD_SIZE == 16
-            /// SIMD vectors containing the matrix values.
-            Register m_matrix[ 4 ];
+                /// SIMD vectors containing the matrix values.
+                Register m_matrix[ 4 ];
 #elif HELIUM_SIMD_SIZE == 64
-            /// SIMD vector containing the matrix values.
-            Register m_matrix;
+                /// SIMD vector containing the matrix values.
+                Register m_matrix;
 #else
-            /// Matrix values.
-            float32_t m_matrix[ 4 ][ 4 ];
+                /// Matrix values.
+                float32_t m_matrix[ 4 ][ 4 ];
 #endif
+                struct 
+                {
+                    float32_t m_m00; float32_t m_m01; float32_t m_m02; float32_t m_m03; 
+                    float32_t m_m10; float32_t m_m11; float32_t m_m12; float32_t m_m13; 
+                    float32_t m_m20; float32_t m_m21; float32_t m_m22; float32_t m_m23; 
+                    float32_t m_m30; float32_t m_m31; float32_t m_m32; float32_t m_m33; 
+                };
+            };
         } HELIUM_SIMD_ALIGN_POST;
     }
 }

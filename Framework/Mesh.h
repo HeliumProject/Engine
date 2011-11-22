@@ -11,6 +11,7 @@
 
 #include "Framework/Framework.h"
 #include "Engine/Resource.h"
+#include "Foundation/Math/SimdMatrix44.h"
 
 #include "Foundation/Math/SimdAaBox.h"
 #include "GraphicsTypes/GraphicsTypes.h"
@@ -36,6 +37,7 @@ namespace Helium
     class HELIUM_FRAMEWORK_API Mesh : public Resource
     {
         HELIUM_DECLARE_OBJECT( Mesh, Resource );
+        static void PopulateComposite( Reflect::Composite& comp );
 
     public:
 

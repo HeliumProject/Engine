@@ -1,11 +1,35 @@
 #include "FoundationPch.h"
 #include "Foundation/Math/SimdMatrix44.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Simd::Matrix44 );
 
 const Helium::Simd::Matrix44 Helium::Simd::Matrix44::IDENTITY(
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f );
+
+void Helium::Simd::Matrix44::PopulateComposite( Reflect::Composite& comp )
+{
+#pragma TODO("Support static arrays in reflect")
+    comp.AddField( &Matrix44::m_m00,       TXT( "m_m00" ) );
+    comp.AddField( &Matrix44::m_m01,       TXT( "m_m01" ) );
+    comp.AddField( &Matrix44::m_m02,       TXT( "m_m02" ) );
+    comp.AddField( &Matrix44::m_m03,       TXT( "m_m03" ) );
+    comp.AddField( &Matrix44::m_m10,       TXT( "m_m10" ) );
+    comp.AddField( &Matrix44::m_m11,       TXT( "m_m11" ) );
+    comp.AddField( &Matrix44::m_m12,       TXT( "m_m12" ) );
+    comp.AddField( &Matrix44::m_m13,       TXT( "m_m13" ) );
+    comp.AddField( &Matrix44::m_m20,       TXT( "m_m20" ) );
+    comp.AddField( &Matrix44::m_m21,       TXT( "m_m21" ) );
+    comp.AddField( &Matrix44::m_m22,       TXT( "m_m22" ) );
+    comp.AddField( &Matrix44::m_m23,       TXT( "m_m23" ) );
+    comp.AddField( &Matrix44::m_m30,       TXT( "m_m30" ) );
+    comp.AddField( &Matrix44::m_m31,       TXT( "m_m31" ) );
+    comp.AddField( &Matrix44::m_m32,       TXT( "m_m32" ) );
+    comp.AddField( &Matrix44::m_m33,       TXT( "m_m33" ) );
+}
 
 /// Set this matrix to a perspective projection matrix.
 ///

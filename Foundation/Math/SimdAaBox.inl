@@ -17,3 +17,14 @@ const Helium::Simd::Vector3& Helium::Simd::AaBox::GetMaximum() const
 {
     return m_maximum;
 }
+
+bool Helium::Simd::AaBox::operator==( const Helium::Simd::AaBox& rhs ) const
+{
+    return (m_minimum == rhs.m_minimum && 
+        m_maximum == rhs.m_maximum);
+}
+
+bool Helium::Simd::AaBox::operator!=( const Helium::Simd::AaBox& rhs ) const
+{
+    return !(*this == rhs);
+}

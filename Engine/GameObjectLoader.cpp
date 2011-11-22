@@ -506,73 +506,74 @@ namespace Helium
         virtual ~PopulateObjectFromLinkTable()
         {
         }
+        
+        virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
+        {
+            if (_pointer.HasLinkIndex())
+            {
+                size_t link_index = _pointer.GetLinkIndex();
+                _pointer.ClearLinkIndex();
+
+                if( link_index >= m_LinkTable.GetSize() )
+                {
+                    HELIUM_TRACE(
+                        TRACE_ERROR,
+                        TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+                        link_index );
+
+                    m_bError = true;
+
+                    return false;
+                }
+
+                GameObject* pObject = m_LinkTable[ link_index ].spObject;
+                if( pObject )
+                {
+//                     HELIUM_ASSERT(field->m_Type->HasReflectionType(Reflect::ReflectionTypes::GameObjectType));
+//                     const GameObjectType *go_type = static_cast<const GameObjectType *>(field->m_Type);
+//                     if( !pObject->IsClass( go_type ) )
+//                     {
+//                         HELIUM_TRACE(
+//                             TRACE_ERROR,
+//                             TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
+//                             *pObject->GetPath().ToString(),
+//                             *go_type->GetName() );
+// 
+//                         m_bError = true;
+//                     }
+//                     else
+//                     {
+////                             if (field->m_Flags & Reflect::FieldFlags::Share)
+////                             {
+                            _pointer.Set(pObject);
+////                             }
+////                             else
+////                             {
+////                                 GameObjectPtr new_object_ptr;
+////                                 bool success = GameObject::CreateObject(new_object_ptr, pObject->GetGameObjectType(), pObject->GetName(), &m_Owner, pObject, true);
+//// 
+////                                 if (!success)
+////                                 {
+////                                     HELIUM_TRACE(
+////                                         TRACE_ERROR,
+////                                         TXT( "GameObjectLoader: Could not create GameObject for non-shared GameObject reference \"%s\" .\n" ),
+////                                         *pObject->GetPath().ToString());
+//// 
+////                                     m_bError = true;
+////                                 }
+//// 
+////                                 go_data->m_Data->Set(new_object_ptr);
+////                             }
+//                    }
+                }
+            }
+
+            return true;
+        }
 
         virtual bool VisitField(void* instance, const Reflect::Field* field) HELIUM_OVERRIDE
         {
-            if ( field->m_DataClass == Reflect::GetClass< GameObjectPointerData >() )
-            {
-                Reflect::DataPtr go_data_untyped = field->CreateData( instance );
-                GameObjectPointerData *go_data = Reflect::AssertCast<GameObjectPointerData>(go_data_untyped.Get());
-
-                if (go_data && go_data->m_Data->HasLinkIndex())
-                {
-                    size_t link_index = go_data->m_Data->GetLinkIndex();
-                    go_data->m_Data->ClearLinkIndex();
-                    if( link_index >= m_LinkTable.GetSize() )
-                    {
-                        HELIUM_TRACE(
-                            TRACE_ERROR,
-                            TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-                            link_index );
-
-                        m_bError = true;
-
-                        return false;
-                    }
-
-                    GameObject* pObject = m_LinkTable[ link_index ].spObject;
-                    if( pObject )
-                    {
-                        HELIUM_ASSERT(field->m_Type->HasReflectionType(Reflect::ReflectionTypes::GameObjectType));
-                        const GameObjectType *go_type = static_cast<const GameObjectType *>(field->m_Type);
-                        if( !pObject->IsClass( go_type ) )
-                        {
-                            HELIUM_TRACE(
-                                TRACE_ERROR,
-                                TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
-                                *pObject->GetPath().ToString(),
-                                *go_type->GetName() );
-
-                            m_bError = true;
-                        }
-                        else
-                        {
-//                             if (field->m_Flags & Reflect::FieldFlags::Share)
-//                             {
-                                go_data->m_Data->Set(pObject);
-//                             }
-//                             else
-//                             {
-//                                 GameObjectPtr new_object_ptr;
-//                                 bool success = GameObject::CreateObject(new_object_ptr, pObject->GetGameObjectType(), pObject->GetName(), &m_Owner, pObject, true);
-// 
-//                                 if (!success)
-//                                 {
-//                                     HELIUM_TRACE(
-//                                         TRACE_ERROR,
-//                                         TXT( "GameObjectLoader: Could not create GameObject for non-shared GameObject reference \"%s\" .\n" ),
-//                                         *pObject->GetPath().ToString());
-// 
-//                                     m_bError = true;
-//                                 }
-// 
-//                                 go_data->m_Data->Set(new_object_ptr);
-//                             }
-                        }
-                    }
-                }
-            }
-            return false;
+            return true;
         }
     };
 }

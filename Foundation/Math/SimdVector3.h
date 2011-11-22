@@ -4,6 +4,7 @@
 #include "Foundation/Math/Common.h"
 #include "Foundation/Math/Simd.h"
 #include "Platform/Utility.h"
+#include "Foundation/Reflect/Structure.h"
 
 namespace Helium
 {
@@ -14,6 +15,9 @@ namespace Helium
         HELIUM_ALIGN_PRE( 16 ) class HELIUM_FOUNDATION_API Vector3
         {
         public:
+            REFLECT_DECLARE_BASE_STRUCTURE(Vector3);
+            static void PopulateComposite( Reflect::Composite& comp );
+
             /// @name Construction/Destruction
             //@{
             inline Vector3();
@@ -103,13 +107,28 @@ namespace Helium
             //@}
 
         private:
+
+            union
+            {
+                
 #if HELIUM_SIMD_SIZE == 16
-            /// SIMD vector containing the vector values.
-            Register m_vector;
+                /// SIMD vector containing the vector values.
+                Register m_vector;
 #else
-            /// Vector values.
-            float32_t m_vector[ 4 ];
+                /// Vector values.
+                float32_t m_vector[ 4 ];
 #endif
+                /// Vector values.
+                float32_t m_vectorAsFloatArray[ 4 ];
+                struct 
+                {
+                    float32_t m_x;
+                    float32_t m_y;
+                    float32_t m_z;
+                    float32_t m_w;
+                };
+            };
+
         } HELIUM_ALIGN_POST( 16 );
     }
 }

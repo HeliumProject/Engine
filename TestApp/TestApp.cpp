@@ -89,6 +89,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     RegisterEngineTypes();
     PreRegisterGraphicsTypes();
     RegisterGraphicsTypes();
+    PreRegisterFrameworkTypes();
     RegisterFrameworkTypes();
     RegisterPcSupportTypes();
 #if HELIUM_TOOLS
@@ -1671,8 +1672,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     UnregisterPcSupportTypes();
     UnregisterFrameworkTypes();
-    PostRegisterGraphicsTypes();
+    PostRegisterFrameworkTypes();
     UnregisterGraphicsTypes();
+    PostRegisterGraphicsTypes();
     UnregisterEngineTypes();
 
     GameObjectType::Shutdown();

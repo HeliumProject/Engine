@@ -14,6 +14,7 @@
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
+#include "Foundation/Reflect/Data/ObjectDynArrayData.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
@@ -66,6 +67,11 @@ void Mesh::PreDestroy()
 //
 //    s << HELIUM_TAGGED_DYNARRAY( m_materials );
 //}
+
+void Mesh::PopulateComposite(Reflect::Composite& comp)
+{
+    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynArrayData>());
+}
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
 bool Mesh::NeedsPrecacheResourceData() const
@@ -258,7 +264,7 @@ void Mesh::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &PersistentResourceData::m_boneCount,            TXT( "m_boneCount" ) );
     comp.AddField( &PersistentResourceData::m_pBoneNames,            TXT( "m_pBoneNames" ) );
     comp.AddField( &PersistentResourceData::m_pParentBoneIndices,            TXT( "m_pParentBoneIndices" ) );
-    comp.AddField( &PersistentResourceData::m_pReferencePose,            TXT( "m_pReferencePose" ) );
+    comp.AddStructureField( &PersistentResourceData::m_pReferencePose,            TXT( "m_pReferencePose" ) );
 #endif
 }
 
@@ -326,6 +332,8 @@ bool Helium::Mesh::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
     }
 
     _object->CopyTo(&m_persistentResourceData);
+
+    return true;
 }
 
 /// @copydoc Resource::GetCacheName()

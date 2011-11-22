@@ -2,6 +2,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Math/Common.h"
+#include "Foundation/Reflect/Structure.h"
 
 namespace Helium
 {
@@ -12,6 +13,9 @@ namespace Helium
         class HELIUM_FOUNDATION_API Vector2
         {
         public:
+            REFLECT_DECLARE_BASE_STRUCTURE(Vector2);
+            static void PopulateComposite( Reflect::Composite& comp );
+
             /// @name Construction/Destruction
             //@{
             inline Vector2();
@@ -99,7 +103,15 @@ namespace Helium
 
         private:
             /// Vector values.
-            float32_t m_vector[ 2 ];
+            union
+            {
+                float32_t m_vector[ 2 ];
+                struct
+                {
+                    float32_t m_x;
+                    float32_t m_y;
+                };
+            };
         };
     }
 }

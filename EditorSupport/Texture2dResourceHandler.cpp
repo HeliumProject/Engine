@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture2dResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -27,9 +20,9 @@
 
 #include <nvtt/nvtt.h>
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture2dResourceHandler, EditorSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Texture2dResourceHandler, EditorSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 Texture2dResourceHandler::Texture2dResourceHandler()

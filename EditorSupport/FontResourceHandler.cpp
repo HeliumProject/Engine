@@ -16,6 +16,8 @@
 
 #include <nvtt/nvtt.h>
 
+HELIUM_IMPLEMENT_OBJECT( Helium::FontResourceHandler, EditorSupport, 0 );
+
 using namespace Helium;
 
 /// Maximum Unicode code point value.
@@ -127,8 +129,6 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
 
 /// FreeType memory management routines.
 static FT_MemoryRec_ s_freeTypeMemory = { NULL, FreeTypeAllocate, FreeTypeFree, FreeTypeReallocate };
-
-HELIUM_IMPLEMENT_OBJECT( FontResourceHandler, EditorSupport, 0 );
 
 FT_Library FontResourceHandler::sm_pLibrary = NULL;
 

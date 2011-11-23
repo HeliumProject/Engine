@@ -30,6 +30,8 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Graphics/Texture.h"
 
+HELIUM_IMPLEMENT_OBJECT( Helium::GraphicsScene, Graphics, 0 );
+
 using namespace Helium;
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
@@ -40,8 +42,6 @@ namespace Helium
 {
     HELIUM_DECLARE_RPTR( RRenderCommandProxy );
 }
-
-HELIUM_IMPLEMENT_OBJECT( GraphicsScene, Graphics, 0 );
 
 /// Constructor.
 GraphicsScene::GraphicsScene()

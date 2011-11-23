@@ -1,16 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "PcSupportPch.h"
 #include "PcSupport/ResourceHandler.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::ResourceHandler, PcSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 ResourceHandler::ResourceHandler()

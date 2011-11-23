@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Mesh.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Mesh.h"
 
@@ -21,9 +14,10 @@
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+REFLECT_DEFINE_OBJECT( Helium::Mesh::PersistentResourceData );
 
-HELIUM_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Mesh::Mesh()
@@ -238,9 +232,6 @@ bool Mesh::TryFinishPrecacheResourceData()
 
     return true;
 }
-
-
-REFLECT_DEFINE_OBJECT( Mesh::PersistentResourceData );
 
 Mesh::PersistentResourceData::PersistentResourceData()
 : m_vertexCount( 0 )

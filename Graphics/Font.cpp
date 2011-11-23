@@ -6,13 +6,12 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+HELIUM_IMPLEMENT_OBJECT( Helium::Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
+REFLECT_DEFINE_ENUMERATION( Helium::Font::ECompression );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Font::Character );
+REFLECT_DEFINE_OBJECT( Helium::Font::PersistentResourceData );
+
 using namespace Helium;
-
-REFLECT_DEFINE_ENUMERATION( Font::ECompression );
-
-HELIUM_IMPLEMENT_OBJECT( Font, Graphics, 0 );  // We allow templating of fonts to generate resources for different font sizes.
-
-REFLECT_DEFINE_BASE_STRUCTURE( Font::Character );
 
 void Font::Character::PopulateComposite( Reflect::Composite& comp )
 {
@@ -28,9 +27,6 @@ void Font::Character::PopulateComposite( Reflect::Composite& comp )
     comp.AddField( &Character::advance,         TXT( "advance" ) );
     comp.AddField( &Character::texture,         TXT( "texture" ) );
 }
-
-
-REFLECT_DEFINE_OBJECT( Font::PersistentResourceData );
 
 Font::PersistentResourceData::PersistentResourceData()
 : m_ascender( 0 )

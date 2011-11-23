@@ -1,18 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Layer.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Layer.h"
 
 #include "Framework/World.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Layer, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Layer, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 Layer::Layer()

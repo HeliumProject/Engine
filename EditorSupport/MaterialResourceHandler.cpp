@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MaterialResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -17,9 +10,9 @@
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::MaterialResourceHandler, EditorSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( MaterialResourceHandler, EditorSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 MaterialResourceHandler::MaterialResourceHandler()

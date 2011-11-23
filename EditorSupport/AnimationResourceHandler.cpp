@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// AnimationResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -23,9 +16,9 @@
 #include "EditorSupport/GrannyStreamWriter.h"
 #endif
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::AnimationResourceHandler, EditorSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( AnimationResourceHandler, EditorSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 AnimationResourceHandler::AnimationResourceHandler()

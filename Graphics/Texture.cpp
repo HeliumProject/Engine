@@ -1,19 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Texture.h"
 
 #include "Rendering/RTexture.h"
 
-using namespace Helium;
+REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 
-REFLECT_DEFINE_ENUMERATION( Texture::ECompression );
-HELIUM_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Texture::Texture()

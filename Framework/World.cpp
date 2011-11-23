@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// World.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/World.h"
 
@@ -20,9 +13,9 @@ namespace Helium
     HELIUM_DECLARE_PTR( World );
 }
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::World, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( World, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 World::World()

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Material.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Material.h"
 
@@ -15,9 +8,15 @@
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Engine/GameObjectPointerData.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, 0 );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float3Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float4Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::TextureParameter );
+REFLECT_DEFINE_OBJECT( Helium::Material::PersistentResourceData );
 
-HELIUM_IMPLEMENT_OBJECT( Material, Graphics, 0 );
+using namespace Helium;
 
 /// Constructor.
 Material::Material()
@@ -747,43 +746,36 @@ void Material::SynchronizeShaderParameters()
 }
 #endif  // HELIUM_TOOLS
 
-REFLECT_DEFINE_BASE_STRUCTURE( Material::Float1Parameter );
 void Material::Float1Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float1Parameter::name,           TXT( "name" ) );
     comp.AddField( &Material::Float1Parameter::value,          TXT( "value" ) );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
 void Material::Float2Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float2Parameter::name,           TXT( "name" ) );
     comp.AddStructureField( &Material::Float2Parameter::value,          TXT( "value" ) );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Material::Float3Parameter );
 void Material::Float3Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float3Parameter::name,           TXT( "name" ) );
     comp.AddStructureField( &Material::Float3Parameter::value,          TXT( "value" ) );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float4Parameter );
 void Material::Float4Parameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::Float4Parameter::name,           TXT( "name" ) );
     comp.AddStructureField( &Material::Float4Parameter::value,          TXT( "value" ) );
 }
 
-REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::TextureParameter );
 void Material::TextureParameter::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddField( &Material::TextureParameter::name,          TXT( "name" ) );
     comp.AddField( &Material::TextureParameter::value,         TXT( "value" ), 0, Reflect::GetClass<GameObjectPointerData>() );
 }
 
-
-REFLECT_DEFINE_OBJECT( Material::PersistentResourceData );
 void Material::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
 {
     // If these trip, then this struct needs to be updated. Having to do this hack because reflect does not support serializing

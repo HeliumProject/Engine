@@ -62,7 +62,7 @@
     \
     void TYPE::InPlaceDestroy() \
     { \
-        this->~TYPE(); \
+        this->~This(); \
     } \
     \
     void TYPE::ReleaseStaticType() \

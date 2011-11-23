@@ -1,20 +1,13 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GraphicsConfig.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsConfig.h"
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
-using namespace Helium;
+REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::ETextureFilter );
+REFLECT_DEFINE_ENUMERATION( Helium::GraphicsConfig::EShadowMode );
+HELIUM_IMPLEMENT_OBJECT( Helium::GraphicsConfig, Graphics, 0 );
 
-REFLECT_DEFINE_ENUMERATION( GraphicsConfig::ETextureFilter );
-REFLECT_DEFINE_ENUMERATION( GraphicsConfig::EShadowMode );
-HELIUM_IMPLEMENT_OBJECT( GraphicsConfig, Graphics, 0 );
+using namespace Helium;
 
 /// Constructor.
 GraphicsConfig::GraphicsConfig()

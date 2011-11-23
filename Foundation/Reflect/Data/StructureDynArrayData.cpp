@@ -6,10 +6,10 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Structure.h"
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StructureDynArrayData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT( StructureDynArrayData );
 
 StructureDynArrayData::StructureDynArrayData()
 {

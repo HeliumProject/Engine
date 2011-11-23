@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Shader.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Shader.h"
 
@@ -17,19 +10,18 @@
 
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+REFLECT_DEFINE_OBJECT( Helium::Shader::PersistentResourceData );
+REFLECT_DEFINE_OBJECT( Helium::ShaderVariant::PersistentResourceData );
 
-HELIUM_IMPLEMENT_OBJECT( Shader, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
-HELIUM_IMPLEMENT_OBJECT( ShaderVariant, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
-REFLECT_DEFINE_OBJECT( Shader::PersistentResourceData );
+using namespace Helium;
 
 void Shader::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
 {
     comp.AddStructureField(&Shader::PersistentResourceData::m_systemOptions, TXT("systemOptions"));
     comp.AddStructureField(&Shader::PersistentResourceData::m_userOptions, TXT("userOptions"));
 }
-
-REFLECT_DEFINE_OBJECT( ShaderVariant::PersistentResourceData );
 
 void ShaderVariant::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
 {

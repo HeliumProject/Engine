@@ -1,18 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Entity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Entity.h"
 
 #include "Framework/Layer.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Entity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Entity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 Entity::Entity()

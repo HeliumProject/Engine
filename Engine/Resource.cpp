@@ -7,9 +7,9 @@
 #include "Engine/CacheManager.h"
 #include "Engine/Package.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Resource, Engine, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Resource, Engine, 0 );
+using namespace Helium;
 
 /// Constructor.
 Resource::Resource()

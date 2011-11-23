@@ -32,9 +32,9 @@
 
 #include "expat.h"
 
-using namespace Helium;
+REFLECT_DEFINE_OBJECT( Helium::ObjectDescriptor );
 
-REFLECT_DEFINE_OBJECT(ObjectDescriptor);
+using namespace Helium;
 
 void Helium::ObjectDescriptor::PopulateComposite( Reflect::Composite& comp )
 {
@@ -42,7 +42,6 @@ void Helium::ObjectDescriptor::PopulateComposite( Reflect::Composite& comp )
     comp.AddField(&ObjectDescriptor::m_TypeName, TXT("m_TypeName"));
     comp.AddField(&ObjectDescriptor::m_TemplatePath, TXT("m_TemplatePath"));
 }
-
 
 /// Constructor.
 ArchivePackageLoader::ArchivePackageLoader()

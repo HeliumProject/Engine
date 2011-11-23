@@ -1,18 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Camera.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Camera.h"
 
 #include "Foundation/Math/SimdVectorConversion.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Camera, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Camera, Framework, 0 );
+using namespace Helium;
 
 const float32_t Camera::DEFAULT_FOV = 70.0f;
 

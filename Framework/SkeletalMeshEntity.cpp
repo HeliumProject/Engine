@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// SkeletalMeshEntity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/SkeletalMeshEntity.h"
 
@@ -12,9 +5,9 @@
 #include "GrannySkeletalMeshEntityInterface.cpp.inl"
 #endif
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::SkeletalMeshEntity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( SkeletalMeshEntity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 SkeletalMeshEntity::SkeletalMeshEntity()

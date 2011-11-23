@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MeshEntity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/MeshEntity.h"
 
@@ -14,9 +7,9 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/World.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::MeshEntity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( MeshEntity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 MeshEntity::MeshEntity()

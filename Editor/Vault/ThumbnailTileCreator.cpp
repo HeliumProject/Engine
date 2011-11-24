@@ -53,6 +53,7 @@ void ThumbnailTileCreator::ThreadProc( int32_t threadID )
             
             const TrackedFile& file = (*itr);
             HELIUM_ASSERT( wxGetApp().GetFrame()->GetProject() );
+#ifdef TRACKER_REFACTOR
             Path path( wxGetApp().GetFrame()->GetProject()->a_Path.Get().Directory() + file.mPath.value() );
             ThumbnailTilePtr tile = new ThumbnailTile( path );
             m_Tiles.insert( std::make_pair( path, tile ) );
@@ -69,6 +70,7 @@ void ThumbnailTileCreator::ThreadProc( int32_t threadID )
             {
                 tile->SetThumbnail( m_TextureError );
             }
+#endif
         }
     }
 

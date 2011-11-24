@@ -88,50 +88,6 @@ project "freetype"
 			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
 
-project "LiteSQL"
-	uuid "6D880828-B2BC-4FB5-A8E2-75FBE177349A"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-	includedirs
-	{
-		"Dependencies/Expat",
-		"Dependencies/LiteSQL/include",
-		"Dependencies/LiteSQL/src/library",
-	}
-	files
-	{
-		"Dependencies/LiteSQL/include/**.cpp",
-		"Dependencies/LiteSQL/include/**.h",
-		"Dependencies/LiteSQL/include/**.hpp",
-		"Dependencies/LiteSQL/src/library/**.c",
-		"Dependencies/LiteSQL/src/library/**.cpp",
-		"Dependencies/LiteSQL/src/library/**.h",
-		"Dependencies/LiteSQL/src/library/**.hpp",
-		"Dependencies/LiteSQL/src/generator/generator.cpp",
-		"Dependencies/LiteSQL/src/generator/generator.hpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-cpp.cpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-cpp.hpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-graphviz.cpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-graphviz.hpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-ruby-activerecord.cpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-ruby-activerecord.hpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-xml.cpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen-xml.hpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen.cpp",
-		"Dependencies/LiteSQL/src/generator/litesql-gen.hpp",
-		"Dependencies/LiteSQL/src/generator/logger.cpp",
-		"Dependencies/LiteSQL/src/generator/logger.hpp",
-		"Dependencies/LiteSQL/src/generator/md5.cpp",
-		"Dependencies/LiteSQL/src/generator/md5.hpp",
-		"Dependencies/LiteSQL/src/generator/objectmodel.cpp",
-		"Dependencies/LiteSQL/src/generator/objectmodel.hpp",
-		"Dependencies/LiteSQL/src/generator/xmlobjects.cpp",
-		"Dependencies/LiteSQL/src/generator/xmlobjects.hpp",
-		"Dependencies/LiteSQL/src/generator/xmlparser.cpp",
-		"Dependencies/LiteSQL/src/generator/xmlparser.hpp",
-	}
-
 project "lua"
 	uuid "A6339978-DA6B-4DEE-9997-0D60052CFFC3"
 	kind "StaticLib"
@@ -214,53 +170,6 @@ project "png"
 		"Dependencies/png/*.h",
 		"Dependencies/png/*.c",
 	}
-
-project "tiff"
-	uuid "FAB06C82-5A66-419A-ACD1-6F771984E35C"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-	includedirs
-	{
-		"Dependencies/tiff",
-		"Dependencies/tiff/libtiff",
-	}
-	files
-	{
-		"Dependencies/tiff/libtiff/*.h",
-		"Dependencies/tiff/libtiff/*.c",
-	}
-	
-	configuration "windows"
-		excludes
-		{
-			"Dependencies/tiff/libtiff/tif_acorn.c",
-			"Dependencies/tiff/libtiff/tif_atari.c",
-			"Dependencies/tiff/libtiff/tif_apple.c",
-			"Dependencies/tiff/libtiff/tif_msdos.c",
-			"Dependencies/tiff/libtiff/tif_unix.c",
-			"Dependencies/tiff/libtiff/tif_win3.c",
-		}
-	configuration "macosx"
-		excludes
-		{
-			"Dependencies/tiff/libtiff/tif_acorn.c",
-			"Dependencies/tiff/libtiff/tif_atari.c",
-			"Dependencies/tiff/libtiff/tif_msdos.c",
-			"Dependencies/tiff/libtiff/tif_unix.c",
-			"Dependencies/tiff/libtiff/tif_win3.c",
-			"Dependencies/tiff/libtiff/tif_win32.c",
-		}
-	configuration "linux"
-		excludes
-		{
-			"Dependencies/tiff/libtiff/tif_acorn.c",
-			"Dependencies/tiff/libtiff/tif_atari.c",
-			"Dependencies/tiff/libtiff/tif_apple.c",
-			"Dependencies/tiff/libtiff/tif_msdos.c",
-			"Dependencies/tiff/libtiff/tif_win3.c",
-			"Dependencies/tiff/libtiff/tif_win32.c",
-		}
 
 project "zlib"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBA"

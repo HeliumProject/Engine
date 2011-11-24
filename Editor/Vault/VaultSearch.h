@@ -3,7 +3,6 @@
 #include "VaultSearchQuery.h"
 #include "VaultSearchResults.h"
 
-#include "Editor/Tracker/TrackerDBGenerated.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/Memory/SmartPtr.h"

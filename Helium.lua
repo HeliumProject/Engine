@@ -344,6 +344,7 @@ Helium.DoDefaultSolutionSettings = function()
 		buildoptions
 		{
 			"/MP",
+			"/Zm256"
 		}
 	
 	configuration { "windows", "Debug" }

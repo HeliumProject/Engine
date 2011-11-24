@@ -757,12 +757,6 @@ namespace Helium
     static Image* LoadDDS(const void* ddsadr, bool convert_to_linear);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Load a TIFF file as a 2D image
-    // NOTE: TIFF files cannot currently be loaded from memory
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Image* LoadTIFF(const tchar_t* filename, bool convert_to_linear);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Load a file based on file extension, the returned texture could be 2D, volume or cube depending
     // on what was loaded.
     // If the file name begins with "ANIM_", a volume texture will be constructed from the image

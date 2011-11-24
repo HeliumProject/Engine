@@ -7,7 +7,7 @@
 #include "Foundation/Document/DocumentManager.h"
 
 #include "Editor/MainFrame.h"
-#include "Editor/Tracker/Tracker.h"
+#include "Editor/Tracker.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>

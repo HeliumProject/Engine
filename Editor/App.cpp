@@ -59,7 +59,7 @@
 #include "Editor/ProjectViewModel.h"
 #include "Editor/Settings/EditorSettings.h"
 #include "Editor/Settings/WindowSettings.h"
-#include "Editor/Tracker/Tracker.h"
+#include "Editor/Tracker.h"
 #include "Editor/Task/TaskInit.h"
 #include "Editor/Perforce/Perforce.h"
 #include "Editor/Dialogs/PerforceWaitDialog.h"

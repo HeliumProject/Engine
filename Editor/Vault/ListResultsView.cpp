@@ -125,6 +125,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
         {
             m_ListCtrl->EnableSorting( false );
 
+#ifdef TRACKER_REFACTOR
             const std::set< TrackedFile >& foundFiles = results->GetResults();
             for ( std::set< TrackedFile >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
             {
@@ -169,7 +170,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
                     }
                 }
             }
-            
+#endif
             m_ListCtrl->EnableSorting( true );
         }
         m_ListCtrl->Thaw();

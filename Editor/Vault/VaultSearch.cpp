@@ -325,6 +325,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
 
     SearchThreadEnter( searchID );
 
+#ifdef TRACKER_REFACTOR
     tstring dbSpec = tstring( TXT( "database=" ) ) + m_Project->GetTrackerDB().Get();
     TrackerDBGenerated trackerDB( TXT( "sqlite3" ), dbSpec.c_str() );
 
@@ -373,6 +374,7 @@ void VaultSearch::SearchThreadProc( int32_t searchID )
     {
         return;
     }
+#endif
 
     SearchThreadLeave( searchID );
 }
@@ -448,6 +450,7 @@ uint32_t VaultSearch::Add( const TrackedFile& file, int32_t searchID )
 
     MutexScopeLock mutex (m_SearchResultsMutex);
 
+#ifdef TRACKER_REFACTOR
     HELIUM_ASSERT( !Path( file.mPath.value() ).IsDirectory() );
 
     StdInsert< std::set< TrackedFile > >::Result inserted = m_FoundFiles.insert( file );
@@ -456,6 +459,7 @@ uint32_t VaultSearch::Add( const TrackedFile& file, int32_t searchID )
         m_SearchResults->Add( file );
         ++numFilesAdded;
     }
+#endif
 
     return numFilesAdded;
 }

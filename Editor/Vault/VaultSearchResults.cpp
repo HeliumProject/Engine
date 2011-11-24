@@ -8,7 +8,8 @@ using namespace Helium::Editor;
 
 bool Helium::Editor::operator<( const TrackedFile& lhs, const TrackedFile& rhs )
 {
-    return lhs.mPath.value() < rhs.mPath.value();
+#pragma TODO("Implement this")
+    return true;
 }
 
 VaultSearchResults::VaultSearchResults( uint32_t vaultSearchID )

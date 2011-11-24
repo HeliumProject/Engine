@@ -166,17 +166,19 @@ Helium.PublishTBB = function( bin )
 			end
 		end
 	elseif os.get() == "macosx" then
+		local ver = os.getversion()
+		local str = string.format("%d.%d.%d", ver.majorversion, ver.minorversion, ver.revision)
 		if Helium.Build32Bit() then
-			table.insert( files, { file="libtbb_debug.dylib",	source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.7_debug",		    target=bin .. "/x32/Debug" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.7_release",        target=bin .. "/x32/Intermediate" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.7_release",        target=bin .. "/x32/Profile" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.7_release",        target=bin .. "/x32/Release" } )
+			table.insert( files, { file="libtbb_debug.dylib",	source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_debug",		    target=bin .. "/x32/Debug" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         target=bin .. "/x32/Intermediate" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         target=bin .. "/x32/Profile" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os" .. str .. "_release",         target=bin .. "/x32/Release" } )
 		end
 		if Helium.Build64Bit() then		
-			table.insert( files, { file="libtbb_debug.dylib",	source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.7_debug",	    target=bin .. "/x64/Debug" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.7_release",	    target=bin .. "/x64/Intermediate" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.7_release",	    target=bin .. "/x64/Profile" } )
-			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.7_release",	    target=bin .. "/x64/Release" } )
+			table.insert( files, { file="libtbb_debug.dylib",	source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_debug",	    target=bin .. "/x64/Debug" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Intermediate" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Profile" } )
+			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Release" } )
 		end       
 	else
 		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")

@@ -17,8 +17,6 @@
 #include "nvimage/FloatImage.h"
 #include "nvimage/Filter.h"
 
-#include "tiffio.h"
-
 using namespace Helium;
 
 //-----------------------------------------------------------------------------
@@ -228,65 +226,6 @@ bool Image::WriteRAW(const tchar_t* fname, void* data, uint32_t size, uint32_t f
 
     return true;
 }
-
-//-----------------------------------------------------------------------------
-Image* Image::LoadTIFF(const tchar_t* fname, bool convert_to_linear)
-{
-    TIFF* tiff = NULL;
-#ifdef UNICODE
-    tiff = TIFFOpenW( fname, "r" );
-#else
-    tiff = TIFFOpen(fname, "r");
-#endif
-    TIFFRGBAImage img;
-
-    if (tiff == 0)
-        return 0;
-
-    Image* result = 0;
-
-    char error[1024];
-    if (TIFFRGBAImageOK(tiff, error))
-    {
-        // any code that gets to here always create a 32bit RGBA texture
-        if (TIFFRGBAImageBegin(&img, tiff, 0, error) == 0)
-        {
-            Log::Warning( TXT( "TIFFRGBAImageBegin: %s\n" ), error);
-            TIFFClose(tiff);
-            return 0;
-        }
-
-        //Allocate space for the native data
-        uint8_t* native_data = new uint8_t[img.width*img.height*sizeof(uint32)];
-
-        if (TIFFRGBAImageGet(&img, (uint32*)native_data, img.width, img.height) == 0)
-        {
-            TIFFClose(tiff);
-            delete[] native_data;
-            return 0;
-        }
-        else
-        {
-            result = new Image(img.width,img.height,CF_ARGB8888);
-            result->FillFaceData(0, CF_ARGB8888, native_data);
-            delete[] native_data;
-        }
-
-        // NOTE: Tiffs are stored upside down so we need to reverse them
-        result->FlipVertical();
-
-        // only convert non-floating point images
-        if(convert_to_linear)
-        {
-            result->ConvertSrgbToLinear();
-        }
-    }
-
-    TIFFClose(tiff);
-
-    return result;
-}
-
 
 //-----------------------------------------------------------------------------
 Image* Image::LoadRAW(const void* rawadr, bool convert_to_linear, LoadRAWInfo* inf)
@@ -629,14 +568,6 @@ Image* Image::LoadSingleFile(const tchar_t* filename, bool convert_to_linear, Lo
     else if ((_tcsicmp(ext,TXT(".jpg"))==0) || (_tcsicmp(ext,TXT(".jpeg"))==0))
     {
         result =  LoadJPG(data, convert_to_linear);
-    }
-    else if ((_tcsicmp(ext,TXT(".tif"))==0) || (_tcsicmp(ext,TXT(".tiff"))==0))
-    {
-        // TIFFS Cannot be loaded from memory, delete the copy we
-        // just loaded and pass the filename to the loader function
-        delete data;
-        data = 0;
-        result =  LoadTIFF(filename, convert_to_linear);
     }
     else if (_tcsicmp(ext,TXT( ".raw" ) )==0)
     {

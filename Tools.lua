@@ -29,7 +29,6 @@ project( prefix .. "Image" )
 			prefix .. "Platform",
 			prefix .. "Foundation",
 			"nvtt",
-			"tiff",
 			"d3d9",
 			"d3dx9",
 		}
@@ -108,7 +107,6 @@ project( prefix .. "Editor" )
 		prefix .. "Image",
 		"Expat",
 		"zlib",
-		"LiteSQL",
 		"libclient",
 		"librpc",
 		"libsupp",

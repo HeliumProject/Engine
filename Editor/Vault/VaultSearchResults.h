@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "Editor/API.h"
-#include "Editor/Tracker/TrackerDBGenerated.h"
 
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -13,8 +12,10 @@ namespace Helium
 {
     namespace Editor
     {
-
-        // we need to define this operator to support sets of TrackedFile
+#pragma TODO("Define Tracked file as a db-serialized reflect object")
+        struct TrackedFile
+        {
+        };
         bool operator<( const TrackedFile& lhs, const TrackedFile& rhs );
 
         class VaultSearchResults : public Helium::RefCountBase< VaultSearchResults >

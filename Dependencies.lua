@@ -165,6 +165,17 @@ project "nvtt"
 			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
 		}
 
+	configuration "macosx"
+		defines
+		{
+			"HAVE_STDARG_H",
+			"HAVE_MALLOC_H",
+		}
+		includedirs
+		{
+			"Dependencies/nvtt/project/xcode4",
+		}
+
 project "png"
 	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
 	kind "StaticLib"

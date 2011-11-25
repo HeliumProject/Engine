@@ -11,15 +11,24 @@ project "Expat"
 	kind "StaticLib"
 	language "C++"
 	location( "Premake/" .. solution().name )
-	defines
-	{
-		"COMPILED_FROM_DSP",
-	}
+
 	files
 	{
 		"Dependencies/Expat/*.h",
 		"Dependencies/Expat/*.c",
 	}
+
+	configuration "windows"
+		defines
+		{
+			"COMPILED_FROM_DSP",
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"HAVE_MEMMOVE",
+		}
 
 project "freetype"
 	uuid "53C96BED-38E8-4A1f-81E0-45D09AFD33EB"

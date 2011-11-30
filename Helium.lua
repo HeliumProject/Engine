@@ -248,7 +248,6 @@ Helium.DoDefaultSolutionSettings = function()
 		"FBXSDK_SHARED=1",
 		"LITESQL_UNICODE=1",
 		"XML_STATIC=1",
-		"XML_UNICODE_WCHAR_T=1",
 		"HELIUM_UNICODE=1",
 	}
 
@@ -283,6 +282,7 @@ Helium.DoDefaultSolutionSettings = function()
 			"_WIN32",
 			"_CRT_SECURE_NO_DEPRECATE",
 			"_CRT_NON_CONFORMING_SWPRINTFS",
+			"XML_UNICODE_WCHAR_T=1",
 		}
 
 	configuration "Debug"

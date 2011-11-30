@@ -11,15 +11,24 @@ project "Expat"
 	kind "StaticLib"
 	language "C++"
 	location( "Premake/" .. solution().name )
-	defines
-	{
-		"COMPILED_FROM_DSP",
-	}
+
 	files
 	{
 		"Dependencies/Expat/*.h",
 		"Dependencies/Expat/*.c",
 	}
+
+	configuration "windows"
+		defines
+		{
+			"COMPILED_FROM_DSP",
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"HAVE_MEMMOVE",
+		}
 
 project "freetype"
 	uuid "53C96BED-38E8-4A1f-81E0-45D09AFD33EB"
@@ -154,6 +163,17 @@ project "nvtt"
 		flags
 		{
 			"NoEditAndContinue",  -- Edit and continue support is not compatible with /Ob2
+		}
+
+	configuration "macosx"
+		defines
+		{
+			"HAVE_STDARG_H",
+			"HAVE_MALLOC_H",
+		}
+		includedirs
+		{
+			"Dependencies/nvtt/project/xcode4",
 		}
 
 project "png"

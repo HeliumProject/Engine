@@ -7,6 +7,9 @@ Helium.Prebuild = function()
 	
 	if os.get() == "windows" then
 		python = python .. ".exe"
+		if os.pathsearch( python, os.getenv( 'PATH' ) ) == nil then
+			python = python .. ".bat"
+		end
     else
 		python = python .. "3"
     end

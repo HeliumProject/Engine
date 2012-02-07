@@ -85,7 +85,7 @@ Helium.CheckEnvironment = function()
     
         local failed = 0
         
-        if os.pathsearch( 'python.exe', os.getenv( 'PATH' ) ) == nil and os.pathsearch( 'python.bat', os.getenv( 'PATH' ) ) == nil then
+        if os.pathsearch( 'python.exe', os.getenv( 'PATH' ) ) == nil and os.pathsearch( 'python3.bat', os.getenv( 'PATH' ) ) == nil then
             print( " -> Python was not found in your path.  Python is required for the 'prebuild' phase." )
             print( " -> Make sure to download python (http://www.python.org/download/) and add it to your path." )
             print( " -> eg: Add c:\\Python\\Python31 to your path." )

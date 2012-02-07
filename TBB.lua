@@ -19,8 +19,7 @@ function CallMake( arch, cmd )
 
 	local bat = io.open( path, "w+")		
 	bat.write( bat, "@call \"%VCINSTALLDIR%\"\\vcvarsall.bat " .. arch .. "\n" )
-	bat.write( bat, "@set PATH=%PATH%;" .. FlipSlashes( os.getcwd() ) .. "\\..\\..\\Utilities\\Win32\n" )
-	bat.write( bat, "@make.exe " .. cmd .. "\n" )
+	bat.write( bat, "@" .. FlipSlashes( os.getcwd() ) .. "\\..\\..\\Utilities\\Win32\\make.exe " .. cmd .. "\n" )
 	io.close( bat )
 
 	local result = os.execute( "cmd.exe /c \"call \"" .. path .. "\"" )

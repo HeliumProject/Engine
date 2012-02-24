@@ -5,7 +5,7 @@ Helium.PublishFBX = function( bin )
     local files = {}
 	
 	if os.get() == "windows" then
-		if Helium.Build64Bit() then
+		if Helium.Build32Bit() then
 			table.insert( files, { file="fbxsdk-2012.2d.dll", source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86", target=bin .. "/x32/Debug" } )
 			table.insert( files, { file="fbxsdk-2012.2.dll",  source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86", target=bin .. "/x32/Intermediate" } )
 			table.insert( files, { file="fbxsdk-2012.2.dll",  source=Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86", target=bin .. "/x32/Profile" } )

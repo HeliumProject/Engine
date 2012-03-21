@@ -12,7 +12,9 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Package );
+    class Package;
+    typedef Helium::StrongPtr< Package > PackagePtr;
+    typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;

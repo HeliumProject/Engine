@@ -20,8 +20,13 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( GameObject );
-    HELIUM_DECLARE_PTR( Package );
+    class GameObject;
+    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
+    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+
+    class Package;
+    typedef Helium::StrongPtr< Package > PackagePtr;
+    typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
     /// Configuration management.
     class HELIUM_ENGINE_API Config : NonCopyable

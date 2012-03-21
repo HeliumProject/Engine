@@ -19,9 +19,17 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Shader );
-    HELIUM_DECLARE_PTR( ShaderVariant );
-    HELIUM_DECLARE_PTR( Texture );
+    class Shader;
+    typedef Helium::StrongPtr< Shader > ShaderPtr;
+    typedef Helium::StrongPtr< const Shader > ConstShaderPtr;
+
+    class ShaderVariant;
+    typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
+    typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
+
+    class Texture;
+    typedef Helium::StrongPtr< Texture > TexturePtr;
+    typedef Helium::StrongPtr< const Texture > ConstTexturePtr;
 
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 

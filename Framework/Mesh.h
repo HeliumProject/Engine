@@ -31,7 +31,9 @@ namespace Helium
     HELIUM_DECLARE_RPTR( RVertexBuffer );
     HELIUM_DECLARE_RPTR( RIndexBuffer );
 
-    HELIUM_DECLARE_PTR( Material );
+    class Material;
+    typedef Helium::StrongPtr< Material > MaterialPtr;
+    typedef Helium::StrongPtr< const Material > ConstMaterialPtr;
 
     /// Mesh resource type.
     class HELIUM_FRAMEWORK_API Mesh : public Resource

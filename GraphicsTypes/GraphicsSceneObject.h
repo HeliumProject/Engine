@@ -22,7 +22,9 @@ namespace Helium
 {
     class GraphicsScene;
 
-    HELIUM_DECLARE_PTR( Material );
+    class Material;
+    typedef Helium::StrongPtr< Material > MaterialPtr;
+    typedef Helium::StrongPtr< const Material > ConstMaterialPtr;
 
     HELIUM_DECLARE_RPTR( RVertexBuffer );
     HELIUM_DECLARE_RPTR( RIndexBuffer );

@@ -20,8 +20,13 @@ namespace Helium
 {
     class Entity;
 
-    HELIUM_DECLARE_PTR( GraphicsScene );
-    HELIUM_DECLARE_PTR( Layer );
+    class GraphicsScene;
+    typedef Helium::StrongPtr< GraphicsScene > GraphicsScenePtr;
+    typedef Helium::StrongPtr< const GraphicsScene > ConstGraphicsScenePtr;
+
+    class Layer;
+    typedef Helium::StrongPtr< Layer > LayerPtr;
+    typedef Helium::StrongPtr< const Layer > ConstLayerPtr;
 
     /// World instance.
     ///

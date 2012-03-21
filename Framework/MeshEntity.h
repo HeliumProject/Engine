@@ -19,8 +19,13 @@ namespace Helium
     class GraphicsScene;
     class GraphicsSceneObject;
 
-    HELIUM_DECLARE_PTR( Mesh );
-    HELIUM_DECLARE_PTR( Material );
+    class Mesh;
+    typedef Helium::StrongPtr< Mesh > MeshPtr;
+    typedef Helium::StrongPtr< const Mesh > ConstMeshPtr;
+
+    class Material;
+    typedef Helium::StrongPtr< Material > MaterialPtr;
+    typedef Helium::StrongPtr< const Material > ConstMaterialPtr;
 
     /// Base class for mesh-based entities.
     class HELIUM_FRAMEWORK_API MeshEntity : public Entity

@@ -68,9 +68,17 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Camera );
-    HELIUM_DECLARE_PTR( SkeletalMeshEntity );
-    HELIUM_DECLARE_PTR( StaticMeshEntity );
+    class Camera;
+    typedef Helium::StrongPtr< Camera > CameraPtr;
+    typedef Helium::StrongPtr< const Camera > ConstCameraPtr;
+
+    class SkeletalMeshEntity;
+    typedef Helium::StrongPtr< SkeletalMeshEntity > SkeletalMeshEntityPtr;
+    typedef Helium::StrongPtr< const SkeletalMeshEntity > ConstSkeletalMeshEntityPtr;
+
+	class StaticMeshEntity;
+    typedef Helium::StrongPtr< StaticMeshEntity > StaticMeshEntityPtr;
+    typedef Helium::StrongPtr< const StaticMeshEntity > ConstStaticMeshEntityPtr;
 
     HELIUM_DECLARE_RPTR( RRenderContext );
     HELIUM_DECLARE_RPTR( RSurface );

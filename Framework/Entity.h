@@ -21,8 +21,13 @@ namespace Helium
 {
     class World;
 
-    HELIUM_DECLARE_WPTR( Layer );
-    HELIUM_DECLARE_WPTR( World );
+    class Layer;
+    typedef Helium::WeakPtr< Layer > LayerWPtr;
+    typedef Helium::WeakPtr< const Layer > ConstLayerWPtr;
+
+    class World;
+    typedef Helium::WeakPtr< World > WorldWPtr;
+    typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API Entity : public GameObject

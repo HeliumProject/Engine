@@ -7,7 +7,9 @@
     <inline file="Framework/WorldManagerUpdate.inl" />
 
     <forwarddeclare namespace="Helium" type="class Entity" />
-    <forwarddeclare namespace="Helium" type="HELIUM_DECLARE_PTR( World )" />
+    <forwarddeclare namespace="Helium" type="class World" />
+    <forwarddeclare namespace="Helium"><![CDATA[typedef Helium::StrongPtr< World > WorldPtr]]></forwarddeclare>
+    <forwarddeclare namespace="Helium"><![CDATA[typedef Helium::StrongPtr< const World > ConstWorldPtr]]></forwarddeclare>
 
     <job name="WorldManagerUpdate" description="WorldManager update job launcher.">
         <templateparam name="EntityUpdateJobType" />

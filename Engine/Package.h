@@ -5,6 +5,9 @@
 namespace Helium
 {
 	class PackageLoader;
+	class Package;
+	typedef Helium::StrongPtr< Package > PackagePtr;
+	typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
 	/// GameObject package.
 	class HELIUM_ENGINE_API Package : public GameObject
@@ -33,8 +36,6 @@ namespace Helium
 		/// Package loader.
 		PackageLoader* m_pLoader;
 	};
-
-	HELIUM_DECLARE_PTR( Package );
 }
 
 #include "Engine/Package.inl"

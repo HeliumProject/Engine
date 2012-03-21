@@ -177,7 +177,9 @@ namespace Helium
 {
     class GameObjectType;
 
-    HELIUM_DECLARE_PTR( GameObject );
+    class GameObject;
+    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
+    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
 
     /// Struct serialization wrapper.
     template< typename T >

@@ -19,7 +19,9 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Animation );
+    class Animation;
+    typedef Helium::StrongPtr< Animation > AnimationPtr;
+    typedef Helium::StrongPtr< const Animation > ConstAnimationPtr;
 
     /// In-game entity comprising of a skeletal (skinned) mesh.
     class HELIUM_FRAMEWORK_API SkeletalMeshEntity : public MeshEntity

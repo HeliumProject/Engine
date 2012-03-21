@@ -123,8 +123,13 @@ namespace Helium
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
-    HELIUM_DECLARE_PTR( GameObject );
-    HELIUM_DECLARE_WPTR( GameObject );
+    class GameObject;
+    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
+    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+
+    class GameObject;
+    typedef Helium::WeakPtr< GameObject > GameObjectWPtr;
+    typedef Helium::WeakPtr< const GameObject > ConstGameObjectWPtr;
 
     /// Base class for the engine's game object system.
     class HELIUM_ENGINE_API GameObject : public Helium::Reflect::Object

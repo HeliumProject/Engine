@@ -3,43 +3,6 @@
 
 using namespace Helium;
 
-TEST(Engine, Jobs)
-{
-    {
-        Path jobDefParserPath;
-        HELIUM_VERIFY( File::GetDataDirectory( jobDefParserPath ) );
-        jobDefParserPath += TXT( "..\\Prebuild\\JobDefParser.py" );
-
-        bool bJobDefParserExists = jobDefParserPath.Exists();
-        HELIUM_UNREF( bJobDefParserExists );
-        HELIUM_ASSERT( bJobDefParserExists );
-
-        int64_t jobDefParserSize = jobDefParserPath.Size();
-        HELIUM_UNREF( jobDefParserSize );
-        HELIUM_TRACE( TRACE_INFO, ( TXT( "JobDefParser.py size: %" ) TPRIu64 TXT( "\n" ) ), jobDefParserSize );
-
-        FileStream* pJobDefFile = File::Open( jobDefParserPath, FileStream::MODE_READ );
-        HELIUM_ASSERT( pJobDefFile );
-        HELIUM_ASSERT( pJobDefFile->IsOpen() );
-        HELIUM_ASSERT( pJobDefFile->GetSize() == jobDefParserSize );
-        HELIUM_ASSERT( pJobDefFile->CanSeek() );
-        HELIUM_ASSERT( pJobDefFile->CanRead() );
-        HELIUM_ASSERT( !pJobDefFile->CanWrite() );
-        HELIUM_ASSERT( pJobDefFile->Tell() == 0 );
-        BufferedStream bufferedStream( pJobDefFile );
-        uint8_t testBuffer[ 5000 ];
-        size_t bytesRead = bufferedStream.Read( testBuffer, 1, sizeof( testBuffer ) );
-        HELIUM_UNREF( bytesRead );
-        HELIUM_ASSERT( bytesRead == sizeof( testBuffer ) || static_cast< int64_t >( bytesRead ) == jobDefParserSize );
-        HELIUM_ASSERT( bufferedStream.Tell() == static_cast< int64_t >( bytesRead ) );
-        bufferedStream.Close();
-        HELIUM_ASSERT( !pJobDefFile->CanSeek() );
-        HELIUM_ASSERT( !pJobDefFile->CanRead() );
-        HELIUM_ASSERT( !pJobDefFile->CanWrite() );
-        delete pJobDefFile;
-    }
-}
-
 TEST(Foundation, Path)
 {
     {

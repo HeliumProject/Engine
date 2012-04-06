@@ -32,15 +32,21 @@
  *
  *	RunCommand::Run() - run the command
  *			Used by the client for launching editor, diff.
+ *			Check e->Test() for errors.
  *
  *	RunCommand::RunInWindow() - create a window to run the command
  *			Used by p4web for launching editor, resolve.
  *			Not implemented for VMS.
+ *			Check e->Test() for errors.
  *
  *	RunCommand::RunChild() - launch a subprocess whose stdin/stdout
  *			are the given fds.  Not implemented for VMS.
+ *			Check e->Test() for subprocess setup errors.
  *
  *	RunCommand::WaitChild() - wait for the child launched by RunChild().
+ *
+ *	RunCommand::PollChild() - check to see if the child launched
+ *	        by RunChild() is still running.
  *
  *	RunCommandIo::Run() - run the command, sending stdin, capturing 
  *			stdout. Used to run triggers for 'p4 submit'.
@@ -71,13 +77,17 @@
  *			Words() handles "; execvp() doesn't.
  */
 
+class StrArray;
+
 enum RunCommandOpts {
 
 	RCO_SOLO_FD = 0x01,	// RunChild() uses same fd for I/O
 	RCO_AS_SHELL = 0x02,	// RunChild() uses separate pipes, no socketPair
-	RCO_USE_STDOUT = 0x04	// RunChild() preserves stdout for command
+	RCO_USE_STDOUT = 0x04,	// RunChild() preserves stdout for command
+	RCO_P4_RPC = 0x08	// RunChild() error output over p4 rpc
 
 } ;
+
 
 class RunArgs {
 
@@ -108,6 +118,37 @@ class RunArgs {
 	StrBuf	argbuf;
 } ;
 
+/**
+ * An array-based version of the string-based RunArgs,
+ * to avoid quoting/parsing issues.
+ */
+class RunArgv {
+
+    public:
+
+		RunArgv();
+
+		~RunArgv();
+
+	void	AddArg( const StrPtr &arg );
+	void	AddArg( const char *arg );
+	void	SetArgs( int argc, const char * const *argv );
+	void 	AddCmd( const char *arg );
+
+	RunArgv &operator <<( const char *a ) { AddArg( a ); return *this; }
+	RunArgv &operator <<( const StrPtr &a ) { AddArg( a ); return *this; }
+
+	char *	Text( StrBuf    &buf );
+
+    friend class RunCommand;
+
+    private:
+
+	int	Argc( char **argv, int nargv );
+
+	StrArray	*args;
+} ;
+
 class RunCommand {
 
     public:
@@ -115,10 +156,17 @@ class RunCommand {
 		~RunCommand();
 
 	int 	Run( RunArgs &cmd, Error *e );
+	int 	Run( RunArgv &cmd, Error *e );
 	int 	RunInWindow( RunArgs &cmd, Error *e );
+	int 	RunInWindow( RunArgv &cmd, Error *e );
 	void 	RunChild( RunArgs &cmd, int opts, int f[2], Error *e );
+	void 	RunChild( RunArgv &cmd, int opts, int f[2], Error *e );
+	void	DoRunChild( char *cmdText, char *argv[], int opts, int fds[2], Error *e );
 
 	int	WaitChild();
+
+    // NT only!  no-op on all other platforms
+	bool    PollChild(unsigned long millisecs) const;
 
     private:
 
@@ -145,6 +193,17 @@ class RunCommandIo : public RunCommand {
 
 	void 	Run( RunArgs &cmd, Error *e )
 		{ RunChild( cmd, RCO_AS_SHELL, fds, e ); }
+
+	// RunArgv flavors
+	int 	Run( RunArgv &cmd, const StrPtr &in, StrBuf &out, Error *e );
+
+	int 	Run( RunArgv &cmd, StrBuf &result, Error *e )
+		{ return Run( cmd, StrRef::Null(), result, e ); }
+
+	void 	Run( RunArgv &cmd, Error *e )
+		{ RunChild( cmd, RCO_AS_SHELL, fds, e ); }
+
+	int	ProcessRunResults( const StrPtr &in, StrBuf &out, Error *e );
 
 	void	Write( const StrPtr &in, Error *e );
 	int 	Read( const StrPtr &out, Error *e );

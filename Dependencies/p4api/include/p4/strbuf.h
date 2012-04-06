@@ -100,7 +100,7 @@ class StrPtr {
 	unsigned char *UText() const
 		{ return (unsigned char *)Text(); }
 
-	int 	Length() const
+	size_t 	Length() const
 		{ return length; }
 
 	char *	End() const
@@ -112,19 +112,21 @@ class StrPtr {
 	int	Atoi() const
 		{ return Atoi( buffer ); }
 
+	bool	IsNumeric() const;
+
 	P4INT64	Atoi64() const
 		{ return Atoi64( buffer ); }
 
 	void	SetLength() 
 		{ length = strlen( buffer ); }
 
-	void	SetLength( int len ) 
+	void	SetLength( size_t len )
 		{ length = len; }
 
 	void	SetEnd( char *p ) 
 		{ length = p - buffer; }
 
-	char	operator[]( int x ) const
+	char	operator[]( size_t x ) const
 		{ return buffer[x]; }
 
 	// Compare -- p4ftp legacy
@@ -140,8 +142,12 @@ class StrPtr {
 	int	SCompare( const StrPtr &s ) const
 		{ return SCompare( buffer, s.buffer ); }
 
+	int	NCompare( const StrPtr &s ) const
+		{ return NCompare( buffer, s.buffer ); }
+
 	static int CCompare( const char *a, const char *b );
 	static int SCompare( const char *a, const char *b );
+	static int NCompare( const char *a, const char *b );
 
 	static int SCompare( unsigned char a, unsigned char b )
 		{
@@ -174,40 +180,40 @@ class StrPtr {
 	const char *Contains( const StrPtr &s ) const
 		{ return strstr( Text(), s.Text() ); }
 
-	int	operator ==( const char *buf ) const
+	bool	operator ==( const char *buf ) const
 		{ return strcmp( buffer, buf ) == 0; }
 
-	int	operator !=( const char *buf ) const
+	bool	operator !=( const char *buf ) const
 		{ return strcmp( buffer, buf ) != 0; }
 
-	int	operator <( const char *buf ) const
+	bool	operator <( const char *buf ) const
 		{ return strcmp( buffer, buf ) < 0; }
 
-	int	operator <=( const char *buf ) const
+	bool	operator <=( const char *buf ) const
 		{ return strcmp( buffer, buf ) <= 0; }
 
-	int	operator >( const char *buf ) const
+	bool	operator >( const char *buf ) const
 		{ return strcmp( buffer, buf ) > 0; }
 
-	int	operator >=( const char *buf ) const
+	bool	operator >=( const char *buf ) const
 		{ return strcmp( buffer, buf ) >= 0; }
 
-	int	operator ==( const StrPtr &s ) const
+	bool	operator ==( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) == 0; }
 
-	int	operator !=( const StrPtr &s ) const
+	bool	operator !=( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) != 0; }
 
-	int	operator <( const StrPtr &s ) const
+	bool	operator <( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) < 0; }
 
-	int	operator <=( const StrPtr &s ) const
+	bool	operator <=( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) <= 0; }
 
-	int	operator >( const StrPtr &s ) const
+	bool	operator >( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) > 0; }
 
-	int	operator >=( const StrPtr &s ) const
+	bool	operator >=( const StrPtr &s ) const
 		{ return strcmp( buffer, s.buffer ) >= 0; }
 
 	// Copying out
@@ -226,29 +232,33 @@ class StrPtr {
 
 	static P4INT64 Atoi64( const char *buffer );
 	static char *Itoa64( P4INT64 v, char *endbuf );
+	static char *Itox( unsigned int v, char *endbuf );
 
     friend class StrBuf;
     friend class StrRef;
 
     protected:
 	char	*buffer;
-	int	length;
+	size_t	length;
 
     public:
 
 	// Case sensitive server?
 
-	static int CaseFolding()
+	static bool CaseFolding()
 		{ return caseUse != ST_UNIX; }
 
-	static int CaseIgnored()
+	static bool CaseIgnored()
 		{ return caseUse == ST_WINDOWS; }
 
-	static int CaseHybrid()
+	static bool CaseHybrid()
 		{ return caseUse == ST_HYBRID; }
 
 	static void SetCaseFolding( int c )
-		{ caseUse = (CaseUse)c; }
+		{ caseUse = (CaseUse)c; foldingSet = true; }
+
+	static bool CaseFoldingAlreadySet()
+		{ return foldingSet; }
 
 	enum CaseUse { ST_UNIX, ST_WINDOWS, ST_HYBRID };
 
@@ -257,10 +267,15 @@ class StrPtr {
     private:
 
 	static CaseUse caseUse;
+	static bool foldingSet;
 
 	static int SEqualF( unsigned char a, unsigned char b );
 	static int SCompareF( unsigned char a, unsigned char b );
 
+	static int NCompareLeft( const unsigned char *a, 
+	                         const unsigned char *b );
+	static int NCompareRight( const unsigned char *a, 
+	                          const unsigned char *b );
 } ;
 
 class StrRef : public StrPtr {
@@ -278,7 +293,7 @@ class StrRef : public StrPtr {
 		StrRef( const char *buf )
 		{ Set( (char *)buf ); }
 
-		StrRef( const char *buf, int len )
+		StrRef( const char *buf, size_t len )
 		{ Set( (char *)buf, len ); }
 
 	static const StrPtr &Null()
@@ -299,7 +314,7 @@ class StrRef : public StrPtr {
 	void 	Set( char *buf )
 		{ Set( buf, strlen( buf ) ); }
 		 
-	void	Set( char *buf, int len )
+	void	Set( char *buf, size_t len )
 		{ buffer = buf; length = len; }
 
 	void	Set( const StrPtr *s )
@@ -370,10 +385,10 @@ class StrBuf : public StrPtr {
 	void	Set( const StrPtr &s )
 		{ Clear(); Append( &s ); }
 
-	void	Set( const char *buf, int len )
+	void	Set( const char *buf, size_t len )
 		{ Clear(); Append( buf, len ); }
 
-	void	Extend( const char *buf, int len )
+	void	Extend( const char *buf, size_t len )
 		{ memcpy( Alloc( len ), buf, len ); }
 
 	void	Extend( char c )
@@ -382,15 +397,18 @@ class StrBuf : public StrPtr {
 	void 	Terminate() 
 		{ Extend(0); --length; }
 
+	void	TruncateBlanks();     // Removes blanks just from the end
+	void	TrimBlanks();         // Removes blanks from start and end
+
 	void	Append( const char *buf );     
 
 	void	Append( const StrPtr *s );
 
-	void	Append( const char *buf, int len );
+	void	Append( const char *buf, size_t len );
 
-	char *	Alloc( int len )
+	char *	Alloc( size_t len )
 		{
-		    int oldlen = length;
+	    size_t oldlen = length;
 
 		    if( ( length += len ) > size )
 			Grow( oldlen );
@@ -398,7 +416,7 @@ class StrBuf : public StrPtr {
 		    return buffer + oldlen;
 		}
 
-        void    Fill( const char *buf, int len );
+        void    Fill( const char *buf, size_t len );
 
         void    Fill( const char *buf )
                 {
@@ -419,9 +437,9 @@ class StrBuf : public StrPtr {
 	StrBuf& operator <<( int v );
 
     private:
-	int	size;
+	size_t	size;
 
-	void	Grow( int len );
+	void	Grow( size_t len );
 
 	static char nullStrBuf[];
 } ;
@@ -430,7 +448,7 @@ class StrFixed : public StrPtr {
 
     public:
 
-		StrFixed( int l )
+		StrFixed( size_t l )
 		{ this->length = l; this->buffer = new char[ l ]; }
 
 		~StrFixed()
@@ -455,11 +473,17 @@ class StrNum : public StrPtr {
 		    length = buf + sizeof( buf ) - buffer - 1;
 		}
 
+	void	SetHex( int v )
+		{
+		    buffer = Itox( v, buf + sizeof( buf ) );
+		    length = buf + sizeof( buf ) - buffer - 1;
+		}
+
 	void	Set( int v, int digits )
 		{
 		    Set( v );
 
-		    while( length < digits )
+		    while( (int)length < digits )
 			*--buffer = '0', ++length;
 		}
 

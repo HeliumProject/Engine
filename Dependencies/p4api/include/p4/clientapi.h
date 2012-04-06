@@ -16,6 +16,7 @@
 # include "p4tags.h"
 
 # include "clientmerge.h"
+# include "clientresolvea.h"
 # include "clientuser.h"
 
 # include "keepalive.h"

@@ -120,6 +120,14 @@ class ClientMerge : public LastChance {
 			    FileSysType resType,
 			    MergeType m );
 
+	static ClientMerge *Create( 
+			    ClientUser *ui, 
+			    FileSysType type,
+			    FileSysType resType,
+			    FileSysType theirType,
+			    FileSysType baseType,
+			    MergeType m );
+
 	virtual		~ClientMerge();
 
 	// User interface: AutoResolve is called if any of the -a flags

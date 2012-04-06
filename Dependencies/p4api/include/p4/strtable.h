@@ -69,6 +69,8 @@ class StrBufDict : public StrDict {
 	int		VGetVarX( int x, StrRef &var, StrRef &val );
 	void		VClear() { tabLength = 0; }
 
+	StrPtr *	GetVarN( const StrPtr &var );
+
     private:
 	
 	VarArray	*elems;
@@ -92,6 +94,7 @@ class BufferDict : public StrDict {
 	int 		VGetVarX( int x, StrRef &var, StrRef &val );
 	void		VSetVar( const StrPtr &var, const StrPtr &val );
 	void		VClear() { buf.Clear(); count = 0; }
+	void		VRemoveVar( const StrPtr &var );
 
     private:
 	StrRef		varRef;		// temp for VGetVar

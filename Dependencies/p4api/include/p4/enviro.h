@@ -48,9 +48,16 @@ class Enviro {
 	};
 
 	void		BeServer( const StrPtr *name = 0 );
+	const char      *ServiceName();
 	void		OsServer();
 
 	void		List();
+	int		FormatVariable( int i, StrBuf *sb );
+	int		HasVariable( int i );
+	int		IsKnown( const char *nm );
+	void		GetVarName( int i, StrBuf &sb );
+	void		GetVarValue( int i, StrBuf &sb );
+	void		Format( const char *var, StrBuf *sb );
 
 	void		Print( const char *var );
 	char		*Get( const char *var );
@@ -61,6 +68,7 @@ class Enviro {
 	int		FromRegistry( const char *var );
 
 	void		Config( const StrPtr &cwd );
+	void		LoadConfig( const StrPtr &cwd, int checkSyntax = 1 );
 
 	void		Reload();
 
@@ -75,14 +83,20 @@ class Enviro {
 
 	EnviroTable	*symbolTab;
 	EnviroItem	*GetItem( const char *var );
+
+	bool		ReadItemPlatform( ItemType type, const char *var, EnviroItem * item );
+
 	StrBuf		configFile;
+	StrBuf		serviceName;
 
 # ifdef OS_NT
 	KeyPair		*setKey;
 	KeyPair		*serviceKey;
 	StrBuf		serviceKeyName;
 	int		charset;
-# endif /* OS_NT */
+# elif defined ( OS_MACOSX ) || defined ( OS_DARWIN )
+	ItemType        domain; // set to Enviro::USER or Enviro::SYS
+#endif /* OS_NT, OS_MACOSX, OS_DARWIN */
 
 } ;
 

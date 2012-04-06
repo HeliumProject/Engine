@@ -13,6 +13,7 @@
  *		x.	- flag takes an argument (-xarg)
  *		x:	- flag takes an argument (-xarg or -x arg)
  *		x+	- flag takes a flag and arg (-xyarg or -xy arg)
+ *		x#	- flag takes a non-neg numeric arg (-xN or -x N)
  */
 
 const int N_OPTS = 20;
@@ -53,6 +54,11 @@ class Options
 			{ return GetValue( opt, 0, subopt ); }
 
 	StrPtr *	GetValue( char opt, char flag2, int subopt );
+
+	int		FormatOption( int i, Error *e );
+	int		HasOption( int i );
+	void		GetOptionName( int i, StrBuf &sb );
+	void		GetOptionValue( int i, StrBuf &sb );
 
     private:
 	int 	optc;

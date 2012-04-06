@@ -30,6 +30,7 @@ class MsgClient {
 	static ErrorId CantFindApp;
 	static ErrorId BadSignature;
 	static ErrorId BadMarshalInput;
+	static ErrorId LineTooLong;
 
 	static ErrorId ResolveManually;
 	static ErrorId NonTextFileMerge;
@@ -51,4 +52,8 @@ class MsgClient {
 
 	static ErrorId FileExists;
 	static ErrorId NoSuchFile;
+
+	static ErrorId LoginPrintTicket;
+	static ErrorId DigestMisMatch;
+	static ErrorId NotUnderPath;
 } ;

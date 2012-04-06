@@ -72,6 +72,7 @@ class NetEndPoint {
 	virtual			~NetEndPoint();
 
 	virtual StrPtr		*GetListenAddress( int raf_flags ) = 0;
+	virtual StrPtr		*GetHost() = 0;
 
 	virtual void		Listen( Error *e ) = 0;
 	virtual void		ListenCheck( Error *e ) = 0;

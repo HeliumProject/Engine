@@ -41,6 +41,7 @@
  * NEED_ACCESS - access()
  * NEED_BRK - brk()/sbrk()
  * NEED_CHDIR - chdir()
+ * NEED_DBGBREAK - DebugBreak(), just Windows for now
  * NEED_EBCDIC - __etoa, __atoe
  * NEED_ERRNO - errno, strerror
  * NEED_FILE - write(), unlink(), etc
@@ -50,6 +51,7 @@
  * NEED_FSYNC - fsync()
  * NEED_GETPID - getpid()
  * NEED_GETUID - getuid(),setuid() etc.
+ * NEED_IOCTL - ioctl() call and flags for UNIX
  * NEED_MKDIR - mkdir()
  * NEED_MMAP - mmap()
  * NEED_OPENDIR - opendir(), etc
@@ -58,6 +60,8 @@
  * NEED_SLEEP - Sleep()
  * NEED_SMARTHEAP - Smartheap Initialization
  * NEED_STAT - stat()
+ * NEED_STATFS - statfs()
+ * NEED_STATVFS - statvfs()
  * NEED_SOCKETPAIR - pipe(), socketpair()
  * NEED_SYSLOG - syslog()
  * NEED_TIME - time(), etc
@@ -131,6 +135,33 @@ extern int errno;
 # include <fcntl.h>
 # endif
 
+// This must be one of the first occurances for including windows.h
+// so that _WIN32_WINNT will flavor definitions.
+//
+# ifdef OS_NT
+# define HAVE_DBGBREAK
+# ifdef NEED_DBGBREAK
+# define WIN32_LEAN_AND_MEAN
+# define _WIN32_WINNT 0x0501
+# include <windows.h>
+# endif // NEED_DBGBREAK
+# endif // OS_NT
+
+// This must be one of the first occurances for including windows.h
+// so that _WIN32_WINNT will flavor definitions.
+//
+# ifdef NEED_SMARTHEAP
+# if defined( USE_SMARTHEAP )
+# ifdef OS_NT
+# define WIN32_LEAN_AND_MEAN
+# define _WIN32_WINNT 0x0501
+# include <windows.h>
+# endif // OS_NT
+# include <smrtheap.h>
+# define HAVE_SMARTHEAP
+# endif // USE_SMARTHEAP
+# endif // NEED_SMARTHEAP
+
 # ifdef NEED_FLOCK
 # ifdef OS_NT
 # define WIN32_LEAN_AND_MEAN
@@ -177,7 +208,7 @@ extern "C" char *getcwd( char *buf, size_t size );
 # endif
 # endif 
 
-# if !defined(OS_OS2) && !(defined(USE_CARBON))
+# if !defined(OS_OS2)
 # define HAVE_GETHOSTNAME
 
 # ifdef NEED_GETHOSTNAME
@@ -227,6 +258,12 @@ extern "C" int __stdcall gethostname( char * name, int namelen );
 # endif 
 # endif /* UNIX */
 
+# ifdef NEED_IOCTL
+# ifndef OS_NT
+# include <sys/ioctl.h>
+# endif /* NT */
+# endif /* IOCTL */
+
 # if defined(NEED_MKDIR) || defined(NEED_STAT) || defined(NEED_CHMOD)
 
 # ifdef OS_OS2
@@ -264,6 +301,36 @@ extern "C" int __stdcall gethostname( char * name, int namelen );
 # endif
 
 # endif
+
+# if defined(NEED_STATVFS)
+
+# ifdef OS_NT
+# else
+# include <sys/statvfs.h>
+# endif
+
+# ifdef OS_SOLARIS
+# define HAVE_STATVFS_BASETYPE
+# endif
+
+# endif
+
+# if defined(NEED_STATFS)
+
+# ifdef OS_LINUX
+# define HAVE_STATFS
+# include <sys/statfs.h>
+# endif
+
+# if defined(OS_DARWIN80) || defined(OS_DARWIN90) || defined(OS_DARWIN100) \
+  || defined(OS_FREEBSD)
+# define HAVE_STATFS
+# define HAVE_STATFS_FSTYPENAME
+# include <sys/param.h>
+# include <sys/mount.h>
+# endif
+
+# endif /* NEED_STATFS */
 
 /* Many users don't define NEED_MMAP -- so we always find out */
 /* added AIX 5.3 - mmap region getting corrupted */
@@ -318,13 +385,6 @@ extern "C" FILE *popen(const char *, const char *);
 # endif
 # endif
 
-# ifdef NEED_SMARTHEAP
-# if defined( USE_SMARTHEAP )
-# include <smrtheap.h>
-# define HAVE_SMARTHEAP
-# endif
-# endif
-
 /*
  * This definition differs from the conventional approach because we test
  * on AF_UNIX and that's not defined until after we include socket.h. So,
@@ -354,11 +414,14 @@ extern "C" int socketpair(int, int, int, int*);
 # endif
 # endif
 
-# if defined( unix )
-# define HAVE_SYSLOG
 # ifdef NEED_SYSLOG
-# include <syslog.h>
-# endif
+#  if defined( unix )
+#   define HAVE_SYSLOG
+#   include <syslog.h>
+#  elif defined( OS_NT )
+#   define HAVE_EVENT_LOG
+#   include <windows.h>
+#  endif
 # endif
 
 # if defined(NEED_TIME) || defined(NEED_UTIME)
@@ -393,6 +456,10 @@ using namespace std;
 # define WIN32_LEAN_AND_MEAN
 # include <windows.h>
 # define sleep(x) Sleep(x * 1000)
+# define usleep(x) Sleep(x)
+# ifndef OS_MINGW
+typedef unsigned long useconds_t;
+# endif
 # endif
 # endif
 
@@ -403,7 +470,6 @@ using namespace std;
 
 # define HAVE_SYMLINKS
 # if defined( OS_OS2 ) || \
-	defined( OS_NT ) || \
 	defined ( MAC_MWPEF ) || \
 	defined( OS_VMS ) || \
 	defined( OS_INTERIX )
@@ -480,7 +546,7 @@ int truncate(const char *path, off_t length);
  */
 
 # ifdef OS_NT
-# define BadSpecFileCharList "%/<>:"
+# define BadSpecFileCharList "%/<>:|"
 # else
 # define BadSpecFileCharList "%/"
 # endif
@@ -533,5 +599,13 @@ typedef P4INT64 offL_t;
         ((UInt32) (_b) << 16) |                   \
         ((UInt32) (_c) <<  8) |                   \
         ((UInt32) (_d)))
+# endif
+
+/* 
+ * B&R's NTIA64 build machine doesn't define vsnprintf, 
+ * but it does define _vsnprintf. Use that one instead.
+ */
+# ifdef OS_NTIA64
+# define vsnprintf _vsnprintf 
 # endif
 

@@ -148,20 +148,20 @@ project( prefix .. "Editor" )
 	configuration { "windows", "x32", "Debug" }
 		libdirs
 		{
-			"Dependencies/p4api/lib/Win32/Debug",
+			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Debug",
 		}
 	configuration { "windows", "x32", "not Debug" }
 		libdirs
 		{
-			"Dependencies/p4api/lib/Win32/Release",
+			"Dependencies/p4api/lib/" .. _ACTION .. "/Win32/Release",
 		}
 	configuration { "windows", "x64", "Debug" }
 		libdirs
 		{
-			"Dependencies/p4api/lib/x64/Debug",
+			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Debug",
 		}
 	configuration { "windows", "x64", "not Debug" }
 		libdirs
 		{
-			"Dependencies/p4api/lib/x64/Release",
+			"Dependencies/p4api/lib/" .. _ACTION .. "/x64/Release",
 		}

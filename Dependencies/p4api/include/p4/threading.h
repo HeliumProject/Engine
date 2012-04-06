@@ -38,9 +38,12 @@
  *	Threading::Launch() - create a thread/process and call Thread::Run().
  *	
  *	Threading::Cancelled() - returns true (in leader) if Cancel()
+ *	Threading::Restarted() - returns true (in leader) if Restart()
  *
  *	Threading::Cancel() - can be called from any thread to tell the 
  *			leader to stop; leader calls Process::Cancel()
+ *	Threading::Restart() - can be called from any thread to tell the 
+ *			leader to restart; leader calls Process::Restart()
  *
  *	Threading::Reap() - called in leader to kill children
  *
@@ -61,6 +64,9 @@
  *	in order to kill and collect all the child processes.  It should
  *	only do that if the database is safely locked from child process
  *	access.
+ *
+ * Restart is just like Cancel but the leader re-starts all processing rather
+ * than exiting.
  */
 
 enum ThreadMode {
@@ -94,14 +100,16 @@ class Threader {
 
     friend class Threading;
 
-			Threader() { cancelled = 0; }
+			Threader() { cancelled = 0; restarted = 0; }
 
 	virtual		~Threader();
 	virtual void	Launch( Thread *t );
 	virtual void	Cancel();
+	virtual void	Restart();
 	virtual void	Reap();
 
 	int		cancelled;
+	int		restarted;
 	Process		*process;
 
 } ;
@@ -114,9 +122,11 @@ class Threading {
 
 	void		Launch( Thread *t ) { threader->Launch( t ); }
 	int		Cancelled() { return threader->cancelled; }
+	int		Restarted() { return threader->restarted; }
 	void		Reap() { threader->Reap(); }
 
 	static void	Cancel() { if( current ) current->Cancel(); }
+	static void	Restart() { if( current ) current->Restart(); }
 	static int	WasCancelled() { if( current ) return current->cancelled; else return 0; }
 
     private:

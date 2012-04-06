@@ -158,7 +158,9 @@ class Error {
 	ErrorId *	GetId( int i ) const;
 
 	int		CheckId( const ErrorId &id ) const
-			{ return severity && GetId(0)->code == id.code; }
+			{ return severity &&
+				GetId(0)->Subsystem() == id.Subsystem() &&
+				GetId(0)->SubCode()   == id.SubCode(); }
 
 	StrDict *	GetDict();
 

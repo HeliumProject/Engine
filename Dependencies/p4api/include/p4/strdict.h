@@ -70,6 +70,7 @@ class StrDict {
 
 	void	ReplaceVar( const char *var, const char *value );
 	void	RemoveVar( const char *var );
+	void	RemoveVar( const StrPtr &var ) { VRemoveVar( var ); }
 
 	void	Clear()
 		{ VClear(); }

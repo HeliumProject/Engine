@@ -112,7 +112,7 @@ void Helium::Reflect::VoidDataPointer::Allocate( uint32_t size ) const
     m_Size = size;
 #endif
 
-    Helium::MemoryZero(m_Target, m_Size);
+    Helium::MemoryZero(m_Target, size);
 }
 
 void Helium::Reflect::VoidDataPointer::Deallocate() const

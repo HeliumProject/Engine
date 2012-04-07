@@ -8,9 +8,13 @@
  * DateTime - get and set the date as a string
  */
 
-// size for Fmt, FmtDay, FmtTz
+// size for Fmt, FmtDay
 
 # define DateTimeBufSize 20 
+
+// size for FmtTz, which can say things like '0700 - Pacific Standard Time'
+
+# define DateTimeZoneBufSize 80 
 
 class DateTime {
 

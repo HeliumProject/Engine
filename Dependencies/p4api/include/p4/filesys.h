@@ -51,6 +51,7 @@
  *
  *	FileSys::GetFd() - return underlying int fd, FST_BINARY only
  *	FileSys::GetSize() - return file size, FST_BINARY,TEXT,ATEXT only
+ *	FileSys::GetDiskSpace() - fill in data about filesystem space usage.
  *	FileSys::Seek() - seek to offset, FST_BINARY,TEXT,ATEXT only
  *	FileSys::Tell() - file position, FST_BINARY,TEXT,ATEXT only
  *
@@ -152,6 +153,23 @@ enum FilePerm {
 
 class StrArray;
 class CharSetCvt;
+class MD5;
+class StrBuf;
+
+class DiskSpaceInfo {
+
+    public:
+
+	    		DiskSpaceInfo();
+			~DiskSpaceInfo();
+
+	P4INT64		blockSize;
+	P4INT64		totalBytes;
+	P4INT64		usedBytes;
+	P4INT64		freeBytes;
+	int		pctUsed;
+	StrBuf		*fsType;
+} ;
 
 class FileSys {
 
@@ -177,11 +195,33 @@ class FileSys {
 
 	static int	BufferSize();
 
+	int		IsUnderPath( const StrPtr &path );
+
+	static int	SymlinksSupported()
+# ifdef OS_NT
+		;		// Have to probe the system to decide
+# else
+# ifdef HAVE_SYMLINKS
+				{ return 1; }
+# else
+				{ return 0; }
+# endif
+# endif
+
 	// Get/set perms, modtime
 
 	void		Perms( FilePerm p ) { perms = p; }
 	void		ModTime( StrPtr *u ) { modTime = u->Atoi(); }
 	void		ModTime( time_t t ) { modTime = (int)t; }
+
+	// Set filesize hint for NT fragmentation avoidance
+
+	void		SetSizeHint( offL_t l ) { sizeHint = l; }
+	offL_t		GetSizeHint() { return sizeHint; }
+
+	// Initialize digest
+
+	void		SetDigest( MD5 *m ) { checksum = m; }
 
 	// Get type info
 
@@ -295,13 +335,18 @@ class FileSys {
 	void		SetContentCharSetPriv( int x = 0 ) { content_charSet = x; }
 	int		GetContentCharSetPriv() { return content_charSet; }
 
+	void		GetDiskSpace( DiskSpaceInfo *info, Error *e );
+
+	void		LowerCasePath();
     protected:
 
 	FileOpenMode	mode;		// read or write
 	FilePerm	perms;		// leave read-only or read-write
 	int		modTime;	// stamp file mod date on close
+	offL_t		sizeHint;       // how big will the file get ?
 	StrBuf		path;
 	FileSysType 	type;
+	MD5		*checksum;      // if verifying file transfer
 
     private:
 	void		TempName( char *buf );

@@ -44,6 +44,7 @@ class PathSys : public StrBuf {
 
 	virtual int	GetCanon( const StrPtr &root, StrBuf &t ) = 0;
 	virtual int	ToParent( StrBuf *file = 0 ) = 0;
+	virtual int	IsUnderRoot( const StrPtr &root ) = 0;
 	virtual void	SetCharSet( int = 0 );
 
 	void		Expand();

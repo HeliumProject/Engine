@@ -80,7 +80,7 @@ class Diff {
 class DiffFlags {
 
     public:
-			DiffFlags() { type = Normal; sequence = Line; }
+			DiffFlags() { Init( "" ); }
 			DiffFlags( const char *flags ) { Init( flags ); }
 			DiffFlags( const StrPtr *flags ) { Init( flags ); }
 

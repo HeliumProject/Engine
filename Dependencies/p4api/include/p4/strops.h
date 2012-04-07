@@ -86,15 +86,18 @@ class StrOps {
 	static unsigned char XtoO( char h )
 			{ return h - ( h > '9' ? ( h >= 'a' ? 'a' - 10 : 'A' - 10 ) : '0' ); }
 
+	static int	IsDigest( const StrPtr &hex );
 	static void	WildToStr( const StrPtr &i, StrBuf &o );
 	static void	WildToStr( const StrPtr &i, StrBuf &o, const char *t );
 	static void	StrToWild( const StrPtr &i, StrBuf &o );
 	static void	WildCompat( const StrPtr &i, StrBuf &o );
+	static void	MaskNonPrintable( const StrPtr &i, StrBuf &o );
 
 	static void 	ScrunchArgs( StrBuf &out, int argc, 
 				StrPtr *argv, int targetLength );
 
 	static void     CommonPath( StrBuf &o, int &mdir, const StrPtr &n );
+	static void     GetDepotName( const char *d, StrBuf &n );
 	static void	StripNewline( StrBuf &o );
 
 	// i18n

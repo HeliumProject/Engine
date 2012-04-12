@@ -29,7 +29,7 @@ Helium.GetSystemVersion = function()
 end
 
 Helium.Build32Bit = function()
-	if ( _OPTIONS[ "build32and64" ] ) then
+	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
     	return not os.is64bit()
@@ -37,7 +37,7 @@ Helium.Build32Bit = function()
 end
 
 Helium.Build64Bit = function()
-	if ( _OPTIONS[ "build32and64" ] ) then
+	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
 	    return os.is64bit()
@@ -209,7 +209,7 @@ Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
 
-    if _OPTIONS[ "build32and64" ] then
+    if _OPTIONS[ "universal" ] then
         platforms
         {
             "x32",

@@ -6,8 +6,8 @@ require "WxWidgets"
 -- Do both instruction sets
 newoption
 {
-   trigger = "build32and64",
-   description = "Build both 32-bit and 64-bit binaries"
+   trigger = "universal",
+   description = "Build for both 32-bit and 64-bit target machines"
 }
 
 -- Do nothing if there is no action (--help, etc...)

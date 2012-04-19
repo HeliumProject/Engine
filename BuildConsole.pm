@@ -2,9 +2,6 @@ package Console;
 
 use strict;
 
-use Console::TraceFile;
-use Console::FileManager;
-
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( Print PrintStream PrintColor Warning Debug Error Profile SetColor Reset SetOutputLevel GetOutputLevel AddTraceFile RemoveTraceFile );
 
@@ -600,6 +597,229 @@ sub DESTROY
 {
   my $self = shift;
   --$g_BulletLevel;
+}
+
+1;
+
+#
+# TODO: Document
+#
+
+package Console::TraceFile;
+
+use strict;
+
+use File::Spec;
+use File::Path;
+use File::Basename;
+use FileHandle;
+
+sub new
+{
+  my $class = shift;
+  my $self = {};
+ 
+  $self->{ filename } = shift;
+  $self->{ stream } = shift || 0;
+  $self->{ level } = shift || -1;
+  $self->{ append } = shift || 0;
+  $self->{ refcount } = 0;
+  $self->{ handle } = undef;
+  
+  bless $self, $class;
+  return $self;
+}
+
+sub Open
+{
+  my $self = shift;
+  my $stream = shift || 0;
+  my $level = shift;
+  
+  $self->{ stream } |= $stream;
+
+  if( defined( $level ) )
+  {
+    $self->{ level } = $level;
+  }
+
+  if ( defined( $self->{ handle } ) )
+  {
+    ++$self->{ refcount };
+    return;
+  }
+  
+  my $mode = $self->{ append } ? '+>>' : '+>';
+  
+  my $directory = File::Basename::dirname( $self->{ filename } );
+  if ( !-d $directory )
+  {
+    mkpath( $directory );
+  }
+  
+  $self->{ handle } = FileHandle->new();
+  open( $self->{ handle }, $mode, $self->{ filename } );
+    
+  if ( !defined( $self->{ handle } ) )
+  {
+    die( "Could not open file '" . $self->{ filename } . "': $!\n" );
+  }
+    
+  $self->{ refcount } = 1;
+}
+
+sub Close
+{
+  my $self = shift;
+  my $force = shift || 0;
+  
+  $self->{ refcount } = $self->{ refcount } > 0 ? $self->{ refcount } - 1 : 0;
+  
+  if ( defined( $self->{ handle } ) && ( $self->{ refcount } <= 0 || $force ) )
+  {
+    if ( !$self->{ handle }->close() )
+    {
+      die( "Could not close file '" . $self->{ filename } . "': $!\n" );
+    }
+    
+    $self->{ handle } = undef;
+    
+    return 1;
+  }
+  
+  return 0;
+}
+
+sub DESTROY
+{
+  my $self = shift;
+  $self->Close( 1 );
+}
+
+1;
+
+package Console::ScopedTraceFile;
+
+use strict;
+
+sub new
+{
+  my $class = shift;
+  my $filename = shift;
+  
+  my $self = {};
+
+  $self->{ traceFilename } = $filename;
+  
+  Console::AddTraceFile( $filename, @_ );
+  
+  bless $self, $class;
+  return $self;
+}
+
+sub DESTROY
+{
+  my $self = shift;
+  
+  Console::RemoveTraceFile( $self->{ traceFilename } );
+}
+
+1;
+
+package Console::FileManager;
+
+use strict;
+
+sub new
+{
+  my $class = shift;
+  my $self = {};
+  
+  $self->{ files } = {};
+  
+  bless $self, $class;
+  return $self;
+}
+
+sub Redirect
+{
+  my $self = shift;
+  my $stream = shift;
+  my $level = shift;
+  my $format = shift || '';
+
+  foreach my $file ( values( %{ $self->{ files } } ) )
+  {
+    if (     ( ( $file->{ stream } & $stream ) == $stream )
+          && ( $file->{ level } < 0 || $level <= $file->{ level } ) )
+    {
+      my $fh = $file->{ handle };
+      print $fh sprintf( $format, @_ );
+    }
+  }
+}
+
+sub Find
+{
+  my $self = shift;
+  my $filename = shift;
+  
+  return $self->{ files }->{ $filename };
+}
+
+sub Open
+{
+  my $self = shift;
+  my $filename = shift;
+  my $stream = shift;
+  my $level = shift;
+  my $append = shift;
+  
+  my $file = $self->Find( $filename );
+
+  if ( defined( $file ) )
+  {
+    # should already be open, just potentially add this new stream/level
+    $file->Open( $stream, $level );
+    return;
+  }
+
+  $self->{ files }->{ $filename } = Console::TraceFile->new( $filename, $stream, $level, $append );
+  $self->{ files }->{ $filename }->Open();
+
+}
+
+sub Close
+{
+  my $self = shift;
+  my $filename = shift;
+  
+  my $file = $self->Find( $filename );
+  if ( defined( $file ) )
+  {
+    # check the return of close to see if we should actually get rid
+    # of it (close can return 0 to indicate the file did not have a zero
+    # refcount)
+    if ( $file->Close() )
+    {
+      delete( $self->{ files }->{ $filename } );
+    }
+  }
+}
+
+sub DESTROY
+{
+  my $self = shift;
+  
+  while ( my ( $filename, $file ) = each( %{ $self->{ files } } ) )
+  {
+    if ( defined( $file ) )
+    {
+      $file->Close( 1 );
+    }
+
+    delete( $self->{ files }->{ $filename } );
+  }
 }
 
 1;

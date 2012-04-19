@@ -60,3 +60,63 @@ sub AsHighPrecisionString
 }
 
 1;
+
+package Accumulator;
+
+use strict;
+
+use Time::HiRes qw( time );
+
+sub new
+{
+  my $class = shift;
+  
+  my $self = {};
+  $self->{ value } = 0;
+  
+  bless $self, $class;
+  return $self;
+}
+
+sub AsString
+{
+  my $self = shift;
+  my $timer = Timer->new();
+  return $timer->AsString( $self->{ value } );
+}
+
+sub AsHighPrecisionString
+{
+  my $self = shift;
+  my $timer = Timer->new();
+  return $timer->AsHighPrecisionString( $self->{ value } );
+}
+
+1;
+
+package ScopeTimer;
+
+use strict;
+
+use Time::HiRes qw( time );
+
+sub new
+{
+  my $class = shift;
+  my $accumulatorRef = shift;
+  
+  my $self = {};
+  $self->{ timer } = Timer->new();
+  $self->{ accumulatorRef } = $accumulatorRef;
+  
+  bless $self, $class;
+  return $self;
+}
+
+sub DESTROY
+{
+  my $self = shift;
+  ${ $self->{ accumulatorRef } }->{ value } += $self->{ timer }->Elapsed();
+}
+
+1;

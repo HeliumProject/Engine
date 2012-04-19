@@ -8,11 +8,9 @@ use File::Basename;
 use Data::Dumper;
 use Getopt::Long;
 
-use lib (dirname $0) . "\\Perl\\";
-use Console;
-use Timer;
-use ScopeTimer;
-use Accumulator;
+use lib (dirname $0);
+use BuildConsole;
+use BuildTimer;
 
 my $g_Config = 'Debug';
 my $g_Clean = 0;

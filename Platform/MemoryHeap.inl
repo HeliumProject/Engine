@@ -22,18 +22,18 @@
 #define mspace_usable_size          APPLY_PREFIX( mspace_usable_size )
 #define mspace_mallopt              APPLY_PREFIX( mspace_mallopt )
 
-/// Wrapper for Helium::PhysicalMemory::Allocate() to support return values expected by dlmalloc.
+/// Wrapper for Helium::VirtualMemory::Allocate() to support return values expected by dlmalloc.
 ///
 /// @param[in] size  Allocation size, in bytes.
 ///
 /// @return  Address of the allocation if successfully allocated, (void*)~0 if not.
 static void* PhysicalMemoryAllocate( size_t size )
 {
-    void* pMemory = Helium::PhysicalMemory::Allocate( size );
+    void* pMemory = Helium::VirtualMemory::Allocate( size );
     return( pMemory ? pMemory : reinterpret_cast< void* >( ~static_cast< uintptr_t >( 0 ) ) );
 }
 
-/// Wrapper for Helium::PhysicalMemory::Free() to support return values expected by dlmalloc.
+/// Wrapper for Helium::VirtualMemory::Free() to support return values expected by dlmalloc.
 ///
 /// @param[in] pMemory  Base address of the region of memory to free.
 /// @param[in] size     Size of the region of memory to free.
@@ -41,7 +41,7 @@ static void* PhysicalMemoryAllocate( size_t size )
 /// @return  Zero if successful, non-zero if an error occurred.
 static int PhysicalMemoryFree( void* pMemory, size_t size )
 {
-    return( Helium::PhysicalMemory::Free( pMemory, size ) ? 0 : -1 );
+    return( Helium::VirtualMemory::Free( pMemory, size ) ? 0 : -1 );
 }
 
 #if HELIUM_ENABLE_TRACE
@@ -138,10 +138,10 @@ static void PrintfWrapper( const char* pFormat, ... )
 
 #if USE_NEDMALLOC
 #define EXTSPEC static
-#include "nedmalloc/nedmalloc.c"
+#include "Dependencies/nedmalloc/nedmalloc.c"
 #undef EXTSPEC
 #else
-#include "dlmalloc/malloc.c.h"
+#include "Dependencies/dlmalloc/malloc.c.h"
 #endif
 
 #undef printf
@@ -197,8 +197,8 @@ Helium::MEMORY_HEAP_CLASS_NAME::~MEMORY_HEAP_CLASS_NAME()
     HELIUM_ASSERT( pVerboseTrackingData->allocationBacktraceMap.empty() );
     pVerboseTrackingData->~DynamicMemoryHeapVerboseTrackingData();
 
-    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), PhysicalMemory::GetPageSize() );
-    PhysicalMemory::Free( pVerboseTrackingData, allocationSize );
+    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), VirtualMemory::GetPageSize() );
+    VirtualMemory::Free( pVerboseTrackingData, allocationSize );
 
     sm_bDisableBacktraceTracking = bOldDisableBactraceTracking;
 
@@ -501,9 +501,9 @@ void Helium::MEMORY_HEAP_CLASS_NAME::ConstructNoName( size_t capacity )
     bool bOldDisableBactraceTracking = sm_bDisableBacktraceTracking;
     sm_bDisableBacktraceTracking = true;
 
-    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), PhysicalMemory::GetPageSize() );
+    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), VirtualMemory::GetPageSize() );
     DynamicMemoryHeapVerboseTrackingData* pVerboseTrackingData =
-        static_cast< DynamicMemoryHeapVerboseTrackingData* >( PhysicalMemory::Allocate( allocationSize ) );
+        static_cast< DynamicMemoryHeapVerboseTrackingData* >( VirtualMemory::Allocate( allocationSize ) );
     HELIUM_ASSERT( pVerboseTrackingData );
     new( pVerboseTrackingData ) DynamicMemoryHeapVerboseTrackingData;
 

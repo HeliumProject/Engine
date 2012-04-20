@@ -5,7 +5,7 @@
 using namespace Helium;
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-volatile size_t PhysicalMemory::sm_bytesAllocated = 0;
+volatile size_t VirtualMemory::sm_bytesAllocated = 0;
 #endif
 
 /// Constructor.
@@ -114,7 +114,7 @@ DynamicMemoryHeap& Helium::GetDefaultHeap()
     static DynamicMemoryHeap* pDefaultHeap = NULL;
     if( !pDefaultHeap )
     {
-        pDefaultHeap = static_cast< DynamicMemoryHeap* >( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
+        pDefaultHeap = static_cast< DynamicMemoryHeap* >( VirtualMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
         new( pDefaultHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "Default" ) );
     }
 
@@ -131,7 +131,7 @@ DynamicMemoryHeap& Helium::GetExternalHeap()
     static DynamicMemoryHeap* pExternalHeap = NULL;
     if( !pExternalHeap )
     {
-        pExternalHeap = static_cast< DynamicMemoryHeap* >( PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
+        pExternalHeap = static_cast< DynamicMemoryHeap* >( VirtualMemory::Allocate( sizeof( DynamicMemoryHeap ) ) );
         new( pExternalHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( "External" ) );
     }
 

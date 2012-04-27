@@ -1,7 +1,7 @@
 #include "EnginePch.h"
 #include "Engine/Resource.h"
 
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Foundation/Reflect/Class.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/CacheManager.h"

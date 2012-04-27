@@ -10,7 +10,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Foundation/Container/Map.h"
 #include "Foundation/Container/SortedMap.h"
 #include "Foundation/Container/SortedSet.h"

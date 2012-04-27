@@ -8,7 +8,7 @@
 #include "FrameworkPch.h"
 #include "Framework/GameSystem.h"
 
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Reflect/Registry.h"

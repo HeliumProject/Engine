@@ -8,7 +8,7 @@
 #include "EnginePch.h"
 #include "Engine/CachePackageLoader.h"
 
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/GameObjectLoader.h"

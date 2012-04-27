@@ -12,7 +12,7 @@
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
 #include "Foundation/StringConverter.h"
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 
 #if USE_XML_FOR_CACHE_DATA
 #include "Foundation/Reflect/ArchiveXML.h"

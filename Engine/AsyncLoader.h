@@ -6,10 +6,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_CORE_ASYNC_LOADER_H
-#define HELIUM_CORE_ASYNC_LOADER_H
-
-#include "Foundation/API.h"
+#ifndef HELIUM_ENGINE_ASYNC_LOADER_H
+#define HELIUM_ENGINE_ASYNC_LOADER_H
 
 #include "Platform/Condition.h"
 #include "Platform/ReadWriteLock.h"
@@ -17,6 +15,8 @@
 
 #include "Foundation/String.h"
 #include "Foundation/Container/ObjectPool.h"
+
+#include "Engine/Engine.h"
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -32,7 +32,7 @@
 namespace Helium
 {
     /// Async loading manager.
-    class HELIUM_FOUNDATION_API AsyncLoader : NonCopyable
+    class HELIUM_ENGINE_API AsyncLoader : NonCopyable
     {
     public:
         /// Request pool block size.
@@ -164,4 +164,4 @@ namespace Helium
     };
 }
 
-#endif  // HELIUM_CORE_ASYNC_LOADER_H
+#endif  // HELIUM_ENGINE_ASYNC_LOADER_H

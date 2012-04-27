@@ -13,7 +13,7 @@
 #include "Foundation/File/Directory.h"
 #include "Foundation/Stream/FileStream.h"
 #include "Foundation/Stream/BufferedStream.h"
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Engine/BinaryDeserializer.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"

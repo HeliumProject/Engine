@@ -16,7 +16,7 @@
 #include "Foundation/Exception.h"
 #include "Foundation/SettingsManager.h"
 #include "Foundation/InitializerStack.h"
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"

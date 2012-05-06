@@ -442,8 +442,8 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
-	pchheader( path.join(os.getcwd(), moduleName .. "/" .. moduleName .. "Pch.h") )
-	pchsource( path.join(os.getcwd(), moduleName .. "/" .. moduleName .. "Pch.cpp") )
+	pchheader( path.join(baseDirectory, moduleName .. "/" .. moduleName .. "Pch.h") )
+	pchsource( path.join(baseDirectory, moduleName .. "/" .. moduleName .. "Pch.cpp") )
 
 	Helium.DoDefaultProjectSettings()
 

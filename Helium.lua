@@ -442,8 +442,23 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
-	pchheader( path.join(baseDirectory, moduleName .. "/" .. moduleName .. "Pch.h") )
-	pchsource( path.join(baseDirectory, moduleName .. "/" .. moduleName .. "Pch.cpp") )
+    local header = moduleName .. "Pch.h"
+
+    if os.get() == "macosx" then
+    	header = path.join( moduleName, header )
+    	header = path.join( baseDirectory, header )
+    	header = path.join( "..", header )
+    	header = path.join( "..", header )
+    end
+
+	pchheader( header )
+
+	local source = moduleName .. "Pch.cpp"
+
+	source = path.join( moduleName, source )
+	source = path.join( baseDirectory, source )
+
+	pchsource( source )
 
 	Helium.DoDefaultProjectSettings()
 

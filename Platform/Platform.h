@@ -26,6 +26,17 @@
 # define HELIUM_OS_WIN32 1
 # define HELIUM_CPU_X86 1
 # define HELIUM_CPU_X86_32 1
+#elif defined( __APPLE__ )
+# define HELIUM_OS_MAC 1
+# if defined( __x86_64__ )
+#  define HELIUM_OS_MAC64 1
+#  define HELIUM_CPU_X86 1
+#  define HELIUM_CPU_X86_64 1
+# else
+#  define HELIUM_OS_MAC32 1
+#  define HELIUM_CPU_X86 1
+#  define HELIUM_CPU_X86_32 1
+# endif
 #else
 # error Unsupported platform.
 #endif
@@ -59,4 +70,8 @@
 
 #if HELIUM_OS_WIN
 # include "Platform/PlatformWin.h"
+#endif
+
+#if HELIUM_OS_MAC
+# include "Platform/PlatformMac.h"
 #endif

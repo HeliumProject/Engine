@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/API.h"
 #include "Editor/MRU/MRU.h"

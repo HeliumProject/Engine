@@ -13,7 +13,7 @@ namespace Helium
         class Transform;
         typedef Helium::StrongPtr< SceneGraph::Transform > TransformPtr;
 
-        class SCENE_GRAPH_API Transform : public HierarchyNode
+        class HELIUM_SCENE_GRAPH_API Transform : public HierarchyNode
         {
         public:
             REFLECT_DECLARE_OBJECT( Transform, HierarchyNode );

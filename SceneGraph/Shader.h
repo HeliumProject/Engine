@@ -12,7 +12,7 @@ namespace Helium
     {
         class Scene;
 
-        class SCENE_GRAPH_API Shader : public SceneNode
+        class HELIUM_SCENE_GRAPH_API Shader : public SceneNode
         {
         public:
             REFLECT_DECLARE_OBJECT( Shader, SceneNode );

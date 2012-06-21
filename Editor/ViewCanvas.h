@@ -4,7 +4,6 @@
 #include "Foundation/Math/FpuVector3.h"
 #include "Foundation/Math/FpuAlignedBox.h"
 
-#include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Undo/UndoQueue.h"
 
@@ -13,6 +12,7 @@
 #include "SceneGraph/Resource.h"
 #include "SceneGraph/Viewport.h"
 #include "SceneGraph/ViewportSettings.h"
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/DeviceManager.h"
 
 #include "Editor/API.h"

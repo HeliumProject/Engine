@@ -17,7 +17,7 @@ namespace Helium
         // Command for making or breaking connections between ancestor and descendant
         // dependency nodes.
         // 
-        class SCENE_GRAPH_API DependencyCommand : public UndoCommand
+        class HELIUM_SCENE_GRAPH_API DependencyCommand : public UndoCommand
         {
         public:
             // Is this command connecting or disconnecting the nodes?

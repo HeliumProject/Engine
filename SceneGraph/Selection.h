@@ -43,7 +43,7 @@ namespace Helium
         //  If you need to extend the functionality of this class, patch in more events :)
         //
 
-        class SCENE_GRAPH_API Selection
+        class HELIUM_SCENE_GRAPH_API Selection
         {
         private:
             //

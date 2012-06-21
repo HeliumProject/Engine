@@ -39,7 +39,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Tracks all the scenes and their undo queues.
         // 
-        class SCENE_GRAPH_API SceneManager
+        class HELIUM_SCENE_GRAPH_API SceneManager
         {
         private:
             // all loaded scenes by path

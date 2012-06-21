@@ -12,7 +12,7 @@ namespace Helium
         typedef std::vector< Transform* > V_TransformDumbPtr;
 
         // Influence stores the object ID indices and weights of transforms that influence or deform a vertex
-        class SCENE_GRAPH_API Influence : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API Influence : public Reflect::Object
         {
         public:
             // The object ID indices of the transforms that influence this vertex

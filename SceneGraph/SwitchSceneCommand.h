@@ -16,7 +16,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Undo command for switching the current scene.
         // 
-        class SCENE_GRAPH_API SwitchSceneCommand : public PropertyUndoCommand< SceneGraph::Scene* >
+        class HELIUM_SCENE_GRAPH_API SwitchSceneCommand : public PropertyUndoCommand< SceneGraph::Scene* >
         {
         public:
             typedef PropertyUndoCommand< SceneGraph::Scene* > Base;

@@ -27,7 +27,7 @@ namespace Helium
 
         class PickVisitor;
 
-        class SCENE_GRAPH_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
+        class HELIUM_SCENE_GRAPH_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
         {
         protected:
             // The mode of the manipulator (duh)

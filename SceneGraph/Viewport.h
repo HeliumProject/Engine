@@ -4,7 +4,6 @@
 #include "Foundation/Math/FpuVector3.h"
 #include "Foundation/Math/FpuAlignedBox.h"
 
-#include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Enumeration.h"
 #include "Foundation/Undo/UndoQueue.h"
 
@@ -13,6 +12,7 @@
 #include "SceneGraph/API.h"
 #include "SceneGraph/Render.h"
 #include "SceneGraph/Camera.h"
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/ViewportSettings.h"
 #include "SceneGraph/DeviceManager.h"
 
@@ -199,7 +199,7 @@ namespace Helium
         class PrimitiveGrid;
         class PrimitiveFrame;
 
-        class SCENE_GRAPH_API Viewport
+        class HELIUM_SCENE_GRAPH_API Viewport
         {
         public:
             static const Helium::Color s_LiveMaterial;

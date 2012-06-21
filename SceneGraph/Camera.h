@@ -72,7 +72,7 @@ namespace Helium
         // Camera
         //
 
-        class SCENE_GRAPH_API Camera
+        class HELIUM_SCENE_GRAPH_API Camera
         {
         private:
             // total control size

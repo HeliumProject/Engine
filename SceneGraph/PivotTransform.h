@@ -11,7 +11,7 @@ namespace Helium
         //     -1                      -1
         //  [Sp]x[S]x[Sh]x[Sp]x[St]x[Rp]x[R]x[Rp]x[Rt]x[T]x[Tp]
 
-        class SCENE_GRAPH_API PivotTransform : public Transform
+        class HELIUM_SCENE_GRAPH_API PivotTransform : public Transform
         {
         public:
             REFLECT_DECLARE_OBJECT( SceneGraph::PivotTransform, SceneGraph::Transform );

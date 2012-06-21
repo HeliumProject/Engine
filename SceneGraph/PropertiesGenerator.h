@@ -14,7 +14,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API PropertiesGenerator : public Inspect::Interpreter
+        class HELIUM_SCENE_GRAPH_API PropertiesGenerator : public Inspect::Interpreter
         {
         public:
             PropertiesGenerator (Inspect::Container* container);

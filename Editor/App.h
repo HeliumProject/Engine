@@ -3,8 +3,9 @@
 #include "Platform/Thread.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/SettingsManager.h"
 #include "Foundation/Document/DocumentManager.h"
+
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker.h"

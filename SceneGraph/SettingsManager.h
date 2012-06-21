@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Foundation/API.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
+#include "SceneGraph/API.h"
+
 namespace Helium
 {
-	class HELIUM_FOUNDATION_API Settings : public Reflect::Object
+	class HELIUM_SCENE_GRAPH_API Settings : public Reflect::Object
 	{
 	public:
 		Settings()
@@ -32,7 +33,7 @@ namespace Helium
 
 	typedef std::map< Reflect::TypeID, SettingsPtr > M_Settings;
 
-	class HELIUM_FOUNDATION_API SettingsManager : public Reflect::Object
+	class HELIUM_SCENE_GRAPH_API SettingsManager : public Reflect::Object
 	{
 	public:
 		REFLECT_DECLARE_OBJECT( SettingsManager, Reflect::Object );

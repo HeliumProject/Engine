@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Foundation/API.h" 
-
 #include <hash_map>
 
 #include "Foundation/Reflect/Registry.h"
@@ -30,7 +28,7 @@ namespace Helium
 
         typedef Helium::Signature< const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
-        class HELIUM_FOUNDATION_API ComponentCollection : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);

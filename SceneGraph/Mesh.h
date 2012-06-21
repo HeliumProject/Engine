@@ -57,7 +57,7 @@ namespace Helium
         };
         typedef std::set<MeshEdge> S_MeshEdge;
 
-        class SCENE_GRAPH_API Mesh : public PivotTransform
+        class HELIUM_SCENE_GRAPH_API Mesh : public PivotTransform
         {
         public:
             REFLECT_DECLARE_OBJECT( Mesh, PivotTransform );

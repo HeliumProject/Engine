@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/TransformManipulator.h"
 
 namespace Helium
@@ -23,7 +22,7 @@ namespace Helium
 
         typedef RotationTypes::RotationType RotationType;
 
-        class SCENE_GRAPH_API RotateManipulator : public TransformManipulator
+        class HELIUM_SCENE_GRAPH_API RotateManipulator : public TransformManipulator
         {
         private:
             SettingsManager* m_SettingsManager;

@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "SceneGraphPch.h"
 #include "SearchableProperties.h"
 
 using namespace Helium;

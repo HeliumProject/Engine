@@ -53,7 +53,7 @@ namespace Helium
             }
         };
 
-        class SCENE_GRAPH_API CameraSettings : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API CameraSettings : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_OBJECT( CameraSettings, Reflect::Object );

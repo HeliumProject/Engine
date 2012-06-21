@@ -300,7 +300,7 @@ namespace Helium
 
         typedef stdext::hash_map< tstring, SceneGraph::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
-        class SCENE_GRAPH_API Scene : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
             //
             // Members

@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        struct SCENE_GRAPH_API EvaluateResult
+        struct HELIUM_SCENE_GRAPH_API EvaluateResult
         {
             float32_t m_TotalTime;
             uint32_t m_NodeCount;
@@ -49,7 +49,7 @@ namespace Helium
         // Evaluates dirty nodes when appropriate, and notifies interested listeners
         // that evaluation has occurred.
         // 
-        class SCENE_GRAPH_API Graph : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API Graph : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_OBJECT( Graph, Reflect::Object );

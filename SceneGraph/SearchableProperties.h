@@ -4,11 +4,11 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/API.h" 
+#include "SceneGraph/API.h"
 
 namespace Helium
 {
-    class HELIUM_FOUNDATION_API SearchableProperties
+    class HELIUM_SCENE_GRAPH_API SearchableProperties
     {
     private:
         std::multimap< tstring, tstring > m_StringProperties;

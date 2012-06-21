@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Foundation/API.h" 
 #include "Foundation/Automation/Event.h"
-#include "Foundation/Component/ComponentExceptions.h"
+
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 
-#include "Foundation/Component/SearchableProperties.h"
+#include "SceneGraph/API.h"
+#include "SceneGraph/ComponentExceptions.h"
+#include "SceneGraph/SearchableProperties.h"
 
 namespace Helium
 {
@@ -53,7 +54,7 @@ namespace Helium
         // Abstract Base Class - Subclass this for structured attribute data you can add to a collection
         //
 
-        class HELIUM_FOUNDATION_API ComponentBase : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API ComponentBase : public Reflect::Object
         {
         private:
             REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Object );

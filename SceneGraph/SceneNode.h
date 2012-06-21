@@ -3,11 +3,11 @@
 #include <hash_map>
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
+#include "SceneGraph/ComponentCollection.h"
 
 namespace Helium
 {
@@ -76,7 +76,7 @@ namespace Helium
         //   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
         //
 
-        class SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public Component::ComponentCollection
+        class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public Component::ComponentCollection
         {
         public:
             REFLECT_DECLARE_ABSTRACT( SceneNode, Component::ComponentCollection );

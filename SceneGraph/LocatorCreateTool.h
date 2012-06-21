@@ -10,7 +10,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API LocatorCreateTool : public CreateTool
+        class HELIUM_SCENE_GRAPH_API LocatorCreateTool : public CreateTool
         {
         public:
             static LocatorShape s_Shape;

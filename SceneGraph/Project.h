@@ -9,7 +9,7 @@
 
 namespace Helium
 {
-    class SCENE_GRAPH_API Project : public Reflect::Object
+    class HELIUM_SCENE_GRAPH_API Project : public Reflect::Object
     {
     public:
         Project( const Path& path = TXT( "" ) );

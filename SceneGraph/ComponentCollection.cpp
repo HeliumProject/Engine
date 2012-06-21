@@ -1,8 +1,8 @@
-#include "FoundationPch.h"
+#include "SceneGraphPch.h"
 #include "ComponentCollection.h"
-#include "Foundation/Component/ComponentExceptions.h"
 
 #include "Foundation/Container/Insert.h" 
+#include "SceneGraph/ComponentExceptions.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Component::ComponentCollection );
 

@@ -10,13 +10,10 @@
 #include "Platform/Timer.h"
 
 #include "Foundation/Math/Common.h"
-
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
-#include "Foundation/SettingsManager.h"
 #include "Foundation/InitializerStack.h"
-#include "Engine/AsyncLoader.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"
@@ -29,6 +26,7 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Worker/Process.h"
 
+#include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/GameObjectType.h"
@@ -51,6 +49,7 @@
 #include "Framework/WorldManager.h"
 
 #include "SceneGraph/SceneGraphInit.h"
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"

@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "SceneGraphPch.h"
 #include "SettingsManager.h"
 
 #include "Platform/Debug.h"

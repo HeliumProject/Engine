@@ -2,9 +2,10 @@
 
 #include <map>
 
-#include "Foundation/SettingsManager.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Inspect/Interpreter.h"
+
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/API.h"
 #include "Editor/Inspect/Canvas.h"

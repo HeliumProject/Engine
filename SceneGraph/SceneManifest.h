@@ -9,7 +9,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API SceneManifest : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API SceneManifest : public Reflect::Object
         {
         public:
             Vector3 m_BoundingBoxMin;

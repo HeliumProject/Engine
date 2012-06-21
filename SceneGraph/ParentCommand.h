@@ -11,7 +11,7 @@ namespace Helium
         class HierarchyNode;
         typedef Helium::StrongPtr< SceneGraph::HierarchyNode > HierarchyNodePtr;
 
-        class SCENE_GRAPH_API ParentCommand : public BatchUndoCommand
+        class HELIUM_SCENE_GRAPH_API ParentCommand : public BatchUndoCommand
         {
         public:
             typedef BatchUndoCommand Base;

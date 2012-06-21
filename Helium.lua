@@ -354,6 +354,11 @@ Helium.DoDefaultSolutionSettings = function()
 			"/Oi",
 		}
 
+    -- vars to set in the project file for llvm + c++11 (for type traits)
+	-- CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+	-- CLANG_CXX_LIBRARY = "libc++";
+	-- GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+
 	configuration {}
 
 end

@@ -2,8 +2,8 @@
 
 #include "Foundation/Automation/Attribute.h"
 #include "Foundation/Document/Document.h"
-#include "Foundation/Reflect/Structure.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Structure.h"
+#include "Reflect/Data/DataDeduction.h"
 
 #include "SceneGraph/API.h"
 

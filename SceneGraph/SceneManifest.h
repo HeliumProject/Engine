@@ -1,9 +1,10 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/DataDeduction.h"
+#include "Math/FpuVector3.h"
+
+#include "SceneGraph/API.h"
 
 namespace Helium
 {

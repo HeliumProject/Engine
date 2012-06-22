@@ -4,8 +4,8 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Reflect/Class.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Class.h"
+#include "Reflect/Object.h"
 #include "Foundation/Container/Map.h"
 #include "Foundation/Memory/AutoPtr.h"
 

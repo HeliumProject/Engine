@@ -3,7 +3,7 @@
 
 #include "TestAppPch.h"
 
-#include "Foundation/Reflect/Registry.h"
+#include "Reflect/Registry.h"
 #include "WindowProc.h"
 
 #include <cfloat>

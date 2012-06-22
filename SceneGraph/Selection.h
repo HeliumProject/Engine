@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Foundation/Automation/Event.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 #include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"

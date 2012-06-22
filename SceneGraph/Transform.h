@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Math/FpuEulerAngles.h"
+#include "Math/FpuEulerAngles.h"
 
 #include "SceneGraph/Manipulator.h"
 #include "SceneGraph/HierarchyNode.h"

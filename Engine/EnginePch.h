@@ -5,4 +5,4 @@
 #include "Platform/Memory.h"
 #include "Platform/Trace.h"
 
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/DataDeduction.h"

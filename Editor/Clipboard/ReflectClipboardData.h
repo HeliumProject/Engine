@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {

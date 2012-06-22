@@ -2,7 +2,7 @@
 #include "Engine/GameObjectType.h"
 
 #include "Foundation/Container/ObjectPool.h"
-#include "Foundation/Reflect/Registry.h"
+#include "Reflect/Registry.h"
 #include "Engine/GameObjectPointerData.h"
 
 #include "Engine/Package.h"

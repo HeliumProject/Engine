@@ -11,9 +11,9 @@
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
-#include "Foundation/Math/Float16.h"
-#include "Foundation/Math/SimdVector2.h"
-#include "Foundation/Math/SimdVector3.h"
+#include "Math/Float16.h"
+#include "Math/SimdVector2.h"
+#include "Math/SimdVector3.h"
 #include "Engine/Serializer.h"
 #include "Rendering/Color.h"
 

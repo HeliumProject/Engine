@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/CommandQueue.h"
-#include "Foundation/Inspect/Controls.h"
+#include "Inspect/Controls.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/PropertiesGenerator.h"

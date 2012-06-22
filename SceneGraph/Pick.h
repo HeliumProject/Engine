@@ -2,12 +2,12 @@
 
 #include "SceneGraph/API.h"
 
-#include "Foundation/Math/FpuLine.h"
-#include "Foundation/Math/FpuFrustum.h"
+#include "Math/FpuLine.h"
+#include "Math/FpuFrustum.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 #include "SceneGraph/Visitor.h"
 
 namespace Helium

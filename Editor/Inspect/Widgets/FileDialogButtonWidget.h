@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Editor/Inspect/Widget.h"
+#include "Editor/Inspect/wxWidget.h"
 #include "Editor/Inspect/Widgets/ButtonWidget.h"
 
 #include "Foundation/FileDialog.h"

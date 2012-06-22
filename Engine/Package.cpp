@@ -1,7 +1,7 @@
 #include "EnginePch.h"
 #include "Engine/Package.h"
 
-#include "Foundation/Reflect/Class.h"
+#include "Reflect/Class.h"
 #include "Engine/GameObjectType.h"
 
 using namespace Helium;

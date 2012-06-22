@@ -8,8 +8,8 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Archive.h"
-#include "Foundation/Reflect/Version.h"
+#include "Reflect/Archive.h"
+#include "Reflect/Version.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 

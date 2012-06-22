@@ -3,7 +3,7 @@
 
 #include "Platform/Memory.h"
 
-#include "Foundation/Math/Common.h"
+#include "Math/Common.h"
 
 using namespace Helium;
 

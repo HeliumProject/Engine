@@ -3,7 +3,7 @@
 #include "SceneGraph/API.h"
 #include "Foundation/Automation/Event.h"     // for Helium::Delegate
 #include "SceneGraph/SceneNode.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 namespace Helium
 {

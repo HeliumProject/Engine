@@ -2,13 +2,13 @@
 
 #include <map>
 
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Inspect/Interpreter.h"
+#include "Reflect/Object.h"
+#include "Inspect/Interpreter.h"
 
 #include "SceneGraph/SettingsManager.h"
 
 #include "Editor/API.h"
-#include "Editor/Inspect/Canvas.h"
+#include "Editor/Inspect/wxCanvas.h"
 #include "Editor/Inspect/TreeCanvas.h"
 
 namespace Helium

@@ -11,8 +11,8 @@
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
-#include "Foundation/Math/SimdMatrix44.h"
-#include "Foundation/Math/SimdFrustum.h"
+#include "Math/SimdMatrix44.h"
+#include "Math/SimdFrustum.h"
 #include "Rendering/Color.h"
 #include "Rendering/RRenderResource.h"
 

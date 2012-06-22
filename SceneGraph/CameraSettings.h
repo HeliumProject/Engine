@@ -2,8 +2,8 @@
 
 #include "SceneGraph/API.h"
 
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Object.h"
+#include "Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {

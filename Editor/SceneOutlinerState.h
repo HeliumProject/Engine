@@ -2,7 +2,7 @@
 
 #include <set>
 
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 #include "Editor/API.h"
 #include "Platform/Types.h"

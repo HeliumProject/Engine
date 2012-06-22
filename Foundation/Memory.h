@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
+
 #include "Foundation/API.h"
 
 #include <sys/types.h>
@@ -15,10 +16,10 @@ namespace Helium
 
         struct MemoryPool
         {
-            const tchar_t* m_Name;
-            uint32_t         m_Count;
-            uint64_t         m_Size;
-            uint64_t         m_Previous;
+            const tchar_t*  m_Name;
+            uint32_t        m_Count;
+            uint64_t        m_Size;
+            uint64_t        m_Previous;
 
             MemoryPool()
                 : m_Name (NULL)

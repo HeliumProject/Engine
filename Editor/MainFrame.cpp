@@ -3,7 +3,7 @@
 
 #include "Platform/Platform.h"
 
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "Reflect/ArchiveXML.h"
 
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/TransformManipulator.h"
@@ -2037,6 +2037,7 @@ void MainFrame::OnSmartDuplicate(wxCommandEvent& event)
 
 void MainFrame::OnCopyTransform(wxCommandEvent& event)
 {
+#ifdef REFLECT_REFACTOR
     if ( m_SceneManager.HasCurrentScene() )
     {
         V_Matrix4 transforms;
@@ -2054,10 +2055,12 @@ void MainFrame::OnCopyTransform(wxCommandEvent& event)
             wxTheClipboard->Close();
         }
     }
+#endif
 }
 
 void MainFrame::OnPasteTransform(wxCommandEvent& event)
 {
+#ifdef REFLECT_REFACTOR
     if ( m_SceneManager.HasCurrentScene() )
     {
         tstring xml;
@@ -2087,6 +2090,7 @@ void MainFrame::OnPasteTransform(wxCommandEvent& event)
             }
         }
     }
+#endif
 }
 
 void MainFrame::OnSnapToCamera(wxCommandEvent& event)

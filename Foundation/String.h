@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Platform/Memory.h"
 
-#include "Foundation/Math/Common.h"
+#include "Math/Common.h"
 
 #include "Foundation/API.h"
 #include "Foundation/HashFunctions.h"

@@ -5,7 +5,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Archive.h"
+#include "Reflect/Archive.h"
 
 namespace Helium
 {

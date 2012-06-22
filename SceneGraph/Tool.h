@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/Input.h"
+#include "Reflect/Object.h"
 
 #include "SceneGraph/API.h"
-#include "Foundation/Reflect/Object.h"
+#include "SceneGraph/Input.h"
 #include "SceneGraph/Selection.h"
 #include "SceneGraph/Viewport.h"
 

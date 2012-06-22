@@ -2,8 +2,8 @@
 
 #include <hash_map>
 
-#include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Data/DataDeduction.h"
 
 #include "Component.h"
 

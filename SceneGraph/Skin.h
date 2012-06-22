@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Math/FpuMatrix4.h"
+
 #include "SceneGraph/SceneNode.h"
 
 namespace Helium

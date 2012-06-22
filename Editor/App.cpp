@@ -9,7 +9,6 @@
 #include "Platform/Console.h"
 #include "Platform/Timer.h"
 
-#include "Foundation/Math/Common.h"
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
@@ -20,11 +19,15 @@
 #include "Foundation/CommandLine/Processor.h"
 #include "Foundation/Document/Document.h"
 #include "Foundation/File/File.h"
-#include "Foundation/Inspect/Inspect.h"
-#include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 #include "Foundation/Name.h"
-#include "Foundation/Reflect/Registry.h"
 #include "Foundation/Worker/Process.h"
+
+#include "Reflect/Registry.h"
+
+#include "Inspect/Inspect.h"
+#include "Inspect/Interpreters/Reflect/InspectReflectInit.h"
+
+#include "Math/Common.h"
 
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"

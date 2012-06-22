@@ -3,8 +3,9 @@
 #include <string>
 #include <map>
 
-#include "Foundation/Reflect/Enumeration.h"
-#include "Foundation/Inspect/DataBinding.h"
+#include "Reflect/Enumeration.h"
+#include "Inspect/DataBinding.h"
+#include "Math/FpuMatrix4.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"

@@ -3,11 +3,11 @@
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Document/Document.h"
 #include "Foundation/TUID.h"
-#include "Foundation/Reflect/Archive.h"
-#include "Foundation/Reflect/Version.h"
+#include "Reflect/Archive.h"
+#include "Reflect/Version.h"
 
-#include "Foundation/Inspect/DataBinding.h"
-#include "Foundation/Inspect/Canvas.h"
+#include "Inspect/DataBinding.h"
+#include "Inspect/Canvas.h"
 #include "Foundation/Undo/UndoQueue.h"
 
 #include "SceneGraph/API.h"

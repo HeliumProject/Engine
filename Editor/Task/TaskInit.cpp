@@ -2,8 +2,8 @@
 #include "TaskInit.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Object.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

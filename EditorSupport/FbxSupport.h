@@ -13,8 +13,8 @@
 
 #if HELIUM_TOOLS
 
-#include "Foundation/Math/SimdMatrix44.h"
-#include "Foundation/Math/SimdQuat.h"
+#include "Math/SimdMatrix44.h"
+#include "Math/SimdQuat.h"
 #include "GraphicsTypes/VertexTypes.h"
 
 #if HELIUM_CC_CL

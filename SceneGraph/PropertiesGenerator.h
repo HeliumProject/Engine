@@ -3,9 +3,9 @@
 #include <string>
 #include <map>
 
-#include "Foundation/Inspect/DataBinding.h"
-#include "Foundation/Inspect/Controls.h"
-#include "Foundation/Inspect/Interpreter.h"
+#include "Inspect/DataBinding.h"
+#include "Inspect/Controls.h"
+#include "Inspect/Interpreter.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"

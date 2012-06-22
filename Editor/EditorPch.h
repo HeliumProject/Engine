@@ -69,7 +69,7 @@
 
 #if 0
 use /Zm128+
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Object.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Data/DataDeduction.h"
 #endif

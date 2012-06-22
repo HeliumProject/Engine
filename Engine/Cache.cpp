@@ -15,9 +15,9 @@
 #include "Engine/AsyncLoader.h"
 
 #if USE_XML_FOR_CACHE_DATA
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "Reflect/ArchiveXML.h"
 #else
-#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Reflect/ArchiveBinary.h"
 #endif
 
 using namespace Helium;

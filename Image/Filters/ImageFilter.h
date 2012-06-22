@@ -12,9 +12,9 @@
 
 #include <iostream>
 
-#include "Foundation/Math/FpuVector2.h"
-#include "Foundation/Math/FpuVector3.h"
-#include "Foundation/Math/FpuVector4.h"
+#include "Math/FpuVector2.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuVector4.h"
 
 #include "Image/Image.h"
 

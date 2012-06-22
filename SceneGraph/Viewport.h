@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Foundation/Math/Axes.h"
-#include "Foundation/Math/FpuVector3.h"
-#include "Foundation/Math/FpuAlignedBox.h"
+#include "Math/Axes.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuAlignedBox.h"
 
-#include "Foundation/Reflect/Enumeration.h"
+#include "Reflect/Enumeration.h"
 #include "Foundation/Undo/UndoQueue.h"
 
 #include "Rendering/Color.h"

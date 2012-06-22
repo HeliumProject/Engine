@@ -2,8 +2,8 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Reflect/Data/Data.h"
-#include "Foundation/Reflect/Data/PointerData.h"
+#include "Reflect/Data/Data.h"
+#include "Reflect/Data/PointerData.h"
 
 namespace Helium
 {

@@ -26,8 +26,8 @@
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
-#include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/ArchiveXML.h"
+#include "Reflect/Data/DataDeduction.h"
 #include "Engine/ObjectLoaderVisitors.h"
 
 #include "expat.h"

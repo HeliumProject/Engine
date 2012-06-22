@@ -7,8 +7,8 @@
 #include "Foundation/StringConverter.h"
 #include "Engine/Serializer.h"
 #include "Rendering/RRenderResource.h"
-#include "Foundation/Reflect/Enumeration.h"
-#include "Foundation/Reflect/Structure.h"
+#include "Reflect/Enumeration.h"
+#include "Reflect/Structure.h"
 
 namespace Helium
 {

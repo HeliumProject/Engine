@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "ParentCommand.h"
 #include "SceneGraph/Transform.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

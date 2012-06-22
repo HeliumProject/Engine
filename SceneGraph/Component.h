@@ -2,9 +2,9 @@
 
 #include "Foundation/Automation/Event.h"
 
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/Registry.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Object.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Data/DataDeduction.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/ComponentExceptions.h"

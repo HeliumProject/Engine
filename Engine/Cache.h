@@ -16,7 +16,7 @@
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 namespace Helium
 {

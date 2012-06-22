@@ -3,9 +3,9 @@
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
 
-#include "Foundation/Math/Common.h"
-#include "Foundation/Math/Float16.h"
-#include "Foundation/Math/FpuVector3.h"
+#include "Math/Common.h"
+#include "Math/Float16.h"
+#include "Math/FpuVector3.h"
 
 namespace Helium
 {

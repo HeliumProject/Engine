@@ -12,8 +12,8 @@
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
 
-#include "Foundation/Math/SimdVector3.h"
-#include "Foundation/Math/SimdQuat.h"
+#include "Math/SimdVector3.h"
+#include "Math/SimdQuat.h"
 #include "Framework/FrameworkInterface.h"
 #include "Framework/WorldManager.h"
 

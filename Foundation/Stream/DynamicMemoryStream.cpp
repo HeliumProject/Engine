@@ -2,8 +2,7 @@
 #include "Foundation/Stream/DynamicMemoryStream.h"
 
 #include "Platform/Trace.h"
-
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 using namespace Helium;
 

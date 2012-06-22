@@ -5,7 +5,7 @@
 
 #include "Math/API.h"
 #include "Math/Axes.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/FpuVector4.h"
 #include "Math/FpuScale.h"
 #include "Math/FpuShear.h"

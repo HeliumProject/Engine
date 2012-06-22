@@ -2,8 +2,7 @@
 #include "Foundation/Stream/BufferedStream.h"
 
 #include "Platform/Memory.h"
-
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 using namespace Helium;
 

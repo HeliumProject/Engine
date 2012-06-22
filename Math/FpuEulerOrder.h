@@ -2,7 +2,7 @@
 
 #include "Math/API.h"
 #include "Math/Axes.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 //
 // Support for 24 angle schemes based on code by Ken Shoemake,

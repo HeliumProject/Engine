@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Math/API.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/Simd.h"
 #include "Reflect/Structure.h"
 

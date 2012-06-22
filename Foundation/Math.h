@@ -6,18 +6,16 @@
 #include "Math/API.h"
 
 #if HELIUM_CC_CL
-#pragma warning( push )
-#pragma warning( disable : 4530 )  // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
-// Temporary workaround for bug in Visual C++ 2008 with including intrin.h and math.h simultaneously
-// (see http://connect.microsoft.com/VisualStudio/feedback/details/381422/warning-of-attributes-not-present-on-previous-declaration-on-ceil-using-both-math-h-and-intrin-h).
-#pragma warning( disable : 4985 )  // 'symbol name': attributes not present on previous declaration
+# pragma warning( push )
+# pragma warning( disable : 4530 ) // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+# pragma warning( disable : 4985 ) // Temporary workaround for bug in Visual C++ 2008 with including intrin.h and math.h simultaneously (see http://connect.microsoft.com/VisualStudio/feedback/details/381422/warning-of-attributes-not-present-on-previous-declaration-on-ceil-using-both-math-h-and-intrin-h).
 #endif
 
 #include <type_traits>
 #include <cmath>
 
 #if HELIUM_CC_CL
-#pragma warning( pop )
+# pragma warning( pop )
 #endif
 
 /// @defgroup mathconstants Standard Math Constants
@@ -50,7 +48,7 @@
 #define HELIUM_EPSILON ( 1.0e-8f )
 
 #define HELIUM_VALUE_NEAR_ZERO 1e-20f
-#define HELIUM_DIVISOR_NEAR_ZERO 1e-15f//(0.00005f)
+#define HELIUM_DIVISOR_NEAR_ZERO 1e-15f //(0.00005f)
 #define HELIUM_ANGLE_NEAR_ZERO 1e-7f
 
 #define HELIUM_CRITICAL_DOT_PRODUCT 0.98f
@@ -170,4 +168,4 @@ namespace Helium
     inline bool Equal( float32_t a, float32_t b, float32_t err = HELIUM_VALUE_NEAR_ZERO );
 }
 
-#include "Math/Common.inl"
+#include "Foundation/Math.inl"

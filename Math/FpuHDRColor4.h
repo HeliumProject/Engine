@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "Math/API.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/FpuColor.h"
 #include "Math/FpuColor4.h"
 #include "Math/FpuVector4.h"

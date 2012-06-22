@@ -3,9 +3,8 @@
 #include "Platform/Types.h"
 #include "Platform/Memory.h"
 
-#include "Math/Common.h"
-
 #include "Foundation/API.h"
+#include "Foundation/Math.h"
 #include "Foundation/HashFunctions.h"
 #include "Foundation/Container/DynArray.h"
 

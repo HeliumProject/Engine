@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 
 #include "Math/API.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 namespace Helium
 {

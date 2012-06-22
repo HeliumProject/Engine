@@ -27,7 +27,7 @@
 #include "Inspect/Inspect.h"
 #include "Inspect/Interpreters/Reflect/InspectReflectInit.h"
 
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 #include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"

@@ -3,7 +3,7 @@
 #include <float.h>
 
 #include "Math/API.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/FpuEulerOrder.h"
 #include "Math/FpuVector3.h"
 

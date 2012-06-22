@@ -2,7 +2,7 @@
 
 #include "Math/API.h"
 #include "Math/Simd.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/SimdVector3.h"
 
 namespace Helium

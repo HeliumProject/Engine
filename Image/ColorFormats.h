@@ -3,7 +3,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
 
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 #include "Math/Float16.h"
 #include "Math/FpuVector3.h"
 

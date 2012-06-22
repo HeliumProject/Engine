@@ -1,6 +1,6 @@
 #include "MathPch.h"
 #include "Math/Float16.h"
-#include "Math/Common.h"
+#include "Foundation/Math.h"
 
 namespace Helium
 {

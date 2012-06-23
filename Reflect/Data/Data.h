@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Reflect/Object.h"
 #include "Reflect/Archive.h"
 

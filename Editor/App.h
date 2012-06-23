@@ -3,7 +3,7 @@
 #include "Platform/Thread.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Document/DocumentManager.h"
+#include "Foundation/DocumentManager.h"
 
 #include "SceneGraph/SettingsManager.h"
 

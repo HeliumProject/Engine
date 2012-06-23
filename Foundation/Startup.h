@@ -8,7 +8,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Thread.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/Log.h"
 
 namespace Helium

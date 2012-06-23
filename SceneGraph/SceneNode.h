@@ -3,8 +3,9 @@
 #include <hash_map>
 
 #include "Foundation/Container/OrderedSet.h"
+#include "Foundation/UndoQueue.h"
+
 #include "Reflect/Object.h"
-#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/ComponentCollection.h"

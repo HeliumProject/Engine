@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 #include "MRU.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Platform/Types.h"
 
 #include <wx/window.h>

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "SceneGraph/API.h"
+
 #include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/Undo/UndoCommand.h"
+#include "Foundation/UndoQueue.h"
 
 namespace Helium
 {

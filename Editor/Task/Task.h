@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

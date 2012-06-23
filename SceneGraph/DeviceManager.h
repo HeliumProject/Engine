@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Rendering/Renderer.h"
 #include "SceneGraph/API.h"
 

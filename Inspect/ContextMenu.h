@@ -3,7 +3,7 @@
 #include <map>
 
 #include "Platform/Types.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Inspect/API.h"
 
 namespace Helium

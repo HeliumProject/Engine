@@ -13,11 +13,8 @@
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
 #include "Foundation/InitializerStack.h"
-#include "Foundation/CommandLine/Option.h"
-#include "Foundation/CommandLine/Command.h"
-#include "Foundation/CommandLine/Commands/Help.h"
-#include "Foundation/CommandLine/Processor.h"
-#include "Foundation/Document/Document.h"
+#include "Foundation/CmdLineProcessor.h"
+#include "Foundation/DocumentManager.h"
 #include "Foundation/File/File.h"
 #include "Foundation/Name.h"
 #include "Foundation/Worker/Process.h"
@@ -592,7 +589,7 @@ int Main( int argc, const tchar_t** argv )
     success &= rebuildCommand.Initialize( error );
     success &= processor.RegisterCommand( &rebuildCommand, error );
 
-    Helium::CommandLine::Help helpCommand;
+    Helium::CommandLine::HelpCommand helpCommand;
     helpCommand.SetOwner( &processor );
     success &= helpCommand.Initialize( error );
     success &= processor.RegisterCommand( &helpCommand, error );

@@ -5,7 +5,7 @@
 #include "Platform/Types.h"
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

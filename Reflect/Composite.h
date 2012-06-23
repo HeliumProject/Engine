@@ -4,7 +4,7 @@
 
 #include "Reflect/Type.h"
 #include "Reflect/Visitor.h"
-#include "Foundation/Automation/Attribute.h"
+#include "Foundation/Attribute.h"
 #include "Foundation/Container/Set.h"
 #include "Foundation/Container/DynArray.h"
 

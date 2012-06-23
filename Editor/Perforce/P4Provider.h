@@ -2,7 +2,7 @@
 
 #include "Foundation/RCS/RCS.h"
 #include "Foundation/RCS/Provider.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/Profile.h"
 #include "Platform/Condition.h"
 #include "Platform/Thread.h"

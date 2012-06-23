@@ -1,7 +1,8 @@
 #include "EditorPch.h"
 #include "Editor/SceneOutliner.h"
 
-#include "Foundation/Undo/UndoCommand.h"
+#include "Foundation/UndoQueue.h"
+
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
 

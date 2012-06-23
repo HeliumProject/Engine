@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 #include "Reflect/Object.h"
 #include "Reflect/Registry.h"

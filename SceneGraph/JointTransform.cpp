@@ -1,8 +1,9 @@
 #include "SceneGraphPch.h"
 #include "JointTransform.h"
 
+#include "Foundation/UndoQueue.h"
+
 #include "Math/FpuEulerAngles.h"
-#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/Color.h"
 #include "SceneGraph/PrimitiveAxes.h"

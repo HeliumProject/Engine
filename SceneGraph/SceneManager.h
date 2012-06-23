@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
-
-#include "Foundation/Document/Document.h"
+#include "Foundation/Event.h"
+#include "Foundation/DocumentManager.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"

@@ -1,5 +1,4 @@
 #include "FoundationPch.h"
-#include "FoundationPch.h"
 #include "Foundation/AppInfo.h"
 
 using namespace Helium;

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Foundation/Automation/Attribute.h"
-#include "Foundation/Document/Document.h"
+#include "Foundation/Attribute.h"
+#include "Foundation/DocumentManager.h"
+
 #include "Reflect/Structure.h"
 #include "Reflect/Data/DataDeduction.h"
 

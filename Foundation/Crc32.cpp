@@ -1,7 +1,7 @@
 #include "FoundationPch.h"
+#include "Foundation/Crc32.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/Checksum/Crc32.h"
 
 using namespace Helium;
 

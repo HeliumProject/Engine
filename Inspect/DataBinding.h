@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Inspect/API.h"
-#include "Inspect/API.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Automation/Property.h"
+#include "Foundation/Event.h"
+#include "Foundation/Property.h"
+#include "Foundation/UndoQueue.h"
+
 #include "Reflect/Data/DataDeduction.h"
-#include "Foundation/Undo/UndoCommand.h"
+
+#include "Inspect/API.h"
 
 #include <iomanip>
 

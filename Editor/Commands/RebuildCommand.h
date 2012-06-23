@@ -3,7 +3,7 @@
 #include <string>
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/CommandLine/Command.h"
+#include "Foundation/CmdLineProcessor.h"
 #include "Foundation/File/Path.h"
 #include "Reflect/Archive.h"
 

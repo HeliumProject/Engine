@@ -5,7 +5,7 @@
 #include "Math/FpuAlignedBox.h"
 
 #include "Reflect/Enumeration.h"
-#include "Foundation/Undo/UndoQueue.h"
+#include "Foundation/UndoQueue.h"
 
 #include "Rendering/Color.h"
 

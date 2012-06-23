@@ -4,8 +4,8 @@
 #include "Platform/Assert.h"
 #include "Platform/Utility.h"
 
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Automation/Attribute.h"
+#include "Foundation/Event.h"
+#include "Foundation/Attribute.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/ReferenceCounting.h"

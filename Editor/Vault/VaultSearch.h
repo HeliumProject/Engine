@@ -3,7 +3,7 @@
 #include "VaultSearchQuery.h"
 #include "VaultSearchResults.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/Memory/SmartPtr.h"
 

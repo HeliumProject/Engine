@@ -41,7 +41,7 @@ namespace Helium
         private:
             wxWindow* m_Window;
             ThumbnailLoader m_Loader;
-            Helium::Locker< std::map< uint64_t, Helium::Path > > m_AllRequests;
+            Helium::Locker< std::map< uint32_t, Helium::Path > > m_AllRequests;
             Helium::Mutex m_WindowMutex;
         };
     }

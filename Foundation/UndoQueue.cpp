@@ -11,6 +11,83 @@
 
 using namespace Helium;
 
+
+UndoCommand::UndoCommand()
+{
+
+}
+
+UndoCommand::~UndoCommand()
+{
+
+}
+
+BatchUndoCommand::BatchUndoCommand()
+    : m_IsSignificant( false )
+{
+
+}
+
+BatchUndoCommand::BatchUndoCommand(const std::vector<UndoCommandPtr>& objects)
+    : m_IsSignificant( false )
+{
+    Set( objects );
+}
+
+void BatchUndoCommand::Set(const std::vector<UndoCommandPtr>& commands)
+{
+    m_Commands = commands;
+
+    std::vector<UndoCommandPtr>::iterator itr = m_Commands.begin();
+    std::vector<UndoCommandPtr>::iterator end = m_Commands.end();
+    for ( m_IsSignificant = false; itr != end && !m_IsSignificant; ++itr )
+    {
+        UndoCommandPtr& command = *itr;
+        m_IsSignificant |= command->IsSignificant();
+    }
+}
+
+void BatchUndoCommand::Push(const UndoCommandPtr& command)
+{
+    if (command.ReferencesObject())
+    {
+        m_IsSignificant |= command->IsSignificant();
+        m_Commands.push_back(command);
+    }
+}
+
+void BatchUndoCommand::Undo()
+{
+    std::vector<UndoCommandPtr>::reverse_iterator rItr = m_Commands.rbegin();
+    std::vector<UndoCommandPtr>::reverse_iterator rEnd = m_Commands.rend();
+    for ( ; rItr != rEnd; ++rItr )
+    {
+        UndoCommandPtr& command = *rItr;
+        command->Undo();
+    }
+}
+
+void BatchUndoCommand::Redo()
+{
+    std::vector<UndoCommandPtr>::iterator itr = m_Commands.begin();
+    std::vector<UndoCommandPtr>::iterator end = m_Commands.end();
+    for ( ; itr != end; ++itr )
+    {
+        UndoCommandPtr& command = *itr;
+        command->Redo();
+    }
+}
+
+bool BatchUndoCommand::IsSignificant() const
+{
+    return m_IsSignificant;
+}
+
+bool BatchUndoCommand::IsEmpty() const
+{
+    return m_Commands.empty();
+}
+
 UndoQueue::UndoQueue()
 : m_MaxLength (0)
 {

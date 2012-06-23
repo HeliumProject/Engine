@@ -4,7 +4,7 @@
 #include "Editor/App.h"
 #include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
-#include "Foundation/Checksum/MD5.h"
+#include "Foundation/MD5.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Log.h"

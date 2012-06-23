@@ -18,4 +18,4 @@ namespace Helium
     //@}
 }
 
-#include "Foundation/Checksum/Crc32.inl"
+#include "Foundation/Crc32.inl"

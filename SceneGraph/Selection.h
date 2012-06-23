@@ -2,9 +2,10 @@
 
 #include <vector>
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
+#include "Foundation/UndoQueue.h"
+
 #include "Reflect/Object.h"
-#include "Foundation/Undo/UndoCommand.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"

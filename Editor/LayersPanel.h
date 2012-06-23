@@ -3,7 +3,7 @@
 #include "Editor/EditorGenerated.h"
 #include "Grid.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
 
 #include "SceneGraph/Scene.h"

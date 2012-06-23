@@ -2,7 +2,7 @@
 
 #include "Math/FpuPoint.h"
 #include "Reflect/Object.h"
-#include "Foundation/Automation/Attribute.h"
+#include "Foundation/Attribute.h"
 
 #include "Inspect/API.h"
 #include "Inspect/DataBinding.h"

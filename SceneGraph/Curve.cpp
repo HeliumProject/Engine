@@ -1,13 +1,12 @@
 #include "SceneGraphPch.h"
 #include "Curve.h"
 
-#include "Math/SimdQuat.h"
-
 #include "Foundation/Log.h"
+#include "Foundation/UndoQueue.h"
+
 #include "Math/FpuCalculateCurve.h"
 #include "Math/FpuAngleAxis.h"
-
-#include "Foundation/Undo/UndoCommand.h"
+#include "Math/SimdQuat.h"
 
 #include "Graphics/BufferedDrawer.h"
 

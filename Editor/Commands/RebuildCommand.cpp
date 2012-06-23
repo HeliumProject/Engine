@@ -10,8 +10,7 @@
 #include "Foundation/File/Path.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
-#include "Foundation/CommandLine/Option.h"
-#include "Foundation/CommandLine/Command.h"
+#include "Foundation/CmdLineProcessor.h"
 
 #include "Foundation/Startup.h"
 #include "Foundation/RCS/RCS.h"

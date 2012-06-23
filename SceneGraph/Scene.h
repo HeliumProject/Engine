@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Document/Document.h"
+#include "Foundation/DocumentManager.h"
+#include "Foundation/Event.h"
 #include "Foundation/TUID.h"
+#include "Foundation/UndoQueue.h"
+
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
 
 #include "Inspect/DataBinding.h"
 #include "Inspect/Canvas.h"
-#include "Foundation/Undo/UndoQueue.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"

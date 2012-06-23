@@ -8,7 +8,7 @@
 #include "Platform/Exception.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Undo/UndoCommand.h"
+#include "Foundation/UndoQueue.h"
 
 #include "SceneGraph/API.h"
 

@@ -11,7 +11,7 @@
 
 #include "Windowing/Windowing.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

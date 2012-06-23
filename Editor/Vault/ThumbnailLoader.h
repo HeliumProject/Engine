@@ -2,7 +2,7 @@
 
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 

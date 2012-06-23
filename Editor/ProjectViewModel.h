@@ -1,8 +1,7 @@
 #pragma once
 
 #include "SceneGraph/Project.h"
-#include "Foundation/Document/Document.h"
-#include "Foundation/Document/DocumentManager.h"
+#include "Foundation/DocumentManager.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/File/Path.h"
 

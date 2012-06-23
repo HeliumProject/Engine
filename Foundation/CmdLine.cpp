@@ -1,5 +1,6 @@
 #include "FoundationPch.h"
-#include "Utilities.h"
+#include "Foundation/CmdLine.h"
+
 #include "Platform/Environment.h"
 #include "Platform/Assert.h"
 
@@ -9,10 +10,10 @@ using namespace Helium;
 #define ARG_MAX (8192)
 
 // the fully processed argc/argv data
-int            g_Argc = 0;
-const tchar_t**   g_Argv = NULL;
-tchar_t           g_CmdLine[ ARG_MAX ] = { '\0' };
-const tchar_t*    Helium::CmdLineDelimiters = TXT( "-/" );
+int                 g_Argc = 0;
+const tchar_t**     g_Argv = NULL;
+tchar_t             g_CmdLine[ ARG_MAX ] = { '\0' };
+const tchar_t*      Helium::CmdLineDelimiters = TXT( "-/" );
 
 void Helium::SetCmdLine( int argc, const tchar_t** argv )
 {

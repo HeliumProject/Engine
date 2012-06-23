@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 
 #include "Foundation/Memory.h"
-#include "Foundation/Checksum/Crc32.h"
+#include "Foundation/Crc32.h"
 #include "Foundation/Container/SortedMap.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"

@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 
 #include "Foundation/File/Path.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 #include <wx/dnd.h>
 

@@ -51,7 +51,7 @@ static int PhysicalMemoryFree( void* pMemory, size_t size )
 /// @param[in] ...      Format arguments.
 static void PrintfWrapper( const char* pFormat, ... )
 {
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     char message[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
 
     va_list argList;

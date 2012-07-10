@@ -123,7 +123,7 @@ bool Thread::Start( EPriority priority )
             nameInfo.dwThreadId = threadId;
             nameInfo.dwFlags = 0;
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
             char name[ 128 ];
             wcstombs_s( NULL, name, m_Name, _TRUNCATE );
             nameInfo.szName = name;

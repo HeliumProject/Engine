@@ -201,7 +201,7 @@
 //                bool operator()( const String& rText, CharName& rValue ) const;
 //                //@}
 //
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //            private:
 //                /// String parser.
 //                CharStringParser m_stringParser;
@@ -217,7 +217,7 @@
 //                bool operator()( const String& rText, WideName& rValue ) const;
 //                //@}
 //
-//#if !HELIUM_UNICODE
+//#if !HELIUM_WCHAR_T
 //            private:
 //                /// String parser.
 //                WideStringParser m_stringParser;

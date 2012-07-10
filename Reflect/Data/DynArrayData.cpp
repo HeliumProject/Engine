@@ -506,7 +506,7 @@ void NameDynArrayData::Deserialize( ArchiveXML& archive )
 }
 
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
 
 //
 // When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for uint8_t/int8_t

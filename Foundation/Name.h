@@ -128,7 +128,7 @@ namespace Helium
     typedef NameBase< WideNameTable > WideName;
 
     /// String table entry.
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     typedef WideName Name;
 #else
     typedef CharName Name;

@@ -29,21 +29,21 @@
 /// @param[in] X  Macro to expand and stringize.
 #define HELIUM_WSTRINGIZE( X ) BOOST_PP_WSTRINGIZE( X )
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
 
 /// Convert the expanded result of a macro to a tchar_t string.
 ///
 /// @param[in] X  Macro to expand and stringize.
 #define HELIUM_TSTRINGIZE( X ) HELIUM_WSTRINGIZE( X )
 
-#else  // HELIUM_UNICODE
+#else  // HELIUM_WCHAR_T
 
 /// Convert the expanded result of a macro to a tchar_t string.
 ///
 /// @param[in] X  Macro to expand and stringize.
 #define HELIUM_TSTRINGIZE( X ) HELIUM_STRINGIZE( X )
 
-#endif  // HELIUM_UNICODE
+#endif  // HELIUM_WCHAR_T
 
 // Helper macro for defining serializable enumerated values.
 #define HELIUM_ENUM_VALUE_OP( R, PREFIX, VALUE ) BOOST_PP_CAT( PREFIX, VALUE )

@@ -433,9 +433,6 @@ typedef double float64_t;
 # ifndef UNICODE
 #  define UNICODE
 # endif
-# ifndef HELIUM_UNICODE
-#  define HELIUM_UNICODE 1
-# endif
 #endif
 
 #ifdef UNICODE
@@ -444,7 +441,7 @@ typedef double float64_t;
 # endif
 #endif
 
-#if HELIUM_UNICODE
+#ifdef HELIUM_WCHAR_T
 
 /// Default character type.
 typedef wchar_t tchar_t;
@@ -452,7 +449,7 @@ typedef wchar_t tchar_t;
 /// Prefix for declaring string and character literals of the default character type.
 #define TXT( X ) L##X
 
-#else  // HELIUM_UNICODE
+#else  // HELIUM_WCHAR_T
 
 /// Default character type.
 typedef char tchar_t;
@@ -460,7 +457,7 @@ typedef char tchar_t;
 /// Prefix for declaring string and character literals of the default character type.
 #define TXT( X ) X
 
-#endif  // HELIUM_UNICODE
+#endif  // HELIUM_WCHAR_T
 
 typedef std::basic_string< tchar_t > tstring;
 

@@ -15,7 +15,7 @@
 #include <shlobj.h>
 #include <tlhelp32.h>
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
 #define DBGHELP_TRANSLATE_TCHAR
 #endif
 
@@ -53,7 +53,7 @@ static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
 // Callback that loads symbol data from loaded dll into DbgHelp system, dumping error info
 static BOOL CALLBACK EnumerateLoadedModulesProc(PCTSTR name, DWORD64 base, ULONG size, PVOID data)
 {
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     char charName[ MAX_PATH ];
     charName[ 0 ] = '\0';
     wcstombs_s( NULL, charName, name, _TRUNCATE );
@@ -1036,7 +1036,7 @@ void Helium::DebugLog( const tchar_t* pMessage )
 {
     HELIUM_ASSERT( pMessage );
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     OutputDebugStringW( pMessage );
 #else
     OutputDebugStringA( pMessage );

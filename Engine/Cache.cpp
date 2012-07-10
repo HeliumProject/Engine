@@ -482,7 +482,7 @@ bool Cache::CacheEntry(
                     pBufferedStream->Write( &entryCount, sizeof( entryCount ), 1 );
 
                     WideString entryPath;
-#if !HELIUM_UNICODE
+#if !HELIUM_WCHAR_T
                     CharString entryPathCharString;
 #endif
                     uint_fast32_t entryCountFast = entryCount;
@@ -491,7 +491,7 @@ bool Cache::CacheEntry(
                         Entry* pEntry = m_entries[ entryIndex ];
                         HELIUM_ASSERT( pEntry );
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
                         pEntry->path.ToString( entryPath );
 #else
                         pEntry->path.ToString( entryPathCharString );
@@ -640,7 +640,7 @@ bool Cache::FinalizeTocLoad()
 
         for( uint_fast16_t characterIndex = 0; characterIndex < entryPathSizeFast; ++characterIndex )
         {
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
             bReadResult = CheckedTocRead(
                 pLoadFunction,
                 pPathString[ characterIndex ],

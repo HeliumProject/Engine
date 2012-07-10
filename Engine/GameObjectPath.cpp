@@ -797,7 +797,7 @@ bool GameObjectPath::Parse(
                     return false;
                 }
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
 #if HELIUM_CC_CL
                 int parseCount = swscanf_s( pTempNameString, TXT( "%" ) TSCNu32, pTargetIndex );
 #else

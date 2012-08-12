@@ -29,10 +29,10 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 , m_MemLargestFree( 0 )
 {
     m_UserName.clear();
-    Helium::GetUsername( m_UserName );
+    Helium::GetUserName( m_UserName );
 
     m_Computer.clear();
-    Helium::GetComputer( m_Computer );
+    Helium::GetMachineName( m_Computer );
 
     m_ApplicationPath = Helium::GetProcessPath();
     m_ApplicationName = Helium::GetProcessName();

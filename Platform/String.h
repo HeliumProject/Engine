@@ -44,13 +44,15 @@ namespace Helium
     HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
     HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 #endif
-
-    HELIUM_PLATFORM_API tstring GetEncoding();
 }
 
 #if HELIUM_OS_WIN
+# define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
+	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
+	char* convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
+	ConvertString( chars, convertedChars, convertedChars##Count );
 # define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
-	size_t convertedCharsCount = GetConvertedStringLength( messageBoxText ); \
-	wchar_t* convertedChars = (wchar_t*)alloca( convertedCharsCount * sizeof( wchar_t ) ); \
-	ConvertString( messageBoxText, convertedChars, convertedCharsCount );
+	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
+	wchar_t* convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
+	ConvertString( chars, convertedChars, convertedChars##Count );
 #endif

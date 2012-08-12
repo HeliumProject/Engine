@@ -1,35 +1,33 @@
 #include "PlatformPch.h"
 #include "Platform/Directory.h"
+
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Exception.h"
+#include "Platform/StatWin.h"
+#include "Platform/String.h"
 
 using namespace Helium;
 
 void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ourFile )
 {
-    ourFile.m_Filename = windowsFile.cFileName;
+    ConvertString( windowsFile.cFileName, ourFile.m_Filename );
 
-#pragma TODO( "FileFindData should have a flag set as to whether or not we have file stat data retrieved." )
-#ifndef _DEBUG
-    ourFile.m_Stat.m_CreatedTime = ( (uint64_t)windowsFile.ftCreationTime.dwHighDateTime << 32 ) | windowsFile.ftCreationTime.dwLowDateTime;
-    ourFile.m_Stat.m_ModifiedTime = ( (uint64_t)windowsFile.ftLastWriteTime.dwHighDateTime << 32 ) | windowsFile.ftLastWriteTime.dwLowDateTime;
-    ourFile.m_Stat.m_AccessTime = ( (uint64_t)windowsFile.ftLastAccessTime.dwHighDateTime << 32 ) | windowsFile.ftLastAccessTime.dwLowDateTime;
     ourFile.m_Stat.m_Size = ( (uint64_t)windowsFile.nFileSizeHigh << 32 ) | windowsFile.nFileSizeLow;
+    ourFile.m_Stat.m_CreatedTime = FileTimeToUnixTime( windowsFile.ftCreationTime );
+    ourFile.m_Stat.m_ModifiedTime = FileTimeToUnixTime( windowsFile.ftLastWriteTime );
+    ourFile.m_Stat.m_AccessTime = FileTimeToUnixTime( windowsFile.ftLastAccessTime );
 
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_READONLY ) ? FileModeFlags::Read : ( FileModeFlags::Read | FileModeFlags::Write );
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) ? FileModeFlags::Directory : FileModeFlags::None;
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ) ? FileModeFlags::File : FileModeFlags::None;
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_DEVICE ) ? FileModeFlags::Special : FileModeFlags::None;
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) ? FileModeFlags::Special : FileModeFlags::None;
-    ourFile.m_Stat.m_Mode |= ( windowsFile.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ) ? FileModeFlags::Special : FileModeFlags::None;
-#endif
+	CopyFromWindowsAttributes( windowsFile.dwFileAttributes, ourFile.m_Stat.m_Mode );
 }
 
 bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
 {
+	tstring path ( handle.m_Path + TXT( "/*" ) );
+	HELIUM_CONVERT_TO_WCHAR_T( path.c_str(), convertedPath );
+
     WIN32_FIND_DATA foundFile;
-    handle.m_Handle = ::FindFirstFile( tstring( handle.m_Path + TXT( "/*" ) ).c_str(), &foundFile );
+    handle.m_Handle = ::FindFirstFile( convertedPath, &foundFile );
 
     if ( handle.m_Handle == INVALID_HANDLE_VALUE )
     {

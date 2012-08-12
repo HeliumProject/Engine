@@ -1,39 +1,59 @@
 #include "PlatformPch.h"
 #include "Platform/Environment.h"
 
+#include "Platform/String.h"
+
 #include <ShlObj.h>
 
-bool Helium::GetUsername( tstring& username )
+using namespace Helium;
+
+static bool GetEnvVar( wchar_t* var, tstring& value )
 {
-    return Helium::GetEnvironmentVariable( TXT( "USERNAME" ), username );
+	DWORD count = ::GetEnvironmentVariable( var, NULL, 0 );
+	wchar_t* varValue = (wchar_t*)alloca( count * sizeof( wchar_t ) );
+	if ( ::GetEnvironmentVariable( var, varValue, count * sizeof( wchar_t ) ) )
+	{
+		HELIUM_CONVERT_TO_CHAR( varValue, convertedVarValue );
+		value = convertedVarValue;
+		return true;
+	}
+
+	return false;
 }
 
-bool Helium::GetComputer( tstring& computername )
+bool Helium::GetUserName( tstring& username )
 {
-    return Helium::GetEnvironmentVariable( TXT( "COMPUTERNAME" ), computername );
+    return GetEnvVar( L"USERNAME", username );
 }
 
-bool Helium::GetPreferencesDirectory( tstring& preferencesDirectory )
+bool Helium::GetMachineName( tstring& computername )
 {
-    tchar_t path[ MAX_PATH ];
+    return GetEnvVar( L"COMPUTERNAME", computername );
+}
+
+bool Helium::GetProfileDirectory( tstring& profileDirectory )
+{
+    wchar_t path[ MAX_PATH ];
     HRESULT result = SHGetFolderPath( NULL, CSIDL_PROFILE, NULL, SHGFP_TYPE_CURRENT, path );
     bool bSuccess = ( result == S_OK );
     if ( bSuccess )
     {
-        preferencesDirectory = path;
+		HELIUM_CONVERT_TO_CHAR( path, convertedPath );
+        profileDirectory = convertedPath;
     }
 
     return bSuccess;
 }
 
-bool Helium::GetGameDataDirectory( tstring& gameDataDirectory )
+bool Helium::GetAppDataDirectory( tstring& appDataDirectory )
 {
-    tchar_t path[ MAX_PATH ];
+    wchar_t path[ MAX_PATH ];
     HRESULT result = SHGetFolderPath( NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path );
     bool bSuccess = ( result == S_OK );
     if ( bSuccess )
     {
-        gameDataDirectory = path;
+		HELIUM_CONVERT_TO_CHAR( path, convertedPath );
+        appDataDirectory = convertedPath;
     }
 
     return bSuccess;

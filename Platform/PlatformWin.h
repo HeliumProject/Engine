@@ -34,27 +34,16 @@
 // prevent infrequently used stuff
 #define WIN32_LEAN_AND_MEAN
 
-// Declare macros to ensure Windows XP compatibility level before including windows.h.
-#define WINVER _WIN32_WINNT_WINXP
-#define _WIN32_WINNT _WIN32_WINNT_WINXP
+// windows 7
+#define WINVER			0x0601
+#define _WIN32_WINNT	0x0601
 
-// internet explorer 6
-#define _WIN32_IE 0x0600
+// internet explorer 7
+#define _WIN32_IE		0x0700
 
 #include <tchar.h>
 #include <windows.h>
 #include <winsock2.h>
 #include <intrin.h>
-
-// poison incompatible APIs
-#define GetThreadId GetThreadId_doesnt_work_with_Windows_XP_32_bit_and_is_not_protected_by_a_preprocessor_guard
-
-// undefine dumb macros
-#undef CreateFile
-#undef CreateDirectory
-#undef GetObject
-#undef GetUserName
-#undef GetEnvironmentVariable
-#undef DrawText
 
 #pragma warning( pop )

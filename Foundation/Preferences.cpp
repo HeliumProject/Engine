@@ -3,11 +3,11 @@
 
 #include "Platform/Environment.h"
 
-bool Helium::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
+bool Helium::GetProfileDirectory( Helium::Path& preferencesDirectory )
 {
     tstring prefDirectory;
 
-    if ( !Helium::GetPreferencesDirectory( prefDirectory ) )
+    if ( !Helium::GetProfileDirectory( prefDirectory ) )
     {
         return false;
     }

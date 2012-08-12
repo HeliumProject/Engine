@@ -110,7 +110,7 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
         bLocateRequested = true;
 
         tstring gameDataDirectory;
-        if( !Helium::GetGameDataDirectory( gameDataDirectory ) )
+        if( !Helium::GetAppDataDirectory( gameDataDirectory ) )
         {
             return userDataDirectory;
         }

@@ -10,8 +10,8 @@ namespace Helium
         enum FileModeFlag
         {
             None             = 0,
-            File             = 1 << 0,  // File and Directory should be mutually exclusive
-            Directory        = 1 << 1,
+            Directory        = 1 << 0,
+            Link             = 1 << 1,
             Pipe             = 1 << 2,
             Special          = 1 << 3,
 
@@ -25,17 +25,17 @@ namespace Helium
     struct HELIUM_PLATFORM_API Stat
     {
         uint32_t     m_Mode;
-        int64_t      m_Size;
-        uint64_t     m_AccessTime;
-        uint64_t     m_ModifiedTime;
+        uint64_t     m_Size;
         uint64_t     m_CreatedTime;
+        uint64_t     m_ModifiedTime;
+        uint64_t     m_AccessTime;
 
         Stat()
-            : m_Mode( (FileModeFlag)0 )
+            : m_Mode( 0 )
             , m_Size( 0 )
-            , m_AccessTime( 0 )
-            , m_ModifiedTime( 0 )
             , m_CreatedTime( 0 )
+            , m_ModifiedTime( 0 )
+            , m_AccessTime( 0 )
         {
         }
     };

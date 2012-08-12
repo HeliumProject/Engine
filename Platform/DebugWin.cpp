@@ -8,6 +8,7 @@
 #include "Platform/String.h"
 #include "Platform/Debug.h"
 #include "Platform/Trace.h"
+#include "Platform/Print.h"
 #include "Platform/Process.h"
 
 #include <map>
@@ -15,10 +16,7 @@
 #include <shlobj.h>
 #include <tlhelp32.h>
 
-#if HELIUM_WCHAR_T
 #define DBGHELP_TRANSLATE_TCHAR
-#endif
-
 #include <dbghelp.h>
 
 #pragma comment ( lib, "dbghelp.lib" )
@@ -37,30 +35,25 @@ using namespace Helium::Debug;
 static bool g_Initialized = false;
 
 // Utility to print to a string
-static void PrintString(tstring& buffer, const tchar_t* tstring, ...)
+static void PrintToString(tstring& str, const tchar_t* fmt, ...)
 {
-    static tchar_t buf[4096];
+    va_list args;
+    va_start(args, fmt);
 
-    va_list argptr;
-    va_start(argptr, tstring);
-    _vsntprintf(buf, sizeof(buf), tstring, argptr);
+	size_t needed = StringPrint(NULL, 0, fmt, args);
+	tchar_t* buf = (tchar_t*)alloca( sizeof(tchar_t) * needed );
+
+    StringPrint(buf, sizeof(buf), fmt, args);
     buf[ sizeof(buf)/sizeof(buf[0]) - 1] = 0; 
-    va_end(argptr);
+    va_end(args);
 
-    buffer += buf;
+    str += buf;
 }
 
 // Callback that loads symbol data from loaded dll into DbgHelp system, dumping error info
 static BOOL CALLBACK EnumerateLoadedModulesProc(PCTSTR name, DWORD64 base, ULONG size, PVOID data)
 {
-#if HELIUM_WCHAR_T
-    char charName[ MAX_PATH ];
-    charName[ 0 ] = '\0';
-    wcstombs_s( NULL, charName, name, _TRUNCATE );
-#else
-    PCSTR charName = name;
-#endif
-    if (SymLoadModule64(GetCurrentProcess(), 0, charName, 0, base, size))
+    if (SymLoadModuleEx(GetCurrentProcess(), 0, name, 0, base, size, NULL, 0))
     {
         IMAGEHLP_MODULE64 moduleInfo;
         ZeroMemory(&moduleInfo, sizeof(IMAGEHLP_MODULE64));
@@ -69,16 +62,16 @@ static BOOL CALLBACK EnumerateLoadedModulesProc(PCTSTR name, DWORD64 base, ULONG
         {
             if ( moduleInfo.LoadedPdbName[0] != '\0' )
             {
-                _tprintf( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n"), name, base, size, moduleInfo.LoadedPdbName );
+                Print( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n"), name, base, size, moduleInfo.LoadedPdbName );
             }
             else
             {
-                _tprintf( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n"), name, base, size );
+                Print( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n"), name, base, size );
             }
         }
         else
         {
-            _tprintf( TXT("Failure loading symbols for module: %s: %s\n"), name, Helium::GetErrorString().c_str() );
+            Print( TXT("Failure loading symbols for module: %s: %s\n"), name, Helium::GetErrorString().c_str() );
         }
     }
 
@@ -104,15 +97,15 @@ bool Debug::Initialize(const tstring& pdbPaths)
 {
     if ( !g_Initialized )
     {
-        tstring dir;
+		std::wstring dir;
 
         if ( pdbPaths.empty() )
         {
-            tchar_t module[MAX_PATH];
-            tchar_t drive[MAX_PATH];
-            tchar_t path[MAX_PATH];
-            tchar_t file[MAX_PATH];
-            tchar_t ext[MAX_PATH];
+            wchar_t module[MAX_PATH];
+            wchar_t drive[MAX_PATH];
+            wchar_t path[MAX_PATH];
+            wchar_t file[MAX_PATH];
+            wchar_t ext[MAX_PATH];
             GetModuleFileName(0,module,MAX_PATH);
             _tsplitpath(module,drive,path,file,ext);
 
@@ -121,7 +114,7 @@ bool Debug::Initialize(const tstring& pdbPaths)
         }
         else
         {
-            dir = pdbPaths;
+			ConvertString(pdbPaths, dir);
         }
 
         DWORD options = SYMOPT_FAIL_CRITICAL_ERRORS |
@@ -130,12 +123,10 @@ bool Debug::Initialize(const tstring& pdbPaths)
 
         SymSetOptions(options);
 
-        _tprintf( TXT("Symbol Path: %s\n"), dir.c_str() );
-
         // initialize symbols (dbghelp.dll)
         if ( SymInitialize(GetCurrentProcess(), dir.c_str(), FALSE) == 0 )
         {
-            _tprintf( TXT("Failure initializing symbol API: %s\n"), Helium::GetErrorString().c_str() );
+            Print( TXT("Failure initializing symbol API: %s\n"), Helium::GetErrorString().c_str() );
             return false;
         }
 
@@ -377,7 +368,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsi
         }
 
 #ifdef DEBUG_SYMBOLS
-        _tprintf( TXT( "0x%08I64X - %s\n" ), frame.AddrReturn.Offset, GetSymbolInfo(frame.AddrReturn.Offset, false).c_str() );
+        Print( TXT( "0x%08I64X - %s\n" ), frame.AddrReturn.Offset, GetSymbolInfo(frame.AddrReturn.Offset, false).c_str() );
 #endif
 
         if (omitFrames == 0)
@@ -399,7 +390,7 @@ void Debug::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& bu
     std::vector<uintptr_t>::const_iterator end = trace.end();
     for ( ; itr != end; ++itr )
     {
-        PrintString(buffer, TXT("0x%08I64X - %s\n"), *itr, GetSymbolInfo(*itr, false).c_str() );
+        PrintToString(buffer, TXT("0x%08I64X - %s\n"), *itr, GetSymbolInfo(*itr, false).c_str() );
     }
 }
 
@@ -549,7 +540,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         HANDLE handle = itr->second;
 
         args.m_Threads.push_back( TXT("") );
-        PrintString( args.m_Threads.back(), TXT("Thread %d:\n"), id );
+        PrintToString( args.m_Threads.back(), TXT("Thread %d:\n"), id );
         tstring::size_type size = args.m_Threads.back().size();
 
         CONTEXT context;
@@ -557,7 +548,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         context.ContextFlags = CONTEXT_FULL;
         if ( ::GetThreadContext( handle, &context ) )
         {
-            PrintString( args.m_Threads.back(), 
+            PrintToString( args.m_Threads.back(), 
                 TXT("\nControl Registers:\n")
                 TXT("EIP = 0x%08X  ESP = 0x%08X\n")
                 TXT("EBP = 0x%08X  EFL = 0x%08X\n"),
@@ -566,7 +557,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
                 info->ContextRecord->BPREG,
                 info->ContextRecord->EFlags );
 
-            PrintString( args.m_Threads.back(), 
+            PrintToString( args.m_Threads.back(), 
                 TXT("\nInteger Registers:\n")
                 TXT("EAX = 0x%08X  EBX = 0x%08X\n")
                 TXT("ECX = 0x%08X  EDX = 0x%08X\n")
@@ -578,7 +569,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
                 info->ContextRecord->SIREG,
                 info->ContextRecord->DIREG );
 
-            PrintString( args.m_Threads.back(), TXT("\nCallstack:\n") );
+            PrintToString( args.m_Threads.back(), TXT("\nCallstack:\n") );
 
             std::vector<uintptr_t> trace;
             if ( GetStackTrace( &context, trace ) )
@@ -654,12 +645,12 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
         if (args.m_SEHCode == EXCEPTION_ACCESS_VIOLATION)
         {
-            PrintString( args.m_Message, TXT("Attempt to %s address 0x%08X"), (info->ExceptionRecord->ExceptionInformation[0]==1)?TXT("write to"):TXT("read from"), info->ExceptionRecord->ExceptionInformation[1]);
+            PrintToString( args.m_Message, TXT("Attempt to %s address 0x%08X"), (info->ExceptionRecord->ExceptionInformation[0]==1)?TXT("write to"):TXT("read from"), info->ExceptionRecord->ExceptionInformation[1]);
         }
 
         if (info->ContextRecord->ContextFlags & CONTEXT_CONTROL)
         {
-            PrintString( args.m_SEHControlRegisters, 
+            PrintToString( args.m_SEHControlRegisters, 
                 TXT("Control Registers:\n")
                 TXT("EIP = 0x%08X  ESP = 0x%08X\n")
                 TXT("EBP = 0x%08X  EFL = 0x%08X\n"),
@@ -671,7 +662,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
         if ( info->ContextRecord->ContextFlags & CONTEXT_INTEGER )
         {
-            PrintString( args.m_SEHIntegerRegisters, 
+            PrintToString( args.m_SEHIntegerRegisters, 
                 TXT("Integer Registers:\n")
                 TXT("EAX = 0x%08X  EBX = 0x%08X\n")
                 TXT("ECX = 0x%08X  EDX = 0x%08X\n")
@@ -704,12 +695,12 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
     {
     case ExceptionTypes::CPP:
         {
-            PrintString( buffer, TXT("Type:    C++ Exception\n") );
-            PrintString( buffer, TXT("Class:   %s\n"), args.m_CPPClass.c_str() );
+            PrintToString( buffer, TXT("Type:    C++ Exception\n") );
+            PrintToString( buffer, TXT("Class:   %s\n"), args.m_CPPClass.c_str() );
 
             if ( !args.m_Message.empty() )
             {
-                PrintString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
+                PrintToString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
             }
 
             break;
@@ -717,23 +708,23 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
     case ExceptionTypes::SEH:
         {
-            PrintString( buffer, TXT("Type:    SEH Exception\n") );
-            PrintString( buffer, TXT("Code:    0x%08X\n"), args.m_SEHCode );
-            PrintString( buffer, TXT("Class:   %s\n"), args.m_SEHClass.c_str() );
+            PrintToString( buffer, TXT("Type:    SEH Exception\n") );
+            PrintToString( buffer, TXT("Code:    0x%08X\n"), args.m_SEHCode );
+            PrintToString( buffer, TXT("Class:   %s\n"), args.m_SEHClass.c_str() );
 
             if ( !args.m_Message.empty() )
             {
-                PrintString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
+                PrintToString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
             }
 
             if ( !args.m_SEHControlRegisters.empty() )
             {
-                PrintString( buffer, TXT("\n%s"), args.m_SEHControlRegisters.c_str() );
+                PrintToString( buffer, TXT("\n%s"), args.m_SEHControlRegisters.c_str() );
             }
 
             if ( !args.m_SEHIntegerRegisters.empty() )
             {
-                PrintString( buffer, TXT("\n%s"), args.m_SEHIntegerRegisters.c_str() );
+                PrintToString( buffer, TXT("\n%s"), args.m_SEHIntegerRegisters.c_str() );
             }
 
             break;
@@ -744,7 +735,7 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
     if ( !args.m_Callstack.empty() )
     {
-        PrintString( buffer, TXT("%s"), args.m_Callstack.c_str() );
+        PrintToString( buffer, TXT("%s"), args.m_Callstack.c_str() );
     }
     else
     {
@@ -755,7 +746,7 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
     std::vector< tstring >::const_iterator end = args.m_Threads.end();
     for ( ; itr != end; ++itr )
     {
-        PrintString( buffer, TXT("\n%s"), itr->c_str() );
+        PrintToString( buffer, TXT("\n%s"), itr->c_str() );
     }
 
     return buffer;
@@ -763,10 +754,10 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-    tstring directory = GetCrashdumpDirectory();
+    tstring directory = GetDumpDirectory();
     if ( directory.empty() )
     {
-        _tprintf( TXT( "Could not determine crash dump directory, failed to generate dump." ) );
+        Print( TXT( "Could not determine crash dump directory, failed to generate dump." ) );
         return TXT( "" );
     }
 

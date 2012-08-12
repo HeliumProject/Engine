@@ -1,7 +1,9 @@
 #include "PlatformPch.h"
 #include "Platform/File.h"
-#include "Platform/Types.h"
+
 #include "Platform/Assert.h"
+#include "Platform/String.h"
+#include "Platform/Types.h"
 
 using namespace Helium;
 
@@ -31,13 +33,10 @@ Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate
         createDisposition = ( truncate ? CREATE_ALWAYS : OPEN_ALWAYS );
     }
 
-    Handle handle = InvalidHandleValue;
-#ifdef UNICODE
-    handle = ::CreateFileW(
-#else
-    handle = ::CreateFileA(
-#endif
-        filename,
+	HELIUM_CONVERT_TO_WCHAR_T( filename, convertedFilename );
+
+    Handle handle = ::CreateFile(
+        convertedFilename,
         desiredAccess,
         shareMode,
         NULL,

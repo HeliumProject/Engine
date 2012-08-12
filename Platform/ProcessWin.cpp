@@ -1,7 +1,9 @@
 #include "PlatformPch.h"
 #include "Platform/Process.h"
+
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
+#include "Platform/String.h"
 #include "Platform/Utility.h"
 
 #include <sstream>
@@ -71,9 +73,11 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
     PROCESS_INFORMATION  pi;
     memset( &pi, 0, sizeof( pi ) );
 
-    if( !CreateProcess(
+	HELIUM_CONVERT_TO_WCHAR_T( command.c_str(), convertedCommand );
+
+	if( !::CreateProcess(
         NULL,                                                 // filename
-        (tchar_t*) command.c_str(),                           // command line for child
+        convertedCommand,                                     // command line for child
         NULL,                                                 // process security descriptor
         NULL,                                                 // thread security descriptor
         TRUE,                                                 // inherit handles?
@@ -145,40 +149,44 @@ tstring Helium::GetProcessString()
 
 tstring Helium::GetProcessPath()
 {
-    HMODULE moduleHandle = GetModuleHandle( NULL );
+	HMODULE moduleHandle = ::GetModuleHandle( NULL );
 
-    tchar_t module[ MAX_PATH + 1 ];
-    DWORD result = GetModuleFileName( moduleHandle, module, MAX_PATH );
+    wchar_t module[ MAX_PATH ];
+	DWORD result = ::GetModuleFileName( moduleHandle, module, MAX_PATH );
     HELIUM_ASSERT( result );
     HELIUM_UNREF( result );
 
-    return module;
+	HELIUM_CONVERT_TO_CHAR( module, convertedModule );
+    return convertedModule;
 }
 
 tstring Helium::GetProcessName()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    tchar_t module[ MAX_PATH + 1 ];
-    GetModuleFileName( moduleHandle, module, MAX_PATH );
+    wchar_t module[ MAX_PATH ];
+	::GetModuleFileName( moduleHandle, module, MAX_PATH );
 
-    tchar_t file[ MAX_PATH + 1 ];
-    _tsplitpath( module, NULL, NULL, file, NULL );
+    wchar_t file[ MAX_PATH ];
+    _wsplitpath( module, NULL, NULL, file, NULL );
 
-    return file;
+	HELIUM_CONVERT_TO_CHAR( file, convertedFile );
+    return convertedFile;
 }
 
-tstring Helium::GetCrashdumpDirectory()
+tstring Helium::GetDumpDirectory()
 {
-    tchar_t tempDir[ MAX_PATH ];
-    size_t result = GetTempPath( MAX_PATH, tempDir );
+    wchar_t tempDir[ MAX_PATH ];
+	size_t result = ::GetTempPath( MAX_PATH, tempDir );
     if ( result == 0 || result > MAX_PATH )
     {
         return TXT("");
     }
 
     // Make sure that the directory exists
-    tchar_t directory[ MAX_PATH ] = { 0 };
-    _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\HeliumCrashdumps"), &tempDir );
-    return directory;
+    wchar_t directory[ MAX_PATH ] = { 0 };
+    _snwprintf( directory, sizeof( directory ) - 1, L"%s\\dumps", &tempDir );
+
+	HELIUM_CONVERT_TO_CHAR( directory, convertedDirectory );
+    return convertedDirectory;
 }

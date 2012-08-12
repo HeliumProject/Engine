@@ -4,6 +4,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Print.h"
+#include "Platform/String.h"
 
 using namespace Helium;
 
@@ -42,7 +43,9 @@ bool Helium::CreatePipe(const tchar_t* name, Pipe& pipe)
     int retry = 0;
     do
     {
-        pipe.m_Handle = ::CreateNamedPipe( name,
+		HELIUM_CONVERT_TO_WCHAR_T( name, convertedName );
+
+        pipe.m_Handle = ::CreateNamedPipe( convertedName,
             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
             1,
@@ -62,7 +65,9 @@ bool Helium::CreatePipe(const tchar_t* name, Pipe& pipe)
             {
                 retry++;
 
-                if ( !::WaitNamedPipe( name, 0 ) )
+				HELIUM_CONVERT_TO_WCHAR_T( name, convertedName );
+
+                if ( !::WaitNamedPipe( convertedName, 0 ) )
                 {
                     ::Sleep(100);
                 }
@@ -76,16 +81,14 @@ bool Helium::CreatePipe(const tchar_t* name, Pipe& pipe)
 
 bool Helium::OpenPipe(const tchar_t* name, Pipe& pipe)
 {
-    if ( !::WaitNamedPipe(name, 0) ) 
+	HELIUM_CONVERT_TO_WCHAR_T( name, convertedName );
+
+    if ( !::WaitNamedPipe(convertedName, 0) ) 
     {
         return false;
     }
 
-#ifdef UNICODE
-    pipe.m_Handle = ::CreateFileW( name,
-#else
-    pipe.m_Handle = ::CreateFileA( name,
-#endif
+    pipe.m_Handle = ::CreateFileW( convertedName,
         GENERIC_READ | GENERIC_WRITE, 
         0,
         NULL,

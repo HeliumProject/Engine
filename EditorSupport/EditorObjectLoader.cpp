@@ -16,7 +16,7 @@
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
-#include "PcSupport/XmlPackageLoader.h"
+#include "PcSupport/ArchivePackageLoader.h"
 
 using namespace Helium;
 
@@ -158,7 +158,7 @@ bool EditorObjectLoader::InitializeStaticInstance()
 /// @copydoc GameObjectLoader::GetPackageLoader()
 PackageLoader* EditorObjectLoader::GetPackageLoader( GameObjectPath path )
 {
-    XmlPackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
+    ArchivePackageLoader* pLoader = m_packageLoaderMap.GetPackageLoader( path );
 
     return pLoader;
 }

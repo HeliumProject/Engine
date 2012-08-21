@@ -1,5 +1,4 @@
 require "Helium"
-require "Prebuild"
 require "FBX"
 require "TBB"
 require "WxWidgets"
@@ -7,16 +6,8 @@ require "WxWidgets"
 -- Do both instruction sets
 newoption
 {
-   trigger = "build32and64",
-   description = "Build both 32-bit and 64-bit binaries"
-}
-
--- Custom action to just run the pre-build scripts.
-newaction
-{
-	trigger = "prebuild",
-	description = "Run the pre-build scripts without updating project or make files",
-	execute = Helium.Prebuild
+   trigger = "universal",
+   description = "Build for both 32-bit and 64-bit target machines"
 }
 
 -- Do nothing if there is no action (--help, etc...)
@@ -30,28 +21,24 @@ if _ACTION then
         os.exit(1)
 	end
 
-	if _ACTION ~= "prebuild" then
-		if _ACTION ~= "clean" then
-			local bin = "Bin"
+	if _ACTION ~= "clean" then
+		local bin = "Bin"
 
-			Helium.BuildWxWidgets()
-			Helium.PublishWxWidgets( bin )
+		Helium.BuildWxWidgets()
+		Helium.PublishWxWidgets( bin )
 
-			Helium.BuildTBB()
-			Helium.PublishTBB( bin )
+		Helium.BuildTBB()
+		Helium.PublishTBB( bin )
 
-			Helium.PublishFBX( bin )
-			Helium.PublishIcons( bin )
-
-			Helium.Prebuild()
-		else
-			Helium.CleanWxWidgets()
-			Helium.CleanTBB()
-		end
-
-		dofile "Dependencies.lua"
-		dofile "Runtime.lua"
-		dofile "Tools.lua"
+		Helium.PublishFBX( bin )
+		Helium.PublishIcons( bin )
+	else
+		Helium.CleanWxWidgets()
+		Helium.CleanTBB()
 	end
+
+	dofile "Dependencies.lua"
+	dofile "Runtime.lua"
+	dofile "Tools.lua"
 	
 end

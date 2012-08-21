@@ -4,6 +4,7 @@
 #include "Registry.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "ArchiveBinary.h"
+#include "Foundation/Reflect/Data/PointerData.h"
 
 #include "Foundation/Log.h"
 
@@ -27,18 +28,17 @@ Class* Class::Create()
 }
 
 template<>
-Class* Class::Create< Object >( const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
+void Class::Create< Object >( Class const*& pointer, const tchar_t* name, const tchar_t* baseName, CreateObjectFunc creator )
 {
-    Class* info = Class::Create();
+    Class* type = Class::Create();
+    pointer = type;
 
-    info->m_Size = sizeof( Object );
-    info->m_Name = name;
+    type->m_Size = sizeof( Object );
+    type->m_Name = name;
 
     // object should have no creator
     HELIUM_ASSERT( creator == NULL );
 
     // object should have no base class
     HELIUM_ASSERT( baseName == NULL );
-
-    return info;
 }

@@ -166,6 +166,9 @@ Helium::StrongPtr< T >::StrongPtr( T* pObject )
         HELIUM_ASSERT( m_pProxy );
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy )->AddStrongRef();
     }
+    
+    // Any pointer we receive must not have the link index flag set
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
 }
 
 /// Constructor.
@@ -190,6 +193,9 @@ Helium::StrongPtr< T >::StrongPtr( const WeakPtr< T >& rPointer )
             m_pProxy = NULL;
         }
     }
+    
+    // Any pointer we receive must not have the link index flag set
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
 }
 
 /// Copy constructor.
@@ -199,16 +205,23 @@ template< typename T >
 Helium::StrongPtr< T >::StrongPtr( const StrongPtr& rPointer )
     : m_pProxy( rPointer.m_pProxy )
 {
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
     if( m_pProxy )
     {
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy )->AddStrongRef();
     }
+    
+    // Any pointer we receive must not have the link index flag set
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
 }
 
 /// Destructor.
 template< typename T >
 Helium::StrongPtr< T >::~StrongPtr()
 {
+    // Link indices must be cleared before destruction (no technical reason why so removing this assert is safe,
+    // but this currently shouldn't trip)
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
     Release();
 }
 
@@ -220,6 +233,7 @@ Helium::StrongPtr< T >::~StrongPtr()
 template< typename T >
 T* Helium::StrongPtr< T >::Get() const
 {
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
     return ( m_pProxy
         ? static_cast< T* >( static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy )->GetObject() )
         : NULL );
@@ -244,6 +258,9 @@ T* Helium::StrongPtr< T >::Ptr() const
 template< typename T >
 void Helium::StrongPtr< T >::Set( T* pObject )
 {
+    // Link indices must be cleared before using as a pointer
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
+
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy );
     if( pProxy )
@@ -267,6 +284,9 @@ void Helium::StrongPtr< T >::Set( T* pObject )
         HELIUM_ASSERT( m_pProxy );
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy )->AddStrongRef();
     }
+    
+    // Any pointer we now point at must not have the link index flag set
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
 }
 
 /// Release any object referenced by this smart pointer.
@@ -275,6 +295,9 @@ void Helium::StrongPtr< T >::Set( T* pObject )
 template< typename T >
 void Helium::StrongPtr< T >::Release()
 {
+    // Can't release a link index
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
+
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pProxy =
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( m_pProxy );
     m_pProxy = NULL;
@@ -291,6 +314,9 @@ void Helium::StrongPtr< T >::Release()
 template< typename T >
 bool Helium::StrongPtr< T >::ReferencesObject() const
 {
+    // Can't use a link index like a pointer
+    HELIUM_ASSERT(!HELIUM_IS_LINK_INDEX(m_LinkIndex));
+
     // Proxy object should never be holding a null reference for strong pointers, so we should only have to check
     // whether we have a proxy object set.
     HELIUM_ASSERT(
@@ -315,7 +341,8 @@ bool Helium::StrongPtr< T >::ReferencesObject() const
 template< typename T >
 void Helium::StrongPtr< T >::SetLinkIndex( uint32_t index )
 {
-    m_LinkIndex = index;
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(index) );
+    m_LinkIndex = HELIUM_FLAG_AS_LINK_INDEX(index);
 }
 
 /// Get the object link table index stored in this smart pointer.
@@ -333,7 +360,9 @@ void Helium::StrongPtr< T >::SetLinkIndex( uint32_t index )
 template< typename T >
 uint32_t Helium::StrongPtr< T >::GetLinkIndex() const
 {
-    return static_cast< uint32_t >( m_LinkIndex );
+    // Must be a link index to use as such
+    HELIUM_ASSERT( HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+    return static_cast< uint32_t >( HELIUM_UNFLAG_AS_LINK_INDEX(m_LinkIndex) );
 }
 
 /// Clear out the link table index stored in this smart pointer.
@@ -351,7 +380,14 @@ uint32_t Helium::StrongPtr< T >::GetLinkIndex() const
 template< typename T >
 void Helium::StrongPtr< T >::ClearLinkIndex()
 {
+    HELIUM_ASSERT( HELIUM_IS_LINK_INDEX(m_LinkIndex) );
     m_pProxy = NULL;
+}
+
+template< typename T >
+bool Helium::StrongPtr< T >::HasLinkIndex() const
+{
+    return HELIUM_IS_LINK_INDEX(m_LinkIndex);
 }
 
 /// Get the object referenced by this smart pointer.
@@ -372,6 +408,9 @@ template< typename T >
 template< typename BaseT >
 Helium::StrongPtr< T >::operator const Helium::StrongPtr< BaseT >&() const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     return ImplicitUpCast< BaseT >( std::is_base_of< BaseT, T >() );
 }
 
@@ -381,6 +420,9 @@ Helium::StrongPtr< T >::operator const Helium::StrongPtr< BaseT >&() const
 template< typename T >
 T& Helium::StrongPtr< T >::operator*() const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     T* pObject = Get();
     HELIUM_ASSERT( pObject );
 
@@ -393,6 +435,9 @@ T& Helium::StrongPtr< T >::operator*() const
 template< typename T >
 T* Helium::StrongPtr< T >::operator->() const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     T* pObject = Get();
     HELIUM_ASSERT( pObject );
 
@@ -407,6 +452,9 @@ T* Helium::StrongPtr< T >::operator->() const
 template< typename T >
 Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( T* pObject )
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     Set( pObject );
 
     return *this;
@@ -420,6 +468,9 @@ Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( T* pObject )
 template< typename T >
 Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( const WeakPtr< T >& rPointer )
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check for
     // and handle that case as well.
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
@@ -451,6 +502,9 @@ Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( const WeakPtr< T >& r
 template< typename T >
 Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( const StrongPtr& rPointer )
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
         static_cast< RefCountProxy< typename T::RefCountSupportType::BaseType >* >( rPointer.m_pProxy );
     if( m_pProxy != pOtherProxy )
@@ -475,6 +529,9 @@ Helium::StrongPtr< T >& Helium::StrongPtr< T >::operator=( const StrongPtr& rPoi
 template< typename T >
 bool Helium::StrongPtr< T >::operator==( const WeakPtr< T >& rPointer ) const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check
     // for and handle that case as well.
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
@@ -495,6 +552,8 @@ bool Helium::StrongPtr< T >::operator==( const WeakPtr< T >& rPointer ) const
 template< typename T >
 bool Helium::StrongPtr< T >::operator==( const StrongPtr& rPointer ) const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
     return ( m_pProxy == rPointer.m_pProxy );
 }
 
@@ -506,6 +565,9 @@ bool Helium::StrongPtr< T >::operator==( const StrongPtr& rPointer ) const
 template< typename T >
 bool Helium::StrongPtr< T >::operator!=( const WeakPtr< T >& rPointer ) const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
+
     // Note that a weak pointer can have a reference count proxy whose object is set to null, so we need to check for
     // and handle that case as well.
     RefCountProxy< typename T::RefCountSupportType::BaseType >* pOtherProxy =
@@ -526,6 +588,8 @@ bool Helium::StrongPtr< T >::operator!=( const WeakPtr< T >& rPointer ) const
 template< typename T >
 bool Helium::StrongPtr< T >::operator!=( const StrongPtr& rPointer ) const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
     return ( m_pProxy != rPointer.m_pProxy );
 }
 
@@ -539,6 +603,8 @@ template< typename BaseT >
 const Helium::StrongPtr< BaseT >& Helium::StrongPtr< T >::ImplicitUpCast(
     const std::true_type& /*rIsProperBase*/ ) const
 {
+    // Clear link index before trying to use this as a pointer
+    HELIUM_ASSERT( !HELIUM_IS_LINK_INDEX(m_LinkIndex) );
     return *reinterpret_cast< const StrongPtr< BaseT >* >( this );
 }
 

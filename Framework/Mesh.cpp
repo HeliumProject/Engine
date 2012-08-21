@@ -1,44 +1,28 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Mesh.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Mesh.h"
 
-#include "Foundation/AsyncLoader.h"
-#include "Math/SimdMatrix44.h"
+#include "Engine/AsyncLoader.h"
+#include "Foundation/Math/SimdMatrix44.h"
 #include "Engine/CacheManager.h"
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
+#include "Foundation/Reflect/Data/ObjectDynArrayData.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+REFLECT_DEFINE_OBJECT( Helium::Mesh::PersistentResourceData );
 
-HELIUM_IMPLEMENT_OBJECT( Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Mesh::Mesh()
-:
-#if !HELIUM_USE_GRANNY_ANIMATION
-m_pBoneNames( NULL )
-, m_pParentBoneIndices( NULL )
-, m_pReferencePose( NULL )
-,
-#endif
-m_vertexCount( 0 )
-, m_triangleCount( 0 )
-, m_vertexBufferLoadId( Invalid< size_t >() )
+: m_vertexBufferLoadId( Invalid< size_t >() )
 , m_indexBufferLoadId( Invalid< size_t >() )
-#if !HELIUM_USE_GRANNY_ANIMATION
-, m_boneCount( 0 )
-#endif
 {
 }
 
@@ -50,11 +34,11 @@ Mesh::~Mesh()
     HELIUM_ASSERT( IsInvalid( m_vertexBufferLoadId ) );
     HELIUM_ASSERT( IsInvalid( m_indexBufferLoadId ) );
 
-#if !HELIUM_USE_GRANNY_ANIMATION
-    delete [] m_pBoneNames;
-    delete [] m_pParentBoneIndices;
-    delete [] m_pReferencePose;
-#endif
+// #if !HELIUM_USE_GRANNY_ANIMATION
+//     delete [] m_pBoneNames;
+//     delete [] m_pParentBoneIndices;
+//     delete [] m_pReferencePose;
+// #endif
 }
 
 /// @copydoc GameObject::PreDestroy()
@@ -70,11 +54,17 @@ void Mesh::PreDestroy()
 }
 
 /// @copydoc GameObject::Serialize()
-void Mesh::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
+//PMDTODO: Implement
+//void Mesh::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED_DYNARRAY( m_materials );
+//}
 
-    s << HELIUM_TAGGED_DYNARRAY( m_materials );
+void Mesh::PopulateComposite(Reflect::Composite& comp)
+{
+    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynArrayData>());
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
@@ -95,7 +85,7 @@ bool Mesh::BeginPrecacheResourceData()
         return true;
     }
 
-    if( m_vertexCount != 0 )
+    if( m_persistentResourceData.m_vertexCount != 0 )
     {
         size_t vertexDataSize = GetSubDataSize( 0 );
         if( IsInvalid( vertexDataSize ) )
@@ -150,7 +140,7 @@ bool Mesh::BeginPrecacheResourceData()
         }
     }
 
-    if( m_triangleCount != 0 )
+    if( m_persistentResourceData.m_triangleCount != 0 )
     {
         size_t indexDataSize = GetSubDataSize( 1 );
         if( IsInvalid( indexDataSize ) )
@@ -243,53 +233,98 @@ bool Mesh::TryFinishPrecacheResourceData()
     return true;
 }
 
-/// @copydoc Resource::SerializePersistentResourceData()
-void Mesh::SerializePersistentResourceData( Serializer& s )
-{
-    s << Serializer::WrapDynArray( m_sectionVertexCounts );
-    s << Serializer::WrapDynArray( m_sectionTriangleCounts );
-    s << Serializer::WrapDynArray( m_skinningPaletteMap );
-    s << m_vertexCount;
-    s << m_triangleCount;
-    s << m_bounds;
-
-#if HELIUM_USE_GRANNY_ANIMATION
-    m_grannyData.SerializePersistentResourceData( s );
-#else
-    s << m_boneCount;
-    uint_fast8_t boneCountFast = m_boneCount;
-
-    if( s.GetMode() == Serializer::MODE_LOAD )
-    {
-        m_spVertexBuffer.Release();
-        m_spIndexBuffer.Release();
-
-        delete [] m_pBoneNames;
-        delete [] m_pParentBoneIndices;
-        delete [] m_pReferencePose;
-
-        m_pBoneNames = NULL;
-        m_pParentBoneIndices = NULL;
-        m_pReferencePose = NULL;
-
-        if( boneCountFast != 0 )
-        {
-            m_pBoneNames = new Name [ boneCountFast ];
-            HELIUM_ASSERT( m_pBoneNames );
-            m_pParentBoneIndices = new uint8_t [ boneCountFast ];
-            HELIUM_ASSERT( m_pParentBoneIndices );
-            m_pReferencePose = new Simd::Matrix44 [ boneCountFast ];
-            HELIUM_ASSERT( m_pReferencePose );
-        }
-    }
-
-    for( uint_fast8_t boneIndex = 0; boneIndex < boneCountFast; ++boneIndex )
-    {
-        s << m_pBoneNames[ boneIndex ];
-        s << m_pParentBoneIndices[ boneIndex ];
-        s << m_pReferencePose[ boneIndex ];
-    }
+Mesh::PersistentResourceData::PersistentResourceData()
+: m_vertexCount( 0 )
+, m_triangleCount( 0 )
+#if !HELIUM_USE_GRANNY_ANIMATION
+, m_boneCount( 0 )
 #endif
+{
+
+}
+
+void Mesh::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &PersistentResourceData::m_sectionVertexCounts,      TXT( "m_sectionVertexCounts" ) );
+    comp.AddField( &PersistentResourceData::m_sectionTriangleCounts,    TXT( "m_sectionTriangleCounts" ) );
+    comp.AddField( &PersistentResourceData::m_skinningPaletteMap,       TXT( "m_skinningPaletteMap" ) );
+    comp.AddField( &PersistentResourceData::m_vertexCount,              TXT( "m_vertexCount" ) );
+    comp.AddField( &PersistentResourceData::m_triangleCount,            TXT( "m_triangleCount" ) );
+    comp.AddStructureField( &PersistentResourceData::m_bounds,          TXT( "m_bounds" ) );
+#if !HELIUM_USE_GRANNY_ANIMATION
+    comp.AddField( &PersistentResourceData::m_boneCount,            TXT( "m_boneCount" ) );
+    comp.AddField( &PersistentResourceData::m_pBoneNames,            TXT( "m_pBoneNames" ) );
+    comp.AddField( &PersistentResourceData::m_pParentBoneIndices,            TXT( "m_pParentBoneIndices" ) );
+    comp.AddStructureField( &PersistentResourceData::m_pReferencePose,            TXT( "m_pReferencePose" ) );
+#endif
+}
+
+
+
+//PMDTODO: Implement this
+/// @copydoc Resource::SerializePersistentResourceData()
+// void Mesh::SerializePersistentResourceData( Serializer& s )
+// {
+//     s << Serializer::WrapDynArray( m_sectionVertexCounts );
+//     s << Serializer::WrapDynArray( m_sectionTriangleCounts );
+//     s << Serializer::WrapDynArray( m_skinningPaletteMap );
+//     s << m_vertexCount;
+//     s << m_triangleCount;
+//     s << m_bounds;
+// 
+// #if HELIUM_USE_GRANNY_ANIMATION
+//     m_grannyData.SerializePersistentResourceData( s );
+// #else
+//     s << m_boneCount;
+//     uint_fast8_t boneCountFast = m_boneCount;
+// 
+//     if( s.GetMode() == Serializer::MODE_LOAD )
+//     {
+//         m_spVertexBuffer.Release();
+//         m_spIndexBuffer.Release();
+// 
+//         delete [] m_pBoneNames;
+//         delete [] m_pParentBoneIndices;
+//         delete [] m_pReferencePose;
+// 
+//         m_pBoneNames = NULL;
+//         m_pParentBoneIndices = NULL;
+//         m_pReferencePose = NULL;
+// 
+//         if( boneCountFast != 0 )
+//         {
+//             m_pBoneNames = new Name [ boneCountFast ];
+//             HELIUM_ASSERT( m_pBoneNames );
+//             m_pParentBoneIndices = new uint8_t [ boneCountFast ];
+//             HELIUM_ASSERT( m_pParentBoneIndices );
+//             m_pReferencePose = new Simd::Matrix44 [ boneCountFast ];
+//             HELIUM_ASSERT( m_pReferencePose );
+//         }
+//     }
+// 
+//     for( uint_fast8_t boneIndex = 0; boneIndex < boneCountFast; ++boneIndex )
+//     {
+//         s << m_pBoneNames[ boneIndex ];
+//         s << m_pParentBoneIndices[ boneIndex ];
+//         s << m_pReferencePose[ boneIndex ];
+//     }
+// #endif
+// }
+
+bool Helium::Mesh::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
+{    
+    m_spVertexBuffer.Release();
+    m_spIndexBuffer.Release();
+
+    HELIUM_ASSERT(_object.ReferencesObject());
+    if (!_object.ReferencesObject())
+    {
+        return false;
+    }
+
+    _object->CopyTo(&m_persistentResourceData);
+
+    return true;
 }
 
 /// @copydoc Resource::GetCacheName()
@@ -314,13 +349,13 @@ Name Mesh::GetCacheName() const
 /// @see GetSectionVertexCount(), GetSectionTriangleCount(), GetSectionCount()
 const uint8_t* Mesh::GetSectionSkinningPaletteMap( size_t sectionIndex ) const
 {
-    HELIUM_ASSERT( sectionIndex < m_sectionTriangleCounts.GetSize() );
+    HELIUM_ASSERT( sectionIndex < m_persistentResourceData.m_sectionTriangleCounts.GetSize() );
 
 #if HELIUM_USE_GRANNY_ANIMATION
     size_t boneCount = m_grannyData.GetBoneCount();
 #else
-    size_t boneCount = m_boneCount;
+    size_t boneCount = m_persistentResourceData.m_boneCount;
 #endif
 
-    return m_skinningPaletteMap.GetData() + sectionIndex * boneCount;
+    return m_persistentResourceData.m_skinningPaletteMap.GetData() + sectionIndex * boneCount;
 }

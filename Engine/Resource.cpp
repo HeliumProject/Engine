@@ -1,15 +1,15 @@
 #include "EnginePch.h"
 #include "Engine/Resource.h"
 
-#include "Foundation/AsyncLoader.h"
+#include "Engine/AsyncLoader.h"
 #include "Foundation/Reflect/Class.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Package.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Resource, Engine, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Resource, Engine, 0 );
+using namespace Helium;
 
 /// Constructor.
 Resource::Resource()

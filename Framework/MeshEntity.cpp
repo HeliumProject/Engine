@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MeshEntity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/MeshEntity.h"
 
@@ -14,9 +7,9 @@
 #include "Graphics/RenderResourceManager.h"
 #include "Framework/World.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::MeshEntity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( MeshEntity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 MeshEntity::MeshEntity()
@@ -30,14 +23,15 @@ MeshEntity::~MeshEntity()
     HELIUM_ASSERT( IsInvalid( m_graphicsSceneObjectId ) );
 }
 
-/// @copydoc GameObject::Serialize()
-void MeshEntity::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_spMesh );
-    s << HELIUM_TAGGED_DYNARRAY( m_overrideMaterials );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void MeshEntity::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_spMesh );
+//    s << HELIUM_TAGGED_DYNARRAY( m_overrideMaterials );
+//}
 
 /// @copydoc Entity::Attach()
 void MeshEntity::Attach()

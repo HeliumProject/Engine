@@ -1,19 +1,12 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Texture.h"
 
 #include "Rendering/RTexture.h"
 
-using namespace Helium;
+REFLECT_DEFINE_ENUMERATION( Helium::Texture::ECompression );
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 
-HELIUM_DEFINE_ENUMERATION( Texture::ECompression, HELIUM_GRAPHICS_API );
-HELIUM_IMPLEMENT_OBJECT( Texture, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Texture::Texture()
@@ -37,16 +30,18 @@ void Texture::PreDestroy()
     Base::PreDestroy();
 }
 
-/// @copydoc GameObject::Serialize()
-void Texture::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
 
-    s << HELIUM_TAGGED( m_compression );
-    s << HELIUM_TAGGED( m_bSrgb );
-    s << HELIUM_TAGGED( m_bCreateMipmaps );
-    s << HELIUM_TAGGED( m_bIgnoreAlpha );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Texture::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_compression );
+//    s << HELIUM_TAGGED( m_bSrgb );
+//    s << HELIUM_TAGGED( m_bCreateMipmaps );
+//    s << HELIUM_TAGGED( m_bIgnoreAlpha );
+//}
 
 /// Get the render resource as a RTexture2d if this is a 2D texture.
 ///

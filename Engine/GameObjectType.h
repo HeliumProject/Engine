@@ -12,7 +12,9 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Package );
+    class Package;
+    typedef Helium::StrongPtr< Package > PackagePtr;
+    typedef Helium::StrongPtr< const Package > ConstPackagePtr;
 
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
@@ -95,7 +97,7 @@ namespace Helium
         inline static Package* GetTypePackage();
         static void SetTypePackage( Package* pPackage );
 
-        static const GameObjectType* Create( const Reflect::Class* pClass, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
+        static GameObjectType* Create( const Reflect::Class* pClass, Package* pTypePackage, const GameObjectType* pParent, GameObject* pTemplate, uint32_t flags );
         static void Unregister( const GameObjectType* pType );
 
         static GameObjectType* Find( Name typeName );

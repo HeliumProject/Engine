@@ -52,7 +52,7 @@
             if( !pModuleHeap ) \
             { \
                 pModuleHeap = static_cast< DynamicMemoryHeap* >( \
-                    PhysicalMemory::Allocate( sizeof( DynamicMemoryHeap ) ) ); \
+                    VirtualMemory::Allocate( sizeof( DynamicMemoryHeap ) ) ); \
                 new( pModuleHeap ) DynamicMemoryHeap HELIUM_DYNAMIC_MEMORY_HEAP_INIT( TXT( #MODULE_NAME ) ); \
             } \
             \
@@ -159,7 +159,7 @@ namespace Helium
     /// space (physical memory if possible).  Typically, most application will not use this directly, but will instead
     /// allocate using one of the provided heap allocators, which provide better management for most runtime
     /// allocations.
-    class HELIUM_PLATFORM_API PhysicalMemory
+    class HELIUM_PLATFORM_API VirtualMemory
     {
     public:
         /// @name Memory Allocation
@@ -205,7 +205,7 @@ namespace Helium
     /// Thread-safe dynamic memory heap.
     ///
     /// This provides a thread-safe, dynamic memory heap for general purpose allocations.  Pages of memory are allocated
-    /// from the system using PhysicalMemory::Allocate() and PhysicalMemory::Free(), and allocations within these blocks
+    /// from the system using VirtualMemory::Allocate() and VirtualMemory::Free(), and allocations within these blocks
     /// are managed internally using nedmalloc (http://www.nedprod.com/programs/portable/nedmalloc/) to provide
     /// efficient scalability across multiple threads.
     class HELIUM_PLATFORM_API DynamicMemoryHeap : public MemoryHeap

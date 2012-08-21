@@ -32,10 +32,10 @@ namespace Helium
         virtual ~Animation();
         //@}
 
-        /// @name Serialization
-        //@{
-        virtual void Serialize( Serializer& s );
-        //@}
+        ///// @name Serialization
+        ////@{
+        //virtual void Serialize( Serializer& s );
+        ////@}
 
         /// @name Resource Serialization
         //@{

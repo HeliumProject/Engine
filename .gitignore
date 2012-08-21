@@ -13,11 +13,6 @@ Bin/*
 Logs/*
 DataPC/
 Doc/html/
-*/*Interface.cpp
-*/*Interface.h
-*/*Interface.inl
-*/*TypeRegistration.cpp
-!Framework/ObjectTypeRegistration.cpp
 Dependencies/LiteSQL/0.3.8/build/*
 Dependencies/tbb/build/windows_*
 Dependencies/tbb/build/macos_*

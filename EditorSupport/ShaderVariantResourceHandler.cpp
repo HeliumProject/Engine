@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ShaderVariantResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -24,9 +17,9 @@
 #include "Rendering/ShaderProfiles.h"
 #include "PcSupport/ObjectPreprocessor.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::ShaderVariantResourceHandler, EditorSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( ShaderVariantResourceHandler, EditorSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 ShaderVariantResourceHandler::ShaderVariantResourceHandler()
@@ -250,13 +243,10 @@ bool ShaderVariantResourceHandler::CacheResource(
 
         Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
-
-        BinarySerializer serializer;
-        serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-        serializer.BeginSerialize();
-        serializer << systemOptionSetCount32;
-        serializer.EndSerialize();
-        rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+        
+        ShaderVariant::PersistentResourceData persistentResourceData;
+        persistentResourceData.m_resourceCount = systemOptionSetCount32;
+        SaveObjectToPersistentDataBuffer(&persistentResourceData, rPreprocessedData.persistentDataBuffer);
 
         size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
         size_t shaderCount = shaderProfileCount * systemOptionSetCount;
@@ -270,10 +260,12 @@ bool ShaderVariantResourceHandler::CacheResource(
         rPreprocessedData.bLoaded = true;
     }
 
-    DynArray< uint8_t > compiledCodeBuffer;
-    DynArray< ShaderConstantBufferInfo > constantBuffers, pcSm4ConstantBuffers;
-    DynArray< ShaderSamplerInfo > samplerInputs;
-    DynArray< ShaderTextureInfo > textureInputs;
+//     DynArray< uint8_t > compiledCodeBuffer;
+//     DynArray< ShaderConstantBufferInfo > constantBuffers, pcSm4ConstantBuffers;
+//     DynArray< ShaderSamplerInfo > samplerInputs;
+//     DynArray< ShaderTextureInfo > textureInputs;
+    
+    CompiledShaderData csd_pc_sm4;
 
     for( size_t systemOptionSetIndex = 0; systemOptionSetIndex < systemOptionSetCount; ++systemOptionSetIndex )
     {
@@ -308,7 +300,7 @@ bool ShaderVariantResourceHandler::CacheResource(
         PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor( Cache::PLATFORM_PC );
         HELIUM_ASSERT( pPreprocessor );
 
-        compiledCodeBuffer.Resize( 0 );
+        csd_pc_sm4.compiledCodeBuffer.Resize( 0 );
         bool bCompiled = CompileShader(
             pVariant,
             pPreprocessor,
@@ -318,7 +310,7 @@ bool ShaderVariantResourceHandler::CacheResource(
             pShaderSource,
             size,
             shaderTokens,
-            compiledCodeBuffer );
+            csd_pc_sm4.compiledCodeBuffer );
         if( !bCompiled )
         {
             HELIUM_TRACE(
@@ -328,16 +320,16 @@ bool ShaderVariantResourceHandler::CacheResource(
         }
         else
         {
-            pcSm4ConstantBuffers.Resize( 0 );
-            samplerInputs.Resize( 0 );
-            textureInputs.Resize( 0 );
+            csd_pc_sm4.constantBuffers.Resize( 0 );
+            csd_pc_sm4.samplerInputs.Resize( 0 );
+            csd_pc_sm4.textureInputs.Resize( 0 );
             bool bReadConstantBuffers = pPreprocessor->FillShaderReflectionData(
                 ShaderProfile::PC_SM4,
-                compiledCodeBuffer.GetData(),
-                compiledCodeBuffer.GetSize(),
-                pcSm4ConstantBuffers,
-                samplerInputs,
-                textureInputs );
+                csd_pc_sm4.compiledCodeBuffer.GetData(),
+                csd_pc_sm4.compiledCodeBuffer.GetSize(),
+                csd_pc_sm4.constantBuffers,
+                csd_pc_sm4.samplerInputs,
+                csd_pc_sm4.textureInputs );
             if( !bReadConstantBuffers )
             {
                 HELIUM_TRACE(
@@ -347,32 +339,15 @@ bool ShaderVariantResourceHandler::CacheResource(
             }
             else
             {
-                BinarySerializer serializer;
-                serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-                serializer.BeginSerialize();
-                serializer << Serializer::WrapStructDynArray( pcSm4ConstantBuffers );
-                serializer << Serializer::WrapStructDynArray( samplerInputs );
-                serializer << Serializer::WrapStructDynArray( textureInputs );
-                serializer.EndSerialize();
-
-                const DynArray< uint8_t >& rPropertyStreamBuffer = serializer.GetPropertyStreamBuffer();
-                size_t propertyStreamSize = rPropertyStreamBuffer.GetSize();
-
                 Resource::PreprocessedData& rPcPreprocessedData = pVariant->GetPreprocessedData(
                     Cache::PLATFORM_PC );
                 DynArray< DynArray< uint8_t > >& rPcSubDataBuffers = rPcPreprocessedData.subDataBuffers;
                 DynArray< uint8_t >& rPcSm4SubDataBuffer =
                     rPcSubDataBuffers[ ShaderProfile::PC_SM4 * systemOptionSetCount + systemOptionSetIndex ];
 
-                rPcSm4SubDataBuffer = rPropertyStreamBuffer;
-
-                // Pad the shader data to enforce 4-byte alignment on load.
-                rPcSm4SubDataBuffer.Add(
-                    0,
-                    Align( propertyStreamSize, sizeof( uint32_t ) ) - propertyStreamSize );
-
-                rPcSm4SubDataBuffer.AddArray( compiledCodeBuffer.GetData(), compiledCodeBuffer.GetSize() );
-
+                Cache::WriteCacheObjectToBuffer(csd_pc_sm4, rPcSm4SubDataBuffer);
+                
+                // FOR EACH PLATFORM
                 for( size_t platformIndex = 0;
                     platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX );
                     ++platformIndex )
@@ -383,9 +358,8 @@ bool ShaderVariantResourceHandler::CacheResource(
                     {
                         continue;
                     }
-
-                    serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-
+                    
+                    // GET PLATFORM'S SUBDATA BUFFER
                     Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
                         static_cast< Cache::EPlatform >( platformIndex ) );
                     DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
@@ -395,6 +369,8 @@ bool ShaderVariantResourceHandler::CacheResource(
                         shaderProfileIndex < shaderProfileCount;
                         ++shaderProfileIndex )
                     {
+                        CompiledShaderData csd;
+
                         // Already cached PC shader model 4...
                         if( shaderProfileIndex == ShaderProfile::PC_SM4 && platformIndex == Cache::PLATFORM_PC )
                         {
@@ -410,45 +386,30 @@ bool ShaderVariantResourceHandler::CacheResource(
                             pShaderSource,
                             size,
                             shaderTokens,
-                            compiledCodeBuffer );
+                            csd.compiledCodeBuffer );
                         if( !bCompiled )
                         {
                             continue;
                         }
 
-                        constantBuffers = pcSm4ConstantBuffers;
-                        samplerInputs.Resize( 0 );
-                        textureInputs.Resize( 0 );
+                        csd.constantBuffers = csd_pc_sm4.constantBuffers;
+                        csd.samplerInputs.Resize( 0 );
+                        csd.textureInputs.Resize( 0 );
                         bReadConstantBuffers = pPreprocessor->FillShaderReflectionData(
                             shaderProfileIndex,
-                            compiledCodeBuffer.GetData(),
-                            compiledCodeBuffer.GetSize(),
-                            constantBuffers,
-                            samplerInputs,
-                            textureInputs );
+                            csd.compiledCodeBuffer.GetData(),
+                            csd.compiledCodeBuffer.GetSize(),
+                            csd.constantBuffers,
+                            csd.samplerInputs,
+                            csd.textureInputs );
                         if( !bReadConstantBuffers )
                         {
                             continue;
                         }
 
-                        serializer.BeginSerialize();
-                        serializer << Serializer::WrapStructDynArray( constantBuffers );
-                        serializer << Serializer::WrapStructDynArray( samplerInputs );
-                        serializer << Serializer::WrapStructDynArray( textureInputs );
-                        serializer.EndSerialize();
-
-                        propertyStreamSize = rPropertyStreamBuffer.GetSize();
-
                         DynArray< uint8_t >& rTargetSubDataBuffer =
                             rSubDataBuffers[ shaderProfileIndex * systemOptionSetCount + systemOptionSetIndex ];
-                        rTargetSubDataBuffer = rPropertyStreamBuffer;
-
-                        // Pad the shader data to enforce 4-byte alignment on load.
-                        rTargetSubDataBuffer.Add(
-                            0,
-                            Align( propertyStreamSize, sizeof( uint32_t ) ) - propertyStreamSize );
-
-                        rTargetSubDataBuffer.AddArray( compiledCodeBuffer.GetData(), compiledCodeBuffer.GetSize() );
+                        Cache::WriteCacheObjectToBuffer(csd, rTargetSubDataBuffer);
                     }
                 }
             }
@@ -570,12 +531,14 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
             rCacheManager.GetCurrentPlatform() );
         const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 
-        BinaryDeserializer deserializer;
-        deserializer.Prepare( rPersistentDataBuffer.GetData(), rPersistentDataBuffer.GetSize() );
-        deserializer.BeginSerialize();
-        pVariant->SerializePersistentResourceData( deserializer );
-        deserializer.EndSerialize();
-
+        //PMDTODO: Implmenet this
+//         BinaryDeserializer deserializer;
+//         deserializer.Prepare( rPersistentDataBuffer.GetData(), rPersistentDataBuffer.GetSize() );
+//         deserializer.BeginSerialize();
+//         pVariant->SerializePersistentResourceData( deserializer );
+//         deserializer.EndSerialize();
+        Reflect::ObjectPtr persistent_resource_data = Cache::ReadCacheObjectFromBuffer(rPersistentDataBuffer);
+        pVariant->LoadPersistentResourceObject(persistent_resource_data);
         pVariant->BeginPrecacheResourceData();
     }
 

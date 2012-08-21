@@ -18,7 +18,9 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( World );
+    class World;
+    typedef Helium::StrongPtr< World > WorldPtr;
+    typedef Helium::StrongPtr< const World > ConstWorldPtr;
 
     /// Manager for individual World instances.
     class HELIUM_FRAMEWORK_API WorldManager : NonCopyable

@@ -1,16 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// StaticMeshEntity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/StaticMeshEntity.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::StaticMeshEntity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( StaticMeshEntity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 StaticMeshEntity::StaticMeshEntity()

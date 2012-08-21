@@ -1,18 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Camera.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Camera.h"
 
-#include "Math/SimdVectorConversion.h"
+#include "Foundation/Math/SimdVectorConversion.h"
+
+HELIUM_IMPLEMENT_OBJECT( Helium::Camera, Framework, 0 );
 
 using namespace Helium;
-
-HELIUM_IMPLEMENT_OBJECT( Camera, Framework, 0 );
 
 const float32_t Camera::DEFAULT_FOV = 70.0f;
 
@@ -28,13 +21,14 @@ Camera::~Camera()
 {
 }
 
-/// @copydoc GameObject::Serialize()
-void Camera::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_fov );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Camera::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_fov );
+//}
 
 /// @copydoc Entity::Attach()
 void Camera::Attach()

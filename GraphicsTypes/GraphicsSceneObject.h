@@ -11,9 +11,9 @@
 
 #include "GraphicsTypes/GraphicsTypes.h"
 
-#include "Math/SimdAaBox.h"
-#include "Math/SimdMatrix44.h"
-#include "Math/SimdSphere.h"
+#include "Foundation/Math/SimdAaBox.h"
+#include "Foundation/Math/SimdMatrix44.h"
+#include "Foundation/Math/SimdSphere.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
@@ -22,7 +22,9 @@ namespace Helium
 {
     class GraphicsScene;
 
-    HELIUM_DECLARE_PTR( Material );
+    class Material;
+    typedef Helium::StrongPtr< Material > MaterialPtr;
+    typedef Helium::StrongPtr< const Material > ConstMaterialPtr;
 
     HELIUM_DECLARE_RPTR( RVertexBuffer );
     HELIUM_DECLARE_RPTR( RIndexBuffer );

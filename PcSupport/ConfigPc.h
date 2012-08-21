@@ -28,7 +28,7 @@ namespace Helium
     private:
         /// @name Private Utility Functions
         //@{
-        static void RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject );
+        //static void RecursiveSerializeObject( XmlSerializer& rSerializer, GameObject* pObject );
         //@}
     };
 }

@@ -6,6 +6,7 @@
 #include "Foundation/Reflect/Structure.h"
 #include "Foundation/Reflect/Data/DataDeduction.h"
 #include "Foundation/Log.h"
+#include "Foundation/Memory/AutoPtr.h"
 
 #include <strstream>
 #include <expat.h>
@@ -14,6 +15,8 @@ using namespace Helium;
 using namespace Helium::Reflect;
 
 const uint32_t ArchiveXML::CURRENT_VERSION = 4;
+
+#define REFLECT_ARCHIVE_VERBOSE
 
 #pragma TODO("Structures still have an extra <Object Type=\"StructureType\">, eliminate that with removing the type check for Data")
 
@@ -69,9 +72,23 @@ ArchiveXML::ArchiveXML()
 
 }
 
+ArchiveXML::ArchiveXML( TCharStream *stream, bool write /*= false */ )
+: Archive()
+, m_Version( CURRENT_VERSION )
+, m_Size( 0 )
+, m_Skip( false )
+, m_Body( NULL )
+{
+    HELIUM_ASSERT(stream);
+    OpenStream(stream, write);
+}
+
 ArchiveXML::~ArchiveXML()
 {
-
+    if (m_Stream)
+    {
+        Close();
+    }
 }
 
 void ArchiveXML::Open( bool write )
@@ -116,46 +133,8 @@ void ArchiveXML::Read()
 
     m_Abort = false;
 
-    // determine the size of the input stream
-    m_Stream->SeekRead(0, std::ios_base::end);
-    m_Size = m_Stream->TellRead();
-    m_Stream->SeekRead(0, std::ios_base::beg);
-
-    // fail on an empty input stream
-    if ( m_Size == 0 )
-    {
-        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
-    }
-
-    // while there is data, parse buffer
-    {
-        REFLECT_SCOPE_TIMER( ("Parse XML") );
-
-        long step = 0;
-        const unsigned bufferSizeInBytes = 4096;
-        char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
-        while (!m_Stream->Fail() && !m_Abort)
-        {
-            m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)m_Size) * 100.0f);
-
-            // divide by the character size so wide char builds don't override the allocation
-            //  stream objects read characters, not byte-by-byte
-            m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
-            int bytesRead = static_cast<int>(m_Stream->ElementsRead());
-
-            m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
-        }
-    }
-
-    m_Iterator.SetCurrent( m_Document.GetRoot() );
-
-    // read file format version attribute
-    const String* version = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
-    if ( version )
-    {
-        tstringstream str ( version->GetData() );
-        str >> m_Version;
-    }
+    ParseStream();
+    ReadFileHeader(false);
 
     // deserialize main file objects
     {
@@ -178,13 +157,8 @@ void ArchiveXML::Write()
     ArchiveStatus info( *this, ArchiveStates::Starting );
     e_Status.Raise( info );
 
-#ifdef UNICODE
-    uint16_t feff = 0xfeff;
-    m_Stream->Write( &feff ); // byte order mark
-#endif
 
-    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
-    *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
+    WriteFileHeader();
 
     // serialize main file objects
     {
@@ -192,7 +166,7 @@ void ArchiveXML::Write()
         SerializeArray(m_Objects, ArchiveFlags::Status);
     }
 
-    *m_Stream << TXT( "</Reflect>\n\0" );
+    WriteFileFooter();
 
     info.m_State = ArchiveStates::Complete;
     e_Status.Raise( info );
@@ -224,7 +198,7 @@ void ArchiveXML::SerializeInstance(Object* object, const tchar_t* fieldName)
         HELIUM_ASSERT(c);
         *m_Stream << c->m_Name;
     }
-
+    
     *m_Stream << TXT( "\"" );
 
     if ( fieldName )
@@ -406,11 +380,24 @@ void ArchiveXML::DeserializeInstance(ObjectPtr& object)
             tstringstream stringStream ( body );
             TCharStream stream ( &stringStream, false );
 
+            const DeserializingField *deserializing_field = GetDeserializingField();
+            if (deserializing_field)
+            {
+                //data->ConnectField(deserializing_field->m_Instance, deserializing_field->m_Field);
+            }
+
+            Helium::XMLElement *element = m_Iterator.GetCurrent();
+
             m_Body = &stream;
             data->Deserialize(*this);
             m_Body = NULL;
 
-            m_Iterator.Advance( true );
+            // I don't like doing this change, but structures/objects call DeserializeInstance
+            // but simple data doesn't.
+            if (m_Iterator.GetCurrent() == element)
+            {
+                m_Iterator.Advance();
+            }
         }
         else
         {
@@ -433,6 +420,8 @@ void ArchiveXML::DeserializeInstance( void* structure, const Structure* type )
     m_Indent.Push();
 #endif
 
+    // pmd - Step into the structure field
+    m_Iterator.Advance();
     DeserializeFields(structure, type);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -446,7 +435,14 @@ void ArchiveXML::DeserializeFields(Object* object)
     {
         // advance to the first child
         m_Iterator.Advance();
-
+        
+        size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+        //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        m_DeserializingFieldStack.New();
+        //HELIUM_ASSERT(deserializing_field);
+        HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+        //deserializing_field->m_Instance = structure;
+        m_DeserializingFieldStack[deserializing_field_index].m_Instance = object;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -459,6 +455,8 @@ void ArchiveXML::DeserializeFields(Object* object)
 
             ObjectPtr unknown;
             const Field* field = type->FindFieldByName(fieldNameCrc);
+            //deserializing_field->m_Field = field;
+            m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -550,6 +548,7 @@ void ArchiveXML::DeserializeFields(Object* object)
             m_Indent.Pop();
 #endif
         }
+        m_DeserializingFieldStack.Pop();
     }
     else
     {
@@ -565,6 +564,13 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
         // advance to the first child
         m_Iterator.Advance();
 
+        size_t deserializing_field_index = m_DeserializingFieldStack.GetSize();
+        //DeserializingField *deserializing_field = m_DeserializingFieldStack.New();
+        m_DeserializingFieldStack.New();
+        //HELIUM_ASSERT(deserializing_field);
+        HELIUM_ASSERT(m_DeserializingFieldStack.GetSize() == (deserializing_field_index + 1));
+        //deserializing_field->m_Instance = structure;
+        m_DeserializingFieldStack[deserializing_field_index].m_Instance = structure;
         for ( XMLElement* sibling = m_Iterator.GetCurrent(); sibling != NULL; sibling = sibling->GetNextSibling() )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
@@ -573,6 +579,7 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             uint32_t fieldNameCrc = fieldNameStr ? Crc32( fieldNameStr->GetData() ) : 0x0;
 
             const Field* field = type->FindFieldByName(fieldNameCrc);
+            m_DeserializingFieldStack[deserializing_field_index].m_Field = field;
             if ( field )
             {
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -635,6 +642,10 @@ void ArchiveXML::DeserializeFields( void* structure, const Structure* type )
             m_Indent.Pop();
 #endif
         }
+        // else skip this entire node
+        //
+        //
+        m_DeserializingFieldStack.Pop();
     }
     else
     {
@@ -671,11 +682,25 @@ void ArchiveXML::DeserializeArray( ArrayPusher& push, uint32_t flags )
         {
             HELIUM_ASSERT( m_Iterator.GetCurrent() == sibling );
 
-            ObjectPtr object;
-            DeserializeInstance(object);
-
+            ObjectPtr object = Allocate();
             if (object.ReferencesObject())
             {
+                // A bit of a hack to handle structs.
+                StructureData* structure_data = SafeCast<StructureData>(object);
+                if ( structure_data )
+                {
+                    //deserializing_field->m_Instance = structure_data->m_Data.Get(deserializing_field->m_Field->m_Size);
+                    const DeserializingField *deserializing_field = GetDeserializingField();
+                    HELIUM_ASSERT(deserializing_field);
+                    structure_data->AllocateForArrayEntry(deserializing_field->m_Instance, deserializing_field->m_Field);
+                }
+                else
+                {
+                    //deserializing_field->m_Instance = object.Get();
+                }
+
+                DeserializeInstance(object);
+
                 if ( object->IsClass( m_SearchClass ) )
                 {
                     m_Skip = true;
@@ -763,14 +788,14 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
     {
         searchClass = Reflect::GetClass<Object>();
     }
-
-    ArchiveXML archive;
-    archive.m_SearchClass = searchClass;
-
+    
     tstringstream strStream;
     strStream << xml;
-    archive.m_Stream = new Reflect::TCharStream(&strStream, false); 
+
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), false);
+    archive.m_SearchClass = searchClass;
     archive.Read();
+    archive.Close();
 
     std::vector< ObjectPtr >::iterator itr = archive.m_Objects.begin();
     std::vector< ObjectPtr >::iterator end = archive.m_Objects.end();
@@ -787,24 +812,129 @@ ObjectPtr ArchiveXML::FromString( const tstring& xml, const Class* searchClass )
 
 void ArchiveXML::ToString( const std::vector< ObjectPtr >& objects, tstring& xml )
 {
-    ArchiveXML archive;
+    //ArchiveXML archive;
     tstringstream strStream;
 
-    archive.m_Stream = new Reflect::TCharStream( &strStream, false ); 
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), true);
     archive.m_Objects = objects;
     archive.Write();
-
+    archive.Close();
     xml = strStream.str();
 }
 
 void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& objects )
 {
-    ArchiveXML archive;
+    //ArchiveXML archive;
     tstringstream strStream;
     strStream << xml;
 
-    archive.m_Stream = new Reflect::TCharStream( &strStream, false );
+    ArchiveXML archive(new Reflect::TCharStream(&strStream, false), false);
     archive.Read();
+    archive.Close();
 
     objects = archive.m_Objects;
+}
+
+void Helium::Reflect::ArchiveXML::WriteFileHeader()
+{
+#ifdef UNICODE
+    uint16_t feff = 0xfeff;
+    m_Stream->Write( &feff ); // byte order mark
+#endif
+
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
+    *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
+}
+
+void Helium::Reflect::ArchiveXML::WriteFileFooter()
+{
+    *m_Stream << TXT( "</Reflect>\n\0" );
+}
+
+void Helium::Reflect::ArchiveXML::ReadFileHeader(bool _reparse)
+{
+    if (_reparse)
+    {
+        ParseStream();
+    }
+
+    // read file format version attribute
+    const String* version = m_Iterator.GetCurrent()->GetAttributeValue( Name( TXT( "FileFormatVersion" ) ) );
+    if ( version )
+    {
+        tstringstream str ( version->GetData() );
+        str >> m_Version;
+    }
+}
+
+void Helium::Reflect::ArchiveXML::ReadFileFooter()
+{
+
+}
+
+void Helium::Reflect::ArchiveXML::ParseStream()
+{
+    // determine the size of the input stream
+    m_Stream->SeekRead(0, std::ios_base::end);
+    m_Size = m_Stream->TellRead();
+    m_Stream->SeekRead(0, std::ios_base::beg);
+
+    // fail on an empty input stream
+    if ( m_Size == 0 )
+    {
+        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
+    }
+
+    // while there is data, parse buffer
+    {
+        REFLECT_SCOPE_TIMER( ("Parse XML") );
+
+        long step = 0;
+        const unsigned bufferSizeInBytes = 4096;
+        char* buffer = static_cast< char* >( alloca( bufferSizeInBytes ) );
+        while (!m_Stream->Fail() && !m_Abort)
+        {
+            m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)m_Size) * 100.0f);
+
+            // divide by the character size so wide char builds don't override the allocation
+            //  stream objects read characters, not byte-by-byte
+            m_Stream->ReadBuffer(buffer, bufferSizeInBytes / sizeof(tchar_t));
+            int bytesRead = static_cast<int>(m_Stream->ElementsRead());
+
+            m_Document.ParseBuffer(buffer, bytesRead * sizeof(tchar_t), bytesRead == 0);
+        }
+    }
+
+    m_Iterator.SetCurrent( m_Document.GetRoot() );
+}
+
+void Helium::Reflect::ArchiveXML::WriteSingleObject( Object& object )
+{
+    SerializeInstance(&object);
+}
+
+bool Helium::Reflect::ArchiveXML::BeginReadingSingleObjects()
+{
+    bool return_value = m_Iterator.GetCurrent()->GetFirstChild() != NULL;
+    m_Iterator.Advance();
+    return return_value;
+}
+
+bool Helium::Reflect::ArchiveXML::ReadSingleObject( ObjectPtr& object )
+{
+    bool return_value = m_Iterator.GetCurrent()->GetNextSibling() != NULL;
+    DeserializeInstance(object);
+    return return_value;
+}
+
+void Helium::Reflect::ArchiveXML::ReadString( tstring &str )
+{
+    std::streamsize size = GetStream().ElementsAvailable(); 
+    str.resize( (size_t)size );
+    GetStream().ReadBuffer( const_cast<tchar_t*>( (str).c_str() ), size );
+}
+
+void Helium::Reflect::ArchiveXML::WriteString( const tstring &str )
+{
+    GetStream() << TXT( "<![CDATA[" ) << str << TXT( "]]>" );
 }

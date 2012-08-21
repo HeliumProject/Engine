@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture2d.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Texture2d.h"
 
@@ -12,9 +5,9 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/RTexture2d.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
-HELIUM_IMPLEMENT_OBJECT( Texture2d, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Texture2d::Texture2d()
@@ -147,7 +140,7 @@ bool Texture2d::TryFinishPrecacheResourceData()
 
     return true;
 }
-
+//PMDTODO: Implement this
 /// @copydoc Resource::SerializePersistentResourceData()
 void Texture2d::SerializePersistentResourceData( Serializer& s )
 {

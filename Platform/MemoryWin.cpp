@@ -12,7 +12,7 @@ using namespace Helium;
 /// @return  Address of the allocation if successfully allocated, null if not.
 ///
 /// @see Free()
-void* PhysicalMemory::Allocate( size_t size )
+void* VirtualMemory::Allocate( size_t size )
 {
     void* pMemory = VirtualAlloc( NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 
@@ -51,7 +51,7 @@ void* PhysicalMemory::Allocate( size_t size )
 /// @return  True if all pages were freed successfully, false if not.
 ///
 /// @see Allocate()
-bool PhysicalMemory::Free( void* pMemory, size_t size )
+bool VirtualMemory::Free( void* pMemory, size_t size )
 {
     HELIUM_ASSERT( pMemory );
     HELIUM_ASSERT( size != 0 );
@@ -110,7 +110,7 @@ bool PhysicalMemory::Free( void* pMemory, size_t size )
 /// Get the page size of memory allocated through this function.
 ///
 /// @return  Current platform page size.
-size_t PhysicalMemory::GetPageSize()
+size_t VirtualMemory::GetPageSize()
 {
     SYSTEM_INFO systemInfo;
     GetSystemInfo( &systemInfo );

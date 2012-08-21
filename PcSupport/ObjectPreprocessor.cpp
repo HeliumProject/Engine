@@ -10,6 +10,8 @@
 
 #include "Platform/Stat.h"
 #include "Foundation/Stream/BufferedStream.h"
+#include "Foundation/Stream/DynamicMemoryStream.h"
+#include "Foundation/Stream/ByteSwappingStream.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Stream/FileStream.h"
@@ -20,6 +22,8 @@
 #include "Engine/Resource.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "PcSupport/ResourceHandler.h"
+#include "Foundation/Numeric.h"
+
 
 using namespace Helium;
 
@@ -82,8 +86,8 @@ bool ObjectPreprocessor::CacheObject(
 
     DynArray< uint8_t > objectStreamBuffer;
 
-    DynamicMemoryStream directStream;
-    ByteSwappingStream byteSwappingStream( &directStream );
+    Helium::DynamicMemoryStream directStream;
+    Helium::ByteSwappingStream byteSwappingStream( &directStream );
 
     GameObjectPath objectPath = pObject->GetPath();
 
@@ -134,28 +138,23 @@ bool ObjectPreprocessor::CacheObject(
         bool bSwapBytes = pPreprocessor->SwapBytes();
         Stream& rObjectStream =
             ( bSwapBytes ? static_cast< Stream& >( byteSwappingStream ) : static_cast< Stream& >( directStream ) );
+        
+        DynArray<uint8_t> data_buffer;
+        Cache::WriteCacheObjectToBuffer(*pObject, data_buffer);
 
-        // Set aside 4 bytes at the beginning of the data stream for the size of the property data itself so that we
-        // can know how much data we can skip to get directly to the persistent resource data for resource objects.
-        uint32_t propertyDataSize = 0;
-        rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
-
-        // Serialize the property data.
-        BinarySerializer serializer;
-        serializer.SetByteSwapping( bSwapBytes );
-        serializer.Serialize( pObject );
-
-        serializer.WriteToStream( &rObjectStream );
-
-        // Update the property data size for resources.
-        size_t propertyDataSizeActual = objectStreamBuffer.GetSize() - sizeof( propertyDataSize );
-        HELIUM_ASSERT( propertyDataSizeActual <= UINT32_MAX );
-
-        propertyDataSize = static_cast< uint32_t >( propertyDataSizeActual );
-        rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_BEGIN );
-        rObjectStream.Write( &propertyDataSize, sizeof( propertyDataSize ), 1 );
-        rObjectStream.Seek( 0, SeekOrigins::SEEK_ORIGIN_END );
-
+        if (!data_buffer.IsEmpty())
+        {
+            HELIUM_ASSERT(data_buffer.GetSize() <= Helium::NumericLimits<uint32_t>::Maximum);
+            uint32_t data_size = static_cast<uint32_t>(data_buffer.GetSize());
+            rObjectStream.Write(&data_size, sizeof(data_size), 1);
+            rObjectStream.Write(&data_buffer[0], sizeof(data_buffer[0]), data_size);
+        }
+        else
+        {
+            uint32_t data_size = 0;
+            rObjectStream.Write(&data_size, sizeof(data_size), 1);
+        }
+		
         // Serialize persistent resource data and the number of chunks of sub-data.
         if( pResource )
         {
@@ -877,13 +876,9 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
             size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
             if( persistentDataBufferSize != 0 )
             {
-                BinaryDeserializer deserializer;
-                deserializer.Prepare( rPersistentDataBuffer.GetData(), persistentDataBufferSize );
-                deserializer.SetByteSwapping( pPlatformPreprocessor->SwapBytes() );
-
-                deserializer.BeginSerialize();
-                pResource->SerializePersistentResourceData( deserializer );
-                HELIUM_VERIFY( deserializer.EndSerialize() );
+                Reflect::ObjectPtr persistent_data = Cache::ReadCacheObjectFromBuffer(rPersistentDataBuffer);
+                
+                pResource->LoadPersistentResourceObject(persistent_data);
             }
         }
     }

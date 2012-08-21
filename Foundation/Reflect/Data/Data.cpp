@@ -337,3 +337,18 @@ void Data::Accept(Visitor& visitor)
 {
     // by default, don't do anything as it will all have to be special cased in derived classes
 }
+
+// See also Data::Bind in .inl file
+Helium::Reflect::DataPtr Helium::Reflect::Data::BindStructure( void* value, void* instance, const Field* field )
+{
+    DataPtr ser = AssertCast<Data>( StructureData::CreateObject() );
+
+    if (ser.ReferencesObject())
+    {
+        ser->m_Instance = instance;
+        ser->m_Field = field;
+        ser->ConnectData( value );
+    }
+
+    return ser;
+}

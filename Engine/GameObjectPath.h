@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Engine/Engine.h"
-
 #include "Platform/ReadWriteLock.h"
+
 #include "Foundation/Name.h"
+#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/Memory/ReferenceCounting.h"
+
+#include "Engine/Engine.h"
 
 /// @defgroup objectpathdelims GameObject Path Delimiter Characters
 //@{
@@ -26,6 +29,8 @@
 
 namespace Helium
 {
+    class GameObject;
+
     /// Hashed object path name for fast lookups and comparisons.
     class HELIUM_ENGINE_API GameObjectPath
     {
@@ -34,6 +39,8 @@ namespace Helium
         static const size_t TABLE_BUCKET_COUNT = 37;
         /// GameObject path stack memory heap block size.
         static const size_t STACK_HEAP_BLOCK_SIZE = sizeof( tchar_t ) * 8192;
+        /// Block size for pool of pending links
+        static const size_t PENDING_LINKS_POOL_BLOCK_SIZE = 64;
 
         /// @name Construction/Destruction
         //@{
@@ -86,6 +93,9 @@ namespace Helium
         //@}
 
     private:
+
+        struct PendingLink;
+
         /// GameObject path entry.
         struct Entry
         {
@@ -97,6 +107,19 @@ namespace Helium
             uint32_t instanceIndex;
             /// True if the object is a package.
             bool bPackage;
+            
+            /// Pointer to instance of object
+            class GameObject *instance; // NOTE: Hate raw pointers but GameObject depends on GameObjectPath
+                                        //       so can't use smart pointer
+
+            /// Links other objects have placed on this object
+            /// NOTE: For thread safety, this is a weird variables
+            /// - If 0, instance is null and any AddPendingLink calls will insert into this linked list
+            /// - If value of this pointer == this Entry's pointer, then instance is good and AddPendingLink calls
+            ///   should immediately link the value of instance and return true
+            /// - If value of this pointer != 0 and != the outer Entry's pointer, then instances is not set and
+            ///   AddPendingLink will continue to insert into this linked list
+            PendingLink * volatile rpFirstPendingLink;
         };
 
         /// GameObject path hash table bucket.
@@ -123,6 +146,7 @@ namespace Helium
         static TableBucket* sm_pTable;
         /// Stack-based memory heap for object path entry allocations.
         static StackMemoryHeap<>* sm_pEntryMemoryHeap;
+        static ObjectPool<PendingLink> *sm_pPendingLinksPool;
 
         /// @name Private Utility Functions
         //@{

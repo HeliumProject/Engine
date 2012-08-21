@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Engine.h"
-#include "Foundation/Reflect/Object.h"
 
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ConcurrentHashSet.h"
@@ -9,7 +8,10 @@
 #include "Foundation/Container/SparseArray.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Reflect/Object.h"
+
 #include "Engine/GameObjectPath.h"
+#include "Engine/GameObjectPointerData.h"
 
 /// @defgroup objectmacros Common "GameObject"-class Macros
 //@{
@@ -60,7 +62,7 @@
     \
     void TYPE::InPlaceDestroy() \
     { \
-        this->~TYPE(); \
+        this->~This(); \
     } \
     \
     void TYPE::ReleaseStaticType() \
@@ -107,7 +109,6 @@
                 pParentType, \
                 spTemplate, \
                 TYPE_FLAGS ); \
-            HELIUM_ASSERT( s_Class ); \
         } \
         \
         return static_cast< const Helium::GameObjectType* >( s_Class->m_Tag ); \
@@ -122,15 +123,23 @@ namespace Helium
     class GameObjectType;
     typedef SmartPtr< GameObjectType > GameObjectTypePtr;
 
-    HELIUM_DECLARE_PTR( GameObject );
-    HELIUM_DECLARE_WPTR( GameObject );
+    class GameObject;
+    typedef Helium::StrongPtr< GameObject > GameObjectPtr;
+    typedef Helium::StrongPtr< const GameObject > ConstGameObjectPtr;
+
+    class GameObject;
+    typedef Helium::WeakPtr< GameObject > GameObjectWPtr;
+    typedef Helium::WeakPtr< const GameObject > ConstGameObjectWPtr;
 
     /// Base class for the engine's game object system.
     class HELIUM_ENGINE_API GameObject : public Helium::Reflect::Object
     {
-        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object )
-
     public:
+        REFLECT_DECLARE_OBJECT( GameObject, Reflect::Object );
+
+        /// Pointer serialization override.
+        typedef GameObjectPointerData PointerDataClass;
+
         /// Destruction callback type.
         typedef void ( CUSTOM_DESTROY_CALLBACK )( GameObject* pObject );
 
@@ -191,6 +200,10 @@ namespace Helium
         inline GameObject* GetOwner() const;
         inline uint32_t GetInstanceIndex() const;
         bool Rename( const RenameParameters& rParameters );
+        
+        // Override for Object::Clone
+        virtual Reflect::ObjectPtr Clone();
+        virtual bool CloneGameObject(GameObjectPtr _game_object_ptr);
 
         inline uint32_t GetId() const;
 
@@ -225,6 +238,11 @@ namespace Helium
 
         /// @name Serialization
         //@{
+
+        static void PopulateComposite( Reflect::Composite& comp);
+
+
+
         virtual void Serialize( Serializer& s );
 
         virtual bool NeedsPrecacheResourceData() const;

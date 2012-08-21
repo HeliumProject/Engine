@@ -1,18 +1,11 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Entity.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "FrameworkPch.h"
 #include "Framework/Entity.h"
 
 #include "Framework/Layer.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Entity, Framework, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Entity, Framework, 0 );
+using namespace Helium;
 
 /// Constructor.
 Entity::Entity()
@@ -32,15 +25,16 @@ Entity::~Entity()
     HELIUM_ASSERT( !m_spLayer );
 }
 
-/// @copydoc GameObject::Serialize()
-void Entity::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_position );
-    s << HELIUM_TAGGED( m_rotation );
-    s << HELIUM_TAGGED( m_scale );
-}
+//PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Entity::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_position );
+//    s << HELIUM_TAGGED( m_rotation );
+//    s << HELIUM_TAGGED( m_scale );
+//}
 
 /// Perform any necessary work upon attaching this entity to the world.
 ///

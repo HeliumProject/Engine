@@ -12,16 +12,24 @@
 #include "Graphics/Graphics.h"
 #include "Engine/Resource.h"
 
-#include "Math/SimdVector2.h"
-#include "Math/SimdVector3.h"
-#include "Math/SimdVector4.h"
+#include "Foundation/Math/SimdVector2.h"
+#include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Math/SimdVector4.h"
 #include "Graphics/Shader.h"
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Shader );
-    HELIUM_DECLARE_PTR( ShaderVariant );
-    HELIUM_DECLARE_PTR( Texture );
+    class Shader;
+    typedef Helium::StrongPtr< Shader > ShaderPtr;
+    typedef Helium::StrongPtr< const Shader > ConstShaderPtr;
+
+    class ShaderVariant;
+    typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
+    typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
+
+    class Texture;
+    typedef Helium::StrongPtr< Texture > TexturePtr;
+    typedef Helium::StrongPtr< const Texture > ConstTexturePtr;
 
     HELIUM_DECLARE_RPTR( RConstantBuffer );
 
@@ -34,71 +42,98 @@ namespace Helium
         /// Scalar floating-point parameter.
         struct HELIUM_GRAPHICS_API Float1Parameter
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float1Parameter);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator==( const Float1Parameter& _rhs ) const;
+            inline bool operator!=( const Float1Parameter& _rhs ) const;
+
             /// Parameter name.
             Name name;
             /// Parameter value.
             float32_t value;
-
-            /// @name Serialization
-            //@{
-            void Serialize( Serializer& s );
-            //@}
+            
         };
 
         /// Two-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float2Parameter
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float2Parameter);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator==( const Float2Parameter& _rhs ) const;
+            inline bool operator!=( const Float2Parameter& _rhs ) const;
+
             /// Parameter name.
             Name name;
             /// Parameter value.
             Simd::Vector2 value;
-
-            /// @name Serialization
-            //@{
-            void Serialize( Serializer& s );
-            //@}
         };
 
         /// Three-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float3Parameter
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float3Parameter);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator==( const Float3Parameter& _rhs ) const;
+            inline bool operator!=( const Float3Parameter& _rhs ) const;
+
             /// Parameter name.
             Name name;
             /// Parameter value.
             Simd::Vector3 value;
-
-            /// @name Serialization
-            //@{
-            void Serialize( Serializer& s );
-            //@}
         };
 
         /// Four-component floating-point vector parameter.
         struct HELIUM_GRAPHICS_API Float4Parameter
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Material::Float4Parameter);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator==( const Float4Parameter& _rhs ) const;
+            inline bool operator!=( const Float4Parameter& _rhs ) const;
+
             /// Parameter name.
             Name name;
             /// Parameter value.
             Simd::Vector4 value;
-
-            /// @name Serialization
-            //@{
-            void Serialize( Serializer& s );
-            //@}
         };
 
         /// Shader texture sampler parameter.
         struct TextureParameter
         {
+            REFLECT_DECLARE_BASE_STRUCTURE(Material::TextureParameter);
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            inline bool operator==( const TextureParameter& _rhs ) const;
+            inline bool operator!=( const TextureParameter& _rhs ) const;
+
             /// Parameter name.
             Name name;
             /// Parameter value.
             TexturePtr value;
+        };
+        
+        /// Shader texture sampler parameter.
+        struct PersistentResourceData : public Reflect::Object
+        {
+            REFLECT_DECLARE_OBJECT(Material::PersistentResourceData, Reflect::Object);
+            static void PopulateComposite( Reflect::Composite& comp );
 
-            /// @name Serialization
-            //@{
-            void Serialize( Serializer& s );
-            //@}
+            inline bool operator==( const PersistentResourceData& _rhs ) const;
+            inline bool operator!=( const PersistentResourceData& _rhs ) const;
+            
+            union
+            {
+                /// Shader variant indices.
+                uint32_t m_shaderVariantIndices[ RShader::TYPE_MAX ];
+                struct
+                {
+                    uint32_t m_shaderVariantIndexVertex;
+                    uint32_t m_shaderVariantIndexPixel;
+                };
+            };
         };
 
         /// @name Construction/Destruction
@@ -109,7 +144,13 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
+        static void PopulateComposite( Reflect::Composite& comp );
+
+#if HELIUM_TOOLS
+        void Helium::Material::PreSerialize( const Reflect::Field* field );
+        void Helium::Material::PostDeserialize( const Reflect::Field* field );
+#endif
 
         virtual bool NeedsPrecacheResourceData() const;
         virtual bool BeginPrecacheResourceData();
@@ -118,7 +159,8 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        //virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject(Reflect::ObjectPtr &_object);
         //@}
 
         /// @name Resource Caching Support
@@ -169,9 +211,9 @@ namespace Helium
 
     private:
         /// Material shader.
+        //GameObjectPtr m_spShaderAsGameObject;
         ShaderPtr m_spShader;
-        /// Shader variant indices.
-        uint32_t m_shaderVariantIndices[ RShader::TYPE_MAX ];
+        PersistentResourceData m_persistentResourceData;
 
         /// Cached references to the specific shader variants used by this material.
         ShaderVariantPtr m_shaderVariants[ RShader::TYPE_MAX ];

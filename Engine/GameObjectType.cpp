@@ -3,6 +3,7 @@
 
 #include "Foundation/Container/ObjectPool.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Engine/GameObjectPointerData.h"
 
 #include "Engine/Package.h"
 
@@ -49,7 +50,13 @@ void GameObjectType::SetTypePackage( Package* pPackage )
 /// @return  Pointer to the type object if created successfully, null if not.
 ///
 /// @see Unregister()
-const GameObjectType* GameObjectType::Create(
+// PMD: Removing const because:
+// - Objects must be able to have properties of the same type as the outer type (i.e. GameObject has reference to GameObject that is the template)
+// - So, s_Class must be set before calling PopulateComposite
+// - So, this function must return a pointer that PopulateComposite can work on, rather than calling PopulateComposite directly
+//   - If not for this restriction, I'd want to see if we could call Class::Create and Composite::Create, rather than doing duplicate set-up work here
+// - To prevent un-consting parameter to PopulateComposite, making GameObjectType return non-const
+GameObjectType* GameObjectType::Create(
     const Reflect::Class* pClass,
     Package* pTypePackage,
     const GameObjectType* pParent,

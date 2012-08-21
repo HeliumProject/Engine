@@ -63,7 +63,7 @@ namespace Helium
             static void RegisterTypes( RegistrarType type );
             static void UnregisterTypes( RegistrarType type );
 
-            static void AddTypeToRegistry( Type* type );
+            static void AddTypeToRegistry( const Type* type );
             static void RemoveTypeFromRegistry( const Type* type );
 
         private:

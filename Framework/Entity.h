@@ -12,8 +12,8 @@
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
 
-#include "Math/SimdVector3.h"
-#include "Math/SimdQuat.h"
+#include "Foundation/Math/SimdVector3.h"
+#include "Foundation/Math/SimdQuat.h"
 #include "Framework/FrameworkInterface.h"
 #include "Framework/WorldManager.h"
 
@@ -21,8 +21,13 @@ namespace Helium
 {
     class World;
 
-    HELIUM_DECLARE_WPTR( Layer );
-    HELIUM_DECLARE_WPTR( World );
+    class Layer;
+    typedef Helium::WeakPtr< Layer > LayerWPtr;
+    typedef Helium::WeakPtr< const Layer > ConstLayerWPtr;
+
+    class World;
+    typedef Helium::WeakPtr< World > WorldWPtr;
+    typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
     /// Base type for in-world entities.
     class HELIUM_FRAMEWORK_API Entity : public GameObject
@@ -58,7 +63,7 @@ namespace Helium
 
         /// @name Serialization
         //@{
-        virtual void Serialize( Serializer& s );
+        //virtual void Serialize( Serializer& s );
         //@}
 
         /// @name Entity Registration

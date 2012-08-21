@@ -16,6 +16,8 @@
 
 #include <nvtt/nvtt.h>
 
+HELIUM_IMPLEMENT_OBJECT( Helium::FontResourceHandler, EditorSupport, 0 );
+
 using namespace Helium;
 
 /// Maximum Unicode code point value.
@@ -127,8 +129,6 @@ static void* FreeTypeReallocate( FT_Memory /*pMemory*/, long currentSize, long n
 
 /// FreeType memory management routines.
 static FT_MemoryRec_ s_freeTypeMemory = { NULL, FreeTypeAllocate, FreeTypeFree, FreeTypeReallocate };
-
-HELIUM_IMPLEMENT_OBJECT( FontResourceHandler, EditorSupport, 0 );
 
 FT_Library FontResourceHandler::sm_pLibrary = NULL;
 
@@ -265,6 +265,7 @@ bool FontResourceHandler::CacheResource(
     FT_Size pSize = pFace->size;
     HELIUM_ASSERT( pSize );
 
+    Font::PersistentResourceData resource_data;
     int32_t ascender = pSize->metrics.ascender;
     int32_t descender = pSize->metrics.descender;
     int32_t height = pSize->metrics.height;
@@ -457,25 +458,26 @@ bool FontResourceHandler::CacheResource(
         // Store the character information in our character array.
         Font::Character* pCharacter = characters.New();
         HELIUM_ASSERT( pCharacter );
+    
         pCharacter->codePoint = static_cast< uint32_t >( codePoint );
-
+         
         pCharacter->imageX = penX;
         pCharacter->imageY = penY;
         pCharacter->imageWidth = static_cast< uint16_t >( glyphWidth );
         pCharacter->imageHeight = static_cast< uint16_t >( glyphRowCount );
-
+    
         pCharacter->width = pGlyph->metrics.width;
         pCharacter->height = pGlyph->metrics.height;
         pCharacter->bearingX = pGlyph->metrics.horiBearingX;
         pCharacter->bearingY = pGlyph->metrics.horiBearingY;
         pCharacter->advance = pGlyph->metrics.horiAdvance;
-
+    
         HELIUM_ASSERT( textureSheets.GetSize() < UINT8_MAX );
         pCharacter->texture = static_cast< uint8_t >( static_cast< uint8_t >( textureSheets.GetSize() ) );
-
+    
         // Update the pen location as well as the maximum line height as appropriate based on the current line height.
         penX += static_cast< uint16_t >( glyphWidth ) + 1;
-
+    
         HELIUM_ASSERT( glyphRowCount <= UINT16_MAX );
         lineHeight = Max< uint16_t >( lineHeight, static_cast< uint16_t >( glyphRowCount ) );
     }
@@ -501,38 +503,30 @@ bool FontResourceHandler::CacheResource(
     HELIUM_ASSERT( textureCountActual < UINT8_MAX );
     uint8_t textureCount = static_cast< uint8_t >( textureCountActual );
 
-    BinarySerializer persistentDataSerializer;
+    resource_data.m_ascender = ascender;
+    resource_data.m_descender = descender;
+    resource_data.m_height = height;
+    resource_data.m_maxAdvance = maxAdvance;
+    resource_data.m_textureCount = textureCount;
+    // m_characters is populated above
+
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
         PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
             static_cast< Cache::EPlatform >( platformIndex ) );
+
         if( !pPreprocessor )
         {
             continue;
         }
 
-        persistentDataSerializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-        persistentDataSerializer.BeginSerialize();
-
-        persistentDataSerializer << ascender;
-        persistentDataSerializer << descender;
-        persistentDataSerializer << height;
-        persistentDataSerializer << maxAdvance;
-        persistentDataSerializer << characterCount;
-        persistentDataSerializer << textureCount;
-
-        for( size_t characterIndex = 0; characterIndex < characterCountActual; ++characterIndex )
-        {
-            characters[ characterIndex ].Serialize( persistentDataSerializer );
-        }
-
-        persistentDataSerializer.EndSerialize();
-
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
-        rPreprocessedData.persistentDataBuffer = persistentDataSerializer.GetPropertyStreamBuffer();
+        //rPreprocessedData.persistentDataBuffer = ;
+        SaveObjectToPersistentDataBuffer(&resource_data, rPreprocessedData.persistentDataBuffer);
         rPreprocessedData.subDataBuffers = textureSheets;
         rPreprocessedData.bLoaded = true;
+
     }
 
     return true;

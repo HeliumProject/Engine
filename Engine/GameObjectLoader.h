@@ -14,6 +14,7 @@
 #include "Foundation/Container/ConcurrentHashMap.h"
 #include "Foundation/Container/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
+#include "Engine/GameObject.h"
 #include "Engine/Serializer.h"
 
 namespace Helium
@@ -68,6 +69,10 @@ namespace Helium
         static void DestroyStaticInstance();
         //@}
 
+        static void HandleLinkDependency(GameObject &_outer, Helium::StrongPtr<GameObject> &_game_object_pointer, GameObjectPath &_path);
+
+        static void FinalizeLink(GameObject *_game_object);
+
     protected:
         /// Load status flags.
         enum ELoadFlag
@@ -116,60 +121,60 @@ namespace Helium
             /// Number of load requests for this specific object.
             volatile int32_t requestCount;
         };
-
-        /// Serializer for linking object references.
-        class HELIUM_ENGINE_API Linker : public Serializer
-        {
-        public:
-            /// @name Construction/Destruction
-            //@{
-            Linker();
-            virtual ~Linker();
-            //@}
-
-            /// @name Serialization Control
-            //@{
-            void Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount );
-            //@}
-
-            /// @name Serialization Interface
-            //@{
-            virtual bool Serialize( GameObject* pObject );
-            virtual EMode GetMode() const;
-
-            virtual void SerializeTag( const Tag& rTag );
-            virtual bool CanResolveTags() const;
-
-            virtual void SerializeBool( bool& rValue );
-            virtual void SerializeInt8( int8_t& rValue );
-            virtual void SerializeUint8( uint8_t& rValue );
-            virtual void SerializeInt16( int16_t& rValue );
-            virtual void SerializeUint16( uint16_t& rValue );
-            virtual void SerializeInt32( int32_t& rValue );
-            virtual void SerializeUint32( uint32_t& rValue );
-            virtual void SerializeInt64( int64_t& rValue );
-            virtual void SerializeUint64( uint64_t& rValue );
-            virtual void SerializeFloat32( float32_t& rValue );
-            virtual void SerializeFloat64( float64_t& rValue );
-            virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
-            virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
-            virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
-            virtual void SerializeCharName( CharName& rValue );
-            virtual void SerializeWideName( WideName& rValue );
-            virtual void SerializeCharString( CharString& rValue );
-            virtual void SerializeWideString( WideString& rValue );
-            virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
-            //@}
-
-        private:
-            /// Link table.
-            const LinkEntry* m_pLinkEntries;
-            /// Number of link table entries.
-            uint32_t m_linkEntryCount;
-
-            /// True if an invalid link table index was found.
-            bool m_bError;
-        };
+// 
+//         /// Serializer for linking object references.
+//         class HELIUM_ENGINE_API Linker : public Serializer
+//         {
+//         public:
+//             /// @name Construction/Destruction
+//             //@{
+//             Linker();
+//             virtual ~Linker();
+//             //@}
+// 
+//             /// @name Serialization Control
+//             //@{
+//             void Prepare( const LinkEntry* pLinkEntries, uint32_t linkEntryCount );
+//             //@}
+// 
+//             /// @name Serialization Interface
+//             //@{
+//             virtual bool Serialize( GameObject* pObject );
+//             virtual EMode GetMode() const;
+// 
+//             virtual void SerializeTag( const Tag& rTag );
+//             virtual bool CanResolveTags() const;
+// 
+//             virtual void SerializeBool( bool& rValue );
+//             virtual void SerializeInt8( int8_t& rValue );
+//             virtual void SerializeUint8( uint8_t& rValue );
+//             virtual void SerializeInt16( int16_t& rValue );
+//             virtual void SerializeUint16( uint16_t& rValue );
+//             virtual void SerializeInt32( int32_t& rValue );
+//             virtual void SerializeUint32( uint32_t& rValue );
+//             virtual void SerializeInt64( int64_t& rValue );
+//             virtual void SerializeUint64( uint64_t& rValue );
+//             virtual void SerializeFloat32( float32_t& rValue );
+//             virtual void SerializeFloat64( float64_t& rValue );
+//             virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
+//             virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
+//             virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
+//             virtual void SerializeCharName( CharName& rValue );
+//             virtual void SerializeWideName( WideName& rValue );
+//             virtual void SerializeCharString( CharString& rValue );
+//             virtual void SerializeWideString( WideString& rValue );
+//             virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
+//             //@}
+// 
+//         private:
+//             /// Link table.
+//             const LinkEntry* m_pLinkEntries;
+//             /// Number of link table entries.
+//             uint32_t m_linkEntryCount;
+// 
+//             /// True if an invalid link table index was found.
+//             bool m_bError;
+//         };
 
         /// Information for deferred freeing of load requests.
         struct DeferredLoadRequestFree
@@ -184,8 +189,6 @@ namespace Helium
         ConcurrentHashMap< GameObjectPath, LoadRequest* > m_loadRequestMap;
         /// Load request pool.
         ObjectPool< LoadRequest > m_loadRequestPool;
-        /// List of load requests to update in the current tick.
-        DynArray< LoadRequest* > m_loadRequestTickArray;
 
         /// Singleton instance.
         static GameObjectLoader* sm_pInstance;

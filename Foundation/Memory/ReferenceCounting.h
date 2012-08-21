@@ -5,6 +5,11 @@
 #include "Platform/Atomic.h"
 #include "Platform/Utility.h"
 
+#define HELIUM_IS_LINK_INDEX_FLAG (0x8000000000000000)
+#define HELIUM_IS_LINK_INDEX(_x_) ((_x_ & HELIUM_IS_LINK_INDEX_FLAG) == HELIUM_IS_LINK_INDEX_FLAG)
+#define HELIUM_FLAG_AS_LINK_INDEX(_x_) (HELIUM_IS_LINK_INDEX_FLAG | _x_)
+#define HELIUM_UNFLAG_AS_LINK_INDEX(_x_) ((~HELIUM_IS_LINK_INDEX_FLAG) & _x_)
+
 /// Utility macro for declaring common functions and variables for an object with strong/weak reference counting
 /// support.
 ///
@@ -19,26 +24,6 @@
         } \
     private: \
         mutable Helium::RefCountProxyContainer< CLASS > _m_refCountProxyContainer;
-
-/// Forward declare a strong pointer type.
-///
-/// @param[in] CLASS  Class for which to declare the strong pointer type.
-///
-/// @see HELIUM_DECLARE_WPTR()
-#define HELIUM_DECLARE_PTR( CLASS ) \
-    class CLASS; \
-    typedef Helium::StrongPtr< CLASS > CLASS##Ptr; \
-    typedef Helium::StrongPtr< const CLASS > Const##CLASS##Ptr;
-
-/// Forward declare a weak pointer type.
-///
-/// @param[in] CLASS  Class for which to declare the weak pointer type.
-///
-/// @see HELIUM_DECLARE_PTR()
-#define HELIUM_DECLARE_WPTR( CLASS ) \
-    class CLASS; \
-    typedef Helium::WeakPtr< CLASS > CLASS##WPtr; \
-    typedef Helium::WeakPtr< const CLASS > Const##CLASS##WPtr;
 
 namespace Helium
 {
@@ -144,6 +129,7 @@ namespace Helium
         void SetLinkIndex( uint32_t index );
         uint32_t GetLinkIndex() const;
         void ClearLinkIndex();
+        bool HasLinkIndex() const;
         //@}
 
         /// @name Overloaded Operators

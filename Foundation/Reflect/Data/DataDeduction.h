@@ -31,6 +31,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathData );
 //
 
 #include "Foundation/Reflect/Data/ContainerData.h"
+#include "Foundation/Reflect/Data/StructureDynArrayData.h"
 
 #include "Foundation/Reflect/Data/SimpleData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringData );
@@ -56,6 +57,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color3Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Color4Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor3Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::HDRColor4Data );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameData );
 
 #include "Foundation/Reflect/Data/StlVectorData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlVectorData );
@@ -114,6 +116,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDMatrix4StlMapData );
 
 #include "Foundation/Reflect/Data/DynArrayData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8DynArrayData );

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// MeshResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -12,21 +5,17 @@
 #include "EditorSupport/MeshResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
-#include "Math/SimdMatrix44.h"
-#include "Math/SimdVectorConversion.h"
+#include "Foundation/Math/SimdMatrix44.h"
+#include "Foundation/Math/SimdVectorConversion.h"
 #include "Engine/BinarySerializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"
 #include "EditorSupport/FbxSupport.h"
 
-#if HELIUM_USE_GRANNY_ANIMATION
-#include "GrannyMeshResourceHandlerInterface.h"
-#endif
+HELIUM_IMPLEMENT_OBJECT( Helium::MeshResourceHandler, EditorSupport, 0 );
 
 using namespace Helium;
-
-HELIUM_IMPLEMENT_OBJECT( MeshResourceHandler, EditorSupport, 0 );
 
 /// Constructor.
 MeshResourceHandler::MeshResourceHandler()
@@ -64,23 +53,26 @@ bool MeshResourceHandler::CacheResource(
     HELIUM_ASSERT( pObjectPreprocessor );
     HELIUM_ASSERT( pResource );
 
+    Mesh::PersistentResourceData persistentResourceData;
+
     // Load and parse the mesh data.
     DynArray< StaticMeshVertex< 1 > > vertices;
     DynArray< uint16_t > indices;
-    DynArray< uint16_t > sectionVertexCounts;
-    DynArray< uint32_t > sectionTriangleCounts;
+    //DynArray< uint16_t > sectionVertexCounts;
+    //DynArray< uint32_t > sectionTriangleCounts;
     DynArray< FbxSupport::BoneData > bones;
     DynArray< FbxSupport::BlendData > vertexBlendData;
-    DynArray< uint8_t > skinningPaletteMap;
+    //DynArray< uint8_t > skinningPaletteMap;
+
     bool bLoadSuccess = m_rFbxSupport.LoadMesh(
         rSourceFilePath,
         vertices,
         indices,
-        sectionVertexCounts,
-        sectionTriangleCounts,
+        persistentResourceData.m_sectionVertexCounts,
+        persistentResourceData.m_sectionTriangleCounts,
         bones,
         vertexBlendData,
-        skinningPaletteMap );
+        persistentResourceData.m_skinningPaletteMap );
     if( !bLoadSuccess )
     {
         HELIUM_TRACE(
@@ -93,42 +85,45 @@ bool MeshResourceHandler::CacheResource(
 
     size_t vertexCountActual = vertices.GetSize();
     HELIUM_ASSERT( vertexCountActual <= UINT32_MAX );
-    uint32_t vertexCount = static_cast< uint32_t >( vertexCountActual );
+    persistentResourceData.m_vertexCount = static_cast< uint32_t >( vertexCountActual );
 
     size_t indexCount = indices.GetSize();
     size_t triangleCountActual = indexCount;
     HELIUM_ASSERT( triangleCountActual % 3 == 0 );
     triangleCountActual /= 3;
     HELIUM_ASSERT( triangleCountActual <= UINT32_MAX );
-    uint32_t triangleCount = static_cast< uint32_t >( triangleCountActual );
+    persistentResourceData.m_triangleCount = static_cast< uint32_t >( triangleCountActual );
 
     size_t boneCountActual = bones.GetSize();
     HELIUM_ASSERT( boneCountActual <= UINT8_MAX );
-#if !HELIUM_USE_GRANNY_ANIMATION
-    uint8_t boneCount = static_cast< uint8_t >( boneCountActual );
-#endif
+    persistentResourceData.m_boneCount = static_cast< uint8_t >( boneCountActual );
 
     // Compute the mesh bounding box.
-    Simd::AaBox bounds;
+    //Simd::AaBox bounds;
     if( vertexCountActual != 0 )
     {
         const float32_t* pPosition = vertices[ 0 ].position;
         Simd::Vector3 position( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] );
-        bounds.Set( position, position );
+        persistentResourceData.m_bounds.Set( position, position );
         for( size_t vertexIndex = 1; vertexIndex < vertexCountActual; ++vertexIndex )
         {
             pPosition = vertices[ vertexIndex ].position;
-            bounds.Expand( Simd::Vector3( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] ) );
+            persistentResourceData.m_bounds.Expand( Simd::Vector3( pPosition[ 0 ], pPosition[ 1 ], pPosition[ 2 ] ) );
         }
     }
-
-#if HELIUM_USE_GRANNY_ANIMATION
-    Granny::MeshCachingData grannyMeshCachingData;
-    grannyMeshCachingData.BuildResourceData( bones );
-#endif  // HELIUM_USE_GRANNY_ANIMATION
-
+    
+    persistentResourceData.m_pBoneNames.Resize(persistentResourceData.m_boneCount);
+    persistentResourceData.m_pParentBoneIndices.Resize(persistentResourceData.m_boneCount);
+    persistentResourceData.m_pReferencePose.Resize(persistentResourceData.m_boneCount);
+    for( size_t boneIndex = 0; boneIndex < persistentResourceData.m_boneCount; ++boneIndex )
+    {
+        FbxSupport::BoneData& rBoneData = bones[ boneIndex ];            
+        persistentResourceData.m_pBoneNames[boneIndex] = rBoneData.name;
+        persistentResourceData.m_pParentBoneIndices[boneIndex] = rBoneData.parentIndex;
+        persistentResourceData.m_pReferencePose[boneIndex] = rBoneData.referenceTransform;
+    }
+    
     // Cache the data for each supported platform.
-    BinarySerializer serializer;
     for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     {
         PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
@@ -146,53 +141,28 @@ bool MeshResourceHandler::CacheResource(
         rSubDataBuffers.Resize( 2 );
         rSubDataBuffers.Trim();
 
-        serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-
-        // Serialize the buffer sizes and mesh bounds first.
-        serializer.BeginSerialize();
-        serializer << Serializer::WrapDynArray( sectionVertexCounts );
-        serializer << Serializer::WrapDynArray( sectionTriangleCounts );
-        serializer << Serializer::WrapDynArray( skinningPaletteMap );
-        serializer << vertexCount;
-        serializer << triangleCount;
-        serializer << bounds;
-
-#if HELIUM_USE_GRANNY_ANIMATION
-        grannyMeshCachingData.CachePlatformResourceData( pPreprocessor, serializer );
-#else
-        serializer << boneCount;
-
-        for( size_t boneIndex = 0; boneIndex < boneCount; ++boneIndex )
-        {
-            FbxSupport::BoneData& rBoneData = bones[ boneIndex ];
-            serializer << rBoneData.name;
-            serializer << rBoneData.parentIndex;
-            serializer << rBoneData.referenceTransform;
-        }
-#endif
-
-        serializer.EndSerialize();
-
-        rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+        Cache::WriteCacheObjectToBuffer(persistentResourceData, rPreprocessedData.persistentDataBuffer);
 
         // Serialize the vertex buffer.  If the mesh is a skinned mesh, the vertices will need to be converted to
         // and serialized as an array of SkinnedMeshVertex structs.
-        serializer.BeginSerialize();
-
         if( boneCountActual == 0 )
         {
-            for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
-            {
-                vertices[ vertexIndex ].Serialize( serializer );
-            }
+            HELIUM_ASSERT(vertexCountActual == vertices.GetSize());
+            size_t vertexDataSizeInBytes = vertexCountActual * sizeof(StaticMeshVertex< 1 >);
+            rSubDataBuffers[0].Resize(vertexDataSizeInBytes);
+            MemoryCopy(rSubDataBuffers[0].GetData(), vertices.GetData(), vertexDataSizeInBytes);
         }
         else
         {
             HELIUM_ASSERT( vertexBlendData.GetSize() == vertexCountActual );
+            
+            size_t vertexDataSizeInBytes = vertexCountActual * sizeof(SkinnedMeshVertex);
+            rSubDataBuffers[0].Resize(vertexDataSizeInBytes);
+            SkinnedMeshVertex *pVertices = reinterpret_cast<SkinnedMeshVertex *>(rSubDataBuffers[0].GetData());
 
-            SkinnedMeshVertex vertex;
             for( size_t vertexIndex = 0; vertexIndex < vertexCountActual; ++vertexIndex )
             {
+                SkinnedMeshVertex &vertex = pVertices[vertexIndex];
                 const StaticMeshVertex< 1 >& rStaticVertex = vertices[ vertexIndex ];
                 const FbxSupport::BlendData& rBlendData = vertexBlendData[ vertexIndex ];
 
@@ -268,25 +238,12 @@ bool MeshResourceHandler::CacheResource(
                 MemoryCopy( vertex.normal, rStaticVertex.normal, sizeof( vertex.normal ) );
                 MemoryCopy( vertex.tangent, rStaticVertex.tangent, sizeof( vertex.tangent ) );
                 MemoryCopy( vertex.texCoords, rStaticVertex.texCoords[ 0 ], sizeof( vertex.texCoords ) );
-
-                vertex.Serialize( serializer );
             }
         }
-
-        serializer.EndSerialize();
-
-        rSubDataBuffers[ 0 ] = serializer.GetPropertyStreamBuffer();
-
-        // Serialize the index buffer.
-        serializer.BeginSerialize();
-        for( size_t indexIndex = 0; indexIndex < indexCount; ++indexIndex )
-        {
-            serializer << indices[ indexIndex ];
-        }
-
-        serializer.EndSerialize();
-
-        rSubDataBuffers[ 1 ] = serializer.GetPropertyStreamBuffer();
+        
+        size_t indexDataSize = indexCount * sizeof(uint16_t);
+        rSubDataBuffers[ 1 ].Resize(indexDataSize);
+        MemoryCopy(rSubDataBuffers[1].GetData(), indices.GetData(), indexDataSize);
 
         // Platform data is now loaded.
         rPreprocessedData.bLoaded = true;

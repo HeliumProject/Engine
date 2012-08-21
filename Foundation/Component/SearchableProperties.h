@@ -28,3 +28,4 @@ namespace Helium
         //void Erase( const tstring& propName );
     };
 }
+    

@@ -3,7 +3,7 @@
 
 #include "Platform/Trace.h"
 
-#include "Math/Common.h"
+#include "Foundation/Math/Common.h"
 
 using namespace Helium;
 

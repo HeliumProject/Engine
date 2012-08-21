@@ -17,8 +17,13 @@
 
 namespace Helium
 {
-    HELIUM_DECLARE_PTR( Font );
-    HELIUM_DECLARE_PTR( ShaderVariant );
+    class Font;
+    typedef Helium::StrongPtr< Font > FontPtr;
+    typedef Helium::StrongPtr< const Font > ConstFontPtr;
+
+    class ShaderVariant;
+    typedef Helium::StrongPtr< ShaderVariant > ShaderVariantPtr;
+    typedef Helium::StrongPtr< const ShaderVariant > ConstShaderVariantPtr;
 
     HELIUM_DECLARE_RPTR( RRasterizerState );
     HELIUM_DECLARE_RPTR( RBlendState );

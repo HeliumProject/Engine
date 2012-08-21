@@ -1,4 +1,7 @@
 #include "ExampleGamePch.h"
+
+#include "Engine/GameObjectType.h"
+
 #include "ExampleGame/ExampleObject.h"
 
 using namespace Helium;

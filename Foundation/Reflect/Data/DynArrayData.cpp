@@ -330,6 +330,65 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
 // Specializations
 //
 
+void SerializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
+{
+    archive.GetIndent().Push();
+    archive.GetIndent().Get(archive.GetStream());
+
+    // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
+    archive.GetStream() << TXT("<![CDATA[\n");
+
+    for (size_t i=0; i<data.GetSize(); i++)
+    {
+        archive.GetIndent().Get(archive.GetStream());
+
+        // output the escape-code free character sequence between double qutoes
+        archive.GetStream() << TXT('\"') << (data)[i] << TXT('\"') << s_ContainerItemDelimiter;
+    }
+
+    // end our CDATA escape section
+    archive.GetIndent().Get(archive.GetStream());
+    archive.GetStream() << TXT("]]>\n");
+    archive.GetIndent().Pop();
+}
+
+void DeserializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
+{
+    archive.GetStream().SkipWhitespace(); 
+    tstring value;
+
+    while (!archive.GetStream().Done())
+    {
+        std::getline( archive.GetStream().GetInternal(), value ); 
+
+        size_t start = value.find_first_of('\"');
+        size_t end = value.find_last_of('\"');
+
+        // if we found a pair of quotes
+        if (start != std::string::npos && end != std::string::npos && start != end)
+        {
+            // if all we have are open/close quotes, push a blank string
+            String* string = data.New();
+            HELIUM_ASSERT( string );
+            if (start != end-1)
+            {
+                *string = value.substr( start + 1, end - start - 1).c_str();
+            }
+        }
+        else
+        {
+            start = value.find_first_not_of( TXT( " \t\n" ) );
+
+            if ( start != std::string::npos )
+            {
+                HELIUM_VERIFY( data.New( value.substr(start).c_str() ) );
+            }
+        }
+
+        archive.GetStream().SkipWhitespace(); 
+    }
+}
+
 template<>
 void StringDynArrayData::Serialize( ArchiveBinary& archive )
 {
@@ -370,63 +429,82 @@ void StringDynArrayData::Deserialize( ArchiveBinary& archive )
 template<>
 void StringDynArrayData::Serialize( ArchiveXML& archive )
 {
-    archive.GetIndent().Push();
-    archive.GetIndent().Get(archive.GetStream());
-
-    // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
-    archive.GetStream() << TXT("<![CDATA[\n");
-
-    for (size_t i=0; i<m_Data->GetSize(); i++)
-    {
-        archive.GetIndent().Get(archive.GetStream());
-
-        // output the escape-code free character sequence between double qutoes
-        archive.GetStream() << TXT('\"') << (*m_Data)[i] << TXT('\"') << s_ContainerItemDelimiter;
-    }
-
-    // end our CDATA escape section
-    archive.GetIndent().Get(archive.GetStream());
-    archive.GetStream() << TXT("]]>\n");
-    archive.GetIndent().Pop();
+    SerializeStringDynArray(archive, *m_Data);
 }
 
 template<>
 void StringDynArrayData::Deserialize( ArchiveXML& archive )
 {
-    archive.GetStream().SkipWhitespace(); 
-    tstring value;
+    DeserializeStringDynArray(archive, *m_Data);
+}
 
-    while (!archive.GetStream().Done())
+template<>
+void NameDynArrayData::Serialize( ArchiveBinary& archive )
+{
+    CharStream& stream = archive.GetStream();
+
+    size_t countActual = m_Data->GetSize();
+    HELIUM_ASSERT( countActual <= UINT32_MAX );
+    uint32_t count = static_cast< uint32_t >( countActual );
+    stream.Write( &count );
+
+    for( size_t index = 0; index < countActual; ++index )
     {
-        std::getline( archive.GetStream().GetInternal(), value ); 
-
-        size_t start = value.find_first_of('\"');
-        size_t end = value.find_last_of('\"');
-
-        // if we found a pair of quotes
-        if (start != std::string::npos && end != std::string::npos && start != end)
-        {
-            // if all we have are open/close quotes, push a blank string
-            String* string = m_Data->New();
-            HELIUM_ASSERT( string );
-            if (start != end-1)
-            {
-                *string = value.substr( start + 1, end - start - 1).c_str();
-            }
-        }
-        else
-        {
-            start = value.find_first_not_of( TXT( " \t\n" ) );
-
-            if ( start != std::string::npos )
-            {
-                HELIUM_VERIFY( m_Data->New( value.substr(start).c_str() ) );
-            }
-        }
-
-        archive.GetStream().SkipWhitespace(); 
+        stream.WriteString( *m_Data->GetElement( index ) );
     }
 }
+
+template<>
+void NameDynArrayData::Deserialize( ArchiveBinary& archive )
+{
+    m_Data->Clear();
+
+    CharStream& stream = archive.GetStream();
+
+    uint32_t count = 0;
+    stream.Read( &count );
+
+    m_Data->Reserve( count );
+
+    uint_fast32_t countFast = count;
+    for( uint32_t index = 0; index < countFast; index++ )
+    {
+        Name* element = m_Data->New();
+        HELIUM_ASSERT( element );
+        String name_as_str;
+        stream.ReadString(name_as_str);
+        element->Set(name_as_str);
+    }
+}
+
+template<>
+void NameDynArrayData::Serialize( ArchiveXML& archive )
+{
+    DynArray<String> names_as_str;
+    names_as_str.Resize(m_Data->GetSize());
+
+    for( size_t index = 0; index < m_Data->GetSize(); ++index )
+    {
+        names_as_str[index] = *m_Data->GetElement( index );
+    }
+
+    SerializeStringDynArray(archive, names_as_str);
+}
+
+template<>
+void NameDynArrayData::Deserialize( ArchiveXML& archive )
+{
+    DynArray<String> names_as_str;
+    DeserializeStringDynArray(archive, names_as_str);
+
+    m_Data->Resize(names_as_str.GetSize());
+    
+    for ( size_t index = 0; index < m_Data->GetSize(); ++index )
+    {
+        m_Data->GetElement(index).Set(names_as_str.GetElement(index));
+    }
+}
+
 
 #if HELIUM_UNICODE
 
@@ -469,6 +547,7 @@ tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
 
 #endif // UNICODE
 
+template SimpleDynArrayData< Name >;
 template SimpleDynArrayData< String >;
 template SimpleDynArrayData< bool >;
 template SimpleDynArrayData< uint8_t >;
@@ -496,6 +575,7 @@ template SimpleDynArrayData< Color4 >;
 template SimpleDynArrayData< HDRColor3 >;
 template SimpleDynArrayData< HDRColor4 >;
 
+REFLECT_DEFINE_OBJECT( Helium::Reflect::NameDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8DynArrayData );

@@ -354,6 +354,107 @@ TEST_F(Components, SmartPtr)
         // The component pointer should be wiped out BEFORE this call
         EXPECT_FALSE(component.IsGood());
     }
-
-
 }
+
+//class Object
+//{
+//
+//};
+//
+//struct Stimulus
+//{
+//
+//};
+//
+//struct Response
+//{
+//
+//};
+//
+//struct NamedProperty
+//{
+//    Helium::Name m_Name;
+//    const Reflect::Field *m_Field;
+//};
+//
+//struct NamedPropertyValue
+//{
+//    Helium::Name m_Name;
+//    // Don't know about this.. and I would want it to be capable of holding references
+//    DynArray<uint8_t> m_SerializedValue;
+//};
+//
+//struct NamedStimulus
+//{
+//    Helium::Name m_Name;
+//    Reflect::Field *m_Field;
+//    const Stimulus *m_Stimulus;
+//};
+//
+//struct NamedResponse
+//{
+//    Helium::Name m_Name;
+//    Reflect::Field *m_Field;
+//    const Response *m_Response;
+//};
+//
+//struct Linkage
+//{
+//    Helium::Name m_StimulusName;
+//    Helium::Name m_ResponseName;
+//};
+//
+//class ComponentDefinition
+//{
+//    DynArray<NamedProperty>      m_Properties;       // Declared externally provided properties
+//    DynArray<NamedStimulus>      m_Stimuli;          // Stimuli are exposed by name
+//    DynArray<NamedResponse>      m_Responses;        // Responses are exposed by name
+//
+//    // Fields that can be filled by other 
+//    DynArray<FieldValue>    m_FieldValues;      // Overridden fields
+//
+//    ComponentDefinition*    m_BaseDefinition;   // Parent definition (we inherit its fields/params)
+//    Component*              m_Model;            // Preallocated component we can clone (not in the component pool)
+//};
+//
+//class ComponentCluster
+//{
+//    DynArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
+//    DynArray<Linkage>               m_Linkages;
+//    DynArray<ComponentDefinition *> m_Components;
+//};
+//
+//class ObjectDefinition
+//{
+//    DynArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
+//    DynArray<Linkage>               m_Linkages;
+//
+//    DynArray<ComponentCluster *>    m_ComponentClusters;
+//    DynArray<ComponentDefinition *> m_Components;
+//
+//    ObjectDefinition *m_BaseDefinition;
+//    Object *m_Model;
+//};
+//
+//// 
+//class InstanceFactory
+//{
+//    // 1. Gather up all the things we want to fill out
+//    void AddProperties(DynArray<NamedProperty> &_properties);
+//    void AddStimuli(DynArray<NamedStimulus> &_stimuli);
+//    void AddResponses(DynArray<NamedResponse> &_responses);
+//
+//    // 2. Apply values to those things we can fill out
+//    void ApplyPropertyValues(DynArray<NamedPropertyValue> &_property_values);
+//    void ApplyLinkages(DynArray<Linkage> &_linkages);
+//
+//    // 3. Verify all mandatory parameters defined
+//    bool ReadyToMaterialize();
+//    void GetUnsatisfiedParameters();
+//
+//    // 4. Generate objects/components (can be called multiple times)
+//    void MaterializeInstances();
+//
+//    // In addition, the editor can cook into a more compressed structure
+//    CookedInstanceFactoryPtr Cook();
+//};

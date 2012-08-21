@@ -208,12 +208,11 @@ bool Object::IsClass( const Reflect::Class* type ) const
     return thisType->IsType( type );
 }
 
-Reflect::Class* Object::CreateClass()
+const Reflect::Class* Object::CreateClass()
 {
     HELIUM_ASSERT( s_Class == NULL );
-    Reflect::Class* type = Class::Create<Object>( TXT("Object"), NULL );
-    s_Class = type;
-    return type;
+    Class::Create<Object>( s_Class, TXT("Object"), NULL );
+    return s_Class;
 }
 
 void Object::PopulateComposite( Reflect::Composite& comp )

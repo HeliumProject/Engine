@@ -10,10 +10,23 @@
 
 #include "Foundation/File/Path.h"
 
+#include "Foundation/Memory/ReferenceCounting.h"
+#include "Engine/GameObject.h"
+
+struct Helium::GameObjectPath::PendingLink
+{
+    PendingLink *rpNext;
+    //struct Entry *pObjectPath;
+    GameObjectWPtr wpOwner;
+    // TODO: Maybe this ought to be a relative pointer from pObjectPath's instance?
+    GameObjectPtr *rpPointerToLink;
+};
+
 using namespace Helium;
 
 GameObjectPath::TableBucket* GameObjectPath::sm_pTable = NULL;
 StackMemoryHeap<>* GameObjectPath::sm_pEntryMemoryHeap = NULL;
+ObjectPool<GameObjectPath::PendingLink> *GameObjectPath::sm_pPendingLinksPool = NULL;
 
 /// Parse the object path in the specified string and store it in this object.
 ///
@@ -91,6 +104,8 @@ bool GameObjectPath::Set( Name name, bool bPackage, GameObjectPath parentPath, u
     entry.name = name;
     entry.instanceIndex = instanceIndex;
     entry.bPackage = bPackage;
+    entry.instance = NULL;
+    entry.rpFirstPendingLink = NULL;
 
     // Look up/add the entry.
     m_pEntry = Add( entry );
@@ -504,6 +519,9 @@ void GameObjectPath::Shutdown()
     delete sm_pEntryMemoryHeap;
     sm_pEntryMemoryHeap = NULL;
 
+    delete sm_pPendingLinksPool;
+    sm_pPendingLinksPool = NULL;
+
     HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectPath table shutdown complete.\n" ) );
 }
 
@@ -851,6 +869,9 @@ GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
     {
         sm_pEntryMemoryHeap = new StackMemoryHeap<>( STACK_HEAP_BLOCK_SIZE );
         HELIUM_ASSERT( sm_pEntryMemoryHeap );
+
+        sm_pPendingLinksPool = new ObjectPool<PendingLink>( PENDING_LINKS_POOL_BLOCK_SIZE );
+        HELIUM_ASSERT( sm_pPendingLinksPool );
 
         HELIUM_ASSERT( !sm_pTable );
         sm_pTable = new TableBucket [ TABLE_BUCKET_COUNT ];

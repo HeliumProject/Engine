@@ -72,16 +72,20 @@ void TypeIDData::Serialize(ArchiveXML& archive)
     const Type* type = *m_Data;
     if ( type )
     {
-        archive.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
+        //archive.GetStream() << "<![CDATA[" << type->m_Name << "]]>";
+        archive.WriteString(type->m_Name);
     }
 }
 
 void TypeIDData::Deserialize(ArchiveXML& archive)
 {
-    std::streamsize size = archive.GetStream().ElementsAvailable(); 
+//     std::streamsize size = archive.GetStream().ElementsAvailable(); 
+//     tstring str;
+//     str.resize( (size_t)size );
+//     archive.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
+
     tstring str;
-    str.resize( (size_t)size );
-    archive.GetStream().ReadBuffer(const_cast<tchar_t*>(str.c_str()), size);
+    archive.ReadString(str);
 
     const Type* type = Registry::GetInstance()->GetType( str.c_str() );
     if ( type )

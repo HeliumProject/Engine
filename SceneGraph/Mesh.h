@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Math/FpuCalculateBounds.h"
-#include "Math/FpuAlignedBox.h"
+#include "Foundation/Math/FpuCalculateBounds.h"
+#include "Foundation/Math/FpuAlignedBox.h"
 
 #include "SceneGraph/VertexResource.h"
 #include "SceneGraph/IndexResource.h"

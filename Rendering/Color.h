@@ -10,12 +10,18 @@
 #define HELIUM_RENDERING_COLOR_H
 
 #include "Rendering/Rendering.h"
-#include "Math/Common.h"
+#include "Foundation/Math/Common.h"
+
+#include "Foundation/Reflect/Data/SimpleData.h"
+#include "Foundation/Reflect/Data/DataDeduction.h"
+
+
+
+
+
 
 namespace Helium
 {
-    class Serializer;
-
     /// 32-bit ARGB color value.
     class HELIUM_RENDERING_API Color
     {
@@ -59,8 +65,11 @@ namespace Helium
 
         /// @name Friend Functions
         //@{
-        friend Serializer& operator<<( Serializer& s, Color& rValue );
+        //friend Serializer& operator<<( Serializer& s, Color& rValue );
         //@}
+        
+//         friend HELIUM_RENDERING_API tostream& operator<<(tostream& outStream, const Color& v);
+//         friend HELIUM_RENDERING_API tistream& operator>>(tistream& inStream, Color& v);
 
     private:
         /// Color data.

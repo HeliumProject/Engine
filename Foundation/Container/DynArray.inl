@@ -578,6 +578,18 @@ void Helium::DynArray< T, Allocator >::Swap( DynArray& rArray )
     rArray.m_capacity = capacity;
 }
 
+/// Find the index that accesses the provided pointer
+///
+/// @param[in] pPtr  Pointer to find the index of.
+template< typename T, typename Allocator >
+uint32_t Helium::DynArray< T, Allocator >::GetIndexOfPointer(const T *pPtr) const
+{
+    HELIUM_ASSERT( pPtr >= m_pBuffer );
+    HELIUM_ASSERT( pPtr < m_pBuffer + m_size );
+    
+    return static_cast< uint32_t >( pPtr - m_pBuffer );
+}
+
 /// Allocate a new object as a new element in this array.
 ///
 /// @return  Pointer to the new object.
@@ -828,7 +840,7 @@ bool Helium::DynArray< T, Allocator >::Equals( const DynArray< T, OtherAllocator
     const T* pOtherBuffer = rOther.m_pBuffer;
     for( size_t index = 0; index < size; ++index )
     {
-        if( pThisBuffer[ index ] != pOtherBuffer[ index ] )
+        if( !( pThisBuffer[ index ] == pOtherBuffer[ index ] ) )
         {
             return false;
         }

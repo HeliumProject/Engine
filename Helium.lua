@@ -29,7 +29,7 @@ Helium.GetSystemVersion = function()
 end
 
 Helium.Build32Bit = function()
-	if ( _OPTIONS[ "build32and64" ] ) then
+	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
     	return not os.is64bit()
@@ -37,7 +37,7 @@ Helium.Build32Bit = function()
 end
 
 Helium.Build64Bit = function()
-	if ( _OPTIONS[ "build32and64" ] ) then
+	if ( _OPTIONS[ "universal" ] ) then
 		return true
 	else
 	    return os.is64bit()
@@ -85,13 +85,6 @@ Helium.CheckEnvironment = function()
     
         local failed = 0
         
-        if os.pathsearch( 'Python.exe', os.getenv( 'PATH' ) ) == nil then
-            print( " -> Python was not found in your path.  Python is required for the 'prebuild' phase." )
-            print( " -> Make sure to download python (http://www.python.org/download/) and add it to your path." )
-            print( " -> eg: Add c:\\Python\\Python31 to your path." )
-            failed = 1
-		end
-
         if os.getenv( "VCINSTALLDIR" ) == nil then
             print( " -> You must be running in a Visual Studio Command Prompt.")
             failed = 1
@@ -216,7 +209,7 @@ Helium.DoDefaultSolutionSettings = function()
 
 	location "Premake"
 
-    if _OPTIONS[ "build32and64" ] then
+    if _OPTIONS[ "universal" ] then
         platforms
         {
             "x32",
@@ -449,8 +442,23 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
 	}
 
-	pchheader( moduleName .. "Pch.h" )
-	pchsource( baseDirectory .. "/" .. moduleName .. "/" .. moduleName .. "Pch.cpp" )
+    local header = moduleName .. "Pch.h"
+
+    if os.get() == "macosx" then
+    	header = path.join( moduleName, header )
+    	header = path.join( baseDirectory, header )
+    	header = path.join( "..", header )
+    	header = path.join( "..", header )
+    end
+
+	pchheader( header )
+
+	local source = moduleName .. "Pch.cpp"
+
+	source = path.join( moduleName, source )
+	source = path.join( baseDirectory, source )
+
+	pchsource( source )
 
 	Helium.DoDefaultProjectSettings()
 

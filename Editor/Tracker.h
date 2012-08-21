@@ -42,10 +42,6 @@ namespace Helium
             bool m_IndexingFailed;
             uint32_t m_CurrentProgress;
             uint32_t m_Total;
-
-        protected:
-            static int s_InitCount;
-            static Helium::InitializerStack s_InitializerStack;
         };
 
     }

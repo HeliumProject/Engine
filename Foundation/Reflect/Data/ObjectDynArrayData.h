@@ -3,21 +3,34 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Data/SimpleData.h"
 #include "Foundation/Reflect/Data/ContainerData.h"
+#include "Foundation/Reflect/Data/DynArrayData.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class HELIUM_FOUNDATION_API ObjectDynArrayData : public ContainerData
+        class HELIUM_FOUNDATION_API ObjectDynArrayData : public DynArrayData
         {
         public:
             typedef DynArray< ObjectPtr > DataType;
             DataPointer< DataType > m_Data;
 
-            REFLECT_DECLARE_OBJECT( ObjectDynArrayData, ContainerData )
+            REFLECT_DECLARE_OBJECT( ObjectDynArrayData, DynArrayData )
 
             ObjectDynArrayData();
             ~ObjectDynArrayData();
+
+            //DynArrayData Interface
+            
+            virtual void SetSize( size_t size );
+
+            virtual const Class* GetItemClass() const;
+            virtual DataPtr GetItem( size_t at );
+            virtual void SetItem( size_t at, Data* value );
+            virtual void Insert( size_t at, Data* value );
+            virtual void Remove( size_t at );
+            virtual void MoveUp( std::set< size_t >& selectedIndices );
+            virtual void MoveDown( std::set< size_t >& selectedIndices );
 
             virtual void ConnectData( void* data ) HELIUM_OVERRIDE;
 

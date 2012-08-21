@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Animation.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Animation.h"
 
@@ -13,9 +6,9 @@
 #include "GrannyAnimationInterface.cpp.inl"
 #endif
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 
-HELIUM_IMPLEMENT_OBJECT( Animation, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
+using namespace Helium;
 
 /// Constructor.
 Animation::Animation()
@@ -27,15 +20,16 @@ Animation::~Animation()
 {
 }
 
-/// @copydoc GameObject::Serialize()
-void Animation::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-#if HELIUM_USE_GRANNY_ANIMATION
-    m_grannyData.Serialize( s );
-#endif
-}
+////PMDTODO: Implement this
+///// @copydoc GameObject::Serialize()
+//void Animation::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//#if HELIUM_USE_GRANNY_ANIMATION
+//    m_grannyData.Serialize( s );
+//#endif
+//}
 
 /// @copydoc Resource::SerializePersistentResourceData()
 void Animation::SerializePersistentResourceData( Serializer& s )

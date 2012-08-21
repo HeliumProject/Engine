@@ -64,7 +64,8 @@ namespace Helium
             virtual tostream& operator>>( tostream& stream ) const HELIUM_OVERRIDE;
             virtual tistream& operator<<( tistream& stream ) HELIUM_OVERRIDE;
         };
-
+        
+        typedef SimpleDynArrayData< Name > NameDynArrayData;
         typedef SimpleDynArrayData< String > StringDynArrayData;
         typedef SimpleDynArrayData< bool > BoolDynArrayData;
         typedef SimpleDynArrayData< uint8_t > UInt8DynArrayData;

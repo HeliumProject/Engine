@@ -13,7 +13,7 @@
 #include "Foundation/Inspect/DataBinding.h"
 #include "Foundation/Inspect/Canvas.h"
 #include "Foundation/String/Utilities.h"
-#include "Math/FpuAngleAxis.h"
+#include "Foundation/Math/FpuAngleAxis.h"
 #include "Foundation/Log.h"
 
 #include "SceneGraph/Graph.h"

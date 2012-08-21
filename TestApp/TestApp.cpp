@@ -8,6 +8,16 @@
 
 #include "gtest.h"
 
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Engine/GameObject.h"
+
+#include "TestGameObject.h"
+#include "PcSupport/ArchiveObjectLoader.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+#include "PcSupport/ArchivePackageLoader.h"
+
+
 using namespace Helium;
 
 
@@ -26,6 +36,9 @@ extern void RegisterEditorSupportTypes();
 extern void UnregisterEditorSupportTypes();
 #endif
 
+extern void RegisterTestAppTypes();
+extern void UnregisterTestAppTypes();
+
 #include "Engine/Components.h"
 
 
@@ -34,16 +47,24 @@ class TestComponentFour : public Helium::Components::Component
 public:
     TestComponentFour()
     {
-        static int32_t next_id = 100;
-        m_Id = next_id++;
+        //static int32_t next_id = 100;
+        //m_Id = next_id++;
     }
 
-    int32_t m_Id;
+    //int32_t m_Id;
+    Helium::Color4 m_Color;
 
     OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
+
+    static void PopulateComposite( Reflect::Composite& comp );
 };
 
 OBJECT_DEFINE_COMPONENT(TestComponentFour);
+
+void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
+}
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -72,6 +93,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #if HELIUM_TOOLS
     RegisterEditorSupportTypes();
 #endif
+    RegisterTestAppTypes();
 
     InitEngineJobsDefaultHeap();
     InitGraphicsJobsDefaultHeap();
@@ -82,7 +104,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
 
 #if HELIUM_TOOLS
-    HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
+    //HELIUM_VERIFY( EditorObjectLoader::InitializeStaticInstance() );
+    HELIUM_VERIFY( ArchiveObjectLoader::InitializeStaticInstance() );
 
     ObjectPreprocessor* pObjectPreprocessor = ObjectPreprocessor::CreateStaticInstance();
     HELIUM_ASSERT( pObjectPreprocessor );
@@ -94,6 +117,197 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     gObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( gObjectLoader );
+    /*
+    //std::string str;
+    {
+//         ObjectDescriptor os;
+//         os.m_Name = TXT("ObjectName");
+//         os.m_TypeName = TXT("GraphicsConfig");
+//         os.m_TemplatePath = TXT("TemplatePath");
+
+        
+        Helium::StrongPtr<Font::PersistentResourceData> prd(new Font::PersistentResourceData());
+        prd->m_ascender = 1;
+        prd->m_characters.Resize(5);
+        prd->m_descender = 2;
+        prd->m_height = 3;
+        prd->m_maxAdvance = 4;
+        prd->m_textureCount = 5;
+
+        for (int i = 0; i < prd->m_characters.GetSize(); ++i)
+        {
+            prd->m_characters[i].advance = 1;
+            prd->m_characters[i].bearingX = 2;
+            prd->m_characters[i].bearingY = 3;
+            prd->m_characters[i].codePoint = i;
+            prd->m_characters[i].height = 5;
+            prd->m_characters[i].imageHeight = 6;
+            prd->m_characters[i].imageWidth = 7;
+            prd->m_characters[i].imageX = 8;
+            prd->m_characters[i].imageY = 9;
+            prd->m_characters[i].texture = 10;
+        }
+    
+        Reflect::ObjectPtr object_ptr(&*prd);
+        
+        //
+        // Write out xml
+        //
+        tstringstream xml_out_ss;
+
+        Reflect::ArchiveXML xml_out(new Reflect::TCharStream(&xml_out_ss, false), true);
+        xml_out.WriteFileHeader();
+        xml_out.WriteSingleObject(*object_ptr);
+        //xml_out.SerializeInstance(object_ptr);
+        xml_out.WriteFileFooter();
+        xml_out.Close();
+        
+        // pull it into a string
+        tstring xml_str;
+        xml_str = xml_out_ss.str();
+
+        //
+        // Write out binary
+        //
+        std::stringstream binary_out_ss;
+        Reflect::ArchiveBinary binary_out(new Reflect::CharStream(&binary_out_ss, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), true);
+
+        binary_out.SerializeInstance(object_ptr);
+        
+        // pull it into a string
+        std::string binary_str;
+        binary_str = binary_out_ss.str();    
+        
+        //
+        // Read in xml
+        //
+        tstringstream xml_ss_in;
+        xml_ss_in.str(xml_str);
+
+        Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_ss_in, false), false);
+        xml_in.ReadFileHeader();
+        xml_in.BeginReadingSingleObjects();
+        
+        Reflect::ObjectPtr xml_in_ptr;
+        xml_in.ReadSingleObject(xml_in_ptr);
+
+        //
+        // Read in binary
+        //
+        std::stringstream binary_ss_in;
+        binary_ss_in.str(binary_str);
+
+        Reflect::ArchiveBinary binary_in(new Reflect::CharStream(&binary_ss_in, false, Helium::ByteOrders::LittleEndian, Helium::Reflect::CharacterEncodings::UTF_16), false);
+        
+        Reflect::ObjectPtr binary_in_ptr;
+        binary_in.ReadSingleObject(binary_in_ptr);
+
+
+
+        //Helium::Reflect::ObjectPtr os_obj_ptr_in;
+        //Helium::Reflect::ObjectPtr gc_obj_ptr_in;
+
+        //binary_in.ReadSingleObject(os_obj_ptr_in);
+        //binary_in.DeserializeInstance(gc_obj_ptr_in);
+
+        //ObjectDescriptor *os_in = Reflect::SafeCast<ObjectDescriptor>(os_obj_ptr_in.Get());
+        //GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(gc_obj_ptr_in.Get());
+
+        //GameObjectType *got = GameObjectType::Find(Name(os_in->m_TypeName.c_str()));
+
+        //Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+
+//         if (got)
+//         {
+//             GameObjectPtr game_object_ptr;
+//             GameObject::CreateObject(game_object_ptr, got, Name(os_in->m_Name.c_str()), pTypesPackageObject);
+//             gc_obj_ptr_in.Set(game_object_ptr.Ptr());
+//             binary_in.ReadSingleObject(gc_obj_ptr_in);
+// 
+//             GraphicsConfig *gc_in = Reflect::SafeCast<GraphicsConfig>(game_object_ptr.Get());
+//         }
+
+
+
+         //xml_out.WriteFileHeader();
+         //xml_out.WriteSingleObject(os);
+         //xml_out.WriteSingleObject(*config);
+         //xml_out.WriteFileFooter();
+         //xml_out.
+         //xml_out.Close();
+
+         //std::
+         //Reflect::ArchiveBinary 
+     }
+// 
+// 
+//         //Reflect::ArchiveXML::
+//         //Reflect::ArchiveXML::ToString(config, str);
+//         str = xml_out_ss.str();
+//         const tchar_t *raw_data = str.data();
+// 
+//         {
+//             FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+//             pFileStream->Write(str.c_str(), 2, str.length());
+//             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+//             //// Write the XML header.
+//             //m_pStream->Write( str.c_str(), 1, str.length() );
+//             //m_pStream->Close();
+//             pFileStream->Close();
+//             //delete m_pStream;
+//             delete pFileStream;
+//         }
+// 
+//         if (str.length())
+//         {
+//             char *buffer = new char[2 * str.length()];
+//             FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_READ, true );
+//             pFileStream->Read(buffer, 2, str.length());
+//             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
+//             //// Write the XML header.
+//             //m_pStream->Write( str.c_str(), 1, str.length() );
+//             //m_pStream->Close();
+//             pFileStream->Close();
+//             //delete m_pStream;
+//             delete pFileStream;
+//             delete[] buffer;
+//         }
+//     }
+// 
+//     Reflect::ObjectPtr od_ptr(new ObjectDescriptor());
+//     Reflect::ObjectPtr config_ptr;
+// 
+//     GraphicsConfig *config = 0;
+// 
+//     {
+//         Reflect::ArchiveXML xml_in(new Reflect::TCharStream(&xml_out_ss, false), false);
+//         xml_in.ReadFileHeader();
+//         xml_in.BeginReadingSingleObjects();
+//         xml_in.ReadSingleObject(od_ptr);
+// 
+//         ObjectDescriptor *od = Reflect::AssertCast<ObjectDescriptor>(od_ptr.Get());
+//         //const Reflect::Class *class_to_create = Reflect::Registry::GetInstance()->GetClass(od->m_ClassName.c_str());
+// 
+//         GameObjectType *got = GameObjectType::Find(Name(od->m_TypeName.c_str()));
+// 
+//         Helium::GameObject* pTypesPackageObject = Helium::GameObject::FindChildOf( NULL, Helium::Name( TXT( "Types" ) ) );
+// 
+//         if (got)
+//         {
+//             GameObjectPtr game_object_ptr;
+//             GameObject::CreateObject(game_object_ptr, got, Name(od->m_Name.c_str()), pTypesPackageObject);
+//             config_ptr.Set(game_object_ptr.Ptr());
+//         }
+//         
+//         xml_in.ReadSingleObject(config_ptr);
+//         xml_in.ReadFileFooter();
+//         xml_in.Close();
+// 
+//         config = Reflect::AssertCast<GraphicsConfig>(config_ptr.Get());
+//     }
+*/
+
+
 
     Config& rConfig = Config::GetStaticInstance();
     rConfig.BeginLoad();
@@ -103,7 +317,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     ConfigPc::SaveUserConfig();
-
+    /*
     JobManager& rJobManager = JobManager::GetStaticInstance();
     HELIUM_VERIFY( rJobManager.Initialize() );
 
@@ -127,6 +341,147 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #pragma TODO("Why is this just commented out? Speed? -Geoff")
         //DynamicMemoryHeap::LogMemoryStats();
 #endif
+    }
+
+//     TestComponentFour tc4_1;
+//     tc4_1.m_Color = Color4(1.0f, 0.5f, 0.25f, 0.9f);
+// 
+//     TestComponentFour *tc4_2 = static_cast<TestComponentFour *>(tc4_1.CreateObject()
+// 
+//     tstring xml_data_1;
+//     tc4_1.ToXML(xml_data_1);
+// 
+//     tstring xml_data_2;
+//     tc4_2->ToXML(xml_data_2);
+// 
+//     Helium::Reflect::UnregisterClassType<TestComponentFour>();
+//     Helium::Reflect::UnregisterClassType<Helium::Components::Component>();
+// 
+//     Reflect::RegisterClassType<TestGameObject>(TXT("TestGameObject"));
+// 
+//     GameObjectPtr spTestGameObject1;
+//     GameObjectPtr spTestGameObject2;
+//     GameObject::CreateObject(spTestGameObject1, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject")), NULL);
+//     TestGameObject *tgo1 = Reflect::AssertCast<TestGameObject>(spTestGameObject1.Get());
+//     tgo1->m_TestValue1 = 5.0f;
+//     tgo1->m_TestValue2 = 6.0f;
+//     GameObject::CreateObject(spTestGameObject2, TestGameObject::GetStaticType(), Name( TXT( "TestGameObject2")), NULL, spTestGameObject1.Get());
+//     TestGameObject *tgo2 = Reflect::AssertCast<TestGameObject>(spTestGameObject2.Get());
+// 
+// //     Engine::PackageLoader *package_loader = gObjectLoader->GetPackageLoader("TestPackage");
+// //     package_loader->
+// 
+//     GameObjectPath testPath;
+//     testPath.Set(TXT("/EngineTest"));
+//     Helium::GameObjectPtr package_ptr;
+//     gObjectLoader->LoadObject(testPath, package_ptr);
+// 
+// 
+//     GameObjectPath testPath2;
+//     testPath2.Set(TXT( "/EngineTest:TestObject" ));
+//     Helium::GameObjectPtr go_ptr;
+//     gObjectLoader->LoadObject( testPath2, go_ptr );
+// 
+//     GameObjectPath testPath3;
+//     testPath3.Set(TXT( "/EngineTest/ChildPackage:ChildTestObject" ));
+//     Helium::GameObjectPtr go_ptr2;
+//     gObjectLoader->LoadObject( testPath3, go_ptr2 );
+//     
+//     Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
+//     GameObject *test_object = Reflect::SafeCast< GameObject >( go_ptr.Get() );
+//     GameObject *test_object2 = Reflect::SafeCast< GameObject >( go_ptr2.Get() );
+// 
+//     Reflect::UnregisterClassType<TestGameObject>();
+    
+    Helium::GameObjectPtr go2;
+    Helium::GameObjectPtr go3;
+    TestGameObject2 *tgo2 = 0;
+    TestGameObject3 *tgo3 = 0;
+    {
+        //GameObjectPath go1; go1.Set("/EngineTest/ChildPackage/TestObject
+        Helium::GameObjectPath gop2; gop2.Set(TXT("/EngineTest/ChildPackage:TestObject2"));
+        Helium::GameObjectPath gop3; gop3.Set(TXT("/EngineTest/ChildPackage:TestObject3"));
+        
+        Helium::GameObjectLoader *loader = Helium::GameObjectLoader::GetStaticInstance();
+        loader->LoadObject(gop2, go2);
+        loader->LoadObject(gop3, go3);
+
+        tgo2 = Reflect::AssertCast<TestGameObject2>(go2.Get());
+        tgo3 = Reflect::AssertCast<TestGameObject3>(go3.Get());
+    }
+
+    Helium::StrongPtr<TestGameObject2> tg2_c1_ptr;
+    Helium::StrongPtr<TestGameObject2> tg2_c2_ptr;
+
+    Helium::GameObject::Create<TestGameObject2>(tg2_c1_ptr, Name(TXT("MyTestObject")), NULL, tgo2, true);
+    Helium::GameObject::Create<TestGameObject2>(tg2_c2_ptr, Name(TXT("MyTestObject")), NULL, tgo2, true);
+    
+    TestGameObject2 *tgo2_c1 = tg2_c1_ptr.Get();
+    TestGameObject2 *tgo2_c2 = tg2_c2_ptr.Get();
+
+    
+    GameObjectPath testPathX;
+    testPathX.Set(TXT("/EngineTest/P2/P3:MyObject"));
+
+    DynArray<int> my_dyn_array;
+    my_dyn_array.Add(10);
+    my_dyn_array.Add(11);
+    my_dyn_array.Add(12);
+    my_dyn_array.Add(13);
+    my_dyn_array.Add(14);
+    my_dyn_array.Resize(200);
+
+    Helium::Map<int, float> my_map;
+    typedef Helium::HashMap<int, float> HM_Test;
+    HM_Test my_hash_map;
+    std::map<int, float> stl_map;
+    for (int i = 0; i < 50; ++i)
+    {
+        my_map[i] = sinf(static_cast<float>(i));
+        //my_hash_map.Insert(Helium::HashMap<int, float>:: = sinf(static_cast<float>(i));
+        my_hash_map.Insert(HM_Test::ValueType(i, sinf(static_cast<float>(i))));
+        stl_map[i] = sinf(static_cast<float>(i));
+    }
+
+    String str(TXT("test"));
+    String str2;
+
+
+    GameObjectPath testPath;
+    testPath.Set(TXT("/EngineTest"));
+    Helium::GameObjectPtr package_ptr;
+    gObjectLoader->LoadObject(testPath, package_ptr);
+    Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
+
+    GameObject *game_object = package->GetFirstChild();
+    DynArray<GameObject *> go_iter_stack;
+    bool returned_from_child = false;
+    while (game_object)
+    {
+        if (!returned_from_child)
+        {
+            if (GameObject *child = game_object->GetFirstChild())
+            {
+                go_iter_stack.Push(game_object);
+                game_object = child;
+                continue;
+            }
+        }
+        else
+        {
+            returned_from_child = false;
+        }
+
+        HELIUM_TRACE( TRACE_INFO, TXT( "Found object %s" ), *game_object->GetName());
+
+        game_object = game_object->GetNextSibling();
+
+        if (!game_object && !go_iter_stack.IsEmpty())
+        {
+            game_object = go_iter_stack.GetLast();
+            go_iter_stack.Pop();
+            returned_from_child = true;
+        }
     }
 
     int argc = 2;
@@ -588,12 +943,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             rBoxMaximum.GetElement( 2 ) );
 #endif
     }
-
+    */
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;
     bool bVsync;
-
+    
     {
         StrongPtr< GraphicsConfig > spGraphicsConfig(
             rConfig.GetConfigObject< GraphicsConfig >( Name( TXT( "GraphicsConfig" ) ) ) );

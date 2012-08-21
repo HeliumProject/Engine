@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Math/FpuLine.h"
-#include "Math/FpuFrustum.h"
-#include "Math/FpuVector3.h"
-#include "Math/FpuMatrix4.h"
-#include "Math/FpuPoint.h"
+#include "Foundation/Math/FpuLine.h"
+#include "Foundation/Math/FpuFrustum.h"
+#include "Foundation/Math/FpuVector3.h"
+#include "Foundation/Math/FpuMatrix4.h"
+#include "Foundation/Math/FpuPoint.h"
 #include "Foundation/Input.h"
 
 #include "SceneGraph/API.h"

@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Texture2dResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
@@ -27,9 +20,9 @@
 
 #include <nvtt/nvtt.h>
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::Texture2dResourceHandler, EditorSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( Texture2dResourceHandler, EditorSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 Texture2dResourceHandler::Texture2dResourceHandler()
@@ -304,44 +297,45 @@ bool Texture2dResourceHandler::CacheResource(
 
     int32_t pixelFormatIndex = static_cast< int32_t >( pixelFormat );
 
-    BinarySerializer serializer;
-    for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    {
-        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-            static_cast< Cache::EPlatform >( platformIndex ) );
-        if( !pPreprocessor )
-        {
-            continue;
-        }
+    //PMDTODO: Implement this
+    //BinarySerializer serializer;
+    //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    //{
+    //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+    //        static_cast< Cache::EPlatform >( platformIndex ) );
+    //    if( !pPreprocessor )
+    //    {
+    //        continue;
+    //    }
 
-        Resource::PreprocessedData& rPreprocessedData = pTexture->GetPreprocessedData(
-            static_cast< Cache::EPlatform >( platformIndex ) );
+    //    Resource::PreprocessedData& rPreprocessedData = pTexture->GetPreprocessedData(
+    //        static_cast< Cache::EPlatform >( platformIndex ) );
 
-        // Serialize the persistent data about the texture first.
-        serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-        serializer.BeginSerialize();
-        serializer << imageWidth;
-        serializer << imageHeight;
-        serializer << mipLevelCount;
-        serializer << pixelFormatIndex;
-        serializer.EndSerialize();
+    //    // Serialize the persistent data about the texture first.
+    //    serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
+    //    serializer.BeginSerialize();
+    //    serializer << imageWidth;
+    //    serializer << imageHeight;
+    //    serializer << mipLevelCount;
+    //    serializer << pixelFormatIndex;
+    //    serializer.EndSerialize();
 
-        rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+    //    rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
 
-        // Serialize each mip level.
-        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
-        rSubDataBuffers.Reserve( mipLevelCount );
-        rSubDataBuffers.Resize( mipLevelCount );
-        rSubDataBuffers.Trim();
+    //    // Serialize each mip level.
+    //    DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+    //    rSubDataBuffers.Reserve( mipLevelCount );
+    //    rSubDataBuffers.Resize( mipLevelCount );
+    //    rSubDataBuffers.Trim();
 
-        for( uint32_t mipLevelIndex = 0; mipLevelIndex < mipLevelCount; ++mipLevelIndex )
-        {
-            rSubDataBuffers[ mipLevelIndex ] = rMipLevels[ mipLevelIndex ];
-        }
+    //    for( uint32_t mipLevelIndex = 0; mipLevelIndex < mipLevelCount; ++mipLevelIndex )
+    //    {
+    //        rSubDataBuffers[ mipLevelIndex ] = rMipLevels[ mipLevelIndex ];
+    //    }
 
-        // Platform data is now loaded.
-        rPreprocessedData.bLoaded = true;
-    }
+    //    // Platform data is now loaded.
+    //    rPreprocessedData.bLoaded = true;
+    //}
 
     return true;
 }

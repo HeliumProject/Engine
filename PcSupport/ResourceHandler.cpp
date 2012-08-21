@@ -1,16 +1,9 @@
-//----------------------------------------------------------------------------------------------------------------------
-// ResourceHandler.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "PcSupportPch.h"
 #include "PcSupport/ResourceHandler.h"
 
-using namespace Helium;
+HELIUM_IMPLEMENT_OBJECT( Helium::ResourceHandler, PcSupport, 0 );
 
-HELIUM_IMPLEMENT_OBJECT( ResourceHandler, PcSupport, 0 );
+using namespace Helium;
 
 /// Constructor.
 ResourceHandler::ResourceHandler()
@@ -54,6 +47,20 @@ bool ResourceHandler::CacheResource(
                                     const String& /*rSourceFilePath*/ )
 {
     return false;
+}
+#endif  // HELIUM_TOOLS
+
+
+#if HELIUM_TOOLS
+void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object *_object, DynArray< uint8_t > &_buffer )
+{
+    _buffer.Resize(0);
+    if (!_object)
+    {
+        return;
+    }
+
+    Cache::WriteCacheObjectToBuffer(*_object, _buffer);
 }
 #endif  // HELIUM_TOOLS
 

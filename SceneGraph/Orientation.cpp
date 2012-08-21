@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "Orientation.h"
 
-#include "Math/Axes.h"
+#include "Foundation/Math/Axes.h"
 
 using namespace Helium;
 

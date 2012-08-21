@@ -24,7 +24,7 @@ namespace Helium
     {
         HELIUM_ASSERT( static_cast< size_t >( shaderType ) < static_cast< size_t >( RShader::TYPE_MAX ) );
 
-        return m_shaderVariantIndices[ shaderType ];
+        return m_persistentResourceData.m_shaderVariantIndices[ shaderType ];
     }
 
     /// Get the shader variant resource for the specified shader type.
@@ -196,4 +196,87 @@ namespace Helium
         return m_float4Parameters[ index ];
     }
 #endif  // HELIUM_TOOLS
+    
+    bool Helium::Material::Float1Parameter::operator==( const Helium::Material::Float1Parameter& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            value == _rhs.value
+            );
+    }
+
+    bool Helium::Material::Float1Parameter::operator!=( const Helium::Material::Float1Parameter& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+        
+    bool Helium::Material::Float2Parameter::operator==( const Helium::Material::Float2Parameter& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            value == _rhs.value
+            );
+    }
+
+    bool Helium::Material::Float2Parameter::operator!=( const Helium::Material::Float2Parameter& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+        
+    bool Helium::Material::Float3Parameter::operator==( const Helium::Material::Float3Parameter& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            value == _rhs.value
+            );
+    }
+
+    bool Helium::Material::Float3Parameter::operator!=( const Helium::Material::Float3Parameter& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+        
+    bool Helium::Material::Float4Parameter::operator==( const Helium::Material::Float4Parameter& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            value == _rhs.value
+            );
+    }
+
+    bool Helium::Material::Float4Parameter::operator!=( const Helium::Material::Float4Parameter& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+    
+    bool Helium::Material::TextureParameter::operator==( const Helium::Material::TextureParameter& _rhs ) const
+    {
+        return ( 
+            name == _rhs.name &&
+            value == _rhs.value
+            );
+    }
+
+    bool Helium::Material::TextureParameter::operator!=( const Helium::Material::TextureParameter& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
+    
+    bool Helium::Material::PersistentResourceData::operator==( const Helium::Material::PersistentResourceData& _rhs ) const
+    {
+        for (uint32_t i = 0; i < RShader::TYPE_MAX; ++i)
+        {
+            if (m_shaderVariantIndices[i] != _rhs.m_shaderVariantIndices[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool Helium::Material::PersistentResourceData::operator!=( const Helium::Material::PersistentResourceData& _rhs ) const
+    {
+        return !( *this == _rhs );
+    }
 }

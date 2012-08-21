@@ -1,17 +1,18 @@
 #pragma once
 
 #include "Foundation/Reflect/Data/Data.h"
-#include "Math/FpuVector2.h"
-#include "Math/FpuVector3.h"
-#include "Math/FpuVector4.h"
-#include "Math/FpuMatrix3.h"
-#include "Math/FpuMatrix4.h"
-#include "Math/FpuColor3.h"
-#include "Math/FpuColor4.h"
-#include "Math/FpuHDRColor3.h"
-#include "Math/FpuHDRColor4.h"
+#include "Foundation/Math/FpuVector2.h"
+#include "Foundation/Math/FpuVector3.h"
+#include "Foundation/Math/FpuVector4.h"
+#include "Foundation/Math/FpuMatrix3.h"
+#include "Foundation/Math/FpuMatrix4.h"
+#include "Foundation/Math/FpuColor3.h"
+#include "Foundation/Math/FpuColor4.h"
+#include "Foundation/Math/FpuHDRColor3.h"
+#include "Foundation/Math/FpuHDRColor4.h"
 #include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
+#include "Foundation/Name.h"
 
 namespace Helium
 {
@@ -53,6 +54,7 @@ namespace Helium
             virtual tistream& operator<<(tistream& stream);
         };
 
+        typedef SimpleData<Name> NameData;
         typedef SimpleData<tstring> StlStringData;
         typedef SimpleData<bool> BoolData;
         typedef SimpleData<uint8_t> UInt8Data;

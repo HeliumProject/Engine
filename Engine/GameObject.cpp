@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// GameObject.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EnginePch.h"
 #include "Engine/GameObject.h"
 
@@ -13,6 +6,7 @@
 #include "Engine/Package.h"
 #include "Engine/DirectSerializer.h"
 #include "Engine/DirectDeserializer.h"
+#include "Engine/GameObjectPointerData.h"
 
 REFLECT_DEFINE_OBJECT( Helium::GameObject )
 
@@ -48,6 +42,12 @@ GameObject::~GameObject()
         TXT( "GameObject::PreDestroy() not called prior to destruction." ) );
 }
 
+void GameObject::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField(            &GameObject::m_spTemplate,               TXT( "m_Template" ) , Reflect::FieldFlags::Hide);
+}
+
+
 /// Modify the name, owner, or instance index of this object.
 ///
 /// @param[in] rParameters  Object rename parameters.
@@ -60,6 +60,14 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     Name name = rParameters.name;
     GameObject* pOwner = rParameters.spOwner;
     uint32_t instanceIndex = rParameters.instanceIndex;
+
+    HELIUM_TRACE(
+        TRACE_DEBUG,
+        TXT("GameObject::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
+        *m_name,
+        *rParameters.name,
+        m_spOwner.ReferencesObject() ? *m_spOwner->GetPath().ToString() : TXT("[none]"),
+        rParameters.spOwner.ReferencesObject() ? *rParameters.spOwner->GetPath().ToString() : TXT("[none]"));
 
     // Only allow setting an empty name if no owner or instance index are given and this object has no children.
     if( name.IsEmpty() )
@@ -296,6 +304,18 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     }
 
     return true;
+}
+
+Helium::Reflect::ObjectPtr Helium::GameObject::Clone()
+{
+    GameObjectPtr gop;
+    CreateObject(gop, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
+    return gop;
+}
+
+bool Helium::GameObject::CloneGameObject(GameObjectPtr _game_object_ptr)
+{
+    return CreateObject(_game_object_ptr, GetGameObjectType(), m_name, m_spOwner.Get(), this, true);
 }
 
 /// Set all object flags covered by the given mask.
@@ -563,6 +583,13 @@ bool GameObject::CreateObject(
 {
     HELIUM_ASSERT( pType );
 
+    HELIUM_TRACE(
+        TRACE_DEBUG,
+        TXT( "GameObject::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
+        *name,
+        *pType->GetName(),
+        !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
     rspObject.Release();
 
     // Get the appropriate template object.
@@ -611,12 +638,7 @@ bool GameObject::CreateObject(
     pObject->m_spTemplate = pTemplate;
 
     // Initialize the object based on its default.
-    sm_serializationBuffer.Resize( 0 );
-    DirectSerializer templateSerializer( sm_serializationBuffer );
-    HELIUM_VERIFY( templateSerializer.Serialize( pObjectTemplate ) );
-
-    DirectDeserializer templateDeserializer( sm_serializationBuffer );
-    HELIUM_VERIFY( templateDeserializer.Serialize( pObject ) );
+    pObjectTemplate->CopyTo(pObject);
 
     // Attempt to register the object and set its name.
     RenameParameters nameParameters;
@@ -627,8 +649,29 @@ bool GameObject::CreateObject(
         nameParameters.instanceIndex = INSTANCE_INDEX_AUTO;
     }
 
-    if( !RegisterObject( pObject ) || !pObject->Rename( nameParameters ) )
+    if ( !RegisterObject( pObject ) )
+    {            
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObject::CreateObject(): RegisterObject() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            *name,
+            !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
+        HELIUM_ASSERT_FALSE();
+
+        rspObject.Release();
+
+        return false;
+    }
+
+    if( !pObject->Rename( nameParameters ) )
     {
+        HELIUM_TRACE(
+            TRACE_ERROR,
+            TXT( "GameObject::CreateObject(): Rename() failed for GameObject \"%s\" owned by \"%s\".\n" ),
+            *name,
+            !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
+
         HELIUM_ASSERT_FALSE();
 
         rspObject.Release();

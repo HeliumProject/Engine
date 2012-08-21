@@ -1,10 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Material.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "GraphicsPch.h"
 #include "Graphics/Material.h"
 
@@ -12,16 +5,25 @@
 #include "Rendering/Renderer.h"
 #include "Graphics/Texture.h"
 
-using namespace Helium;
+#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Engine/GameObjectPointerData.h"
 
-HELIUM_IMPLEMENT_OBJECT( Material, Graphics, 0 );
+HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, 0 );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float3Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float4Parameter );
+REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::TextureParameter );
+REFLECT_DEFINE_OBJECT( Helium::Material::PersistentResourceData );
+
+using namespace Helium;
 
 /// Constructor.
 Material::Material()
 {
-    MemoryZero( m_shaderVariantIndices, sizeof( m_shaderVariantIndices ) );
+    MemoryZero( m_persistentResourceData.m_shaderVariantIndices, sizeof( m_persistentResourceData.m_shaderVariantIndices ) );
 
-    for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_shaderVariantLoadIds ); ++shaderTypeIndex )
+    for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_persistentResourceData.m_shaderVariantIndices ); ++shaderTypeIndex )
     {
         SetInvalid( m_shaderVariantLoadIds[ shaderTypeIndex ] );
         SetInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] );
@@ -37,117 +39,196 @@ Material::~Material()
 {
 }
 
-/// @copydoc GameObject::Serialize()
-void Material::Serialize( Serializer& s )
-{
-    HELIUM_SERIALIZE_BASE( s );
-
-    s << HELIUM_TAGGED( m_spShader );
 
 #if HELIUM_TOOLS
-    if( s.CanResolveTags() )
+void Helium::Material::PreSerialize( const Reflect::Field* field )
+{
+    m_userOptions.Resize(0);
+
+    Shader* pShader = m_spShader;
+    if( pShader )
     {
-        m_userOptions.Resize( 0 );
+        const Shader::Options& rUserOptions = pShader->GetUserOptions();
 
-        Serializer::EMode serializerMode = s.GetMode();
-        bool bSaving = ( serializerMode == Serializer::MODE_SAVE );
-        bool bLoading = ( serializerMode == Serializer::MODE_LOAD );
+        DynArray< Name > enabledToggles;
+        rUserOptions.GetOptionSetFromIndex(
+            RShader::TYPE_FIRST,
+            m_persistentResourceData.m_shaderVariantIndices[ 0 ],
+            enabledToggles,
+            m_userOptions );
 
-        if( bSaving )
+        size_t enabledToggleCount = enabledToggles.GetSize();
+
+        Shader::SelectPair optionPair;
+
+        Name enabledChoice( TXT( "1" ) );
+        Name disabledChoice( TXT( "0" ) );
+
+        const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+        size_t userToggleCount = rUserToggles.GetSize();
+        for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
         {
-            // Aggregate all user options from the resource information into the single "m_userOptions" array.
-            Shader* pShader = m_spShader;
-            if( pShader )
+            optionPair.name = rUserToggles[ userToggleIndex ].name;
+
+            size_t enabledToggleIndex;
+            for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
             {
-                const Shader::Options& rUserOptions = pShader->GetUserOptions();
-
-                DynArray< Name > enabledToggles;
-                rUserOptions.GetOptionSetFromIndex(
-                    RShader::TYPE_FIRST,
-                    m_shaderVariantIndices[ 0 ],
-                    enabledToggles,
-                    m_userOptions );
-
-                size_t enabledToggleCount = enabledToggles.GetSize();
-
-                Shader::SelectPair optionPair;
-
-                Name enabledChoice( TXT( "1" ) );
-                Name disabledChoice( TXT( "0" ) );
-
-                const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
-                size_t userToggleCount = rUserToggles.GetSize();
-                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
+                if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
                 {
-                    optionPair.name = rUserToggles[ userToggleIndex ].name;
-
-                    size_t enabledToggleIndex;
-                    for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
-                    {
-                        if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
-                        {
-                            break;
-                        }
-                    }
-
-                    optionPair.choice =
-                        ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
-
-                    m_userOptions.Push( optionPair );
+                    break;
                 }
             }
-        }
-        else if( bLoading )
-        {
-            DynArray< String > propertyTagNames;
-            s.GetPropertyTagNames( propertyTagNames );
 
-            Shader::SelectPair optionPair;
-            optionPair.choice.Clear();
+            optionPair.choice =
+                ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
 
-            size_t propertyTagCount = propertyTagNames.GetSize();
-            for( size_t tagIndex = 0; tagIndex < propertyTagCount; ++tagIndex )
-            {
-                const String& rTagName = propertyTagNames[ tagIndex ];
-                if( !rTagName.Contains( TXT( '.' ) ) )
-                {
-                    optionPair.name.Set( rTagName );
-                    m_userOptions.Push( optionPair );
-                }
-            }
-        }
-
-        s.PushPropertyFlags( Serializer::FLAG_EDITOR_ONLY );
-
-        size_t userOptionCount = m_userOptions.GetSize();
-        for( size_t optionIndex = 0; optionIndex < userOptionCount; ++optionIndex )
-        {
-            Shader::SelectPair& rOptionPair = m_userOptions[ optionIndex ];
-            s << Serializer::Tag( *rOptionPair.name ) << rOptionPair.choice;
-        }
-
-        // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
-        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
-
-        s.PopPropertyFlags();
-
-        if( bSaving )
-        {
-            m_userOptions.Clear();
-        }
-        else if( bLoading )
-        {
-            m_bLoadedOptions = true;
+            m_userOptions.Push( optionPair );
         }
     }
+}
+
+void Helium::Material::PostDeserialize( const Reflect::Field* field )
+{
+    m_bLoadedOptions = true;
+//     m_spShader = Reflect::SafeCast<ShaderPtr>(m_spShaderAsGameObject);
+// 
+//     if (m_spShaderAsGameObject && !m_spShader)
+//     {
+//         HELIUM_TRACE(
+//             TRACE_WARNING,
+//             TXT( "Material::PostDeserialize(): Shader object \"%s\" is not of the type Shader.\n" ),
+//             m_spShaderAsGameObject->GetPath().ToString() );
+//     }
+}
 #endif
 
-    // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
-    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
+
+
+void Material::PopulateComposite( Reflect::Composite& comp )
+{
+    comp.AddField( &Material::m_spShader,           TXT( "m_spShader" ), 0, Reflect::GetClass<GameObjectPointerData>() );
+    comp.AddStructureField( &Material::m_textureParameters,  TXT( "m_textureParameters" ) );
+#if HELIUM_TOOLS
+    comp.AddStructureField( &Material::m_userOptions,        TXT( "m_userOptions" ) );
+    comp.AddStructureField( &Material::m_float1Parameters,   TXT( "m_float1Parameters" ) );
+    comp.AddStructureField( &Material::m_float2Parameters,   TXT( "m_float2Parameters" ) );
+    comp.AddStructureField( &Material::m_float3Parameters,   TXT( "m_float3Parameters" ) );
+    comp.AddStructureField( &Material::m_float4Parameters,   TXT( "m_float4Parameters" ) );
+#endif
 }
+
+//
+///// @copydoc GameObject::Serialize()
+//void Material::Serialize( Serializer& s )
+//{
+//    HELIUM_SERIALIZE_BASE( s );
+//
+//    s << HELIUM_TAGGED( m_spShader );
+//
+//#if HELIUM_TOOLS
+//    if( s.CanResolveTags() )
+//    {
+//        m_userOptions.Resize( 0 );
+//
+//        Serializer::EMode serializerMode = s.GetMode();
+//        bool bSaving = ( serializerMode == Serializer::MODE_SAVE );
+//        bool bLoading = ( serializerMode == Serializer::MODE_LOAD );
+//
+//        if( bSaving )
+//        {
+//            // Aggregate all user options from the resource information into the single "m_userOptions" array.
+//            Shader* pShader = m_spShader;
+//            if( pShader )
+//            {
+//                const Shader::Options& rUserOptions = pShader->GetUserOptions();
+//
+//                DynArray< Name > enabledToggles;
+//                rUserOptions.GetOptionSetFromIndex(
+//                    RShader::TYPE_FIRST,
+//                    m_shaderVariantIndices[ 0 ],
+//                    enabledToggles,
+//                    m_userOptions );
+//
+//                size_t enabledToggleCount = enabledToggles.GetSize();
+//
+//                Shader::SelectPair optionPair;
+//
+//                Name enabledChoice( TXT( "1" ) );
+//                Name disabledChoice( TXT( "0" ) );
+//
+//                const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+//                size_t userToggleCount = rUserToggles.GetSize();
+//                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
+//                {
+//                    optionPair.name = rUserToggles[ userToggleIndex ].name;
+//
+//                    size_t enabledToggleIndex;
+//                    for( enabledToggleIndex = 0; enabledToggleIndex < enabledToggleCount; ++enabledToggleIndex )
+//                    {
+//                        if( enabledToggles[ enabledToggleIndex ] == optionPair.name )
+//                        {
+//                            break;
+//                        }
+//                    }
+//
+//                    optionPair.choice =
+//                        ( enabledToggleIndex < enabledToggleCount ? enabledChoice : disabledChoice );
+//
+//                    m_userOptions.Push( optionPair );
+//                }
+//            }
+//        }
+//        else if( bLoading )
+//        {
+//            DynArray< String > propertyTagNames;
+//            s.GetPropertyTagNames( propertyTagNames );
+//
+//            Shader::SelectPair optionPair;
+//            optionPair.choice.Clear();
+//
+//            size_t propertyTagCount = propertyTagNames.GetSize();
+//            for( size_t tagIndex = 0; tagIndex < propertyTagCount; ++tagIndex )
+//            {
+//                const String& rTagName = propertyTagNames[ tagIndex ];
+//                if( !rTagName.Contains( TXT( '.' ) ) )
+//                {
+//                    optionPair.name.Set( rTagName );
+//                    m_userOptions.Push( optionPair );
+//                }
+//            }
+//        }
+//
+//        s.PushPropertyFlags( Serializer::FLAG_EDITOR_ONLY );
+//
+//        size_t userOptionCount = m_userOptions.GetSize();
+//        for( size_t optionIndex = 0; optionIndex < userOptionCount; ++optionIndex )
+//        {
+//            Shader::SelectPair& rOptionPair = m_userOptions[ optionIndex ];
+//            s << Serializer::Tag( *rOptionPair.name ) << rOptionPair.choice;
+//        }
+//
+//        // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float1Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float2Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float3Parameters );
+//        s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_float4Parameters );
+//
+//        s.PopPropertyFlags();
+//
+//        if( bSaving )
+//        {
+//            m_userOptions.Clear();
+//        }
+//        else if( bLoading )
+//        {
+//            m_bLoadedOptions = true;
+//        }
+//    }
+//#endif
+//
+//    // XXX TMC TODO: Replace with flexible name resolution support (a la m_userOptions above).
+//    s << HELIUM_TAGGED_STRUCT_DYNARRAY( m_textureParameters );
+//}
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
 bool Material::NeedsPrecacheResourceData() const
@@ -162,7 +243,7 @@ bool Material::BeginPrecacheResourceData()
     // Convert shader options to variant indices if we just loaded a set of options.
     if( m_bLoadedOptions )
     {
-        MemoryZero( m_shaderVariantIndices, sizeof( m_shaderVariantIndices ) );
+        MemoryZero( m_persistentResourceData.m_shaderVariantIndices, sizeof( m_persistentResourceData.m_shaderVariantIndices ) );
 
         Shader* pShader = m_spShader;
         if( pShader )
@@ -170,10 +251,10 @@ bool Material::BeginPrecacheResourceData()
             const Shader::Options& rUserOptions = pShader->GetUserOptions();
 
             for( size_t shaderTypeIndex = 0;
-                shaderTypeIndex < HELIUM_ARRAY_COUNT( m_shaderVariantIndices );
+                shaderTypeIndex < HELIUM_ARRAY_COUNT( m_persistentResourceData.m_shaderVariantIndices );
                 ++shaderTypeIndex )
             {
-                m_shaderVariantIndices[ shaderTypeIndex ] = static_cast< uint32_t >( rUserOptions.GetOptionSetIndex(
+                m_persistentResourceData.m_shaderVariantIndices[ shaderTypeIndex ] = static_cast< uint32_t >( rUserOptions.GetOptionSetIndex(
                     static_cast< RShader::EType >( shaderTypeIndex ),
                     m_userOptions.GetData(),
                     m_userOptions.GetSize() ) );
@@ -203,7 +284,7 @@ bool Material::BeginPrecacheResourceData()
             HELIUM_ASSERT( IsInvalid( m_shaderVariantLoadIds[ shaderTypeIndex ] ) );
             m_shaderVariantLoadIds[ shaderTypeIndex ] = pShader->BeginLoadVariant(
                 static_cast< RShader::EType >( shaderTypeIndex ),
-                m_shaderVariantIndices[ shaderTypeIndex ] );
+                m_persistentResourceData.m_shaderVariantIndices[ shaderTypeIndex ] );
         }
     }
 
@@ -320,9 +401,22 @@ bool Material::TryFinishPrecacheResourceData()
 }
 
 /// @copydoc Resource::SerializePersistentResourceData()
-void Material::SerializePersistentResourceData( Serializer& s )
+// void Material::SerializePersistentResourceData( Serializer& s )
+// {
+//     s << Serializer::WrapArray( m_persistentResourceData.m_shaderVariantIndices );
+// }
+
+bool Helium::Material::LoadPersistentResourceObject( Reflect::ObjectPtr &_object )
 {
-    s << Serializer::WrapArray( m_shaderVariantIndices );
+    HELIUM_ASSERT(_object.ReferencesObject());
+    if (!_object.ReferencesObject())
+    {
+        return false;
+    }
+
+    _object->CopyTo(&m_persistentResourceData);
+
+    return true;
 }
 
 /// @copydoc Resource::GetCacheName()
@@ -652,53 +746,45 @@ void Material::SynchronizeShaderParameters()
 }
 #endif  // HELIUM_TOOLS
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float1Parameter::Serialize( Serializer& s )
+void Material::Float1Parameter::PopulateComposite( Reflect::Composite& comp )
 {
-    s << HELIUM_TAGGED( name );
-
-    // Serialize the value as a struct with only an "x" component to mimic the serialization layout of the vector
-    // float parameter structs.
-    s << Serializer::Tag( TXT( "value" ) );
-    s.BeginStruct();
-    s << Serializer::Tag( TXT( "x" ) ) << value;
-    s.EndStruct();
+    comp.AddField( &Material::Float1Parameter::name,           TXT( "name" ) );
+    comp.AddField( &Material::Float1Parameter::value,          TXT( "value" ) );
 }
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float2Parameter::Serialize( Serializer& s )
+void Material::Float2Parameter::PopulateComposite( Reflect::Composite& comp )
 {
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
+    comp.AddField( &Material::Float2Parameter::name,           TXT( "name" ) );
+    comp.AddStructureField( &Material::Float2Parameter::value,          TXT( "value" ) );
 }
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float3Parameter::Serialize( Serializer& s )
+void Material::Float3Parameter::PopulateComposite( Reflect::Composite& comp )
 {
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
+    comp.AddField( &Material::Float3Parameter::name,           TXT( "name" ) );
+    comp.AddStructureField( &Material::Float3Parameter::value,          TXT( "value" ) );
 }
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::Float4Parameter::Serialize( Serializer& s )
+void Material::Float4Parameter::PopulateComposite( Reflect::Composite& comp )
 {
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
+    comp.AddField( &Material::Float4Parameter::name,           TXT( "name" ) );
+    comp.AddStructureField( &Material::Float4Parameter::value,          TXT( "value" ) );
 }
 
-/// Serialize this struct.
-///
-/// @param[in] s  Serializer with which to serialize.
-void Material::TextureParameter::Serialize( Serializer& s )
+void Material::TextureParameter::PopulateComposite( Reflect::Composite& comp )
 {
-    s << HELIUM_TAGGED( name );
-    s << HELIUM_TAGGED( value );
+    comp.AddField( &Material::TextureParameter::name,          TXT( "name" ) );
+    comp.AddField( &Material::TextureParameter::value,         TXT( "value" ), 0, Reflect::GetClass<GameObjectPointerData>() );
+}
+
+void Material::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
+{
+    // If these trip, then this struct needs to be updated. Having to do this hack because reflect does not support serializing
+    // c style arrays
+#pragma TODO("Support static arrays in reflect")
+    HELIUM_COMPILE_ASSERT(RShader::TYPE_MAX == 2);
+    HELIUM_COMPILE_ASSERT(RShader::TYPE_VERTEX == 0);
+    HELIUM_COMPILE_ASSERT(RShader::TYPE_PIXEL == 1);
+
+    comp.AddField( &Material::PersistentResourceData::m_shaderVariantIndexVertex,        TXT( "m_shaderVariantIndexVertex" ) );
+    comp.AddField( &Material::PersistentResourceData::m_shaderVariantIndexPixel,         TXT( "m_shaderVariantIndexPixel" ) );
 }

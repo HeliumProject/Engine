@@ -5,6 +5,8 @@
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
+#include "GameObjectLoader.h"
+
 namespace Helium
 {
     /// DynamicCast() implementation for up-cast or same conversions.

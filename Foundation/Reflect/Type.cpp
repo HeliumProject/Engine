@@ -99,7 +99,7 @@ void TypeRegistrar::UnregisterTypes( RegistrarType type )
     }
 }
 
-void TypeRegistrar::AddTypeToRegistry( Type* type )
+void TypeRegistrar::AddTypeToRegistry( const Type* type )
 {
     Reflect::Registry::GetInstance()->RegisterType( type );
 }

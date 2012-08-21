@@ -1,5 +1,3 @@
-########################################################################
-
 ======
 Helium
 ======
@@ -59,15 +57,6 @@ Once you've build Dependencies.sln, you should be able to build
 Helium.sln.  Again, make sure your Project Configuration and Platform
 setting match up.
 
-===============
-Unicode Support
-===============
-
-Unicode is built via solution and project configurations (Debug Unicode
-and Release Unicode).  wxWidgets is signalled to compile and link via
-wxUSE_UNICODE which is specified in the Unicode.vsprops file.  This
-vsprops file is inherited only in Unicode project configurations.
-
 ====================
 Platform Agnosticism
 ====================
@@ -78,5 +67,4 @@ Platform.vcproj.
 
 -Geoff (AKA gorlak)
 -Andy (AKA andyburke)
--Paul (AKA pacman) 
-########################################################################
+-Paul (AKA pacman)

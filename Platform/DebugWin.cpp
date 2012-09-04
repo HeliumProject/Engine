@@ -153,24 +153,24 @@ tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
     }
 
     // module image name "reflect.dll"
-    static tchar_t module[MAX_PATH];
+    wchar_t module[MAX_PATH];
     ZeroMemory(&module, sizeof(module));
-    static tchar_t extension[MAX_PATH];
+    wchar_t extension[MAX_PATH];
     ZeroMemory(&extension, sizeof(extension));
 
     // symbol name "Reflect::Class::AddSerializer + 0x16d"
-    static tchar_t symbol[MAX_SYM_NAME+16];
+    tchar_t symbol[MAX_SYM_NAME+16];
     ZeroMemory(&symbol, sizeof(symbol));
 
     // source file name "typeinfo.cpp"
-    static tchar_t filename[MAX_PATH];
+    wchar_t filename[MAX_PATH];
     ZeroMemory(&filename, sizeof(filename));
 
     // line number in source "246"
     DWORD line = 0xFFFFFFFF;
 
     // resulting line is worst case of all components
-    static tchar_t result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
+    tchar_t result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
     ZeroMemory(&result, sizeof(result));
 
 
@@ -203,7 +203,7 @@ tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
         if ( SymFromAddr(GetCurrentProcess(), adr, &disp, symbolInfo) != 0 )
         {
             // success, copy the symbol info
-            _stprintf(symbol, TXT("%s + 0x%X"), symbolInfo->Name, disp);
+            StringPrint(symbol, TXT("%s + 0x%X"), symbolInfo->Name, disp);
 
             //
             // Now find source line information
@@ -217,19 +217,22 @@ tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
             {
                 // success, copy the source file name
                 _tcscpy(filename, l.FileName);
-                static tchar_t ext[MAX_PATH];
-                static tchar_t file[MAX_PATH];
+                wchar_t ext[MAX_PATH];
+                wchar_t file[MAX_PATH];
                 _tsplitpath(filename, NULL, NULL, file, ext);
 
-                _stprintf(result, TXT("%s, %s : %s%s(%d)"), module, symbol, file, ext, l.LineNumber);
+				HELIUM_CONVERT_TO_CHAR(module, convertedModule);
+				HELIUM_CONVERT_TO_CHAR(file, convertedFile);
+				HELIUM_CONVERT_TO_CHAR(ext, convertedExt);
+                StringPrint(result, TXT("%s, %s : %s%s(%d)"), convertedModule, symbol, convertedFile, convertedExt, l.LineNumber);
                 return result;
             }
 
-            _stprintf(result, TXT("%s, %s"), module, symbol);
+            StringPrint(result, TXT("%s, %s"), module, symbol);
             return result;
         }
 
-        _stprintf(result, TXT("%s"), module);
+        StringPrint(result, TXT("%s"), module);
         return result;
     }
     else
@@ -761,26 +764,23 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
         return TXT( "" );
     }
 
-    SHCreateDirectoryEx( NULL, directory.c_str(), NULL );
+	HELIUM_CONVERT_TO_WCHAR_T( directory.c_str(), convertedDirectory );
+
+    SHCreateDirectoryEx( NULL, convertedDirectory, NULL );
 
     // Tack time (in seconds since UTC) onto end of file name
     time_t now;
     time( &now );
 
-    tchar_t module[ MAX_PATH ];
-    tchar_t file[ MAX_PATH ];
+    wchar_t module[ MAX_PATH ];
+    wchar_t file[ MAX_PATH ];
     GetModuleFileName( 0, module, MAX_PATH );
     _tsplitpath( module, NULL, NULL, file, NULL );
 
-    tchar_t dmp_file[ MAX_PATH ] = { '\0' };
-    _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory.c_str(), file, now );
+    wchar_t dmpFile[ MAX_PATH ] = { L'\0' };
+    _sntprintf( dmpFile, sizeof( dmpFile ) - 1, L"%s\\%s_%ld.dmp", convertedDirectory, file, now );
 
-    HANDLE dmp;
-#ifdef UNICODE
-    dmp = CreateFileW( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
-#else
-    dmp = CreateFileA( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
-#endif
+    HANDLE dmp = CreateFile( dmpFile, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
     if ( dmp!=INVALID_HANDLE_VALUE )
     {
         MINIDUMP_EXCEPTION_INFORMATION ex;
@@ -805,7 +805,8 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
         // close the file
         CloseHandle( dmp );
 
-        return dmp_file;
+		HELIUM_CONVERT_TO_CHAR( dmpFile, convertedDmpFile );
+        return convertedDmpFile;
     }
 
     return TXT("");
@@ -967,7 +968,8 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
         if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
         {
             rSymbol += TXT( "(" );
-            rSymbol += moduleInfo.ModuleName;
+			HELIUM_CONVERT_TO_CHAR( moduleInfo.ModuleName, convertedModuleName );
+            rSymbol += convertedModuleName;
             rSymbol += TXT( ") " );
 
             bAddedModuleName = true;
@@ -990,7 +992,8 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
     if( SymFromAddr( hProcess, reinterpret_cast< uintptr_t >( pAddress ), NULL, &rSymbolInfo ) )
     {
         rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = TXT( '\0' );
-        rSymbol += rSymbolInfo.Name;
+		HELIUM_CONVERT_TO_CHAR( rSymbolInfo.Name, convertedName );
+        rSymbol += convertedName;
         rSymbol += TXT( " " );
     }
     else
@@ -1009,7 +1012,8 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
         lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
 
         rSymbol += TXT( "(" );
-        rSymbol += lineInfo.FileName;
+		HELIUM_CONVERT_TO_CHAR( lineInfo.FileName, convertedFileName );
+        rSymbol += convertedFileName;
         rSymbol += TXT( ", line " );
         rSymbol += lineNumberBuffer;
         rSymbol += TXT( ")" );

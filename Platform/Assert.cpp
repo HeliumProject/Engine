@@ -44,7 +44,7 @@ Assert::EResult Assert::Trigger(
             vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
             va_end(args); 
 
-            snprintf(
+            StringPrint(
                 messageText,
 				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "%s\n\nAssertion failed in %s (%s, line %d): (%s)" ),
@@ -56,7 +56,7 @@ Assert::EResult Assert::Trigger(
         }
         else
         {
-            snprintf(
+            StringPrint(
                 messageText,
 				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d): %s" ),
@@ -76,7 +76,7 @@ Assert::EResult Assert::Trigger(
             vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
             va_end(args); 
 
-            snprintf(
+            StringPrint(
                 messageText,
 				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "%s\n\nAssertion failed in %s (%s, line %d)" ),
@@ -87,7 +87,7 @@ Assert::EResult Assert::Trigger(
         }
         else
         {
-            snprintf(
+            StringPrint(
                 messageText,
 				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d)" ),

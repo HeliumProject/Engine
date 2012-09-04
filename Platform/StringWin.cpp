@@ -16,7 +16,7 @@ size_t Helium::GetConvertedStringLength( const char* src )
 	return ::MultiByteToWideChar( CP_UTF8, 0, src, -1, NULL, 0 );
 }
 
-size_t GetConvertedStringLength( const wchar_t* src )
+size_t Helium::GetConvertedStringLength( const wchar_t* src )
 {
 	return ::WideCharToMultiByte( CP_UTF8, 0, src, -1, NULL, 0, NULL, NULL );
 }

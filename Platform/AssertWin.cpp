@@ -24,7 +24,7 @@ void Helium::FatalExit( int exitCode )
 Assert::EResult Assert::TriggerImplementation( const char* pMessageText )
 {
     char messageBoxText[ 1024 ];
-    snprintf(
+    StringPrint(
         messageBoxText,
 		sizeof( messageBoxText ) / sizeof( messageBoxText[0] ),
         ( TXT( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )

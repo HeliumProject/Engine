@@ -1,6 +1,8 @@
 #include "PlatformPch.h"
 #include "Console.h"
 
+#include "Platform/Print.h"
+
 using namespace Helium;
 
 void Helium::Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...)
@@ -21,7 +23,7 @@ void Helium::Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...)
 
     va_list args;
     va_start(args, fmt); 
-    _vftprintf(stream, fmt, args);
+    FilePrint(stream, fmt, args);
     va_end(args); 
 
     fflush(stream);
@@ -49,7 +51,7 @@ void Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
     }
 
-    _vftprintf(stream, fmt, args);
+    FilePrint(stream, fmt, args);
 
     fflush(stream);
 
@@ -76,7 +78,7 @@ void Helium::PrintString(ConsoleColor color, FILE* stream, const tstring& tstrin
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
     }
 
-    _ftprintf(stream, TXT("%s"), tstring.c_str());
+    FilePrint(stream, TXT("%s"), tstring.c_str());
 
     fflush(stream);
 

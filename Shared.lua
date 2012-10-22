@@ -142,16 +142,20 @@ if os.get() == "windows" then
 			"/NODEFAULTLIB:wxmsw29u_gl",
 			"/NODEFAULTLIB:wxmsw29_gl",
 		}
-		includedirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "Include"
-		}
+		if os.getenv( "DXSDK_DIR" ) then
+			includedirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Include"
+			}
+		end
 
 	configuration { "windows", "x32" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
-		}
+		if os.getenv( "DXSDK_DIR" ) then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+			}
+		end
 	
 		if haveGranny then
 			libdirs
@@ -161,10 +165,12 @@ if os.get() == "windows" then
 		end
 
 	configuration { "windows", "x64" }
-		libdirs
-		{
-			os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
-		}
+		if os.getenv( "DXSDK_DIR" ) then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+			}
+		end
 	
 		if haveGranny then
 			libdirs

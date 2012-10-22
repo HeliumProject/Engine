@@ -110,11 +110,6 @@ Helium.CheckEnvironment = function()
             end
         end
         
-        if os.getenv( "DXSDK_DIR" ) == nil then
-            print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
-            failed = 1
-        end
-        
         local fbxDir = Helium.GetFbxSdkLocation()
         if not fbxDir or not os.isdir( fbxDir ) then
             print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )

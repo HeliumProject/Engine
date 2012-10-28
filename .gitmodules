@@ -1,6 +1,6 @@
 [submodule "Dependencies/wxWidgets"]
 	path = Dependencies/wxWidgets
 	url = https://github.com/wxWidgets/wxWidgets.git
-[submodule "Dependencies\\tbb"]
-	path = Dependencies\\tbb
+[submodule "Dependencies/tbb"]
+	path = Dependencies/tbb
 	url = git@github.com:HeliumProject/tbb.git

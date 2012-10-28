@@ -420,14 +420,6 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     }
 
     HELIUM_ASSERT( pSwapChain );
-#ifndef NDEBUG
-    if( m_bExDevice )
-    {
-        void* pSwapChainEx = NULL;
-        L_D3D9_VERIFY( pSwapChain->QueryInterface( IID_IDirect3DSwapChain9Ex, &pSwapChainEx ) );
-        HELIUM_ASSERT( pSwapChainEx );
-    }
-#endif
 
     // Create the rendering sub-context interface.
     D3D9SubContext* pSubContext = new D3D9SubContext( pSwapChain );

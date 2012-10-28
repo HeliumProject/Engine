@@ -30,7 +30,6 @@ project( prefix .. "Image" )
 			prefix .. "Foundation",
 			"nvtt",
 			"d3d9",
-			"d3dx9",
 		}
 
 project( prefix .. "SceneGraph" )
@@ -62,7 +61,6 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
 			"d3d9",
-			"d3dx9",
 		}
 
 project( prefix .. "Editor" )
@@ -112,7 +110,6 @@ project( prefix .. "Editor" )
 		"libsupp",
 		"lua",
 		"d3d9",
-		"d3dx9",
 		"ws2_32",
 	}
 	flags
@@ -129,7 +126,7 @@ project( prefix .. "Editor" )
 	configuration { "windows", "x64" }
 		libdirs
 		{
-			"Dependencies/wxWidgets/lib/vc_amd64_dll",
+			"Dependencies/wxWidgets/lib/vc_x64_dll",
 		}
 		
 	-- per configuration

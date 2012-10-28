@@ -7,7 +7,6 @@
 #include "SceneGraph/Orientation.h"
 
 #include <d3d9.h>
-#include <d3dx9.h>
 
 using namespace Helium;
 using namespace Helium::SceneGraph;
@@ -156,7 +155,9 @@ void Camera::GetPerspectiveProjection(Matrix4& m) const
     }
 
     Matrix4 persp;
+#ifdef VIEWPORT_REFACTOR
     D3DXMatrixPerspectiveFovRH((D3DXMATRIX*)&persp, fov, aspect, NearClipDistance, FarClipDistance);
+#endif
 
     m *= persp;
 }
@@ -170,7 +171,9 @@ void Camera::GetOrthographicProjection(Matrix4& m) const
     GetUpAxisTransform(m);
 
     Matrix4 ortho;
+#ifdef VIEWPORT_REFACTOR
     D3DXMatrixOrthoRH((D3DXMATRIX*)&ortho, aspect * m_Offset, m_Offset, NearClipDistance, FarClipDistance);
+#endif
 
     m *= ortho;
 }

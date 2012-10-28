@@ -11,8 +11,8 @@ using namespace Helium::Editor;
 //-----------------------------------------------------------
 // macros
 //-----------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS( MenuButton, wxButton );
-BEGIN_EVENT_TABLE( MenuButton, wxButton )
+IMPLEMENT_DYNAMIC_CLASS( MenuButton, EditorButton );
+BEGIN_EVENT_TABLE( MenuButton, EditorButton )
 END_EVENT_TABLE();
 
 MenuButton::MenuButton

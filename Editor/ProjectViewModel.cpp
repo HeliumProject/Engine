@@ -406,7 +406,7 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
         {
             parentNode = NULL;
         }
-        ItemAdded( (void*)parentNode, (void*)childNode );
+        ItemAdded( wxDataViewItem( parentNode ), wxDataViewItem( childNode ) );
 
         return true;
     }
@@ -643,7 +643,7 @@ void ProjectViewModel::GetValue( wxVariant& variant, const wxDataViewItem& item,
                     int x = 0;
                     int y = 0;
                     IconArtFile::CalculatePlacement( image, overlayImage, OverlayQuadrants::BottomRight, x, y );
-                    image.Paste( overlayImage, x, y, wxIMAGE_ALPHA_BLEND_COMPOSITE );
+                    image.Paste( overlayImage, x, y );
                 }
 
                 bitmap = wxBitmap( image );

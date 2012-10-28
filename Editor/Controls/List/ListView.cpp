@@ -219,7 +219,7 @@ const tstring& StringLookup( long item, SortData* data )
 // the text values for each item in the list is slow, so the values are cached
 // as this function runs.
 // 
-int wxCALLBACK LazyMapCompareFunction( long item1, long item2, wxIntPtr sortData )
+int wxCALLBACK LazyMapCompareFunction( wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData )
 {
     SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
     if ( data )

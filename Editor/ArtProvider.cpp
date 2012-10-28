@@ -447,7 +447,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                     int x = 0;
                     int y = 0;
                     IconArtFile::CalculatePlacement( image, overlayImage, itr->first, x, y );
-                    image.Paste( overlayImage, x, y, wxIMAGE_ALPHA_BLEND_COMPOSITE );
+                    image.Paste( overlayImage, x, y );
                 }
             }
 

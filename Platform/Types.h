@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include "Platform/Platform.h"
 
 //
@@ -7,108 +9,6 @@
 //
 
 #if HELIUM_CC_CL
-
-/// @defgroup inttypes Integer Types
-/// We use the integer types defined in stdint.h on platforms where it is available.  If it is not available, then we
-/// define compatible types here.
-//@{
-
-/// 8-bit signed integer.
-typedef signed char int8_t;
-/// 16-bit signed integer.
-typedef signed short int16_t;
-/// 32-bit signed integer.
-typedef signed int int32_t;
-/// 64-bit signed integer.
-typedef signed __int64 int64_t;
-
-/// 8-bit unsigned integer.
-typedef unsigned char uint8_t;
-/// 16-bit unsigned integer.
-typedef unsigned short uint16_t;
-/// 32-bit unsigned integer.
-typedef unsigned int uint32_t;
-/// 64-bit unsigned integer.
-typedef unsigned __int64 uint64_t;
-
-/// Fastest signed integer of at least 8 bits.
-typedef int8_t int_fast8_t;
-/// Fastest signed integer of at least 16 bits.
-typedef int32_t int_fast16_t;
-/// Fastest signed integer of at least 32 bits.
-typedef int32_t int_fast32_t;
-/// Fastest signed integer of at least 64 bits.
-typedef int64_t int_fast64_t;
-
-/// Fastest unsigned integer of at least 8 bits.
-typedef uint8_t uint_fast8_t;
-/// Fastest unsigned integer of at least 16 bits.
-typedef uint32_t uint_fast16_t;
-/// Fastest unsigned integer of at least 32 bits.
-typedef uint32_t uint_fast32_t;
-/// Fastest unsigned integer of at least 64 bits.
-typedef uint64_t uint_fast64_t;
-
-//@}
-
-/// @defgroup intlimits Integer Limits
-//@{
-
-/// Minimum signed 8-bit integer.
-#define INT8_MIN ( -128 )
-/// Minimum signed 16-bit integer.
-#define INT16_MIN ( -32768 )
-/// Minimum signed 32-bit integer.
-#define INT32_MIN ( -2147483647 - 1 )
-/// Minimum signed 64-bit integer.
-#define INT64_MIN ( -9223372036854775807i64 - 1i64 )
-
-/// Maximum signed 8-bit integer.
-#define INT8_MAX ( 127 )
-/// Maximum signed 16-bit integer.
-#define INT16_MAX ( 32767 )
-/// Maximum signed 32-bit integer.
-#define INT32_MAX ( 2147483647 )
-/// Maximum signed 64-bit integer.
-#define INT64_MAX ( 9223372036854775807i64 )
-
-/// Maximum unsigned 8-bit integer.
-#define UINT8_MAX ( 255 )
-/// Maximum unsigned 16-bit integer.
-#define UINT16_MAX ( 65535 )
-/// Maximum unsigned 32-bit integer.
-#define UINT32_MAX ( 4294967295UL )
-/// Maximum unsigned 64-bit integer.
-#define UINT64_MAX ( 18446744073709551615ui64 )
-
-/// Minimum int_fast8_t value.
-#define INT_FAST8_MIN INT8_MIN
-/// Minimum int_fast16_t value.
-#define INT_FAST16_MIN INT32_MIN
-/// Minimum int_fast32_t value.
-#define INT_FAST32_MIN INT32_MIN
-/// Minimum int_fast64_t value.
-#define INT_FAST64_MIN INT64_MIN
-
-/// Maximum int_fast8_t value.
-#define INT_FAST8_MAX INT8_MAX
-/// Maximum int_fast16_t value.
-#define INT_FAST16_MAX INT32_MAX
-/// Maximum int_fast32_t value.
-#define INT_FAST32_MAX INT32_MAX
-/// Maximum int_fast64_t value.
-#define INT_FAST64_MAX INT64_MAX
-
-/// Maximum uint_fast8_t value.
-#define UINT_FAST8_MAX UINT8_MAX
-/// Maximum uint_fast16_t value.
-#define UINT_FAST16_MAX UINT32_MAX
-/// Maximum uint_fast32_t value.
-#define UINT_FAST32_MAX UINT32_MAX
-/// Maximum uint_fast64_t value.
-#define UINT_FAST64_MAX UINT64_MAX
-
-//@}
 
 /// @defgroup intprintf Integer "printf" Formatting Macros
 /// These allow portable usage of fixed-sized integers in formatting strings for printf() and similar statements.

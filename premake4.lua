@@ -27,14 +27,13 @@ if _ACTION then
 		Helium.BuildWxWidgets()
 		Helium.PublishWxWidgets( bin )
 
-		Helium.BuildTBB()
-		Helium.PublishTBB( bin )
-
-		Helium.PublishFBX( bin )
+		Helium.BuildTbb()
+		Helium.PublishTbb( bin )
+		Helium.PublishFbx( bin )
 		Helium.PublishIcons( bin )
 	else
 		Helium.CleanWxWidgets()
-		Helium.CleanTBB()
+		Helium.CleanTbb()
 	end
 
 	dofile "Dependencies.lua"

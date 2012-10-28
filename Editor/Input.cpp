@@ -132,7 +132,6 @@ void Helium::ConvertEvent( wxKeyEvent& event, KeyboardInput& input )
         case WXK_ALT:           code = KeyCodes::Alt; break;
         case WXK_CONTROL:       code = KeyCodes::Ctrl; break;
         case WXK_SHIFT:         code = KeyCodes::Shift; break;
-        case WXK_COMMAND:       code = KeyCodes::System; break;
         case WXK_WINDOWS_LEFT:  code = KeyCodes::System; break;
         case WXK_WINDOWS_RIGHT: code = KeyCodes::System; break;
         case WXK_WINDOWS_MENU:  code = KeyCodes::Menu; break;

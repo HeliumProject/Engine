@@ -27,7 +27,7 @@ function CallMake( arch, cmd )
 	return result
 end
 
-Helium.BuildTBB = function()
+Helium.BuildTbb = function()
 
 	local cwd = os.getcwd()
 
@@ -70,7 +70,7 @@ Helium.BuildTBB = function()
 
 end
 
-Helium.CleanTBB = function()
+Helium.CleanTbb = function()
 
 	local cwd = os.getcwd()
 
@@ -116,7 +116,7 @@ Helium.CleanTBB = function()
 
 end
 
-Helium.PublishTBB = function( bin )
+Helium.PublishTbb = function( bin )
 
 	local files = {}
 	
@@ -141,7 +141,7 @@ Helium.PublishTBB = function( bin )
 				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc9_release",	    target=bin .. "/x64/Profile" } )
 				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_intel64_cl_vc9_release",	    target=bin .. "/x64/Release" } )
 				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc9_release",	    target=bin .. "/x64/Release" } )
-			end       
+			end
 		elseif _ACTION == "vs2010" then 
 			if Helium.Build32Bit() then
 				table.insert( files, { file="tbb_debug.dll",	source="Dependencies/tbb/build/windows_ia32_cl_vc10_debug",		    target=bin .. "/x32/Debug" } )
@@ -163,6 +163,27 @@ Helium.PublishTBB = function( bin )
 				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_intel64_cl_vc10_release",	target=bin .. "/x64/Release" } )
 				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc10_release",	target=bin .. "/x64/Release" } )
 			end
+		elseif _ACTION == "vs2012" then 
+			if Helium.Build32Bit() then
+				table.insert( files, { file="tbb_debug.dll",	source="Dependencies/tbb/build/windows_ia32_cl_vc11_debug",		    target=bin .. "/x32/Debug" } )
+				table.insert( files, { file="tbb_debug.pdb",	source="Dependencies/tbb/build/windows_ia32_cl_vc11_debug",		    target=bin .. "/x32/Debug" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Intermediate" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Intermediate" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Profile" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Profile" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Release" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_ia32_cl_vc11_release",	    target=bin .. "/x32/Release" } )
+			end
+			if Helium.Build64Bit() then
+				table.insert( files, { file="tbb_debug.dll",	source="Dependencies/tbb/build/windows_intel64_cl_vc11_debug",	    target=bin .. "/x64/Debug" } )
+				table.insert( files, { file="tbb_debug.pdb",	source="Dependencies/tbb/build/windows_intel64_cl_vc11_debug",	    target=bin .. "/x64/Debug" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Intermediate" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Intermediate" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Profile" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Profile" } )
+				table.insert( files, { file="tbb.dll",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Release" } )
+				table.insert( files, { file="tbb.pdb",			source="Dependencies/tbb/build/windows_intel64_cl_vc11_release",	target=bin .. "/x64/Release" } )
+			end
 		end
 	elseif os.get() == "macosx" then
 		local ver = os.getversion()
@@ -180,7 +201,7 @@ Helium.PublishTBB = function( bin )
 			table.insert( files, { file="libtbb.dylib",			source="Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os" .. str .. "_release",	    target=bin .. "/x64/Release" } )
 		end       
 	else
-		print("Implement support for " .. os.get() .. " to CleanWxWidgets()")
+		print("Implement support for " .. os.get() .. " to PublishTBB()")
 		os.exit(1)
 	end
 

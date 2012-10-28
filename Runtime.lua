@@ -94,10 +94,7 @@ project( prefix .. "ExampleMain" )
 		links
 		{
 			"d3d9",
-			"d3dx9",
 			"d3d11",
-			"dxguid",
-			"d3dcompiler",
 			"wininet",
 			"ws2_32",
 			"dbghelp",
@@ -106,12 +103,12 @@ project( prefix .. "ExampleMain" )
 	configuration { "windows", "Debug" }
 		links
 		{
-			"fbxsdk-2012.2d",
+			Helium.DebugFbxLib,
 		}
 	configuration { "windows", "not Debug" }
 		links
 		{
-			"fbxsdk-2012.2",
+			Helium.ReleaseFbxLib,
 		}
 		
 	if haveGranny then

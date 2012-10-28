@@ -248,9 +248,10 @@ namespace Helium
 
             DeviceManager m_DeviceManager;
             float m_LabelFontHeight;
+#ifdef VIEWPORT_REFACTOR
             ID3DXFont* m_LabelFont;
             ID3DXFont* m_TypeFont;
-
+#endif
             wxTextCtrl* m_EditCtrl;
 
             std::map<tstring, ThumbnailPtr> m_AssociatedIcons; // this guy is just for use in the bg thread

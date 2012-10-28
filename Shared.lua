@@ -142,7 +142,7 @@ if os.get() == "windows" then
 			"/NODEFAULTLIB:wxmsw29u_gl",
 			"/NODEFAULTLIB:wxmsw29_gl",
 		}
-		if os.getenv( "DXSDK_DIR" ) then
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
 			includedirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Include"
@@ -150,13 +150,13 @@ if os.get() == "windows" then
 		end
 
 	configuration { "windows", "x32" }
-		if os.getenv( "DXSDK_DIR" ) then
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
 			}
 		end
-	
+
 		if haveGranny then
 			libdirs
 			{
@@ -165,13 +165,13 @@ if os.get() == "windows" then
 		end
 
 	configuration { "windows", "x64" }
-		if os.getenv( "DXSDK_DIR" ) then
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
 			libdirs
 			{
 				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
 			}
 		end
-	
+		
 		if haveGranny then
 			libdirs
 			{
@@ -227,6 +227,30 @@ elseif _ACTION == "vs2010" then
 		libdirs
 		{
 			"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+		}
+elseif _ACTION == "vs2012" then
+	configuration { "windows", "x32", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc11_debug",
+		}
+
+	configuration { "windows", "x32", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_ia32_cl_vc11_release",
+		}
+
+	configuration { "windows", "x64", "Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc11_debug",
+		}
+
+	configuration { "windows", "x64", "not Debug" }
+		libdirs
+		{
+			"Dependencies/tbb/build/windows_intel64_cl_vc11_release",
 		}
 elseif _ACTION == "xcode3" or _ACTION == "xcode4" then
 	configuration { "windows", "x32", "Debug" }
@@ -689,10 +713,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		links
 		{
 			"d3d9",
-			"d3dx9",
 			"d3d11",
-			"dxguid",
-			"d3dcompiler",
 			"wininet",
 			"ws2_32",
 			"dbghelp",
@@ -701,12 +722,12 @@ project( prefix .. "TestApp" )-- DEPRECATED
 	configuration { "windows", "Debug" }
 		links
 		{
-			"fbxsdk-2012.2d",
+			Helium.DebugFbxLib,
 		}
 	configuration { "windows", "not Debug" }
 		links
 		{
-			"fbxsdk-2012.2",
+			Helium.ReleaseFbxLib,
 		}
 		
 	if haveGranny then

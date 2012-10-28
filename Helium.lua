@@ -2,7 +2,6 @@ Helium = {}
 
 Helium.RequiredPremakeVersion = '4.4-beta1'
 Helium.RequiredCLVersion = 150030729
-Helium.RequiredFBXVersion = '2012.2'
 
 os.capture = function( cmd, raw )
     local f = assert( io.popen( cmd, 'r' ) )
@@ -42,26 +41,6 @@ Helium.Build64Bit = function()
 	else
 	    return os.is64bit()
 	end
-end
-
-Helium.GetFbxSdkLocation = function()
-    local fbxLocation = os.getenv( 'FBX_SDK' )
-    if not fbxLocation then
-        if os.get() == "windows" then
-            fbxLocation = "C:\\Program Files\\Autodesk\\FBX\\FbxSdk\\" .. Helium.RequiredFBXVersion
-        elseif os.get() == "macosx" then
-	       	fbxLocation = "/Applications/Autodesk/FBXSDK" .. string.gsub(Helium.RequiredFBXVersion, "%.", "")
-        else
-            print("Implement support for " .. os.get() .. " to Helium.GetFbxSdkLocation()")
-            os.exit(1)
-        end
-		if not os.isdir( fbxLocation ) then
-            print("FBX SDK not found at: " .. fbxLocation)
-            os.exit(1)
-		end
-    end
-    
-    return fbxLocation
 end
 
 Helium.Sleep = function( seconds )
@@ -109,7 +88,12 @@ Helium.CheckEnvironment = function()
                 failed = 1
             end
         end
-        
+	  	
+        if os.getenv( "DXSDK_DIR" ) == nil then
+            print( " -> You must have the DirectX SDK installed (DXSDK_DIR is not defined in your environment)." )
+            failed = 1
+        end
+
         local fbxDir = Helium.GetFbxSdkLocation()
         if not fbxDir or not os.isdir( fbxDir ) then
             print( " -> You must have the FBX SDK installed and the FBX_SDK environment variable set." )
@@ -385,12 +369,12 @@ Helium.DoDefaultProjectSettings = function()
 		links
 		{
 			"ws2_32",
+			"wininet",
 			"d3d9",
 			"d3dx9",
 			"d3d11",
-			"dxguid",
 			"d3dcompiler",
-			"wininet",
+			"dxguid",
 		}
 
 	configuration { "windows", "SharedLib or *App" }
@@ -402,12 +386,12 @@ Helium.DoDefaultProjectSettings = function()
 	configuration { "windows", "Debug", "SharedLib or *App" }
 		links
 		{
-			"fbxsdk-2012.2d",
+			Helium.DebugFbxLib,
 		}
 	configuration { "windows", "not Debug", "SharedLib or *App" }
 		links
 		{
-			"fbxsdk-2012.2",
+			Helium.ReleaseFbxLib,
 		}
 
 	if haveGranny then

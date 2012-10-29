@@ -1,9 +1,9 @@
 [submodule "Dependencies/wxWidgets"]
 	path = Dependencies/wxWidgets
 	url = https://github.com/wxWidgets/wxWidgets.git
-[submodule "Dependencies/tbb"]
+[submodule "Dependencies/ThreadBuildingBlocks"]
 	path = Dependencies/tbb
-	url = git@github.com:HeliumProject/tbb.git
+	url = git@github.com:HeliumProject/ThreadBuildingBlocks.git
 [submodule "Dependencies/nedmalloc"]
 	path = Dependencies/nedmalloc
 	url = https://github.com/ned14/nedmalloc.git

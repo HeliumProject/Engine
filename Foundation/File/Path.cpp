@@ -6,10 +6,9 @@
 #include "Platform/Path.h"
 #include "Platform/Exception.h"
 
-#include "Foundation/Checksum/Crc32.h"
-#include "Foundation/Checksum/MD5.h"
-#include "Foundation/Checksum/MurmurHash2.h"
-
+#include "Foundation/Crc32.h"
+#include "Foundation/MD5.h"
+    
 #include <algorithm>
 #include <sstream>
 
@@ -491,13 +490,6 @@ tstring Path::Normalized() const
     tstring normalized = m_Path;
     Path::Normalize( normalized );
     return normalized;
-}
-
-uint64_t Path::Hash() const
-{
-    tstring temp = m_Path;
-    Normalize( temp );
-    return Helium::MurmurHash2( temp );
 }
 
 tstring Path::Signature()

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
-
-#include "Foundation/Document/Document.h"
+#include "Foundation/Event.h"
+#include "Foundation/DocumentManager.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"
@@ -39,7 +38,7 @@ namespace Helium
         /////////////////////////////////////////////////////////////////////////////
         // Tracks all the scenes and their undo queues.
         // 
-        class SCENE_GRAPH_API SceneManager
+        class HELIUM_SCENE_GRAPH_API SceneManager
         {
         private:
             // all loaded scenes by path

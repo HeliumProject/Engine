@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API CurveCreateTool : public Tool
+        class HELIUM_SCENE_GRAPH_API CurveCreateTool : public Tool
         {
         private:
             // Created flag

@@ -2,8 +2,8 @@
 
 #include "ReflectClipboardData.h"
 
-#include "Foundation/Reflect/Data/SimpleData.h"
-#include "Foundation/Reflect/Data/ObjectStlVectorData.h"
+#include "Reflect/Data/SimpleData.h"
+#include "Reflect/Data/ObjectStlVectorData.h"
 
 namespace Helium
 {

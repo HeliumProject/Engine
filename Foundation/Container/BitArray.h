@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Foundation/API.h"
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
-#include "Foundation/Math/Common.h"
+
+#include "Foundation/API.h"
+#include "Foundation/Math.h"
 
 namespace Helium
 {

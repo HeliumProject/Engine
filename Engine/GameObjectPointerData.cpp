@@ -1,8 +1,8 @@
 #include "EnginePch.h"
 #include "Engine/GameObjectPointerData.h"
 
-#include "Foundation/Reflect/ArchiveBinary.h"
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "Reflect/ArchiveBinary.h"
+#include "Reflect/ArchiveXML.h"
 #include "Engine/GameObject.h"
 
 using namespace Helium;

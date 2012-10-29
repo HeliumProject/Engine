@@ -5,7 +5,7 @@
 #include <list>
 
 #include "Platform/Types.h"
-#include "Foundation/Math/Common.h"
+#include "Foundation/Math.h"
 
 #include "Image/API.h"
 #include "Image/MipSet.h"

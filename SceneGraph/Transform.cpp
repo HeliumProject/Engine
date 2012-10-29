@@ -1,10 +1,10 @@
 #include "SceneGraphPch.h"
 #include "SceneGraph/Transform.h"
 
-#include "Foundation/Math/FpuEulerAngles.h"
-#include "Foundation/Math/Axes.h"
+#include "Foundation/UndoQueue.h"
 
-#include "Foundation/Undo/UndoCommand.h"
+#include "Math/FpuEulerAngles.h"
+#include "Math/Axes.h"
 
 #include "SceneGraph/Manipulator.h"
 #include "SceneGraph/PrimitiveAxes.h"

@@ -1,9 +1,11 @@
 #include "SceneGraphPch.h"
 #include "PivotTransform.h"
 
-#include "Foundation/Math/FpuEulerAngles.h"
-#include "Foundation/Math/Axes.h"
-#include "Foundation/Undo/UndoCommand.h"
+#include "Foundation/UndoQueue.h"
+
+#include "Math/FpuMatrix3.h"
+#include "Math/FpuEulerAngles.h"
+#include "Math/Axes.h"
 
 #include "SceneGraph/Scene.h"
 

@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "HierarchyNode.h"
 
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 #include "Foundation/Container/Insert.h" 
 
 #include "SceneGraph/Color.h"

@@ -4,8 +4,8 @@
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 
 
-#include "Foundation/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Foundation/Inspect/Controls/LabelControl.h"
+#include "Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Inspect/Controls/LabelControl.h"
 
 using namespace Helium;
 using namespace Helium::SceneGraph;

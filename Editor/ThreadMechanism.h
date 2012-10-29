@@ -4,7 +4,7 @@
 #include "Platform/Mutex.h"
 #include "Platform/Thread.h"
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 #include "Editor/API.h"
 

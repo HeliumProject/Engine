@@ -1,25 +1,27 @@
 #include "TestAppPch.h"
+#include "TestApp.h"
 
-#include "Foundation/Reflect/Registry.h"
+#include "Reflect/Registry.h"
+#include "Reflect/Data/DataDeduction.h"
+
+#include "Math/FpuColor4.h"
+
+#include "Engine/GameObject.h"
+
+#include "Reflect/ArchiveXML.h"
+#include "Reflect/ArchiveBinary.h"
+
+#include "PcSupport/ArchiveObjectLoader.h"
+#include "PcSupport/ArchivePackageLoader.h"
+
+#include "gtest.h"
+#include "TestGameObject.h"
 #include "WindowProc.h"
 
 #include <cfloat>
 #include <ctime>
 
-#include "gtest.h"
-
-#include "Foundation/Reflect/Data/DataDeduction.h"
-#include "Engine/GameObject.h"
-
-#include "TestGameObject.h"
-#include "PcSupport/ArchiveObjectLoader.h"
-#include "Foundation/Reflect/ArchiveXML.h"
-#include "Foundation/Reflect/ArchiveBinary.h"
-#include "PcSupport/ArchivePackageLoader.h"
-
-
 using namespace Helium;
-
 
 extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();

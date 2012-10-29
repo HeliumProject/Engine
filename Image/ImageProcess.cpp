@@ -4,7 +4,7 @@
 #include "Platform/Types.h"
 #include "Platform/Exception.h"
 
-#include "Foundation/Checksum/CRC32.h"
+#include "Foundation/CRC32.h"
 #include "Foundation/String/Utilities.h"
 
 #include "Foundation/Log.h"

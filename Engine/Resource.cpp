@@ -2,7 +2,7 @@
 #include "Engine/Resource.h"
 
 #include "Engine/AsyncLoader.h"
-#include "Foundation/Reflect/Class.h"
+#include "Reflect/Class.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Package.h"

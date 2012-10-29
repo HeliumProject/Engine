@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "ClipboardDataObject.h"
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "Reflect/ArchiveXML.h"
 #include "Editor/Clipboard/ClipboardDataWrapper.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 

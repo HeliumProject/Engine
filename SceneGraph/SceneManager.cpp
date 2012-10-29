@@ -1,10 +1,10 @@
 #include "SceneGraphPch.h"
 #include "SceneGraph/SceneManager.h"
 
-#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 
+#include "SceneGraph/ComponentHandle.h"
 #include "SceneGraph/SwitchSceneCommand.h"
 #include "SceneGraph/Viewport.h"
 

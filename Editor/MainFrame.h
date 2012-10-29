@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/PropertiesManager.h"
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
-
 #include "SceneGraph/Project.h"
 
 #include "Editor/Vault/VaultPanel.h"

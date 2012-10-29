@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/Inspect/Container.h"
+#include "Inspect/Container.h"
 #include "Editor/Controls/Drawer/Drawer.h"
 #include "Editor/Inspect/StripCanvas.h"
-#include "Editor/Inspect/Widget.h"
+#include "Editor/Inspect/wxWidget.h"
 
 namespace Helium
 {

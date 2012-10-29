@@ -2,13 +2,13 @@
 #include "Framework/Mesh.h"
 
 #include "Engine/AsyncLoader.h"
-#include "Foundation/Math/SimdMatrix44.h"
+#include "Math/SimdMatrix44.h"
 #include "Engine/CacheManager.h"
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
-#include "Foundation/Reflect/Data/ObjectDynArrayData.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/ObjectDynArrayData.h"
+#include "Reflect/Data/DataDeduction.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
 #include "GrannyMeshInterface.cpp.inl"

@@ -11,7 +11,7 @@
 #include "Engine/AsyncLoader.h"
 #include "Foundation/File/File.h"
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Registry.h"
+#include "Reflect/Registry.h"
 #include "Platform/Timer.h"
 #include "Engine/Config.h"
 #include "Engine/JobManager.h"

@@ -18,7 +18,6 @@ includedirs
 	"Dependencies/boost-preprocessor/include",
 	"Dependencies/expat/lib",
 	"Dependencies/freetype/include",
-	"Dependencies/lua/src",
 	"Dependencies/nvtt",
 	"Dependencies/nvtt/src",
 	"Dependencies/nvtt/src/nvtt/squish",
@@ -330,7 +329,69 @@ project( prefix .. "Foundation" )
 		{
 			prefix .. "Platform",
 			"Expat",
+		}
+
+project( prefix .. "Buffers" )
+	uuid "F8A00DD4-2BAF-4409-A713-366AA79386AB"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Buffers", "BUFFERS" )
+
+	files
+	{
+		"Buffers/**",
+	}
+
+    pchheader( "BuffersPch.h" )
+    pchsource( "Buffers/BuffersPch.cpp" )
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Math",
+		}
+
+project( prefix .. "Reflect" )
+	uuid "6488751F-220A-4E88-BA5B-A1BE5E3124EC"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Reflect", "REFLECT" )
+
+	files
+	{
+		"Reflect/**",
+	}
+
+    pchheader( "ReflectPch.h" )
+    pchsource( "Reflect/ReflectPch.cpp" )
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
 			"zlib",
+		}
+
+project( prefix .. "Math" )
+	uuid "8F42DBD6-75E3-4A16-A3B6-77381600009D"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Math", "MATH" )
+
+	files
+	{
+		"Math/**",
+	}
+
+    pchheader( "MathPch.h" )
+    pchsource( "Math/MathPch.cpp" )
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
 		}
 
 project( prefix .. "Engine" )
@@ -348,6 +409,8 @@ project( prefix .. "Engine" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 		}
 
 project( prefix .. "EngineJobs" )
@@ -365,6 +428,8 @@ project( prefix .. "EngineJobs" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 		}
 
@@ -383,6 +448,8 @@ project( prefix .. "Windowing" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -402,6 +469,8 @@ project( prefix .. "Rendering" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -421,6 +490,8 @@ project( prefix .. "GraphicsTypes" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -441,6 +512,8 @@ project( prefix .. "GraphicsJobs" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -462,6 +535,8 @@ project( prefix .. "Graphics" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -484,6 +559,8 @@ project( prefix .. "Framework" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -508,6 +585,8 @@ project( prefix .. "WindowingWin" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -528,6 +607,8 @@ project( prefix .. "RenderingD3D9" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -548,6 +629,8 @@ project( prefix .. "PcSupport" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -568,6 +651,8 @@ project( prefix .. "PreprocessingPc" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -592,6 +677,8 @@ project( prefix .. "EditorSupport" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -619,6 +706,8 @@ project( prefix .. "FrameworkWin" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -649,6 +738,8 @@ project( prefix .. "TestJobs" )-- DEPRECATED
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -675,6 +766,8 @@ project( prefix .. "TestApp" )-- DEPRECATED
 	{
 		prefix .. "Platform",
 		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Math",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",

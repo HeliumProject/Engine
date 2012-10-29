@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/CommandLine/Command.h"
+#include "Foundation/CmdLineProcessor.h"
 
 namespace Helium
 {

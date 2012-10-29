@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/CommandQueue.h"
-#include "Foundation/Inspect/Controls.h"
+#include "Inspect/Controls.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/PropertiesGenerator.h"
@@ -126,7 +126,7 @@ namespace Helium
             OrderedSet<SceneNodePtr>    m_Selection;
         };
 
-        class SCENE_GRAPH_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
+        class HELIUM_SCENE_GRAPH_API PropertiesManager : public Helium::RefCountBase< PropertiesManager >
         {
         public:
             PropertiesManager( PropertiesGenerator* generator, CommandQueue* commandQueue );

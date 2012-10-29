@@ -2,9 +2,9 @@
 #include "SceneGraphInit.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/SettingsManager.h"
-#include "Foundation/Reflect/Registry.h"
+#include "Reflect/Registry.h"
 
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/Tool.h"
 #include "SceneGraph/CreateTool.h"

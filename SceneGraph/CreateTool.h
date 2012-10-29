@@ -45,7 +45,7 @@ namespace Helium
 
         typedef std::map< Vector3, V_Vector3, Vector3Compare > M_Vector3;
 
-        class SCENE_GRAPH_API CreateTool : public Tool
+        class HELIUM_SCENE_GRAPH_API CreateTool : public Tool
         {
         private:
             // Created flag

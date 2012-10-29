@@ -54,3 +54,8 @@ void CommandQueue::Flush()
         (*itr).Invoke( Helium::Void () );
     }
 }
+
+void CommandQueue::EnqueueFlush()
+{
+    // override this to manually defer the Flush() call (instead of calling it explicitly in an update loop or timer)
+}

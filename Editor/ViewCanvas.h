@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Foundation/Math/Axes.h"
-#include "Foundation/Math/FpuVector3.h"
-#include "Foundation/Math/FpuAlignedBox.h"
+#include "Math/Axes.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuAlignedBox.h"
 
-#include "Foundation/SettingsManager.h"
-#include "Foundation/Reflect/Enumeration.h"
-#include "Foundation/Undo/UndoQueue.h"
+#include "Reflect/Enumeration.h"
+#include "Foundation/UndoQueue.h"
 
 #include "SceneGraph/Render.h"
 #include "SceneGraph/Camera.h"
 #include "SceneGraph/Resource.h"
 #include "SceneGraph/Viewport.h"
 #include "SceneGraph/ViewportSettings.h"
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/DeviceManager.h"
 
 #include "Editor/API.h"

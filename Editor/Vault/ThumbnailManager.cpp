@@ -1,6 +1,8 @@
 #include "EditorPch.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
+
+#include "Foundation/Crc32.h"
 #include "SceneGraph/DeviceManager.h"
 
 using namespace Helium;
@@ -30,7 +32,7 @@ ThumbnailManager::~ThumbnailManager()
 // 
 void ThumbnailManager::Reset()
 {
-    Helium::Locker< std::map< uint64_t, Helium::Path > >::Handle list( m_AllRequests );
+    Helium::Locker< std::map< uint32_t, Helium::Path > >::Handle list( m_AllRequests );
     list->clear();
 }
 
@@ -66,15 +68,16 @@ void ThumbnailManager::DetachFromWindow()
 // 
 void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args )
 {
-    Helium::Locker< std::map< uint64_t, Helium::Path > >::Handle list( m_AllRequests );
+    const uint32_t crc = Crc32( args.m_Path );
+
+    Helium::Locker< std::map< uint32_t, Helium::Path > >::Handle list( m_AllRequests );
     if ( args.m_Cancelled )
     {
-        list->erase( args.m_Path.Hash() );
+        list->erase( crc );
     }
     else
     {
-        uint64_t hash = args.m_Path.Hash();
-        Helium::StdInsert< std::map< uint64_t, Helium::Path > >::Result inserted = list->insert( std::make_pair( hash, args.m_Path ) );
+        Helium::StdInsert< std::map< uint32_t, Helium::Path > >::Result inserted = list->insert( std::make_pair( crc, args.m_Path ) );
 
         // only kick to foreground for new entries
         if ( inserted.second )

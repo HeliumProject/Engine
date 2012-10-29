@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Editor/Inspect/Canvas.h"
-#include "Editor/Inspect/Widget.h"
+#include "Editor/Inspect/wxCanvas.h"
+#include "Editor/Inspect/wxWidget.h"
 #include "Editor/Controls/Tree/TreeWndCtrl.h"
 
 namespace Helium

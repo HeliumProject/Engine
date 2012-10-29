@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Document/Document.h"
+#include "Foundation/DocumentManager.h"
+#include "Foundation/Event.h"
 #include "Foundation/TUID.h"
-#include "Foundation/Reflect/Archive.h"
-#include "Foundation/Reflect/Version.h"
+#include "Foundation/UndoQueue.h"
 
-#include "Foundation/Inspect/DataBinding.h"
-#include "Foundation/Inspect/Canvas.h"
-#include "Foundation/Undo/UndoQueue.h"
+#include "Reflect/Archive.h"
+#include "Reflect/Version.h"
+
+#include "Inspect/DataBinding.h"
+#include "Inspect/Canvas.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"
@@ -300,7 +301,7 @@ namespace Helium
 
         typedef stdext::hash_map< tstring, SceneGraph::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
 
-        class SCENE_GRAPH_API Scene : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API Scene : public Reflect::Object
         {
             //
             // Members

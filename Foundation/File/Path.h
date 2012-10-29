@@ -77,8 +77,6 @@ namespace Helium
         tstring Native() const;
         tstring Absolute() const;
         tstring Normalized() const;
-
-        uint64_t Hash() const;
         tstring Signature();
 
         bool Exists() const;

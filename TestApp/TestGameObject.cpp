@@ -1,7 +1,7 @@
 #include "TestAppPch.h"
 
 #include "TestGameObject.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/DataDeduction.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::TestGameObject1, TestApp, 0 );
 HELIUM_IMPLEMENT_OBJECT( Helium::TestGameObject2, TestApp, 0 );

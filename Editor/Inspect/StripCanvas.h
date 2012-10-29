@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Editor/Controls/Drawer/DrawerManager.h"
-#include "Editor/Inspect/Canvas.h"
-#include "Editor/Inspect/Widget.h"
+#include "Editor/Inspect/wxCanvas.h"
+#include "Editor/Inspect/wxWidget.h"
 
 namespace Helium
 {

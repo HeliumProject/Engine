@@ -96,22 +96,6 @@ project "freetype"
 		{
 			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
-
-project "lua"
-	uuid "A6339978-DA6B-4DEE-9997-0D60052CFFC3"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-	files
-	{
-		"Dependencies/lua/src/*.h",
-		"Dependencies/lua/src/*.c",
-	}
-	excludes
-	{
-		"Dependencies/lua/src/lua.c",
-		"Dependencies/lua/src/luac.c",
-	}
 	
 project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"

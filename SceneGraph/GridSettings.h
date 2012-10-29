@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Foundation/Math/FpuColor3.h"
-
-#include "Foundation/SettingsManager.h"
+#include "Math/FpuColor3.h"
 
 #include "SceneGraph/API.h"
+#include "SceneGraph/SettingsManager.h"
 
 namespace Helium
 {
@@ -28,7 +27,7 @@ namespace Helium
             }
         };
 
-        class SCENE_GRAPH_API GridSettings : public Settings
+        class HELIUM_SCENE_GRAPH_API GridSettings : public Settings
         {
         public:
             REFLECT_DECLARE_OBJECT( GridSettings, Settings );

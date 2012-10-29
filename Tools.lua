@@ -28,8 +28,32 @@ project( prefix .. "Image" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			"nvtt",
 			"d3d9",
+		}
+
+project( prefix .. "Inspect" )
+	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Inspect", "INSPECT" )
+
+	files
+	{
+		"Inspect/**",
+	}
+
+    pchheader( "InspectPch.h" )
+    pchsource( "Inspect/InspectPch.cpp" )
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 		}
 
 project( prefix .. "SceneGraph" )
@@ -47,6 +71,9 @@ project( prefix .. "SceneGraph" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Inspect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -88,6 +115,9 @@ project( prefix .. "Editor" )
 	{
 		prefix .. "Platform",
 		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Math",
+		prefix .. "Inspect",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",
@@ -108,7 +138,6 @@ project( prefix .. "Editor" )
 		"libclient",
 		"librpc",
 		"libsupp",
-		"lua",
 		"d3d9",
 		"ws2_32",
 	}

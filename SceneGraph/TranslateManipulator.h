@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/TransformManipulator.h"
 
 namespace Helium
@@ -38,7 +37,7 @@ namespace Helium
             }
         };
 
-        class SCENE_GRAPH_API TranslateManipulator : public TransformManipulator
+        class HELIUM_SCENE_GRAPH_API TranslateManipulator : public TransformManipulator
         {
         private:
             SettingsManager* m_SettingsManager;

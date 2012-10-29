@@ -3,9 +3,9 @@
 #include <string>
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/CommandLine/Command.h"
+#include "Foundation/CmdLineProcessor.h"
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Archive.h"
+#include "Reflect/Archive.h"
 
 namespace Helium
 {

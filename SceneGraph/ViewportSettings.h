@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
 #include "SceneGraph/API.h"
 #include "SceneGraph/CameraSettings.h"
+#include "SceneGraph/SettingsManager.h"
 
 namespace Helium
 {
@@ -53,7 +52,7 @@ namespace Helium
             }
         };
 
-        class SCENE_GRAPH_API ViewportSettings : public Settings
+        class HELIUM_SCENE_GRAPH_API ViewportSettings : public Settings
         {
         public: 
             REFLECT_DECLARE_OBJECT( ViewportSettings, Settings );

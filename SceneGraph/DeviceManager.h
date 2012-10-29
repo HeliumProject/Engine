@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Rendering/Renderer.h"
 #include "SceneGraph/API.h"
 
@@ -32,7 +32,7 @@ namespace Helium
     typedef Helium::Signature< const DeviceStateArgs& > DeviceStateSignature;
 
     // all rendering classes should be derived this
-    class SCENE_GRAPH_API DeviceManager : NonCopyable
+    class HELIUM_SCENE_GRAPH_API DeviceManager : NonCopyable
     {
     public:
         DeviceManager();

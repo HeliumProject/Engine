@@ -4,7 +4,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 #include "Image/Image.h"
 

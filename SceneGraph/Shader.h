@@ -2,6 +2,8 @@
 
 #include <d3d9.h>
 
+#include "Math/FpuColor4.h"
+
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"
 
@@ -11,7 +13,7 @@ namespace Helium
     {
         class Scene;
 
-        class SCENE_GRAPH_API Shader : public SceneNode
+        class HELIUM_SCENE_GRAPH_API Shader : public SceneNode
         {
         public:
             REFLECT_DECLARE_OBJECT( Shader, SceneNode );
@@ -35,13 +37,13 @@ namespace Helium
             bool                m_WrapV;
             float               m_RepeatU;
             float               m_RepeatV;
-            Vector4       m_BaseColor;
-            Helium::Path        m_AssetPath;
+            Color4              m_BaseColor;
+            Path                m_AssetPath;
 
         protected:
             // Non-reflected
             bool                m_Alpha;
-            uint32_t                 m_BaseTextureSize;
+            uint32_t            m_BaseTextureSize;
             IDirect3DTexture9*  m_BaseTexture;
         };
     }

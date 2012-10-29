@@ -10,7 +10,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/File/Path.h"
-#include "Foundation/CommandLine/Utilities.h"
+#include "Foundation/CmdLine.h"
 #include "Foundation/String/Utilities.h"
 
 #include <sstream>

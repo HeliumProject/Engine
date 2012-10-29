@@ -15,8 +15,8 @@
 #include "SceneGraph/SceneSettings.h"
 #include "SceneGraph/Mesh.h"
 
-#include "Foundation/Math/Common.h"
-#include "Foundation/Math/FpuAngleAxis.h"
+#include "Foundation/Math.h"
+#include "Math/FpuAngleAxis.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::SceneGraph::TranslateSnappingMode );
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::TranslateManipulator );

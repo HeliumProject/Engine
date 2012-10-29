@@ -1,16 +1,15 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
 #include "SceneGraph/API.h"
 #include "SceneGraph/Manipulator.h"
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/TranslateManipulator.h"
 
 namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API SceneSettings : public Settings
+        class HELIUM_SCENE_GRAPH_API SceneSettings : public Settings
         {
         public:
             REFLECT_DECLARE_OBJECT( SceneSettings, Settings );

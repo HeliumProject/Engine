@@ -3,17 +3,18 @@
 #include "VaultSearchResults.h"
 #include "ThumbnailLoadedEvent.h"
 
+#include "Platform/Process.h"
+
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Editor/UpdateStatusEvent.h"
-#include "Editor/DragDrop/DropSource.h"
-#include "Foundation/Undo/UndoCommand.h"
-#include "Editor/ArtProvider.h"
+#include "Foundation/UndoQueue.h"
 
 #include "SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?
 
-#include "Platform/Process.h"
+#include "Editor/UpdateStatusEvent.h"
+#include "Editor/DragDrop/DropSource.h"
+#include "Editor/ArtProvider.h"
 
 #include <wx/dnd.h>
 #include <shellapi.h>

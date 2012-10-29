@@ -5,7 +5,7 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/SceneManager.h"
 #include "SceneGraph/Selection.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 #include "Editor/API.h"
 #include "Editor/SceneOutlinerState.h"

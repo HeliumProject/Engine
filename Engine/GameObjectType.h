@@ -5,8 +5,8 @@
 #include "Platform/String.h"
 #include "Foundation/Name.h"
 #include "Foundation/Container/HashMap.h"
-#include "Foundation/Reflect/Class.h"
-#include "Foundation/Reflect/ReflectionInfo.h"
+#include "Reflect/Class.h"
+#include "Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"
 #include "Engine/Package.h"
 

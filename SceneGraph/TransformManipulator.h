@@ -2,10 +2,10 @@
 
 #include <hash_map>
 
-#include "Foundation/Math/FpuVector3.h"
-#include "Foundation/Math/FpuMatrix4.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuMatrix4.h"
 
-#include "Foundation/Undo/UndoQueue.h"
+#include "Foundation/UndoQueue.h"
 
 #include "SceneGraph/Tool.h"
 #include "SceneGraph/Scene.h"
@@ -27,7 +27,7 @@ namespace Helium
 
         class PickVisitor;
 
-        class SCENE_GRAPH_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
+        class HELIUM_SCENE_GRAPH_API TransformManipulator HELIUM_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
         {
         protected:
             // The mode of the manipulator (duh)

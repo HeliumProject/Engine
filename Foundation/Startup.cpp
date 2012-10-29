@@ -11,7 +11,7 @@
 #include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
 #include "Foundation/ExceptionReport.h"
-#include "Foundation/CommandLine/Utilities.h"
+#include "Foundation/CmdLine.h"
 #include "Foundation/Localization.h"
 
 #include <crtdbg.h>

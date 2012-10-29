@@ -6,11 +6,11 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory.h"
 
-#define PROFILE_ACCUMULATOR_MAX   (2048)
-#define PROFILE_CONTEXTS_MAX      (128)
-
 #define PROFILE_STRINGIFY(x) #x
 #define PROFILE_TOSTRING(x) PROFILE_STRINGIFY(x)
+
+#define PROFILE_ACCUMULATOR_MAX         (2048)
+#define PROFILE_CONTEXTS_MAX            (128)
 
 #define PROFILE_PROTOCOL_VERSION        (0x00)
 #define PROFILE_SIGNATURE               (0x12345678)
@@ -81,9 +81,9 @@ namespace Helium
             ~ScopeTimer(); 
 
             char         m_Description[MAX_DESCRIPTION]; 
-            uint64_t          m_StartTicks; 
+            uint64_t     m_StartTicks; 
             Accumulator* m_Accum; 
-            uint32_t          m_UniqueID; 
+            uint32_t     m_UniqueID; 
             bool         m_Print; 
 
         private: 
@@ -102,23 +102,23 @@ namespace Helium
             Header m_Header; 
             uint32_t    m_Version; 
             uint32_t    m_Signature; 
-            float32_t    m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
+            float32_t   m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
         }; 
 
         struct ScopeEnterPacket
         {
-            Header m_Header; 
+            Header      m_Header; 
             uint32_t    m_UniqueID; 
             uint32_t    m_StackDepth; 
             uint32_t    m_Line; 
             uint64_t    m_StartTicks; 
-            char   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
-            char   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
+            char        m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
+            char        m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
         }; 
 
         struct ScopeExitPacket 
         {
-            Header m_Header;
+            Header      m_Header;
             uint32_t    m_UniqueID;   
             uint32_t    m_StackDepth; 
             uint64_t    m_Duration; 
@@ -126,7 +126,7 @@ namespace Helium
 
         struct BlockEndPacket
         {
-            Header m_Header; 
+            Header      m_Header; 
         };
 
         union UberPacket
@@ -140,12 +140,12 @@ namespace Helium
         class HELIUM_FOUNDATION_API Context
         {
         public:
-            Helium::TraceFile m_TraceFile; 
-            uint32_t               m_UniqueID; 
-            uint32_t               m_StackDepth; 
-            uint32_t               m_PacketBufferOffset; 
-            uint8_t                m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
-            uint32_t               m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
+            Helium::TraceFile   m_TraceFile; 
+            uint32_t            m_UniqueID; 
+            uint32_t            m_StackDepth; 
+            uint32_t            m_PacketBufferOffset; 
+            uint8_t             m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
+            uint32_t            m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
 
             Context(); 
             ~Context(); 

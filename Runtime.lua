@@ -34,6 +34,8 @@ project( prefix .. "ExampleGame" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Reflect",
+			prefix .. "Math",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -63,6 +65,8 @@ project( prefix .. "ExampleMain" )
 	{
 		prefix .. "Platform",
 		prefix .. "Foundation",
+		prefix .. "Reflect",
+		prefix .. "Math",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",

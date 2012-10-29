@@ -1,15 +1,16 @@
 #pragma once
 
-#include "SceneGraph/API.h"
-
 #include "Foundation/File/Path.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Data/DataDeduction.h"
+#include "Math/FpuVector3.h"
+
+#include "SceneGraph/API.h"
 
 namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API SceneManifest : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API SceneManifest : public Reflect::Object
         {
         public:
             Vector3 m_BoundingBoxMin;

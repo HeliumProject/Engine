@@ -11,9 +11,9 @@
 
 #include "Framework/Framework.h"
 #include "Engine/Resource.h"
-#include "Foundation/Math/SimdMatrix44.h"
+#include "Math/SimdMatrix44.h"
 
-#include "Foundation/Math/SimdAaBox.h"
+#include "Math/SimdAaBox.h"
 #include "GraphicsTypes/GraphicsTypes.h"
 #include "Graphics/Material.h"
 

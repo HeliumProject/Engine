@@ -11,7 +11,7 @@
 
 #include "EditorSupport/FbxSupport.h"
 
-#include "Foundation/Math/SimdVector2.h"
+#include "Math/SimdVector2.h"
 #include "Foundation/StringConverter.h"
 #include "Rendering/Color.h"
 

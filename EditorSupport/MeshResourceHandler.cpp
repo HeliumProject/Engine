@@ -5,8 +5,8 @@
 #include "EditorSupport/MeshResourceHandler.h"
 
 #include "Foundation/StringConverter.h"
-#include "Foundation/Math/SimdMatrix44.h"
-#include "Foundation/Math/SimdVectorConversion.h"
+#include "Math/SimdMatrix44.h"
+#include "Math/SimdVectorConversion.h"
 #include "Engine/BinarySerializer.h"
 #include "GraphicsTypes/VertexTypes.h"
 #include "PcSupport/ObjectPreprocessor.h"

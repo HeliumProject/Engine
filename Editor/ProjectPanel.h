@@ -3,8 +3,8 @@
 #include "ProjectViewModel.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Foundation/Document/Document.h"
-#include "Foundation/Document/DocumentManager.h"
+#include "Foundation/DocumentManager.h"
+
 #include "SceneGraph/Project.h"
 
 #include "Editor/EditorGenerated.h"

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
 #include "Foundation/Container/OrderedSet.h"
+
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/Vault/VaultMenuIDs.h"
 #include "Editor/Vault/VaultSearchQuery.h"

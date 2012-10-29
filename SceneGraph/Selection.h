@@ -2,9 +2,10 @@
 
 #include <vector>
 
-#include "Foundation/Automation/Event.h"
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Undo/UndoCommand.h"
+#include "Foundation/Event.h"
+#include "Foundation/UndoQueue.h"
+
+#include "Reflect/Object.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"
@@ -43,7 +44,7 @@ namespace Helium
         //  If you need to extend the functionality of this class, patch in more events :)
         //
 
-        class SCENE_GRAPH_API Selection
+        class HELIUM_SCENE_GRAPH_API Selection
         {
         private:
             //

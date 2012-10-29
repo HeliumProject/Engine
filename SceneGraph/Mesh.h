@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/Math/FpuCalculateBounds.h"
-#include "Foundation/Math/FpuAlignedBox.h"
+#include "Math/FpuCalculateBounds.h"
+#include "Math/FpuAlignedBox.h"
 
 #include "SceneGraph/VertexResource.h"
 #include "SceneGraph/IndexResource.h"
@@ -57,7 +57,7 @@ namespace Helium
         };
         typedef std::set<MeshEdge> S_MeshEdge;
 
-        class SCENE_GRAPH_API Mesh : public PivotTransform
+        class HELIUM_SCENE_GRAPH_API Mesh : public PivotTransform
         {
         public:
             REFLECT_DECLARE_OBJECT( Mesh, PivotTransform );

@@ -8,7 +8,7 @@ namespace Helium
 {
     namespace SceneGraph
     {
-        class SCENE_GRAPH_API Layer : public SceneNode
+        class HELIUM_SCENE_GRAPH_API Layer : public SceneNode
         {
         public:
             REFLECT_DECLARE_OBJECT( Layer, SceneGraph::SceneNode );

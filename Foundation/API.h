@@ -9,7 +9,7 @@
 #  define HELIUM_FOUNDATION_API HELIUM_API_IMPORT
 # endif
 #else
-#define HELIUM_FOUNDATION_API
+# define HELIUM_FOUNDATION_API
 #endif
 
 // profiling
@@ -25,19 +25,4 @@
 # define FOUNDATION_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
 #else
 # define FOUNDATION_SCOPE_TIMER(__Str)
-#endif
-
-// profiling
-//#define MATH_PROFILE
-
-#if defined(PROFILE_INSTRUMENT_ALL) || defined (MATH_PROFILE)
-# define MATH_FUNCTION_TIMER() PROFILE_FUNCTION_TIMER()
-#else
-# define MATH_FUNCTION_TIMER()
-#endif
-
-#if defined(PROFILE_INSTRUMENT_ALL) || defined (MATH_PROFILE)
-# define MATH_SCOPE_TIMER(__Str) PROFILE_SCOPE_TIMER(__Str)
-#else
-# define MATH_SCOPE_TIMER(__Str)
 #endif

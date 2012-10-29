@@ -13,7 +13,7 @@
 
 #include "Foundation/Name.h"
 #include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/Reflect/Enumeration.h"
+#include "Reflect/Enumeration.h"
 
 #include "boost/preprocessor/seq.hpp"
 #include "boost/preprocessor/wstringize.hpp"

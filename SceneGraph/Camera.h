@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Foundation/Math/FpuLine.h"
-#include "Foundation/Math/FpuFrustum.h"
-#include "Foundation/Math/FpuVector3.h"
-#include "Foundation/Math/FpuMatrix4.h"
-#include "Foundation/Math/FpuPoint.h"
-#include "Foundation/Input.h"
+#include "Math/FpuLine.h"
+#include "Math/FpuFrustum.h"
+#include "Math/FpuVector3.h"
+#include "Math/FpuMatrix4.h"
+#include "Math/FpuPoint.h"
 
 #include "SceneGraph/API.h"
+#include "SceneGraph/Input.h"
 #include "SceneGraph/CameraSettings.h"
 
 namespace Helium
@@ -72,7 +72,7 @@ namespace Helium
         // Camera
         //
 
-        class SCENE_GRAPH_API Camera
+        class HELIUM_SCENE_GRAPH_API Camera
         {
         private:
             // total control size

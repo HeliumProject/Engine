@@ -5,7 +5,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Thread.h"
 #include "Platform/Profile.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

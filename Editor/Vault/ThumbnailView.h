@@ -8,8 +8,8 @@
 #include "ThumbnailTileCreator.h"
 
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Math/FpuMatrix4.h"
-#include "Foundation/Math/FpuFrustum.h"
+#include "Math/FpuMatrix4.h"
+#include "Math/FpuFrustum.h"
 
 #include "SceneGraph/DeviceManager.h"
 

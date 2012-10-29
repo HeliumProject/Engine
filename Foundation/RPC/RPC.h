@@ -6,7 +6,7 @@
 #include "Foundation/API.h"
 #include "Foundation/RPC/Swizzle.h"
 #include "Foundation/Memory/Endian.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

@@ -8,7 +8,7 @@
 #include "Foundation/Container/SparseArray.h"
 #include "Foundation/Memory/ReferenceCounting.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Reflect/Object.h"
+#include "Reflect/Object.h"
 
 #include "Engine/GameObjectPath.h"
 #include "Engine/GameObjectPointerData.h"

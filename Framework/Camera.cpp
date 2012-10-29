@@ -1,7 +1,7 @@
 #include "FrameworkPch.h"
 #include "Framework/Camera.h"
 
-#include "Foundation/Math/SimdVectorConversion.h"
+#include "Math/SimdVectorConversion.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::Camera, Framework, 0 );
 

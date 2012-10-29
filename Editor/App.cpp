@@ -9,26 +9,24 @@
 #include "Platform/Console.h"
 #include "Platform/Timer.h"
 
-#include "Foundation/Math/Common.h"
-
 #include "Foundation/Log.h"
 #include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
-#include "Foundation/SettingsManager.h"
 #include "Foundation/InitializerStack.h"
-#include "Engine/AsyncLoader.h"
-#include "Foundation/CommandLine/Option.h"
-#include "Foundation/CommandLine/Command.h"
-#include "Foundation/CommandLine/Commands/Help.h"
-#include "Foundation/CommandLine/Processor.h"
-#include "Foundation/Document/Document.h"
+#include "Foundation/CmdLineProcessor.h"
+#include "Foundation/DocumentManager.h"
 #include "Foundation/File/File.h"
-#include "Foundation/Inspect/Inspect.h"
-#include "Foundation/Inspect/Interpreters/Reflect/InspectReflectInit.h"
 #include "Foundation/Name.h"
-#include "Foundation/Reflect/Registry.h"
 #include "Foundation/Worker/Process.h"
 
+#include "Reflect/Registry.h"
+
+#include "Inspect/Inspect.h"
+#include "Inspect/Interpreters/Reflect/InspectReflectInit.h"
+
+#include "Foundation/Math.h"
+
+#include "Engine/AsyncLoader.h"
 #include "Engine/CacheManager.h"
 #include "Engine/Config.h"
 #include "Engine/GameObjectType.h"
@@ -51,6 +49,7 @@
 #include "Framework/WorldManager.h"
 
 #include "SceneGraph/SceneGraphInit.h"
+#include "SceneGraph/SettingsManager.h"
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Input.h"
@@ -590,7 +589,7 @@ int Main( int argc, const tchar_t** argv )
     success &= rebuildCommand.Initialize( error );
     success &= processor.RegisterCommand( &rebuildCommand, error );
 
-    Helium::CommandLine::Help helpCommand;
+    Helium::CommandLine::HelpCommand helpCommand;
     helpCommand.SetOwner( &processor );
     success &= helpCommand.Initialize( error );
     success &= processor.RegisterCommand( &helpCommand, error );

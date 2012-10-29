@@ -3,7 +3,7 @@
 
 #include "Foundation/Log.h"
 #include "Platform/Exception.h"
-#include "Foundation/CommandLine/Utilities.h"
+#include "Foundation/CmdLine.h"
 #include "Foundation/IPC/Pipe.h"
 
 #include "Foundation/Startup.h"
@@ -79,7 +79,6 @@ bool Client::Initialize( bool debug, bool wait )
     int timeout = DefaultWorkerTimeout;
 
     // wait forever is we are asked to
-#pragma TODO( "All command line options should be defined and parsed once in the application, we shouldn't be parsing the commandline every time! " )
     if ( wait )
     {
         timeout = -1;

@@ -2,9 +2,10 @@
 #include "Tracker.h"
 
 #include "Foundation/File/Path.h"
-#include "Foundation/Component/SearchableProperties.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/Version.h"
+
+#include "SceneGraph/SearchableProperties.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

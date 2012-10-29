@@ -4,7 +4,7 @@
 
 #include "Editor/ArtProvider.h"
 #include "Editor/Controls/PanelButton.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 
 namespace Helium
 {

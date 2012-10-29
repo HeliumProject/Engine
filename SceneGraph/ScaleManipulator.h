@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
+#include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/TransformManipulator.h"
 
 namespace Helium
@@ -11,7 +10,7 @@ namespace Helium
         class PrimitiveAxes;
         class PrimitiveCube;
 
-        class SCENE_GRAPH_API ScaleManipulator : public TransformManipulator
+        class HELIUM_SCENE_GRAPH_API ScaleManipulator : public TransformManipulator
         {
         private:
             // UI

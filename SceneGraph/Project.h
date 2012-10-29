@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Foundation/Automation/Attribute.h"
-#include "Foundation/Document/Document.h"
-#include "Foundation/Reflect/Structure.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Foundation/Attribute.h"
+#include "Foundation/DocumentManager.h"
+
+#include "Reflect/Structure.h"
+#include "Reflect/Data/DataDeduction.h"
 
 #include "SceneGraph/API.h"
 
 namespace Helium
 {
-    class SCENE_GRAPH_API Project : public Reflect::Object
+    class HELIUM_SCENE_GRAPH_API Project : public Reflect::Object
     {
     public:
         Project( const Path& path = TXT( "" ) );

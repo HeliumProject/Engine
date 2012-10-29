@@ -4,7 +4,7 @@
 #include "Platform/Directory.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Automation/Event.h"
+#include "Foundation/Event.h"
 #include "Foundation/File/Path.h"
 
 namespace Helium

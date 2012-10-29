@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Foundation/SettingsManager.h"
-
 #include "SceneGraph/API.h"
 #include "SceneGraph/Curve.h"
 #include "SceneGraph/Tool.h"
+#include "SceneGraph/SettingsManager.h"
 
 namespace Helium
 {
@@ -25,7 +24,7 @@ namespace Helium
         }
         typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-        class SCENE_GRAPH_API CurveEditTool : public Tool
+        class HELIUM_SCENE_GRAPH_API CurveEditTool : public Tool
         {
         private:
             SettingsManager* m_SettingsManager;

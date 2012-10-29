@@ -2,8 +2,8 @@
 
 #include "SceneGraph/API.h"
 
-#include "Foundation/Reflect/Object.h"
-#include "Foundation/Reflect/Data/DataDeduction.h"
+#include "Reflect/Object.h"
+#include "Reflect/Data/DataDeduction.h"
 
 namespace Helium
 {
@@ -53,7 +53,7 @@ namespace Helium
             }
         };
 
-        class SCENE_GRAPH_API CameraSettings : public Reflect::Object
+        class HELIUM_SCENE_GRAPH_API CameraSettings : public Reflect::Object
         {
         public:
             REFLECT_DECLARE_OBJECT( CameraSettings, Reflect::Object );

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Editor/ArtProvider.h"
-#include "Editor/Inspect/Widget.h"
+#include "Editor/Inspect/wxWidget.h"
 
 namespace Helium
 {

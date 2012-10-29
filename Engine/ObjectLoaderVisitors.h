@@ -2,8 +2,8 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Reflect/Visitor.h"
-#include "Foundation/Reflect/Composite.h"
+#include "Reflect/Visitor.h"
+#include "Reflect/Composite.h"
 #include "Foundation/Container/DynArray.h"
 
 namespace Helium

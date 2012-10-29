@@ -7,3 +7,6 @@
 [submodule "Dependencies/nedmalloc"]
 	path = Dependencies/nedmalloc
 	url = https://github.com/ned14/nedmalloc.git
+[submodule "Dependencies/boost-preprocessor"]
+	path = Dependencies/boost-preprocessor
+	url = https://github.com/boost-lib/preprocessor.git

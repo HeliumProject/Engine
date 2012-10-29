@@ -4,3 +4,6 @@
 [submodule "Dependencies/tbb"]
 	path = Dependencies/tbb
 	url = git@github.com:HeliumProject/tbb.git
+[submodule "Dependencies/nedmalloc"]
+	path = Dependencies/nedmalloc
+	url = https://github.com/ned14/nedmalloc.git

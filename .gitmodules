@@ -3,7 +3,7 @@
 	url = https://github.com/wxWidgets/wxWidgets.git
 [submodule "Dependencies/ThreadBuildingBlocks"]
 	path = Dependencies/tbb
-	url = git@github.com:HeliumProject/ThreadBuildingBlocks.git
+	url = https://github.com/HeliumProject/ThreadBuildingBlocks.git
 [submodule "Dependencies/nedmalloc"]
 	path = Dependencies/nedmalloc
 	url = https://github.com/ned14/nedmalloc.git

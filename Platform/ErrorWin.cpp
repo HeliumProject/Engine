@@ -1,5 +1,6 @@
 #include "PlatformPch.h"
 #include "Platform/Error.h"
+#include "Platform/String.h"
 
 using namespace Helium;
 
@@ -13,28 +14,20 @@ tstring Helium::GetErrorString( uint32_t errorOverride )
     // get the system error
     DWORD error = ( errorOverride != 0 ) ? errorOverride : ::GetLastError();
 
-    LPVOID lpMsgBuf;
-    ::FormatMessage( 
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL,
-        error,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPTSTR) &lpMsgBuf,
-        0,
-        NULL 
-        );
+    LPTSTR lpMsgBuf = NULL;
+    ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        lpMsgBuf, 0, NULL );
 
-    tstring result;
-
+	std::wstring result;
     if (lpMsgBuf)
     {
-        result = (tchar_t*)lpMsgBuf;
-
+        result = lpMsgBuf;
         ::LocalFree( lpMsgBuf );
     }
     else
     {
-        result = TXT("Unknown error (the error code could not be translated)");
+        result = L"Unknown error (the error code could not be translated)";
     }
 
     // trim enter chracters from message
@@ -43,5 +36,7 @@ tstring Helium::GetErrorString( uint32_t errorOverride )
         result.resize( result.size() - 1 );
     }
 
-    return result;
+	tstring str;
+	ConvertString( result, str );
+    return str;
 }

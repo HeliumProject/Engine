@@ -1,40 +1,48 @@
 #include "PlatformPch.h"
 #include "Platform/Stat.h"
 
+#include "Platform/String.h"
+
 #include <sys/stat.h>
+
+using namespace Helium;
+
+void CopyFromWindowsAttributes( DWORD attrs, uint32_t mode )
+{
+    mode |= ( attrs & FILE_ATTRIBUTE_READONLY ) ? FileModeFlags::Read : ( FileModeFlags::Read | FileModeFlags::Write );
+    mode |= ( attrs & FILE_ATTRIBUTE_DIRECTORY ) ? FileModeFlags::Directory : FileModeFlags::None;
+    mode |= ( attrs & FILE_ATTRIBUTE_REPARSE_POINT ) ? FileModeFlags::Link : FileModeFlags::None;
+    mode |= ( attrs & FILE_ATTRIBUTE_DEVICE ) ? FileModeFlags::Special : FileModeFlags::None;
+    mode |= ( attrs & FILE_ATTRIBUTE_SYSTEM ) ? FileModeFlags::Special : FileModeFlags::None;
+}
+
+// FILETIME is a 64-bit unsigned integer representing
+// the number of 100-nanosecond intervals since January 1, 1601
+// UNIX timestamp is number of seconds since January 1, 1970
+// 116444736000000000 = 10000000 * 60 * 60 * 24 * 365 * 369 + 89 leap days
+uint64_t FileTimeToUnixTime( FILETIME time )
+{
+	uint64_t ticks = ( (uint64_t)time.dwHighDateTime << 32 ) | time.dwLowDateTime;
+	return (ticks - 116444736000000000) / 10000000;
+}
 
 bool Helium::StatPath( const tchar_t* path, Helium::Stat& stat )
 {
-    struct _stati64 windowsStats;
-    bool result = ( _tstati64( path, &windowsStats ) == 0 );
+	HELIUM_CONVERT_TO_WCHAR_T( path, convertedPath );
 
-    if ( result )
-    {
-        stat.m_Mode = 0;
+	WIN32_FILE_ATTRIBUTE_DATA fileStatus;
+	memset( &fileStatus, 0, sizeof( fileStatus ) );
+	bool result = ::GetFileAttributesEx( convertedPath, GetFileExInfoStandard, &fileStatus ) == TRUE;
+	if ( result )
+	{
+		stat.m_Size = ( (uint64_t)fileStatus.nFileSizeHigh << 32 ) | fileStatus.nFileSizeLow;
+		stat.m_CreatedTime = FileTimeToUnixTime( fileStatus.ftCreationTime );
+		stat.m_ModifiedTime = FileTimeToUnixTime( fileStatus.ftLastWriteTime );
+		stat.m_AccessTime = FileTimeToUnixTime( fileStatus.ftLastAccessTime );
 
-        if ( ( windowsStats.st_mode & _S_IFREG ) == _S_IFREG )
-            stat.m_Mode |= FileModeFlags::File;
-        if ( ( windowsStats.st_mode & _S_IFDIR ) == _S_IFDIR )
-            stat.m_Mode |= FileModeFlags::Directory;
-        if ( ( windowsStats.st_mode & _S_IFIFO ) == _S_IFIFO )
-            stat.m_Mode |= FileModeFlags::Pipe;
-        if ( ( windowsStats.st_mode & _S_IFCHR ) == _S_IFCHR )
-            stat.m_Mode |= FileModeFlags::Special;
+		CopyFromWindowsAttributes( fileStatus.dwFileAttributes, stat.m_Mode );
+	}
 
-
-        if ( ( windowsStats.st_mode & _S_IREAD ) == _S_IREAD )
-            stat.m_Mode |= FileModeFlags::Read;
-        if ( ( windowsStats.st_mode & _S_IWRITE ) == _S_IWRITE )
-            stat.m_Mode |= FileModeFlags::Write;
-        if ( ( windowsStats.st_mode & _S_IEXEC ) == _S_IEXEC )
-            stat.m_Mode |= FileModeFlags::Execute;
-
-        stat.m_AccessTime = windowsStats.st_atime;
-        stat.m_CreatedTime = windowsStats.st_ctime;
-        stat.m_ModifiedTime = windowsStats.st_mtime;
-        stat.m_Size = windowsStats.st_size;
-    }
-
-    return result;
+	return result;
 }
 

@@ -3,6 +3,7 @@
 
 #include "Platform/Print.h"
 #include "Platform/ProfileMemory.h"
+#include "Platform/String.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +16,9 @@ using namespace Helium::Profile;
 
 void Helium::TraceFile::Open(const tchar_t* file)
 {
-    m_FileHandle = _tfopen(file, TXT("wb"));
+	HELIUM_CONVERT_TO_WCHAR_T( file, convertedFile );
+
+    m_FileHandle = _tfopen( convertedFile, L"wb" );
 }
 
 void Helium::TraceFile::Close()
@@ -36,18 +39,20 @@ void Helium::TraceFile::Write(const tchar_t* data, int size)
 
 const tchar_t* Helium::TraceFile::GetFilePath()
 {
-    tchar_t buf[MAX_PATH];
-    GetModuleFileName(NULL, buf, MAX_PATH);
+    wchar_t buf[MAX_PATH];
+    GetModuleFileName( NULL, buf, MAX_PATH );
 
-    tchar_t drive[ MAX_PATH ];
-    tchar_t dir[ MAX_PATH ];
-    tchar_t modulename[ MAX_PATH ];
-    _tsplitpath( buf, drive, dir, modulename, NULL );
+    wchar_t drive[ MAX_PATH ];
+    wchar_t dir[ MAX_PATH ];
+    wchar_t modulename[ MAX_PATH ];
+    _wsplitpath( buf, drive, dir, modulename, NULL );
 
-    static tchar_t file[ MAX_PATH ];
-    _sntprintf_s( file, sizeof( file ), MAX_PATH, TXT("%s\\%s\\log\\profile_%s_%.5X_%.5X.bin"), drive, dir, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
+    wchar_t file[ MAX_PATH ];
+    _snwprintf( file, MAX_PATH, L"%s\\%s\\log\\profile_%s_%.5X_%.5X.bin", drive, dir, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
 
-    return file;
+	static tchar_t convertedFile[ MAX_PATH ];
+	ConvertString( file, convertedFile, MAX_PATH );
+    return convertedFile;
 }
 
 uint64_t Helium::TimerGetClock()

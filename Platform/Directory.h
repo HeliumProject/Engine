@@ -27,8 +27,8 @@ namespace Helium
         {
         }
 
-        tstring      m_Filename;
-        Stat         m_Stat;
+        tstring	m_Filename;
+        Stat    m_Stat;
     };
 
     HELIUM_PLATFORM_API bool FindFirst( DirectoryHandle& handle, FileFindData& data );

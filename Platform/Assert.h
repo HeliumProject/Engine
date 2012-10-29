@@ -75,7 +75,7 @@ namespace Helium
 
         /// @name Static Utility Functions
         //@{
-        static EResult Trigger( const tchar_t* pExpression, const char* pFunction, const char* pFile, int line, const tchar_t* pMessage, ... );
+        static EResult Trigger( const char* pExpression, const char* pFunction, const char* pFile, int line, const char* pMessage, ... );
         //@}
 
     private:
@@ -84,7 +84,7 @@ namespace Helium
 
         /// @name Private Static Utility Functions
         //@{
-        static EResult TriggerImplementation( const tchar_t* pMessageText );
+        static EResult TriggerImplementation( const char* pMessageText );
         //@}
     };
 }
@@ -215,7 +215,7 @@ namespace Helium
 #endif
 
 #ifndef HELIUM_COMPILE_ASSERT
-# define HELIUM_COMPILE_ASSERT(exp) typedef tchar_t __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
+# define HELIUM_COMPILE_ASSERT(exp) typedef char __HELIUM_COMPILE_ASSERT__[(exp)?1:-1]
 #endif
 
 //

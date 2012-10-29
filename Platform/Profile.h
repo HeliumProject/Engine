@@ -52,9 +52,7 @@ namespace Helium
         }
 
         void Open(const tchar_t* file);
-
         void Close();
-
         void Write(const tchar_t* data, int size);
 
         static const tchar_t* GetFilePath();

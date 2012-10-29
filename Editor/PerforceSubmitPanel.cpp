@@ -549,7 +549,7 @@ void PerforceSubmitPanel::CommitChanges()
                 m_Changeset.Create();
                 if ( m_Changeset.m_Description.empty() )
                 {
-                    Helium::GetUsername( m_Changeset.m_Description );
+                    Helium::GetUserName( m_Changeset.m_Description );
                 }
 
                 RCS::V_File::iterator fItr = openedFiles.begin();

@@ -247,13 +247,13 @@ namespace Helium
         size_t operator()( const WideString& rKey ) const;
     };
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     /// Default string class.
     typedef WideString String;
-#else  // HELIUM_UNICODE
+#else  // HELIUM_WCHAR_T
     /// Default string class.
     typedef CharString String;
-#endif  // HELIUM_UNICODE
+#endif  // HELIUM_WCHAR_T
 
     /// @defgroup stringiostream std::iostream String Support
     //@{

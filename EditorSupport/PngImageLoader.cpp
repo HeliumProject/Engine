@@ -64,7 +64,7 @@ static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
 
     HELIUM_ASSERT( pMessage );
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     String convertedMessage;
     StringConverter< char, tchar_t >::Convert( convertedMessage, pMessage );
     const tchar_t* pConvertedMessage = *convertedMessage;
@@ -87,7 +87,7 @@ static void PNGAPI PngWarning( png_structp /*pPng*/, png_const_charp pMessage )
 {
     HELIUM_ASSERT( pMessage );
 
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
     String convertedMessage;
     StringConverter< char, tchar_t >::Convert( convertedMessage, pMessage );
     const tchar_t* pConvertedMessage = *convertedMessage;

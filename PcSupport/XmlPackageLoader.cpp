@@ -2502,7 +2502,7 @@
 //    HELIUM_ASSERT( pTextData );
 //
 //    int parseResult;
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //#ifdef _MSC_VER
 //    parseResult = swscanf_s( pTextData, m_pFormat, &rValue );
 //#else
@@ -2555,7 +2555,7 @@
 //
 //    // Fall back to decimal format parsing.
 //    int parseResult;
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //#ifdef _MSC_VER
 //    parseResult = swscanf_s( pTextData, m_pDecFormat, &rValue );
 //#else
@@ -2593,7 +2593,7 @@
 //    do
 //    {
 //        character = rText[ characterIndex ];
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //        if( !iswspace( character ) )
 //#else
 //        if( !isspace( character ) )
@@ -2797,7 +2797,7 @@
 ///// @return  True if a value was parsed successfully, false if not.
 //bool XmlPackageLoader::Deserializer::CharStringParser::operator()( const String& rText, CharString& rValue ) const
 //{
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //
 //    if( rText.IsEmpty() )
 //    {
@@ -2841,13 +2841,13 @@
 //
 //    return true;
 //
-//#else  // HELIUM_UNICODE
+//#else  // HELIUM_WCHAR_T
 //
 //    rValue = rText;
 //
 //    return true;
 //
-//#endif  // HELIUM_UNICODE
+//#endif  // HELIUM_WCHAR_T
 //}
 //
 ///// Parse a value from the given property text.
@@ -2858,13 +2858,13 @@
 ///// @return  True if a value was parsed successfully, false if not.
 //bool XmlPackageLoader::Deserializer::WideStringParser::operator()( const String& rText, WideString& rValue ) const
 //{
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //
 //    rValue = rText;
 //
 //    return true;
 //
-//#else  // HELIUM_UNICODE
+//#else  // HELIUM_WCHAR_T
 //
 //    if( rText.IsEmpty() )
 //    {
@@ -2908,7 +2908,7 @@
 //
 //    return true;
 //
-//#endif  // HELIUM_UNICODE
+//#endif  // HELIUM_WCHAR_T
 //}
 //
 ///// Parse a value from the given property text.
@@ -2919,7 +2919,7 @@
 ///// @return  True if a value was parsed successfully, false if not.
 //bool XmlPackageLoader::Deserializer::CharNameParser::operator()( const String& rText, CharName& rValue ) const
 //{
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //    CharString tempString;
 //    m_stringParser( rText, tempString );
 //    rValue.Set( tempString );
@@ -2938,7 +2938,7 @@
 ///// @return  True if a value was parsed successfully, false if not.
 //bool XmlPackageLoader::Deserializer::WideNameParser::operator()( const String& rText, WideName& rValue ) const
 //{
-//#if HELIUM_UNICODE
+//#if HELIUM_WCHAR_T
 //    rValue.Set( rText );
 //#else
 //    WideString tempString;

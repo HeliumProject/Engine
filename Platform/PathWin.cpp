@@ -1,52 +1,37 @@
 #include "PlatformPch.h"
 #include "Platform/Path.h"
-#include "Platform/Types.h"
+
+#include "Platform/String.h"
 
 #include <vector>
 #include <sys/stat.h>
 
 const tchar_t Helium::PathSeparator = TXT('\\');
 
-#pragma comment( lib, "Version.lib" )
-
-#if HELIUM_UNICODE
-#define _CREATE_DIRECTORY CreateDirectoryW
-#else
-#define _CREATE_DIRECTORY CreateDirectoryA
-#endif
-
-bool Helium::GetFullPath( const tchar_t* path, tstring& fullPath )
+void Helium::GetFullPath( const tchar_t* path, tstring& fullPath )
 {
-    tchar_t* full = new tchar_t[ PLATFORM_PATH_MAX ];
-    uint32_t result = ::GetFullPathName( path, PLATFORM_PATH_MAX, full, NULL );
+	HELIUM_CONVERT_TO_WCHAR_T( path, convertedPath );
+	DWORD fullPathNameCount = ::GetFullPathName( convertedPath, 0, NULL, NULL );
+    wchar_t* fullPathName = (wchar_t*)alloca( sizeof(wchar_t) * fullPathNameCount );
+    uint32_t result = ::GetFullPathName( convertedPath, MAX_PATH, fullPathName, NULL );
 
-    if ( result > PLATFORM_PATH_MAX )
-    {
-        delete full;
-        full = new tchar_t[ result ];
-        result = ::GetFullPathName( path, result, full, NULL );
-    }
-
-    if ( result == 0 )
-    {
-        delete full;
-        return false;
-    }
-
-    fullPath = full;
-    delete full;
-    return true;
+	HELIUM_CONVERT_TO_CHAR( fullPathName, convertedFullPathName );
+	fullPath = convertedFullPathName;
 }
 
 bool Helium::IsAbsolute( const tchar_t* path )
 {
-    if ( path && _tcslen( path ) > 1 )
+    if ( path && path[0] != '\0' && path[1] != '\0' )
     {
         if ( path[ 1 ] == ':' )
+		{
             return true;
+		}
 
         if ( path[ 0 ] == '\\' && path[ 1 ] == '\\' )
+		{
             return true;
+		}
     }
 
     return false;
@@ -71,13 +56,15 @@ bool Helium::MakePath( const tchar_t* path )
 
     struct _stati64 statInfo;
     tstring currentDirectory;
-    currentDirectory.reserve( PLATFORM_PATH_MAX );
+    currentDirectory.reserve( MAX_PATH );
     currentDirectory = directories[ 0 ];
     for( std::vector< tstring >::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
     {
-        if ( ( (*currentDirectory.rbegin()) != TXT(':') ) && ( _tstati64( currentDirectory.c_str(), &statInfo ) != 0 ) )
+		HELIUM_CONVERT_TO_WCHAR_T( currentDirectory.c_str(), convertedCurrentDirectory );
+
+        if ( ( (*currentDirectory.rbegin()) != TXT(':') ) && ( _wstat64( convertedCurrentDirectory, &statInfo ) != 0 ) )
         {
-            if ( !_CREATE_DIRECTORY( currentDirectory.c_str(), NULL ) )
+            if ( !CreateDirectory( convertedCurrentDirectory, NULL ) )
             {
                 return false;
             }
@@ -91,17 +78,22 @@ bool Helium::MakePath( const tchar_t* path )
 
 bool Helium::Copy( const tchar_t* source, const tchar_t* dest, bool overwrite )
 {
-    return ( TRUE == ::CopyFile( source, dest, overwrite ? FALSE : TRUE ) );
+	HELIUM_CONVERT_TO_WCHAR_T( source, convertedSource );
+	HELIUM_CONVERT_TO_WCHAR_T( dest, convertedDest );
+    return ( TRUE == ::CopyFile( convertedSource, convertedDest, overwrite ? FALSE : TRUE ) );
 }
 
 bool Helium::Move( const tchar_t* source, const tchar_t* dest )
 {
-    return ( TRUE == ::MoveFile( source, dest ) );
+	HELIUM_CONVERT_TO_WCHAR_T( source, convertedSource );
+	HELIUM_CONVERT_TO_WCHAR_T( dest, convertedDest );
+    return ( TRUE == ::MoveFile( convertedSource, convertedDest ) );
 }
 
 bool Helium::Delete( const tchar_t* path )
 {
-    return ( TRUE == ::DeleteFile( path ) );
+	HELIUM_CONVERT_TO_WCHAR_T( path, convertedPath );
+    return ( TRUE == ::DeleteFile( convertedPath ) );
 }
 
 bool GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wLangId, DWORD &dwId, bool bPrimaryEnough/*= FALSE*/)
@@ -129,65 +121,4 @@ bool GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wLangId, DWORD &dwId
     }
 
     return FALSE;
-}
-
-bool Helium::GetVersionInfo( const tchar_t* path, tstring& versionInfo )
-{
-    DWORD	dwHandle;
-    DWORD fileDataSize = GetFileVersionInfoSize( ( LPTSTR ) path, ( LPDWORD ) &dwHandle );
-
-    // file has no version info in this case
-    if ( fileDataSize <= 0 )
-        return false;
-
-    LPVOID fileData = ( LPVOID ) malloc ( fileDataSize );
-    if ( fileData == NULL )
-    {
-        return false;
-    }
-
-    // get the version info
-    dwHandle = 0;
-    if ( GetFileVersionInfo( ( LPTSTR ) path, dwHandle, fileDataSize, fileData ) )
-    {
-        // catch default information
-        LPVOID lpInfo;
-        UINT unInfoLen;
-        VerQueryValue( fileData, TXT("\\"), &lpInfo, &unInfoLen );
-
-        // find best matching language and codepage
-        VerQueryValue( fileData, TXT("\\VarFile\\Translation"), &lpInfo, &unInfoLen );
-
-        DWORD dwLangCode = 0;
-        if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE ) )
-        {
-            if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, TRUE ) )
-            {
-                if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
-                {
-                    if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
-                    {
-                        // use the first one we can get
-                        dwLangCode = *( ( DWORD* ) lpInfo );
-                    }
-                }
-            }
-        }
-
-        tchar_t key[64];
-        _sntprintf(
-            key,
-            sizeof(key),
-            TXT("\\StringFile\\%04X%04X\\FileVersion"),
-            ( dwLangCode & 0x0000FFFF ),
-            ( dwLangCode & 0xFFFF0000 ) >> 16 );
-
-        if ( VerQueryValue( fileData, ( LPTSTR ) key, &lpInfo, &unInfoLen ) )
-        {
-            versionInfo = ( LPCTSTR ) lpInfo;
-        }
-    }
-
-    free( fileData );
-    return true;
 }

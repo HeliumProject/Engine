@@ -277,13 +277,12 @@ ScopeTimer::~ScopeTimer()
 #endif
 }
 
-
 Context::Context()
 : m_UniqueID(0)
 , m_StackDepth(0)
 , m_PacketBufferOffset(0)
 {
-    m_TraceFile.Open( Helium::TraceFile::GetFilePath() ); 
+    m_TraceFile.Open( TraceFile::GetFilePath() ); 
     memset(m_AccumStack, 0, sizeof(m_AccumStack)); 
 }
 

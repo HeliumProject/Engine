@@ -40,5 +40,5 @@ namespace Helium
     //
     // Get the crashdump directory
     //
-    HELIUM_PLATFORM_API tstring GetCrashdumpDirectory();
+    HELIUM_PLATFORM_API tstring GetDumpDirectory();
 }

@@ -501,7 +501,7 @@ bool App::OnExceptionInMainLoop()
 void App::SaveSettings()
 {
     Helium::Path path;
-    Helium::GetPreferencesDirectory( path );
+    Helium::GetProfileDirectory( path );
     path += TXT("EditorSettings.xml");
 
     tstring error;
@@ -530,7 +530,7 @@ void App::SaveSettings()
 void App::LoadSettings()
 {
     Helium::Path path;
-    Helium::GetPreferencesDirectory( path );
+    Helium::GetProfileDirectory( path );
     path += TXT("EditorSettings.xml");
 
     if ( !path.Exists() )

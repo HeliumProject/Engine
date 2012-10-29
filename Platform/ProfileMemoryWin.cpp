@@ -78,26 +78,16 @@ void Profile::GetMemoryStatus(tchar_t* buffer, size_t bufSize)
     MemoryStatus status;
     GetMemoryStatus(&status);
 
-    try
-    {
-        memset(buffer, 0, bufSize); 
-
-        _sntprintf(buffer, bufSize,
-            TXT("Memory:\n") \
-            TXT("Total Reserved %iK bytes\n") \
-            TXT("Total Commit   %iK bytes\n") \
-            TXT("Total Free     %iK bytes\n") \
-            TXT("Largest Free   %iK bytes\n") ,
-            (status.m_TotalReserve >> 10),
-            (status.m_TotalCommit >> 10),
-            (status.m_TotalFree >> 10),
-            (status.m_LargestFree >> 10) );
-
-        buffer[ bufSize - 1] = 0; 
-
-    }
-    catch ( const std::exception& )
-    {
-
-    }
+	memset(buffer, 0, bufSize); 
+    StringPrint(buffer, bufSize,
+        TXT("Memory:\n") \
+        TXT("Total Reserved %iK bytes\n") \
+        TXT("Total Commit   %iK bytes\n") \
+        TXT("Total Free     %iK bytes\n") \
+        TXT("Largest Free   %iK bytes\n") ,
+        (status.m_TotalReserve >> 10),
+        (status.m_TotalCommit >> 10),
+        (status.m_TotalFree >> 10),
+        (status.m_LargestFree >> 10) );
+    buffer[ bufSize - 1 ] = 0; 
 }

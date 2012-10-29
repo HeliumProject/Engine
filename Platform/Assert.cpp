@@ -1,21 +1,11 @@
 #include "PlatformPch.h"
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
+#include "Platform/Print.h"
 
 #if HELIUM_ASSERT_ENABLED
 
 #include "Platform/Atomic.h"
-
-#if HELIUM_CC_CL
-# define SNPRINTF( BUFFER, FORMAT, ... )           _sntprintf_s( BUFFER, _TRUNCATE, FORMAT, __VA_ARGS__ )
-# define VSNPRINTF( BUFFER, FORMAT, FMT, ARGS )    _vsntprintf_s( BUFFER, _TRUNCATE, FORMAT, FMT, ARGS )
-#else
-# if HELIUM_UNICODE
-#  define SNPRINTF( BUFFER, FORMAT, ... ) { swprintf( BUFFER, HELIUM_ARRAY_COUNT( BUFFER ) - 1, FORMAT, __VA_ARGS__ ); BUFFER[ HELIUM_BUFFER_ARRAY_COUNT( BUFFER ) - 1 ] = L'\0'; }
-# else
-#  define SNPRINTF( BUFFER, FORMAT, ... ) { snprintf( BUFFER, HELIUM_ARRAY_COUNT( BUFFER ) - 1, FORMAT, __VA_ARGS__ ); BUFFER[ HELIUM_BUFFER_ARRAY_COUNT( BUFFER ) - 1 ] = '\0'; }
-# endif
-#endif
 
 using namespace Helium;
 
@@ -30,11 +20,11 @@ volatile int32_t Assert::sm_active = 0;
 /// @param[in] pFile        File in which the assertion occurred.
 /// @param[in] line         Line number at which the assertion occurred.
 Assert::EResult Assert::Trigger(
-    const tchar_t* pExpression,
+    const char* pExpression,
     const char* pFunction,
     const char* pFile,
     int line,
-    const tchar_t* pMessage,
+    const char* pMessage,
     ... )
 {
     // Only allow one assert handler to be active at a time.
@@ -42,22 +32,7 @@ Assert::EResult Assert::Trigger(
     {
     }
 
-    // Build the assert message string.
-#if HELIUM_UNICODE
-    wchar_t fileName[ MAX_PATH ];
-    wchar_t functionName[ 1024 ];
-
-    size_t charsConverted = 0;
-    mbstowcs_s( &charsConverted, fileName, pFile, _TRUNCATE );
-    fileName[ charsConverted ] = L'\0';
-    mbstowcs_s( &charsConverted, functionName, pFunction, _TRUNCATE );
-    functionName[ charsConverted ] = L'\0';
-#else
-    const char* fileName = pFile;
-    const char* functionName = pFunction;
-#endif
-
-    tchar_t messageText[ 1024 ];
+    char messageText[ 1024 ];
 
     if( pExpression )
     {
@@ -65,26 +40,28 @@ Assert::EResult Assert::Trigger(
         {
             va_list args;
             va_start(args, pMessage); 
-            tchar_t message[1024];
-            VSNPRINTF(message, sizeof(message) / sizeof(tchar_t), pMessage, args);
+            char message[1024];
+            vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
             va_end(args); 
 
-            SNPRINTF(
+            StringPrint(
                 messageText,
+				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "%s\n\nAssertion failed in %s (%s, line %d): (%s)" ),
                 message,
-                functionName,
-                fileName,
+                pFunction,
+                pFile,
                 line,
                 pExpression );
         }
         else
         {
-            SNPRINTF(
+            StringPrint(
                 messageText,
+				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d): %s" ),
-                functionName,
-                fileName,
+                pFunction,
+                pFile,
                 line,
                 pExpression );
         }
@@ -95,25 +72,27 @@ Assert::EResult Assert::Trigger(
         {
             va_list args;
             va_start(args, pMessage); 
-            tchar_t message[1024];
-            VSNPRINTF(message, sizeof(message) / sizeof(tchar_t), pMessage, args);
+            char message[1024];
+            vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
             va_end(args); 
 
-            SNPRINTF(
+            StringPrint(
                 messageText,
+				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "%s\n\nAssertion failed in %s (%s, line %d)" ),
                 message,
-                functionName,
-                fileName,
+                pFunction,
+                pFile,
                 line );
         }
         else
         {
-            SNPRINTF(
+            StringPrint(
                 messageText,
+				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d)" ),
-                functionName,
-                fileName,
+                pFunction,
+                pFile,
                 line );
         }
     }

@@ -94,7 +94,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     uint32_t userOptionIndex = 0;
     ++pVariantNameString;
     int parseResult;
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
 #if HELIUM_CC_CL
     parseResult = swscanf_s( pVariantNameString, TXT( "%" ) TSCNu32, &userOptionIndex );
 #else
@@ -720,14 +720,14 @@ bool ShaderVariantResourceHandler::CompileShader(
 
 #if HELIUM_ENABLE_TRACE
         String tokenList;
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
         String convertedToken;
 #endif
         size_t tokenCount = rTokens.GetSize();
         for( size_t tokenIndex = 0; tokenIndex < tokenCount; ++tokenIndex )
         {
             tokenList += TXT( ' ' );
-#if HELIUM_UNICODE
+#if HELIUM_WCHAR_T
             StringConverter< char, tchar_t >::Convert( convertedToken, rTokens[ tokenIndex ].name );
             tokenList += convertedToken;
 #else

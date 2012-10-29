@@ -14,8 +14,8 @@ project "Expat"
 
 	files
 	{
-		"Dependencies/Expat/*.h",
-		"Dependencies/Expat/*.c",
+		"Dependencies/Expat/lib/*.h",
+		"Dependencies/Expat/lib/*.c",
 	}
 
 	configuration "windows"

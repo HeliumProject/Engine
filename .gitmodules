@@ -10,3 +10,6 @@
 [submodule "Dependencies/boost-preprocessor"]
 	path = Dependencies/boost-preprocessor
 	url = https://github.com/boost-lib/preprocessor.git
+[submodule "Dependencies/expat"]
+	path = Dependencies/expat
+	url = https://github.com/HeliumProject/Expat.git

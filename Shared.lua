@@ -16,7 +16,7 @@ includedirs
 {
 	".",
 	"Dependencies/boost-preprocessor/include",
-	"Dependencies/expat",
+	"Dependencies/expat/lib",
 	"Dependencies/freetype/include",
 	"Dependencies/lua/src",
 	"Dependencies/nvtt",

@@ -6,7 +6,7 @@ Helium.DoDefaultSolutionSettings()
 
 configuration {}
 
-project "Expat"
+project "expat"
 	uuid "224FF97E-122E-4515-AB71-CBE11D3EC210"
 	kind "StaticLib"
 	language "C++"
@@ -14,8 +14,8 @@ project "Expat"
 
 	files
 	{
-		"Dependencies/Expat/lib/*.h",
-		"Dependencies/Expat/lib/*.c",
+		"Dependencies/expat/lib/*.h",
+		"Dependencies/expat/lib/*.c",
 	}
 
 	configuration "windows"
@@ -97,6 +97,25 @@ project "freetype"
 			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
 	
+project "libpng"
+	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+	includedirs
+	{
+		"Dependencies/zlib"
+	}
+	files
+	{
+		"Dependencies/libpng/*.h",
+		"Dependencies/libpng/*.c",
+	}
+	
+	if not os.isfile( "Dependencies/libpng/pnglibconf.h" ) then
+		os.copyfile( "Dependencies/libpng/scripts/pnglibconf.h.prebuilt", "Dependencies/libpng/pnglibconf.h" );
+	end
+
 project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
 	kind "StaticLib"
@@ -104,15 +123,20 @@ project "nvtt"
 	location( "Premake/" .. solution().name )
 	includedirs
 	{
+		"Dependencies/nvtt/extern/poshlib",
 		"Dependencies/nvtt/src",
 		"Dependencies/nvtt/src/nvtt/squish",
 	}
 	files
 	{
+		"Dependencies/nvtt/extern/poshlib/*.h",
+		"Dependencies/nvtt/extern/poshlib/*.cpp",
 		"Dependencies/nvtt/src/nvmath/*.h",
 		"Dependencies/nvtt/src/nvmath/*.cpp",
 		"Dependencies/nvtt/src/nvcore/*.h",
 		"Dependencies/nvtt/src/nvcore/*.cpp",
+		"Dependencies/nvtt/src/nvthread/*.h",
+		"Dependencies/nvtt/src/nvthread/*.cpp",
 		"Dependencies/nvtt/src/nvimage/*.h",
 		"Dependencies/nvtt/src/nvimage/*.cpp",
 		"Dependencies/nvtt/src/nvtt/*.h",
@@ -124,11 +148,16 @@ project "nvtt"
 	}
 	excludes
 	{
-		"Dependencies/nvtt/src/nvcore/Tokenizer.h",
-		"Dependencies/nvtt/src/nvcore/Tokenizer.cpp",
-		"Dependencies/nvtt/src/nvimage/ConeMap.h",
-		"Dependencies/nvtt/src/nvimage/ConeMap.cpp",
+		"Dependencies/nvtt/src/nvcore/Tokenizer.*",
+		"Dependencies/nvtt/src/nvimage/ConeMap.*",
+		"Dependencies/nvtt/src/nvimage/KtxFile.*",
+		"Dependencies/nvtt/src/nvtt/squish/alpha.*",
+		"Dependencies/nvtt/src/nvtt/squish/clusterfit.*",
+		"Dependencies/nvtt/src/nvtt/squish/rangefit.*",
+		"Dependencies/nvtt/src/nvtt/squish/singlecolourfit.*",
 		"Dependencies/nvtt/src/nvtt/squish/singlechannelfit.*",
+		"Dependencies/nvtt/src/nvtt/squish/squish.*",
+		"Dependencies/nvtt/src/nvtt/CompressorDX11.*",
 	}
 	
 	configuration "windows"
@@ -159,21 +188,6 @@ project "nvtt"
 		{
 			"Dependencies/nvtt/project/xcode4",
 		}
-
-project "png"
-	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-	includedirs
-	{
-		"Dependencies/zlib"
-	}
-	files
-	{
-		"Dependencies/png/*.h",
-		"Dependencies/png/*.c",
-	}
 
 project "zlib"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBA"

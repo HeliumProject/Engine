@@ -18,11 +18,12 @@ includedirs
 	"Dependencies/boost-preprocessor/include",
 	"Dependencies/expat/lib",
 	"Dependencies/freetype/include",
+	"Dependencies/libpng",
 	"Dependencies/nvtt",
+	"Dependencies/nvtt/extern/poshlib",
 	"Dependencies/nvtt/src",
 	"Dependencies/nvtt/src/nvtt/squish",
 	"Dependencies/p4api/include",
-	"Dependencies/png",
 	"Dependencies/tbb/include",
 	"Dependencies/wxWidgets/include",
 	"Dependencies/zlib",
@@ -286,7 +287,9 @@ project( prefix .. "Platform" )
 
 	files
 	{
-		"Platform/*",
+		"Platform/*.cpp",
+		"Platform/*.h",
+		"Platform/*.inl",
 	}
 
 	configuration "windows"
@@ -328,7 +331,7 @@ project( prefix .. "Foundation" )
 		links
 		{
 			prefix .. "Platform",
-			"Expat",
+			"expat",
 		}
 
 project( prefix .. "Buffers" )

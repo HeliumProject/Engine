@@ -368,10 +368,10 @@ Helium.DoDefaultProjectSettings = function()
 	configuration "SharedLib or *App"
 		links
 		{
-			"Expat",
+			"expat",
 			"freetype",
+			"libpng",
 			"nvtt",
-			"png",
 			"zlib",
 		}
 

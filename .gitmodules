@@ -13,3 +13,18 @@
 [submodule "Dependencies/expat"]
 	path = Dependencies/expat
 	url = https://github.com/HeliumProject/Expat.git
+[submodule "Dependencies/freetype"]
+	path = Dependencies/freetype
+	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
+[submodule "Dependencies/nvtt"]
+	path = Dependencies/nvtt
+	url = https://github.com/HeliumProject/NvidiaTextureTools.git
+[submodule "Dependencies/p4api"]
+	path = Dependencies/p4api
+	url = https://github.com/HeliumProject/P4API.git
+[submodule "Dependencies/zlib"]
+	path = Dependencies/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "Dependencies/libpng"]
+	path = Dependencies/libpng
+	url = git://libpng.git.sourceforge.net/gitroot/libpng/libpng

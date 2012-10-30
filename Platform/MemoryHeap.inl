@@ -141,7 +141,7 @@ static void PrintfWrapper( const char* pFormat, ... )
 #include "Dependencies/nedmalloc/nedmalloc.c"
 #undef EXTSPEC
 #else
-#include "Dependencies/dlmalloc/malloc.c.h"
+#include "Platform/MemoryHeap.dlmalloc.c"
 #endif
 
 #undef printf

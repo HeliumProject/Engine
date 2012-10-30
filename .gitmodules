@@ -16,3 +16,6 @@
 [submodule "Dependencies/freetype"]
 	path = Dependencies/freetype
 	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
+[submodule "Dependencies/nvtt"]
+	path = Dependencies/nvtt
+	url = https://github.com/HeliumProject/NvidiaTextureTools.git

@@ -97,6 +97,25 @@ project "freetype"
 			"Dependencies/freetype/builds/win32/ftdebug.c",
 		}
 	
+project "libpng"
+	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
+	kind "StaticLib"
+	language "C++"
+	location( "Premake/" .. solution().name )
+	includedirs
+	{
+		"Dependencies/zlib"
+	}
+	files
+	{
+		"Dependencies/libpng/*.h",
+		"Dependencies/libpng/*.c",
+	}
+	
+	if not os.isfile( "Dependencies/libpng/pnglibconf.h" ) then
+		os.copyfile( "Dependencies/libpng/scripts/pnglibconf.h.prebuilt", "Dependencies/libpng/pnglibconf.h" );
+	end
+
 project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
 	kind "StaticLib"
@@ -169,21 +188,6 @@ project "nvtt"
 		{
 			"Dependencies/nvtt/project/xcode4",
 		}
-
-project "png"
-	uuid "46BA228E-C636-4468-9CBD-7CD4F12FBB33"
-	kind "StaticLib"
-	language "C++"
-	location( "Premake/" .. solution().name )
-	includedirs
-	{
-		"Dependencies/zlib"
-	}
-	files
-	{
-		"Dependencies/png/*.h",
-		"Dependencies/png/*.c",
-	}
 
 project "zlib"
 	uuid "23112391-0616-46AF-B0C2-5325E8530FBA"

@@ -365,8 +365,8 @@ Helium.DoDefaultProjectSettings = function()
 		{
 			"expat",
 			"freetype",
+			"libpng",
 			"nvtt",
-			"png",
 			"zlib",
 		}
 

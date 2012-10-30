@@ -22,3 +22,6 @@
 [submodule "Dependencies/p4api"]
 	path = Dependencies/p4api
 	url = https://github.com/HeliumProject/P4API.git
+[submodule "Dependencies/zlib"]
+	path = Dependencies/zlib
+	url = https://github.com/madler/zlib.git

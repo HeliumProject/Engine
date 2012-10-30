@@ -13,27 +13,6 @@ dofile "Shared.lua"
 
 local prefix = solution().name .. '.'
 
-project( prefix .. "Image" )
-	uuid "50F5AA7E-22D9-4D33-B48A-357CD3082BC1"
-
-	Helium.DoModuleProjectSettings( ".", "HELIUM", "Image", "IMAGE" )
-
-	files
-	{
-		"Image/**",
-	}
-
-	configuration "SharedLib"
-		links
-		{
-			prefix .. "Platform",
-			prefix .. "Foundation",
-			prefix .. "Reflect",
-			prefix .. "Math",
-			"nvtt",
-			"d3d9",
-		}
-
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
 
@@ -132,7 +111,6 @@ project( prefix .. "Editor" )
 		prefix .. "PreprocessingPc",
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
-		prefix .. "Image",
 		"expat",
 		"zlib",
 		"libclient",

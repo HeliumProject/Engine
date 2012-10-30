@@ -286,7 +286,9 @@ project( prefix .. "Platform" )
 
 	files
 	{
-		"Platform/*",
+		"Platform/*.cpp",
+		"Platform/*.h",
+		"Platform/*.inl",
 	}
 
 	configuration "windows"
@@ -328,7 +330,7 @@ project( prefix .. "Foundation" )
 		links
 		{
 			prefix .. "Platform",
-			"Expat",
+			"expat",
 		}
 
 project( prefix .. "Buffers" )

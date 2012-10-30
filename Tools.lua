@@ -133,7 +133,7 @@ project( prefix .. "Editor" )
 		prefix .. "EditorSupport",
 		prefix .. "SceneGraph",
 		prefix .. "Image",
-		"Expat",
+		"expat",
 		"zlib",
 		"libclient",
 		"librpc",

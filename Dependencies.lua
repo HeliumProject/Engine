@@ -6,7 +6,7 @@ Helium.DoDefaultSolutionSettings()
 
 configuration {}
 
-project "Expat"
+project "expat"
 	uuid "224FF97E-122E-4515-AB71-CBE11D3EC210"
 	kind "StaticLib"
 	language "C++"
@@ -14,8 +14,8 @@ project "Expat"
 
 	files
 	{
-		"Dependencies/Expat/lib/*.h",
-		"Dependencies/Expat/lib/*.c",
+		"Dependencies/expat/lib/*.h",
+		"Dependencies/expat/lib/*.c",
 	}
 
 	configuration "windows"

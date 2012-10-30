@@ -13,3 +13,6 @@
 [submodule "Dependencies/expat"]
 	path = Dependencies/expat
 	url = https://github.com/HeliumProject/Expat.git
+[submodule "Dependencies/freetype"]
+	path = Dependencies/freetype
+	url = http://git.savannah.gnu.org/r/freetype/freetype2.git

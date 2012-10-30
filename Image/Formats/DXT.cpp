@@ -326,25 +326,25 @@ void ProcessMip(const Image* mip, uint32_t mip_level, uint32_t face, OutputColor
         }
 
         // set up squish flags
-        uint32_t squish_flags = (squish::kColourClusterFit /*| squish::kColourIterativeClusterFit*/);
+        uint32_t squish_flags = (nvsquish::kColourClusterFit /*| nvsquish::kColourIterativeClusterFit*/);
 
         switch (format)
         {
-        case Helium::OUTPUT_CF_DXT3:      squish_flags |= squish::kDxt3;  break;
-        case Helium::OUTPUT_CF_DXT5:      squish_flags |= squish::kDxt5;  break;
-        default:                      squish_flags |= squish::kDxt1;  break;
+        case Helium::OUTPUT_CF_DXT3:      squish_flags |= nvsquish::kDxt3;  break;
+        case Helium::OUTPUT_CF_DXT5:      squish_flags |= nvsquish::kDxt5;  break;
+        default:                      squish_flags |= nvsquish::kDxt1;  break;
         }
 
 #if DO_PERCEPTUAL_WEIGHTING
         if(convert_to_srgb)
-            squish_flags |= squish::kColourMetricPerceptual;    // we are working with a color map, compress based on perceived distances
+            squish_flags |= nvsquish::kColourMetricPerceptual;    // we are working with a color map, compress based on perceived distances
         else
 #endif
-            squish_flags |= squish::kColourMetricUniform;       // assume we are working with linear data
+            squish_flags |= nvsquish::kColourMetricUniform;       // assume we are working with linear data
 
         if ((format != Helium::OUTPUT_CF_DXT1) && convert_to_srgb)
         {
-            squish_flags |= squish::kWeightColourByAlpha;
+            squish_flags |= nvsquish::kWeightColourByAlpha;
         }
 
 
@@ -357,9 +357,9 @@ void ProcessMip(const Image* mip, uint32_t mip_level, uint32_t face, OutputColor
         {
             PROFILE_SCOPE_ACCUM(g_CompressAccum);
 
-            uint32_t size = squish::GetStorageRequirements(mip->m_Width, mip->m_Height, squish_flags);
+            uint32_t size = nvsquish::GetStorageRequirements(mip->m_Width, mip->m_Height, squish_flags);
             void* data = malloc(size);
-            squish::CompressImage(p_curr_native_data, mip->m_Width, mip->m_Height, data, squish_flags);
+            nvsquish::CompressImage(p_curr_native_data, mip->m_Width, mip->m_Height, data, squish_flags);
             memcpy(p_curr_work_buffer, data, size);
             free(data);
 

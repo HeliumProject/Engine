@@ -67,19 +67,19 @@ void DecodeMips::Decode(MipSet* mips)
         }
         else
         {
-          uint32_t flags = squish::kDxt1;
+          uint32_t flags = nvsquish::kDxt1;
           if (mips->m_format == OUTPUT_CF_DXT3)
           {
-            flags = squish::kDxt3;
+            flags = nvsquish::kDxt3;
           }
           else if (mips->m_format == OUTPUT_CF_DXT5)
           {
-            flags = squish::kDxt5;
+            flags = nvsquish::kDxt5;
           }
 
           uint8_t* src_data  = (uint8_t*)mips->m_levels[0][i].m_data;
           uint8_t* src_rgba  = new uint8_t[m_images[i]->m_Width*m_images[i]->m_Height*4];
-          squish::DecompressImage(src_rgba, m_images[i]->m_Width,  m_images[i]->m_Height,  src_data, flags);
+          nvsquish::DecompressImage(src_rgba, m_images[i]->m_Width,  m_images[i]->m_Height,  src_data, flags);
           m_images[i]->FillFaceData(0, CF_ARGB8888, src_rgba);
           delete[] src_rgba;
         }

@@ -102,6 +102,13 @@ void MemoryTextureOutputHandler::beginImage(
     m_pCurrentMipLevel = &rMipData;
 }
 
+/// Indicate the end of a new compressed image that's part of the final texture.
+///
+/// @see writeData()
+void MemoryTextureOutputHandler::endImage()
+{
+}
+
 /// Output data.  Compressed data is output as soon as it's generated to minimize memory allocations.
 ///
 /// @param[in] pData  Data to write.

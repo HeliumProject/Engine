@@ -694,15 +694,15 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
         uint32_t flags;
         if (header->m_pixel_format.m_fourcc == Helium::DDS_CC_D3DFMT_DXT1)
         {
-          flags = squish::kDxt1;
+          flags = nvsquish::kDxt1;
         }
         else if (header->m_pixel_format.m_fourcc == Helium::DDS_CC_D3DFMT_DXT3)
         {
-          flags = squish::kDxt3;
+          flags = nvsquish::kDxt3;
         }
         else if (header->m_pixel_format.m_fourcc == Helium::DDS_CC_D3DFMT_DXT5)
         {
-          flags = squish::kDxt5;
+          flags = nvsquish::kDxt5;
         }
         else
         {
@@ -712,7 +712,7 @@ Image* Image::LoadDDS(const void* ddsadr, bool convert_to_linear)
         }
 
         uint8_t* src_rgba  = new uint8_t[width*height*4];
-        squish::DecompressImage(src_rgba, width,  height,  face_data, flags);
+        nvsquish::DecompressImage(src_rgba, width,  height,  face_data, flags);
         result->FillFaceData(f, CF_ARGB8888, src_rgba);
         result->m_NativeFormat  = CF_ARGB8888;
         delete[] src_rgba;

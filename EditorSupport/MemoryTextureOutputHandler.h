@@ -35,6 +35,7 @@ namespace Helium
         /// @name Output Handler Interface
         //@{
         virtual void beginImage( int size, int width, int height, int depth, int face, int miplevel );
+		virtual void endImage();
         virtual bool writeData( const void* pData, int size );
         //@}
 

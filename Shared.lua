@@ -19,6 +19,7 @@ includedirs
 	"Dependencies/expat/lib",
 	"Dependencies/freetype/include",
 	"Dependencies/nvtt",
+	"Dependencies/nvtt/extern/poshlib",
 	"Dependencies/nvtt/src",
 	"Dependencies/nvtt/src/nvtt/squish",
 	"Dependencies/p4api/include",

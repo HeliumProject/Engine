@@ -104,15 +104,20 @@ project "nvtt"
 	location( "Premake/" .. solution().name )
 	includedirs
 	{
+		"Dependencies/nvtt/extern/poshlib",
 		"Dependencies/nvtt/src",
 		"Dependencies/nvtt/src/nvtt/squish",
 	}
 	files
 	{
+		"Dependencies/nvtt/extern/poshlib/*.h",
+		"Dependencies/nvtt/extern/poshlib/*.cpp",
 		"Dependencies/nvtt/src/nvmath/*.h",
 		"Dependencies/nvtt/src/nvmath/*.cpp",
 		"Dependencies/nvtt/src/nvcore/*.h",
 		"Dependencies/nvtt/src/nvcore/*.cpp",
+		"Dependencies/nvtt/src/nvthread/*.h",
+		"Dependencies/nvtt/src/nvthread/*.cpp",
 		"Dependencies/nvtt/src/nvimage/*.h",
 		"Dependencies/nvtt/src/nvimage/*.cpp",
 		"Dependencies/nvtt/src/nvtt/*.h",
@@ -124,11 +129,16 @@ project "nvtt"
 	}
 	excludes
 	{
-		"Dependencies/nvtt/src/nvcore/Tokenizer.h",
-		"Dependencies/nvtt/src/nvcore/Tokenizer.cpp",
-		"Dependencies/nvtt/src/nvimage/ConeMap.h",
-		"Dependencies/nvtt/src/nvimage/ConeMap.cpp",
+		"Dependencies/nvtt/src/nvcore/Tokenizer.*",
+		"Dependencies/nvtt/src/nvimage/ConeMap.*",
+		"Dependencies/nvtt/src/nvimage/KtxFile.*",
+		"Dependencies/nvtt/src/nvtt/squish/alpha.*",
+		"Dependencies/nvtt/src/nvtt/squish/clusterfit.*",
+		"Dependencies/nvtt/src/nvtt/squish/rangefit.*",
+		"Dependencies/nvtt/src/nvtt/squish/singlecolourfit.*",
 		"Dependencies/nvtt/src/nvtt/squish/singlechannelfit.*",
+		"Dependencies/nvtt/src/nvtt/squish/squish.*",
+		"Dependencies/nvtt/src/nvtt/CompressorDX11.*",
 	}
 	
 	configuration "windows"

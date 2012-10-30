@@ -19,3 +19,6 @@
 [submodule "Dependencies/nvtt"]
 	path = Dependencies/nvtt
 	url = https://github.com/HeliumProject/NvidiaTextureTools.git
+[submodule "Dependencies/p4api"]
+	path = Dependencies/p4api
+	url = https://github.com/HeliumProject/P4API.git

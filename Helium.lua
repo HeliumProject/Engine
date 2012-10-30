@@ -117,8 +117,6 @@ Helium.Publish = function( files )
 		local exists = os.isfile( path )
 		local destination = v.target .. "/" .. v.file
 
-print( path )
-
 		-- do the hard link
 		local linkCommand = ''
 		if ( os.get() == "windows" ) then

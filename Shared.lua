@@ -278,8 +278,6 @@ else
 	os.exit(1)
 end
 
-local prefix = solution().name .. '.'
-
 project( prefix .. "Platform" )
 	uuid "E4A1F8FC-A93A-46E2-9CA8-40C2CE1B163E"
 

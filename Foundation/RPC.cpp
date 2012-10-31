@@ -593,3 +593,25 @@ bool Host::Process(bool wait)
 
     return result;
 }
+
+using namespace Helium::RPC::Test;
+
+Test::TestInterface g_TestInterface;
+
+TestInterface::TestInterface()
+: Interface ("Test")
+{
+    Helium::Signature< TestArgs&>::Delegate delegate ( this, &TestInterface::Test );
+
+    AddInvoker( new InvokerTemplate<TestArgs> ( this, delegate ) );
+}
+
+void TestInterface::Test( TestArgs& args )
+{
+
+}
+
+void RPC::Test::AddInterface( RPC::Host& host )
+{
+    host.AddInterface( &g_TestInterface );
+}

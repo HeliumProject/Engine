@@ -1,17 +1,6 @@
 require "Helium"
 
-solution "Tools"
-
-Helium.DoDefaultSolutionSettings()
-
-defines
-{
-	"HELIUM_TOOLS=1",
-}
-
 dofile "Shared.lua"
-
-local prefix = solution().name .. '.'
 
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"

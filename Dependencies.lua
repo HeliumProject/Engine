@@ -1,9 +1,5 @@
 require "Helium"
 
-solution "Dependencies"
-
-Helium.DoDefaultSolutionSettings()
-
 configuration {}
 
 project "expat"

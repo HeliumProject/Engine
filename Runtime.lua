@@ -1,18 +1,6 @@
 require "Helium"
 
-solution "Runtime"
-
-Helium.DoDefaultSolutionSettings()
-
-print( "Temporarily defining HELIUM_TOOLS in Runtime" )
-defines
-{
-	"HELIUM_TOOLS=1",
-}
-
 dofile "Shared.lua"
-
-local prefix = solution().name .. '.'
 
 project( prefix .. "ExampleGame" )
 	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"

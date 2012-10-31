@@ -36,8 +36,23 @@ if _ACTION then
 		Helium.CleanTbb()
 	end
 
+	solution "Dependencies"
+	Helium.DoDefaultSolutionSettings()
 	dofile "Dependencies.lua"
+
+	solution "Helium"
+	Helium.DoDefaultSolutionSettings()
+
+	print( "Temporarily defining HELIUM_TOOLS everywhere" )
+	defines
+	{
+		"HELIUM_TOOLS=1",
+	}
+
+	prefix = "Runtime."
 	dofile "Runtime.lua"
+
+	prefix = "Tools."
 	dofile "Tools.lua"
 	
 end

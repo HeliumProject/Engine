@@ -4,12 +4,12 @@
 #include "Platform/Platform.h"
 
 #include "Foundation/API.h"
-#include "Foundation/RPC/Swizzle.h"
 #include "Foundation/Memory/Endian.h"
 #include "Foundation/Event.h"
 
 namespace Helium
 {
+
     namespace IPC
     {
         class Message;
@@ -18,6 +18,97 @@ namespace Helium
 
     namespace RPC
     {
+        typedef void (*SwizzleFunc)(void* data);
+
+        template <class T>
+        inline void Swizzle(T* data)
+        {
+#ifdef WIN32
+            HELIUM_BREAK();
+#endif
+        }
+
+        template<>
+        inline void Swizzle<uint8_t>(uint8_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(int8_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(uint16_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(int16_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(uint32_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(int32_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(uint64_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(int64_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template<> inline void Swizzle(float32_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+        template<> inline void Swizzle(float64_t* data)
+        {
+#ifdef WIN32
+            Helium::Swizzle(*data, true);
+#endif
+        }
+
+        template <class T>
+        inline void Swizzle(T& data)
+        {
+#ifdef WIN32
+            Swizzle(&data);
+#endif
+        }
+
+        template <class T>
+        SwizzleFunc GetSwizzleFunc()
+        {
+            void (*func)(T*) = &Swizzle<T>;
+            return (SwizzleFunc)(void*)func;
+        }
+
         class Invoker;
         class Interface;
         class Host;
@@ -284,6 +375,26 @@ namespace Helium
 
         private:
             InvokerDelegate m_Delegate;
+        };
+
+        namespace Test
+        {
+            struct TestArgs : RPC::Args
+            {
+                uint8_t m_char;
+                uint32_t m_integer;
+            };
+            typedef Helium::Signature< TestArgs&>::Delegate TestDelegate;
+
+            class TestInterface : public RPC::Interface
+            {
+            public:
+                TestInterface();
+
+                void Test( TestArgs& args );
+            };
+
+            void AddInterface(RPC::Host& host);
         };
     }
 }

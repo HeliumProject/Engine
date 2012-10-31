@@ -2,7 +2,6 @@
 #include "File.h"
 
 #include "Foundation/Stream/FileStream.h"
-#include "Foundation/AppInfo.h"
 
 #include "Platform/Environment.h"
 #include "Platform/Process.h"
@@ -115,12 +114,7 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
             return userDataDirectory;
         }
 
-        String subDirectory = AppInfo::GetName();
-        if( subDirectory.IsEmpty() )
-        {
-            subDirectory = TXT( "Helium" );
-        }
-
+        String subDirectory ( GetProcessName().c_str() );
         userDataDirectory.Set( gameDataDirectory + TXT( "/" ) + subDirectory.GetData() );
         if( !userDataDirectory.MakePath() )
         {

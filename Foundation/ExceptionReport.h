@@ -27,10 +27,10 @@ namespace Helium
             tstring  m_ApplicationName;
             tstring  m_CmdLineArgs;
             tstring  m_BuildConfig;
-            uint64_t      m_MemTotalReserve;
-            uint64_t      m_MemTotalCommit;
-            uint64_t      m_MemTotalFree;
-            uint64_t      m_MemLargestFree;
+            uint64_t m_MemTotalReserve;
+            uint64_t m_MemTotalCommit;
+            uint64_t m_MemTotalFree;
+            uint64_t m_MemLargestFree;
             tstring  m_Environment;
         };
     }

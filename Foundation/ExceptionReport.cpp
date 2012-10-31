@@ -58,17 +58,9 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
     }
 
 #ifdef DEBUG
-# ifdef UNICODE
-    m_BuildConfig = TXT( "Debug Unicode" );
-# else
     m_BuildConfig = TXT( "Debug" );
-# endif
 #else
-# ifdef UNICODE
-    m_BuildConfig = TXT( "Release Unicode" );
-# else
     m_BuildConfig = TXT( "Release" );
-# endif
 #endif
 
     // Memory

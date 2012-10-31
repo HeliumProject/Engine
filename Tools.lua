@@ -23,9 +23,6 @@ project( prefix .. "Inspect" )
 		"Inspect/**",
 	}
 
-    pchheader( "InspectPch.h" )
-    pchsource( "Inspect/InspectPch.cpp" )
-
 	configuration "SharedLib"
 		links
 		{

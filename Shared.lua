@@ -324,9 +324,6 @@ project( prefix .. "Foundation" )
 		"Foundation/**",
 	}
 
-    pchheader( "FoundationPch.h" )
-    pchsource( "Foundation/FoundationPch.cpp" )
-
 	configuration "SharedLib"
 		links
 		{
@@ -343,9 +340,6 @@ project( prefix .. "Buffers" )
 	{
 		"Buffers/**",
 	}
-
-    pchheader( "BuffersPch.h" )
-    pchsource( "Buffers/BuffersPch.cpp" )
 
 	configuration "SharedLib"
 		links
@@ -365,9 +359,6 @@ project( prefix .. "Reflect" )
 		"Reflect/**",
 	}
 
-    pchheader( "ReflectPch.h" )
-    pchsource( "Reflect/ReflectPch.cpp" )
-
 	configuration "SharedLib"
 		links
 		{
@@ -385,9 +376,6 @@ project( prefix .. "Math" )
 	{
 		"Math/**",
 	}
-
-    pchheader( "MathPch.h" )
-    pchsource( "Math/MathPch.cpp" )
 
 	configuration "SharedLib"
 		links

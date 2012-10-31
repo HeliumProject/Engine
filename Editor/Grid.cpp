@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "Grid.h"
 #include "Platform/Assert.h"
-#include "Foundation/Container/Insert.h" 
+#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
 
 using namespace Helium;

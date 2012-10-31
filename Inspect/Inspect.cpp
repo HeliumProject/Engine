@@ -1,5 +1,5 @@
 #include "InspectPch.h"
-#include "Foundation/InitializerStack.h"
+#include "Application/InitializerStack.h"
 #include "Inspect/Inspect.h"
 #include "Inspect/Script.h"
 #include "Inspect/Controls.h"

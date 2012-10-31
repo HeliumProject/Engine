@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "Startup.h"
 
 #include "Platform/Assert.h"
@@ -10,9 +10,10 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
-#include "Foundation/ExceptionReport.h"
 #include "Foundation/CmdLine.h"
 #include "Foundation/Localization.h"
+
+#include "Application/ExceptionReport.h"
 
 #include <crtdbg.h>
 #include <assert.h>

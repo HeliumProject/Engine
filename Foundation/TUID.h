@@ -12,7 +12,7 @@
 #include "Platform/Types.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 
 typedef uint64_t tuid;
 typedef std::set< tuid > S_tuid;

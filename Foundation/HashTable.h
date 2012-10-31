@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/Container/DynArray.h"
-#include "Foundation/Container/Pair.h"
+#include "Foundation/DynArray.h"
+#include "Foundation/Pair.h"
 
 namespace Helium
 {
@@ -248,4 +248,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/HashTable.inl"
+#include "Foundation/HashTable.inl"

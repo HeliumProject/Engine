@@ -241,4 +241,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/BitArray.inl"
+#include "Foundation/BitArray.inl"

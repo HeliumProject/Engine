@@ -4,9 +4,9 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/API.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/RCS/RCSTypes.h"
+#include "Application/API.h"
+#include "Foundation/SmartPtr.h"
+#include "Application/RCSTypes.h"
 
 namespace Helium
 {
@@ -77,7 +77,7 @@ namespace Helium
         }
         typedef ActionData::ActionDatum ActionDatum;
 
-        class HELIUM_FOUNDATION_API Action : public Helium::RefCountBase< Action >
+        class HELIUM_APPLICATION_API Action : public Helium::RefCountBase< Action >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
@@ -136,7 +136,7 @@ namespace Helium
         }
         typedef FileData::FileDatum FileDatum;
 
-        class HELIUM_FOUNDATION_API File : public Helium::RefCountBase< File >
+        class HELIUM_APPLICATION_API File : public Helium::RefCountBase< File >
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly

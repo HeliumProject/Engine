@@ -4,10 +4,10 @@
 #include "VaultSearchResults.h"
 
 #include "Foundation/Regex.h"
-#include "Foundation/Container/Insert.h"
-#include "Foundation/File/Directory.h"
-#include "Foundation/String/Tokenize.h"
-#include "Foundation/String/Utilities.h"
+#include "Foundation/Insert.h"
+#include "Foundation/Directory.h"
+#include "Foundation/Tokenize.h"
+#include "Foundation/StringUtilities.h"
 #include "Platform/Exception.h"
 
 using namespace Helium;

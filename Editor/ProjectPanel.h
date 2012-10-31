@@ -2,8 +2,8 @@
 
 #include "ProjectViewModel.h"
 
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/DocumentManager.h"
+#include "Foundation/OrderedSet.h"
+#include "Application/DocumentManager.h"
 
 #include "SceneGraph/Project.h"
 

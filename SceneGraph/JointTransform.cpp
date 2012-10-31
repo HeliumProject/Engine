@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "JointTransform.h"
 
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "Math/FpuEulerAngles.h"
 

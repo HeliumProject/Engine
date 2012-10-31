@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/RbTree.h"
+#include "Foundation/RbTree.h"
 
 namespace Helium
 {
@@ -62,4 +62,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/SortedMap.inl"
+#include "Foundation/SortedMap.inl"

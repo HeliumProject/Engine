@@ -1,8 +1,8 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "RCSFile.h"
 #include "RCS.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Log.h"
 
 using namespace Helium::RCS;

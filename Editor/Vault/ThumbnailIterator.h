@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 namespace Helium
 {

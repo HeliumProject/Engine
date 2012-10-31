@@ -2,7 +2,7 @@
 #include "Reflect/Registry.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Container/Insert.h"
+#include "Foundation/Insert.h"
 #include "Reflect/Enumeration.h"
 #include "Reflect/Data/DataDeduction.h"
 #include "Reflect/Version.h"

@@ -2,7 +2,7 @@
 
 #include "Reflect/Data/Data.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {

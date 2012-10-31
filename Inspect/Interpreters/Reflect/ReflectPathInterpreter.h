@@ -3,7 +3,7 @@
 #include "Inspect/API.h"
 #include "Inspect/Interpreters/Reflect/ReflectFieldInterpreter.h"
 
-#include "Foundation/FileDialog.h"
+#include "Application/FileDialog.h"
 
 namespace Helium
 {

@@ -12,7 +12,7 @@
 #include "Engine/Engine.h"
 
 #include "Foundation/Name.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ReferenceCounting.h"
 #include "Reflect/Enumeration.h"
 
 #include "boost/preprocessor/seq.hpp"

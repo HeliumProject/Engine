@@ -3,8 +3,8 @@
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
 #include "Foundation/Event.h"
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/OrderedSet.h"
+#include "Foundation/FilePath.h"
 
 #include "SceneGraph/DeviceManager.h"
 

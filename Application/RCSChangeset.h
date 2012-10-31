@@ -2,15 +2,15 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/API.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/RCS/RCSFile.h"
+#include "Application/API.h"
+#include "Foundation/SmartPtr.h"
+#include "Application/RCSFile.h"
 
 namespace Helium
 {
     namespace RCS
     {
-        class HELIUM_FOUNDATION_API Changeset : public Helium::RefCountBase< Changeset >
+        class HELIUM_APPLICATION_API Changeset : public Helium::RefCountBase< Changeset >
         {
         public:
             uint64_t                m_Id;

@@ -4,10 +4,10 @@
 #include <algorithm>
 
 #include "Foundation/API.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
 #include "Reflect/Data/DataDeduction.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {

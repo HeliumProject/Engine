@@ -2,8 +2,8 @@
 
 #include "Platform/Thread.h"
 
-#include "Foundation/InitializerStack.h"
-#include "Foundation/DocumentManager.h"
+#include "Application/InitializerStack.h"
+#include "Application/DocumentManager.h"
 
 #include "SceneGraph/SettingsManager.h"
 

@@ -9,8 +9,8 @@
 #include "Engine/CacheManager.h"
 
 #include "Platform/Process.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/File/File.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/File.h"
 
 using namespace Helium;
 

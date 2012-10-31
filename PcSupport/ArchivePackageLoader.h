@@ -14,7 +14,7 @@
 #include "Engine/PackageLoader.h"
 //#include "Engine/Serializer.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 /// XML package file extension string.
 #define HELIUM_ARCHIVE_PACKAGE_OBJECT_FILE_EXTENSION TXT( ".object" )

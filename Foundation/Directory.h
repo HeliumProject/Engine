@@ -5,7 +5,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Event.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {

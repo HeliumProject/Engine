@@ -1,8 +1,8 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "FileWatcher.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 using namespace Helium;
 

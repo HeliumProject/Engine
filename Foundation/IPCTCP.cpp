@@ -1,11 +1,11 @@
 #include "FoundationPch.h"
-#include "TCP.h"
+#include "IPCTCP.h"
 
 #include "Platform/Assert.h"
 #include "Platform/String.h"
 #include "Platform/Print.h"
 
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 
 #include <string.h>
 #include <algorithm>

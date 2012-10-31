@@ -261,4 +261,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/SparseArray.inl"
+#include "Foundation/SparseArray.inl"

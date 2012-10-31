@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Foundation/Stream/DynamicMemoryStream.h"
+#include "Foundation/DynamicMemoryStream.h"
 
 #include "Platform/Trace.h"
 #include "Foundation/Math.h"

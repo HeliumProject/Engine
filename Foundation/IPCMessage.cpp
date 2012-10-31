@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Message.h"
+#include "IPCMessage.h"
 
 #include "Platform/Assert.h"
 

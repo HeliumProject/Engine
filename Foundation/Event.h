@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include <vector>
 

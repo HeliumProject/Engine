@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/UndoQueue.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Application/UndoQueue.h"
+#include "Foundation/ReferenceCounting.h"
 
 #include "SceneGraph/API.h"
 

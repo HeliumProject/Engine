@@ -2,8 +2,7 @@
 
 #include "Platform/Socket.h"
 
-#include "IPC.h"
-#include "Connection.h"
+#include "IPCConnection.h"
 
 // Debug printing
 //#define IPC_TCP_DEBUG_SOCKETS

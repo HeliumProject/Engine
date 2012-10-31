@@ -1,4 +1,4 @@
 #include "FoundationPch.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 using namespace Helium;

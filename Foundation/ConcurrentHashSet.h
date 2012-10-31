@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/ConcurrentHashTable.h"
+#include "Foundation/ConcurrentHashTable.h"
 #include "Foundation/Functions.h"
 #include "Foundation/HashFunctions.h"
 
@@ -54,4 +54,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/ConcurrentHashSet.inl"
+#include "Foundation/ConcurrentHashSet.inl"

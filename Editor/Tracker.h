@@ -2,8 +2,8 @@
 
 #include "Editor/API.h"
 
-#include "Foundation/InitializerStack.h"
-#include "Foundation/File/Directory.h"
+#include "Application/InitializerStack.h"
+#include "Foundation/Directory.h"
 #include "Platform/Thread.h"
 #include "SceneGraph/Project.h"
 

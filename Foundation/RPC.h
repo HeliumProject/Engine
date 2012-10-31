@@ -4,7 +4,7 @@
 #include "Platform/Platform.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 #include "Foundation/Event.h"
 
 namespace Helium

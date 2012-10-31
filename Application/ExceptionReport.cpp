@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "ExceptionReport.h"
 
 #include "Platform/Process.h"
@@ -9,9 +9,9 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/CmdLine.h"
-#include "Foundation/String/Utilities.h"
+#include "Foundation/StringUtilities.h"
 
 #include <sstream>
 #include <time.h>

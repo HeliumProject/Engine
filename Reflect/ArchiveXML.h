@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/XMLDocument.h"
 #include "Reflect/Indent.h"
 #include "Reflect/Archive.h"
+#include "Reflect/XMLDocument.h"
 
 namespace Helium
 {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/API.h"
+#include "Application/API.h"
 #include "Foundation/Event.h"
 #include "Foundation/Property.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include <vector>
 
@@ -13,7 +13,7 @@ namespace Helium
     // This is a basic undoable command object, interface for the queue
     //
 
-    class HELIUM_FOUNDATION_API UndoCommand : public Helium::RefCountBase<UndoCommand>
+    class HELIUM_APPLICATION_API UndoCommand : public Helium::RefCountBase<UndoCommand>
     {
     public:
         UndoCommand();
@@ -41,7 +41,7 @@ namespace Helium
     // This is a tuple of commands for making multiple changes to multiple objects in a single command
     //
 
-    class HELIUM_FOUNDATION_API BatchUndoCommand : public UndoCommand
+    class HELIUM_APPLICATION_API BatchUndoCommand : public UndoCommand
     {
     protected:
         std::vector<UndoCommandPtr>   m_Commands;
@@ -223,7 +223,7 @@ namespace Helium
     typedef Helium::Signature< const UndoQueueChangingArgs& > UndoQueueChangingSignature;
     typedef Helium::Signature< const UndoQueueChangeArgs& > UndoQueueChangeSignature;
 
-    class HELIUM_FOUNDATION_API UndoQueue
+    class HELIUM_APPLICATION_API UndoQueue
     {
         //
         // Members

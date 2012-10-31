@@ -10,9 +10,9 @@
 #include "Platform/Assert.h"
 
 #include "Foundation/Log.h" 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Event.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include "Reflect/API.h"
 #include "Reflect/Class.h"

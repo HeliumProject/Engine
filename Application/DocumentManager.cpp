@@ -1,10 +1,10 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "DocumentManager.h"
 
 #include "Platform/Assert.h"
 #include "Foundation/Flags.h"
 #include "Foundation/Log.h"
-#include "Foundation/RCS/RCS.h"
+#include "Application/RCS.h"
 
 #include <algorithm>
 #include <cctype>

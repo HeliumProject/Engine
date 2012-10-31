@@ -2,7 +2,7 @@
 
 #include <stack>
 
-#include "Foundation/API.h"
+#include "Application/API.h"
 
 namespace Helium
 {
@@ -19,7 +19,7 @@ namespace Helium
 
     typedef std::stack< CleanupFunc > InitCleanupStack;
 
-    class HELIUM_FOUNDATION_API InitializerStack
+    class HELIUM_APPLICATION_API InitializerStack
     {
     private:
         InitCleanupStack    m_InitCleanupStack;

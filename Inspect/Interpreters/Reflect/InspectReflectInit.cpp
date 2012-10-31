@@ -1,7 +1,7 @@
 #include "InspectPch.h"
 #include "InspectReflectInit.h"
 
-#include "Foundation/InitializerStack.h"
+#include "Application/InitializerStack.h"
 #include "Inspect/Inspect.h"
 #include "Inspect/Container.h"
 

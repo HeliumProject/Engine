@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "SceneGraphInit.h"
 
-#include "Foundation/InitializerStack.h"
+#include "Application/InitializerStack.h"
 #include "Reflect/Registry.h"
 
 #include "SceneGraph/SettingsManager.h"

@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "FileTreeCtrl.h"
-#include "Foundation/String/Natural.h"
+#include "Foundation/Natural.h"
 
 #include <wx/wx.h>
 #include <wx/artprov.h>

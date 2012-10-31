@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Foundation/Stream/ExternalMemoryStream.h"
+#include "Foundation/ExternalMemoryStream.h"
 
 #include "Platform/Trace.h"
 

@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <wx/config.h>
 
-#include "Foundation/Startup.h"
-#include "Foundation/String/Utilities.h"
+#include "Application/Startup.h"
+#include "Foundation/StringUtilities.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

@@ -2,7 +2,7 @@
 
 #include "Platform/Mutex.h"
 
-#include "Foundation/API.h"
+#include "Application/API.h"
 #include "Foundation/Event.h"
 
 namespace Helium
@@ -13,7 +13,7 @@ namespace Helium
     //  commands to coexist easier with issuing commands in callbacks
     //
 
-    class HELIUM_FOUNDATION_API CommandQueue
+    class HELIUM_APPLICATION_API CommandQueue
     {
     public:
         CommandQueue();

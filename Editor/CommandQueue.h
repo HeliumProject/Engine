@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 
-#include "Foundation/CommandQueue.h"
+#include "Application/CommandQueue.h"
 
 namespace Helium
 {

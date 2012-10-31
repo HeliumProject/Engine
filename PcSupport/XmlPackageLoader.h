@@ -13,7 +13,7 @@
 //#include "Engine/PackageLoader.h"
 //#include "Engine/Serializer.h"
 //
-//#include "Foundation/File/Path.h"
+//#include "Foundation/FilePath.h"
 //
 ///// XML package file extension string.
 //#define HELIUM_XML_PACKAGE_FILE_EXTENSION TXT( ".xml" )

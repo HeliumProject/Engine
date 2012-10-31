@@ -11,8 +11,8 @@
 
 #include "EditorSupport/EditorObjectLoader.h"
 
-#include "Foundation/File/File.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/File.h"
+#include "Foundation/FilePath.h"
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"

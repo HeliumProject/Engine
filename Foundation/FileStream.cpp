@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Foundation/Stream/FileStream.h"
+#include "Foundation/FileStream.h"
 
 using namespace Helium;
 

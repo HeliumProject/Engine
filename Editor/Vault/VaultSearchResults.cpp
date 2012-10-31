@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "VaultSearchResults.h"
 
-#include "Foundation/Container/Insert.h"
+#include "Foundation/Insert.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

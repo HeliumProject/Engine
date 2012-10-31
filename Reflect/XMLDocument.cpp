@@ -1,5 +1,6 @@
-#include "FoundationPch.h"
-#include "Foundation/XMLDocument.h"
+#include "ReflectPch.h"
+#include "XMLDocument.h"
+
 #include "Foundation/Exception.h"
 
 #include <expat.h>

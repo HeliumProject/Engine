@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/Stream/Stream.h"
+#include "Foundation/Stream.h"
 
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 
 namespace Helium
 {
@@ -56,4 +56,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Stream/DynamicMemoryStream.inl"
+#include "Foundation/DynamicMemoryStream.inl"

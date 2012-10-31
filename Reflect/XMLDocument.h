@@ -2,7 +2,9 @@
 
 #include "Foundation/Name.h"
 #include "Foundation/String.h"
-#include "Foundation/Container/Map.h"
+#include "Foundation/Map.h"
+
+#include "Reflect/API.h"
 
 // expat fwds
 struct XML_ParserStruct;
@@ -12,7 +14,7 @@ namespace Helium
 {
     class XMLDocument;
 
-    class HELIUM_FOUNDATION_API XMLElement
+    class HELIUM_REFLECT_API XMLElement
     {
     public:
         typedef Map< Name, String >             AttributeMap;
@@ -41,7 +43,7 @@ namespace Helium
         int32_t         m_NextSibling;
     };
 
-    class HELIUM_FOUNDATION_API XMLDocument
+    class HELIUM_REFLECT_API XMLDocument
     {
     public:
         class Iterator
@@ -82,4 +84,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/XMLDocument.inl"
+#include "Reflect/XMLDocument.inl"

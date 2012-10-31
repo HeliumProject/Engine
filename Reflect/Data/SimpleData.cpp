@@ -1,7 +1,7 @@
 #include "ReflectPch.h"
 #include "Reflect/Data/SimpleData.h"
 
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 #include "Reflect/ArchiveBinary.h"
 #include "Reflect/ArchiveXML.h"
 

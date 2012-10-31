@@ -9,7 +9,7 @@
 #include <wx/imaglist.h>
 
 #include "FileIconsTable.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Platform/Types.h"
 
 namespace Helium

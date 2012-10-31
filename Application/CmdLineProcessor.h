@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/API.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Application/API.h"
+#include "Foundation/SmartPtr.h"
 
 #include <string>
 #include <vector>
@@ -12,7 +12,7 @@ namespace Helium
 {
 	namespace CommandLine
 	{
-		class HELIUM_FOUNDATION_API Option : public Helium::RefCountBase< Option >
+		class HELIUM_APPLICATION_API Option : public Helium::RefCountBase< Option >
 		{
 		protected:
 			tstring m_Token;
@@ -168,7 +168,7 @@ namespace Helium
 			return result;
 		}
 
-		class HELIUM_FOUNDATION_API FlagOption : public SimpleOption<bool>
+		class HELIUM_APPLICATION_API FlagOption : public SimpleOption<bool>
 		{
 		protected:
 			bool* m_Data;
@@ -193,7 +193,7 @@ namespace Helium
 
 		};
 
-		class HELIUM_FOUNDATION_API OptionsMap
+		class HELIUM_APPLICATION_API OptionsMap
 		{
 		public:
 			mutable tstring m_Usage;
@@ -213,7 +213,7 @@ namespace Helium
 			bool ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error );
 		};
 
-		class HELIUM_FOUNDATION_API Command
+		class HELIUM_APPLICATION_API Command
 		{
 		protected:
 			tstring m_Token;
@@ -258,7 +258,7 @@ namespace Helium
 
 		class Processor;
 
-		class HELIUM_FOUNDATION_API HelpCommand : public Command
+		class HELIUM_APPLICATION_API HelpCommand : public Command
 		{
 		protected:
 			Processor* m_Owner;
@@ -276,7 +276,7 @@ namespace Helium
 			virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) HELIUM_OVERRIDE;
 		};
 		
-		class HELIUM_FOUNDATION_API Processor
+		class HELIUM_APPLICATION_API Processor
 		{
 		protected:
 			tstring m_Token;

@@ -211,4 +211,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Memory/SmartPtr.inl"
+#include "Foundation/SmartPtr.inl"

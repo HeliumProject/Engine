@@ -2,7 +2,7 @@
 
 #include "Platform/ReadWriteLock.h"
 
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 
 namespace Helium
 {
@@ -267,4 +267,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/ConcurrentHashTable.inl"
+#include "Foundation/ConcurrentHashTable.inl"

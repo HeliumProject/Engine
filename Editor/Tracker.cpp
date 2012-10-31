@@ -1,8 +1,8 @@
 #include "EditorPch.h"
 #include "Tracker.h"
 
-#include "Foundation/File/Path.h"
-#include "Foundation/String/Wildcard.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/Wildcard.h"
 #include "Foundation/Version.h"
 
 #include "SceneGraph/SearchableProperties.h"

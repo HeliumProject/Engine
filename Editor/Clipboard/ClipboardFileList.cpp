@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "ClipboardFileList.h"
-#include "Foundation/Container/Insert.h"
+#include "Foundation/Insert.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardFileList );
 

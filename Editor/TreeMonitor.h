@@ -4,7 +4,7 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/TimerThread.h"
+#include "Application/TimerThread.h"
 
 #include "SceneGraph/SceneManager.h"
 

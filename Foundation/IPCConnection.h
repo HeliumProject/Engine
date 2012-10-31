@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Message.h"
+#include "IPCMessage.h"
 
 #include "Platform/Condition.h"
 #include "Platform/Runtime.h"

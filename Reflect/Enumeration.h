@@ -2,7 +2,7 @@
 
 #include <hash_map>
 
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 #include "Reflect/Type.h"
 
 namespace Helium

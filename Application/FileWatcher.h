@@ -2,10 +2,10 @@
 
 #include <map>
 
-#include "Foundation/API.h"
 #include "Foundation/Event.h"
+#include "Foundation/FilePath.h"
 
-#include "Path.h"
+#include "Application/API.h"
 
 namespace Helium
 {
@@ -23,7 +23,7 @@ namespace Helium
     typedef FileOperations::FileOperation FileOperation;
 
 
-    struct HELIUM_FOUNDATION_API FileChangedArgs
+    struct HELIUM_APPLICATION_API FileChangedArgs
     {
         tstring   m_Path;
         FileOperation m_Operation;
@@ -40,7 +40,7 @@ namespace Helium
     typedef Helium::Signature< const FileChangedArgs& > FileChangedSignature;
 
     typedef void* HANDLE;
-    struct HELIUM_FOUNDATION_API FileWatch
+    struct HELIUM_APPLICATION_API FileWatch
     {
         HANDLE                      m_ChangeHandle;
         FileChangedSignature::Event m_Event;
@@ -59,7 +59,7 @@ namespace Helium
 
     typedef void* HANDLE;
 
-    class HELIUM_FOUNDATION_API FileWatcher
+    class HELIUM_APPLICATION_API FileWatcher
     {
     private:
         M_PathToFileWatch m_Watches;

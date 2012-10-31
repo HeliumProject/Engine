@@ -1,9 +1,9 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "CmdLineProcessor.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Container/Insert.h"
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Insert.h"
+#include "Foundation/Tokenize.h"
 
 #include <iomanip>
 

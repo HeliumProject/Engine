@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Functions.h"
-#include "Foundation/Container/Table.h"
+#include "Foundation/Table.h"
 
 namespace Helium
 {
@@ -53,4 +53,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/Map.inl"
+#include "Foundation/Map.inl"

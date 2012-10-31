@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ListWidget.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Editor::ListWidget );
 

@@ -2,9 +2,9 @@
 
 #include "Thumbnail.h"
 
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/SmartPtr.h"
+#include "Foundation/OrderedSet.h"
 
 namespace Helium
 {

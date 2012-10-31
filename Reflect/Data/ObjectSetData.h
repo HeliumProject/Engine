@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/Set.h"
+#include "Foundation/Set.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Data/SimpleData.h"
 #include "Reflect/Data/ContainerData.h"

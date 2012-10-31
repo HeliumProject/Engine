@@ -7,7 +7,7 @@
 #include "Editor/Settings/EditorSettings.h"
 
 #include "Foundation/Flags.h"
-#include "Foundation/String/Units.h"
+#include "Foundation/Units.h"
 
 REFLECT_DEFINE_ENUMERATION( Helium::Editor::ProjectMenuID );
 

@@ -5,9 +5,9 @@
 
 #include "Platform/Process.h"
 
-#include "Foundation/File/Path.h"
-#include "Foundation/String/Utilities.h"
-#include "Foundation/UndoQueue.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/StringUtilities.h"
+#include "Application/UndoQueue.h"
 
 #include "SceneGraph/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "SceneGraph/Render.h" // BARF! Should we move Render.h to Editor?

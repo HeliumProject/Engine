@@ -1,7 +1,6 @@
 
 #include "TestAppPch.h"
 
-#include "Foundation/InitializerStack.h"
 #include "Engine/Components.h"
 
 using namespace Helium;
@@ -42,19 +41,12 @@ OBJECT_DEFINE_COMPONENT(TestComponentOne);
 OBJECT_DEFINE_COMPONENT(TestComponentTwo);
 OBJECT_DEFINE_COMPONENT(TestComponentThree);
 
-//std::auto_ptr<Nocturnal::InitializerStack> InitStack;
-
 class Components : public testing::Test
 {
 public:
-    Components()
-        : m_InitStack(true)
-    {
-    }
-
     void SetUp()
     {
-        m_InitStack.Push(Helium::Components::Initialize, Helium::Components::Cleanup);
+        Helium::Components::Initialize();
 
         m_ComponentOneTypeId = TestComponentOne::RegisterComponentType(10);
         m_ComponentTwoTypeId = TestComponentTwo::RegisterComponentType(10);
@@ -63,10 +55,8 @@ public:
 
     void TearDown()
     {
-
+		Helium::Components::Cleanup();
     }
-
-    Helium::InitializerStack m_InitStack;
 
     Components::TypeId m_ComponentOneTypeId;
     Components::TypeId m_ComponentTwoTypeId;

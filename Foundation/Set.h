@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/Table.h"
+#include "Foundation/Table.h"
 
 #include "Foundation/Functions.h"
 
@@ -49,4 +49,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/Set.inl"
+#include "Foundation/Set.inl"

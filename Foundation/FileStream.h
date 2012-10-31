@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Stream/Stream.h"
+#include "Foundation/Stream.h"
 
 #include "Platform/File.h"
 

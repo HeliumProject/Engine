@@ -10,7 +10,7 @@
 namespace Helium
 {
 
-    struct HELIUM_FOUNDATION_API TimerTickArgs
+    struct HELIUM_APPLICATION_API TimerTickArgs
     {
         float32_t m_Elapsed;
 
@@ -21,7 +21,7 @@ namespace Helium
     };
     typedef Helium::Signature< const TimerTickArgs& > TimerTickSignature;
 
-    class HELIUM_FOUNDATION_API TimerThread
+    class HELIUM_APPLICATION_API TimerThread
     {
     public:
         TimerThread( const tstring& timerName, int32_t intervalInMilliseconds, bool singleShot = false )

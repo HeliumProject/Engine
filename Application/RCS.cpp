@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include <map>
 #include <sstream>
 #include <stdio.h>
@@ -10,7 +10,7 @@
 #include "RCS.h"
 #include "RCSExceptions.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Log.h"
 
 #include <algorithm>

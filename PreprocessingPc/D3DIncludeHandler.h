@@ -10,7 +10,7 @@
 #define HELIUM_PREPROCESSING_PC_D3D_INCLUDE_HANDLER_H
 
 #include "PreprocessingPc/PreprocessingPc.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 #include <d3d10_1.h>
 

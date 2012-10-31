@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Connection.h"
+#include "IPCConnection.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Print.h"

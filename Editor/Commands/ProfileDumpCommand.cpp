@@ -3,7 +3,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 #include <stdio.h>
 #include <stdlib.h>

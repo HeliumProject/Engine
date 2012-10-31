@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "TaskInit.h"
 
-#include "Foundation/InitializerStack.h"
+#include "Application/InitializerStack.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Object.h"
 

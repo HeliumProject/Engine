@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "Foundation/InitializerStack.h"
-#include "Foundation/CmdLineProcessor.h"
-#include "Foundation/File/Path.h"
+#include "Application/InitializerStack.h"
+#include "Application/CmdLineProcessor.h"
+#include "Foundation/FilePath.h"
 #include "Reflect/Archive.h"
 
 namespace Helium

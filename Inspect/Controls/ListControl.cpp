@@ -2,7 +2,7 @@
 #include "Inspect/Controls/ListControl.h"
 #include "Inspect/Canvas.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Inspect::List );
 

@@ -228,4 +228,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Memory/ReferenceCounting.inl"
+#include "Foundation/ReferenceCounting.inl"

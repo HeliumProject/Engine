@@ -5,8 +5,8 @@
 
 #include "Platform/Assert.h"
 
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/Endian.h"
 #include "Foundation/String.h"
 #include "Foundation/StringConverter.h"
 

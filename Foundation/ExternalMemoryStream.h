@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Stream/Stream.h"
+#include "Foundation/Stream.h"
 
 namespace Helium
 {
@@ -54,4 +54,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Stream/ExternalMemoryStream.inl"
+#include "Foundation/ExternalMemoryStream.inl"

@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ThumbnailSorter.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/String/Natural.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/Natural.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

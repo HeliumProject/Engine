@@ -4,7 +4,7 @@
 #include "Grid.h"
 
 #include "Foundation/Event.h"
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/OrderedSet.h"
 
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Layer.h"

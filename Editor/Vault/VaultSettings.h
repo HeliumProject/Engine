@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/OrderedSet.h"
 
 #include "SceneGraph/SettingsManager.h"
 

@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Foundation/Stream/BufferedStream.h"
+#include "Foundation/BufferedStream.h"
 
 #include "Platform/Memory.h"
 #include "Foundation/Math.h"

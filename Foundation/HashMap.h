@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/HashTable.h"
+#include "Foundation/HashTable.h"
 
 #include "Foundation/Functions.h"
 #include "Foundation/HashFunctions.h"
@@ -66,4 +66,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/HashMap.inl"
+#include "Foundation/HashMap.inl"

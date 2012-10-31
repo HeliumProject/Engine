@@ -2,6 +2,23 @@ require "Helium"
 
 dofile "Shared.lua"
 
+project( prefix .. "Application" )
+	uuid "870F919A-B4E8-4b15-93CA-FA211D68B609"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "Application", "APPLICATION" )
+
+	files
+	{
+		"Application/**",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+		}
+
 project( prefix .. "Inspect" )
 	uuid "D4D7F216-5EE6-4252-BF25-0698C1BD30CD"
 
@@ -17,6 +34,7 @@ project( prefix .. "Inspect" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Application",
 			prefix .. "Reflect",
 			prefix .. "Math",
 		}
@@ -36,6 +54,7 @@ project( prefix .. "SceneGraph" )
 		{
 			prefix .. "Platform",
 			prefix .. "Foundation",
+			prefix .. "Application",
 			prefix .. "Reflect",
 			prefix .. "Inspect",
 			prefix .. "Math",
@@ -80,6 +99,7 @@ project( prefix .. "Editor" )
 	{
 		prefix .. "Platform",
 		prefix .. "Foundation",
+		prefix .. "Application",
 		prefix .. "Reflect",
 		prefix .. "Math",
 		prefix .. "Inspect",

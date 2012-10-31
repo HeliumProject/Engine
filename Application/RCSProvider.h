@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/API.h"
-#include "Foundation/RCS/RCSFile.h"
-#include "Foundation/RCS/Changeset.h"
+#include "Application/API.h"
+#include "Application/RCSFile.h"
+#include "Application/RCSChangeset.h"
 
 namespace Helium
 {
@@ -12,7 +12,7 @@ namespace Helium
         // Abstract base class for a revision control provider
         //
 
-        class HELIUM_FOUNDATION_API Provider
+        class HELIUM_APPLICATION_API Provider
         {
         public:
             Provider();

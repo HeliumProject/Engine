@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Event.h"
 
 namespace Helium

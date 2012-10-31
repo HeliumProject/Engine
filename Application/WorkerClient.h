@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/API.h"
+#include "Application/API.h"
 
 namespace Helium
 {
@@ -13,7 +13,7 @@ namespace Helium
 
     namespace Worker
     {
-        struct HELIUM_FOUNDATION_API Client
+        struct HELIUM_APPLICATION_API Client
         {
             // initialize connection
             static bool Initialize( bool debug = false, bool wait = false );

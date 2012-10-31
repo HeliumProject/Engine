@@ -3,8 +3,8 @@
 #include "Platform/ReadWriteLock.h"
 
 #include "Foundation/Name.h"
-#include "Foundation/Container/ObjectPool.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ObjectPool.h"
+#include "Foundation/ReferenceCounting.h"
 
 #include "Engine/Engine.h"
 

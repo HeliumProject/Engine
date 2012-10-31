@@ -100,4 +100,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/ArrayIterator.inl"
+#include "Foundation/ArrayIterator.inl"

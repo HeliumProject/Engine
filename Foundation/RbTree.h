@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/Container/BitArray.h"
-#include "Foundation/Container/DynArray.h"
-#include "Foundation/Container/Pair.h"
+#include "Foundation/BitArray.h"
+#include "Foundation/DynArray.h"
+#include "Foundation/Pair.h"
 #include "Foundation/Functions.h"
 
 namespace Helium
@@ -201,4 +201,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/RbTree.inl"
+#include "Foundation/RbTree.inl"

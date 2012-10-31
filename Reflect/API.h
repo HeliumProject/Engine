@@ -3,7 +3,7 @@
 #include "Platform/Platform.h"
 
 #include "Foundation/Profile.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ReferenceCounting.h"
 
 #if HELIUM_SHARED
 # ifdef HELIUM_REFLECT_EXPORTS

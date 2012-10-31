@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Exception.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 namespace Helium
 {

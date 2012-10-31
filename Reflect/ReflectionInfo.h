@@ -4,8 +4,8 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/Container/Insert.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Insert.h"
+#include "Foundation/SmartPtr.h"
 
 #include "Reflect/API.h"
 

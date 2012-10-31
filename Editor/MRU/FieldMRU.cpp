@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "FieldMRU.h"
-#include "Foundation/Container/Insert.h" 
+#include "Foundation/Insert.h" 
 
 #include <wx/ctrlsub.h>
 

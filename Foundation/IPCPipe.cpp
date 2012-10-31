@@ -1,10 +1,10 @@
 #include "FoundationPch.h"
-#include "Pipe.h"
+#include "IPCPipe.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Print.h"
 
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 
 #include <stdio.h>
 #include <string.h>

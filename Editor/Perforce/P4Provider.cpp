@@ -8,8 +8,8 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Mutex.h"
-#include "Foundation/Startup.h"
-#include "Foundation/RCS/RCS.h"
+#include "Application/Startup.h"
+#include "Application/RCS.h"
 
 using namespace Helium;
 using namespace Helium::Perforce;

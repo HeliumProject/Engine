@@ -4,7 +4,7 @@
 
 #include "Platform/String.h"
 #include "Foundation/Name.h"
-#include "Foundation/Container/HashMap.h"
+#include "Foundation/HashMap.h"
 #include "Reflect/Class.h"
 #include "Reflect/ReflectionInfo.h"
 #include "Engine/GameObject.h"

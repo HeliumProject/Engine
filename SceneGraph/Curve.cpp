@@ -2,7 +2,7 @@
 #include "Curve.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "Math/FpuCalculateCurve.h"
 #include "Math/FpuAngleAxis.h"

@@ -1,8 +1,8 @@
 #include "SceneGraphPch.h"
 #include "Layer.h"
 
-#include "Foundation/Container/Insert.h" 
-#include "Foundation/String/Natural.h"
+#include "Foundation/Insert.h" 
+#include "Foundation/Natural.h"
 #include "Foundation/Log.h"
 
 #include "SceneGraph/Scene.h"

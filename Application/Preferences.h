@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/API.h"
-#include "Foundation/File/Path.h"
+#include "Application/API.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {
-    HELIUM_FOUNDATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
+    HELIUM_APPLICATION_API bool GetPreferencesDirectory( Helium::Path& preferencesDirectory );
 }

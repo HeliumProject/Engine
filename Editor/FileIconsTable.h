@@ -4,7 +4,7 @@
 #include "Editor/ArtProvider.h"
 
 #include "Platform/Types.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 #include <map>
 

@@ -2,8 +2,8 @@
 
 #include <hash_map>
 
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/UndoQueue.h"
+#include "Foundation/OrderedSet.h"
+#include "Application/UndoQueue.h"
 
 #include "Reflect/Object.h"
 

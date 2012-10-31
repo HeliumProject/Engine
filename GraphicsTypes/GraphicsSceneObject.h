@@ -14,7 +14,7 @@
 #include "Math/SimdAaBox.h"
 #include "Math/SimdMatrix44.h"
 #include "Math/SimdSphere.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ReferenceCounting.h"
 #include "Rendering/RendererTypes.h"
 #include "Rendering/RRenderResource.h"
 

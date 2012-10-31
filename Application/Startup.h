@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "Foundation/API.h"
+#include "Application/API.h"
 #include "Preferences.h"
 
 #include "Platform/Types.h"
@@ -17,7 +17,7 @@ namespace Helium
     // Top level pervasive command line args
     //
 
-    struct HELIUM_FOUNDATION_API StartupArgs
+    struct HELIUM_APPLICATION_API StartupArgs
     {
         static const tchar_t* Script;
         static const tchar_t* Attach;
@@ -45,14 +45,14 @@ namespace Helium
     //  * Perform version checking (to validate execution)
     //  * Initialize Console printing system
     //  * Inherit automatic command line args from the environment
-    HELIUM_FOUNDATION_API void Startup( int argc = 0, const tchar_t** argv = NULL );
+    HELIUM_APPLICATION_API void Startup( int argc = 0, const tchar_t** argv = NULL );
 
     // Shutdown your application
     //  * Cleans up global initializer stack to release memory so its not reported as memory leaks
     //  * Report profiling summary
     //  * Report execution time
     //  * Invoke exit() (if console app)
-    HELIUM_FOUNDATION_API int Shutdown( int code = 0 );
+    HELIUM_APPLICATION_API int Shutdown( int code = 0 );
 
 
     //
@@ -64,13 +64,13 @@ namespace Helium
         int m_Code;
     };
     typedef Helium::Signature< const ShutdownArgs&> ShutdownSignature;
-    extern HELIUM_FOUNDATION_API ShutdownSignature::Event g_ShuttingDown;
+    extern HELIUM_APPLICATION_API ShutdownSignature::Event g_ShuttingDown;
 
     //
     // Trace Files
     //
-    HELIUM_FOUNDATION_API void InitializeStandardTraceFiles();
-    HELIUM_FOUNDATION_API void CleanupStandardTraceFiles();
+    HELIUM_APPLICATION_API void InitializeStandardTraceFiles();
+    HELIUM_APPLICATION_API void CleanupStandardTraceFiles();
 
 
     //
@@ -78,7 +78,7 @@ namespace Helium
     //
 
     // Which streams should go into the trace file
-    HELIUM_FOUNDATION_API Log::Stream GetTraceStreams(); 
+    HELIUM_APPLICATION_API Log::Stream GetTraceStreams(); 
 
 
     //
@@ -100,7 +100,7 @@ namespace Helium
     //  }
     //
 
-    HELIUM_FOUNDATION_API void StandardThread( Helium::CallbackThread::Entry entry, void* param );
+    HELIUM_APPLICATION_API void StandardThread( Helium::CallbackThread::Entry entry, void* param );
 
     //
     // Main wrappers for console applications
@@ -110,7 +110,7 @@ namespace Helium
     //  }
     //
 
-    HELIUM_FOUNDATION_API int StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv  );
+    HELIUM_APPLICATION_API int StandardMain( int (*main)(int argc, const tchar_t** argv), int argc, const tchar_t** argv  );
 
     //
     // Main wrappers for windows applications
@@ -128,7 +128,7 @@ namespace Helium
     //
 
 #if defined( WIN32 ) && defined ( _WINDOWS_ )
-    HELIUM_FOUNDATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
+    HELIUM_APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
         HINSTANCE hInstance = ::GetModuleHandle(NULL),
         HINSTANCE hPrevInstance = NULL,
         LPTSTR lpCmdLine = ::GetCommandLine(),

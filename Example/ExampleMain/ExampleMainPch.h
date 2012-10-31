@@ -19,8 +19,8 @@
 #include "FrameworkWin/ConfigInitializationWin.h"
 #include "FrameworkWin/WindowManagerInitializationWin.h"
 #include "FrameworkWin/RendererInitializationWin.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/File/File.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/File.h"
 #include "Engine/CacheManager.h"
 
 #include <tchar.h>

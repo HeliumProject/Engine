@@ -1,6 +1,6 @@
 #include "EditorPch.h"
 #include "SortTreeCtrl.h"
-#include "Foundation/String/Natural.h"
+#include "Foundation/Natural.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

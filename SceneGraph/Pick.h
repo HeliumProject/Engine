@@ -5,7 +5,7 @@
 #include "Math/FpuLine.h"
 #include "Math/FpuFrustum.h"
 
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include "Reflect/Object.h"
 #include "SceneGraph/Visitor.h"

@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Foundation/TUID.h"
-#include "Foundation/Message.h"
-#include "Foundation/FileDialog.h"
 #include "Foundation/Event.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/SmartPtr.h"
+#include "Foundation/OrderedSet.h"
+
+#include "Application/API.h"
+#include "Application/Message.h"
+#include "Application/FileDialog.h"
 
 namespace Helium
 {
@@ -82,7 +84,7 @@ namespace Helium
     // Wraps all files manipulated by editors in Editor.  Handles all interaction
     // with revision control.
     // 
-    class HELIUM_FOUNDATION_API Document : public Helium::RefCountBase< Document >
+    class HELIUM_APPLICATION_API Document : public Helium::RefCountBase< Document >
     {
     public:
         Document( const tstring& path );
@@ -181,7 +183,7 @@ namespace Helium
     // Manages a group of documents, providing convenience functions for saving,
     // closing, etc. all of them at once.
     // 
-    class HELIUM_FOUNDATION_API DocumentManager
+    class HELIUM_APPLICATION_API DocumentManager
     {
     public:
         DocumentManager( MessageSignature::Delegate displayMessage, FileDialogSignature::Delegate fileDialog );

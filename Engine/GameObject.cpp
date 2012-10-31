@@ -1,7 +1,7 @@
 #include "EnginePch.h"
 #include "Engine/GameObject.h"
 
-#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/ObjectPool.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/Package.h"
 #include "Engine/DirectSerializer.h"

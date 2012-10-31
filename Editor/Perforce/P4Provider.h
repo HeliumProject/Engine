@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Foundation/RCS/RCS.h"
-#include "Foundation/RCS/Provider.h"
+#include "Application/RCS.h"
+#include "Application/RCSProvider.h"
 #include "Foundation/Event.h"
 #include "Foundation/Profile.h"
 #include "Platform/Condition.h"

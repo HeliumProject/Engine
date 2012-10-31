@@ -11,8 +11,8 @@
 //
 //#include "Engine/Serializer.h"
 //
-//#include "Foundation/Stream/ByteSwappingStream.h"
-//#include "Foundation/Stream/DynamicMemoryStream.h"
+//#include "Foundation/ByteSwappingStream.h"
+//#include "Foundation/DynamicMemoryStream.h"
 //
 //namespace Helium
 //{

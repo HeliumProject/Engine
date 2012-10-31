@@ -11,7 +11,7 @@
 //
 //#include "Engine/Serializer.h"
 //
-//#include "Foundation/Container/DynArray.h"
+//#include "Foundation/DynArray.h"
 //
 //namespace Helium
 //{

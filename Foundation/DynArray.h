@@ -6,7 +6,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Math.h"
-#include "Foundation/Container/ArrayIterator.h"
+#include "Foundation/ArrayIterator.h"
 
 #include "boost/preprocessor/repetition/enum_params.hpp"
 #include "boost/preprocessor/repetition/enum_binary_params.hpp"
@@ -156,4 +156,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/DynArray.inl"
+#include "Foundation/DynArray.inl"

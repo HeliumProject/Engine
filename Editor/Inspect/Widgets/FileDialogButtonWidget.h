@@ -3,7 +3,7 @@
 #include "Editor/Inspect/wxWidget.h"
 #include "Editor/Inspect/Widgets/ButtonWidget.h"
 
-#include "Foundation/FileDialog.h"
+#include "Application/FileDialog.h"
 
 namespace Helium
 {

@@ -1,7 +1,7 @@
 #include "FoundationPch.h"
 #include "File.h"
 
-#include "Foundation/Stream/FileStream.h"
+#include "Foundation/FileStream.h"
 
 #include "Platform/Environment.h"
 #include "Platform/Process.h"

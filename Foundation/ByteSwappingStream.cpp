@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "Foundation/Stream/ByteSwappingStream.h"
+#include "Foundation/ByteSwappingStream.h"
 
 using namespace Helium;
 

@@ -11,7 +11,7 @@
 
 #include "Engine/Cache.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 /// Cache table of contents file extension.
 #define HELIUM_CACHE_TOC_EXTENSION TXT( "cachetoc" )

@@ -2,8 +2,8 @@
 #include "ListView.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/String/Natural.h"
-#include "Foundation/Container/Insert.h" 
+#include "Foundation/Natural.h"
+#include "Foundation/Insert.h" 
 
 #include <map>
 #include <wx/wx.h>

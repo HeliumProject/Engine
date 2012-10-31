@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/Pair.h"
+#include "Foundation/Pair.h"
 
 #include <utility>
 

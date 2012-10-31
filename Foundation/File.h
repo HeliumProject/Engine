@@ -2,7 +2,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/String.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 #include "Platform/Types.h"
 

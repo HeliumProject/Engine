@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 
-#include "Foundation/IPC/Connection.h"
+#include "Foundation/IPCConnection.h"
 
 #include <string.h>
 

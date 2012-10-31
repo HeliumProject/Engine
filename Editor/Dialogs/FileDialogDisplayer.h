@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/FileDialog.h"
+#include "Application/FileDialog.h"
 
 namespace Helium
 {

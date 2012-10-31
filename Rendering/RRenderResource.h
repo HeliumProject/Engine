@@ -10,7 +10,7 @@
 #define HELIUM_RENDERING_R_RENDER_RESOURCE_H
 
 #include "Rendering/Rendering.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 /// Forward declare a render resource smart pointer type.
 ///

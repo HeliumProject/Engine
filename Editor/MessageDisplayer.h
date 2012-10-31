@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Message.h"
+#include "Application/Message.h"
 
 namespace Helium
 {

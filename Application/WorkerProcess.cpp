@@ -1,13 +1,14 @@
-#include "FoundationPch.h"
-#include "Process.h"
+#include "ApplicationPch.h"
+#include "WorkerProcess.h"
 
 #include "Platform/Exception.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/IPC/Pipe.h"
+#include "Foundation/IPCPipe.h"
 #include "Foundation/CmdLine.h"
-#include "Foundation/Startup.h"
 #include "Foundation/Exception.h"
+
+#include "Application/Startup.h"
 
 #include <sstream>
 

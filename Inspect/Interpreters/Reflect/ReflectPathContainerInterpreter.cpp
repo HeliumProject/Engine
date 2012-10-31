@@ -10,7 +10,7 @@
 #include "Inspect/Inspect.h"
 #include "Inspect/Interpreters/Reflect/InspectReflectInit.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 #include "Foundation/Log.h"
 
 using namespace Helium;

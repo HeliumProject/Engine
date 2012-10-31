@@ -2,8 +2,8 @@
 
 #include "SceneGraph/API.h"
 
-#include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/UndoQueue.h"
+#include "Foundation/ReferenceCounting.h"
+#include "Application/UndoQueue.h"
 
 namespace Helium
 {

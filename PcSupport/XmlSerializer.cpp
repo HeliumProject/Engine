@@ -8,10 +8,10 @@
 #include "PcSupportPch.h"
 //#include "PcSupport/XmlSerializer.h"
 //
-//#include "Foundation/File/File.h"
-//#include "Foundation/File/Path.h"
-//#include "Foundation/Stream/FileStream.h"
-//#include "Foundation/Stream/BufferedStream.h"
+//#include "Foundation/File.h"
+//#include "Foundation/FilePath.h"
+//#include "Foundation/FileStream.h"
+//#include "Foundation/BufferedStream.h"
 //
 //using namespace Helium;
 //

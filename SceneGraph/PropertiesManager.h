@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/CommandQueue.h"
+#include "Application/CommandQueue.h"
 #include "Inspect/Controls.h"
 
 #include "SceneGraph/API.h"

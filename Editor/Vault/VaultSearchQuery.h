@@ -2,8 +2,8 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/Container/OrderedSet.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/OrderedSet.h"
+#include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
 #include "Reflect/Data/DataDeduction.h"
 

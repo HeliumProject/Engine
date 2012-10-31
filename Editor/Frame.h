@@ -2,9 +2,8 @@
 
 #include "Editor/API.h"
 #include "CommandQueue.h"
-#include "Foundation/Memory/SmartPtr.h"
-
-#include "Foundation/UndoQueue.h"
+#include "Foundation/SmartPtr.h"
+#include "Application/UndoQueue.h"
 
 #include <wx/timer.h>
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Foundation/API.h"
-#include "Foundation/Container/DynArray.h"
-#include "Foundation/Container/Pair.h"
+#include "Foundation/DynArray.h"
+#include "Foundation/Pair.h"
 
 namespace Helium
 {
@@ -86,4 +86,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/Container/Table.inl"
+#include "Foundation/Table.inl"

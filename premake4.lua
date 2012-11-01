@@ -16,8 +16,13 @@ if _ACTION then
 	-- Check prereqs
 	Helium.CheckEnvironment()
 
+	if _ACTION == "xcode3" then
+        print("XCode 3 is not supported")
+        os.exit(1)
+	end
+
 	if _ACTION == "vs2005" then
-        print("Visual Studio 2005 is no longer supported (no regex library)")
+        print("Visual Studio 2005 is not supported (lacks std::regex)")
         os.exit(1)
 	end
 

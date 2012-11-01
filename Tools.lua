@@ -12,6 +12,11 @@ project( prefix .. "Application" )
 		"Application/**",
 	}
 
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+	}
+
 	configuration "SharedLib"
 		links
 		{
@@ -27,6 +32,11 @@ project( prefix .. "Inspect" )
 	files
 	{
 		"Inspect/**",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -47,6 +57,11 @@ project( prefix .. "SceneGraph" )
 	files
 	{
 		"SceneGraph/*",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
 	}
 
 	configuration "SharedLib"
@@ -71,17 +86,14 @@ project( prefix .. "SceneGraph" )
 			prefix .. "PcSupport",
 			prefix .. "PreprocessingPc",
 			prefix .. "EditorSupport",
-			"d3d9",
 		}
 
 project( prefix .. "Editor" )
 	uuid "A5CAC2F6-62BC-4EF3-A752-887F89C64812"
 	kind "ConsoleApp"
 
-	defines
-	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
-	}
+	Helium.DoTbbProjectSettings()
+
 	files
 	{
 		"Editor/**.h",
@@ -90,10 +102,37 @@ project( prefix .. "Editor" )
 		"Editor/Editor.rc",
 	}
 
+	flags
+	{
+		"WinMain"
+	}
+
+	defines
+	{
+		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
+		"WXUSINGDLL=1",
+		"wxNO_EXPAT_LIB=1",
+		"wxNO_JPEG_LIB=1",
+		"wxNO_PNG_LIB=1",
+		"wxNO_TIFF_LIB=1",
+		"wxNO_ZLIB_LIB=1",
+	}
+	
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+		"Dependencies/freetype/include",
+		"Dependencies/p4api/include",
+		"Dependencies/wxWidgets/include",
+	}
+
     pchheader( "EditorPch.h" )
     pchsource( "Editor/EditorPch.cpp" )
 
-	Helium.DoDefaultProjectSettings()
+	Helium.DoBasicProjectSettings()
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
 
 	links
 	{
@@ -122,13 +161,82 @@ project( prefix .. "Editor" )
 		"libclient",
 		"librpc",
 		"libsupp",
-		"d3d9",
 		"ws2_32",
 	}
-	flags
-	{
-		"WinMain"
-	}
+
+	--[[
+	We build monolithic wx, so ignore all the legacy non-monolithic
+	#pragma comment directives (on windows only)
+	--]]
+
+	configuration "windows"
+		includedirs
+		{
+			"Dependencies/wxWidgets/include/msvc",
+		}
+		linkoptions
+		{
+			"/NODEFAULTLIB:wxbase29ud",
+			"/NODEFAULTLIB:wxbase29d",
+			"/NODEFAULTLIB:wxbase29u",
+			"/NODEFAULTLIB:wxbase29",
+			"/NODEFAULTLIB:wxbase29ud_net",
+			"/NODEFAULTLIB:wxbase29d_net",
+			"/NODEFAULTLIB:wxbase29u_net",
+			"/NODEFAULTLIB:wxbase29_net",
+			"/NODEFAULTLIB:wxbase29ud_xml",
+			"/NODEFAULTLIB:wxbase29d_xml",
+			"/NODEFAULTLIB:wxbase29u_xml",
+			"/NODEFAULTLIB:wxbase29_xml",
+			"/NODEFAULTLIB:wxmsw29ud_core",
+			"/NODEFAULTLIB:wxmsw29d_core",
+			"/NODEFAULTLIB:wxmsw29u_core",
+			"/NODEFAULTLIB:wxmsw29_core",
+			"/NODEFAULTLIB:wxmsw29ud_adv",
+			"/NODEFAULTLIB:wxmsw29d_adv",
+			"/NODEFAULTLIB:wxmsw29u_adv",
+			"/NODEFAULTLIB:wxmsw29_adv",
+			"/NODEFAULTLIB:wxmsw29ud_html",
+			"/NODEFAULTLIB:wxmsw29d_html",
+			"/NODEFAULTLIB:wxmsw29u_html",
+			"/NODEFAULTLIB:wxmsw29_html",
+			"/NODEFAULTLIB:wxmsw29ud_qa",
+			"/NODEFAULTLIB:wxmsw29d_qa",
+			"/NODEFAULTLIB:wxmsw29u_qa",
+			"/NODEFAULTLIB:wxmsw29_qa",
+			"/NODEFAULTLIB:wxmsw29ud_xrc",
+			"/NODEFAULTLIB:wxmsw29d_xrc",
+			"/NODEFAULTLIB:wxmsw29u_xrc",
+			"/NODEFAULTLIB:wxmsw29_xrc",
+			"/NODEFAULTLIB:wxmsw29ud_aui",
+			"/NODEFAULTLIB:wxmsw29d_aui",
+			"/NODEFAULTLIB:wxmsw29u_aui",
+			"/NODEFAULTLIB:wxmsw29_aui",
+			"/NODEFAULTLIB:wxmsw29ud_propgrid",
+			"/NODEFAULTLIB:wxmsw29d_propgrid",
+			"/NODEFAULTLIB:wxmsw29u_propgrid",
+			"/NODEFAULTLIB:wxmsw29_propgrid",
+			"/NODEFAULTLIB:wxmsw29ud_ribbon",
+			"/NODEFAULTLIB:wxmsw29d_ribbon",
+			"/NODEFAULTLIB:wxmsw29u_ribbon",
+			"/NODEFAULTLIB:wxmsw29_ribbon",
+			"/NODEFAULTLIB:wxmsw29ud_richtext",
+			"/NODEFAULTLIB:wxmsw29d_richtext",
+			"/NODEFAULTLIB:wxmsw29u_richtext",
+			"/NODEFAULTLIB:wxmsw29_richtext",
+			"/NODEFAULTLIB:wxmsw29ud_media",
+			"/NODEFAULTLIB:wxmsw29d_media",
+			"/NODEFAULTLIB:wxmsw29u_media",
+			"/NODEFAULTLIB:wxmsw29_media",
+			"/NODEFAULTLIB:wxmsw29ud_stc",
+			"/NODEFAULTLIB:wxmsw29d_stc",
+			"/NODEFAULTLIB:wxmsw29u_stc",
+			"/NODEFAULTLIB:wxmsw29_stc",
+			"/NODEFAULTLIB:wxmsw29ud_gl",
+			"/NODEFAULTLIB:wxmsw29d_gl",
+			"/NODEFAULTLIB:wxmsw29u_gl",
+			"/NODEFAULTLIB:wxmsw29_gl",
+		}
 
 	-- per architecture
 	configuration { "windows", "x32" }

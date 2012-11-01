@@ -341,21 +341,24 @@ Helium.DoDefaultSolutionSettings = function()
 end
 
 -- Common settings for projects linking with libraries.
-Helium.DoDefaultProjectSettings = function()
-
-	language "C++"
-	
-	location( "Premake/" .. solution().name )
-
-	targetname( "Helium." .. project().name )
+Helium.DoBasicProjectSettings = function()
 
 	configuration {}
+
+	language "C++"
+	location( "Premake/" .. solution().name )
+	targetname( "Helium." .. project().name )
 
 	flags
 	{
 		--"FatalWarnings",
 		--"ExtraWarnings",
 		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
+	}
+
+	includedirs
+	{
+		".",
 	}
 
 	configuration "SharedLib or *App"
@@ -371,8 +374,44 @@ Helium.DoDefaultProjectSettings = function()
 	configuration { "windows", "SharedLib or *App" }
 		links
 		{
+			"dbghelp",
 			"ws2_32",
 			"wininet",
+		}
+
+	configuration {}
+
+end
+
+Helium.DoGraphicsProjectSettings = function()
+
+	configuration {}
+
+	configuration "windows"
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+			includedirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Include"
+			}
+		end
+	configuration { "windows", "x32" }
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x86",
+			}
+		end
+	configuration { "windows", "x64" }
+		if _ACTION == "vs2010" or _ACTION == "vs2008" then
+			libdirs
+			{
+				os.getenv( "DXSDK_DIR" ) .. "Lib/x64",
+			}
+		end
+
+	configuration { "windows", "SharedLib or *App" }
+		links
+		{
 			"d3d9",
 			"d3dx9",
 			"d3d11",
@@ -380,38 +419,8 @@ Helium.DoDefaultProjectSettings = function()
 			"dxguid",
 		}
 
-	configuration { "windows", "SharedLib or *App" }
-		links
-		{
-			"dbghelp",
-		}
-
-	configuration { "windows", "Debug", "SharedLib or *App" }
-		links
-		{
-			Helium.DebugFbxLib,
-		}
-	configuration { "windows", "not Debug", "SharedLib or *App" }
-		links
-		{
-			Helium.ReleaseFbxLib,
-		}
-
-	if haveGranny then
-		configuration { "x32", "SharedLib or *App" }
-			links
-			{
-				"granny2",
-			}
-
-		configuration { "x64", "SharedLib or *App" }
-			links
-			{
-				"granny2_x64",
-			}
-	end
-
 	configuration {}
+
 end
 
 -- Common settings for modules.
@@ -442,7 +451,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	pchsource( source )
 
-	Helium.DoDefaultProjectSettings()
+	Helium.DoBasicProjectSettings()
 
 --[[--This is off until we get rid of a couple dynamic_cast<>'s -Geoff
 	configuration "not Debug"

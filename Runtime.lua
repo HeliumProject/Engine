@@ -14,6 +14,7 @@ project( prefix .. "ExampleGame" )
 
 	includedirs
 	{
+		"Dependencies/boost-preprocessor/include",
 		"Example",
 	}
 
@@ -49,6 +50,20 @@ project( prefix .. "ExampleMain" )
 		"WinMain",
 	}
 
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+		"Example",
+	}
+
+	pchheader( "ExampleMainPch.h" )
+	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
+
+	Helium.DoBasicProjectSettings()
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
+
 	links
 	{
 		prefix .. "Platform",
@@ -72,37 +87,14 @@ project( prefix .. "ExampleMain" )
 		prefix .. "ExampleGame",
 	}
 
-	includedirs
-	{
-		"Example",
-	}
-
-	pchheader( "ExampleMainPch.h" )
-	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
-
-	Helium.DoDefaultProjectSettings()
-
 	configuration "windows"
 		links
 		{
-			"d3d9",
-			"d3d11",
+			"dbghelp",
 			"wininet",
 			"ws2_32",
-			"dbghelp",
 		}
-		
-	configuration { "windows", "Debug" }
-		links
-		{
-			Helium.DebugFbxLib,
-		}
-	configuration { "windows", "not Debug" }
-		links
-		{
-			Helium.ReleaseFbxLib,
-		}
-		
+
 	if haveGranny then
 		configuration "x32"
 			links

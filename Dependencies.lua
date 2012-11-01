@@ -160,7 +160,7 @@ project "nvtt"
 		includedirs
 		{
 			"Dependencies/nvtt/project/vc8",
-		}
+		}	
 
 	-- Override inline function expansion and intrinsic function usage settings for Debug builds.
 	configuration { "windows", "Debug" }

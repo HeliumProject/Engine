@@ -156,11 +156,19 @@ project "nvtt"
 		"Dependencies/nvtt/src/nvtt/CompressorDX11.*",
 	}
 	
-	configuration "windows"
-		includedirs
-		{
-			"Dependencies/nvtt/project/vc8",
-		}	
+	if _ACTION == "vs2010" then
+		configuration "windows"
+			includedirs
+			{
+				"Dependencies/nvtt/project/vc10",
+			}
+	elseif _ACTION == "vc2008" then
+		configuration "windows"
+			includedirs
+			{
+				"Dependencies/nvtt/project/vc9",
+			}
+	end
 
 	-- Override inline function expansion and intrinsic function usage settings for Debug builds.
 	configuration { "windows", "Debug" }

@@ -837,12 +837,24 @@ void ArchiveXML::FromString( const tstring& xml, std::vector< ObjectPtr >& objec
 
 void Helium::Reflect::ArchiveXML::WriteFileHeader()
 {
-#ifdef UNICODE
-    uint16_t feff = 0xfeff;
-    m_Stream->Write( &feff ); // byte order mark
+#if HELIUM_WCHAR_T
+
+	// note this is TWO UTF-8 code points, not one UTF-16 code point, http://en.wikipedia.org/wiki/Byte_order_mark
+	uint16_t feff = 0xfeff;
+
+	// write the byte order mark since we are writing multi-byte unicode with some endianness
+    m_Stream->Write( &feff );
+
+# if HELIUM_OS_WIN
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n" );
+# else
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"UTF-32\"?>\n" );
+# endif
+
+#else // HELIUM_WCHAR_T
+    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 #endif
 
-    *m_Stream << TXT( "<?xml version=\"1.0\" encoding=\"" ) << Helium::GetEncoding() << TXT( "\"?>\n" );
     *m_Stream << TXT( "<Reflect FileFormatVersion=\"" ) << m_Version << TXT( "\">\n" );
 }
 

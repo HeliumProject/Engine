@@ -151,7 +151,7 @@ bool Path::IsFile() const
         return false;
     }
 
-    return ( stat.m_Mode & Helium::FileModeFlags::File ) == Helium::FileModeFlags::File;
+    return !( stat.m_Mode & Helium::FileModeFlags::Directory );
 }
 
 bool Path::IsDirectory() const
@@ -167,7 +167,7 @@ bool Path::IsDirectory() const
         return false;
     }
 
-    return ( stat.m_Mode & Helium::FileModeFlags::Directory ) == Helium::FileModeFlags::Directory;
+    return ( stat.m_Mode & Helium::FileModeFlags::Directory );
 }
 
 bool Path::Writable() const

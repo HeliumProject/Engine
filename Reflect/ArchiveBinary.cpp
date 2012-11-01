@@ -148,11 +148,11 @@ void ArchiveBinary::Read()
     m_Stream->SetByteOrder( byteOrder );
 
     // read character encoding
-    CharacterEncoding characterEncoding = CharacterEncodings::ASCII;
+    CharacterEncoding characterEncoding = CharacterEncodings::UTF_8;
     uint8_t encodingByte;
     m_Stream->Read(&encodingByte);
     characterEncoding = (CharacterEncoding)encodingByte;
-    if ( characterEncoding != CharacterEncodings::ASCII && characterEncoding != CharacterEncodings::UTF_16 )
+    if ( characterEncoding != CharacterEncodings::UTF_8 && characterEncoding != CharacterEncodings::UTF_16 && characterEncoding != CharacterEncodings::UTF_32 )
     {
         throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d (%s)\n" ), characterEncoding, m_Path.c_str() ); 
     }
@@ -201,11 +201,16 @@ void ArchiveBinary::Write()
 
     // save character encoding value
     CharacterEncoding encoding;
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
+# if HELIUM_OS_WIN 
     encoding = CharacterEncodings::UTF_16;
     HELIUM_COMPILE_ASSERT( sizeof(wchar_t) == 2 );
+# else
+    encoding = CharacterEncodings::UTF_32;
+    HELIUM_COMPILE_ASSERT( sizeof(wchar_t) == 4 );
+#endif
 #else
-    encoding = CharacterEncodings::ASCII;
+    encoding = CharacterEncodings::UTF_8;
     HELIUM_COMPILE_ASSERT( sizeof(char) == 1 );
 #endif
     uint8_t encodingByte = (uint8_t)encoding;

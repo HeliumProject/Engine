@@ -21,18 +21,17 @@ void Helium::FatalExit( int exitCode )
 /// Handle an assertion.
 ///
 /// @param[in] pMessageText  Assert message text.
-Assert::EResult Assert::TriggerImplementation( const char* pMessageText )
+Assert::EResult Assert::TriggerImplementation( const tchar_t* pMessageText )
 {
-    char messageBoxText[ 1024 ];
+    tchar_t messageBoxText[ 1024 ];
     StringPrint(
         messageBoxText,
-		sizeof( messageBoxText ) / sizeof( messageBoxText[0] ),
         ( TXT( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )
           TXT( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
         pMessageText );
 
 	HELIUM_CONVERT_TO_WCHAR_T( messageBoxText, wideMessageBoxText );
-    int result = MessageBox( NULL, wideMessageBoxText, L"Assert", MB_ABORTRETRYIGNORE );
+    int result = MessageBoxW( NULL, wideMessageBoxText, L"Assert", MB_ABORTRETRYIGNORE );
 
     return ( result == IDABORT ? RESULT_ABORT : ( result == IDIGNORE ? RESULT_CONTINUE : RESULT_BREAK ) );
 }

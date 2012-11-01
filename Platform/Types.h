@@ -347,7 +347,8 @@ typedef double float64_t;
 typedef wchar_t tchar_t;
 
 /// Prefix for declaring string and character literals of the default character type.
-#define TXT( X ) L##X
+#define TXT2(X) L ## X
+#define TXT(X) TXT2(X)
 
 #else  // HELIUM_WCHAR_T
 

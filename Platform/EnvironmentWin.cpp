@@ -31,7 +31,7 @@ bool Helium::GetMachineName( tstring& computername )
     return GetEnvVar( L"COMPUTERNAME", computername );
 }
 
-bool Helium::GetProfileDirectory( tstring& profileDirectory )
+bool Helium::GetPreferencesDirectory( tstring& profileDirectory )
 {
     wchar_t path[ MAX_PATH ];
     HRESULT result = SHGetFolderPath( NULL, CSIDL_PROFILE, NULL, SHGFP_TYPE_CURRENT, path );

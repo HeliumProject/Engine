@@ -47,12 +47,19 @@ namespace Helium
 }
 
 #if HELIUM_OS_WIN
-# define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
+# if HELIUM_WCHAR_T
+#  define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
+	const wchar_t* convertedChars = chars;
+#  define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
+	const wchar_t* convertedChars = chars;
+# else
+#  define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
 	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
 	char* convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
 	ConvertString( chars, convertedChars, convertedChars##Count );
-# define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
+#  define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
 	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
 	wchar_t* convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
 	ConvertString( chars, convertedChars, convertedChars##Count );
+# endif
 #endif

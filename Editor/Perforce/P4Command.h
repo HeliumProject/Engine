@@ -29,7 +29,7 @@ namespace Helium
 
             void AddArg( const tstring& arg )
             {
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
                 std::string narrowArg;
                 bool converted = Helium::ConvertString( arg, narrowArg );
                 HELIUM_ASSERT( converted );

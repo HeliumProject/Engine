@@ -20,11 +20,11 @@ volatile int32_t Assert::sm_active = 0;
 /// @param[in] pFile        File in which the assertion occurred.
 /// @param[in] line         Line number at which the assertion occurred.
 Assert::EResult Assert::Trigger(
-    const char* pExpression,
-    const char* pFunction,
-    const char* pFile,
+    const tchar_t* pExpression,
+    const tchar_t* pFunction,
+    const tchar_t* pFile,
     int line,
-    const char* pMessage,
+    const tchar_t* pMessage,
     ... )
 {
     // Only allow one assert handler to be active at a time.
@@ -32,7 +32,7 @@ Assert::EResult Assert::Trigger(
     {
     }
 
-    char messageText[ 1024 ];
+    tchar_t messageText[ 1024 ];
 
     if( pExpression )
     {
@@ -40,14 +40,13 @@ Assert::EResult Assert::Trigger(
         {
             va_list args;
             va_start(args, pMessage); 
-            char message[1024];
-            vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
+            tchar_t message[1024];
+            StringPrint(message, pMessage, args);
             va_end(args); 
 
             StringPrint(
                 messageText,
-				sizeof( messageText ) / sizeof( messageText[0] ),
-                TXT( "%s\n\nAssertion failed in %s (%s, line %d): (%s)" ),
+				TXT( "%s\n\nAssertion failed in %s (%s, line %d): (%s)" ),
                 message,
                 pFunction,
                 pFile,
@@ -58,7 +57,6 @@ Assert::EResult Assert::Trigger(
         {
             StringPrint(
                 messageText,
-				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d): %s" ),
                 pFunction,
                 pFile,
@@ -72,13 +70,12 @@ Assert::EResult Assert::Trigger(
         {
             va_list args;
             va_start(args, pMessage); 
-            char message[1024];
-            vsnprintf(message, sizeof(message) / sizeof(char), pMessage, args);
+            tchar_t message[1024];
+            StringPrint(message, pMessage, args);
             va_end(args); 
 
             StringPrint(
                 messageText,
-				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "%s\n\nAssertion failed in %s (%s, line %d)" ),
                 message,
                 pFunction,
@@ -89,7 +86,6 @@ Assert::EResult Assert::Trigger(
         {
             StringPrint(
                 messageText,
-				sizeof( messageText ) / sizeof( messageText[0] ),
                 TXT( "Assertion failed in %s (%s, line %d)" ),
                 pFunction,
                 pFile,

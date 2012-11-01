@@ -77,7 +77,7 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
 
 	if( !::CreateProcess(
         NULL,                                                 // filename
-        convertedCommand,                                     // command line for child
+        (LPWSTR)convertedCommand,                             // command line for child
         NULL,                                                 // process security descriptor
         NULL,                                                 // thread security descriptor
         TRUE,                                                 // inherit handles?

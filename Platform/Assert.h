@@ -48,45 +48,45 @@
 
 namespace Helium
 {
-    HELIUM_PLATFORM_API void FatalExit( int exitCode );
+	HELIUM_PLATFORM_API void FatalExit( int exitCode );
 }
 
 #if HELIUM_ASSERT_ENABLED
 
 namespace Helium
 {
-    /// Assert utility functions.
-    class HELIUM_PLATFORM_API Assert
-    {
-    public:
-        /// Assertion handler result.
-        enum EResult
-        {
-            RESULT_FIRST   =  0,
-            RESULT_INVALID = -1,
+	/// Assert utility functions.
+	class HELIUM_PLATFORM_API Assert
+	{
+	public:
+		/// Assertion handler result.
+		enum EResult
+		{
+			RESULT_FIRST   =  0,
+			RESULT_INVALID = -1,
 
-            RESULT_BREAK,     ///< Break execution.
-            RESULT_ABORT,     ///< Terminate the program.
-            RESULT_CONTINUE,  ///< Continue execution.
+			RESULT_BREAK,     ///< Break execution.
+			RESULT_ABORT,     ///< Terminate the program.
+			RESULT_CONTINUE,  ///< Continue execution.
 
-            RESULT_MAX,
-            RESULT_LAST = RESULT_MAX - 1
-        };
+			RESULT_MAX,
+			RESULT_LAST = RESULT_MAX - 1
+		};
 
-        /// @name Static Utility Functions
-        //@{
-        static EResult Trigger( const char* pExpression, const char* pFunction, const char* pFile, int line, const char* pMessage, ... );
-        //@}
+		/// @name Static Utility Functions
+		//@{
+		static EResult Trigger( const tchar_t* pExpression, const tchar_t* pFunction, const tchar_t* pFile, int line, const tchar_t* pMessage, ... );
+		//@}
 
-    private:
-        /// Non-zero if the assert handler is currently active, zero if not.
-        static volatile int32_t sm_active;
+	private:
+		/// Non-zero if the assert handler is currently active, zero if not.
+		static volatile int32_t sm_active;
 
-        /// @name Private Static Utility Functions
-        //@{
-        static EResult TriggerImplementation( const char* pMessageText );
-        //@}
-    };
+		/// @name Private Static Utility Functions
+		//@{
+		static EResult TriggerImplementation( const tchar_t* pMessageText );
+		//@}
+	};
 }
 
 /// Trigger and handle a Helium::Assert::EResult code.
@@ -94,23 +94,23 @@ namespace Helium
 /// @param[in] EXP      Expression string.
 /// @param[in] MESSAGE  Message string.
 #define HELIUM_TRIGGER_ASSERT_HANDLER( EXP, ... ) \
-    { \
-        HELIUM_DISABLEABLE_CODE_BLOCK( \
-            Helium::Assert::EResult _result = Helium::Assert::Trigger( \
-                EXP, \
-                HELIUM_FUNCTION_NAME, \
-                __FILE__, \
-                __LINE__, \
-                __VA_ARGS__ ); \
-            if( _result == Helium::Assert::RESULT_BREAK ) \
-            { \
-                HELIUM_ISSUE_BREAK(); \
-            } \
-            else if( _result == Helium::Assert::RESULT_ABORT ) \
-            { \
-                Helium::FatalExit( -1 ); \
-            } ) \
-    }
+	{ \
+		HELIUM_DISABLEABLE_CODE_BLOCK( \
+			Helium::Assert::EResult _result = Helium::Assert::Trigger( \
+				EXP, \
+				TXT(HELIUM_FUNCTION_NAME), \
+				TXT(__FILE__), \
+				__LINE__, \
+				__VA_ARGS__ ); \
+			if( _result == Helium::Assert::RESULT_BREAK ) \
+			{ \
+				HELIUM_ISSUE_BREAK(); \
+			} \
+			else if( _result == Helium::Assert::RESULT_ABORT ) \
+			{ \
+				Helium::FatalExit( -1 ); \
+			} ) \
+	}
 
 /// Trigger a debug breakpoint if the result of an expression is false in non-release builds.
 ///

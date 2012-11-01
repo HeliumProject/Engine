@@ -458,10 +458,10 @@ void StlStringStlVectorData::Deserialize(ArchiveXML& archive)
     }
 }
 
-#ifdef UNICODE
+#ifdef HELIUM_WCHAR_T
 
 //
-// When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for uint8_t/int8_t
+// When --wchar_t is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for uint8_t/int8_t
 //  So we explicitly specialize some functions to to the conversion via a uint16_t/int16_t
 //
 
@@ -495,7 +495,7 @@ tistream& SimpleStlVectorData<int8_t>::operator<<(tistream& stream)
     return stream;
 }
 
-#endif // UNICODE
+#endif // HELIUM_WCHAR_T
 
 template SimpleStlVectorData<tstring>;
 template SimpleStlVectorData<bool>;

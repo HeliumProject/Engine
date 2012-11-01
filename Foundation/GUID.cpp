@@ -9,7 +9,7 @@
 
 #pragma comment( lib, "rpcrt4.lib" )
 
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
 # define RPC_TSTR RPC_WSTR
 #else
 # define RPC_TSTR RPC_CSTR

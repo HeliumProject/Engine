@@ -10,7 +10,7 @@
 #include "Foundation/String.h"
 #include "Foundation/StringConverter.h"
 
-#ifdef UNICODE
+#ifdef HELIUM_WCHAR_T
 
 // http://www.codeproject.com/KB/stl/upgradingstlappstounicode.aspx
 
@@ -78,16 +78,21 @@ namespace Helium
         {
             enum CharacterEncoding
             {
-                ASCII,  // default encoding, legacy 7-bit
-                UTF_16, // used by windows' Unicode build
+                UTF_8,  // default encoding
+                UTF_16, // used by windows' "Unicode" build, same as wchar_t ON WINDOWS ONLY
+                UTF_32, // used every other os as wchar_t
             };
         }
         typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
 
-#if UNICODE
+#if HELIUM_WCHAR_T
+# if HELIUM_OS_WIN
         const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_16;
+# else
+        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_32;
+# endif
 #else
-        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::ASCII;
+        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_8;
 #endif
 
         //
@@ -98,7 +103,7 @@ namespace Helium
         class Stream : public Helium::RefCountBase< Stream< StreamPrimitiveT > >
         {
         public: 
-            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
+            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::UTF_8 )
                 : m_Stream( NULL )
                 , m_OwnStream( false )
                 , m_ByteOrder( byteOrder )
@@ -107,7 +112,7 @@ namespace Helium
 
             }
 
-            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::ASCII )
+            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::UTF_8 )
                 : m_Stream( stream )
                 , m_OwnStream( ownStream )
                 , m_ByteOrder( byteOrder )
@@ -263,9 +268,9 @@ namespace Helium
 
                 switch ( m_CharacterEncoding )
                 {
-                case CharacterEncodings::ASCII:
+                case CharacterEncodings::UTF_8:
                     {
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
                         std::string temp;
                         temp.resize( length );
                         ReadBuffer( &temp[ 0 ], length );
@@ -280,7 +285,7 @@ namespace Helium
 
                 case CharacterEncodings::UTF_16:
                     {
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
                         // read the bytes directly into the string
                         string.resize( length ); 
                         for ( uint32_t index = 0; index < length; ++index )
@@ -311,7 +316,7 @@ namespace Helium
 
                 switch ( m_CharacterEncoding )
                 {
-                case CharacterEncodings::ASCII:
+                case CharacterEncodings::UTF_8:
                     {
                         string.Reserve( length );
                         string.Resize( length ); 
@@ -323,6 +328,7 @@ namespace Helium
                     }
 
                 case CharacterEncodings::UTF_16:
+				case CharacterEncodings::UTF_32:
                     {
                         WideString temp;
                         temp.Reserve( length );
@@ -350,7 +356,7 @@ namespace Helium
 
                 switch ( m_CharacterEncoding )
                 {
-                case CharacterEncodings::ASCII:
+                case CharacterEncodings::UTF_8:
                     {
                         CharString temp;
                         temp.Reserve( length );
@@ -385,7 +391,7 @@ namespace Helium
             {
                 uint32_t length = (uint32_t)string.length();
                 Write( &length );
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
                 for ( uint32_t index = 0; index < length; ++index )
                 {
                     Write( &string[ index ] );
@@ -399,7 +405,7 @@ namespace Helium
             template< typename Allocator >
             Stream& WriteString( const StringBase< char, Allocator >& string )
             {
-#if UNICODE
+#if HELIUM_WCHAR_T
                 WideString temp;
                 StringConverter< char, wchar_t >::Convert( temp, string );
 
@@ -421,7 +427,7 @@ namespace Helium
             template< typename Allocator >
             Stream& WriteString( const StringBase< wchar_t, Allocator >& string )
             {
-#if UNICODE
+#if HELIUM_WCHAR_T
                 uint32_t length = (uint32_t)string.GetSize();
                 Write( &length );
                 for ( uint32_t index = 0; index < length; ++index )
@@ -684,7 +690,7 @@ namespace Helium
 
                 std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* fstream = new std::basic_fstream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >(); 
 
-#ifdef UNICODE
+#if HELIUM_WCHAR_T
                 fstream->imbue( std::locale( std::locale::classic(), &null_codecvt::GetStaticInstance() )) ;
 #endif
 

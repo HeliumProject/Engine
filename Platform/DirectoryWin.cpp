@@ -24,7 +24,7 @@ void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ou
 bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
 {
 	tstring path ( handle.m_Path + TXT( "/*" ) );
-	HELIUM_CONVERT_TO_WCHAR_T( path.c_str(), convertedPath );
+	HELIUM_CONVERT_TO_NATIVE( path.c_str(), convertedPath );
 
     WIN32_FIND_DATA foundFile;
     handle.m_Handle = ::FindFirstFile( convertedPath, &foundFile );

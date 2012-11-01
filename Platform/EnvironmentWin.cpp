@@ -13,7 +13,7 @@ static bool GetEnvVar( wchar_t* var, tstring& value )
 	wchar_t* varValue = (wchar_t*)alloca( count * sizeof( wchar_t ) );
 	if ( ::GetEnvironmentVariable( var, varValue, count * sizeof( wchar_t ) ) )
 	{
-		HELIUM_CONVERT_TO_CHAR( varValue, convertedVarValue );
+		HELIUM_CONVERT_TO_TCHAR( varValue, convertedVarValue );
 		value = convertedVarValue;
 		return true;
 	}
@@ -38,7 +38,7 @@ bool Helium::GetPreferencesDirectory( tstring& profileDirectory )
     bool bSuccess = ( result == S_OK );
     if ( bSuccess )
     {
-		HELIUM_CONVERT_TO_CHAR( path, convertedPath );
+		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
         profileDirectory = convertedPath;
     }
 
@@ -52,7 +52,7 @@ bool Helium::GetAppDataDirectory( tstring& appDataDirectory )
     bool bSuccess = ( result == S_OK );
     if ( bSuccess )
     {
-		HELIUM_CONVERT_TO_CHAR( path, convertedPath );
+		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
         appDataDirectory = convertedPath;
     }
 

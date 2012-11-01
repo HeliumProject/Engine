@@ -221,9 +221,9 @@ tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
                 wchar_t file[MAX_PATH];
                 _tsplitpath(filename, NULL, NULL, file, ext);
 
-				HELIUM_CONVERT_TO_CHAR(module, convertedModule);
-				HELIUM_CONVERT_TO_CHAR(file, convertedFile);
-				HELIUM_CONVERT_TO_CHAR(ext, convertedExt);
+				HELIUM_CONVERT_TO_TCHAR(module, convertedModule);
+				HELIUM_CONVERT_TO_TCHAR(file, convertedFile);
+				HELIUM_CONVERT_TO_TCHAR(ext, convertedExt);
                 StringPrint(result, TXT("%s, %s : %s%s(%d)"), convertedModule, symbol, convertedFile, convertedExt, l.LineNumber);
                 return result;
             }
@@ -764,7 +764,7 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
         return TXT( "" );
     }
 
-	HELIUM_CONVERT_TO_WCHAR_T( directory.c_str(), convertedDirectory );
+	HELIUM_CONVERT_TO_NATIVE( directory.c_str(), convertedDirectory );
 
     SHCreateDirectoryEx( NULL, convertedDirectory, NULL );
 
@@ -805,7 +805,7 @@ tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
         // close the file
         CloseHandle( dmp );
 
-		HELIUM_CONVERT_TO_CHAR( dmpFile, convertedDmpFile );
+		HELIUM_CONVERT_TO_TCHAR( dmpFile, convertedDmpFile );
         return convertedDmpFile;
     }
 
@@ -968,7 +968,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
         if( SymGetModuleInfo64( hProcess, moduleBase, &moduleInfo ) )
         {
             rSymbol += TXT( "(" );
-			HELIUM_CONVERT_TO_CHAR( moduleInfo.ModuleName, convertedModuleName );
+			HELIUM_CONVERT_TO_TCHAR( moduleInfo.ModuleName, convertedModuleName );
             rSymbol += convertedModuleName;
             rSymbol += TXT( ") " );
 
@@ -992,7 +992,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
     if( SymFromAddr( hProcess, reinterpret_cast< uintptr_t >( pAddress ), NULL, &rSymbolInfo ) )
     {
         rSymbolInfo.Name[ MAX_SYM_NAME - 1 ] = TXT( '\0' );
-		HELIUM_CONVERT_TO_CHAR( rSymbolInfo.Name, convertedName );
+		HELIUM_CONVERT_TO_TCHAR( rSymbolInfo.Name, convertedName );
         rSymbol += convertedName;
         rSymbol += TXT( " " );
     }
@@ -1012,7 +1012,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
         lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
 
         rSymbol += TXT( "(" );
-		HELIUM_CONVERT_TO_CHAR( lineInfo.FileName, convertedFileName );
+		HELIUM_CONVERT_TO_TCHAR( lineInfo.FileName, convertedFileName );
         rSymbol += convertedFileName;
         rSymbol += TXT( ", line " );
         rSymbol += lineNumberBuffer;

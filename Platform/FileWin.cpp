@@ -33,7 +33,7 @@ Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate
         createDisposition = ( truncate ? CREATE_ALWAYS : OPEN_ALWAYS );
     }
 
-	HELIUM_CONVERT_TO_WCHAR_T( filename, convertedFilename );
+	HELIUM_CONVERT_TO_NATIVE( filename, convertedFilename );
 
     Handle handle = ::CreateFile(
         convertedFilename,

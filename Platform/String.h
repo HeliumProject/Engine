@@ -21,7 +21,6 @@ namespace Helium
         return true;
     }
 
-#if HELIUM_OS_WIN
     inline bool ConvertString( const wchar_t* src, wchar_t* dest, size_t destCount )
     {
 		size_t srcCount = wcslen( src );
@@ -43,23 +42,20 @@ namespace Helium
 
     HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
     HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
-#endif
 }
 
-#if HELIUM_OS_WIN
-# if HELIUM_WCHAR_T
-#  define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
+#if HELIUM_WCHAR_T
+# define HELIUM_CONVERT_TO_TCHAR( chars, convertedChars ) \
 	const wchar_t* convertedChars = chars;
-#  define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
+# define HELIUM_CONVERT_TO_NATIVE( chars, convertedChars ) \
 	const wchar_t* convertedChars = chars;
-# else
-#  define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
+#else
+# define HELIUM_CONVERT_TO_TCHAR( chars, convertedChars ) \
 	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
 	char* convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
 	ConvertString( chars, convertedChars, convertedChars##Count );
-#  define HELIUM_CONVERT_TO_WCHAR_T( chars, convertedChars ) \
+# define HELIUM_CONVERT_TO_NATIVE( chars, convertedChars ) \
 	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
 	wchar_t* convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
 	ConvertString( chars, convertedChars, convertedChars##Count );
-# endif
 #endif

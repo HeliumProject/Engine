@@ -73,7 +73,7 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
     PROCESS_INFORMATION  pi;
     memset( &pi, 0, sizeof( pi ) );
 
-	HELIUM_CONVERT_TO_WCHAR_T( command.c_str(), convertedCommand );
+	HELIUM_CONVERT_TO_NATIVE( command.c_str(), convertedCommand );
 
 	if( !::CreateProcess(
         NULL,                                                 // filename
@@ -156,7 +156,7 @@ tstring Helium::GetProcessPath()
     HELIUM_ASSERT( result );
     HELIUM_UNREF( result );
 
-	HELIUM_CONVERT_TO_CHAR( module, convertedModule );
+	HELIUM_CONVERT_TO_TCHAR( module, convertedModule );
     return convertedModule;
 }
 
@@ -170,7 +170,7 @@ tstring Helium::GetProcessName()
     wchar_t file[ MAX_PATH ];
     _wsplitpath( module, NULL, NULL, file, NULL );
 
-	HELIUM_CONVERT_TO_CHAR( file, convertedFile );
+	HELIUM_CONVERT_TO_TCHAR( file, convertedFile );
     return convertedFile;
 }
 
@@ -187,6 +187,6 @@ tstring Helium::GetDumpDirectory()
     wchar_t directory[ MAX_PATH ] = { 0 };
     _snwprintf( directory, sizeof( directory ) - 1, L"%s\\dumps", &tempDir );
 
-	HELIUM_CONVERT_TO_CHAR( directory, convertedDirectory );
+	HELIUM_CONVERT_TO_TCHAR( directory, convertedDirectory );
     return convertedDirectory;
 }

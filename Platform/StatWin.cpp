@@ -28,7 +28,7 @@ uint64_t FileTimeToUnixTime( FILETIME time )
 
 bool Helium::StatPath( const tchar_t* path, Helium::Stat& stat )
 {
-	HELIUM_CONVERT_TO_WCHAR_T( path, convertedPath );
+	HELIUM_CONVERT_TO_NATIVE( path, convertedPath );
 
 	WIN32_FILE_ATTRIBUTE_DATA fileStatus;
 	memset( &fileStatus, 0, sizeof( fileStatus ) );

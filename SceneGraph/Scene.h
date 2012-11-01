@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/DocumentManager.h"
+#include "Application/DocumentManager.h"
 #include "Foundation/Event.h"
 #include "Foundation/TUID.h"
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"

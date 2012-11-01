@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include "SceneGraph/DeviceManager.h"
 

@@ -2,7 +2,7 @@
 #include "ArtProvider.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Container/Insert.h"
+#include "Foundation/Insert.h"
 #include "Foundation/Log.h"
 
 #include <sstream>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Container/SortedMap.h"
+#include "Foundation/SortedMap.h"
 #include "Foundation/String.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Data/SimpleData.h"

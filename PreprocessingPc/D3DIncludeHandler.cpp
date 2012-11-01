@@ -8,9 +8,9 @@
 #include "PreprocessingPcPch.h"
 #include "PreprocessingPc/D3DIncludeHandler.h"
 
-#include "Foundation/File/File.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/Stream/FileStream.h"
+#include "Foundation/File.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/FileStream.h"
 #include "Foundation/StringConverter.h"
 
 using namespace Helium;

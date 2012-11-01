@@ -4,7 +4,7 @@
 
 #include "Foundation/Event.h"
 #include "Platform/Types.h"
-#include "Foundation/String/Natural.h"
+#include "Foundation/Natural.h"
 
 typedef std::set< tstring, CaseSensitiveNatStrCmp > S_NaturalOrderString;
 

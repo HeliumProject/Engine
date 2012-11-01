@@ -5,8 +5,8 @@
 #include "Reflect/Type.h"
 #include "Reflect/Visitor.h"
 #include "Foundation/Attribute.h"
-#include "Foundation/Container/Set.h"
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/Set.h"
+#include "Foundation/DynArray.h"
 
 //
 //  Composite Binary format:

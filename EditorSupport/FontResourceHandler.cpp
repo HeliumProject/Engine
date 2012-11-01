@@ -4,8 +4,8 @@
 
 #include "EditorSupport/FontResourceHandler.h"
 
-#include "Foundation/File/File.h"
-#include "Foundation/Stream/FileStream.h"
+#include "Foundation/File.h"
+#include "Foundation/FileStream.h"
 #include "Engine/BinarySerializer.h"
 #include "PcSupport/ObjectPreprocessor.h"
 #include "PcSupport/PlatformPreprocessor.h"

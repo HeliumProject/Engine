@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Memory/AutoPtr.h"
+#include "Foundation/AutoPtr.h"
 
 #include "Composite.h"
 

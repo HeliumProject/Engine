@@ -12,7 +12,7 @@
 //#include "PcSupport/PcSupport.h"
 //#include "Engine/Serializer.h"
 //
-//#include "Foundation/Stream/DynamicMemoryStream.h"
+//#include "Foundation/DynamicMemoryStream.h"
 //
 //// Output newline character.
 //#if HELIUM_OS_WIN

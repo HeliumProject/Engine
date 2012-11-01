@@ -2,7 +2,7 @@
 
 #include "Editor/API.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Event.h"
 
 #include <wx/dnd.h>

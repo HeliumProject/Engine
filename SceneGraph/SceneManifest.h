@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Reflect/Data/DataDeduction.h"
 #include "Math/FpuVector3.h"
 

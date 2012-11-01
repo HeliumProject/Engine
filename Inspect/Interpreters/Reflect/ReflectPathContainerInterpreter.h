@@ -5,7 +5,7 @@
 #include "Reflect/Data/StlVectorData.h"
 #include "Reflect/Data/StlSetData.h"
 
-#include "Foundation/FileDialog.h"
+#include "Application/FileDialog.h"
 
 namespace Helium
 {

@@ -6,8 +6,8 @@
 
 #include "Reflect/Class.h"
 #include "Reflect/Object.h"
-#include "Foundation/Container/Map.h"
-#include "Foundation/Memory/AutoPtr.h"
+#include "Foundation/Map.h"
+#include "Foundation/AutoPtr.h"
 
 //TODO: OnAttach/OnDetach events for components?
 //TODO: API for systems to iterate over allocated components

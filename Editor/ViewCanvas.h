@@ -5,7 +5,7 @@
 #include "Math/FpuAlignedBox.h"
 
 #include "Reflect/Enumeration.h"
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "SceneGraph/Render.h"
 #include "SceneGraph/Camera.h"

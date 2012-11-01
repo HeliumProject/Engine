@@ -208,3 +208,118 @@ Helium.PublishTbb = function( bin )
 	Helium.Publish( files )
 
 end
+
+Helium.DoTbbProjectSettings = function( bin )
+
+	configuration {}
+
+	includedirs
+	{
+		"Dependencies/tbb/include",
+	}
+
+
+	if _ACTION == "vs2008" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc9_debug",
+			}
+
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc9_release",
+			}
+
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc9_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc9_release",
+			}
+	elseif _ACTION == "vs2010" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc10_debug",
+			}
+
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc10_release",
+			}
+
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc10_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc10_release",
+			}
+	elseif _ACTION == "vs2012" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc11_debug",
+			}
+
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_ia32_cl_vc11_release",
+			}
+
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc11_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/windows_intel64_cl_vc11_release",
+			}
+	elseif _ACTION == "xcode4" then
+		configuration { "windows", "x32", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_debug",
+			}
+
+		configuration { "windows", "x32", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/macos_ia32_gcc_cc4.2.1_os10.6.8_release",
+			}
+
+		configuration { "windows", "x64", "Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_debug",
+			}
+
+		configuration { "windows", "x64", "not Debug" }
+			libdirs
+			{
+				"Dependencies/tbb/build/macos_intel64_gcc_cc4.2.1_os10.6.8_release",
+			}
+	else
+		print("Implement support for " .. _ACTION .. " to tbb lib dir in Helium.lua")
+		os.exit(1)
+	end
+
+	configuration {}
+
+end

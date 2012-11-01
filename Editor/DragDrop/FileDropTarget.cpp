@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "FileDropTarget.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 #include "Platform/Exception.h"
 
 using namespace Helium;

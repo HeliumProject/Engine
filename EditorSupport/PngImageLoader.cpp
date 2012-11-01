@@ -11,7 +11,7 @@
 
 #include "EditorSupport/PngImageLoader.h"
 
-#include "Foundation/Stream/Stream.h"
+#include "Foundation/Stream.h"
 #include "Foundation/StringConverter.h"
 #include "Rendering/Color.h"
 #include "EditorSupport/Image.h"

@@ -5,7 +5,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include "API.h"
 #include "TypeID.h"

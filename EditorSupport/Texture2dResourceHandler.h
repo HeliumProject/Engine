@@ -14,7 +14,7 @@
 #if HELIUM_TOOLS
 
 #include "PcSupport/ResourceHandler.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {

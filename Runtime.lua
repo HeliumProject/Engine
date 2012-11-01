@@ -1,18 +1,6 @@
 require "Helium"
 
-solution "Runtime"
-
-Helium.DoDefaultSolutionSettings()
-
-print( "Temporarily defining HELIUM_TOOLS in Runtime" )
-defines
-{
-	"HELIUM_TOOLS=1",
-}
-
 dofile "Shared.lua"
-
-local prefix = solution().name .. '.'
 
 project( prefix .. "ExampleGame" )
 	uuid "ABB15BB2-467A-4D1A-A6DC-193DEF359AE4"
@@ -26,6 +14,7 @@ project( prefix .. "ExampleGame" )
 
 	includedirs
 	{
+		"Dependencies/boost-preprocessor/include",
 		"Example",
 	}
 
@@ -61,6 +50,20 @@ project( prefix .. "ExampleMain" )
 		"WinMain",
 	}
 
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+		"Example",
+	}
+
+	pchheader( "ExampleMainPch.h" )
+	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
+
+	Helium.DoBasicProjectSettings()
+	Helium.DoGraphicsProjectSettings()
+	Helium.DoTbbProjectSettings()
+	Helium.DoFbxProjectSettings()
+
 	links
 	{
 		prefix .. "Platform",
@@ -84,37 +87,6 @@ project( prefix .. "ExampleMain" )
 		prefix .. "ExampleGame",
 	}
 
-	includedirs
-	{
-		"Example",
-	}
-
-	pchheader( "ExampleMainPch.h" )
-	pchsource( "Example/ExampleMain/ExampleMainPch.cpp" )
-
-	Helium.DoDefaultProjectSettings()
-
-	configuration "windows"
-		links
-		{
-			"d3d9",
-			"d3d11",
-			"wininet",
-			"ws2_32",
-			"dbghelp",
-		}
-		
-	configuration { "windows", "Debug" }
-		links
-		{
-			Helium.DebugFbxLib,
-		}
-	configuration { "windows", "not Debug" }
-		links
-		{
-			Helium.ReleaseFbxLib,
-		}
-		
 	if haveGranny then
 		configuration "x32"
 			links

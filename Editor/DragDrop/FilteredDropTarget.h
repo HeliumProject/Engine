@@ -2,7 +2,7 @@
 
 #include "DropTarget.h"
 
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 
 namespace Helium
 {

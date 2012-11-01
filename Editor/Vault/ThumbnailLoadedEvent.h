@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 #include "Thumbnail.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 namespace Helium
 {

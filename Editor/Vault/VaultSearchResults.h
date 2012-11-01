@@ -4,8 +4,8 @@
 
 #include "Editor/API.h"
 
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/SmartPtr.h"
 
 
 namespace Helium

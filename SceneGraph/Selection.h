@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Foundation/Event.h"
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "Reflect/Object.h"
 

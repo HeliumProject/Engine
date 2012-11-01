@@ -54,3 +54,38 @@ Helium.PublishFbx = function( bin )
 	Helium.Publish( files )
 
 end
+
+Helium.DoFbxProjectSettings = function( bin )
+
+	configuration {}
+
+	includedirs
+	{
+		Helium.GetFbxSdkLocation() .. "/include",
+	}
+
+	configuration { "windows", "x32" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x86",
+		}
+	configuration { "windows", "x64" }
+		libdirs
+		{
+			Helium.GetFbxSdkLocation() .. "/lib/" .. _ACTION .. "/x64",
+		}
+
+	configuration { "windows", "Debug" }
+		links
+		{
+			Helium.DebugFbxLib,
+		}
+	configuration { "windows", "not Debug" }
+		links
+		{
+			Helium.ReleaseFbxLib,
+		}
+
+	configuration {}
+
+end

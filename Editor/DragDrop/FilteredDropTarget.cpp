@@ -1,8 +1,8 @@
 #include "EditorPch.h"
 #include "FilteredDropTarget.h"
 
-#include "Foundation/String/Wildcard.h"
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Wildcard.h"
+#include "Foundation/Tokenize.h"
 #include "Editor/Clipboard/ClipboardDataObject.h"
 #include "Editor/Clipboard/ClipboardFileList.h"
 

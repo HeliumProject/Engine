@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "MenuMRU.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
 #include <map>
 #include <wx/menu.h>

@@ -4,10 +4,10 @@
 
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
-#include "Foundation/Stream/BufferedStream.h"
-#include "Foundation/File/File.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/Stream/FileStream.h"
+#include "Foundation/BufferedStream.h"
+#include "Foundation/File.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/FileStream.h"
 #include "Foundation/StringConverter.h"
 #include "Engine/BinarySerializer.h"
 #include "Engine/BinaryDeserializer.h"

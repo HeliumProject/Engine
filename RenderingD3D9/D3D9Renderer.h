@@ -13,7 +13,7 @@
 #include "Rendering/Renderer.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 
 #include <d3d9.h>
 

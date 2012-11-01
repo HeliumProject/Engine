@@ -8,9 +8,9 @@
 #include "EnginePch.h"
 #include "Engine/GameObjectPath.h"
 
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ReferenceCounting.h"
 #include "Engine/GameObject.h"
 
 struct Helium::GameObjectPath::PendingLink

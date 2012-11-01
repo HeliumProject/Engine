@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/HierarchyNode.h"

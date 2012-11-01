@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "SceneGraph/SceneManager.h"
 
-#include "Foundation/Container/Insert.h" 
+#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
 
 #include "SceneGraph/ComponentHandle.h"

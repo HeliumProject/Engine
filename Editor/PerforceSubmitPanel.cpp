@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "Platform/Environment.h"
-#include "Foundation/Container/Insert.h" 
+#include "Foundation/Insert.h" 
 
 #include <wx/msgdlg.h>
 

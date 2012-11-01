@@ -10,7 +10,7 @@
 #include "Inspect/DataBinding.h"
 #include "Inspect/Inspect.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

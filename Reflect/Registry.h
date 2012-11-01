@@ -4,9 +4,9 @@
 
 #include "Foundation/Memory.h"
 #include "Foundation/Crc32.h"
-#include "Foundation/Container/SortedMap.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SortedMap.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/SmartPtr.h"
 
 #include "Reflect/ReflectionInfo.h"
 

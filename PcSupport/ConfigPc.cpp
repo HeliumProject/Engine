@@ -8,8 +8,8 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ConfigPc.h"
 
-#include "Foundation/File/File.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/File.h"
+#include "Foundation/FilePath.h"
 #include "Engine/Config.h"
 #include "PcSupport/XmlPackageLoader.h"
 #include "PcSupport/XmlSerializer.h"

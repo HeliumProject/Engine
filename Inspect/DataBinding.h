@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/SmartPtr.h"
 #include "Foundation/Event.h"
 #include "Foundation/Property.h"
-#include "Foundation/UndoQueue.h"
+#include "Application/UndoQueue.h"
 
 #include "Reflect/Data/DataDeduction.h"
 

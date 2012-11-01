@@ -6,7 +6,7 @@
 #include "Foundation/API.h"
 #include "Foundation/Math.h"
 #include "Foundation/HashFunctions.h"
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 
 #include <string>
 #include <stdlib.h>

@@ -11,8 +11,8 @@
 
 #include "Engine/Serializer.h"
 
-#include "Foundation/Stream/ByteSwappingStream.h"
-#include "Foundation/Stream/ExternalMemoryStream.h"
+#include "Foundation/ByteSwappingStream.h"
+#include "Foundation/ExternalMemoryStream.h"
 
 namespace Helium
 {

@@ -14,9 +14,9 @@
 #include "API.h"
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Memory/Endian.h"
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/SmartPtr.h"
+#include "Foundation/Endian.h"
+#include "Foundation/OrderedSet.h"
 
 #include "Foundation/Profile.h"
 

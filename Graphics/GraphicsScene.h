@@ -12,13 +12,13 @@
 #include "Graphics/Graphics.h"
 #include "Engine/GameObject.h"
 
-#include "Foundation/Container/BitArray.h"
+#include "Foundation/BitArray.h"
 #include "Rendering/RRenderResource.h"
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "GraphicsTypes/GraphicsSceneView.h"
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/ObjectPool.h"
 #include "Graphics/BufferedDrawer.h"
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 

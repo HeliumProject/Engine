@@ -3,8 +3,8 @@
 #include <map>
 
 #include "Platform/Assert.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/SmartPtr.h"
+#include "Foundation/OrderedSet.h"
 #include "Editor/API.h"
 
 #include "MRU.h"

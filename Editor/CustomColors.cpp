@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "CustomColors.h"
 
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Tokenize.h"
 
 #include <sstream>
 

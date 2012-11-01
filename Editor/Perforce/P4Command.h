@@ -6,7 +6,7 @@
 #include "Platform/String.h"
 #include "Platform/Thread.h"
 #include "Platform/Profile.h"
-#include "Foundation/RCS/RCSTypes.h"
+#include "Application/RCSTypes.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64
 

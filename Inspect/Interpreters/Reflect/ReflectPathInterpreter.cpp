@@ -8,8 +8,8 @@
 #include "Inspect/Controls/ValueControl.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/String/Wildcard.h"
-#include "Foundation/String/Tokenize.h"
+#include "Foundation/Wildcard.h"
+#include "Foundation/Tokenize.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;

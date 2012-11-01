@@ -12,7 +12,7 @@
 #include "Engine/Engine.h"
 
 #include "Platform/Trace.h"
-#include "Foundation/Container/DynArray.h"
+#include "Foundation/DynArray.h"
 #include "Engine/JobManager.h"
 
 #include <tbb/task.h>

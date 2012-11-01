@@ -2,12 +2,12 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Container/ConcurrentHashMap.h"
-#include "Foundation/Container/ConcurrentHashSet.h"
-#include "Foundation/Container/DynArray.h"
-#include "Foundation/Container/SparseArray.h"
-#include "Foundation/Memory/ReferenceCounting.h"
-#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/ConcurrentHashMap.h"
+#include "Foundation/ConcurrentHashSet.h"
+#include "Foundation/DynArray.h"
+#include "Foundation/SparseArray.h"
+#include "Foundation/ReferenceCounting.h"
+#include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
 
 #include "Engine/GameObjectPath.h"

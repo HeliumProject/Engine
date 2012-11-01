@@ -6,9 +6,9 @@
 
 #include "Foundation/Event.h"
 #include "Foundation/Attribute.h"
-#include "Foundation/Container/ConcurrentHashSet.h"
-#include "Foundation/File/Path.h"
-#include "Foundation/Memory/ReferenceCounting.h"
+#include "Foundation/ConcurrentHashSet.h"
+#include "Foundation/FilePath.h"
+#include "Foundation/ReferenceCounting.h"
 #include "Reflect/API.h"
 #include "Reflect/Exceptions.h"
 

@@ -6,13 +6,13 @@
 #include <cctype>
 
 #include "Foundation/Log.h"
-#include "Foundation/Preferences.h"
-#include "Foundation/Container/Insert.h" 
+#include "Application/Preferences.h"
+#include "Foundation/Insert.h" 
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/Version.h"
 #include "Inspect/DataBinding.h"
 #include "Inspect/Canvas.h"
-#include "Foundation/String/Utilities.h"
+#include "Foundation/StringUtilities.h"
 #include "Math/FpuAngleAxis.h"
 #include "Foundation/Log.h"
 

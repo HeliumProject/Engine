@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/TimerThread.h"
+#include "Application/TimerThread.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Tool.h"

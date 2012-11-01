@@ -5,15 +5,15 @@
 #include "Platform/Debug.h"
 #include "Platform/Exception.h"
 
-#include "Foundation/InitializerStack.h"
+#include "Application/InitializerStack.h"
 #include "Foundation/Log.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/FilePath.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
-#include "Foundation/CmdLineProcessor.h"
+#include "Application/CmdLineProcessor.h"
 
-#include "Foundation/Startup.h"
-#include "Foundation/RCS/RCS.h"
+#include "Application/Startup.h"
+#include "Application/RCS.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

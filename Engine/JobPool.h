@@ -11,7 +11,7 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Container/ConcurrentHashMap.h"
+#include "Foundation/ConcurrentHashMap.h"
 
 namespace Helium
 {

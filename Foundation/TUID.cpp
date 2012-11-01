@@ -2,7 +2,7 @@
 #include "TUID.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Endian.h"
 #include "Foundation/GUID.h"
 
 #include <time.h>

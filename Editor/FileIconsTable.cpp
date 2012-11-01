@@ -2,9 +2,9 @@
 #include "FileIconsTable.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Container/Insert.h" 
-#include "Foundation/File/Directory.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/Insert.h" 
+#include "Foundation/Directory.h"
+#include "Foundation/FilePath.h"
 #include "Foundation/Log.h"
 
 #include "Editor/ArtProvider.h"

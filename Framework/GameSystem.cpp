@@ -9,8 +9,8 @@
 #include "Framework/GameSystem.h"
 
 #include "Engine/AsyncLoader.h"
-#include "Foundation/File/File.h"
-#include "Foundation/File/Path.h"
+#include "Foundation/File.h"
+#include "Foundation/FilePath.h"
 #include "Reflect/Registry.h"
 #include "Platform/Timer.h"
 #include "Engine/Config.h"

@@ -5,8 +5,8 @@
 #include "Reflect/Structure.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Data/DataDeduction.h"
-#include "Foundation/Container/Insert.h" 
-#include "Foundation/Memory/Endian.h"
+#include "Foundation/Insert.h" 
+#include "Foundation/Endian.h"
 
 using Helium::Insert;
 using namespace Helium;

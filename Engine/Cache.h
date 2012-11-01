@@ -13,8 +13,8 @@
 
 #include "Engine/Engine.h"
 
-#include "Foundation/Container/ConcurrentHashMap.h"
-#include "Foundation/Container/ObjectPool.h"
+#include "Foundation/ConcurrentHashMap.h"
+#include "Foundation/ObjectPool.h"
 #include "Engine/GameObjectPath.h"
 #include "Reflect/Object.h"
 

@@ -1,7 +1,7 @@
 #include "SceneGraphPch.h"
 #include "SceneSettings.h"
 
-#include "Foundation/Preferences.h"
+#include "Application/Preferences.h"
 
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::SceneSettings );
 

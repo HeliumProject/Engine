@@ -10,14 +10,14 @@
 #include "Platform/Timer.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Startup.h"
+#include "Application/Startup.h"
 #include "Foundation/Exception.h"
-#include "Foundation/InitializerStack.h"
-#include "Foundation/CmdLineProcessor.h"
-#include "Foundation/DocumentManager.h"
-#include "Foundation/File/File.h"
+#include "Application/InitializerStack.h"
+#include "Application/CmdLineProcessor.h"
+#include "Application/DocumentManager.h"
+#include "Foundation/File.h"
 #include "Foundation/Name.h"
-#include "Foundation/Worker/Process.h"
+#include "Application/WorkerProcess.h"
 
 #include "Reflect/Registry.h"
 

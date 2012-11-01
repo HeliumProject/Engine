@@ -1,9 +1,9 @@
 #pragma once
 
 #include "SceneGraph/Project.h"
-#include "Foundation/DocumentManager.h"
-#include "Foundation/Memory/SmartPtr.h"
-#include "Foundation/File/Path.h"
+#include "Application/DocumentManager.h"
+#include "Foundation/SmartPtr.h"
+#include "Foundation/FilePath.h"
 
 #include <wx/dataview.h>
 

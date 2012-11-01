@@ -835,14 +835,6 @@ project( prefix .. "TestApp" )-- DEPRECATED
 			"HELIUM_TEST_APP_EXPORTS",
 		}
 
-	configuration "windows"
-		links
-		{
-			"dbghelp",
-			"wininet",
-			"ws2_32",
-		}
-
 	if haveGranny then
 		configuration { "windows", "x32" }
 			libdirs

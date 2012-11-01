@@ -87,14 +87,6 @@ project( prefix .. "ExampleMain" )
 		prefix .. "ExampleGame",
 	}
 
-	configuration "windows"
-		links
-		{
-			"dbghelp",
-			"wininet",
-			"ws2_32",
-		}
-
 	if haveGranny then
 		configuration "x32"
 			links

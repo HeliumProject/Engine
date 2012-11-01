@@ -161,7 +161,6 @@ project( prefix .. "Editor" )
 		"libclient",
 		"librpc",
 		"libsupp",
-		"ws2_32",
 	}
 
 	--[[

@@ -149,7 +149,11 @@ void Helium::Startup( int argc, const tchar_t** argv )
             Log::Print( stmt.Get().c_str() );
 
             stmt.Set( "Helium", "CurrentTime" );
-            stmt.ReplaceKey( TXT( "TIME" ), _tctime64( &g_StartTime.time ) );
+#if HELIUM_WCHAR_T
+            stmt.ReplaceKey( TXT( "TIME" ), _wctime64( &g_StartTime.time ) );
+#else
+            stmt.ReplaceKey( TXT( "TIME" ), _ctime64( &g_StartTime.time ) );
+#endif
             Log::Print( stmt.Get().c_str() );
 
             stmt.Set( "Helium", "CommandLine" );
@@ -273,8 +277,12 @@ int Helium::Shutdown( int code )
             Log::Print( TXT( "\n" ) );
 
             _timeb endTime;
-            _ftime(&endTime); 
-            Log::Print( TXT( "Current Time: %s" ), _tctime64( &endTime.time ) );
+            _ftime(&endTime);
+#if HELIUM_WCHAR_T
+            Log::Print( TXT( "Current Time: %s" ), _wctime64( &endTime.time ) );
+#else
+            Log::Print( TXT( "Current Time: %s" ), _ctime64( &endTime.time ) );
+#endif
 
             int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
             int milli = time % 1000; time /= 1000;

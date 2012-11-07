@@ -21,7 +21,7 @@ namespace Helium
 	{
 		va_list args;
 		va_start(args, fmt);
-		int result = StringPrint( dest, N, fmt, args );
+		int result = StringPrintArgs( dest, N, fmt, args );
 	    va_end(args);
 		return result;
 	}
@@ -29,6 +29,6 @@ namespace Helium
 	template <size_t N>
 	inline int StringPrintArgs( tchar_t (&dest)[N], const tchar_t* fmt, va_list args )
 	{
-		return StringPrint( dest, N, fmt, args );
+		return StringPrintArgs( dest, N, fmt, args );
 	}
 }

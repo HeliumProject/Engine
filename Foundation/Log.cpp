@@ -531,7 +531,7 @@ void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
     PrintString(string, Streams::Normal, Levels::Default, color); 
@@ -545,7 +545,7 @@ void Log::Print(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -560,7 +560,7 @@ void Log::Print(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -575,7 +575,7 @@ void Log::Debug(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -590,7 +590,7 @@ void Log::Debug(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -605,7 +605,7 @@ void Log::Profile(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -620,7 +620,7 @@ void Log::Profile(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -726,7 +726,7 @@ Log::Heading::Heading(const tchar_t *fmt, ...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = StringPrint(string, fmt, args);
+    int size = StringPrintArgs(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 

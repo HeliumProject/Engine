@@ -702,13 +702,22 @@ int Main( int argc, const tchar_t** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int _tmain( int argc, const tchar_t** argv )
+int wmain( int argc, const wchar_t** argv )
 {
+	std::vector< tstring > strings;
+	const tchar_t** av = (const tchar_t**)alloca( argc * sizeof( const tchar_t* ) );
+	for ( int i=0; i<argc; i++ )
+	{
+		strings.push_back( tstring() );
+		ConvertString( argv[i], strings.back() );
+		av[i] = strings.back().c_str();
+	}
+
     Helium::InitializerStack initializerStack( true );
 
     Debug::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
 
-    int result = Helium::StandardMain( &Main, argc, argv );
+    int result = Helium::StandardMain( &Main, argc, av );
 
     Debug::g_BreakpointOccurred.Clear();
 

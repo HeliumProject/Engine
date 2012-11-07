@@ -8,7 +8,7 @@ bool Helium::ConvertString( const char* src, wchar_t* dest, size_t destCount )
 
 bool Helium::ConvertString( const wchar_t* src, char* dest, size_t destCount )
 {
-	return ::WideCharToMultiByte( CP_UTF8, 0, src, -1, dest, (int)destCount, "?", NULL ) != 0;
+	return ::WideCharToMultiByte( CP_UTF8, 0, src, -1, dest, (int)destCount, NULL, NULL ) != 0;
 }
 
 size_t Helium::GetConvertedStringLength( const char* src )

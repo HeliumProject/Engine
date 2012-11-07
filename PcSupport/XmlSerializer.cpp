@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 //#include "PcSupport/XmlSerializer.h"
 //
-//#include "Foundation/File.h"
+//#include "Engine/FileLocations.h"
 //#include "Foundation/FilePath.h"
 //#include "Foundation/FileStream.h"
 //#include "Foundation/BufferedStream.h"
@@ -59,7 +59,7 @@
 //    outputFile.MakePath();
 //
 //    // Attempt to open the file for writing.
-//    m_pFileStream = File::Open( pFileName, FileStream::MODE_WRITE, true );
+//    m_pFileStream = FileStream::OpenFileStream( pFileName, FileStream::MODE_WRITE, true );
 //    if( !m_pFileStream )
 //    {
 //        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlSerializer::Initialize(): Failed to open \"%s\" for writing.\n" ), pFileName );

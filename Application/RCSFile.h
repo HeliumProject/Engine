@@ -4,8 +4,10 @@
 
 #include "Platform/Types.h"
 
-#include "Application/API.h"
 #include "Foundation/SmartPtr.h"
+
+#include "Application/API.h"
+#include "Application/Message.h"
 #include "Application/RCSTypes.h"
 
 namespace Helium
@@ -23,20 +25,20 @@ namespace Helium
         class Revision : public Helium::RefCountBase< Revision >
         {
         public:
-            int32_t          m_Revision;
-            int32_t          m_ChangesetId;
-            Operation    m_Operation;
-            FileType     m_FileType;
-            time_t       m_Time;
-            uint64_t          m_Size;
+            int32_t		m_Revision;
+            int32_t     m_ChangesetId;
+            Operation   m_Operation;
+            FileType    m_FileType;
+            time_t      m_Time;
+            uint64_t    m_Size;
 
-            tstring  m_Username;
-            tstring  m_Client;
-            tstring  m_Digest;
-            tstring  m_Description;
+            tstring		m_Username;
+            tstring		m_Client;
+            tstring		m_Digest;
+            tstring		m_Description;
 
-            V_FilePtr m_IntegrationTargets;
-            V_FilePtr m_IntegrationOrigins;
+            V_FilePtr	m_IntegrationTargets;
+            V_FilePtr	m_IntegrationOrigins;
 
             Revision()
                 : m_Revision( 0 )
@@ -140,36 +142,36 @@ namespace Helium
         {
         public:
             // this gates which of the fields below are populated when info is gathered explicitly
-            uint32_t           m_FileData;
-            uint32_t           m_ActionData;
+            uint32_t		m_FileData;
+            uint32_t        m_ActionData;
 
-            tstring       m_DepotPath;
-            tstring       m_LocalPath;
-            tstring       m_Digest;
+            tstring			m_DepotPath;
+            tstring			m_LocalPath;
+            tstring			m_Digest;
 
-            uint64_t           m_Size;
+            uint64_t        m_Size;
 
-            Operation     m_Operation;
-            uint32_t           m_State;
-            uint32_t           m_Flags;
+            Operation		m_Operation;
+            uint32_t        m_State;
+            uint32_t        m_Flags;
 
-            int32_t           m_LocalRevision;
-            int32_t           m_HeadRevision;
+            int32_t         m_LocalRevision;
+            int32_t         m_HeadRevision;
 
-            time_t        m_HeadTime;
-            time_t        m_HeadModTime;
+            time_t			m_HeadTime;
+            time_t			m_HeadModTime;
 
-            tstring       m_Username;
-            tstring       m_Client;
+            tstring			m_Username;
+            tstring			m_Client;
 
-            uint64_t           m_ChangesetId;
+            uint64_t        m_ChangesetId;
 
-            V_ActionPtr   m_Actions;
-            V_RevisionPtr m_Revisions;
+            V_ActionPtr		m_Actions;
+            V_RevisionPtr	m_Revisions;
 
-            FileType      m_FileType;
+            FileType		m_FileType;
 
-            bool          m_Exclusive;
+            bool			m_Exclusive;
 
             File( const tstring& localPath = TXT( "" ), uint32_t fileData = FileData::All, uint32_t actionData = ActionData::All )
                 : m_FileData ( fileData )
@@ -213,8 +215,8 @@ namespace Helium
 
             void Revert( const OpenFlag flags = OpenFlags::Default );
 
-            // Like above, but will use ::MessageBox-style GUI to prompt for common handling in a program
-            bool QueryOpen( const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
+            // Like above, but will use MessageBox-style GUI to prompt for common handling in a program
+            bool QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
 
             void Copy( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );
             void Rename( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const uint64_t changesetId = DefaultChangesetId );

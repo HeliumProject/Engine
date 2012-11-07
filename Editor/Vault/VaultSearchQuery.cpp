@@ -119,19 +119,19 @@ const tstring& VaultSearchQuery::GetSQLQueryString() const
 /////////////////////////////////////////////////////////////////////////////////
 bool VaultSearchQuery::operator<( const VaultSearchQuery& rhs ) const
 {
-    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) < 0;
+    return CaseInsensitiveCompareString( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) < 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 bool VaultSearchQuery::operator==( const VaultSearchQuery& rhs ) const
 {
-    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) == 0;
+    return CaseInsensitiveCompareString( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) == 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 bool VaultSearchQuery::operator!=( const VaultSearchQuery& rhs ) const
 {
-    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) != 0;
+    return CaseInsensitiveCompareString( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) != 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

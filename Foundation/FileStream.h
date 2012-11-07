@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Foundation/Stream.h"
-
 #include "Platform/File.h"
+
+#include "Foundation/Stream.h"
+#include "Foundation/String.h"
 
 namespace Helium
 {
@@ -10,6 +11,12 @@ namespace Helium
     class HELIUM_FOUNDATION_API FileStream : public Stream
     {
     public:
+        /// @name Convenience
+        //@{
+        static FileStream* OpenFileStream( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
+        static FileStream* OpenFileStream( const String& rPath, uint32_t modeFlags, bool bTruncate = true );
+        //@}
+
         /// File access mode flags.
         enum EMode
         {
@@ -33,8 +40,8 @@ namespace Helium
         /// @return  True if the file was successfully opened, false if not.
         ///
         /// @see Close(), IsOpen()
-        bool FileStream::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
-        
+        bool Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate = true );
+
         /// @copydoc Stream::Close()
         virtual void Close();
 
@@ -86,7 +93,6 @@ namespace Helium
         uint32_t m_modeFlags;
         
         /// handle to the stream
-        Handle m_hFile;
-
+        File m_File;
     };
 }

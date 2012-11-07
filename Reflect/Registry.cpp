@@ -44,7 +44,7 @@ struct CaseInsensitiveCompare
 
     bool operator()( const std::pair< const tstring, T >& rhs )
     {
-        return _tcsicmp( rhs.first.c_str(), value.c_str() ) == 0;
+        return CaseInsensitiveCompare( rhs.first.c_str(), value.c_str() ) == 0;
     }
 };
 
@@ -61,7 +61,7 @@ struct CaseInsensitiveNameCompare
 
     bool operator()( const KeyValue< const tchar_t*, T >& rhs )
     {
-        return _tcsicmp( *rhs.First(), *value ) == 0;
+        return CaseInsensitiveCompare( *rhs.First(), *value ) == 0;
     }
 };
 

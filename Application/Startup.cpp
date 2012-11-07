@@ -3,6 +3,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Debug.h"
+#include "Platform/Encoding.h"
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
 #include "Platform/Runtime.h"
@@ -142,14 +143,9 @@ void Helium::Startup( int argc, const tchar_t** argv )
             //
             // Print project and version info
             //
-            tchar_t module[MAX_PATH];
-            GetModuleFileName( 0, module, MAX_PATH );
-
-            tchar_t name[MAX_PATH];
-            _tsplitpath( module, NULL, NULL, name, NULL );
 
             Localization::Statement stmt( "Helium", "RunningApp" );
-            stmt.ReplaceKey( TXT( "APPNAME" ), name );
+            stmt.ReplaceKey( TXT( "APPNAME" ), GetProcessName() );
             Log::Print( stmt.Get().c_str() );
 
             stmt.Set( "Helium", "CurrentTime" );
@@ -192,7 +188,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
             if ( Helium::GetCmdLineFlag( StartupArgs::Verbose ) )
             {
                 // get a pointer to the environment block. 
-                const char* env = (const char*)GetEnvironmentStrings();
+                const wchar_t* env = (const wchar_t*)GetEnvironmentStringsW();
 
                 // if the returned pointer is NULL, exit.
                 if (env)
@@ -201,11 +197,13 @@ void Helium::Startup( int argc, const tchar_t** argv )
                     Log::Debug( TXT( "Environment:\n" ) );
 
                     // variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-                    for (const char* var = (const char*)env; *var; var++) 
+                    for (const wchar_t* var = (const wchar_t*)env; *var; var++) 
                     {
-                        if (*var != '=') // WTF?
+						HELIUM_CONVERT_TO_TCHAR( var, convertedVar );
+
+                        if (*convertedVar != '=') // WTF?
                         {
-                            Log::Debug( TXT( " %s\n" ), var );
+                            Log::Debug( TXT( " %s\n" ), convertedVar );
                         }
 
                         while (*var)
@@ -214,7 +212,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
                         }
                     }
 
-                    FreeEnvironmentStrings((tchar_t*)env);
+                    FreeEnvironmentStringsW((wchar_t*)env);
                 }
             }
         }
@@ -311,13 +309,7 @@ int Helium::Shutdown( int code )
             }
 
             // Print general success or failure, depends on the result code
-            tchar_t module[MAX_PATH];
-            GetModuleFileName( 0, module, MAX_PATH );
-
-            tchar_t name[MAX_PATH];
-            _tsplitpath( module, NULL, NULL, name, NULL );
-
-            Log::Print( TXT( "%s: " ), name );
+            Log::Print( TXT( "%s: " ), GetProcessName().c_str() );
             Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? Log::Colors::Red : Log::Colors::Green );
 
             // Print warning/error count
@@ -329,7 +321,7 @@ int Helium::Shutdown( int code )
             if (Log::GetErrorCount())
             {
                 tchar_t buf[80];
-                _stprintf( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
+                StringPrint( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Red );
             }
 
@@ -341,7 +333,7 @@ int Helium::Shutdown( int code )
             if (Log::GetWarningCount())
             {
                 tchar_t buf[80];
-                _stprintf(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
+                StringPrint(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
                 Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Yellow );
             }
 
@@ -392,18 +384,7 @@ Log::Stream Helium::GetTraceStreams()
 
 void Helium::InitializeStandardTraceFiles()
 {
-    tchar_t module[MAX_PATH];
-    GetModuleFileName( 0, module, MAX_PATH );
-
-    tchar_t drive[MAX_PATH];
-    tchar_t dir[MAX_PATH];
-    tchar_t name[MAX_PATH];
-    _tsplitpath( module, drive, dir, name, NULL );
-
-    tstring path = drive;
-    path += dir;
-    path += name;
-
+    tstring path = GetProcessPath();
     g_TraceFiles.push_back( path + TXT( ".log" ) );
     Log::AddTraceFile( g_TraceFiles.back(), Helium::GetTraceStreams() );
 
@@ -611,9 +592,9 @@ int Helium::StandardMain( int (*main)(int argc, const tchar_t** argv), int argc,
     }
 }
 
-#if defined( WIN32 ) && defined ( _WINDOWS_ )
+#if HELIUM_OS_WIN
 
-static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
+static int StandardWinMainTryExcept( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
     if (Helium::IsDebuggerPresent())
     {
@@ -634,7 +615,13 @@ static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTA
     }
 }
 
-static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
+static void ShowErrorDialog( const tchar_t* error )
+{
+	HELIUM_CONVERT_TO_NATIVE( error, convertedError );
+	::MessageBoxW(NULL, convertedError, L"Error", MB_OK|MB_ICONEXCLAMATION);
+}
+
+static int StandardWinMainTryCatch( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
     if ( Helium::IsDebuggerPresent() )
     {
@@ -651,8 +638,7 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
         catch ( const Helium::Exception& ex )
         {
             Log::Error( TXT( "%s\n" ) , ex.What() );
-            MessageBox(NULL, ex.What(), TXT( "Error" ), MB_OK|MB_ICONEXCLAMATION);
-
+			ShowErrorDialog( ex.What() ); // b/c of not being able to call alloca inside catch
             ::ExitProcess( -1 );
         }
 
@@ -660,11 +646,13 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
     }
 }
 
-static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
+static int StandardWinMainEntry( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd )
 {
+	HELIUM_CONVERT_TO_TCHAR( lpCmdLine, convertedCmdLine );
+
     int argc = 0;
     const tchar_t** argv = NULL;
-    Helium::ProcessCmdLine( lpCmdLine, argc, argv );
+    Helium::ProcessCmdLine( convertedCmdLine, argc, argv );
 
     int result = 0;
 
@@ -695,7 +683,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
     return result;
 }
 
-int Helium::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
+int Helium::StandardWinMain( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd )
 {
     if (Helium::IsDebuggerPresent())
     {

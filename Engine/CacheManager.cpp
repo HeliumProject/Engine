@@ -10,7 +10,7 @@
 
 #include "Platform/Process.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 
 using namespace Helium;
 

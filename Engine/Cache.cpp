@@ -8,10 +8,11 @@
 #include "EnginePch.h"
 #include "Engine/Cache.h"
 
-#include "Foundation/File.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/BufferedStream.h"
 #include "Foundation/StringConverter.h"
+
+#include "Engine/FileLocations.h"
 #include "Engine/AsyncLoader.h"
 
 #if USE_XML_FOR_CACHE_DATA
@@ -72,8 +73,9 @@ bool Cache::Initialize( Name name, EPlatform platform, const tchar_t* pTocFileNa
     m_name = name;
     m_platform = platform;
 
-    Path tocFile( pTocFileName );
-    int64_t tocSize64 = tocFile.Size();
+	Status status;
+	status.Read( pTocFileName );
+    int64_t tocSize64 = status.m_Size;
     if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
     {
         HELIUM_TRACE(
@@ -333,8 +335,9 @@ bool Cache::CacheEntry(
 {
     HELIUM_ASSERT( pData || size == 0 );
 
-    Path cacheFile( m_cacheFileName.GetData() );
-    int64_t cacheFileSize = cacheFile.Size();
+	Status status;
+	status.Read( m_cacheFileName.GetData() );
+	int64_t cacheFileSize = status.m_Size;
     uint64_t entryOffset = ( cacheFileSize == -1 ? 0 : static_cast< uint64_t >( cacheFileSize ) );
 
     HELIUM_ASSERT( m_pEntryPool );
@@ -394,7 +397,7 @@ bool Cache::CacheEntry(
 
     bool bCacheSuccess = true;
 
-    FileStream* pCacheStream = File::Open( m_cacheFileName, FileStream::MODE_WRITE, false );
+    FileStream* pCacheStream = FileStream::OpenFileStream( m_cacheFileName, FileStream::MODE_WRITE, false );
     if( !pCacheStream )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Failed to open cache \"%s\" for writing.\n" ), *m_cacheFileName );
@@ -465,7 +468,7 @@ bool Cache::CacheEntry(
             {
                 HELIUM_TRACE( TRACE_INFO, TXT( "Cache: Rewriting TOC file \"%s\".\n" ), *m_tocFileName );
 
-                FileStream* pTocStream = File::Open( m_tocFileName, FileStream::MODE_WRITE, true );
+                FileStream* pTocStream = FileStream::OpenFileStream( m_tocFileName, FileStream::MODE_WRITE, true );
                 if( !pTocStream )
                 {
                     HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Failed to open TOC \"%s\" for writing.\n" ), *m_tocFileName );
@@ -876,7 +879,7 @@ Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const uint8_t *_buf
         //xml_ss_in.str(xml_str);
 
         tstring str = xml_ss_in.str();
-        FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+        FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_WRITE, true );
         pFileStream->Write(str.c_str(), sizeof(tchar_t), str.size());
         pFileStream->Close();
         delete pFileStream;

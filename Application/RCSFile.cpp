@@ -1,203 +1,205 @@
 #include "ApplicationPch.h"
 #include "RCSFile.h"
-#include "RCS.h"
 
 #include "Foundation/FilePath.h"
 #include "Foundation/Log.h"
 
+#include "Application/RCS.h"
+
+using namespace Helium;
 using namespace Helium::RCS;
 
 void File::GetInfo( const GetInfoFlag flags )
 {
-  GetProvider()->GetInfo( *this, flags );
+	GetProvider()->GetInfo( *this, flags );
 }
 
 void File::Sync( const uint64_t timestamp )
 {
-  uint64_t syncTime = timestamp ? timestamp : GetSyncTimestamp();
+	uint64_t syncTime = timestamp ? timestamp : GetSyncTimestamp();
 
-  GetProvider()->Sync( *this, syncTime );
+	GetProvider()->Sync( *this, syncTime );
 }
 
 void File::Add( const OpenFlag flags, const uint64_t changesetId )
 {
-  GetInfo();
+	GetInfo();
 
-  if ( IsCheckedOutByMe() && ( m_Operation == Operations::Add || m_Operation == Operations::Branch ) )
-  {
-    return;
-  }
+	if ( IsCheckedOutByMe() && ( m_Operation == Operations::Add || m_Operation == Operations::Branch ) )
+	{
+		return;
+	}
 
-  if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
-  {
-    tstring usernames;
-    GetOpenedByUsers( usernames );
-    throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
-  }
+	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
+	{
+		tstring usernames;
+		GetOpenedByUsers( usernames );
+		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
+	}
 
-  m_ChangesetId = changesetId;
+	m_ChangesetId = changesetId;
 
-  GetProvider()->Add( *this );
+	GetProvider()->Add( *this );
 }
 
 void File::Edit( const OpenFlag flags, const uint64_t changesetId )
 {
-  GetInfo();
+	GetInfo();
 
-  if ( IsCheckedOutByMe() && m_Operation == Operations::Edit )
-  {
-    return;
-  }
+	if ( IsCheckedOutByMe() && m_Operation == Operations::Edit )
+	{
+		return;
+	}
 
-  if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
-  {
-    tstring usernames;
-    GetOpenedByUsers( usernames );
-    throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
-  }
+	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
+	{
+		tstring usernames;
+		GetOpenedByUsers( usernames );
+		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
+	}
 
-  if( (flags & OpenFlags::AllowOutOfDate) == 0)
-  {
-    if ( IsBinary() && !IsUpToDate() )
-    {
-      throw FileOutOfDateException( m_LocalPath.c_str(), m_LocalRevision, m_HeadRevision );
-    }
+	if( (flags & OpenFlags::AllowOutOfDate) == 0)
+	{
+		if ( IsBinary() && !IsUpToDate() )
+		{
+			throw FileOutOfDateException( m_LocalPath.c_str(), m_LocalRevision, m_HeadRevision );
+		}
 
-    if ( m_LocalRevision <= 0 && m_LocalRevision != m_HeadRevision && !HeadDeleted() )
-    {
-      throw Exception( TXT( "File '%s' cannot be opened for edit because you do not have the file synced." ), m_LocalPath.c_str() );
-    }
-  }
+		if ( m_LocalRevision <= 0 && m_LocalRevision != m_HeadRevision && !HeadDeleted() )
+		{
+			throw Exception( TXT( "File '%s' cannot be opened for edit because you do not have the file synced." ), m_LocalPath.c_str() );
+		}
+	}
 
-  m_ChangesetId = changesetId;
+	m_ChangesetId = changesetId;
 
-  GetProvider()->Edit( *this );
+	GetProvider()->Edit( *this );
 }
 
 void File::Delete( const OpenFlag flags, const uint64_t changesetId )
 {
-  GetInfo();
+	GetInfo();
 
-  if ( !ExistsInDepot() )
-  {
-    throw Exception( TXT( "File '%s' does not exist in revision control." ), m_LocalPath.c_str() );
-  }
+	if ( !ExistsInDepot() )
+	{
+		throw Exception( TXT( "File '%s' does not exist in revision control." ), m_LocalPath.c_str() );
+	}
 
-  if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
-  {
-    return;
-  }
+	if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
+	{
+		return;
+	}
 
-  if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && ( IsCheckedOutBySomeoneElse() ) )
-  {
-    tstring usernames;
-    GetOpenedByUsers( usernames );
-    throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
-  }
+	if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && ( IsCheckedOutBySomeoneElse() ) )
+	{
+		tstring usernames;
+		GetOpenedByUsers( usernames );
+		throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
+	}
 
-  m_ChangesetId = changesetId;
+	m_ChangesetId = changesetId;
 
-  GetProvider()->Delete( *this );
+	GetProvider()->Delete( *this );
 }
 
 void File::Reopen( const Changeset& changeset, const OpenFlag flags )
 {
-  // verify we have it checked out
-  GetInfo();
-  if ( !IsCheckedOutByMe() )
-  {
-    throw Exception( TXT( "%s is not currently checked out." ), m_LocalPath.c_str() );
-  }
+	// verify we have it checked out
+	GetInfo();
+	if ( !IsCheckedOutByMe() )
+	{
+		throw Exception( TXT( "%s is not currently checked out." ), m_LocalPath.c_str() );
+	}
 
-  m_ChangesetId = changeset.m_Id;
+	m_ChangesetId = changeset.m_Id;
 
-  GetProvider()->Reopen( *this );
+	GetProvider()->Reopen( *this );
 }
 
 void File::Copy( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
-  GetInfo();
-  target.GetInfo();
+	GetInfo();
+	target.GetInfo();
 
-  // here, we've already done this operation, effectively
-  if ( target.IsCheckedOutByMe() && target.m_Operation == Operations::Branch )
-  {
-    return;
-  }
+	// here, we've already done this operation, effectively
+	if ( target.IsCheckedOutByMe() && target.m_Operation == Operations::Branch )
+	{
+		return;
+	}
 
-  if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && target.IsCheckedOutBySomeoneElse() )
-  {
-    tstring targetUsernames;
-    target.GetOpenedByUsers( targetUsernames );
-    throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
-  }
+	if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && target.IsCheckedOutBySomeoneElse() )
+	{
+		tstring targetUsernames;
+		target.GetOpenedByUsers( targetUsernames );
+		throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
+	}
 
-  target.m_ChangesetId = changesetId;
+	target.m_ChangesetId = changesetId;
 
-  GetProvider()->Integrate( *this, target );
+	GetProvider()->Integrate( *this, target );
 }
 
 void File::Rename( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
-  GetInfo();
-  target.GetInfo();
+	GetInfo();
+	target.GetInfo();
 
-  if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
-  {
-    // here, we've already done this operation, effectively
-    if ( target.IsCheckedOutByMe() && target.m_Operation == Operations::Branch )
-    {
-      return;
-    }
+	if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
+	{
+		// here, we've already done this operation, effectively
+		if ( target.IsCheckedOutByMe() && target.m_Operation == Operations::Branch )
+		{
+			return;
+		}
 
-    // else, we have a problem
-    throw Exception( TXT( "Cannot rename the deleted file '%s'." ), m_LocalPath.c_str() );
-  }
+		// else, we have a problem
+		throw Exception( TXT( "Cannot rename the deleted file '%s'." ), m_LocalPath.c_str() );
+	}
 
-  if ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive )
-  {
-    if (  IsCheckedOutBySomeoneElse() )
-    {
-      tstring usernames;
-      GetOpenedByUsers( usernames );
-      throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
-    }
-    else if ( target.IsCheckedOutBySomeoneElse() )
-    {
-      tstring targetUsernames;
-      target.GetOpenedByUsers( targetUsernames );
-      throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
-    }
-  }
+	if ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive )
+	{
+		if (  IsCheckedOutBySomeoneElse() )
+		{
+			tstring usernames;
+			GetOpenedByUsers( usernames );
+			throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
+		}
+		else if ( target.IsCheckedOutBySomeoneElse() )
+		{
+			tstring targetUsernames;
+			target.GetOpenedByUsers( targetUsernames );
+			throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
+		}
+	}
 
-  if ( IsBinary() && !IsUpToDate() )
-  {
-    throw FileOutOfDateException( m_LocalPath.c_str(), m_LocalRevision, m_HeadRevision );
-  }
+	if ( IsBinary() && !IsUpToDate() )
+	{
+		throw FileOutOfDateException( m_LocalPath.c_str(), m_LocalRevision, m_HeadRevision );
+	}
 
-  if ( !target.IsUpToDate() )
-  {
-    throw FileOutOfDateException( target.m_LocalPath.c_str(), target.m_LocalRevision, target.m_HeadRevision );
-  }
+	if ( !target.IsUpToDate() )
+	{
+		throw FileOutOfDateException( target.m_LocalPath.c_str(), target.m_LocalRevision, target.m_HeadRevision );
+	}
 
-  m_ChangesetId = changesetId;
-  target.m_ChangesetId = changesetId;
+	m_ChangesetId = changesetId;
+	target.m_ChangesetId = changesetId;
 
-  GetProvider()->Rename( *this, target );
+	GetProvider()->Rename( *this, target );
 }
 
 void File::Revert( const OpenFlag flags )
 {
-  GetInfo();
+	GetInfo();
 
-  if ( !IsCheckedOutByMe() )
-  {
-    return;
-  }
+	if ( !IsCheckedOutByMe() )
+	{
+		return;
+	}
 
-  bool revertUnchangedOnly = ( flags & OpenFlags::UnchangedOnly ) == OpenFlags::UnchangedOnly;
+	bool revertUnchangedOnly = ( flags & OpenFlags::UnchangedOnly ) == OpenFlags::UnchangedOnly;
 
-  GetProvider()->Revert( *this, revertUnchangedOnly );
+	GetProvider()->Revert( *this, revertUnchangedOnly );
 }
 
 //
@@ -208,175 +210,184 @@ void File::Revert( const OpenFlag flags )
 //
 static void _EnsureExistence( const tstring &path )
 {
-  Helium::Path file( path );
+	Helium::Path file( path );
 
-  // if the file doesn't exist, create a zero length 
-  if( !file.Exists() )
-  {
-      file.Create();
-  }
+	// if the file doesn't exist, create a zero length 
+	if( !file.Exists() )
+	{
+		file.Create();
+	}
 }
 
 void File::Open( const OpenFlag flags, const uint64_t changesetId )
 {
-  if ( !PathIsManaged( m_LocalPath ) )
-  {
-    Log::Warning( Log::Levels::Verbose, TXT( "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n" ), m_LocalPath.c_str() );
-    _EnsureExistence( m_LocalPath );
-    return;
-  }
+	if ( !PathIsManaged( m_LocalPath ) )
+	{
+		Log::Warning( Log::Levels::Verbose, TXT( "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n" ), m_LocalPath.c_str() );
+		_EnsureExistence( m_LocalPath );
+		return;
+	}
 
-  GetInfo();
+	GetInfo();
 
-  if ( ExistsInDepot() )
-  {
-    if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
-    {
-      Revert();
-      Edit( flags, changesetId );
-    }
-    else if ( IsCheckedOutByMe() )
-    {
-      Changeset changeset;
-      changeset.m_Id = changesetId;
-      Reopen( changeset, flags );
-    }
-    else if ( HeadDeleted() )
-    {
-      _EnsureExistence( m_LocalPath );
-      Add( flags, changesetId );
-    }
-    else
-    {
-      Edit( flags, changesetId );
-    }
+	if ( ExistsInDepot() )
+	{
+		if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
+		{
+			Revert();
+			Edit( flags, changesetId );
+		}
+		else if ( IsCheckedOutByMe() )
+		{
+			Changeset changeset;
+			changeset.m_Id = changesetId;
+			Reopen( changeset, flags );
+		}
+		else if ( HeadDeleted() )
+		{
+			_EnsureExistence( m_LocalPath );
+			Add( flags, changesetId );
+		}
+		else
+		{
+			Edit( flags, changesetId );
+		}
 
-    return;
-  }
+		return;
+	}
 
-  // file doesn't exist in depot down here...
-  _EnsureExistence( m_LocalPath );
+	// file doesn't exist in depot down here...
+	_EnsureExistence( m_LocalPath );
 
-  // open the resultant file for add, should show up in
-  // their changelist
-  Add( flags, changesetId );
+	// open the resultant file for add, should show up in
+	// their changelist
+	Add( flags, changesetId );
 }
 
-bool File::QueryOpen( const OpenFlag flags, const uint64_t changesetId )
+bool File::QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag flags, const uint64_t changesetId )
 {
-  tstring message;
+	tstring message;
 
-  GetInfo();
+	GetInfo();
 
-  if ( !ExistsInDepot() )
-  {
-    message = m_LocalPath;
-    message += TXT( " doesn't exist in revision control, do you want to create it?" );
+	if ( !ExistsInDepot() )
+	{
+		message = m_LocalPath;
+		message += TXT( " doesn't exist in revision control, do you want to create it?" );
 
-    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Check Out?" ), MB_YESNO | MB_ICONEXCLAMATION ) )
-    {
-      Open( flags, changesetId );
-    }
+		HELIUM_ASSERT( messageHandler.Valid() );
+		if ( messageHandler.Valid() )
+		{
+			MessageArgs args ( TXT( "Check Out?" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+			messageHandler.Invoke( args );
+			if ( args.m_Result == MessageResults::Yes )
+			{
+				Open( flags, changesetId );
+			}
+		}
 
-    return true;
-  }
+		return true;
+	}
 
-  if ( IsCheckedOutByMe() )
-  {
-    return true;
-  }
+	if ( IsCheckedOutByMe() )
+	{
+		return true;
+	}
 
-  if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && IsCheckedOutBySomeoneElse() )
-  {
-    tstring usernames;
-    GetOpenedByUsers( usernames );
-    message = m_LocalPath + TXT( " is already checked out by " ) + usernames + TXT( ", do you still wish to open the file?" );
+	if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && IsCheckedOutBySomeoneElse() )
+	{
+		tstring usernames;
+		GetOpenedByUsers( usernames );
+		message = m_LocalPath + TXT( " is already checked out by " ) + usernames + TXT( ", do you still wish to open the file?" );
 
-    // here, the user has basically overridden the exlusivity setting, so we just try to Open it
-    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Checked Out" ), MB_YESNO | MB_ICONEXCLAMATION ) )
-    {
-      Open( OpenFlags::Default, changesetId );
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
+		HELIUM_ASSERT( messageHandler.Valid() );
+		if ( messageHandler.Valid() )
+		{
+			MessageArgs args ( TXT( "Checked Out" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+			messageHandler.Invoke( args );
+			if ( args.m_Result == MessageResults::Yes )
+			{
+				Open( OpenFlags::Default, changesetId );
+				return true;
+			}
+		}
 
-  message = tstring( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
+		return false;
+	}
 
-  // here, if someone's checked it out in the interim, and they were supposed to be exlusively doing it,
-  // we want to let Open() fail, so we give it the exlusive flag
-  if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Check Out?" ), MB_YESNO | MB_ICONEXCLAMATION ) )
-  {
-    Open( flags, changesetId );
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+	message = tstring( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
 
-  return false;
+	HELIUM_ASSERT( messageHandler.Valid() );
+	if ( messageHandler.Valid() )
+	{
+		MessageArgs args ( TXT( "Check Out?" ), message, MessagePriorities::Question, MessageAppearances::YesNo );
+		messageHandler.Invoke( args );
+		if ( args.m_Result == MessageResults::Yes )
+		{
+			Open( flags, changesetId );
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void File::Commit( const tstring& description )
 {
-  Changeset changeset;
-  changeset.m_Description = description;
-  changeset.Create();
+	Changeset changeset;
+	changeset.m_Description = description;
+	changeset.Create();
 
-  Reopen( changeset );
-  changeset.Commit();
+	Reopen( changeset );
+	changeset.Commit();
 }
 
 // Was: GetLastUser
 void File::GetCreatedByUser( tstring& username )
 {
-  if ( m_Revisions.empty() )
-  {
-    GetInfo( (RCS::GetInfoFlag) ( RCS::GetInfoFlags::GetHistory | RCS::GetInfoFlags::GetIntegrationHistory ) );
-  }
+	if ( m_Revisions.empty() )
+	{
+		GetInfo( (RCS::GetInfoFlag) ( RCS::GetInfoFlags::GetHistory | RCS::GetInfoFlags::GetIntegrationHistory ) );
+	}
 
-  if ( !m_Revisions.empty() )
-  {
-    username = (*m_Revisions.rbegin())->m_Username;
-  }
+	if ( !m_Revisions.empty() )
+	{
+		username = (*m_Revisions.rbegin())->m_Username;
+	}
 }
 
 void File::GetLastModifiedByUser( tstring& username )
 {
-  if ( m_Revisions.empty() )
-  {
-    GetInfo( (RCS::GetInfoFlag) ( RCS::GetInfoFlags::GetHistory | RCS::GetInfoFlags::GetIntegrationHistory )  );
-  }
+	if ( m_Revisions.empty() )
+	{
+		GetInfo( (RCS::GetInfoFlag) ( RCS::GetInfoFlags::GetHistory | RCS::GetInfoFlags::GetIntegrationHistory )  );
+	}
 
-  if ( !m_Revisions.empty() )
-  {
-    username = (*m_Revisions.begin())->m_Username;
-  }
+	if ( !m_Revisions.empty() )
+	{
+		username = (*m_Revisions.begin())->m_Username;
+	}
 }
 
 // Was: GetOtherUsers
 void File::GetOpenedByUsers( tstring& usernames )
 {
-  usernames = TXT( "" );
+	usernames = TXT( "" );
 
-  if ( m_Actions.empty() )
-  {
-    GetInfo();
-  }
+	if ( m_Actions.empty() )
+	{
+		GetInfo();
+	}
 
-  if ( !m_Actions.empty() )
-  {
-    for( V_ActionPtr::const_iterator itr = m_Actions.begin(), end = m_Actions.end(); itr != end; ++itr )
-    {
-      usernames += (*itr)->m_Username;
-      if ( itr + 1 != end )
-      {
-        usernames += TXT( ", " );
-      }
-    }
-  }
+	if ( !m_Actions.empty() )
+	{
+		for( V_ActionPtr::const_iterator itr = m_Actions.begin(), end = m_Actions.end(); itr != end; ++itr )
+		{
+			usernames += (*itr)->m_Username;
+			if ( itr + 1 != end )
+			{
+				usernames += TXT( ", " );
+			}
+		}
+	}
 }

@@ -90,7 +90,7 @@ bool D3D9Renderer::Initialize()
 
 #if !L_DISABLE_DIRECT3D9EX
     // Test for Direct3D9Ex support (provides better support for Windows Vista and later).
-    HMODULE hD3DLibrary = LoadLibrary( TXT( "d3d9.dll" ) );
+    HMODULE hD3DLibrary = LoadLibraryA( "d3d9.dll" );
     if( !hD3DLibrary )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to load d3d9.dll.\n" ) );

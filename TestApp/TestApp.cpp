@@ -78,7 +78,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     AsyncLoader::GetStaticInstance().Initialize();
 
     Path baseDirectory;
-    if ( !File::GetBaseDirectory( baseDirectory ) )
+    if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
         return -1;
@@ -249,7 +249,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 //         const tchar_t *raw_data = str.data();
 // 
 //         {
-//             FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_WRITE, true );
+//             FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_WRITE, true );
 //             pFileStream->Write(str.c_str(), 2, str.length());
 //             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
 //             //// Write the XML header.
@@ -263,7 +263,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 //         if (str.length())
 //         {
 //             char *buffer = new char[2 * str.length()];
-//             FileStream* pFileStream = File::Open( TXT("test.txt"), FileStream::MODE_READ, true );
+//             FileStream* pFileStream = FileStream::OpenFileStream( TXT("test.txt"), FileStream::MODE_READ, true );
 //             pFileStream->Read(buffer, 2, str.length());
 //             //BufferedStream *m_pStream = new BufferedStream( pFileStream );
 //             //// Write the XML header.
@@ -961,7 +961,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         bVsync = spGraphicsConfig->GetVsync();
     }
 
-    WNDCLASSEX windowClass;
+    WNDCLASSEXW windowClass;
     windowClass.cbSize = sizeof( windowClass );
     windowClass.style = 0;
     windowClass.lpfnWndProc = WindowProc;
@@ -972,7 +972,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     windowClass.hCursor = NULL;
     windowClass.hbrBackground = NULL;
     windowClass.lpszMenuName = NULL;
-    windowClass.lpszClassName = TXT( "HeliumTestAppClass" );
+    windowClass.lpszClassName = L"HeliumTestAppClass";
     windowClass.hIconSm = NULL;
     HELIUM_VERIFY( RegisterClassEx( &windowClass ) );
 
@@ -992,9 +992,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     windowRect.bottom = static_cast< LONG >( displayHeight );
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
-    HWND hMainWnd = CreateWindow(
-        TXT( "HeliumTestAppClass" ),
-        TXT( "Helium TestApp" ),
+    HWND hMainWnd = ::CreateWindowW(
+        L"HeliumTestAppClass",
+        L"Helium TestApp",
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1012,9 +1012,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     windowRect.bottom = static_cast< LONG >( displayHeight );
     HELIUM_VERIFY( AdjustWindowRect( &windowRect, dwStyle, FALSE ) );
 
-    HWND hSubWnd = CreateWindow(
-        TXT( "HeliumTestAppClass" ),
-        TXT( "Helium TestApp (second view)" ),
+    HWND hSubWnd = ::CreateWindowW(
+        L"HeliumTestAppClass",
+        L"Helium TestApp (second view)",
         dwStyle,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -1676,7 +1676,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     CharName::Shutdown();
     WideName::Shutdown();
 
-    File::Shutdown();
+    FileLocations::Shutdown();
 
     ThreadLocalStackAllocator::ReleaseMemoryHeap();
 

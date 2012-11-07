@@ -285,13 +285,11 @@ void SimpleStlSetData<DataT, DataClassT>::Deserialize( ArchiveT& archive )
 template SimpleStlSetData< tstring, StlStringData >;
 template SimpleStlSetData< uint32_t, UInt32Data >;
 template SimpleStlSetData< uint64_t, UInt64Data >;
-template SimpleStlSetData< Helium::GUID, GUIDData >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
 template SimpleStlSetData< Helium::Path, PathData >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StlSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StlSetData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDStlSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDStlSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::PathStlSetData );

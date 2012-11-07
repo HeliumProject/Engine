@@ -2,6 +2,7 @@
 #include "BasicBuffer.h"
 
 #include "Platform/Exception.h"
+#include "Platform/File.h"
 
 #include "Math/Float16.h"
 #include "Math/FpuVector3.h"
@@ -244,31 +245,36 @@ uint32_t BasicBuffer::AddFile( const tstring& filename )
 
 uint32_t BasicBuffer::AddFile( const tchar_t* filename )
 {
-    FILE *pfile = _tfopen( filename, TXT( "rb" ) );
-    if ( pfile == NULL )
+    File f;
+    if ( !f.Open( filename, FileModes::MODE_READ ) )
     {
         throw Helium::Exception( TXT( "Could not open file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
-    fseek(pfile,0,SEEK_END);
-    long filesize = ftell(pfile);
-    fseek(pfile,0,SEEK_SET);
-
+    int64_t filesize = f.GetSize();
     if(filesize == -1)
     {
         throw Helium::Exception( TXT( "Could not get file size for file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
     if ( (filesize + m_Size) > m_Capacity )
-        GrowBy(filesize);
+	{
+		HELIUM_ASSERT( filesize < 0xffffffff );
+        GrowBy( (uint32_t)filesize );
+	}
 
-    size_t file_read = fread( m_Data + m_Size, 1, filesize, pfile );
+    size_t file_read;
+	if ( !f.Read( m_Data + m_Size, filesize, &file_read ) )
+	{
+        throw Helium::Exception( TXT( "Failure reading file '%s'." ), filename, m_Name.c_str() );
+	}
+
     if(file_read != (size_t)filesize)
     {
-        Log::Warning( TXT( "Could not read entire file '%s' to add to membuf '%s'.\n" ), filename, m_Name.c_str() );
+        throw Helium::Exception( TXT( "Could not read entire file '%s' to add to membuf '%s'.\n" ), filename, m_Name.c_str() );
     }
 
-    fclose(pfile);
+	f.Close();
 
     m_Size += (uint32_t)file_read;
     return m_Size - (uint32_t)file_read;

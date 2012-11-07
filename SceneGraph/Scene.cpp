@@ -972,7 +972,8 @@ int Scene::Split( tstring& outName )
         // trim name
         outName = name.substr(0, lastNum);
 
-        ret = _tstoi(numberString.c_str());
+		tstringstream str( numberString );
+		str >> ret;
     }
 
     return ret;

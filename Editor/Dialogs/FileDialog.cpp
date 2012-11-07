@@ -61,10 +61,7 @@ bool FileDialog::Create
  )
 {
     bool result = wxFileDialog::Create( parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name );
-
-    const wxChar* str = wildCard.c_str();
-    SetFilter( str );
-
+    SetFilter( tstring( wildCard.c_str() ) );
     return result;
 }
 
@@ -98,8 +95,7 @@ int FileDialog::ShowModal()
         const size_t num = paths.Count();
         for ( size_t index = 0; index < num; ++index )
         {
-            const wxChar* str = paths[index].c_str();
-            m_Files.insert( str );
+            m_Files.insert( tstring( paths[index].c_str() ) );
         }
     }
 

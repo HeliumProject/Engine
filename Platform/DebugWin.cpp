@@ -5,7 +5,7 @@
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
 #include "Platform/Assert.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Debug.h"
 #include "Platform/Trace.h"
 #include "Platform/Print.h"

@@ -346,7 +346,7 @@ void VaultPanel::StartSearchFromField()
     queryString.Trim(true);  // trim white-space right 
     queryString.Trim(false); // trim white-space left
 
-    Search( queryString.wx_str() );
+	Search( tstring( queryString.c_str() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

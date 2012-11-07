@@ -509,7 +509,6 @@ template SimpleStlVectorData<uint64_t>;
 template SimpleStlVectorData<int64_t>;
 template SimpleStlVectorData<float32_t>;
 template SimpleStlVectorData<float64_t>;
-template SimpleStlVectorData<Helium::GUID>;
 template SimpleStlVectorData<Helium::TUID>;
 template SimpleStlVectorData<Helium::Path>;
 
@@ -525,6 +524,5 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64StlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32StlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64StlVectorData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDStlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDStlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::PathStlVectorData  );

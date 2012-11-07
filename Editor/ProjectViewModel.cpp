@@ -68,7 +68,7 @@ bool ProjectViewModelNode::IsContainer() const
 
 void ProjectViewModelNode::SetPath( const Helium::Path& path )
 {
-    if ( _tcsicmp( m_Path.c_str(), path.c_str() ) != 0 )
+    if ( CaseInsensitiveCompareString( m_Path.c_str(), path.c_str() ) != 0 )
     {
         m_Path = path;
     }
@@ -111,7 +111,9 @@ tstring ProjectViewModelNode::GetFileSize() const
     }
     else if ( m_Path.IsFile() )
     {
-        uint64_t size = m_Path.Size();
+		Status status;
+		status.Read( m_Path.Get().c_str() );
+		uint64_t size = status.m_Size;
         return BytesToString( size );
     }
 
@@ -426,7 +428,7 @@ bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const H
     for ( S_ProjectViewModelNodeChildren::const_iterator itr = parentNode->GetChildren().begin(),
         end = parentNode->GetChildren().end(); itr != end; ++itr )
     {
-        if ( _tcsicmp( (*itr)->GetPath().Get().c_str(), path.Get().c_str() ) == 0 )
+        if ( CaseInsensitiveCompareString( (*itr)->GetPath().Get().c_str(), path.Get().c_str() ) == 0 )
         {
             foundChild = itr;
             break;

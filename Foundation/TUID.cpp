@@ -3,7 +3,6 @@
 
 #include "Platform/Exception.h"
 #include "Foundation/Endian.h"
-#include "Foundation/GUID.h"
 
 #include <time.h>
 #include <iphlpapi.h>
@@ -18,44 +17,10 @@ using namespace Helium;
 const tuid TUID::Null = 0x0;
 
 static uint64_t s_CachedMacBits64 = 0; ///< cached 48-bit MAC address, centered in uint64_t
-static uint64_t s_GUIDConvertConstant = 0xDEADDEADDEADDEAD;
-
-// GUID interop
-struct guid
-{
-    uint32_t   data0;
-    uint16_t   data1;
-    uint16_t   data2;
-    uint8_t    data3[8];
-
-    guid()
-    {
-        memset(this, 0, sizeof(guid));
-    }
-};
 
 bool isAlpha( int c )
 {
     return ( std::isalpha( c ) != 0 );
-}
-
-void TUID::ToGUID( Helium::GUID& id ) const
-{
-    static guid null;
-    if ( m_ID == 0x0 )
-    {
-        memset( &id, 0, sizeof( guid ) );
-    }
-    else
-    {
-        uint64_t* tempPtr = (uint64_t*)&id;
-
-        // set the 'high order' guid bytes to our constant so we can identify it later
-        tempPtr[ 0 ] = s_GUIDConvertConstant;
-
-        // endian convert the data bytes so standard GUID printing routines generate the same characters as hexidecimal TUID printing
-        tempPtr[ 1 ] = ConvertEndian( m_ID, true );
-    }
 }
 
 void TUID::ToString(tstring& id) const
@@ -63,32 +28,6 @@ void TUID::ToString(tstring& id) const
     tostringstream str;
     str << TUID::HexFormat << m_ID;
     id = str.str();
-}
-
-void TUID::FromGUID( const Helium::GUID& id )
-{
-    static guid null;
-
-    if ( memcmp( &id, &null, sizeof( guid ) ) == 0 )
-    {
-        m_ID = Null;
-    }
-    else
-    {
-        uint64_t* tempPtr = (uint64_t*)&id;
-
-        // if our GUID has been converted FROM a tuid (it has been upsampled)
-        if ( tempPtr[ 0 ] == s_GUIDConvertConstant )
-        {
-            // copy it back and endian convert to account for byte reorder noted below
-            m_ID = ConvertEndian( tempPtr[ 1 ], true );
-        }
-        else
-        {
-            // we're going to xor the top and bottom halves of the guid into the tuid
-            m_ID = ( ( ( ( uint64_t ) id.Data1 ) << 32 ) | ( id.Data2 << 16 ) | ( id.Data3 ) ) ^ ( *(uint64_t*)( &id.Data4 ) );
-        }
-    }
 }
 
 bool TUID::FromString( const tstring& str )

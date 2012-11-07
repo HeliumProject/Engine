@@ -3,7 +3,8 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Natural.h"
-#include "Foundation/Insert.h" 
+#include "Foundation/Insert.h"
+#include "Foundation/String.h"
 
 #include <map>
 #include <wx/wx.h>
@@ -230,7 +231,7 @@ int wxCALLBACK LazyMapCompareFunction( wxIntPtr item1, wxIntPtr item2, wxIntPtr 
         switch ( data->m_List->GetSortMethod() )
         {
         case ListViewSortMethods::Normal:
-            return _tcsicmp( text1.c_str(), text2.c_str() );
+            return CaseInsensitiveCompareString( text1.c_str(), text2.c_str() );
             break;
 
         case ListViewSortMethods::Natural:
@@ -273,7 +274,7 @@ int wxCALLBACK SlowCompareFunction( long item1, long item2, long sortData )
                 switch ( data->m_List->GetSortMethod() )
                 {
                 case ListViewSortMethods::Normal:
-                    return _tcsicmp( text1, text2 );
+                    return CaseInsensitiveCompareString( text1, text2 );
                     break;
 
                 case ListViewSortMethods::Natural:

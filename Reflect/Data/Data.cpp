@@ -53,28 +53,6 @@ bool Cast<Helium::TUID, uint64_t>(Data* src, Data* dest)
     return true;
 }
 
-template<>
-bool Cast<Helium::TUID, Helium::GUID>(Data* src, Data* dest)
-{
-    SimpleData<Helium::TUID>* source = static_cast<SimpleData<Helium::TUID>*>(src);
-    SimpleData<Helium::GUID>* destination = static_cast<SimpleData<Helium::GUID>*>(dest);
-
-    (*destination->m_Data).FromTUID( *source->m_Data );
-
-    return true;
-}
-
-template<>
-bool Cast<Helium::GUID, Helium::TUID>(Data* src, Data* dest)
-{
-    SimpleData<Helium::GUID>* source = static_cast<SimpleData<Helium::GUID>*>(src);
-    SimpleData<Helium::TUID>* destination = static_cast<SimpleData<Helium::TUID>*>(dest);
-
-    (*destination->m_Data).FromGUID( *source->m_Data );
-
-    return true;
-}
-
 typedef std::pair<const Class*, const Class*> ClassPair;
 typedef std::map<ClassPair, bool (*)(Data*, Data*)> CastingFunctionMap;
 
@@ -156,9 +134,6 @@ void Data::Initialize()
 
     // uint64_t to TUID and back
     MapCasts<uint64_t, Helium::TUID>();
-
-    // GUID to TUID and back
-    MapCasts<Helium::GUID, Helium::TUID>();
 }
 
 void Data::Cleanup()

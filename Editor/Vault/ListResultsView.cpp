@@ -24,7 +24,9 @@ tstring DetailsColumn::Directory( const Helium::Path& path )
 
 tstring DetailsColumn::Size( const Helium::Path& path )
 {
-    int64_t size = path.Size();
+	Status status;
+	status.Read( path.Get().c_str() );
+	int64_t size = status.m_Size;
 
     tstringstream printSize;
     if ( size == 0 )

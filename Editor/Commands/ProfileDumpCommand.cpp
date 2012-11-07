@@ -1,6 +1,8 @@
 #include "EditorPch.h"
 #include "ProfileDumpCommand.h"
 
+#include "Platform/File.h"
+
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/FilePath.h"
@@ -98,16 +100,14 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
 
     const tchar_t* filename = fileArg.c_str(); 
 
-    FILE* file = _tfopen(filename, TXT( "rb" ) );
-    if(!file)
+    File f;
+    if(!f.Open( filename, FileModes::MODE_READ ))
     {
         Log::Print( TXT( "Unable to open %s for reading!\n" ), filename); 
         return false;
     }
 
-    fseek(file, 0, SEEK_END); 
-    long filesize = ftell(file); 
-    fseek(file, 0, SEEK_SET); 
+    int64_t filesize = f.GetSize();
 
     uint32_t blockCount = filesize / PROFILE_PACKET_BLOCK_SIZE; 
 
@@ -125,7 +125,8 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
 
     for(uint32_t i = 0; i < blockCount; ++i)
     {
-        size_t bytesRead = fread(buffer, 1, PROFILE_PACKET_BLOCK_SIZE, file); 
+        size_t bytesRead;
+		f.Read( buffer, PROFILE_PACKET_BLOCK_SIZE, &bytesRead ); 
 
         if(bytesRead != PROFILE_PACKET_BLOCK_SIZE)
         {
@@ -137,8 +138,9 @@ bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBe
         ParseAndPrintBlock(buffer); 
     }
 
-    delete[] buffer; 
+    f.Close(); 
 
-    fclose(file); 
+	delete[] buffer; 
+
     return true;
 }

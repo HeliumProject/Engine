@@ -4,51 +4,56 @@
 #include "Platform/Types.h"
 #include "Platform/Platform.h"
 
-#ifdef HELIUM_OS_WIN
-# include "Platform/FileWin.h"
-#else
-# include "Platform/POSIX/File.h"
-#endif
-
 namespace Helium
 {
-    class SeekOrigins
-    {
-    public:
-        /// Stream seek origin.
-        enum SeekOrigin
-        {
-            SEEK_ORIGIN_FIRST   =  0,
-            SEEK_ORIGIN_INVALID = -1,
+	namespace SeekOrigins
+	{
+		/// Stream seek origin.
+		enum SeekOrigin
+		{
+			SEEK_ORIGIN_INVALID = -1,
+			SEEK_ORIGIN_CURRENT,  ///< Seek relative to the current location.
+			SEEK_ORIGIN_BEGIN,    ///< Seek relative to the beginning of the stream.
+			SEEK_ORIGIN_END,      ///< Seek relative to the end of the stream.
+			SEEK_ORIGIN_MAX,
+		};
+	};
+	typedef SeekOrigins::SeekOrigin SeekOrigin;
 
-            SEEK_ORIGIN_CURRENT,  ///< Seek relative to the current location.
-            SEEK_ORIGIN_BEGIN,    ///< Seek relative to the beginning of the stream.
-            SEEK_ORIGIN_END,      ///< Seek relative to the end of the stream.
+	namespace FileModes
+	{
+		/// File access mode flags.
+		enum FileMode
+		{
+			MODE_READ	= ( 1 << 0 ),  ///< Read access.
+			MODE_WRITE	= ( 1 << 1 ),  ///< Write access.
+		};
+	};
+	typedef FileModes::FileMode FileMode;
 
-            SEEK_ORIGIN_MAX,
-            SEEK_ORIGIN_LAST = SEEK_ORIGIN_MAX - 1
-        };
-    };
-    typedef SeekOrigins::SeekOrigin SeekOrigin;
+	class HELIUM_PLATFORM_API File
+	{
+	public:
+		File();
+		~File();
 
-    class FileModes
-    {
-    public:
-        /// File access mode flags.
-        enum FileMode
-        {
-            MODE_READ  = ( 1 << 0 ),  ///< Read access.
-            MODE_WRITE = ( 1 << 1 ),  ///< Write access.
-        };
-    };
-    typedef FileModes::FileMode FileMode;
+		bool IsOpen() const;
+		bool Open( const tchar_t* filename, FileMode mode, bool truncate = true );
+		bool Close();
+		
+		bool Read( void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
+		bool Write( const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
+		bool Flush();
 
-    HELIUM_PLATFORM_API Handle CreateFile( const tchar_t* filename, FileMode mode, bool truncate = true );
-    HELIUM_PLATFORM_API bool CloseHandle( Handle& handle );
-    HELIUM_PLATFORM_API bool ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead = NULL );
-    HELIUM_PLATFORM_API bool WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten = NULL );
-    HELIUM_PLATFORM_API bool FlushFile( Handle& handle );
-    HELIUM_PLATFORM_API int64_t Seek( Handle& handle, int64_t offset, SeekOrigin origin );
-    HELIUM_PLATFORM_API int64_t Tell( const Handle& handle );
-    HELIUM_PLATFORM_API int64_t GetSize( const Handle& handle );
+		int64_t Seek( int64_t offset, SeekOrigin origin );
+		int64_t Tell() const;
+		int64_t GetSize() const;
+
+	private:
+#ifdef HELIUM_OS_WIN
+		// windows.h: HANDLE
+		typedef void* Handle;
+#endif
+		Handle m_Handle;
+	};
 }

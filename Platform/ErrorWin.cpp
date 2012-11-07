@@ -1,6 +1,6 @@
 #include "PlatformPch.h"
 #include "Platform/Error.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 using namespace Helium;
 

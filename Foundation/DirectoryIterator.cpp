@@ -1,18 +1,18 @@
 #include "FoundationPch.h"
-#include "Directory.h"
+#include "DirectoryIterator.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
 
 using namespace Helium;
 
-Directory::Directory()
+DirectoryIterator::DirectoryIterator()
 : m_Done( true )
 {
 
 }
 
-Directory::Directory( const Path& path, uint32_t flags )
+DirectoryIterator::DirectoryIterator( const Path& path, uint32_t flags )
 : m_Done( true )
 {
     HELIUM_ASSERT( path.IsDirectory() );
@@ -21,17 +21,17 @@ Directory::Directory( const Path& path, uint32_t flags )
     Open( path, flags );
 }
 
-Directory::~Directory()
+DirectoryIterator::~DirectoryIterator()
 {
     Close();
 }
 
-bool Directory::IsDone()
+bool DirectoryIterator::IsDone()
 {
     return m_Done;
 }
 
-bool Directory::Next()
+bool DirectoryIterator::Next()
 {
     if ( m_Done )
     {
@@ -41,7 +41,7 @@ bool Directory::Next()
     return Find();
 }
 
-const DirectoryItem& Directory::GetItem()
+const DirectoryIteratorItem& DirectoryIterator::GetItem()
 {
     if ( m_Done )
     {
@@ -51,13 +51,13 @@ const DirectoryItem& Directory::GetItem()
     return m_Item;
 }
 
-void Directory::Reset()
+void DirectoryIterator::Reset()
 {
     Close();
     Find();
 }
 
-bool Directory::Open( const Path& path, uint32_t flags )
+bool DirectoryIterator::Open( const Path& path, uint32_t flags )
 {
     Close();
 
@@ -65,46 +65,41 @@ bool Directory::Open( const Path& path, uint32_t flags )
     HELIUM_ASSERT( *path.Get().rbegin() == TXT( '/' ) )
 
     m_Path = path;
-    m_Handle.m_Path = m_Path.Get();
+    m_Directory.m_Path = m_Path.Get();
     m_Flags = flags;
 
     return Find();
 }
 
-void Directory::GetFiles( const Path& path, std::set< Helium::Path >& paths, bool recursive )
+void DirectoryIterator::GetFiles( const Path& path, std::set< Helium::Path >& paths, bool recursive )
 {
-    for ( Directory dir( path, DirectoryFlags::SkipDirectories ); !dir.IsDone(); dir.Next() )
+    for ( DirectoryIterator dir( path, DirectoryFlags::SkipDirectories ); !dir.IsDone(); dir.Next() )
     {
-        const DirectoryItem& item = dir.GetItem();
+        const DirectoryIteratorItem& item = dir.GetItem();
         paths.insert( item.m_Path );
     }
 
     if ( recursive )
     {
-        for ( Directory dir( path, DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
+        for ( DirectoryIterator dir( path, DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
         {
             GetFiles( dir.GetItem().m_Path, paths, recursive );
         }
     }
 }
 
-void Directory::GetFiles( std::set< Helium::Path >& paths, bool recursive )
+void DirectoryIterator::GetFiles( std::set< Helium::Path >& paths, bool recursive )
 {
     GetFiles( m_Path, paths, recursive );
 }
 
-bool Directory::Find()
+bool DirectoryIterator::Find()
 {
-    FileFindData foundFile;
     m_Done = false;
+    HELIUM_ASSERT( m_Directory.m_Path.length() > 0 );
 
-    HELIUM_ASSERT( m_Handle.m_Path.length() > 0 );
-
-    bool findResult =
-        m_Handle.m_Handle == InvalidHandleValue
-        ? FindFirst( m_Handle, foundFile )
-        : FindNext( m_Handle, foundFile );
-
+    DirectoryEntry entry;
+    bool findResult = !m_Directory.IsOpen() ? m_Directory.FindFirst( entry ) : m_Directory.FindNext( entry );
     if ( findResult == 0 )
     {      
         m_Done = true;
@@ -120,23 +115,23 @@ bool Directory::Find()
         tstring absolutePath;
 
         // skip relative path directories if fileName is "." or ".."
-        if ( ( _tcscmp( foundFile.m_Filename.c_str(), TXT( "." ) ) == 0 ) || ( _tcscmp( foundFile.m_Filename.c_str(), TXT( ".." ) ) == 0 ) )
+        if ( ( StringCompare( entry.m_Name.c_str(), TXT( "." ) ) == 0 ) || ( StringCompare( entry.m_Name.c_str(), TXT( ".." ) ) == 0 ) )
         {
             ok = false;
         }
         else
         {
-            absolutePath = m_Path.Get() + foundFile.m_Filename;
+            absolutePath = m_Path.Get() + entry.m_Name;
 
-            HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
+            HELIUM_VERIFY( entry.m_Stat.Read( absolutePath.c_str() ) );
             needStatPath = false;
 
             // directory...
-            if ( foundFile.m_Stat.m_Mode & FileModeFlags::Directory )
+            if ( entry.m_Stat.m_Mode & StatusModes::Directory )
             {
                 // SkipDirectories: skip directory files, also skip hidden/system directories, so we don't try to access "System Volume Information"
                 if ( m_Flags & DirectoryFlags::SkipDirectories  
-                    || foundFile.m_Stat.m_Mode & FileModeFlags::Special )
+                    || entry.m_Stat.m_Mode & StatusModes::Special )
                 {
                     m_Item.Clear();
                     ok = false;
@@ -160,18 +155,17 @@ bool Directory::Find()
             // add the path path to the fileName
             if ( needStatPath )
             {
-                absolutePath = m_Path.Get() + foundFile.m_Filename;
-
-                HELIUM_VERIFY( StatPath( absolutePath.c_str(), foundFile.m_Stat ) );
+                absolutePath = m_Path.Get() + entry.m_Name;
+				HELIUM_VERIFY( entry.m_Stat.Read( absolutePath.c_str() ) );
             }
 
             if ( m_Flags & DirectoryFlags::RelativePath )
             {
-                m_Item.m_Path.Set( foundFile.m_Filename );
+                m_Item.m_Path.Set( entry.m_Name );
             }
             else
             {
-                if ( foundFile.m_Stat.m_Mode & FileModeFlags::Directory )
+                if ( entry.m_Stat.m_Mode & StatusModes::Directory )
                 {
                     Path::GuaranteeSeparator( absolutePath );
                 }
@@ -179,9 +173,9 @@ bool Directory::Find()
                 m_Item.m_Path = absolutePath;
             }
 
-            m_Item.m_CreateTime = foundFile.m_Stat.m_CreatedTime;
-            m_Item.m_ModTime = foundFile.m_Stat.m_ModifiedTime;
-            m_Item.m_Size = foundFile.m_Stat.m_Size;
+            m_Item.m_CreateTime = entry.m_Stat.m_CreatedTime;
+            m_Item.m_ModTime = entry.m_Stat.m_ModifiedTime;
+            m_Item.m_Size = entry.m_Stat.m_Size;
 
             break;
         }
@@ -189,8 +183,8 @@ bool Directory::Find()
         {
             m_Item.Clear();
 
-            // this pumps the file iterator to the next element (into foundFile) for our next do...while loop
-            if ( !FindNext( m_Handle, foundFile ) )
+            // this pumps the file iterator to the next element (into entry) for our next do...while loop
+            if ( !m_Directory.FindNext( entry ) )
             {      
                 m_Done = true;
                 Close();
@@ -201,16 +195,12 @@ bool Directory::Find()
     return !m_Done;
 }
 
-void Directory::Close()
+void DirectoryIterator::Close()
 {
-    if ( m_Handle.m_Handle != InvalidHandleValue )
+    if ( m_Directory.IsOpen() )
     {
-        bool result = CloseFind( m_Handle );
+        bool result = m_Directory.Close();
         HELIUM_ASSERT( result );
-        if ( result )
-        {
-            m_Handle.m_Handle = InvalidHandleValue;
-        }
     }
 
     m_Done = true;
@@ -220,13 +210,13 @@ void Directory::Close()
 void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const Path& path, uint32_t flags )
 {
     // contents
-    for ( Directory dir( path, flags ); !dir.IsDone(); dir.Next() )
+    for ( DirectoryIterator dir( path, flags ); !dir.IsDone(); dir.Next() )
     {
         delegate.Invoke( dir.GetItem() );
     }
 
     // recurse
-    for ( Directory dir( path, DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
+    for ( DirectoryIterator dir( path, DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
     {
         if ( dir.GetItem().m_Path.IsDirectory() )
         {

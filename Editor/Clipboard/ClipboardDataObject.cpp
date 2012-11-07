@@ -93,8 +93,7 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
             wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
             for ( ; fileItr != fileEnd; ++fileItr )
             {
-                const wxChar* file = fileItr->c_str();
-                fileList->AddFilePath( file );
+                fileList->AddFilePath( tstring( fileItr->c_str() ) );
             }
 
             result = ToBuffer( fileList );

@@ -3,7 +3,7 @@
 #include "Perforce.h"
 
 #include "Foundation/Log.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 using namespace Helium::Perforce;
 

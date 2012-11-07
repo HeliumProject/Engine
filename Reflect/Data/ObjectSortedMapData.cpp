@@ -281,7 +281,6 @@ template SimpleObjectSortedMapData< uint32_t >;
 template SimpleObjectSortedMapData< int32_t >;
 template SimpleObjectSortedMapData< uint64_t >;
 template SimpleObjectSortedMapData< int64_t >;
-template SimpleObjectSortedMapData< Helium::GUID >;
 template SimpleObjectSortedMapData< Helium::TUID >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TypeIDObjectSortedMapData );
@@ -290,5 +289,4 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32ObjectSortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32ObjectSortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64ObjectSortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64ObjectSortedMapData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDObjectSortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDObjectSortedMapData );

@@ -295,7 +295,7 @@ namespace Helium
 
             bool operator( )( const tstring& str1, const tstring& str2 ) const
             {
-                return _tcsicmp(str1.c_str(), str2.c_str()) < 0;
+                return CaseInsensitiveCompareString(str1.c_str(), str2.c_str()) < 0;
             }
         };
 

@@ -136,12 +136,12 @@ namespace Helium
 
             inline bool operator<( const ProjectViewModelNode& rhs ) const
             {
-                return ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) < 0 );
+                return ( CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) < 0 );
             }
 
             inline bool operator==( const ProjectViewModelNode& rhs ) const
             {
-                return ( ( _tcsicmp( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 )
+                return ( ( CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) == 0 )
                     && m_ParentNode == rhs.m_ParentNode ) ;
             }
 

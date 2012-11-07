@@ -1116,7 +1116,7 @@ void MainFrame::OpenVaultPanel()
         pane.caption += queryString;
     }
 
-    m_VaultPanel->Search( queryString.wx_str() );
+	m_VaultPanel->Search( tstring( queryString.c_str() ) );
 }
 
 void MainFrame::OnSearchGoButtonClick( wxCommandEvent& event )
@@ -1394,7 +1394,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
                         return;
                     }
 
-                    Helium::Path path( (const wxChar*)fileDialog.GetPath().c_str() );
+                    Helium::Path path( tstring( fileDialog.GetPath().c_str() ) );
                     currentScene->Push( currentScene->Import( path, ImportActions::Import, flags, currentScene->GetRoot() ) );
                     break;
                 }

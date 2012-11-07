@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Reflect/Data/Data.h"
-#include "Foundation/GUID.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Name.h"
 
@@ -58,7 +57,6 @@ namespace Helium
         typedef SimpleData<int64_t> Int64Data;
         typedef SimpleData<float32_t> Float32Data;
         typedef SimpleData<float64_t> Float64Data;
-        typedef SimpleData<Helium::GUID> GUIDData;
         typedef SimpleData<Helium::TUID> TUIDData;
     }
 }

@@ -1,3 +1,95 @@
+template< class T >
+const T* Helium::FindCharacter( const T* data, const T value, size_t count )
+{
+	size_t length = StringLength( data );
+	if ( count > 0 && count < length )
+	{
+		length = count;
+	}
+
+	size_t i=0;
+	const T* p=data;
+	while ( i<length && *p != value )
+	{
+		i++;
+		p++;
+	}
+	
+	return i == length ? NULL : p;
+}
+
+template< class T >
+const T* Helium::FindNextToken( const T* data, const T delim, size_t count )
+{
+	size_t length = StringLength( data );
+	if ( count && count < length )
+	{
+		length = count;
+	}
+
+	size_t i=0;
+	const T* p=data;
+	while ( i<length && *p != delim )
+	{
+		i++;
+		p++;
+	}
+	
+	if ( i == length )
+	{
+		return NULL;
+	}
+
+	p++;
+	
+	if ( *p == static_cast<T>( 0 ) )
+	{
+		return NULL;
+	}
+
+	return p;
+}
+
+template < class T, size_t N >
+void Helium::CopyString( T (&dest)[N], const T* src, size_t count )
+{
+	CopyString( dest, N, src, count );
+}
+
+template< class T >
+void Helium::CopyString( T* dest, size_t destCount, const T* src, size_t count )
+{
+	size_t length = StringLength( src );
+
+	if ( count && count < length )
+	{
+		length = count;
+	}
+
+	if ( destCount < length + 1 )
+	{
+		length = destCount - 1;
+	}
+
+	memcpy( dest, src, sizeof( T ) * length );
+	dest[ length ] = static_cast< T >( 0 );
+}
+
+template < class T, size_t N >
+void Helium::AppendString( T (&dest)[N], const T* src, size_t count )
+{
+	size_t destLength = StringLength( dest );
+	CopyString( dest + destLength, N - destLength - 1, src, count );
+}
+
+template< class T >
+void Helium::AppendString( T* dest, size_t destCount, const T* src, size_t count )
+{
+	size_t destLength = StringLength( dest );
+	CopyString( dest + destLength, destCount - destLength - 1, src, count );
+}
+
+
 /// Constructor.
 ///
 /// This creates an empty string without allocating any memory.
@@ -15,14 +107,14 @@ Helium::StringBase< CharType, Allocator >::StringBase()
 template< typename CharType, typename Allocator >
 Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString )
 {
-    if( pString )
-    {
-        size_t length = StringLength( pString );
-        if( length )
-        {
-            m_buffer.Set( pString, length + 1 );
-        }
-    }
+	if( pString )
+	{
+		size_t length = StringLength( pString );
+		if( length )
+		{
+			m_buffer.Set( pString, length + 1 );
+		}
+	}
 }
 
 /// Constructor.
@@ -34,13 +126,13 @@ Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString )
 template< typename CharType, typename Allocator >
 Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString, size_t size )
 {
-    if( size != 0 )
-    {
-        HELIUM_ASSERT( pString );
-        m_buffer.Reserve( size + 1 );
-        m_buffer.Set( pString, size );
-        m_buffer.Add( static_cast< CharType >( '\0' ) );
-    }
+	if( size != 0 )
+	{
+		HELIUM_ASSERT( pString );
+		m_buffer.Reserve( size + 1 );
+		m_buffer.Set( pString, size );
+		m_buffer.Add( static_cast< CharType >( '\0' ) );
+	}
 }
 
 /// Get the size of this string.
@@ -56,8 +148,8 @@ Helium::StringBase< CharType, Allocator >::StringBase( const CharType* pString, 
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::GetSize() const
 {
-    size_t bufferSize = m_buffer.GetSize();
-    return( bufferSize == 0 ? 0 : bufferSize - 1 );
+	size_t bufferSize = m_buffer.GetSize();
+	return( bufferSize == 0 ? 0 : bufferSize - 1 );
 }
 
 /// Get whether this string is empty.
@@ -68,7 +160,7 @@ size_t Helium::StringBase< CharType, Allocator >::GetSize() const
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::IsEmpty() const
 {
-    return( m_buffer.GetSize() <= 1 );
+	return( m_buffer.GetSize() <= 1 );
 }
 
 /// Resize this array, retaining any existing data that fits within the new size.
@@ -88,14 +180,14 @@ bool Helium::StringBase< CharType, Allocator >::IsEmpty() const
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Resize( size_t size, CharType fill )
 {
-    size_t oldSize = m_buffer.GetSize();
-    m_buffer.Resize( size );
+	size_t oldSize = m_buffer.GetSize();
+	m_buffer.Resize( size );
 
-    if( size > oldSize )
-    {
-        size_t newCharacterCount = size - oldSize;
-        ArraySet( m_buffer.GetData() + oldSize, fill, newCharacterCount );
-    }
+	if( size > oldSize )
+	{
+		size_t newCharacterCount = size - oldSize;
+		ArraySet( m_buffer.GetData() + oldSize, fill, newCharacterCount );
+	}
 }
 
 /// Get the number of character type elements that can be held by this string without reallocating memory.
@@ -109,8 +201,8 @@ void Helium::StringBase< CharType, Allocator >::Resize( size_t size, CharType fi
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::GetCapacity() const
 {
-    size_t bufferCapacity = m_buffer.GetCapacity();
-    return( bufferCapacity == 0 ? 0 : bufferCapacity - 1 );
+	size_t bufferCapacity = m_buffer.GetCapacity();
+	return( bufferCapacity == 0 ? 0 : bufferCapacity - 1 );
 }
 
 /// Explicitly increase the capacity of this string to support at least the specified number of character type
@@ -124,10 +216,10 @@ size_t Helium::StringBase< CharType, Allocator >::GetCapacity() const
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Reserve( size_t capacity )
 {
-    if( capacity )
-    {
-        m_buffer.Reserve( capacity + 1 );
-    }
+	if( capacity )
+	{
+		m_buffer.Reserve( capacity + 1 );
+	}
 }
 
 /// Resize the allocated string memory to match the size actually in use.
@@ -136,7 +228,7 @@ void Helium::StringBase< CharType, Allocator >::Reserve( size_t capacity )
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Trim()
 {
-    m_buffer.Trim();
+	m_buffer.Trim();
 }
 
 /// Get a pointer to the base of the allocated string buffer.
@@ -145,16 +237,16 @@ void Helium::StringBase< CharType, Allocator >::Trim()
 template< typename CharType, typename Allocator >
 const CharType* Helium::StringBase< CharType, Allocator >::GetData() const
 {
-    // The internal string buffer may contain an old string if the string has been resized to zero, so return a null
-    // pointer if this string is empty.
-    return ( m_buffer.GetSize() ? m_buffer.GetData() : NULL );
+	// The internal string buffer may contain an old string if the string has been resized to zero, so return a null
+	// pointer if this string is empty.
+	return ( m_buffer.GetSize() ? m_buffer.GetData() : NULL );
 }
 
 /// Empty the string contents and free all allocated memory.
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Clear()
 {
-    m_buffer.Clear();
+	m_buffer.Clear();
 }
 
 /// Get the string element at the specified index.
@@ -165,8 +257,8 @@ void Helium::StringBase< CharType, Allocator >::Clear()
 template< typename CharType, typename Allocator >
 CharType& Helium::StringBase< CharType, Allocator >::GetElement( size_t index )
 {
-    HELIUM_ASSERT( index < GetSize() );
-    return m_buffer.GetElement( index );
+	HELIUM_ASSERT( index < GetSize() );
+	return m_buffer.GetElement( index );
 }
 
 /// Get the string element at the specified index.
@@ -177,8 +269,8 @@ CharType& Helium::StringBase< CharType, Allocator >::GetElement( size_t index )
 template< typename CharType, typename Allocator >
 const CharType& Helium::StringBase< CharType, Allocator >::GetElement( size_t index ) const
 {
-    HELIUM_ASSERT( index < GetSize() );
-    return m_buffer.GetElement( index );
+	HELIUM_ASSERT( index < GetSize() );
+	return m_buffer.GetElement( index );
 }
 
 /// Append a character to the end of this string.
@@ -188,16 +280,16 @@ const CharType& Helium::StringBase< CharType, Allocator >::GetElement( size_t in
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Add( CharType character, size_t count )
 {
-    size_t bufferSize = m_buffer.GetSize();
-    if( bufferSize == 0 )
-    {
-        m_buffer.Add( character, count );
-        m_buffer.Add( static_cast< CharType >( 0 ) );
-    }
-    else
-    {
-        m_buffer.Insert( bufferSize - 1, character, count );
-    }
+	size_t bufferSize = m_buffer.GetSize();
+	if( bufferSize == 0 )
+	{
+		m_buffer.Add( character, count );
+		m_buffer.Add( static_cast< CharType >( 0 ) );
+	}
+	else
+	{
+		m_buffer.Insert( bufferSize - 1, character, count );
+	}
 }
 
 /// Append the contents of a null-terminated C-style string to the end of this string.
@@ -208,30 +300,30 @@ void Helium::StringBase< CharType, Allocator >::Add( CharType character, size_t 
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Add( const CharType* pString, size_t length )
 {
-    if( pString )
-    {
-        size_t stringLength = length;
-                if( stringLength == 0 )
-        {
-            stringLength = StringLength( pString );
-        }
+	if( pString )
+	{
+		size_t stringLength = length;
+				if( stringLength == 0 )
+		{
+			stringLength = StringLength( pString );
+		}
 
-        if( stringLength != 0 )
-        {
-            HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
+		if( stringLength != 0 )
+		{
+			HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
 
-            size_t bufferSize = m_buffer.GetSize();
-            if( bufferSize == 0 )
-            {
-                // Given string ends with a null terminator, so we can copy it over to terminate our string.
-                m_buffer.AddArray( pString, stringLength + 1 );
-            }
-            else
-            {
-                m_buffer.InsertArray( bufferSize - 1, pString, stringLength );
-            }
-        }
-    }
+			size_t bufferSize = m_buffer.GetSize();
+			if( bufferSize == 0 )
+			{
+				// Given string ends with a null terminator, so we can copy it over to terminate our string.
+				m_buffer.AddArray( pString, stringLength + 1 );
+			}
+			else
+			{
+				m_buffer.InsertArray( bufferSize - 1, pString, stringLength );
+			}
+		}
+	}
 }
 
 /// Insert copies of a character at the specified index in this string.
@@ -242,17 +334,17 @@ void Helium::StringBase< CharType, Allocator >::Add( const CharType* pString, si
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Insert( size_t index, CharType character, size_t count )
 {
-    HELIUM_ASSERT( index <= GetSize() );
-    size_t bufferSize = m_buffer.GetSize();
-    if( bufferSize == 0 )
-    {
-        m_buffer.Add( character, count );
-        m_buffer.Add( static_cast< CharType >( 0 ) );
-    }
-    else
-    {
-        m_buffer.Insert( index, character, count );
-    }
+	HELIUM_ASSERT( index <= GetSize() );
+	size_t bufferSize = m_buffer.GetSize();
+	if( bufferSize == 0 )
+	{
+		m_buffer.Add( character, count );
+		m_buffer.Add( static_cast< CharType >( 0 ) );
+	}
+	else
+	{
+		m_buffer.Insert( index, character, count );
+	}
 }
 
 /// Insert a copy of a null-terminated C-style string at the specified index in this string.
@@ -264,26 +356,26 @@ void Helium::StringBase< CharType, Allocator >::Insert( size_t index, CharType c
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Insert( size_t index, const CharType* pString )
 {
-    HELIUM_ASSERT( index <= GetSize() );
-    if( pString )
-    {
-        size_t stringLength = StringLength( pString );
-        if( stringLength != 0 )
-        {
-            HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
+	HELIUM_ASSERT( index <= GetSize() );
+	if( pString )
+	{
+		size_t stringLength = StringLength( pString );
+		if( stringLength != 0 )
+		{
+			HELIUM_ASSERT( pString < m_buffer.GetData() || pString >= m_buffer.GetData() + m_buffer.GetSize() );
 
-            size_t bufferSize = m_buffer.GetSize();
-            if( bufferSize == 0 )
-            {
-                // Given string ends with a null terminator, so we can copy it over to terminate our string.
-                m_buffer.AddArray( pString, stringLength + 1 );
-            }
-            else
-            {
-                m_buffer.InsertArray( index, pString, stringLength );
-            }
-        }
-    }
+			size_t bufferSize = m_buffer.GetSize();
+			if( bufferSize == 0 )
+			{
+				// Given string ends with a null terminator, so we can copy it over to terminate our string.
+				m_buffer.AddArray( pString, stringLength + 1 );
+			}
+			else
+			{
+				m_buffer.InsertArray( index, pString, stringLength );
+			}
+		}
+	}
 }
 
 /// Remove characters from this string.
@@ -293,9 +385,9 @@ void Helium::StringBase< CharType, Allocator >::Insert( size_t index, const Char
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Remove( size_t index, size_t count )
 {
-    HELIUM_ASSERT( index <= GetSize() );
-    HELIUM_ASSERT( index + count <= GetSize() );
-    m_buffer.Remove( index, count );
+	HELIUM_ASSERT( index <= GetSize() );
+	HELIUM_ASSERT( index + count <= GetSize() );
+	m_buffer.Remove( index, count );
 }
 
 /// Extract a substring from this string.
@@ -306,38 +398,38 @@ void Helium::StringBase< CharType, Allocator >::Remove( size_t index, size_t cou
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 void Helium::StringBase< CharType, Allocator >::Substring(
-    StringBase< CharType, OtherAllocator >& rOutput,
-    size_t index,
-    size_t count ) const
+	StringBase< CharType, OtherAllocator >& rOutput,
+	size_t index,
+	size_t count ) const
 {
-    size_t stringSize = GetSize();
-    HELIUM_ASSERT( index <= stringSize );
+	size_t stringSize = GetSize();
+	HELIUM_ASSERT( index <= stringSize );
 
-    if( index >= stringSize || count == 0 )
-    {
-        rOutput.Clear();
+	if( index >= stringSize || count == 0 )
+	{
+		rOutput.Clear();
 
-        return;
-    }
+		return;
+	}
 
-    count = Min( count, stringSize - index );
-    size_t endIndex = index + count;
+	count = Min( count, stringSize - index );
+	size_t endIndex = index + count;
 
-    if( &rOutput == this )
-    {
-        rOutput.Remove( endIndex, stringSize - endIndex );
-        rOutput.Remove( 0, index );
+	if( &rOutput == this )
+	{
+		rOutput.Remove( endIndex, stringSize - endIndex );
+		rOutput.Remove( 0, index );
 
-        return;
-    }
+		return;
+	}
 
-    rOutput.Clear();
-    rOutput.Reserve( count );
+	rOutput.Clear();
+	rOutput.Reserve( count );
 
-    for( ; index < endIndex; ++index )
-    {
-        rOutput.Push( m_buffer[ index ] );
-    }
+	for( ; index < endIndex; ++index )
+	{
+		rOutput.Push( m_buffer[ index ] );
+	}
 }
 
 /// Extract a substring from this string.
@@ -348,13 +440,13 @@ void Helium::StringBase< CharType, Allocator >::Substring(
 /// @return  Extracted substring.
 template< typename CharType, typename Allocator >
 Helium::StringBase< CharType, Allocator > Helium::StringBase< CharType, Allocator >::Substring(
-    size_t index,
-    size_t count ) const
+	size_t index,
+	size_t count ) const
 {
-    StringBase output;
-    Substring( output, index, count );
+	StringBase output;
+	Substring( output, index, count );
 
-    return output;
+	return output;
 }
 
 /// Get the first character in this string.
@@ -365,8 +457,8 @@ Helium::StringBase< CharType, Allocator > Helium::StringBase< CharType, Allocato
 template< typename CharType, typename Allocator >
 CharType& Helium::StringBase< CharType, Allocator >::GetFirst()
 {
-    HELIUM_ASSERT( GetSize() != 0 );
-    return m_buffer.GetFirst();
+	HELIUM_ASSERT( GetSize() != 0 );
+	return m_buffer.GetFirst();
 }
 
 /// Get the first character in this string.
@@ -377,8 +469,8 @@ CharType& Helium::StringBase< CharType, Allocator >::GetFirst()
 template< typename CharType, typename Allocator >
 const CharType& Helium::StringBase< CharType, Allocator >::GetFirst() const
 {
-    HELIUM_ASSERT( GetSize() != 0 );
-    return m_buffer.GetFirst();
+	HELIUM_ASSERT( GetSize() != 0 );
+	return m_buffer.GetFirst();
 }
 
 /// Get the last character in this string.
@@ -389,9 +481,9 @@ const CharType& Helium::StringBase< CharType, Allocator >::GetFirst() const
 template< typename CharType, typename Allocator >
 CharType& Helium::StringBase< CharType, Allocator >::GetLast()
 {
-    size_t bufferSize = m_buffer.GetSize();
-    HELIUM_ASSERT( bufferSize >= 2 );
-    return m_buffer.GetElement( bufferSize - 2 );
+	size_t bufferSize = m_buffer.GetSize();
+	HELIUM_ASSERT( bufferSize >= 2 );
+	return m_buffer.GetElement( bufferSize - 2 );
 }
 
 /// Get the last character in this string.
@@ -402,9 +494,9 @@ CharType& Helium::StringBase< CharType, Allocator >::GetLast()
 template< typename CharType, typename Allocator >
 const CharType& Helium::StringBase< CharType, Allocator >::GetLast() const
 {
-    size_t bufferSize = m_buffer.GetSize();
-    HELIUM_ASSERT( bufferSize >= 2 );
-    return m_buffer.GetElement( bufferSize - 2 );
+	size_t bufferSize = m_buffer.GetSize();
+	HELIUM_ASSERT( bufferSize >= 2 );
+	return m_buffer.GetElement( bufferSize - 2 );
 }
 
 /// Push a character element onto the end of this string.
@@ -417,19 +509,19 @@ const CharType& Helium::StringBase< CharType, Allocator >::GetLast() const
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::Push( CharType character )
 {
-    size_t bufferSize = m_buffer.GetSize();
-    if( bufferSize == 0 )
-    {
-        m_buffer.Push( character );
-        m_buffer.Push( static_cast< CharType >( 0 ) );
+	size_t bufferSize = m_buffer.GetSize();
+	if( bufferSize == 0 )
+	{
+		m_buffer.Push( character );
+		m_buffer.Push( static_cast< CharType >( 0 ) );
 
-        return 0;
-    }
+		return 0;
+	}
 
-    size_t insertIndex = bufferSize - 1;
-    m_buffer.Insert( insertIndex, character );
+	size_t insertIndex = bufferSize - 1;
+	m_buffer.Insert( insertIndex, character );
 
-    return insertIndex;
+	return insertIndex;
 }
 
 /// Remove the last character element from this string.
@@ -438,19 +530,19 @@ size_t Helium::StringBase< CharType, Allocator >::Push( CharType character )
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Pop()
 {
-    size_t bufferSize = m_buffer.GetSize();
-    HELIUM_ASSERT( bufferSize >= 2 );
+	size_t bufferSize = m_buffer.GetSize();
+	HELIUM_ASSERT( bufferSize >= 2 );
 
-    if( bufferSize == 2 )
-    {
-        // Only the null terminator will remain if we pop the last character, so empty out the string.
-        m_buffer.Resize( 0 );
-    }
-    else
-    {
-        // Remove the character prior to the final null terminator.
-        m_buffer.Remove( bufferSize - 2 );
-    }
+	if( bufferSize == 2 )
+	{
+		// Only the null terminator will remain if we pop the last character, so empty out the string.
+		m_buffer.Resize( 0 );
+	}
+	else
+	{
+		// Remove the character prior to the final null terminator.
+		m_buffer.Remove( bufferSize - 2 );
+	}
 }
 
 /// Set this string using "printf"-style formatting.
@@ -460,28 +552,28 @@ void Helium::StringBase< CharType, Allocator >::Pop()
 template< typename CharType, typename Allocator >
 void Helium::StringBase< CharType, Allocator >::Format( const CharType* pFormatString, ... )
 {
-    HELIUM_ASSERT( pFormatString );
+	HELIUM_ASSERT( pFormatString );
 
-    va_list argList;
-    va_start( argList, pFormatString );
-    int resultLength = StringFormatVa( NULL, 0, pFormatString, argList );
-    va_end( argList );
+	va_list argList;
+	va_start( argList, pFormatString );
+	int resultLength = StringFormatVa( NULL, 0, pFormatString, argList );
+	va_end( argList );
 
-    if( resultLength <= 0 )
-    {
-        m_buffer.Resize( 0 );
-        return;
-    }
+	if( resultLength <= 0 )
+	{
+		m_buffer.Resize( 0 );
+		return;
+	}
 
-    m_buffer.Resize( resultLength + 1 );
-    CharType* pBufferData = m_buffer.GetData();
-    HELIUM_ASSERT( pBufferData );
+	m_buffer.Resize( resultLength + 1 );
+	CharType* pBufferData = m_buffer.GetData();
+	HELIUM_ASSERT( pBufferData );
 
-    va_start( argList, pFormatString );
-    int finalResult = StringFormatVa( pBufferData, resultLength + 1, pFormatString, argList );
-    HELIUM_ASSERT( finalResult == resultLength );
-    HELIUM_UNREF( finalResult );
-    va_end( argList );
+	va_start( argList, pFormatString );
+	int finalResult = StringFormatVa( pBufferData, resultLength + 1, pFormatString, argList );
+	HELIUM_ASSERT( finalResult == resultLength );
+	HELIUM_UNREF( finalResult );
+	va_end( argList );
 }
 
 /// Find the first instance of the specified character, starting from the given offset.
@@ -495,16 +587,16 @@ void Helium::StringBase< CharType, Allocator >::Format( const CharType* pFormatS
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::Find( CharType character, size_t startIndex ) const
 {
-    size_t size = GetSize();
-    for( size_t index = startIndex; index < size; ++index )
-    {
-        if( m_buffer[ index ] == character )
-        {
-            return index;
-        }
-    }
+	size_t size = GetSize();
+	for( size_t index = startIndex; index < size; ++index )
+	{
+		if( m_buffer[ index ] == character )
+		{
+			return index;
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the last instance of the specified character, starting from the given offset and searching in reverse.
@@ -519,21 +611,21 @@ size_t Helium::StringBase< CharType, Allocator >::Find( CharType character, size
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindReverse( CharType character, size_t startIndex ) const
 {
-    size_t size = GetSize();
-    if( size != 0 )
-    {
-        size_t index = ( startIndex >= size ? size : startIndex + 1 );
-        while( index != 0 )
-        {
-            --index;
-            if( m_buffer[ index ] == character )
-            {
-                return index;
-            }
-        }
-    }
+	size_t size = GetSize();
+	if( size != 0 )
+	{
+		size_t index = ( startIndex >= size ? size : startIndex + 1 );
+		while( index != 0 )
+		{
+			--index;
+			if( m_buffer[ index ] == character )
+			{
+				return index;
+			}
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the first instance of any of the characters in the given string, starting from the given offset.
@@ -548,34 +640,34 @@ size_t Helium::StringBase< CharType, Allocator >::FindReverse( CharType characte
 /// @see FindAnyReverse(), Find(), FindReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAny(
-    const CharType* pCharacters,
-    size_t startIndex,
-    size_t characterCount ) const
+	const CharType* pCharacters,
+	size_t startIndex,
+	size_t characterCount ) const
 {
-    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+	HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
-    if( IsInvalid( characterCount ) )
-    {
-        characterCount = StringLength( pCharacters );
-    }
+	if( IsInvalid( characterCount ) )
+	{
+		characterCount = StringLength( pCharacters );
+	}
 
-    if( characterCount != 0 )
-    {
-        size_t size = GetSize();
-        for( size_t index = startIndex; index < size; ++index )
-        {
-            CharType testCharacter = m_buffer[ index ];
-            for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-            {
-                if( testCharacter == pCharacters[ characterIndex ] )
-                {
-                    return index;
-                }
-            }
-        }
-    }
+	if( characterCount != 0 )
+	{
+		size_t size = GetSize();
+		for( size_t index = startIndex; index < size; ++index )
+		{
+			CharType testCharacter = m_buffer[ index ];
+			for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+			{
+				if( testCharacter == pCharacters[ characterIndex ] )
+				{
+					return index;
+				}
+			}
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the first instance of any of the characters in the given string, starting from the given offset.
@@ -589,10 +681,10 @@ size_t Helium::StringBase< CharType, Allocator >::FindAny(
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAny(
-    const StringBase< CharType, OtherAllocator >& rCharacters,
-    size_t startIndex ) const
+	const StringBase< CharType, OtherAllocator >& rCharacters,
+	size_t startIndex ) const
 {
-    return FindAny( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+	return FindAny( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Find the last instance of any of the characters in the given string, starting from the given offset and searching in
@@ -608,40 +700,40 @@ size_t Helium::StringBase< CharType, Allocator >::FindAny(
 /// @see FindAny(), Find(), FindReverse(), FindNone(), FindNoneReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
-    const CharType* pCharacters,
-    size_t startIndex,
-    size_t characterCount ) const
+	const CharType* pCharacters,
+	size_t startIndex,
+	size_t characterCount ) const
 {
-    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+	HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
-    if( IsInvalid( characterCount ) )
-    {
-        characterCount = StringLength( pCharacters );
-    }
+	if( IsInvalid( characterCount ) )
+	{
+		characterCount = StringLength( pCharacters );
+	}
 
-    if( characterCount != 0 )
-    {
-        size_t size = GetSize();
-        if( size != 0 )
-        {
-            size_t index = ( startIndex >= size ? size : startIndex + 1 );
-            while( index != 0 )
-            {
-                --index;
+	if( characterCount != 0 )
+	{
+		size_t size = GetSize();
+		if( size != 0 )
+		{
+			size_t index = ( startIndex >= size ? size : startIndex + 1 );
+			while( index != 0 )
+			{
+				--index;
 
-                CharType testCharacter = m_buffer[ index ];
-                for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-                {
-                    if( testCharacter == pCharacters[ characterIndex ] )
-                    {
-                        return index;
-                    }
-                }
-            }
-        }
-    }
+				CharType testCharacter = m_buffer[ index ];
+				for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+				{
+					if( testCharacter == pCharacters[ characterIndex ] )
+					{
+						return index;
+					}
+				}
+			}
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the last instance of any of the characters in the given string, starting from the given offset and searching in
@@ -656,10 +748,10 @@ size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
-    const StringBase< CharType, OtherAllocator >& rCharacters,
-    size_t startIndex ) const
+	const StringBase< CharType, OtherAllocator >& rCharacters,
+	size_t startIndex ) const
 {
-    return FindAnyReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+	return FindAnyReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Find the first character not in a given set of characters, starting from the given offset.
@@ -675,40 +767,40 @@ size_t Helium::StringBase< CharType, Allocator >::FindAnyReverse(
 /// @see FindNoneReverse(), Find(), FindReverse(), FindAny(), FindAnyReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindNone(
-    const CharType* pCharacters,
-    size_t startIndex,
-    size_t characterCount ) const
+	const CharType* pCharacters,
+	size_t startIndex,
+	size_t characterCount ) const
 {
-    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+	HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
-    if( IsInvalid( characterCount ) )
-    {
-        characterCount = StringLength( pCharacters );
-    }
+	if( IsInvalid( characterCount ) )
+	{
+		characterCount = StringLength( pCharacters );
+	}
 
-    if( characterCount != 0 )
-    {
-        size_t size = GetSize();
-        for( size_t index = startIndex; index < size; ++index )
-        {
-            CharType testCharacter = m_buffer[ index ];
-            size_t characterIndex;
-            for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-            {
-                if( testCharacter == pCharacters[ characterIndex ] )
-                {
-                    break;
-                }
-            }
+	if( characterCount != 0 )
+	{
+		size_t size = GetSize();
+		for( size_t index = startIndex; index < size; ++index )
+		{
+			CharType testCharacter = m_buffer[ index ];
+			size_t characterIndex;
+			for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+			{
+				if( testCharacter == pCharacters[ characterIndex ] )
+				{
+					break;
+				}
+			}
 
-            if( characterIndex >= characterCount )
-            {
-                return index;
-            }
-        }
-    }
+			if( characterIndex >= characterCount )
+			{
+				return index;
+			}
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the first character not in a given set of characters, starting from the given offset.
@@ -723,10 +815,10 @@ size_t Helium::StringBase< CharType, Allocator >::FindNone(
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 size_t Helium::StringBase< CharType, Allocator >::FindNone(
-    const StringBase< CharType, OtherAllocator >& rCharacters,
-    size_t startIndex ) const
+	const StringBase< CharType, OtherAllocator >& rCharacters,
+	size_t startIndex ) const
 {
-    return FindNone( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+	return FindNone( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Find the last character not in a given set of characters, starting from the given offset and searching in reverse.
@@ -742,46 +834,46 @@ size_t Helium::StringBase< CharType, Allocator >::FindNone(
 /// @see FindNone(), Find(), FindReverse(), FindAny(), FindAnyReverse()
 template< typename CharType, typename Allocator >
 size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
-    const CharType* pCharacters,
-    size_t startIndex,
-    size_t characterCount ) const
+	const CharType* pCharacters,
+	size_t startIndex,
+	size_t characterCount ) const
 {
-    HELIUM_ASSERT( pCharacters || characterCount == 0 );
+	HELIUM_ASSERT( pCharacters || characterCount == 0 );
 
-    if( IsInvalid( characterCount ) )
-    {
-        characterCount = StringLength( pCharacters );
-    }
+	if( IsInvalid( characterCount ) )
+	{
+		characterCount = StringLength( pCharacters );
+	}
 
-    if( characterCount != 0 )
-    {
-        size_t size = GetSize();
-        if( size != 0 )
-        {
-            size_t index = ( startIndex >= size ? size : startIndex + 1 );
-            while( index != 0 )
-            {
-                --index;
+	if( characterCount != 0 )
+	{
+		size_t size = GetSize();
+		if( size != 0 )
+		{
+			size_t index = ( startIndex >= size ? size : startIndex + 1 );
+			while( index != 0 )
+			{
+				--index;
 
-                CharType testCharacter = m_buffer[ index ];
-                size_t characterIndex;
-                for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-                {
-                    if( testCharacter == pCharacters[ characterIndex ] )
-                    {
-                        break;
-                    }
-                }
+				CharType testCharacter = m_buffer[ index ];
+				size_t characterIndex;
+				for( characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+				{
+					if( testCharacter == pCharacters[ characterIndex ] )
+					{
+						break;
+					}
+				}
 
-                if( characterIndex >= characterCount )
-                {
-                    return index;
-                }
-            }
-        }
-    }
+				if( characterIndex >= characterCount )
+				{
+					return index;
+				}
+			}
+		}
+	}
 
-    return Invalid< size_t >();
+	return Invalid< size_t >();
 }
 
 /// Find the last character not in a given set of characters, starting from the given offset and searching in reverse.
@@ -796,10 +888,10 @@ size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
-    const StringBase< CharType, OtherAllocator >& rCharacters,
-    size_t startIndex ) const
+	const StringBase< CharType, OtherAllocator >& rCharacters,
+	size_t startIndex ) const
 {
-    return FindNoneReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
+	return FindNoneReverse( rCharacters.GetData(), startIndex, rCharacters.GetSize() );
 }
 
 /// Check whether this string contains a character.
@@ -810,16 +902,16 @@ size_t Helium::StringBase< CharType, Allocator >::FindNoneReverse(
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::Contains( CharType character ) const
 {
-    size_t size = GetSize();
-    for( size_t index = 0; index < size; ++index )
-    {
-        if( m_buffer[ index ] == character )
-        {
-            return true;
-        }
-    }
+	size_t size = GetSize();
+	for( size_t index = 0; index < size; ++index )
+	{
+		if( m_buffer[ index ] == character )
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 /// Check whether this string contains another string.
@@ -831,32 +923,32 @@ template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::Contains( const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    size_t otherSize = rString.GetSize();
-    if( otherSize == 0 )
-    {
-        // We always contain an empty string.
-        return true;
-    }
+	size_t otherSize = rString.GetSize();
+	if( otherSize == 0 )
+	{
+		// We always contain an empty string.
+		return true;
+	}
 
-    size_t size = GetSize();
-    if( otherSize > size )
-    {
-        return false;
-    }
+	size_t size = GetSize();
+	if( otherSize > size )
+	{
+		return false;
+	}
 
-    const CharType* pString = rString.m_buffer.GetData();
+	const CharType* pString = rString.m_buffer.GetData();
 
-    size -= otherSize;
-    size_t otherByteCount = sizeof( CharType ) * otherSize;
-    for( size_t index = 0; index < size; ++index )
-    {
-        if( MemoryCompare( &m_buffer[ index ], pString, otherByteCount ) == 0 )
-        {
-            return true;
-        }
-    }
+	size -= otherSize;
+	size_t otherByteCount = sizeof( CharType ) * otherSize;
+	for( size_t index = 0; index < size; ++index )
+	{
+		if( MemoryCompare( &m_buffer[ index ], pString, otherByteCount ) == 0 )
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 /// Check whether this string contains another string.
@@ -867,35 +959,35 @@ bool Helium::StringBase< CharType, Allocator >::Contains( const StringBase< Char
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::Contains( const CharType* pString ) const
 {
-    // We always contain an empty string.
-    if( !pString )
-    {
-        return false;
-    }
+	// We always contain an empty string.
+	if( !pString )
+	{
+		return false;
+	}
 
-    size_t otherSize = StringLength( pString );
-    if( otherSize == 0 )
-    {
-        return true;
-    }
+	size_t otherSize = StringLength( pString );
+	if( otherSize == 0 )
+	{
+		return true;
+	}
 
-    size_t size = GetSize();
-    if( otherSize > size )
-    {
-        return false;
-    }
+	size_t size = GetSize();
+	if( otherSize > size )
+	{
+		return false;
+	}
 
-    size -= otherSize;
-    size_t otherByteCount = sizeof( CharType ) * otherSize;
-    for( size_t index = 0; index < size; ++index )
-    {
-        if( MemoryCompare( &m_buffer[ index ], pString, otherByteCount ) == 0 )
-        {
-            return true;
-        }
-    }
+	size -= otherSize;
+	size_t otherByteCount = sizeof( CharType ) * otherSize;
+	for( size_t index = 0; index < size; ++index )
+	{
+		if( MemoryCompare( &m_buffer[ index ], pString, otherByteCount ) == 0 )
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 /// Check whether this string starts with a given string.
@@ -908,20 +1000,20 @@ bool Helium::StringBase< CharType, Allocator >::Contains( const CharType* pStrin
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::StartsWith(
-    const StringBase< CharType, OtherAllocator >& rString ) const
+	const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    size_t stringSize = rString.GetSize();
-    if( stringSize > GetSize() )
-    {
-        return false;
-    }
+	size_t stringSize = rString.GetSize();
+	if( stringSize > GetSize() )
+	{
+		return false;
+	}
 
-    int compareResult = MemoryCompare(
-        m_buffer.GetData(),
-        rString.m_buffer.GetData(),
-        sizeof( CharType ) * stringSize );
+	int compareResult = MemoryCompare(
+		m_buffer.GetData(),
+		rString.m_buffer.GetData(),
+		sizeof( CharType ) * stringSize );
 
-    return ( compareResult == 0 );
+	return ( compareResult == 0 );
 }
 
 /// Check whether this string starts with a given string.
@@ -934,17 +1026,17 @@ bool Helium::StringBase< CharType, Allocator >::StartsWith(
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::StartsWith( const CharType* pString ) const
 {
-    HELIUM_ASSERT( pString );
+	HELIUM_ASSERT( pString );
 
-    size_t stringSize = StringLength( pString );
-    if( stringSize > GetSize() )
-    {
-        return false;
-    }
+	size_t stringSize = StringLength( pString );
+	if( stringSize > GetSize() )
+	{
+		return false;
+	}
 
-    int compareResult = MemoryCompare( m_buffer.GetData(), pString, sizeof( CharType ) * stringSize );
+	int compareResult = MemoryCompare( m_buffer.GetData(), pString, sizeof( CharType ) * stringSize );
 
-    return ( compareResult == 0 );
+	return ( compareResult == 0 );
 }
 
 /// Check whether this string ends with a given string.
@@ -958,19 +1050,19 @@ template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::EndsWith( const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    size_t stringSize = rString.GetSize();
-    size_t thisSize = GetSize();
-    if( stringSize > thisSize )
-    {
-        return false;
-    }
+	size_t stringSize = rString.GetSize();
+	size_t thisSize = GetSize();
+	if( stringSize > thisSize )
+	{
+		return false;
+	}
 
-    int compareResult = MemoryCompare(
-        m_buffer.GetData() + thisSize - stringSize,
-        rString.m_buffer.GetData(),
-        sizeof( CharType ) * stringSize );
+	int compareResult = MemoryCompare(
+		m_buffer.GetData() + thisSize - stringSize,
+		rString.m_buffer.GetData(),
+		sizeof( CharType ) * stringSize );
 
-    return ( compareResult == 0 );
+	return ( compareResult == 0 );
 }
 
 /// Check whether this string ends with a given string.
@@ -983,21 +1075,21 @@ bool Helium::StringBase< CharType, Allocator >::EndsWith( const StringBase< Char
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::EndsWith( const CharType* pString ) const
 {
-    HELIUM_ASSERT( pString );
+	HELIUM_ASSERT( pString );
 
-    size_t stringSize = StringLength( pString );
-    size_t thisSize = GetSize();
-    if( stringSize > thisSize )
-    {
-        return false;
-    }
+	size_t stringSize = StringLength( pString );
+	size_t thisSize = GetSize();
+	if( stringSize > thisSize )
+	{
+		return false;
+	}
 
-    int compareResult = MemoryCompare(
-        m_buffer.GetData() + thisSize - stringSize,
-        pString,
-        sizeof( CharType ) * stringSize );
+	int compareResult = MemoryCompare(
+		m_buffer.GetData() + thisSize - stringSize,
+		pString,
+		sizeof( CharType ) * stringSize );
 
-    return ( compareResult == 0 );
+	return ( compareResult == 0 );
 }
 
 /// Split a string into an array of strings based on the specified character separator.
@@ -1014,37 +1106,37 @@ bool Helium::StringBase< CharType, Allocator >::EndsWith( const CharType* pStrin
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-    DynArray< ArrayType, ArrayAllocator >& rStringResults,
-    CharType separator,
-    bool bCombineAdjacentSeparators ) const
+	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	CharType separator,
+	bool bCombineAdjacentSeparators ) const
 {
-    rStringResults.Resize( 0 );
+	rStringResults.Resize( 0 );
 
-    // Always allow splitting off an empty string at the start if this string starts with a separator character.
-    bool bHaveNonSeparator = true;
+	// Always allow splitting off an empty string at the start if this string starts with a separator character.
+	bool bHaveNonSeparator = true;
 
-    size_t startIndex = 0;
-    size_t characterCount = GetSize();
-    for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-    {
-        if( m_buffer[ characterIndex ] == separator )
-        {
-            if( !bCombineAdjacentSeparators || bHaveNonSeparator )
-            {
-                HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
-                bHaveNonSeparator = false;
-            }
+	size_t startIndex = 0;
+	size_t characterCount = GetSize();
+	for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+	{
+		if( m_buffer[ characterIndex ] == separator )
+		{
+			if( !bCombineAdjacentSeparators || bHaveNonSeparator )
+			{
+				HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
+				bHaveNonSeparator = false;
+			}
 
-            startIndex = characterIndex + 1;
-        }
-        else
-        {
-            bHaveNonSeparator = true;
-        }
-    }
+			startIndex = characterIndex + 1;
+		}
+		else
+		{
+			bHaveNonSeparator = true;
+		}
+	}
 
-    // Always allow splitting off an empty string at the end if this string ends with a separator character.
-    HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
+	// Always allow splitting off an empty string at the end if this string ends with a separator character.
+	HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
 }
 
 /// Split a string into an array of strings based on the specified character separators.
@@ -1064,53 +1156,53 @@ void Helium::StringBase< CharType, Allocator >::Split(
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-    DynArray< ArrayType, ArrayAllocator >& rStringResults,
-    const CharType* pSeparators,
-    size_t separatorCount,
-    bool bCombineAdjacentSeparators ) const
+	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	const CharType* pSeparators,
+	size_t separatorCount,
+	bool bCombineAdjacentSeparators ) const
 {
-    HELIUM_ASSERT( pSeparators || separatorCount == 0 );
+	HELIUM_ASSERT( pSeparators || separatorCount == 0 );
 
-    rStringResults.Resize( 0 );
+	rStringResults.Resize( 0 );
 
-    if( IsInvalid( separatorCount ) )
-    {
-        separatorCount = StringLength( pSeparators );
-    }
+	if( IsInvalid( separatorCount ) )
+	{
+		separatorCount = StringLength( pSeparators );
+	}
 
-    // Always allow splitting off an empty string at the start if this string starts with a separator character.
-    bool bHaveNonSeparator = true;
+	// Always allow splitting off an empty string at the start if this string starts with a separator character.
+	bool bHaveNonSeparator = true;
 
-    size_t startIndex = 0;
-    size_t characterCount = GetSize();
-    for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
-    {
-        CharType character = m_buffer[ characterIndex ];
-        size_t separatorIndex;
-        for( separatorIndex = 0; separatorIndex < separatorCount; ++separatorIndex )
-        {
-            if( character == pSeparators[ separatorIndex ] )
-            {
-                if( !bCombineAdjacentSeparators || bHaveNonSeparator )
-                {
-                    HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
-                    bHaveNonSeparator = false;
-                }
+	size_t startIndex = 0;
+	size_t characterCount = GetSize();
+	for( size_t characterIndex = 0; characterIndex < characterCount; ++characterIndex )
+	{
+		CharType character = m_buffer[ characterIndex ];
+		size_t separatorIndex;
+		for( separatorIndex = 0; separatorIndex < separatorCount; ++separatorIndex )
+		{
+			if( character == pSeparators[ separatorIndex ] )
+			{
+				if( !bCombineAdjacentSeparators || bHaveNonSeparator )
+				{
+					HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterIndex - startIndex ) );
+					bHaveNonSeparator = false;
+				}
 
-                startIndex = characterIndex + 1;
+				startIndex = characterIndex + 1;
 
-                break;
-            }
-        }
+				break;
+			}
+		}
 
-        if( separatorIndex >= separatorCount )
-        {
-            bHaveNonSeparator = true;
-        }
-    }
+		if( separatorIndex >= separatorCount )
+		{
+			bHaveNonSeparator = true;
+		}
+	}
 
-    // Always allow splitting off an empty string at the end if this string ends with a separator character.
-    HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
+	// Always allow splitting off an empty string at the end if this string ends with a separator character.
+	HELIUM_VERIFY( rStringResults.New( m_buffer.GetData() + startIndex, characterCount - startIndex ) );
 }
 
 /// Split a string into an array of strings based on the specified character separators.
@@ -1127,11 +1219,11 @@ void Helium::StringBase< CharType, Allocator >::Split(
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator, typename StringAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-    DynArray< ArrayType, ArrayAllocator >& rStringResults,
-    const StringBase< CharType, StringAllocator >& rSeparators,
-    bool bCombineAdjacentSeparators ) const
+	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	const StringBase< CharType, StringAllocator >& rSeparators,
+	bool bCombineAdjacentSeparators ) const
 {
-    Split( rStringResults, rSeparators.GetData(), rSeparators.GetSize(), bCombineAdjacentSeparators );
+	Split( rStringResults, rSeparators.GetData(), rSeparators.GetSize(), bCombineAdjacentSeparators );
 }
 
 /// Get the contents of this string as a null-terminated C-string.
@@ -1144,12 +1236,12 @@ void Helium::StringBase< CharType, Allocator >::Split(
 template< typename CharType, typename Allocator >
 const CharType* Helium::StringBase< CharType, Allocator >::operator*() const
 {
-    static const CharType emptyString[] = { static_cast< CharType >( '\0' ) };
+	static const CharType emptyString[] = { static_cast< CharType >( '\0' ) };
 
-    // Use StringBase::GetData() instead of getting the buffer data directly in order to check for empty strings.
-    const CharType* pString = GetData();
+	// Use StringBase::GetData() instead of getting the buffer data directly in order to check for empty strings.
+	const CharType* pString = GetData();
 
-    return ( pString ? pString : emptyString );
+	return ( pString ? pString : emptyString );
 }
 
 /// Get the string element at the specified index.
@@ -1160,8 +1252,8 @@ const CharType* Helium::StringBase< CharType, Allocator >::operator*() const
 template< typename CharType, typename Allocator >
 CharType& Helium::StringBase< CharType, Allocator >::operator[]( ptrdiff_t index )
 {
-    HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
-    return m_buffer.GetElement( index );
+	HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
+	return m_buffer.GetElement( index );
 }
 
 /// Get the string element at the specified index.
@@ -1172,8 +1264,8 @@ CharType& Helium::StringBase< CharType, Allocator >::operator[]( ptrdiff_t index
 template< typename CharType, typename Allocator >
 const CharType& Helium::StringBase< CharType, Allocator >::operator[]( ptrdiff_t index ) const
 {
-    HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
-    return m_buffer.GetElement( index );
+	HELIUM_ASSERT( static_cast< size_t >( index ) < GetSize() );
+	return m_buffer.GetElement( index );
 }
 
 /// Set this string to a single character.
@@ -1187,13 +1279,13 @@ const CharType& Helium::StringBase< CharType, Allocator >::operator[]( ptrdiff_t
 template< typename CharType, typename Allocator >
 Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocator >::operator=( CharType character )
 {
-    m_buffer.Clear();
-    m_buffer.Reserve( 2 );
-    m_buffer.Resize( 2 );
-    m_buffer[ 0 ] = character;
-    m_buffer[ 1 ] = static_cast< CharType >( 0 );
+	m_buffer.Clear();
+	m_buffer.Reserve( 2 );
+	m_buffer.Resize( 2 );
+	m_buffer[ 0 ] = character;
+	m_buffer[ 1 ] = static_cast< CharType >( 0 );
 
-    return *this;
+	return *this;
 }
 
 /// Set this string to a copy of the given C-style string.
@@ -1207,25 +1299,25 @@ Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocat
 /// @return  Reference to this string.
 template< typename CharType, typename Allocator >
 Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocator >::operator=(
-    const CharType* pString )
+	const CharType* pString )
 {
-    if( m_buffer.GetData() != pString )
-    {
-        m_buffer.Clear();
-        if( pString )
-        {
-            size_t length = StringLength( pString );
-            if( length != 0 )
-            {
-                ++length;
-                m_buffer.Reserve( length );
-                m_buffer.Resize( length );
-                MemoryCopy( m_buffer.GetData(), pString, sizeof( CharType ) * length );
-            }
-        }
-    }
+	if( m_buffer.GetData() != pString )
+	{
+		m_buffer.Clear();
+		if( pString )
+		{
+			size_t length = StringLength( pString );
+			if( length != 0 )
+			{
+				++length;
+				m_buffer.Reserve( length );
+				m_buffer.Resize( length );
+				MemoryCopy( m_buffer.GetData(), pString, sizeof( CharType ) * length );
+			}
+		}
+	}
 
-    return *this;
+	return *this;
 }
 
 /// Set this string to the contents of the given string.
@@ -1239,10 +1331,10 @@ Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocat
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocator >::operator=(
-    const StringBase< CharType, OtherAllocator >& rSource )
+	const StringBase< CharType, OtherAllocator >& rSource )
 {
-    m_buffer = rSource.m_buffer;
-    return *this;
+	m_buffer = rSource.m_buffer;
+	return *this;
 }
 
 /// Check whether this string should precede the given null-terminated C-style string based on character code values.
@@ -1253,30 +1345,30 @@ Helium::StringBase< CharType, Allocator >& Helium::StringBase< CharType, Allocat
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::operator<( const CharType* pString ) const
 {
-    // No strings can precede empty strings.
-    if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
-    {
-        return false;
-    }
+	// No strings can precede empty strings.
+	if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
+	{
+		return false;
+	}
 
-    // Perform a character-by-character comparison.
-    size_t stringSize = GetSize();
-    for( size_t characterIndex = 0; characterIndex < stringSize; ++characterIndex )
-    {
-        CharType thisCharacter = m_buffer[ characterIndex ];
-        CharType otherCharacter = pString[ characterIndex ];
-        if( thisCharacter < otherCharacter )
-        {
-            return true;
-        }
+	// Perform a character-by-character comparison.
+	size_t stringSize = GetSize();
+	for( size_t characterIndex = 0; characterIndex < stringSize; ++characterIndex )
+	{
+		CharType thisCharacter = m_buffer[ characterIndex ];
+		CharType otherCharacter = pString[ characterIndex ];
+		if( thisCharacter < otherCharacter )
+		{
+			return true;
+		}
 
-        if( otherCharacter < thisCharacter || otherCharacter == static_cast< CharType >( 0 ) )
-        {
-            return false;
-        }
-    }
+		if( otherCharacter < thisCharacter || otherCharacter == static_cast< CharType >( 0 ) )
+		{
+			return false;
+		}
+	}
 
-    return ( static_cast< CharType >( 0 ) < pString[ stringSize ] );
+	return ( static_cast< CharType >( 0 ) < pString[ stringSize ] );
 }
 
 /// Check whether this string should precede the given string based on character code values.
@@ -1288,26 +1380,26 @@ template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::operator<( const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    size_t thisSize = GetSize();
-    size_t otherSize = rString.GetSize();
+	size_t thisSize = GetSize();
+	size_t otherSize = rString.GetSize();
 
-    size_t testSize = Min( thisSize, otherSize );
-    for( size_t characterIndex = 0; characterIndex < testSize; ++characterIndex )
-    {
-        CharType thisCharacter = m_buffer[ characterIndex ];
-        CharType otherCharacter = rString.m_buffer[ characterIndex ];
-        if( thisCharacter < otherCharacter )
-        {
-            return true;
-        }
+	size_t testSize = Min( thisSize, otherSize );
+	for( size_t characterIndex = 0; characterIndex < testSize; ++characterIndex )
+	{
+		CharType thisCharacter = m_buffer[ characterIndex ];
+		CharType otherCharacter = rString.m_buffer[ characterIndex ];
+		if( thisCharacter < otherCharacter )
+		{
+			return true;
+		}
 
-        if( otherCharacter < thisCharacter )
-        {
-            return false;
-        }
-    }
+		if( otherCharacter < thisCharacter )
+		{
+			return false;
+		}
+	}
 
-    return ( thisSize < otherSize );
+	return ( thisSize < otherSize );
 }
 
 /// Check whether the contents of this string match the contents of a given null-terminated C-style string.
@@ -1318,27 +1410,27 @@ bool Helium::StringBase< CharType, Allocator >::operator<( const StringBase< Cha
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::operator==( const CharType* pString ) const
 {
-    size_t bufferSize = m_buffer.GetSize();
+	size_t bufferSize = m_buffer.GetSize();
 
-    // Check for empty string matches.
-    if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
-    {
-        return ( bufferSize <= 1 );
-    }
+	// Check for empty string matches.
+	if( !pString || pString[ 0 ] == static_cast< CharType >( 0 ) )
+	{
+		return ( bufferSize <= 1 );
+	}
 
-    // Perform a character-by-character comparison.
-    size_t stringSize = bufferSize - 1;
-    for( size_t characterIndex = 0; characterIndex < stringSize; ++characterIndex )
-    {
-        CharType character = pString[ characterIndex ];
-        if( character == static_cast< CharType >( 0 ) || m_buffer[ characterIndex ] != character )
-        {
-            return false;
-        }
-    }
+	// Perform a character-by-character comparison.
+	size_t stringSize = bufferSize - 1;
+	for( size_t characterIndex = 0; characterIndex < stringSize; ++characterIndex )
+	{
+		CharType character = pString[ characterIndex ];
+		if( character == static_cast< CharType >( 0 ) || m_buffer[ characterIndex ] != character )
+		{
+			return false;
+		}
+	}
 
-    // String should be null-terminated.
-    return ( pString[ stringSize ] == static_cast< CharType >( 0 ) );
+	// String should be null-terminated.
+	return ( pString[ stringSize ] == static_cast< CharType >( 0 ) );
 }
 
 /// Check whether the contents of this string match the contents of a given string.
@@ -1349,12 +1441,12 @@ bool Helium::StringBase< CharType, Allocator >::operator==( const CharType* pStr
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::operator==(
-    const StringBase< CharType, OtherAllocator >& rString ) const
+	const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    size_t bufferSize = m_buffer.GetSize();
+	size_t bufferSize = m_buffer.GetSize();
 
-    return ( bufferSize == rString.m_buffer.GetSize() &&
-             MemoryCompare( m_buffer.GetData(), rString.m_buffer.GetData(), bufferSize * sizeof( CharType ) ) == 0 );
+	return ( bufferSize == rString.m_buffer.GetSize() &&
+			 MemoryCompare( m_buffer.GetData(), rString.m_buffer.GetData(), bufferSize * sizeof( CharType ) ) == 0 );
 }
 
 /// Check whether the contents of this string do not match the contents of a given null-terminated C-style string.
@@ -1365,7 +1457,7 @@ bool Helium::StringBase< CharType, Allocator >::operator==(
 template< typename CharType, typename Allocator >
 bool Helium::StringBase< CharType, Allocator >::operator!=( const CharType* pString ) const
 {
-    return !( *this == pString );
+	return !( *this == pString );
 }
 
 /// Check whether the contents of this string do not match the contents of a given string.
@@ -1376,9 +1468,9 @@ bool Helium::StringBase< CharType, Allocator >::operator!=( const CharType* pStr
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 bool Helium::StringBase< CharType, Allocator >::operator!=(
-    const StringBase< CharType, OtherAllocator >& rString ) const
+	const StringBase< CharType, OtherAllocator >& rString ) const
 {
-    return !( *this == rString );
+	return !( *this == rString );
 }
 
 /// Append the contents of a string to the end of this string.
@@ -1388,18 +1480,18 @@ template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 void Helium::StringBase< CharType, Allocator >::Add( const StringBase< CharType, OtherAllocator >& rString )
 {
-    // We cache the size locally, but not the string buffer data, so that we can support appending a string to
-    // itself (buffer address may change when resizing this string).
-    size_t otherBufferSize = rString.m_buffer.GetSize();
-    if( otherBufferSize > 1 )
-    {
-        size_t currentSize = GetSize();
-        m_buffer.Resize( currentSize + otherBufferSize );
-        MemoryCopy(
-            m_buffer.GetData() + currentSize,
-            rString.m_buffer.GetData(),
-            sizeof( CharType ) * otherBufferSize );
-    }
+	// We cache the size locally, but not the string buffer data, so that we can support appending a string to
+	// itself (buffer address may change when resizing this string).
+	size_t otherBufferSize = rString.m_buffer.GetSize();
+	if( otherBufferSize > 1 )
+	{
+		size_t currentSize = GetSize();
+		m_buffer.Resize( currentSize + otherBufferSize );
+		MemoryCopy(
+			m_buffer.GetData() + currentSize,
+			rString.m_buffer.GetData(),
+			sizeof( CharType ) * otherBufferSize );
+	}
 }
 
 /// Insert a copy of a string at the specified index in this string.
@@ -1411,27 +1503,27 @@ void Helium::StringBase< CharType, Allocator >::Add( const StringBase< CharType,
 template< typename CharType, typename Allocator >
 template< typename OtherAllocator >
 void Helium::StringBase< CharType, Allocator >::Insert(
-    size_t index,
-    const StringBase< CharType, OtherAllocator >& rString )
+	size_t index,
+	const StringBase< CharType, OtherAllocator >& rString )
 {
-    HELIUM_ASSERT( index <= GetSize() );
-    size_t otherBufferSize = rString.m_buffer.GetSize();
-    if( otherBufferSize > 1 )
-    {
-        size_t bufferSize = m_buffer.GetSize();
-        if( bufferSize > 1 )
-        {
-            m_buffer.InsertArray( index, rString.m_buffer.GetData(), otherBufferSize - 1 );
-        }
-        else
-        {
-            m_buffer.Resize( otherBufferSize );
-            MemoryCopy(
-                m_buffer.GetData(),
-                rString.m_buffer.GetData(),
-                sizeof( CharType ) * otherBufferSize );
-        }
-    }
+	HELIUM_ASSERT( index <= GetSize() );
+	size_t otherBufferSize = rString.m_buffer.GetSize();
+	if( otherBufferSize > 1 )
+	{
+		size_t bufferSize = m_buffer.GetSize();
+		if( bufferSize > 1 )
+		{
+			m_buffer.InsertArray( index, rString.m_buffer.GetData(), otherBufferSize - 1 );
+		}
+		else
+		{
+			m_buffer.Resize( otherBufferSize );
+			MemoryCopy(
+				m_buffer.GetData(),
+				rString.m_buffer.GetData(),
+				sizeof( CharType ) * otherBufferSize );
+		}
+	}
 }
 
 /// Write a string to the given output stream.
@@ -1442,10 +1534,10 @@ void Helium::StringBase< CharType, Allocator >::Insert(
 /// @return  Reference to the given output stream.
 template< typename CharType, typename CharTypeTraits, typename Allocator >
 std::basic_ostream< CharType, CharTypeTraits >& Helium::operator<<(
-    std::basic_ostream< CharType, CharTypeTraits >& rStream,
-    const StringBase< CharType, Allocator >& rString )
+	std::basic_ostream< CharType, CharTypeTraits >& rStream,
+	const StringBase< CharType, Allocator >& rString )
 {
-    return ( rStream << *rString );
+	return ( rStream << *rString );
 }
 
 /// Read a string from the given input stream.
@@ -1456,13 +1548,13 @@ std::basic_ostream< CharType, CharTypeTraits >& Helium::operator<<(
 /// @return  Reference to the given input stream.
 template< typename CharType, typename CharTypeTraits, typename Allocator >
 std::basic_istream< CharType, CharTypeTraits >& Helium::operator>>(
-    std::basic_istream< CharType, CharTypeTraits >& rStream,
-    StringBase< CharType, Allocator >& rString )
+	std::basic_istream< CharType, CharTypeTraits >& rStream,
+	StringBase< CharType, Allocator >& rString )
 {
-    // Could definitely improve this...
-    std::basic_string< CharType, CharTypeTraits, std::allocator< char > > tempString;
-    rStream >> tempString;
-    rString = tempString.c_str();
+	// Could definitely improve this...
+	std::basic_string< CharType, CharTypeTraits, std::allocator< char > > tempString;
+	rStream >> tempString;
+	rString = tempString.c_str();
 
-    return rStream;
+	return rStream;
 }

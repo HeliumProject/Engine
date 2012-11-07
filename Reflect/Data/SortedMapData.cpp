@@ -452,7 +452,6 @@ template SimpleSortedMapData< uint64_t, String >;
 template SimpleSortedMapData< uint64_t, uint32_t >;
 template SimpleSortedMapData< uint64_t, uint64_t >;
 
-template SimpleSortedMapData< Helium::GUID, uint32_t >;
 template SimpleSortedMapData< Helium::TUID, uint32_t >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringStringSortedMapData );
@@ -474,5 +473,4 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StringSortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt32SortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt64SortedMapData );
 
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDUInt32SortedMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDUInt32SortedMapData );

@@ -25,8 +25,6 @@ typedef std::map< tuid, uint32_t > M_tuidu32;
 
 namespace Helium
 {
-    class GUID;
-
     class HELIUM_FOUNDATION_API TUID
     {
     protected:
@@ -58,9 +56,6 @@ namespace Helium
 
         void ToString(tstring& id) const;
         bool FromString( const tstring& str );
-
-        void ToGUID(GUID& id) const;
-        void FromGUID(const GUID& id);
 
         // Resets the ID to be the null ID
         void Reset();

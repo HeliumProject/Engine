@@ -3,14 +3,11 @@
 #include <set>
 #include <vector>
 
+#include "Platform/Status.h"
+
 #include "Foundation/API.h"
 #include "Foundation/SmartPtr.h"
 #include "Foundation/StringUtilities.h"
-
-namespace Helium
-{
-    struct Stat;
-}
 
 namespace Helium
 {
@@ -80,18 +77,12 @@ namespace Helium
         tstring Signature();
 
         bool Exists() const;
-        bool Stat( Helium::Stat& stat ) const;
         bool IsAbsolute() const;
         bool IsUnder( const tstring& location ) const;
         bool IsFile() const;
         bool IsDirectory() const;
         bool Writable() const;
         bool Readable() const;
-        bool ChangedSince( uint64_t lastTime ) const;
-        uint64_t ModifiedTime() const;
-        uint64_t CreatedTime() const;
-        uint64_t AccessTime() const;
-        int64_t Size() const;
 
         bool MakePath() const;
         bool Create() const;

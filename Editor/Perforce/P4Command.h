@@ -3,7 +3,7 @@
 #include "P4API.h"
 #include "P4Provider.h"
 #include "P4Exceptions.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Thread.h"
 #include "Platform/Profile.h"
 #include "Application/RCSTypes.h"

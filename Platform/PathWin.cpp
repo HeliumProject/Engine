@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Path.h"
 
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include <vector>
 #include <sys/stat.h>

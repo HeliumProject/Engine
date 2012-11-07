@@ -2,7 +2,7 @@
 
 #include "Engine/Engine.h"
 
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Foundation/Name.h"
 #include "Foundation/HashMap.h"
 #include "Reflect/Class.h"

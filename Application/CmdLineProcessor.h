@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Application/API.h"
 #include "Foundation/SmartPtr.h"
+#include "Foundation/String.h"
+
+#include "Application/API.h"
 
 #include <string>
 #include <vector>
@@ -114,11 +116,11 @@ namespace Helium
 				const tstring& arg = (*argsBegin);
 				++argsBegin;
 
-				if ( _tcsicmp( arg.c_str(), TXT( "false" ) ) == 0 || _tcsicmp( arg.c_str(), TXT( "0" ) ) == 0 )
+				if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "false" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "0" ) ) == 0 )
 				{
 					*m_Data = false;
 				}
-				else if ( _tcsicmp( arg.c_str(), TXT( "true" ) ) == 0 || _tcsicmp( arg.c_str(), TXT( "1" ) ) == 0 )
+				else if ( CaseInsensitiveCompareString( arg.c_str(), TXT( "true" ) ) == 0 || CaseInsensitiveCompareString( arg.c_str(), TXT( "1" ) ) == 0 )
 				{
 					*m_Data = true;
 				}

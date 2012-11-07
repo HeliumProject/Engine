@@ -1,10 +1,13 @@
 #include "BuffersPch.h"
 #include "BufferSerializer.h"
-#include "SmartBuffer.h"
-#include "ObjectBuffer.h"
-#include "BasicBuffer.h"
+
+#include "Platform/Print.h"
 
 #include "Foundation/Log.h"
+
+#include "Buffers/SmartBuffer.h"
+#include "Buffers/ObjectBuffer.h"
+#include "Buffers/BasicBuffer.h"
 #include "Buffers/SmartLoader.h"
 
 #include <iostream>
@@ -180,9 +183,8 @@ bool BufferSerializer::WriteToFile( const tchar_t* filename ) const
     bool return_val = false;
 
     tchar_t print[512];
-    _sntprintf(print, sizeof(print) / sizeof( tchar_t ), TXT( "Writing '%s'" ), filename);
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, ""/*print*/);
+    StringPrint(print, TXT( "Writing '%s'" ), filename);
+    PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, print);
     Log::Debug( TXT( "%s\n" ), print);
 
     tofstream strm( filename, std::ios::out | std::ios::binary );
@@ -410,9 +412,8 @@ bool BufferSerializer::ReadFromFile( const tchar_t* filename )
     bool return_val = false;
 
     tchar_t print[512];
-    _sntprintf(print, sizeof(print) / sizeof( tchar_t ), TXT( "Reading '%s'" ), filename);
-#pragma TODO("Profiler support for wide strings")
-    PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, ""/*print*/);
+    StringPrint(print, TXT( "Reading '%s'" ), filename);
+    PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, print);
     Log::Debug( TXT( "%s\n" ), print);
 
     tifstream strm( filename, std::ios::in | std::ios::binary );

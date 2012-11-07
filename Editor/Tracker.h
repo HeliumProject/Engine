@@ -3,7 +3,7 @@
 #include "Editor/API.h"
 
 #include "Application/InitializerStack.h"
-#include "Foundation/Directory.h"
+#include "Foundation/DirectoryIterator.h"
 #include "Platform/Thread.h"
 #include "SceneGraph/Project.h"
 

@@ -2,7 +2,7 @@
 #include "Exception.h"
 
 #include "Platform/Assert.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Console.h"
 #include "Platform/ProfileMemory.h"
 

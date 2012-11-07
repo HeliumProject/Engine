@@ -76,7 +76,6 @@ namespace Helium
         typedef SimpleStlVectorData<int64_t> Int64StlVectorData;
         typedef SimpleStlVectorData<float32_t> Float32StlVectorData;
         typedef SimpleStlVectorData<float64_t> Float64StlVectorData;
-        typedef SimpleStlVectorData<Helium::GUID> GUIDStlVectorData;
         typedef SimpleStlVectorData<Helium::TUID> TUIDStlVectorData;
         typedef SimpleStlVectorData<Helium::Path> PathStlVectorData;
     }

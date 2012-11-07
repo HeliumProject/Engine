@@ -2,6 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Memory.h"
+#include "Platform/Utility.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Math.h"
@@ -13,6 +14,30 @@
 
 namespace Helium
 {
+	template< class T >
+	inline size_t StringLength( const T* data );
+
+	template< class T >
+	inline const T* FindCharacter( const T* data, const T value, size_t count = 0 );
+
+	template< class T >
+	inline const T* FindNextToken( const T* data, const T delim, size_t count = 0 );
+
+	template< class T, size_t N >
+	inline void CopyString( T (&dest)[N], const T* src, size_t count = 0 );
+	template< class T >
+	inline void CopyString( T* dest, size_t destCount, const T* src, size_t count = 0 );
+
+	template< class T, size_t N >
+	inline void AppendString( T (&dest)[N], const T* src, size_t count = 0 );
+	template< class T >
+	inline void AppendString( T* dest, size_t destCount, const T* src, size_t count = 0 );
+
+	HELIUM_FOUNDATION_API int CompareString( const char* a, const char* b, size_t count = 0 );
+	HELIUM_FOUNDATION_API int CompareString( const wchar_t* a, const wchar_t* b, size_t count = 0 );
+	HELIUM_FOUNDATION_API int CaseInsensitiveCompareString( const char* a, const char* b, size_t count = 0 );
+	HELIUM_FOUNDATION_API int CaseInsensitiveCompareString( const wchar_t* a, const wchar_t* b, size_t count = 0 );
+
     /// Base string class.
     template< typename CharType, typename Allocator = DefaultAllocator >
     class StringBase

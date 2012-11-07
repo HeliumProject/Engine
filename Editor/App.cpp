@@ -15,7 +15,7 @@
 #include "Application/InitializerStack.h"
 #include "Application/CmdLineProcessor.h"
 #include "Application/DocumentManager.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/Name.h"
 #include "Application/WorkerProcess.h"
 
@@ -234,10 +234,7 @@ bool App::OnInit()
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    tchar_t module[MAX_PATH];
-    GetModuleFileName( 0, module, MAX_PATH );
-
-    Helium::Path exePath( module );
+    Helium::Path exePath( GetProcessPath() );
     Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
     wxInitAllImageHandlers();
@@ -262,7 +259,7 @@ bool App::OnInit()
     InitGraphicsJobsDefaultHeap();
 
     // Register shutdown for general systems.
-    m_InitializerStack.Push( File::Shutdown );
+    m_InitializerStack.Push( FileLocations::Shutdown );
     m_InitializerStack.Push( CharName::Shutdown );
     m_InitializerStack.Push( WideName::Shutdown );
     m_InitializerStack.Push( GameObjectPath::Shutdown );
@@ -274,7 +271,7 @@ bool App::OnInit()
 
     // GameObject cache management.
     Path baseDirectory;
-    if ( !File::GetBaseDirectory( baseDirectory ) )
+    if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
         return false;
@@ -551,7 +548,7 @@ void App::LoadSettings()
 }
 
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")
-static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar_t* pCmdLine, int nCmdShow)
+static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR pCmdLine, int nCmdShow)
 {
     std::string cmdLine;
     Helium::ConvertString( pCmdLine, cmdLine );

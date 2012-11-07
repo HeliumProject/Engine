@@ -2,6 +2,7 @@
 #include "Enumeration.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/String.h"
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -111,18 +112,17 @@ bool Enumeration::GetBitfieldValue(const tstring& str, uint32_t& value) const
     }
 
     tchar_t tmp[1024];
-    _tcscpy( tmp, str.c_str() );
+    CopyString( tmp, str.c_str() );
 
     std::vector< tstring > strs;
 
-    tchar_t seps[] = TXT("|");
-    tchar_t *token = _tcstok( tmp, seps );
-    while( token != NULL )
+    const tchar_t *token = FindNextToken( tmp, TXT('|') );
+    while( token )
     {
         strs.push_back(token);
 
         /* Get next token: */
-        token = _tcstok( NULL, seps );
+        token = FindNextToken( token, TXT('|') );
     }
 
     return GetBitfieldValue(strs, value);

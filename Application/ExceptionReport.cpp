@@ -1,11 +1,12 @@
 #include "ApplicationPch.h"
 #include "ExceptionReport.h"
 
-#include "Platform/Process.h"
+#include "Platform/Console.h"
+#include "Platform/Encoding.h"
 #include "Platform/Exception.h"
 #include "Platform/Environment.h"
+#include "Platform/Process.h"
 #include "Platform/ProfileMemory.h"
-#include "Platform/Console.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
@@ -73,18 +74,19 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 
     m_Environment.clear();
     // Get a pointer to the environment block. 
-    const tchar_t* env = (const tchar_t*)::GetEnvironmentStrings();
+    const wchar_t* env = (const wchar_t*)::GetEnvironmentStringsW();
     if ( env )
     {
         // Variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-        for (const tchar_t* var = (const tchar_t*)env; *var; var++) 
+        for (const wchar_t* var = (const wchar_t*)env; *var; var++) 
         {
             // Variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-            for (const tchar_t* var = (const tchar_t*)env; *var; var++) 
+            for (const wchar_t* var = (const wchar_t*)env; *var; var++) 
             {
                 if (*var != '=')
                 {
-                    m_Environment += var;
+					HELIUM_CONVERT_TO_TCHAR( var, convertedVar );
+                    m_Environment += convertedVar;
                     m_Environment += TXT( "\n" );
                 }
 
@@ -94,7 +96,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
                 }
             }
 
-            ::FreeEnvironmentStrings((tchar_t*)env);
+            ::FreeEnvironmentStringsW((wchar_t*)env);
         }
     }
 }
@@ -140,7 +142,9 @@ static void CopyDump( ExceptionReport& report )
     Helium::Path dest( destination.str() );
     dest.MakePath();
 
-    if ( FALSE == ::CopyFile( report.m_Args.m_Dump.c_str(), destination.str().c_str(), FALSE ) )
+	HELIUM_CONVERT_TO_NATIVE( report.m_Args.m_Dump.c_str(), srcFile );
+	HELIUM_CONVERT_TO_NATIVE( destination.str().c_str(), destFile );
+    if ( FALSE == ::CopyFileW( srcFile, destFile, FALSE ) )
     {
         Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "Failed to copy '%s' to '%s': %s\n" ), report.m_Args.m_Dump.c_str(), destination.str().c_str(), Helium::GetErrorString().c_str() );
     }
@@ -273,14 +277,10 @@ void Debug::InitializeExceptionListener()
     // init counting this API seems kind of silly, but we can actually get initialized from several places
     if ( ++g_InitCount == 1 )
     {
-        tchar_t module[MAX_PATH];
-        tchar_t drive[MAX_PATH];
-        tchar_t path[MAX_PATH];
-        GetModuleFileName( 0, module, MAX_PATH );
-        _tsplitpath( module, drive, path, NULL, NULL );
+		Path process ( GetProcessPath() );
 
         // Symbol path always starts with module directory
-        tstring symbolPath( tstring( drive ) + tstring( path ) );
+        tstring symbolPath( process.Directory() );
 
         // initialize debug symbols
         Debug::Initialize( symbolPath );

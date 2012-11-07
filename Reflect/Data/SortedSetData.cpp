@@ -289,13 +289,11 @@ void SimpleSortedSetData< KeyT, CompareKeyT, AllocatorT >::Deserialize( ArchiveT
 template SimpleSortedSetData< String >;
 template SimpleSortedSetData< uint32_t >;
 template SimpleSortedSetData< uint64_t >;
-template SimpleSortedSetData< Helium::GUID >;
 template SimpleSortedSetData< Helium::TUID >;
 template SimpleSortedSetData< Helium::Path >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringSortedSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32SortedSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64SortedSetData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDSortedSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDSortedSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::PathSortedSetData );

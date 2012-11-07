@@ -1,11 +1,13 @@
 #include "FoundationPch.h"
 #include "Profile.h"
-#include "Log.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Thread.h"
 #include "Platform/Platform.h"
 #include "Platform/Types.h"
+
+#include "Foundation/Log.h"
+#include "Foundation/String.h"
 
 #include <stdarg.h>
 #include <string.h>
@@ -175,14 +177,13 @@ void Accumulator::ReportAll()
 
 Helium::ThreadLocalPointer g_ProfileContext;
 
-ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const char* desc)
+ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const tchar_t* desc)
 {
     HELIUM_ASSERT(func); 
     m_Description[0] = '\0'; 
     if(desc)
     {
-        strncpy(m_Description, desc, sizeof(m_Description)); 
-        m_Description[ sizeof(m_Description)-1 ] = '\0'; 
+        CopyString(m_Description, desc);
     }
 
     m_Accum       = accum; 

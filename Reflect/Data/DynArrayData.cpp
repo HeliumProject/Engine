@@ -560,7 +560,6 @@ template SimpleDynArrayData< uint64_t >;
 template SimpleDynArrayData< int64_t >;
 template SimpleDynArrayData< float32_t >;
 template SimpleDynArrayData< float64_t >;
-template SimpleDynArrayData< Helium::GUID >;
 template SimpleDynArrayData< Helium::TUID >;
 template SimpleDynArrayData< Helium::Path >;
 
@@ -577,6 +576,5 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64DynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64DynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32DynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::PathDynArrayData );

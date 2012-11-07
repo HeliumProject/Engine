@@ -127,11 +127,9 @@ namespace Helium
     //  }
     //
 
-#if defined( WIN32 ) && defined ( _WINDOWS_ )
-    HELIUM_APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
-        HINSTANCE hInstance = ::GetModuleHandle(NULL),
-        HINSTANCE hPrevInstance = NULL,
-        LPTSTR lpCmdLine = ::GetCommandLine(),
-        int nShowCmd = SW_SHOWNORMAL );
+#if HELIUM_OS_WIN
+	typedef int (*WinMainFunc)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd );
+
+    HELIUM_APPLICATION_API int StandardWinMain( WinMainFunc winMain, HINSTANCE hInstance = ::GetModuleHandle(NULL), HINSTANCE hPrevInstance = NULL, LPWSTR lpCmdLine = ::GetCommandLineW(), int nShowCmd = SW_SHOWNORMAL );
 #endif
 }

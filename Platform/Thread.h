@@ -188,8 +188,7 @@ namespace Helium
         static void EntryHelper( void* param );
 
         // create and execute a thread with a separate args object
-        inline bool CreateWithArgs(
-            Entry entry, void* obj, void* args, const tchar_t* name, EPriority priority = PRIORITY_NORMAL );
+        inline bool CreateWithArgs( Entry entry, void* obj, void* args, const tchar_t* name, EPriority priority = PRIORITY_NORMAL );
 
         // C++ helper (remember, it is valid to pass a member function pointer as a template parameter!)
         template< class ObjectT, typename ArgsT, void (ObjectT::*method)( ArgsT& ) >

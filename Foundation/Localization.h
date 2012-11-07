@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Assert.h"
 
 #include <map>

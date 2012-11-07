@@ -20,7 +20,7 @@
 #include "FrameworkWin/WindowManagerInitializationWin.h"
 #include "FrameworkWin/RendererInitializationWin.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Engine/CacheManager.h"
 
 #include <tchar.h>

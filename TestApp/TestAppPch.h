@@ -6,7 +6,7 @@
 #include "Platform/Socket.h"
 #include "Platform/Trace.h"
 #include "Platform/Timer.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/BufferedStream.h"

@@ -395,8 +395,12 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 
             tstringstream strm;
             strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
-            Helium::Path imageFile( strm.str() );
-            if ( !imageFile.Exists() || imageFile.Size() <= 0 )
+
+            tstring imageFile( strm.str() );
+
+			Status status;
+			bool exists = status.Read( imageFile.c_str() );
+			if ( !exists || status.m_Size <= 0 )
             {
                 HELIUM_BREAK();
 
@@ -405,7 +409,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                 //imageFile.Set( strm2.str() );
             }
 
-            wxImage image( imageFile.Get().c_str(), wxBITMAP_TYPE_PNG );
+            wxImage image( imageFile.c_str(), wxBITMAP_TYPE_PNG );
             HELIUM_ASSERT( image.Ok() );
             if ( image.GetWidth() != width || image.GetHeight() != height )
             {
@@ -424,20 +428,23 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
                 {
                     tstringstream overlayStrm;
                     overlayStrm << exePath.Directory() << TXT( "Icons/" ) << overlayWidth << TXT( 'x' ) << overlayHeight << TXT( '/' ) << itr->second;
-                    Helium::Path overlayImageFile( overlayStrm.str() );
-                    if ( !overlayImageFile.Exists() || overlayImageFile.Size() <= 0 )
+                    tstring overlayImageFile( overlayStrm.str() );
+
+					exists = status.Read( overlayImageFile.c_str() );
+					if ( !exists || status.m_Size <= 0 )
                     {
                         tstringstream strm2;
                         strm2 << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << itr->second;
-                        overlayImageFile.Set( strm2.str() );
+                        overlayImageFile = strm2.str();
 
-                        if ( !overlayImageFile.Exists() || overlayImageFile.Size() <= 0 )
+						exists = status.Read( overlayImageFile.c_str() );
+						if ( !exists || status.m_Size <= 0 )
                         {
                             HELIUM_BREAK();
                         }
-                    }      
+                    }
 
-                    wxImage overlayImage( overlayImageFile.Get().c_str(), wxBITMAP_TYPE_PNG );
+                    wxImage overlayImage( overlayImageFile.c_str(), wxBITMAP_TYPE_PNG );
                     HELIUM_ASSERT( overlayImage.Ok() );
                     if ( overlayImage.GetWidth() != overlayWidth || overlayImage.GetHeight() != overlayHeight )
                     {

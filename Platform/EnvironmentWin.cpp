@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Environment.h"
 
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include <ShlObj.h>
 

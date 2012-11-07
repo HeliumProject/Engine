@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "ThumbnailLoader.h"
 
-#include "Foundation/Directory.h"
+#include "Foundation/DirectoryIterator.h"
 #include "SceneGraph/DeviceManager.h"
 #include "SceneGraph/Render.h"
 

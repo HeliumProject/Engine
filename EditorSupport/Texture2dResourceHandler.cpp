@@ -5,7 +5,7 @@
 #include "EditorSupport/Texture2dResourceHandler.h"
 
 #include "Foundation/BufferedStream.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Engine/BinarySerializer.h"
@@ -63,7 +63,7 @@ bool Texture2dResourceHandler::CacheResource(
     Texture2d* pTexture = Reflect::AssertCast< Texture2d >( pResource );
 
     // Load the source texture data.
-    FileStream* pSourceFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );
+    FileStream* pSourceFileStream = FileStream::OpenFileStream( rSourceFilePath, FileStream::MODE_READ );
     if( !pSourceFileStream )
     {
         HELIUM_TRACE(

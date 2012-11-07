@@ -4,6 +4,8 @@
 #include "Platform/Assert.h"
 #include "Platform/Print.h"
 
+#include "Foundation/String.h"
+
 #include <string.h>
 
 using namespace Helium;
@@ -71,7 +73,7 @@ Connection::~Connection()
 
 bool Connection::Initialize(bool server, const tchar_t* name)
 {
-    _tcscpy(m_Name, name);
+    CopyString(m_Name, name);
     m_Server = server;
 
     if (server)

@@ -5,7 +5,7 @@
 
 #include "Foundation/Regex.h"
 #include "Foundation/Insert.h"
-#include "Foundation/Directory.h"
+#include "Foundation/DirectoryIterator.h"
 #include "Foundation/Tokenize.h"
 #include "Foundation/StringUtilities.h"
 #include "Platform/Exception.h"
@@ -166,8 +166,8 @@ VaultSearch::VaultSearch( Project* project )
 , m_CurrentSearchID( -1 )
 , m_CurrentSearchQuery( NULL )
 {
-    m_SearchInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, TXT( "VaultBeginSearchEvent" ) );
-    m_EndSearchEvent = ::CreateEvent( NULL, TRUE, TRUE, TXT( "VaultEndSearchEvent" ) );
+    m_SearchInitializedEvent = ::CreateEventW( NULL, TRUE, TRUE, L"VaultBeginSearchEvent" );
+    m_EndSearchEvent = ::CreateEventW( NULL, TRUE, TRUE, L"VaultEndSearchEvent" );
 }
 
 VaultSearch::~VaultSearch()

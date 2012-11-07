@@ -9,7 +9,7 @@
 #include "Framework/GameSystem.h"
 
 #include "Engine/AsyncLoader.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Reflect/Registry.h"
 #include "Platform/Timer.h"
@@ -110,7 +110,7 @@ bool GameSystem::Initialize(
 
     //pmd - Initialize the cache manager
     Path baseDirectory;
-    if ( !File::GetBaseDirectory( baseDirectory ) )
+    if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
       HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
       return false;
@@ -372,7 +372,7 @@ void GameSystem::Shutdown()
     CharName::Shutdown();
     WideName::Shutdown();
 
-    File::Shutdown();
+    FileLocations::Shutdown();
 
     // Perform base System shutdown last.
     System::Shutdown();

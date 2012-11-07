@@ -78,7 +78,6 @@ namespace Helium
         typedef SimpleDynArrayData< int64_t > Int64DynArrayData;
         typedef SimpleDynArrayData< float32_t > Float32DynArrayData;
         typedef SimpleDynArrayData< float64_t > Float64DynArrayData;
-        typedef SimpleDynArrayData< Helium::GUID > GUIDDynArrayData;
         typedef SimpleDynArrayData< Helium::TUID > TUIDDynArrayData;
         typedef SimpleDynArrayData< Helium::Path > PathDynArrayData;
     }

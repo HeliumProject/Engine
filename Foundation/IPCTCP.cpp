@@ -2,10 +2,11 @@
 #include "IPCTCP.h"
 
 #include "Platform/Assert.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Print.h"
 
 #include "Foundation/Endian.h"
+#include "Foundation/String.h"
 
 #include <string.h>
 #include <algorithm>
@@ -41,7 +42,7 @@ bool TCPConnection::Initialize(bool server, const tchar_t* name, const tchar_t* 
 
     if (server_ip)
     {
-        _tcscpy(m_IP, server_ip);
+        CopyString(m_IP, server_ip);
     }
 
     if (server)

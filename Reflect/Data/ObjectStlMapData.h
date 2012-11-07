@@ -73,7 +73,6 @@ namespace Helium
         typedef SimpleObjectStlMapData<int32_t> Int32ObjectStlMapData;
         typedef SimpleObjectStlMapData<uint64_t> UInt64ObjectStlMapData;
         typedef SimpleObjectStlMapData<int64_t> Int64ObjectStlMapData;
-        typedef SimpleObjectStlMapData<Helium::GUID> GUIDObjectStlMapData;
         typedef SimpleObjectStlMapData<Helium::TUID> TUIDObjectStlMapData;
     }
 }

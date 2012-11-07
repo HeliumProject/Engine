@@ -5,6 +5,7 @@
 #include "Platform/Print.h"
 
 #include "Foundation/Endian.h"
+#include "Foundation/String.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -14,8 +15,6 @@ using namespace Helium;
 using namespace Helium::IPC;
 
 PipeConnection::PipeConnection()
-: m_ReadPipe (0)
-, m_WritePipe (0)
 {
     m_PipeName[0] = '\0';
     m_ServerName[0] = '\0';
@@ -39,33 +38,33 @@ bool PipeConnection::Initialize(bool server, const tchar_t* name, const tchar_t*
 
     if (pipe_name && pipe_name[0] != '\0')
     {
-        _tcscpy(m_PipeName, pipe_name);
+        CopyString(m_PipeName, pipe_name);
     }
 
     if (server_name && server_name[0] != '\0')
     {
-        _tcscpy(m_ServerName, server_name);
+        CopyString(m_ServerName, server_name);
     }
 
     if (server)
     {
         // a server cannot be on a remote machine so we simply ignore the server name
-        _stprintf(m_ReadName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
-        _stprintf(m_WriteName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
+        StringPrint(m_ReadName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
+        StringPrint(m_WriteName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
     }
     else
     {
         // if the server name is null then create the pipe on the local machine, if a server name
         // is specified then it names the remote machine on which to connect to.
-        if (server_name && _tcslen(server_name) != 0)
+        if (server_name && StringLength(server_name) != 0)
         {
-            _stprintf(m_ReadName, IPC_PIPE_ROOT TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "client_read");
-            _stprintf(m_WriteName, IPC_PIPE_ROOT TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "server_read");
+            StringPrint(m_ReadName, TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "client_read");
+            StringPrint(m_WriteName, TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "server_read");
         }
         else
         {
-            _stprintf(m_ReadName, IPC_PIPE_ROOT TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
-            _stprintf(m_WriteName, IPC_PIPE_ROOT TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
+            StringPrint(m_ReadName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
+            StringPrint(m_WriteName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
         }
     }
 
@@ -90,13 +89,13 @@ void PipeConnection::ServerThread()
     // while the server is still running, cycle through connections
     while (!m_Terminating)
     {
-        if ( !Helium::CreatePipe( m_ReadName, m_ReadPipe ) )
+        if ( !m_ReadPipe.Create( m_ReadName ) )
         {
             SetState(ConnectionStates::Failed);
             return;
         }
 
-        if ( !Helium::CreatePipe( m_WriteName, m_WritePipe ) )
+        if ( !m_WritePipe.Create( m_WriteName ) )
         {
             SetState(ConnectionStates::Failed);
             return;
@@ -107,8 +106,8 @@ void PipeConnection::ServerThread()
         // wait for the connection
         while (!m_Terminating)
         {
-            bool readConnect = Helium::ConnectPipe( m_ReadPipe, m_Terminate );
-            bool writeConnect = Helium::ConnectPipe( m_WritePipe, m_Terminate );
+            bool readConnect = m_ReadPipe.Connect( m_Terminate );
+            bool writeConnect = m_WritePipe.Connect( m_Terminate );
 
             if (readConnect && writeConnect)
             {
@@ -127,12 +126,12 @@ void PipeConnection::ServerThread()
         }
 
         // force disconnect of the client
-        Helium::DisconnectPipe(m_ReadPipe);
-        Helium::DisconnectPipe(m_WritePipe);
+        m_ReadPipe.Disconnect();
+        m_WritePipe.Disconnect();
 
         // release the handles to the pipes
-        Helium::ClosePipe(m_ReadPipe);
-        Helium::ClosePipe(m_WritePipe);
+        m_ReadPipe.Close();
+        m_WritePipe.Close();
 
         if (!m_Terminating)
         {
@@ -155,8 +154,8 @@ void PipeConnection::ClientThread()
         // wait for write pipe creation
         while (!m_Terminating)
         {
-            bool writeOpen = Helium::OpenPipe( m_WriteName, m_WritePipe );
-            bool readOpen = Helium::OpenPipe( m_ReadName, m_ReadPipe );
+            bool writeOpen = m_WritePipe.Open( m_WriteName );
+            bool readOpen = m_ReadPipe.Open( m_ReadName );
 
             if (writeOpen && readOpen)
             {
@@ -175,8 +174,8 @@ void PipeConnection::ClientThread()
         }
 
         // close the handles to the pipes
-        Helium::ClosePipe(m_ReadPipe);
-        Helium::ClosePipe(m_WritePipe);
+        m_ReadPipe.Close();
+		m_WritePipe.Close();
 
         if (!m_Terminating)
         {
@@ -305,7 +304,7 @@ bool PipeConnection::Read(void* buffer, uint32_t bytes)
         Helium::Print(" %s: Receiving %d bytes...\n", m_Name, count);
 #endif
 
-        if (!Helium::ReadPipe(m_ReadPipe, buffer, count, bytes_got, m_Terminate))
+        if (!m_ReadPipe.Read(buffer, count, bytes_got, m_Terminate))
         {
             return false;
         }
@@ -347,7 +346,7 @@ bool PipeConnection::Write(void* buffer, uint32_t bytes)
         Helium::Print(" %s: Sending %d bytes...\n", m_Name, count);
 #endif
 
-        if (!Helium::WritePipe(m_WritePipe, buffer, count, bytes_put, m_Terminate))
+        if (!m_WritePipe.Write(buffer, count, bytes_put, m_Terminate))
         {
             return false;
         }

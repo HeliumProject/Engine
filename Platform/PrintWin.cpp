@@ -55,7 +55,7 @@ int Helium::StringPrint(tchar_t* dest, size_t destCount, const tchar_t* fmt, ...
 	va_list args;
 	va_start(args, fmt);
 #if HELIUM_WCHAR_T
-	int result = vsnwprintf(dest, destCount, fmt, args);
+	int result = _vsnwprintf(dest, destCount, fmt, args);
 #else
 	int result = vsnprintf(dest, destCount, fmt, args);
 #endif
@@ -66,7 +66,7 @@ int Helium::StringPrint(tchar_t* dest, size_t destCount, const tchar_t* fmt, ...
 int Helium::StringPrintArgs(tchar_t* dest, size_t destCount, const tchar_t* fmt, va_list args)
 {
 #if HELIUM_WCHAR_T
-	return vsnwprintf(dest, destCount, fmt, args);
+	return _vsnwprintf(dest, destCount, fmt, args);
 #else
 	return vsnprintf(dest, destCount, fmt, args);
 #endif

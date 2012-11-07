@@ -5,7 +5,7 @@
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
 #include "Foundation/BufferedStream.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/StringConverter.h"
@@ -160,7 +160,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     size_t userShaderTokenCount = shaderTokens.GetSize();
 
     // Load the entire shader resource into memory.
-    FileStream* pSourceFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );
+    FileStream* pSourceFileStream = FileStream::OpenFileStream( rSourceFilePath, FileStream::MODE_READ );
     if( !pSourceFileStream )
     {
         HELIUM_TRACE(
@@ -688,7 +688,7 @@ bool ShaderVariantResourceHandler::CompileShader(
 #endif
 
     Path shaderFilePath;
-    if ( !File::GetDataDirectory( shaderFilePath ) )
+    if ( !FileLocations::GetDataDirectory( shaderFilePath ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,

@@ -262,7 +262,11 @@ void PerforceSubmitPanel::Populate()
         dateTime = _localtime64( &now );
 
         tchar_t dateTimeStr[128];
-        _tcsftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
+#if HELIUM_WCHAR_T
+        wcsftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
+#else
+        strftime( dateTimeStr, 128, TXT( "%Y/%m/%d %H:%M:%S" ), dateTime );
+#endif
         m_DateStaticText->SetLabel( dateTimeStr );
 
         m_StatusStaticText->SetLabel( TXT( "pending" ) );

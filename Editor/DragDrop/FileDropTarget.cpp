@@ -1,8 +1,10 @@
 #include "EditorPch.h"
 #include "FileDropTarget.h"
 
-#include "Foundation/Tokenize.h"
 #include "Platform/Exception.h"
+
+#include "Foundation/String.h"
+#include "Foundation/Tokenize.h"
 
 using namespace Helium;
 using namespace Helium::Editor;
@@ -83,7 +85,7 @@ bool FileDropTarget::TestExtension( const tchar_t* testExt )
         for ( std::set< tstring >::const_iterator itr = m_FileExtensions.begin(), end = m_FileExtensions.end();
             itr != end; ++itr )
         {
-            if ( ( _tcsicmp( testExt, itr->c_str() ) == 0 ) )
+            if ( ( CaseInsensitiveCompareString( testExt, itr->c_str() ) == 0 ) )
             {
                 return true;
             }
@@ -134,7 +136,7 @@ wxDragResult FileDropTarget::OnDragOver( wxCoord x, wxCoord y, wxDragResult def 
         wxFileDataObject *fileDataObj = static_cast< wxFileDataObject* >( GetDataObject() );
         const wxArrayString& filenames = fileDataObj->GetFilenames();
 
-        FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str(), x, y, def );
+        FileDroppedArgs args( tstring( filenames[ 0 ].c_str() ), x, y, def );
         if ( TestExtension( args.m_Path.Extension().c_str() ) )
         {
             m_DragOverEvent.Raise( args ); //, &results.front(), (uint32_t)results.size() );
@@ -191,7 +193,7 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
         return false;
     }
 
-    FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str(), x, y );
+    FileDroppedArgs args( tstring( filenames[ 0 ].c_str() ), x, y );
     if ( TestExtension( args.m_Path.Extension().c_str() ) )
     {
         m_DroppedEvent.Raise( args );

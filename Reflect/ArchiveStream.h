@@ -197,9 +197,7 @@ namespace Helium
 
                 if (m_Stream->fail() && !m_Stream->eof())
                 {
-                    tchar_t error[ 1024 ];
-                    _tcserror_s( error, 1024, errno );
-                    throw Reflect::StreamException( TXT( "General read failure: %s" ), &error );
+                    throw Reflect::StreamException( TXT( "General read failure" ) );
                 }
 
                 return *this; 
@@ -418,7 +416,7 @@ namespace Helium
 #else
                 uint32_t length = (uint32_t)string.GetSize();
                 Write( &length );
-                WriteBuffer( string.c_str(), length );
+                WriteBuffer( string.GetData(), length );
 #endif
 
                 return *this;

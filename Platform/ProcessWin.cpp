@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Utility.h"
 
 #include <sstream>

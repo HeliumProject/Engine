@@ -3,7 +3,7 @@
 
 #include "Platform/Print.h"
 #include "Platform/ProfileMemory.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include <stdio.h>
 #include <string.h>

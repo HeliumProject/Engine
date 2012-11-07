@@ -73,7 +73,6 @@ namespace Helium
         typedef SimpleObjectSortedMapData< int32_t > Int32ObjectSortedMapData;
         typedef SimpleObjectSortedMapData< uint64_t > UInt64ObjectSortedMapData;
         typedef SimpleObjectSortedMapData< int64_t > Int64ObjectSortedMapData;
-        typedef SimpleObjectSortedMapData< Helium::GUID > GUIDObjectSortedMapData;
         typedef SimpleObjectSortedMapData< Helium::TUID > TUIDObjectSortedMapData;
     }
 }

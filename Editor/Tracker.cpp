@@ -132,7 +132,7 @@ void Tracker::TrackEverything()
         // find all the files in the project
         {
             SimpleTimer timer;
-            Helium::Directory directory( m_Project->a_Path.Get().Directory() );
+            Helium::DirectoryIterator directory( m_Project->a_Path.Get().Directory() );
             directory.GetFiles( assetFiles, true );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
         }

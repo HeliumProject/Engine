@@ -9,8 +9,9 @@
 
 #include "PcSupport/ArchiveObjectLoader.h"
 
-#include "Foundation/File.h"
+#include "Platform/Status.h"
 #include "Foundation/FilePath.h"
+#include "Engine/FileLocations.h"
 #include "Engine/Config.h"
 #include "Engine/Resource.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -181,7 +182,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
             }
 
             Path sourceFilePath;
-            if ( !File::GetDataDirectory( sourceFilePath ) )
+            if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
             {
                 HELIUM_TRACE(
                     TRACE_WARNING,
@@ -192,7 +193,10 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
 
             sourceFilePath += baseResourcePath.ToFilePathString().GetData();
 
-            int64_t sourceFileTimestamp = sourceFilePath.ModifiedTime();
+			Status stat;
+			stat.Read( sourceFilePath.Get().c_str() );
+
+			int64_t sourceFileTimestamp = stat.m_ModifiedTime;
             if( sourceFileTimestamp > objectTimestamp )
             {
                 objectTimestamp = sourceFileTimestamp;

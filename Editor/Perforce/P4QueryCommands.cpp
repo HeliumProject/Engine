@@ -3,7 +3,7 @@
 #include "P4Tags.h"
 
 #include "Foundation/Log.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include <p4/errornum.h>
 

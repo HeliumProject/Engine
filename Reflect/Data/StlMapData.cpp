@@ -446,7 +446,6 @@ template SimpleStlMapData<uint64_t, UInt64Data, tstring, StlStringData>;
 template SimpleStlMapData<uint64_t, UInt64Data, uint32_t, UInt32Data>;
 template SimpleStlMapData<uint64_t, UInt64Data, uint64_t, UInt64Data>;
 
-template SimpleStlMapData<Helium::GUID, GUIDData, uint32_t, UInt32Data>;
 template SimpleStlMapData<Helium::TUID, TUIDData, uint32_t, UInt32Data>;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlStringStlMapData );
@@ -468,5 +467,4 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64StringStlMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt32StlMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64UInt64StlMapData );
 
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDUInt32StlMapData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDUInt32StlMapData );

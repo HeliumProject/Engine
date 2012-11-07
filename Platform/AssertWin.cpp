@@ -2,7 +2,7 @@
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
 #include "Platform/Print.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #if HELIUM_OS_WIN
 

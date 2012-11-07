@@ -46,7 +46,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32Data );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64Data );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameData );
 
@@ -63,7 +62,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32StlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64StlVectorData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathStlVectorData );
 
@@ -71,7 +69,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathStlVectorData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringStlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32StlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StlSetData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDStlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDStlSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathStlSetData );
 
@@ -91,7 +88,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32UInt64StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StringStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt64StlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDUInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 
 #include "Reflect/Data/DynArrayData.h"
@@ -108,7 +104,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32DynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathDynArrayData );
 
@@ -116,7 +111,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathDynArrayData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32SetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64SetData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathSetData );
 
@@ -136,14 +130,12 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32UInt64MapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StringMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt32MapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt64MapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDUInt32MapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32MapData );
 
 #include "Reflect/Data/SortedSetData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSortedSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32SortedSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64SortedSetData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDSortedSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDSortedSetData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathSortedSetData );
 
@@ -163,7 +155,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32UInt64SortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64StringSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt32SortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt64SortedMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDUInt32SortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32SortedMapData );
 
 #include "Reflect/Data/ObjectStlVectorData.h"
@@ -179,7 +170,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectStlMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectStlMapData );
 
 #include "Reflect/Data/ObjectDynArrayData.h"
@@ -195,7 +185,6 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectMapData );
 
 #include "Reflect/Data/ObjectSortedSetData.h"
@@ -208,5 +197,4 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32ObjectSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32ObjectSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectSortedMapData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::GUIDObjectSortedMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectSortedMapData );

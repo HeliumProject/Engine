@@ -81,7 +81,9 @@ void CheckBoxWidget::Read()
     }
     else
     {
-        int value = _tstoi( text.c_str() );
+		tstringstream str ( text );
+        int value = 0;
+		str >> value;
         m_CheckBoxWindow->SetValue( value == 1 ? true : false );
     }
 

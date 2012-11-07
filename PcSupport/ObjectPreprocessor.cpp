@@ -8,11 +8,11 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ObjectPreprocessor.h"
 
-#include "Platform/Stat.h"
+#include "Platform/Status.h"
 #include "Foundation/BufferedStream.h"
 #include "Foundation/DynamicMemoryStream.h"
 #include "Foundation/ByteSwappingStream.h"
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Engine/BinaryDeserializer.h"
@@ -318,7 +318,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
     } while( !parentPath.IsEmpty() && !parentPath.IsPackage() );
 
     Path sourceFilePath;
-    if ( !File::GetDataDirectory( sourceFilePath ) )
+    if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
     {
         HELIUM_TRACE(
             TRACE_ERROR,
@@ -329,8 +329,8 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 
     sourceFilePath += baseResourcePath.ToFilePathString().GetData();
 
-    Helium::Stat stat;
-    sourceFilePath.Stat( stat );
+    Helium::Status stat;
+    stat.Read( sourceFilePath );
 
     int64_t sourceFileTimestamp = stat.m_ModifiedTime;
 
@@ -479,7 +479,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
         return Invalid< uint32_t >();
     }
 
-    FileStream* pFileStream = File::Open( pCache->GetCacheFileName(), FileStream::MODE_READ );
+    FileStream* pFileStream = FileStream::OpenFileStream( pCache->GetCacheFileName(), FileStream::MODE_READ );
     if( !pFileStream )
     {
         HELIUM_TRACE(
@@ -721,7 +721,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
             return false;
         }
 
-        FileStream* pFileStream = File::Open( resourceCachePath.c_str(), FileStream::MODE_READ );
+        FileStream* pFileStream = FileStream::OpenFileStream( resourceCachePath.c_str(), FileStream::MODE_READ );
         if( !pFileStream )
         {
             HELIUM_TRACE(

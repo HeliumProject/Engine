@@ -5,9 +5,9 @@
 
 namespace Helium
 {
-    namespace FileModeFlags
+    namespace StatusModes
     {
-        enum FileModeFlag
+        enum Type
         {
             None             = 0,
             Directory        = 1 << 0,
@@ -20,25 +20,19 @@ namespace Helium
             Execute          = 1 << 10
         };
     }
-    typedef FileModeFlags::FileModeFlag FileModeFlag;
+    typedef StatusModes::Type StatusMode;
 
-    struct HELIUM_PLATFORM_API Stat
+    class HELIUM_PLATFORM_API Status
     {
+	public:
+        Status();
+
+	    bool Read( const tchar_t* path );
+
         uint32_t     m_Mode;
         uint64_t     m_Size;
         uint64_t     m_CreatedTime;
         uint64_t     m_ModifiedTime;
         uint64_t     m_AccessTime;
-
-        Stat()
-            : m_Mode( 0 )
-            , m_Size( 0 )
-            , m_CreatedTime( 0 )
-            , m_ModifiedTime( 0 )
-            , m_AccessTime( 0 )
-        {
-        }
-    };
-
-    HELIUM_PLATFORM_API bool StatPath( const tchar_t* path, Stat& stat );
+	};
 }

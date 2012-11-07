@@ -444,7 +444,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
     Path path( args.m_Path );
 
     // it's a project file
-    if ( _tcsicmp( path.Extension().c_str(), TXT( "HeliumProject" ) ) == 0 ) 
+    if ( CaseInsensitiveCompareString( path.Extension().c_str(), TXT( "HeliumProject" ) ) == 0 ) 
     {
         wxGetApp().GetFrame()->OpenProject( path );
     }
@@ -470,7 +470,7 @@ void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
         return;
     }
 
-    if ( _tcsicmp( path.Extension().c_str(), TXT( "HeliumScene" ) ) == 0 )
+    if ( CaseInsensitiveCompareString( path.Extension().c_str(), TXT( "HeliumScene" ) ) == 0 )
     {
         m_Project->AddPath( path );
         return;

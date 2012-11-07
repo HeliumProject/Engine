@@ -4,7 +4,7 @@
 
 #include "EditorSupport/FontResourceHandler.h"
 
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FileStream.h"
 #include "Engine/BinarySerializer.h"
 #include "PcSupport/ObjectPreprocessor.h"
@@ -169,7 +169,7 @@ bool FontResourceHandler::CacheResource(
     Font* pFont = Reflect::AssertCast< Font >( pResource );
 
     // Load the font into memory ourselves in order to make sure we properly support Unicode file names.
-    FileStream* pFileStream = File::Open( rSourceFilePath, FileStream::MODE_READ );
+    FileStream* pFileStream = FileStream::OpenFileStream( rSourceFilePath, FileStream::MODE_READ );
     if( !pFileStream )
     {
         HELIUM_TRACE(

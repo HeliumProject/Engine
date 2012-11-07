@@ -4,14 +4,14 @@
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Exception.h"
-#include "Platform/StatWin.h"
-#include "Platform/String.h"
+#include "Platform/StatusWin.h"
+#include "Platform/Encoding.h"
 
 using namespace Helium;
 
-void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ourFile )
+void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, DirectoryEntry& ourFile )
 {
-    ConvertString( windowsFile.cFileName, ourFile.m_Filename );
+    ConvertString( windowsFile.cFileName, ourFile.m_Name );
 
     ourFile.m_Stat.m_Size = ( (uint64_t)windowsFile.nFileSizeHigh << 32 ) | windowsFile.nFileSizeLow;
     ourFile.m_Stat.m_CreatedTime = FileTimeToUnixTime( windowsFile.ftCreationTime );
@@ -21,19 +21,40 @@ void CopyFromWindowsStruct( const WIN32_FIND_DATA& windowsFile, FileFindData& ou
 	CopyFromWindowsAttributes( windowsFile.dwFileAttributes, ourFile.m_Stat.m_Mode );
 }
 
-bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
+DirectoryEntry::DirectoryEntry( const tstring& name )
+	: m_Name( name )
 {
-	tstring path ( handle.m_Path + TXT( "/*" ) );
+}
+
+Directory::Directory( const tstring& path )
+    : m_Path( path )
+    , m_Handle( INVALID_HANDLE_VALUE )
+{
+}
+
+Directory::~Directory()
+{
+	Close();
+}
+
+bool Directory::IsOpen()
+{
+	return m_Handle != INVALID_HANDLE_VALUE;
+}
+
+bool Directory::FindFirst( DirectoryEntry& entry )
+{
+	Close();
+
+	tstring path ( m_Path + TXT( "/*" ) );
 	HELIUM_CONVERT_TO_NATIVE( path.c_str(), convertedPath );
 
     WIN32_FIND_DATA foundFile;
-    handle.m_Handle = ::FindFirstFile( convertedPath, &foundFile );
+    m_Handle = ::FindFirstFile( convertedPath, &foundFile );
 
-    if ( handle.m_Handle == INVALID_HANDLE_VALUE )
+    if ( m_Handle == INVALID_HANDLE_VALUE )
     {
         DWORD error = GetLastError();
-        
-        //pmd020611 - Added ERROR_ACCESS_DENIED
         if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND || error == ERROR_ACCESS_DENIED ) 
         {
             return false;
@@ -44,14 +65,14 @@ bool Helium::FindFirst( DirectoryHandle& handle, FileFindData& data )
         }
     }
 
-    CopyFromWindowsStruct( foundFile, data );
+    CopyFromWindowsStruct( foundFile, entry );
     return true;
 }
 
-bool Helium::FindNext( DirectoryHandle& handle, FileFindData& data )
+bool Directory::FindNext( DirectoryEntry& entry )
 {
     WIN32_FIND_DATA foundFile;
-    if ( !::FindNextFile( handle.m_Handle, &foundFile ) )
+    if ( !::FindNextFile( m_Handle, &foundFile ) )
     {
         DWORD error = GetLastError();
         if ( error != ERROR_NO_MORE_FILES ) 
@@ -62,31 +83,18 @@ bool Helium::FindNext( DirectoryHandle& handle, FileFindData& data )
         return false;
     }
 
-    CopyFromWindowsStruct( foundFile, data );
+    CopyFromWindowsStruct( foundFile, entry );
     return true;
 }
 
-bool Helium::CloseFind( DirectoryHandle& handle )
+bool Directory::Close()
 {
-    if ( ::FindClose( handle.m_Handle ) == 0 )
+    if ( ::FindClose( m_Handle ) == 0 )
     {
         DWORD error = GetLastError();
         throw Exception( TXT( "Error calling ::FindClose: %s" ), GetErrorString( error ).c_str() );
-
         return false;
     }
-    return true;
-}
-
-bool Helium::GetExtendedData( DirectoryHandle& handle, FileFindData& data )
-{
-#ifdef _DEBUG
-    if ( !Helium::StatPath( tstring( handle.m_Path + TXT( "/" ) + data.m_Filename.c_str() ).c_str(), data.m_Stat ) )
-    {
-        return false;
-    }
-
-#endif
 
     return true;
 }

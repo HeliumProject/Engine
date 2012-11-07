@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ConfigPc.h"
 
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Engine/Config.h"
 #include "PcSupport/XmlPackageLoader.h"
@@ -34,7 +34,7 @@ bool ConfigPc::SaveUserConfig()
     }
 
     Path userDataDirectory;
-    if ( !File::GetUserDataDirectory( userDataDirectory ) )
+    if ( !FileLocations::GetUserDataDirectory( userDataDirectory ) )
     {
         HELIUM_TRACE( TRACE_WARNING, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
         return false;

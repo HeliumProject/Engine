@@ -5,7 +5,7 @@
 #include "Platform/Error.h"
 #include "Platform/Print.h"
 #include "Platform/Memory.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include <process.h>
 

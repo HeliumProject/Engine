@@ -37,8 +37,8 @@ namespace Helium
     HELIUM_PLATFORM_API bool ConvertString( const char* src, wchar_t* dest, size_t destCount );
     HELIUM_PLATFORM_API bool ConvertString( const wchar_t* src, char* dest, size_t destCount );
 
-	size_t GetConvertedStringLength( const char* src );
-	size_t GetConvertedStringLength( const wchar_t* src );
+	HELIUM_PLATFORM_API size_t GetConvertedStringLength( const char* src );
+	HELIUM_PLATFORM_API size_t GetConvertedStringLength( const wchar_t* src );
 
     HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
     HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
@@ -51,11 +51,19 @@ namespace Helium
 	const wchar_t* convertedChars = chars;
 #else
 # define HELIUM_CONVERT_TO_TCHAR( chars, convertedChars ) \
-	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
-	char* convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
-	ConvertString( chars, convertedChars, convertedChars##Count );
+	char* convertedChars = NULL; \
+	if ( chars ) \
+	{ \
+		size_t convertedChars##Count = GetConvertedStringLength( chars ); \
+		convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
+		ConvertString( chars, convertedChars, convertedChars##Count ); \
+	}
 # define HELIUM_CONVERT_TO_NATIVE( chars, convertedChars ) \
-	size_t convertedChars##Count = GetConvertedStringLength( chars ); \
-	wchar_t* convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
-	ConvertString( chars, convertedChars, convertedChars##Count );
+	wchar_t* convertedChars = NULL; \
+	if ( chars ) \
+	{ \
+		size_t convertedChars##Count = GetConvertedStringLength( chars ); \
+		convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
+		ConvertString( chars, convertedChars, convertedChars##Count ); \
+	}
 #endif

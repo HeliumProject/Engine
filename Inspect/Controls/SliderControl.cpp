@@ -25,12 +25,18 @@ bool Slider::Process( const tstring& key, const tstring& value )
 
     if (key == SLIDER_ATTR_MIN)
     {
-        a_Min.Set( static_cast< float >( _tstof( value.c_str() ) ) );
+		float min = 0.f;
+		tstringstream str ( value );
+		str >> min;
+        a_Min.Set( min );
         return true;
     }
     else if (key == SLIDER_ATTR_MAX)
     {
-        a_Max.Set( static_cast< float >( _tstof( value.c_str() ) ) );
+		float max = 0.f;
+		tstringstream str ( value );
+		str >> max;
+        a_Max.Set( max );
         return true;
     }
 

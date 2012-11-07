@@ -911,7 +911,7 @@ SceneGraph::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
     if ( targetName.empty() )
         return NULL;
 
-    if ( _tcsicmp( GetName().c_str(), targetName.c_str() ) == 0 )
+    if ( CaseInsensitiveCompareString( GetName().c_str(), targetName.c_str() ) == 0 )
     {
         return this;
     }
@@ -925,7 +925,7 @@ SceneGraph::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
         const tstring& currentName = child->GetName();
 
         // Case-insensitive comparison to see if the name matches the target
-        if ( !currentName.empty() && ( _tcsicmp( currentName.c_str(), targetName.c_str() ) == 0 ) )
+        if ( !currentName.empty() && ( CaseInsensitiveCompareString( currentName.c_str(), targetName.c_str() ) == 0 ) )
         {
             found = child; // stopping case, breaks out of the loop
         }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 
 #include "Reflect/Composite.h"
 #include "Reflect/Enumeration.h"

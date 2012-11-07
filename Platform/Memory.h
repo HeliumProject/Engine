@@ -268,7 +268,7 @@ namespace Helium
         //@}
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
-        /// @name Memory Stat Support
+        /// @name Memory Status Support
         //@{
         static void LogMemoryStats();
         //@}

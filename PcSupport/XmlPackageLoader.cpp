@@ -8,7 +8,7 @@
 #include "PcSupportPch.h"
 //#include "PcSupport/XmlPackageLoader.h"
 //
-//#include "Foundation/File.h"
+//#include "Engine/FileLocations.h"
 //#include "Foundation/FilePath.h"
 //#include "Foundation/Directory.h"
 //#include "Foundation/FileStream.h"
@@ -828,7 +828,7 @@
 //
 //    if ( packagePath == rConfig.GetUserConfigPackagePath() )
 //    {
-//        if ( !File::GetUserDataDirectory( dataDirectory ) )
+//        if ( !FileLocations::GetUserDataDirectory( dataDirectory ) )
 //        {
 //            HELIUM_TRACE(
 //                TRACE_ERROR,
@@ -839,7 +839,7 @@
 //    }
 //    else
 //    {
-//        if ( !File::GetDataDirectory( dataDirectory ) )
+//        if ( !FileLocations::GetDataDirectory( dataDirectory ) )
 //        {
 //            HELIUM_TRACE(
 //                TRACE_ERROR,
@@ -1463,7 +1463,7 @@
 //
 //    Path packageDirectoryPath;
 //
-//    if ( !File::GetDataDirectory( packageDirectoryPath ) )
+//    if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
 //    {
 //        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlPackageLoader::TickPreload(): Could not get data directory.\n" ) );
 //        return;
@@ -1476,7 +1476,7 @@
 //
 //    for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
 //    {
-//        const DirectoryItem& item = packageDirectory.GetItem();
+//        const DirectoryIteratorItem& item = packageDirectory.GetItem();
 //
 //        if ( !item.m_Path.IsFile() )
 //        {

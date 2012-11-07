@@ -1,5 +1,5 @@
-#include "FoundationPch.h"
-#include "File.h"
+#include "EnginePch.h"
+#include "FileLocations.h"
 
 #include "Foundation/FileStream.h"
 
@@ -134,58 +134,9 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
 /// Free any statically allocated resources.
 ///
 /// This should only be called immediately prior to application exit.
-void File::Shutdown()
+void FileLocations::Shutdown()
 {
     PlatformShutdown();
-}
-
-/// Attempt to open a file with a new file stream object.
-///
-/// @param[in] pPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of FileStream::EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the FileStream::MODE_WRITE flag is set, true to truncate any existing file, false to
-///                       append to any existing file.  This is ignored if FileStream::MODE_WRITE is not set.
-///
-/// @return  Pointer to a FileStream instance opened for the specified file if it was successfully opened, null if
-///          opening failed.  Note that the caller is responsible for deleting the FileStream instance when it is no
-///          longer needed.
-FileStream* File::Open( const tchar_t* pPath, uint32_t modeFlags, bool bTruncate )
-{
-    FileStream* pStream = CreateStream();
-    HELIUM_ASSERT( pStream );
-    if( !pStream->Open( pPath, modeFlags, bTruncate ) )
-    {
-        delete pStream;
-        return NULL;
-    }
-
-    return pStream;
-}
-
-/// Attempt to open a file with a new file stream object.
-///
-/// @param[in] rPath      Path name of the file to open.
-/// @param[in] modeFlags  Combination of FileStream::EMode flags specifying the mode in which to open the file.
-/// @param[in] bTruncate  If the FileStream::MODE_WRITE flag is set, true to truncate any existing file, false to
-///                       append to any existing file.  This is ignored if FileStream::MODE_WRITE is not set.
-///
-/// @return  Pointer to a FileStream instance opened for the specified file if it was successfully opened, null if
-///          opening failed.  Note that the caller is responsible for deleting the FileStream instance when it is no
-///          longer needed.
-FileStream* File::Open( const String& rPath, uint32_t modeFlags, bool bTruncate )
-{
-    return Open( *rPath, modeFlags, bTruncate );
-}
-
-/// Create a new file stream object for this platform.
-///
-/// @return  File stream object.
-FileStream* File::CreateStream()
-{
-    FileStream* pStream = new FileStream();
-    HELIUM_ASSERT( pStream );
-
-    return pStream;
 }
 
 /// Get the full path to the base directory for the application.
@@ -193,7 +144,7 @@ FileStream* File::CreateStream()
 /// @return  Base application directory path, with a trailing path separator character.
 ///
 /// @see GetDataDirectory(), GetUserDataDirectory()
-const bool File::GetBaseDirectory( Path& path )
+const bool FileLocations::GetBaseDirectory( Path& path )
 {
     bool bSuccess;
     path = GetMutableBaseDirectory( bSuccess );
@@ -206,7 +157,7 @@ const bool File::GetBaseDirectory( Path& path )
 /// @return  Data directory path, with a trailing path separator character.
 ///
 /// @see GetBaseDirectory(), GetUserDataDirectory()
-const bool File::GetDataDirectory( Path& path )
+const bool FileLocations::GetDataDirectory( Path& path )
 {
     bool bSuccess;
     path = GetMutableDataDirectory( bSuccess );
@@ -219,7 +170,7 @@ const bool File::GetDataDirectory( Path& path )
 /// @return  User data directory path, with a trailing path separator character.
 ///
 /// @see GetBaseDirectory(), GetDataDirectory()
-const bool File::GetUserDataDirectory( Path& path )
+const bool FileLocations::GetUserDataDirectory( Path& path )
 {
     bool bSuccess;
     path = GetMutableUserDataDirectory( bSuccess );
@@ -228,7 +179,7 @@ const bool File::GetUserDataDirectory( Path& path )
 }
 
 /// Free any resources statically allocated for platform-specific purposes.
-void File::PlatformShutdown()
+void FileLocations::PlatformShutdown()
 {
     bool bSuccess;
     GetMutableUserDataDirectory( bSuccess ).Clear();

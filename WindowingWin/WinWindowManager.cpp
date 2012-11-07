@@ -40,7 +40,7 @@ bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
     Shutdown();
 
     // Register the default window class.
-    WNDCLASSEX windowClass;
+    WNDCLASSEXW windowClass;
     windowClass.cbSize = sizeof( windowClass );
     windowClass.style = 0;
     windowClass.lpfnWndProc = WindowProc;
@@ -51,7 +51,7 @@ bool WinWindowManager::Initialize( HINSTANCE hInstance, int nCmdShow )
     windowClass.hCursor = NULL;
     windowClass.hbrBackground = NULL;
     windowClass.lpszMenuName = NULL;
-    windowClass.lpszClassName = TXT( "HeliumWindowClass" );
+    windowClass.lpszClassName = L"HeliumWindowClass";
     windowClass.hIconSm = NULL;
 
     m_windowClassAtom = RegisterClassEx( &windowClass );
@@ -165,10 +165,11 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
     WinWindow* pWindow = new WinWindow;
     HELIUM_ASSERT( pWindow );
 
+	HELIUM_CONVERT_TO_NATIVE( rParameters.pTitle, convertedTitle );
     HWND hWnd = CreateWindowEx(
         exStyle,
         reinterpret_cast< LPCTSTR >( static_cast< uintptr_t >( m_windowClassAtom ) ),
-        ( rParameters.pTitle ? rParameters.pTitle : TXT( "" ) ),
+        ( convertedTitle ? convertedTitle : L"" ),
         style,
         xy,
         xy,

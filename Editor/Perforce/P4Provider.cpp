@@ -8,14 +8,16 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Mutex.h"
-#include "Application/Startup.h"
+
+#include "Application/Message.h"
 #include "Application/RCS.h"
+#include "Application/Startup.h"
 
 using namespace Helium;
 using namespace Helium::Perforce;
 
 WaitSignature::Delegate Perforce::g_ShowWaitDialog;
-MessageSignature::Delegate Perforce::g_ShowWarningDialog;
+Perforce::MessageSignature::Delegate Perforce::g_ShowWarningDialog;
 
 Profile::Accumulator g_CommandAccum( "Perforce Commands" );
 
@@ -117,10 +119,13 @@ void Provider::ThreadEntry()
             }
 
             {
-                char print[512];
-                _snprintf(print, sizeof(print), "Command 'p4 %s'", cmd.c_str());
+				tstring str;
+				ConvertString( cmd, str );
+
+                tchar_t print[512];
+                StringPrint(print, TXT("Command 'p4 %s'"), str.c_str());
                 PROFILE_SCOPE_ACCUM_VERBOSE( g_CommandAccum, print );
-                Log::Debug( TXT( "%s\n" ), print);
+				Log::Debug( TXT( "%s\n" ), print );
                 m_Client.Run( cmd.c_str(), m_Command );
             }
 

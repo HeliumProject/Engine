@@ -174,11 +174,12 @@ float SliderWidget::GetValue() const
 
     float value = 0.f;
 
-    tstring str;
-    m_SliderControl->ReadStringData( str );
-    if ( str != Inspect::MULTI_VALUE_STRING && str != Inspect::UNDEF_VALUE_STRING )
+    tstring string;
+    m_SliderControl->ReadStringData( string );
+    if ( string != Inspect::MULTI_VALUE_STRING && string != Inspect::UNDEF_VALUE_STRING )
     {
-        value = static_cast< float >( _tstof( str.c_str() ) );
+		tstringstream str ( string );
+		str >> value;
     }
 
     return value;

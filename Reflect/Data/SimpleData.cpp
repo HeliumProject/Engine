@@ -254,7 +254,6 @@ template SimpleData<uint64_t>;
 template SimpleData<int64_t>;
 template SimpleData<float32_t>;
 template SimpleData<float64_t>;
-template SimpleData<Helium::GUID>;
 template SimpleData<Helium::TUID>;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::NameData );
@@ -270,5 +269,4 @@ REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64Data );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64Data );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32Data );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64Data );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDData );

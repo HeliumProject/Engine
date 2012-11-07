@@ -2,37 +2,40 @@
 
 #include "API.h"
 
-#include "Platform/Types.h"
-#include "Platform/Stat.h"
 #include "Platform/File.h"
+#include "Platform/Status.h"
+#include "Platform/Types.h"
+#include "Platform/Utility.h"
 
 namespace Helium
 {
-    struct DirectoryHandle
-    {
-        DirectoryHandle( const tstring& path = TXT( "" ) )
-            : m_Path( path )
-            , m_Handle( InvalidHandleValue )
-        {
-        }
+	class HELIUM_PLATFORM_API DirectoryEntry
+	{
+	public:
+		DirectoryEntry( const tstring& name = TXT( "" ) );
 
-        tstring m_Path;
-        void*   m_Handle;
-    };
+		tstring	m_Name;
+		Status	m_Stat;
+	};
 
-    struct FileFindData
-    {
-        FileFindData( const tstring& filename = TXT( "" ) )
-            : m_Filename( filename )
-        {
-        }
+	class HELIUM_PLATFORM_API Directory : NonCopyable
+	{
+	public:
+		Directory( const tstring& path = TXT( "" ) );
+		~Directory();
 
-        tstring	m_Filename;
-        Stat    m_Stat;
-    };
+		bool IsOpen();
+		bool FindFirst( DirectoryEntry& entry );
+		bool FindNext( DirectoryEntry& entry );
+		bool Close();
 
-    HELIUM_PLATFORM_API bool FindFirst( DirectoryHandle& handle, FileFindData& data );
-    HELIUM_PLATFORM_API bool FindNext( DirectoryHandle& handle, FileFindData& data );
-    HELIUM_PLATFORM_API bool GetExtendedData( DirectoryHandle& handle, FileFindData& );
-    HELIUM_PLATFORM_API bool CloseFind( DirectoryHandle& handle );
+		tstring	m_Path;
+
+	private:
+#if HELIUM_OS_WIN
+		void*	m_Handle;
+#else
+#error Implement Directory for this platform.
+#endif
+	};
 }

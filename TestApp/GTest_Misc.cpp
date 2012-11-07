@@ -38,12 +38,12 @@ TEST(Foundation, Path)
 
     {
         Path dataDirectory;
-        HELIUM_VERIFY( File::GetDataDirectory( dataDirectory ) );
+        HELIUM_VERIFY( FileLocations::GetDataDirectory( dataDirectory ) );
         HELIUM_TRACE( TRACE_DEBUG, TXT( "Data directory: %s\n" ), dataDirectory.c_str() );
         HELIUM_UNREF( dataDirectory );
 
         Path userDataDirectory;
-        HELIUM_VERIFY( File::GetUserDataDirectory( userDataDirectory ) );
+        HELIUM_VERIFY( FileLocations::GetUserDataDirectory( userDataDirectory ) );
         HELIUM_TRACE( TRACE_DEBUG, TXT( "User data directory: %s\n" ), userDataDirectory.c_str() );
         HELIUM_UNREF( userDataDirectory );
     }

@@ -1,5 +1,7 @@
 #include "EditorPch.h"
 #include "ThumbnailSorter.h"
+
+#include "Foundation/String.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/Natural.h"
 
@@ -10,9 +12,9 @@ using namespace Helium::Editor;
 // Constructor
 // 
 ThumbnailSorter::ThumbnailSorter()
-: m_SortMethod( VaultSortMethods::AlphabeticalByName )
-, m_AlphaByName( SortAlphabeticalByName )
-, m_AlphaByType( SortAlphabeticalByType )
+	: m_SortMethod( VaultSortMethods::AlphabeticalByName )
+	, m_AlphaByName( SortAlphabeticalByName )
+	, m_AlphaByType( SortAlphabeticalByType )
 {
 }
 
@@ -28,7 +30,7 @@ ThumbnailSorter::~ThumbnailSorter()
 // 
 void ThumbnailSorter::SetSortMethod( VaultSortMethod sortMethod )
 {
-  m_SortMethod = sortMethod;
+	m_SortMethod = sortMethod;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,7 +38,7 @@ void ThumbnailSorter::SetSortMethod( VaultSortMethod sortMethod )
 // 
 VaultSortMethod ThumbnailSorter::GetSortMethod() const
 {
-  return m_SortMethod;
+	return m_SortMethod;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,8 +46,8 @@ VaultSortMethod ThumbnailSorter::GetSortMethod() const
 // 
 void ThumbnailSorter::Clear()
 {
-  m_AlphaByName.clear();
-  m_AlphaByType.clear();
+	m_AlphaByName.clear();
+	m_AlphaByType.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,17 +55,17 @@ void ThumbnailSorter::Clear()
 // 
 void ThumbnailSorter::Add( ThumbnailTile* tile )
 {
-  m_AlphaByName.insert( tile );
-  m_AlphaByType.insert( tile );
+	m_AlphaByName.insert( tile );
+	m_AlphaByType.insert( tile );
 }
 
 void ThumbnailSorter::Add( const M_PathToTilePtr& tiles )
 {
-  for ( M_PathToTilePtr::const_iterator tileItr = tiles.begin(), tileEnd = tiles.end();
-    tileItr != tileEnd; ++tileItr )
-  {
-    Add( tileItr->second );
-  }
+	for ( M_PathToTilePtr::const_iterator tileItr = tiles.begin(), tileEnd = tiles.end();
+		tileItr != tileEnd; ++tileItr )
+	{
+		Add( tileItr->second );
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,25 +74,25 @@ void ThumbnailSorter::Add( const M_PathToTilePtr& tiles )
 // 
 ThumbnailIteratorPtr ThumbnailSorter::GetIterator( ThumbnailTile* startingTile ) const
 {
-  ThumbnailIteratorPtr iterator;
-  switch ( m_SortMethod )
-  {
-  case VaultSortMethods::AlphabeticalByName:
-  default:
-    iterator = new ThumbnailSetIterator< S_AlphaByName >( &m_AlphaByName, startingTile );
-    break;
+	ThumbnailIteratorPtr iterator;
+	switch ( m_SortMethod )
+	{
+	case VaultSortMethods::AlphabeticalByName:
+	default:
+		iterator = new ThumbnailSetIterator< S_AlphaByName >( &m_AlphaByName, startingTile );
+		break;
 
-  case VaultSortMethods::AlphabeticalByType:
-    iterator = new ThumbnailSetIterator< S_AlphaByType >( &m_AlphaByType, startingTile );
-    break;
-  }
+	case VaultSortMethods::AlphabeticalByType:
+		iterator = new ThumbnailSetIterator< S_AlphaByType >( &m_AlphaByType, startingTile );
+		break;
+	}
 
-  if ( iterator.ReferencesObject() && startingTile == NULL )
-  {
-    iterator->Begin();
-  }
+	if ( iterator.ReferencesObject() && startingTile == NULL )
+	{
+		iterator->Begin();
+	}
 
-  return iterator;
+	return iterator;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,35 +103,35 @@ ThumbnailIteratorPtr ThumbnailSorter::GetIterator( ThumbnailTile* startingTile )
 // 
 int32_t ThumbnailSorter::Compare( const ThumbnailTile* first, const ThumbnailTile* second ) const
 {
-  int32_t result = 0;
+	int32_t result = 0;
 
-  bool firstBeforeSecond = false;
-  bool secondBeforeFirst = false;
+	bool firstBeforeSecond = false;
+	bool secondBeforeFirst = false;
 
-  switch ( m_SortMethod )
-  {
-  case VaultSortMethods::AlphabeticalByName:
-  default:
-    firstBeforeSecond = m_AlphaByName.value_comp()( first, second );
-    secondBeforeFirst = m_AlphaByName.value_comp()( second, first );
-    break;
+	switch ( m_SortMethod )
+	{
+	case VaultSortMethods::AlphabeticalByName:
+	default:
+		firstBeforeSecond = m_AlphaByName.value_comp()( first, second );
+		secondBeforeFirst = m_AlphaByName.value_comp()( second, first );
+		break;
 
-  case VaultSortMethods::AlphabeticalByType:
-    firstBeforeSecond = m_AlphaByType.value_comp()( first, second );
-    secondBeforeFirst = m_AlphaByType.value_comp()( second, first );
-    break;
-  }
+	case VaultSortMethods::AlphabeticalByType:
+		firstBeforeSecond = m_AlphaByType.value_comp()( first, second );
+		secondBeforeFirst = m_AlphaByType.value_comp()( second, first );
+		break;
+	}
 
-  if ( firstBeforeSecond && !secondBeforeFirst )
-  {
-    result = -1;
-  }
-  else if ( secondBeforeFirst && !firstBeforeSecond )
-  {
-    result = 1;
-  }
+	if ( firstBeforeSecond && !secondBeforeFirst )
+	{
+		result = -1;
+	}
+	else if ( secondBeforeFirst && !firstBeforeSecond )
+	{
+		result = 1;
+	}
 
-  return result;
+	return result;
 }
 
 
@@ -140,31 +142,31 @@ int32_t ThumbnailSorter::Compare( const ThumbnailTile* first, const ThumbnailTil
 // 
 bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const ThumbnailTile* second )
 {
-  // Irreflexivity
-  if ( first == second )
-  {
-    return false;
-  }
+	// Irreflexivity
+	if ( first == second )
+	{
+		return false;
+	}
 
-  // 1. Folders come before files
-  if ( first->GetPath().IsDirectory() && second->GetPath().IsFile() )
-  {
-    return true;
-  }
-  else if ( first->GetPath().IsFile() && second->GetPath().IsDirectory() )
-  {
-    return false;
-  }
-  // else: both are the same type
+	// 1. Folders come before files
+	if ( first->GetPath().IsDirectory() && second->GetPath().IsFile() )
+	{
+		return true;
+	}
+	else if ( first->GetPath().IsFile() && second->GetPath().IsDirectory() )
+	{
+		return false;
+	}
+	// else: both are the same type
 
-  // 2. Compare only the tile labels
-  int32_t result = strinatcmp( first->GetLabel().c_str(), second->GetLabel().c_str() );
-  if ( result == 0 )
-  {
-    // 3. Labels are the same, look at the full path
-      return first->GetPath() < second->GetPath();
-  }
-  return result < 0;
+	// 2. Compare only the tile labels
+	int32_t result = strinatcmp( first->GetLabel().c_str(), second->GetLabel().c_str() );
+	if ( result == 0 )
+	{
+		// 3. Labels are the same, look at the full path
+		return first->GetPath() < second->GetPath();
+	}
+	return result < 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,10 +175,10 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
 // 
 bool ThumbnailSorter::SortAlphabeticalByType( const ThumbnailTile* first, const ThumbnailTile* second )
 {
-  int32_t result = _tcsicmp( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
-  if ( result == 0 )
-  {
-    return SortAlphabeticalByName( first, second );
-  }
-  return result < 0;
+	int32_t result = CaseInsensitiveCompareString( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
+	if ( result == 0 )
+	{
+		return SortAlphabeticalByName( first, second );
+	}
+	return result < 0;
 }

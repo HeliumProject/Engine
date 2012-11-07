@@ -7,6 +7,7 @@
 #include <strstream>
 
 #include "Platform/Types.h"
+#include "Foundation/String.h"
 
 namespace Helium
 {
@@ -67,13 +68,13 @@ namespace Helium
 
         if ( cmdArgSetting )
         {
-            if ( !_tcsicmp( cmdArgSetting, TXT( "false" ) ) || !_tcsicmp( cmdArgSetting, TXT( "0" ) ) )
+            if ( !CaseInsensitiveCompareString( cmdArgSetting, TXT( "false" ) ) || !CaseInsensitiveCompareString( cmdArgSetting, TXT( "0" ) ) )
             {
                 cmdArgValue = false;
                 return true;
             }
 
-            if ( !_tcsicmp( cmdArgSetting, TXT( "true" ) ) || !_tcsicmp( cmdArgSetting, TXT( "1" ) ) )
+            if ( !CaseInsensitiveCompareString( cmdArgSetting, TXT( "true" ) ) || !CaseInsensitiveCompareString( cmdArgSetting, TXT( "1" ) ) )
             {
                 cmdArgValue = true;
                 return true;

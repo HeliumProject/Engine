@@ -77,10 +77,10 @@ namespace Helium
         class HELIUM_FOUNDATION_API ScopeTimer
         {
         public: 
-            ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const char* desc = NULL); 
+            ScopeTimer(Accumulator* accum, const char* func, uint32_t line, const tchar_t* desc = NULL); 
             ~ScopeTimer(); 
 
-            char         m_Description[MAX_DESCRIPTION]; 
+            tchar_t      m_Description[MAX_DESCRIPTION]; 
             uint64_t     m_StartTicks; 
             Accumulator* m_Accum; 
             uint32_t     m_UniqueID; 

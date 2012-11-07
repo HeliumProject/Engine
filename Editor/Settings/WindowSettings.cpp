@@ -50,7 +50,7 @@ void WindowSettings::SetFromWindow( const wxWindow* window, wxAuiManager* manage
 
     if ( manager )
     {
-        SetDockingState( (const wxChar*)manager->SavePerspective().c_str() );
+        SetDockingState( tstring( manager->SavePerspective().c_str() ) );
     }
 }
 

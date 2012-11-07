@@ -2,12 +2,27 @@
 #include "Platform/File.h"
 
 #include "Platform/Assert.h"
-#include "Platform/String.h"
+#include "Platform/Encoding.h"
 #include "Platform/Types.h"
 
 using namespace Helium;
 
-Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate )
+File::File()
+	: m_Handle( INVALID_HANDLE_VALUE )
+{
+}
+
+File::~File()
+{
+	Close();
+}
+
+bool File::IsOpen() const
+{
+	return m_Handle != INVALID_HANDLE_VALUE;
+}
+
+bool File::Open( const tchar_t* filename, FileMode mode, bool truncate )
 {
     DWORD desiredAccess = 0;
     if( mode & FileModes::MODE_READ )
@@ -34,25 +49,16 @@ Handle Helium::CreateFile( const tchar_t* filename, FileMode mode, bool truncate
     }
 
 	HELIUM_CONVERT_TO_NATIVE( filename, convertedFilename );
-
-    Handle handle = ::CreateFile(
-        convertedFilename,
-        desiredAccess,
-        shareMode,
-        NULL,
-        createDisposition,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL );
-
-    return handle;
+    m_Handle = ::CreateFile( convertedFilename, desiredAccess, shareMode, NULL, createDisposition, FILE_ATTRIBUTE_NORMAL, NULL );
+	return m_Handle != INVALID_HANDLE_VALUE;
 }
 
-bool Helium::CloseHandle( Handle& handle )
+bool File::Close()
 {
-    return 1 == ::CloseHandle( (HANDLE)handle );
+    return 1 == ::CloseHandle( m_Handle );
 }
 
-bool Helium::ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead )
+bool File::Read( void* buffer, size_t numberOfBytesToRead, size_t* numberOfBytesRead )
 {
     HELIUM_ASSERT_MSG( numberOfBytesToRead <= MAXDWORD, TXT( "File read operations are limited to DWORD sizes" ) );
     if( numberOfBytesToRead > MAXDWORD )
@@ -63,7 +69,7 @@ bool Helium::ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead,
     HELIUM_ASSERT( buffer || numberOfBytesToRead == 0 );
 
     DWORD tempBytesRead;
-    bool result = 1 == ::ReadFile( handle, buffer, static_cast< DWORD >( numberOfBytesToRead ), &tempBytesRead, NULL );
+    bool result = 1 == ::ReadFile( m_Handle, buffer, static_cast< DWORD >( numberOfBytesToRead ), &tempBytesRead, NULL );
     if ( result && numberOfBytesRead )
     {
         *numberOfBytesRead = tempBytesRead;
@@ -71,7 +77,7 @@ bool Helium::ReadFile( Handle& handle, void* buffer, size_t numberOfBytesToRead,
     return result;
 }
 
-bool Helium::WriteFile( Handle& handle, const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten )
+bool File::Write( const void* buffer, size_t numberOfBytesToWrite, size_t* numberOfBytesWritten )
 {
     HELIUM_ASSERT_MSG( numberOfBytesToWrite <= MAXDWORD, TXT( "File write operations are limited to DWORD sizes" ) );
     if( numberOfBytesToWrite > MAXDWORD )
@@ -82,7 +88,7 @@ bool Helium::WriteFile( Handle& handle, const void* buffer, size_t numberOfBytes
     HELIUM_ASSERT( buffer || numberOfBytesToWrite == 0 );
 
     DWORD tempBytesWritten;
-    bool result = 1 == ::WriteFile( handle, buffer, static_cast< DWORD >( numberOfBytesToWrite ), &tempBytesWritten, NULL );
+    bool result = 1 == ::WriteFile( m_Handle, buffer, static_cast< DWORD >( numberOfBytesToWrite ), &tempBytesWritten, NULL );
     if ( result && numberOfBytesWritten )
     {
         *numberOfBytesWritten = tempBytesWritten;
@@ -90,12 +96,12 @@ bool Helium::WriteFile( Handle& handle, const void* buffer, size_t numberOfBytes
     return result;
 }
 
-bool Helium::FlushFile( Handle& handle )
+bool File::Flush()
 {
-    return 1 == ::FlushFileBuffers( handle );
+    return 1 == ::FlushFileBuffers( m_Handle );
 }
 
-int64_t Helium::Seek( Handle& handle, int64_t offset, SeekOrigin origin )
+int64_t File::Seek( int64_t offset, SeekOrigin origin )
 {
     HELIUM_ASSERT_MSG( static_cast< size_t >( origin ) <= static_cast< size_t >( SeekOrigins::SEEK_ORIGIN_MAX ), TXT( "Invalid seek origin" ) );
 
@@ -110,13 +116,13 @@ int64_t Helium::Seek( Handle& handle, int64_t offset, SeekOrigin origin )
     LARGE_INTEGER filePointer;
     filePointer.QuadPart = 0;
 
-    BOOL bResult = ::SetFilePointerEx( handle, moveDistance, &filePointer, moveMethod );
+    BOOL bResult = ::SetFilePointerEx( m_Handle, moveDistance, &filePointer, moveMethod );
     HELIUM_ASSERT( bResult );
 
     return ( bResult ? filePointer.QuadPart : -1 );
 }
 
-int64_t Helium::Tell( const Handle& handle )
+int64_t File::Tell() const
 {
     LARGE_INTEGER moveDistance;
     moveDistance.QuadPart = 0;
@@ -124,18 +130,18 @@ int64_t Helium::Tell( const Handle& handle )
     LARGE_INTEGER filePointer;
     filePointer.QuadPart = 0;
 
-    BOOL bResult = ::SetFilePointerEx( handle, moveDistance, &filePointer, FILE_CURRENT );
+    BOOL bResult = ::SetFilePointerEx( m_Handle, moveDistance, &filePointer, FILE_CURRENT );
     HELIUM_ASSERT( bResult );
 
     return ( bResult ? filePointer.QuadPart : -1 );
 }
 
-int64_t Helium::GetSize( const Handle& handle )
+int64_t File::GetSize() const
 {
     LARGE_INTEGER fileSize;
     fileSize.QuadPart = 0;
 
-    BOOL bResult = ::GetFileSizeEx( handle, &fileSize );
+    BOOL bResult = ::GetFileSizeEx( m_Handle, &fileSize );
     HELIUM_ASSERT( bResult );
 
     return ( bResult ? fileSize.QuadPart : -1 );

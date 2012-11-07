@@ -5,6 +5,10 @@
 #include "Platform/Mutex.h"
 #include "Platform/Thread.h"
 #include "Platform/Console.h"
+#include "Platform/File.h"
+#include "Platform/Print.h"
+
+#include "Foundation/String.h"
 
 #include <cstdio>
 #include <fstream>
@@ -25,7 +29,7 @@ uint32_t g_LogFileCount = 20;
 
 Helium::Mutex g_Mutex;
 
-typedef std::map<tstring, FILE*> M_Files;
+typedef std::map<tstring, File*> M_Files;
 
 class FileManager
 {
@@ -44,18 +48,19 @@ public:
         M_Files::const_iterator end = m_Files.end();
         for ( ; itr != end; ++itr )
         {
-            fclose( itr->second );
+			itr->second->Close();
+			delete itr->second;
         }
 
         m_Files.clear();
     }
 
-    bool Opened(const tstring& fileName, FILE* handle)
+    bool Opened(const tstring& fileName, File* f)
     {
-        return m_Files.insert( M_Files::value_type (fileName, handle) ).second;
+        return m_Files.insert( M_Files::value_type (fileName, f) ).second;
     }
 
-    FILE* Find(const tstring& fileName)
+    File* Find(const tstring& fileName)
     {
         M_Files::const_iterator found = m_Files.find(fileName.c_str());
         if (found != m_Files.end())
@@ -73,7 +78,8 @@ public:
         M_Files::iterator found = m_Files.find( fileName );
         if (found != m_Files.end())
         {
-            fclose( found->second );
+			found->second->Close();
+			delete found->second;
             m_Files.erase( found );
         }
         else
@@ -89,7 +95,7 @@ struct OutputFile
 {
     Stream      m_StreamType;
     int         m_RefCount;
-    uint32_t         m_ThreadId;
+    uint32_t    m_ThreadId;
 
     OutputFile()
         : m_StreamType( Streams::Normal )
@@ -184,9 +190,12 @@ void Log::RemovePrintedListener(const PrintedSignature::Delegate& listener)
 
 void Redirect(const tstring& fileName, const tchar_t* str, bool stampNewLine = true )
 {
-    FILE* f = g_FileManager.Find(fileName);
+    File* f = g_FileManager.Find(fileName);
     if (f)
     {
+		size_t length = 0;
+		size_t count = ( StringLength( str ) + 128 );
+		tchar_t* temp = (tchar_t*)alloca( sizeof(tchar_t) * count );
         if ( stampNewLine )
         {
             _timeb currentTime;
@@ -199,14 +208,15 @@ void Redirect(const tstring& fileName, const tchar_t* str, bool stampNewLine = t
             time += currentTime.dstflag ? 1 : 0;
             uint32_t hour = time % 24;
 
-            fprintf( f, "[%02d:%02d:%02d.%03d TID:%d] %s", hour, min, sec, milli, GetCurrentThreadId(), str );
+			length = StringPrint( temp, count, TXT("[%02d:%02d:%02d.%03d TID:%d] %s"), hour, min, sec, milli, GetCurrentThreadId(), str );
         }
         else
         {
-            fprintf( f, "%s", str );
+            length = StringPrint( temp, count, TXT("%s"), str );
         }
 
-        fflush( f );
+		f->Write( temp, length );
+		f->Flush();
     }
 }
 
@@ -231,25 +241,30 @@ bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, uint3
     }
     else
     {
-        FILE* f = NULL;
-
         if (fileName != TXT( "" ))
         {
-            tchar_t *mode = append ? TXT( "at+" ) : TXT( "wt+" );
+	        File* f = new File;
+			if ( f->Open( fileName.c_str(), FileModes::MODE_WRITE ) )
+			{
+				if ( append )
+				{
+					f->Seek( 0, SeekOrigins::SEEK_ORIGIN_END );
+				}
 
-            f = _tfopen( fileName.c_str(), mode );
-        }
-
-        if ( f )
-        {
-            g_FileManager.Opened( fileName, f );
-            OutputFile info;
-            info.m_StreamType = stream;
-            info.m_RefCount = 1;
-            info.m_ThreadId = threadId;
-            files[ fileName ] = info;
-            return true;
-        }
+				g_FileManager.Opened( fileName, f );
+				OutputFile info;
+				info.m_StreamType = stream;
+				info.m_RefCount = 1;
+				info.m_ThreadId = threadId;
+				files[ fileName ] = info;
+				return true;
+			}
+			else
+			{
+				delete f;
+				f = NULL;
+			}
+		}
     }
 
     return false;
@@ -451,8 +466,13 @@ void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color c
             }
 
             // send the text to the debugger, if no debugger nothing happens
-            OutputDebugString(statement.m_String.c_str());
-
+#if HELIUM_OS_WIN
+#if HELIUM_WCHAR_T
+            OutputDebugStringW(statement.m_String.c_str());
+#else
+            OutputDebugStringA(statement.m_String.c_str());
+#endif
+#endif
             // output to trace file(s)
             static bool stampNewLine = true;
 
@@ -476,7 +496,7 @@ void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color c
             // output to buffer
             if (output && outputSize > 0)
             {
-                _tcsncpy( output, statement.m_String.c_str(), outputSize - 1 );
+                CopyString( output, outputSize - 1, statement.m_String.c_str() );
             }
         }
     }
@@ -511,7 +531,7 @@ void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
     PrintString(string, Streams::Normal, Levels::Default, color); 
@@ -525,7 +545,7 @@ void Log::Print(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -540,7 +560,7 @@ void Log::Print(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -555,7 +575,7 @@ void Log::Debug(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -570,7 +590,7 @@ void Log::Debug(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -585,7 +605,7 @@ void Log::Profile(const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -600,7 +620,7 @@ void Log::Profile(Level level, const tchar_t *fmt,...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -613,13 +633,13 @@ void Log::Warning(const tchar_t *fmt,...)
     Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
-    _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
-    _tcscat(format, fmt);
+    StringPrint(format, TXT( "Warning (%d): " ), ++g_WarningCount);
+    AppendString(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), format, args);
+    int size = StringPrint(string, format, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -634,18 +654,18 @@ void Log::Warning(Level level, const tchar_t *fmt,...)
     static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
-        _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
+        StringPrint(format, TXT( "Warning (%d): " ), ++g_WarningCount);
     }
     else
     {
         format[0] = '\0';
     }
-    _tcscat(format, fmt);
+    AppendString(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), format, args);
+    int size = StringPrint(string, format, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -658,13 +678,13 @@ void Log::Error(const tchar_t *fmt,...)
     Helium::MutexScopeLock mutex (g_Mutex);
 
     static tchar_t format[MAX_PRINT_SIZE];
-    _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
-    _tcscat(format, fmt);
+    StringPrint(format, TXT( "Error (%d): " ), ++g_ErrorCount);
+    AppendString(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), format, args);
+    int size = StringPrint(string, format, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -679,18 +699,18 @@ void Log::Error(Level level, const tchar_t *fmt,...)
     static tchar_t format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
-        _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
+        StringPrint(format, TXT( "Error (%d): " ), ++g_ErrorCount);
     }
     else
     {
         format[0] = '\0';
     }
-    _tcscat(format, fmt);
+    AppendString(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), format, args);
+    int size = StringPrint(string, format, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -706,7 +726,7 @@ Log::Heading::Heading(const tchar_t *fmt, ...)
     va_list args;
     va_start(args, fmt); 
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), fmt, args);
+    int size = StringPrint(string, fmt, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 
@@ -820,11 +840,11 @@ void Log::Bullet::CreateBullet(const tchar_t *fmt, va_list args)
         format[1] = ' ';
         format[2] = '\0';
     }
-    _tcscat(format, fmt);
+    AppendString(format, fmt);
 
     // format the bullet string
     static tchar_t string[MAX_PRINT_SIZE];
-    int size = _vsntprintf(string, sizeof(string), format, args);
+    int size = StringPrint(string, format, args);
     string[ sizeof(string)/sizeof(string[0]) - 1] = 0; 
     HELIUM_ASSERT(size >= 0);
 

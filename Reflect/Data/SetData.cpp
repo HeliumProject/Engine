@@ -307,13 +307,11 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveT& archiv
 template SimpleSetData< String >;
 template SimpleSetData< uint32_t >;
 template SimpleSetData< uint64_t >;
-template SimpleSetData< Helium::GUID >;
 template SimpleSetData< Helium::TUID >;
 template SimpleSetData< Helium::Path >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32SetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64SetData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::GUIDSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::PathSetData );

@@ -2,10 +2,13 @@
 #include "FileIconsTable.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Insert.h" 
-#include "Foundation/Directory.h"
+#include "Platform/Process.h"
+
+#include "Foundation/DirectoryIterator.h"
 #include "Foundation/FilePath.h"
+#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
+#include "Foundation/String.h"
 
 #include "Editor/ArtProvider.h"
 
@@ -118,14 +121,11 @@ void FileIconsTable::Create()
 
     ///////////////////////////////////////////////////////////////////////////
     {
-        tchar_t module[MAX_PATH];
-        ::GetModuleFileName( 0, module, MAX_PATH );
-
-        Helium::Path exePath( module );
+        Helium::Path exePath( GetProcessPath() );
         Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
 
         std::set< Helium::Path > artFiles;
-        Helium::Directory::GetFiles( iconFolder, artFiles, true );
+        Helium::DirectoryIterator::GetFiles( iconFolder, artFiles, true );
 
         int numImages = 0;
         for ( std::set< Helium::Path >::const_iterator itr = artFiles.begin(), end = artFiles.end(); itr != end; ++itr )
@@ -330,7 +330,7 @@ int FileIconsTable::GetIconIDFromPath( const Helium::Path& path )
     }
 
     // try just the end extension
-    if ( _tcsicmp( path.Extension().c_str(), extension.c_str() ) != 0 )
+    if ( CaseInsensitiveCompareString( path.Extension().c_str(), extension.c_str() ) != 0 )
     {
         extension = path.Extension();
         if ( extension.empty() )

@@ -1,7 +1,7 @@
 #include "EnginePch.h"
 #include "Engine/AsyncLoader.h"
 
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/BufferedStream.h"
 
@@ -264,7 +264,7 @@ void AsyncLoader::LoadWorker::Run()
 
         HELIUM_ASSERT( pRequest );
 
-        FileStream* pFileStream = File::Open( pRequest->fileName, FileStream::MODE_READ );
+        FileStream* pFileStream = FileStream::OpenFileStream( pRequest->fileName, FileStream::MODE_READ );
         if( !pFileStream )
         {
             SetInvalid( pRequest->bytesRead );

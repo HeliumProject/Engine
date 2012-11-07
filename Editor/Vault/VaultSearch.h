@@ -4,7 +4,7 @@
 #include "VaultSearchResults.h"
 
 #include "Foundation/Event.h"
-#include "Foundation/Directory.h"
+#include "Foundation/DirectoryIterator.h"
 #include "Foundation/SmartPtr.h"
 
 #include "SceneGraph/Project.h"

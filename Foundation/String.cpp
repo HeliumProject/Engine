@@ -3,6 +3,70 @@
 
 using namespace Helium;
 
+template< class T >
+static int CaseSensitiveCompare( T a, T b )
+{
+	return a - b;
+}
+
+template< class T >
+static int CaseInsensitiveCompare( T a, T b )
+{
+	HELIUM_COMPILE_ASSERT( 'a' > 'A' );
+	const static int offset = 'a' - 'A';
+	if ( a >= 'A' && a <= 'Z' )
+	{
+		a += offset;
+	}
+	if ( b >= 'A' && b <= 'Z' )
+	{
+		b += offset;
+	}
+	return a - b;
+}
+
+template< class T, int (*C)( T a, T b ) >
+static int CompareStringHelper( const T* a, const T* b, size_t count )
+{
+	size_t lenA = StringLength( a );
+	size_t lenB = StringLength( b );
+	size_t min = lenA < lenB ? lenA : lenB;
+	
+	int result;
+	const T *pA = a, *pB = b;
+	for ( int i=0; i<=min && i<count; i++ ) // note: compare against the null terminator
+	{
+		result = C( *pA, *pB );
+		if ( result != 0 )
+		{
+			return result;
+		}
+	}
+
+	return 0;
+}
+
+int Helium::CompareString( const char* a, const char* b, size_t count )
+{
+	return CompareStringHelper<char, CaseSensitiveCompare>( a, b, count );
+}
+
+int Helium::CompareString( const wchar_t* a, const wchar_t* b, size_t count )
+{
+	return CompareStringHelper<wchar_t, CaseSensitiveCompare>( a, b, count );
+}
+
+int Helium::CaseInsensitiveCompareString( const char* a, const char* b, size_t count )
+{
+	return CompareStringHelper<char, CaseInsensitiveCompare>( a, b, count );
+}
+
+int Helium::CaseInsensitiveCompareString( const wchar_t* a, const wchar_t* b, size_t count )
+{
+	return CompareStringHelper<wchar_t, CaseInsensitiveCompare>( a, b, count );
+}
+
+
 /// Constructor.
 ///
 /// This creates an empty string without allocating any memory.

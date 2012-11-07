@@ -8,9 +8,9 @@
 #include "PcSupportPch.h"
 #include "PcSupport/ArchivePackageLoader.h"
 
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/Directory.h"
+#include "Foundation/DirectoryIterator.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/BufferedStream.h"
 #include "Engine/AsyncLoader.h"
@@ -142,7 +142,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
 
     if ( packagePath == rConfig.GetUserConfigPackagePath() )
     {
-        if ( !File::GetUserDataDirectory( dataDirectory ) )
+        if ( !FileLocations::GetUserDataDirectory( dataDirectory ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -153,7 +153,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     }
     else
     {
-        if ( !File::GetDataDirectory( dataDirectory ) )
+        if ( !FileLocations::GetDataDirectory( dataDirectory ) )
         {
             HELIUM_TRACE(
                 TRACE_ERROR,
@@ -321,10 +321,10 @@ bool ArchivePackageLoader::BeginPreload()
     AsyncLoader &rAsyncLoader = AsyncLoader::GetStaticInstance();
     //rAsyncLoader.
     
-    Directory packageDirectory( m_packageDirPath );
+    DirectoryIterator packageDirectory( m_packageDirPath );
     for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
     {
-        const DirectoryItem& item = packageDirectory.GetItem();
+        const DirectoryIteratorItem& item = packageDirectory.GetItem();
         if (item.m_Path.Extension() == TXT("object"))
         {
             FileReadRequest *request = m_fileReadRequests.New();
@@ -929,7 +929,7 @@ void ArchivePackageLoader::TickPreload()
 
     Path packageDirectoryPath;
 
-    if ( !File::GetDataDirectory( packageDirectoryPath ) )
+    if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
     {
         HELIUM_TRACE( TRACE_ERROR, TXT( "ArchivePackageLoader::TickPreload(): Could not get data directory.\n" ) );
         return;
@@ -938,11 +938,10 @@ void ArchivePackageLoader::TickPreload()
     packageDirectoryPath += m_packagePath.ToFilePathString().GetData();
     packageDirectoryPath += TXT("/");
 
-    Directory packageDirectory( packageDirectoryPath );
-
+    DirectoryIterator packageDirectory( packageDirectoryPath );
     for( ; !packageDirectory.IsDone(); packageDirectory.Next() )
     {
-        const DirectoryItem& item = packageDirectory.GetItem();
+        const DirectoryIteratorItem& item = packageDirectory.GetItem();
 
         if ( !item.m_Path.IsFile() )
         {
@@ -1244,7 +1243,9 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         }
         else
         {
-            int64_t i64_object_file_size = object_file_path.Size();
+			Status status;
+			status.Read( object_file_path.Get().c_str() );
+			int64_t i64_object_file_size = status.m_Size;
 
             if( i64_object_file_size == -1 )
             {

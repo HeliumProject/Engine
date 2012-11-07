@@ -89,7 +89,6 @@ namespace Helium
         typedef SimpleMapData< uint64_t, uint32_t > UInt64UInt32MapData;
         typedef SimpleMapData< uint64_t, uint64_t > UInt64UInt64MapData;
 
-        typedef SimpleMapData< Helium::GUID, uint32_t > GUIDUInt32MapData;
         typedef SimpleMapData< Helium::TUID, uint32_t > TUIDUInt32MapData;
     }
 }

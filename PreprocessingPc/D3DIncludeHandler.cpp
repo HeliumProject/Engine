@@ -8,7 +8,7 @@
 #include "PreprocessingPcPch.h"
 #include "PreprocessingPc/D3DIncludeHandler.h"
 
-#include "Foundation/File.h"
+#include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
 #include "Foundation/StringConverter.h"
@@ -58,7 +58,7 @@ HRESULT D3DIncludeHandler::Open(
     Path includePath( m_shaderDirectory + fileName.GetData() );
 
     // Attempt to open and read the contents of the include file.
-    FileStream* pIncludeFileStream = File::Open( includePath.c_str(), FileStream::MODE_READ );
+    FileStream* pIncludeFileStream = FileStream::OpenFileStream( includePath.c_str(), FileStream::MODE_READ );
     if( !pIncludeFileStream )
     {
         HELIUM_TRACE(

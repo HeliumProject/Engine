@@ -13,7 +13,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Engine/GameObject.h"
 #include "Engine/GameObjectType.h"
 #include "Engine/Package.h"

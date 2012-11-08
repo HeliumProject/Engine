@@ -4,7 +4,7 @@
 #if HELIUM_ENABLE_TRACE
 
 #include "Platform/Debug.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 
 #include <cstdarg>
 

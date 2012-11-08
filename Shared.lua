@@ -10,6 +10,7 @@ project( prefix .. "Platform" )
 		"Platform/*.cpp",
 		"Platform/*.h",
 		"Platform/*.inl",
+		"Platform/*.impl",
 	}
 
 	configuration "windows"

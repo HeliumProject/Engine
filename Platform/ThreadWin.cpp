@@ -4,7 +4,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
 #include "Platform/Print.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Platform/Encoding.h"
 
 #include <process.h>

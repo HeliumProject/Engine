@@ -63,7 +63,7 @@
 //
 
 #include "Platform/Assert.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Platform/Trace.h"
 
 #if 0

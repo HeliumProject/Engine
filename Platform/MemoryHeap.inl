@@ -1,274 +1,65 @@
-#define APPLY_PREFIX_IMPL_IMPL( PREFIX, FUNCTION ) _##PREFIX##_##FUNCTION
-#define APPLY_PREFIX_IMPL( PREFIX, FUNCTION ) APPLY_PREFIX_IMPL_IMPL( PREFIX, FUNCTION )
-#define APPLY_PREFIX( FUNCTION ) APPLY_PREFIX_IMPL( MEMORY_HEAP_CLASS_NAME, FUNCTION )
-
-#define dlmalloc_usable_size        APPLY_PREFIX( dlmalloc_usable_size )
-#define create_mspace               APPLY_PREFIX( create_mspace )
-#define create_mspace_with_base     APPLY_PREFIX( create_mspace_with_base )
-#define mspace_track_large_chunks   APPLY_PREFIX( mspace_track_large_chunks )
-#define destroy_mspace              APPLY_PREFIX( destroy_mspace )
-#define mspace_malloc               APPLY_PREFIX( mspace_malloc )
-#define mspace_free                 APPLY_PREFIX( mspace_free )
-#define mspace_calloc               APPLY_PREFIX( mspace_calloc )
-#define mspace_realloc              APPLY_PREFIX( mspace_realloc )
-#define mspace_memalign             APPLY_PREFIX( mspace_memalign )
-#define mspace_independent_calloc   APPLY_PREFIX( mspace_independent_calloc )
-#define mspace_independent_comalloc APPLY_PREFIX( mspace_independent_comalloc )
-#define mspace_trim                 APPLY_PREFIX( mspace_trim )
-#define mspace_malloc_stats         APPLY_PREFIX( mspace_malloc_stats )
-#define mspace_footprint            APPLY_PREFIX( mspace_footprint )
-#define mspace_max_footprint        APPLY_PREFIX( mspace_max_footprint )
-#define mspace_mallinfo             APPLY_PREFIX( mspace_mallinfo )
-#define mspace_usable_size          APPLY_PREFIX( mspace_usable_size )
-#define mspace_mallopt              APPLY_PREFIX( mspace_mallopt )
-
-/// Wrapper for Helium::VirtualMemory::Allocate() to support return values expected by dlmalloc.
+/// Get the previous dynamic memory heap in the global list.
 ///
-/// @param[in] size  Allocation size, in bytes.
+/// @return  Previous heap in the list.
 ///
-/// @return  Address of the allocation if successfully allocated, (void*)~0 if not.
-static void* PhysicalMemoryAllocate( size_t size )
+/// @see GetNextHeap(), LockReadGlobalHeapList(), UnlockReadGlobalHeapList()
+Helium::DynamicMemoryHeap* Helium::DynamicMemoryHeap::GetPreviousHeap() const
 {
-    void* pMemory = Helium::VirtualMemory::Allocate( size );
-    return( pMemory ? pMemory : reinterpret_cast< void* >( ~static_cast< uintptr_t >( 0 ) ) );
+    return m_pPreviousHeap;
 }
 
-/// Wrapper for Helium::VirtualMemory::Free() to support return values expected by dlmalloc.
+/// Get the next dynamic memory heap in the global list.
 ///
-/// @param[in] pMemory  Base address of the region of memory to free.
-/// @param[in] size     Size of the region of memory to free.
+/// @return  Next heap in the list.
 ///
-/// @return  Zero if successful, non-zero if an error occurred.
-static int PhysicalMemoryFree( void* pMemory, size_t size )
+/// @see GetPreviousHeap(), LockReadGlobalHeapList(), UnlockReadGlobalHeapList()
+Helium::DynamicMemoryHeap* Helium::DynamicMemoryHeap::GetNextHeap() const
 {
-    return( Helium::VirtualMemory::Free( pMemory, size ) ? 0 : -1 );
-}
-
-#if HELIUM_ENABLE_TRACE
-/// Wrapper for re-routing printf() calls to the logging system.
-///
-/// @param[in] pFormat  Format string.
-/// @param[in] ...      Format arguments.
-static void PrintfWrapper( const char* pFormat, ... )
-{
-#if HELIUM_WCHAR_T
-    char message[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
-
-    va_list argList;
-    va_start( argList, pFormat );
-    Helium::StringFormatVa( message, HELIUM_ARRAY_COUNT( message ), pFormat, argList );
-    va_end( argList );
-
-    message[ HELIUM_ARRAY_COUNT( message ) - 1 ] = '\0';
-
-    // Do a direct conversion, assuming memory allocator logging is only using 7-bit ASCII text.
-    wchar_t messageWide[ Helium::Trace::DEFAULT_MESSAGE_BUFFER_SIZE ];
-
-    const char* pSourceCharacter = &message[ 0 ];
-    wchar_t* pDestCharacter = &messageWide[ 0 ];
-    for( ; ; )
-    {
-        uint8_t character = *pSourceCharacter;
-        *pDestCharacter = static_cast< wchar_t >( character );
-
-        if( character == '\0' )
-        {
-            break;
-        }
-
-        ++pSourceCharacter;
-        ++pDestCharacter;
-    }
-
-    HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "%s" ), messageWide );
-#else
-    va_list argList;
-    va_start( argList, pFormat );
-    HELIUM_TRACE_VA( Helium::TRACE_DEBUG, pFormat, argList );
-    va_end( argList );
-#endif
-}
-#endif  // HELIUM_ENABLE_TRACE
-
-#define MSPACES 1
-#define ONLY_MSPACES 1
-#define USE_DL_PREFIX 1
-#define MMAP( s ) PhysicalMemoryAllocate( s )
-#define MUNMAP( a, s ) PhysicalMemoryFree( a, s )
-#define DIRECT_MMAP( s ) PhysicalMemoryAllocate( s )
-#define HAVE_MREMAP 0
-#define REALLOC_ZERO_BYTES_FREES 1
-#define FOOTERS 1
-
-#define CORRUPTION_ERROR_ACTION( m ) HELIUM_ASSERT_MSG_FALSE( TXT( "Memory corruption detected!" ) )
-#define USAGE_ERROR_ACTION( m, p ) HELIUM_ASSERT_MSG_FALSE( TXT( "Incorrect realloc()/free() usage detected!" ) )
-
-#if HELIUM_RELEASE || HELIUM_PROFILE
-#define INSECURE 1
-#else
-#define INSECURE 0
-#endif
-
-#if HELIUM_DEBUG
-#define DEBUG 1
-#endif
-
-#ifdef HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-#define FULLSANITYCHECKS
-#endif
-
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4100 ) // 'identifier' : unreferenced formal parameter
-#pragma warning( disable : 4127 ) // conditional expression is constant
-#pragma warning( disable : 4189 ) // 'identifier' : local variable is initialized but not referenced
-#pragma warning( disable : 4267 ) // 'var' : conversion from 'size_t' to 'type', possible loss of data
-// XXX TMC: C4505 must be disabled on a per-source basis (disabling it on just the scope of the function definitions
-// does not work).
-//#pragma warning( disable : 4505 ) // 'function' : unreferenced local function has been removed
-#pragma warning( disable : 4706 ) // assignment within conditional expression
-#endif
-
-// Re-route printf() calls to the engine's logging system.
-#if HELIUM_ENABLE_TRACE
-#define printf( FORMAT, ... ) PrintfWrapper( FORMAT, __VA_ARGS__ )
-#else
-#define printf( FORMAT, ... )
-#endif
-
-#if USE_NEDMALLOC
-#define EXTSPEC static
-#include "Dependencies/nedmalloc/nedmalloc.c"
-#undef EXTSPEC
-#else
-#include "Platform/MemoryHeap.dlmalloc.c"
-#endif
-
-#undef printf
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
-
-/// Constructor.
-///
-/// @param[in] capacity  Fixed size (in bytes) of the memory heap to create, or zero to create a growable heap.
-Helium::MEMORY_HEAP_CLASS_NAME::MEMORY_HEAP_CLASS_NAME( size_t capacity )
-#if !HELIUM_RELEASE && !HELIUM_PROFILE
-    : m_pName( NULL )
-#endif
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    , m_pVerboseTrackingData( NULL )
-#endif
-{
-    ConstructNoName( capacity );
+    return m_pNextHeap;
 }
 
 #if !HELIUM_RELEASE && !HELIUM_PROFILE
-/// Constructor.
+/// Get the debugging name associated with this heap.
 ///
-/// @param[in] pName     Name to associate with the memory heap (for debugging purposes).  Note that the heap holds
-///                      onto the given pointer directly, so it must remain valid for the entire lifetime of the
-///                      memory heap.  Using a hard-coded string literal is recommended.
-/// @param[in] capacity  Fixed size (in bytes) of the memory heap to create, or zero to create a growable heap.
-Helium::MEMORY_HEAP_CLASS_NAME::MEMORY_HEAP_CLASS_NAME( const tchar_t* pName, size_t capacity )
-    : m_pName( pName )
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    , m_pVerboseTrackingData( NULL )
-#endif
+/// @return  Heap name string.
+const tchar_t* Helium::DynamicMemoryHeap::GetName() const
 {
-    ConstructNoName( capacity );
+    return m_pName;
 }
 #endif
 
-/// Destructor.
-Helium::MEMORY_HEAP_CLASS_NAME::~MEMORY_HEAP_CLASS_NAME()
+#if HELIUM_ENABLE_MEMORY_TRACKING
+/// Get the current number of active allocations in this heap.
+///
+/// @return  Active allocation count.
+///
+/// @see GetBytesActual()
+size_t Helium::DynamicMemoryHeap::GetAllocationCount() const
 {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    // Destroy the memory tracking data first in case it is referencing memory allocated from this allocator.
-    bool bLockedTracking = ConditionalVerboseTrackingLock();
-
-    bool bOldDisableBactraceTracking = sm_bDisableBacktraceTracking;
-    sm_bDisableBacktraceTracking = true;
-
-    DynamicMemoryHeapVerboseTrackingData* pVerboseTrackingData = m_pVerboseTrackingData;
-    m_pVerboseTrackingData = NULL;
-
-    HELIUM_ASSERT( pVerboseTrackingData->allocationBacktraceMap.empty() );
-    pVerboseTrackingData->~DynamicMemoryHeapVerboseTrackingData();
-
-    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), VirtualMemory::GetPageSize() );
-    VirtualMemory::Free( pVerboseTrackingData, allocationSize );
-
-    sm_bDisableBacktraceTracking = bOldDisableBactraceTracking;
-
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
-
-    {
-        ScopeWriteLock writeLock( GetGlobalHeapListLock() );
-
-        MEMORY_HEAP_CLASS_NAME* pPreviousHeap = m_pPreviousHeap;
-        MEMORY_HEAP_CLASS_NAME* pNextHeap = m_pNextHeap;
-        if( pPreviousHeap )
-        {
-            pPreviousHeap->m_pNextHeap = pNextHeap;
-        }
-        else
-        {
-            sm_pGlobalHeapListHead = pNextHeap;
-        }
-
-        if( pNextHeap )
-        {
-            pNextHeap->m_pPreviousHeap = pPreviousHeap;
-        }
-    }
-
-#if USE_NEDMALLOC
-    nedalloc::neddestroypool( static_cast< nedalloc::nedpool* >( m_pMspace ) );
-#else
-    destroy_mspace( m_pMspace );
-#endif
+    return m_allocationCount;
 }
 
-/// Allocate a block of memory.
+/// Get the total number of usable bytes allocated from this heap.
+///
+/// @return  Usable bytes allocated.
+///
+/// @see GetAllocationCount()
+size_t Helium::DynamicMemoryHeap::GetBytesActual() const
+{
+    return m_bytesActual;
+}
+#endif
+
+/// Allocate a block of memory from this allocator's heap.
 ///
 /// @param[in] size  Number of bytes to allocate.
 ///
 /// @return  Base address of the allocation if successful, null pointer if not.
 ///
-/// @see Reallocate(), Free()
-void* Helium::MEMORY_HEAP_CLASS_NAME::Allocate( size_t size )
+/// @see MemoryHeap::Allocate(), Reallocate(), Free()
+HELIUM_FORCEINLINE void* Helium::DefaultAllocator::Allocate( size_t size )
 {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    bool bLockedTracking = ConditionalVerboseTrackingLock();
-#endif
-
-#if USE_NEDMALLOC
-    void* pMemory = nedalloc::nedpmalloc( static_cast< nedalloc::nedpool* >( m_pMspace ), size );
-#else
-    void* pMemory = mspace_malloc( m_pMspace, size );
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    if( pMemory )
-    {
-        AddAllocation( pMemory );
-    }
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
-
-    return pMemory;
+    return HELIUM_DEFAULT_HEAP.Allocate( size );
 }
 
 /// Resize an allocation previously allocated using Allocate() or Reallocate().
@@ -284,99 +75,23 @@ void* Helium::MEMORY_HEAP_CLASS_NAME::Allocate( size_t size )
 ///          reallocated or, in the case size is zero, was freed.  The original address provided should be discarded
 ///          if a valid pointer was returned or a zero-byte reallocation was requested.
 ///
-/// @see Allocate(), Free()
-void* Helium::MEMORY_HEAP_CLASS_NAME::Reallocate( void* pMemory, size_t size )
+/// @see MemoryHeap::Reallocate(), Allocate(), Free()
+HELIUM_FORCEINLINE void* Helium::DefaultAllocator::Reallocate( void* pMemory, size_t size )
 {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    bool bLockedTracking = false;
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    if( pMemory )
-    {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-        bLockedTracking = ConditionalVerboseTrackingLock();
-#endif
-
-        MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-        HELIUM_ASSERT( pHeap );
-        if( pHeap )
-        {
-            pHeap->RemoveAllocation( pMemory );
-        }
-    }
-#endif
-
-#if USE_NEDMALLOC
-    pMemory = nedalloc::nedprealloc( static_cast< nedalloc::nedpool* >( m_pMspace ), pMemory, size );
-#else
-    pMemory = mspace_realloc( m_pMspace, pMemory, size );
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    if( pMemory )
-    {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-        if( !bLockedTracking )
-        {
-            bLockedTracking = ConditionalVerboseTrackingLock();
-        }
-#endif
-
-        MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-        HELIUM_ASSERT( pHeap );
-        if( pHeap )
-        {
-            pHeap->AddAllocation( pMemory );
-        }
-    }
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
-
-    return pMemory;
+    return HELIUM_DEFAULT_HEAP.Reallocate( pMemory, size );
 }
 
-/// Allocate an aligned block of memory.
+/// Allocate an aligned block of memory from this allocator's heap.
 ///
 /// @param[in] alignment  Alignment of the allocation, in bytes.  This must be a power of two.
 /// @param[in] size       Number of bytes to allocate.
 ///
 /// @return  Base address of the allocation if successful, null pointer if not.
 ///
-/// @see Free()
-void* Helium::MEMORY_HEAP_CLASS_NAME::AllocateAligned( size_t alignment, size_t size )
+/// @see MemoryHeap::AllocateAligned(), Free()
+HELIUM_FORCEINLINE void* Helium::DefaultAllocator::AllocateAligned( size_t alignment, size_t size )
 {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    bool bLockedTracking = ConditionalVerboseTrackingLock();
-#endif
-
-#if USE_NEDMALLOC
-    void* pMemory = nedalloc::nedpmemalign( static_cast< nedalloc::nedpool* >( m_pMspace ), alignment, size );
-#else
-    void* pMemory = mspace_memalign( m_pMspace, alignment, size );
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    if( pMemory )
-    {
-        AddAllocation( pMemory );
-    }
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
-
-    return pMemory;
+    return HELIUM_DEFAULT_HEAP.AllocateAligned( alignment, size );
 }
 
 /// Free a block of memory previously allocated using Allocate(), Reallocate(), or AllocateAligned().
@@ -384,45 +99,10 @@ void* Helium::MEMORY_HEAP_CLASS_NAME::AllocateAligned( size_t alignment, size_t 
 /// @param[in] pMemory  Base address of the allocation to free.  If this is a null pointer, no action will be
 ///                     performed.
 ///
-/// @see Allocate(), Reallocate(), AllocateAligned()
-void Helium::MEMORY_HEAP_CLASS_NAME::Free( void* pMemory )
+/// @see MemoryHeap::AllocateAligned(), Allocate(), Reallocate(), AllocateAligned()
+HELIUM_FORCEINLINE void Helium::DefaultAllocator::Free( void* pMemory )
 {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    bool bLockedTracking = false;
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    if( pMemory )
-    {
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-        bLockedTracking = ConditionalVerboseTrackingLock();
-#endif
-
-        MEMORY_HEAP_CLASS_NAME* pHeap = GetAllocationHeap( pMemory );
-        HELIUM_ASSERT( pHeap );
-        if( pHeap )
-        {
-            pHeap->RemoveAllocation( pMemory );
-        }
-    }
-#endif
-
-#if USE_NEDMALLOC
-    // nedmalloc does not accept null pointers.
-    if( pMemory )
-    {
-        nedalloc::nedpfree( static_cast< nedalloc::nedpool* >( m_pMspace ), pMemory );
-    }
-#else
-    mspace_free( m_pMspace, pMemory );
-#endif
-
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
+    HELIUM_DEFAULT_HEAP.Free( pMemory );
 }
 
 /// Get the size of an allocated memory block.
@@ -430,241 +110,464 @@ void Helium::MEMORY_HEAP_CLASS_NAME::Free( void* pMemory )
 /// @param[in] pMemory  Base address of the allocation.
 ///
 /// @return  Allocation size in bytes.
-size_t Helium::MEMORY_HEAP_CLASS_NAME::GetMemorySize( void* pMemory )
+HELIUM_FORCEINLINE size_t Helium::DefaultAllocator::GetMemorySize( void* pMemory )
 {
-#if USE_NEDMALLOC
-    return malloc_usable_size( pMemory );
-#else
-    return mspace_usable_size( pMemory );
-#endif
+    return HELIUM_DEFAULT_HEAP.GetMemorySize( pMemory );
 }
 
-/// Release any thread caches created for the current thread in all existing memory heaps.
+/// Constructor.
 ///
-/// This should always be called from threads in which dynamic allocations may have been performed.
-void Helium::MEMORY_HEAP_CLASS_NAME::UnregisterCurrentThreadCache()
+/// @param[in] blockSize         Number of bytes to allocate for each stack block.
+/// @param[in] blockCountMax     Maximum number of blocks that can be allocated, clamped to a minimum of one.  If
+///                              this is Invalid< size_t >(), no limit will be applied to the number of blocks that
+///                              can be allocated.
+/// @param[in] defaultAlignment  Byte alignment for allocations made using Allocate() (must be a power of two).
+template< typename Allocator >
+Helium::StackMemoryHeap< Allocator >::StackMemoryHeap(
+    size_t blockSize,
+    size_t blockCountMax,
+    size_t defaultAlignment )
+    : m_blockSize( blockSize > 1 ? blockSize : 1 )
+    , m_defaultAlignment( defaultAlignment > 1 ? defaultAlignment : 1 )
+    , m_remainingBlockCount( blockCountMax > 1 ? blockCountMax : 1 )
 {
-    // Only applicable when using nedmalloc.
-#if USE_NEDMALLOC
-    ScopeReadLock readLock( GetGlobalHeapListLock() );
+    HELIUM_ASSERT( ( m_defaultAlignment & ( m_defaultAlignment - 1 ) ) == 0 ); // affirm power of two
 
-    for( MEMORY_HEAP_CLASS_NAME* pHeap = sm_pGlobalHeapListHead; pHeap != NULL; pHeap = pHeap->m_pNextHeap )
+    Block* pBlock = AllocateBlock();
+    HELIUM_ASSERT( pBlock );
+    pBlock->m_pPreviousBlock = NULL;
+    pBlock->m_pNextBlock = NULL;
+
+    m_pHeadBlock = pBlock;
+    m_pTailBlock = pBlock;
+    m_pCurrentBlock = pBlock;
+
+    HELIUM_ASSERT( pBlock->m_pBuffer );
+    m_pStackPointer = static_cast< uint8_t* >( pBlock->m_pBuffer ) + m_blockSize;
+}
+
+/// Destructor.
+template< typename Allocator >
+Helium::StackMemoryHeap< Allocator >::~StackMemoryHeap()
+{
+    // Blocks are allocated as part of the buffer associated with them, so we only need to free the buffer
+    // addresses.
+    Allocator allocator;
+
+    Block* pNextBlock = m_pHeadBlock;
+    while( pNextBlock )
     {
-        void* pMspace = pHeap->m_pMspace;
-        HELIUM_ASSERT( pMspace );
-        nedalloc::neddisablethreadcache( static_cast< nedalloc::nedpool* >( pMspace ) );
+        Block* pBlock = pNextBlock;
+        pNextBlock = pBlock->m_pNextBlock;
+
+        HELIUM_ASSERT( pBlock->m_pBuffer );
+        allocator.Free( pBlock->m_pBuffer );
     }
-#endif
 }
 
-/// Initialize this object, assuming all existing fields other than the name are in an uninitialized state.
-///
-/// @param[in] capacity  Fixed size (in bytes) of the memory heap to create, or zero to create a growable heap.
-void Helium::MEMORY_HEAP_CLASS_NAME::ConstructNoName( size_t capacity )
+/// @copydoc MemoryHeap::Allocate()
+template< typename Allocator >
+void* Helium::StackMemoryHeap< Allocator >::Allocate( size_t size )
 {
-#if USE_NEDMALLOC
-    // XXX TMC TODO: Add support for the target number of threads (either determined programatically and/or through
-    // a parameter).
-    m_pMspace = nedalloc::nedcreatepool( capacity, 0 );
-    HELIUM_ASSERT( m_pMspace );
-#else
-    m_pMspace = create_mspace( capacity, 1 );
-    HELIUM_ASSERT( m_pMspace );
+    return AllocateAligned( m_defaultAlignment, size );
+}
 
-    // "extp" is unused, so we'll use it to point back to the heap instance.
-    static_cast< mstate >( m_pMspace )->extp = this;
-#endif
+/// @copydoc MemoryHeap::Reallocate()
+template< typename Allocator >
+void* Helium::StackMemoryHeap< Allocator >::Reallocate( void* /*pMemory*/, size_t /*size*/ )
+{
+    HELIUM_ASSERT_MSG_FALSE( TXT( "Reallocate() not supported by StackMemoryHeap" ) );
 
+    return NULL;
+}
+
+/// @copydoc MemoryHeap::AllocateAligned()
+template< typename Allocator >
+void* Helium::StackMemoryHeap< Allocator >::AllocateAligned( size_t alignment, size_t size )
+{
+    HELIUM_ASSERT( ( alignment & ( alignment - 1 ) ) == 0 ); // affirm power of two
+
+    // Check whether the allocation will fit within the current block.
+    Block* pBlock = m_pCurrentBlock;
+    HELIUM_ASSERT( pBlock );
+
+    uint8_t* pBasePointer = static_cast< uint8_t* >( pBlock->m_pBuffer );
+    HELIUM_ASSERT( pBasePointer );
+
+    uint8_t* pStackPointerAligned = Align( static_cast< uint8_t* >( m_pStackPointer ), alignment );
+    HELIUM_ASSERT( pStackPointerAligned );
+
+    size_t usedBlockSize = pStackPointerAligned - pBasePointer;
+    if( usedBlockSize > m_blockSize || size > m_blockSize - usedBlockSize )
     {
-        ScopeWriteLock writeLock( GetGlobalHeapListLock() );
-
-        m_pPreviousHeap = NULL;
-
-        MEMORY_HEAP_CLASS_NAME* pNextHeap = sm_pGlobalHeapListHead;
-        m_pNextHeap = pNextHeap;
-        if( pNextHeap )
+        // Check whether the allocation will fit within the next block (which should either be unused or not yet
+        // allocated).
+        pBlock = pBlock->m_pNextBlock;
+        if( !pBlock )
         {
-            pNextHeap->m_pPreviousHeap = this;
+            // Allocate a fresh block so we can test it.
+            if( m_remainingBlockCount == 0 )
+            {
+                // We can't allocate any more blocks, so the allocation cannot succeed.
+                return NULL;
+            }
+
+            pBlock = AllocateBlock();
+            HELIUM_ASSERT( pBlock );
+            pBlock->m_pPreviousBlock = m_pTailBlock;
+            pBlock->m_pNextBlock = NULL;
+
+            if( m_pTailBlock )
+            {
+                m_pTailBlock->m_pNextBlock = pBlock;
+            }
+            else
+            {
+                m_pHeadBlock = pBlock;
+            }
+
+            m_pTailBlock = pBlock;
         }
 
-        sm_pGlobalHeapListHead = this;
-    }
+        pBasePointer = static_cast< uint8_t* >( pBlock->m_pBuffer );
+        HELIUM_ASSERT( pBasePointer );
 
-#if HELIUM_ENABLE_MEMORY_TRACKING
-    m_allocationCount = 0;
-    m_bytesActual = 0;
-#endif
+        pStackPointerAligned = Align( pBasePointer, alignment );
 
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-    bool bLockedTracking = ConditionalVerboseTrackingLock();
-
-    bool bOldDisableBactraceTracking = sm_bDisableBacktraceTracking;
-    sm_bDisableBacktraceTracking = true;
-
-    size_t allocationSize = Align( sizeof( DynamicMemoryHeapVerboseTrackingData ), VirtualMemory::GetPageSize() );
-    DynamicMemoryHeapVerboseTrackingData* pVerboseTrackingData =
-        static_cast< DynamicMemoryHeapVerboseTrackingData* >( VirtualMemory::Allocate( allocationSize ) );
-    HELIUM_ASSERT( pVerboseTrackingData );
-    new( pVerboseTrackingData ) DynamicMemoryHeapVerboseTrackingData;
-
-    m_pVerboseTrackingData = pVerboseTrackingData;
-
-    sm_bDisableBacktraceTracking = bOldDisableBactraceTracking;
-
-    if( bLockedTracking )
-    {
-        VerboseTrackingUnlock();
-    }
-#endif
-}
-
-#if HELIUM_ENABLE_MEMORY_TRACKING
-/// Update memory usage stats for a new allocation.
-///
-/// @param[in] pMemory  Base address of the newly allocated memory.
-///
-/// @see RemoveAllocation()
-void Helium::MEMORY_HEAP_CLASS_NAME::AddAllocation( void* pMemory )
-{
-    if( pMemory )
-    {
-#if USE_NEDMALLOC
-        size_t byteCount = nedalloc::nedblksize( NULL, pMemory );
-#else
-        size_t byteCount = dlmalloc_usable_size( pMemory );
-#endif
-
-        size_t lastAllocationCount = m_allocationCount;
-        size_t currentAllocationCount;
-        do
+        size_t usedBlockSize = pStackPointerAligned - pBasePointer;
+        if( usedBlockSize > m_blockSize || size > m_blockSize - usedBlockSize )
         {
-            currentAllocationCount = lastAllocationCount;
-            lastAllocationCount = reinterpret_cast< size_t >( AtomicCompareExchangeUnsafe(
-                reinterpret_cast< void* volatile& >( m_allocationCount ),
-                reinterpret_cast< void* >( currentAllocationCount + 1 ),
-                reinterpret_cast< void* >( currentAllocationCount ) ) );
-        } while( currentAllocationCount != lastAllocationCount );
-
-        size_t lastBytesActual = m_bytesActual;
-        size_t currentBytesActual;
-        do
-        {
-            currentBytesActual = lastBytesActual;
-            lastAllocationCount = reinterpret_cast< size_t >( AtomicCompareExchangeUnsafe(
-                reinterpret_cast< void* volatile& >( m_bytesActual ),
-                reinterpret_cast< void* >( currentBytesActual + byteCount ),
-                reinterpret_cast< void* >( currentBytesActual ) ) );
-        } while( currentBytesActual != lastBytesActual );
-
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-        if( !sm_bDisableBacktraceTracking )
-        {
-            sm_bDisableBacktraceTracking = true;
-
-            AllocationBacktrace backtrace;
-            MemoryZero( backtrace.pAddresses, sizeof( backtrace.pAddresses ) );
-            Helium::GetStackTrace( backtrace.pAddresses, HELIUM_ARRAY_COUNT( backtrace.pAddresses ), 2 );
-            m_pVerboseTrackingData->allocationBacktraceMap[ pMemory ] = backtrace;
-
-            sm_bDisableBacktraceTracking = false;
+            // There is no hope for the requested allocation.
+            return NULL;
         }
-#endif
     }
+
+    // Allocation will fit, so update the stack data and return the properly aligned allocation base address.
+    m_pCurrentBlock = pBlock;
+    m_pStackPointer = pStackPointerAligned + size;
+
+    return pStackPointerAligned;
 }
 
-/// Update memory usage for an allocation about to be freed.
-///
-/// @param[in] pMemory  Base address of the allocation about to be freed.
-///
-/// @see AddAllocation()
-void Helium::MEMORY_HEAP_CLASS_NAME::RemoveAllocation( void* pMemory )
+// @copydoc Free()
+template< typename Allocator >
+void Helium::StackMemoryHeap< Allocator >::Free( void* pMemory )
 {
-    if( pMemory )
+    // Silently ignore null addresses.
+    if( !pMemory )
     {
-#if USE_NEDMALLOC
-        size_t byteCount = nedalloc::nedblksize( NULL, pMemory );
-#else
-        size_t byteCount = dlmalloc_usable_size( pMemory );
-#endif
+        return;
+    }
 
-        size_t lastAllocationCount = m_allocationCount;
-        size_t currentAllocationCount;
-        do
-        {
-            currentAllocationCount = lastAllocationCount;
-            lastAllocationCount = reinterpret_cast< size_t >( AtomicCompareExchangeUnsafe(
-                reinterpret_cast< void* volatile& >( m_allocationCount ),
-                reinterpret_cast< void* >( currentAllocationCount - 1 ),
-                reinterpret_cast< void* >( currentAllocationCount ) ) );
-        } while( currentAllocationCount != lastAllocationCount );
+    // Check if the allocation exists in the current block.
+    HELIUM_ASSERT( m_pCurrentBlock );
+    if( pMemory <= m_pStackPointer && pMemory >= m_pCurrentBlock->m_pBuffer )
+    {
+        // Allocation is in the current block, so we only need to adjust the stack pointer.
+        m_pStackPointer = pMemory;
 
-        size_t lastBytesActual = m_bytesActual;
-        size_t currentBytesActual;
-        do
-        {
-            currentBytesActual = lastBytesActual;
-            lastAllocationCount = reinterpret_cast< size_t >( AtomicCompareExchangeUnsafe(
-                reinterpret_cast< void* volatile& >( m_bytesActual ),
-                reinterpret_cast< void* >( currentBytesActual - byteCount ),
-                reinterpret_cast< void* >( currentBytesActual ) ) );
-        } while( currentBytesActual != lastBytesActual );
+        return;
+    }
 
-#if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE
-        if( !sm_bDisableBacktraceTracking )
+    // Pointer possibly belongs to another level in the stack, so search for the block in which it resides.
+    Block* pBlock = m_pCurrentBlock->m_pPreviousBlock;
+    while( pBlock )
+    {
+        uint8_t* pBaseAddress = static_cast< uint8_t* >( pBlock->m_pBuffer );
+        if( pMemory >= pBaseAddress && pMemory <= pBaseAddress + m_blockSize )
         {
-            sm_bDisableBacktraceTracking = true;
-            m_pVerboseTrackingData->allocationBacktraceMap.erase( pMemory );
-            sm_bDisableBacktraceTracking = false;
+            m_pCurrentBlock = pBlock;
+            m_pStackPointer = pMemory;
+
+            return;
         }
-#endif
+
+        pBlock = pBlock->m_pPreviousBlock;
+    }
+
+    HELIUM_ASSERT_MSG_FALSE(
+        TXT( "Allocation does not exist in the current stack (may have already been popped via another " )
+        TXT( "allocation)" ) );
+}
+
+// @copydoc GetMemorySize()
+template< typename Allocator >
+size_t Helium::StackMemoryHeap< Allocator >::GetMemorySize( void* /*pMemory*/ )
+{
+    HELIUM_ASSERT_MSG_FALSE( TXT( "GetMemorySize() is not supported by StackMemoryHeap" ) );
+
+    return static_cast< size_t >( -1 ); 
+}
+
+/// Allocate an uninitialized block of memory for this heap.
+///
+/// @return  Allocated block.
+template< typename Allocator >
+typename Helium::StackMemoryHeap< Allocator >::Block* Helium::StackMemoryHeap< Allocator >::AllocateBlock()
+{
+    HELIUM_ASSERT( m_remainingBlockCount != 0 );
+    if( IsValid( m_remainingBlockCount ) )
+    {
+        --m_remainingBlockCount;
+    }
+
+    size_t alignedBufferSize = Align( m_blockSize, std::alignment_of< Block >::value );
+
+    void* pBuffer = Allocator().AllocateAligned( HELIUM_SIMD_ALIGNMENT, alignedBufferSize + sizeof( Block ) );
+    HELIUM_ASSERT( pBuffer );
+
+    Block* pBlock = reinterpret_cast< Block* >( static_cast< uint8_t* >( pBuffer ) + alignedBufferSize );
+    pBlock->m_pBuffer = pBuffer;
+
+    return pBlock;
+}
+
+/// Constructor.
+template< typename Allocator >
+Helium::StackMemoryHeap< Allocator >::Marker::Marker()
+    : m_pHeap( NULL )
+    , m_pStackPointer( NULL )
+{
+}
+
+/// Constructor.
+///
+/// @param[in] rHeap  Heap from which to initialize this marker.
+template< typename Allocator >
+Helium::StackMemoryHeap< Allocator >::Marker::Marker( StackMemoryHeap& rHeap )
+    : m_pHeap( &rHeap )
+    , m_pStackPointer( rHeap.m_pStackPointer )
+{
+    HELIUM_ASSERT( m_pStackPointer );
+}
+
+/// Destructor.
+///
+/// This will automatically pop any currently set heap marker.
+template< typename Allocator >
+Helium::StackMemoryHeap< Allocator >::Marker::~Marker()
+{
+    Pop();
+}
+
+/// Set the current heap marker.
+///
+/// If this marker is already set to an existing heap location, that location will automatically be popped.
+///
+/// @param[in] rHeap  Heap from which to set this marker.
+template< typename Allocator >
+void Helium::StackMemoryHeap< Allocator >::Marker::Set( StackMemoryHeap& rHeap )
+{
+    Pop();
+
+    m_pHeap = &rHeap;
+    m_pStackPointer = rHeap.m_pStackPointer;
+}
+
+/// Pop the current heap marker.
+///
+/// This will pop any currently marked heap location, freeing all allocations made after the marker was set.  If the
+/// marker is not currently set, this will have no effect.
+template< typename Allocator >
+void Helium::StackMemoryHeap< Allocator >::Marker::Pop()
+{
+    if( m_pHeap )
+    {
+        HELIUM_ASSERT( m_pStackPointer );
+        m_pHeap->Free( m_pStackPointer );
+
+        m_pHeap = NULL;
+        m_pStackPointer = NULL;
     }
 }
-#endif  // HELIUM_ENABLE_MEMORY_TRACKING
 
-#if HELIUM_ENABLE_MEMORY_TRACKING
-/// Search for the heap to which the given allocation belongs.
+/// Delete an object created from a specific allocator or heap.
 ///
-/// @param[in] pMemory  Allocation address.
-///
-/// @return  Pointer to the heap to which the allocation belongs.
-Helium::MEMORY_HEAP_CLASS_NAME* Helium::MEMORY_HEAP_CLASS_NAME::GetAllocationHeap( void* pMemory )
+/// @param[in] rAllocator  Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] pObject     Object to delete.
+template< typename T, typename Allocator >
+void Helium::DeleteHelper( Allocator& rAllocator, T* pObject )
 {
+    if( pObject )
+    {
+        pObject->~T();
+        rAllocator.Free( pObject );
+    }
+}
+
+/// Construct a new array.
+///
+/// @param[in] rAllocator  Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] count       Number of elements in the array to create.
+///
+/// @return  Pointer to the first element in the newly constructed array.
+template< typename T, typename Allocator >
+T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count )
+{
+    return NewArrayHelper< T >( rAllocator, count, std::has_trivial_destructor< T >() );
+}
+
+/// Construct a new array of a type with a trivial destructor.
+///
+/// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] count                  Number of elements in the array to create.
+/// @param[in] rHasTrivialDestructor  std::true_type.
+///
+/// @return  Pointer to the first element in the newly constructed array.
+template< typename T, typename Allocator >
+T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const std::true_type& /*rHasTrivialDestructor*/ )
+{
+    size_t size = count * sizeof( T );
+
+    // For allocations that may need to be SIMD-aligned, allocate aligned memory.
+    void* pMemory;
+    if( sizeof( T ) >= HELIUM_SIMD_SIZE )
+    {
+        pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
+    }
+    else
+    {
+        pMemory = rAllocator.Allocate( size );
+    }
+
     HELIUM_ASSERT( pMemory );
 
-#if USE_NEDMALLOC
-    // Not yet implemented.
-    return NULL;
-#elif FOOTERS
-    mchunkptr pChunk = mem2chunk( pMemory );
-    HELIUM_ASSERT( pChunk );
+    return ArrayInPlaceConstruct< T >( pMemory, count );
+}
 
-    mstate pMstate = get_mstate_for( pChunk );
-    HELIUM_ASSERT( pMstate );
+/// Construct a new array of a type with a non-trivial destructor.
+///
+/// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] count                  Number of elements in the array to create.
+/// @param[in] rHasTrivialDestructor  std::false_type.
+///
+/// @return  Pointer to the first element in the newly constructed array.
+template< typename T, typename Allocator >
+T* Helium::NewArrayHelper( Allocator& rAllocator, size_t count, const std::false_type& /*rHasTrivialDestructor*/ )
+{
+    size_t size = count * sizeof( T );
+    size_t allocationOffset = sizeof( size_t );
 
-    MEMORY_HEAP_CLASS_NAME* pHeap = static_cast< MEMORY_HEAP_CLASS_NAME* >( pMstate->extp );
-    HELIUM_ASSERT( pHeap );
-
-    return pHeap;
-#else
-    ScopeReadLock readLock( GetGlobalHeapListLock() );
-
-    for( MEMORY_HEAP_CLASS_NAME* pHeap = sm_pGlobalHeapListHead; pHeap != NULL; pHeap = pHeap->m_pNextHeap )
+    // Since we need to worry about destruction of the array elements, we want to allocate some extra space to store
+    // the number of elements that need to be deleted.  The array count will be stored in a size_t value stored
+    // immediately before the allocation pointer we return to the application.  Note that for possible SIMD-aligned
+    // types, we need to allocate an extra HELIUM_SIMD_ALIGNMENT bytes instead of just sizeof( size_t ) to keep the
+    // address returned to the application properly aligned.
+    void* pMemory;
+    if( sizeof( T ) >= HELIUM_SIMD_SIZE )
     {
-        mstate* pMspace = pHeap->m_pMspace;
-        HELIUM_ASSERT( pMspace );
-
-        for( msegmentptr pSegment = &pMspace->seg; pSegment != NULL; pSegment = pSegment->next )
-        {
-            const char* pBase = pSegment->base;
-            if( static_cast< const char* >( pMemory ) >= pBase &&
-                static_cast< const char* >( pMemory ) < pBase + pSegment->size )
-            {
-                return pHeap;
-            }
-        }
+        allocationOffset = HELIUM_SIMD_ALIGNMENT;
+        HELIUM_ASSERT( allocationOffset >= sizeof( size_t ) );
+        pMemory = rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size + HELIUM_SIMD_ALIGNMENT );
+    }
+    else
+    {
+        pMemory = rAllocator.Allocate( size + sizeof( size_t ) );
     }
 
-    return NULL;
-#endif
+    HELIUM_ASSERT( pMemory );
+
+    // Offset the allocation and store the array element count.
+    if( pMemory )
+    {
+        pMemory = static_cast< uint8_t* >( pMemory ) + allocationOffset;
+        *( static_cast< size_t* >( pMemory ) - 1 ) = count;
+    }
+
+    return ArrayInPlaceConstruct< T >( pMemory, count );
 }
-#endif  // HELIUM_ENABLE_MEMORY_TRACKING
+
+/// Delete an allocated array.
+///
+/// @param[in] rAllocator  Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] pArray      Array to delete.
+template< typename T, typename Allocator >
+void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray )
+{
+    DeleteArrayHelper< T >( rAllocator, pArray, std::has_trivial_destructor< T >() );
+}
+
+/// Delete an allocated array of a type with a trivial destructor.
+///
+/// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] pArray                 Array to delete.
+/// @param[in] rHasTrivialDestructor  std::true_type.
+template< typename T, typename Allocator >
+void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const std::true_type& /*rHasTrivialDestructor*/ )
+{
+    rAllocator.Free( pArray );
+}
+
+/// Delete an allocated array of a type with a non-trivial destructor.
+///
+/// @param[in] rAllocator             Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] pArray                 Array to delete.
+/// @param[in] rHasTrivialDestructor  std::false_type.
+template< typename T, typename Allocator >
+void Helium::DeleteArrayHelper( Allocator& rAllocator, T* pArray, const std::false_type& /*rHasTrivialDestructor*/ )
+{
+    if( pArray )
+    {
+        // Get the array element count stored immediately prior to the given memory allocation.
+        size_t count = *( reinterpret_cast< size_t* >( pArray ) - 1 );
+
+        // Destroy the array elements.
+        for( size_t index = 0; index < count; ++index )
+        {
+            pArray[ index ].~T();
+        }
+
+        // Free the actual allocation, taking into account the offset applied by NewArrayHelper().
+        size_t allocationOffset = sizeof( size_t );
+        if( sizeof( T ) >= HELIUM_SIMD_SIZE )
+        {
+            allocationOffset = HELIUM_SIMD_ALIGNMENT;
+        }
+
+        void* pMemory = reinterpret_cast< uint8_t* >( pArray ) - allocationOffset;
+        rAllocator.Free( pMemory );
+    }
+}
+
+/// Allocate memory for a "new" operator override, aligning the allocation if it is potentially necessary.
+///
+/// Since global "new" overrides don't provide type information, this provides proper alignment in case the memory
+/// being allocated contains any data types that need to be aligned for SIMD operation usage.  If an allocation is
+/// larger than the size of SIMD vector types, the allocation will be aligned to the platform's SIMD alignment in
+/// case the allocation contains any elements that need to be SIMD aligned.
+///
+/// @param[in] rAllocator  Reference to an allocator or Helium::MemoryHeap to use for allocations.
+/// @param[in] size        Number of bytes to allocate.
+///
+/// @return  Pointer to the requested memory if allocation was successful, null pointer if allocation failed.
+template< typename Allocator > void* Helium::AllocateAlignmentHelper( Allocator& rAllocator, size_t size )
+{
+    HELIUM_ASSERT( size != 0 );
+
+    if ( size >= HELIUM_SIMD_SIZE )
+    {
+        return rAllocator.AllocateAligned( HELIUM_SIMD_ALIGNMENT, size );
+    }
+
+    return rAllocator.Allocate( size );
+}
+
+#if !HELIUM_DEBUG
+#define HELIUM_NEW_DELETE_SPEC HELIUM_FORCEINLINE
+#include "Platform/NewDelete.h"
+#undef HELIUM_NEW_DELETE_SPEC
+#endif
+
+/// Create a new object using a Helium::MemoryHeap instance.
+///
+/// @param[in] size   Allocation size.
+/// @param[in] rHeap  Reference to the MemoryHeap from which to allocate memory.
+///
+/// @return  Base address of the requested allocation if successful.
+void* operator new( size_t size, Helium::MemoryHeap& rHeap )
+{
+    void* pMemory = Helium::AllocateAlignmentHelper( rHeap, size );
+    HELIUM_ASSERT( pMemory );
+
+    return pMemory;
+}

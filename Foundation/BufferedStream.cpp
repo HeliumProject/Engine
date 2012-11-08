@@ -1,7 +1,7 @@
 #include "FoundationPch.h"
 #include "Foundation/BufferedStream.h"
 
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Foundation/Math.h"
 
 using namespace Helium;

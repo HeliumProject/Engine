@@ -4,7 +4,7 @@
 #include "Log.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Platform/Profile.h"
 #include "Platform/ProfileMemory.h"
 #include "Platform/Thread.h"

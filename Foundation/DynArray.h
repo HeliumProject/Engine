@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Utility.h"
-#include "Platform/Memory.h"
+#include "Platform/MemoryHeap.h"
 #include "Platform/Assert.h"
 
 #include "Foundation/API.h"

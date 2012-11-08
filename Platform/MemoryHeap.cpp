@@ -142,7 +142,7 @@ static void VerboseTrackingUnlock()
 #define ACQUIRE_MALLOC_GLOBAL_LOCK() GetMallocGlobalMutex().Lock();
 #define RELEASE_MALLOC_GLOBAL_LOCK() GetMallocGlobalMutex().Unlock();
 
-#include "MemoryHeap.impl"
+#include "MemoryHeapImpl.inl"
 
 DynamicMemoryHeap* volatile DynamicMemoryHeap::sm_pGlobalHeapListHead = NULL;
 #if HELIUM_ENABLE_MEMORY_TRACKING_VERBOSE

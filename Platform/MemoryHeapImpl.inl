@@ -27,7 +27,7 @@
 /// @param[in] size  Allocation size, in bytes.
 ///
 /// @return  Address of the allocation if successfully allocated, (void*)~0 if not.
-static void* PhysicalMemoryAllocate( size_t size )
+static void* VirtualMemoryAllocate( size_t size )
 {
     void* pMemory = Helium::VirtualMemory::Allocate( size );
     return( pMemory ? pMemory : reinterpret_cast< void* >( ~static_cast< uintptr_t >( 0 ) ) );
@@ -39,7 +39,7 @@ static void* PhysicalMemoryAllocate( size_t size )
 /// @param[in] size     Size of the region of memory to free.
 ///
 /// @return  Zero if successful, non-zero if an error occurred.
-static int PhysicalMemoryFree( void* pMemory, size_t size )
+static int VirtualMemoryFree( void* pMemory, size_t size )
 {
     return( Helium::VirtualMemory::Free( pMemory, size ) ? 0 : -1 );
 }
@@ -93,9 +93,9 @@ static void PrintfWrapper( const char* pFormat, ... )
 #define MSPACES 1
 #define ONLY_MSPACES 1
 #define USE_DL_PREFIX 1
-#define MMAP( s ) PhysicalMemoryAllocate( s )
-#define MUNMAP( a, s ) PhysicalMemoryFree( a, s )
-#define DIRECT_MMAP( s ) PhysicalMemoryAllocate( s )
+#define MMAP( s ) VirtualMemoryAllocate( s )
+#define MUNMAP( a, s ) VirtualMemoryFree( a, s )
+#define DIRECT_MMAP( s ) VirtualMemoryAllocate( s )
 #define HAVE_MREMAP 0
 #define REALLOC_ZERO_BYTES_FREES 1
 #define FOOTERS 1

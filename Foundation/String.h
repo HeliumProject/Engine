@@ -15,9 +15,6 @@
 namespace Helium
 {
 	template< class T >
-	inline size_t StringLength( const T* data );
-
-	template< class T >
 	inline const T* FindCharacter( const T* data, const T value, size_t count = 0 );
 
 	template< class T >

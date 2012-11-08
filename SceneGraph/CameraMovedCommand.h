@@ -12,7 +12,7 @@ namespace Helium
         class Viewport;
 
         /// @class CameraMovedCommand
-        /// @breif Used to implement a Undo/Redo queue for camera movement in the scene editor
+        /// @brief Used to implement a Undo/Redo queue for camera movement in the scene editor
         class CameraMovedCommand : public UndoCommand
         {
         private:

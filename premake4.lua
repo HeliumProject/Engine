@@ -142,24 +142,11 @@ if _ACTION then
 	dofile "Dependencies.lua"
 
 	solution "Runtime"
-	print( "Temporarily defining HELIUM_TOOLS in Runtime" )
-	defines
-	{
-		"HELIUM_TOOLS=1",
-	}
-
     Helium.DoBasicSolutionSettings()
-	prefix = "Runtime."
 	dofile "Runtime.lua"
 
 	solution "Tools"
-	defines
-	{
-		"HELIUM_TOOLS=1",
-	}
-
 	Helium.DoBasicSolutionSettings()
-	prefix = "Tools."
 	dofile "Tools.lua"
-	
+
 end

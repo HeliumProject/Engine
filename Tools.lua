@@ -1,5 +1,12 @@
 require "Helium"
 
+defines
+{
+    "HELIUM_TOOLS=1",
+}
+
+prefix = "Tools."
+
 dofile "Shared.lua"
 
 project( prefix .. "Application" )

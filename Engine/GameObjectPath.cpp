@@ -84,7 +84,7 @@ bool GameObjectPath::Set( const String& rString )
 ///
 /// @param[in] name           GameObject name.
 /// @param[in] bPackage       True if the object is a package, false if not.
-/// @param[in] parentPath     Path to the parent object.
+/// @param[in] parentPath     FilePath to the parent object.
 /// @param[in] instanceIndex  GameObject instance index.  Invalid index values are excluded from the path name string.
 ///
 /// @return  True if the parameters can represent a valid path and the path was set, false if not.
@@ -638,7 +638,7 @@ bool GameObjectPath::Parse(
     {
         HELIUM_TRACE(
             TraceLevels::Warning,
-            TXT( "GameObjectPath: Path string \"%s\" does not contain a leading path separator.\n" ),
+            TXT( "GameObjectPath: FilePath string \"%s\" does not contain a leading path separator.\n" ),
             pString );
 
         return false;
@@ -898,8 +898,8 @@ GameObjectPath::Entry* GameObjectPath::Add( const Entry& rEntry )
 
 /// Recursive function for building the string representation of an object path entry.
 ///
-/// @param[in]  rEntry   Path entry.
-/// @param[out] rString  Path string.
+/// @param[in]  rEntry   FilePath entry.
+/// @param[out] rString  FilePath string.
 void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
 {
     Entry* pParent = rEntry.pParent;
@@ -926,7 +926,7 @@ void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
 
 /// Recursive function for building the file path string representation of an object path entry.
 ///
-/// @param[in]  rEntry   Path entry.
+/// @param[in]  rEntry   FilePath entry.
 /// @param[out] rString  File path string.
 void GameObjectPath::EntryToFilePathString( const Entry& rEntry, String& rString )
 {

@@ -17,7 +17,7 @@ using namespace Helium;
 CacheManager* CacheManager::sm_pInstance = NULL;
 
 /// Constructor.
-CacheManager::CacheManager( const Path& rBaseDirectory )
+CacheManager::CacheManager( const FilePath& rBaseDirectory )
 : m_cachePool( CACHE_POOL_BLOCK_SIZE )
 {
     m_platformDataDirectories[ Cache::PLATFORM_PC ] = rBaseDirectory.c_str();
@@ -66,7 +66,7 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
 
 #if HELIUM_TOOLS
     // If the cache directory doesn't exist, attempt to create it.
-    Path platformDataPath( rPlatformDataDirectory.GetData() );
+    FilePath platformDataPath( rPlatformDataDirectory.GetData() );
     platformDataPath.MakePath();
 #endif
 
@@ -125,7 +125,7 @@ const String& CacheManager::GetPlatformDataDirectory( Cache::EPlatform platform 
 /// @return  Reference to the CacheManager instance.
 ///
 /// @see DestroyStaticInstance()
-bool CacheManager::InitializeStaticInstance( const Path& rBaseDirectory )
+bool CacheManager::InitializeStaticInstance( const FilePath& rBaseDirectory )
 {
     HELIUM_ASSERT( sm_pInstance == NULL );
     sm_pInstance = new CacheManager( rBaseDirectory );

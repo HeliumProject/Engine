@@ -82,7 +82,7 @@ bool Texture2dResourceHandler::CacheResource(
         BufferedStream sourceStream( pSourceFileStream );
 
         // Determine the proper image loader to used based on the image extension.
-        Path sourceFilePath = *rSourceFilePath;
+        FilePath sourceFilePath = *rSourceFilePath;
         String extension( sourceFilePath.Extension().c_str() );
         if( extension == TXT( "png" ) )
         {

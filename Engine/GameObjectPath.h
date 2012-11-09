@@ -8,7 +8,7 @@
 
 #include "Engine/Engine.h"
 
-/// @defgroup objectpathdelims GameObject Path Delimiter Characters
+/// @defgroup objectpathdelims GameObject FilePath Delimiter Characters
 //@{
 
 /// Package delimiter character.
@@ -48,7 +48,7 @@ namespace Helium
         inline GameObjectPath( ENullName );
         //@}
 
-        /// @name Path Access
+        /// @name FilePath Access
         //@{
         bool Set( const tchar_t* pString );
         bool Set( const String& rString );

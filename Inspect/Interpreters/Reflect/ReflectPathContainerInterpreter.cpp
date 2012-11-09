@@ -261,18 +261,18 @@ void PathContainerInterpreter::OnFindFile( const ButtonClickedArgs& args )
 
 void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
 {
-    FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Edit File Path" ), TXT( "*.*" ) );
+    FileDialogArgs fileDialogArgs ( Helium::FileDialogTypes::OpenFile, TXT( "Edit File FilePath" ), TXT( "*.*" ) );
     d_OpenFileDialog.Invoke( fileDialogArgs );
     if ( !fileDialogArgs.m_Result.empty() )
     {
         Reflect::PathData pathData;
         pathData.m_Data->Set( fileDialogArgs.m_Result.Get() );
 
-        std::vector< Path > paths;
+        std::vector< FilePath > paths;
 
         if ( m_PathSet )
         {
-            for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
+            for ( std::set< FilePath >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
             {
                 paths.push_back( *itr );
             }
@@ -305,7 +305,7 @@ void PathContainerInterpreter::OnEdit( const ButtonClickedArgs& args )
 
 void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
 {
-    std::vector< Path > paths;
+    std::vector< FilePath > paths;
 
     if ( m_PathVector )
     {
@@ -313,7 +313,7 @@ void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
     }
     else if ( m_PathSet )
     {
-        for ( std::set< Path >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
+        for ( std::set< FilePath >::const_iterator itr = m_PathSet->m_Data->begin(), end = m_PathSet->m_Data->end(); itr != end; ++itr )
         {
             paths.push_back( *itr );
         }
@@ -331,10 +331,10 @@ void PathContainerInterpreter::OnRemove( const ButtonClickedArgs& args )
     }
     else if ( m_PathSet )
     {
-        std::set< Path > pathSet;
-        for ( std::vector< Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
+        std::set< FilePath > pathSet;
+        for ( std::vector< FilePath >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
         {
-            pathSet.insert( std::set< Path >::value_type( *itr ) );
+            pathSet.insert( std::set< FilePath >::value_type( *itr ) );
         }
 
         (*m_PathSet->m_Data) = pathSet;

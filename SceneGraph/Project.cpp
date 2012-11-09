@@ -7,11 +7,11 @@ REFLECT_DEFINE_OBJECT( Helium::Project );
 
 void Project::PopulateComposite( Reflect::Composite& comp )
 {
-    comp.AddField( &This::a_Path, TXT( "Path" ), Reflect::FieldFlags::Discard );
+    comp.AddField( &This::a_Path, TXT( "FilePath" ), Reflect::FieldFlags::Discard );
     comp.AddField( &This::m_Paths, TXT( "m_Paths" ) );
 }
 
-Project::Project( const Path& path )
+Project::Project( const FilePath& path )
 {
     a_Path.Set( path );
 }
@@ -20,16 +20,16 @@ Project::~Project()
 {
 }
 
-Path Project::GetTrackerDB() const
+FilePath Project::GetTrackerDB() const
 {
-    return Path( a_Path.Get().Directory() + TXT( ".Helium/" ) + a_Path.Get().Basename() + TXT( ".trackerdb" ) );
+    return FilePath( a_Path.Get().Directory() + TXT( ".Helium/" ) + a_Path.Get().Basename() + TXT( ".trackerdb" ) );
 }
 
-void Project::AddPath( const Path& path )
+void Project::AddPath( const FilePath& path )
 {
-    Path relativePath = path.GetRelativePath( a_Path.Get() );
+    FilePath relativePath = path.GetRelativePath( a_Path.Get() );
     HELIUM_ASSERT( !relativePath.IsAbsolute() );
-    std::pair< std::set< Path >::iterator, bool > result = m_Paths.insert( relativePath );
+    std::pair< std::set< FilePath >::iterator, bool > result = m_Paths.insert( relativePath );
     if ( result.second )
     {
         e_PathAdded.Raise( relativePath );
@@ -37,10 +37,10 @@ void Project::AddPath( const Path& path )
     }
 }
 
-void Project::RemovePath( const Path& path )
+void Project::RemovePath( const FilePath& path )
 {
-    Path relativePath = path.GetRelativePath( a_Path.Get() );
-    std::set< Path >::iterator itr = m_Paths.find( relativePath );
+    FilePath relativePath = path.GetRelativePath( a_Path.Get() );
+    std::set< FilePath >::iterator itr = m_Paths.find( relativePath );
     if ( itr != m_Paths.end() )
     {
         m_Paths.erase( itr );
@@ -70,7 +70,7 @@ void Project::OnDocumentOpened( const DocumentEventArgs& args )
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-    std::set< Path >::iterator findPath = m_Paths.find( document->GetPath() );
+    std::set< FilePath >::iterator findPath = m_Paths.find( document->GetPath() );
     if ( findPath != m_Paths.end() )
     {
         document->e_PathChanged.AddMethod( this, &Project::OnChildDocumentPathChanged );
@@ -82,7 +82,7 @@ void Project::OnDocumenClosed( const DocumentEventArgs& args )
     const Document* document = static_cast< const Document* >( args.m_Document );
     HELIUM_ASSERT( document );
 
-    std::set< Path >::iterator findPath = m_Paths.find( document->GetPath() );
+    std::set< FilePath >::iterator findPath = m_Paths.find( document->GetPath() );
     if ( findPath != m_Paths.end() )
     {
         document->e_PathChanged.RemoveMethod( this, &Project::OnChildDocumentPathChanged );
@@ -95,7 +95,7 @@ void Project::OnDocumentSave( const DocumentEventArgs& args )
     HELIUM_ASSERT( document );
     HELIUM_ASSERT( !a_Path.Get().empty() && document->GetPath() == a_Path.Get() );
 
-    //for ( std::set< Path >::iterator itr = m_Paths.begin(), end = m_Paths.end(); itr != end; ++itr )
+    //for ( std::set< FilePath >::iterator itr = m_Paths.begin(), end = m_Paths.end(); itr != end; ++itr )
     //{
 
     //}

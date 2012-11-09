@@ -12,9 +12,9 @@ using namespace Helium;
 /// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
 ///
 /// @return  Application base directory path, with a trailing path separator character.
-static Path& GetMutableBaseDirectory( bool& rbSuccess )
+static FilePath& GetMutableBaseDirectory( bool& rbSuccess )
 {
-    static Path baseDirectory;
+    static FilePath baseDirectory;
     static bool bLocateRequested = false;
     static bool bLocateSuccess = false;
 
@@ -52,9 +52,9 @@ static Path& GetMutableBaseDirectory( bool& rbSuccess )
 /// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
 ///
 /// @return  Data directory path, with a trailing path separator character.
-static Path& GetMutableDataDirectory( bool& rbSuccess )
+static FilePath& GetMutableDataDirectory( bool& rbSuccess )
 {
-    static Path dataDirectory;
+    static FilePath dataDirectory;
     static bool bLocateRequested = false;
     static bool bLocateSuccess = false;
 
@@ -95,9 +95,9 @@ static Path& GetMutableDataDirectory( bool& rbSuccess )
 /// @param[out] rbSuccess  True if the path was retrieved successfully, false if not.
 ///
 /// @return  User data directory path, with a trailing path separator character.
-static Path& GetMutableUserDataDirectory( bool& rbSuccess )
+static FilePath& GetMutableUserDataDirectory( bool& rbSuccess )
 {
-    static Path userDataDirectory;
+    static FilePath userDataDirectory;
     static bool bLocateRequested = false;
     static bool bLocateSuccess = false;
 
@@ -142,7 +142,7 @@ void FileLocations::Shutdown()
 /// @return  Base application directory path, with a trailing path separator character.
 ///
 /// @see GetDataDirectory(), GetUserDataDirectory()
-const bool FileLocations::GetBaseDirectory( Path& path )
+const bool FileLocations::GetBaseDirectory( FilePath& path )
 {
     bool bSuccess;
     path = GetMutableBaseDirectory( bSuccess );
@@ -155,7 +155,7 @@ const bool FileLocations::GetBaseDirectory( Path& path )
 /// @return  Data directory path, with a trailing path separator character.
 ///
 /// @see GetBaseDirectory(), GetUserDataDirectory()
-const bool FileLocations::GetDataDirectory( Path& path )
+const bool FileLocations::GetDataDirectory( FilePath& path )
 {
     bool bSuccess;
     path = GetMutableDataDirectory( bSuccess );
@@ -168,7 +168,7 @@ const bool FileLocations::GetDataDirectory( Path& path )
 /// @return  User data directory path, with a trailing path separator character.
 ///
 /// @see GetBaseDirectory(), GetDataDirectory()
-const bool FileLocations::GetUserDataDirectory( Path& path )
+const bool FileLocations::GetUserDataDirectory( FilePath& path )
 {
     bool bSuccess;
     path = GetMutableUserDataDirectory( bSuccess );

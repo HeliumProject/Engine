@@ -41,7 +41,7 @@ namespace Helium
 	{
 		void*                       m_ChangeHandle;
 		FileChangedSignature::Event m_Event;
-		Path                        m_Path;
+		FilePath                        m_Path;
 		bool                        m_WatchSubtree;
 
 		FileWatch()

@@ -293,7 +293,7 @@ void FbxSupport::Release()
 
 /// Load mesh data from a supported source file type (i.e. FBX, OBJ).
 ///
-/// @param[in]  rSourceFilePath         Path name of the source file from which to load the mesh.
+/// @param[in]  rSourceFilePath         FilePath name of the source file from which to load the mesh.
 /// @param[out] rVertices               Mesh vertices.
 /// @param[out] rIndices                Triangle vertex indices.
 /// @param[in]  rSectionVertexCounts    Number of vertices addressed by each mesh section.
@@ -398,7 +398,7 @@ bool FbxSupport::LoadMesh(
 
 /// Load animation data from a supported source file type.
 ///
-/// @param[in]  rSourceFilePath    Path name of the source file from which to load the animation data.
+/// @param[in]  rSourceFilePath    FilePath name of the source file from which to load the animation data.
 /// @param[in]  oversampling       Amount of oversampling to perform when parsing the animation data.
 /// @param[out] rTracks            Information about each track loaded from the animation, including transform
 ///                                keyframe data.

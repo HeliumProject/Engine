@@ -26,15 +26,15 @@ namespace Helium
             const V_ThumbnailPtr& GetThumbnails() const;
             void SetThumbnails( const V_ThumbnailPtr& thumbnails );
 
-            const Helium::Path& GetPath() const;
-            void SetPath( const Helium::Path& path );
+            const Helium::FilePath& GetPath() const;
+            void SetPath( const Helium::FilePath& path );
 
             bool Cancelled() const;
             void SetCancelled( bool cancelled );
 
         private:
             V_ThumbnailPtr m_Thumbnails;
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
             bool m_Cancelled;
         };
 

@@ -247,7 +247,7 @@ void Object::ToBinary(std::iostream& stream)
     ArchiveBinary::ToStream( this, stream );
 }
 
-void Object::ToFile( const Path& path )
+void Object::ToFile( const FilePath& path )
 {
     ArchivePtr archive = GetArchive( path );
     archive->Put( this );

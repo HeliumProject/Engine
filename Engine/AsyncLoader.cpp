@@ -67,7 +67,7 @@ void AsyncLoader::Shutdown()
 /// Queue an async load request.
 ///
 /// @param[in] pBuffer    Buffer in which to load data.
-/// @param[in] rFileName  Path name of the file from which to load.
+/// @param[in] rFileName  FilePath name of the file from which to load.
 /// @param[in] offset     Byte offset within the file from which to load.
 /// @param[in] size       Number of bytes to read.
 /// @param[in] priority   Load priority.

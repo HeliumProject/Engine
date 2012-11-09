@@ -17,14 +17,14 @@ using namespace Helium::Editor;
 const tchar_t* ProjectMenuID::s_Labels[COUNT] =
 {
     TXT( "Filename" ),
-    TXT( "Full Path" ),
-    TXT( "Relative Path" ),
+    TXT( "Full FilePath" ),
+    TXT( "Relative FilePath" ),
 };
 
 const wxArtID ProjectViewModel::DefaultFileIcon = ArtIDs::FileSystem::File;
 
 ///////////////////////////////////////////////////////////////////////////////
-ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::Path& path, const Document* document, const bool isContainer, const bool isActive )
+ProjectViewModelNode::ProjectViewModelNode( ProjectViewModel* model, ProjectViewModelNode* parent, const Helium::FilePath& path, const Document* document, const bool isContainer, const bool isActive )
 : m_Model( model )
 , m_ParentNode( parent )
 , m_Path( path )
@@ -66,7 +66,7 @@ bool ProjectViewModelNode::IsContainer() const
     return ( m_IsContainer || m_ChildNodes.size() > 0 || m_Path.IsDirectory() ) ? true : false;
 }
 
-void ProjectViewModelNode::SetPath( const Helium::Path& path )
+void ProjectViewModelNode::SetPath( const Helium::FilePath& path )
 {
     if ( CaseInsensitiveCompareString( m_Path.c_str(), path.c_str() ) != 0 )
     {
@@ -74,7 +74,7 @@ void ProjectViewModelNode::SetPath( const Helium::Path& path )
     }
 }
 
-const Helium::Path& ProjectViewModelNode::GetPath()
+const Helium::FilePath& ProjectViewModelNode::GetPath()
 {
     return m_Path;
 }
@@ -335,7 +335,7 @@ ProjectViewModelNode* ProjectViewModel::OpenProject( Project* project, const Doc
         m_MM_ProjectViewModelNodesByPath.insert( MM_ProjectViewModelNodesByPath::value_type( m_Project->a_Path.Get(), m_RootNode.Ptr() ));
                 
         // Add the Project's Children
-        for ( std::set< Path >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
+        for ( std::set< FilePath >::const_iterator itr = m_Project->Paths().begin(), end = m_Project->Paths().end();
             itr != end; ++itr )
         {
             AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), *itr );
@@ -374,7 +374,7 @@ void ProjectViewModel::CloseProject()
     }
 }
 
-bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path )
+bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path )
 {
     // Get the parent node
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
@@ -415,7 +415,7 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
     return false;
 }
 
-bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path )
+bool ProjectViewModel::RemoveChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path )
 {
     ProjectViewModelNode *parentNode = static_cast< ProjectViewModelNode* >( parenItem.GetID() );
     if ( !parentNode )
@@ -504,9 +504,9 @@ bool ProjectViewModel::IsDropPossible( const wxDataViewItem& item )
     return false;
 }
 
-void ProjectViewModel::SetActive( const Path& path, bool active )
+void ProjectViewModel::SetActive( const FilePath& path, bool active )
 {
-    Path relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
+    FilePath relativePath = path.GetRelativePath( m_Project->a_Path.Get() );
     for ( MM_ProjectViewModelNodesByPath::iterator lower = m_MM_ProjectViewModelNodesByPath.lower_bound( relativePath ),
         upper = m_MM_ProjectViewModelNodesByPath.upper_bound( relativePath );
         lower != upper && lower != m_MM_ProjectViewModelNodesByPath.end();
@@ -518,12 +518,12 @@ void ProjectViewModel::SetActive( const Path& path, bool active )
 }
 
 
-void ProjectViewModel::OnPathAdded( const Helium::Path& path )
+void ProjectViewModel::OnPathAdded( const Helium::FilePath& path )
 {
     AddChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
 
-void ProjectViewModel::OnPathRemoved( const Helium::Path& path )
+void ProjectViewModel::OnPathRemoved( const Helium::FilePath& path )
 {
     RemoveChildItem( wxDataViewItem( (void*) m_RootNode.Ptr() ), path );   
 }
@@ -749,7 +749,7 @@ bool ProjectViewModel::GetAttr( const wxDataViewItem& item, unsigned int column,
     // italicize the entry if it is modified
     attr.SetItalic( ( node->GetDocument() && node->GetDocument()->HasChanged() ) );
 
-    Path nodePath = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
+    FilePath nodePath = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
     if ( !nodePath.Exists() )
     {
         attr.SetColour( *wxRED );
@@ -816,7 +816,7 @@ bool ProjectViewModel::IsContainer( const wxDataViewItem& item ) const
     return node ? node->IsContainer() : false;
 }
 
-const wxArtID& ProjectViewModel::GetArtIDFromPath( const Path& path ) const
+const wxArtID& ProjectViewModel::GetArtIDFromPath( const FilePath& path ) const
 {
     tstring extension = path.FullExtension();
     if ( extension.empty() )

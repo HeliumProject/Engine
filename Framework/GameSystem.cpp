@@ -109,7 +109,7 @@ bool GameSystem::Initialize(
     }
 
     //pmd - Initialize the cache manager
-    Path baseDirectory;
+    FilePath baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
       HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );

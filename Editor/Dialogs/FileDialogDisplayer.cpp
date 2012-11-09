@@ -29,7 +29,7 @@ void FileDialogDisplayer::DisplayFileDialog( const Helium::FileDialogArgs& args 
 
     saveDlg.AddFilter( args.m_Filters );
 
-    Helium::Path path;
+    Helium::FilePath path;
 
     if ( saveDlg.ShowModal() == wxID_OK )
     {

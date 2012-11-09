@@ -6,7 +6,7 @@ using namespace Helium;
 
 /// Attempt to open a file with a new file stream object.
 ///
-/// @param[in] pPath      Path name of the file to open.
+/// @param[in] pPath      FilePath name of the file to open.
 /// @param[in] modeFlags  Combination of FileStream::EMode flags specifying the mode in which to open the file.
 /// @param[in] bTruncate  If the FileStream::MODE_WRITE flag is set, true to truncate any existing file, false to
 ///                       append to any existing file.  This is ignored if FileStream::MODE_WRITE is not set.
@@ -29,7 +29,7 @@ FileStream* FileStream::OpenFileStream( const tchar_t* pPath, uint32_t modeFlags
 
 /// Attempt to open a file with a new file stream object.
 ///
-/// @param[in] rPath      Path name of the file to open.
+/// @param[in] rPath      FilePath name of the file to open.
 /// @param[in] modeFlags  Combination of FileStream::EMode flags specifying the mode in which to open the file.
 /// @param[in] bTruncate  If the FileStream::MODE_WRITE flag is set, true to truncate any existing file, false to
 ///                       append to any existing file.  This is ignored if FileStream::MODE_WRITE is not set.

@@ -148,8 +148,8 @@ bool RebuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin,
                     output = line;
                 }
 
-                Helium::Path inputPath( input );
-                Helium::Path outputPath( output );
+                Helium::FilePath inputPath( input );
+                Helium::FilePath outputPath( output );
 
                 if (!input.empty() && inputPath.Exists() )
                 {
@@ -278,7 +278,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     //
 
     // RCS requires absolute paths, this will resolve the output using cwd if necessary
-    Helium::Path absolute( output );
+    Helium::FilePath absolute( output );
     absolute.Set( absolute.Absolute() );
 
     if (m_RCS)

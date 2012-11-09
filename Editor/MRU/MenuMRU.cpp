@@ -131,7 +131,7 @@ void MenuMRU::RemoveNonexistentPaths()
         HELIUM_ASSERT( !current.empty() );
 
         // Check to make sure the file exists on disk
-        bool exists = Helium::Path( current ).Exists();
+        bool exists = Helium::FilePath( current ).Exists();
 
         if ( !exists )
         {

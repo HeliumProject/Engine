@@ -147,7 +147,7 @@ namespace Helium
             // Serialize to a particular data target, just works on this
             void                        ToXML( tstring& xml );
             void                        ToBinary( std::iostream& stream );
-            void                        ToFile( const Path& path );
+            void                        ToFile( const FilePath& path );
 
             // Callbacks are executed at the appropriate time by the archive and cloning APIs
             virtual ObjectPtr           GetTemplate() const;

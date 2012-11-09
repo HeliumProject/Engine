@@ -23,7 +23,7 @@ namespace Helium
             void OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
-            void SetActive( const Path& path, bool active );
+            void SetActive( const FilePath& path, bool active );
 
         protected:
             void GeneralSettingsChanged( const Reflect::ObjectChangeArgs& args );
@@ -62,9 +62,9 @@ namespace Helium
             wxMenu* m_OptionsMenu;
             wxMenu m_ContextMenu;
 
-            OrderedSet< Path* > m_Selected;
+            OrderedSet< FilePath* > m_Selected;
 
-            typedef std::map< wxWindowID, Path > M_ProjectMRULookup;
+            typedef std::map< wxWindowID, FilePath > M_ProjectMRULookup;
             M_ProjectMRULookup m_ProjectMRULookup;
             
             FileDropTarget* m_DropTarget;

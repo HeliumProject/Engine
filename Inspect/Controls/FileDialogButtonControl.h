@@ -24,7 +24,7 @@ namespace Helium
 
         struct FileDialogButtonClickedArgs
         {
-            FileDialogButtonClickedArgs( FileDialogButton* control, const FileDialogType& type, const tstring& caption, const Path& startPath, const tstring& filter )
+            FileDialogButtonClickedArgs( FileDialogButton* control, const FileDialogType& type, const tstring& caption, const FilePath& startPath, const tstring& filter )
                 : m_Control( control )
                 , m_Type( type )
                 , m_Caption( caption )
@@ -36,9 +36,9 @@ namespace Helium
             FileDialogButton* m_Control;
             FileDialogType    m_Type;
             tstring           m_Caption;
-            Path              m_StartPath;
+            FilePath              m_StartPath;
             tstring           m_Filter;
-            mutable Path      m_Result;
+            mutable FilePath      m_Result;
         };
         typedef Helium::Signature< const FileDialogButtonClickedArgs& > FileDialogButtonClickedSignature;
 
@@ -61,7 +61,7 @@ namespace Helium
             {
                 tstring path;
                 ReadStringData( path );
-                Path startPath( path );
+                FilePath startPath( path );
 
                 FileDialogButtonClickedArgs args ( this, a_Type.Get(), a_Caption.Get(), startPath, a_Filter.Get() );
                 d_Clicked.Invoke( args );

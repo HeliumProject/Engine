@@ -3,12 +3,12 @@
 
 using namespace Helium;
 
-TEST(Foundation, Path)
+TEST(Foundation, FilePath)
 {
     {
         String tempString;
-        Path pathCopy;
-        Path path( TXT( "C:/Users/Test/File.notext.ext" ) );
+        FilePath pathCopy;
+        FilePath path( TXT( "C:/Users/Test/File.notext.ext" ) );
         HELIUM_TRACE( TraceLevels::Info, TXT( "path: %s\n" ), path.c_str() );
 
         pathCopy = path;
@@ -37,12 +37,12 @@ TEST(Foundation, Path)
     }
 
     {
-        Path dataDirectory;
+        FilePath dataDirectory;
         HELIUM_VERIFY( FileLocations::GetDataDirectory( dataDirectory ) );
         HELIUM_TRACE( TraceLevels::Debug, TXT( "Data directory: %s\n" ), dataDirectory.c_str() );
         HELIUM_UNREF( dataDirectory );
 
-        Path userDataDirectory;
+        FilePath userDataDirectory;
         HELIUM_VERIFY( FileLocations::GetUserDataDirectory( userDataDirectory ) );
         HELIUM_TRACE( TraceLevels::Debug, TXT( "User data directory: %s\n" ), userDataDirectory.c_str() );
         HELIUM_UNREF( userDataDirectory );

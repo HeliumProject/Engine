@@ -221,7 +221,7 @@ void PathInterpreter::DataChanging( const DataChangingArgs& args )
 
     if ( !text.empty() )
     {
-        Helium::Path path( text );
+        Helium::FilePath path( text );
 
         if ( path.IsFile() )
         {
@@ -230,7 +230,7 @@ void PathInterpreter::DataChanging( const DataChangingArgs& args )
 
         path.TrimToExisting();
 
-        FileDialogArgs fileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "Path Does Not Exist" ), m_FileFilter, path );
+        FileDialogArgs fileDialogArgs( Helium::FileDialogTypes::OpenFile, TXT( "FilePath Does Not Exist" ), m_FileFilter, path );
         d_FindMissingFile.Invoke( fileDialogArgs );
         Reflect::Data::SetValue< tstring >( args.m_NewValue, fileDialogArgs.m_Result.Get() );
     }

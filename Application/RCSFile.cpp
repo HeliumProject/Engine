@@ -210,7 +210,7 @@ void RCS::File::Revert( const OpenFlag flags )
 //
 static void _EnsureExistence( const tstring &path )
 {
-	Helium::Path file( path );
+	Helium::FilePath file( path );
 
 	// if the file doesn't exist, create a zero length 
 	if( !file.Exists() )

@@ -173,7 +173,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
 				baseResourcePath = parentPath;
 			}
 
-			Path sourceFilePath;
+			FilePath sourceFilePath;
 			if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
 			{
 				HELIUM_TRACE(

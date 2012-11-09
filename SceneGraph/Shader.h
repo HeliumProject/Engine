@@ -38,7 +38,7 @@ namespace Helium
             float               m_RepeatU;
             float               m_RepeatV;
             Color4              m_BaseColor;
-            Path                m_AssetPath;
+            FilePath                m_AssetPath;
 
         protected:
             // Non-reflected

@@ -70,6 +70,6 @@ namespace Helium
         typedef SimpleSetData< uint32_t > UInt32SetData;
         typedef SimpleSetData< uint64_t > UInt64SetData;
         typedef SimpleSetData< Helium::TUID > TUIDSetData;
-        typedef SimpleSetData< Helium::Path > PathSetData;
+        typedef SimpleSetData< Helium::FilePath > PathSetData;
     }
 }

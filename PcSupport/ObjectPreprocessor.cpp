@@ -309,7 +309,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 		parentPath = parentPath.GetParent();
 	} while( !parentPath.IsEmpty() && !parentPath.IsPackage() );
 
-	Path sourceFilePath;
+	FilePath sourceFilePath;
 	if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
 	{
 		HELIUM_TRACE(
@@ -409,7 +409,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 
 /// Load the persistent resource data for the specified resource from the object cache.
 ///
-/// @param[in]  resourcePath           Path of the resource object.
+/// @param[in]  resourcePath           FilePath of the resource object.
 /// @param[in]  platform               Platform for which to retrieve the cached data.
 /// @param[out] rPersistentDataBuffer  Buffer in which the persistent resource data should be stored.
 ///
@@ -700,7 +700,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 		HELIUM_ASSERT( pResourceCache );
 		pResourceCache->EnforceTocLoad();
 
-		Path resourceCachePath( pResourceCache->GetCacheFileName().GetData() );
+		FilePath resourceCachePath( pResourceCache->GetCacheFileName().GetData() );
 		if( !resourceCachePath.Exists() )
 		{
 			HELIUM_TRACE(
@@ -804,7 +804,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 /// Preprocess a resource for all enabled platforms, storing the resource data in memory with the resource.
 ///
 /// @param[in] pResource        Resource to preprocess.
-/// @param[in] rSourceFilePath  Path name of the source resource data file.
+/// @param[in] rSourceFilePath  FilePath name of the source resource data file.
 ///
 /// @return  True if preprocessing was successful, false if not.
 bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& rSourceFilePath )

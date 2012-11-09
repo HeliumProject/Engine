@@ -33,11 +33,11 @@ uint64_t           g_SyncTimestamp = 0;
 // 
 static bool _IsSubdir( const tstring& query, std::vector< tstring >& paths )
 {
-  Helium::Path queryPath( query );
+  Helium::FilePath queryPath( query );
 
   for( std::vector< tstring >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
   {
-    Helium::Path path( (*it) );
+    Helium::FilePath path( (*it) );
 
     if ( queryPath.Normalized().compare( 0, path.length(), path.Normalized() ) == 0 )
     {

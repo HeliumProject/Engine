@@ -64,7 +64,7 @@ void Tracker::SetProject( Project* project )
 
     if ( m_Project )
     {
-        Path dbPath = m_Project->GetTrackerDB();
+        FilePath dbPath = m_Project->GetTrackerDB();
 
         if ( !dbPath.MakePath() )
         {
@@ -123,7 +123,7 @@ void Tracker::TrackEverything()
 
 #pragma TODO("Create default tables/migrate db")
 
-    std::set< Helium::Path > assetFiles;
+    std::set< Helium::FilePath > assetFiles;
     while ( !m_StopTracking )
     {
         Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default,
@@ -144,7 +144,7 @@ void Tracker::TrackEverything()
         SimpleTimer timer;
         Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: Scanning %d asset file(s) for changes...\n"), (uint32_t)assetFiles.size() );
 
-        for( std::set< Helium::Path >::const_iterator assetFileItr = assetFiles.begin(), assetFileItrEnd = assetFiles.end();
+        for( std::set< Helium::FilePath >::const_iterator assetFileItr = assetFiles.begin(), assetFileItrEnd = assetFiles.end();
             !m_StopTracking && assetFileItr != assetFileItrEnd; ++assetFileItr )
         {
             Log::Listener listener ( ~Log::Streams::Error );
@@ -152,7 +152,7 @@ void Tracker::TrackEverything()
 
             // see if the file has changed
             // insert/update the file: path, timestamp, etc...
-            const Helium::Path& assetFilePath = (*assetFileItr);
+            const Helium::FilePath& assetFilePath = (*assetFileItr);
 
 #pragma TODO( "Make a configurable list of places to ignore" )
             // skip files in the meta directory
@@ -187,12 +187,12 @@ void Tracker::TrackEverything()
                         }
 
                         // get file's dependencies
-                        std::set< Helium::Path > fileReferences;
+                        std::set< Helium::FilePath > fileReferences;
                         assetClass->GetFileReferences( fileReferences );
-                        for( std::set< Helium::Path >::const_iterator fileRefsItr = fileReferences.begin(), fileRefsItrEnd = fileReferences.end(); fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
+                        for( std::set< Helium::FilePath >::const_iterator fileRefsItr = fileReferences.begin(), fileRefsItrEnd = fileReferences.end(); fileRefsItr != fileRefsItrEnd; ++fileRefsItr )
                         {
                             //   see if the file has changed
-                            const Helium::Path& fileRefPath = (*fileRefsItr);
+                            const Helium::FilePath& fileRefPath = (*fileRefsItr);
 
                             TrackedFile fileRefTrackedFile( *m_TrackerDB );
                             fileRefTrackedFile.mPath = fileRefPath.Get();

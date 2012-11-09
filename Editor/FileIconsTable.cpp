@@ -121,14 +121,14 @@ void FileIconsTable::Create()
 
     ///////////////////////////////////////////////////////////////////////////
     {
-        Helium::Path exePath( GetProcessPath() );
-        Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
+        Helium::FilePath exePath( GetProcessPath() );
+        Helium::FilePath iconFolder( exePath.Directory() + TXT( "Icons/16x16/mimetypes/" ) );
 
-        std::set< Helium::Path > artFiles;
+        std::set< Helium::FilePath > artFiles;
         Helium::DirectoryIterator::GetFiles( iconFolder, artFiles, true );
 
         int numImages = 0;
-        for ( std::set< Helium::Path >::const_iterator itr = artFiles.begin(), end = artFiles.end(); itr != end; ++itr )
+        for ( std::set< Helium::FilePath >::const_iterator itr = artFiles.begin(), end = artFiles.end(); itr != end; ++itr )
         {
             if ( (*itr).Extension() == TXT( "png" ) )
             {
@@ -315,7 +315,7 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
 }
 #endif // wxUSE_MIMETYPE
 
-int FileIconsTable::GetIconIDFromPath( const Helium::Path& path )
+int FileIconsTable::GetIconIDFromPath( const Helium::FilePath& path )
 { 
     wxString extension = path.FullExtension();
     if ( extension.empty() )

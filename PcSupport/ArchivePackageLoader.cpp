@@ -138,7 +138,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     // Build the package file path.  If the package is a user configuration package, use the user data directory,
     // otherwise use the global data directory.
     Config& rConfig = Config::GetStaticInstance();
-    Path dataDirectory;
+    FilePath dataDirectory;
 
     if ( packagePath == rConfig.GetUserConfigPackagePath() )
     {
@@ -166,8 +166,8 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     // Set up to read the TOC (which may not exist)
     //SetInvalid( m_packageTocFileSize );
 
-    // First do this check without a trailing "/" so that Path has to actually look at the file system
-    Path package_dir = dataDirectory + packagePath.ToFilePathString().GetData();
+    // First do this check without a trailing "/" so that FilePath has to actually look at the file system
+    FilePath package_dir = dataDirectory + packagePath.ToFilePathString().GetData();
     
     if (!package_dir.Exists())
     {
@@ -670,7 +670,7 @@ Package* ArchivePackageLoader::GetPackage() const
 
 /// Get the object path for the package managed by this loader.
 ///
-/// @return  Path of the associated package.
+/// @return  FilePath of the associated package.
 ///
 /// @see GetPackage()
 GameObjectPath ArchivePackageLoader::GetPackagePath() const
@@ -927,7 +927,7 @@ void ArchivePackageLoader::TickPreload()
     ResourceHandler::GetAllResourceHandlers( resourceHandlers );
     size_t resourceHandlerCount = resourceHandlers.GetSize();
 
-    Path packageDirectoryPath;
+    FilePath packageDirectoryPath;
 
     if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
     {
@@ -1212,7 +1212,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     HELIUM_ASSERT( !pTemplate || pTemplate->IsFullyLoaded() );
 
     AsyncLoader& rAsyncLoader = AsyncLoader::GetStaticInstance();
-    Path object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT(".xml.object");
+    FilePath object_file_path = m_packageDirPath + *rObjectData.objectPath.GetName() + TXT(".xml.object");
 
     bool load_properties_from_file = true;
     size_t object_file_size = 0;

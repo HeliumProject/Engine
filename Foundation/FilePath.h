@@ -13,7 +13,7 @@ namespace Helium
 {
     const static tchar_t s_InternalPathSeparator = '/';
 
-    class HELIUM_FOUNDATION_API Path : public Helium::RefCountBase< Path >
+    class HELIUM_FOUNDATION_API FilePath : public Helium::RefCountBase< FilePath >
     {
     private:
         tstring m_Path;
@@ -30,24 +30,24 @@ namespace Helium
         static bool IsUnder( const tstring& location, const tstring& path );
 
     public:
-        Path( const tchar_t* path );
-        Path( const tstring& path = TXT( "" ) );
-        Path( const Path& path );
+        FilePath( const tchar_t* path );
+        FilePath( const tstring& path = TXT( "" ) );
+        FilePath( const FilePath& path );
 
         const tchar_t* operator*() const;
 
-        Path& operator=( const Path& rhs );
-        bool operator==( const Path& rhs ) const;
+        FilePath& operator=( const FilePath& rhs );
+        bool operator==( const FilePath& rhs ) const;
 
-        bool operator<( const Path& rhs ) const;
+        bool operator<( const FilePath& rhs ) const;
 
-        Path operator+( const tchar_t* rhs ) const;
-        Path operator+( const tstring& rhs ) const;
-        Path operator+( const Path& rhs ) const;
+        FilePath operator+( const tchar_t* rhs ) const;
+        FilePath operator+( const tstring& rhs ) const;
+        FilePath operator+( const FilePath& rhs ) const;
 
-        Path& operator+=( const tchar_t* rhs );
-        Path& operator+=( const tstring& rhs );
-        Path& operator+=( const Helium::Path& rhs );
+        FilePath& operator+=( const tchar_t* rhs );
+        FilePath& operator+=( const tstring& rhs );
+        FilePath& operator+=( const Helium::FilePath& rhs );
 
         const tstring& Get() const;
         const tstring& Set( const tstring& path );
@@ -86,8 +86,8 @@ namespace Helium
 
         bool MakePath() const;
         bool Create() const;
-        bool Copy( const Helium::Path& target, bool overwrite = true ) const;
-        bool Move( const Helium::Path& target ) const;
+        bool Copy( const Helium::FilePath& target, bool overwrite = true ) const;
+        bool Move( const Helium::FilePath& target ) const;
         bool Delete() const;
 
         tstring FileMD5() const;
@@ -95,8 +95,8 @@ namespace Helium
 
     public:
 
-        Helium::Path GetAbsolutePath( const Helium::Path& basisPath ) const;
-        Helium::Path GetRelativePath( const Helium::Path& basisPath ) const;
+        Helium::FilePath GetAbsolutePath( const Helium::FilePath& basisPath ) const;
+        Helium::FilePath GetRelativePath( const Helium::FilePath& basisPath ) const;
 
     public:
 
@@ -112,18 +112,18 @@ namespace Helium
             return m_Path;
         }
 
-        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& outStream, const Path& p );
-        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& inStream, Path& p );
-        friend HELIUM_FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const Path& p );
-        friend HELIUM_FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, Path& p );
+        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& outStream, const FilePath& p );
+        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& inStream, FilePath& p );
+        friend HELIUM_FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const FilePath& p );
+        friend HELIUM_FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, FilePath& p );
     };
 
-    inline tostream& operator<<( tostream& outStream, const Path& p )
+    inline tostream& operator<<( tostream& outStream, const FilePath& p )
     {
         return outStream << p.Get();
     }
 
-    inline tistream& operator>>( tistream& inStream, Path& p )
+    inline tistream& operator>>( tistream& inStream, FilePath& p )
     {
         tstring str;
         std::streamsize size = inStream.rdbuf()->in_avail();

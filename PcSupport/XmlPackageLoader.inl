@@ -10,7 +10,7 @@
 //    /// Get the package file path.
 //    ///
 //    /// @return  Package file path.
-//    const Path& XmlPackageLoader::GetPackageFileSystemPath() const
+//    const FilePath& XmlPackageLoader::GetPackageFileSystemPath() const
 //    {
 //        return m_packageFilePath;
 //    }

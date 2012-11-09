@@ -32,14 +32,14 @@ ThumbnailManager::~ThumbnailManager()
 // 
 void ThumbnailManager::Reset()
 {
-    Helium::Locker< std::map< uint32_t, Helium::Path > >::Handle list( m_AllRequests );
+    Helium::Locker< std::map< uint32_t, Helium::FilePath > >::Handle list( m_AllRequests );
     list->clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Request that some thumbnails be loaded.
 // 
-void ThumbnailManager::Request( const std::set< Helium::Path >& paths )
+void ThumbnailManager::Request( const std::set< Helium::FilePath >& paths )
 {
     m_Loader.Enqueue( paths );
 }
@@ -70,14 +70,14 @@ void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& arg
 {
     const uint32_t crc = Crc32( args.m_Path );
 
-    Helium::Locker< std::map< uint32_t, Helium::Path > >::Handle list( m_AllRequests );
+    Helium::Locker< std::map< uint32_t, Helium::FilePath > >::Handle list( m_AllRequests );
     if ( args.m_Cancelled )
     {
         list->erase( crc );
     }
     else
     {
-        Helium::StdInsert< std::map< uint32_t, Helium::Path > >::Result inserted = list->insert( std::make_pair( crc, args.m_Path ) );
+        Helium::StdInsert< std::map< uint32_t, Helium::FilePath > >::Result inserted = list->insert( std::make_pair( crc, args.m_Path ) );
 
         // only kick to foreground for new entries
         if ( inserted.second )

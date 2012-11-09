@@ -134,7 +134,7 @@ namespace Helium
 
         struct ResolveSceneArgs
         {
-            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::Path& path )
+            ResolveSceneArgs( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
                 : m_Viewport( viewport )
                 , m_Path( path )
                 , m_Scene( NULL )
@@ -142,7 +142,7 @@ namespace Helium
             }
 
             SceneGraph::Viewport* m_Viewport;
-            Helium::Path          m_Path;
+            Helium::FilePath          m_Path;
             mutable Scene*        m_Scene;
         };
         typedef Helium::Signature< const ResolveSceneArgs& > ResolveSceneSignature;
@@ -309,7 +309,7 @@ namespace Helium
 
         private:
 
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
             Helium::TUID m_Id;
 
             // load
@@ -365,7 +365,7 @@ namespace Helium
             //
 
         public:
-            Scene( SceneGraph::Viewport* viewport, const Helium::Path& path );
+            Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path );
             ~Scene();
 
             Helium::TUID GetId() const
@@ -387,12 +387,12 @@ namespace Helium
             // is this scene able to be edited?
             bool IsEditable();
 
-            // Path to the file that this scene is currently editing
-            const Helium::Path& GetPath() const
+            // FilePath to the file that this scene is currently editing
+            const Helium::FilePath& GetPath() const
             {
                 return m_Path;
             }
-            void SetPath( const Path& path )
+            void SetPath( const FilePath& path )
             {
                 m_Path = path;
             }
@@ -575,10 +575,10 @@ namespace Helium
         public:
             // Open a whole scene, replacing the current one.
             bool Reload();
-            bool Load( const Helium::Path& path ); 
+            bool Load( const Helium::FilePath& path ); 
 
             // Import data into this scene, possibly merging with existing nodes.
-            UndoCommandPtr Import( const Helium::Path& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
+            UndoCommandPtr Import( const Helium::FilePath& path, ImportAction action = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL, const Reflect::Class* importReflectType = NULL );
             UndoCommandPtr ImportXML( const tstring& xml, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* parent = NULL );
             UndoCommandPtr ImportSceneNodes( std::vector< Reflect::ObjectPtr >& elements, ImportAction action, uint32_t importFlags, const Reflect::Class* importReflectType = NULL );
 
@@ -610,7 +610,7 @@ namespace Helium
             // Save nodes to a file or to an xml string buffer.  Do not change the file
             // that this scene is pointing at.  Optionally export the entire scene or
             // just selected nodes.  Optionally maintain hiearchy or dependencies.
-            bool Export( const Path& path, const ExportArgs& args );
+            bool Export( const FilePath& path, const ExportArgs& args );
             bool ExportXML( tstring& xml, const ExportArgs& args );
             bool Export( std::vector< Reflect::ObjectPtr >& elements, const ExportArgs& args, BatchUndoCommand* changes );
 
@@ -807,7 +807,7 @@ namespace Helium
         class SceneImportCommand : public UndoCommand
         {
         public:
-            SceneImportCommand( SceneGraph::Scene* scene, const Helium::Path& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
+            SceneImportCommand( SceneGraph::Scene* scene, const Helium::FilePath& path, ImportAction importAction = ImportActions::Import, uint32_t importFlags = ImportFlags::None, SceneGraph::HierarchyNode* importRoot = NULL, const Reflect::Class* importReflectType = NULL )
                 : m_Scene( scene )
                 , m_Path( path )
                 , m_ImportAction( importAction )
@@ -842,7 +842,7 @@ namespace Helium
 
         private:
             SceneGraph::Scene*          m_Scene;
-            Helium::Path                m_Path;
+            Helium::FilePath                m_Path;
             ImportAction                m_ImportAction;
             uint32_t                    m_ImportFlags;
             SceneGraph::HierarchyNode*  m_ImportRoot;

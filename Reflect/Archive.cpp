@@ -21,7 +21,7 @@
 using namespace Helium;
 using namespace Helium::Reflect;
 
-Archive::Archive( const Path& path, ByteOrder byteOrder )
+Archive::Archive( const FilePath& path, ByteOrder byteOrder )
 : m_Path( path )
 , m_ByteOrder( byteOrder )
 , m_Progress( 0 )
@@ -126,7 +126,7 @@ void Archive::Get( std::vector< ObjectPtr >& objects )
     objects = m_Objects;
 }
 
-ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteOrder byteOrder )
+ArchivePtr Reflect::GetArchive( const FilePath& path, ArchiveType archiveType, ByteOrder byteOrder )
 {
     switch ( archiveType )
     {
@@ -149,14 +149,14 @@ ArchivePtr Reflect::GetArchive( const Path& path, ArchiveType archiveType, ByteO
     return NULL;
 }
 
-bool Reflect::ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const FilePath& path, ObjectPtr object, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     std::vector< ObjectPtr > objects;
     objects.push_back( object );
     return ToArchive( path, objects, archiveType, error, byteOrder );
 }
 
-bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
+bool Reflect::ToArchive( const FilePath& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType, tstring* error, ByteOrder byteOrder )
 {
     HELIUM_ASSERT( !path.empty() );
     HELIUM_ASSERT( objects.size() > 0 );
@@ -167,7 +167,7 @@ bool Reflect::ToArchive( const Path& path, const std::vector< ObjectPtr >& objec
     path.MakePath();
 
     // build a path to a unique file for this process
-    Path safetyPath( path.Directory() + Helium::GetProcessString() );
+    FilePath safetyPath( path.Directory() + Helium::GetProcessString() );
     safetyPath.ReplaceExtension( path.Extension() );
 
     ArchivePtr archive = GetArchive( safetyPath, archiveType, byteOrder );

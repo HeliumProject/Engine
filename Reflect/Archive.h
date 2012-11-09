@@ -109,12 +109,12 @@ namespace Helium
         protected:
             friend class RefCountBase< Archive >;
 
-            Archive( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+            Archive( const FilePath& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             Archive();
             ~Archive();
 
         public:
-            const Helium::Path& GetPath() const
+            const Helium::FilePath& GetPath() const
             {
                 return m_Path;
             }
@@ -202,7 +202,7 @@ namespace Helium
             bool m_Abort;
 
             // The file we are working with
-            Path m_Path;
+            FilePath m_Path;
 
             // The mode
             ArchiveMode m_Mode;
@@ -220,13 +220,13 @@ namespace Helium
         typedef Helium::SmartPtr< Archive > ArchivePtr;
 
         // Get parser for a file
-        HELIUM_REFLECT_API ArchivePtr GetArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_REFLECT_API ArchivePtr GetArchive( const FilePath& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
-        HELIUM_REFLECT_API bool ToArchive( const Path& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
-        HELIUM_REFLECT_API bool ToArchive( const Path& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_REFLECT_API bool ToArchive( const FilePath& path, ObjectPtr object, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
+        HELIUM_REFLECT_API bool ToArchive( const FilePath& path, const std::vector< ObjectPtr >& objects, ArchiveType archiveType = ArchiveTypes::Auto, tstring* error = NULL, ByteOrder byteOrder = Helium::PlatformByteOrder );
 
         template <class T>
-        Helium::StrongPtr<T> FromArchive( const Path& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
+        Helium::StrongPtr<T> FromArchive( const FilePath& path, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
             ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
 
@@ -239,7 +239,7 @@ namespace Helium
         }
 
         template< class T >
-        void FromArchive( const Path& path, std::vector< Helium::StrongPtr<T> >& objects, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
+        void FromArchive( const FilePath& path, std::vector< Helium::StrongPtr<T> >& objects, ArchiveType archiveType = ArchiveTypes::Auto, ByteOrder byteOrder = Helium::PlatformByteOrder )
         {
             ArchivePtr archive = GetArchive( path, archiveType, byteOrder );
             archive->Get< T >( objects );

@@ -103,7 +103,7 @@ static void CopyDump( ExceptionReport& report )
         return;
     }
 
-    if ( report.m_Args.m_Dump.empty() || !Helium::Path( report.m_Args.m_Dump ).Exists() )
+    if ( report.m_Args.m_Dump.empty() || !Helium::FilePath( report.m_Args.m_Dump ).Exists() )
     {
         return;
     }
@@ -134,7 +134,7 @@ static void CopyDump( ExceptionReport& report )
         << TXT( "." ) << std::setfill( TXT( '0' ) ) << std::setw(2) << now->tm_sec
         << TXT( "." ) << std::setfill( TXT( '0' ) ) << std::setw(3) << t % 1000 << TXT( ".dmp" );
 
-    Helium::Path dest( destination.str() );
+    Helium::FilePath dest( destination.str() );
     dest.MakePath();
 
 	HELIUM_CONVERT_TO_NATIVE( report.m_Args.m_Dump.c_str(), srcFile );
@@ -272,7 +272,7 @@ void Debug::InitializeExceptionListener()
     // init counting this API seems kind of silly, but we can actually get initialized from several places
     if ( ++g_InitCount == 1 )
     {
-		Path process ( GetProcessPath() );
+		FilePath process ( GetProcessPath() );
 
         // Symbol path always starts with module directory
         tstring symbolPath( process.Directory() );

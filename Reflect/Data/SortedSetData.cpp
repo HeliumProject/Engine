@@ -290,7 +290,7 @@ template SimpleSortedSetData< String >;
 template SimpleSortedSetData< uint32_t >;
 template SimpleSortedSetData< uint64_t >;
 template SimpleSortedSetData< Helium::TUID >;
-template SimpleSortedSetData< Helium::Path >;
+template SimpleSortedSetData< Helium::FilePath >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringSortedSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32SortedSetData );

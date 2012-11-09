@@ -41,7 +41,7 @@ namespace Helium
             Indent<tchar_t> m_Indent;
 
         public:
-            ArchiveXML( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+            ArchiveXML( const FilePath& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             
             // PMD: Added to give more control to caller to step through objects one-by-one.
             ArchiveXML( TCharStream *stream, bool write = false );

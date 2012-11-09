@@ -133,7 +133,7 @@ namespace Helium
             virtual void SetName( const tstring& value ) HELIUM_OVERRIDE;
 
             //
-            // Path string of this node in the scene, its cached and computed as needed
+            // FilePath string of this node in the scene, its cached and computed as needed
             //
 
             const tstring& GetPath();

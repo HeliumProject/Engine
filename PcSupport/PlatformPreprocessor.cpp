@@ -30,7 +30,7 @@ PlatformPreprocessor::~PlatformPreprocessor()
 /// @fn bool PlatformPreprocessor::CompileShader( size_t profileIndex, RShader::EType type, const void* pShaderCode, size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynArray< uint8_t >& rMicrocode, DynArray< String >* pErrorMessages )
 /// Compile a shader for the target platform.
 ///
-/// @param[in]  rShaderPath     Path to the shader file being compiled.
+/// @param[in]  rShaderPath     FilePath to the shader file being compiled.
 /// @param[in]  profileIndex    Index of the target shader profile (must be a value less than that returned by
 ///                             GetShaderProfileCount()).
 /// @param[in]  type            Shader type.

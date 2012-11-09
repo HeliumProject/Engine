@@ -43,7 +43,7 @@ bool FilteredDropTarget::ValidateDrag( const Editor::DragArgs& args )
 
     for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
-        Helium::Path path( *fileItr );
+        Helium::FilePath path( *fileItr );
         if ( path.Get().empty() )
         {
             continue;
@@ -104,7 +104,7 @@ void FilteredDropTarget::Drop( const Editor::DragArgs& args )
 
     for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
-        Helium::Path path( *fileItr );
+        Helium::FilePath path( *fileItr );
         if ( path.Get().empty() )
         {
             continue;

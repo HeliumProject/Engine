@@ -561,7 +561,7 @@ template SimpleDynArrayData< int64_t >;
 template SimpleDynArrayData< float32_t >;
 template SimpleDynArrayData< float64_t >;
 template SimpleDynArrayData< Helium::TUID >;
-template SimpleDynArrayData< Helium::Path >;
+template SimpleDynArrayData< Helium::FilePath >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::NameDynArrayData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringDynArrayData );

@@ -687,7 +687,7 @@ bool ShaderVariantResourceHandler::CompileShader(
     DynArray< String > errorMessages;
 #endif
 
-    Path shaderFilePath;
+    FilePath shaderFilePath;
     if ( !FileLocations::GetDataDirectory( shaderFilePath ) )
     {
         HELIUM_TRACE(

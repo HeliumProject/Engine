@@ -278,7 +278,7 @@ void VaultPanel::ClearResults()
     }
 }
 
-void VaultPanel::SelectPath( const Helium::Path& path )
+void VaultPanel::SelectPath( const Helium::FilePath& path )
 {
     switch ( m_CurrentViewMode )
     {
@@ -298,7 +298,7 @@ void VaultPanel::SelectPath( const Helium::Path& path )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::Path >& paths )
+uint32_t VaultPanel::GetSelectedPaths( std::set< Helium::FilePath >& paths )
 {
     switch ( m_CurrentViewMode )
     {

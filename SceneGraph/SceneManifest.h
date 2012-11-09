@@ -15,7 +15,7 @@ namespace Helium
         public:
             Vector3 m_BoundingBoxMin;
             Vector3 m_BoundingBoxMax;
-            std::set< Helium::Path > m_Assets;
+            std::set< Helium::FilePath > m_Assets;
 
             REFLECT_DECLARE_OBJECT(SceneManifest, Reflect::Object);
 			static void PopulateComposite( Reflect::Composite& comp );

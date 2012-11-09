@@ -132,7 +132,7 @@ ThumbnailView::ThumbnailView( wxWindow *parent, wxWindowID id, const wxPoint& po
 #ifdef VIEWPORT_REFACTOR
     IDirect3DDevice9* device = m_DeviceManager.GetD3DDevice();
 
-    Path processPath( GetProcessPath() );
+    FilePath processPath( GetProcessPath() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumProject" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Project.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumEntity" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Entity.png" ) ).c_str() );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "HeliumScene" ), tstring( processPath.Directory() + TXT( "Icons/128x128/editor/Scene.png" ) ).c_str() );
@@ -288,7 +288,7 @@ void ThumbnailView::SelectPath( const tstring& path )
 // Fills out the specified arrays with the files and folders that are currently
 // selected.
 // 
-void ThumbnailView::GetSelectedPaths( std::set< Helium::Path >& paths )
+void ThumbnailView::GetSelectedPaths( std::set< Helium::FilePath >& paths )
 {
     for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
         tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
@@ -417,7 +417,7 @@ void ThumbnailView::Scroll( int x, int y )
 // after being generated from the current results.  Replaces the view's containers
 // with those provided by the loader.
 // 
-void ThumbnailView::OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Helium::Path >& textures )
+void ThumbnailView::OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Helium::FilePath >& textures )
 {
     m_Tiles = tiles;
 
@@ -663,7 +663,7 @@ void ThumbnailView::CreateResources()
 
 #pragma TODO( "redo the below as resources" )
 
-    Path processPath( GetProcessPath() );
+    FilePath processPath( GetProcessPath() );
     if ( !m_TextureMissing )
     {
         tstring file = processPath.Directory() + TXT( "Icons/128x128/status/Error.png" );
@@ -1023,7 +1023,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 ///////////////////////////////////////////////////////////////////////////////
 // Finds the tile that goes with the specified asset file.
 // 
-ThumbnailTile* ThumbnailView::FindTile( const Helium::Path& path ) const
+ThumbnailTile* ThumbnailView::FindTile( const Helium::FilePath& path ) const
 {
     M_PathToTilePtr::const_iterator found = m_Tiles.find( path );
     if ( found != m_Tiles.end() )
@@ -1904,7 +1904,7 @@ void ThumbnailView::OnSort( wxCommandEvent& args )
 // 
 void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 {
-    std::set< Helium::Path > paths;
+    std::set< Helium::FilePath > paths;
     GetSelectedPaths( paths );
     if ( !paths.empty() )
     {
@@ -1919,7 +1919,7 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
             }
         }
 
-        //for ( std::set< Helium::Path >::const_iterator fileItr = paths.begin(), fileEnd = paths.end();
+        //for ( std::set< Helium::FilePath >::const_iterator fileItr = paths.begin(), fileEnd = paths.end();
         //    fileItr != fileEnd; ++fileItr )
         //{
         //    DetailsFrame* detailsWindow = new DetailsFrame( m_VaultPanel );

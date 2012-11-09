@@ -26,8 +26,8 @@ namespace Helium
             void SetResults( VaultSearchResults* results );
             void ClearResults();
 
-            void SelectPath( const Helium::Path& path );
-            uint32_t GetSelectedPaths( std::set< Helium::Path >& paths );
+            void SelectPath( const Helium::FilePath& path );
+            uint32_t GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
             void SaveSettings();
             void OnSearchResultsAvailable( const Editor::SearchResultsAvailableArgs& args );

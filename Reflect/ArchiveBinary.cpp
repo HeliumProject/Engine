@@ -46,7 +46,7 @@ public:
     }
 };
 
-ArchiveBinary::ArchiveBinary( const Path& path, ByteOrder byteOrder )
+ArchiveBinary::ArchiveBinary( const FilePath& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Size( 0 )

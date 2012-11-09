@@ -824,7 +824,7 @@
 //    // Build the package file path.  If the package is a user configuration package, use the user data directory,
 //    // otherwise use the global data directory.
 //    Config& rConfig = Config::GetStaticInstance();
-//    Path dataDirectory;
+//    FilePath dataDirectory;
 //
 //    if ( packagePath == rConfig.GetUserConfigPackagePath() )
 //    {
@@ -849,7 +849,7 @@
 //        }
 //    }
 //
-//    Path basePackageFilePath( dataDirectory + packagePath.ToFilePathString().GetData() );
+//    FilePath basePackageFilePath( dataDirectory + packagePath.ToFilePathString().GetData() );
 //
 //    m_packageFilePath.Set( basePackageFilePath.Get() + TXT( "/" ) + HELIUM_XML_PACKAGE_FILE_NAME );
 //
@@ -1311,7 +1311,7 @@
 //
 ///// Get the object path for the package managed by this loader.
 /////
-///// @return  Path of the associated package.
+///// @return  FilePath of the associated package.
 /////
 ///// @see GetPackage()
 //GameObjectPath XmlPackageLoader::GetPackagePath() const
@@ -1461,7 +1461,7 @@
 //    ResourceHandler::GetAllResourceHandlers( resourceHandlers );
 //    size_t resourceHandlerCount = resourceHandlers.GetSize();
 //
-//    Path packageDirectoryPath;
+//    FilePath packageDirectoryPath;
 //
 //    if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
 //    {

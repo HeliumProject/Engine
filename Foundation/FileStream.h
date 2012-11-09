@@ -32,7 +32,7 @@ namespace Helium
 
         /// Open a file.
         ///
-        /// @param[in] pPath      Path name of the file to open.
+        /// @param[in] pPath      FilePath name of the file to open.
         /// @param[in] modeFlags  Combination of EMode flags specifying the mode in which to open the file.
         /// @param[in] bTruncate  If the MODE_WRITE flag is set, true to truncate any existing file, false to append to any
         ///                       existing file.  This is ignored if MODE_WRITE is not set.

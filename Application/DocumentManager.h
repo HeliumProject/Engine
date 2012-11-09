@@ -54,9 +54,9 @@ namespace Helium
     class DocumentPathChangedArgs : public DocumentEventArgs
     {
     public:
-        const Helium::Path& m_OldPath;
+        const Helium::FilePath& m_OldPath;
 
-        DocumentPathChangedArgs( Document* document, const Helium::Path& oldPath )
+        DocumentPathChangedArgs( Document* document, const Helium::FilePath& oldPath )
             : DocumentEventArgs( document )
             , m_OldPath( oldPath )
         {
@@ -102,11 +102,11 @@ namespace Helium
         void HasChanged( bool changed );
         void OnObjectChanged( const DocumentObjectChangedArgs& args );
 
-        const Helium::Path& GetPath() const
+        const Helium::FilePath& GetPath() const
         {
             return m_Path;
         }
-        void SetPath( const Helium::Path& path );
+        void SetPath( const Helium::FilePath& path );
 
         uint32_t GetStatus() const;
 
@@ -147,14 +147,14 @@ namespace Helium
         // Modified On Disk
         mutable DocumentEventSignature::Event e_ModifiedOnDiskStateChanged;
 
-        // Path
+        // FilePath
         mutable DocumentPathChangedSignature::Event e_PathChanged;
 
         // Revision Control
         mutable DocumentEventSignature::Event e_CheckedOut;
 
     private:
-        Helium::Path m_Path;
+        Helium::FilePath m_Path;
         uint32_t m_DocumentStatus;
         bool m_AllowUnsavableChanges;        //<! allows override of checkout (but you can't save)
         int32_t m_Revision;
@@ -194,7 +194,7 @@ namespace Helium
         }
 
         bool                OpenDocument( const DocumentPtr& document, tstring& error );
-        Document*           FindDocument( const Helium::Path& path ) const;
+        Document*           FindDocument( const Helium::FilePath& path ) const;
 
         bool                SaveAll( tstring& error );
         bool                SaveDocument( DocumentPtr document, tstring& error );

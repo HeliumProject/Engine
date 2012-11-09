@@ -12,7 +12,7 @@ DirectoryIterator::DirectoryIterator()
 
 }
 
-DirectoryIterator::DirectoryIterator( const Path& path, uint32_t flags )
+DirectoryIterator::DirectoryIterator( const FilePath& path, uint32_t flags )
 : m_Done( true )
 {
     HELIUM_ASSERT( path.IsDirectory() );
@@ -57,7 +57,7 @@ void DirectoryIterator::Reset()
     Find();
 }
 
-bool DirectoryIterator::Open( const Path& path, uint32_t flags )
+bool DirectoryIterator::Open( const FilePath& path, uint32_t flags )
 {
     Close();
 
@@ -71,7 +71,7 @@ bool DirectoryIterator::Open( const Path& path, uint32_t flags )
     return Find();
 }
 
-void DirectoryIterator::GetFiles( const Path& path, std::set< Helium::Path >& paths, bool recursive )
+void DirectoryIterator::GetFiles( const FilePath& path, std::set< Helium::FilePath >& paths, bool recursive )
 {
     for ( DirectoryIterator dir( path, DirectoryFlags::SkipDirectories ); !dir.IsDone(); dir.Next() )
     {
@@ -88,7 +88,7 @@ void DirectoryIterator::GetFiles( const Path& path, std::set< Helium::Path >& pa
     }
 }
 
-void DirectoryIterator::GetFiles( std::set< Helium::Path >& paths, bool recursive )
+void DirectoryIterator::GetFiles( std::set< Helium::FilePath >& paths, bool recursive )
 {
     GetFiles( m_Path, paths, recursive );
 }
@@ -167,7 +167,7 @@ bool DirectoryIterator::Find()
             {
                 if ( entry.m_Stat.m_Mode & StatusModes::Directory )
                 {
-                    Path::GuaranteeSeparator( absolutePath );
+                    FilePath::GuaranteeSeparator( absolutePath );
                 }
 
                 m_Item.m_Path = absolutePath;
@@ -207,7 +207,7 @@ void DirectoryIterator::Close()
     m_Item.Clear(); 
 }
 
-void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const Path& path, uint32_t flags )
+void Helium::RecurseDirectories( DirectoryItemSignature::Delegate delegate, const FilePath& path, uint32_t flags )
 {
     // contents
     for ( DirectoryIterator dir( path, flags ); !dir.IsDone(); dir.Next() )

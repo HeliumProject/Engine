@@ -22,9 +22,9 @@ namespace Helium
 
         /// @name Filesystem Information
         //@{
-        static const bool GetBaseDirectory( Path& path );
-        static const bool GetDataDirectory( Path& path );
-        static const bool GetUserDataDirectory( Path& path );
+        static const bool GetBaseDirectory( FilePath& path );
+        static const bool GetDataDirectory( FilePath& path );
+        static const bool GetUserDataDirectory( FilePath& path );
         //@}
 
     private:

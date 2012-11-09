@@ -52,7 +52,7 @@ public:
     }
 };
 
-ArchiveXML::ArchiveXML( const Path& path, ByteOrder byteOrder )
+ArchiveXML::ArchiveXML( const FilePath& path, ByteOrder byteOrder )
 : Archive( path, byteOrder )
 , m_Version( CURRENT_VERSION )
 , m_Size( 0 )

@@ -36,7 +36,7 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Scene::Scene( SceneGraph::Viewport* viewport, const Helium::Path& path )
+Scene::Scene( SceneGraph::Viewport* viewport, const Helium::FilePath& path )
 : m_Path( path )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
@@ -162,7 +162,7 @@ bool Scene::Reload()
     return Load( m_Path );
 }
 
-bool Scene::Load( const Helium::Path& path )
+bool Scene::Load( const Helium::FilePath& path )
 {
     if ( !m_Nodes.empty() )
     {
@@ -175,7 +175,7 @@ bool Scene::Load( const Helium::Path& path )
     return Import( path, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-UndoCommandPtr Scene::Import( const Helium::Path& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
+UndoCommandPtr Scene::Import( const Helium::FilePath& path, ImportAction action, uint32_t importFlags, SceneGraph::HierarchyNode* importRoot, const Reflect::Class* importReflectType )
 {
     SCENE_GRAPH_SCOPE_TIMER( ( "%s", path.c_str() ) );
 
@@ -840,7 +840,7 @@ bool Scene::Serialize()
     return Export( m_Path, ExportFlags::Default );
 }
 
-bool Scene::Export( const Helium::Path& path, const ExportArgs& args )
+bool Scene::Export( const Helium::FilePath& path, const ExportArgs& args )
 {
     uint64_t startTimer = Helium::TimerGetClock();
 

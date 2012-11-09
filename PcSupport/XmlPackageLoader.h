@@ -342,7 +342,7 @@
 //        Package* GetPackage() const;
 //        GameObjectPath GetPackagePath() const;
 //
-//        inline const Path& GetPackageFileSystemPath() const;
+//        inline const FilePath& GetPackageFileSystemPath() const;
 //        //@}
 //
 //        /// @name Package File Information
@@ -428,7 +428,7 @@
 //        ObjectPool< LoadRequest > m_loadRequestPool;
 //
 //        /// Package file path name.
-//        Path m_packageFilePath;
+//        FilePath m_packageFilePath;
 //        /// Size of the package data file.
 //        size_t m_packageFileSize;
 //

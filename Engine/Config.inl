@@ -9,7 +9,7 @@ namespace Helium
 {
     /// Get the path of the main package in which all configuration packages are stored.
     ///
-    /// @return  Path of the configuration container package.
+    /// @return  FilePath of the configuration container package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetUserConfigPackagePath()
     GameObjectPath Config::GetConfigContainerPackagePath() const
@@ -19,7 +19,7 @@ namespace Helium
 
     /// Get the path of the default configuration package for the current platform.
     ///
-    /// @return  Path of the default configuration package for this platform.
+    /// @return  FilePath of the default configuration package for this platform.
     ///
     /// @see GetUserConfigPackagePath(), GetConfigContainerPackagePath()
     GameObjectPath Config::GetDefaultConfigPackagePath() const
@@ -29,7 +29,7 @@ namespace Helium
 
     /// Get the path of the user-specific configuration package.
     ///
-    /// @return  Path of the user configuration package.
+    /// @return  FilePath of the user configuration package.
     ///
     /// @see GetDefaultConfigPackagePath(), GetConfigContainerPackagePath()
     GameObjectPath Config::GetUserConfigPackagePath() const

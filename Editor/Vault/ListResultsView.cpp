@@ -7,22 +7,22 @@
 
 using namespace Helium::Editor;
 
-tstring DetailsColumn::Path( const Helium::Path& path )
+tstring DetailsColumn::FilePath( const Helium::FilePath& path )
 {
     return path.Get();
 }
 
-tstring DetailsColumn::Filename( const Helium::Path& path )
+tstring DetailsColumn::Filename( const Helium::FilePath& path )
 {
     return path.Filename();
 }
 
-tstring DetailsColumn::Directory( const Helium::Path& path )
+tstring DetailsColumn::Directory( const Helium::FilePath& path )
 {
     return path.Directory();
 }
 
-tstring DetailsColumn::Size( const Helium::Path& path )
+tstring DetailsColumn::Size( const Helium::FilePath& path )
 {
 	Status status;
 	status.Read( path.Get().c_str() );
@@ -59,13 +59,13 @@ ListResultsView::ListResultsView( wxWindow* parent, wxWindowID id, const wxPoint
   wxImageList *imageList = wxTheFileIconsTable->GetSmallImageList();
   m_ListCtrl->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
-  m_DetailsColumns[DetailsColumnTypes::Path] = DetailsColumn( DetailsColumnTypes::Path, TXT( "Path" ), 600, DetailsColumn::Path );
+  m_DetailsColumns[DetailsColumnTypes::FilePath] = DetailsColumn( DetailsColumnTypes::FilePath, TXT( "FilePath" ), 600, DetailsColumn::FilePath );
   //m_DetailsColumns[DetailsColumnTypes::Filename] = DetailsColumn( DetailsColumnTypes::Filename, TXT( "Name" ), 200, DetailsColumn::Filename );
   //m_DetailsColumns[DetailsColumnTypes::Directory] = DetailsColumn( DetailsColumnTypes::Directory, TXT( "Directory" ), 250, DetailsColumn::Directory );
   //m_DetailsColumns[DetailsColumnTypes::Size] = DetailsColumn( DetailsColumnTypes::Size, TXT( "Size" ), 50, DetailsColumn::Size );
 
   m_DetailsColumnList.clear();
-  m_DetailsColumnList.push_back( DetailsColumnTypes::Path );
+  m_DetailsColumnList.push_back( DetailsColumnTypes::FilePath );
   //m_DetailsColumnList.push_back( DetailsColumnTypes::Filename );
   //m_DetailsColumnList.push_back( DetailsColumnTypes::Directory );
   //m_DetailsColumnList.push_back( DetailsColumnTypes::Size );
@@ -132,7 +132,7 @@ void ListResultsView::SetResults( VaultSearchResults* results )
             for ( std::set< TrackedFile >::const_iterator itr = foundFiles.begin(), end = foundFiles.end(); itr != end; ++itr )
             {
                 const TrackedFile& foundFile = (*itr);
-                Path path( foundFile.mPath.value() );
+                FilePath path( foundFile.mPath.value() );
 
                 // File Icon
                 int32_t imageIndex = wxFileIconsTable::file;
@@ -197,7 +197,7 @@ void ListResultsView::SelectPath( const tstring& path )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ListResultsView::GetSelectedPaths( std::set< Helium::Path >& paths )
+void ListResultsView::GetSelectedPaths( std::set< Helium::FilePath >& paths )
 {
 }
 

@@ -234,8 +234,8 @@ bool App::OnInit()
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    Helium::Path exePath( GetProcessPath() );
-    Helium::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
+    Helium::FilePath exePath( GetProcessPath() );
+    Helium::FilePath iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
     wxInitAllImageHandlers();
     wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
@@ -270,7 +270,7 @@ bool App::OnInit()
     m_InitializerStack.Push( AsyncLoader::DestroyStaticInstance );
 
     // GameObject cache management.
-    Path baseDirectory;
+    FilePath baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
         HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
@@ -352,7 +352,7 @@ bool App::OnInit()
         const std::vector< tstring >& mruPaths = wxGetApp().GetSettingsManager()->GetSettings<EditorSettings>()->GetMRUProjects();
         if ( !mruPaths.empty() )
         {
-            Path projectPath( *mruPaths.rbegin() );
+            FilePath projectPath( *mruPaths.rbegin() );
             if ( projectPath.Exists() )
             {
                 m_Frame->OpenProject( *mruPaths.rbegin() );
@@ -497,7 +497,7 @@ bool App::OnExceptionInMainLoop()
 
 void App::SaveSettings()
 {
-    Helium::Path path;
+    Helium::FilePath path;
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 
@@ -526,7 +526,7 @@ void App::SaveSettings()
 
 void App::LoadSettings()
 {
-    Helium::Path path;
+    Helium::FilePath path;
     Helium::GetPreferencesDirectory( path );
     path += TXT("EditorSettings.xml");
 

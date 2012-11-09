@@ -33,7 +33,7 @@ namespace Helium
             VaultSearchResultsPtr m_Results;
             M_PathToTilePtr m_Tiles;
             ThumbnailSorter m_Sorter;
-            std::set< Helium::Path > m_TextureRequests;
+            std::set< Helium::FilePath > m_TextureRequests;
         };
     }
 }

@@ -14,9 +14,9 @@ namespace Helium
         struct ThumbnailResultArgs
         {
             const V_ThumbnailPtr& m_Thumbnails;
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
 
-            ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, const Helium::Path& path )
+            ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, const Helium::FilePath& path )
                 : m_Thumbnails( thumbnails )
                 , m_Path( path )
             {
@@ -31,7 +31,7 @@ namespace Helium
             virtual ~ThumbnailManager();
 
             void Reset();
-            void Request( const std::set< Helium::Path >& paths );
+            void Request( const std::set< Helium::FilePath >& paths );
             void Cancel();
             void DetachFromWindow();
 
@@ -41,7 +41,7 @@ namespace Helium
         private:
             wxWindow* m_Window;
             ThumbnailLoader m_Loader;
-            Helium::Locker< std::map< uint32_t, Helium::Path > > m_AllRequests;
+            Helium::Locker< std::map< uint32_t, Helium::FilePath > > m_AllRequests;
             Helium::Mutex m_WindowMutex;
         };
     }

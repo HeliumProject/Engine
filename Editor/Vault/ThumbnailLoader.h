@@ -24,14 +24,14 @@ namespace Helium
             ThumbnailLoader( DeviceManager* d3dManager );
             ~ThumbnailLoader();
 
-            void Enqueue( const std::set< Helium::Path >& files );
+            void Enqueue( const std::set< Helium::FilePath >& files );
             void Stop();
 
 
         public:
             struct ResultArgs
             {
-                Helium::Path m_Path;
+                Helium::FilePath m_Path;
                 V_ThumbnailPtr m_Textures;
                 bool m_Cancelled;
             };
@@ -70,7 +70,7 @@ namespace Helium
                 ThumbnailLoader& m_Loader;
             } m_LoadThread; // The loading thread object
 
-            Helium::Locker< Helium::OrderedSet< Helium::Path > >    m_FileQueue; // The queue of files to load (mutex locked)
+            Helium::Locker< Helium::OrderedSet< Helium::FilePath > >    m_FileQueue; // The queue of files to load (mutex locked)
             Helium::Semaphore                                       m_Signal; // Signalling semaphore to wake up load thread
             bool                                                    m_Quit;
             DeviceManager*                            m_DeviceManager;

@@ -63,7 +63,7 @@ namespace Helium
         //@}
 
     private:
-        /// Path for the overall configuration container package.
+        /// FilePath for the overall configuration container package.
         GameObjectPath m_configContainerPackagePath;
         /// Default configuration package path.
         GameObjectPath m_defaultConfigPackagePath;

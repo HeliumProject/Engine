@@ -323,7 +323,7 @@ void MainFrame::SetHelpText( const tchar_t* text )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for common opening code.
 // 
-void MainFrame::OpenProject( const Helium::Path& path )
+void MainFrame::OpenProject( const Helium::FilePath& path )
 {
 	HELIUM_ASSERT( !path.empty() );
 
@@ -425,7 +425,7 @@ void MainFrame::CloseProject()
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< Path >& paths, Helium::Path& name )
+static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, const std::set< FilePath >& paths, Helium::FilePath& name )
 {
 	int32_t number = 0;
 
@@ -444,9 +444,9 @@ static void GetUniquePathName( const tchar_t* root, const tchar_t* extension, co
 	while ( paths.find( name ) != paths.end() );
 }
 
-Path MainFrame::NewSceneDialog()
+FilePath MainFrame::NewSceneDialog()
 {
-	Path path;
+	FilePath path;
 	GetUniquePathName( TXT( "New Scene" ), TXT( ".HeliumScene" ), m_Project->Paths(), path );
 
 	FileDialog newSceneDialog( this, TXT( "Select New Scene Location" ), wxEmptyString, path.c_str(), TXT( "Scene File (*.HeliumScene)|*.HeliumScene|All Files (*)|*" ), FileDialogStyles::DefaultSave );
@@ -479,7 +479,7 @@ void MainFrame::NewProjectDialog()
 
 	if ( newProjectDialog.ShowModal() == wxID_OK )
 	{
-		Path newProjectPath( newProjectDialog.GetPath().c_str() );
+		FilePath newProjectPath( newProjectDialog.GetPath().c_str() );
 
 		// the newProjectDialog prompts if they're choosing an existing path, so we should just need to clean up here if it exists
 		if ( newProjectPath.Exists() )
@@ -501,7 +501,7 @@ void MainFrame::OpenProjectDialog()
 
 	if ( openDlg.ShowModal() == wxID_OK )
 	{
-		Path existingProjectPath( openDlg.GetPath().c_str() );
+		FilePath existingProjectPath( openDlg.GetPath().c_str() );
 
 		if ( !existingProjectPath.Exists() )
 		{
@@ -513,7 +513,7 @@ void MainFrame::OpenProjectDialog()
 	}
 }
 
-void MainFrame::OpenScene( const Path& path )
+void MainFrame::OpenScene( const FilePath& path )
 {
 	HELIUM_ASSERT( m_Project );
 
@@ -638,7 +638,7 @@ bool MainFrame::ValidateDrag( const Editor::DragArgs& args )
 			fileItr != fileEnd && !canHandleArgs;
 			++fileItr )
 		{
-			Path path( *fileItr );
+			FilePath path( *fileItr );
 
 			if ( path.Exists() )
 			{
@@ -681,7 +681,7 @@ void MainFrame::Drop( const Editor::DragArgs& args )
 			for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
 				fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
 			{
-				Path path( *fileItr );
+				FilePath path( *fileItr );
 
 #pragma TODO( "Load the files" )
 			}
@@ -868,7 +868,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
 
 bool CheckMRUPathExists( const tstring& item )
 {
-	return Path( item ).Exists();
+	return FilePath( item ).Exists();
 }
 
 void MainFrame::OnMenuOpen( wxMenuEvent& event )
@@ -978,7 +978,7 @@ void MainFrame::OnNewScene( wxCommandEvent& event )
 
 	m_PropertiesPanel->GetPropertiesManager().SyncThreads();
 
-	Path path = NewSceneDialog();
+	FilePath path = NewSceneDialog();
 
 	if ( path.empty() )
 	{
@@ -1030,7 +1030,7 @@ bool MainFrame::DoOpen( const tstring& path )
 #pragma TODO( "Rachel WIP: "__FUNCTION__" - This should be opening and closing Projects rather than Scenes." )
 #pragma TODO( "Rachel WIP: "__FUNCTION__" - We will need to handle opening/loading Scenes from the projectView" )
 	//bool opened = false;
-	//Helium::Path nocPath( path );
+	//Helium::FilePath nocPath( path );
 	//if ( !path.empty() && nocPath.Exists() )
 	//{
 	//    m_PropertiesPanel->GetPropertiesManager().SyncThreads();
@@ -1394,7 +1394,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 						return;
 					}
 
-					Helium::Path path( tstring( fileDialog.GetPath().c_str() ) );
+					Helium::FilePath path( tstring( fileDialog.GetPath().c_str() ) );
 					currentScene->Push( currentScene->Import( path, ImportActions::Import, flags, currentScene->GetRoot() ) );
 					break;
 				}

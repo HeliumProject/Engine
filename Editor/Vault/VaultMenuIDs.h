@@ -76,8 +76,8 @@ namespace Helium
                 TXT( "Medium" ),
                 TXT( "Large" ),
 
-                TXT( "Path (Native Format)" ),
-                TXT( "Path (Internal Tools Format)" ),
+                TXT( "FilePath (Native Format)" ),
+                TXT( "FilePath (Internal Tools Format)" ),
 
                 TXT( "Sync" ),
                 TXT( "Check Out" ),

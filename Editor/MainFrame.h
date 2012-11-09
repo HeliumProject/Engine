@@ -55,19 +55,19 @@ namespace Helium
 
             void SetHelpText( const tchar_t* text );
 
-            void OpenProject( const Helium::Path& path );
+            void OpenProject( const Helium::FilePath& path );
             void CloseProject();
             const ProjectPtr& GetProject()
             {
                 return m_Project;
             }
 
-            Path NewSceneDialog();
+            FilePath NewSceneDialog();
 
             void NewProjectDialog();
             void OpenProjectDialog();
 
-            void OpenScene( const Path& path );
+            void OpenScene( const FilePath& path );
             void CloseAllScenes();
 
             SceneGraph::SceneManager& GetSceneManager()

@@ -87,7 +87,7 @@ namespace Helium
             std::stack<WriteFields> m_FieldStack;
 
         public:
-            ArchiveBinary( const Path& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
+            ArchiveBinary( const FilePath& path, ByteOrder byteOrder = Helium::PlatformByteOrder );
             
             // PMD: Added to give more control to caller to step through objects one-by-one.
             ArchiveBinary( CharStream *stream, bool write = false );

@@ -510,7 +510,7 @@ template SimpleStlVectorData<int64_t>;
 template SimpleStlVectorData<float32_t>;
 template SimpleStlVectorData<float64_t>;
 template SimpleStlVectorData<Helium::TUID>;
-template SimpleStlVectorData<Helium::Path>;
+template SimpleStlVectorData<Helium::FilePath>;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlVectorData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolStlVectorData );

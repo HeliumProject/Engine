@@ -3,7 +3,7 @@
 
 #include "Platform/Process.h"
 
-bool Helium::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
+bool Helium::GetPreferencesDirectory( Helium::FilePath& preferencesDirectory )
 {
     tstring prefDirectory = Helium::GetPreferencesDirectory();
 	if ( !prefDirectory.empty() )

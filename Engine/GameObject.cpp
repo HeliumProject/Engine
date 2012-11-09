@@ -684,7 +684,7 @@ bool GameObject::CreateObject(
 
 /// Find an object based on its path name.
 ///
-/// @param[in] path  Path of the object to locate.
+/// @param[in] path  FilePath of the object to locate.
 ///
 /// @return  Pointer to the object if found, null pointer if not found.
 GameObject* GameObject::FindObject( GameObjectPath path )

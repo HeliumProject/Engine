@@ -77,7 +77,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     AsyncLoader::GetStaticInstance().Initialize();
 
-    Path baseDirectory;
+    FilePath baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
         HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );

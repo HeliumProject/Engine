@@ -17,8 +17,8 @@ using namespace Helium;
 
 /// Constructor.
 ///
-/// @param[in] rShaderPath  Path to the shader file being processed.
-D3DIncludeHandler::D3DIncludeHandler( const Path& rShaderPath )
+/// @param[in] rShaderPath  FilePath to the shader file being processed.
+D3DIncludeHandler::D3DIncludeHandler( const FilePath& rShaderPath )
 {
     m_shaderDirectory.Set( rShaderPath.Directory() );
 }
@@ -55,7 +55,7 @@ HRESULT D3DIncludeHandler::Open(
     String fileName;
     StringConverter< char, tchar_t >::Convert( fileName, pFileName );
 
-    Path includePath( m_shaderDirectory + fileName.GetData() );
+    FilePath includePath( m_shaderDirectory + fileName.GetData() );
 
     // Attempt to open and read the contents of the include file.
     FileStream* pIncludeFileStream = FileStream::OpenFileStream( includePath.c_str(), FileStream::MODE_READ );

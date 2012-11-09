@@ -660,7 +660,7 @@ namespace Helium
         class FileStream : public Stream< StreamPrimitiveT >
         {
         public: 
-            FileStream( const Path& path, bool write )
+            FileStream( const FilePath& path, bool write )
                 : m_Path( path )
                 , m_OpenForWrite( write )
             {
@@ -715,7 +715,7 @@ namespace Helium
             }
 
         protected: 
-            Path  m_Path; 
+            FilePath  m_Path; 
             bool  m_OpenForWrite; 
         };
 

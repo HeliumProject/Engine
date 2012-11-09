@@ -21,7 +21,7 @@ PackageLoader::~PackageLoader()
 /// Note: Do NOT call this multiple times for the same object (access to this function should actually be abstracted
 /// by the GameObjectLoader interface).
 ///
-/// @param[in] path  Path of the object to attempt to load.
+/// @param[in] path  FilePath of the object to attempt to load.
 ///
 /// @return  Load request ID.
 ///

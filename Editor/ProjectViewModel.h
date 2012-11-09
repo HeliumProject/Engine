@@ -104,7 +104,7 @@ namespace Helium
         public:
             ProjectViewModelNode( ProjectViewModel* model,
                 ProjectViewModelNode* parent,
-                const Helium::Path& path,
+                const Helium::FilePath& path,
                 const Document* document = NULL,
                 const bool isContainer = false,
                 const bool isActive = false );
@@ -115,8 +115,8 @@ namespace Helium
 
             bool IsContainer() const;
 
-            void SetPath( const Helium::Path& path );
-            const Helium::Path& GetPath();
+            void SetPath( const Helium::FilePath& path );
+            const Helium::FilePath& GetPath();
 
             tstring GetName() const;
             tstring GetDetails() const;
@@ -154,7 +154,7 @@ namespace Helium
             bool m_IsContainer;
             bool m_IsActive;
 
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
             const Document* m_Document;
         };
 
@@ -175,18 +175,18 @@ namespace Helium
             ProjectViewModelNode* OpenProject( Project* project, const Document* document = NULL );
             void CloseProject();
 
-            bool AddChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
-            bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::Path& path );
+            bool AddChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path );
+            bool RemoveChildItem( const wxDataViewItem& parenItem, const Helium::FilePath& path );
 
             void RemoveItem( const wxDataViewItem& item );
 
             bool IsDropPossible( const wxDataViewItem& item );
 
-            void SetActive( const Path& path, bool active );
+            void SetActive( const FilePath& path, bool active );
 
             // Project Events
-            void OnPathAdded( const Helium::Path& path );
-            void OnPathRemoved( const Helium::Path& path );
+            void OnPathAdded( const Helium::FilePath& path );
+            void OnPathRemoved( const Helium::FilePath& path );
 
             // Document and DocumentManager Events
             void OnDocumentOpened( const DocumentEventArgs& args );
@@ -215,7 +215,7 @@ namespace Helium
             Project* m_Project;
             ProjectViewModelNodePtr m_RootNode;
 
-            typedef std::multimap< const Helium::Path, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
+            typedef std::multimap< const Helium::FilePath, ProjectViewModelNode* > MM_ProjectViewModelNodesByPath;
             MM_ProjectViewModelNodesByPath m_MM_ProjectViewModelNodesByPath;
 
             typedef std::vector< uint32_t > M_ColumnLookupTable;
@@ -225,7 +225,7 @@ namespace Helium
             M_FileIconExtensionLookup m_FileIconExtensionLookup;
 
             static const wxArtID DefaultFileIcon;
-            const wxArtID& GetArtIDFromPath( const Path& path ) const;
+            const wxArtID& GetArtIDFromPath( const FilePath& path ) const;
         };
     }
 }

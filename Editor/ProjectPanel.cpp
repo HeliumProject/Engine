@@ -198,7 +198,7 @@ void ProjectPanel::CloseProject()
     Layout();
 }
 
-void ProjectPanel::SetActive( const Path& path, bool active )
+void ProjectPanel::SetActive( const FilePath& path, bool active )
 {
     if ( m_Project && m_Model )
     {
@@ -231,7 +231,7 @@ void ProjectPanel::OnActivateItem( wxDataViewEvent& event )
         return;
     }
 
-    const Path& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
+    const FilePath& path = node->GetPath().GetAbsolutePath( m_Project->a_Path.Get() );
     HELIUM_ASSERT( !path.empty() );
 
     if ( !path.Exists() )
@@ -308,7 +308,7 @@ void ProjectPanel::PopulateOpenProjectListItems()
             for ( std::vector< tstring >::const_reverse_iterator itr = projectMRU.rbegin(), end = projectMRU.rend();
                 itr != end && numberAdded < HELIUM_MAX_RECENT_PROJECTS; ++itr, ++numberAdded )
             {
-                Helium::Path path( *itr );
+                Helium::FilePath path( *itr );
                 bool fileExists = path.Exists();
 
                 EditorButton* button = new EditorButton( m_RecentProjectsPanel, wxNewId() );
@@ -420,7 +420,7 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 {
     if ( !m_Project )
     {
-        Path path( args.m_Path );
+        FilePath path( args.m_Path );
         if ( !path.HasExtension( TXT( "HeliumProject" ) ) )
         {
             args.m_DragResult = wxDragNone;
@@ -441,7 +441,7 @@ void ProjectPanel::OnDragOver( FileDroppedArgs& args )
 
 void ProjectPanel::OnDroppedFiles( const FileDroppedArgs& args )
 {
-    Path path( args.m_Path );
+    FilePath path( args.m_Path );
 
     // it's a project file
     if ( CaseInsensitiveCompareString( path.Extension().c_str(), TXT( "HeliumProject" ) ) == 0 ) 

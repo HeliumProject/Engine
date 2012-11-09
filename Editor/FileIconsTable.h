@@ -40,7 +40,7 @@ namespace Helium
             FileIconsTable();
             virtual ~FileIconsTable();
 
-            int GetIconIDFromPath( const Helium::Path& path );
+            int GetIconIDFromPath( const Helium::FilePath& path );
             int GetIconID( const wxString& extension, const wxString& mime = wxEmptyString );
 
             // which is wxIMAGE_LIST_NORMAL, wxIMAGE_LIST_SMALL, or wxIMAGE_LIST_STATE

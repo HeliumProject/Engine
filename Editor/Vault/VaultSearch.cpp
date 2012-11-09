@@ -451,7 +451,7 @@ uint32_t VaultSearch::Add( const TrackedFile& file, int32_t searchID )
     MutexScopeLock mutex (m_SearchResultsMutex);
 
 #ifdef TRACKER_REFACTOR
-    HELIUM_ASSERT( !Path( file.mPath.value() ).IsDirectory() );
+    HELIUM_ASSERT( !FilePath( file.mPath.value() ).IsDirectory() );
 
     StdInsert< std::set< TrackedFile > >::Result inserted = m_FoundFiles.insert( file );
     if ( m_SearchResults && inserted.second )

@@ -22,7 +22,7 @@ namespace Helium
     public:
         /// @name Construction/Destruction
         //@{
-        explicit D3DIncludeHandler( const Path& rShaderPath );
+        explicit D3DIncludeHandler( const FilePath& rShaderPath );
         virtual ~D3DIncludeHandler();
         //@}
 
@@ -35,7 +35,7 @@ namespace Helium
 
     private:
         /// Directory containing the shader file being processed.
-        Path m_shaderDirectory;
+        FilePath m_shaderDirectory;
     };
 }
 

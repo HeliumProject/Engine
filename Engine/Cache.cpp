@@ -55,8 +55,8 @@ Cache::~Cache()
 ///
 /// @param[in] name            Name identifying this cache.
 /// @param[in] platform        Cache platform identifier.
-/// @param[in] pTocFileName    Path name of the table of contents file.
-/// @param[in] pCacheFileName  Path name of the cache file.
+/// @param[in] pTocFileName    FilePath name of the table of contents file.
+/// @param[in] pCacheFileName  FilePath name of the cache file.
 ///
 /// @return  True if initialization was successful, false if not.
 ///

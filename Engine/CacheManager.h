@@ -39,7 +39,7 @@ namespace Helium
 
         /// @name Static Access
         //@{
-        static bool InitializeStaticInstance( const Path& rBaseDirectory );
+        static bool InitializeStaticInstance( const FilePath& rBaseDirectory );
         static CacheManager& GetStaticInstance();
         static void DestroyStaticInstance();
         //@}
@@ -63,7 +63,7 @@ namespace Helium
 
         /// @name Construction/Destruction
         //@{
-        CacheManager( const Path& rBaseDirectory );
+        CacheManager( const FilePath& rBaseDirectory );
         ~CacheManager();
         //@}
     };

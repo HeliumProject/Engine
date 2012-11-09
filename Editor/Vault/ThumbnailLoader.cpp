@@ -53,10 +53,10 @@ void* ThumbnailLoader::LoadThread::Entry()
             break;
         }
 
-        Helium::Path path;
+        Helium::FilePath path;
 
         {
-            Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_Loader.m_FileQueue );
+            Helium::Locker< Helium::OrderedSet< Helium::FilePath > >::Handle queue( m_Loader.m_FileQueue );
             if ( !queue->Empty() )
             {
 #ifdef HELIUM_ASSERT_ENABLED
@@ -99,7 +99,7 @@ void* ThumbnailLoader::LoadThread::Entry()
 
             if ( path.Extension() == TXT( "HeliumEntity" ) )
             {
-                Path thumbnailPath( path.Directory() + path.Basename() + TXT( "_thumbnail.png" ) );
+                FilePath thumbnailPath( path.Directory() + path.Basename() + TXT( "_thumbnail.png" ) );
 
                 if ( thumbnailPath.Exists() )
                 {
@@ -166,11 +166,11 @@ ThumbnailLoader::~ThumbnailLoader()
     m_LoadThread.Wait();
 }
 
-void ThumbnailLoader::Enqueue( const std::set< Helium::Path >& files )
+void ThumbnailLoader::Enqueue( const std::set< Helium::FilePath >& files )
 {
-    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_FileQueue );
+    Helium::Locker< Helium::OrderedSet< Helium::FilePath > >::Handle queue( m_FileQueue );
 
-    for ( std::set< Helium::Path >::const_reverse_iterator itr = files.rbegin(), end = files.rend();
+    for ( std::set< Helium::FilePath >::const_reverse_iterator itr = files.rbegin(), end = files.rend();
         itr != end;
         ++itr )
     {
@@ -185,7 +185,7 @@ void ThumbnailLoader::Enqueue( const std::set< Helium::Path >& files )
 
 void ThumbnailLoader::Stop()
 {
-    Helium::Locker< Helium::OrderedSet< Helium::Path > >::Handle queue( m_FileQueue );
+    Helium::Locker< Helium::OrderedSet< Helium::FilePath > >::Handle queue( m_FileQueue );
     if ( queue->Empty() )
     {
         return;

@@ -113,7 +113,7 @@ namespace Helium
             const VaultSearchResults* GetResults() const;
 
             void SelectPath( const tstring& path );
-            void GetSelectedPaths( std::set< Helium::Path >& paths );
+            void GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
             tstring GetHighlightedPath() const;
 
@@ -128,7 +128,7 @@ namespace Helium
             void CreateTiles( VaultSearchResults* results );
 
             friend ThumbnailTileCreator;
-            void OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Helium::Path >& textures );
+            void OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Helium::FilePath >& textures );
 
             bool Select( ThumbnailTile* tile );
             bool Deselect( ThumbnailTile* tile );
@@ -159,7 +159,7 @@ namespace Helium
 
             void ShowContextMenu( const wxPoint& pos );
 
-            ThumbnailTile* FindTile( const Helium::Path& path ) const;
+            ThumbnailTile* FindTile( const Helium::FilePath& path ) const;
 
             enum Corner
             {
@@ -269,7 +269,7 @@ namespace Helium
             ThumbnailTileCreator m_TileCreator;
 
             ThumbnailManager*   m_ThumbnailManager;
-            std::set< Helium::Path > m_CurrentTextureRequests;
+            std::set< Helium::FilePath > m_CurrentTextureRequests;
 
             M_PathToTilePtr m_Tiles;
             OS_ThumbnailTiles m_VisibleTiles;

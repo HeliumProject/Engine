@@ -44,7 +44,7 @@ size_t PcPreprocessor::GetShaderProfileCount() const
 
 /// @copydoc PlatformPreprocessor::CompileShader()
 bool PcPreprocessor::CompileShader(
-                                   const Path& rShaderPath,
+                                   const FilePath& rShaderPath,
                                    size_t profileIndex,
                                    RShader::EType type,
                                    const void* pShaderCode,

@@ -179,7 +179,7 @@ namespace Helium
         /// Information for deferred freeing of load requests.
         struct DeferredLoadRequestFree
         {
-            /// Path of the object entry.
+            /// FilePath of the object entry.
             GameObjectPath path;
             /// Load request instance.
             LoadRequest* pRequest;

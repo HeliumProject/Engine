@@ -14,7 +14,7 @@ namespace Helium
         ///////////////////////////////////////////////////////////////////////
         struct FileDroppedArgs
         {
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
             wxCoord m_X;
             wxCoord m_Y;
             wxDragResult m_DragResult;

@@ -308,7 +308,7 @@ template SimpleSetData< String >;
 template SimpleSetData< uint32_t >;
 template SimpleSetData< uint64_t >;
 template SimpleSetData< Helium::TUID >;
-template SimpleSetData< Helium::Path >;
+template SimpleSetData< Helium::FilePath >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StringSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32SetData );

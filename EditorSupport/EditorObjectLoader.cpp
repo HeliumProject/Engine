@@ -96,7 +96,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
                 baseResourcePath = parentPath;
             }
 
-            Path sourceFilePath;
+            FilePath sourceFilePath;
             if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
             {
                 HELIUM_TRACE(

@@ -97,7 +97,7 @@ namespace Helium
         Package* GetPackage() const;
         GameObjectPath GetPackagePath() const;
 
-        inline const Path& GetPackageFileSystemPath() const;
+        inline const FilePath& GetPackageFileSystemPath() const;
         //@}
 
         /// @name Package File Information
@@ -190,8 +190,8 @@ namespace Helium
         ObjectPool< LoadRequest > m_loadRequestPool;
 
         /// Package file path name.
-        Path m_packageDirPath;
-        //Path m_packageTocFilePath;
+        FilePath m_packageDirPath;
+        //FilePath m_packageTocFilePath;
         /// Size of the package data file.
         //size_t m_packageTocFileSize;
 
@@ -202,7 +202,7 @@ namespace Helium
         
         struct FileReadRequest
         {
-            Helium::Path filePath; // Used only to give good error messages
+            Helium::FilePath filePath; // Used only to give good error messages
             void* pLoadBuffer;
             size_t asyncLoadId;
             uint64_t expectedSize;

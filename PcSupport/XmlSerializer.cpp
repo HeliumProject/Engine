@@ -55,7 +55,7 @@
 //    Shutdown();
 //
 //    // Make sure the output directory exists.
-//    Path outputFile( pFileName );
+//    FilePath outputFile( pFileName );
 //    outputFile.MakePath();
 //
 //    // Attempt to open the file for writing.

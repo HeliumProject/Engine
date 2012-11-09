@@ -75,9 +75,9 @@ void Document::Checkout() const
 // Sets the path to this file.  The name of the file is also updated.  Notifies
 // any interested listeners about this event.
 // 
-void Document::SetPath( const Helium::Path& newPath )
+void Document::SetPath( const Helium::FilePath& newPath )
 {
-    Helium::Path oldPath = m_Path.Get();
+    Helium::FilePath oldPath = m_Path.Get();
 
     m_Path = newPath;
     UpdateRCSFileInfo();
@@ -230,7 +230,7 @@ DocumentManager::DocumentManager( MessageSignature::Delegate message, FileDialog
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the first document found with the specified path.
 // 
-Document* DocumentManager::FindDocument( const Helium::Path& path ) const
+Document* DocumentManager::FindDocument( const Helium::FilePath& path ) const
 {
     OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
     OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();

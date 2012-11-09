@@ -33,7 +33,7 @@ bool ConfigPc::SaveUserConfig()
         return false;
     }
 
-    Path userDataDirectory;
+    FilePath userDataDirectory;
     if ( !FileLocations::GetUserDataDirectory( userDataDirectory ) )
     {
         HELIUM_TRACE( TraceLevels::Warning, TXT( "ConfigPc: No user data directory could be determined.\n" ) );
@@ -42,7 +42,7 @@ bool ConfigPc::SaveUserConfig()
 
     GameObjectPath configPackagePath = pConfigPackage->GetPath();
 
-    //Path packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
+    //FilePath packageFilePath( userDataDirectory + configPackagePath.ToFilePathString().GetData() + HELIUM_XML_PACKAGE_FILE_EXTENSION );
 
     //HELIUM_TRACE( TraceLevels::Info, TXT( "ConfigPc: Saving configuration to \"%s\".\n" ), *packageFilePath );
 

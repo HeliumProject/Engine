@@ -286,7 +286,7 @@ template SimpleStlSetData< tstring, StlStringData >;
 template SimpleStlSetData< uint32_t, UInt32Data >;
 template SimpleStlSetData< uint64_t, UInt64Data >;
 template SimpleStlSetData< Helium::TUID, TUIDData >;
-template SimpleStlSetData< Helium::Path, PathData >;
+template SimpleStlSetData< Helium::FilePath, PathData >;
 
 REFLECT_DEFINE_OBJECT( Helium::Reflect::StlStringStlSetData );
 REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32StlSetData );

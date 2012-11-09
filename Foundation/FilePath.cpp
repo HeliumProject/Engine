@@ -14,29 +14,29 @@
 
 using namespace Helium;
 
-void Path::Init( const tchar_t* path )
+void FilePath::Init( const tchar_t* path )
 {
 	m_Path = path;
 
 	std::replace( m_Path.begin(), m_Path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 
-Path::Path( const tchar_t* path )
+FilePath::FilePath( const tchar_t* path )
 {
 	Init( path );
 }
 
-Path::Path( const tstring& path )
+FilePath::FilePath( const tstring& path )
 {
 	Init( path.c_str() );
 }
 
-Path::Path( const Path& path )
+FilePath::FilePath( const FilePath& path )
 {
 	Init( path.m_Path.c_str() );
 }
 
-const tchar_t* Path::operator*() const
+const tchar_t* FilePath::operator*() const
 {
 	static const tchar_t emptyString[] = { TXT( '\0' ) };
 
@@ -45,52 +45,52 @@ const tchar_t* Path::operator*() const
 	return ( pString ? pString : emptyString );
 }
 
-Path& Path::operator=( const Path& rhs )
+FilePath& FilePath::operator=( const FilePath& rhs )
 {
 	Init( rhs.m_Path.c_str() );
 	return *this;
 }
 
-bool Path::operator==( const Path& rhs ) const
+bool FilePath::operator==( const FilePath& rhs ) const
 {
 	return CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) == 0;
 }
 
-bool Path::operator<( const Path& rhs ) const
+bool FilePath::operator<( const FilePath& rhs ) const
 {
 	return CaseInsensitiveCompareString( m_Path.c_str(), rhs.m_Path.c_str() ) < 0;
 }
 
-Helium::Path Path::operator+( const tchar_t* rhs ) const
+Helium::FilePath FilePath::operator+( const tchar_t* rhs ) const
 {
-	return Helium::Path( Get() + rhs );
+	return Helium::FilePath( Get() + rhs );
 }
 
-Helium::Path Path::operator+( const tstring& rhs ) const
+Helium::FilePath FilePath::operator+( const tstring& rhs ) const
 {
-	return Helium::Path( Get() + rhs );
+	return Helium::FilePath( Get() + rhs );
 }
 
-Helium::Path Path::operator+( const Helium::Path& rhs ) const
+Helium::FilePath FilePath::operator+( const Helium::FilePath& rhs ) const
 {
 	// you shouldn't use this on an absolute path
 	HELIUM_ASSERT( !rhs.IsAbsolute() );
 	return rhs.GetAbsolutePath( *this );
 }
 
-Helium::Path& Path::operator+=( const tchar_t* rhs )
+Helium::FilePath& FilePath::operator+=( const tchar_t* rhs )
 {
 	Set( Get() + rhs );
 	return *this;
 }
 
-Helium::Path& Path::operator+=( const tstring& rhs )
+Helium::FilePath& FilePath::operator+=( const tstring& rhs )
 {
 	Set( Get() + rhs );
 	return *this;
 }
 
-Helium::Path& Path::operator+=( const Helium::Path& rhs )
+Helium::FilePath& FilePath::operator+=( const Helium::FilePath& rhs )
 {
 	// you shouldn't use this on an absolute path
 	HELIUM_ASSERT( !rhs.IsAbsolute() );
@@ -98,18 +98,18 @@ Helium::Path& Path::operator+=( const Helium::Path& rhs )
 	return *this;
 }
 
-void Path::Normalize( tstring& path )
+void FilePath::Normalize( tstring& path )
 {
 	toLower( path );
 	std::replace( path.begin(), path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 
-void Path::MakeNative( tstring& path )
+void FilePath::MakeNative( tstring& path )
 {
 	std::replace( path.begin(), path.end(), s_InternalPathSeparator, Helium::PathSeparator );
 }
 
-void Path::GuaranteeSeparator( tstring& path )
+void FilePath::GuaranteeSeparator( tstring& path )
 {
 	if ( !path.empty() && *path.rbegin() != s_InternalPathSeparator )
 	{
@@ -117,23 +117,23 @@ void Path::GuaranteeSeparator( tstring& path )
 	}
 }
 
-bool Path::Exists( const tstring& path )
+bool FilePath::Exists( const tstring& path )
 {
 	Status stat;
 	return stat.Read( path.c_str() );
 }
 
-bool Path::IsAbsolute( const tchar_t* path )
+bool FilePath::IsAbsolute( const tchar_t* path )
 {
 	return Helium::IsAbsolute( path );
 }
 
-bool Path::IsUnder( const tstring& location, const tstring& path )
+bool FilePath::IsUnder( const tstring& location, const tstring& path )
 {
 	return CaseInsensitiveCompareString( location.c_str(), path.c_str(), location.length() ) == 0;
 }
 
-bool Path::IsFile() const
+bool FilePath::IsFile() const
 {
 	if ( *(m_Path.rbegin()) == s_InternalPathSeparator )
 	{
@@ -149,7 +149,7 @@ bool Path::IsFile() const
 	return !( stat.m_Mode & Helium::StatusModes::Directory );
 }
 
-bool Path::IsDirectory() const
+bool FilePath::IsDirectory() const
 {
 	if ( *(m_Path.rbegin()) == s_InternalPathSeparator )
 	{
@@ -165,7 +165,7 @@ bool Path::IsDirectory() const
 	return ( stat.m_Mode & Helium::StatusModes::Directory );
 }
 
-bool Path::Writable() const
+bool FilePath::Writable() const
 {
 	Status stat;
 	if ( stat.Read( m_Path.c_str() ) )
@@ -176,7 +176,7 @@ bool Path::Writable() const
 	return ( stat.m_Mode & Helium::StatusModes::Write ) == Helium::StatusModes::Write;
 }
 
-bool Path::Readable() const
+bool FilePath::Readable() const
 {
 	Status stat;
 	if ( stat.Read( m_Path.c_str() ) )
@@ -187,15 +187,15 @@ bool Path::Readable() const
 	return ( stat.m_Mode & Helium::StatusModes::Read ) == Helium::StatusModes::Read;
 }
 
-bool Path::MakePath() const
+bool FilePath::MakePath() const
 {
 #pragma TODO( "FIXME: This seems excessive, but Helium::MakePath expects native separators" )
 	tstring dir = Directory();
-	Path::MakeNative( dir );
+	FilePath::MakeNative( dir );
 	return Helium::MakePath( dir.c_str() );
 }
 
-bool Path::Create() const
+bool FilePath::Create() const
 {
 	if ( !MakePath() )
 	{
@@ -212,38 +212,38 @@ bool Path::Create() const
 	return true;
 }
 
-bool Path::Copy( const Helium::Path& target, bool overwrite ) const
+bool FilePath::Copy( const Helium::FilePath& target, bool overwrite ) const
 {
 	return Helium::Copy( m_Path.c_str(), target.m_Path.c_str(), overwrite );
 }
 
-bool Path::Move( const Helium::Path& target ) const 
+bool FilePath::Move( const Helium::FilePath& target ) const 
 {
 	return Helium::Move( m_Path.c_str(), target.m_Path.c_str() );
 }
 
-bool Path::Delete() const
+bool FilePath::Delete() const
 {
 	return Helium::Delete( m_Path.c_str() );
 }
 
-const tstring& Path::Get() const
+const tstring& FilePath::Get() const
 {
 	return m_Path;
 }
 
-const tstring& Path::Set( const tstring& path )
+const tstring& FilePath::Set( const tstring& path )
 {
 	Init( path.c_str() );
 	return m_Path;
 }
 
-void Path::Clear()
+void FilePath::Clear()
 {
 	Set( TXT( "" ) );
 }
 
-void Path::TrimToExisting()
+void FilePath::TrimToExisting()
 {
 	if ( !Exists() )
 	{
@@ -263,19 +263,19 @@ void Path::TrimToExisting()
 	}
 }
 
-void Path::Split( tstring& directory, tstring& filename ) const
+void FilePath::Split( tstring& directory, tstring& filename ) const
 {
 	directory = Directory();
 	filename = Filename();
 }
 
-void Path::Split( tstring& directory, tstring& filename, tstring& extension ) const
+void FilePath::Split( tstring& directory, tstring& filename, tstring& extension ) const
 {
 	Split( directory, filename );
 	extension = Extension();
 }
 
-tstring Path::Basename() const
+tstring FilePath::Basename() const
 {
 	tstring basename = Filename();
 	size_t pos = basename.rfind( TXT( '.' ) );
@@ -288,7 +288,7 @@ tstring Path::Basename() const
 	return basename;
 }
 
-tstring Path::Filename() const
+tstring FilePath::Filename() const
 {
 	size_t pos = m_Path.rfind( s_InternalPathSeparator );
 	if ( pos != tstring::npos )
@@ -299,7 +299,7 @@ tstring Path::Filename() const
 	return m_Path;
 }
 
-tstring Path::Directory() const
+tstring FilePath::Directory() const
 {
 	size_t pos = m_Path.rfind( s_InternalPathSeparator );
 	if ( pos != tstring::npos )
@@ -310,7 +310,7 @@ tstring Path::Directory() const
 	return TXT( "" );
 }
 
-std::vector< tstring > Path::DirectoryAsVector() const
+std::vector< tstring > FilePath::DirectoryAsVector() const
 {
 	tistringstream iss( Directory() );
 	std::vector< tstring > out;
@@ -328,7 +328,7 @@ std::vector< tstring > Path::DirectoryAsVector() const
 	return out;
 }
 
-tstring Path::Extension() const
+tstring FilePath::Extension() const
 {
 	tstring filename = Filename();
 	size_t pos = filename.rfind( TXT( '.' ) );
@@ -340,7 +340,7 @@ tstring Path::Extension() const
 	return TXT( "" );
 }
 
-tstring Path::FullExtension() const
+tstring FilePath::FullExtension() const
 {
 	tstring filename = Filename();
 	size_t pos = filename.find_first_of( TXT( '.' ) );
@@ -352,7 +352,7 @@ tstring Path::FullExtension() const
 	return TXT( "" );
 }
 
-void Path::RemoveExtension()
+void FilePath::RemoveExtension()
 {
 	size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
 	size_t pos = m_Path.find_last_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
@@ -362,7 +362,7 @@ void Path::RemoveExtension()
 	}
 }
 
-void Path::RemoveFullExtension()
+void FilePath::RemoveFullExtension()
 {
 	size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
 	size_t pos = m_Path.find_first_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
@@ -372,7 +372,7 @@ void Path::RemoveFullExtension()
 	}
 }
 
-void Path::ReplaceExtension( const tstring& newExtension )
+void FilePath::ReplaceExtension( const tstring& newExtension )
 {
 	size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
 	size_t offset = m_Path.rfind( TXT( '.' ) );
@@ -386,7 +386,7 @@ void Path::ReplaceExtension( const tstring& newExtension )
 	}
 }
 
-void Path::ReplaceFullExtension( const tstring& newExtension )
+void FilePath::ReplaceFullExtension( const tstring& newExtension )
 {
 	size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
 	size_t offset = m_Path.find_first_of( TXT( '.' ), slash == tstring::npos ? 0 : slash );
@@ -400,7 +400,7 @@ void Path::ReplaceFullExtension( const tstring& newExtension )
 	}
 }
 
-bool Path::HasExtension( const tchar_t* extension ) const
+bool FilePath::HasExtension( const tchar_t* extension ) const
 {
 	size_t len = StringLength( extension );
 
@@ -412,44 +412,44 @@ bool Path::HasExtension( const tchar_t* extension ) const
 	return CaseInsensitiveCompareString( m_Path.c_str() + ( m_Path.length() - len ), extension ) == 0;
 }
 
-tstring Path::Native() const
+tstring FilePath::Native() const
 {
 	tstring native = m_Path;
-	Path::MakeNative( native );    
+	FilePath::MakeNative( native );    
 	return native;
 }
 
-tstring Path::Absolute() const
+tstring FilePath::Absolute() const
 {
 	tstring full;
 	Helium::GetFullPath( m_Path.c_str(), full );
 	return full;
 }
 
-tstring Path::Normalized() const
+tstring FilePath::Normalized() const
 {
 	tstring normalized = m_Path;
-	Path::Normalize( normalized );
+	FilePath::Normalize( normalized );
 	return normalized;
 }
 
-tstring Path::Signature()
+tstring FilePath::Signature()
 {
 	tstring temp = m_Path;
 	Normalize( temp );
 	return Helium::MD5( temp );
 }
 
-Helium::Path Path::GetAbsolutePath( const Helium::Path& basisPath ) const
+Helium::FilePath FilePath::GetAbsolutePath( const Helium::FilePath& basisPath ) const
 {
 	HELIUM_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
 	tstring newPathtstring;
 	Helium::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathtstring );
-	return Helium::Path( newPathtstring );
+	return Helium::FilePath( newPathtstring );
 }
 
-Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
+Helium::FilePath FilePath::GetRelativePath( const Helium::FilePath& basisPath ) const
 {
 	std::vector< tstring > targetDirectories = this->DirectoryAsVector();
 	std::vector< tstring > baseDirectories = basisPath.DirectoryAsVector();
@@ -477,45 +477,45 @@ Helium::Path Path::GetRelativePath( const Helium::Path& basisPath ) const
 	}
 
 	newPathtstring += Filename();
-	return Helium::Path( newPathtstring );
+	return Helium::FilePath( newPathtstring );
 }
 
-bool Path::Exists() const
+bool FilePath::Exists() const
 {
-	return Path::Exists( m_Path );
+	return FilePath::Exists( m_Path );
 }
 
-bool Path::IsAbsolute() const
+bool FilePath::IsAbsolute() const
 {
-	return Path::IsAbsolute( m_Path.c_str() );
+	return FilePath::IsAbsolute( m_Path.c_str() );
 }
 
-bool Path::IsUnder( const tstring& location ) const
+bool FilePath::IsUnder( const tstring& location ) const
 {
-	return Path::IsUnder( location, m_Path );
+	return FilePath::IsUnder( location, m_Path );
 }
 
-size_t Path::length() const
+size_t FilePath::length() const
 {
 	return m_Path.length();
 }
 
-bool Path::empty() const
+bool FilePath::empty() const
 {
 	return m_Path.empty();
 }
 
-const tchar_t* Path::c_str() const
+const tchar_t* FilePath::c_str() const
 {
 	return m_Path.c_str();
 }
 
-tstring Path::FileMD5() const
+tstring FilePath::FileMD5() const
 {
 	return Helium::FileMD5( m_Path.c_str() );
 }
 
-bool Path::VerifyFileMD5( const tstring& hash ) const
+bool FilePath::VerifyFileMD5( const tstring& hash ) const
 {
 	return FileMD5().compare( hash ) == 0;
 }

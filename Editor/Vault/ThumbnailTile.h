@@ -13,11 +13,11 @@ namespace Helium
         class ThumbnailTile : public Helium::RefCountBase< ThumbnailTile >
         {
         public:
-            ThumbnailTile( const Helium::Path& path );
+            ThumbnailTile( const Helium::FilePath& path );
             virtual ~ThumbnailTile();
 
         public:
-            const Helium::Path& GetPath() const;
+            const Helium::FilePath& GetPath() const;
 
             inline uint32_t GetRow() const
             {
@@ -62,7 +62,7 @@ namespace Helium
             void SetThumbnail( ThumbnailPtr thumbnail );
 
         private:
-            Helium::Path m_Path;
+            Helium::FilePath m_Path;
 
             uint32_t m_Row;
             uint32_t m_Column;
@@ -79,6 +79,6 @@ namespace Helium
         typedef std::set< ThumbnailTilePtr > S_ThumbnailTiles;
         typedef Helium::OrderedSet< ThumbnailTilePtr > OS_ThumbnailTiles;
 
-        typedef std::map< const Helium::Path, ThumbnailTilePtr > M_PathToTilePtr;
+        typedef std::map< const Helium::FilePath, ThumbnailTilePtr > M_PathToTilePtr;
     }
 }

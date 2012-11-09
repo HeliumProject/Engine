@@ -11,7 +11,7 @@ namespace Helium
         class HELIUM_REFLECT_API PathData : public Data
         {
         public:
-            typedef Helium::Path DataType;
+            typedef Helium::FilePath DataType;
             DataPointer< DataType > m_Data;
 
             REFLECT_DECLARE_OBJECT( PathData, Data );

@@ -6,7 +6,7 @@
 using namespace Helium;
 using namespace Helium::Editor;
 
-ThumbnailTile::ThumbnailTile( const Helium::Path& path )
+ThumbnailTile::ThumbnailTile( const Helium::FilePath& path )
 : m_Path( path )
 , m_Row( 0 )
 , m_Column( 0 )
@@ -42,7 +42,7 @@ tstring ThumbnailTile::GetEditableName() const
     return m_Path.Basename();
 }
 
-const Helium::Path& ThumbnailTile::GetPath() const
+const Helium::FilePath& ThumbnailTile::GetPath() const
 {
     return m_Path;
 }

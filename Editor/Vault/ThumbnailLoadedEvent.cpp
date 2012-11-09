@@ -37,12 +37,12 @@ void ThumbnailLoadedEvent::SetThumbnails( const V_ThumbnailPtr& thumbnails )
   m_Thumbnails = thumbnails;
 }
 
-const Helium::Path& ThumbnailLoadedEvent::GetPath() const
+const Helium::FilePath& ThumbnailLoadedEvent::GetPath() const
 {
   return m_Path;
 }
 
-void ThumbnailLoadedEvent::SetPath( const Helium::Path& path )
+void ThumbnailLoadedEvent::SetPath( const Helium::FilePath& path )
 {
   m_Path = path;
 }

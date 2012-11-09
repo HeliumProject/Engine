@@ -19,7 +19,7 @@ namespace Helium
             {
                 NONE        = 0,
                 Icon,
-                Path,
+                FilePath,
                 Filename,
                 Directory,
                 Size,
@@ -29,7 +29,7 @@ namespace Helium
         typedef std::vector< DetailsColumnType > V_DetailsColumnType;
 
         /////////////////////////////////////////////////////////////////////////////
-        typedef tstring (*GetFileInfoDataFunc)( const Helium::Path& path );
+        typedef tstring (*GetFileInfoDataFunc)( const Helium::FilePath& path );
 
         class DetailsColumn
         {
@@ -65,7 +65,7 @@ namespace Helium
                 return m_ColumnWidth;
             }
 
-            tstring Data( const Helium::Path& path )
+            tstring Data( const Helium::FilePath& path )
             {
                 if ( m_GetFileInfoDataFunc != NULL )
                 {
@@ -76,10 +76,10 @@ namespace Helium
             }
 
         public:
-            static tstring Path( const Helium::Path& path );
-            static tstring Filename( const Helium::Path& path );
-            static tstring Directory( const Helium::Path& path );
-            static tstring Size( const Helium::Path& path );
+            static tstring FilePath( const Helium::FilePath& path );
+            static tstring Filename( const Helium::FilePath& path );
+            static tstring Directory( const Helium::FilePath& path );
+            static tstring Size( const Helium::FilePath& path );
 
         private:
             DetailsColumnType m_DetailsColumnType;
@@ -103,7 +103,7 @@ namespace Helium
             const VaultSearchResults* GetResults() const;
 
             void SelectPath( const tstring& path );
-            void GetSelectedPaths( std::set< Helium::Path >& paths );
+            void GetSelectedPaths( std::set< Helium::FilePath >& paths );
 
             tstring GetHighlightedPath() const;
 

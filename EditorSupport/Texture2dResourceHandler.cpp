@@ -67,7 +67,7 @@ bool Texture2dResourceHandler::CacheResource(
     if( !pSourceFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Texture2dResourceHandler::CacheResource(): Failed to open source texture file \"%s\" for " )
             TXT( "reading.\n" ) ),
             *rSourceFilePath );
@@ -99,7 +99,7 @@ bool Texture2dResourceHandler::CacheResource(
     if( !bLoadSuccess )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Texture2dResourceHandler::CacheResource(): Failed to load source texture image \"%s\".\n" ),
             *rSourceFilePath );
     }
@@ -282,7 +282,7 @@ bool Texture2dResourceHandler::CacheResource(
     if( !bCompressSuccess )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Texture2dResourceHandler::CacheResource(): Texture compression failed for texture image " )
             TXT( "\"%s\".\n" ) ),
             *rSourceFilePath );

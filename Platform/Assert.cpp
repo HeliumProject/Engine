@@ -19,7 +19,7 @@ volatile int32_t Assert::sm_active = 0;
 /// @param[in] pFunction    Function in which the assertion occurred.
 /// @param[in] pFile        File in which the assertion occurred.
 /// @param[in] line         Line number at which the assertion occurred.
-Assert::EResult Assert::Trigger(
+AssertResult Assert::Trigger(
     const tchar_t* pExpression,
     const tchar_t* pFunction,
     const tchar_t* pFile,
@@ -93,10 +93,10 @@ Assert::EResult Assert::Trigger(
         }
     }
 
-    HELIUM_TRACE( TRACE_ERROR, TXT( "%s\n" ), messageText );
+    HELIUM_TRACE( TraceLevels::Error, TXT( "%s\n" ), messageText );
 
     // Present the assert message and get how we should proceed.
-    EResult result = TriggerImplementation( messageText );
+    AssertResult result = TriggerImplementation( messageText );
 
     AtomicExchangeRelease( sm_active, 0 );
 

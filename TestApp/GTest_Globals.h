@@ -15,23 +15,23 @@ public:
     NonTrivialClass( float32_t value = 0.0f )
         : m_value( value )
     {
-        HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "NonTrivialClass::NonTrivialClass()\n" ) );
+        HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "NonTrivialClass::NonTrivialClass()\n" ) );
     }
 
     NonTrivialClass( const NonTrivialClass& rSource )
         : m_value( rSource.m_value )
     {
-        HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "NonTrivialClass::NonTrivialClass( const NonTrivialClass& )\n" ) );
+        HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "NonTrivialClass::NonTrivialClass( const NonTrivialClass& )\n" ) );
     }
 
     ~NonTrivialClass()
     {
-        HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "NonTrivialClass::~NonTrivialClass()\n" ) );
+        HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "NonTrivialClass::~NonTrivialClass()\n" ) );
     }
 
     NonTrivialClass& operator=( const NonTrivialClass& rSource )
     {
-        HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "NonTrivialClass::operator=( const NonTrivialClass& )\n" ) );
+        HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "NonTrivialClass::operator=( const NonTrivialClass& )\n" ) );
         m_value = rSource.m_value;
         return *this;
     }
@@ -55,7 +55,7 @@ public:
 
     virtual void Run()
     {
-        HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "%s\n" ), *m_string );
+        HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "%s\n" ), *m_string );
     }
 
 private:
@@ -81,8 +81,8 @@ static void PrintArrayInfo( const tchar_t varName[], const Helium::DynArray< T, 
 {
     HELIUM_UNREF( varName );
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "%s.GetSize() = %Iu\n" ), varName, rArray.GetSize() );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "%s.GetCapacity() = %Iu\n" ), varName, rArray.GetCapacity() );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "%s.GetSize() = %Iu\n" ), varName, rArray.GetSize() );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "%s.GetCapacity() = %Iu\n" ), varName, rArray.GetCapacity() );
 
     tchar_t valueBuffer[ 64 ];
 
@@ -90,10 +90,10 @@ static void PrintArrayInfo( const tchar_t varName[], const Helium::DynArray< T, 
     for( size_t arrayIndex = 0; arrayIndex < arraySize; ++arrayIndex )
     {
         GetFormattedValue( valueBuffer, rArray[ arrayIndex ] );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "%s " ), valueBuffer );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "%s " ), valueBuffer );
     }
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "\n" ) );
 }
 
 static int FloatCompare( const void* pElement0, const void* pElement1 )

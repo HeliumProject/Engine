@@ -76,7 +76,7 @@ bool MeshResourceHandler::CacheResource(
     if( !bLoadSuccess )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "MeshResourceHandler::CacheResource(): Failed to build mesh from source file \"%s\".\n" ),
             *rSourceFilePath );
 

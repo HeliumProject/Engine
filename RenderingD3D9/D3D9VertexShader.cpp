@@ -51,7 +51,7 @@ void* D3D9VertexShader::Lock()
 {
     if( !m_bStaging )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9VertexShader::Lock(): Vertex shader has already been loaded.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9VertexShader::Lock(): Vertex shader has already been loaded.\n" ) );
 
         return NULL;
     }
@@ -64,7 +64,7 @@ bool D3D9VertexShader::Unlock()
 {
     if( !m_bStaging )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9VertexShader::Unlock(): Vertex shader has already been loaded.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9VertexShader::Unlock(): Vertex shader has already been loaded.\n" ) );
 
         return false;
     }
@@ -83,7 +83,7 @@ bool D3D9VertexShader::Unlock()
     HRESULT createResult = pD3DDevice->CreateVertexShader( static_cast< DWORD* >( m_pShaderData ), &pD3DShader );
     if( FAILED( createResult ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9VertexShader::Unlock(): Vertex shader creation failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9VertexShader::Unlock(): Vertex shader creation failed.\n" ) );
         pD3DShader = NULL;
     }
 

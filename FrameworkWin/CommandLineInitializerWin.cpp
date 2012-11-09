@@ -20,7 +20,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< St
     if( !pCommandLine )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CommandLineInitializationWin::Initialize(): Failed to retrieve command-line string.\n" ) );
 
         return false;
@@ -31,7 +31,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< St
     if( moduleFileNameLength == 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CommandLineInitializationWin::Initialize(): Failed to retrieve module file name string.\n" ) );
 
         return false;
@@ -58,7 +58,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< St
     if( !ppArguments )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CommandLineInitializationWin::Initialize(): Failed to parse command-line arguments.\n" ) );
 
         return false;

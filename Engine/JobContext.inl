@@ -190,7 +190,7 @@ namespace Helium
         if( childContextCount >= HELIUM_ARRAY_COUNT( m_childContexts ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "The maximum number of child contexts (%" ) TPRIuSZ TXT( ") has already been allocated " ),
                   TXT( "for this spawner.\n" ) ),
                 childContextCount );
@@ -211,7 +211,7 @@ namespace Helium
                 HELIUM_ASSERT( !m_pContext->m_pActiveSpawner );
                 if( m_pContext->m_pActiveSpawner )
                 {
-                    HELIUM_TRACE( TRACE_ERROR, TXT( "Parent context already has a job spawner attached.\n" ) );
+                    HELIUM_TRACE( TraceLevels::Error, TXT( "Parent context already has a job spawner attached.\n" ) );
 
                     return NULL;
                 }
@@ -220,7 +220,7 @@ namespace Helium
                 if( m_pContext->m_bAllocatedChildren )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "Child context cannot be allocated for a context for which children have already been " )
                           TXT( "spawned." ) ) );
 
@@ -285,7 +285,7 @@ namespace Helium
         HELIUM_ASSERT( !m_pContinuationContext );
         if( m_pContinuationContext )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "A continuation context has already been allocated for this spawner.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "A continuation context has already been allocated for this spawner.\n" ) );
 
             return NULL;
         }
@@ -294,7 +294,7 @@ namespace Helium
         HELIUM_ASSERT( m_pContext );
         if( !m_pContext )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Spawner was not created with an existing job context.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Spawner was not created with an existing job context.\n" ) );
 
             return NULL;
         }
@@ -303,7 +303,7 @@ namespace Helium
         HELIUM_ASSERT( m_childContextCount == 0 );
         if( m_childContextCount != 0 )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Continuation contexts must be allocated before allocating child contexts.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Continuation contexts must be allocated before allocating child contexts.\n" ) );
 
             return NULL;
         }
@@ -315,7 +315,7 @@ namespace Helium
             HELIUM_ASSERT( !m_pContext->m_pActiveSpawner );
             if( m_pContext->m_pActiveSpawner )
             {
-                HELIUM_TRACE( TRACE_ERROR, TXT( "Parent context already has a job spawner attached.\n" ) );
+                HELIUM_TRACE( TraceLevels::Error, TXT( "Parent context already has a job spawner attached.\n" ) );
 
                 return NULL;
             }
@@ -324,7 +324,7 @@ namespace Helium
             if( m_pContext->m_bAllocatedChildren )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Continuation context cannot be allocated for a context for which children have already " )
                       TXT( "been spawned." ) ) );
 

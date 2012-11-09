@@ -884,7 +884,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
     if( nodeIndex >= m_values.GetSize() )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             TXT( "Invalid RbTree node index %" ) TPRIuSZ TXT( " (max: %" ) TPRIuSZ TXT( ").\n" ),
             nodeIndex,
             m_values.GetSize() );
@@ -904,7 +904,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         if( IsValid( child0Index ) && !m_blackNodes[ child0Index ] )
         {
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "Consecutive red nodes found in RbTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
                 nodeIndex,
                 child0Index );
@@ -915,7 +915,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         if( IsValid( child1Index ) && !m_blackNodes[ child1Index ] )
         {
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "Consecutive red nodes found in RbTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
                 nodeIndex,
                 child1Index );
@@ -935,7 +935,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         if( !keyCompare( rChildKey, rNodeKey ) )
         {
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "RbTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
                 nodeIndex,
                 child0Index );
@@ -950,7 +950,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         if( !keyCompare( rNodeKey, rChildKey ) )
         {
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "RbTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
                 nodeIndex,
                 child1Index );
@@ -984,7 +984,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
     if( child0BlackNodeCount != child1BlackNodeCount )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             ( TXT( "RbTree black node depth mismatch between subtrees at nodes %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ
               TXT( " black nodes) and %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ TXT( " black nodes).\n" ) ),
             child0Index,

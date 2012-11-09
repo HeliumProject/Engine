@@ -69,7 +69,7 @@
 //        if( m_properties[ propertyIndex ].GetName() == name )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_WARNING,
+//                TraceLevels::Warning,
 //                ( TXT( "XmlTemplateSerializer: Duplicate property \"%s\" serialized.  The existing property data " )
 //                TXT( "will be overwritten.\n" ) ),
 //                *name );

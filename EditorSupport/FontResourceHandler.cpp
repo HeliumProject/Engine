@@ -173,7 +173,7 @@ bool FontResourceHandler::CacheResource(
     if( !pFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "FontResourceHandler: Source file for font resource \"%s\" failed to open properly.\n" ),
             *rSourceFilePath );
 
@@ -184,7 +184,7 @@ bool FontResourceHandler::CacheResource(
     if( fileSize64 > SIZE_MAX )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "FontResourceHandler: Font file \"%s\" exceeds the maximum addressable size of data in memory for " )
               TXT( "this platform and will not be cached.\n" ) ),
             *rSourceFilePath );
@@ -200,7 +200,7 @@ bool FontResourceHandler::CacheResource(
     if( !pFileData )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "FontResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for resource data for font " )
               TXT( "\"%s\".\n" ) ),
             fileSize,
@@ -217,7 +217,7 @@ bool FontResourceHandler::CacheResource(
     if( bytesRead != fileSize )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "FontResourceHandler: Attempted to read %" ) TPRIuSZ TXT( " bytes from font resource file \"%s\", " )
               TXT( "but only %" ) TPRIuSZ TXT( " bytes were read successfully.\n" ) ),
             fileSize,
@@ -234,7 +234,7 @@ bool FontResourceHandler::CacheResource(
     if( error != 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "FontResourceHandler: Failed to create font face from resource file \"%s\".\n" ),
             *rSourceFilePath );
 
@@ -251,7 +251,7 @@ bool FontResourceHandler::CacheResource(
     if( error != 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "FontResourceHandler: Failed to set size of font resource \"%s\".\n" ),
             *rSourceFilePath );
 
@@ -280,7 +280,7 @@ bool FontResourceHandler::CacheResource(
     if( integerHeight + 2 > textureSheetHeight )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "FontResourceHandler: Font height (%" ) TPRId32 TXT( ") exceeds the texture sheet height (%" )
               TPRIu16 TXT( ") for font resource \"%s\".\n" ) ),
             integerHeight,
@@ -297,7 +297,7 @@ bool FontResourceHandler::CacheResource(
     if( integerMaxAdvance + 2 > textureSheetWidth )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "FontResourceHandler: Maximum character advance (%" ) TPRId32 TXT( ") exceeds the texture sheet " )
               TXT( "width (%" ) TPRIu16 TXT( ") for font resource \"%s\".\n" ) ),
             integerMaxAdvance,
@@ -318,7 +318,7 @@ bool FontResourceHandler::CacheResource(
     if( !pTextureBuffer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "FontResourceHandler: Failed to allocate %" ) TPRIuFAST32 TXT( " bytes for texture resource " )
               TXT( "buffer data while caching font resource \"%s\".\n" ) ),
             texturePixelCount,

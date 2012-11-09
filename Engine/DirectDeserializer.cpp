@@ -267,7 +267,7 @@
 //    size_t bufferRemaining = bufferSize - m_offset;
 //    if( bufferRemaining < byteCount )
 //    {
-//        HELIUM_TRACE( TRACE_ERROR, TXT( "DirectDeserializer error: End of buffer reached during de-serialization.\n" ) );
+//        HELIUM_TRACE( TraceLevels::Error, TXT( "DirectDeserializer error: End of buffer reached during de-serialization.\n" ) );
 //
 //        m_offset = bufferSize;
 //        m_bEndOfStream = true;

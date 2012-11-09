@@ -81,19 +81,19 @@ bool D3D9Renderer::Initialize()
     HELIUM_ASSERT( !m_pD3D );
     if( m_pD3D )
     {
-        HELIUM_TRACE( TRACE_WARNING, TXT( "D3D9Renderer: Initialize() called on an already initialized renderer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Warning, TXT( "D3D9Renderer: Initialize() called on an already initialized renderer.\n" ) );
 
         return true;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Initializing Direct3D 9 rendering support (D3D9Renderer).\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Initializing Direct3D 9 rendering support (D3D9Renderer).\n" ) );
 
 #if !L_DISABLE_DIRECT3D9EX
     // Test for Direct3D9Ex support (provides better support for Windows Vista and later).
     HMODULE hD3DLibrary = LoadLibraryA( "d3d9.dll" );
     if( !hD3DLibrary )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to load d3d9.dll.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to load d3d9.dll.\n" ) );
 
         return false;
     }
@@ -102,11 +102,11 @@ bool D3D9Renderer::Initialize()
         reinterpret_cast< DIRECT3DCREATE9EX_FUNC* >( GetProcAddress( hD3DLibrary, "Direct3DCreate9Ex" ) );
     if( !pDirect3DCreate9Ex )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D9Ex support not found.\n" ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Direct3D9Ex support not found.\n" ) );
     }
     else
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D9Ex support found.\n" ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Direct3D9Ex support found.\n" ) );
 
         IDirect3D9Ex* pD3DEx = NULL;
         HRESULT createResult = pDirect3DCreate9Ex( D3D_SDK_VERSION, &pD3DEx );
@@ -116,7 +116,7 @@ bool D3D9Renderer::Initialize()
         if( FAILED( createResult ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to initialize Direct3D9Ex interface (error code 0x%x).  Falling back to standard " )
                 TXT( "Direct3D9 support.\n" ) ),
                 createResult );
@@ -127,7 +127,7 @@ bool D3D9Renderer::Initialize()
             m_pD3D = pD3DEx;
             m_bExDevice = true;
 
-            HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D9Ex initialized successfully.\n" ) );
+            HELIUM_TRACE( TraceLevels::Info, TXT( "Direct3D9Ex initialized successfully.\n" ) );
         }
     }
 #endif
@@ -137,7 +137,7 @@ bool D3D9Renderer::Initialize()
         m_pD3D = Direct3DCreate9( D3D_SDK_VERSION );
         if( !m_pD3D )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to initialize Direct3D9 interface.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize Direct3D9 interface.\n" ) );
 
             return false;
         }
@@ -167,7 +167,7 @@ bool D3D9Renderer::Initialize()
         if( checkResult == D3D_OK )
         {
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "Using D3DFORMAT %x for depth textures.\n" ),
                 static_cast< unsigned int >( format ) );
 
@@ -180,7 +180,7 @@ bool D3D9Renderer::Initialize()
     if( m_depthTextureFormat == D3DFMT_UNKNOWN )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "Failed to find an appropriate D3DFORMAT for depth texture support.  Shadow mapping and other " )
               TXT( "depth-dependent effects will be disabled.\n" ) ) );
     }
@@ -192,7 +192,7 @@ bool D3D9Renderer::Initialize()
         m_featureFlags |= RENDERER_FEATURE_FLAG_DEPTH_TEXTURE;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D9 initialized successfully.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Direct3D9 initialized successfully.\n" ) );
 
     return true;
 }
@@ -200,7 +200,7 @@ bool D3D9Renderer::Initialize()
 /// @copydoc Renderer::Shutdown()
 void D3D9Renderer::Shutdown()
 {
-    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down Direct3D 9 rendering support (D3D9Renderer).\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down Direct3D 9 rendering support (D3D9Renderer).\n" ) );
 
     m_spMainContext.Release();
     m_spImmediateCommandProxy.Release();
@@ -243,7 +243,7 @@ void D3D9Renderer::Shutdown()
 
     m_featureFlags = 0;
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Direct3D 9 renderer shutdown complete.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Direct3D 9 renderer shutdown complete.\n" ) );
 }
 
 /// @copydoc Renderer::CreateMainContext()
@@ -256,19 +256,19 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     if( m_pD3DDevice )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "D3D9Renderer: CreateMainContext() called when a main context already exists.\n" ) );
 
         return false;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Creating main display context.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: Creating main display context.\n" ) );
 
     // Build the presentation parameters.
     if( !GetPresentParameters( rInitParameters, m_presentParameters, m_fullscreenDisplayMode ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the main context.\n" ) );
 
         return false;
@@ -302,7 +302,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
 
     if( FAILED( createResult ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Device creation failed (error code: 0x%x).\n" ), createResult );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer: Device creation failed (error code: 0x%x).\n" ), createResult );
 
         return false;
     }
@@ -310,7 +310,7 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     HELIUM_ASSERT( m_pD3DDevice );
 
     HELIUM_TRACE(
-        TRACE_INFO,
+        TraceLevels::Info,
         ( TXT( "D3D9Renderer: Display context created:\n- Dimensions: %ux%u\n- Multisample count: %u\n" )
           TXT( "- Fullscreen: %d\n- VSync: %d\n" ) ),
         rInitParameters.displayWidth,
@@ -340,13 +340,13 @@ bool D3D9Renderer::ResetMainContext( const ContextInitParameters& rInitParameter
     if( !m_spMainContext )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Attempted to reset the main rendering context without creating it first.\n" ) );
 
         return false;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Resetting main display context.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: Resetting main display context.\n" ) );
 
     // Build the presentation parameters and reset the device.
     D3DPRESENT_PARAMETERS presentParameters;
@@ -354,7 +354,7 @@ bool D3D9Renderer::ResetMainContext( const ContextInitParameters& rInitParameter
     if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the main context.\n" ) );
 
         return false;
@@ -386,14 +386,14 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     if( !m_spMainContext )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer: Attempted creation of a renderer sub-context without creating a main context " )
               TXT( "first.\n" ) ) );
 
         return NULL;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Creating display sub-context.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: Creating display sub-context.\n" ) );
 
     // Build the presentation parameters and create the swap chain.
     D3DPRESENT_PARAMETERS presentParameters;
@@ -401,7 +401,7 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     if( !GetPresentParameters( rInitParameters, presentParameters, fullscreenDisplayMode ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Failed to find matching fullscreen display mode for the sub-context.\n" ) );
 
         return false;
@@ -412,7 +412,7 @@ RRenderContext* D3D9Renderer::CreateSubContext( const ContextInitParameters& rIn
     if( FAILED( createResult ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Swap chain creation failed (error code: 0x%x).\n" ),
             createResult );
 
@@ -482,13 +482,13 @@ Renderer::EStatus D3D9Renderer::Reset()
     if( !m_spMainContext )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer: Attempted to reset the device without creating a main context first.\n" ) );
 
         return STATUS_INVALID;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "D3D9Renderer: Resetting device.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: Resetting device.\n" ) );
 
     HRESULT resetResult = ResetDevice( m_presentParameters, m_fullscreenDisplayMode );
 
@@ -503,7 +503,7 @@ RRasterizerState* D3D9Renderer::CreateRasterizerState( const RRasterizerState::D
 
     if( !pState->Initialize( rDescription ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Failed to create rasterizer state.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer: Failed to create rasterizer state.\n" ) );
 
         D3D9RasterizerStatePtr spState( pState );
 
@@ -521,7 +521,7 @@ RBlendState* D3D9Renderer::CreateBlendState( const RBlendState::Description& rDe
 
     if( !pState->Initialize( rDescription ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Failed to create blend state.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer: Failed to create blend state.\n" ) );
 
         D3D9BlendStatePtr spState( pState );
 
@@ -539,7 +539,7 @@ RDepthStencilState* D3D9Renderer::CreateDepthStencilState( const RDepthStencilSt
 
     if( !pState->Initialize( rDescription ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Failed to create depth-stencil state.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer: Failed to create depth-stencil state.\n" ) );
 
         D3D9DepthStencilStatePtr spState( pState );
 
@@ -557,7 +557,7 @@ RSamplerState* D3D9Renderer::CreateSamplerState( const RSamplerState::Descriptio
 
     if( !pState->Initialize( rDescription ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer: Failed to create sampler state.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer: Failed to create sampler state.\n" ) );
 
         D3D9SamplerStatePtr spState( pState );
 
@@ -588,7 +588,7 @@ RSurface* D3D9Renderer::CreateDepthStencilSurface(
         if( multisampleCount > 16 )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Multisample count cannot be more than 16.  Value " )
                   TXT( "will be clamped.\n" ) ) );
             multisampleCount = 16;
@@ -611,7 +611,7 @@ RSurface* D3D9Renderer::CreateDepthStencilSurface(
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateDepthStencilSurface(): Failed to create depth-stencil surface (error code: " )
               TXT( "0x%x).\n" ) ),
             result );
@@ -658,7 +658,7 @@ RVertexShader* D3D9Renderer::CreateVertexShader( size_t size, const void* pData 
             &pD3DShader );
         if( FAILED( createResult ) )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer::CreateVertexShader(): Vertex shader creation failed.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer::CreateVertexShader(): Vertex shader creation failed.\n" ) );
 
             return NULL;
         }
@@ -676,7 +676,7 @@ RVertexShader* D3D9Renderer::CreateVertexShader( size_t size, const void* pData 
     if( !pStaging )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateVertexShader(): Failed to allocate staging buffer of %" ) TPRIuSZ
             TXT( " bytes for loading.\n" ) ),
             size );
@@ -706,7 +706,7 @@ RPixelShader* D3D9Renderer::CreatePixelShader( size_t size, const void* pData )
         HRESULT createResult = m_pD3DDevice->CreatePixelShader( static_cast< const DWORD* >( pData ), &pD3DShader );
         if( FAILED( createResult ) )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer::CreatePixelShader(): Pixel shader creation failed.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer::CreatePixelShader(): Pixel shader creation failed.\n" ) );
 
             return NULL;
         }
@@ -724,7 +724,7 @@ RPixelShader* D3D9Renderer::CreatePixelShader( size_t size, const void* pData )
     if( !pStaging )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreatePixelShader(): Failed to allocate staging buffer of %" ) TPRIuSZ
             TXT( " bytes for loading.\n" ) ),
             size );
@@ -750,7 +750,7 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
     if( usage != RENDERER_BUFFER_USAGE_STATIC && usage != RENDERER_BUFFER_USAGE_DYNAMIC )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateVertexBuffer(): Vertex buffers can only be created with static or " )
             TXT( "dynamic usage semantics.\n" ) ) );
 
@@ -773,7 +773,7 @@ RVertexBuffer* D3D9Renderer::CreateVertexBuffer( size_t size, ERendererBufferUsa
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer::CreateVertexBuffer(): Vertex buffer creation failed (result code: 0x%x).\n" ),
             result );
 
@@ -826,7 +826,7 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
     if( usage != RENDERER_BUFFER_USAGE_STATIC && usage != RENDERER_BUFFER_USAGE_DYNAMIC )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateIndexBuffer(): Index buffers can only be created with static or dynamic " )
               TXT( "usage semantics.\n" ) ) );
 
@@ -850,7 +850,7 @@ RIndexBuffer* D3D9Renderer::CreateIndexBuffer(
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer::CreateIndexBuffer(): Index buffer creation failed (result code: 0x%x).\n" ),
             result );
 
@@ -908,7 +908,7 @@ RConstantBuffer* D3D9Renderer::CreateConstantBuffer(
     if( registerCount > UINT16_MAX )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateConstantBuffer(): Buffer size (%" ) TPRIuSZ TXT( ") is larger than the " )
             TXT( "maximum size supported (%" ) TPRIuSZ TXT( ").\n" ) ),
             size,
@@ -923,7 +923,7 @@ RConstantBuffer* D3D9Renderer::CreateConstantBuffer(
     if( !pBufferMemory )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateConstantBuffer(): Failed to allocate %" ) TPRIuSZ TXT( " bytes for " )
             TXT( "constant buffer data.\n" ) ),
             actualSize );
@@ -956,7 +956,7 @@ RVertexDescription* D3D9Renderer::CreateVertexDescription(
     if( elementCount == 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateVertexDescription(): Cannot create a vertex description with no " )
             TXT( "elements.\n" ) ) );
 
@@ -1039,7 +1039,7 @@ RVertexDescription* D3D9Renderer::CreateVertexDescription(
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateVertexInputDescription(): Failed to create vertex declaration (error " )
             TXT( "code: 0x%x).\n" ) ),
             result );
@@ -1110,7 +1110,7 @@ RTexture2d* D3D9Renderer::CreateTexture2d(
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Renderer::CreateTexture2d(): Failed to create 2D texture (error code: 0x%x).\n" ),
             result );
 
@@ -1193,7 +1193,7 @@ RFence* D3D9Renderer::CreateFence()
     if( FAILED( createResult ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::CreateFence(): Failed to create Direct3D event query instance (error code: " )
               TXT( "0x%x).\n" ) ),
             createResult );
@@ -1230,7 +1230,7 @@ void D3D9Renderer::SyncFence( RFence* pFence )
         {
             if( syncResult == D3DERR_DEVICELOST )
             {
-                HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer::SyncFence(): Device lost, aborting sync.\n" ) );
+                HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer::SyncFence(): Device lost, aborting sync.\n" ) );
             }
 
             return;
@@ -1258,7 +1258,7 @@ bool D3D9Renderer::TrySyncFence( RFence* pFence )
     HRESULT syncResult = pD3DQuery->GetData( NULL, 0, D3DGETDATA_FLUSH );
     if( syncResult == D3DERR_DEVICELOST )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9Renderer::TrySyncFence(): Device lost.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9Renderer::TrySyncFence(): Device lost.\n" ) );
     }
 
     return ( syncResult != S_FALSE );
@@ -1431,7 +1431,7 @@ IDirect3DTexture9* D3D9Renderer::GetPooledStaticTextureMapTarget(
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Renderer::GetPooledStaticTextureMapTarget(): Failed to create pool texture (width: %" )
             TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; format: %x).\n" ) ),
             poolTextureWidth,
@@ -1657,7 +1657,7 @@ bool D3D9Renderer::GetPresentParameters(
         if( IsInvalid( bestModeIndex ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "D3D9Renderer: Failed to locate valid fullscreen display mode for resolution %" ) TPRIu32
                   TXT( "x%" ) TPRIu32 TXT( ".\n" ) ),
                 rContextInitParameters.displayWidth,
@@ -1682,7 +1682,7 @@ bool D3D9Renderer::GetPresentParameters(
         if( multisampleCount > 16 )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 TXT( "D3D9Renderer: Multisample count cannot be more than 16.  Value will be clamped.\n" ) );
             multisampleCount = 16;
         }
@@ -1700,7 +1700,7 @@ bool D3D9Renderer::GetPresentParameters(
         if( FAILED( checkResult ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "D3D9Renderer: Multisample count of %u is not supported.  Disabling multisampling.\n" ),
                 multisampleCount );
         }

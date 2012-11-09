@@ -71,7 +71,7 @@ void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
-    HELIUM_TRACE_SET_LEVEL( TRACE_DEBUG );
+    HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     Timer::StaticInitialize();
 
@@ -80,7 +80,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Path baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
         return -1;
     }
 
@@ -324,20 +324,20 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( rJobManager.Initialize() );
 
     {
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::PropertyCollection size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::PropertyCollection ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::ReflectionInfo size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::ReflectionInfo ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::Type size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Type ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::Composite size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Composite ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::Class size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Class ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObjectType size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObjectType ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Reflect::Object size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Object ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObject ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Entity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Entity ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "StaticMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( StaticMeshEntity ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "SkeletalMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( SkeletalMeshEntity ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Mesh size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Mesh ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "GraphicsSceneObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "GraphicsSceneObject::SubMeshData size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject::SubMeshData ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::PropertyCollection size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::PropertyCollection ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::ReflectionInfo size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::ReflectionInfo ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Type size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Type ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Composite size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Composite ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Class size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Class ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObjectType size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObjectType ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Reflect::Object size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Reflect::Object ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GameObject ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Entity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Entity ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "StaticMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( StaticMeshEntity ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "SkeletalMeshEntity size: %" ) TPRIuSZ TXT( "\n" ), sizeof( SkeletalMeshEntity ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Mesh size: %" ) TPRIuSZ TXT( "\n" ), sizeof( Mesh ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "GraphicsSceneObject size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject ) );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "GraphicsSceneObject::SubMeshData size: %" ) TPRIuSZ TXT( "\n" ), sizeof( GraphicsSceneObject::SubMeshData ) );
 
 #if HELIUM_ENABLE_MEMORY_TRACKING
 #pragma TODO("Why is this just commented out? Speed? -Geoff")
@@ -474,7 +474,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             returned_from_child = false;
         }
 
-        HELIUM_TRACE( TRACE_INFO, TXT( "Found object %s" ), *game_object->GetName());
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Found object %s" ), *game_object->GetName());
 
         game_object = game_object->GetNextSibling();
 
@@ -507,7 +507,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         const GameObjectType* pType = spObject->GetGameObjectType();
         HELIUM_ASSERT( pType );
         HELIUM_UNREF( pType );
-        HELIUM_TRACE( TRACE_INFO, TXT( "GameObject type: %s\n" ), *pType->GetName() );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "GameObject type: %s\n" ), *pType->GetName() );
 
         GameObjectWPtr wpObject( spObject );
         HELIUM_ASSERT( wpObject == spObject );
@@ -518,20 +518,20 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     {
         Simd::Vector3 vec3( 1.0f, 3.0f, -2.0f );
-        HELIUM_TRACE( TRACE_INFO, TXT( "Vector magnitude: %f\n" ), vec3.GetMagnitude() );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), vec3.GetMagnitude() );
         vec3.Normalize();
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Vector normalized: %f %f %f\n" ),
             vec3.GetElement( 0 ),
             vec3.GetElement( 1 ),
             vec3.GetElement( 2 ) );
 
         Simd::Vector4 vec4( 1.0f, 3.0f, -2.0f, 1.0f );
-        HELIUM_TRACE( TRACE_INFO, TXT( "Vector magnitude: %f\n" ), vec4.GetMagnitude() );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), vec4.GetMagnitude() );
         vec4.Normalize();
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Vector normalized: %f %f %f %f\n" ),
             vec4.GetElement( 0 ),
             vec4.GetElement( 1 ),
@@ -540,7 +540,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         Simd::Quat rotQuat( static_cast< float32_t >( HELIUM_PI_4 ), static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Quat: %f %f %f %f\n" ),
             rotQuat.GetElement( 0 ),
             rotQuat.GetElement( 1 ),
@@ -550,7 +550,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         rotQuat = Simd::Quat( static_cast< float32_t >( HELIUM_PI_4 ), 0.0f, 0.0f ) *
             Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f );
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Quat: %f %f %f %f\n" ),
             rotQuat.GetElement( 0 ),
             rotQuat.GetElement( 1 ),
@@ -560,7 +560,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         Simd::Matrix44 matrix( Simd::Matrix44::INIT_ROTATION, rotQuat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             matrix.GetElement( 0 ),
             matrix.GetElement( 1 ),
@@ -583,7 +583,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             Simd::Matrix44( Simd::Matrix44::INIT_ROTATION, Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI_2 ), 0.0f ) );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             matrix.GetElement( 0 ),
             matrix.GetElement( 1 ),
@@ -604,13 +604,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         float32_t determinant = matrix.GetDeterminant();
         HELIUM_UNREF( determinant );
-        HELIUM_TRACE( TRACE_INFO, TXT( "Matrix determinant: %f\n" ), determinant );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Matrix determinant: %f\n" ), determinant );
 
         Simd::Matrix44 inverseMat;
         matrix.GetInverse( inverseMat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix inverse:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             inverseMat.GetElement( 0 ),
             inverseMat.GetElement( 1 ),
@@ -633,7 +633,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         matrix.GetTranspose( transposeMat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix transpose:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             transposeMat.GetElement( 0 ),
             transposeMat.GetElement( 1 ),
@@ -655,7 +655,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         Simd::Matrix44 productMat = matrix * inverseMat;
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix product:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             productMat.GetElement( 0 ),
             productMat.GetElement( 1 ),
@@ -681,10 +681,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             Helium::Simd::SetSplatF32( 3.0f ),
             Helium::Simd::SetSplatF32( -2.0f ) );
         Helium::Simd::Register magnitude = vec3.GetMagnitude();
-        HELIUM_TRACE( TRACE_INFO, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
         vec3.Normalize();
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Vector normalized: %f %f %f\n" ),
             *reinterpret_cast< const float32_t* >( &vec3.m_x ),
             *reinterpret_cast< const float32_t* >( &vec3.m_y ),
@@ -696,10 +696,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             Helium::Simd::SetSplatF32( -2.0f ),
             Helium::Simd::SetSplatF32( 1.0f ) );
         magnitude = vec4.GetMagnitude();
-        HELIUM_TRACE( TRACE_INFO, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Vector magnitude: %f\n" ), *reinterpret_cast< const float32_t* >( &magnitude ) );
         vec4.Normalize();
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Vector normalized: %f %f %f %f\n" ),
             *reinterpret_cast< const float32_t* >( &vec4.m_x ),
             *reinterpret_cast< const float32_t* >( &vec4.m_y ),
@@ -713,7 +713,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 2 ) ),
             Helium::Simd::SetSplatF32( rotQuatScalar0.GetElement( 3 ) ) );
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Quat: %f %f %f %f\n" ),
             *reinterpret_cast< const float32_t* >( &rotQuat.m_x ),
             *reinterpret_cast< const float32_t* >( &rotQuat.m_y ),
@@ -734,7 +734,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 2 ) ),
                 Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 3 ) ) );
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Quat: %f %f %f %f\n" ),
             *reinterpret_cast< const float32_t* >( &rotQuat.m_x ),
             *reinterpret_cast< const float32_t* >( &rotQuat.m_y ),
@@ -744,7 +744,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         Simd::Matrix44Soa matrix( Simd::Matrix44Soa::INIT_ROTATION, rotQuat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 0 ] ),
             *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 1 ] ),
@@ -780,7 +780,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     Helium::Simd::SetSplatF32( rotQuatScalar1.GetElement( 3 ) ) ) );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Rotation matrix:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 0 ] ),
             *reinterpret_cast< const float32_t* >( &matrix.m_matrix[ 0 ][ 1 ] ),
@@ -801,13 +801,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         Helium::Simd::Register determinant = matrix.GetDeterminant();
         HELIUM_UNREF( determinant );
-        HELIUM_TRACE( TRACE_INFO, TXT( "Matrix determinant: %f\n" ), *reinterpret_cast< const float32_t* >( &determinant ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Matrix determinant: %f\n" ), *reinterpret_cast< const float32_t* >( &determinant ) );
 
         Simd::Matrix44Soa inverseMat;
         matrix.GetInverse( inverseMat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix inverse:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 0 ] ),
             *reinterpret_cast< const float32_t* >( &inverseMat.m_matrix[ 0 ][ 1 ] ),
@@ -830,7 +830,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         matrix.GetTranspose( transposeMat );
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix transpose:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 0 ] ),
             *reinterpret_cast< const float32_t* >( &transposeMat.m_matrix[ 0 ][ 1 ] ),
@@ -852,7 +852,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         Simd::Matrix44Soa productMat = matrix * inverseMat;
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Matrix product:\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n" ),
             *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 0 ] ),
             *reinterpret_cast< const float32_t* >( &productMat.m_matrix[ 0 ][ 1 ] ),
@@ -875,7 +875,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     {
         uint32_t index = static_cast< uint32_t >( -1 );
         uint64_t castIndex = CastIndex< uint64_t >( index );
-        HELIUM_TRACE( TRACE_INFO, TXT( "uint32_t invalid index to uint64_t: %" ) TPRIu64 TXT( "\n" ), castIndex );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "uint32_t invalid index to uint64_t: %" ) TPRIu64 TXT( "\n" ), castIndex );
         HELIUM_UNREF( castIndex );
     }
 
@@ -885,10 +885,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         {
             Float32 fullValue;
             fullValue.value = testValues[ valueIndex ];
-            HELIUM_TRACE( TRACE_INFO, TXT( "Converting %f (%x):\n" ), fullValue.value, fullValue.packed );
+            HELIUM_TRACE( TraceLevels::Info, TXT( "Converting %f (%x):\n" ), fullValue.value, fullValue.packed );
 
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 TXT( "Float32 value = %f (sign: %" ) TPRIu32 TXT( "; exponent: %" ) TPRIu32 TXT( "; mantissa: %x)\n" ),
                 fullValue.value,
                 fullValue.components.sign,
@@ -897,7 +897,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             Float16 packedValue = Float32To16( fullValue );
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 TXT( "Float16 value = %x (sign: %" ) TPRIu16 TXT( "; exponent: %" ) TPRIu16 TXT( "; mantissa: %x)\n" ),
                 static_cast< unsigned int >( packedValue.packed ),
                 packedValue.components.sign,
@@ -906,7 +906,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             fullValue = Float16To32( packedValue );
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 TXT( "Float32 value = %f (sign: %" ) TPRIu32 TXT( "; exponent: %" ) TPRIu32 TXT( "; mantissa: %x)\n" ),
                 fullValue.value,
                 fullValue.components.sign,
@@ -935,7 +935,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         const Simd::Vector3& rBoxMinimum = box.GetMinimum();
         const Simd::Vector3& rBoxMaximum = box.GetMaximum();
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Bounds: < %f, %f, %f >, < %f, %f, %f >\n" ),
             rBoxMinimum.GetElement( 0 ),
             rBoxMinimum.GetElement( 1 ),
@@ -1070,7 +1070,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     WorldPtr spWorld( rWorldManager.CreateDefaultWorld() );
     HELIUM_ASSERT( spWorld );
     HELIUM_VERIFY( spWorld->Initialize() );
-    HELIUM_TRACE( TRACE_INFO, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
 
     PackagePtr spLayerPackage;
     HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
@@ -1351,7 +1351,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Renderer::DestroyStaticInstance();
 
     int defaultTaskThreadCount = tbb::task_scheduler_init::default_num_threads();
-    HELIUM_TRACE( TRACE_INFO, TXT( "TBB default task thread count: %d\n" ), defaultTaskThreadCount );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "TBB default task thread count: %d\n" ), defaultTaskThreadCount );
     HELIUM_UNREF( defaultTaskThreadCount );
 
     LARGE_INTEGER perfFrequency, startCounter, endCounter;
@@ -1372,7 +1372,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         floatSetString += formatString;
     }
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "Float set:%s.\n" ), *floatSetString );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "Float set:%s.\n" ), *floatSetString );
 
     HELIUM_SIMD_ALIGN_PRE float32_t sortedFloat32Set[ HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ) ] HELIUM_SIMD_ALIGN_POST;
 
@@ -1393,8 +1393,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             floatSetString += formatString;
         }
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sorted float set (std::sort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sort time (std::sort()): %f msec\n" ), sortTime );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (std::sort()):%s\n" ), *floatSetString );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (std::sort()): %f msec\n" ), sortTime );
     }
 
     {
@@ -1414,8 +1414,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             floatSetString += formatString;
         }
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sorted float set (qsort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sort time (qsort()): %f msec\n" ), sortTime );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (qsort()):%s\n" ), *floatSetString );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (qsort()): %f msec\n" ), sortTime );
     }
 
     {
@@ -1454,8 +1454,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             floatSetString += formatString;
         }
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sorted float set (SortJob):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Sort time (SortJob): %f msec\n" ), sortTime );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (SortJob):%s\n" ), *floatSetString );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (SortJob): %f msec\n" ), sortTime );
     }
 
 #if 0
@@ -1481,7 +1481,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             static_cast< float32_t >( perfFrequency.QuadPart );
         HELIUM_UNREF( processTime );
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "_mm_movhl_ps() work time: %f msec\n" ), processTime );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_movhl_ps() work time: %f msec\n" ), processTime );
     }
 
     {
@@ -1506,7 +1506,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             static_cast< float32_t >( perfFrequency.QuadPart );
         HELIUM_UNREF( processTime );
 
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "_mm_shuffle_ps() work time: %f msec\n" ), processTime );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_shuffle_ps() work time: %f msec\n" ), processTime );
     }
 #endif
 
@@ -1632,14 +1632,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     jobParallelAvg /= static_cast< float32_t >( iterationCount );
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         TXT( "Sorting benchmark (%" ) TPRIuSZ TXT( " 32-bit floats, average over %" ) TPRIuSZ TXT( " iterations):\n" ),
         HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ),
         iterationCount );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
 
     JobManager::DestroyStaticInstance();
 

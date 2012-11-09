@@ -95,7 +95,7 @@ void Helium::Material::PostDeserialize( const Reflect::Field* field )
 //     if (m_spShaderAsGameObject && !m_spShader)
 //     {
 //         HELIUM_TRACE(
-//             TRACE_WARNING,
+//             TraceLevels::Warning,
 //             TXT( "Material::PostDeserialize(): Shader object \"%s\" is not of the type Shader.\n" ),
 //             m_spShaderAsGameObject->GetPath().ToString() );
 //     }
@@ -309,7 +309,7 @@ bool Material::BeginPrecacheResourceData()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Material::BeginPrecacheResourceData(): Failed to allocate constant buffer of %" )
                     TPRIuSZ TXT( " bytes for parameter usage for material \"%s\".\n" ) ),
                     bufferSize,
@@ -322,7 +322,7 @@ bool Material::BeginPrecacheResourceData()
             if( !pBufferData )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Material::BeginPrecacheResourceData(): Failed to map constant buffer data for " )
                     TXT( "material \"%s\".\n" ) ),
                     *GetPath().ToString() );
@@ -334,7 +334,7 @@ bool Material::BeginPrecacheResourceData()
             if( IsInvalid( loadId ) )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Material::BeginPrecacheResourceData(): Failed to begin loading resource sub-data %" )
                     TPRIuSZ TXT( " for material \"%s\".\n" ) ),
                     shaderTypeIndex,

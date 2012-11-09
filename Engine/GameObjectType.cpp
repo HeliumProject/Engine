@@ -75,7 +75,7 @@ GameObjectType* GameObjectType::Create(
     if( !GameObject::RegisterObject( pTemplate ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObjectType::Initialize(): Failed to register type \"%s\" template object.\n" ),
             *name );
 
@@ -89,7 +89,7 @@ GameObjectType* GameObjectType::Create(
     if( !pTemplate->Rename( nameParameters ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObjectType::Initialize(): Failed to set type \"%s\" template object name and owner.\n" ),
             *name );
 
@@ -206,7 +206,7 @@ GameObjectType::ConstIterator GameObjectType::GetTypeEnd()
 /// @see GameObject::Shutdown()
 void GameObjectType::Shutdown()
 {
-    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObjectType registration.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObjectType registration.\n" ) );
 
     // Make sure the GameObject type is unregistered, as it does not get included in the unregistration of the Engine
     // type package.
@@ -218,5 +218,5 @@ void GameObjectType::Shutdown()
     // Release the reference to the main "Types" package.
     sm_spTypePackage.Release();
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectType registration shutdown complete.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "GameObjectType registration shutdown complete.\n" ) );
 }

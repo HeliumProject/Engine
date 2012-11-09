@@ -137,8 +137,8 @@ ThreadMechanism::ThreadMechanism( const tstring& evenPrefix )
 : m_StopThread( true )
 , m_CurrentThreadID( -1 )
 , m_DummyWindow( NULL )
-, m_ThreadInitializedEvent( Condition::RESET_MODE_MANUAL, true )
-, m_EndThreadEvent( Condition::RESET_MODE_MANUAL, true )
+, m_ThreadInitializedEvent( true, true )
+, m_EndThreadEvent( true, true )
 {
     //tstring eventName;
     //eventName = evenPrefix + TXT( "BeginEvent" );

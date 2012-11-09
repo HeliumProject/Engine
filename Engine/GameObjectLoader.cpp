@@ -56,7 +56,7 @@ size_t GameObjectLoader::BeginLoadObject( GameObjectPath path )
 	if( !pPackageLoader )
 	{
 		HELIUM_TRACE(
-			TRACE_ERROR,
+			TraceLevels::Error,
 			TXT( "GameObjectLoader::BeginLoadObject(): Failed to locate package loader for \"%s\".\n" ),
 			*path.ToString() );
 
@@ -438,7 +438,7 @@ bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
 			if( pObject )
 			{
 				HELIUM_TRACE(
-					TRACE_WARNING,
+					TraceLevels::Warning,
 					TXT( "GameObjectLoader: GameObject \"%s\" is not serialized, but was found in memory.\n" ),
 					*path.ToString() );
 
@@ -452,7 +452,7 @@ bool GameObjectLoader::TickPreload( LoadRequest* pRequest )
 			}
 
 			HELIUM_TRACE(
-				TRACE_ERROR,
+				TraceLevels::Error,
 				TXT( "GameObjectLoader: GameObject \"%s\" is not serialized and does not exist in memory.\n" ),
 				*path.ToString() );
 
@@ -513,7 +513,7 @@ namespace Helium
                 if( link_index >= m_LinkTable.GetSize() )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
                         link_index );
 
@@ -530,7 +530,7 @@ namespace Helium
 //                     if( !pObject->IsClass( go_type ) )
 //                     {
 //                         HELIUM_TRACE(
-//                             TRACE_ERROR,
+//                             TraceLevels::Error,
 //                             TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
 //                             *pObject->GetPath().ToString(),
 //                             *go_type->GetName() );
@@ -551,7 +551,7 @@ namespace Helium
 ////                                 if (!success)
 ////                                 {
 ////                                     HELIUM_TRACE(
-////                                         TRACE_ERROR,
+////                                         TraceLevels::Error,
 ////                                         TXT( "GameObjectLoader: Could not create GameObject for non-shared GameObject reference \"%s\" .\n" ),
 ////                                         *pObject->GetPath().ToString());
 //// 
@@ -680,7 +680,7 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 				if( !pObject->BeginPrecacheResourceData() )
 				{
 					HELIUM_TRACE(
-						TRACE_ERROR,
+						TraceLevels::Error,
 						TXT( "GameObjectLoader: Failed to begin precaching object \"%s\".\n" ),
 						*pObject->GetPath().ToString() );
 
@@ -759,7 +759,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //{
 //    HELIUM_ASSERT( pObject );
 //
-//    HELIUM_TRACE( TRACE_DEBUG, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
+//    HELIUM_TRACE( TraceLevels::Debug, TXT( "GameObjectLoader::Linker: Linking \"%s\".\n" ), *pObject->GetPath().ToString() );
 //
 //    HELIUM_ASSERT( m_pLinkEntries || m_linkEntryCount == 0 );
 //
@@ -897,7 +897,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //    if( linkIndex >= m_linkEntryCount )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
 //            linkIndex );
 //
@@ -912,7 +912,7 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //        if( !pObject->IsClass( pType ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
 //                *pObject->GetPath().ToString(),
 //                *pType->GetName() );

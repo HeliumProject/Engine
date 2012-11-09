@@ -75,20 +75,20 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
     // Make sure the path represents a package.
     if( packagePath.IsEmpty() )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "ArchivePackageLoader::Initialize(): Empty package path specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "ArchivePackageLoader::Initialize(): Empty package path specified.\n" ) );
 
         return false;
     }
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         TXT( "ArchivePackageLoader::Initialize(): Initializing loader for package \"%s\".\n" ),
         *packagePath.ToString() );
 
     if( !packagePath.IsPackage() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ArchivePackageLoader::Initialize(): \"%s\" does not represent a package path.\n" ),
             *packagePath.ToString() );
 
@@ -106,7 +106,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
         if( pPackage->GetLoader() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader::Initialize(): Package \"%s\" already has a loader.\n" ),
                 *packagePath.ToString() );
 
@@ -126,7 +126,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
             HELIUM_ASSERT( !spObject->IsPackage() );
 
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "PackageLoader::Initialize(): Package loader cannot be initialized for \"%s\", as an " )
                 TXT( "object with the same name exists that is not a package.\n" ) ),
                 *packagePath.ToString() );
@@ -145,7 +145,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
         if ( !FileLocations::GetUserDataDirectory( dataDirectory ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 
             return false;
@@ -156,7 +156,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
         if ( !FileLocations::GetDataDirectory( dataDirectory ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 
             return false;
@@ -190,7 +190,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
 //     if (!m_packageTocFilePath.IsFile())
 //     {
 //         HELIUM_TRACE(
-//             TRACE_WARNING,
+//             TraceLevels::Warning,
 //             TXT( "ArchivePackageLoader::Initialize(): No TOC file for package \"%s\". Expected file location: \"%s\"\n" ),
 //             *m_packagePath.ToString(),
 //             *m_packageDirPath);
@@ -202,7 +202,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
 //         if( packageFileSize == -1 )
 //         {
 //             HELIUM_TRACE(
-//                 TRACE_WARNING,
+//                 TraceLevels::Warning,
 //                 TXT( "ArchivePackageLoader::Initialize(): Could not get file size for TOC of package \"%s\". Expected file location: \"%s\"\n" ),
 //                 *m_packagePath.ToString(),
 //                 *m_packageDirPath );
@@ -210,7 +210,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
 //         else if( packageFileSize == 0 )
 //         {
 //             HELIUM_TRACE(
-//                 TRACE_WARNING,
+//                 TraceLevels::Warning,
 //                 TXT( "ArchivePackageLoader::Initialize(): Package TOC file \"%s\" for package \"%s\" is empty.\n" ),
 //                 *m_packageTocFilePath,
 //                 *packagePath.ToString() );
@@ -218,7 +218,7 @@ bool ArchivePackageLoader::Initialize( GameObjectPath packagePath )
 //         else if( static_cast< uint64_t >( packageFileSize ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
 //         {
 //             HELIUM_TRACE(
-//                 TRACE_ERROR,
+//                 TraceLevels::Error,
 //                 ( TXT( "ArchivePackageLoader::Initialize(): Package TOC file \"%s\" exceeds the maximum size supported by " )
 //                 TXT( "the current platform (package: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
 //                 TXT( " bytes).\n" ) ),
@@ -359,7 +359,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
     MutexScopeLock scopeLock( m_accessLock );
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         TXT( "ArchivePackageLoader::BeginLoadObject: Beginning load for path \"%s\".\n"),
         *path.ToString());
 
@@ -415,7 +415,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
     if( objectIndex >= objectCount )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "ArchivePackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
             *path.ToString() );
 
@@ -430,7 +430,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
     if( !pType )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ArchivePackageLoader::BeginLoadObject(): Failed to locate type \"%s\" for loading object \"%s\".\n" ),
             *rObjectData.typeName,
             *path.ToString() );
@@ -718,14 +718,14 @@ void ArchivePackageLoader::TickPreload()
 //         if( IsInvalid( bytes_read ) )
 //         {
 //             HELIUM_TRACE(
-//                 TRACE_ERROR,
+//                 TraceLevels::Error,
 //                 TXT( "ArchivePackageLoader: Failed to read the contents of async load request \"%d\".\n" ),
 //                 m_tocAsyncLoadId );
 //         }
 //         else if( bytes_read != m_packageTocFileSize )
 //         {
 //             HELIUM_TRACE(
-//                 TRACE_WARNING,
+//                 TraceLevels::Warning,
 //                 ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package TOC file \"%s\", " )
 //                 TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
 //                 m_packageTocFileSize,
@@ -750,7 +750,7 @@ void ArchivePackageLoader::TickPreload()
 //                 if ( !iter->Get() )
 //                 {
 //                     HELIUM_TRACE(
-//                         TRACE_WARNING,
+//                         TraceLevels::Warning,
 //                         ( TXT( "ArchivePackageLoader: An null object was read from a package TOC file \"%s\"" )
 //                         TXT( ".\n" ) ),
 //                         m_packageTocFilePath);
@@ -763,7 +763,7 @@ void ArchivePackageLoader::TickPreload()
 //                 if ( !(*iter)->IsClass(Reflect::GetClass<ObjectDescriptor>()) )
 //                 {
 //                     HELIUM_TRACE(
-//                         TRACE_WARNING,
+//                         TraceLevels::Warning,
 //                         ( TXT( "ArchivePackageLoader: An object that is not an ObjectDescriptor was read from a package TOC file \"%s\"" )
 //                         TXT( ".\n" ) ),
 //                         m_packageTocFilePath);
@@ -815,14 +815,14 @@ void ArchivePackageLoader::TickPreload()
         if( IsInvalid( bytes_read ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader: Failed to read the contents of async load request \"%d\".\n" ),
                 rRequest.asyncLoadId );
         }
         else if( bytes_read != rRequest.expectedSize)
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package file \"%s\", " )
                 TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
                 rRequest.expectedSize,
@@ -869,7 +869,7 @@ void ArchivePackageLoader::TickPreload()
                 else
                 {
                     HELIUM_TRACE(
-                        TRACE_WARNING,
+                        TraceLevels::Warning,
                         TXT( "ArchivePackageLoader: First object in package file \"%s\" was not an ObjectDescriptor" ),
                         rRequest.filePath.c_str(),
                         bytes_read );
@@ -878,7 +878,7 @@ void ArchivePackageLoader::TickPreload()
             else
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchivePackageLoader: Failed to read a valid object from package file \"%s\"" ),
                     rRequest.filePath.c_str(),
                     bytes_read );
@@ -931,7 +931,7 @@ void ArchivePackageLoader::TickPreload()
 
     if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "ArchivePackageLoader::TickPreload(): Could not get data directory.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "ArchivePackageLoader::TickPreload(): Could not get data directory.\n" ) );
         return;
     }
 
@@ -1012,7 +1012,7 @@ void ArchivePackageLoader::TickPreload()
             HELIUM_ASSERT( pResourceType );
 
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 ( TXT( "ArchivePackageLoader: Registered source asset file \"%s\" as as instance of resource " )
                 TXT( "type \"%s\" in package \"%s\".\n" ) ),
                 *objectNameString,
@@ -1151,7 +1151,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !pRequest->spTemplate )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader: Failed to load template object for \"%s\".\n" ),
                 *rObjectData.objectPath.ToString() );
 
@@ -1186,7 +1186,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !pRequest->spOwner )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader: Failed to load owner object for \"%s\".\n" ),
                 *rObjectData.objectPath.ToString() );
 
@@ -1223,7 +1223,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             if (pType->GetClass()->IsType( Reflect::GetClass< Resource >() ))
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchivePackageLoader::TickDeserialize(): No object file found for resource \"%s\". Expected file location: \"%s\". This is normal for newly added resources.\n" ),
                     *rObjectData.objectPath.ToString(),
                     *object_file_path);
@@ -1235,7 +1235,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             else
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchivePackageLoader::TickDeserialize(): No object file found for object \"%s\". Expected file location: \"%s\"\n" ),
                     *rObjectData.objectPath.ToString(),
                     *object_file_path);
@@ -1250,7 +1250,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             if( i64_object_file_size == -1 )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchivePackageLoader::TickDeserialize(): Could not get file size for object file of object \"%s\". Expected file location: \"%s\"\n" ),
                     *rObjectData.objectPath.ToString(),
                     *object_file_path );
@@ -1258,7 +1258,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             else if( i64_object_file_size == 0 )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchivePackageLoader::TickDeserialize(): Object file \"%s\" for objct \"%s\" is empty.\n" ),
                     *object_file_path,
                     *rObjectData.objectPath.ToString() );
@@ -1266,7 +1266,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
             else if( static_cast< uint64_t >( i64_object_file_size ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ArchivePackageLoader::TickDeserialize(): Object file \"%s\" exceeds the maximum size supported by " )
                     TXT( "the current platform (file size: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
                     TXT( " bytes).\n" ) ),
@@ -1331,7 +1331,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( pExistingType != pType )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ArchivePackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
                 TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
                 *rObjectData.objectPath.ToString(),
@@ -1356,7 +1356,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !bCreateResult )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader: Failed to create \"%s\" during loading.\n" ),
                 *rObjectData.objectPath.ToString() );
                 
@@ -1374,7 +1374,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( IsInvalid( bytesRead ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ArchivePackageLoader: Failed to read the contents of object file \"%s\" in async load request \"%d\".\n" ),
                 object_file_path.c_str(),
                 pRequest->asyncFileLoadId );
@@ -1382,7 +1382,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
         else if( bytesRead != pRequest->asyncFileLoadBufferSize )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "ArchivePackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from object file \"%s\", " )
                 TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
                 pRequest->asyncFileLoadBufferSize,
@@ -1443,7 +1443,7 @@ bool ArchivePackageLoader::TickDeserialize( LoadRequest* pRequest )
     if( object_creation_failure )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ArchivePackageLoader: Deserialization of object \"%s\" failed.\n" ),
             *rObjectData.objectPath.ToString() );
         
@@ -1533,7 +1533,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
     if( bytesRead != pRequest->cachedObjectDataBufferSize )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "ArchivePackageLoader: Requested load of %" ) TPRIu32 TXT( " bytes from cached object data for " )
             TXT( "\"%s\", but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
             pRequest->cachedObjectDataBufferSize,
@@ -1545,7 +1545,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
     if( bytesRead < sizeof( uint32_t ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ArchivePackageLoader: Not enough bytes read of cached object data \"%s\" from which to parse the " )
             TXT( "property stream size.\n" ) ),
             *pResource->GetPath().ToString() );
@@ -1564,7 +1564,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
         if( byteSkipCount > bytesRead )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ArchivePackageLoader: Cached persistent resource data for \"%s\" extends past the end of the " )
                 TXT( "cached data stream.\n" ) ),
                 *pResource->GetPath().ToString() );
@@ -1580,7 +1580,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
             if( bytesRemaining < sizeof( uint32_t ) )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ArchivePackageLoader: Not enough space is reserved in the cached persistent resource " )
                     TXT( "data stream for \"%s\" for the resource sub-data count.\n" ) ),
                     *pResource->GetPath().ToString() );
@@ -1607,7 +1607,7 @@ bool ArchivePackageLoader::TickPersistentResourcePreload( LoadRequest* pRequest 
                 if (!pResource->LoadPersistentResourceObject(persistent_data))
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "ArchivePackageLoader: Failed to load persistent resource object for \"%s\".\n" ) ),
                         *pResource->GetPath().ToString() );
 

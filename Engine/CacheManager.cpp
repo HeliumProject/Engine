@@ -80,7 +80,7 @@ Cache* CacheManager::GetCache( Name name, Cache::EPlatform platform )
 
     if( !pCache->Initialize( name, platform, *tocFileName, *cacheFileName ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "CacheManager: Failed to initialize cache \"%s\".\n" ), *name );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "CacheManager: Failed to initialize cache \"%s\".\n" ), *name );
 
         return NULL;
     }

@@ -40,19 +40,6 @@ namespace Helium
         };
 #endif
 
-        /// Reset modes.
-        enum EResetMode
-        {
-            RESET_MODE_FIRST   =  0,
-            RESET_MODE_INVALID = -1,
-
-            RESET_MODE_MANUAL,  ///< Condition remains signaled until Reset() is explicitly called.
-            RESET_MODE_AUTO,    ///< Condition is immediately reset when a single waiting thread is released.
-
-            RESET_MODE_MAX,
-            RESET_MODE_LAST = RESET_MODE_MAX - 1
-        };
-
     private:
         /// Platform-specific condition handle.
         Handle m_Handle;
@@ -60,7 +47,7 @@ namespace Helium
     public:
         /// @name Construction/Destruction
         //@{
-        explicit Condition( EResetMode resetMode, bool bInitialState = false );
+        explicit Condition( bool bManualReset, bool bInitialState );
         ~Condition();
         //@}
 

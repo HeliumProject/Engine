@@ -59,7 +59,7 @@ bool DynamicDrawer::Initialize()
     if( !m_untexturedTriangles.Initialize() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for untextured triangle " )
             TXT( "rendering.\n" ) ) );
 
@@ -73,7 +73,7 @@ bool DynamicDrawer::Initialize()
         if( !m_texturedTriangles[ bufferSetIndex ].Initialize() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "DynamicDrawer::Initialize(): Failed to initialize buffers for textured triangle " )
                 TXT( "rendering.\n" ) ) );
 
@@ -487,7 +487,7 @@ bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
     if( !m_spVertices )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate vertex buffer of %" ) TPRIuSZ
             TXT( " bytes.\n" ) ),
             vertexBufferSize );
@@ -506,7 +506,7 @@ bool DynamicDrawer::BufferData< VertexType, Functions, DivisionCount, DivisionVe
     if( !m_spIndices )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "DynamicDrawer::BufferData::Initialize(): Failed to allocate index buffer of %" ) TPRIuSZ
             TXT( " bytes.\n" ) ),
             indexBufferSize );

@@ -7,8 +7,8 @@ using namespace Helium;
 /// Constructor.
 ReadWriteLock::ReadWriteLock()
     : m_readLockCount( 0 )
-    , m_readReleaseCondition( Condition::RESET_MODE_MANUAL, true )
-    , m_writeReleaseCondition( Condition::RESET_MODE_MANUAL, true )
+    , m_readReleaseCondition( true, true )
+    , m_writeReleaseCondition( true, true )
 {
 }
 

@@ -123,7 +123,7 @@ bool Font::BeginPrecacheResourceData()
         if( IsInvalid( textureSize ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Font::BeginPrecacheResourceData(): Unable to locate cached texture data for texture sheet %" )
                   TPRIuFAST8 TXT( " of font \"%s\".\n" ) ),
                 textureIndex,
@@ -140,7 +140,7 @@ bool Font::BeginPrecacheResourceData()
             if( !pTexture )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Font::BeginPrecacheResourceData(): Failed to allocate %" ) TPRIu16 TXT( "x%") TPRIu16
                       TXT( " texture for texture sheet %" ) TPRIuFAST8 TXT( " of font \"%s\".\n" ) ),
                     textureSheetWidth,
@@ -160,7 +160,7 @@ bool Font::BeginPrecacheResourceData()
                 if( IsInvalid( loadId ) )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "Font::BeginPrecacheResourceData(): Failed to begin loading texture sheet %" ) TPRIuFAST8
                           TXT( " of font \"%s\".\n" ) ),
                         textureIndex,

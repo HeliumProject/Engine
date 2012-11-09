@@ -132,7 +132,7 @@ int64_t DynamicMemoryStream::Seek( int64_t offset, SeekOrigin origin )
 
         default:
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "DynamicMemoryStream::Seek(): Invalid seek origin specified.\n" ) );
 
             return static_cast< int64_t >( m_offset );
         }
@@ -145,7 +145,7 @@ int64_t DynamicMemoryStream::Seek( int64_t offset, SeekOrigin origin )
         if( absOffset > static_cast< uint64_t >( referenceOffset ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "DynamicMemoryStream::Seek(): Attempted to seek before the start of the memory stream.\n" ) );
         }
         else
@@ -160,7 +160,7 @@ int64_t DynamicMemoryStream::Seek( int64_t offset, SeekOrigin origin )
         if( absOffset >= static_cast< uint64_t >( static_cast< size_t >( -1 ) - referenceOffset ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "DynamicMemoryStream::Seek(): Attempted to seek outside the maximum buffer size supported " )
                   TXT( "by the current platform.\n" ) ) );
         }

@@ -125,7 +125,7 @@ bool ObjectPreprocessor::CacheObject(
         }
 
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "ObjectPreprocessor: Object \"%s\" is out of date.  Recaching...\n" ),
             *objectPath.ToString() );
 
@@ -163,7 +163,7 @@ bool ObjectPreprocessor::CacheObject(
             if( !rResourceData.bLoaded )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     ( TXT( "ObjectPreprocessor::CacheObject(): Cannot cache resource data for \"%s\" for " )
                     TXT( "platform index %" ) TPRIuSZ TXT( " as the resource data is not in memory.  Make sure " )
                     TXT( "ObjectPreprocessor::LoadResourceData() has been called on the object prior to " )
@@ -201,7 +201,7 @@ bool ObjectPreprocessor::CacheObject(
         if( !bCacheResult )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "ObjectPreprocessor: Failed to cache object \"%s\".\n" ),
                 *objectPath.ToString() );
 
@@ -244,7 +244,7 @@ bool ObjectPreprocessor::CacheObject(
                         if( !bCacheResult )
                         {
                             HELIUM_TRACE(
-                                TRACE_ERROR,
+                                TraceLevels::Error,
                                 ( TXT( "ObjectPreprocessor: Failed to cache resource sub-data %" ) TPRIuSZ
                                 TXT( " for resource \"%s\".\n" ) ),
                                 subDataBufferIndex,
@@ -321,7 +321,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
     if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ObjectPreprocessor::LoadResourceData(): Could not retrieve data directory.\n" ) );
 
         return;
@@ -371,7 +371,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
         if( !pCacheEntry || pCacheEntry->timestamp != timestamp )
         {
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 ( TXT( "ObjectPreprocessor::LoadResourceData(): Cached resource data not found or is out-of-date " )
                 TXT( "for resource \"%s\".  Resource will be preprocessed.\n" ) ),
                 *resourcePath.ToString() );
@@ -383,7 +383,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
         if( !LoadCachedResourceData( pResource, static_cast< Cache::EPlatform >( platformIndex ) ) )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "ObjectPreprocessor::LoadResourceData(): Failed to load cached resource data for " )
                 TXT( "\"%s\".  Resource will be preprocessed again.\n" ) ),
                 *resourcePath.ToString() );
@@ -402,7 +402,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
     if( !PreprocessResource( pResource, String( sourceFilePath.c_str() ) ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ObjectPreprocessor::LoadResourceData(): Preprocessing of resource \"%s\" failed.\n" ),
             *resourcePath.ToString() );
     }
@@ -438,7 +438,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( !pPreprocessor )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Platform preprocessor does not exist for " )
             TXT( "platform index %" ) TPRId32 TXT( ".\n" ) ),
             static_cast< int32_t >( platform ) );
@@ -460,7 +460,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( !pCacheEntry )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to locate cached persistent " )
             TXT( "resource data for \"%s\".\n" ) ),
             *resourcePath.ToString() );
@@ -471,7 +471,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( pCacheEntry->size < sizeof( uint32_t ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): GameObject cache entry for \"%s\" is smaller " )
             TXT( "than the size needed to provide the property data stream byte count.\n" ) ),
             *resourcePath.ToString() );
@@ -483,7 +483,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( !pFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to open cache file \"%s\" for " )
             TXT( "retrieving cached object data for \"%s\".\n" ) ),
             *pCache->GetCacheFileName(),
@@ -498,7 +498,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( static_cast< uint64_t >( seekLocation ) != pCacheEntry->offset )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) TPRIu64
             TXT( " in cache file \"%s\" for retrieving cached object data for \"%s\".\n" ) ),
             pCacheEntry->offset,
@@ -522,7 +522,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( readCount != 1 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to read the size of the object " )
             TXT( "property stream for \"%s\" from cache \"%s\".\n" ) ),
             *resourcePath.ToString(),
@@ -538,7 +538,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( propertyDataSize > pCacheEntry->size - sizeof( propertyDataSize ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Property data stream for \"%s\" (%" ) TPRIu32
             TXT( " bytes) extends past the end of its cached object data stream (%" ) TPRIu32 TXT( " bytes).  " )
             TXT( "Size will be clamped.\n" ) ),
@@ -552,7 +552,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( pCacheEntry->size - sizeof( propertyDataSize ) - propertyDataSize < sizeof( uint32_t ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Property data stream for \"%s\" is not " )
             TXT( "large enough to provide the resource sub-data count.\n" ) ),
             *resourcePath.ToString() );
@@ -569,7 +569,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( static_cast< uint64_t >( seekLocation ) != newOffset )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to seek to byte offset %" ) TPRIu64
             TXT( " in cache file \"%s\" for the cached persistent resource data for \"%s\".\n" ) ),
             newOffset,
@@ -593,7 +593,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( bytesRead != resourceDataStreamSize )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Attempted to load %" ) TPRIuSZ
             TXT( " bytes from offset %" ) TPRIu64 TXT( " in cache file \"%s\", but only %" ) TPRIuSZ
             TXT( " bytes could be read.\n" ) ),
@@ -612,7 +612,7 @@ uint32_t ObjectPreprocessor::LoadPersistentResourceData(
     if( readCount != 1 )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "ObjectPreprocessor::LoadPersistentResourceData(): Failed to read resource sub-data count for " )
             TXT( "\"%s\" from the end of its object data stream.\n" ) ),
             *resourcePath.ToString() );
@@ -689,7 +689,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
     if( IsInvalid( subDataCount ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Failed to load persistent resource data for " )
             TXT( "\"%s\".\n" ) ),
             *resourcePath.ToString() );
@@ -712,7 +712,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
         if( !resourceCachePath.Exists() )
         {
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Cache file for cache \"%s\" does not exist " )
                 TXT( "when loading resource data for \"%s\".\n" ) ),
                 *resourceCacheName,
@@ -725,7 +725,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
         if( !pFileStream )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Failed to open cache file for cache \"%s\" " )
                 TXT( "for resource \"%s\".\n" ) ),
                 *resourceCacheName,
@@ -744,7 +744,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
             if( !pResourceCacheEntry )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Failed to locate sub-data %" ) TPRIu32
                     TXT( " of resource \"%s\" in cache \"%s\".\n" ) ),
                     subDataIndex,
@@ -760,7 +760,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
             if( static_cast< uint64_t >( newOffset ) != pResourceCacheEntry->offset )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Failed to seek to offset %" ) TPRIu64
                     TXT( " in cache \"%s\" when loading sub-data %" ) TPRIu32 TXT( " of resource \"%s\".\n" ) ),
                     pResourceCacheEntry->offset,
@@ -784,7 +784,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
             if( bytesRead != subDataSize )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ObjectPreprocessor::LoadCachedResourceData(): Failed to read %" ) TPRIu32
                     TXT( " bytes from cache \"%s\" for sub-data %" ) TPRIu32 TXT( " of resource \"%s\" (only %" )
                     TPRIuSZ TXT( " bytes read).\n" ) ),
@@ -821,7 +821,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     HELIUM_ASSERT( !pResource->IsDefaultTemplate() );
 
     HELIUM_TRACE(
-        TRACE_INFO,
+        TraceLevels::Info,
         TXT( "ObjectPreprocessor::PreprocessResource(): Preprocessing resource \"%s\".\n" ),
         *pResource->GetPath().ToString() );
 
@@ -842,7 +842,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     if( !pResourceHandler )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ObjectPreprocessor::PreprocessResource(): Failed to locate resource handler for resource " )
             TXT( "\"%s\" of type \"%s\".\n" ) ),
             *pResource->GetPath().ToString(),
@@ -855,7 +855,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
     if( !pResourceHandler->CacheResource( this, pResource, rSourceFilePath ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ObjectPreprocessor::PreprocessResource(): Failed to preprocess resource \"%s\".\n" ),
             *pResource->GetPath().ToString() );
 

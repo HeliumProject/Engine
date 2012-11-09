@@ -287,7 +287,7 @@
 //        if( !m_bAllowObjectReferences )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "BinarySerializer: Attempted to serialize an object reference using a serializer with " )
 //                TXT( "which it is not allowed.\n" ) ) );
 //

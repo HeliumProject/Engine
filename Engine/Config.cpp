@@ -42,7 +42,7 @@ void Config::BeginLoad()
     if( !m_objectLoadIds.IsEmpty() )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "Config::BeginLoad(): Called while configuration loading is already in progress.\n" ) );
 
         return;
@@ -179,7 +179,7 @@ bool Config::TryFinishLoad()
 
         if( spObject )
         {
-            HELIUM_TRACE( TRACE_INFO, TXT( "Loaded configuration object \"%s\".\n" ), *spObject->GetPath().ToString() );
+            HELIUM_TRACE( TraceLevels::Info, TXT( "Loaded configuration object \"%s\".\n" ), *spObject->GetPath().ToString() );
             if( spObject->GetPath().GetParent() == defaultConfigPackagePath )
             {
                 m_defaultConfigObjects.Add( spObject );
@@ -237,7 +237,7 @@ bool Config::TryFinishLoad()
                 HELIUM_ASSERT( spUserConfigObject );
 
                 HELIUM_TRACE(
-                    TRACE_INFO,
+                    TraceLevels::Info,
                     TXT( "Config: Created user configuration object \"%s\".\n" ),
                     *spUserConfigObject->GetPath().ToString() );
 
@@ -246,7 +246,7 @@ bool Config::TryFinishLoad()
             else
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     TXT( "Config: Failed to create user configuration object \"%s\".\n" ),
                     *objectName );
             }

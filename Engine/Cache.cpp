@@ -79,7 +79,7 @@ bool Cache::Initialize( Name name, EPlatform platform, const tchar_t* pTocFileNa
     if( tocSize64 != -1 && static_cast< uint64_t >( tocSize64 ) >= UINT32_MAX )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::Initialize(): TOC file \"%s\" exceeds the maximum allowed size for TOC files (2 GB).\n" ),
             pTocFileName );
 
@@ -140,7 +140,7 @@ bool Cache::BeginLoadToc()
     if( IsValid( m_asyncLoadId ) )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "Cache::BeginLoadToc(): Async load of TOC file \"%s\" already in progress.\n" ),
             *m_tocFileName );
 
@@ -149,14 +149,14 @@ bool Cache::BeginLoadToc()
 
     if( m_tocFileName.IsEmpty() )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Cache::BeginLoadToc(): Called without having initialized the cache.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Cache::BeginLoadToc(): Called without having initialized the cache.\n" ) );
 
         return false;
     }
 
     if( IsInvalid( m_tocSize ) )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Cache::BeginLoadToc(): TOC file does not seem to exist.  MOVING ON...\n" ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache::BeginLoadToc(): TOC file does not seem to exist.  MOVING ON...\n" ) );
 
         // Since the TOC doesn't exist, we can consider its loading to be complete.
         m_bTocLoaded = true;
@@ -171,7 +171,7 @@ bool Cache::BeginLoadToc()
     if( !m_pTocBuffer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::BeginLoadToc(): Failed to allocate %" ) TPRIu32 TXT( " bytes for TOC file \"%s\".\n" ),
             m_tocSize,
             *m_tocFileName );
@@ -185,7 +185,7 @@ bool Cache::BeginLoadToc()
     if( IsInvalid( m_asyncLoadId ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::BeginLoadToc(): Failed to begin asynchronous load of TOC file \"%s\".\n" ),
             *m_tocFileName );
 
@@ -209,7 +209,7 @@ bool Cache::TryFinishLoadToc()
 {
     if( IsInvalid( m_asyncLoadId ) )
     {
-        HELIUM_TRACE( TRACE_WARNING, TXT( "Cache::TryFinishLoadToc(): Called without a TOC load in progress.\n" ) );
+        HELIUM_TRACE( TraceLevels::Warning, TXT( "Cache::TryFinishLoadToc(): Called without a TOC load in progress.\n" ) );
 
         return true;
     }
@@ -227,7 +227,7 @@ bool Cache::TryFinishLoadToc()
     if( bytesRead == 0 || IsInvalid( bytesRead ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::TryFinishLoadToc(): No data loaded from TOC file \"%s\".\n" ),
             *m_tocFileName );
 
@@ -238,7 +238,7 @@ bool Cache::TryFinishLoadToc()
         if( m_tocSize != bytesRead )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "Cache::TryFinishLoadToc(): TOC file \"%s\" size (%" ) TPRIu32 TXT( ") does not match the " )
                 TXT( "number of bytes read (%" ) TPRIuSZ TXT( ").\n" ) ),
                 m_tocSize,
@@ -281,7 +281,7 @@ void Cache::EnforceTocLoad()
 {
     if( !IsTocLoaded() )
     {
-        HELIUM_TRACE( TRACE_WARNING, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
+        HELIUM_TRACE( TraceLevels::Warning, TXT( "Cache::EnforceTocLoad(): Block-loading cache \"%s\".\n" ), *m_name );
 
         if( BeginLoadToc() )
         {
@@ -361,13 +361,13 @@ bool Cache::CacheEntry(
     bool bNewEntry = m_entryMap.Insert( entryAccessor, KeyValue< EntryKey, Entry* >( key, pEntryUpdate ) );
     if( bNewEntry )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Cache: Adding \"%s\" to cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Adding \"%s\" to cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
 
         m_entries.Push( pEntryUpdate );
     }
     else
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Cache: Updating \"%s\" in cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Updating \"%s\" in cache \"%s\".\n" ), *path.ToString(), *m_cacheFileName );
 
         m_pEntryPool->Release( pEntryUpdate );
 
@@ -400,14 +400,14 @@ bool Cache::CacheEntry(
     FileStream* pCacheStream = FileStream::OpenFileStream( m_cacheFileName, FileStream::MODE_WRITE, false );
     if( !pCacheStream )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Failed to open cache \"%s\" for writing.\n" ), *m_cacheFileName );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open cache \"%s\" for writing.\n" ), *m_cacheFileName );
 
         bCacheSuccess = false;
     }
     else
     {
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Cache: Caching \"%s\" to \"%s\" (%" ) TPRIu32 TXT( " bytes @ offset %" ) TPRIu64 TXT( ").\n" ),
             *path.ToString(),
             *m_cacheFileName,
@@ -419,7 +419,7 @@ bool Cache::CacheEntry(
             SeekOrigins::SEEK_ORIGIN_BEGIN ) );
         if( seekOffset != entryOffset )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Cache file offset seek failed.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Cache file offset seek failed.\n" ) );
 
             if( bNewEntry )
             {
@@ -442,7 +442,7 @@ bool Cache::CacheEntry(
             if( writeSize != size )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Cache: Failed to write %" ) TPRIu32 TXT( " bytes to cache \"%s\" (%" ) TPRIuSZ
                     TXT( " bytes written).\n" ) ),
                     size,
@@ -466,12 +466,12 @@ bool Cache::CacheEntry(
             }
             else
             {
-                HELIUM_TRACE( TRACE_INFO, TXT( "Cache: Rewriting TOC file \"%s\".\n" ), *m_tocFileName );
+                HELIUM_TRACE( TraceLevels::Info, TXT( "Cache: Rewriting TOC file \"%s\".\n" ), *m_tocFileName );
 
                 FileStream* pTocStream = FileStream::OpenFileStream( m_tocFileName, FileStream::MODE_WRITE, true );
                 if( !pTocStream )
                 {
-                    HELIUM_TRACE( TRACE_ERROR, TXT( "Cache: Failed to open TOC \"%s\" for writing.\n" ), *m_tocFileName );
+                    HELIUM_TRACE( TraceLevels::Error, TXT( "Cache: Failed to open TOC \"%s\" for writing.\n" ), *m_tocFileName );
                 }
                 else
                 {
@@ -553,7 +553,7 @@ bool Cache::FinalizeTocLoad()
     if( magic == TOC_MAGIC )
     {
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (no byte swapping).\n" ),
             *m_tocFileName );
 
@@ -562,11 +562,11 @@ bool Cache::FinalizeTocLoad()
     else if( magic == TOC_MAGIC_SWAPPED )
     {
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" identified (byte swapping is necessary).\n" ),
             *m_tocFileName );
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "Cache::TryFinishLoadToc(): Cache for TOC \"%s\" uses byte swapping, which may incur " )
             TXT( "performance penalties.\n" ) ),
             *m_tocFileName );
@@ -576,7 +576,7 @@ bool Cache::FinalizeTocLoad()
     else
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::FinalizeTocLoad(): TOC \"%s\" has invalid file magic.\n" ),
             *m_tocFileName );
 
@@ -592,7 +592,7 @@ bool Cache::FinalizeTocLoad()
     if( version > sm_Version )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Cache::FinalizeTocLoad(): Cache version number (%" ) TPRIu32 TXT( ") exceeds the maximum " )
             TXT( "supported version (%" ) TPRIu32 TXT( ").\n" ) ),
             version,
@@ -676,7 +676,7 @@ bool Cache::FinalizeTocLoad()
         if( !entryPath.Set( pPathString ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "Cache::FinalizeTocLoad(): Failed to set GameObjectPath for entry %" ) TPRIuFAST16 TXT( ".\n" ),
                 entryIndex );
 
@@ -702,7 +702,7 @@ bool Cache::FinalizeTocLoad()
         if( m_entryMap.Find( entryAccessor, key ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Cache::FinalizeTocLoad(): Duplicate entry found for GameObjectPath \"%s\", sub-data %" ) TPRIu32
                 TXT( ".\n" ) ),
                 pPathString,
@@ -772,7 +772,7 @@ bool Cache::CheckedTocRead(
     if( rpTocCurrent + sizeof( rValue ) > pTocMax )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Cache::TryFinishLoadToc(): Not enough bytes in the TOC file for %s.\n" ),
             pDescription );
 

@@ -62,7 +62,7 @@
 //    m_pFileStream = FileStream::OpenFileStream( pFileName, FileStream::MODE_WRITE, true );
 //    if( !m_pFileStream )
 //    {
-//        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlSerializer::Initialize(): Failed to open \"%s\" for writing.\n" ), pFileName );
+//        HELIUM_TRACE( TraceLevels::Error, TXT( "XmlSerializer::Initialize(): Failed to open \"%s\" for writing.\n" ), pFileName );
 //
 //        return false;
 //    }

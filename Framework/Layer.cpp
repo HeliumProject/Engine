@@ -115,7 +115,7 @@ Entity* Layer::CreateEntity(
     if( !m_spPackage )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Layer::CreateEntity(): Layer \"%s\" is not bound to a package.\n" ),
             *GetPath().ToString() );
 
@@ -125,7 +125,7 @@ Entity* Layer::CreateEntity(
     HELIUM_ASSERT( pType );
     if( !pType )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Layer::CreateEntity(): No entity type specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Layer::CreateEntity(): No entity type specified.\n" ) );
 
         return NULL;
     }
@@ -135,7 +135,7 @@ Entity* Layer::CreateEntity(
     if( !bIsEntityType )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Layer::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
             *pType->GetName() );
 
@@ -151,7 +151,7 @@ Entity* Layer::CreateEntity(
     if( !GameObject::CreateObject( spObject, pType, name, m_spPackage, pTemplate, bAssignInstanceIndex ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Layer::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in layer package \"%s\" " )
               TXT( "(template: %s; assign instance index: %s).\n" ) ),
             *name,
@@ -192,7 +192,7 @@ bool Layer::DestroyEntity( Entity* pEntity )
     if( pEntity->GetLayer().Get() != this )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Layer::DestroyEntity(): Entity \"%s\" is not part of layer \"%s\".\n" ),
             *pEntity->GetPath().ToString(),
             *GetPath().ToString() );
@@ -303,7 +303,7 @@ void Layer::StripNonPackageEntities()
         if( !m_entities.IsEmpty() )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "Layer::StripNonPackageEntities(): Layer contains %" ) TPRIuSZ TXT( " entities, but has " )
                 TXT( "no package bound.  Entities will be removed.\n" ) ),
                 m_entities.GetSize() );
@@ -324,7 +324,7 @@ void Layer::StripNonPackageEntities()
         if( pOwner != pPackage )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "Layer::StripNonPackageEntities(): Entity \"%s\" is not directly part of the bound " )
                 TXT( "package \"%s\".  Entity will be removed.\n" ) ),
                 *pEntity->GetPath().ToString(),

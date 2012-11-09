@@ -231,7 +231,7 @@ void AsyncLoader::DestroyStaticInstance()
 
 /// Constructor.
 AsyncLoader::LoadWorker::LoadWorker()
-: m_wakeUpCondition( Condition::RESET_MODE_AUTO )
+: m_wakeUpCondition( false, false )
 , m_stopCounter( 0 )
 , m_processingCounter( 0 )
 {

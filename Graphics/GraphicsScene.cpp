@@ -652,7 +652,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex global data constant buffer " )
                     TXT( "creation failed!\n" ) ) );
             }
@@ -714,7 +714,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex base-pass data constant " )
                     TXT( "buffer creation failed!\n" ) ) );
             }
@@ -777,7 +777,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View vertex screen-space data constant " )
                       TXT( "buffer creation failed!\n" ) ) );
             }
@@ -830,7 +830,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): View pixel base-pass data constant " )
                     TXT( "buffer creation failed!\n" ) ) );
             }
@@ -874,7 +874,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !spBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Shadow view vertex data constant buffer " )
                     TXT( "creation failed!\n" ) ) );
             }
@@ -1019,7 +1019,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
                         if( !pBuffer )
                         {
                             HELIUM_TRACE(
-                                TRACE_ERROR,
+                                TraceLevels::Error,
                                 ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Skinned mesh instance " )
                                 TXT( "vertex constant global data buffer creation failed!\n" ) ) );
                         }
@@ -1062,7 +1062,7 @@ void GraphicsScene::SwapDynamicConstantBuffers()
             if( !pBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GraphicsScene::SwapDynamicConstantBuffers(): Static mesh instance vertex " )
                     TXT( "constant global data buffer creation failed!\n" ) ) );
             }

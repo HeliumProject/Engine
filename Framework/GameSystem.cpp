@@ -82,18 +82,18 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bCommandLineInitSuccess );
     if( !bCommandLineInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Command-line initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Command-line initialization failed.\n" ) );
 
         return false;
     }
 
 #if HELIUM_ENABLE_TRACE
-    HELIUM_TRACE( TRACE_INFO, TXT( "Module name: %s\n" ), *m_moduleName );
-    HELIUM_TRACE( TRACE_INFO, TXT( "Command-line arguments:\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Module name: %s\n" ), *m_moduleName );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Command-line arguments:\n" ) );
     size_t argumentCount = m_arguments.GetSize();
     for( size_t argumentIndex = 0; argumentIndex < argumentCount; ++argumentIndex )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "* %s\n" ), *m_arguments[ argumentIndex ] );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "* %s\n" ), *m_arguments[ argumentIndex ] );
     }
 #endif
 
@@ -103,7 +103,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bAsyncLoaderInitSuccess );
     if( !bAsyncLoaderInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Async loader initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Async loader initialization failed.\n" ) );
 
         return false;
     }
@@ -112,7 +112,7 @@ bool GameSystem::Initialize(
     Path baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
-      HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+      HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
       return false;
     }
 
@@ -132,7 +132,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( pObjectLoader );
     if( !pObjectLoader )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): GameObject loader initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): GameObject loader initialization failed.\n" ) );
 
         return false;
     }
@@ -144,7 +144,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bConfigInitSuccess );
     if( !bConfigInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Failed to initialize configuration settings.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Failed to initialize configuration settings.\n" ) );
 
         return false;
     }
@@ -154,7 +154,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bJobManagerInitSuccess );
     if( !bJobManagerInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Job manager initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Job manager initialization failed.\n" ) );
 
         return false;
     }
@@ -165,7 +165,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bWindowManagerInitSuccess );
     if( !bWindowManagerInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Window manager initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Window manager initialization failed.\n" ) );
 
         return false;
     }
@@ -174,7 +174,7 @@ bool GameSystem::Initialize(
     if( !pWindowManager )
     {
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             ( TXT( "GameSystem::Initialize(): No window manager created.  A window manager is necessary for " )
             TXT( "GameSystem execution.\n" ) ) );
 
@@ -186,7 +186,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bRendererInitSuccess );
     if( !bRendererInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameSystem::Initialize(): Renderer initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameSystem::Initialize(): Renderer initialization failed.\n" ) );
 
         return false;
     }
@@ -194,7 +194,7 @@ bool GameSystem::Initialize(
     Renderer* pRenderer = Renderer::GetStaticInstance();
     if( !pRenderer )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "GameSystem::Initialize(): Using null renderer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "GameSystem::Initialize(): Using null renderer.\n" ) );
     }
     else
     {
@@ -219,7 +219,7 @@ bool GameSystem::Initialize(
         HELIUM_ASSERT( m_pMainWindow );
         if( !m_pMainWindow )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to create main application window.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main application window.\n" ) );
 
             return false;
         }
@@ -237,7 +237,7 @@ bool GameSystem::Initialize(
         HELIUM_ASSERT( bContextCreateResult );
         if( !bContextCreateResult )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to create main renderer context.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create main renderer context.\n" ) );
 
             return false;
         }
@@ -250,7 +250,7 @@ bool GameSystem::Initialize(
         DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
         if( !rDynamicDrawer.Initialize() )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to initialize dynamic drawing support.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize dynamic drawing support.\n" ) );
 
             return false;
         }
@@ -262,7 +262,7 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( bWorldManagerInitSuccess );
     if( !bWorldManagerInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "World manager initialization failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World manager initialization failed.\n" ) );
 
         return false;
     }
@@ -277,18 +277,18 @@ bool GameSystem::Initialize(
     HELIUM_ASSERT( spDefaultWorld );
     if( !spDefaultWorld )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to create the default world.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to create the default world.\n" ) );
 
         return false;
     }
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Created default world \"%s\".\n" ), *spDefaultWorld->GetPath().ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Created default world \"%s\".\n" ), *spDefaultWorld->GetPath().ToString() );
 
     bool bWorldInitSuccess = spDefaultWorld->Initialize();
     HELIUM_ASSERT( bWorldInitSuccess );
     if( !bWorldInitSuccess )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Failed to initialize default world.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Failed to initialize default world.\n" ) );
 
         return false;
     }

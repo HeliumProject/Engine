@@ -28,7 +28,7 @@ bool ConfigInitialization::Initialize()
     GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "Loading configuration settings.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Loading configuration settings.\n" ) );
 
     rConfig.BeginLoad();
     while( !rConfig.TryFinishLoad() )
@@ -36,7 +36,7 @@ bool ConfigInitialization::Initialize()
         pObjectLoader->Tick();
     }
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "Configuration settings loaded.\n" ) );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "Configuration settings loaded.\n" ) );
 
     return true;
 }

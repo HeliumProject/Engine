@@ -48,7 +48,7 @@ bool World::Initialize()
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::Initialize(): Failed to create a primary graphics scene.\n" ) );
 
         return false;
     }
@@ -121,7 +121,7 @@ Entity* World::CreateEntity(
     HELIUM_ASSERT( pLayer );
     if( !pLayer )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "World::CreateEntity(): Missing entity layer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity layer.\n" ) );
 
         return NULL;
     }
@@ -131,7 +131,7 @@ Entity* World::CreateEntity(
     if( pLayerWorld != this )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::CreateEntity(): Layer \"%s\" is not bound to world \"%s\".\n" ),
             *pLayer->GetPath().ToString(),
             *GetPath().ToString() );
@@ -151,7 +151,7 @@ Entity* World::CreateEntity(
     if( !pEntity )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", layer \"%s\".\n" ),
             *GetPath().ToString(),
             *pLayer->GetPath().ToString() );
@@ -181,7 +181,7 @@ bool World::DestroyEntity( Entity* pEntity )
     if( !spEntityLayer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::DestroyEntity(): Entity \"%s\" is not bound to a layer.\n" ),
             *pEntity->GetPath().ToString() );
 
@@ -192,7 +192,7 @@ bool World::DestroyEntity( Entity* pEntity )
     if( spEntityWorld.Get() != this )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::DestroyEntity(): Entity \"%s\" is not part of world \"%s\".\n" ),
             *pEntity->GetPath().ToString() );
 
@@ -220,7 +220,7 @@ bool World::AddLayer( Layer* pLayer )
     HELIUM_ASSERT( pLayer );
     if( !pLayer )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "World::AddLayer(): Null layer specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "World::AddLayer(): Null layer specified.\n" ) );
 
         return false;
     }
@@ -230,7 +230,7 @@ bool World::AddLayer( Layer* pLayer )
     if( pExistingWorld )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::AddLayer(): Layer \"%s\" is already bound to world \"%s\".\n" ),
             *pLayer->GetPath().ToString(),
             *pExistingWorld->GetPath().ToString() );
@@ -270,7 +270,7 @@ bool World::RemoveLayer( Layer* pLayer )
     if( pLayer->GetWorld().Get() != this )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "World::RemoveLayer(): Layer \"%s\" is not part of world \"%s\".\n" ),
             *pLayer->GetPath().ToString(),
             *GetPath().ToString() );

@@ -273,7 +273,7 @@ bool App::OnInit()
     Path baseDirectory;
     if ( !FileLocations::GetBaseDirectory( baseDirectory ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "Could not get base directory." ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Could not get base directory." ) );
         return false;
     }
 

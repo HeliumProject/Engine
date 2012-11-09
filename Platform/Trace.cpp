@@ -14,8 +14,8 @@ Helium::Trace Helium::g_Trace;
 
 /// Constructor.
 Helium::Trace::Trace()
-    : m_level( TRACE_INFO )
-    , m_lastMessageLevel( TRACE_INVALID )
+    : m_level( TraceLevels::Info )
+	, m_lastMessageLevel( TraceLevels::Debug )
     , m_bNewLine( true )
 {
 }
@@ -30,11 +30,10 @@ Helium::Trace::~Trace()
 /// @param[in] level  Logging level.
 ///
 /// @see GetLevel()
-void Helium::Trace::SetLevel( ETraceLevel level )
+void Helium::Trace::SetLevel( TraceLevel level )
 {
     MutexScopeLock scopeLock( m_mutex );
 
-    HELIUM_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( TRACE_MAX ) );
     m_level = level;
 }
 
@@ -43,7 +42,7 @@ void Helium::Trace::SetLevel( ETraceLevel level )
 /// @param[in] level    Logging level.
 /// @param[in] pFormat  Format string.
 /// @param[in] ...      Format arguments.
-void Helium::Trace::Output( ETraceLevel level, const tchar_t* pFormat, ... )
+void Helium::Trace::Output( TraceLevel level, const tchar_t* pFormat, ... )
 {
     va_list argList;
     va_start( argList, pFormat );
@@ -57,7 +56,7 @@ void Helium::Trace::Output( ETraceLevel level, const tchar_t* pFormat, ... )
 /// @param[in] pFormat  Format string.
 /// @param[in] argList  Initialized variable argument list for the format arguments (va_start() should have already
 ///                     been called on this as necessary).
-void Helium::Trace::OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list argList )
+void Helium::Trace::OutputVa( TraceLevel level, const tchar_t* pFormat, va_list argList )
 {
     HELIUM_ASSERT( pFormat );
 
@@ -131,28 +130,26 @@ void Helium::Trace::OutputImplementation( const tchar_t* pMessage )
 /// @param[in] level  Logging level.
 ///
 /// @return  Logging level string.
-const tchar_t* Helium::Trace::GetLevelString( ETraceLevel level )
+const tchar_t* Helium::Trace::GetLevelString( TraceLevel level )
 {
-    HELIUM_ASSERT( static_cast< size_t >( level ) < static_cast< size_t >( TRACE_MAX ) );
-
     switch( level )
     {
-        case TRACE_DEBUG:
+        case TraceLevels::Debug:
         {
             return TXT( "[D] " );
         }
 
-        case TRACE_INFO:
+        case TraceLevels::Info:
         {
             return TXT( "[I] " );
         }
 
-        case TRACE_WARNING:
+        case TraceLevels::Warning:
         {
             return TXT( "[W] " );
         }
 
-        case TRACE_ERROR:
+        case TraceLevels::Error:
         {
             return TXT( "[E] " );
         }

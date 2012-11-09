@@ -5,7 +5,7 @@
 /// @return  Current logging level.
 ///
 /// @see SetLevel()
-Helium::ETraceLevel Helium::Trace::GetLevel() const
+Helium::TraceLevel Helium::Trace::GetLevel() const
 {
     return m_level;
 }

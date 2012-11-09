@@ -52,7 +52,7 @@
 //            if( packagePath.IsEmpty() )
 //            {
 //                HELIUM_TRACE(
-//                    TRACE_ERROR,
+//                    TraceLevels::Error,
 //                    ( TXT( "XmlPackageLoaderMap::GetPackageLoader(): Cannot resolve package loader for \"%s\", as it " )
 //                      TXT( "is not located in a package.\n" ) ),
 //                    *path.ToString() );
@@ -87,7 +87,7 @@
 //            if( !bInitResult )
 //            {
 //                HELIUM_TRACE(
-//                    TRACE_ERROR,
+//                    TraceLevels::Error,
 //                    TXT( "XmlPackageLoaderMap::GetPackageLoader(): Failed to initialize package loader for \"%s\".\n" ),
 //                    *packagePath.ToString() );
 //

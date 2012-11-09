@@ -68,7 +68,7 @@ Serializer::~Serializer()
 /// @param[out] rTagNames  List of property tag names.  The existing contents of this array will be erased.
 void Serializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
 {
-    HELIUM_TRACE( TRACE_WARNING, TXT( "Serializer::GetPropertyTagNames(): Called on an unsupported serializer.\n" ) );
+    HELIUM_TRACE( TraceLevels::Warning, TXT( "Serializer::GetPropertyTagNames(): Called on an unsupported serializer.\n" ) );
 
     rTagNames.Clear();
 }

@@ -57,7 +57,7 @@ bool ShaderResourceHandler::CacheResource(
     const Shader* pShader = Reflect::AssertCast< const Shader >( pResource );
     GameObjectPath shaderPath = pShader->GetPath();
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "ShaderResourceHandler: Caching \"%s\".\n" ), *shaderPath.ToString() );
 
     DefaultAllocator allocator;
 
@@ -65,7 +65,7 @@ bool ShaderResourceHandler::CacheResource(
     if( !pSourceFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ShaderResourceHandler: Source file for shader resource \"%s\" failed to open properly.\n" ),
             *shaderPath.ToString() );
 
@@ -80,7 +80,7 @@ bool ShaderResourceHandler::CacheResource(
     if( size64 > static_cast< uint64_t >( static_cast< size_t >( -1 ) ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderResourceHandler: Source file for shader resource \"%s\" is too large to fit into " )
             TXT( "memory for preprocessing.\n" ) ),
             *shaderPath.ToString() );
@@ -97,7 +97,7 @@ bool ShaderResourceHandler::CacheResource(
     if( !pShaderData )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for loading the source " )
             TXT( "data of \"%s\" for preprocessing.\n" ) ),
             size,
@@ -255,7 +255,7 @@ void ShaderResourceHandler::ParseLine(
     if( optionName.IsEmpty() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ShaderResourceHandler: Skipping empty option in shader resource \"%s\".\n" ),
             *shaderPath.ToString() );
 
@@ -278,7 +278,7 @@ void ShaderResourceHandler::ParseLine(
         ParseLineDuplicateOptionCheck( optionName, rUserSelects ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderResourceHandler: Duplicate option name \"%s\" found in shader resource \"%s\".  Only " )
             TXT( "the first option will be used.\n" ) ),
             *optionName,
@@ -320,7 +320,7 @@ void ShaderResourceHandler::ParseLine(
         if( splitCount > 2 )
         {
             HELIUM_TRACE(
-                TRACE_WARNING,
+                TraceLevels::Warning,
                 ( TXT( "ShaderResourceHandler: Extra tokens for toggle command \"%s\" in shader resource \"%s\" " )
                 TXT( "ignored.\n" ) ),
                 *splitLine[ 1 ],
@@ -332,7 +332,7 @@ void ShaderResourceHandler::ParseLine(
         if( splitCount < 3 || ( splitCount < 4 && splitLine[ 2 ] == "NONE" ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderResourceHandler: Missing options for select command \"%s\" in shader resource " )
                 TXT( "\"%s\".\n" ) ),
                 *splitLine[ 1 ],

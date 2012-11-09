@@ -9,42 +9,42 @@ TEST(Foundation, Path)
         String tempString;
         Path pathCopy;
         Path path( TXT( "C:/Users/Test/File.notext.ext" ) );
-        HELIUM_TRACE( TRACE_INFO, TXT( "path: %s\n" ), path.c_str() );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "path: %s\n" ), path.c_str() );
 
         pathCopy = path;
         tempString = pathCopy.Directory().c_str();
         pathCopy.Set( pathCopy.Directory() );
         HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "directory name: %s\n" ), *tempString );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "directory name: %s\n" ), *tempString );
 
         pathCopy = path;
         tempString = pathCopy.Filename().c_str();
         pathCopy.Set( pathCopy.Filename() );
         HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "filename: %s\n" ), *tempString );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "filename: %s\n" ), *tempString );
 
         pathCopy = path;
         tempString = pathCopy.Basename().c_str();
         pathCopy.Set( pathCopy.Basename() );
         HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "base name: %s\n" ), *tempString );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "base name: %s\n" ), *tempString );
 
         pathCopy = path;
         tempString = pathCopy.Extension().c_str();
         pathCopy.Set( pathCopy.Extension() );
         HELIUM_ASSERT( tempString == pathCopy.c_str() );
-        HELIUM_TRACE( TRACE_INFO, TXT( "extension: %s\n" ), *tempString );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "extension: %s\n" ), *tempString );
     }
 
     {
         Path dataDirectory;
         HELIUM_VERIFY( FileLocations::GetDataDirectory( dataDirectory ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "Data directory: %s\n" ), dataDirectory.c_str() );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "Data directory: %s\n" ), dataDirectory.c_str() );
         HELIUM_UNREF( dataDirectory );
 
         Path userDataDirectory;
         HELIUM_VERIFY( FileLocations::GetUserDataDirectory( userDataDirectory ) );
-        HELIUM_TRACE( TRACE_DEBUG, TXT( "User data directory: %s\n" ), userDataDirectory.c_str() );
+        HELIUM_TRACE( TraceLevels::Debug, TXT( "User data directory: %s\n" ), userDataDirectory.c_str() );
         HELIUM_UNREF( userDataDirectory );
     }
 
@@ -75,11 +75,11 @@ TEST(DataStructures, String)
     testString.Remove( 10 );
     testString.Insert( 4, TXT( '-' ) );
     HELIUM_ASSERT( testString == TXT( "Test-String1" ) );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "%s\n" ), *testString );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "%s\n" ), *testString );
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "\n" ) );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "String length = %Iu\n" ), testString.GetSize() );
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "String capacity = %Iu\n" ), testString.GetCapacity() );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "\n" ) );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "String length = %Iu\n" ), testString.GetSize() );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "String capacity = %Iu\n" ), testString.GetCapacity() );
 }
 
 TEST(Framework, StackHeap)
@@ -95,7 +95,7 @@ TEST(Framework, StackHeap)
     int* pInt1 = static_cast< int* >( rStackHeap.Allocate( sizeof( int ) ) );
     *pInt1 = -3;
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "*pInt0 = %d; *pInt1 = %d\n" ), *pInt0, *pInt1 );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "*pInt0 = %d; *pInt1 = %d\n" ), *pInt0, *pInt1 );
 
     rStackHeap.Free( pInt1 );
 }
@@ -117,7 +117,7 @@ TEST(DataStructures, SortedSet)
             if( integerSet.Insert( iterator, value ) )
             {
                 HELIUM_TRACE(
-                    TRACE_DEBUG,
+                    TraceLevels::Debug,
                     TXT( "@ size %" ) TPRIuSZ TXT( ":\tInserting %" ) TPRId32 TXT( "\n" ),
                     setSize,
                     value );
@@ -134,7 +134,7 @@ TEST(DataStructures, SortedSet)
             }
 
             HELIUM_TRACE(
-                TRACE_DEBUG,
+                TraceLevels::Debug,
                 TXT( "@ size %" ) TPRIuSZ TXT( ":\tRemoving %" ) TPRId32 TXT( "\n" ),
                 setSize,
                 *iterator );
@@ -202,15 +202,15 @@ TEST(DataStructures, Map)
     HELIUM_ASSERT( !bSuccess );
     HELIUM_UNREF( bSuccess );
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "june -> %" ) TPRIu32 TXT( "\n" ), integerMap[ String( TXT( "june" ) ) ] );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "june -> %" ) TPRIu32 TXT( "\n" ), integerMap[ String( TXT( "june" ) ) ] );
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "Map contents:\n" ) );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "Map contents:\n" ) );
 
     Map< String, uint32_t >::Iterator endIterator = integerMap.End();
     for( mapIterator = integerMap.Begin(); mapIterator != endIterator; ++mapIterator )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
             *mapIterator->First(),
             mapIterator->Second() );
@@ -258,13 +258,13 @@ TEST(DataStructures, SortedMap)
     HELIUM_ASSERT( !bSuccess );
     HELIUM_UNREF( bSuccess );
 
-    HELIUM_TRACE( TRACE_DEBUG, TXT( "SortedMap contents:\n" ) );
+    HELIUM_TRACE( TraceLevels::Debug, TXT( "SortedMap contents:\n" ) );
 
     IntegerMapType::Iterator mapEnd = integerMap.End();
     for( mapIterator = integerMap.Begin(); mapIterator != mapEnd; ++mapIterator )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             TXT( "%s -> %" ) TPRIu32 TXT( "\n" ),
             *mapIterator->First(),
             mapIterator->Second() );
@@ -277,10 +277,10 @@ TEST(DataStructures, SortedMap)
 TEST(Framework, Sockets) 
 {
     //pmd - Added UDP/TCP socket demo code
-    HELIUM_TRACE( TRACE_DEBUG, TXT("Testing Sockets"));
+    HELIUM_TRACE( TraceLevels::Debug, TXT("Testing Sockets"));
     Helium::InitializeSockets();
     {
-        HELIUM_TRACE( TRACE_DEBUG, TXT(" - UDP"));
+        HELIUM_TRACE( TraceLevels::Debug, TXT(" - UDP"));
         // Get the local host information
         hostent* localhost = gethostbyname("");
         char* local_ip = inet_ntoa (*(struct in_addr *)*localhost->h_addr_list);
@@ -305,7 +305,7 @@ TEST(Framework, Sockets)
         Helium::BindSocket(peer2, 45555);
 
         uint32_t wrote;
-        Helium::Condition terminate_condition(Condition::RESET_MODE_MANUAL);
+        Helium::Condition terminate_condition(true, false);
         Helium::WriteSocket(peer1, "test_data", 10, wrote, terminate_condition, &peer2_addr);
 
         char buffer[256];
@@ -319,7 +319,7 @@ TEST(Framework, Sockets)
     }
 
     {
-        HELIUM_TRACE( TRACE_DEBUG, TXT(" - TCP"));
+        HELIUM_TRACE( TraceLevels::Debug, TXT(" - TCP"));
 
         // Get the local host information
         hostent* localhost = gethostbyname("");
@@ -351,7 +351,7 @@ TEST(Framework, Sockets)
         Helium::AcceptSocket(peer1_new_client, peer1, &peer_addr);
 
         uint32_t wrote;
-        Helium::Condition terminate_condition(Condition::RESET_MODE_MANUAL);
+        Helium::Condition terminate_condition(true, false);
         Helium::WriteSocket(peer1_new_client, "test_data", 10, wrote, terminate_condition);
 
         char buffer[256];

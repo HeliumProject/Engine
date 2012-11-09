@@ -39,8 +39,8 @@ void JobManager::Shutdown()
     m_poolTls.SetPointer( NULL );
 
 #if HELIUM_TRACK_JOB_POOL_HITS
-    HELIUM_TRACE( TRACE_INFO, TXT( "Job pool allocation stats:\n" ) );
-    HELIUM_TRACE( TRACE_INFO, TXT( "Pool index\tLocal hits\tStolen hits\tMisses\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Job pool allocation stats:\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Pool index\tLocal hits\tStolen hits\tMisses\n" ) );
     uint32_t nodeIndex = 0;
 #endif
 
@@ -49,7 +49,7 @@ void JobManager::Shutdown()
     {
 #if HELIUM_TRACK_JOB_POOL_HITS
         HELIUM_TRACE(
-            TRACE_INFO,
+            TraceLevels::Info,
             TXT( "%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\t%" ) TPRIu32 TXT( "\n" ),
             nodeIndex,
             pNode->localHits,
@@ -64,7 +64,7 @@ void JobManager::Shutdown()
     }
 
 #if HELIUM_TRACK_JOB_POOL_HITS
-    HELIUM_TRACE( TRACE_INFO, TXT( "\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "\n" ) );
 #endif
 
     m_pHeadPool = NULL;

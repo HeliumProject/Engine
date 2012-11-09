@@ -366,7 +366,7 @@ Helium::Font::ProcessTextConverter< char >::ProcessTextConverter( const char* pS
     if( IsInvalid( m_length ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Font::ProcessTextConverter: Failed to convert multi-byte character string to a wide-character " )
               TXT( "string.\n" ) ) );
 

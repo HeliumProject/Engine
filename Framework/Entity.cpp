@@ -95,7 +95,7 @@ void Entity::DeferredReattach()
         ( updatePhase == WorldManager::UPDATE_PHASE_PRE || updatePhase == WorldManager::UPDATE_PHASE_POST ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "SafeReattach() called on an entity other than the one being updated by the current " )
             TXT( "thread during %s-update.\n" ) ),
             ( updatePhase == WorldManager::UPDATE_PHASE_PRE ? TXT( "pre" ) : TXT( "post" ) ) );

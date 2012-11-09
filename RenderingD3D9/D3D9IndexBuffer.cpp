@@ -33,7 +33,7 @@ void* D3D9IndexBuffer::Map( ERendererBufferMapHint hint )
     if( !m_pBuffer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9IndexBuffer::Map(): Attempted to map a buffer for which no Direct3D resource has been " )
               TXT( "allocated.\n" ) ) );
 
@@ -54,7 +54,7 @@ void* D3D9IndexBuffer::Map( ERendererBufferMapHint hint )
     HRESULT hResult = m_pBuffer->Lock( 0, 0, &pData, lockFlags );
     if( FAILED( hResult ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9IndexBuffer::Map(): Failed to lock Direct3D buffer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9IndexBuffer::Map(): Failed to lock Direct3D buffer.\n" ) );
 
         return NULL;
     }
@@ -70,7 +70,7 @@ void D3D9IndexBuffer::Unmap()
     if( !m_pBuffer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9IndexBuffer::Unmap(): Attempted to unmap a buffer for which no Direct3D resource has been " )
               TXT( "allocated.\n" ) ) );
 
@@ -80,6 +80,6 @@ void D3D9IndexBuffer::Unmap()
     HRESULT hResult = m_pBuffer->Unlock();
     if( FAILED( hResult ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9IndexBuffer::Unmap(): Failed to unlock Direct3D buffer.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9IndexBuffer::Unmap(): Failed to unlock Direct3D buffer.\n" ) );
     }
 }

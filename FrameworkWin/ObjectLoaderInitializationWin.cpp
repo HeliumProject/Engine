@@ -22,7 +22,7 @@ GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
     if( !EditorObjectLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ObjectLoaderFactoryWin::Create(): Failed to initialize EditorObjectLoader instance.\n" ) );
 
         return NULL;
@@ -37,7 +37,7 @@ GameObjectLoader* ObjectLoaderInitializationWin::Initialize()
     if( !PcCacheObjectLoader::InitializeStaticInstance() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ObjectLoaderFactoryWin::Create() Failed to initialize PcCacheObjectLoader instance.\n" ) );
 
         return NULL;

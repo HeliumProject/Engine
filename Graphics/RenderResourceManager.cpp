@@ -61,7 +61,7 @@ void RenderResourceManager::Initialize()
     if( !spGraphicsConfig )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "RenderResourceManager::Initialize(): Initialization failed; missing GraphicsConfig.\n" ) );
 
         return;
@@ -539,7 +539,7 @@ void RenderResourceManager::PostConfigUpdate()
     if( !spGraphicsConfig )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "RenderResourceManager::PostConfigUpdate(): Initialization failed; missing GraphicsConfig.\n" ) );
 
         return;
@@ -656,7 +656,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     if( !m_spSceneTexture )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Failed to create scene render texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
             bufferWidth,
             bufferHeight );
@@ -670,7 +670,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
     if( !m_spDepthStencilSurface )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "Failed to create scene depth-stencil surface of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
             bufferWidth,
             bufferHeight );
@@ -688,7 +688,7 @@ void RenderResourceManager::UpdateMaxViewportSize( uint32_t width, uint32_t heig
         if( !m_spShadowDepthTexture )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "Failed to create shadow depth texture of size %" ) TPRIu32 TXT( "x%" ) TPRIu32 TXT( ".\n" ),
                 bufferWidth,
                 bufferHeight );

@@ -96,7 +96,7 @@
 //    if( !m_outputLevelStack.IsEmpty() && m_outputLevelStack.GetLast() != OUTPUT_LEVEL_STRUCT )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase::SerializeTag(): Called while within a property or array tag.\n" ) );
 //
 //        return;
@@ -240,7 +240,7 @@
 //    if( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() == OUTPUT_LEVEL_STRUCT )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase::BeginStruct(): Called while not within a valid property or array tag.\n" ) );
 //
 //        return;
@@ -262,7 +262,7 @@
 //    // Make sure we are within a valid struct tag.
 //    if( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() != OUTPUT_LEVEL_STRUCT )
 //    {
-//        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlSerializerBase::EndStruct(): Called while not within a valid struct tag.\n" ) );
+//        HELIUM_TRACE( TraceLevels::Error, TXT( "XmlSerializerBase::EndStruct(): Called while not within a valid struct tag.\n" ) );
 //
 //        return;
 //    }
@@ -290,7 +290,7 @@
 //    if( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() == OUTPUT_LEVEL_STRUCT )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase::BeginArray(): Called while not within a valid property or array tag.\n" ) );
 //
 //        return;
@@ -325,7 +325,7 @@
 //    if( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() == OUTPUT_LEVEL_STRUCT )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase::BeginDynArray(): Called while not within a valid property or array tag.\n" ) );
 //
 //        return;
@@ -351,7 +351,7 @@
 //    if( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() != OUTPUT_LEVEL_ARRAY )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase::EndArray/EndDynArray(): Called while not within a valid array tag.\n" ) );
 //
 //        return;
@@ -670,7 +670,7 @@
 //        ( m_outputLevelStack.IsEmpty() || m_outputLevelStack.GetLast() != OUTPUT_LEVEL_ARRAY ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlSerializerBase: Attempted to serialize a %s without an active property tag.\n" ),
 //            pTypeString );
 //

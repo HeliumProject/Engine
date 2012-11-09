@@ -250,7 +250,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
     if( startIndex >= HELIUM_ARRAY_COUNT( m_samplerStates ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetSamplerStates(): Start index (%" ) TPRIuSZ TXT( ") exceeds the " )
             TXT( "number of sampler stages available (%" ) TPRIuSZ TXT( ").\n" ) ),
             startIndex,
@@ -263,7 +263,7 @@ void D3D9ImmediateCommandProxy::SetSamplerStates(
     if( samplerCount > samplerCountMax )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetSamplerStates(): Input sampler state array (start index: %" )
             TPRIuSZ TXT( "; sampler count: %" ) TPRIuSZ TXT( ") exceeds the available sampler stage range (%" )
             TPRIuSZ TXT( ").  State object range will be clamped.\n" ) ),
@@ -478,7 +478,7 @@ void D3D9ImmediateCommandProxy::SetVertexBuffers(
     if( startIndex >= STREAM_SOURCE_COUNT )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetVertexBuffers(): Start index (%" ) TPRIuSZ TXT( ") exceeds the " )
             TXT( "number of stream inputs available (%" ) TPRIuSZ TXT( ").\n" ) ),
             startIndex,
@@ -491,7 +491,7 @@ void D3D9ImmediateCommandProxy::SetVertexBuffers(
     if( bufferCount > bufferCountMax )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetVertexBuffers(): Input vertex buffer array (start index: %" )
             TPRIuSZ TXT( "; buffer count: %" ) TPRIuSZ TXT( ") exceeds the available stream input range (%" )
             TPRIuSZ TXT( ").  Vertex buffer range will be clamped.\n" ) ),
@@ -580,7 +580,7 @@ void D3D9ImmediateCommandProxy::SetVertexConstantBuffers(
     if( startIndex >= CONSTANT_BUFFER_SLOT_COUNT )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Start index (%" ) TPRIuSZ TXT( ") " )
             TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) TPRIuSZ TXT( ").\n" ) ),
             startIndex,
@@ -593,7 +593,7 @@ void D3D9ImmediateCommandProxy::SetVertexConstantBuffers(
     if( availableSlots < bufferCount )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetVertexConstantBuffers(): Buffer range (start: %" ) TPRIuSZ
             TXT( "; count: %" ) TPRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
             TXT( "slots (%" ) TPRIuSZ TXT( ").  Range will be clamped.\n" ) ),
@@ -638,7 +638,7 @@ void D3D9ImmediateCommandProxy::SetPixelConstantBuffers(
     if( startIndex >= CONSTANT_BUFFER_SLOT_COUNT )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Start index (%" ) TPRIuSZ TXT( ") " )
             TXT( "exceeds the range allowed by the number of constant buffer slots (%" ) TPRIuSZ TXT( ").\n" ) ),
             startIndex,
@@ -651,7 +651,7 @@ void D3D9ImmediateCommandProxy::SetPixelConstantBuffers(
     if( availableSlots < bufferCount )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetPixelConstantBuffers(): Buffer range (start: %" ) TPRIuSZ
             TXT( "; count: %" ) TPRIuSZ TXT( ") exceeds the range allowed by the number of constant buffer " )
             TXT( "slots (%" ) TPRIuSZ TXT( ").  Range will be clamped.\n" ) ),
@@ -691,7 +691,7 @@ void D3D9ImmediateCommandProxy::SetTexture( size_t samplerIndex, RTexture* pText
     if( samplerIndex >= HELIUM_ARRAY_COUNT( m_textures ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::SetTexture(): Sampler index %" ) TPRIuSZ TXT( " exceeds the " )
             TXT( "number of sampler stages available (%" ) TPRIuSZ TXT( ").\n" ) ),
             samplerIndex,
@@ -892,7 +892,7 @@ void D3D9ImmediateCommandProxy::ExecuteCommandList( RRenderCommandList* pCommand
 void D3D9ImmediateCommandProxy::FinishCommandList( RRenderCommandListPtr& rspCommandList )
 {
     HELIUM_TRACE(
-        TRACE_ERROR,
+        TraceLevels::Error,
         TXT( "D3D9ImmediateCommandProxy: FinishCommandList() called on an immediate command proxy.\n" ) );
 
     HELIUM_ASSERT_MSG_FALSE(
@@ -1158,7 +1158,7 @@ void D3D9ImmediateCommandProxy::VertexShaderConstantPusher::operator()(
     if( FAILED( hResult ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::VertexShaderConstantPusher(): Failed to update %u constants " )
             TXT( "starting at register %u.\n" ) ),
             count,
@@ -1184,7 +1184,7 @@ void D3D9ImmediateCommandProxy::PixelShaderConstantPusher::operator()(
     if( FAILED( hResult ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9ImmediateCommandProxy::PixelShaderConstantPusher(): Failed to update %u constants " )
             TXT( "starting at register %u.\n" ) ),
             count,

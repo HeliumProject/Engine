@@ -87,7 +87,7 @@ void ArchiveObjectLoader::OnLoadComplete( GameObjectPath /*path*/, GameObject* p
      if( !pObjectPreprocessor )
      {
          HELIUM_TRACE(
-             TRACE_WARNING,
+             TraceLevels::Warning,
              ( TXT( "ArchiveObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
              TXT( "preprocessing.\n" ) ) );
  
@@ -125,7 +125,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
     if( !pObjectPreprocessor )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "ArchiveObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
 
         return false;
@@ -185,7 +185,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
             if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "ArchiveObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
                 return false;
@@ -212,7 +212,7 @@ bool ArchiveObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformP
     if( !bSuccess )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ArchiveObjectLoader: Failed to cache object \"%s\".\n" ),
             *objectPath.ToString() );
     }

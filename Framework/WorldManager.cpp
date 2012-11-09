@@ -54,7 +54,7 @@ bool WorldManager::Initialize()
     if( !bCreateResult )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "WorldManager::Initialize(): Failed to create world package \"%s\".\n" ),
             *worldPackagePath.ToString() );
 
@@ -138,7 +138,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
     HELIUM_ASSERT( pType );
     if( !pType )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "WorldManager::CreateDefaultWorld(): No world type specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): No world type specified.\n" ) );
 
         return NULL;
     }
@@ -148,7 +148,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
     if( !bIsWorldType )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "WorldManager::CreateDefaultWorld(): Type \"%s\" specified is not a World subtype.\n" ),
             *pType->GetName() );
 
@@ -158,7 +158,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
     HELIUM_ASSERT( m_spWorldPackage );
     if( !m_spWorldPackage )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "WorldManager::CreateDefaultWorld(): World manager has not been initialized.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): World manager has not been initialized.\n" ) );
 
         return NULL;
     }
@@ -166,7 +166,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
     HELIUM_ASSERT( m_worlds.IsEmpty() );
     if( !m_worlds.IsEmpty() )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "WorldManager::CreateDefaultWorld(): Default world has already been created.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "WorldManager::CreateDefaultWorld(): Default world has already been created.\n" ) );
 
         return NULL;
     }
@@ -181,7 +181,7 @@ World* WorldManager::CreateDefaultWorld( const GameObjectType* pType )
     if( !bCreateResult )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "WorldManager::CreateDefaultWorld(): Failed to create world of type \"%s\".\n" ),
             *pType->GetName() );
 

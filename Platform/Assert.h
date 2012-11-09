@@ -55,27 +55,25 @@ namespace Helium
 
 namespace Helium
 {
+	namespace AssertResults
+	{
+		/// Assertion handler result.
+		enum Type
+		{
+			Break,		///< Break execution.
+			Abort,		///< Terminate the program.
+			Continue,	///< Continue execution.
+		};
+	}
+	typedef AssertResults::Type AssertResult;
+
 	/// Assert utility functions.
 	class HELIUM_PLATFORM_API Assert
 	{
 	public:
-		/// Assertion handler result.
-		enum EResult
-		{
-			RESULT_FIRST   =  0,
-			RESULT_INVALID = -1,
-
-			RESULT_BREAK,     ///< Break execution.
-			RESULT_ABORT,     ///< Terminate the program.
-			RESULT_CONTINUE,  ///< Continue execution.
-
-			RESULT_MAX,
-			RESULT_LAST = RESULT_MAX - 1
-		};
-
 		/// @name Static Utility Functions
 		//@{
-		static EResult Trigger( const tchar_t* pExpression, const tchar_t* pFunction, const tchar_t* pFile, int line, const tchar_t* pMessage, ... );
+		static AssertResult Trigger( const tchar_t* pExpression, const tchar_t* pFunction, const tchar_t* pFile, int line, const tchar_t* pMessage, ... );
 		//@}
 
 	private:
@@ -84,29 +82,29 @@ namespace Helium
 
 		/// @name Private Static Utility Functions
 		//@{
-		static EResult TriggerImplementation( const tchar_t* pMessageText );
+		static AssertResult TriggerImplementation( const tchar_t* pMessageText );
 		//@}
 	};
 }
 
-/// Trigger and handle a Helium::Assert::EResult code.
+/// Trigger and handle a Helium::AssertResult code.
 ///
 /// @param[in] EXP      Expression string.
 /// @param[in] MESSAGE  Message string.
 #define HELIUM_TRIGGER_ASSERT_HANDLER( EXP, ... ) \
 	{ \
 		HELIUM_DISABLEABLE_CODE_BLOCK( \
-			Helium::Assert::EResult _result = Helium::Assert::Trigger( \
+			Helium::AssertResult _result = Helium::Assert::Trigger( \
 				EXP, \
 				TXT(HELIUM_FUNCTION_NAME), \
 				TXT(__FILE__), \
 				__LINE__, \
 				__VA_ARGS__ ); \
-			if( _result == Helium::Assert::RESULT_BREAK ) \
+			if( _result == Helium::AssertResults::Break ) \
 			{ \
 				HELIUM_ISSUE_BREAK(); \
 			} \
-			else if( _result == Helium::Assert::RESULT_ABORT ) \
+			else if( _result == Helium::AssertResults::Abort ) \
 			{ \
 				Helium::FatalExit( -1 ); \
 			} ) \

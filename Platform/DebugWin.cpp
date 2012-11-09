@@ -826,7 +826,7 @@ static void ConditionalSymInitialize()
     static volatile bool bSymInitialized = false;
     if( !bSymInitialized )
     {
-        HELIUM_TRACE( TRACE_INFO, TXT( "Initializing symbol handler for the current process...\n" ) );
+        HELIUM_TRACE( TraceLevels::Info, TXT( "Initializing symbol handler for the current process...\n" ) );
 
         HANDLE hProcess = GetCurrentProcess();
         HELIUM_ASSERT( hProcess );
@@ -834,12 +834,12 @@ static void ConditionalSymInitialize()
         BOOL bInitialized = SymInitialize( hProcess, NULL, TRUE );
         if( bInitialized )
         {
-            HELIUM_TRACE( TRACE_INFO, TXT( "Symbol handler initialization successful!\n" ) );
+            HELIUM_TRACE( TraceLevels::Info, TXT( "Symbol handler initialization successful!\n" ) );
         }
         else
         {
             HELIUM_TRACE(
-                TRACE_INFO,
+                TraceLevels::Info,
                 TXT( "Symbol handler initialization failed (error code %u).\n" ),
                 ::GetLastError() );
         }

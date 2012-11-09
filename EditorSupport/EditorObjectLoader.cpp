@@ -47,7 +47,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
     if( !pObjectPreprocessor )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "EditorObjectLoader::CacheObject(): Missing ObjectPreprocessor to use for caching.\n" ) );
 
         return false;
@@ -107,7 +107,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
             if ( !FileLocations::GetDataDirectory( sourceFilePath ) )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     TXT( "EditorObjectLoader::CacheObject(): Could not obtain data directory.\n" ) );
 
                 return false;
@@ -134,7 +134,7 @@ bool EditorObjectLoader::CacheObject( GameObject* pObject, bool bEvictPlatformPr
     if( !bSuccess )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "EditorObjectLoader: Failed to cache object \"%s\".\n" ),
             *objectPath.ToString() );
     }
@@ -191,7 +191,7 @@ void EditorObjectLoader::OnPrecacheReady( GameObject* pObject, PackageLoader* pP
     if( !pObjectPreprocessor )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "EditorObjectLoader::OnPrecacheReady(): Missing ObjectPreprocessor to use for resource " )
             TXT( "preprocessing.\n" ) ) );
 

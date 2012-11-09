@@ -52,7 +52,7 @@ bool CachePackageLoader::Initialize( Name cacheName )
     if( !m_pCache )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader::Initialize(): Failed to initialize cache \"%s\".\n" ),
             *cacheName );
 
@@ -141,7 +141,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
     if( path.IsPackage() )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is a package, resolving immediately.\n" ),
             *path.ToString() );
 
@@ -176,7 +176,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
     if( !pEntry )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             ( TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is not cached in this package.  No load " )
             TXT( "request added.\n" ) ),
             *path.ToString() );
@@ -199,7 +199,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
         if( pRequest->pEntry == pEntry )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "CachePackageLoader::BeginLoadObject(): Duplicate load request of \"%s\".  No load " )
                 TXT( "request added.\n" ) ),
                 *path.ToString() );
@@ -236,7 +236,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
     if( pObject && pObject->IsFullyLoaded() )
     {
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             ( TXT( "CachePackageLoader::BeginLoadObject(): \"%s\" is already fully loaded.  Bypassing load " )
             TXT( "process.\n" ) ),
             *path.ToString() );
@@ -248,7 +248,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
         HELIUM_ASSERT( !pObject || !pObject->GetAnyFlagSet( GameObject::FLAG_LOADED | GameObject::FLAG_LINKED ) );
 
         HELIUM_TRACE(
-            TRACE_DEBUG,
+            TraceLevels::Debug,
             TXT( "CachePackageLoader::BeginLoadObject(): Issuing async load of property data for \"%s\".\n" ),
             *path.ToString() );
 
@@ -268,7 +268,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
     size_t requestId = m_loadRequests.Add( pRequest );
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         ( TXT( "CachePackageLoader::BeginLoadObject(): Load request for \"%s\" added (ID: %" ) TPRIuSZ
         TXT( ").\n" ) ),
         *path.ToString(),
@@ -353,7 +353,7 @@ bool CachePackageLoader::TryFinishLoadObject(
 
     HELIUM_ASSERT( pObject || pRequest->pEntry );
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         ( TXT( "CachePackageLoader::TryFinishLoadObject(): Load request for \"%s\" (ID: %" ) TPRIuSZ TXT( ") " )
         TXT( "synced.\n" ) ),
         *( pObject ? pObject->GetPath() : pRequest->pEntry->path ).ToString(),
@@ -461,7 +461,7 @@ bool CachePackageLoader::TickCacheLoad( LoadRequest* pRequest )
         HELIUM_ASSERT( pRequest->pEntry );
 
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: Failed to read cache data for object \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
     }
@@ -527,7 +527,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !pRequest->spTemplate )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Failed to load template object for \"%s\".\n" ),
                 *pCacheEntry->path.ToString() );
 
@@ -562,7 +562,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !pRequest->spOwner )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Failed to load owner object for \"%s\".\n" ),
                 *pCacheEntry->path.ToString() );
 
@@ -597,7 +597,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( pExistingType != pType )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "CachePackageLoader: Cannot load \"%s\" using the existing object as the types do not " )
                 TXT( "match (existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
                 *pCacheEntry->path.ToString(),
@@ -621,7 +621,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
         if( !GameObject::CreateObject( pRequest->spObject, pType, pCacheEntry->path.GetName(), pOwner, pTemplate ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Failed to create \"%s\" during loading.\n" ),
                 *pCacheEntry->path.ToString() );
 
@@ -642,7 +642,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
     if (!cached_object.ReferencesObject())
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: Failed to deserialize object \"%s\".\n" ),
             *pCacheEntry->path.ToString() );
 
@@ -673,7 +673,7 @@ bool CachePackageLoader::TickDeserialize( LoadRequest* pRequest )
                 if (!cached_prd.ReferencesObject())
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "CachePackageLoader: Failed to deserialize persistent resource " )
                         TXT( "data for \"%s\".\n" ) ),
                         *pCacheEntry->path.ToString() );
@@ -745,7 +745,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( propertyStreamSize ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -758,7 +758,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( propertyStreamSize > static_cast< size_t >( pPropertyStreamEnd - pBufferCurrent ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "CachePackageLoader: Property stream size (%" ) TPRIu32 TXT( " bytes) for \"%s\" exceeds the " )
             TXT( "amount of data cached.  Value will be clamped.\n" ) ),
             propertyStreamSize,
@@ -788,7 +788,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( typeLinkTableSize ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -808,7 +808,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pBufferCurrent + sizeof( typeNameSize ) > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
@@ -821,7 +821,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pBufferCurrent + sizeof( tchar_t ) * typeNameSize > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
@@ -844,7 +844,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( !pType )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Failed to locate type \"%s\" when attempting to deserialize \"%s\".\n" ),
                 pTypeNameString,
                 *pRequest->pEntry->path.ToString() );
@@ -858,7 +858,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( objectLinkTableSize ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -891,7 +891,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pBufferCurrent + sizeof( pathStringSize ) > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
@@ -904,7 +904,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pBufferCurrent + sizeof( tchar_t ) * pathStringSize > pPropertyStreamEnd )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
@@ -928,7 +928,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( !path.Set( pPathString ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "CachePackageLoader: Invalid object path \"%s\" found in linker table when deserializing " )
                 TXT( "\"%s\".  Setting to null.\n" ) ),
                 pPathString,
@@ -945,7 +945,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
             if( IsInvalid( linkLoadId ) )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "CachePackageLoader: Failed to begin loading \"%s\" as a link dependency for \"%s\".  " )
                     TXT( "Setting to null.\n" ) ),
                     pPathString,
@@ -963,7 +963,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( typeLinkIndex ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -976,7 +976,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( typeLinkIndex >= typeLinkTableSizeFast )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: Invalid link table index for the type of \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -987,7 +987,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( !pType )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: Type not found for object \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -1000,7 +1000,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( pRequest->templateLinkIndex ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -1015,7 +1015,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pRequest->templateLinkIndex >= objectLinkTableSizeFast )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Invalid link table index for the template of \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 
@@ -1034,7 +1034,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
     if( pBufferCurrent + sizeof( pRequest->ownerLinkIndex ) > pPropertyStreamEnd )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "CachePackageLoader: End of buffer reached when attempting to deserialize \"%s\".\n" ),
             *pRequest->pEntry->path.ToString() );
 
@@ -1049,7 +1049,7 @@ bool CachePackageLoader::DeserializeLinkTables( LoadRequest* pRequest )
         if( pRequest->ownerLinkIndex >= objectLinkTableSizeFast )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "CachePackageLoader: Invalid link table index for the owner of \"%s\".\n" ),
                 *pRequest->pEntry->path.ToString() );
 

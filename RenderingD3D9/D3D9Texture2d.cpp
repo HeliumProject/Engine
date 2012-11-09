@@ -62,7 +62,7 @@ void* D3D9Texture2d::Map( uint32_t mipLevel, size_t& rPitch, ERendererBufferMapH
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3D9Texture2d::Map(): Failed to lock mip level %" ) TPRIu32 TXT( " (error code 0x%x).\n" ),
             mipLevel,
             result );
@@ -88,7 +88,7 @@ void D3D9Texture2d::Unmap( uint32_t mipLevel )
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Texture2d::Unmap(): Failed to unlock texture mip level %" ) TPRIu32 TXT( " (error code " )
             TXT( "0x%x).\n" ) ),
             mipLevel,
@@ -111,7 +111,7 @@ uint32_t D3D9Texture2d::GetWidth( uint32_t mipLevel ) const
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Texture2d::GetWidth(): Failed to get surface description for mip level %" ) TPRIu32
             TXT( " (error code 0x%x).\n" ) ),
             mipLevel,
@@ -131,7 +131,7 @@ uint32_t D3D9Texture2d::GetHeight( uint32_t mipLevel ) const
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Texture2d::GetHeight(): Failed to get surface description for mip level %" ) TPRIu32
               TXT( " (error code 0x%x).\n" ) ),
             mipLevel,
@@ -161,7 +161,7 @@ RSurface* D3D9Texture2d::GetSurface( uint32_t mipLevel )
     if( FAILED( result ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3D9Texture2d::GetSurface(): Failed to get surface for mip level %" ) TPRIu32 TXT( " (error code " )
               TXT( "0x%x).\n" ) ),
             mipLevel,

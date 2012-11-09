@@ -80,11 +80,11 @@ static void PrintfWrapper( const char* pFormat, ... )
         ++pDestCharacter;
     }
 
-    HELIUM_TRACE( Helium::TRACE_DEBUG, TXT( "%s" ), messageWide );
+    HELIUM_TRACE( Helium::TraceLevels::Debug, TXT( "%s" ), messageWide );
 #else
     va_list argList;
     va_start( argList, pFormat );
-    HELIUM_TRACE_VA( Helium::TRACE_DEBUG, pFormat, argList );
+    HELIUM_TRACE_VA( Helium::TraceLevels::Debug, pFormat, argList );
     va_end( argList );
 #endif
 }

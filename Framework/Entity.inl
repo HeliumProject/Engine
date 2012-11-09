@@ -73,7 +73,7 @@ namespace Helium
             if( pCurrentEntity != this )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Accessed entity other than the entity currently being updated by the current thread " )
                       TXT( "during the post-update phase.\n" ) ) );
             }
@@ -94,7 +94,7 @@ namespace Helium
             TXT( "Can only perform read-only access to entities during the pre-update phase." ) );
         if( updatePhase == WorldManager::UPDATE_PHASE_PRE )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Accessed entity with write-allowed semantics during pre-update phase.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Accessed entity with write-allowed semantics during pre-update phase.\n" ) );
         }
         else if( updatePhase == WorldManager::UPDATE_PHASE_POST )
         {
@@ -106,7 +106,7 @@ namespace Helium
             if( pCurrentEntity != this )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Accessed entity other than the entity currently being updated by the current thread " )
                       TXT( "during the post-update phase.\n" ) ) );
             }
@@ -132,7 +132,7 @@ namespace Helium
             if( pCurrentEntity != this )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Call made to method that can only be used on the entity being updated by the current " )
                       TXT( "thread.\n" ) ) );
             }
@@ -153,7 +153,7 @@ namespace Helium
             TXT( "Can only perform read-only access to entities during the pre-update phase." ) );
         if( updatePhase == WorldManager::UPDATE_PHASE_PRE )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "Accessed entity with write-allowed semantics during pre-update phase.\n" ) );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "Accessed entity with write-allowed semantics during pre-update phase.\n" ) );
         }
         else if( updatePhase != WorldManager::UPDATE_PHASE_INVALID )
         {
@@ -164,7 +164,7 @@ namespace Helium
             if( pCurrentEntity != this )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Call made to method that can only be used on the entity being updated by the current " )
                       TXT( "thread.\n" ) ) );
             }

@@ -91,7 +91,7 @@ bool Mesh::BeginPrecacheResourceData()
         if( IsInvalid( vertexDataSize ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to locate cached vertex buffer data for mesh " )
                 TXT( "\"%s\".\n" ) ),
                 *GetPath().ToString() );
@@ -102,7 +102,7 @@ bool Mesh::BeginPrecacheResourceData()
             if( !m_spVertexBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create a vertex buffer of %" ) TPRIuSZ
                     TXT( " bytes for mesh \"%s\".\n" ) ),
                     vertexDataSize,
@@ -114,7 +114,7 @@ bool Mesh::BeginPrecacheResourceData()
                 if( !pData )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to map vertex buffer for loading for " )
                         TXT( "mesh \"%s\".\n" ) ),
                         *GetPath().ToString() );
@@ -127,7 +127,7 @@ bool Mesh::BeginPrecacheResourceData()
                     if( IsInvalid( m_vertexBufferLoadId ) )
                     {
                         HELIUM_TRACE(
-                            TRACE_ERROR,
+                            TraceLevels::Error,
                             ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for " )
                             TXT( "vertex buffer data for mesh \"%s\".\n" ) ),
                             *GetPath().ToString() );
@@ -146,7 +146,7 @@ bool Mesh::BeginPrecacheResourceData()
         if( IsInvalid( indexDataSize ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to locate cached index buffer data for mesh " )
                 TXT( "\"%s\".\n" ) ),
                 *GetPath().ToString() );
@@ -160,7 +160,7 @@ bool Mesh::BeginPrecacheResourceData()
             if( !m_spIndexBuffer )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to create an index buffer of %" ) TPRIuSZ
                     TXT( " bytes for mesh \"%s\".\n" ) ),
                     indexDataSize,
@@ -172,7 +172,7 @@ bool Mesh::BeginPrecacheResourceData()
                 if( !pData )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to map index buffer for loading for " )
                         TXT( "mesh \"%s\".\n" ) ),
                         *GetPath().ToString() );
@@ -185,7 +185,7 @@ bool Mesh::BeginPrecacheResourceData()
                     if( IsInvalid( m_indexBufferLoadId ) )
                     {
                         HELIUM_TRACE(
-                            TRACE_ERROR,
+                            TraceLevels::Error,
                             ( TXT( "Mesh::BeginPrecacheResourceData(): Failed to queue async load request for " )
                             TXT( "index buffer data for mesh \"%s\".\n" ) ),
                             *GetPath().ToString() );

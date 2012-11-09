@@ -44,7 +44,7 @@ bool Connection::s_RegisteredStringTable = false;
 Connection::Connection()
 : m_Server (false)
 , m_Terminating (false)
-, m_Terminate (Condition::RESET_MODE_MANUAL)
+, m_Terminate (true, false)
 , m_State (ConnectionStates::Closed)
 , m_ConnectCount (0)
 , m_RemotePlatform ((Helium::Platform::Type)-1)

@@ -62,7 +62,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     uint32_t instanceIndex = rParameters.instanceIndex;
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         TXT("GameObject::Rename(): Renaming object \"%s\" to \"%s\" (Old Owner: \"%s\". New Owner: \"%s\".)\n"),
         *m_name,
         *rParameters.name,
@@ -77,7 +77,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         if( pOwner || IsValid( instanceIndex ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "GameObject::Rename(): Objects cannot have name information cleared if being assigned an " )
                   TXT( "owner or instance index.\n" ) ) );
 
@@ -88,7 +88,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         if( m_wpFirstChild )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "GameObject::Rename(): Cannot clear name information for objects with children.\n" ) );
 
             return false;
@@ -98,7 +98,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     // Don't allow setting the owner to ourself.
     if( pOwner == this )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "GameObject::Rename(): Cannot set the owner of an object to itself.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "GameObject::Rename(): Cannot set the owner of an object to itself.\n" ) );
 
         return false;
     }
@@ -107,7 +107,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
     if( pOwner && pOwner->m_name.IsEmpty() )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObject::Rename(): Cannot set the owner of an object to an object with no path information.\n" ) );
 
         return false;
@@ -119,7 +119,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         if( pOwner && !pOwner->IsPackage() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "GameObject::Rename(): Cannot set a non-package as the owner of a package.\n" ) );
 
             return false;
@@ -129,7 +129,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
         if( IsValid( instanceIndex ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "GameObject::Rename(): Instance indexing not supported for packages.\n" ) );
 
             return false;
@@ -197,7 +197,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
                     if( !rIndexSet.Insert( indexAccessor, instanceIndex ) )
                     {
                         HELIUM_TRACE(
-                            TRACE_ERROR,
+                            TraceLevels::Error,
                             ( TXT( "GameObject::Rename(): Object already exists with the specified owner (%s), name " )
                               TXT( "(%s), and instance index (%" ) TPRIu32 TXT( ").\n" ) ),
                             ( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
@@ -216,7 +216,7 @@ bool GameObject::Rename( const RenameParameters& rParameters )
                     if( pChild->m_name == name && pChild->m_instanceIndex == instanceIndex )
                     {
                         HELIUM_TRACE(
-                            TRACE_ERROR,
+                            TraceLevels::Error,
                             ( TXT( "GameObject::Rename(): Object already exists with the specified owner (%s) and " )
                               TXT( "name (%s).\n" ) ),
                             ( pOwner ? *pOwner->GetPath().ToString() : TXT( "none" ) ),
@@ -584,7 +584,7 @@ bool GameObject::CreateObject(
     HELIUM_ASSERT( pType );
 
     HELIUM_TRACE(
-        TRACE_DEBUG,
+        TraceLevels::Debug,
         TXT( "GameObject::CreateObject(): Creating object named \"%s\" of type \"%s\" owned by \"%s\".\n"),
         *name,
         *pType->GetName(),
@@ -599,7 +599,7 @@ bool GameObject::CreateObject(
         if( pType->GetFlags() & GameObjectType::FLAG_NO_TEMPLATE && pType->GetTemplate() != pObjectTemplate )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "GameObject::CreateObject(): Objects of type \"%s\" cannot be used as templates.\n" ),
                 *pType->GetName() );
 
@@ -616,7 +616,7 @@ bool GameObject::CreateObject(
     if( !pObjectTemplate->IsInstanceOf( pType ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObject::CreateObject: Template object \"%s\" is not of type \"%s\".\n" ),
             *pTemplate->GetPath().ToString(),
             pType->GetName().Get() );
@@ -652,7 +652,7 @@ bool GameObject::CreateObject(
     if ( !RegisterObject( pObject ) )
     {            
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObject::CreateObject(): RegisterObject() failed for GameObject \"%s\" owned by \"%s\".\n" ),
             *name,
             !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
@@ -667,7 +667,7 @@ bool GameObject::CreateObject(
     if( !pObject->Rename( nameParameters ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "GameObject::CreateObject(): Rename() failed for GameObject \"%s\" owned by \"%s\".\n" ),
             *name,
             !pOwner ? TXT("[none]") : *pOwner->GetPath().ToString());
@@ -850,7 +850,7 @@ bool GameObject::RegisterObject( GameObject* pObject )
         HELIUM_ASSERT( sm_objects[ pObject->m_id ].Get() == pObject );
 
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "GameObject::RegisterObject(): Attempted to register object \"%s\", which is already registered.\n" ),
             *pObject->GetPath().ToString() );
 
@@ -886,7 +886,7 @@ void GameObject::UnregisterObject( GameObject* pObject )
     if( IsInvalid( objectId ) )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "GameObject::UnregisterObject(): Called on object \"%s\", which is already unregistered.\n" ),
             *pObject->GetPath().ToString() );
 
@@ -917,7 +917,7 @@ void GameObject::UnregisterObject( GameObject* pObject )
 /// @see GameObjectType::Shutdown()
 void GameObject::Shutdown()
 {
-    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObject system.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObject system.\n" ) );
 
     GameObject::ReleaseStaticType();
 
@@ -927,7 +927,7 @@ void GameObject::Shutdown()
     if( Reflect::ObjectRefCountSupport::GetFirstActiveProxy( refCountProxyAccessor ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "%" ) TPRIuSZ TXT( " smart pointer(s) still active during shutdown!\n" ),
             Reflect::ObjectRefCountSupport::GetActiveProxyCount() );
 
@@ -950,7 +950,7 @@ void GameObject::Shutdown()
         }
 
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "%" ) TPRIuSZ TXT( " active GameObject smart pointer(s):\n" ),
             activeGameObjectCount );
 
@@ -964,7 +964,7 @@ void GameObject::Shutdown()
             if( pGameObject )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     TXT( "- 0x%p: %s (%" ) TPRIu16 TXT( " strong ref(s), %" ) TPRIu16 TXT( " weak ref(s))\n" ),
                     pProxy,
                     ( pGameObject ? *pGameObject->GetPath().ToString() : TXT( "(cleared reference)" ) ),
@@ -983,7 +983,7 @@ void GameObject::Shutdown()
     if( objectCountActual != 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "%" ) TPRIuSZ TXT( " object(s) still referenced during shutdown!\n" ),
             objectCountActual );
 
@@ -1001,7 +1001,7 @@ void GameObject::Shutdown()
                 continue;
             }
 
-            HELIUM_TRACE( TRACE_ERROR, TXT( "- %s\n" ), *pObject->GetPath().ToString() );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "- %s\n" ), *pObject->GetPath().ToString() );
         }
     }
 #endif  // !HELIUM_RELEASE

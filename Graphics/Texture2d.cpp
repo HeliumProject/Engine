@@ -62,7 +62,7 @@ bool Texture2d::BeginPrecacheResourceData()
         if( !pMipData )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 TXT( "Texture2d::BeginPrecacheResourceData(): Failed to lock mip level %" ) TPRIu32 TXT( ".\n" ),
                 mipIndex );
 
@@ -80,7 +80,7 @@ bool Texture2d::BeginPrecacheResourceData()
         if( IsInvalid( loadId ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Texture2d::BeginPrecacheResourceData(): Failed to begin loading of cached data for mip " )
                 TXT( "level %" ) TPRIu32 TXT( ".\n" ) ),
                 mipIndex );
@@ -183,7 +183,7 @@ void Texture2d::SerializePersistentResourceData( Serializer& s )
             if( !m_spTexture )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "Texture2d::SerializePersistentResourceData(): Failed to create texture render " )
                     TXT( "resource (width: %" ) TPRIu32 TXT( "; height: %" ) TPRIu32 TXT( "; mip count: %" )
                     TPRIu32 TXT( "; pixel format index: %" ) TPRId32 TXT( ").\n" ) ),

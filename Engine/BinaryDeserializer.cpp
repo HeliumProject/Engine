@@ -194,7 +194,7 @@ void BinaryDeserializer::SerializeEnum( int32_t& rValue, uint32_t nameCount, con
             if( rValue != -1 && static_cast< uint32_t >( rValue ) >= nameCount )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     ( TXT( "BinaryDeserializer: Enum value %" ) TPRId32 TXT( " exceeds the maximum supported " )
                     TXT( "range (%" ) TPRIu32 TXT( ").  Setting to invalid (-1).\n" ) ),
                     rValue,
@@ -216,7 +216,7 @@ void BinaryDeserializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::
             if( rValue != -1 && !pEnumeration->IsValid( rValue ) )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     ( TXT( "BinaryDeserializer: Enum value %" ) TPRId32 TXT( " exceeds the maximum supported " )
                     TXT( "range (%" ) TPRIu32 TXT( ").  Setting to invalid (-1).\n" ) ),
                     rValue,
@@ -383,7 +383,7 @@ bool BinaryDeserializer::Deserialize( void* pBuffer, size_t elementSize, size_t 
         if( readCount != count )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "BinaryDeserializer: End of stream reached when trying to deserialize %" ) TPRIuSZ
                 TXT( " elements of %" ) TPRIuSZ TXT( " bytes each.\n" ) ),
                 count,

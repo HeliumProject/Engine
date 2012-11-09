@@ -149,7 +149,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, GameObjectPath subPath )
             if( subPathComponent.IsPackage() )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                     TXT( "package, while the first path ends in an object).\n" ) ),
                     *rootPath.ToString(),
@@ -250,7 +250,7 @@ bool GameObjectPath::Join( GameObjectPath rootPath, const tchar_t* pSubPath )
     if( !rootPath.IsPackage() && subPathPackageCount != 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
             TXT( "while the first path ends in an object).\n" ) ),
             *rootPath.ToString(),
@@ -340,7 +340,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, GameObjectPath subPath )
             if( subPathComponent.IsPackage() )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a " )
                     TXT( "package, while the first path ends in an object).\n" ) ),
                     pRootPath,
@@ -436,7 +436,7 @@ bool GameObjectPath::Join( const tchar_t* pRootPath, const tchar_t* pSubPath )
     if( rootPathNameCount != rootPathPackageCount && subPathPackageCount != 0 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "GameObjectPath::Join(): Cannot combine \"%s\" and \"%s\" (second path is rooted in a package, " )
             TXT( "while the first path ends in an object).\n" ) ),
             pRootPath,
@@ -511,7 +511,7 @@ void GameObjectPath::Clear()
 /// This should only be called immediately prior to application exit.
 void GameObjectPath::Shutdown()
 {
-    HELIUM_TRACE( TRACE_INFO, TXT( "Shutting down GameObjectPath table.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Shutting down GameObjectPath table.\n" ) );
 
     delete [] sm_pTable;
     sm_pTable = NULL;
@@ -522,7 +522,7 @@ void GameObjectPath::Shutdown()
     delete sm_pPendingLinksPool;
     sm_pPendingLinksPool = NULL;
 
-    HELIUM_TRACE( TRACE_INFO, TXT( "GameObjectPath table shutdown complete.\n" ) );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "GameObjectPath table shutdown complete.\n" ) );
 }
 
 /// Convert the path separator characters in the given object path to valid directory delimiters for the current
@@ -637,7 +637,7 @@ bool GameObjectPath::Parse(
     if( pString[ 0 ] != HELIUM_PACKAGE_PATH_CHAR && pString[ 0 ] != HELIUM_OBJECT_PATH_CHAR )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             TXT( "GameObjectPath: Path string \"%s\" does not contain a leading path separator.\n" ),
             pString );
 
@@ -671,7 +671,7 @@ bool GameObjectPath::Parse(
             if( packageCount != nameCount )
             {
                 HELIUM_TRACE(
-                    TRACE_WARNING,
+                    TraceLevels::Warning,
                     ( TXT( "GameObjectPath: Unexpected package path separator at character %" ) TPRIdPD TXT( " of " )
                     TXT( "path string \"%s\".\n" ) ),
                     pTestCharacter - pString,
@@ -736,7 +736,7 @@ bool GameObjectPath::Parse(
             if( !bParsingName && ( character < TXT( '0' ) || character > TXT( '9' ) ) )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     TXT( "GameObjectPath: Encountered non-numeric instance index value in path string \"%s\".\n" ),
                     *pString );
 
@@ -778,7 +778,7 @@ bool GameObjectPath::Parse(
                 if( pTempNameCharacter == pTempNameString )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         TXT( "GameObjectPath: Empty instance index encountered in path string \"%s\".\n" ),
                         pString );
 
@@ -788,7 +788,7 @@ bool GameObjectPath::Parse(
                 if( pTempNameCharacter - pTempNameString > 1 && *pTempNameString == TXT( '0' ) )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "GameObjectPath: Encountered instance index \"%s\" with leading zeros in path string " )
                         TXT( "\"%s\".\n" ) ),
                         pTempNameString,
@@ -814,7 +814,7 @@ bool GameObjectPath::Parse(
                 if( parseCount != 1 )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         TXT( "GameObjectPath: Failed to parse object instance index \"%s\" in path string \"%s\".\n" ),
                         pTempNameString,
                         pString );
@@ -825,7 +825,7 @@ bool GameObjectPath::Parse(
                 if( IsInvalid( *pTargetIndex ) )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         TXT( "GameObjectPath: Instance index \"%s\" in path string \"%s\" is a reserved value.\n" ),
                         pTempNameString,
                         pString );

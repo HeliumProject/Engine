@@ -105,7 +105,7 @@
 //        if( StringCompare( pName, TXT( "package" ) ) != 0 )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Top-level tag " )
 //                TXT( "is \"%s\"; expected \"package\" tag.\n" ) ),
 //                line,
@@ -126,7 +126,7 @@
 //        if( StringCompare( pName, TXT( "object" ) ) != 0 )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"%s\" tag as a top-level tag within a \"package\" tag; expected \"object\" tag.\n" ) ),
 //                line,
@@ -163,7 +163,7 @@
 //                if( !GameObjectType::Find( typeName ) )
 //                {
 //                    HELIUM_TRACE(
-//                        TRACE_ERROR,
+//                        TraceLevels::Error,
 //                        ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") \"%s\" " )
 //                        TXT( "is not a valid object type.\n" ) ),
 //                        line,
@@ -183,7 +183,7 @@
 //                    if( !templatePath.Set( pAttValue ) )
 //                    {
 //                        HELIUM_TRACE(
-//                            TRACE_ERROR,
+//                            TraceLevels::Error,
 //                            ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") " )
 //                            TXT( "\"%s\" is not a valid object path.\n" ) ),
 //                            line,
@@ -200,7 +200,7 @@
 //        if( objectName.IsEmpty() )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Missing " )
 //                TXT( "\"name\" parameter in \"object\" tag.\n" ) ),
 //                line,
@@ -214,7 +214,7 @@
 //        if( typeName.IsEmpty() )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Missing valid " )
 //                TXT( "\"type\" parameter in \"object\" tag.\n" ) ),
 //                line,
@@ -229,7 +229,7 @@
 //        if( !objectPath.Join( pContext->packagePath, *objectName ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") GameObject path is " )
 //                TXT( "not valid.\n" ) ),
 //                line,
@@ -277,7 +277,7 @@
 //        if( IsInvalid( pContext->currentObjectIndex ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"property\" tag outside of a valid \"object\" tag; ignoring.\n" ) ),
 //                line,
@@ -298,7 +298,7 @@
 //        if( rPropertyTop.bParsing || rPropertyTop.bClosed )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"property\" tag within another \"property\" tag outside the context of a \"struct\" or " )
 //                TXT( "\"array\" tag; ignoring.\n" ) ),
@@ -337,7 +337,7 @@
 //            }
 //
 //            HELIUM_TRACE(
-//                TRACE_WARNING,
+//                TraceLevels::Warning,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Unknown " )
 //                TXT( "\"property\" tag attribute \"%s\" encountered.\n" ) ),
 //                line,
@@ -349,7 +349,7 @@
 //        if( propertyName.IsEmpty() )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Incomplete " )
 //                TXT( "\"property\" tag encountered.\n" ) ),
 //                line,
@@ -379,7 +379,7 @@
 //        if( rPropertyTop.name.IsEmpty() )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"%s\" tag outside the scope of a \"property\" tag; ignoring.\n" ) ),
 //                line,
@@ -394,7 +394,7 @@
 //        if( rPropertyTop.bClosed )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"%s\" tag within a property that has already been parsed as an array or struct; " )
 //                TXT( "ignoring.\n" ) ),
@@ -410,7 +410,7 @@
 //        if( !rPropertyTop.bParsing )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "\"%s\" tag within an \"array\" or \"struct\" tag; ignoring.\n" ) ),
 //                line,
@@ -425,7 +425,7 @@
 //        if( bArrayTag && IsValid( rPropertyTop.index ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Encountered " )
 //                TXT( "nested \"array\" tag, which is not supported (arrays can only contain singular " )
 //                TXT( "properties or structs); ignoring.\n" ) ),
@@ -461,7 +461,7 @@
 //
 //    // Ignore unsupported tags.
 //    HELIUM_TRACE(
-//        TRACE_WARNING,
+//        TraceLevels::Warning,
 //        ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Unknown tag \"%s\" " )
 //        TXT( "encountered; ignoring.\n" ) ),
 //        line,
@@ -569,7 +569,7 @@
 //        if( !rProperties.Insert( propertyAccessor, newProperty ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_WARNING,
+//                TraceLevels::Warning,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Duplicate " )
 //                TXT( "\"%s\" property encountered in object; overwriting existing property.\n" ) ),
 //                line,
@@ -666,7 +666,7 @@
 //        if( !rArraySizes.Insert( arraySizeMapAccessor, arraySizeEntry ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_WARNING,
+//                TraceLevels::Warning,
 //                ( TXT( "XmlPackageLoader: (Line %" ) TPRIu64 TXT( ", column %" ) TPRIu64 TXT( ") Duplicate " )
 //                TXT( "\"%s\" array property encountered in object; overwriting existing array size.\n" ) ),
 //                line,
@@ -761,20 +761,20 @@
 //    // Make sure the path represents a package.
 //    if( packagePath.IsEmpty() )
 //    {
-//        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlPackageLoader::Initialize(): Empty package path specified.\n" ) );
+//        HELIUM_TRACE( TraceLevels::Error, TXT( "XmlPackageLoader::Initialize(): Empty package path specified.\n" ) );
 //
 //        return false;
 //    }
 //
 //    HELIUM_TRACE(
-//        TRACE_DEBUG,
+//        TraceLevels::Debug,
 //        TXT( "XmlPackageLoader::Initialize(): Initializing loader for package \"%s\".\n" ),
 //        *packagePath.ToString() );
 //
 //    if( !packagePath.IsPackage() )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Initialize(): \"%s\" does not represent a package path.\n" ),
 //            *packagePath.ToString() );
 //
@@ -792,7 +792,7 @@
 //        if( pPackage->GetLoader() )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader::Initialize(): Package \"%s\" already has a loader.\n" ),
 //                *packagePath.ToString() );
 //
@@ -812,7 +812,7 @@
 //            HELIUM_ASSERT( !spObject->IsPackage() );
 //
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "PackageLoader::Initialize(): Package loader cannot be initialized for \"%s\", as an " )
 //                TXT( "object with the same name exists that is not a package.\n" ) ),
 //                *packagePath.ToString() );
@@ -831,7 +831,7 @@
 //        if ( !FileLocations::GetUserDataDirectory( dataDirectory ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 //
 //            return false;
@@ -842,7 +842,7 @@
 //        if ( !FileLocations::GetDataDirectory( dataDirectory ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "PackageLoader::Initialize(): Could not obtain user data directory." ) );
 //
 //            return false;
@@ -868,7 +868,7 @@
 //    if( packageFileSize == -1 )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_WARNING,
+//            TraceLevels::Warning,
 //            TXT( "XmlPackageLoader::Initialize(): Failed to locate a valid package file for package \"%s\".\n" ),
 //            *m_packageFilePath,
 //            *packagePath.ToString() );
@@ -876,7 +876,7 @@
 //    else if( packageFileSize == 0 )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_WARNING,
+//            TraceLevels::Warning,
 //            TXT( "XmlPackageLoader::Initialize(): Package file \"%s\" for package \"%s\" is empty.\n" ),
 //            *m_packageFilePath,
 //            *packagePath.ToString() );
@@ -884,7 +884,7 @@
 //    else if( static_cast< uint64_t >( packageFileSize ) > static_cast< uint64_t >( ~static_cast< size_t >( 0 ) ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            ( TXT( "XmlPackageLoader::Initialize(): Package file \"%s\" exceeds the maximum size supported by " )
 //            TXT( "the current platform (package: %" ) TPRIu64 TXT( " bytes; max supported: %" ) TPRIuSZ
 //            TXT( " bytes).\n" ) ),
@@ -1059,7 +1059,7 @@
 //    if( objectIndex >= objectCount )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_WARNING,
+//            TraceLevels::Warning,
 //            TXT( "XmlPackageLoader::BeginLoadObject(): Failed to locate \"%s\" for loading.\n" ),
 //            *path.ToString() );
 //
@@ -1074,7 +1074,7 @@
 //    if( !pType )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::BeginLoadObject(): Failed to locate type \"%s\" for loading object \"%s\".\n" ),
 //            *rObjectData.typeName,
 //            *path.ToString() );
@@ -1355,7 +1355,7 @@
 //        if( IsInvalid( bytesRead ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader: Failed to read the contents of package file \"%s\".\n" ),
 //                *m_packageFilePath );
 //
@@ -1364,7 +1364,7 @@
 //        else if( bytesRead != m_packageFileSize )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_WARNING,
+//                TraceLevels::Warning,
 //                ( TXT( "XmlPackageLoader: Attempted to read %" ) TPRIuSZ TXT( " bytes from package file \"%s\", " )
 //                TXT( "but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
 //                m_packageFileSize,
@@ -1410,7 +1410,7 @@
 //                ( parseBytes == 0 ) );
 //            if( parseResult != XML_STATUS_OK )
 //            {
-//                HELIUM_TRACE( TRACE_ERROR, TXT( "XmlPackageLoader::Initialize(): XML parse error.\n" ) );
+//                HELIUM_TRACE( TraceLevels::Error, TXT( "XmlPackageLoader::Initialize(): XML parse error.\n" ) );
 //                break;
 //            }
 //
@@ -1465,7 +1465,7 @@
 //
 //    if ( !FileLocations::GetDataDirectory( packageDirectoryPath ) )
 //    {
-//        HELIUM_TRACE( TRACE_ERROR, TXT( "XmlPackageLoader::TickPreload(): Could not get data directory.\n" ) );
+//        HELIUM_TRACE( TraceLevels::Error, TXT( "XmlPackageLoader::TickPreload(): Could not get data directory.\n" ) );
 //        return;
 //    }
 //
@@ -1547,7 +1547,7 @@
 //            HELIUM_ASSERT( pResourceType );
 //
 //            HELIUM_TRACE(
-//                TRACE_DEBUG,
+//                TraceLevels::Debug,
 //                ( TXT( "XmlPackageLoader: Registered source asset file \"%s\" as as instance of resource " )
 //                TXT( "type \"%s\" in package \"%s\".\n" ) ),
 //                *objectNameString,
@@ -1637,7 +1637,7 @@
 //        if( !pRequest->spTemplate )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader: Failed to load template object for \"%s\".\n" ),
 //                *rObjectData.objectPath.ToString() );
 //
@@ -1672,7 +1672,7 @@
 //        if( !pRequest->spOwner )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader: Failed to load owner object for \"%s\".\n" ),
 //                *rObjectData.objectPath.ToString() );
 //
@@ -1705,7 +1705,7 @@
 //        if( pExistingType != pType )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: Cannot load \"%s\" using the existing object as the types do not match " )
 //                TXT( "(existing type: \"%s\"; serialized type: \"%s\".\n" ) ),
 //                *rObjectData.objectPath.ToString(),
@@ -1732,7 +1732,7 @@
 //        if( !bCreateResult )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader: Failed to create \"%s\" during loading.\n" ),
 //                *rObjectData.objectPath.ToString() );
 //
@@ -1755,7 +1755,7 @@
 //    if( !bResult )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader: Deserialization of object \"%s\" failed.\n" ),
 //            *rObjectData.objectPath.ToString() );
 //
@@ -1844,7 +1844,7 @@
 //    if( bytesRead != pRequest->cachedObjectDataBufferSize )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_WARNING,
+//            TraceLevels::Warning,
 //            ( TXT( "XmlPackageLoader: Requested load of %" ) TPRIu32 TXT( " bytes from cached object data for " )
 //            TXT( "\"%s\", but only %" ) TPRIuSZ TXT( " bytes were read.\n" ) ),
 //            pRequest->cachedObjectDataBufferSize,
@@ -1856,7 +1856,7 @@
 //    if( bytesRead < sizeof( uint32_t ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            ( TXT( "XmlPackageLoader: Not enough bytes read of cached object data \"%s\" from which to parse the " )
 //            TXT( "property stream size.\n" ) ),
 //            *pResource->GetPath().ToString() );
@@ -1875,7 +1875,7 @@
 //        if( byteSkipCount > bytesRead )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader: Cached persistent resource data for \"%s\" extends past the end of the " )
 //                TXT( "cached data stream.\n" ) ),
 //                *pResource->GetPath().ToString() );
@@ -1891,7 +1891,7 @@
 //            if( bytesRemaining < sizeof( uint32_t ) )
 //            {
 //                HELIUM_TRACE(
-//                    TRACE_ERROR,
+//                    TraceLevels::Error,
 //                    ( TXT( "XmlPackageLoader: Not enough space is reserved in the cached persistent resource " )
 //                    TXT( "data stream for \"%s\" for the resource sub-data count.\n" ) ),
 //                    *pResource->GetPath().ToString() );
@@ -1911,7 +1911,7 @@
 //                if( !deserializer.EndSerialize() )
 //                {
 //                    HELIUM_TRACE(
-//                        TRACE_ERROR,
+//                        TraceLevels::Error,
 //                        ( TXT( "XmlPackageLoader: Attempted to read past the end of the cached data stream when " )
 //                        TXT( "deserializing persistent resource data for \"%s\".\n" ) ),
 //                        *pResource->GetPath().ToString() );
@@ -1995,7 +1995,7 @@
 //    if( IsValid( rTagElement.index ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: Tag encountered while deserializing an array." ) );
 //
 //        return;
@@ -2242,7 +2242,7 @@
 //    if( m_tagStack.GetSize() == 1 )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: EndStruct() called without a corresponding BeginStruct().\n" ) );
 //
 //        return;
@@ -2267,7 +2267,7 @@
 //    if( !rTagElement.tag.Get() )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            ( TXT( "XmlPackageLoader::Deserializer: BeginArray() called without having properly serialized a " )
 //            TXT( "property tag.\n" ) ) );
 //
@@ -2277,7 +2277,7 @@
 //    if( IsValid( rTagElement.index ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: BeginArray() called while already serializing an array.\n" ) );
 //
 //        return;
@@ -2295,7 +2295,7 @@
 //    if( !rTagElement.tag.Get() || IsInvalid( rTagElement.index ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: EndArray() called outside of array serialization.\n" ) );
 //
 //        return;
@@ -2315,7 +2315,7 @@
 //    if( !rTagElement.tag.Get() )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            ( TXT( "XmlPackageLoader::Deserializer: BeginDynArray() called without having properly serialized a " )
 //            TXT( "property tag.\n" ) ) );
 //
@@ -2325,7 +2325,7 @@
 //    if( IsValid( rTagElement.index ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: BeginDynArray() called while already serializing an array.\n" ) );
 //
 //        return;
@@ -2344,7 +2344,7 @@
 //    if( !rTagElement.tag.Get() || IsInvalid( rTagElement.index ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: EndDynArray() called outside of array serialization.\n" ) );
 //
 //        return;
@@ -2378,7 +2378,7 @@
 //    if( IsInvalid( rTagElement.index + 1 ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            ( TXT( "XmlPackageLoader::Deserializer: Attempted to tag a value other than a uint32_t when " )
 //            TXT( "deserializing a dynamic array size.\n" ) ) );
 //
@@ -2402,7 +2402,7 @@
 //        if( !rParser( propertyAccessor->Second(), rValue ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader::Deserializer: Failed to parse a %s from text for property \"%s\" in " )
 //                TXT( "object \"%s\".  Using template value.\n" ) ),
 //                pTypeString,
@@ -2455,7 +2455,7 @@
 //        if( !pTagString || IsInvalid( rTagElement.index + 1 ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                ( TXT( "XmlPackageLoader::Deserializer: Attempted to deserialize a property without having " )
 //                TXT( "properly serialized a tag.\n" ) ) );
 //
@@ -2978,7 +2978,7 @@
 //    if( !path.Set( rText ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader::Deserializer: \"%s\" does not represent a valid object path.\n" ),
 //            *rText );
 //
@@ -3012,7 +3012,7 @@
 //        if( IsInvalid( pLinkEntry->loadRequestId ) )
 //        {
 //            HELIUM_TRACE(
-//                TRACE_ERROR,
+//                TraceLevels::Error,
 //                TXT( "XmlPackageLoader: Failed to begin loading \"%s\" as a link dependency.\n" ),
 //                *rText );
 //        }
@@ -3081,7 +3081,7 @@
 //    if( IsInvalid( pNewEntry->loadRequestId ) )
 //    {
 //        HELIUM_TRACE(
-//            TRACE_ERROR,
+//            TraceLevels::Error,
 //            TXT( "XmlPackageLoader: Failed to begin reloading \"%s\" as a link dependency.\n" ),
 //            *objectPath.ToString() );
 //    }

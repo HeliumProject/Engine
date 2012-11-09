@@ -250,7 +250,7 @@ size_t Shader::BeginLoadVariant( RShader::EType shaderType, uint32_t userOptionI
     if( userOptionIndex >= m_variantCounts[ shaderType ] )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Shader::BeginLoadVariant(): Invalid user option index %" ) TPRIuSZ TXT( " specified for " )
             TXT( "variant of shader \"%s\" (only %" ) TPRIuSZ TXT ( " variants are available for shader type %" )
             TPRId32 TXT( ").\n" ) ),
@@ -728,7 +728,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
     if( shaderTypeCharacter != TXT( 'v' ) && shaderTypeCharacter != TXT( 'p' ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Unable to determine shader type from variant " )
             TXT( "name \"%s\".\n" ) ),
             *GetPath().ToString() );
@@ -757,7 +757,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
         if( IsInvalid( loadSize ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Could not find resource sub-data %" ) TPRIuSZ
                 TXT( " for shader variant \"%s\".\n" ) ),
                 resourceIndex,
@@ -804,7 +804,7 @@ bool ShaderVariant::BeginPrecacheResourceData()
         if( IsInvalid( rLoadData.id ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::BeginPrecacheResourceData(): Failed to begin asynchronous load of " )
                 TXT( "resource sub-data %" ) TPRIuSZ TXT( " of shader variant \"%s\".\n" ) ),
                 resourceIndex,
@@ -896,7 +896,7 @@ bool ShaderVariant::TryFinishPrecacheResourceData()
         if( !spShaderBase )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::TryFinishPrecacheResourceData(): Failed to create shader for sub-data %" )
                 TPRIuSZ TXT( " of shader \"%s\".\n" ) ),
                 loadRequestIndex,

@@ -67,7 +67,7 @@ bool BufferedDrawer::Initialize()
         if( !m_spScreenSpaceTextIndexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "BufferedDrawer::Initialize(): Failed to create index buffer for screen-space text " )
                   TXT( "rendering.\n" ) ) );
 
@@ -90,7 +90,7 @@ bool BufferedDrawer::Initialize()
                 if( !pConstantBuffer )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance vertex shader constant " )
                           TXT( "buffers.\n" ) ) );
 
@@ -111,7 +111,7 @@ bool BufferedDrawer::Initialize()
                 if( !pConstantBuffer )
                 {
                     HELIUM_TRACE(
-                        TRACE_ERROR,
+                        TraceLevels::Error,
                         ( TXT( "BufferedDrawer::Initialize(): Failed to allocate per-instance pixel shader constant " )
                           TXT( "buffers.\n" ) ) );
 
@@ -746,7 +746,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spUntexturedVertexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create vertex buffer for untextured debug drawing of %" ) TPRIuFAST32
                   TXT( " vertices.\n" ) ),
                 untexturedVertexCount );
@@ -769,7 +769,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spUntexturedIndexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create index buffer for untextured debug drawing of %" ) TPRIuFAST32
                   TXT( " indices.\n" ) ),
                 untexturedIndexCount );
@@ -791,7 +791,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spTexturedVertexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create vertex buffer for textured debug drawing of %" ) TPRIuFAST32
                   TXT( " vertices.\n" ) ),
                 texturedVertexCount );
@@ -814,7 +814,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spTexturedIndexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create index buffer for textured debug drawing of %" ) TPRIuFAST32
                   TXT( " indices.\n" ) ),
                 texturedIndexCount );
@@ -836,7 +836,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spScreenSpaceTextVertexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create vertex buffer for screen-space text drawing of %" ) TPRIuFAST32
                   TXT( " vertices.\n" ) ),
                 screenTextVertexCount );
@@ -858,7 +858,7 @@ void BufferedDrawer::BeginDrawing()
         if( !rResourceSet.spProjectedTextVertexBuffer )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "Failed to create vertex buffer for projected text drawing of %" ) TPRIuFAST32
                   TXT( " vertices.\n" ) ),
                 projectedTextVertexCount );

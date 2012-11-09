@@ -72,7 +72,7 @@ static void PNGAPI PngError( png_structp /*pPng*/, png_const_charp pMessage )
     const tchar_t* pConvertedMessage = pMessage;
 #endif
 
-    HELIUM_TRACE( TRACE_ERROR, TXT( "libpng error: %s\n" ), pConvertedMessage );
+    HELIUM_TRACE( TraceLevels::Error, TXT( "libpng error: %s\n" ), pConvertedMessage );
 
 #endif  // HELIUM_ENABLE_TRACE
 }
@@ -95,7 +95,7 @@ static void PNGAPI PngWarning( png_structp /*pPng*/, png_const_charp pMessage )
     const tchar_t* pConvertedMessage = pMessage;
 #endif
 
-    HELIUM_TRACE( TRACE_WARNING, TXT( "libpng warning: %s\n" ), pConvertedMessage );
+    HELIUM_TRACE( TraceLevels::Warning, TXT( "libpng warning: %s\n" ), pConvertedMessage );
 }
 
 /// libpng read callback.
@@ -116,7 +116,7 @@ static void PNGAPI PngReadData( png_structp pPng, png_bytep pData, png_size_t si
     if( bytesRead != size )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "Attempted to read %" ) TPRIuSZ TXT( " bytes from PNG image, but only %" ) TPRIuSZ
             TXT( " bytes could be read.\n" ) ),
             size,
@@ -143,7 +143,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
     size_t bytesRead = pSourceStream->Read( header, 1, sizeof( header ) );
     if( bytesRead != sizeof( header ) || png_sig_cmp( header, 0, bytesRead ) != 0 )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "PngImageLoader::Load(): Source stream does not contain a valid PNG image.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "PngImageLoader::Load(): Source stream does not contain a valid PNG image.\n" ) );
 
         return false;
     }
@@ -159,7 +159,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
         PngFree );
     if( !pPng )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "PngImageLoader::Load(): Failed to create PNG reader struct.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "PngImageLoader::Load(): Failed to create PNG reader struct.\n" ) );
 
         return false;
     }
@@ -167,7 +167,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
     png_infop pPngInfo = png_create_info_struct( pPng );
     if( !pPngInfo )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "PngImageLoader::Load(): Failed to create PNG info struct.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "PngImageLoader::Load(): Failed to create PNG info struct.\n" ) );
 
         png_destroy_read_struct( &pPng, NULL, NULL );
 
@@ -184,7 +184,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
 #endif
     if( setjmp( png_jmpbuf( pPng ) ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "PngImageLoader::Load(): Error occurred while reading PNG image data.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "PngImageLoader::Load(): Error occurred while reading PNG image data.\n" ) );
 
         png_destroy_read_struct( &pPng, &pPngInfo, NULL );
 
@@ -307,7 +307,7 @@ bool PngImageLoader::Load( Image& rImage, Stream* pSourceStream )
     if( !rImage.Initialize( imageParameters ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "PngImageLoader::Load(): Failed to initialize target image object based on source image " )
             TXT( "parameters.\n" ) ) );
 

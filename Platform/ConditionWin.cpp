@@ -10,15 +10,11 @@ using namespace Helium;
 /// Constructor.
 ///
 /// @param[in] resetMode      Whether the condition should automatically reset after releasing a thread when signaled
-///                           (RESET_MODE_AUTO) or whether the condition will remain signaled until Reset() is called
-///                           (RESET_MODE_MANUAL).
+///                           or whether the condition will remain signaled until Reset() is called.
 /// @param[in] bInitialState  True to initialize this condition in the signaled state, false to initialize non-signaled.
-Condition::Condition( EResetMode resetMode, bool bInitialState )
+Condition::Condition( bool bManualReset, bool bInitialState )
 {
-    HELIUM_ASSERT( static_cast< size_t >( resetMode ) < static_cast< size_t >( RESET_MODE_MAX ) );
-
-    //m_Handle = ::CreateEvent(NULL, TRUE, FALSE, NULL);
-    m_Handle = ::CreateEvent( NULL, ( resetMode == RESET_MODE_MANUAL ), bInitialState, NULL );
+    m_Handle = ::CreateEvent( NULL, bManualReset, bInitialState, NULL );
     HELIUM_ASSERT( m_Handle );
     if ( !m_Handle )
     {

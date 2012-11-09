@@ -50,19 +50,17 @@ namespace Helium
 {
     /// Trace levels.  These are intentionally declared outside the scope of the Trace class and abbreviated for ease of
     /// use.
-    enum ETraceLevel
+    namespace TraceLevels
     {
-        TRACE_FIRST   =  0,
-        TRACE_INVALID = -1,
-
-        TRACE_DEBUG,    ///< Debug logging messages.
-        TRACE_INFO,     ///< General info messages.
-        TRACE_WARNING,  ///< Warning messages.
-        TRACE_ERROR,    ///< Critical error messages.
-
-        TRACE_MAX,
-        TRACE_LAST = TRACE_MAX - 1
-    };
+		enum Type
+		{
+			Debug,    ///< Debug logging messages.
+			Info,     ///< General info messages.
+			Warning,  ///< Warning messages.
+			Error,    ///< Critical error messages.
+		};
+    }
+	typedef TraceLevels::Type TraceLevel;
 
     /// Trace interface.
     class HELIUM_PLATFORM_API Trace
@@ -79,11 +77,11 @@ namespace Helium
 
         /// @name Logging Interface
         //@{
-        void SetLevel( ETraceLevel level );
-        inline ETraceLevel GetLevel() const;
+        void SetLevel( TraceLevel level );
+        inline TraceLevel GetLevel() const;
 
-        void Output( ETraceLevel level, const tchar_t* pFormat, ... );
-        void OutputVa( ETraceLevel level, const tchar_t* pFormat, va_list argList );
+        void Output( TraceLevel level, const tchar_t* pFormat, ... );
+        void OutputVa( TraceLevel level, const tchar_t* pFormat, va_list argList );
         //@}
 
     protected:
@@ -91,10 +89,10 @@ namespace Helium
         Mutex m_mutex;
 
         /// Current logging level.
-        ETraceLevel m_level;
+        TraceLevel m_level;
 
         /// Logging level of the last message.
-        ETraceLevel m_lastMessageLevel;
+        TraceLevel m_lastMessageLevel;
         /// True if logging just started a fresh line.
         bool m_bNewLine;
 
@@ -105,7 +103,7 @@ namespace Helium
 
         /// @name Static Utility Functions
         //@{
-        static const tchar_t* GetLevelString( ETraceLevel level );
+        static const tchar_t* GetLevelString( TraceLevel level );
         //@}
     };
 

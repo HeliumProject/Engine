@@ -142,7 +142,7 @@ namespace Helium
         if( bytesRemaining < alignedSize + sizeof( size_t ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "D3D9RenderCommandList: Failed to allocate a command of size %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ
                   TXT( " bytes needed; %" ) TPRIuSZ TXT( " bytes remaining in buffer).\n" ) ),
                 alignedSize,

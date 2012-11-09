@@ -82,7 +82,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     default:
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariantResourceHandler: Failed to determine shader type from the name of object " )
                 TXT( "\"%s\".\n" ) ),
                 *pVariant->GetPath().ToString() );
@@ -110,7 +110,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     if( parseResult != 1 )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: Failed to parse user shader option set index from the name of " )
             TXT( "option \"%s\".\n" ) ),
             *pVariant->GetPath().ToString() );
@@ -164,7 +164,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     if( !pSourceFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: Source file for shader variant resource \"%s\" failed to open " )
             TXT( "properly.\n" ) ),
             *pVariant->GetPath().ToString() );
@@ -179,7 +179,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     if( size64 > static_cast< uint64_t >( static_cast< size_t >( -1 ) ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: Source file for shader resource \"%s\" is too large to fit " )
             TXT( "into memory for preprocessing.\n" ) ),
             *pShader->GetPath().ToString() );
@@ -197,7 +197,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     if( !pShaderSource )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: Failed to allocate %" ) TPRIuSZ TXT( " bytes for loading the " )
             TXT( "source data of \"%s\" for preprocessing.\n" ) ),
             size,
@@ -218,7 +218,7 @@ bool ShaderVariantResourceHandler::CacheResource(
     if( systemOptionSetCount > UINT32_MAX )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: System option set count (%" ) TPRIuSZ TXT( ") in shader \"%s\" " )
             TXT( "exceeds the maximum supported (%" ) TPRIuSZ TXT( ").\n" ) ),
             systemOptionSetCount,
@@ -314,7 +314,7 @@ bool ShaderVariantResourceHandler::CacheResource(
         if( !bCompiled )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariantResourceHandler: Failed to compile shader for PC shader model 4, which is " )
                 TXT( "needed for reflection purposes.  Additional shader targets will not be built.\n" ) ) );
         }
@@ -333,7 +333,7 @@ bool ShaderVariantResourceHandler::CacheResource(
             if( !bReadConstantBuffers )
             {
                 HELIUM_TRACE(
-                    TRACE_ERROR,
+                    TraceLevels::Error,
                     ( TXT( "ShaderVariantResourceHandler: Failed to read reflection information for PC shader " )
                     TXT( "model 4.  Additional shader targets will not be built.\n" ) ) );
             }
@@ -490,7 +490,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
         if( !GameObject::Create< ShaderVariant >( pLoadRequest->spVariant, variantName, pShader ) )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariantResourceHandler::BeginLoadVariant(): Failed to create shader variant object " )
                   TXT( "\"%s:%s\".\n" ) ),
                 *pShader->GetPath().ToString(),
@@ -691,7 +691,7 @@ bool ShaderVariantResourceHandler::CompileShader(
     if ( !FileLocations::GetDataDirectory( shaderFilePath ) )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "ShaderVariantResourceHandler: Failed to obtain data directory." ) );
 
         return false;
@@ -738,7 +738,7 @@ bool ShaderVariantResourceHandler::CompileShader(
         size_t errorCount = errorMessages.GetSize();
 
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "ShaderVariantResourceHandler: Failed to compile \"%s\" for platform %" ) TPRIuSZ
             TXT( ", profile %" ) TPRIuSZ TXT( "; %" ) TPRIuSZ TXT( " errors (tokens:%s):\n" ) ),
             *pVariant->GetPath().ToString(),
@@ -749,7 +749,7 @@ bool ShaderVariantResourceHandler::CompileShader(
 
         for( size_t errorIndex = 0; errorIndex < errorCount; ++errorIndex )
         {
-            HELIUM_TRACE( TRACE_ERROR, TXT( "- %s\n" ), *errorMessages[ errorIndex ] );
+            HELIUM_TRACE( TraceLevels::Error, TXT( "- %s\n" ), *errorMessages[ errorIndex ] );
         }
 #endif  // HELIUM_ENABLE_TRACE
     }

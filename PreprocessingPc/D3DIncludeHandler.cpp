@@ -62,7 +62,7 @@ HRESULT D3DIncludeHandler::Open(
     if( !pIncludeFileStream )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             TXT( "D3DIncludeHandler::Open(): Failed to open include file \"%s\" for reading.\n" ),
             *includePath );
 
@@ -74,7 +74,7 @@ HRESULT D3DIncludeHandler::Open(
     if( fileSizeActual > UINT32_MAX )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" is larger than 4 GB and cannot be read.\n" ) ),
             *includePath );
 
@@ -90,7 +90,7 @@ HRESULT D3DIncludeHandler::Open(
     if( !pBuffer )
     {
         HELIUM_TRACE(
-            TRACE_ERROR,
+            TraceLevels::Error,
             ( TXT( "D3DIncludeHandler::Open(): Failed to allocate %" ) TPRIu32 TXT( " bytes for loading include " )
             TXT( "file \"%s\".\n" ) ),
             fileSize,
@@ -105,7 +105,7 @@ HRESULT D3DIncludeHandler::Open(
     if( bytesRead != fileSize )
     {
         HELIUM_TRACE(
-            TRACE_WARNING,
+            TraceLevels::Warning,
             ( TXT( "D3DIncludeHandler::Open(): Include file \"%s\" claimed to be %" ) TPRIu32 TXT( " bytes, but " )
             TXT( "only %" ) TPRIuSZ TXT( " bytes could be read.\n" ) ),
             *includePath,

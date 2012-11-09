@@ -317,7 +317,7 @@ namespace Helium
         if( index >= m_renderResources.GetSize() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::GetRenderResource(): Invalid render resource index %" ) TPRIuSZ
                   TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
                 index,
@@ -342,7 +342,7 @@ namespace Helium
         if( index >= m_constantBufferSets.GetSize() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::GetConstantBufferSet(): Invalid render resource index %" ) TPRIuSZ
                   TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
                 index,
@@ -367,7 +367,7 @@ namespace Helium
         if( index >= m_samplerInputSets.GetSize() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::GetSamplerInfoSet(): Invalid render resource index %" ) TPRIuSZ
                   TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
                 index,
@@ -392,7 +392,7 @@ namespace Helium
         if( index >= m_textureInputSets.GetSize() )
         {
             HELIUM_TRACE(
-                TRACE_ERROR,
+                TraceLevels::Error,
                 ( TXT( "ShaderVariant::GetTextureInfoSet(): Invalid render resource index %" ) TPRIuSZ
                   TXT( " specified (resource count: %" ) TPRIuSZ TXT( ").\n" ) ),
                 index,

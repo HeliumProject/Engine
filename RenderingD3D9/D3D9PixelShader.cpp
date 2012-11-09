@@ -51,7 +51,7 @@ void* D3D9PixelShader::Lock()
 {
     if( !m_bStaging )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9PixelShader::Lock(): Pixel shader has already been loaded.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9PixelShader::Lock(): Pixel shader has already been loaded.\n" ) );
 
         return NULL;
     }
@@ -64,7 +64,7 @@ bool D3D9PixelShader::Unlock()
 {
     if( !m_bStaging )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9PixelShader::Unlock(): Pixel shader has already been loaded.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9PixelShader::Unlock(): Pixel shader has already been loaded.\n" ) );
 
         return false;
     }
@@ -83,7 +83,7 @@ bool D3D9PixelShader::Unlock()
     HRESULT createResult = pD3DDevice->CreatePixelShader( static_cast< DWORD* >( m_pShaderData ), &pD3DShader );
     if( FAILED( createResult ) )
     {
-        HELIUM_TRACE( TRACE_ERROR, TXT( "D3D9PixelShader::Unlock(): Pixel shader creation failed.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "D3D9PixelShader::Unlock(): Pixel shader creation failed.\n" ) );
         pD3DShader = NULL;
     }
 

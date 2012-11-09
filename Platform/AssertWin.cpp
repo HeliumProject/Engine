@@ -13,7 +13,7 @@ using namespace Helium;
 /// @param[in] exitCode  Error code associated with the exit.
 void Helium::FatalExit( int exitCode )
 {
-    ::FatalExit( exitCode );
+	::FatalExit( exitCode );
 }
 
 #if HELIUM_ASSERT_ENABLED
@@ -23,15 +23,15 @@ void Helium::FatalExit( int exitCode )
 /// @param[in] pMessageText  Assert message text.
 AssertResult Assert::TriggerImplementation( const tchar_t* pMessageText )
 {
-    tchar_t messageBoxText[ 1024 ];
-    StringPrint(
-        messageBoxText,
-        ( TXT( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )
-          TXT( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
-        pMessageText );
+	tchar_t messageBoxText[ 1024 ];
+	StringPrint(
+		messageBoxText,
+		( TXT( "%s\n\nChoose \"Abort\" to terminate the program, \"Retry\" to debug the program (if a debugger " )
+		  TXT( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
+		pMessageText );
 
 	HELIUM_CONVERT_TO_NATIVE( messageBoxText, wideMessageBoxText );
-    int result = MessageBoxW( NULL, wideMessageBoxText, L"Assert", MB_ABORTRETRYIGNORE );
+	int result = MessageBoxW( NULL, wideMessageBoxText, L"Assert", MB_ABORTRETRYIGNORE );
 
 	return ( result == IDABORT ? AssertResults::Abort : ( result == IDIGNORE ? AssertResults::Continue : AssertResults::Break ) );
 }

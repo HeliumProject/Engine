@@ -45,67 +45,67 @@ namespace Helium
 {
 	class Exception;
 
-    namespace ExceptionTypes
-    {
-        enum ExceptionType
-        {
-            SEH,
-            CPP
-        };
+	namespace ExceptionTypes
+	{
+		enum ExceptionType
+		{
+			SEH,
+			CPP
+		};
 
-        static const tchar_t* Strings[] =
-        {
-            TXT("SEH"),
-            TXT("C++"),
-        };
-    }
-    typedef ExceptionTypes::ExceptionType ExceptionType;
+		static const tchar_t* Strings[] =
+		{
+			TXT("SEH"),
+			TXT("C++"),
+		};
+	}
+	typedef ExceptionTypes::ExceptionType ExceptionType;
 
-    struct HELIUM_PLATFORM_API ExceptionArgs
-    {
-        ExceptionType           m_Type;
-        bool                    m_Fatal;
-        tstring                 m_Message;
-        tstring                 m_Callstack;
-        std::vector< tstring >  m_Threads;
-        tstring                 m_State;
-        tstring                 m_Dump;
+	struct HELIUM_PLATFORM_API ExceptionArgs
+	{
+		ExceptionType           m_Type;
+		bool                    m_Fatal;
+		tstring                 m_Message;
+		tstring                 m_Callstack;
+		std::vector< tstring >  m_Threads;
+		tstring                 m_State;
+		tstring                 m_Dump;
 
-        // SEH-specific info
-        uint32_t                     m_SEHCode;
-        tstring                 m_SEHClass;
-        tstring                 m_SEHControlRegisters;
-        tstring                 m_SEHIntegerRegisters;
+		// SEH-specific info
+		uint32_t                     m_SEHCode;
+		tstring                 m_SEHClass;
+		tstring                 m_SEHControlRegisters;
+		tstring                 m_SEHIntegerRegisters;
 
-        // CPP-specific info
-        tstring                 m_CPPClass;
+		// CPP-specific info
+		tstring                 m_CPPClass;
 
-        ExceptionArgs( ExceptionType type, bool fatal )
-            : m_Type( type )
-            , m_Fatal( fatal )
-            , m_SEHCode( -1 )
-        {
-        };
-    };
+		ExceptionArgs( ExceptionType type, bool fatal )
+			: m_Type( type )
+			, m_Fatal( fatal )
+			, m_SEHCode( -1 )
+		{
+		};
+	};
 
-    // Init (need to specify the search paths to the pdbs if they aren't with the executables)
-    HELIUM_PLATFORM_API bool InitializeSymbols( const tstring& path = TXT("") );
+	// Init (need to specify the search paths to the pdbs if they aren't with the executables)
+	HELIUM_PLATFORM_API bool InitializeSymbols( const tstring& path = TXT("") );
 
-    // Query information from a bare address (should be pretty safe to call)
-    HELIUM_PLATFORM_API tstring GetSymbolInfo( uintptr_t adr, bool enumLoadedModules = true );
-    HELIUM_PLATFORM_API Helium::Exception* GetHeliumException( uintptr_t addr );
-    HELIUM_PLATFORM_API std::exception* GetStandardException( uintptr_t addr );
+	// Query information from a bare address (should be pretty safe to call)
+	HELIUM_PLATFORM_API tstring GetSymbolInfo( uintptr_t adr, bool enumLoadedModules = true );
+	HELIUM_PLATFORM_API Helium::Exception* GetHeliumException( uintptr_t addr );
+	HELIUM_PLATFORM_API std::exception* GetStandardException( uintptr_t addr );
 
-    // Stack traces (capture with or without an explicit context, translate to string rep)
-    HELIUM_PLATFORM_API bool GetStackTrace( std::vector<uintptr_t>& trace, unsigned omitFrames = 0 );
-    HELIUM_PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames = 0 );
-    HELIUM_PLATFORM_API void TranslateStackTrace( const std::vector<uintptr_t>& trace, tstring& buffer );
+	// Stack traces (capture with or without an explicit context, translate to string rep)
+	HELIUM_PLATFORM_API bool GetStackTrace( std::vector<uintptr_t>& trace, unsigned omitFrames = 0 );
+	HELIUM_PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames = 0 );
+	HELIUM_PLATFORM_API void TranslateStackTrace( const std::vector<uintptr_t>& trace, tstring& buffer );
 
-    // Query SEH exception pointers for full report, abbreviated name, or more details
-    HELIUM_PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
-    HELIUM_PLATFORM_API const tchar_t* GetExceptionClass( uint32_t exceptionCode );
-    HELIUM_PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
+	// Query SEH exception pointers for full report, abbreviated name, or more details
+	HELIUM_PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
+	HELIUM_PLATFORM_API const tchar_t* GetExceptionClass( uint32_t exceptionCode );
+	HELIUM_PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
-    // Core dumps (full dumps include process heaps)
-    HELIUM_PLATFORM_API tstring WriteDump( LPEXCEPTION_POINTERS info, bool full );
+	// Core dumps (full dumps include process heaps)
+	HELIUM_PLATFORM_API tstring WriteDump( LPEXCEPTION_POINTERS info, bool full );
 }

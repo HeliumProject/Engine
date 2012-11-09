@@ -9,28 +9,28 @@
 
 namespace Helium
 {
-    class HELIUM_PLATFORM_API Semaphore
-    {
-    public:
+	class HELIUM_PLATFORM_API Semaphore
+	{
+	public:
 #if HELIUM_OS_WIN
-        typedef void* Handle;
+		typedef void* Handle;
 #else
-        typedef sem_t Handle;
+		typedef sem_t Handle;
 #endif
 
 	public:
-        Semaphore();
-        ~Semaphore();
+		Semaphore();
+		~Semaphore();
 
-        void Increment();
-        void Decrement();
-        void Reset();
+		void Increment();
+		void Decrement();
+		void Reset();
 
-        inline const Handle& GetHandle();
+		inline const Handle& GetHandle();
 
 	private:
-        Handle m_Handle;
-    };
+		Handle m_Handle;
+	};
 }
 
 #include "Platform/Semaphore.inl"

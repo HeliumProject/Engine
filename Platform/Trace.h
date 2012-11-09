@@ -48,10 +48,10 @@
 
 namespace Helium
 {
-    /// Trace levels.  These are intentionally declared outside the scope of the Trace class and abbreviated for ease of
-    /// use.
-    namespace TraceLevels
-    {
+	/// Trace levels.  These are intentionally declared outside the scope of the Trace class and abbreviated for ease of
+	/// use.
+	namespace TraceLevels
+	{
 		enum Type
 		{
 			Debug,    ///< Debug logging messages.
@@ -59,56 +59,56 @@ namespace Helium
 			Warning,  ///< Warning messages.
 			Error,    ///< Critical error messages.
 		};
-    }
+	}
 	typedef TraceLevels::Type TraceLevel;
 
-    /// Trace interface.
-    class HELIUM_PLATFORM_API Trace
-    {
-    public:
-        /// Default size for formatted trace message buffers without requiring dynamic memory allocation.
-        static const size_t DEFAULT_MESSAGE_BUFFER_SIZE = 1024;
+	/// Trace interface.
+	class HELIUM_PLATFORM_API Trace
+	{
+	public:
+		/// Default size for formatted trace message buffers without requiring dynamic memory allocation.
+		static const size_t DEFAULT_MESSAGE_BUFFER_SIZE = 1024;
 
-        /// @name Construction/Destruction
-        //@{
-        Trace();
-        virtual ~Trace();
-        //@}
+		/// @name Construction/Destruction
+		//@{
+		Trace();
+		virtual ~Trace();
+		//@}
 
-        /// @name Logging Interface
-        //@{
-        void SetLevel( TraceLevel level );
-        inline TraceLevel GetLevel() const;
+		/// @name Logging Interface
+		//@{
+		void SetLevel( TraceLevel level );
+		inline TraceLevel GetLevel() const;
 
-        void Output( TraceLevel level, const tchar_t* pFormat, ... );
-        void OutputVa( TraceLevel level, const tchar_t* pFormat, va_list argList );
-        //@}
+		void Output( TraceLevel level, const tchar_t* pFormat, ... );
+		void OutputVa( TraceLevel level, const tchar_t* pFormat, va_list argList );
+		//@}
 
-    protected:
-        /// Synchronization mutex.
-        Mutex m_mutex;
+	protected:
+		/// Synchronization mutex.
+		Mutex m_mutex;
 
-        /// Current logging level.
-        TraceLevel m_level;
+		/// Current logging level.
+		TraceLevel m_level;
 
-        /// Logging level of the last message.
-        TraceLevel m_lastMessageLevel;
-        /// True if logging just started a fresh line.
-        bool m_bNewLine;
+		/// Logging level of the last message.
+		TraceLevel m_lastMessageLevel;
+		/// True if logging just started a fresh line.
+		bool m_bNewLine;
 
-        /// @name Logging Implementation
-        //@{
-        void OutputImplementation( const tchar_t* pMessage );
-        //@}
+		/// @name Logging Implementation
+		//@{
+		void OutputImplementation( const tchar_t* pMessage );
+		//@}
 
-        /// @name Static Utility Functions
-        //@{
-        static const tchar_t* GetLevelString( TraceLevel level );
-        //@}
-    };
+		/// @name Static Utility Functions
+		//@{
+		static const tchar_t* GetLevelString( TraceLevel level );
+		//@}
+	};
 
-    /// Global trace instance.
-    HELIUM_PLATFORM_API extern Trace g_Trace;
+	/// Global trace instance.
+	HELIUM_PLATFORM_API extern Trace g_Trace;
 }
 
 #else  // HELIUM_ENABLE_TRACE

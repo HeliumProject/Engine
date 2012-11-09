@@ -67,35 +67,35 @@ namespace Helium
 	// File status
 	//
 
-    namespace StatusModes
-    {
-        enum Type
-        {
-            None             = 0,
-            Directory        = 1 << 0,
-            Link             = 1 << 1,
-            Pipe             = 1 << 2,
-            Special          = 1 << 3,
+	namespace StatusModes
+	{
+		enum Type
+		{
+			None             = 0,
+			Directory        = 1 << 0,
+			Link             = 1 << 1,
+			Pipe             = 1 << 2,
+			Special          = 1 << 3,
 
-            Read             = 1 << 8,
-            Write            = 1 << 9,
-            Execute          = 1 << 10
-        };
-    }
-    typedef StatusModes::Type StatusMode;
+			Read             = 1 << 8,
+			Write            = 1 << 9,
+			Execute          = 1 << 10
+		};
+	}
+	typedef StatusModes::Type StatusMode;
 
-    class HELIUM_PLATFORM_API Status
-    {
+	class HELIUM_PLATFORM_API Status
+	{
 	public:
-        Status();
+		Status();
 
-	    bool Read( const tchar_t* path );
+		bool Read( const tchar_t* path );
 
-        uint32_t     m_Mode;
-        uint64_t     m_Size;
-        uint64_t     m_CreatedTime;
-        uint64_t     m_ModifiedTime;
-        uint64_t     m_AccessTime;
+		uint32_t     m_Mode;
+		uint64_t     m_Size;
+		uint64_t     m_CreatedTime;
+		uint64_t     m_ModifiedTime;
+		uint64_t     m_AccessTime;
 	};
 
 	//
@@ -140,13 +140,13 @@ namespace Helium
 	// File system operations
 	//
 
-    HELIUM_PLATFORM_API extern const tchar_t PathSeparator;
-    HELIUM_PLATFORM_API void GetFullPath( const tchar_t* path, tstring& fullPath );
-    HELIUM_PLATFORM_API bool IsAbsolute( const tchar_t* path );
-    HELIUM_PLATFORM_API bool MakePath( const tchar_t* path );
-    HELIUM_PLATFORM_API bool Copy( const tchar_t* source, const tchar_t* dest, bool overwrite );
-    HELIUM_PLATFORM_API bool Move( const tchar_t* source, const tchar_t* dest );
-    HELIUM_PLATFORM_API bool Delete( const tchar_t* path );
+	HELIUM_PLATFORM_API extern const tchar_t PathSeparator;
+	HELIUM_PLATFORM_API void GetFullPath( const tchar_t* path, tstring& fullPath );
+	HELIUM_PLATFORM_API bool IsAbsolute( const tchar_t* path );
+	HELIUM_PLATFORM_API bool MakePath( const tchar_t* path );
+	HELIUM_PLATFORM_API bool Copy( const tchar_t* source, const tchar_t* dest, bool overwrite );
+	HELIUM_PLATFORM_API bool Move( const tchar_t* source, const tchar_t* dest );
+	HELIUM_PLATFORM_API bool Delete( const tchar_t* path );
 }
 
 #include "Platform/File.inl"

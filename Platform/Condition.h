@@ -10,56 +10,56 @@
 
 namespace Helium
 {
-    /// Condition object.
-    ///
-    /// A condition is a type of synchronization mechanism that allows one or more threads to sleep until a signal is
-    /// triggered by another thread.
-    class HELIUM_PLATFORM_API Condition
-    {
-    public:
+	/// Condition object.
+	///
+	/// A condition is a type of synchronization mechanism that allows one or more threads to sleep until a signal is
+	/// triggered by another thread.
+	class HELIUM_PLATFORM_API Condition
+	{
+	public:
 #if HELIUM_OS_WIN
-        typedef void* Handle;
+		typedef void* Handle;
 #else
-        struct Handle
-        {
-            // Protect critical section
-            pthread_mutex_t lock;
+		struct Handle
+		{
+			// Protect critical section
+			pthread_mutex_t lock;
 
-            // Keeps track of waiters
-            pthread_cond_t condition;
+			// Keeps track of waiters
+			pthread_cond_t condition;
 
-            // Specifies if this is an auto- or manual-reset event
-            bool manual_reset;
+			// Specifies if this is an auto- or manual-reset event
+			bool manual_reset;
 
-            // "True" if signaled
-            bool is_signaled;
+			// "True" if signaled
+			bool is_signaled;
 
-            // Number of waiting threads
-            unsigned waiting_threads;
-        };
+			// Number of waiting threads
+			unsigned waiting_threads;
+		};
 #endif
-        /// @name Construction/Destruction
-        //@{
-        explicit Condition( bool bManualReset, bool bInitialState );
-        ~Condition();
-        //@}
+		/// @name Construction/Destruction
+		//@{
+		explicit Condition( bool bManualReset, bool bInitialState );
+		~Condition();
+		//@}
 
-        /// @name Synchronization Interface
-        //@{
-        void Signal();
-        void Reset();
-        bool Wait();
-        bool Wait( uint32_t timeoutMs );
-        //@}
+		/// @name Synchronization Interface
+		//@{
+		void Signal();
+		void Reset();
+		bool Wait();
+		bool Wait( uint32_t timeoutMs );
+		//@}
 
-        /// @name Data Access
-        //@{
-        inline const Handle& GetHandle() const;
-        //@}
+		/// @name Data Access
+		//@{
+		inline const Handle& GetHandle() const;
+		//@}
 
-    private:
+	private:
 		/// Platform-specific condition handle.
-        Handle m_Handle;
+		Handle m_Handle;
 	};
 }
 

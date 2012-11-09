@@ -5,19 +5,19 @@
 
 namespace Helium
 {
-    HELIUM_PLATFORM_API inline bool ConvertString( const char* src, char* dest, size_t destCount );
+	HELIUM_PLATFORM_API inline bool ConvertString( const char* src, char* dest, size_t destCount );
 	HELIUM_PLATFORM_API inline bool ConvertString( const std::string& src, std::string& dest );
-    HELIUM_PLATFORM_API inline bool ConvertString( const wchar_t* src, wchar_t* dest, size_t destCount );
-    HELIUM_PLATFORM_API inline bool ConvertString( const std::wstring& src, std::wstring& dest );
+	HELIUM_PLATFORM_API inline bool ConvertString( const wchar_t* src, wchar_t* dest, size_t destCount );
+	HELIUM_PLATFORM_API inline bool ConvertString( const std::wstring& src, std::wstring& dest );
 
-    HELIUM_PLATFORM_API bool ConvertString( const char* src, wchar_t* dest, size_t destCount );
-    HELIUM_PLATFORM_API bool ConvertString( const wchar_t* src, char* dest, size_t destCount );
+	HELIUM_PLATFORM_API bool ConvertString( const char* src, wchar_t* dest, size_t destCount );
+	HELIUM_PLATFORM_API bool ConvertString( const wchar_t* src, char* dest, size_t destCount );
 
 	HELIUM_PLATFORM_API size_t GetConvertedStringLength( const char* src );
 	HELIUM_PLATFORM_API size_t GetConvertedStringLength( const wchar_t* src );
 
-    HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
-    HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
+	HELIUM_PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
+	HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 }
 
 #if HELIUM_WCHAR_T

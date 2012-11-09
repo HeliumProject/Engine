@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 #include "Application/API.h"
 #include "Foundation/Event.h"

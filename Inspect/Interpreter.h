@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Thread.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 #include "Inspect/API.h"
 #include "Inspect/DataBinding.h"

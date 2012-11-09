@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/ReadWriteLock.h"
+#include "Platform/Locks.h"
 
 #include "Foundation/Name.h"
 #include "Foundation/ObjectPool.h"

@@ -1,5 +1,5 @@
 #include "PlatformPch.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 #include "Platform/Error.h"
 #include "Platform/System.h"
 #include "Platform/Assert.h"

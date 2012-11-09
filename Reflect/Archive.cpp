@@ -1,7 +1,7 @@
 #include "ReflectPch.h"
 #include "Reflect/Archive.h"
 
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 

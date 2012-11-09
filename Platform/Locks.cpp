@@ -1,5 +1,6 @@
 #include "PlatformPch.h"
-#include "Platform/ReadWriteLock.h"
+#include "Locks.h"
+
 #include "Platform/Atomic.h"
 
 using namespace Helium;

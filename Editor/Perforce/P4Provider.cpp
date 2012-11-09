@@ -7,7 +7,7 @@
 #include "P4ChangelistCommands.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 #include "Application/Message.h"
 #include "Application/RCS.h"

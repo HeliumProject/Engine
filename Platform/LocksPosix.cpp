@@ -1,5 +1,4 @@
-#include "Platform/Mutex.h"
-#include "Platform/Platform.h"
+#include "Locks.h"
 
 #include "Platform/Assert.h"
 

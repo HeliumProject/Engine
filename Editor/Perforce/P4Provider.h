@@ -6,7 +6,7 @@
 #include "Foundation/Profile.h"
 #include "Platform/Condition.h"
 #include "Platform/Thread.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 #include "P4API.h"
 
 namespace Helium

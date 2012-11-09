@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Platform/Locks.h"
+
 #include "Foundation/API.h"
-#include "Platform/ReadWriteLock.h"
-#include "Platform/SpinLock.h"
 
 namespace Helium
 {

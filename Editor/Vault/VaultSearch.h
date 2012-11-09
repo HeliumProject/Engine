@@ -10,7 +10,7 @@
 #include "SceneGraph/Project.h"
 
 #include "Platform/Types.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 //
 // Forwards

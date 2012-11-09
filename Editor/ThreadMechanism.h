@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Condition.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 #include "Platform/Thread.h"
 
 #include "Foundation/Event.h"

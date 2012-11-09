@@ -10,7 +10,7 @@
 #define HELIUM_ENGINE_ASYNC_LOADER_H
 
 #include "Platform/Condition.h"
-#include "Platform/ReadWriteLock.h"
+#include "Platform/Locks.h"
 #include "Platform/Thread.h"
 
 #include "Foundation/String.h"

@@ -2,7 +2,7 @@
 #include "Log.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 #include "Platform/Thread.h"
 #include "Platform/File.h"
 #include "Platform/Console.h"

@@ -2,7 +2,7 @@
 
 #include "Platform/API.h"
 #include "Platform/Assert.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 /// @defgroup tracemacros Trace Macros
 //@{

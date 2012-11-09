@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/SmartPtr.h"

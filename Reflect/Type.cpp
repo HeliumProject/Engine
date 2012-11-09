@@ -3,7 +3,7 @@
 #include "Registry.h"
 #include "Reflect/Data/Data.h"
 
-#include "Platform/Mutex.h"
+#include "Platform/Locks.h"
 
 using namespace Helium::Reflect;
 

@@ -3,7 +3,7 @@
 #include "Foundation/API.h"
 
 #include "Platform/Trace.h"
-#include "Platform/ReadWriteLock.h"
+#include "Platform/Locks.h"
 #include "Foundation/String.h"
 #include "Foundation/HashFunctions.h"
 

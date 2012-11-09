@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Platform/Directory.h"
+#include "Platform/File.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Event.h"

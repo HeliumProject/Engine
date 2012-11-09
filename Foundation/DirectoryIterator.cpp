@@ -65,7 +65,7 @@ bool DirectoryIterator::Open( const Path& path, uint32_t flags )
     HELIUM_ASSERT( *path.Get().rbegin() == TXT( '/' ) )
 
     m_Path = path;
-    m_Directory.m_Path = m_Path.Get();
+    m_Directory.SetPath( m_Path.Get() );
     m_Flags = flags;
 
     return Find();
@@ -96,7 +96,7 @@ void DirectoryIterator::GetFiles( std::set< Helium::Path >& paths, bool recursiv
 bool DirectoryIterator::Find()
 {
     m_Done = false;
-    HELIUM_ASSERT( m_Directory.m_Path.length() > 0 );
+    HELIUM_ASSERT( m_Directory.GetPath().length() > 0 );
 
     DirectoryEntry entry;
     bool findResult = !m_Directory.IsOpen() ? m_Directory.FindFirst( entry ) : m_Directory.FindNext( entry );

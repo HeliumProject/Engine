@@ -9,19 +9,19 @@
 using namespace Helium;
 using namespace Helium::RCS;
 
-void File::GetInfo( const GetInfoFlag flags )
+void RCS::File::GetInfo( const GetInfoFlag flags )
 {
 	GetProvider()->GetInfo( *this, flags );
 }
 
-void File::Sync( const uint64_t timestamp )
+void RCS::File::Sync( const uint64_t timestamp )
 {
 	uint64_t syncTime = timestamp ? timestamp : GetSyncTimestamp();
 
 	GetProvider()->Sync( *this, syncTime );
 }
 
-void File::Add( const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Add( const OpenFlag flags, const uint64_t changesetId )
 {
 	GetInfo();
 
@@ -42,7 +42,7 @@ void File::Add( const OpenFlag flags, const uint64_t changesetId )
 	GetProvider()->Add( *this );
 }
 
-void File::Edit( const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Edit( const OpenFlag flags, const uint64_t changesetId )
 {
 	GetInfo();
 
@@ -76,7 +76,7 @@ void File::Edit( const OpenFlag flags, const uint64_t changesetId )
 	GetProvider()->Edit( *this );
 }
 
-void File::Delete( const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Delete( const OpenFlag flags, const uint64_t changesetId )
 {
 	GetInfo();
 
@@ -102,7 +102,7 @@ void File::Delete( const OpenFlag flags, const uint64_t changesetId )
 	GetProvider()->Delete( *this );
 }
 
-void File::Reopen( const Changeset& changeset, const OpenFlag flags )
+void RCS::File::Reopen( const Changeset& changeset, const OpenFlag flags )
 {
 	// verify we have it checked out
 	GetInfo();
@@ -116,7 +116,7 @@ void File::Reopen( const Changeset& changeset, const OpenFlag flags )
 	GetProvider()->Reopen( *this );
 }
 
-void File::Copy( File& target, const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Copy( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
 	GetInfo();
 	target.GetInfo();
@@ -139,7 +139,7 @@ void File::Copy( File& target, const OpenFlag flags, const uint64_t changesetId 
 	GetProvider()->Integrate( *this, target );
 }
 
-void File::Rename( File& target, const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Rename( File& target, const OpenFlag flags, const uint64_t changesetId )
 {
 	GetInfo();
 	target.GetInfo();
@@ -188,7 +188,7 @@ void File::Rename( File& target, const OpenFlag flags, const uint64_t changesetI
 	GetProvider()->Rename( *this, target );
 }
 
-void File::Revert( const OpenFlag flags )
+void RCS::File::Revert( const OpenFlag flags )
 {
 	GetInfo();
 
@@ -219,7 +219,7 @@ static void _EnsureExistence( const tstring &path )
 	}
 }
 
-void File::Open( const OpenFlag flags, const uint64_t changesetId )
+void RCS::File::Open( const OpenFlag flags, const uint64_t changesetId )
 {
 	if ( !PathIsManaged( m_LocalPath ) )
 	{
@@ -264,7 +264,7 @@ void File::Open( const OpenFlag flags, const uint64_t changesetId )
 	Add( flags, changesetId );
 }
 
-bool File::QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag flags, const uint64_t changesetId )
+bool RCS::File::QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag flags, const uint64_t changesetId )
 {
 	tstring message;
 
@@ -332,7 +332,7 @@ bool File::QueryOpen( MessageSignature::Delegate messageHandler, const OpenFlag 
 	return false;
 }
 
-void File::Commit( const tstring& description )
+void RCS::File::Commit( const tstring& description )
 {
 	Changeset changeset;
 	changeset.m_Description = description;
@@ -343,7 +343,7 @@ void File::Commit( const tstring& description )
 }
 
 // Was: GetLastUser
-void File::GetCreatedByUser( tstring& username )
+void RCS::File::GetCreatedByUser( tstring& username )
 {
 	if ( m_Revisions.empty() )
 	{
@@ -356,7 +356,7 @@ void File::GetCreatedByUser( tstring& username )
 	}
 }
 
-void File::GetLastModifiedByUser( tstring& username )
+void RCS::File::GetLastModifiedByUser( tstring& username )
 {
 	if ( m_Revisions.empty() )
 	{
@@ -370,7 +370,7 @@ void File::GetLastModifiedByUser( tstring& username )
 }
 
 // Was: GetOtherUsers
-void File::GetOpenedByUsers( tstring& usernames )
+void RCS::File::GetOpenedByUsers( tstring& usernames )
 {
 	usernames = TXT( "" );
 

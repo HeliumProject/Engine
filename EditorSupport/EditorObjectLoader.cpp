@@ -1,17 +1,10 @@
-//----------------------------------------------------------------------------------------------------------------------
-// EditorObjectLoader.cpp
-//
-// Copyright (C) 2010 WhiteMoon Dreams, Inc.
-// All Rights Reserved
-//----------------------------------------------------------------------------------------------------------------------
-
 #include "EditorSupportPch.h"
 
 #if HELIUM_TOOLS
 
-#include "EditorSupport/EditorObjectLoader.h"
+#include "EditorObjectLoader.h"
 
-#include "Platform/Status.h"
+#include "Platform/File.h"
 #include "Foundation/FilePath.h"
 #include "Engine/FileLocations.h"
 #include "Engine/Config.h"

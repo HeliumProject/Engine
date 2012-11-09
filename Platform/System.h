@@ -69,9 +69,9 @@
 #endif
 
 #if HELIUM_OS_WIN
-# include "Platform/PlatformWin.h"
+# include "Platform/SystemWin.h"
 #endif
 
 #if HELIUM_OS_MAC
-# include "Platform/PlatformMac.h"
+# include "Platform/SystemMac.h"
 #endif

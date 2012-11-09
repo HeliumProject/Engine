@@ -3,7 +3,7 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 
 #if HELIUM_CC_CL
 # pragma warning( push )

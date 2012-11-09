@@ -9,7 +9,7 @@
 #ifndef HELIUM_WINDOWING_WINDOWING_H
 #define HELIUM_WINDOWING_WINDOWING_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_WINDOWING_EXPORTS

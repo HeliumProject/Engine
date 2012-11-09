@@ -2,7 +2,7 @@
 
 #include "TestApp/TestApp.h"
 
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 #include "Platform/Socket.h"
 #include "Platform/Trace.h"
 #include "Platform/Timer.h"

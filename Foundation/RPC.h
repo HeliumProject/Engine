@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 
 #include "Foundation/API.h"
 #include "Foundation/Endian.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 
 #if HELIUM_OS_WIN
 # include "Platform/TimerWin.h"

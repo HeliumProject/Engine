@@ -9,7 +9,7 @@
 #ifndef HELIUM_PC_SUPPORT_PC_SUPPORT_H
 #define HELIUM_PC_SUPPORT_PC_SUPPORT_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_PC_SUPPORT_EXPORTS

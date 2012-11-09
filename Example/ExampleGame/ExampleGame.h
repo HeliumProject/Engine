@@ -9,7 +9,7 @@
 #ifndef EXAMPLE_EXAMPLE_GAME_EXAMPLE_GAME_H
 #define EXAMPLE_EXAMPLE_GAME_EXAMPLE_GAME_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef EXAMPLE_EXAMPLE_GAME_EXPORTS

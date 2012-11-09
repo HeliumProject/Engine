@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 
 //
 // Register types

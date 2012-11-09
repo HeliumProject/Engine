@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;

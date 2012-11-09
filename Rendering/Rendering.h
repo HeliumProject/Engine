@@ -9,7 +9,7 @@
 #ifndef HELIUM_RENDERING_RENDERING_H
 #define HELIUM_RENDERING_RENDERING_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_RENDERING_EXPORTS

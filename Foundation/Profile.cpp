@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Thread.h"
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 #include "Platform/Types.h"
 
 #include "Foundation/Log.h"

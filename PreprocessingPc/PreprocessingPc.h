@@ -9,7 +9,7 @@
 #ifndef HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
 #define HELIUM_PREPROCESSING_PC_PREPROCESSING_PC_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_PREPROCESSING_PC_EXPORTS

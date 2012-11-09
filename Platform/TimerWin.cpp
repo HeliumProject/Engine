@@ -1,6 +1,6 @@
 #include "PlatformPch.h"
 
-#include "Platform/Platform.h"
+#include "Platform/System.h"
 
 #if HELIUM_OS_WIN
 

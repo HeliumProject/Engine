@@ -9,7 +9,7 @@
 #ifndef HELIUM_FRAMEWORK_WIN_FRAMEWORK_WIN_H
 #define HELIUM_FRAMEWORK_WIN_FRAMEWORK_WIN_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_FRAMEWORK_WIN_EXPORTS

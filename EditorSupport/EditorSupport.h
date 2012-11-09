@@ -9,7 +9,7 @@
 #ifndef HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_H
 #define HELIUM_EDITOR_SUPPORT_EDITOR_SUPPORT_H
 
-#include "Platform/Platform.h"  // Always make sure Platform.h gets included first.
+#include "Platform/System.h"
 
 #if HELIUM_SHARED
     #ifdef HELIUM_EDITOR_SUPPORT_EXPORTS

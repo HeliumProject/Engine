@@ -6,7 +6,7 @@
 # include "POSIX/Socket.h"
 #endif
 
-#include "Condition.h"
+#include "Platform/Condition.h"
 
 namespace Helium
 {

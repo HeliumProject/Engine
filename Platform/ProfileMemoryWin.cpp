@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "ProfileMemory.h"
 
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 #include "Platform/Profile.h"
 
 using namespace Helium;

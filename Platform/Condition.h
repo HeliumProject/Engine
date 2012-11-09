@@ -1,8 +1,7 @@
 #pragma once
 
-#include "API.h"
-
-#include "Types.h"
+#include "Platform/API.h"
+#include "Platform/Types.h"
 
 #if !HELIUM_OS_WIN
 # include <string.h>
@@ -39,12 +38,6 @@ namespace Helium
             unsigned waiting_threads;
         };
 #endif
-
-    private:
-        /// Platform-specific condition handle.
-        Handle m_Handle;
-
-    public:
         /// @name Construction/Destruction
         //@{
         explicit Condition( bool bManualReset, bool bInitialState );
@@ -63,7 +56,11 @@ namespace Helium
         //@{
         inline const Handle& GetHandle() const;
         //@}
-    };
+
+    private:
+		/// Platform-specific condition handle.
+        Handle m_Handle;
+	};
 }
 
 #include "Platform/Condition.inl"

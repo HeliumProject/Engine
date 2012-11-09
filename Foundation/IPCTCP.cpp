@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Encoding.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #include "Foundation/Endian.h"
 #include "Foundation/String.h"

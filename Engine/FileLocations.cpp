@@ -1,10 +1,9 @@
 #include "EnginePch.h"
 #include "FileLocations.h"
 
-#include "Foundation/FileStream.h"
-
-#include "Platform/Environment.h"
 #include "Platform/Process.h"
+
+#include "Foundation/FileStream.h"
 
 using namespace Helium;
 
@@ -108,8 +107,8 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
     {
         bLocateRequested = true;
 
-        tstring gameDataDirectory;
-        if( !Helium::GetAppDataDirectory( gameDataDirectory ) )
+        tstring gameDataDirectory = Helium::GetAppDataDirectory();
+		if ( gameDataDirectory.empty() )
         {
             return userDataDirectory;
         }
@@ -119,7 +118,6 @@ static Path& GetMutableUserDataDirectory( bool& rbSuccess )
         if( !userDataDirectory.MakePath() )
         {
             userDataDirectory.Clear();
-
             return userDataDirectory;
         }
 

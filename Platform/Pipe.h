@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Condition.h"
+#include "Platform/Condition.h"
 
 const static uint32_t IPC_PIPE_BUFFER_SIZE = 8192;
 

@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Socket.h"
 #include "Platform/Assert.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #include <mstcpip.h>
 

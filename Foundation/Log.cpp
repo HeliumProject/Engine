@@ -4,9 +4,8 @@
 #include "Platform/Assert.h"
 #include "Platform/Mutex.h"
 #include "Platform/Thread.h"
-#include "Platform/Console.h"
 #include "Platform/File.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #include "Foundation/String.h"
 

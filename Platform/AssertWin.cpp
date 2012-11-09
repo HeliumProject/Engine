@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 #include "Platform/Encoding.h"
 
 #if HELIUM_OS_WIN

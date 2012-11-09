@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Error.h"
-#include "Platform.h"
-#include "Print.h"
+#include "Platform/Error.h"
+#include "Platform/Console.h"
 
-#include <string>
 #include <exception>
 
 namespace Helium

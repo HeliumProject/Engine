@@ -7,6 +7,23 @@
 #include "Platform/Utility.h"
 
 #include <sstream>
+#include <shlobj.h>
+
+using namespace Helium;
+
+static bool GetEnvVar( wchar_t* var, tstring& value )
+{
+	DWORD count = ::GetEnvironmentVariable( var, NULL, 0 );
+	wchar_t* varValue = (wchar_t*)alloca( count * sizeof( wchar_t ) );
+	if ( ::GetEnvironmentVariable( var, varValue, count * sizeof( wchar_t ) ) )
+	{
+		HELIUM_CONVERT_TO_TCHAR( varValue, convertedVarValue );
+		value = convertedVarValue;
+		return true;
+	}
+
+	return false;
+}
 
 int Helium::Execute( const tstring& command, bool showWindow, bool block )
 {
@@ -172,6 +189,52 @@ tstring Helium::GetProcessName()
 
 	HELIUM_CONVERT_TO_TCHAR( file, convertedFile );
     return convertedFile;
+}
+
+tstring Helium::GetUserName()
+{
+	tstring username;
+    HELIUM_VERIFY( GetEnvVar( L"USERNAME", username ) );
+	return username;
+}
+
+tstring Helium::GetMachineName()
+{
+	tstring computername;
+    HELIUM_VERIFY( GetEnvVar( L"COMPUTERNAME", computername ) );
+	return computername;
+}
+
+tstring Helium::GetPreferencesDirectory()
+{
+	tstring profileDirectory;
+
+    wchar_t path[ MAX_PATH ];
+    HRESULT result = SHGetFolderPath( NULL, CSIDL_PROFILE, NULL, SHGFP_TYPE_CURRENT, path );
+    bool bSuccess = ( result == S_OK );
+    if ( bSuccess )
+    {
+		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
+        profileDirectory = convertedPath;
+    }
+
+    return profileDirectory;
+}
+
+tstring Helium::GetAppDataDirectory()
+{
+	tstring appDataDirectory;
+
+    wchar_t path[ MAX_PATH ];
+    HRESULT result = SHGetFolderPath( NULL, CSIDL_LOCAL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path );
+    bool bSuccess = ( result == S_OK );
+    if ( bSuccess )
+    {
+		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
+        appDataDirectory = convertedPath;
+    }
+
+    return appDataDirectory;
 }
 
 tstring Helium::GetDumpDirectory()

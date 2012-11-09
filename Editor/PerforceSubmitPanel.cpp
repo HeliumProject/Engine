@@ -1,12 +1,12 @@
 #include "EditorPch.h"
 #include "PerforceSubmitPanel.h"
 
-#include <set>
-#include <sstream>
+#include "Platform/Process.h"
 
-#include "Platform/Environment.h"
 #include "Foundation/Insert.h" 
 
+#include <set>
+#include <sstream>
 #include <wx/msgdlg.h>
 
 using namespace Helium;
@@ -553,7 +553,7 @@ void PerforceSubmitPanel::CommitChanges()
                 m_Changeset.Create();
                 if ( m_Changeset.m_Description.empty() )
                 {
-                    Helium::GetUserName( m_Changeset.m_Description );
+                    m_Changeset.m_Description = Helium::GetUserName();
                 }
 
                 RCS::V_File::iterator fItr = openedFiles.begin();

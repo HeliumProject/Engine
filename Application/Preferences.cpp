@@ -1,19 +1,16 @@
 #include "ApplicationPch.h"
 #include "Preferences.h"
 
-#include "Platform/Environment.h"
+#include "Platform/Process.h"
 
 bool Helium::GetPreferencesDirectory( Helium::Path& preferencesDirectory )
 {
-    tstring prefDirectory;
-
-    if ( !Helium::GetPreferencesDirectory( prefDirectory ) )
+    tstring prefDirectory = Helium::GetPreferencesDirectory();
+	if ( !prefDirectory.empty() )
     {
-        return false;
+		prefDirectory += TXT( "/.Helium/" );
+		preferencesDirectory.Set( prefDirectory );
     }
 
-    prefDirectory += TXT( "/.Helium/" );
-    
-    preferencesDirectory.Set( prefDirectory );
-    return true;
+    return false;
 }

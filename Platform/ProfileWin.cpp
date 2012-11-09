@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Profile.h"
 
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 #include "Platform/ProfileMemory.h"
 #include "Platform/Encoding.h"
 

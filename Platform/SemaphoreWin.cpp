@@ -3,7 +3,7 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Error.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 using namespace Helium;
 

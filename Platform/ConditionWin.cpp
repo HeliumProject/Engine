@@ -2,7 +2,7 @@
 #include "Condition.h"
 
 #include "Platform/Error.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;

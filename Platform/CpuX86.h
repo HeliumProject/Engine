@@ -17,8 +17,8 @@
 #define HELIUM_WORDSIZE 32
 #endif
 
-/// Cache line prefetch size, in bytes (general case).
-#define HELIUM_PREFETCH_CACHE_SIZE 32
+/// Cache line size, in bytes (general case).
+#define HELIUM_CACHE_LINE_SIZE_IN_BYTES 64
 
 namespace Helium
 {

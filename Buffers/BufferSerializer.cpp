@@ -1,7 +1,7 @@
 #include "BuffersPch.h"
 #include "BufferSerializer.h"
 
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #include "Foundation/Log.h"
 

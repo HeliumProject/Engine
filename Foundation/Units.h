@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #define BYTE_TO_STR_BUF_SIZE 32
 

@@ -325,10 +325,6 @@ typedef double float64_t;
 #include <sstream>
 #include <strstream>
 
-#if HELIUM_OS_WIN
-# include <tchar.h>
-#endif
-
 #ifdef _UNICODE
 # ifndef UNICODE
 #  define UNICODE

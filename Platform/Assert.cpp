@@ -1,7 +1,7 @@
 #include "PlatformPch.h"
 #include "Platform/Assert.h"
 #include "Platform/Trace.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #if HELIUM_ASSERT_ENABLED
 

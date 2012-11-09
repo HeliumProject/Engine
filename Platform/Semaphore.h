@@ -1,10 +1,9 @@
 #pragma once
 
-#include "API.h"
+#include "Platform/API.h"
+#include "Platform/Types.h"
 
-#include "Types.h"
-
-#ifdef __GNUC__
+#if !HELIUM_OS_WIN
 # include <semaphore.h>
 #endif
 
@@ -13,29 +12,25 @@ namespace Helium
     class HELIUM_PLATFORM_API Semaphore
     {
     public:
-
-#ifdef __GNUC__
-        typedef sem_t Handle;
-#elif defined( WIN32 )
+#if HELIUM_OS_WIN
         typedef void* Handle;
 #else
-#  pragma TODO( "Emit an error here..." )
+        typedef sem_t Handle;
 #endif
 
-    private:
-        Handle m_Handle;
-
-    public:
+	public:
         Semaphore();
         ~Semaphore();
-
-        const Handle& GetHandle()
-        {
-            return m_Handle;
-        }
 
         void Increment();
         void Decrement();
         void Reset();
+
+        inline const Handle& GetHandle();
+
+	private:
+        Handle m_Handle;
     };
 }
+
+#include "Platform/Semaphore.inl"

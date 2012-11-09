@@ -4,7 +4,6 @@
 #include "Platform/Console.h"
 #include "Platform/Encoding.h"
 #include "Platform/Exception.h"
-#include "Platform/Environment.h"
 #include "Platform/Process.h"
 #include "Platform/ProfileMemory.h"
 
@@ -29,12 +28,8 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 , m_MemTotalFree( 0 )
 , m_MemLargestFree( 0 )
 {
-    m_UserName.clear();
-    Helium::GetUserName( m_UserName );
-
-    m_Computer.clear();
-    Helium::GetMachineName( m_Computer );
-
+    m_UserName = Helium::GetUserName();
+    m_Computer = Helium::GetMachineName();
     m_ApplicationPath = Helium::GetProcessPath();
     m_ApplicationName = Helium::GetProcessName();
 

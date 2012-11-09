@@ -1,8 +1,8 @@
 #pragma once
 
-#include "API.h"
-#include "Types.h"
-#include "Assert.h"
+#include "Platform/API.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
 
 namespace Helium
 {

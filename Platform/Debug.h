@@ -19,6 +19,5 @@ namespace Helium
     HELIUM_PLATFORM_API void GetAddressSymbol( tstring& rSymbol, void* pAddress );
     HELIUM_PLATFORM_API void DebugLog( const tchar_t* pMessage );
 #endif
-
     //@}
 }

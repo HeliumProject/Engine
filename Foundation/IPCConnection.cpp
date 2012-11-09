@@ -2,7 +2,7 @@
 #include "IPCConnection.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Print.h"
+#include "Platform/Console.h"
 
 #include "Foundation/String.h"
 

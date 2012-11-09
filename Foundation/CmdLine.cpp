@@ -1,7 +1,7 @@
 #include "FoundationPch.h"
-#include "Foundation/CmdLine.h"
+#include "CmdLine.h"
 
-#include "Platform/Environment.h"
+#include "Platform/Process.h"
 #include "Platform/Assert.h"
 
 using namespace Helium;

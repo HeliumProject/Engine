@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "Types.h"
+#include "Platform/API.h"
+#include "Platform/Types.h"
 
 namespace Helium
 {

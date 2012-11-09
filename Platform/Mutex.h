@@ -46,10 +46,6 @@ namespace Helium
         typedef pthread_mutex_t Handle;
 #endif
 
-    private:
-        /// Platform-specific mutex handle.
-        Handle m_Handle;
-
     public:
         /// @name Construction/Destruction
         //@{
@@ -68,6 +64,10 @@ namespace Helium
         //@{
         inline const Handle& GetHandle() const;
         //@}
+
+    private:
+        /// Platform-specific mutex handle.
+        Handle m_Handle;
     };
 
     /// Scope-based locking mechanism for Mutex objects.

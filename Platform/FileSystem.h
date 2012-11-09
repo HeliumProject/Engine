@@ -3,8 +3,6 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-#include <string>
-
 namespace Helium
 {
     HELIUM_PLATFORM_API extern const tchar_t PathSeparator;

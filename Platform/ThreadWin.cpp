@@ -21,8 +21,6 @@ static const int WIN32_THREAD_PRIORITY_MAP[] =
     THREAD_PRIORITY_HIGHEST,       // PRIORITY_HIGHEST
 };
 
-HELIUM_COMPILE_ASSERT( HELIUM_ARRAY_COUNT( WIN32_THREAD_PRIORITY_MAP ) == Thread::PRIORITY_MAX );
-
 // Thread name assignment exception information.
 struct ThreadNameInfo
 {
@@ -95,9 +93,9 @@ const tchar_t* Thread::GetName() const
 /// @return  True if the thread was started successfully, false if not.
 ///
 /// @see Join(), TryJoin()
-bool Thread::Start( EPriority priority )
+bool Thread::Start( ThreadPriority priority )
 {
-    HELIUM_ASSERT( static_cast< size_t >( priority ) < PRIORITY_MAX );
+	HELIUM_ASSERT( priority >= ThreadPriorities::Lowest && priority <= ThreadPriorities::Highest );
 
     // Make sure a thread hasn't already been started.
     HELIUM_ASSERT( m_Handle == 0 );

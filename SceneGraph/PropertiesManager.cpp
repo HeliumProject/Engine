@@ -80,7 +80,7 @@ void PropertiesManager::CreateProperties()
 
         PropertiesThreadArgs* args = new PropertiesThreadArgs( m_Style, m_SelectionId, &m_SelectionId, m_Selection );
         Helium::CallbackThread::Entry entry = Helium::CallbackThread::EntryHelperWithArgs<PropertiesManager, PropertiesThreadArgs, &PropertiesManager::GeneratePropertiesThreadEntry>;
-        propertyThread.CreateWithArgs( entry, this, args, TXT( "GeneratePropertiesThreadEntry()" ), Thread::PRIORITY_LOW );
+        propertyThread.CreateWithArgs( entry, this, args, TXT( "GeneratePropertiesThreadEntry()" ), ThreadPriorities::Low );
     }
 }
 

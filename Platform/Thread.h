@@ -32,6 +32,25 @@ namespace Helium
         //@}
     };
 
+	namespace ThreadPriorities
+	{
+        /// Thread priority constants.
+        enum Type
+		{
+            /// Lowest thread priority.
+            Lowest,
+            /// Low thread priority.
+            Low,
+            /// Normal (default) thread priority.
+            Normal,
+            /// High thread priority.
+            High,
+            /// Highest thread priority.
+            Highest,
+        };
+	}
+	typedef ThreadPriorities::Type ThreadPriority;
+
     /// Thread interface.
     class HELIUM_PLATFORM_API Thread : NonCopyable
     {
@@ -49,27 +68,6 @@ namespace Helium
 #else
 # error Implement Thread for this platform.
 #endif
-
-        /// Thread priority constants.
-        enum EPriority
-        {
-            PRIORITY_FIRST   =  0,
-            PRIORITY_INVALID = -1,
-
-            /// Lowest thread priority.
-            PRIORITY_LOWEST,
-            /// Low thread priority.
-            PRIORITY_LOW,
-            /// Normal (default) thread priority.
-            PRIORITY_NORMAL,
-            /// High thread priority.
-            PRIORITY_HIGH,
-            /// Highest thread priority.
-            PRIORITY_HIGHEST,
-
-            PRIORITY_MAX,
-            PRIORITY_LAST = PRIORITY_MAX - 1
-        };
 
     private:
         /// Platform-specific thread handle.
@@ -100,7 +98,7 @@ namespace Helium
         void SetName( const tchar_t* pName );
         inline const tchar_t* GetName() const;
 
-        bool Start( EPriority priority = PRIORITY_NORMAL );
+		bool Start( ThreadPriority priority = ThreadPriorities::Normal );
         bool Join( uint32_t timeOutMilliseconds = 0 );
         bool TryJoin();
         bool IsRunning() const;
@@ -181,14 +179,14 @@ namespace Helium
         /// @name Caller Interface
         //@{
         // create and execute a thread
-        bool Create( Entry entry, void* obj, const tchar_t* name, EPriority priority = PRIORITY_NORMAL );
+		bool Create( Entry entry, void* obj, const tchar_t* name, ThreadPriority priority = ThreadPriorities::Normal );
 
         // C++ helper (remember, it is valid to pass a member function pointer as a template parameter!)
         template< class ObjectT, void (ObjectT::*method)() >
         static void EntryHelper( void* param );
 
         // create and execute a thread with a separate args object
-        inline bool CreateWithArgs( Entry entry, void* obj, void* args, const tchar_t* name, EPriority priority = PRIORITY_NORMAL );
+		inline bool CreateWithArgs( Entry entry, void* obj, void* args, const tchar_t* name, ThreadPriority priority = ThreadPriorities::Normal );
 
         // C++ helper (remember, it is valid to pass a member function pointer as a template parameter!)
         template< class ObjectT, typename ArgsT, void (ObjectT::*method)( ArgsT& ) >

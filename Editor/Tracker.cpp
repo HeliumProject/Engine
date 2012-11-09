@@ -93,7 +93,7 @@ void Tracker::StartThread()
     m_StopTracking = false;
 
     Helium::CallbackThread::Entry entry = &Helium::CallbackThread::EntryHelper<Tracker, &Tracker::TrackEverything>;
-    if ( !m_Thread.Create( entry, this, TXT( "Tracker Thread" ), Thread::PRIORITY_LOW ) )
+	if ( !m_Thread.Create( entry, this, TXT( "Tracker Thread" ), ThreadPriorities::Low ) )
     {
         throw Exception( TXT( "Unable to create thread for asset tracking." ) );
     }

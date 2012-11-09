@@ -15,7 +15,7 @@ void Helium::CallbackThread::EntryHelper( void* param )
 }
 
 // create and execute a thread with a separate args object
-bool Helium::CallbackThread::CreateWithArgs( Entry entry, void* obj, void* args, const tchar_t* name, EPriority priority )
+bool Helium::CallbackThread::CreateWithArgs( Entry entry, void* obj, void* args, const tchar_t* name, ThreadPriority priority )
 {
     ThreadHelperArgs* threadHelperArgs = new ThreadHelperArgs( obj, args );
     return Create(entry, threadHelperArgs, name, priority);

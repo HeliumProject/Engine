@@ -3,7 +3,7 @@
 
 #include "Platform/Mutex.h"
 #include "Platform/Process.h"
-#include "Platform/Debug.h"
+#include "Platform/Exception.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"

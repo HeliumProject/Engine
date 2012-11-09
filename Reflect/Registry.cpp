@@ -94,10 +94,10 @@ void Reflect::Initialize()
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
     std::vector<uintptr_t> trace;
-    Debug::GetStackTrace( trace );
+    Helium::GetStackTrace( trace );
 
     std::string str;
-    Debug::TranslateStackTrace( trace, str );
+    Helium::TranslateStackTrace( trace, str );
 
     Log::Print( "\n" );
     Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
@@ -120,10 +120,10 @@ void Reflect::Cleanup()
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
     std::vector<uintptr_t> trace;
-    Debug::GetStackTrace( trace );
+    Helium::GetStackTrace( trace );
 
     std::string str;
-    Debug::TranslateStackTrace( trace, str );
+    Helium::TranslateStackTrace( trace, str );
 
     Log::Print( "\n" );
     Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );

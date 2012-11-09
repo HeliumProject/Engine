@@ -2,7 +2,7 @@
 #include "Platform/MemoryHeap.h"
 
 #include "Platform/Atomic.h"
-#include "Platform/Debug.h"
+#include "Platform/Exception.h"
 #include "Platform/Mutex.h"
 #include "Platform/ReadWriteLock.h"
 #include "Platform/Thread.h"

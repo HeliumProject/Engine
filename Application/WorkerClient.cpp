@@ -48,7 +48,7 @@ static void ShutdownListener(const Helium::ShutdownArgs& args)
 }
 
 // Called from Debug if an exception occurs
-static void TerminateListener(const Debug::TerminateArgs& args)
+static void TerminateListener(const Helium::TerminateArgs& args)
 {
     // release our connection to our manager process
     Client::Cleanup();
@@ -103,7 +103,7 @@ bool Client::Initialize( bool debug, bool wait )
     Helium::g_ShuttingDown.Add( &ShutdownListener );
 
     // hook up our handler to debug
-    Debug::g_Terminating.Add( &TerminateListener );
+    Helium::g_Terminating.Add( &TerminateListener );
 
     return true;
 }

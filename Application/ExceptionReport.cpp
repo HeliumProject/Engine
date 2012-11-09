@@ -19,7 +19,6 @@
 #include <iomanip>
 
 using namespace Helium;
-using namespace Helium::Debug;
 
 ExceptionReport::ExceptionReport( const ExceptionArgs& args )
 : m_Args ( args )
@@ -158,7 +157,7 @@ static void SendMail( ExceptionReport& report )
     {
         subject += TXT( "Fatal " );
     }
-    subject += Debug::ExceptionTypes::Strings[ report.m_Args.m_Type ];
+    subject += Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ];
     subject += TXT( " Exception: " ) + report.m_ApplicationName + TXT( " " ) + report.m_UserName + TXT( "@" ) + report.m_Computer;
 
     tstringstream body;
@@ -189,10 +188,10 @@ static void SendMail( ExceptionReport& report )
     }
 
     body << std::endl;
-    body << "Type: " << Debug::ExceptionTypes::Strings[ report.m_Args.m_Type ] << std::endl;
+    body << "Type: " << Helium::ExceptionTypes::Strings[ report.m_Args.m_Type ] << std::endl;
     switch ( report.m_Args.m_Type )
     {
-    case Debug::ExceptionTypes::SEH:
+    case Helium::ExceptionTypes::SEH:
         {
             body << TXT( "Code: 0x" ) << std::hex << std::setfill( TXT( '0' ) ) << std::setw(8) << report.m_Args.m_SEHCode << std::endl;
             body << TXT( "Class: " ) << report.m_Args.m_SEHClass << std::endl;
@@ -210,7 +209,7 @@ static void SendMail( ExceptionReport& report )
             break;
         }
 
-    case Debug::ExceptionTypes::CPP:
+    case Helium::ExceptionTypes::CPP:
         {
             body << "Class: " << report.m_Args.m_CPPClass << std::endl;
 
@@ -249,7 +248,7 @@ static void SendMail( ExceptionReport& report )
 #pragma TODO("Send email?")
 }
 
-static void HandleException( const Helium::Debug::ExceptionArgs& args )
+static void HandleException( const Helium::ExceptionArgs& args )
 {
     ExceptionReport report ( args );
 
@@ -267,7 +266,7 @@ static void HandleException( const Helium::Debug::ExceptionArgs& args )
 
 static int32_t g_InitCount = 0;
 
-void Debug::InitializeExceptionListener()
+void Helium::InitializeExceptionListener()
 {
     // init counting this API seems kind of silly, but we can actually get initialized from several places
     if ( ++g_InitCount == 1 )
@@ -278,24 +277,24 @@ void Debug::InitializeExceptionListener()
         tstring symbolPath( process.Directory() );
 
         // initialize debug symbols
-        Debug::Initialize( symbolPath );
+        Helium::InitializeSymbols( symbolPath );
 
         // from here on out, submit crash reports
-        Debug::EnableExceptionFilter(true);
+        Helium::EnableExceptionFilter(true);
 
         // wait for an exception
-        Debug::g_ExceptionOccurred.Set( &HandleException );
+        Helium::g_ExceptionOccurred.Set( &HandleException );
     }
 }
 
-void Debug::CleanupExceptionListener()
+void Helium::CleanupExceptionListener()
 {
     if ( --g_InitCount == 0 )
     {
         // stop waiting for exception
-        Debug::g_ExceptionOccurred.Clear();
+        Helium::g_ExceptionOccurred.Clear();
 
         // uninstall the exception filter function
-        Debug::EnableExceptionFilter(false);
+        Helium::EnableExceptionFilter(false);
     }
 }

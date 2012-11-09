@@ -2,7 +2,6 @@
 #include "Startup.h"
 
 #include "Platform/Assert.h"
-#include "Platform/Debug.h"
 #include "Platform/Encoding.h"
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
@@ -240,7 +239,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
         Helium::EnableCPPErrorHandling( true );
 
         // init debug handling
-        Helium::Debug::InitializeExceptionListener();
+        Helium::InitializeExceptionListener();
 
         // disable dialogs for main line error cases
         SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
@@ -368,7 +367,7 @@ int Helium::Shutdown( int code )
 #endif
 
         // Disable exception handling
-        Helium::Debug::CleanupExceptionListener();
+        Helium::CleanupExceptionListener();
 
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
@@ -417,16 +416,15 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
 {
     if ( info->ExceptionRecord->ExceptionCode == 0xE06D7363 )
     {
-        Helium::Exception* nocturnalException = Debug::GetHeliumException( info->ExceptionRecord->ExceptionInformation[1] );
-
-        if ( nocturnalException )
+        Helium::Exception* ex = Helium::GetHeliumException( info->ExceptionRecord->ExceptionInformation[1] );
+        if ( ex )
         {
             // process this as a non-fatal C++ exception, but via the SEH handler so we get the callstack at the throw() statment
-            return Debug::ProcessException( info, false, false );
+            return Helium::ProcessException( info, false, false );
         }
 
         // this is not a nocturnal exception, so it will not be caught by the catch statements below, process it then execute the handler to unload the process
-        return Debug::ProcessException( info, true, true );
+        return Helium::ProcessException( info, true, true );
     }
 
     return EXCEPTION_CONTINUE_SEARCH;
@@ -486,18 +484,18 @@ void Helium::StandardThread( Helium::CallbackThread::Entry entry, void* param )
     }
     else
     {
-        Debug::InitializeExceptionListener();
+        Helium::InitializeExceptionListener();
 
         __try
         {
             StandardThreadEntry( entry, param );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Helium::ProcessException( GetExceptionInformation(), true, true ) )
         {
             ::ExitProcess( -1 );
         }
 
-        Debug::CleanupExceptionListener();
+        Helium::CleanupExceptionListener();
     }
 }
 
@@ -583,18 +581,18 @@ int Helium::StandardMain( int (*main)(int argc, const tchar_t** argv), int argc,
     {
         int result = -1;
 
-        Debug::InitializeExceptionListener();
+        Helium::InitializeExceptionListener();
 
         __try
         {
             result = StandardMainEntry( main, argc, argv );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Helium::ProcessException( GetExceptionInformation(), true, true ) )
         {
             ::ExitProcess( Helium::Shutdown( result ) );
         }
 
-        Debug::CleanupExceptionListener();
+        Helium::CleanupExceptionListener();
 
         return result;
     }
@@ -701,18 +699,18 @@ int Helium::StandardWinMain( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE
     {
         int result = -1;
 
-        Debug::InitializeExceptionListener();
+        Helium::InitializeExceptionListener();
 
         __try
         {
             result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
         }
-        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), true, true ) )
+        __except( ( g_ShutdownComplete || Helium::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Helium::ProcessException( GetExceptionInformation(), true, true ) )
         {
             ::ExitProcess( Helium::Shutdown( result ) );
         }
 
-        Debug::CleanupExceptionListener();
+        Helium::CleanupExceptionListener();
 
         return result;
     }

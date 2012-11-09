@@ -1,12 +1,12 @@
 #include "PlatformPch.h"
-#include "Debug.h"
+#include "Exception.h"
 
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
 #include "Platform/Assert.h"
 #include "Platform/Encoding.h"
-#include "Platform/Debug.h"
+#include "Platform/Exception.h"
 #include "Platform/Trace.h"
 #include "Platform/Console.h"
 #include "Platform/Process.h"
@@ -22,7 +22,6 @@
 #pragma comment ( lib, "dbghelp.lib" )
 
 using namespace Helium;
-using namespace Helium::Debug;
 
 //#define DEBUG_SYMBOLS
 
@@ -93,13 +92,13 @@ bool Helium::IsDebuggerPresent()
 	return ::IsDebuggerPresent() != 0;
 }
 
-bool Debug::Initialize(const tstring& pdbPaths)
+bool Helium::InitializeSymbols(const tstring& path)
 {
 	if ( !g_Initialized )
 	{
 		std::wstring dir;
 
-		if ( pdbPaths.empty() )
+		if ( path.empty() )
 		{
 			wchar_t module[MAX_PATH];
 			wchar_t drive[MAX_PATH];
@@ -114,7 +113,7 @@ bool Debug::Initialize(const tstring& pdbPaths)
 		}
 		else
 		{
-			ConvertString(pdbPaths, dir);
+			ConvertString(path, dir);
 		}
 
 		DWORD options = SYMOPT_FAIL_CRITICAL_ERRORS |
@@ -137,14 +136,9 @@ bool Debug::Initialize(const tstring& pdbPaths)
 	return true;
 }
 
-bool Debug::IsInitialized()
+tstring Helium::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
 {
-	return g_Initialized;
-}
-
-tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
-{
-	HELIUM_ASSERT( Debug::IsInitialized() );
+	HELIUM_ASSERT( g_Initialized );
 
 	if ( enumLoadedModules )
 	{
@@ -242,7 +236,7 @@ tstring Debug::GetSymbolInfo(uintptr_t adr, bool enumLoadedModules)
 	}
 }
 
-Helium::Exception* Debug::GetHeliumException(uintptr_t addr)
+Helium::Exception* Helium::GetHeliumException(uintptr_t addr)
 {
 	Helium::Exception* cppException = (Helium::Exception*)addr;
 
@@ -265,7 +259,7 @@ Helium::Exception* Debug::GetHeliumException(uintptr_t addr)
 	}
 }
 
-std::exception* Debug::GetStandardException(uintptr_t addr)
+std::exception* Helium::GetStandardException(uintptr_t addr)
 {
 	std::exception* cppException = (std::exception*)addr;
 
@@ -288,7 +282,7 @@ std::exception* Debug::GetStandardException(uintptr_t addr)
 	}
 }
 
-bool Debug::GetStackTrace(std::vector<uintptr_t>& trace, unsigned omitFrames)
+bool Helium::GetStackTrace(std::vector<uintptr_t>& trace, unsigned omitFrames)
 {
 	//  Some techniques borrowed from Visual Leak Detector 1.9
 	//   (http://www.codeproject.com/tools/visualleakdetector.asp)
@@ -308,9 +302,9 @@ bool Debug::GetStackTrace(std::vector<uintptr_t>& trace, unsigned omitFrames)
 	return GetStackTrace(&context, trace, omitFrames+1);
 }
 
-bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames)
+bool Helium::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsigned omitFrames)
 {
-	HELIUM_ASSERT( Debug::IsInitialized() );
+	HELIUM_ASSERT( g_Initialized );
 
 	// load debugging information
 	EnumerateLoadedModules();
@@ -387,7 +381,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr_t>& stack, unsi
 	return !stack.empty();
 }
 
-void Debug::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& buffer)
+void Helium::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& buffer)
 {
 	std::vector<uintptr_t>::const_iterator itr = trace.begin();
 	std::vector<uintptr_t>::const_iterator end = trace.end();
@@ -397,7 +391,7 @@ void Debug::TranslateStackTrace(const std::vector<uintptr_t>& trace, tstring& bu
 	}
 }
 
-const tchar_t* Debug::GetExceptionClass(uint32_t exceptionCode)
+const tchar_t* Helium::GetExceptionClass(uint32_t exceptionCode)
 {
 	const tchar_t* ex_name = NULL;
 
@@ -500,7 +494,7 @@ const tchar_t* Debug::GetExceptionClass(uint32_t exceptionCode)
 	return ex_name;
 }
 
-void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args )
+void Helium::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args )
 {
 	static Helium::Mutex s_ExceptionMutex;
 	Helium::MutexScopeLock mutex ( s_ExceptionMutex );
@@ -599,13 +593,13 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 	{
 		args.m_Type = ExceptionTypes::CPP;
 
-		Helium::Exception* nocturnalException = GetHeliumException(info->ExceptionRecord->ExceptionInformation[1]);
-		if (nocturnalException)
+		Helium::Exception* ex = GetHeliumException(info->ExceptionRecord->ExceptionInformation[1]);
+		if (ex)
 		{
 			const char* cppClass = NULL;
 			try
 			{
-				cppClass = typeid(*nocturnalException).name();
+				cppClass = typeid(*ex).name();
 			}
 			catch (...)
 			{
@@ -613,17 +607,17 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 			}
 
 			Helium::ConvertString( cppClass, args.m_CPPClass );
-			Helium::ConvertString( nocturnalException->What(), args.m_Message );
+			Helium::ConvertString( ex->What(), args.m_Message );
 		}
 		else
 		{
-			std::exception* standardException = GetStandardException(info->ExceptionRecord->ExceptionInformation[1]);
-			if (standardException)
+			std::exception* ex = GetStandardException(info->ExceptionRecord->ExceptionInformation[1]);
+			if ( ex )
 			{
 				const char* cppClass = NULL;
 				try
 				{
-					cppClass = typeid(*standardException).name();
+					cppClass = typeid(*ex).name();
 				}
 				catch (...)
 				{
@@ -631,7 +625,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 				}
 
 				Helium::ConvertString( cppClass, args.m_CPPClass );
-				Helium::ConvertString( standardException->what(), args.m_Message );
+				Helium::ConvertString( ex->what(), args.m_Message );
 			}
 		}
 
@@ -686,7 +680,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 	}
 }
 
-tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
+tstring Helium::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 {
 	ExceptionArgs args ( ExceptionTypes::SEH, false );
 	GetExceptionDetails( info, args );
@@ -755,7 +749,7 @@ tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 	return buffer;
 }
 
-tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
+tstring Helium::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
 	tstring directory = GetDumpDirectory();
 	if ( directory.empty() )

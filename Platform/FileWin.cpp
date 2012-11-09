@@ -3,7 +3,6 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Encoding.h"
-#include "Platform/Exception.h"
 #include "Platform/Types.h"
 
 #include <vector>
@@ -254,18 +253,9 @@ bool Directory::FindFirst( DirectoryEntry& entry )
 
 	WIN32_FIND_DATA foundFile;
 	m_Handle = ::FindFirstFile( convertedPath, &foundFile );
-
 	if ( m_Handle == INVALID_HANDLE_VALUE )
 	{
-		DWORD error = GetLastError();
-		if ( error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND || error == ERROR_ACCESS_DENIED ) 
-		{
-			return false;
-		}
-		else
-		{
-			throw Exception( TXT( "Error calling ::FindFirstFile: %s" ), GetErrorString( error ).c_str() );
-		}
+		return false;
 	}
 
 	FromWindowsFindData( foundFile, entry );
@@ -277,12 +267,6 @@ bool Directory::FindNext( DirectoryEntry& entry )
 	WIN32_FIND_DATA foundFile;
 	if ( !::FindNextFile( m_Handle, &foundFile ) )
 	{
-		DWORD error = GetLastError();
-		if ( error != ERROR_NO_MORE_FILES ) 
-		{
-			throw Exception( TXT( "Error calling ::FindNextFile: %s" ), GetErrorString( error ).c_str() );
-		}
-
 		return false;
 	}
 
@@ -294,8 +278,6 @@ bool Directory::Close()
 {
 	if ( IsOpen() && ::FindClose( m_Handle ) == 0 )
 	{
-		DWORD error = GetLastError();
-		throw Exception( TXT( "Error calling ::FindClose: %s" ), GetErrorString( error ).c_str() );
 		return false;
 	}
 

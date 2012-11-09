@@ -1,7 +1,6 @@
 #include "EditorPch.h"
 #include "App.h"
 
-#include "Platform/Debug.h"
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
 #include "Platform/Trace.h"
@@ -111,7 +110,7 @@ extern void UnregisterFrameworkTypes();
 extern void UnregisterPcSupportTypes();
 extern void UnregisterEditorSupportTypes();
 
-static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
+static void ShowBreakpointDialog(const Helium::BreakpointArgs& args )
 {
     static std::set<uintptr_t> disabled;
     static bool skipAll = false;
@@ -128,15 +127,15 @@ static void ShowBreakpointDialog(const Debug::BreakpointArgs& args )
         // we have NOT disabled this break point yet
         else
         {
-            Debug::ExceptionArgs exArgs ( Debug::ExceptionTypes::SEH, args.m_Fatal ); 
-            Debug::GetExceptionDetails( args.m_Info, exArgs ); 
+            Helium::ExceptionArgs exArgs ( Helium::ExceptionTypes::SEH, args.m_Fatal ); 
+            Helium::GetExceptionDetails( args.m_Info, exArgs ); 
 
             // dump args.m_Info to console
-            Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
+            Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "%s" ), Helium::GetExceptionInfo(args.m_Info).c_str());
 
             // display result
             tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
-            message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
+            message += Helium::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
             message += TXT("\n\nWhat do you wish to do?");
 
             const tchar_t* nothing = TXT( "Let the OS handle this as an exception" );
@@ -715,11 +714,11 @@ int wmain( int argc, const wchar_t** argv )
 
     Helium::InitializerStack initializerStack( true );
 
-    Debug::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
+    Helium::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
 
     int result = Helium::StandardMain( &Main, argc, av );
 
-    Debug::g_BreakpointOccurred.Clear();
+    Helium::g_BreakpointOccurred.Clear();
 
     return result;
 }

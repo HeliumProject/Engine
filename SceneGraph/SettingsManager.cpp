@@ -1,8 +1,6 @@
 #include "SceneGraphPch.h"
 #include "SettingsManager.h"
 
-#include "Platform/Debug.h"
-
 REFLECT_DEFINE_OBJECT( Helium::Settings );
 REFLECT_DEFINE_OBJECT( Helium::SettingsManager );
 

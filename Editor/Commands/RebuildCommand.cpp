@@ -2,16 +2,16 @@
 
 #include "RebuildCommand.h"
 
-#include "Platform/Debug.h"
 #include "Platform/Exception.h"
 
-#include "Application/InitializerStack.h"
 #include "Foundation/Log.h"
 #include "Foundation/FilePath.h"
+
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
-#include "Application/CmdLineProcessor.h"
 
+#include "Application/InitializerStack.h"
+#include "Application/CmdLineProcessor.h"
 #include "Application/Startup.h"
 #include "Application/RCS.h"
 

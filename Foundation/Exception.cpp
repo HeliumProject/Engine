@@ -16,20 +16,19 @@
 #include <sys/stat.h>
 
 using namespace Helium;
-using namespace Helium::Debug;
 
-BreakpointSignature::Delegate   Debug::g_BreakpointOccurred;
-ExceptionSignature::Delegate    Debug::g_ExceptionOccurred;
-TerminateSignature::Event       Debug::g_Terminating;
+BreakpointSignature::Delegate   Helium::g_BreakpointOccurred;
+ExceptionSignature::Delegate    Helium::g_ExceptionOccurred;
+TerminateSignature::Event       Helium::g_Terminating;
 
 bool g_EnableExceptionFilter = false;
 
 static LONG __stdcall ProcessFilteredException( LPEXCEPTION_POINTERS info )
 {
-    return Debug::ProcessException(info, true, true);
+    return Helium::ProcessException(info, true, true);
 }
 
-void Debug::EnableExceptionFilter(bool enable)
+void Helium::EnableExceptionFilter(bool enable)
 {
     g_EnableExceptionFilter = enable;
 
@@ -37,7 +36,7 @@ void Debug::EnableExceptionFilter(bool enable)
     SetUnhandledExceptionFilter( g_EnableExceptionFilter ? &ProcessFilteredException : NULL );
 }
 
-void Debug::ProcessException(const Helium::Exception& exception, bool print, bool fatal)
+void Helium::ProcessException(const Helium::Exception& exception, bool print, bool fatal)
 {
     SetUnhandledExceptionFilter( NULL );
 
@@ -79,7 +78,7 @@ void Debug::ProcessException(const Helium::Exception& exception, bool print, boo
     }
 }
 
-void Debug::ProcessException(const std::exception& exception, bool print, bool fatal)
+void Helium::ProcessException(const std::exception& exception, bool print, bool fatal)
 {
     SetUnhandledExceptionFilter( NULL );
 
@@ -121,7 +120,7 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
     }
 }
 
-uint32_t Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fatal)
+uint32_t Helium::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fatal)
 {
     SetUnhandledExceptionFilter( NULL );
 
@@ -140,14 +139,14 @@ uint32_t Debug::ProcessException(LPEXCEPTION_POINTERS info, bool print, bool fat
 
         args.m_State = Log::GetOutlineState();
 
-        Debug::GetExceptionDetails( info, args );
+        Helium::GetExceptionDetails( info, args );
 
         if ( print )
         {
             Helium::Print( Helium::ConsoleColors::Red, stderr, TXT( "%s" ), GetExceptionInfo( info ).c_str() );
         }
 
-        args.m_Dump = Debug::WriteDump(info, false);
+        args.m_Dump = Helium::WriteDump(info, false);
 
         g_ExceptionOccurred.Invoke( args );
 

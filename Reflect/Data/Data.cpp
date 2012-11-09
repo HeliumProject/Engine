@@ -1,7 +1,7 @@
 #include "ReflectPch.h"
 #include "Reflect/Data/Data.h"
 
-#include "Platform/Debug.h"
+#include "Platform/Exception.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Numeric.h"
 #include "Reflect/Data/DataDeduction.h"

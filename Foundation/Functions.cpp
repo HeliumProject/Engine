@@ -2,8 +2,7 @@
 #include "FoundationPch.h"
 
 #include "Foundation/Functions.h"
-
-#include "Platform/Utility.h"
+#include "Foundation/String.h"
 
 using namespace Helium;
 
@@ -15,7 +14,7 @@ using namespace Helium;
 /// @return  True if the two strings match, false if not.
 bool Equals< char* >::operator()( const char* pA, const char* pB ) const
 {
-    return( StringCompare( pA, pB ) == 0 );
+    return( CompareString( pA, pB ) == 0 );
 }
 
 /// Wide-character string "equals" function.
@@ -26,7 +25,7 @@ bool Equals< char* >::operator()( const char* pA, const char* pB ) const
 /// @return  True if the two strings match, false if not.
 bool Equals< wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) const
 {
-    return( StringCompare( pA, pB ) == 0 );
+    return( CompareString( pA, pB ) == 0 );
 }
 
 /// String "equals" function.
@@ -37,7 +36,7 @@ bool Equals< wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) cons
 /// @return  True if the two strings match, false if not.
 bool Equals< const char* >::operator()( const char* pA, const char* pB ) const
 {
-    return( StringCompare( pA, pB ) == 0 );
+    return( CompareString( pA, pB ) == 0 );
 }
 
 /// Wide-character string "equals" function.
@@ -48,7 +47,7 @@ bool Equals< const char* >::operator()( const char* pA, const char* pB ) const
 /// @return  True if the two strings match, false if not.
 bool Equals< const wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) const
 {
-    return( StringCompare( pA, pB ) == 0 );
+    return( CompareString( pA, pB ) == 0 );
 }
 
 /// String "less-than" function.
@@ -59,7 +58,7 @@ bool Equals< const wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB 
 /// @return  True if the first string precedes the second string in basic (byte-wise) sorting, false if not.
 bool Less< char* >::operator()( const char* pA, const char* pB ) const
 {
-    return( StringCompare( pA, pB ) < 0 );
+    return( CompareString( pA, pB ) < 0 );
 }
 
 /// Wide-character string "less-than" function.
@@ -70,7 +69,7 @@ bool Less< char* >::operator()( const char* pA, const char* pB ) const
 /// @return  True if the first string precedes the second string in basic (byte-wise) sorting, false if not.
 bool Less< wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) const
 {
-    return( StringCompare( pA, pB ) < 0 );
+    return( CompareString( pA, pB ) < 0 );
 }
 
 /// String "less-than" function.
@@ -81,7 +80,7 @@ bool Less< wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) const
 /// @return  True if the first string precedes the second string in basic (byte-wise) sorting, false if not.
 bool Less< const char* >::operator()( const char* pA, const char* pB ) const
 {
-    return( StringCompare( pA, pB ) < 0 );
+    return( CompareString( pA, pB ) < 0 );
 }
 
 /// Wide-character string "less-than" function.
@@ -92,5 +91,5 @@ bool Less< const char* >::operator()( const char* pA, const char* pB ) const
 /// @return  True if the first string precedes the second string in basic (byte-wise) sorting, false if not.
 bool Less< const wchar_t* >::operator()( const wchar_t* pA, const wchar_t* pB ) const
 {
-    return( StringCompare( pA, pB ) < 0 );
+    return( CompareString( pA, pB ) < 0 );
 }

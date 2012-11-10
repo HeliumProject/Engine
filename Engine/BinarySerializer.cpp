@@ -232,28 +232,18 @@
 //    }
 //}
 //
-///// @copydoc Serializer::SerializeCharName()
-//void BinarySerializer::SerializeCharName( CharName& rValue )
+///// @copydoc Serializer::SerializeName()
+//void BinarySerializer::SerializeName( Name& rValue )
 //{
 //    if( ShouldSerializeCurrentProperty() )
 //    {
-//        CharString nameString( *rValue );
-//        SerializeCharString( nameString );
+//        String nameString( *rValue );
+//        SerializeString( nameString );
 //    }
 //}
 //
-///// @copydoc Serializer::SerializeWideName()
-//void BinarySerializer::SerializeWideName( WideName& rValue )
-//{
-//    if( ShouldSerializeCurrentProperty() )
-//    {
-//        WideString nameString( *rValue );
-//        SerializeWideString( nameString );
-//    }
-//}
-//
-///// @copydoc Serializer::SerializeCharString()
-//void BinarySerializer::SerializeCharString( CharString& rValue )
+///// @copydoc Serializer::SerializeString()
+//void BinarySerializer::SerializeString( String& rValue )
 //{
 //    if( ShouldSerializeCurrentProperty() )
 //    {
@@ -262,19 +252,6 @@
 //        m_pPropertyStream->Write( &stringLength, sizeof( stringLength ), 1 );
 //
 //        m_pPropertyStream->Write( rValue.GetData(), sizeof( char ), stringLength );
-//    }
-//}
-//
-///// @copydoc Serializer::SerializeWideString()
-//void BinarySerializer::SerializeWideString( WideString& rValue )
-//{
-//    if( ShouldSerializeCurrentProperty() )
-//    {
-//        HELIUM_ASSERT( rValue.GetSize() <= UINT32_MAX );
-//        uint32_t stringLength = static_cast< uint32_t >( rValue.GetSize() );
-//        m_pPropertyStream->Write( &stringLength, sizeof( stringLength ), 1 );
-//
-//        m_pPropertyStream->Write( rValue.GetData(), sizeof( wchar_t ), stringLength );
 //    }
 //}
 //

@@ -259,8 +259,7 @@ bool App::OnInit()
 
     // Register shutdown for general systems.
     m_InitializerStack.Push( FileLocations::Shutdown );
-    m_InitializerStack.Push( CharName::Shutdown );
-    m_InitializerStack.Push( WideName::Shutdown );
+    m_InitializerStack.Push( Name::Shutdown );
     m_InitializerStack.Push( GameObjectPath::Shutdown );
 
     // Async I/O.

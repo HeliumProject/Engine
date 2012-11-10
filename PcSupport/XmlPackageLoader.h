@@ -89,10 +89,8 @@
 //            virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
 //            virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
 //            virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
-//            virtual void SerializeCharName( CharName& rValue );
-//            virtual void SerializeWideName( WideName& rValue );
-//            virtual void SerializeCharString( CharString& rValue );
-//            virtual void SerializeWideString( WideString& rValue );
+//            virtual void SerializeName( CharName& rValue );
+//            virtual void SerializeString( String& rValue );
 //            virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
 //
 //            virtual void BeginStruct( EStructTag tag );
@@ -178,7 +176,7 @@
 //            public:
 //                /// @name Overloaded Operators
 //                //@{
-//                bool operator()( const String& rText, CharString& rValue ) const;
+//                bool operator()( const String& rText, String& rValue ) const;
 //                //@}
 //            };
 //
@@ -205,22 +203,6 @@
 //            private:
 //                /// String parser.
 //                CharStringParser m_stringParser;
-//#endif
-//            };
-//
-//            /// Wide-character name value parser.
-//            class WideNameParser
-//            {
-//            public:
-//                /// @name Overloaded Operators
-//                //@{
-//                bool operator()( const String& rText, WideName& rValue ) const;
-//                //@}
-//
-//#if !HELIUM_WCHAR_T
-//            private:
-//                /// String parser.
-//                WideStringParser m_stringParser;
 //#endif
 //            };
 //
@@ -305,7 +287,7 @@
 //
 //            bool BuildCurrentPropertyName( String& rPropertyName ) const;
 //
-//            void ReadUtf8String( CharString& rString );
+//            void ReadUtf8String( String& rString );
 //            void ReadUtf8String( WideString& rString );
 //            //@}
 //        };

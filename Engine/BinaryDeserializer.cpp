@@ -228,13 +228,13 @@ void BinaryDeserializer::SerializeEnum( int32_t& rValue, const Helium::Reflect::
     }
 }
 
-/// @copydoc Serializer::SerializeCharName()
-void BinaryDeserializer::SerializeCharName( CharName& rValue )
+/// @copydoc Serializer::SerializeName()
+void BinaryDeserializer::SerializeName( Name& rValue )
 {
     if( ShouldSerializeCurrentProperty() && !m_bEndOfStream )
     {
-        CharString nameString;
-        SerializeCharString( nameString );
+        String nameString;
+        SerializeString( nameString );
         if( !m_bEndOfStream )
         {
             rValue.Set( nameString );
@@ -242,22 +242,8 @@ void BinaryDeserializer::SerializeCharName( CharName& rValue )
     }
 }
 
-/// @copydoc Serializer::SerializeWideName()
-void BinaryDeserializer::SerializeWideName( WideName& rValue )
-{
-    if( ShouldSerializeCurrentProperty() && !m_bEndOfStream )
-    {
-        WideString nameString;
-        SerializeWideString( nameString );
-        if( !m_bEndOfStream )
-        {
-            rValue.Set( nameString );
-        }
-    }
-}
-
-/// @copydoc Serializer::SerializeCharString()
-void BinaryDeserializer::SerializeCharString( CharString& rValue )
+/// @copydoc Serializer::SerializeString()
+void BinaryDeserializer::SerializeString( String& rValue )
 {
     if( ShouldSerializeCurrentProperty() && !m_bEndOfStream )
     {
@@ -274,34 +260,6 @@ void BinaryDeserializer::SerializeCharString( CharString& rValue )
         for( uint_fast32_t characterIndex = 0; characterIndex < stringLengthFast; ++characterIndex )
         {
             char character;
-            if( !DeserializeValue( character ) )
-            {
-                return;
-            }
-
-            rValue.Add( character );
-        }
-    }
-}
-
-/// @copydoc Serializer::SerializeWideString()
-void BinaryDeserializer::SerializeWideString( WideString& rValue )
-{
-    if( ShouldSerializeCurrentProperty() && !m_bEndOfStream )
-    {
-        uint32_t stringLength = 0;
-        if( !DeserializeValue( stringLength ) )
-        {
-            return;
-        }
-
-        uint_fast32_t stringLengthFast = stringLength;
-
-        rValue.Clear();
-        rValue.Reserve( stringLengthFast );
-        for( uint_fast32_t characterIndex = 0; characterIndex < stringLengthFast; ++characterIndex )
-        {
-            wchar_t character;
             if( !DeserializeValue( character ) )
             {
                 return;

@@ -56,7 +56,11 @@ static void PrintfWrapper( const char* pFormat, ... )
 
     va_list argList;
     va_start( argList, pFormat );
-    Helium::StringFormatVa( message, HELIUM_ARRAY_COUNT( message ), pFormat, argList );
+#if HELIUM_OS_WIN
+    _snprintf( message, HELIUM_ARRAY_COUNT( message ), pFormat, argList );
+#else
+	snprintf( message, HELIUM_ARRAY_COUNT( message ), pFormat, argList );
+#endif
     va_end( argList );
 
     message[ HELIUM_ARRAY_COUNT( message ) - 1 ] = '\0';

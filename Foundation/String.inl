@@ -556,7 +556,7 @@ void Helium::StringBase< CharType, Allocator >::Format( const CharType* pFormatS
 
 	va_list argList;
 	va_start( argList, pFormatString );
-	int resultLength = StringFormatVa( NULL, 0, pFormatString, argList );
+	int resultLength = StringPrintArgs( NULL, 0, pFormatString, argList );
 	va_end( argList );
 
 	if( resultLength <= 0 )
@@ -570,7 +570,7 @@ void Helium::StringBase< CharType, Allocator >::Format( const CharType* pFormatS
 	HELIUM_ASSERT( pBufferData );
 
 	va_start( argList, pFormatString );
-	int finalResult = StringFormatVa( pBufferData, resultLength + 1, pFormatString, argList );
+	int finalResult = StringPrintArgs( pBufferData, resultLength + 1, pFormatString, argList );
 	HELIUM_ASSERT( finalResult == resultLength );
 	HELIUM_UNREF( finalResult );
 	va_end( argList );

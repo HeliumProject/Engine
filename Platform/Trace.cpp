@@ -78,7 +78,7 @@ void Helium::Trace::OutputVa( TraceLevel level, const tchar_t* pFormat, va_list 
 	tchar_t buffer[ DEFAULT_MESSAGE_BUFFER_SIZE ];
 
 	va_list argListTemp = argList;
-	int result = StringFormatVa( buffer, HELIUM_ARRAY_COUNT( buffer ), pFormat, argListTemp );
+	int result = StringPrintArgs( buffer, HELIUM_ARRAY_COUNT( buffer ), pFormat, argListTemp );
 
 	if( static_cast< unsigned int >( result ) < HELIUM_ARRAY_COUNT( buffer ) )
 	{
@@ -91,7 +91,7 @@ void Helium::Trace::OutputVa( TraceLevel level, const tchar_t* pFormat, va_list 
 	if( result < 0 )
 	{
 		argListTemp = argList;
-		result = StringFormatVa( NULL, 0, pFormat, argListTemp );
+		result = StringPrintArgs( NULL, 0, pFormat, argListTemp );
 		HELIUM_ASSERT( result >= 0 );
 	}
 
@@ -103,7 +103,7 @@ void Helium::Trace::OutputVa( TraceLevel level, const tchar_t* pFormat, va_list 
 	if( pBuffer )
 	{
 		argListTemp = argList;
-		result = StringFormatVa( pBuffer, bufferSize, pFormat, argListTemp );
+		result = StringPrintArgs( pBuffer, bufferSize, pFormat, argListTemp );
 
 		HELIUM_ASSERT( result == static_cast< int >( bufferSize - 1 ) );
 		OutputImplementation( pBuffer );

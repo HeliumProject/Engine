@@ -1673,8 +1673,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Reflect::ObjectRefCountSupport::Shutdown();
 
     GameObjectPath::Shutdown();
-    CharName::Shutdown();
-    WideName::Shutdown();
+    Name::Shutdown();
 
     FileLocations::Shutdown();
 

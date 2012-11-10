@@ -144,8 +144,8 @@
 //    ReadValue( rValue );
 //}
 //
-///// @copydoc Serializer::SerializeCharName()
-//void DirectDeserializer::SerializeCharName( CharName& rValue )
+///// @copydoc Serializer::SerializeName()
+//void DirectDeserializer::SerializeName( Name& rValue )
 //{
 //    if( m_bEndOfStream )
 //    {
@@ -180,50 +180,8 @@
 //    stackAllocator.Free( pNameString );
 //}
 //
-///// @copydoc Serializer::SerializeWideName()
-//void DirectDeserializer::SerializeWideName( WideName& rValue )
-//{
-//    if( m_bEndOfStream )
-//    {
-//        return;
-//    }
-//
-//    size_t count = 0;
-//    ReadValue( count );
-//    if( m_bEndOfStream )
-//    {
-//        return;
-//    }
-//
-//    if( !count )
-//    {
-//        rValue.Set( NULL );
-//        return;
-//    }
-//
-//    ThreadLocalStackAllocator stackAllocator;
-//
-//    size_t byteCount = sizeof( wchar_t ) * count;
-//    wchar_t* pNameString = static_cast< wchar_t* >( stackAllocator.Allocate( byteCount + sizeof( wchar_t ) ) );
-//    HELIUM_ASSERT( pNameString );
-//    ReadBytes( pNameString, byteCount );
-//    if( !m_bEndOfStream )
-//    {
-//        pNameString[ count ] = L'\0';
-//        rValue.Set( pNameString );
-//    }
-//
-//    stackAllocator.Free( pNameString );
-//}
-//
-///// @copydoc Serializer::SerializeCharString()
-//void DirectDeserializer::SerializeCharString( CharString& rValue )
-//{
-//    ReadString( rValue );
-//}
-//
-///// @copydoc Serializer::SerializeWideString()
-//void DirectDeserializer::SerializeWideString( WideString& rValue )
+///// @copydoc Serializer::SerializeString()
+//void DirectDeserializer::SerializeString( String& rValue )
 //{
 //    ReadString( rValue );
 //}

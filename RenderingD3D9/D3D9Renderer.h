@@ -38,9 +38,8 @@
         if( FAILED( d3dResult ) ) \
         { \
             tchar_t messageBuffer[ 512 ]; \
-            Helium::StringFormat( \
+            Helium::StringPrint( \
                 messageBuffer, \
-                HELIUM_ARRAY_COUNT( messageBuffer ), \
                 TXT( "Direct3D result failed (0x%x)" ), \
                 d3dResult ); \
             messageBuffer[ HELIUM_ARRAY_COUNT( messageBuffer ) - 1 ] = TXT( '\0' ); \

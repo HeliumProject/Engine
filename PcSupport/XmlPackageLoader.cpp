@@ -102,7 +102,7 @@
 //    if( pContext->depth == 1 )
 //    {
 //        // Top level tag; must be a "package" tag.
-//        if( StringCompare( pName, TXT( "package" ) ) != 0 )
+//        if( CompareString( pName, TXT( "package" ) ) != 0 )
 //        {
 //            HELIUM_TRACE(
 //                TraceLevels::Error,
@@ -123,7 +123,7 @@
 //        HELIUM_ASSERT( IsInvalid( pContext->currentObjectIndex ) );
 //
 //        // Second-level tag; must be an "object" tag.
-//        if( StringCompare( pName, TXT( "object" ) ) != 0 )
+//        if( CompareString( pName, TXT( "object" ) ) != 0 )
 //        {
 //            HELIUM_TRACE(
 //                TraceLevels::Error,
@@ -149,7 +149,7 @@
 //            const XML_Char* pAttValue = *( ppAtts++ );
 //            HELIUM_ASSERT( pAttValue );
 //
-//            if( StringCompare( pAttName, TXT( "name" ) ) == 0 )
+//            if( CompareString( pAttName, TXT( "name" ) ) == 0 )
 //            {
 //                objectName = HELIUM_OBJECT_PATH_CHAR;
 //                objectName += pAttValue;
@@ -157,7 +157,7 @@
 //                continue;
 //            }
 //
-//            if( StringCompare( pAttName, TXT( "type" ) ) == 0 )
+//            if( CompareString( pAttName, TXT( "type" ) ) == 0 )
 //            {
 //                typeName.Set( pAttValue );
 //                if( !GameObjectType::Find( typeName ) )
@@ -174,7 +174,7 @@
 //                continue;
 //            }
 //
-//            if( StringCompare( pAttName, TXT( "template" ) ) == 0 )
+//            if( CompareString( pAttName, TXT( "template" ) ) == 0 )
 //            {
 //                templatePath.Clear();
 //
@@ -271,7 +271,7 @@
 //    }
 //
 //    // Handle "property" tags.
-//    if( StringCompare( pName, TXT( "property" ) ) == 0 )
+//    if( CompareString( pName, TXT( "property" ) ) == 0 )
 //    {
 //        // Make sure we are editing an object.
 //        if( IsInvalid( pContext->currentObjectIndex ) )
@@ -329,7 +329,7 @@
 //            const XML_Char* pAttValue = *( ppAtts++ );
 //            HELIUM_ASSERT( pAttValue );
 //
-//            if( StringCompare( pAttName, TXT( "name" ) ) == 0 )
+//            if( CompareString( pAttName, TXT( "name" ) ) == 0 )
 //            {
 //                propertyName = Name( pAttValue );
 //
@@ -367,8 +367,8 @@
 //    }
 //
 //    // Handle "struct" and "array" tags.
-//    bool bArrayTag = ( StringCompare( pName, TXT( "array" ) ) == 0 );
-//    if( bArrayTag || StringCompare( pName, TXT( "struct" ) ) == 0 )
+//    bool bArrayTag = ( CompareString( pName, TXT( "array" ) ) == 0 );
+//    if( bArrayTag || CompareString( pName, TXT( "struct" ) ) == 0 )
 //    {
 //        // Make sure we are actively parsing a property.
 //        DynArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
@@ -516,7 +516,7 @@
 //        // Commit "object" tags.
 //        if( IsValid( pContext->currentObjectIndex ) )
 //        {
-//            HELIUM_ASSERT( StringCompare( pName, TXT( "object" ) ) == 0 );
+//            HELIUM_ASSERT( CompareString( pName, TXT( "object" ) ) == 0 );
 //
 //            SetInvalid( pContext->currentObjectIndex );
 //        }
@@ -530,7 +530,7 @@
 //        HELIUM_ASSERT( !rPropertyTop.name.IsEmpty() );
 //        HELIUM_ASSERT( !rPropertyTop.bClosed );
 //
-//        HELIUM_ASSERT( StringCompare( pName, TXT( "property" ) ) == 0 );
+//        HELIUM_ASSERT( CompareString( pName, TXT( "property" ) ) == 0 );
 //
 //        // Null-terminate the property text.
 //        pContext->propertyTextBuffer.Add( static_cast< XML_Char >( '\0' ) );
@@ -598,7 +598,7 @@
 //    // Commit "property" tags enclosing structs/arrays.
 //    if( rPropertyTop.bClosed )
 //    {
-//        HELIUM_ASSERT( StringCompare( pName, TXT( "property" ) ) == 0 );
+//        HELIUM_ASSERT( CompareString( pName, TXT( "property" ) ) == 0 );
 //
 //        // Arrays are terminated with the name intact, while structs have the name cleared.
 //        if( rPropertyTop.name.IsEmpty() )
@@ -633,7 +633,7 @@
 //    // Commit "array" tags.
 //    if( IsValid( rPropertyTop.index ) )
 //    {
-//        HELIUM_ASSERT( StringCompare( pName, TXT( "array" ) ) == 0 );
+//        HELIUM_ASSERT( CompareString( pName, TXT( "array" ) ) == 0 );
 //
 //        // Add an array size entry.
 //        Pair< String, uint32_t > arraySizeEntry;
@@ -684,7 +684,7 @@
 //    }
 //
 //    // Commit "struct" tags.
-//    HELIUM_ASSERT( StringCompare( pName, TXT( "struct" ) ) == 0 );
+//    HELIUM_ASSERT( CompareString( pName, TXT( "struct" ) ) == 0 );
 //
 //    HELIUM_ASSERT( rPropertyTop.name.IsEmpty() );
 //    HELIUM_ASSERT( IsInvalid( rPropertyTop.index ) );
@@ -2191,28 +2191,16 @@
 //#pragma TODO("Reflect enumeration support")
 //}
 //
-///// @copydoc Serializer::SerializeCharName()
-//void XmlPackageLoader::Deserializer::SerializeCharName( CharName& rValue )
+///// @copydoc Serializer::SerializeName()
+//void XmlPackageLoader::Deserializer::SerializeName( CharName& rValue )
 //{
 //    ReadValue( rValue, TXT( "CharName" ), CharNameParser(), NullDefaultHandler< CharName >() );
 //}
 //
-///// @copydoc Serializer::SerializeWideName()
-//void XmlPackageLoader::Deserializer::SerializeWideName( WideName& rValue )
+///// @copydoc Serializer::SerializeString()
+//void XmlPackageLoader::Deserializer::SerializeString( String& rValue )
 //{
-//    ReadValue( rValue, TXT( "WideName" ), WideNameParser(), NullDefaultHandler< WideName >() );
-//}
-//
-///// @copydoc Serializer::SerializeCharString()
-//void XmlPackageLoader::Deserializer::SerializeCharString( CharString& rValue )
-//{
-//    ReadValue( rValue, TXT( "CharString" ), CharStringParser(), NullDefaultHandler< CharString >() );
-//}
-//
-///// @copydoc Serializer::SerializeWideString()
-//void XmlPackageLoader::Deserializer::SerializeWideString( WideString& rValue )
-//{
-//    ReadValue( rValue, TXT( "WideString" ), WideStringParser(), NullDefaultHandler< WideString >() );
+//    ReadValue( rValue, TXT( "String" ), CharStringParser(), NullDefaultHandler< String >() );
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()
@@ -2795,7 +2783,7 @@
 ///// @param[out] rValue  Parsed value.
 /////
 ///// @return  True if a value was parsed successfully, false if not.
-//bool XmlPackageLoader::Deserializer::CharStringParser::operator()( const String& rText, CharString& rValue ) const
+//bool XmlPackageLoader::Deserializer::CharStringParser::operator()( const String& rText, String& rValue ) const
 //{
 //#if HELIUM_WCHAR_T
 //
@@ -2920,30 +2908,11 @@
 //bool XmlPackageLoader::Deserializer::CharNameParser::operator()( const String& rText, CharName& rValue ) const
 //{
 //#if HELIUM_WCHAR_T
-//    CharString tempString;
+//    String tempString;
 //    m_stringParser( rText, tempString );
 //    rValue.Set( tempString );
 //#else
 //    rValue.Set( rText );
-//#endif
-//
-//    return true;
-//}
-//
-///// Parse a value from the given property text.
-/////
-///// @param[in]  rText   Property text to parse.
-///// @param[out] rValue  Parsed value.
-/////
-///// @return  True if a value was parsed successfully, false if not.
-//bool XmlPackageLoader::Deserializer::WideNameParser::operator()( const String& rText, WideName& rValue ) const
-//{
-//#if HELIUM_WCHAR_T
-//    rValue.Set( rText );
-//#else
-//    WideString tempString;
-//    m_stringParser( rText, tempString );
-//    rValue.Set( tempString );
 //#endif
 //
 //    return true;

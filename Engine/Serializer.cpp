@@ -151,25 +151,15 @@ void Serializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
 /// @param[in,out] rValue       Enumeration value.
 /// @param[in]     pEnumeration Reflection information for the enum type.
 
-/// @fn void Serializer::SerializeCharName( CharName& rValue )
+/// @fn void Serializer::SerializeName( Name& rValue )
 /// Serialize an 8-bit character name.
 ///
 /// @param[in,out] rValue  Name.
 
-/// @fn void Serializer::SerializeWideName( WideName& rValue )
-/// Serialize a wide-character name.
-///
-/// @param[in,out] rValue  Name.
-
-/// @fn void Serializer::SerializeCharString( CharString& rValue )
+/// @fn void Serializer::SerializeString( String& rValue )
 /// Serialize an 8-bit character string.
 ///
 /// @param[in,out] rValue  String.
-
-/// @fn void Serializer::SerializeWideString( WideString& rValue )
-/// Serialize a wide-character string.
-///
-/// @param[in,out] rValue  Wide-character string.
 
 /// @fn void Serializer::SerializeObjectReference( GameObjectType* pType, GameObjectPtr& rspObject )
 /// Serialize an object reference.

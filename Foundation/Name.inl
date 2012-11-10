@@ -260,7 +260,7 @@ const typename Helium::NameBase< TableType >::CharType* Helium::NameBase< TableT
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
         const CharType* pEntry = ppEntries[ entryIndex ];
-        if( StringCompare( pEntry, pString ) == 0 )
+        if( CompareString( pEntry, pString ) == 0 )
         {
             return pEntry;
         }
@@ -296,7 +296,7 @@ const typename Helium::NameBase< TableType >::CharType* Helium::NameBase< TableT
     for( size_t entryIndex = previousEntryCount; entryIndex < entryCount; ++entryIndex )
     {
         const CharType* pEntry = ppEntries[ entryIndex ];
-        if( StringCompare( pEntry, pString ) == 0 )
+        if( CompareString( pEntry, pString ) == 0 )
         {
             return pEntry;
         }

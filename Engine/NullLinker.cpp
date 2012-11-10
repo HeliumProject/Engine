@@ -117,23 +117,13 @@
 //{
 //}
 //
-///// @name Serializer::SerializeCharName()
-//void NullLinker::SerializeCharName( CharName& /*rValue*/ )
+///// @name Serializer::SerializeName()
+//void NullLinker::SerializeName( Name& /*rValue*/ )
 //{
 //}
 //
-///// @name Serializer::SerializeWideName()
-//void NullLinker::SerializeWideName( WideName& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeCharString()
-//void NullLinker::SerializeCharString( CharString& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeWideString()
-//void NullLinker::SerializeWideString( WideString& /*rValue*/ )
+///// @name Serializer::SerializeString()
+//void NullLinker::SerializeString( String& /*rValue*/ )
 //{
 //}
 //

@@ -72,15 +72,8 @@ namespace Helium
 
     /// @defgroup utilitystring String Utility Functions
     //@{
-    template< typename T > size_t StringLength( const T* pString );
-    template< typename T > int StringCompare( const T* pString0, const T* pString1 );
-    template< typename T > int StringNCompare( const T* pString0, const T* pString1, size_t count );
-    inline int StringFormat( char* pBuffer, size_t bufferSize, const char* pFormat, ... );
-    inline int StringFormat( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, ... );
-    inline int StringFormatVa( char* pBuffer, size_t bufferSize, const char* pFormat, va_list argList );
-    inline int StringFormatVa( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, va_list argList );
-
     template< typename T > uint32_t StringHash( const T* pString );
+    template< typename T > size_t StringLength( const T* pString );
     //@}
 
     /// @defgroup utilityindex Index Utility Functions
@@ -89,14 +82,12 @@ namespace Helium
     template< typename IndexType > bool IsValid( IndexType index );
     template< typename IndexType > bool IsInvalid( IndexType index );
     template< typename IndexType > void SetInvalid( IndexType& rIndex );
-
     template< typename DestIndexType, typename SourceIndexType > DestIndexType CastIndex( SourceIndexType index );
     //@}
 
     /// @defgroup utilitybit Bit Manipulation Utility Functions
     //@{
-    template< typename ElementType > void GetBitElementAndMaskIndex(
-        size_t bitIndex, size_t& rElementIndex, size_t& rMaskIndex );
+    template< typename ElementType > void GetBitElementAndMaskIndex( size_t bitIndex, size_t& rElementIndex, size_t& rMaskIndex );
 
     template< typename ElementType > bool GetBit( const ElementType& rElement, size_t maskIndex );
     template< typename ElementType > void SetBit( ElementType& rElement, size_t maskIndex );
@@ -109,8 +100,7 @@ namespace Helium
     //@}
 
     /// @defgroup utilitydatareading Data Reading & Byte-swapping Utility Functions
-    /// Note that all of these functions can perform in-place byte swapping (source and destination arguments are the
-    /// same).
+    /// Note that all of these functions can perform in-place byte swapping (source and destination arguments are the same).
     //@{
     template< typename T > const void* LoadValue( T& rDest, const void* pSource );
     template< typename T > const void* LoadValueSwapped( T& rDest, const void* pSource );

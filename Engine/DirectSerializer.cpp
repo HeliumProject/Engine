@@ -131,8 +131,8 @@
 //    WriteValue( rValue );
 //}
 //
-///// @copydoc Serializer::SerializeCharName()
-//void DirectSerializer::SerializeCharName( CharName& rValue )
+///// @copydoc Serializer::SerializeName()
+//void DirectSerializer::SerializeName( Name& rValue )
 //{
 //    const char* pNameString = rValue.Get();
 //    HELIUM_ASSERT( pNameString );
@@ -141,24 +141,8 @@
 //    WriteString( pNameString, nameLength );
 //}
 //
-///// @copydoc Serializer::SerializeWideName()
-//void DirectSerializer::SerializeWideName( WideName& rValue )
-//{
-//    const wchar_t* pNameString = rValue.Get();
-//    HELIUM_ASSERT( pNameString );
-//    size_t nameLength = StringLength( pNameString );
-//
-//    WriteString( pNameString, nameLength );
-//}
-//
-///// @copydoc Serializer::SerializeCharString()
-//void DirectSerializer::SerializeCharString( CharString& rValue )
-//{
-//    WriteString( rValue.GetData(), rValue.GetSize() );
-//}
-//
-///// @copydoc Serializer::SerializeWideString()
-//void DirectSerializer::SerializeWideString( WideString& rValue )
+///// @copydoc Serializer::SerializeString()
+//void DirectSerializer::SerializeString( String& rValue )
 //{
 //    WriteString( rValue.GetData(), rValue.GetSize() );
 //}

@@ -168,9 +168,6 @@ namespace Helium
 
     union Float16;
     union Float32;
-
-    class CharString;
-    class WideString;
 }
 
 namespace Helium
@@ -423,10 +420,8 @@ namespace Helium
         virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count ) = 0;
         virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames ) = 0;
         virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration ) = 0;
-        virtual void SerializeCharName( CharName& rValue ) = 0;
-        virtual void SerializeWideName( WideName& rValue ) = 0;
-        virtual void SerializeCharString( CharString& rValue ) = 0;
-        virtual void SerializeWideString( WideString& rValue ) = 0;
+        virtual void SerializeName( Name& rValue ) = 0;
+        virtual void SerializeString( String& rValue ) = 0;
         virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject ) = 0;
 
         virtual void BeginStruct( EStructTag tag = STRUCT_TAG_INVALID );
@@ -471,10 +466,8 @@ namespace Helium
         inline Serializer& operator<<( float32_t& rValue );
         inline Serializer& operator<<( float64_t& rValue );
         template< typename EnumInfo, typename ValueType > Serializer& operator<<( Enum< EnumInfo, ValueType >& rValue );
-        inline Serializer& operator<<( CharName& rValue );
-        inline Serializer& operator<<( WideName& rValue );
-        inline Serializer& operator<<( CharString& rValue );
-        inline Serializer& operator<<( WideString& rValue );
+        inline Serializer& operator<<( Name& rValue );
+        inline Serializer& operator<<( String& rValue );
         template< typename T > Serializer& operator<<( StrongPtr< T >& rspObject );
 
         template< typename T > Serializer& operator<<( const StructSerializeProxy< T >& rValue );

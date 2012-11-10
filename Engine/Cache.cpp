@@ -484,23 +484,14 @@ bool Cache::CacheEntry(
                     uint32_t entryCount = static_cast< uint32_t >( m_entries.GetSize() );
                     pBufferedStream->Write( &entryCount, sizeof( entryCount ), 1 );
 
-                    WideString entryPath;
-#if !HELIUM_WCHAR_T
-                    CharString entryPathCharString;
-#endif
+                    String entryPath;
                     uint_fast32_t entryCountFast = entryCount;
                     for( uint_fast32_t entryIndex = 0; entryIndex < entryCountFast; ++entryIndex )
                     {
                         Entry* pEntry = m_entries[ entryIndex ];
                         HELIUM_ASSERT( pEntry );
 
-#if HELIUM_WCHAR_T
                         pEntry->path.ToString( entryPath );
-#else
-                        pEntry->path.ToString( entryPathCharString );
-                        StringConverter< char, wchar_t >::Convert( entryPath, entryPathCharString );
-#endif
-
                         HELIUM_ASSERT( entryPath.GetSize() < UINT16_MAX );
                         uint16_t pathSize = static_cast< uint16_t >( entryPath.GetSize() );
                         pBufferedStream->Write( &pathSize, sizeof( pathSize ), 1 );

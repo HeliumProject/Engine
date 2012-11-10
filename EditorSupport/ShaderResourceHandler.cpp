@@ -198,7 +198,7 @@ void ShaderResourceHandler::ParseLine(
 
     // Only process lines that start with the special comment prefix.
     if( characterCount < HELIUM_ARRAY_COUNT( linePrefix ) - 1 ||
-        StringNCompare( pLineStart, linePrefix, HELIUM_ARRAY_COUNT( linePrefix ) - 1 ) != 0 )
+        CompareString( pLineStart, linePrefix, HELIUM_ARRAY_COUNT( linePrefix ) - 1 ) != 0 )
     {
         return;
     }

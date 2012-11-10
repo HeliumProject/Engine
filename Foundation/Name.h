@@ -86,6 +86,8 @@ namespace Helium
         const CharType* m_pEntry;
     };
 
+#if !HELIUM_WCHAR_T
+
     /// CharString name table.
     class HELIUM_FOUNDATION_API CharNameTable
     {
@@ -103,6 +105,14 @@ namespace Helium
         /// Empty name string.
         static char sm_emptyString[ 1 ];
     };
+
+    /// CharString name table entry.
+    typedef NameBase< CharNameTable > CharName;
+
+    /// String table entry.
+    typedef CharName Name;
+
+#else // !HELIUM_WCHAR_T
 
     /// WideString name table.
     class HELIUM_FOUNDATION_API WideNameTable
@@ -122,17 +132,13 @@ namespace Helium
         static wchar_t sm_emptyString[ 1 ];
     };
 
-    /// CharString name table entry.
-    typedef NameBase< CharNameTable > CharName;
     /// WideString name table entry.
     typedef NameBase< WideNameTable > WideName;
 
     /// String table entry.
-#if HELIUM_WCHAR_T
     typedef WideName Name;
-#else
-    typedef CharName Name;
-#endif
+
+#endif // !HELIUM_WCHAR_T
   
     HELIUM_FOUNDATION_API inline tostream& operator<<( tostream& stream, const Name& id )
     {

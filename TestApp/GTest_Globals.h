@@ -65,14 +65,14 @@ private:
 template< size_t BufferSize >
 static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], int value )
 {
-    StringFormat( buffer, BufferSize, TXT( "%u" ), value );
+    StringPrint( buffer, BufferSize, TXT( "%u" ), value );
     buffer[ BufferSize - 1 ] = TXT( '\0' );
 }
 
 template< size_t BufferSize >
 static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], const NonTrivialClass& rValue )
 {
-    StringFormat( buffer, BufferSize, TXT( "%f" ), rValue.GetValue() );
+    StringPrint( buffer, BufferSize, TXT( "%f" ), rValue.GetValue() );
     buffer[ BufferSize - 1 ] = TXT( '\0' );
 }
 
@@ -109,7 +109,7 @@ class StringCompareFunction
 public:
     bool operator()( const Helium::String& rString0, const Helium::String& rString1 ) const
     {
-        return ( Helium::StringCompare( *rString0, *rString1 ) < 0 );
+        return ( Helium::CompareString( *rString0, *rString1 ) < 0 );
     }
 };
 

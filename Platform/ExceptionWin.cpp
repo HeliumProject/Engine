@@ -1002,7 +1002,7 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
 	if( SymGetLineFromAddr64( hProcess, reinterpret_cast< uintptr_t >( pAddress ), &displacement, &lineInfo ) )
 	{
 		tchar_t lineNumberBuffer[ 32 ];
-		StringFormat( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
+		StringPrint( lineNumberBuffer, HELIUM_ARRAY_COUNT( lineNumberBuffer ), TXT( "%u" ), lineInfo.LineNumber );
 		lineNumberBuffer[ HELIUM_ARRAY_COUNT( lineNumberBuffer ) - 1 ] = TXT( '\0' );
 
 		rSymbol += TXT( "(" );
@@ -1024,12 +1024,8 @@ void Helium::GetAddressSymbol( tstring& rSymbol, void* pAddress )
 void Helium::DebugLog( const tchar_t* pMessage )
 {
 	HELIUM_ASSERT( pMessage );
-
-#if HELIUM_WCHAR_T
-	OutputDebugStringW( pMessage );
-#else
-	OutputDebugStringA( pMessage );
-#endif
+	HELIUM_CONVERT_TO_NATIVE( pMessage, convertedMessage );
+	OutputDebugStringW( convertedMessage );
 }
 
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE

@@ -39,107 +39,94 @@ static inline int LookupColor( ConsoleColor color )
 	return ConsoleColors::None;
 }
 
-#pragma TODO("These are really ASCII, not UTF-8.  Track down some UTF-8 implementations.  -Geoff")
+#pragma TODO("These char overloads are really ASCII, not UTF-8.  Track down some UTF-8 implementations.  -Geoff")
 
-int Helium::Print(const tchar_t* fmt, ...)
+int Helium::Print(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-#if HELIUM_WCHAR_T
-	int result = vwprintf(fmt, args);
-#else
 	int result = vprintf(fmt, args);
-#endif
 	va_end(args);
 	return result;
 }
 
-int Helium::PrintArgs(const tchar_t* fmt, va_list args)
+int Helium::Print(const wchar_t* fmt, ...)
 {
-#if HELIUM_WCHAR_T
-	return vwprintf(fmt, args);
-#else
+	va_list args;
+	va_start(args, fmt);
+	int result = vwprintf(fmt, args);
+	va_end(args);
+	return result;
+}
+
+int Helium::PrintArgs(const char* fmt, va_list args)
+{
 	return vprintf(fmt, args);
-#endif
 }
 
-int Helium::FilePrint(FILE* f, const tchar_t* fmt, ...)
+int Helium::PrintArgs(const wchar_t* fmt, va_list args)
+{
+	return vwprintf(fmt, args);
+}
+
+int Helium::FilePrint(FILE* f, const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-#if HELIUM_WCHAR_T
-	int result = vfwprintf(f, fmt, args);
-#else
 	int result = vfprintf(f, fmt, args);
-#endif
 	va_end(args);
 	return result;
 }
 
-int Helium::FilePrintArgs(FILE* f, const tchar_t* fmt, va_list args)
-{
-#if HELIUM_WCHAR_T
-	return vfwprintf(f, fmt, args);
-#else
-	return vfprintf(f, fmt, args);
-#endif
-}
-
-int Helium::StringPrint(tchar_t* dest, size_t destCount, const tchar_t* fmt, ...)
+int Helium::FilePrint(FILE* f, const wchar_t* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-#if HELIUM_WCHAR_T
-	int result = _vsnwprintf(dest, destCount, fmt, args);
-#else
-	int result = vsnprintf(dest, destCount, fmt, args);
-#endif
+	int result = vfwprintf(f, fmt, args);
 	va_end(args);
 	return result;
 }
 
-int Helium::StringPrintArgs(tchar_t* dest, size_t destCount, const tchar_t* fmt, va_list args)
+int Helium::FilePrintArgs(FILE* f, const char* fmt, va_list args)
 {
-#if HELIUM_WCHAR_T
-	return _vsnwprintf(dest, destCount, fmt, args);
-#else
-	return vsnprintf(dest, destCount, fmt, args);
-#endif
+	return vfprintf(f, fmt, args);
 }
 
-int Helium::Print(ConsoleColor color, FILE* stream, const tchar_t* fmt, ...)
+int Helium::FilePrintArgs(FILE* f, const wchar_t* fmt, va_list args)
 {
-	CONSOLE_SCREEN_BUFFER_INFO info;
+	return vfwprintf(f, fmt, args);
+}
 
-	if (color != ConsoleColors::None)
-	{
-		// retrieve settings
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &info);
-
-		// extract background colors
-		int background = info.wAttributes & ~(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-
-		// reset forground only to our desired color
-		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
-	}
-
+int Helium::StringPrint(char* dest, size_t destCount, const char* fmt, ...)
+{
 	va_list args;
-	va_start(args, fmt); 
-	int result = FilePrint(stream, fmt, args);
-	va_end(args); 
-
-	fflush(stream);
-
-	if (color != ConsoleColors::None)
-	{
-		// restore previous settings
-		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), info.wAttributes);
-	}
-
+	va_start(args, fmt);
+	int result = vsnprintf(dest, destCount, fmt, args);
+	va_end(args);
 	return result;
 }
 
-int Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_list args)
+int Helium::StringPrint(wchar_t* dest, size_t destCount, const wchar_t* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	int result = _vsnwprintf(dest, destCount, fmt, args);
+	va_end(args);
+	return result;
+}
+
+int Helium::StringPrintArgs(char* dest, size_t destCount, const char* fmt, va_list args)
+{
+	return vsnprintf(dest, destCount, fmt, args);
+}
+
+int Helium::StringPrintArgs(wchar_t* dest, size_t destCount, const wchar_t* fmt, va_list args)
+{
+	return _vsnwprintf(dest, destCount, fmt, args);
+}
+
+template< class T >
+int PrintArgs(ConsoleColor color, FILE* stream, const T* fmt, va_list args)
 {
 	CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -168,7 +155,8 @@ int Helium::PrintArgs(ConsoleColor color, FILE* stream, const tchar_t* fmt, va_l
 	return result;
 }
 
-int Helium::PrintString(ConsoleColor color, FILE* stream, const tstring& tstring)
+template< class T >
+int PrintString(ConsoleColor color, FILE* stream, const std::basic_string< T >& tstring)
 {
 	CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -195,4 +183,42 @@ int Helium::PrintString(ConsoleColor color, FILE* stream, const tstring& tstring
 	}
 
 	return result;
+}
+
+int Helium::Print(ConsoleColor color, FILE* stream, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	int result = ::PrintArgs<char>( color, stream, fmt, args );
+	va_end(args);
+	return result;
+}
+
+int Helium::Print(ConsoleColor color, FILE* stream, const wchar_t* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	int result = ::PrintArgs<wchar_t>( color, stream, fmt, args );
+	va_end(args);
+	return result;
+}
+
+int Helium::PrintArgs(ConsoleColor color, FILE* stream, const char* fmt, va_list args)
+{
+	return ::PrintArgs<char>( color, stream, fmt, args );
+}
+
+int Helium::PrintArgs(ConsoleColor color, FILE* stream, const wchar_t* fmt, va_list args)
+{
+	return ::PrintArgs<wchar_t>( color, stream, fmt, args );
+}
+
+int Helium::PrintString(ConsoleColor color, FILE* stream, const std::string& string)
+{
+	return ::PrintString<char>( color, stream, string );
+}
+
+int Helium::PrintString(ConsoleColor color, FILE* stream, const std::wstring& string)
+{
+	return ::PrintString<wchar_t>( color, stream, string );
 }

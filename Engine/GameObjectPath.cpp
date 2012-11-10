@@ -913,9 +913,8 @@ void GameObjectPath::EntryToString( const Entry& rEntry, String& rString )
     if( IsValid( rEntry.instanceIndex ) )
     {
         tchar_t instanceIndexString[ 16 ];
-        StringFormat(
+        StringPrint(
             instanceIndexString,
-            HELIUM_ARRAY_COUNT( instanceIndexString ),
             HELIUM_INSTANCE_PATH_CHAR_STRING TXT( "%" ) TPRIu32,
             rEntry.instanceIndex );
         instanceIndexString[ HELIUM_ARRAY_COUNT( instanceIndexString ) - 1 ] = TXT( '\0' );

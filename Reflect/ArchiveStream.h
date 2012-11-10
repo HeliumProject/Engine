@@ -74,27 +74,6 @@ namespace Helium
         extern Profile::Accumulator g_StreamWrite;
         extern Profile::Accumulator g_StreamRead; 
 
-        namespace CharacterEncodings
-        {
-            enum CharacterEncoding
-            {
-                UTF_8,  // default encoding
-                UTF_16, // used by windows' "Unicode" build, same as wchar_t ON WINDOWS ONLY
-                UTF_32, // used every other os as wchar_t
-            };
-        }
-        typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
-
-#if HELIUM_WCHAR_T
-# if HELIUM_OS_WIN
-        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_16;
-# else
-        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_32;
-# endif
-#else
-        const static CharacterEncoding PlatformCharacterEncoding = CharacterEncodings::UTF_8;
-#endif
-
         //
         // Stream object, read and write data to/from a buffer
         //
@@ -103,20 +82,18 @@ namespace Helium
         class Stream : public Helium::RefCountBase< Stream< StreamPrimitiveT > >
         {
         public: 
-            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::UTF_8 )
+            Stream( ByteOrder byteOrder = ByteOrders::LittleEndian )
                 : m_Stream( NULL )
                 , m_OwnStream( false )
                 , m_ByteOrder( byteOrder )
-                , m_CharacterEncoding( characterEncoding )
             {
 
             }
 
-            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian, CharacterEncoding characterEncoding = CharacterEncodings::UTF_8 )
+            Stream( std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >* stream, bool ownStream, ByteOrder byteOrder = ByteOrders::LittleEndian )
                 : m_Stream( stream )
                 , m_OwnStream( ownStream )
                 , m_ByteOrder( byteOrder )
-                , m_CharacterEncoding( characterEncoding )
             {
 
             }
@@ -264,181 +241,67 @@ namespace Helium
                 uint32_t length = 0;
                 Read( &length );
 
-                switch ( m_CharacterEncoding )
-                {
-                case CharacterEncodings::UTF_8:
-                    {
 #if HELIUM_WCHAR_T
-                        std::string temp;
-                        temp.resize( length );
-                        ReadBuffer( &temp[ 0 ], length );
-                        Helium::ConvertString( temp, string );
+                std::string temp;
+                temp.resize( length );
+                ReadBuffer( &temp[ 0 ], length );
+                Helium::ConvertString( temp, string );
 #else
-                        // read the bytes directly into the string
-                        string.resize( length ); 
-                        ReadBuffer( &string[ 0 ], length ); 
+                // read the bytes directly into the string
+                string.resize( length ); 
+                ReadBuffer( &string[ 0 ], length ); 
 #endif
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-                    {
-#if HELIUM_WCHAR_T
-                        // read the bytes directly into the string
-                        string.resize( length ); 
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Read( &string[ index ] );
-                        }
-#else
-                        std::wstring temp;
-                        temp.resize( length );
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Read( &temp[ index ] );
-                        }
-
-                        Helium::ConvertString( temp, string );
-#endif
-                        break;
-                    }
-                }
                 return *this;
             }
 
-            template< typename Allocator >
-            inline Stream& ReadString( StringBase< char, Allocator >& string )
+            inline Stream& ReadString( String& string )
             {
                 uint32_t length = 0;
                 Read( &length );
 
-                switch ( m_CharacterEncoding )
-                {
-                case CharacterEncodings::UTF_8:
-                    {
-                        string.Reserve( length );
-                        string.Resize( length ); 
-                        string.Trim();
-
-                        ReadBuffer( &string[ 0 ], length ); 
-
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-				case CharacterEncodings::UTF_32:
-                    {
-                        WideString temp;
-                        temp.Reserve( length );
-                        temp.Resize( length );
-
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Read( &temp[ index ] );
-                        }
-
-                        StringConverter< wchar_t, char >::Convert( string, temp );
-
-                        break;
-                    }
-                }
-
-                return *this;
-            }
-
-            template< typename Allocator >
-            inline Stream& ReadString( StringBase< wchar_t, Allocator >& string )
-            {
-                uint32_t length = 0;
-                Read( &length );
-
-                switch ( m_CharacterEncoding )
-                {
-                case CharacterEncodings::UTF_8:
-                    {
-                        CharString temp;
-                        temp.Reserve( length );
-                        temp.Resize( length );
-
-                        ReadBuffer( &temp[ 0 ], length ); 
-
-                        StringConverter< char, wchar_t >::Convert( string, temp );
-
-                        break;
-                    }
-
-                case CharacterEncodings::UTF_16:
-                    {
-                        string.Reserve( length );
-                        string.Resize( length ); 
-                        string.Trim();
-
-                        for ( uint32_t index = 0; index < length; ++index )
-                        {
-                            Read( &string[ index ] );
-                        }
-
-                        break;
-                    }
-                }
-
+#if HELIUM_WCHAR_T
+                std::string temp;
+                temp.resize( length );
+                ReadBuffer( &temp[ 0 ], length );
+				StringConverter< char, wchar_t >::Convert( string, temp.c_str() );
+#else
+                // read the bytes directly into the string
+                string.Reserve( length );
+                string.Resize( length ); 
+                string.Trim();
+                ReadBuffer( &string[ 0 ], length ); 
+#endif
                 return *this;
             }
 
             inline Stream& WriteString( const tstring& string )
             {
+#if HELIUM_WCHAR_T
+				std::string temp;
+				Helium::ConvertString( string, temp );
+                uint32_t length = (uint32_t)temp.length();
+                Write( &length );
+                WriteBuffer( temp.c_str(), length );
+#else
                 uint32_t length = (uint32_t)string.length();
                 Write( &length );
-#if HELIUM_WCHAR_T
-                for ( uint32_t index = 0; index < length; ++index )
-                {
-                    Write( &string[ index ] );
-                }
-#else
                 WriteBuffer( string.c_str(), length );
 #endif
                 return *this;
             }
 
-            template< typename Allocator >
-            Stream& WriteString( const StringBase< char, Allocator >& string )
+            inline Stream& WriteString( const String& string )
             {
 #if HELIUM_WCHAR_T
-                WideString temp;
-                StringConverter< char, wchar_t >::Convert( temp, string );
-
-                uint32_t length = (uint32_t)temp.GetSize();
+				std::string temp;
+				Helium::ConvertString( string.GetData(), temp );
+                uint32_t length = (uint32_t)temp.length();
                 Write( &length );
-                for ( uint32_t index = 0; index < length; ++index )
-                {
-                    Write( &temp[ index ] );
-                }
+                WriteBuffer( temp.c_str(), length );
 #else
                 uint32_t length = (uint32_t)string.GetSize();
                 Write( &length );
                 WriteBuffer( string.GetData(), length );
-#endif
-
-                return *this;
-            }
-
-            template< typename Allocator >
-            Stream& WriteString( const StringBase< wchar_t, Allocator >& string )
-            {
-#if HELIUM_WCHAR_T
-                uint32_t length = (uint32_t)string.GetSize();
-                Write( &length );
-                for ( uint32_t index = 0; index < length; ++index )
-                {
-                    Write( &string[ index ] );
-                }
-#else
-                CharString temp;
-                StringConverter< wchar_t, char >::Convert( temp, string );
-
-                uint32_t length = (uint32_t)temp.GetSize();
-                Write( &length );
-                WriteBuffer( temp.c_str(), length );
 #endif
 
                 return *this;
@@ -475,21 +338,10 @@ namespace Helium
                 m_ByteOrder = byteOrder;
             }
 
-            CharacterEncoding GetCharacterEncoding()
-            {
-                return m_CharacterEncoding;
-            }
-
-            void SetCharacterEncoding( CharacterEncoding characterEncoding )
-            {
-                m_CharacterEncoding = characterEncoding;
-            }
-
         protected: 
             std::basic_iostream< StreamPrimitiveT, std::char_traits< StreamPrimitiveT > >*  m_Stream; 
             bool                                                                            m_OwnStream;
             ByteOrder                                                                       m_ByteOrder;
-            CharacterEncoding                                                               m_CharacterEncoding;
         };
 
         template <class T, class StreamPrimitiveT>

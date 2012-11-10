@@ -369,8 +369,7 @@ void GameSystem::Shutdown()
     Reflect::ObjectRefCountSupport::Shutdown();
 
     GameObjectPath::Shutdown();
-    CharName::Shutdown();
-    WideName::Shutdown();
+    Name::Shutdown();
 
     FileLocations::Shutdown();
 

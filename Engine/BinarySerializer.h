@@ -54,10 +54,8 @@
 //        virtual void SerializeBuffer( void* pBuffer, size_t elementSize, size_t count );
 //        virtual void SerializeEnum( int32_t& rValue, uint32_t nameCount, const tchar_t* const* ppNames );
 //        virtual void SerializeEnum( int32_t& rValue, const Helium::Reflect::Enumeration* pEnumeration );
-//        virtual void SerializeCharName( CharName& rValue );
-//        virtual void SerializeWideName( WideName& rValue );
-//        virtual void SerializeCharString( CharString& rValue );
-//        virtual void SerializeWideString( WideString& rValue );
+//        virtual void SerializeName( Name& rValue );
+//        virtual void SerializeString( String& rValue );
 //        virtual void SerializeObjectReference( const GameObjectType* pType, GameObjectPtr& rspObject );
 //
 //        virtual void PushPropertyFlags( uint32_t flags );

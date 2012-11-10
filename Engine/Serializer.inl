@@ -277,20 +277,9 @@ namespace Helium
     /// @param[in,out] rValue  Name.
     ///
     /// @return  Reference to this object.
-    Serializer& Serializer::operator<<( CharName& rValue )
+    Serializer& Serializer::operator<<( Name& rValue )
     {
-        SerializeCharName( rValue );
-        return *this;
-    }
-
-    /// Serialize a wide-character name.
-    ///
-    /// @param[in,out] rValue  Name.
-    ///
-    /// @return  Reference to this object.
-    Serializer& Serializer::operator<<( WideName& rValue )
-    {
-        SerializeWideName( rValue );
+        SerializeName( rValue );
         return *this;
     }
 
@@ -299,20 +288,9 @@ namespace Helium
     /// @param[in,out] rValue  String.
     ///
     /// @return  Reference to this object.
-    Serializer& Serializer::operator<<( CharString& rValue )
+    Serializer& Serializer::operator<<( String& rValue )
     {
-        SerializeCharString( rValue );
-        return *this;
-    }
-
-    /// Serialize a wide-character string.
-    ///
-    /// @param[in,out] rValue  String.
-    ///
-    /// @return  Reference to this object.
-    Serializer& Serializer::operator<<( WideString& rValue )
-    {
-        SerializeWideString( rValue );
+        SerializeString( rValue );
         return *this;
     }
 
@@ -549,7 +527,7 @@ namespace Helium
         uint32_t valueCount = EnumInfo::GetCount();
         for( uint32_t valueIndex = 0; valueIndex < valueCount; ++valueIndex )
         {
-            if( StringCompare( ppNames[ valueIndex ], pName ) == 0 )
+            if( CompareString( ppNames[ valueIndex ], pName ) == 0 )
             {
                 return static_cast< ValueType >( valueIndex );
             }

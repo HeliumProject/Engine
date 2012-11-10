@@ -44,7 +44,7 @@ bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< St
     // (if no command-line arguments are specified, GetCommandLine() may return a string containing just the module
     // name without quoting it, which would in turn cause CommandLineToArgvW() to split the module path if it
     // contains any spaces).
-    if( StringCompare( pCommandLine, moduleFileName ) == 0 )
+    if( CompareString( pCommandLine, moduleFileName ) == 0 )
     {
         StringConverter< wchar_t, tchar_t >::Convert( rModuleName, moduleFileName );
 

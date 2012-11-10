@@ -861,23 +861,13 @@ bool GameObjectLoader::TickFinalizeLoad( LoadRequest* pRequest )
 //{
 //}
 //
-///// @name Serializer::SerializeCharName()
-//void GameObjectLoader::Linker::SerializeCharName( CharName& /*rValue*/ )
+///// @name Serializer::SerializeName()
+//void GameObjectLoader::Linker::SerializeName( Name& /*rValue*/ )
 //{
 //}
 //
-///// @name Serializer::SerializeWideName()
-//void GameObjectLoader::Linker::SerializeWideName( WideName& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeCharString()
-//void GameObjectLoader::Linker::SerializeCharString( CharString& /*rValue*/ )
-//{
-//}
-//
-///// @name Serializer::SerializeWideString()
-//void GameObjectLoader::Linker::SerializeWideString( WideString& /*rValue*/ )
+///// @name Serializer::SerializeString()
+//void GameObjectLoader::Linker::SerializeString( String& /*rValue*/ )
 //{
 //}
 //

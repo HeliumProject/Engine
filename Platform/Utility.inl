@@ -486,6 +486,27 @@ void Helium::Swap( T& rValue0, T& rValue1 )
     rValue1 = temp;
 }
 
+/// Compute a 32-bit hash value for a string.
+///
+/// @param[in] pString  Null-terminated C-string (can be null).
+///
+/// @return  32-bit hash for the given string.
+template< typename T >
+uint32_t Helium::StringHash( const T* pString )
+{
+    // djb2...GO!
+    uint32_t hash = 5381;
+    if( pString )
+    {
+        for( T character = *pString; character != static_cast< T >( '\0' ); character = *( ++pString ) )
+        {
+            hash = ( ( hash * 33 ) ^ static_cast< uint32_t >( character ) );
+        }
+    }
+
+    return hash;
+}
+
 /// Get the length of a C-style string.
 ///
 /// Note that this only counts the number of elements in the given array up to, but not including, the first null
@@ -506,188 +527,6 @@ size_t Helium::StringLength( const T* pString )
     }
 
     return static_cast< size_t >( pEnd - pString );
-}
-
-/// Compare two null-terminated C-style strings.
-///
-/// @param[in] pString0  First C-style string.
-/// @param[in] pString1  Second C-style string.
-///
-/// @return  Zero if the contents match, a value greater than zero if the first non-matching character found is larger
-///          in the first memory buffer, or a value less than zero if the first non-matching character found is larger
-///          in the second memory buffer.
-///
-/// @see StringNCompare()
-template< typename T >
-int Helium::StringCompare( const T* pString0, const T* pString1 )
-{
-    HELIUM_ASSERT( pString0 );
-    HELIUM_ASSERT( pString1 );
-
-    for( ; ; )
-    {
-        int char0 = *pString0;
-        int char1 = *pString1;
-        int charDiff = char0 - char1;
-        if( charDiff != 0 || char0 == static_cast< T >( 0 ) )
-        {
-            return charDiff;
-        }
-
-        ++pString0;
-        ++pString1;
-    }
-}
-
-/// Compare two null-terminated C-style strings, limiting the number of characters checked to a specific range.
-///
-/// @param[in] pString0  First C-style string.
-/// @param[in] pString1  Second C-style string.
-/// @param[in] count     Maximum number of characters to compare.
-///
-/// @return  Zero if the contents match, a value greater than zero if the first non-matching character found is larger
-///          in the first memory buffer, or a value less than zero if the first non-matching character found is larger
-///          in the second memory buffer.
-///
-/// @see StringCompare()
-template< typename T >
-int Helium::StringNCompare( const T* pString0, const T* pString1, size_t count )
-{
-    HELIUM_ASSERT( pString0 );
-    HELIUM_ASSERT( pString1 );
-
-    for( ; count != 0; --count )
-    {
-        int char0 = *pString0;
-        int char1 = *pString1;
-        int charDiff = char0 - char1;
-        if( charDiff != 0 || char0 == static_cast< T >( 0 ) )
-        {
-            return charDiff;
-        }
-
-        ++pString0;
-        ++pString1;
-    }
-
-    return 0;
-}
-
-/// Write a formatted string into a given buffer.
-///
-/// @param[in] pBuffer     Buffer into which the formatted string should be written.
-/// @param[in] bufferSize  Total number of elements that can be stored in the given buffer (including a null
-///                        terminator).
-/// @param[in] pFormat     Format string.
-/// @param[in] ...         Format arguments.
-///
-/// @return  The number of characters that need to be written for the final formatted string, not including the null
-///          terminator.  If the result string does not fit in the buffer, the contents will be truncated, and no null
-///          terminator will be written.  If an error occurred while writing the formatted string, -1 is returned.
-int Helium::StringFormat( char* pBuffer, size_t bufferSize, const char* pFormat, ... )
-{
-    HELIUM_ASSERT( pBuffer || bufferSize == 0 );
-    HELIUM_ASSERT( pFormat );
-
-    va_list argList;
-    va_start( argList, pFormat );
-    int result = StringFormatVa( pBuffer, bufferSize, pFormat, argList );
-    va_end( argList );
-
-    return result;
-}
-
-/// Write a formatted string into a given buffer.
-///
-/// @param[in] pBuffer     Buffer into which the formatted string should be written.
-/// @param[in] bufferSize  Total number of elements that can be stored in the given buffer (including a null
-///                        terminator).
-/// @param[in] pFormat     Format string.
-/// @param[in] ...         Format arguments.
-///
-/// @return  The number of characters that need to be written for the final formatted string, not including the null
-///          terminator.  If the result string does not fit in the buffer, the contents will be truncated, and no null
-///          terminator will be written.  If an error occurred while writing the formatted string, -1 is returned.
-int Helium::StringFormat( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, ... )
-{
-    HELIUM_ASSERT( pBuffer || bufferSize == 0 );
-    HELIUM_ASSERT( pFormat );
-
-    va_list argList;
-    va_start( argList, pFormat );
-    int result = StringFormatVa( pBuffer, bufferSize, pFormat, argList );
-    va_end( argList );
-
-    return result;
-}
-
-#if HELIUM_CC_CL
-// We don't use the secure CRT versions of vsnprintf() and _vsnwprintf() here since we can't use them to compute the
-// size that would be needed for a format string if it doesn't fit (vsnprintf_s() and _vsnwprintf_s() simply return -1
-// if the string doesn't fit, even if _TRUNCATE is specified for the character count).
-#pragma warning( push )
-#pragma warning( disable : 4996 )  // 'function': This function or variable may be unsafe.
-#endif
-/// Write a formatted string into a given buffer.
-///
-/// @param[in] pBuffer     Buffer into which the formatted string should be written.
-/// @param[in] bufferSize  Total number of elements that can be stored in the given buffer (including a null
-///                        terminator).
-/// @param[in] pFormat     Format string.
-/// @param[in] argList     Initialized variable argument list for the format arguments.
-///
-/// @return  The number of characters that need to be written for the final formatted string, not including the null
-///          terminator.  If the result string does not fit in the buffer, the contents will be truncated, and no null
-///          terminator will be written.  If an error occurred while writing the formatted string, -1 is returned.
-int Helium::StringFormatVa( char* pBuffer, size_t bufferSize, const char* pFormat, va_list argList )
-{
-    HELIUM_ASSERT( pBuffer || bufferSize == 0 );
-    HELIUM_ASSERT( pFormat );
-    int result = vsnprintf( pBuffer, bufferSize, pFormat, argList );
-    return result;
-}
-
-/// Write a formatted string into a given buffer.
-///
-/// @param[in] pBuffer     Buffer into which the formatted string should be written.
-/// @param[in] bufferSize  Total number of elements that can be stored in the given buffer (including a null
-///                        terminator).
-/// @param[in] pFormat     Format string.
-/// @param[in] argList     Initialized variable argument list for the format arguments.
-///
-/// @return  The number of characters that need to be written for the final formatted string, not including the null
-///          terminator.  If the result string does not fit in the buffer, the contents will be truncated, and no null
-///          terminator will be written.  If an error occurred while writing the formatted string, -1 is returned.
-int Helium::StringFormatVa( wchar_t* pBuffer, size_t bufferSize, const wchar_t* pFormat, va_list argList )
-{
-    HELIUM_ASSERT( pBuffer || bufferSize == 0 );
-    HELIUM_ASSERT( pFormat );
-    int result = _vsnwprintf( pBuffer, bufferSize, pFormat, argList );
-    return result;
-}
-#if HELIUM_CC_CL
-#pragma warning( pop )
-#endif
-
-/// Compute a 32-bit hash value for a string.
-///
-/// @param[in] pString  Null-terminated C-string (can be null).
-///
-/// @return  32-bit hash for the given string.
-template< typename T >
-uint32_t Helium::StringHash( const T* pString )
-{
-    // djb2...GO!
-    uint32_t hash = 5381;
-    if( pString )
-    {
-        for( T character = *pString; character != static_cast< T >( '\0' ); character = *( ++pString ) )
-        {
-            hash = ( ( hash * 33 ) ^ static_cast< uint32_t >( character ) );
-        }
-    }
-
-    return hash;
 }
 
 /// Get the invalid index value for the template integer type.

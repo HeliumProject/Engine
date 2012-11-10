@@ -196,28 +196,16 @@
 //    WriteValue( rValue, TXT( "Enumeration" ), ReflectEnumFormatter( pEnumeration ) );
 //}
 //
-///// @copydoc Serializer::SerializeCharName()
-//void XmlSerializerBase::SerializeCharName( CharName& rValue )
+///// @copydoc Serializer::SerializeName()
+//void XmlSerializerBase::SerializeName( CharName& rValue )
 //{
 //    WriteValue( rValue, TXT( "CharName" ), NameFormatter< CharNameTable >() );
 //}
 //
-///// @copydoc Serializer::SerializeWideName()
-//void XmlSerializerBase::SerializeWideName( WideName& rValue )
+///// @copydoc Serializer::SerializeString()
+//void XmlSerializerBase::SerializeString( String& rValue )
 //{
-//    WriteValue( rValue, TXT( "WideName" ), NameFormatter< WideNameTable >() );
-//}
-//
-///// @copydoc Serializer::SerializeCharString()
-//void XmlSerializerBase::SerializeCharString( CharString& rValue )
-//{
-//    WriteValue( rValue, TXT( "CharString" ), StringFormatter< char >() );
-//}
-//
-///// @copydoc Serializer::SerializeWideString()
-//void XmlSerializerBase::SerializeWideString( WideString& rValue )
-//{
-//    WriteValue( rValue, TXT( "WideString" ), StringFormatter< wchar_t >() );
+//    WriteValue( rValue, TXT( "String" ), StringFormatter< char >() );
 //}
 //
 ///// @copydoc Serializer::SerializeObjectReference()

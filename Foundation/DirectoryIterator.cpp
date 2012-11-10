@@ -4,6 +4,8 @@
 #include "Platform/Assert.h"
 #include "Platform/Exception.h"
 
+#include "Foundation/String.h"
+
 using namespace Helium;
 
 DirectoryIterator::DirectoryIterator()
@@ -115,7 +117,7 @@ bool DirectoryIterator::Find()
         tstring absolutePath;
 
         // skip relative path directories if fileName is "." or ".."
-        if ( ( StringCompare( entry.m_Name.c_str(), TXT( "." ) ) == 0 ) || ( StringCompare( entry.m_Name.c_str(), TXT( ".." ) ) == 0 ) )
+        if ( ( CompareString( entry.m_Name.c_str(), TXT( "." ) ) == 0 ) || ( CompareString( entry.m_Name.c_str(), TXT( ".." ) ) == 0 ) )
         {
             ok = false;
         }

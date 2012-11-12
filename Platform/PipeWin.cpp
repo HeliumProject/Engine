@@ -42,7 +42,7 @@ bool Pipe::Create(const tchar_t* name)
 	int retry = 0;
 	do
 	{
-		HELIUM_CONVERT_TO_NATIVE( name, convertedName );
+		HELIUM_TCHAR_TO_WIDE( name, convertedName );
 
 		m_Handle = ::CreateNamedPipe( convertedName,
 			PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
@@ -64,7 +64,7 @@ bool Pipe::Create(const tchar_t* name)
 			{
 				retry++;
 
-				HELIUM_CONVERT_TO_NATIVE( name, convertedName );
+				HELIUM_TCHAR_TO_WIDE( name, convertedName );
 
 				if ( !::WaitNamedPipe( convertedName, 0 ) )
 				{
@@ -80,7 +80,7 @@ bool Pipe::Create(const tchar_t* name)
 
 bool Pipe::Open(const tchar_t* name)
 {
-	HELIUM_CONVERT_TO_NATIVE( name, convertedName );
+	HELIUM_TCHAR_TO_WIDE( name, convertedName );
 
 	if ( !::WaitNamedPipe(convertedName, 0) ) 
 	{

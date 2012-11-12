@@ -23,42 +23,81 @@ bool isAlpha( int c )
     return ( std::isalpha( c ) != 0 );
 }
 
-void TUID::ToString(tstring& id) const
+template< class T >
+void ToString( tuid id, std::basic_string< T >& str )
 {
-    tostringstream str;
-    str << TUID::HexFormat << m_ID;
-    id = str.str();
+    std::basic_ostringstream< T > sstr;
+    sstr << TUID::HexFormat << id;
+    str = sstr.str();
 }
 
-bool TUID::FromString( const tstring& str )
+template< class T >
+const T* GetPrefix()
 {
-    tstringstream stream;
-    tstring::const_iterator alphaIt = std::find_if( str.begin(), str.end(), isAlpha );
+	return NULL;
+}
 
+template<>
+const char* GetPrefix()
+{
+	return "0x";
+}
+
+template<>
+const wchar_t* GetPrefix()
+{
+	return L"0x";
+}
+
+template< class T >
+bool FromString( const std::basic_string< T >& str, tuid& id )
+{
+    std::basic_stringstream< T > stream;
+    std::basic_string< T >::const_iterator alphaIt = std::find_if( str.begin(), str.end(), isAlpha );
     if ( alphaIt != str.end() )
     {
         if ( str.length() >= 2 && ( str[1] == 'x' || str[1] == 'X' ) )
         {
             stream << str;
-            stream >> std::hex >> m_ID;
+            stream >> std::hex >> id;
         }
         else
         {
             // this is icky, pretend that they entered a hex tuid without the prefix
-            tstring prefixedStr = tstring( TXT( "0x" ) ) + str;
+            std::basic_string< T > prefixedStr = std::basic_string< T >( GetPrefix<T>() ) + str;
 
             stream << prefixedStr;
-            stream >> std::hex >> m_ID;
+            stream >> std::hex >> id;
         }
     }
     else
     {
         // this is also icky, but it might actually be a decimal TUID
         stream << str;
-        stream >> m_ID;
+        stream >> id;
     }
 
     return ( !stream.fail() && stream.eof() );
+}
+
+void TUID::ToString( std::string& id ) const
+{
+	::ToString< char >( m_ID, id );
+}
+
+bool TUID::FromString( const std::string& str )
+{
+	return ::FromString< char >( str, m_ID );
+}
+
+void TUID::ToString( std::wstring& id ) const
+{
+	::ToString< wchar_t >( m_ID, id );
+}
+
+bool TUID::FromString( const std::wstring& str )
+{
+	return ::FromString< wchar_t >( str, m_ID );
 }
 
 tuid TUID::Generate()

@@ -20,13 +20,7 @@ namespace Helium
 	HELIUM_PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 }
 
-#if HELIUM_WCHAR_T
-# define HELIUM_CONVERT_TO_TCHAR( chars, convertedChars ) \
-	const wchar_t* convertedChars = chars;
-# define HELIUM_CONVERT_TO_NATIVE( chars, convertedChars ) \
-	const wchar_t* convertedChars = chars;
-#else
-# define HELIUM_CONVERT_TO_TCHAR( chars, convertedChars ) \
+#define HELIUM_CONVERT_TO_CHAR( chars, convertedChars ) \
 	char* convertedChars = NULL; \
 	if ( chars ) \
 	{ \
@@ -34,7 +28,7 @@ namespace Helium
 		convertedChars = (char*)alloca( convertedChars##Count * sizeof( char ) ); \
 		Helium::ConvertString( chars, convertedChars, convertedChars##Count ); \
 	}
-# define HELIUM_CONVERT_TO_NATIVE( chars, convertedChars ) \
+#define HELIUM_CONVERT_TO_WIDE( chars, convertedChars ) \
 	wchar_t* convertedChars = NULL; \
 	if ( chars ) \
 	{ \
@@ -42,6 +36,17 @@ namespace Helium
 		convertedChars = (wchar_t*)alloca( convertedChars##Count * sizeof( wchar_t ) ); \
 		Helium::ConvertString( chars, convertedChars, convertedChars##Count ); \
 	}
+
+#if HELIUM_WCHAR_T
+# define HELIUM_TCHAR_TO_CHAR( chars, convertedChars ) HELIUM_CONVERT_TO_CHAR( chars, convertedChars )
+# define HELIUM_CHAR_TO_TCHAR( chars, convertedChars ) HELIUM_CONVERT_TO_WIDE( chars, convertedChars )
+# define HELIUM_TCHAR_TO_WIDE( chars, convertedChars ) const wchar_t* convertedChars = chars;
+# define HELIUM_WIDE_TO_TCHAR( chars, convertedChars ) const wchar_t* convertedChars = chars;
+#else
+# define HELIUM_TCHAR_TO_CHAR( chars, convertedChars ) const wchar_t* convertedChars = chars;
+# define HELIUM_CHAR_TO_TCHAR( chars, convertedChars ) const wchar_t* convertedChars = chars;
+# define HELIUM_TCHAR_TO_WIDE( chars, convertedChars ) HELIUM_CONVERT_TO_WIDE( chars, convertedChars )
+# define HELIUM_WIDE_TO_TCHAR( chars, convertedChars ) HELIUM_CONVERT_TO_CHAR( chars, convertedChars )
 #endif
 
 #include "Platform/Encoding.inl"

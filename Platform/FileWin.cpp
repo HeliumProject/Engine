@@ -86,7 +86,7 @@ bool File::Open( const tchar_t* filename, FileMode mode, bool truncate )
 		createDisposition = ( truncate ? CREATE_ALWAYS : OPEN_ALWAYS );
 	}
 
-	HELIUM_CONVERT_TO_NATIVE( filename, convertedFilename );
+	HELIUM_TCHAR_TO_WIDE( filename, convertedFilename );
 	m_Handle = ::CreateFile( convertedFilename, desiredAccess, shareMode, NULL, createDisposition, FILE_ATTRIBUTE_NORMAL, NULL );
 	return m_Handle != INVALID_HANDLE_VALUE;
 }
@@ -201,7 +201,7 @@ Status::Status()
 
 bool Status::Read( const tchar_t* path )
 {
-	HELIUM_CONVERT_TO_NATIVE( path, convertedPath );
+	HELIUM_TCHAR_TO_WIDE( path, convertedPath );
 
 	WIN32_FILE_ATTRIBUTE_DATA fileStatus;
 	memset( &fileStatus, 0, sizeof( fileStatus ) );
@@ -249,7 +249,7 @@ bool Directory::FindFirst( DirectoryEntry& entry )
 	Close();
 
 	tstring path ( m_Path + TXT( "/*" ) );
-	HELIUM_CONVERT_TO_NATIVE( path.c_str(), convertedPath );
+	HELIUM_TCHAR_TO_WIDE( path.c_str(), convertedPath );
 
 	WIN32_FIND_DATA foundFile;
 	m_Handle = ::FindFirstFile( convertedPath, &foundFile );
@@ -292,12 +292,12 @@ const tchar_t Helium::PathSeparator = TXT('\\');
 
 void Helium::GetFullPath( const tchar_t* path, tstring& fullPath )
 {
-	HELIUM_CONVERT_TO_NATIVE( path, convertedPath );
+	HELIUM_TCHAR_TO_WIDE( path, convertedPath );
 	DWORD fullPathNameCount = ::GetFullPathName( convertedPath, 0, NULL, NULL );
 	wchar_t* fullPathName = (wchar_t*)alloca( sizeof(wchar_t) * fullPathNameCount );
 	uint32_t result = ::GetFullPathName( convertedPath, MAX_PATH, fullPathName, NULL );
 
-	HELIUM_CONVERT_TO_TCHAR( fullPathName, convertedFullPathName );
+	HELIUM_WIDE_TO_TCHAR( fullPathName, convertedFullPathName );
 	fullPath = convertedFullPathName;
 }
 
@@ -342,7 +342,7 @@ bool Helium::MakePath( const tchar_t* path )
 	currentDirectory = directories[ 0 ];
 	for( std::vector< tstring >::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
 	{
-		HELIUM_CONVERT_TO_NATIVE( currentDirectory.c_str(), convertedCurrentDirectory );
+		HELIUM_TCHAR_TO_WIDE( currentDirectory.c_str(), convertedCurrentDirectory );
 
 		if ( ( (*currentDirectory.rbegin()) != TXT(':') ) && ( _wstat64( convertedCurrentDirectory, &statInfo ) != 0 ) )
 		{
@@ -360,20 +360,20 @@ bool Helium::MakePath( const tchar_t* path )
 
 bool Helium::Copy( const tchar_t* source, const tchar_t* dest, bool overwrite )
 {
-	HELIUM_CONVERT_TO_NATIVE( source, convertedSource );
-	HELIUM_CONVERT_TO_NATIVE( dest, convertedDest );
+	HELIUM_TCHAR_TO_WIDE( source, convertedSource );
+	HELIUM_TCHAR_TO_WIDE( dest, convertedDest );
 	return ( TRUE == ::CopyFile( convertedSource, convertedDest, overwrite ? FALSE : TRUE ) );
 }
 
 bool Helium::Move( const tchar_t* source, const tchar_t* dest )
 {
-	HELIUM_CONVERT_TO_NATIVE( source, convertedSource );
-	HELIUM_CONVERT_TO_NATIVE( dest, convertedDest );
+	HELIUM_TCHAR_TO_WIDE( source, convertedSource );
+	HELIUM_TCHAR_TO_WIDE( dest, convertedDest );
 	return ( TRUE == ::MoveFile( convertedSource, convertedDest ) );
 }
 
 bool Helium::Delete( const tchar_t* path )
 {
-	HELIUM_CONVERT_TO_NATIVE( path, convertedPath );
+	HELIUM_TCHAR_TO_WIDE( path, convertedPath );
 	return ( TRUE == ::DeleteFile( convertedPath ) );
 }

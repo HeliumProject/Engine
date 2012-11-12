@@ -43,7 +43,7 @@ bool FileWatcher::Add( const tstring& path, FileChangedSignature::Delegate& list
 	{
 		m_Watches[ path ].m_Path.Set( path );
 
-		HELIUM_CONVERT_TO_NATIVE( m_Watches[ path ].m_Path.c_str(), convertedPath );
+		HELIUM_TCHAR_TO_WIDE( m_Watches[ path ].m_Path.c_str(), convertedPath );
 		m_Watches[ path ].m_ChangeHandle = FindFirstChangeNotificationW( convertedPath, watchSubtree, FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_LAST_WRITE ); // watch for writes
 
 		if ( m_Watches[ path ].m_ChangeHandle == NULL || m_Watches[ path ].m_ChangeHandle == INVALID_HANDLE_VALUE )

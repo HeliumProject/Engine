@@ -16,7 +16,7 @@ using namespace Helium::Profile;
 
 void Helium::TraceFile::Open(const tchar_t* file)
 {
-	HELIUM_CONVERT_TO_NATIVE( file, convertedFile );
+	HELIUM_TCHAR_TO_WIDE( file, convertedFile );
 
 	m_FileHandle = _tfopen( convertedFile, L"wb" );
 }

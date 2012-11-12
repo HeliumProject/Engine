@@ -202,7 +202,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
                     // variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
                     for (const wchar_t* var = (const wchar_t*)env; *var; var++) 
                     {
-						HELIUM_CONVERT_TO_TCHAR( var, convertedVar );
+						HELIUM_WIDE_TO_TCHAR( var, convertedVar );
 
                         if (*convertedVar != '=') // WTF?
                         {
@@ -623,7 +623,7 @@ static int StandardWinMainTryExcept( WinMainFunc winMain, HINSTANCE hInstance, H
 
 static void ShowErrorDialog( const tchar_t* error )
 {
-	HELIUM_CONVERT_TO_NATIVE( error, convertedError );
+	HELIUM_TCHAR_TO_WIDE( error, convertedError );
 	::MessageBoxW(NULL, convertedError, L"Error", MB_OK|MB_ICONEXCLAMATION);
 }
 
@@ -654,7 +654,7 @@ static int StandardWinMainTryCatch( WinMainFunc winMain, HINSTANCE hInstance, HI
 
 static int StandardWinMainEntry( WinMainFunc winMain, HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd )
 {
-	HELIUM_CONVERT_TO_TCHAR( lpCmdLine, convertedCmdLine );
+	HELIUM_WIDE_TO_TCHAR( lpCmdLine, convertedCmdLine );
 
     int argc = 0;
     const tchar_t** argv = NULL;

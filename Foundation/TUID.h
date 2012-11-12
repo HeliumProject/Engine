@@ -54,20 +54,31 @@ namespace Helium
         // Interop with tuid
         operator tuid() const;
 
-        void ToString(tstring& id) const;
-        bool FromString( const tstring& str );
+		// String conversion
+        void ToString( std::string& id ) const;
+        bool FromString( const std::string& str );
+        void ToString( std::wstring& id ) const;
+        bool FromString( const std::wstring& str );
 
         // Resets the ID to be the null ID
         void Reset();
 
-        static inline tostream& HexFormat( tostream& base )
+        static inline std::ostream& HexFormat( std::ostream& base )
         {
-            return base << TXT( "0x" ) << std::setfill( TXT( '0' ) ) << std::setw(16) << std::right << std::hex << std::uppercase;
+            return base << "0x" << std::setfill( '0' ) << std::setw(16) << std::right << std::hex << std::uppercase;
         }
 
-        friend HELIUM_FOUNDATION_API tostream& operator<<( tostream& stream, const TUID& id );
-        friend HELIUM_FOUNDATION_API tistream& operator>>( tistream& stream, TUID& id );
-    };
+        static inline std::wostream& HexFormat( std::wostream& base )
+        {
+            return base << L"0x" << std::setfill( L'0' ) << std::setw(16) << std::right << std::hex << std::uppercase;
+        }
+
+        friend HELIUM_FOUNDATION_API std::ostream& operator<<( std::ostream& stream, const TUID& id );
+        friend HELIUM_FOUNDATION_API std::istream& operator>>( std::istream& stream, TUID& id );
+
+        friend HELIUM_FOUNDATION_API std::wostream& operator<<( std::wostream& stream, const TUID& id );
+        friend HELIUM_FOUNDATION_API std::wistream& operator>>( std::wistream& stream, TUID& id );
+	};
 
     inline TUID::TUID()
         : m_ID( 0x0 )
@@ -133,17 +144,33 @@ namespace Helium
         m_ID = 0x0;
     }
 
-    HELIUM_FOUNDATION_API inline tostream& operator<<(tostream& stream, const TUID& id)
+    HELIUM_FOUNDATION_API inline std::ostream& operator<<(std::ostream& stream, const TUID& id)
     {
-        tstring s;
+        std::string s;
         id.ToString(s);
         stream << s;
         return stream;
     }
 
-    HELIUM_FOUNDATION_API inline tistream& operator>>(tistream& stream, TUID& id)
+    HELIUM_FOUNDATION_API inline std::istream& operator>>(std::istream& stream, TUID& id)
     {
-        tstring s;
+        std::string s;
+        stream >> s;
+        id.FromString(s.c_str());
+        return stream;
+    }
+
+    HELIUM_FOUNDATION_API inline std::wostream& operator<<(std::wostream& stream, const TUID& id)
+    {
+        std::wstring s;
+        id.ToString(s);
+        stream << s;
+        return stream;
+    }
+
+    HELIUM_FOUNDATION_API inline std::wistream& operator>>(std::wistream& stream, TUID& id)
+    {
+        std::wstring s;
         stream >> s;
         id.FromString(s.c_str());
         return stream;

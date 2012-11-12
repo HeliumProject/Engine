@@ -17,7 +17,7 @@ static bool GetEnvVar( wchar_t* var, tstring& value )
 	wchar_t* varValue = (wchar_t*)alloca( count * sizeof( wchar_t ) );
 	if ( ::GetEnvironmentVariable( var, varValue, count * sizeof( wchar_t ) ) )
 	{
-		HELIUM_CONVERT_TO_TCHAR( varValue, convertedVarValue );
+		HELIUM_WIDE_TO_TCHAR( varValue, convertedVarValue );
 		value = convertedVarValue;
 		return true;
 	}
@@ -90,7 +90,7 @@ int Helium::Execute( const tstring& command, tstring& output, bool showWindow )
 	PROCESS_INFORMATION  pi;
 	memset( &pi, 0, sizeof( pi ) );
 
-	HELIUM_CONVERT_TO_NATIVE( command.c_str(), convertedCommand );
+	HELIUM_TCHAR_TO_WIDE( command.c_str(), convertedCommand );
 
 	if( !::CreateProcess(
 		NULL,                                                 // filename
@@ -173,7 +173,7 @@ tstring Helium::GetProcessPath()
 	HELIUM_ASSERT( result );
 	HELIUM_UNREF( result );
 
-	HELIUM_CONVERT_TO_TCHAR( module, convertedModule );
+	HELIUM_WIDE_TO_TCHAR( module, convertedModule );
 	return convertedModule;
 }
 
@@ -187,7 +187,7 @@ tstring Helium::GetProcessName()
 	wchar_t file[ MAX_PATH ];
 	_wsplitpath( module, NULL, NULL, file, NULL );
 
-	HELIUM_CONVERT_TO_TCHAR( file, convertedFile );
+	HELIUM_WIDE_TO_TCHAR( file, convertedFile );
 	return convertedFile;
 }
 
@@ -214,7 +214,7 @@ tstring Helium::GetPreferencesDirectory()
 	bool bSuccess = ( result == S_OK );
 	if ( bSuccess )
 	{
-		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
+		HELIUM_WIDE_TO_TCHAR( path, convertedPath );
 		profileDirectory = convertedPath;
 	}
 
@@ -230,7 +230,7 @@ tstring Helium::GetAppDataDirectory()
 	bool bSuccess = ( result == S_OK );
 	if ( bSuccess )
 	{
-		HELIUM_CONVERT_TO_TCHAR( path, convertedPath );
+		HELIUM_WIDE_TO_TCHAR( path, convertedPath );
 		appDataDirectory = convertedPath;
 	}
 
@@ -250,6 +250,6 @@ tstring Helium::GetDumpDirectory()
 	wchar_t directory[ MAX_PATH ] = { 0 };
 	_snwprintf( directory, sizeof( directory ) - 1, L"%s\\dumps", &tempDir );
 
-	HELIUM_CONVERT_TO_TCHAR( directory, convertedDirectory );
+	HELIUM_WIDE_TO_TCHAR( directory, convertedDirectory );
 	return convertedDirectory;
 }

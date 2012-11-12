@@ -79,7 +79,7 @@ ExceptionReport::ExceptionReport( const ExceptionArgs& args )
             {
                 if (*var != '=')
                 {
-					HELIUM_CONVERT_TO_TCHAR( var, convertedVar );
+					HELIUM_WIDE_TO_TCHAR( var, convertedVar );
                     m_Environment += convertedVar;
                     m_Environment += TXT( "\n" );
                 }
@@ -136,8 +136,8 @@ static void CopyDump( ExceptionReport& report )
     Helium::FilePath dest( destination.str() );
     dest.MakePath();
 
-	HELIUM_CONVERT_TO_NATIVE( report.m_Args.m_Dump.c_str(), srcFile );
-	HELIUM_CONVERT_TO_NATIVE( destination.str().c_str(), destFile );
+	HELIUM_TCHAR_TO_WIDE( report.m_Args.m_Dump.c_str(), srcFile );
+	HELIUM_TCHAR_TO_WIDE( destination.str().c_str(), destFile );
     if ( FALSE == ::CopyFileW( srcFile, destFile, FALSE ) )
     {
         Helium::Print(Helium::ConsoleColors::Red, stderr, TXT( "Failed to copy '%s' to '%s': %s\n" ), report.m_Args.m_Dump.c_str(), destination.str().c_str(), Helium::GetErrorString().c_str() );

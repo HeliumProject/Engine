@@ -30,7 +30,7 @@ AssertResult Assert::TriggerImplementation( const tchar_t* pMessageText )
 		  TXT( "is attached), or \"Ignore\" to attempt to skip over the error." ) ),
 		pMessageText );
 
-	HELIUM_CONVERT_TO_NATIVE( messageBoxText, wideMessageBoxText );
+	HELIUM_TCHAR_TO_WIDE( messageBoxText, wideMessageBoxText );
 	int result = MessageBoxW( NULL, wideMessageBoxText, L"Assert", MB_ABORTRETRYIGNORE );
 
 	return ( result == IDABORT ? AssertResults::Abort : ( result == IDIGNORE ? AssertResults::Continue : AssertResults::Break ) );

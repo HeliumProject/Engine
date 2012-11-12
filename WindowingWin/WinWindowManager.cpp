@@ -165,7 +165,7 @@ Window* WinWindowManager::Create( Window::Parameters& rParameters )
     WinWindow* pWindow = new WinWindow;
     HELIUM_ASSERT( pWindow );
 
-	HELIUM_CONVERT_TO_NATIVE( rParameters.pTitle, convertedTitle );
+	HELIUM_TCHAR_TO_WIDE( rParameters.pTitle, convertedTitle );
     HWND hWnd = CreateWindowEx(
         exStyle,
         reinterpret_cast< LPCTSTR >( static_cast< uintptr_t >( m_windowClassAtom ) ),

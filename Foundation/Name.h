@@ -4,7 +4,9 @@
 
 #include "Platform/Trace.h"
 #include "Platform/Locks.h"
+
 #include "Foundation/String.h"
+#include "Foundation/StringConverter.h"
 #include "Foundation/HashFunctions.h"
 
 namespace Helium
@@ -86,8 +88,6 @@ namespace Helium
         const CharType* m_pEntry;
     };
 
-#if !HELIUM_WCHAR_T
-
     /// CharString name table.
     class HELIUM_FOUNDATION_API CharNameTable
     {
@@ -108,11 +108,6 @@ namespace Helium
 
     /// CharString name table entry.
     typedef NameBase< CharNameTable > CharName;
-
-    /// String table entry.
-    typedef CharName Name;
-
-#else // !HELIUM_WCHAR_T
 
     /// WideString name table.
     class HELIUM_FOUNDATION_API WideNameTable
@@ -135,22 +130,47 @@ namespace Helium
     /// WideString name table entry.
     typedef NameBase< WideNameTable > WideName;
 
+#if HELIUM_WCHAR_T
     /// String table entry.
     typedef WideName Name;
+#else
+    /// String table entry.
+    typedef CharName Name;
+#endif
 
-#endif // !HELIUM_WCHAR_T
-  
-    HELIUM_FOUNDATION_API inline tostream& operator<<( tostream& stream, const Name& id )
+    HELIUM_FOUNDATION_API inline std::ostream& operator<<( std::ostream& stream, const Name& id )
     {
         stream << id.Get();
         return stream;
     }
 
-    HELIUM_FOUNDATION_API inline tistream& operator>>( tistream& stream, Name& id )
+    HELIUM_FOUNDATION_API inline std::istream& operator>>( std::istream& stream, Name& id )
     {
-        tstring str;
+        std::string str;
         stream >> str;
-        id.Set(str.c_str());
+
+		String tstr;
+		StringConverter< char, tchar_t >::Convert( tstr, str.c_str() );
+
+		id.Set(tstr);
+        return stream;
+    }
+
+    HELIUM_FOUNDATION_API inline std::wostream& operator<<( std::wostream& stream, const Name& id )
+    {
+        stream << id.Get();
+        return stream;
+    }
+
+    HELIUM_FOUNDATION_API inline std::wistream& operator>>( std::wistream& stream, Name& id )
+    {
+        std::wstring str;
+        stream >> str;
+
+		String tstr;
+		StringConverter< wchar_t, tchar_t >::Convert( tstr, str.c_str() );
+
+        id.Set(tstr);
         return stream;
     }
 

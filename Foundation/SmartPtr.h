@@ -62,43 +62,7 @@ namespace Helium
         //@}
     };
 
-
-    //
-    // The aggregator
-    //  Use this to aggregate data that cannot be derived from the base class above (such as compiler or library types)
-    //
-
-    template<typename T>
-    class RefCountAggregator : public RefCountBase<T>
-    {
-    public:
-        T m_Object;
-
-        RefCountAggregator()
-        {
-        }
-
-        RefCountAggregator( const T& rhs )
-            : m_Object( rhs )
-        {
-        }
-
-        inline T* operator->() const
-        {
-            return &m_Object;
-        }
-
-        inline operator T*() const
-        {
-            return &m_Object;
-        }
-    };
-
-
-    //
-    // SmartPtr safely manages the reference count on the stack
-    //
-
+    /// SmartPtr safely manages the reference count on the stack.
     template< typename T >
     class SmartPtr
     {
@@ -141,73 +105,17 @@ namespace Helium
         T* m_Pointer;
     };
 
-
-    //
-    // SmartPtrComparator
-    //   Used in containers to compare what's being pointed to by the SmartPtrs rather than the pointers themselves
-    //
-
-    template <typename T>
-    class SmartPtrComparator
+    /// DeepCompareSmartPtr is used in containers to compare what's being pointed to by the SmartPtrs rather than the pointers themselves
+    template < typename T >
+    class DeepCompareSmartPtr : public SmartPtr< T >
     {
     public:
-        SmartPtrComparator()
-            : m_SmartPtr( NULL )
-        {
-        }
+        DeepCompareSmartPtr();
+        DeepCompareSmartPtr( const T* pPointer );
+        DeepCompareSmartPtr( const Helium::SmartPtr<T>& pPointer );
 
-        SmartPtrComparator( const Helium::SmartPtr<T>& smartPtr )
-            : m_SmartPtr( smartPtr )
-        {
-        }
-
-        SmartPtrComparator( const T* smartPtr )
-            : m_SmartPtr( smartPtr )
-        {
-        }
-
-        inline bool operator<( const SmartPtrComparator& rhs ) const
-        {
-            return (*m_SmartPtr) < (*rhs.m_SmartPtr);
-        }
-
-        inline bool operator==( const SmartPtrComparator& rhs ) const
-        {
-            return (*m_SmartPtr) == (*rhs.m_SmartPtr);
-        }
-
-        const T* operator->() const
-        {
-            return m_SmartPtr.operator->();
-        }
-
-        T* operator->()
-        {
-            return m_SmartPtr.operator->();
-        }
-
-        operator const T* () const
-        {
-            return m_SmartPtr.operator T *();
-        }
-
-        operator T* ()
-        {
-            return m_SmartPtr.operator T *();
-        }
-
-        operator const Helium::SmartPtr<T> () const
-        {
-            return m_SmartPtr;
-        }
-
-        operator Helium::SmartPtr<T> ()
-        {
-            return m_SmartPtr;
-        }
-
-    private:
-        Helium::SmartPtr<T> m_SmartPtr;
+        inline bool operator<( const DeepCompareSmartPtr& rhs ) const;
+        inline bool operator==( const DeepCompareSmartPtr& rhs ) const;
     };
 }
 

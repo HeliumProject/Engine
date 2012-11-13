@@ -17,7 +17,7 @@ namespace Helium
         class VaultSearchQuery;
         typedef Helium::StrongPtr< VaultSearchQuery > VaultSearchQueryPtr;
         typedef std::vector< VaultSearchQueryPtr > V_VaultSearchQuery;
-        typedef Helium::OrderedSet< Helium::SmartPtrComparator< VaultSearchQuery > > OS_VaultSearchQuery;
+        typedef Helium::OrderedSet< Helium::DeepCompareSmartPtr< VaultSearchQuery > > OS_VaultSearchQuery;
 
         class VaultSearchQuery : public Reflect::Object
         {

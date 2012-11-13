@@ -20,10 +20,10 @@
         typedef SUPPORT_TYPE RefCountSupportType; \
         Helium::RefCountProxy< CLASS >* GetRefCountProxy() const \
         { \
-            return _m_refCountProxyContainer.Get( const_cast< CLASS* >( this ) ); \
+            return m_refCountProxyContainer.Get( const_cast< CLASS* >( this ) ); \
         } \
     private: \
-        mutable Helium::RefCountProxyContainer< CLASS > _m_refCountProxyContainer;
+        mutable Helium::RefCountProxyContainer< CLASS > m_refCountProxyContainer;
 
 namespace Helium
 {
@@ -151,8 +151,7 @@ namespace Helium
         //@}
 
     private:
-        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared
-        /// types).
+        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared types).
         union
         {
             RefCountProxyBase* m_pProxy; // Almost always, a smart ptr is actually a pointer
@@ -161,8 +160,7 @@ namespace Helium
 
         /// @name Conversion Utility Functions, Private
         //@{
-        template< typename BaseT > const StrongPtr< BaseT >& ImplicitUpCast(
-            const std::true_type& rIsProperBase ) const;
+        template< typename BaseT > const StrongPtr< BaseT >& ImplicitUpCast( const std::true_type& rIsProperBase ) const;
         //@}
     };
 
@@ -216,14 +214,12 @@ namespace Helium
         //@}
 
     private:
-        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared
-        /// types).
+        /// Proxy object (cast to a RefCountProxyBase pointer to allow for declaring smart pointers to forward-declared types).
         RefCountProxyBase* m_pProxy;
 
         /// @name Conversion Utility Functions, Private
         //@{
-        template< typename BaseT > const WeakPtr< BaseT >& ImplicitUpCast(
-            const std::true_type& rIsProperBase ) const;
+        template< typename BaseT > const WeakPtr< BaseT >& ImplicitUpCast( const std::true_type& rIsProperBase ) const;
         //@}
     };
 }

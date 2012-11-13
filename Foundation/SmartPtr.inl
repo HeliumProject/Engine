@@ -338,3 +338,33 @@ Helium::SmartPtr< T >& Helium::SmartPtr< T >::operator=( const SmartPtr< U >& rS
 
     return *this;
 }
+
+template < typename T >
+Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr()
+    : SmartPtr< T >()
+{
+}
+
+template < typename T >
+Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr( const Helium::SmartPtr<T>& pPointer )
+    : SmartPtr< T >( pPointer )
+{
+}
+
+template < typename T >
+Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr( const T* pPointer )
+    : SmartPtr< T >( pPointer )
+{
+}
+
+template < typename T >
+bool Helium::DeepCompareSmartPtr< T >::operator<( const DeepCompareSmartPtr& rhs ) const
+{
+    return (*Get()) < (*rhs.Get());
+}
+
+template < typename T >
+bool Helium::DeepCompareSmartPtr< T >::operator==( const DeepCompareSmartPtr& rhs ) const
+{
+    return (*Get()) == (*rhs.Get());
+}

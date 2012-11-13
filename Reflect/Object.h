@@ -53,8 +53,7 @@ namespace Helium
             /// @name Active Proxy Iteration
             //@{
             static size_t GetActiveProxyCount();
-            static bool GetFirstActiveProxy(
-                ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor );
+            static bool GetFirstActiveProxy( ConcurrentHashSet< RefCountProxy< Object >* >::ConstAccessor& rAccessor );
             //@}
 #endif
 

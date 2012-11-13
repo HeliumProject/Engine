@@ -596,15 +596,18 @@ void Helium::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args
 		Helium::Exception* ex = GetHeliumException(info->ExceptionRecord->ExceptionInformation[1]);
 		if (ex)
 		{
-			const char* cppClass = NULL;
+			const char* cppClass = "Unknown";
+#ifdef _CPPRTTI
 			try
 			{
 				cppClass = typeid(*ex).name();
 			}
 			catch (...)
 			{
-				cppClass = "Unknown";
 			}
+#else
+			cppClass = "Unknown, no RTTI";
+#endif
 
 			Helium::ConvertString( cppClass, args.m_CPPClass );
 			Helium::ConvertString( ex->What(), args.m_Message );
@@ -614,7 +617,8 @@ void Helium::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args
 			std::exception* ex = GetStandardException(info->ExceptionRecord->ExceptionInformation[1]);
 			if ( ex )
 			{
-				const char* cppClass = NULL;
+				const char* cppClass = "Unknown";
+#ifdef _CPPRTTI
 				try
 				{
 					cppClass = typeid(*ex).name();
@@ -623,6 +627,9 @@ void Helium::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args
 				{
 					cppClass = "Unknown";
 				}
+#else
+				cppClass = "Unknown, no RTTI";
+#endif
 
 				Helium::ConvertString( cppClass, args.m_CPPClass );
 				Helium::ConvertString( ex->what(), args.m_Message );

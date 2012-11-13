@@ -42,15 +42,18 @@ void Helium::ProcessException(const Helium::Exception& exception, bool print, bo
 
     ExceptionArgs args( ExceptionTypes::CPP, fatal );
 
-    const char* cppClass = NULL;
-    try
+    const char* cppClass = "Unknown";
+#ifdef _CPPRTTI
+	try
     {
         cppClass = typeid(exception).name();
     }
     catch (...)
     {
-        cppClass = "Unknown";
     }
+#else
+	cppClass = "Unknown, no RTTI";
+#endif
 
     bool converted = Helium::ConvertString( exception.What(), args.m_Message );
     HELIUM_ASSERT( converted );
@@ -84,15 +87,18 @@ void Helium::ProcessException(const std::exception& exception, bool print, bool 
 
     ExceptionArgs args( ExceptionTypes::CPP, fatal );
 
-    const char* cppClass = NULL;
+    const char* cppClass = "Unknown";
+#ifdef _CPPRTTI
     try
     {
         cppClass = typeid(exception).name();
     }
     catch (...)
     {
-        cppClass = "Unknown";
     }
+#else
+	cppClass = "Unknown, no RTTI";
+#endif
 
     bool converted = Helium::ConvertString( exception.what(), args.m_Message );
     HELIUM_ASSERT( converted );

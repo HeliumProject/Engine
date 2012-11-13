@@ -3,7 +3,6 @@
 
 #include "Foundation/FilePath.h"
 #include "Foundation/Wildcard.h"
-#include "Foundation/Version.h"
 
 #include "SceneGraph/SearchableProperties.h"
 
@@ -227,7 +226,6 @@ void Tracker::TrackEverything()
             assetTrackedFile.mPath = assetFilePath.GetRelativePath( m_Project->a_Path.Get() ).Get();
             assetTrackedFile.mSize = (int32_t) assetFilePath.Size();
             assetTrackedFile.mLastModified = litesql::DateTime( assetFilePath.ModifiedTime() );
-            assetTrackedFile.mToolsVersion = HELIUM_VERSION_NUMBER;
             assetTrackedFile.update();
 
             // commit transaction

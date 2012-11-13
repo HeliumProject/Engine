@@ -1,5 +1,5 @@
 #include "FoundationPch.h"
-#include "IPCConnection.h"
+#include "IPC.h"
 
 #include "Platform/Assert.h"
 #include "Platform/Console.h"
@@ -11,18 +11,171 @@
 using namespace Helium;
 using namespace Helium::IPC;
 
-namespace Helium
+Message::Message(uint32_t id, int32_t trn, uint32_t size, MessageType type)
+: MessageHeader( id, trn, size, type )
+, m_Next (NULL)
+, m_Number (0)
 {
-    namespace IPC
+    if (size)
     {
-        namespace ProtocolMessageIDs
+        m_Data = new uint8_t[size];
+    }
+    else
+    {
+        m_Data = 0;
+    }
+}
+
+Message::~Message()
+{
+    if (m_Data)
+    {
+        delete [] m_Data;
+        m_Data = 0;
+    }
+}
+
+MessageQueue::MessageQueue()
+: m_Head (0)
+, m_Tail (0)
+, m_Count (0)
+, m_Total (0)
+{
+
+}
+
+MessageQueue::~MessageQueue()
+{
+    Clear();
+}
+
+void MessageQueue::Add(Message* msg)
+{
+    IPC_SCOPE_TIMER("");
+
+    if (msg)
+    {
+        Helium::MutexScopeLock mutex (m_Mutex);
+
+        if (m_Tail == 0)
         {
-            enum ProtocolMessageID
+            // header must also be zero and count must be zero
+            if(m_Count !=0)
             {
-                Disconnect,
-            };
+                HELIUM_BREAK();
+            }
+            if (m_Head != 0)
+            {
+                HELIUM_BREAK();
+            }
+
+            msg->m_Next = 0;
+            m_Head = msg;
+            m_Tail = msg;
+        }
+        else
+        {
+            Message* end = m_Tail;
+
+            // tail points to new message
+            m_Tail = msg;
+
+            // old end message points to us
+            end->m_Next = msg;
+
+            // we point to null
+            msg->m_Next = 0;       
+        }
+
+        m_Count++;
+        m_Total++;
+        msg->SetNumber( m_Total );
+    }
+
+    m_Append.Increment();
+}
+
+Message* MessageQueue::Remove()
+{
+    IPC_SCOPE_TIMER("");
+
+    m_Append.Decrement();
+
+    Helium::MutexScopeLock mutex (m_Mutex);
+
+    Message* result = 0;
+    if (m_Head != 0)
+    {
+        m_Count--;
+
+        // take the head of the queue
+        result = m_Head;
+
+        // move the the head dow
+        m_Head = m_Head->m_Next;
+
+        // if the head points to null, set the tail to null because we have popped the last entry
+        if (m_Head == 0)
+        {
+            m_Tail = 0;
         }
     }
+
+    return result;
+}
+
+void MessageQueue::Clear()
+{
+    IPC_SCOPE_TIMER("");
+
+    Helium::MutexScopeLock mutex (m_Mutex);
+
+    Message* msg = m_Head;
+    while (msg)
+    {
+        Message* next = msg->m_Next;
+        delete msg;
+        msg = next;
+    }
+
+    m_Head = 0;
+    m_Tail = 0;
+    m_Count = 0;
+    m_Total = 0;
+
+    m_Append.Increment();
+    m_Append.Reset();
+}
+
+uint32_t MessageQueue::Count()
+{
+    return m_Count;
+}
+
+uint32_t MessageQueue::Total()
+{
+    return m_Total;
+}
+
+void MessageQueue::Wait()
+{
+    // this will send the calling thread to sleep, and when it returns the semaphore value will be decremented for *this* thread
+    m_Append.Decrement();
+
+    // this will be zero if the queue was reset by another thread
+    if ( m_Total )
+    {
+        // do an increment to preserve the semaphore's value over the call to this function
+        m_Append.Increment();
+    }
+}
+
+namespace ProtocolMessageIDs
+{
+    enum ProtocolMessageID
+    {
+        Disconnect,
+    };
 }
 
 // Debug printing
@@ -37,7 +190,6 @@ static const tchar_t* ConnectionStateNames[] =
 };
 
 HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar_t*)) );
-
 Localization::StringTable Connection::s_StringTable( "Helium::IPC::Connection" );
 bool Connection::s_RegisteredStringTable = false;
 
@@ -150,7 +302,7 @@ void Connection::SetState(ConnectionState state)
     }
 }
 
-Message* Connection::CreateMessage(uint32_t id, uint32_t size, int32_t trans, uint32_t type)
+Message* Connection::CreateMessage(uint32_t id, uint32_t size, int32_t trans, MessageType type)
 {
     HELIUM_ASSERT(m_NextTransaction != 0);
 
@@ -443,7 +595,7 @@ void Connection::ProcessProtocolMessage( Message* msg )
 
 void Connection::SendProtocolMessage( uint32_t message )
 {
-    Message* msg = CreateMessage( ProtocolMessageIDs::Disconnect, 0, 0, message );
+    Message* msg = CreateMessage( message, 0, 0, MessageTypes::Protocol );
     if (msg)
     {
         WriteMessage(msg);

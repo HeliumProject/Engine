@@ -321,10 +321,10 @@ bool TCPConnection::ReadMessage(Message** msg)
 #ifdef WIN32
     if ( m_RemotePlatform != (Helium::Platform::Type)-1 )
     {
-        m_ReadHeader.m_ID = ConvertEndian(m_ReadHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_ReadHeader.m_TRN = ConvertEndian(m_ReadHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_ReadHeader.m_Size = ConvertEndian(m_ReadHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_ReadHeader.m_Type = ConvertEndian(m_ReadHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_ReadHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_ReadHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_ReadHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_ReadHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
     }
 #endif
 
@@ -378,10 +378,10 @@ bool TCPConnection::WriteMessage(Message* msg)
 #ifdef WIN32
     if ( m_RemotePlatform != (Helium::Platform::Type)-1 )
     {
-        m_WriteHeader.m_ID = ConvertEndian(m_WriteHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_WriteHeader.m_TRN = ConvertEndian(m_WriteHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_WriteHeader.m_Size = ConvertEndian(m_WriteHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
-        m_WriteHeader.m_Type = ConvertEndian(m_WriteHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_WriteHeader.m_ID, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_WriteHeader.m_TRN, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_WriteHeader.m_Size, m_RemotePlatform != Helium::Platform::Types::Windows);
+        Swizzle(m_WriteHeader.m_Type, m_RemotePlatform != Helium::Platform::Types::Windows);
     }
 #endif
 

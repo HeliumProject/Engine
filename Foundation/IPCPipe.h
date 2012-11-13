@@ -2,7 +2,7 @@
 
 #include "Platform/Pipe.h"
 
-#include "IPCConnection.h"
+#include "Foundation/IPC.h"
 
 // Debug printing
 //#define IPC_PIPE_DEBUG_PIPES

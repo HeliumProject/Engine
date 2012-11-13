@@ -277,9 +277,7 @@ Helium.DoBasicProjectSettings = function()
 
 	flags
 	{
-		--"FatalWarnings",
-		--"ExtraWarnings",
-		"FloatFast",  -- Should be used in all configurations to ensure data consistency.
+		"FloatFast",
 	}
 
 	includedirs
@@ -360,32 +358,20 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 	}
 
     local header = moduleName .. "Pch.h"
-
     if os.get() == "macosx" then
     	header = path.join( moduleName, header )
     	header = path.join( baseDirectory, header )
     	header = path.join( "..", header )
     	header = path.join( "..", header )
     end
-
 	pchheader( header )
 
 	local source = moduleName .. "Pch.cpp"
-
 	source = path.join( moduleName, source )
 	source = path.join( baseDirectory, source )
-
 	pchsource( source )
 
 	Helium.DoBasicProjectSettings()
-
---[[--This is off until we get rid of a couple dynamic_cast<>'s -Geoff
-	configuration "not Debug"
-		flags
-		{
-			"NoRTTI",
-		}
---]]
 
 	configuration "not windows"
 		kind "StaticLib"

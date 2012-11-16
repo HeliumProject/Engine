@@ -37,6 +37,15 @@
 #define HELIUM_DYNAMIC_MEMORY_HEAP_CAP_INIT( NAME_STRING, CAPACITY ) ( NAME_STRING, CAPACITY )
 #endif
 
+/// Build the name of the module heap function from preprocessor defines (for THIS module)
+#ifdef HELIUM_MODULE
+#define HELIUM_MAKE_MODULE_HEAP_FUNCTION_TOKEN_PASTE(PREFIX, MODULE, SUFFIX) PREFIX ## MODULE ## SUFFIX
+#define HELIUM_MAKE_MODULE_HEAP_FUNCTION(PREFIX, MODULE, SUFFIX) HELIUM_MAKE_MODULE_HEAP_FUNCTION_TOKEN_PASTE(PREFIX, MODULE, SUFFIX)
+#define HELIUM_MODULE_HEAP_FUNCTION HELIUM_MAKE_MODULE_HEAP_FUNCTION( Get, HELIUM_MODULE, DefaultHeap )
+#else
+#error HELIUM_MODULE not defined, please define this macro to be the bare (non-stringified) name of the current compiling module
+#endif
+
 /// Define the default memory heap for the current module.
 ///
 /// This must be called in the source file of a given module in order to set up the default heap to use for that module.

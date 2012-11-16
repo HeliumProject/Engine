@@ -116,7 +116,7 @@ project( prefix .. "Editor" )
 
 	defines
 	{
-		"HELIUM_MODULE_HEAP_FUNCTION=GetEditorDefaultHeap",
+		"HELIUM_MODULE=Editor",
 		"WXUSINGDLL=1",
 		"wxNO_EXPAT_LIB=1",
 		"wxNO_JPEG_LIB=1",

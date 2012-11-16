@@ -354,7 +354,7 @@ Helium.DoModuleProjectSettings = function( baseDirectory, tokenPrefix, moduleNam
 
 	defines
 	{
-		"HELIUM_MODULE_HEAP_FUNCTION=Get" .. moduleName .. "DefaultHeap"
+		"HELIUM_MODULE=" .. moduleName
 	}
 
     local header = moduleName .. "Pch.h"

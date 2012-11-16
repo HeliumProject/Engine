@@ -791,6 +791,11 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		"WinMain",
 	}
 
+	defines
+	{
+		"HELIUM_MODULE=TestApp",
+	}
+
 	includedirs
 	{
 		"Dependencies/boost-preprocessor/include",

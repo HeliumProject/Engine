@@ -58,6 +58,11 @@ project( prefix .. "ExampleMain" )
 		"WinMain",
 	}
 
+	defines
+	{
+		"HELIUM_MODULE=ExampleMain"
+	}
+
 	includedirs
 	{
 		"Dependencies/boost-preprocessor/include",

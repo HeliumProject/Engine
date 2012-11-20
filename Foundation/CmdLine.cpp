@@ -194,7 +194,6 @@ const tchar_t* Helium::GetCmdLineArg( const tchar_t* arg )
     return NULL;
 }
 
-#pragma TODO ( "Deprecate Helium::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime!" )
 bool Helium::GetCmdLineFlag( const tchar_t* arg )
 {
     bool explicitValue;

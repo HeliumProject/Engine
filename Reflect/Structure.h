@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Foundation/AutoPtr.h"
+#include "Foundation/SmartPtr.h"
 
-#include "Composite.h"
+#include "Reflect/Composite.h"
 
 namespace Helium
 {

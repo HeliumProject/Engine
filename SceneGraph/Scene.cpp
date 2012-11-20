@@ -6,15 +6,14 @@
 #include <cctype>
 
 #include "Foundation/Log.h"
-#include "Application/Preferences.h"
 #include "Foundation/Insert.h" 
+#include "Foundation/Log.h"
+#include "Math/FpuAngleAxis.h"
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/Version.h"
 #include "Inspect/DataBinding.h"
 #include "Inspect/Canvas.h"
-#include "Foundation/StringUtilities.h"
-#include "Math/FpuAngleAxis.h"
-#include "Foundation/Log.h"
+#include "Application/Preferences.h"
 
 #include "SceneGraph/Graph.h"
 #include "SceneGraph/Statistics.h"

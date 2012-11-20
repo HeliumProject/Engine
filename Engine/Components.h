@@ -2,12 +2,11 @@
 
 #include <vector>
 
-#include "Engine/Engine.h"
-
 #include "Reflect/Class.h"
 #include "Reflect/Object.h"
 #include "Foundation/Map.h"
-#include "Foundation/AutoPtr.h"
+#include "Foundation/SmartPtr.h"
+#include "Engine/Engine.h"
 
 //TODO: OnAttach/OnDetach events for components?
 //TODO: API for systems to iterate over allocated components

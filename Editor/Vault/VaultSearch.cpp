@@ -1,14 +1,13 @@
 #include "EditorPch.h"
 #include "VaultSearch.h"
 
-#include "VaultSearchResults.h"
-
+#include "Platform/Exception.h"
 #include "Foundation/Regex.h"
 #include "Foundation/Insert.h"
 #include "Foundation/DirectoryIterator.h"
 #include "Foundation/Tokenize.h"
-#include "Foundation/StringUtilities.h"
-#include "Platform/Exception.h"
+
+#include "VaultSearchResults.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

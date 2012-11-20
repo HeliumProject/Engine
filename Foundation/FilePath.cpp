@@ -100,7 +100,7 @@ Helium::FilePath& FilePath::operator+=( const Helium::FilePath& rhs )
 
 void FilePath::Normalize( tstring& path )
 {
-	toLower( path );
+	std::transform( path.begin(), path.end(), path.begin(), tolower); 
 	std::replace( path.begin(), path.end(), Helium::PathSeparator, s_InternalPathSeparator );
 }
 

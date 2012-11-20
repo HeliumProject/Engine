@@ -6,7 +6,6 @@
 #include <wx/config.h>
 
 #include "Application/Startup.h"
-#include "Foundation/StringUtilities.h"
 
 using namespace Helium;
 using namespace Helium::Editor;

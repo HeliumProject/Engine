@@ -3,7 +3,6 @@
 
 #include "Platform/Types.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/StringUtilities.h"
 #include "Foundation/Tokenize.h"
 
 #include <wx/wx.h>

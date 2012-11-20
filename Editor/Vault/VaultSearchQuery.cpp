@@ -6,7 +6,6 @@
 #include "Foundation/Insert.h"
 #include "Foundation/MD5.h"
 #include "Foundation/Tokenize.h"
-#include "Foundation/StringUtilities.h"
 #include "Foundation/Log.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Editor::VaultSearchQuery );

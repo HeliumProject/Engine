@@ -1,7 +1,104 @@
+template< typename T >
+Helium::AutoPtr< T >::AutoPtr( T* ptr = NULL )
+	: m_Ptr( ptr )
+{
+
+}
+
+template< typename T >
+Helium::AutoPtr< T >::AutoPtr( const AutoPtr& rhs )
+{
+
+}
+
+template< typename T >
+Helium::AutoPtr< T >::~AutoPtr()
+{
+	delete m_Ptr; 
+}
+
+template< typename T >
+T* Helium::AutoPtr< T >::Ptr()
+{
+	return m_Ptr; 
+}
+
+template< typename T >
+const T* Helium::AutoPtr< T >::operator->() const
+{
+	return m_Ptr;
+}
+
+template< typename T >
+T* Helium::AutoPtr< T >::operator->()
+{
+	return m_Ptr;
+}
+
+template< typename T >
+T& Helium::AutoPtr< T >::operator*()
+{
+	return *m_Ptr;
+}
+
+template< typename T >
+void Helium::AutoPtr< T >::Reset(T *_ptr)
+{
+	if (_ptr != m_Ptr)
+	{
+		delete m_Ptr;
+	}
+	m_Ptr = _ptr;
+}
+
+template< typename T >
+T* Helium::AutoPtr< T >::Release()
+{
+	T *return_value = m_Ptr;
+	m_Ptr = NULL;
+	return return_value;
+}
+
+template< typename T >
+Helium::ArrayPtr< T >::ArrayPtr( T* ptr = NULL ) : m_Ptr( ptr )
+{
+
+}
+
+template< typename T >
+Helium::ArrayPtr< T >::ArrayPtr( const ArrayPtr& rhs )
+{
+
+}
+
+template< typename T >
+Helium::ArrayPtr< T >::~ArrayPtr()
+{
+	delete [] m_Ptr; 
+}
+
+template< typename T >
+T* Helium::ArrayPtr< T >::Ptr()
+{
+	return m_Ptr; 
+}
+
+template< typename T >
+const T& Helium::ArrayPtr< T >::operator[]( size_t i ) const
+{
+	return m_Ptr[i];
+}
+
+template< typename T >
+T& Helium::ArrayPtr< T >::operator[]( size_t i )
+{
+	return m_Ptr[i];
+}
+
 /// Constructor.
 template< typename T >
 Helium::RefCountBase< T >::RefCountBase()
-    : m_RefCount( 0 )
+	: m_RefCount( 0 )
 {
 }
 
@@ -10,9 +107,9 @@ Helium::RefCountBase< T >::RefCountBase()
 /// @param[in] rSource  Source object from which to copy.
 template< typename T >
 Helium::RefCountBase< T >::RefCountBase( const RefCountBase& /*rSource*/ )
-    : m_RefCount( 0 )
+	: m_RefCount( 0 )
 {
-    // Note that the reference count is not copied.
+	// Note that the reference count is not copied.
 }
 
 /// Get the current reference count of this object.
@@ -21,7 +118,7 @@ Helium::RefCountBase< T >::RefCountBase( const RefCountBase& /*rSource*/ )
 template< typename T >
 uint32_t Helium::RefCountBase< T >::GetRefCount() const
 {
-    return m_RefCount;
+	return m_RefCount;
 }
 
 /// Increment the reference count of this object.
@@ -32,12 +129,12 @@ uint32_t Helium::RefCountBase< T >::GetRefCount() const
 template< typename T >
 uint32_t Helium::RefCountBase< T >::IncrRefCount() const
 {
-    ++m_RefCount;
+	++m_RefCount;
 
-    // Test for wrapping to zero.
-    HELIUM_ASSERT( m_RefCount != 0 );
+	// Test for wrapping to zero.
+	HELIUM_ASSERT( m_RefCount != 0 );
 
-    return m_RefCount;
+	return m_RefCount;
 }
 
 /// Decrement the reference count of this object, deleting it if the reference count reaches zero.
@@ -48,15 +145,15 @@ uint32_t Helium::RefCountBase< T >::IncrRefCount() const
 template< typename T >
 uint32_t Helium::RefCountBase< T >::DecrRefCount() const
 {
-    --m_RefCount;
-    int32_t newRefCount = m_RefCount;
+	--m_RefCount;
+	int32_t newRefCount = m_RefCount;
 
-    if( newRefCount == 0 )
-    {
-        delete const_cast< T* >( static_cast< const T* >( this ) );
-    }
+	if( newRefCount == 0 )
+	{
+		delete const_cast< T* >( static_cast< const T* >( this ) );
+	}
 
-    return newRefCount;
+	return newRefCount;
 }
 
 /// Assignment operator.
@@ -65,14 +162,14 @@ uint32_t Helium::RefCountBase< T >::DecrRefCount() const
 template< typename T >
 Helium::RefCountBase< T >& Helium::RefCountBase< T >::operator=( const RefCountBase& /*rSource*/ )
 {
-    // do NOT copy the refcount
-    return *this;
+	// do NOT copy the refcount
+	return *this;
 }
 
 /// Constructor.
 template< typename T >
 Helium::AtomicRefCountBase< T >::AtomicRefCountBase()
-    : m_RefCount( 0 )
+	: m_RefCount( 0 )
 {
 }
 
@@ -81,9 +178,9 @@ Helium::AtomicRefCountBase< T >::AtomicRefCountBase()
 /// @param[in] rSource  Source object from which to copy.
 template< typename T >
 Helium::AtomicRefCountBase< T >::AtomicRefCountBase( const AtomicRefCountBase& /*rSource*/ )
-    : m_RefCount( 0 )
+	: m_RefCount( 0 )
 {
-    // Do not copy the reference count.
+	// Do not copy the reference count.
 }
 
 /// Virtual destructor.
@@ -98,7 +195,7 @@ Helium::AtomicRefCountBase< T >::~AtomicRefCountBase()
 template< typename T >
 uint32_t Helium::AtomicRefCountBase< T >::GetRefCount() const
 {
-    return m_RefCount;
+	return m_RefCount;
 }
 
 /// Increment the reference count of this object.
@@ -109,12 +206,12 @@ uint32_t Helium::AtomicRefCountBase< T >::GetRefCount() const
 template< typename T >
 uint32_t Helium::AtomicRefCountBase< T >::IncrRefCount() const
 {
-    uint32_t newRefCount = static_cast< uint32_t >( AtomicIncrementUnsafe( m_RefCount ) );
+	uint32_t newRefCount = static_cast< uint32_t >( AtomicIncrementUnsafe( m_RefCount ) );
 
-    // Test for wrapping to zero.
-    HELIUM_ASSERT( newRefCount != 0 );
+	// Test for wrapping to zero.
+	HELIUM_ASSERT( newRefCount != 0 );
 
-    return newRefCount;
+	return newRefCount;
 }
 
 /// Decrement the reference count of this object, deleting it if the reference count reaches zero.
@@ -125,13 +222,13 @@ uint32_t Helium::AtomicRefCountBase< T >::IncrRefCount() const
 template< typename T >
 uint32_t Helium::AtomicRefCountBase< T >::DecrRefCount() const
 {
-    int32_t newRefCount = AtomicDecrementUnsafe( m_RefCount );
-    if( newRefCount == 0 )
-    {
-        delete this;
-    }
+	int32_t newRefCount = AtomicDecrementUnsafe( m_RefCount );
+	if( newRefCount == 0 )
+	{
+		delete this;
+	}
 
-    return newRefCount;
+	return newRefCount;
 }
 
 /// Assignment operator.
@@ -140,14 +237,14 @@ uint32_t Helium::AtomicRefCountBase< T >::DecrRefCount() const
 template< typename T >
 Helium::AtomicRefCountBase< T >& Helium::AtomicRefCountBase< T >::operator=( const AtomicRefCountBase& /*rSource*/ )
 {
-    // Do not copy the reference count.
-    return *this;
+	// Do not copy the reference count.
+	return *this;
 }
 
 /// Constructor.
 template< typename T >
 Helium::SmartPtr< T >::SmartPtr()
-    : m_Pointer( NULL )
+	: m_Pointer( NULL )
 {
 }
 
@@ -156,12 +253,12 @@ Helium::SmartPtr< T >::SmartPtr()
 /// @param[in] pPointer  Pointer to which this reference should be initialized.
 template< typename T >
 Helium::SmartPtr< T >::SmartPtr( const T* pPointer )
-    : m_Pointer( const_cast< T* >( pPointer ) )
+	: m_Pointer( const_cast< T* >( pPointer ) )
 {
-    if( pPointer )
-    {
-        pPointer->IncrRefCount();
-    }
+	if( pPointer )
+	{
+		pPointer->IncrRefCount();
+	}
 }
 
 /// Copy constructor.
@@ -169,12 +266,12 @@ Helium::SmartPtr< T >::SmartPtr( const T* pPointer )
 /// @param[in] rPointer  Reference from which this reference should be initialized.
 template< typename T >
 Helium::SmartPtr< T >::SmartPtr( const SmartPtr& rPointer )
-    : m_Pointer( rPointer.m_Pointer )
+	: m_Pointer( rPointer.m_Pointer )
 {
-    if( m_Pointer )
-    {
-        m_Pointer->IncrRefCount();
-    }
+	if( m_Pointer )
+	{
+		m_Pointer->IncrRefCount();
+	}
 }
 
 /// Copy constructor.
@@ -183,19 +280,19 @@ Helium::SmartPtr< T >::SmartPtr( const SmartPtr& rPointer )
 template< typename T >
 template< typename U >
 Helium::SmartPtr< T >::SmartPtr( const SmartPtr< U >& rPointer )
-    : m_Pointer( rPointer.m_Pointer )
+	: m_Pointer( rPointer.m_Pointer )
 {
-    if( m_Pointer )
-    {
-        m_Pointer->IncrRefCount();
-    }
+	if( m_Pointer )
+	{
+		m_Pointer->IncrRefCount();
+	}
 }
 
 /// Destructor.
 template< typename T >
 Helium::SmartPtr< T >::~SmartPtr()
 {
-    Release();
+	Release();
 }
 
 /// Get the object currently referenced by this smart pointer.
@@ -206,7 +303,7 @@ Helium::SmartPtr< T >::~SmartPtr()
 template< typename T >
 T* Helium::SmartPtr< T >::Get() const
 {
-    return m_Pointer;
+	return m_Pointer;
 }
 
 /// Get the object currently referenced by this smart pointer.
@@ -217,7 +314,7 @@ T* Helium::SmartPtr< T >::Get() const
 template< typename T >
 T* Helium::SmartPtr< T >::Ptr() const
 {
-    return m_Pointer;
+	return m_Pointer;
 }
 
 /// Set the object referenced by this smart pointer.
@@ -228,21 +325,21 @@ T* Helium::SmartPtr< T >::Ptr() const
 template< typename T >
 void Helium::SmartPtr< T >::Set( const T* pPointer )
 {
-    T* pPointerOld = m_Pointer;
-    if( pPointerOld != pPointer )
-    {
-        m_Pointer = const_cast< T* >( pPointer );
+	T* pPointerOld = m_Pointer;
+	if( pPointerOld != pPointer )
+	{
+		m_Pointer = const_cast< T* >( pPointer );
 
-        if( pPointerOld )
-        {
-            pPointerOld->DecrRefCount();
-        }
+		if( pPointerOld )
+		{
+			pPointerOld->DecrRefCount();
+		}
 
-        if( pPointer )
-        {
-            pPointer->IncrRefCount();
-        }
-    }
+		if( pPointer )
+		{
+			pPointer->IncrRefCount();
+		}
+	}
 }
 
 /// Release any currently set object reference, decrementing its reference count.
@@ -251,12 +348,12 @@ void Helium::SmartPtr< T >::Set( const T* pPointer )
 template< typename T >
 void Helium::SmartPtr< T >::Release()
 {
-    T* pPointer = m_Pointer;
-    if( pPointer )
-    {
-        pPointer->DecrRefCount();
-        m_Pointer = NULL;
-    }
+	T* pPointer = m_Pointer;
+	if( pPointer )
+	{
+		pPointer->DecrRefCount();
+		m_Pointer = NULL;
+	}
 }
 
 /// Get whether this smart pointer references an object.
@@ -265,7 +362,7 @@ void Helium::SmartPtr< T >::Release()
 template< typename T >
 bool Helium::SmartPtr< T >::ReferencesObject() const
 {
-    return ( m_Pointer != NULL );
+	return ( m_Pointer != NULL );
 }
 
 /// Dereference this smart pointer.
@@ -274,9 +371,9 @@ bool Helium::SmartPtr< T >::ReferencesObject() const
 template< typename T >
 T& Helium::SmartPtr< T >::operator*() const
 {
-    HELIUM_ASSERT( m_Pointer );
+	HELIUM_ASSERT( m_Pointer );
 
-    return *m_Pointer;
+	return *m_Pointer;
 }
 
 /// Dereference this smart pointer.
@@ -285,9 +382,9 @@ T& Helium::SmartPtr< T >::operator*() const
 template< typename T >
 T* Helium::SmartPtr< T >::operator->() const
 {
-    HELIUM_ASSERT( m_Pointer );
+	HELIUM_ASSERT( m_Pointer );
 
-    return m_Pointer;
+	return m_Pointer;
 }
 
 /// Cast this reference to a bare object pointer.
@@ -296,7 +393,7 @@ T* Helium::SmartPtr< T >::operator->() const
 template< typename T >
 Helium::SmartPtr< T >::operator T* const&() const
 {
-    return m_Pointer;
+	return m_Pointer;
 }
 
 /// Assignment operator.
@@ -307,9 +404,9 @@ Helium::SmartPtr< T >::operator T* const&() const
 template< typename T >
 Helium::SmartPtr< T >& Helium::SmartPtr< T >::operator=( const T* pPointer )
 {
-    Set( pPointer );
+	Set( pPointer );
 
-    return *this;
+	return *this;
 }
 
 /// Assignment operator.
@@ -320,9 +417,9 @@ Helium::SmartPtr< T >& Helium::SmartPtr< T >::operator=( const T* pPointer )
 template< typename T >
 Helium::SmartPtr< T >& Helium::SmartPtr< T >::operator=( const SmartPtr& rSource )
 {
-    Set( rSource.m_Pointer );
+	Set( rSource.m_Pointer );
 
-    return *this;
+	return *this;
 }
 
 /// Assignment operator.
@@ -334,37 +431,37 @@ template< typename T >
 template< typename U >
 Helium::SmartPtr< T >& Helium::SmartPtr< T >::operator=( const SmartPtr< U >& rSource )
 {
-    Set( rSource.m_Pointer );
+	Set( rSource.m_Pointer );
 
-    return *this;
+	return *this;
 }
 
 template < typename T >
 Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr()
-    : SmartPtr< T >()
+	: SmartPtr< T >()
 {
 }
 
 template < typename T >
 Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr( const Helium::SmartPtr<T>& pPointer )
-    : SmartPtr< T >( pPointer )
+	: SmartPtr< T >( pPointer )
 {
 }
 
 template < typename T >
 Helium::DeepCompareSmartPtr< T >::DeepCompareSmartPtr( const T* pPointer )
-    : SmartPtr< T >( pPointer )
+	: SmartPtr< T >( pPointer )
 {
 }
 
 template < typename T >
 bool Helium::DeepCompareSmartPtr< T >::operator<( const DeepCompareSmartPtr& rhs ) const
 {
-    return (*Get()) < (*rhs.Get());
+	return (*Get()) < (*rhs.Get());
 }
 
 template < typename T >
 bool Helium::DeepCompareSmartPtr< T >::operator==( const DeepCompareSmartPtr& rhs ) const
 {
-    return (*Get()) == (*rhs.Get());
+	return (*Get()) == (*rhs.Get());
 }

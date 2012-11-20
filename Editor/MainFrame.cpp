@@ -2558,8 +2558,8 @@ bool MainFrame::SortContextItemsByName( SceneGraph::SceneNode* lhs, SceneGraph::
 	tstring lname( lhs->GetName() );
 	tstring rname( rhs->GetName() );
 
-	toUpper( lname );
-	toUpper( rname );
+    std::transform(lname.begin(), lname.end(), lname.begin(), toupper); 
+    std::transform(rname.begin(), rname.end(), rname.begin(), toupper); 
 
 	return lname < rname;
 }

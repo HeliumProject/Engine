@@ -6,7 +6,7 @@
 #include "Reflect/Structure.h"
 #include "Reflect/Data/DataDeduction.h"
 #include "Foundation/Log.h"
-#include "Foundation/AutoPtr.h"
+#include "Foundation/SmartPtr.h"
 
 #include <strstream>
 #include <expat.h>

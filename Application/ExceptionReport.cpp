@@ -11,7 +11,6 @@
 #include "Foundation/Profile.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/CmdLine.h"
-#include "Foundation/StringUtilities.h"
 
 #include <sstream>
 #include <time.h>

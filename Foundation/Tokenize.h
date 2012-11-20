@@ -1,6 +1,5 @@
 #pragma once 
 
-#include "Foundation/StringUtilities.h"
 #include "Foundation/Regex.h"
 
 #include <string>

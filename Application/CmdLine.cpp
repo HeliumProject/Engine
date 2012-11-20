@@ -1,4 +1,4 @@
-#include "FoundationPch.h"
+#include "ApplicationPch.h"
 #include "CmdLine.h"
 
 #include "Platform/Process.h"

@@ -10,7 +10,8 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/CmdLine.h"
+
+#include "Application/CmdLine.h"
 
 #include <sstream>
 #include <time.h>

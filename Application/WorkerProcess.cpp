@@ -5,9 +5,9 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/IPCPipe.h"
-#include "Foundation/CmdLine.h"
 #include "Foundation/Exception.h"
 
+#include "Application/CmdLine.h"
 #include "Application/Startup.h"
 
 #include <sstream>

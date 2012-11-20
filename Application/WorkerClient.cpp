@@ -3,10 +3,10 @@
 
 #include "Foundation/Log.h"
 #include "Platform/Exception.h"
-#include "Foundation/CmdLine.h"
 #include "Foundation/IPCPipe.h"
 #include "Foundation/Exception.h"
 
+#include "Application/CmdLine.h"
 #include "Application/Startup.h"
 #include "Application/WorkerProcess.h"
 

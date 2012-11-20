@@ -10,9 +10,9 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
-#include "Foundation/CmdLine.h"
 #include "Foundation/Localization.h"
 
+#include "Application/CmdLine.h"
 #include "Application/ExceptionReport.h"
 
 #include <crtdbg.h>

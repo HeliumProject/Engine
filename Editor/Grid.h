@@ -6,7 +6,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Natural.h"
 
-typedef std::set< tstring, CaseSensitiveNatStrCmp > S_NaturalOrderString;
+typedef std::set< tstring, Helium::NaturalStringComparitor > S_NaturalOrderString;
 
 namespace Helium
 {

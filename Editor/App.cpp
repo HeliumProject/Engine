@@ -613,9 +613,6 @@ int Main( int argc, const tchar_t** argv )
     bool profileFlag = false;
     success &= processor.AddOption( new FlagOption( &profileFlag, StartupArgs::Profile, TXT( "enable profile output to the console windows" ) ), error );
 
-    bool memoryFlag = false;
-    success &= processor.AddOption( new FlagOption( &memoryFlag, StartupArgs::Memory, TXT( "profile and report memory usage to the console" ) ), error );
-
     bool vreboseFlag = false;
     success &= processor.AddOption( new FlagOption( &vreboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
 

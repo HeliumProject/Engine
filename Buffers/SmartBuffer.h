@@ -173,9 +173,6 @@ namespace Helium
         static const uint32_t s_PointerSizes[ 2 ]; // big and little endian
         static const bool s_BigEndian[ 2 ];
 
-        static Profile::MemoryPoolHandle s_ObjectPool;
-        static Profile::MemoryPoolHandle s_DataPool;
-
     protected:
         tstring                 m_Name;
         uint32_t                     m_Type;

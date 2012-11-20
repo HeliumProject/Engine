@@ -10,7 +10,6 @@ namespace Helium
         class IndexResource : public Resource
         {
         public:
-            static Profile::MemoryPoolHandle s_MemoryPool;
             IndexElementType m_ElementType;
             Helium::RIndexBufferPtr m_Buffer; 
 

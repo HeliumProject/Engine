@@ -6,8 +6,6 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Profile::MemoryPoolHandle VertexResource::s_MemoryPool;
-
 VertexResource::VertexResource()
 : Resource( ResourceTypes::Vertex )
 , m_ElementType( VertexElementTypes::Unknown )
@@ -55,10 +53,6 @@ bool VertexResource::Allocate()
         size,
         ( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ) );
     HELIUM_ASSERT( m_Buffer );
-    if ( m_Buffer )
-    {
-        Profile::Memory::Allocate( s_MemoryPool, size );
-    }
 
     return ( m_Buffer != NULL );
 }
@@ -68,6 +62,5 @@ void VertexResource::Release()
     if ( m_Buffer )
     {
         m_Buffer.Release();
-        Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * VertexElementSizes[ GetElementType() ] );
     }
 }

@@ -11,8 +11,6 @@ REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Shader );
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Profile::MemoryPoolHandle g_ShaderTextureMemoryPool;
-
 #pragma TODO("Data-hide public reflected fields")
 
 void Shader::PopulateComposite( Reflect::Composite& comp )
@@ -27,7 +25,7 @@ void Shader::PopulateComposite( Reflect::Composite& comp )
 
 void Shader::InitializeType()
 {
-    g_ShaderTextureMemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Texture Data" ) );
+
 }
 
 void Shader::CleanupType()
@@ -58,8 +56,6 @@ void Shader::Create()
     if ( m_AssetPath.Exists() )
     {
         //m_BaseTexture = SceneGraph::LoadTexture( m_Scene->GetView()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
-
-        //Profile::Memory::Allocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
     }
 }
 
@@ -71,8 +67,6 @@ void Shader::Delete()
     {
         m_BaseTexture->Release();
         m_BaseTexture = NULL;
-
-        Profile::Memory::Deallocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
     }
 }
 

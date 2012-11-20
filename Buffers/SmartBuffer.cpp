@@ -11,10 +11,6 @@ using namespace Helium;
 const uint32_t SmartBuffer::s_PointerSizes[ 2 ] = { 4, 4 }; // big and little endian
 const bool SmartBuffer::s_BigEndian[ 2 ] = { false, true };
 
-// For profiling memory usage
-Profile::MemoryPoolHandle SmartBuffer::s_ObjectPool;
-Profile::MemoryPoolHandle SmartBuffer::s_DataPool;
-
 Fixup::Fixup()
 {
 
@@ -289,8 +285,6 @@ SmartBuffer::~SmartBuffer()
         {
             ::free( m_Data );
         }
-
-        Profile::Memory::Deallocate( s_DataPool, m_Capacity );
     }
 
     if ( m_OwnsData )
@@ -308,24 +302,12 @@ SmartBuffer::~SmartBuffer()
 
 void* SmartBuffer::operator new (size_t bytes)
 {
-    static bool initialized = false;
-    if (!initialized)
-    {
-        s_ObjectPool = Profile::Memory::CreatePool( TXT( "SmartBuffer Objects" ) );
-        s_DataPool = Profile::Memory::CreatePool( TXT( "SmartBuffer Data" ) );
-        initialized = true;
-    }
-
-    Profile::Memory::Allocate( s_ObjectPool, (uint32_t)bytes );
-
     return ::malloc(bytes);
 }
 
 void SmartBuffer::operator delete (void *ptr, size_t bytes)
 {
     ::free(ptr);
-
-    Profile::Memory::Deallocate( s_ObjectPool, (uint32_t)bytes );
 }
 
 void SmartBuffer::Reset()
@@ -359,8 +341,6 @@ void SmartBuffer::Reset()
         {
             ::free(m_Data);
         }
-
-        Profile::Memory::Deallocate( s_DataPool, m_Capacity );
     }
 
     m_Data = 0;
@@ -378,8 +358,6 @@ void SmartBuffer::TakeData( uint32_t& size, uint8_t*& data )
 
         size = m_Size;
         data = m_Data;
-
-        Profile::Memory::Deallocate( s_DataPool, m_Capacity );
     }
     else
     {
@@ -417,8 +395,6 @@ void SmartBuffer::SetVirtual(uint32_t size)
         throw Helium::Exception( TXT( "Out of virtual memory." ) );
     }
 
-    Profile::Memory::Allocate( s_DataPool, size );
-
     m_Capacity = 0;
     m_Virtual = true;
 
@@ -443,10 +419,6 @@ void SmartBuffer::GrowBy(uint32_t size)
             uint32_t difference = size - (m_Capacity - m_Size);
             difference = (difference + 4095) &~ 4095;
 
-            // profiler keeps the allocation count so deallocate our old size and allocate our new total
-            Profile::Memory::Deallocate( s_DataPool, m_Capacity );
-            Profile::Memory::Allocate( s_DataPool, m_Capacity + difference );
-
             // Commit more storage to the end of our already commited section
             ::VirtualAlloc(m_Data+m_Capacity,difference,MEM_COMMIT,PAGE_READWRITE);
             m_Capacity += difference;
@@ -459,10 +431,6 @@ void SmartBuffer::GrowBy(uint32_t size)
             }
 
             uint32_t difference = m_Size + size - m_Capacity;
-
-            // profiler keeps the allocation count so deallocate our old size and allocate our new total
-            Profile::Memory::Deallocate( s_DataPool, m_Capacity );
-            Profile::Memory::Allocate( s_DataPool, m_Capacity + difference );
 
             void *ptr = ::realloc( m_Data, m_Capacity + difference );
             if (ptr == NULL)
@@ -550,8 +518,6 @@ bool SmartBuffer::AdoptBuffer( const SmartBufferPtr& buffer )
         if ( m_Capacity > 0 )
         {
             ::free( m_Data );
-
-            Profile::Memory::Deallocate( s_DataPool, m_Capacity );
 
             m_Data = NULL;
             m_Capacity = 0;

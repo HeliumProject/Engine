@@ -32,7 +32,6 @@ using namespace Helium;
 const tchar_t* StartupArgs::Script = TXT( "script" );
 const tchar_t* StartupArgs::Attach = TXT( "attach" );
 const tchar_t* StartupArgs::Profile = TXT( "profile" );
-const tchar_t* StartupArgs::Memory = TXT( "memory" );
 const tchar_t* StartupArgs::Verbose = TXT( "verbose" );
 const tchar_t* StartupArgs::Extreme = TXT( "extreme" );
 const tchar_t* StartupArgs::Debug = TXT( "debug" );
@@ -227,12 +226,6 @@ void Helium::Startup( int argc, const tchar_t** argv )
 
             // add the profile stream to the trace
             g_TraceStreams |= Log::Streams::Profile; 
-
-            // enable memory reports
-            if ( Helium::GetCmdLineFlag( StartupArgs::Memory ) )
-            {
-                Profile::Memory::Initialize();
-            }
         }
 
         // handle invalid parameters, etc...
@@ -263,7 +256,6 @@ int Helium::Shutdown( int code )
         // This should be done first, so that dynamic libraries to be freed in Cleanup() don't cause breakage in profile
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))
         {
-            Profile::Memory::Cleanup();
             Profile::Accumulator::ReportAll();
         }
 

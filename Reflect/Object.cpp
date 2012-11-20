@@ -149,11 +149,6 @@ Object::~Object()
 
 void* Object::operator new( size_t bytes )
 {
-    if ( Reflect::MemoryPool().Valid() )
-    {
-        Profile::Memory::Allocate( Reflect::MemoryPool(), (uint32_t)bytes );
-    }
-
     Helium::DefaultAllocator allocator;
     void* memory = Helium::AllocateAlignmentHelper( allocator, bytes );
 
@@ -167,11 +162,6 @@ void* Object::operator new( size_t /*bytes*/, void* memory )
 
 void Object::operator delete( void *ptr, size_t bytes )
 {
-    if ( Reflect::MemoryPool().Valid() )
-    {
-        Profile::Memory::Deallocate( Reflect::MemoryPool(), (uint32_t)bytes );
-    }
-
     Helium::DefaultAllocator allocator;
     allocator.Free( ptr );
 }

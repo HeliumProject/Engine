@@ -4,8 +4,6 @@
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
-Profile::MemoryPoolHandle IndexResource::s_MemoryPool;
-
 IndexResource::IndexResource()
 : Resource( ResourceTypes::Index )
 , m_ElementType( IndexElementTypes::Unknown )
@@ -53,10 +51,6 @@ bool IndexResource::Allocate()
         ( IsDynamic() ? Helium::RENDERER_BUFFER_USAGE_DYNAMIC : Helium::RENDERER_BUFFER_USAGE_STATIC ),
         IndexElementFormats[ GetElementType() ] );
     HELIUM_ASSERT( m_Buffer );
-    if ( m_Buffer )
-    {
-        Profile::Memory::Allocate( s_MemoryPool, size );
-    }
 
     return ( m_Buffer != NULL );
 }
@@ -66,6 +60,5 @@ void IndexResource::Release()
     if ( m_Buffer )
     {
         m_Buffer.Release();
-        Profile::Memory::Deallocate( s_MemoryPool, GetElementCount() * IndexElementSizes[ GetElementType() ] );
     }
 }

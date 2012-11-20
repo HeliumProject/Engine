@@ -2,7 +2,6 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/Memory.h"
 #include "Foundation/Crc32.h"
 #include "Foundation/SortedMap.h"
 #include "Foundation/FilePath.h"
@@ -37,8 +36,6 @@ namespace Helium
         HELIUM_REFLECT_API bool IsInitialized();
         HELIUM_REFLECT_API void Initialize();
         HELIUM_REFLECT_API void Cleanup();
-
-        HELIUM_REFLECT_API Profile::MemoryPoolHandle MemoryPool();
 
         class HELIUM_REFLECT_API Registry
         {

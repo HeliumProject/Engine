@@ -22,7 +22,6 @@ namespace Helium
         static const tchar_t* Script;
         static const tchar_t* Attach;
         static const tchar_t* Profile;
-        static const tchar_t* Memory;
         static const tchar_t* Verbose;
         static const tchar_t* Extreme;
         static const tchar_t* Debug;

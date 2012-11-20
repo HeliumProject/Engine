@@ -130,20 +130,10 @@ void Reflect::Cleanup()
 #endif
 }
 
-Profile::MemoryPoolHandle g_MemoryPool;
-
-Profile::MemoryPoolHandle Reflect::MemoryPool()
-{
-    return g_MemoryPool;
-}
-
 // private constructor
 Registry::Registry()
 {
-    if ( Profile::Settings::MemoryProfilingEnabled() )
-    {
-        g_MemoryPool = Profile::Memory::CreatePool( TXT( "Reflect Objects" ) );
-    }
+
 }
 
 Registry::~Registry()

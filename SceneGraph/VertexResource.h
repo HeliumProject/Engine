@@ -11,11 +11,9 @@ namespace Helium
 {
     namespace SceneGraph
     {
-
         class VertexResource : public Resource
         {
         public:
-            static Profile::MemoryPoolHandle s_MemoryPool;
             VertexElementType m_ElementType;
             Helium::RVertexBufferPtr m_Buffer;
 

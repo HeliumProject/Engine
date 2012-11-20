@@ -388,7 +388,7 @@ bool ProjectViewModel::AddChildItem( const wxDataViewItem& parenItem, const Heli
 
     // Create the child node
     const Document* document = m_DocumentManager->FindDocument( path );
-    Helium::StdInsert<S_ProjectViewModelNodeChildren>::Result inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document, isContainer ) );
+    std::pair< S_ProjectViewModelNodeChildren::const_iterator, bool > inserted = parentNode->GetChildren().insert( new ProjectViewModelNode( this, parentNode, path, document, isContainer ) );
     if ( inserted.second )
     {
         ProjectViewModelNode* childNode = (*inserted.first);

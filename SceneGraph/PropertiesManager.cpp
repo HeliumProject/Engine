@@ -149,7 +149,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
                         }
 
                         // copy the shared list into the new shared map
-                        Helium::StdInsert<M_ElementsByType>::Result inserted = 
+                        std::pair< M_ElementsByType::iterator, bool > inserted = 
                             newCommonElements.insert(M_ElementsByType::value_type( currentItr->first, std::vector<Reflect::Object*> () ));
 
                         // add this current element's instance to the new shared list
@@ -173,7 +173,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
                         if (found != currentElements.end())
                         {
                             // copy the shared list into the new shared map
-                            Helium::StdInsert<M_ElementsByType>::Result inserted = 
+                            std::pair< M_ElementsByType::iterator, bool > inserted = 
                                 newCommonElements.insert(M_ElementsByType::value_type( sharedItr->first, sharedItr->second ));
 
                             // add this current element's instance to the new shared list
@@ -219,7 +219,7 @@ void PropertiesManager::GenerateProperties( PropertiesThreadArgs& args )
 
             interpreter->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
 
-            Helium::StdInsert<M_InterpretersByType>::Result inserted = 
+            std::pair< M_InterpretersByType::const_iterator, bool > inserted = 
                 commonElementInterpreters.insert( M_InterpretersByType::value_type(itr->first, interpreter) );
         }
     }

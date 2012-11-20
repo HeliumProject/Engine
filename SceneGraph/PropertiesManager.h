@@ -83,7 +83,7 @@ namespace Helium
             void EnumerateElement(Reflect::Object* element, int32_t includeFlags = 0xFFFFFFFF, int32_t excludeFlags = 0x0 )
             {
                 // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
-                Helium::StdInsert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetClass(), includeFlags, excludeFlags ), element) );
+                std::pair< M_ElementByType::const_iterator, bool > inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetClass(), includeFlags, excludeFlags ), element) );
             }
 
             M_ElementByType&        m_CurrentElements;

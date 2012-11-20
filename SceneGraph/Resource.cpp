@@ -7,7 +7,6 @@
 
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
-#include "Foundation/Insert.h" 
 
 #include <algorithm>
 

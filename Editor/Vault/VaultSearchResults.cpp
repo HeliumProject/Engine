@@ -1,8 +1,6 @@
 #include "EditorPch.h"
 #include "VaultSearchResults.h"
 
-#include "Foundation/Insert.h"
-
 using namespace Helium;
 using namespace Helium::Editor;
 
@@ -51,7 +49,7 @@ const std::set< TrackedFile >& VaultSearchResults::GetResults() const
 
 bool VaultSearchResults::Add( const TrackedFile& file )
 {
-    Helium::StdInsert< std::set< TrackedFile > >::Result inserted = m_Results.insert( file );
+    std::pair<  std::set< TrackedFile > ::const_iterator, bool > inserted = m_Results.insert( file );
     return inserted.second;
 }
 

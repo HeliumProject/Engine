@@ -1,6 +1,5 @@
 #include "EditorPch.h"
 #include "FieldMRU.h"
-#include "Foundation/Insert.h" 
 
 #include <wx/ctrlsub.h>
 
@@ -49,7 +48,7 @@ ManagedStringSetPtr FieldMRU::GetFieldItems( const tstring& fieldKey, const tstr
   // Auto-Init the ManagedStringSet if it's not there
   else if ( autoInit )
   {
-    StdInsert<M_ManagedStringSet>::Result inserted = m_Fields.insert( M_ManagedStringSet::value_type( fieldKey, new ManagedStringSet() ) );
+    std::pair< M_ManagedStringSet::const_iterator, bool > inserted = m_Fields.insert( M_ManagedStringSet::value_type( fieldKey, new ManagedStringSet() ) );
 
     if ( inserted.second )
     {

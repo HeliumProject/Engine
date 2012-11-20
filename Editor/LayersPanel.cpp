@@ -121,7 +121,7 @@ LayersPanel::~LayersPanel()
 // 
 bool LayersPanel::AddLayer( Layer* layer )
 {
-    Helium::StdInsert<M_LayerDumbPtr>::Result inserted = m_Layers.insert( M_LayerDumbPtr::value_type( layer->GetName(), layer ) );
+    std::pair< M_LayerDumbPtr::const_iterator, bool > inserted = m_Layers.insert( M_LayerDumbPtr::value_type( layer->GetName(), layer ) );
     HELIUM_ASSERT( inserted.second );
 
     // Listen for name changes to this layer

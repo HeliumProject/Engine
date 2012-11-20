@@ -6,7 +6,6 @@
 
 #include "Foundation/DirectoryIterator.h"
 #include "Foundation/FilePath.h"
-#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
 #include "Foundation/String.h"
 

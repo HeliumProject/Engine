@@ -3,7 +3,6 @@
 
 #include "Editor/App.h"
 #include "Foundation/Regex.h"
-#include "Foundation/Insert.h"
 #include "Foundation/MD5.h"
 #include "Foundation/Tokenize.h"
 #include "Foundation/Log.h"

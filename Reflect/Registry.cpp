@@ -1,15 +1,15 @@
 #include "ReflectPch.h"
 #include "Reflect/Registry.h"
 
+#include "Platform/Atomic.h"
+#include "Platform/Thread.h"
+
 #include "Foundation/Log.h"
-#include "Foundation/Insert.h"
+
 #include "Reflect/Enumeration.h"
 #include "Reflect/Data/DataDeduction.h"
 #include "Reflect/Version.h"
 #include "Reflect/DOM.h"
-
-#include "Platform/Atomic.h"
-#include "Platform/Thread.h"
 
 #include <io.h>
 
@@ -152,7 +152,7 @@ bool Registry::RegisterType(const Type* type)
     HELIUM_ASSERT( IsMainThread() );
 
     uint32_t crc = Crc32( type->m_Name );
-    Insert< M_HashToType >::Result result = m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
+	Pair< M_HashToType::Iterator, bool > result = m_TypesByHash.Insert( M_HashToType::ValueType( crc, type ) );
     if ( !result.Second() )
     {
         Log::Error( TXT( "Re-registration of type %s, could be ambigouous crc: 0x%08x\n" ), type->m_Name, crc );

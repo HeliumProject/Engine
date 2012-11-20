@@ -1,6 +1,5 @@
 #include "EditorPch.h"
 #include "ClipboardFileList.h"
-#include "Foundation/Insert.h"
 
 REFLECT_DEFINE_OBJECT( Helium::Editor::ClipboardFileList );
 
@@ -27,7 +26,7 @@ ClipboardFileList::~ClipboardFileList()
 // 
 bool ClipboardFileList::AddFilePath( const tstring& file )
 {
-    Helium::StdInsert< std::set< tstring > >::Result inserted = m_Files.insert( file );
+    std::pair< std::set< tstring >::const_iterator, bool > inserted = m_Files.insert( file );
     m_IsDirty = inserted.second;
     return m_IsDirty;
 }

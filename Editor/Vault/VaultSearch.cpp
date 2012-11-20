@@ -3,7 +3,6 @@
 
 #include "Platform/Exception.h"
 #include "Foundation/Regex.h"
-#include "Foundation/Insert.h"
 #include "Foundation/DirectoryIterator.h"
 #include "Foundation/Tokenize.h"
 
@@ -452,7 +451,7 @@ uint32_t VaultSearch::Add( const TrackedFile& file, int32_t searchID )
 #ifdef TRACKER_REFACTOR
     HELIUM_ASSERT( !FilePath( file.mPath.value() ).IsDirectory() );
 
-    StdInsert< std::set< TrackedFile > >::Result inserted = m_FoundFiles.insert( file );
+    std::pair< std::set< TrackedFile >::const_iterator, bool > inserted = m_FoundFiles.insert( file );
     if ( m_SearchResults && inserted.second )
     {
         m_SearchResults->Add( file );

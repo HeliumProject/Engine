@@ -2,7 +2,6 @@
 #include "HierarchyNode.h"
 
 #include "Reflect/Object.h"
-#include "Foundation/Insert.h" 
 
 #include "SceneGraph/Color.h"
 #include "SceneGraph/Graph.h"

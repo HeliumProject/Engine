@@ -3,8 +3,6 @@
 
 #include "Platform/Process.h"
 
-#include "Foundation/Insert.h" 
-
 #include <set>
 #include <sstream>
 #include <wx/msgdlg.h>
@@ -310,7 +308,7 @@ void PerforceSubmitPanel::Populate()
         //displayPath += " ";
         //displayPath += GetOperationString( File.m_Operation );
 
-        Helium::StdInsert<M_FileItemTable>::Result inserted = m_FileItemTable.insert( M_FileItemTable::value_type( depotPath, listBox->Append( displayPath.c_str() ) ) );
+        std::pair< M_FileItemTable::const_iterator, bool > inserted = m_FileItemTable.insert( M_FileItemTable::value_type( depotPath, listBox->Append( displayPath.c_str() ) ) );
         if ( shouldShowCommitButtons && inserted.second )
         {
             m_FileCheckList->Check( inserted.first->second, true ); //File.IsCheckedOutByMe() );

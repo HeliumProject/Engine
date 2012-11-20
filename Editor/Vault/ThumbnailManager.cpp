@@ -77,7 +77,7 @@ void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& arg
     }
     else
     {
-        Helium::StdInsert< std::map< uint32_t, Helium::FilePath > >::Result inserted = list->insert( std::make_pair( crc, args.m_Path ) );
+        std::pair< std::map< uint32_t, Helium::FilePath >::const_iterator, bool > inserted = list->insert( std::make_pair( crc, args.m_Path ) );
 
         // only kick to foreground for new entries
         if ( inserted.second )

@@ -1,7 +1,7 @@
 #include "EditorPch.h"
 #include "Grid.h"
+
 #include "Platform/Assert.h"
-#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
 
 using namespace Helium;
@@ -487,7 +487,7 @@ int32_t Grid::InsertName( const tstring& name )
   int32_t row = -1;
 
   // The name should be unique, so add it to our list
-  StdInsert<S_NaturalOrderString>::Result inserted = m_Names.insert( name );
+  std::pair< S_NaturalOrderString::const_iterator, bool > inserted = m_Names.insert( name );
   if ( inserted.second )
   {
     // Figure out where it was inserted in the list

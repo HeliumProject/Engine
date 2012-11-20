@@ -1,7 +1,6 @@
 #include "SceneGraphPch.h"
 #include "SceneGraph/SceneManager.h"
 
-#include "Foundation/Insert.h" 
 #include "Foundation/Log.h"
 
 #include "SceneGraph/ComponentHandle.h"
@@ -77,7 +76,7 @@ void SceneManager::AddScene(SceneGraph::Scene* scene)
 {
     scene->d_Editing.Set( SceneEditingSignature::Delegate( this, &SceneManager::OnSceneEditing ) );
  
-    Helium::StdInsert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+    std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
     HELIUM_ASSERT(inserted.second);
 
     e_SceneAdded.Raise( SceneChangeArgs( NULL, scene ) );
@@ -396,7 +395,7 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
         scene->SetPath( args.m_Document->GetPath() );
 
         // re-insert w/ new path
-        Helium::StdInsert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
+        std::pair< M_SceneSmartPtr::const_iterator, bool > inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetPath().Get(), scene ) );
         HELIUM_ASSERT( inserted.second );
     }
 }

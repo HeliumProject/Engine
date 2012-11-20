@@ -2,7 +2,6 @@
 #include "SceneGraph/PropertiesGenerator.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Insert.h" 
 
 #include "Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Inspect/Controls/LabelControl.h"

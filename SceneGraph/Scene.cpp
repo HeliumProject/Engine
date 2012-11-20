@@ -6,8 +6,6 @@
 #include <cctype>
 
 #include "Foundation/Log.h"
-#include "Foundation/Insert.h" 
-#include "Foundation/Log.h"
 #include "Math/FpuAngleAxis.h"
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/Version.h"
@@ -1096,7 +1094,7 @@ void Scene::SetName( SceneGraph::SceneNode* sceneNode, const tstring& newName )
     sceneNode->SetName( realName );
 
     // mark it taken
-    Helium::StdInsert<HM_NameToSceneNodeDumbPtr>::Result inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
+    std::pair< HM_NameToSceneNodeDumbPtr::const_iterator, bool > inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
     bool previouslyInserted = sceneNode == inserted.first->second && sceneNode->GetName() == realName;
     bool newlyInserted = inserted.second;
     HELIUM_ASSERT( previouslyInserted || newlyInserted );
@@ -1180,7 +1178,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         // this would be bad
         HELIUM_ASSERT( node->GetID() != TUID::Null );
 
-        Helium::StdInsert<HM_SceneNodeSmartPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeSmartPtr::value_type( node->GetID(), node ) );
+        std::pair< HM_SceneNodeSmartPtr::const_iterator, bool > inserted = m_Nodes.insert( HM_SceneNodeSmartPtr::value_type( node->GetID(), node ) );
         HELIUM_ASSERT( inserted.first->second == node );
         if ( !inserted.second )
         {

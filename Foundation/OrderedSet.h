@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Insert.h" 
 #include "Platform/Assert.h"
 
 #include <set>

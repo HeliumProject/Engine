@@ -266,6 +266,4 @@ namespace Helium
     template <> inline bool RangeCast( const float64_t source, uint64_t& dest, bool clamp )        { return RangeCastFloat( source, dest, clamp ); }
     template <> inline bool RangeCast( const float64_t source, float32_t& dest, bool clamp )        { return RangeCastFloat( source, dest, clamp ); }
     template <> inline bool RangeCast( const float64_t source, float64_t& dest, bool clamp )        { dest = source; return true; }
-
-    extern void NumericTest();
 }

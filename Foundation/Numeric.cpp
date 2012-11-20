@@ -3,6 +3,8 @@
 
 using namespace Helium;
 
+#if HELIUM_DEBUG
+
 static void Test( bool clamp )
 {
     // 32->32 int
@@ -79,3 +81,5 @@ struct NumericTest
         Test(false);
     }
 } g_Test;
+
+#endif

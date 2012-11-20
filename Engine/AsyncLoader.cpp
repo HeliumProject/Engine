@@ -3,7 +3,6 @@
 
 #include "Engine/FileLocations.h"
 #include "Foundation/FileStream.h"
-#include "Foundation/BufferedStream.h"
 
 using namespace Helium;
 

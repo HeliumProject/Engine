@@ -2,11 +2,9 @@
 #include "ObjectPreprocessor.h"
 
 #include "Platform/File.h"
-#include "Foundation/BufferedStream.h"
-#include "Foundation/DynamicMemoryStream.h"
-#include "Foundation/ByteSwappingStream.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
+#include "Foundation/MemoryStream.h"
 #include "Foundation/Numeric.h"
 #include "Engine/FileLocations.h"
 #include "Engine/BinaryDeserializer.h"

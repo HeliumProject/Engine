@@ -9,7 +9,6 @@
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"
-#include "Foundation/BufferedStream.h"
 #include "Engine/AsyncLoader.h"
 #include "Foundation/Map.h"
 #include "Foundation/SortedMap.h"

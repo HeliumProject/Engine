@@ -9,7 +9,6 @@
 #include "Engine/Cache.h"
 
 #include "Foundation/FileStream.h"
-#include "Foundation/BufferedStream.h"
 #include "Foundation/StringConverter.h"
 
 #include "Engine/FileLocations.h"

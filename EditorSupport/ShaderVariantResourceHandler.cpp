@@ -4,7 +4,6 @@
 
 #include "EditorSupport/ShaderVariantResourceHandler.h"
 
-#include "Foundation/BufferedStream.h"
 #include "Engine/FileLocations.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/FileStream.h"

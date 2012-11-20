@@ -9,10 +9,9 @@
 //#ifndef HELIUM_PC_SUPPORT_XML_SERIALIZER_BASE_H
 //#define HELIUM_PC_SUPPORT_XML_SERIALIZER_BASE_H
 //
-//#include "PcSupport/PcSupport.h"
+//#include "Foundation/MemoryStream.h"
 //#include "Engine/Serializer.h"
-//
-//#include "Foundation/DynamicMemoryStream.h"
+//#include "PcSupport/PcSupport.h"
 //
 //// Output newline character.
 //#if HELIUM_OS_WIN

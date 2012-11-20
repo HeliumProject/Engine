@@ -176,7 +176,7 @@ bool MaterialResourceHandler::CacheResource(
     //                    rMaterialSubData.Reserve( bufferSize );
     //                    rMaterialSubData.Add( 0, bufferSize );
 
-    //                    ExternalMemoryStream memoryStream( rMaterialSubData.GetData(), bufferSize );
+    //                    StaticMemoryStream memoryStream( rMaterialSubData.GetData(), bufferSize );
     //                    ByteSwappingStream byteSwapStream( &memoryStream );
     //                    Stream& rOutputStream =
     //                        ( bSwapBytes

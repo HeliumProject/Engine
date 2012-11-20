@@ -11,8 +11,8 @@
 
 #include "Engine/Serializer.h"
 
-#include "Foundation/ByteSwappingStream.h"
-#include "Foundation/ExternalMemoryStream.h"
+#include "Foundation/Stream.h"
+#include "Foundation/MemoryStream.h"
 
 namespace Helium
 {
@@ -80,7 +80,7 @@ namespace Helium
 
     private:
         /// Memory stream for deserialization.
-        ExternalMemoryStream m_directStream;
+        StaticMemoryStream m_directStream;
         /// Byte-swapping stream interface.
         ByteSwappingStream m_byteSwappingStream;
 

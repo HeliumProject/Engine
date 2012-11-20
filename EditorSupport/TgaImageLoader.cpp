@@ -11,7 +11,7 @@
 
 #include "EditorSupport/TgaImageLoader.h"
 
-#include "Foundation/ByteSwappingStream.h"
+#include "Foundation/Stream.h"
 #include "Rendering/Color.h"
 #include "EditorSupport/Image.h"
 

@@ -11,22 +11,24 @@ namespace Helium
 
     namespace GetterTypes
     {
-        enum GetterType
+        enum Type
         {
             Parameter,
             Reference,
             Value
         };
     }
+	typedef GetterTypes::Type GetterType;
 
     namespace SetterTypes
     {
-        enum SetterType
+        enum Type
         {
             Reference,
             Value
         };
     }
+	typedef SetterTypes::Type SetterType;
 
     class PropertyException : public Helium::Exception
     {
@@ -75,7 +77,7 @@ namespace Helium
         virtual bool Set(const V& value);
 
 	private:
-        GetterTypes::GetterType m_GetterType;
+        GetterType				m_GetterType;
         union
         {
             GetterParam			m_GetParam;
@@ -83,7 +85,7 @@ namespace Helium
             GetterValue			m_GetValue;
         };
 
-		SetterTypes::SetterType m_SetterType;
+		SetterType				m_SetterType;
         union
         {
             SetterReference		m_SetReference;
@@ -118,19 +120,19 @@ namespace Helium
         virtual bool Set(const V& value);
 
 	private:
-        GetterTypes::GetterType m_GetterType;
+        GetterType			m_GetterType;
         union
         {
-            GetterParam m_GetParam;
+            GetterParam		m_GetParam;
             GetterReference m_GetReference;
-            GetterValue m_GetValue;
+            GetterValue		m_GetValue;
         };
 
-		SetterTypes::SetterType m_SetterType;
+		SetterType			m_SetterType;
         union
         {
             SetterReference m_SetReference;
-            SetterValue m_SetValue;
+            SetterValue		m_SetValue;
         };
 
 		T* m_Target;

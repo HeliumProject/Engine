@@ -343,31 +343,31 @@ void Log::EnableStream( Stream stream, bool enable )
     }
 }
 
-Log::Color Log::GetStreamColor( Log::Stream stream )
+ConsoleColor Log::GetStreamColor( Log::Stream stream )
 {
     switch (stream)
     {
     case Streams::Normal:
-        return Log::Colors::None;
+        return ConsoleColors::None;
 
     case Streams::Debug:
-        return Log::Colors::Aqua;
+        return ConsoleColors::Aqua;
 
     case Streams::Profile:
-        return Log::Colors::Green;
+        return ConsoleColors::Green;
 
     case Streams::Warning:
-        return Log::Colors::Yellow;
+        return ConsoleColors::Yellow;
 
     case Streams::Error:
-        return Log::Colors::Red;
+        return ConsoleColors::Red;
 
     default:
         HELIUM_BREAK();
         break;
     }
 
-    return Log::Colors::None;
+    return ConsoleColors::None;
 }
 
 int Log::GetErrorCount()
@@ -400,7 +400,7 @@ void Log::UnlockMutex()
     g_Mutex.Unlock();
 }
 
-void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color color, int indent, tchar_t* output, uint32_t outputSize)
+void Log::PrintString(const tchar_t* string, Stream stream, Level level, ConsoleColor color, int indent, tchar_t* output, uint32_t outputSize)
 {
     Helium::MutexScopeLock mutex (g_Mutex);
 
@@ -452,7 +452,7 @@ void Log::PrintString(const tchar_t* string, Stream stream, Level level, Color c
             if ( display )
             {
                 // deduce the color if we were told to do so
-                if ( color == Colors::Auto )
+                if ( color == ConsoleColors::None )
                 {
                     color = GetStreamColor( stream );
                 }
@@ -523,7 +523,7 @@ void Log::PrintStatements(const V_Statement& statements, uint32_t streamFilter)
     }
 }
 
-void Log::PrintColor(Log::Color color, const tchar_t* fmt, ...)
+void Log::PrintColor(ConsoleColor color, const tchar_t* fmt, ...)
 {
     Helium::MutexScopeLock mutex (g_Mutex);
 

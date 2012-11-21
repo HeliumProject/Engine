@@ -3,6 +3,8 @@
 #include <string>
 
 #include "Platform/Types.h"
+#include "Platform/Console.h"
+
 #include "Foundation/API.h"
 #include "Foundation/SmartPtr.h"
 #include "Foundation/Event.h"
@@ -12,33 +14,6 @@ namespace Helium
     namespace Log
     {
         const static uint32_t MAX_PRINT_SIZE = 8192;
-
-
-        //
-        // Color coding
-        //
-
-        namespace Colors
-        {
-            enum Color
-            {
-                Auto   = 0x0,
-                None   = 0xffffffff,
-
-                // from wincon.h
-                Red    = 0x0004,
-                Green  = 0x0002,
-                Blue   = 0x0001,
-
-                Yellow = Red | Green,
-                Aqua   = Green | Blue,
-                Purple = Blue | Red,
-
-                White  = Red | Green | Blue,
-            };
-        }
-        typedef Colors::Color Color;
-
 
         //
         // Output streams, these speak to the qualitative value of the print:
@@ -82,7 +57,6 @@ namespace Helium
             };
         }
         typedef Levels::Level Level;
-
 
         //
         // Printing event API allows for in-process APIs to handle print events themselves
@@ -225,7 +199,7 @@ namespace Helium
         HELIUM_FOUNDATION_API void EnableStream( Stream stream, bool enable );
 
         // get the print color for the given stream
-        HELIUM_FOUNDATION_API Color GetStreamColor(Stream stream);
+        HELIUM_FOUNDATION_API ConsoleColor GetStreamColor(Stream stream);
 
         // get the current counts
         HELIUM_FOUNDATION_API int GetErrorCount();
@@ -245,13 +219,13 @@ namespace Helium
         //
 
         // main printing function used by all prototypes
-        HELIUM_FOUNDATION_API void PrintString(const tchar_t* string,                // the string to print
-            Stream stream = Streams::Normal,   // the stream its going into
-            Level level = Levels::Default,     // the verbosity level
-            Color color = Colors::Auto,        // the color to use (None for auto)
-            int indent = -1,                   // the amount to indent
-            tchar_t* output = NULL,               // the buffer to copy the result string to
-            uint32_t outputSize = 0);               // the size of the output buffer
+        HELIUM_FOUNDATION_API void PrintString(const tchar_t* string,	// the string to print
+            Stream stream = Streams::Normal,							// the stream its going into
+            Level level = Levels::Default,								// the verbosity level
+            ConsoleColor color = ConsoleColors::None,					// the color to use (None for auto)
+            int indent = -1,											// the amount to indent
+            tchar_t* output = NULL,										// the buffer to copy the result string to
+            uint32_t outputSize = 0);									// the size of the output buffer
 
         // print a persisted print statment
         HELIUM_FOUNDATION_API void PrintStatement(const Statement& statement);
@@ -260,7 +234,7 @@ namespace Helium
         HELIUM_FOUNDATION_API void PrintStatements(const V_Statement& statements, uint32_t streams = Streams::All);
 
         // simple way to print a particular color
-        HELIUM_FOUNDATION_API void PrintColor(Color color, const tchar_t* fmt, ...);
+        HELIUM_FOUNDATION_API void PrintColor(ConsoleColor color, const tchar_t* fmt, ...);
 
         // make a print statement
         HELIUM_FOUNDATION_API void Print(const tchar_t *fmt,...);
@@ -343,11 +317,11 @@ namespace Helium
             void Print( Log::PrintingArgs& args );
 
         private:
-            uint32_t                   m_Thread;
-            uint32_t                   m_Throttle;
-            uint32_t*                  m_ErrorCount;
-            uint32_t*                  m_WarningCount;
-            Log::V_Statement*     m_LogOutput;
+            uint32_t            m_Thread;
+            uint32_t            m_Throttle;
+            uint32_t*           m_ErrorCount;
+            uint32_t*           m_WarningCount;
+            Log::V_Statement*	m_LogOutput;
         };
     }
 }

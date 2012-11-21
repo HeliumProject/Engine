@@ -111,7 +111,7 @@ void TaskOutputWindow::LeaveMessageSection()
   ::LeaveCriticalSection(&m_CriticalSection);
 }
 
-const wxColour& TaskOutputWindow::TranslateColor( Log::Color color )
+const wxColour& TaskOutputWindow::TranslateColor( ConsoleColor color )
 {
   const wxColour* result = wxLIGHT_GREY;
 
@@ -120,37 +120,37 @@ const wxColour& TaskOutputWindow::TranslateColor( Log::Color color )
 
   switch ( color )
   {
-  case Log::Colors::Red:
+  case ConsoleColors::Red:
     {
       return *wxRED;
     }
 
-  case Log::Colors::Green:
+  case ConsoleColors::Green:
     {
       return *wxGREEN;
     }
 
-  case Log::Colors::Blue:
+  case ConsoleColors::Blue:
     {
       return *wxBLUE;
     }
 
-  case Log::Colors::Yellow:
+  case ConsoleColors::Yellow:
     {
       return *wxYELLOW;
     }
 
-  case Log::Colors::Aqua:
+  case ConsoleColors::Aqua:
     {
       return *wxCYAN;
     }
 
-  case Log::Colors::Purple:
+  case ConsoleColors::Purple:
     {
       return *wxPURPLE;
     }
 
-  case Log::Colors::White:
+  case ConsoleColors::White:
     {
       return *wxWHITE;
     }

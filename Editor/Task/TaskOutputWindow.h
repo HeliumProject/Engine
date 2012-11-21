@@ -54,7 +54,7 @@ namespace Helium
             void LeaveMessageSection();
 
             // translate color definition
-            const wxColour& TranslateColor( Log::Color color );
+            const wxColour& TranslateColor( ConsoleColor color );
 
             // insomniac event handlers
             void TaskStarted( const TaskStartedArgs& args );

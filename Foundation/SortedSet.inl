@@ -9,7 +9,7 @@ Helium::SortedSet< Key, CompareKey, Allocator >::SortedSet()
 /// @param[in] rSource  Source object from which to copy.
 template< typename Key, typename CompareKey, typename Allocator >
 Helium::SortedSet< Key, CompareKey, Allocator >::SortedSet( const SortedSet& rSource )
-    : RbTree( rSource )
+    : RedBlackTree( rSource )
 {
 }
 
@@ -20,7 +20,7 @@ template< typename Key, typename CompareKey, typename Allocator >
 template< typename OtherAllocator >
 Helium::SortedSet< Key, CompareKey, Allocator >::SortedSet(
     const SortedSet< Key, CompareKey, OtherAllocator >& rSource )
-    : RbTree( rSource )
+    : RedBlackTree( rSource )
 {
 }
 

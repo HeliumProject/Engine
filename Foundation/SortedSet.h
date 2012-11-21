@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/RbTree.h"
+#include "Foundation/RedBlackTree.h"
 
 namespace Helium
 {
@@ -9,11 +9,11 @@ namespace Helium
     /// SortedSet stores elements using a red-black tree data structure.  Lookups, insertions, and deletions are
     /// performed in a worst-case of O(log n) time.  When iterating, values are guaranteed to be sorted.
     template< typename Key, typename CompareKey = Less< Key >, typename Allocator = DefaultAllocator >
-    class SortedSet : public RbTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key >
+    class SortedSet : public RedBlackTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key >
     {
     public:
         /// Parent class type.
-        typedef RbTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key > Base;
+        typedef RedBlackTree< const Key, const Key, Identity< const Key >, CompareKey, Allocator, Key > Base;
 
         /// Type for set keys.
         typedef typename Base::KeyType KeyType;

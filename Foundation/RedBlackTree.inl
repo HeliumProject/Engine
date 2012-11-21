@@ -1,13 +1,13 @@
 /// Constructor.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RbTree()
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RedBlackTree()
     : m_root( Invalid< size_t >() )
 {
 }
 
 /// Copy constructor.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RbTree( const RbTree& rSource )
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RedBlackTree( const RedBlackTree& rSource )
     : m_values( rSource.m_values )
     , m_links( rSource.m_links )
     , m_blackNodes( rSource.m_blackNodes )
@@ -18,8 +18,8 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 /// Copy constructor.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
 template< typename OtherAllocator >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RbTree(
-    const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RedBlackTree(
+    const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
     : m_values( rSource.m_values )
     , m_links( rSource.m_links )
     , m_blackNodes( rSource.m_blackNodes )
@@ -33,7 +33,7 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 ///
 /// @see GetCapacity(), IsEmpty()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::GetSize() const
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::GetSize() const
 {
     return m_values.GetSize();
 }
@@ -44,21 +44,21 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @see GetSize()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::IsEmpty() const
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::IsEmpty() const
 {
     return m_values.IsEmpty();
 }
 
 /// Get the maximum number of elements this tree can contain without requiring reallocation of memory.
 ///
-/// Note that RbTree makes use of an internal BitArray, which may have a different capacity than the arrays used for
+/// Note that RedBlackTree makes use of an internal BitArray, which may have a different capacity than the arrays used for
 /// data storage and other tree information.
 ///
 /// @return  Current tree capacity.
 ///
 /// @see GetSize(), Reserve()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::GetCapacity() const
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::GetCapacity() const
 {
     return m_values.GetCapacity();
 }
@@ -71,7 +71,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @see GetCapacity()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Reserve( size_t capacity )
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Reserve( size_t capacity )
 {
     m_values.Reserve( capacity );
     m_links.Reserve( capacity );
@@ -82,7 +82,7 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @see GetCapacity()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Trim()
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Trim()
 {
     m_values.Trim();
     m_links.Trim();
@@ -91,7 +91,7 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 
 /// Clear out all elements from this tree and free all dynamically allocated memory.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Clear()
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Clear()
 {
     m_values.Clear();
     m_links.Clear();
@@ -106,8 +106,8 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @see End()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Begin()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Begin()
 {
     return Iterator( this, FindFirstNodeIndex() );
 }
@@ -118,8 +118,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @see End()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Begin() const
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Begin() const
 {
     return ConstIterator( this, FindFirstNodeIndex() );
 }
@@ -130,8 +130,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @see Begin()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::End()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::End()
 {
     return Iterator( this, Invalid< size_t >() );
 }
@@ -142,8 +142,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @see Begin()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::End() const
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::End() const
 {
     return ConstIterator( this, Invalid< size_t >() );
 }
@@ -155,8 +155,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 /// @return  Iterator referencing the node with the specified key if found, otherwise an iterator referencing the end of
 ///          this tree if not found.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Find( const Key& rKey )
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Find( const Key& rKey )
 {
     return Iterator( this, FindNodeIndex( rKey ) );
 }
@@ -168,8 +168,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 /// @return  Constant iterator referencing the node with the specified key if found, otherwise a constant iiterator
 ///          referencing the end of this tree if not found.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Find( const Key& rKey ) const
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Find( const Key& rKey ) const
 {
     return ConstIterator( this, FindNodeIndex( rKey ) );
 }
@@ -182,8 +182,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///          the inserted node, and the boolean value will be set to true.  If a node with the same key already exists
 ///          in this tree, the iterator will reference the existing node, and the boolean value will be set to false.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::Pair< typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator, bool >
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Insert( const Value& rValue )
+Helium::Pair< typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator, bool >
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Insert( const Value& rValue )
 {
     Pair< Iterator, bool > result;
     result.Second() = Insert( result.First(), rValue );
@@ -200,7 +200,7 @@ Helium::Pair< typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Alloc
 /// @return  True if a node with the same key as the given value did not already exist in this tree and a new node was
 ///          inserted, false if a node with the same key already existing in this tree.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Insert(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Insert(
     ConstIterator& rIterator,
     const Value& rValue )
 {
@@ -364,7 +364,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  True if an entry was found and removed, false if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( const Key& rKey )
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( const Key& rKey )
 {
     size_t nodeIndex = FindNodeIndex( rKey );
     bool bIsValidNode = IsValid( nodeIndex );
@@ -380,7 +380,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @param[in] iterator  Iterator for the entry to remove.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( Iterator iterator )
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Remove( Iterator iterator )
 {
     HELIUM_ASSERT( iterator.m_pTree == this );
 
@@ -655,7 +655,7 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @param[in] rTree  Tree with which to swap.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Swap( RbTree& rTree )
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Swap( RedBlackTree& rTree )
 {
     m_values.Swap( rTree.m_values );
     m_links.Swap( rTree.m_links );
@@ -678,7 +678,7 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  True if this tree is valid, false if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Verify() const
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Verify() const
 {
     if( !IsValid( m_root ) )
     {
@@ -696,8 +696,8 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  Reference to this object.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=( const RbTree& rSource )
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=( const RedBlackTree& rSource )
 {
     if( this != &rSource )
     {
@@ -714,9 +714,9 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
 /// @return  Reference to this object.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
 template< typename OtherAllocator >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=(
-        const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::operator=(
+        const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
 {
     if( this != &rSource )
     {
@@ -731,8 +731,8 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >&
 /// @param[in] rSource  Source object from which to copy.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
 template< typename OtherAllocator >
-void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Copy(
-    const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
+void Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Copy(
+    const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource )
 {
     m_values = rSource.m_values;
     m_links = rSource.m_links;
@@ -747,7 +747,7 @@ void Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  Index of the node with the given key.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindNodeIndex(
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindNodeIndex(
     const Key& rKey ) const
 {
     ExtractKey keyExtract;
@@ -780,7 +780,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @see FindLastNodeIndex()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindFirstNodeIndex() const
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindFirstNodeIndex() const
 {
     size_t childIndex = m_root;
     size_t nodeIndex = Invalid< size_t >();
@@ -799,7 +799,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @see FindLastNodeIndex()
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindLastNodeIndex() const
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::FindLastNodeIndex() const
 {
     size_t childIndex = m_root;
     size_t nodeIndex = Invalid< size_t >();
@@ -819,7 +819,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @return  Index of the rotated child node.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RotateNode(
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RotateNode(
     size_t nodeIndex,
     size_t childLinkIndex )
 {
@@ -877,7 +877,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 /// @return  Number of black child nodes in the current tree branch (for black node height verification), invalid index
 ///          if an error was encountered..
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RecursiveVerify(
+size_t Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::RecursiveVerify(
     size_t nodeIndex ) const
 {
     // Verify that the node index is valid.
@@ -885,7 +885,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
     {
         HELIUM_TRACE(
             TraceLevels::Debug,
-            TXT( "Invalid RbTree node index %" ) TPRIuSZ TXT( " (max: %" ) TPRIuSZ TXT( ").\n" ),
+            TXT( "Invalid RedBlackTree node index %" ) TPRIuSZ TXT( " (max: %" ) TPRIuSZ TXT( ").\n" ),
             nodeIndex,
             m_values.GetSize() );
 
@@ -905,7 +905,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         {
             HELIUM_TRACE(
                 TraceLevels::Debug,
-                TXT( "Consecutive red nodes found in RbTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
+                TXT( "Consecutive red nodes found in RedBlackTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
                 nodeIndex,
                 child0Index );
 
@@ -916,7 +916,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         {
             HELIUM_TRACE(
                 TraceLevels::Debug,
-                TXT( "Consecutive red nodes found in RbTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
+                TXT( "Consecutive red nodes found in RedBlackTree (nodes %" ) TPRIuSZ TXT( " and %" ) TPRIuSZ TXT( ").\n" ),
                 nodeIndex,
                 child1Index );
 
@@ -936,7 +936,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         {
             HELIUM_TRACE(
                 TraceLevels::Debug,
-                TXT( "RbTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
+                TXT( "RedBlackTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
                 nodeIndex,
                 child0Index );
 
@@ -951,7 +951,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
         {
             HELIUM_TRACE(
                 TraceLevels::Debug,
-                TXT( "RbTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
+                TXT( "RedBlackTree sort mismatch between node %" ) TPRIuSZ TXT( " and child node %" ) TPRIuSZ TXT( ".\n" ),
                 nodeIndex,
                 child1Index );
 
@@ -985,7 +985,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
     {
         HELIUM_TRACE(
             TraceLevels::Debug,
-            ( TXT( "RbTree black node depth mismatch between subtrees at nodes %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ
+            ( TXT( "RedBlackTree black node depth mismatch between subtrees at nodes %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ
               TXT( " black nodes) and %" ) TPRIuSZ TXT( " (%" ) TPRIuSZ TXT( " black nodes).\n" ) ),
             child0Index,
             child0BlackNodeCount,
@@ -1003,7 +1003,7 @@ size_t Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::ConstIterator()
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::ConstIterator()
 {
 }
 
@@ -1012,10 +1012,10 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 /// @param[in] pTree  Tree to iterate.
 /// @param[in] index  Node index at which to start iterating.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::ConstIterator(
-    const RbTree* pTree,
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::ConstIterator(
+    const RedBlackTree* pTree,
     size_t index )
-    : m_pTree( const_cast< RbTree* >( pTree ) )
+    : m_pTree( const_cast< RedBlackTree* >( pTree ) )
     , m_index( index )
 {
 }
@@ -1024,7 +1024,7 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 ///
 /// @return  Constant reference to the current tree entry.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-const Value& Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator*() const
+const Value& Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator*() const
 {
     HELIUM_ASSERT( m_pTree );
     HELIUM_ASSERT( m_index < m_pTree->m_values.GetSize() );
@@ -1036,7 +1036,7 @@ const Value& Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Inte
 ///
 /// @return  Constant pointer to the current tree entry.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-const Value* Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator->() const
+const Value* Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator->() const
 {
     HELIUM_ASSERT( m_pTree );
     HELIUM_ASSERT( m_index < m_pTree->m_values.GetSize() );
@@ -1048,16 +1048,16 @@ const Value* Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Inte
 ///
 /// @return  Reference to this iterator.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator++()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator++()
 {
     HELIUM_ASSERT( m_pTree );
 
-    const DynamicArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
+    const DynamicArray< RedBlackTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
     size_t nodeIndex = m_index;
     HELIUM_ASSERT( nodeIndex < rLinks.GetSize() );
 
-    const RbTree::LinkData& rLinkData = rLinks[ nodeIndex ];
+    const RedBlackTree::LinkData& rLinkData = rLinks[ nodeIndex ];
     size_t childNodeIndex = rLinkData.children[ 1 ];
     if( IsValid( childNodeIndex ) )
     {
@@ -1081,7 +1081,7 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
         return *this;
     }
 
-    const RbTree::LinkData* pParentLinkData = &rLinks[ parentNodeIndex ];
+    const RedBlackTree::LinkData* pParentLinkData = &rLinks[ parentNodeIndex ];
     size_t child1NodeIndex = pParentLinkData->children[ 1 ];
     while( child1NodeIndex == nodeIndex )
     {
@@ -1109,8 +1109,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Copy of this iterator at the location prior to incrementing.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator++( int )
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator++( int )
 {
     ConstIterator iterator = *this;
     ++( *this );
@@ -1122,8 +1122,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Reference to this iterator.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator--()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator--()
 {
     HELIUM_ASSERT( m_pTree );
 
@@ -1136,10 +1136,10 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
         return *this;
     }
 
-    const DynamicArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
+    const DynamicArray< RedBlackTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
     HELIUM_ASSERT( nodeIndex < rLinks.GetSize() );
 
-    const RbTree::LinkData& rLinkData = rLinks[ nodeIndex ];
+    const RedBlackTree::LinkData& rLinkData = rLinks[ nodeIndex ];
     size_t childNodeIndex = rLinkData.children[ 0 ];
     if( IsValid( childNodeIndex ) )
     {
@@ -1163,7 +1163,7 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
         return *this;
     }
 
-    const RbTree::LinkData* pParentLinkData = &rLinks[ parentNodeIndex ];
+    const RedBlackTree::LinkData* pParentLinkData = &rLinks[ parentNodeIndex ];
     size_t child0NodeIndex = pParentLinkData->children[ 0 ];
     while( child0NodeIndex == nodeIndex )
     {
@@ -1191,8 +1191,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Copy of this iterator at the location prior to decrementing.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator--( int )
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator--( int )
 {
     ConstIterator iterator = *this;
     --( *this );
@@ -1206,7 +1206,7 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  True if this iterator references the same tree location as the given iterator, false if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator==(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator==(
     const ConstIterator& rOther ) const
 {
     return ( m_pTree == rOther.m_pTree && m_index == rOther.m_index );
@@ -1219,7 +1219,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 /// @return  True if this iterator does not reference the same tree location as the given iterator, false if they do
 ///          match.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator!=(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator!=(
     const ConstIterator& rOther ) const
 {
     return ( m_pTree != rOther.m_pTree || m_index != rOther.m_index );
@@ -1231,10 +1231,10 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  True if this iterator references a tree location that precedes that of the given iterator, false if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator<(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator<(
     const ConstIterator& rOther ) const
 {
-    // The index value will be invalid if an iterator is set to RbTree::End(), so treat such cases as always being
+    // The index value will be invalid if an iterator is set to RedBlackTree::End(), so treat such cases as always being
     // greater than any other valid location.
     size_t thisIndex = m_index;
     if( IsInvalid( thisIndex ) )
@@ -1270,10 +1270,10 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// @return  True if this iterator references a tree location that succeeds that of the given iterator, false if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator>(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator>(
     const ConstIterator& rOther ) const
 {
-    // The index value will be invalid if an iterator is set to RbTree::End(), so treat such cases as always being
+    // The index value will be invalid if an iterator is set to RedBlackTree::End(), so treat such cases as always being
     // greater than any other valid location.
     size_t otherIndex = rOther.m_index;
     if( IsInvalid( otherIndex ) )
@@ -1310,7 +1310,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 /// @return  True if this iterator references a tree location that matches or precedes that of the given iterator, false
 ///          if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator<=(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator<=(
     const ConstIterator& rOther ) const
 {
     return !( ( *this ) > rOther );
@@ -1323,7 +1323,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 /// @return  True if this iterator references a tree location that matches or succeeds that of the given iterator, false
 ///          if not.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator>=(
+bool Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::ConstIterator::operator>=(
     const ConstIterator& rOther ) const
 {
     return !( ( *this ) < rOther );
@@ -1333,7 +1333,7 @@ bool Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValu
 ///
 /// Creates an uninitialized iterator.  Using this is not safe until it is initialized.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::Iterator()
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::Iterator()
 {
 }
 
@@ -1342,8 +1342,8 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 /// @param[in] pTree  Tree to iterate.
 /// @param[in] index  Node index at which to start iterating.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::Iterator(
-    RbTree* pTree,
+Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::Iterator(
+    RedBlackTree* pTree,
     size_t index )
     : ConstIterator( pTree, index )
 {
@@ -1353,7 +1353,7 @@ Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::
 ///
 /// @return  Reference to the current tree entry.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Value& Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator*() const
+Value& Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator*() const
 {
     HELIUM_ASSERT( m_pTree );
     HELIUM_ASSERT( m_index < m_pTree->m_values.GetSize() );
@@ -1365,7 +1365,7 @@ Value& Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @return  Pointer to the current tree entry.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-Value* Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator->() const
+Value* Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator->() const
 {
     HELIUM_ASSERT( m_pTree );
     HELIUM_ASSERT( m_index < m_pTree->m_values.GetSize() );
@@ -1377,8 +1377,8 @@ Value* Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalVa
 ///
 /// @return  Reference to this iterator.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator++()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator++()
 {
     ConstIterator::operator++();
 
@@ -1389,8 +1389,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Copy of this iterator at the location prior to incrementing.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator++( int )
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator++( int )
 {
     Iterator iterator = *this;
     ++( *this );
@@ -1402,8 +1402,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Reference to this iterator.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator&
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator--()
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator&
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator--()
 {
     ConstIterator::operator--();
 
@@ -1414,8 +1414,8 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 ///
 /// @return  Copy of this iterator at the location prior to decrementing.
 template< typename Value, typename Key, typename ExtractKey, typename CompareKey, typename Allocator, typename InternalValue >
-typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
-    Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator--( int )
+typename Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator
+    Helium::RedBlackTree< Value, Key, ExtractKey, CompareKey, Allocator, InternalValue >::Iterator::operator--( int )
 {
     Iterator iterator = *this;
     --( *this );

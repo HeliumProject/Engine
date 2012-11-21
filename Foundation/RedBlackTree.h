@@ -11,7 +11,7 @@ namespace Helium
     template<
         typename Value, typename Key, typename ExtractKey, typename CompareKey = Less< Key >,
         typename Allocator = DefaultAllocator, typename InternalValue = Value >
-    class RbTree
+    class RedBlackTree
     {
     private:
         struct LinkData;
@@ -33,7 +33,7 @@ namespace Helium
         /// Constant red-black tree iterator.
         class ConstIterator
         {
-            friend class RbTree;
+            friend class RedBlackTree;
 
         public:
             // STL iterator support.
@@ -69,20 +69,20 @@ namespace Helium
 
         protected:
             /// Tree instance.
-            RbTree* m_pTree;
+            RedBlackTree* m_pTree;
             /// Current tree node index.
             size_t m_index;
 
             /// @name Construction/Destruction, Protected
             //@{
-            ConstIterator( const RbTree* pTree, size_t index );
+            ConstIterator( const RedBlackTree* pTree, size_t index );
             //@}
         };
 
         /// Red-black tree iterator.
         class Iterator : public ConstIterator
         {
-            friend class RbTree;
+            friend class RedBlackTree;
 
         public:
             // STL iterator support.
@@ -112,16 +112,16 @@ namespace Helium
         protected:
             /// @name Construction/Destruction, Protected
             //@{
-            Iterator( RbTree* pTree, size_t index );
+            Iterator( RedBlackTree* pTree, size_t index );
             //@}
         };
 
         /// @name Construction/Destruction
         //@{
-        RbTree();
-        RbTree( const RbTree& rSource );
-        template< typename OtherAllocator > RbTree(
-            const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
+        RedBlackTree();
+        RedBlackTree( const RedBlackTree& rSource );
+        template< typename OtherAllocator > RedBlackTree(
+            const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
         //@}
 
         /// @name Tree Operations
@@ -149,7 +149,7 @@ namespace Helium
         bool Remove( const Key& rKey );
         void Remove( Iterator iterator );
 
-        void Swap( RbTree& rTree );
+        void Swap( RedBlackTree& rTree );
         //@}
 
         /// @name Debug Verification
@@ -159,9 +159,9 @@ namespace Helium
 
         /// @name Overloaded Operators
         //@{
-        RbTree& operator=( const RbTree& rSource );
-        template< typename OtherAllocator > RbTree& operator=(
-            const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
+        RedBlackTree& operator=( const RedBlackTree& rSource );
+        template< typename OtherAllocator > RedBlackTree& operator=(
+            const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
         //@}
 
     private:
@@ -187,7 +187,7 @@ namespace Helium
         /// @name Private Utility Functions
         //@{
         template< typename OtherAllocator > void Copy(
-            const RbTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
+            const RedBlackTree< Value, Key, ExtractKey, CompareKey, OtherAllocator, InternalValue >& rSource );
 
         size_t FindNodeIndex( const Key& rKey ) const;
 
@@ -201,4 +201,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/RbTree.inl"
+#include "Foundation/RedBlackTree.inl"

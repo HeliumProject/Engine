@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/RbTree.h"
+#include "Foundation/RedBlackTree.h"
 
 namespace Helium
 {
@@ -9,11 +9,11 @@ namespace Helium
     /// SortedMap stores elements using a red-black tree data structure.  Lookups, insertions, and deletions are
     /// performed in a worst-case of O(log n) time.  When iterating, values are guaranteed to be sorted by their keys.
     template< typename Key, typename Data, typename CompareKey = Less< Key >, typename Allocator = DefaultAllocator >
-    class SortedMap : public RbTree< KeyValue< Key, Data >, Key, SelectKey< KeyValue< Key, Data > >, CompareKey, Allocator, Pair< Key, Data > >
+    class SortedMap : public RedBlackTree< KeyValue< Key, Data >, Key, SelectKey< KeyValue< Key, Data > >, CompareKey, Allocator, Pair< Key, Data > >
     {
     public:
         /// Parent class type.
-        typedef RbTree< KeyValue< Key, Data >, Key, SelectKey< KeyValue< Key, Data > >, CompareKey, Allocator, Pair< Key, Data > >
+        typedef RedBlackTree< KeyValue< Key, Data >, Key, SelectKey< KeyValue< Key, Data > >, CompareKey, Allocator, Pair< Key, Data > >
             Base;
 
         /// Type for map keys.

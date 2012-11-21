@@ -9,7 +9,7 @@ Helium::SortedMap< Key, Data, CompareKey, Allocator >::SortedMap()
 /// @param[in] rSource  Source object from which to copy.
 template< typename Key, typename Data, typename CompareKey, typename Allocator >
 Helium::SortedMap< Key, Data, CompareKey, Allocator >::SortedMap( const SortedMap& rSource )
-    : RbTree( rSource )
+    : RedBlackTree( rSource )
 {
 }
 
@@ -20,7 +20,7 @@ template< typename Key, typename Data, typename CompareKey, typename Allocator >
 template< typename OtherAllocator >
 Helium::SortedMap< Key, Data, CompareKey, Allocator >::SortedMap(
     const SortedMap< Key, Data, CompareKey, OtherAllocator >& rSource )
-    : RbTree( rSource )
+    : RedBlackTree( rSource )
 {
 }
 

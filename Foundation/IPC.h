@@ -6,8 +6,6 @@
 #include "Platform/Semaphore.h"
 #include "Platform/Thread.h"
 
-#include "Foundation/IPC.h"
-#include "Foundation/Localization.h"
 #include "Foundation/Profile.h"
 
 //#define IPC_PROFILE
@@ -155,9 +153,6 @@ namespace Helium
 		class HELIUM_FOUNDATION_API Connection
 		{
 		protected:
-			static Localization::StringTable s_StringTable;
-			static bool                      s_RegisteredStringTable;
-
 			tchar_t					m_Name[256];          // friendly name for this connection
 			bool					m_Server;             // are we the server side or the client side
 			bool                    m_Terminating;        // used by the closedown code to signal it wants the threads to terminate

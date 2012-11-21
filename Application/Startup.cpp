@@ -10,7 +10,6 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
-#include "Foundation/Localization.h"
 
 #include "Application/CmdLine.h"
 #include "Application/ExceptionReport.h"
@@ -62,33 +61,19 @@ std::vector< tstring > g_TraceFiles;
 Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
+#if HELIUM_OS_WIN
 #ifdef _DEBUG
 namespace Helium
 {
     long& g_BreakOnAlloc (_crtBreakAlloc);
 }
-#endif //_DEBUG
-
-namespace Helium
-{
-    static Localization::StringTable g_StringTable( "Helium" );
-}
+#endif // _DEBUG
+#endif // HELIUM_OS_WIN
 
 void Helium::Startup( int argc, const tchar_t** argv )
 {
     if ( ++g_InitCount == 1 )
     {
-        g_StringTable.AddString( "en", "WaitingDebuggerAttach", TXT( "Waiting <MINUTES> minutes for debugger to attach...\n" ) );
-        g_StringTable.AddString( "en", "DebuggerAttached", TXT( "Debugger attached\n" ) );
-        g_StringTable.AddString( "en", "RunningApp", TXT( "Running <APPNAME>...\n" ) );
-        g_StringTable.AddString( "en", "CurrentTime", TXT( "Current Time: <TIME>\n" ) );
-        g_StringTable.AddString( "en", "CommandLine", TXT( "Command Line: <COMMANDLINE>\n" ) );
-
-        Localization::GlobalLocalizer().RegisterTable( &g_StringTable );
-
-#pragma TODO( "Set the language at some more appropriate point in the code?" )
-        Localization::GlobalLocalizer().SetLanguageId( "en" );
-
         InitializeStandardTraceFiles(); 
 
         // Set our start time
@@ -103,10 +88,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
         if ( Helium::GetCmdLineFlag( StartupArgs::Attach ) )
         {
             int32_t timeout = 300; // 5min
-
-            Localization::Statement stmt( "Helium", "WaitingDebuggerAttach" );
-            stmt.ReplaceKey( TXT( "MINUTES" ), timeout / 60 );
-            Log::Print( stmt.Get().c_str() );
+            Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60 );
 
             while ( !Helium::IsDebuggerPresent() && timeout-- )
             {
@@ -115,8 +97,7 @@ void Helium::Startup( int argc, const tchar_t** argv )
 
             if ( Helium::IsDebuggerPresent() )
             {
-                Localization::Statement stmt( "Helium", "DebuggerAttached" );
-                Log::Print( stmt.Get().c_str() );
+                Log::Print( TXT( "Debugger attached\n" ) );
                 HELIUM_ISSUE_BREAK();
             }
         }
@@ -138,25 +119,12 @@ void Helium::Startup( int argc, const tchar_t** argv )
         // Only print startup summary if we are not in script mode
         if ( !Helium::GetCmdLineFlag( StartupArgs::Script ) )
         {
-            //
-            // Print project and version info
-            //
-
-            Localization::Statement stmt( "Helium", "RunningApp" );
-            stmt.ReplaceKey( TXT( "APPNAME" ), GetProcessName() );
-            Log::Print( stmt.Get().c_str() );
-
-            stmt.Set( "Helium", "CurrentTime" );
 #if HELIUM_WCHAR_T
-            stmt.ReplaceKey( TXT( "TIME" ), _wctime64( &g_StartTime.time ) );
+            Log::Print( TXT( "Current Time: %s\n" ), _wctime64( &g_StartTime.time ) );
 #else
-            stmt.ReplaceKey( TXT( "TIME" ), _ctime64( &g_StartTime.time ) );
+            Log::Print( TXT( "Current Time: %s\n" ), _ctime64( &g_StartTime.time ) );
 #endif
-            Log::Print( stmt.Get().c_str() );
-
-            stmt.Set( "Helium", "CommandLine" );
-            stmt.ReplaceKey( TXT( "COMMANDLINE" ), Helium::GetCmdLine() );
-            Log::Print( stmt.Get().c_str() );
+			Log::Print( TXT( "Command Line: %s\n" ), Helium::GetCmdLine() );
         }
 
         // Setup Console
@@ -250,8 +218,6 @@ int Helium::Shutdown( int code )
 
         // signal our shutdown has begun
         g_ShutdownStarted = true;
-
-        Localization::Cleanup();
 
         // This should be done first, so that dynamic libraries to be freed in Cleanup() don't cause breakage in profile
         if (Helium::GetCmdLineFlag( StartupArgs::Profile ))

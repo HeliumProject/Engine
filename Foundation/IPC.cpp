@@ -190,8 +190,6 @@ static const tchar_t* ConnectionStateNames[] =
 };
 
 HELIUM_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar_t*)) );
-Localization::StringTable Connection::s_StringTable( "Helium::IPC::Connection" );
-bool Connection::s_RegisteredStringTable = false;
 
 Connection::Connection()
 : m_Server (false)
@@ -203,20 +201,6 @@ Connection::Connection()
 , m_NextTransaction (0)
 {
     SetState(ConnectionStates::Closed);
-
-    if ( !s_RegisteredStringTable )
-    {
-        s_StringTable.AddString( "en", "Connected", TXT( "<NAME>: Connected\n" ) );
-        s_StringTable.AddString( "en", "Disconnected", TXT( "<NAME>: Disonnected\n" ) );
-        s_StringTable.AddString( "en", "Waiting", TXT( "<NAME>: Waiting for connection\n" ) );
-        s_StringTable.AddString( "en", "MessageCreateFailed", TXT( "<NAME>: Failed to create message ( ID: <ID>, TRN: <TRANS>, Size: <SIZE> )\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatform", TXT( "<NAME>: Remote platform is '<PLATFORM>'\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatformTypeReadFailed", TXT( "<NAME>: Failed to read remote platform type!\n" ) );
-        s_StringTable.AddString( "en", "RemotePlatformTypeWriteFailed", TXT( "<NAME>: Failed to write remote Platform type!\n" ) );
-  
-        Localization::GlobalLocalizer().RegisterTable( &s_StringTable );
-        s_RegisteredStringTable = true;
-    }
 }
 
 Connection::~Connection()
@@ -271,23 +255,17 @@ void Connection::SetState(ConnectionState state)
 #else
         if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
         {
-            Localization::Statement stmt( "Helium::IPC::Connection", "Connected" );
-            stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-            Helium::Print( stmt.Get().c_str() );
+            Helium::Print( TXT( "%s: Connected\n" ), m_Name );
         }
 
         if (m_State == ConnectionStates::Active && state != ConnectionStates::Active)
         {
-            Localization::Statement stmt( "Helium::IPC::Connection", "Disconnected" );
-            stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-            Helium::Print( stmt.Get().c_str() );
+            Helium::Print( TXT( "%s: Disonnected\n" ), m_Name );
         }
 
         if (m_State == ConnectionStates::Active && state == ConnectionStates::Waiting)
         {
-            Localization::Statement stmt( "Helium::IPC::Connection", "Waiting" );
-            stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-            Helium::Print( stmt.Get().c_str() );
+            Helium::Print( TXT( "%s: Waiting for connection\n" ), m_Name );
         }
 #endif
 
@@ -322,13 +300,7 @@ Message* Connection::CreateMessage(uint32_t id, uint32_t size, int32_t trans, Me
 
     if (!msg)
     {
-        Localization::Statement stmt( "Helium::IPC::Connection", "MessageCreateFailed" );
-        stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-        stmt.ReplaceKey( TXT( "ID" ), id );
-        stmt.ReplaceKey( TXT( "TRANS" ), trans );
-        stmt.ReplaceKey( TXT( "SIZE" ), size );
-
-        Helium::Print( stmt.Get().c_str() );
+        Helium::Print( TXT( "%s: Failed to create message ( ID: %d, TRN: %d, Size: %d )\n" ), id, trans, size );
     }
 
     return msg;
@@ -530,13 +502,8 @@ void Connection::ConnectThread()
     // we have handshaked, go active
     SetState(ConnectionStates::Active);
 
-    // report our remote platform type
-    
-    Localization::Statement stmt( "Helium::IPC::Connection", "RemotePlatform" );
-    stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-    stmt.ReplaceKey( TXT( "PLATFORM" ), Helium::Platform::GetTypeName(m_RemotePlatform) );
-
-    Helium::Print( stmt.Get().c_str() );
+    // report our remote platform type    
+    Helium::Print( TXT( "%s: Remote platform is '%s'\n" ), m_Name, Helium::Platform::GetTypeName(m_RemotePlatform) );
 
     // start read thread
     Helium::CallbackThread::Entry readEntry = &Helium::CallbackThread::EntryHelper<Connection, &Connection::ReadThread>;
@@ -609,10 +576,7 @@ bool Connection::ReadHostType()
 
     if (!Read(&byte, sizeof(byte)))
     {
-        Localization::Statement stmt( "Helium::IPC::Connection", "RemotePlatformTypeReadFailed" );
-        stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-
-        Helium::Print( stmt.Get().c_str() );
+		Helium::Print( TXT( "%s: Failed to read remote platform type!\n" ), m_Name );
         return false;
     }
 
@@ -625,11 +589,8 @@ bool Connection::WriteHostType()
 {
     uint8_t byte = (uint8_t)Helium::Platform::GetType();
     if (!Write(&byte, sizeof(byte)))
-    {
-        Localization::Statement stmt( "Helium::IPC::Connection", "RemotePlatformTypeWriteFailed" );
-        stmt.ReplaceKey( TXT( "NAME" ), m_Name );
-
-        Helium::Print( stmt.Get().c_str() );
+	{
+        Helium::Print( TXT( "%s: Failed to write remote Platform type!\n" ), m_Name );
         return false;
     }
 

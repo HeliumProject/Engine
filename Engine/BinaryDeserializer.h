@@ -88,7 +88,7 @@ namespace Helium
         Stream* m_pStream;
 
         /// Property flag state stack.
-        DynArray< uint32_t > m_propertyFlagStack;
+        DynamicArray< uint32_t > m_propertyFlagStack;
 
         /// True if we reached the end of the memory stream early.
         bool m_bEndOfStream;

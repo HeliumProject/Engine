@@ -230,7 +230,7 @@ namespace Helium
     /// @return  Reference to the array of preprocessor toggles.
     ///
     /// @see GetSelects()
-    DynArray< Shader::Toggle >& Shader::Options::GetToggles()
+    DynamicArray< Shader::Toggle >& Shader::Options::GetToggles()
     {
         return m_toggles;
     }
@@ -240,7 +240,7 @@ namespace Helium
     /// @return  Constant reference to the array of preprocessor toggles.
     ///
     /// @see GetSelects()
-    const DynArray< Shader::Toggle >& Shader::Options::GetToggles() const
+    const DynamicArray< Shader::Toggle >& Shader::Options::GetToggles() const
     {
         return m_toggles;
     }
@@ -250,7 +250,7 @@ namespace Helium
     /// @return  Reference to the array of preprocessor selections.
     ///
     /// @see GetToggles()
-    DynArray< Shader::Select >& Shader::Options::GetSelects()
+    DynamicArray< Shader::Select >& Shader::Options::GetSelects()
     {
         return m_selects;
     }
@@ -260,7 +260,7 @@ namespace Helium
     /// @return  Constant reference to the array of preprocessor selections.
     ///
     /// @see GetToggles()
-    const DynArray< Shader::Select >& Shader::Options::GetSelects() const
+    const DynamicArray< Shader::Select >& Shader::Options::GetSelects() const
     {
         return m_selects;
     }

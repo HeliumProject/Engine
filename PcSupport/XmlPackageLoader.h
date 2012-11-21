@@ -62,7 +62,7 @@
 //
 //            /// @name Serialization Control
 //            //@{
-//            void Prepare( SerializedObjectData* pObjectData, DynArray< LinkEntry >* pLinkTable );
+//            void Prepare( SerializedObjectData* pObjectData, DynamicArray< LinkEntry >* pLinkTable );
 //            //@}
 //
 //            /// @name Serialization Interface
@@ -73,7 +73,7 @@
 //            virtual void SerializeTag( const Tag& rTag );
 //            virtual bool CanResolveTags() const;
 //
-//            virtual void GetPropertyTagNames( DynArray< String >& rTagNames ) const;
+//            virtual void GetPropertyTagNames( DynamicArray< String >& rTagNames ) const;
 //
 //            virtual void SerializeBool( bool& rValue );
 //            virtual void SerializeInt8( int8_t& rValue );
@@ -99,8 +99,8 @@
 //            virtual void BeginArray( uint32_t size );
 //            virtual void EndArray();
 //
-//            virtual void BeginDynArray();
-//            virtual void EndDynArray();
+//            virtual void BeginDynamicArray();
+//            virtual void EndDynamicArray();
 //            //@}
 //
 //        private:
@@ -212,7 +212,7 @@
 //            public:
 //                /// @name Construction/Destruction
 //                //@{
-//                ObjectParser( DynArray< LinkEntry >* pLinkTable );
+//                ObjectParser( DynamicArray< LinkEntry >* pLinkTable );
 //                //@}
 //
 //                /// @name Overloaded Operators
@@ -222,7 +222,7 @@
 //
 //            private:
 //                /// GameObject link table.
-//                DynArray< LinkEntry >* m_pLinkTable;
+//                DynamicArray< LinkEntry >* m_pLinkTable;
 //            };
 //
 //            /// Null handler for properties not found in the XML property map.
@@ -242,7 +242,7 @@
 //            public:
 //                /// @name Construction/Destruction
 //                //@{
-//                ObjectDefaultHandler( DynArray< LinkEntry >* pLinkTable );
+//                ObjectDefaultHandler( DynamicArray< LinkEntry >* pLinkTable );
 //                //@}
 //
 //                /// @name Overloaded Operators
@@ -252,7 +252,7 @@
 //
 //            private:
 //                /// GameObject link table.
-//                DynArray< LinkEntry >* m_pLinkTable;
+//                DynamicArray< LinkEntry >* m_pLinkTable;
 //            };
 //
 //            /// Property tag stack entry.
@@ -275,10 +275,10 @@
 //            /// Data for the object being deserialized.
 //            SerializedObjectData* m_pObjectData;
 //            /// Link table for the object being deserialized.
-//            DynArray< LinkEntry >* m_pLinkTable;
+//            DynamicArray< LinkEntry >* m_pLinkTable;
 //
 //            /// Property tag stack.
-//            DynArray< TagStackElement > m_tagStack;
+//            DynamicArray< TagStackElement > m_tagStack;
 //
 //            /// @name Private Utility Functions
 //            //@{
@@ -311,7 +311,7 @@
 //
 //        virtual size_t BeginLoadObject( GameObjectPath path );
 //        virtual bool TryFinishLoadObject(
-//            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable );
+//            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
 //
 //        virtual void Tick();
 //        //@}
@@ -367,7 +367,7 @@
 //            size_t index;
 //
 //            /// Link table.
-//            DynArray< LinkEntry > linkTable;
+//            DynamicArray< LinkEntry > linkTable;
 //
 //            /// Cached type reference.
 //            GameObjectTypePtr spType;
@@ -402,7 +402,7 @@
 //        volatile int32_t m_preloadedCounter;
 //
 //        /// Serialized object data parsed from the XML package.
-//        DynArray< SerializedObjectData > m_objects;
+//        DynamicArray< SerializedObjectData > m_objects;
 //
 //        /// Pending load requests.
 //        SparseArray< LoadRequest* > m_loadRequests;

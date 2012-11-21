@@ -14,7 +14,7 @@
 /////
 ///// @param[in] rBuffer  Buffer to which the data should be serialized.  Note that serialization will begin from the
 /////                     current end of the array, with all existing data left intact.
-//DirectSerializer::DirectSerializer( DynArray< uint8_t >& rBuffer )
+//DirectSerializer::DirectSerializer( DynamicArray< uint8_t >& rBuffer )
 //: m_rBuffer( rBuffer )
 //{
 //}

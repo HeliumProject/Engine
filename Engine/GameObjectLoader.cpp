@@ -225,7 +225,7 @@ void GameObjectLoader::Tick()
 	// them from being released while we don't have a lock on the request hash map.
 	//HELIUM_ASSERT( m_loadRequestTickArray.IsEmpty() );
 	/// List of load requests to update in the current tick.
-	DynArray< LoadRequest* > m_loadRequestTickArray;
+	DynamicArray< LoadRequest* > m_loadRequestTickArray;
 
 	ConcurrentHashMap< GameObjectPath, LoadRequest* >::ConstAccessor loadRequestConstAccessor;
 	if( m_loadRequestMap.First( loadRequestConstAccessor ) )
@@ -488,11 +488,11 @@ namespace Helium
     {
     private:
         GameObject &m_Owner;
-        DynArray<GameObjectLoader::LinkEntry>& m_LinkTable;
+        DynamicArray<GameObjectLoader::LinkEntry>& m_LinkTable;
         bool m_bError;
         
     public:
-        PopulateObjectFromLinkTable(GameObject &_owner, DynArray<GameObjectLoader::LinkEntry> &_link_table)
+        PopulateObjectFromLinkTable(GameObject &_owner, DynamicArray<GameObjectLoader::LinkEntry> &_link_table)
             :   m_Owner(_owner),
                 m_LinkTable( _link_table ),
                 m_bError(false)
@@ -587,7 +587,7 @@ bool GameObjectLoader::TickLink( LoadRequest* pRequest )
 	// Make sure each dependency has finished its preload process.
 	bool bHavePendingLinkEntries = false;
 
-	DynArray< LinkEntry >& rLinkTable = pRequest->linkTable;
+	DynamicArray< LinkEntry >& rLinkTable = pRequest->linkTable;
 	size_t linkTableSize = rLinkTable.GetSize();
 	for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
 	{
@@ -648,7 +648,7 @@ bool GameObjectLoader::TickPrecache( LoadRequest* pRequest )
 	if( pObject )
 	{
 		// Wait for all link dependencies to fully load first.
-		DynArray< LinkEntry >& rLinkTable = pRequest->linkTable;
+		DynamicArray< LinkEntry >& rLinkTable = pRequest->linkTable;
 		size_t linkTableSize = rLinkTable.GetSize();
 		for( size_t linkIndex = 0; linkIndex < linkTableSize; ++linkIndex )
 		{

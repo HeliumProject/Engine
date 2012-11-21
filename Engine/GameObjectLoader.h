@@ -113,7 +113,7 @@ namespace Helium
             size_t packageLoadRequestId;
 
             /// Link table.
-            DynArray< LinkEntry > linkTable;
+            DynamicArray< LinkEntry > linkTable;
 
             /// Loading status flags.
             volatile int32_t stateFlags;

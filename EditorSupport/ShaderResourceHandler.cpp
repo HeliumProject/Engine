@@ -208,7 +208,7 @@ void ShaderResourceHandler::ParseLine(
     // Split the line based on groups of whitespaces.
     CharString line( pLineStart, characterCount );
 
-    DynArray< CharString > splitLine;
+    DynamicArray< CharString > splitLine;
     line.Split( splitLine, " \t\v\f", Invalid< size_t >(), true );
 
     // Ignore the first split if it's empty (will occur if the command is preceded by whitespaces).
@@ -226,7 +226,7 @@ void ShaderResourceHandler::ParseLine(
     }
 
     // Process the command.
-    DynArray< CharString > splitCommand;
+    DynamicArray< CharString > splitCommand;
     splitLine[ 0 ].Split( splitCommand, '_' );
     size_t commandSplitCount = splitCommand.GetSize();
     if( commandSplitCount < 1 || commandSplitCount > 2 )
@@ -265,11 +265,11 @@ void ShaderResourceHandler::ParseLine(
     Shader::Options& rSystemOptions = rResourceData.GetSystemOptions();
     Shader::Options& rUserOptions = rResourceData.GetUserOptions();
 
-    DynArray< Shader::Toggle >& rSystemToggles = rSystemOptions.GetToggles();
-    DynArray< Shader::Select >& rSystemSelects = rSystemOptions.GetSelects();
+    DynamicArray< Shader::Toggle >& rSystemToggles = rSystemOptions.GetToggles();
+    DynamicArray< Shader::Select >& rSystemSelects = rSystemOptions.GetSelects();
 
-    DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
-    DynArray< Shader::Select >& rUserSelects = rUserOptions.GetSelects();
+    DynamicArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+    DynamicArray< Shader::Select >& rUserSelects = rUserOptions.GetSelects();
 
     if( ParseLineDuplicateOptionCheck( optionName, rSystemToggles ) ||
         ParseLineDuplicateOptionCheck( optionName, rSystemSelects ) ||
@@ -363,7 +363,7 @@ void ShaderResourceHandler::ParseLine(
 ///
 /// @return  True if a duplicate was found, false if not.
 template< typename OptionType >
-bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, const DynArray< OptionType >& rOptions )
+bool ShaderResourceHandler::ParseLineDuplicateOptionCheck( Name optionName, const DynamicArray< OptionType >& rOptions )
 {
     size_t optionCount = rOptions.GetSize();
     for( size_t optionIndex = 0; optionIndex < optionCount; ++optionIndex )

@@ -90,7 +90,7 @@ namespace Helium
         /// World package.
         PackagePtr m_spWorldPackage;
         /// World instances.
-        DynArray< WorldPtr > m_worlds;
+        DynamicArray< WorldPtr > m_worlds;
 
         /// Actual application tick count at the start of the current frame.
         uint64_t m_actualFrameTickCount;

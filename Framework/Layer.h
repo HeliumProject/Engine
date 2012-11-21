@@ -85,7 +85,7 @@ namespace Helium
         /// Bound package.
         PackagePtr m_spPackage;
         /// Entities.
-        DynArray< EntityPtr > m_entities;
+        DynamicArray< EntityPtr > m_entities;
 
         /// Layer world.
         WorldWPtr m_spWorld;

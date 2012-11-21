@@ -39,7 +39,7 @@ namespace Helium
         void LoadResourceData( Resource* pResource, int64_t objectTimestamp );
 
         uint32_t LoadPersistentResourceData(
-            GameObjectPath resourcePath, Cache::EPlatform platform, DynArray< uint8_t >& rPersistentDataBuffer );
+            GameObjectPath resourcePath, Cache::EPlatform platform, DynamicArray< uint8_t >& rPersistentDataBuffer );
         //@}
 
         /// @name Static Access

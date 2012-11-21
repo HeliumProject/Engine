@@ -1,11 +1,11 @@
 #include "ReflectPch.h"
-#include "Reflect/Data/DynArrayData.h"
+#include "Reflect/Data/DynamicArrayData.h"
 
 #include "Reflect/Data/DataDeduction.h"
 #include "Reflect/ArchiveBinary.h"
 #include "Reflect/ArchiveXML.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::Reflect::DynArrayData )
+REFLECT_DEFINE_ABSTRACT( Helium::Reflect::DynamicArrayData )
 
 using namespace Helium;
 using namespace Helium::Reflect;
@@ -16,7 +16,7 @@ using namespace Helium::Reflect;
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 template< typename T, typename I >
-void Tokenize( const String& str, DynArray< T >& tokens, const tchar_t* delimiters )
+void Tokenize( const String& str, DynamicArray< T >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -48,7 +48,7 @@ void Tokenize( const String& str, DynArray< T >& tokens, const tchar_t* delimite
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize< String, String >( const String& str, DynArray< String >& tokens, const tchar_t* delimiters )
+inline void Tokenize< String, String >( const String& str, DynamicArray< String >& tokens, const tchar_t* delimiters )
 {
     // Skip delimiters at beginning.
     size_t lastPos = str.FindNone( delimiters );
@@ -69,61 +69,61 @@ inline void Tokenize< String, String >( const String& str, DynArray< String >& t
 }
 
 template< class T >
-SimpleDynArrayData< T >::SimpleDynArrayData()
+SimpleDynamicArrayData< T >::SimpleDynamicArrayData()
 {
 
 }
 
 template< class T >
-SimpleDynArrayData< T >::~SimpleDynArrayData()
+SimpleDynamicArrayData< T >::~SimpleDynamicArrayData()
 {
 
 }
 
 template< class T >
-void SimpleDynArrayData< T >::ConnectData(void* data)
+void SimpleDynamicArrayData< T >::ConnectData(void* data)
 {
     m_Data.Connect( data );
 }
 
 template< class T >
-size_t SimpleDynArrayData< T >::GetSize() const
+size_t SimpleDynamicArrayData< T >::GetSize() const
 { 
     return m_Data->GetSize(); 
 }
 
 template< class T >
-void SimpleDynArrayData< T >::SetSize( size_t size )
+void SimpleDynamicArrayData< T >::SetSize( size_t size )
 {
     return m_Data->Resize( size );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Clear()
+void SimpleDynamicArrayData< T >::Clear()
 {
     return m_Data->Clear();
 }
 
 template< class T >
-const Class* SimpleDynArrayData< T >::GetItemClass() const
+const Class* SimpleDynamicArrayData< T >::GetItemClass() const
 {
     return Reflect::GetDataClass< T >();
 }
 
 template< class T >
-DataPtr SimpleDynArrayData< T >::GetItem( size_t at )
+DataPtr SimpleDynamicArrayData< T >::GetItem( size_t at )
 {
     return Data::Bind( m_Data->GetElement( at ), m_Instance, m_Field );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::SetItem( size_t at, Data* value )
+void SimpleDynamicArrayData< T >::SetItem( size_t at, Data* value )
 {
     Data::GetValue( value, m_Data->GetElement( at ) );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Insert( size_t at, Data* value )
+void SimpleDynamicArrayData< T >::Insert( size_t at, Data* value )
 {
     T temp;
     Data::GetValue( value, temp );
@@ -131,13 +131,13 @@ void SimpleDynArrayData< T >::Insert( size_t at, Data* value )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Remove( size_t at )
+void SimpleDynamicArrayData< T >::Remove( size_t at )
 {
     m_Data->Remove( at );
 }
 
 template< class T >
-void SimpleDynArrayData< T >::MoveUp( std::set< size_t >& selectedIndices )
+void SimpleDynamicArrayData< T >::MoveUp( std::set< size_t >& selectedIndices )
 {
     std::set< size_t > newSelectedIndices;
 
@@ -161,7 +161,7 @@ void SimpleDynArrayData< T >::MoveUp( std::set< size_t >& selectedIndices )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::MoveDown( std::set< size_t >& selectedIndices )
+void SimpleDynamicArrayData< T >::MoveDown( std::set< size_t >& selectedIndices )
 {
     std::set< size_t > newSelectedIndices;
 
@@ -185,9 +185,9 @@ void SimpleDynArrayData< T >::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Set( Data* src, uint32_t flags )
+bool SimpleDynamicArrayData< T >::Set( Data* src, uint32_t flags )
 {
-    const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( src );
+    const SimpleDynamicArrayData< T >* rhs = SafeCast< SimpleDynamicArrayData< T > >( src );
     if (!rhs)
     {
         return false;
@@ -199,9 +199,9 @@ bool SimpleDynArrayData< T >::Set( Data* src, uint32_t flags )
 }
 
 template< class T >
-bool SimpleDynArrayData< T >::Equals( Object* object )
+bool SimpleDynamicArrayData< T >::Equals( Object* object )
 {
-    const SimpleDynArrayData< T >* rhs = SafeCast< SimpleDynArrayData< T > >( object );
+    const SimpleDynamicArrayData< T >* rhs = SafeCast< SimpleDynamicArrayData< T > >( object );
     if (!rhs)
     {
         return false;
@@ -211,7 +211,7 @@ bool SimpleDynArrayData< T >::Equals( Object* object )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Serialize( ArchiveBinary& archive )
+void SimpleDynamicArrayData< T >::Serialize( ArchiveBinary& archive )
 {
     Reflect::CharStream& stream = archive.GetStream();
 
@@ -227,7 +227,7 @@ void SimpleDynArrayData< T >::Serialize( ArchiveBinary& archive )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Deserialize( ArchiveBinary& archive )
+void SimpleDynamicArrayData< T >::Deserialize( ArchiveBinary& archive )
 {
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
@@ -249,7 +249,7 @@ void SimpleDynArrayData< T >::Deserialize( ArchiveBinary& archive )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Serialize( ArchiveXML& archive )
+void SimpleDynamicArrayData< T >::Serialize( ArchiveXML& archive )
 {
     archive.GetIndent().Push();
 
@@ -270,7 +270,7 @@ void SimpleDynArrayData< T >::Serialize( ArchiveXML& archive )
 }
 
 template< class T >
-void SimpleDynArrayData< T >::Deserialize( ArchiveXML& archive )
+void SimpleDynamicArrayData< T >::Deserialize( ArchiveXML& archive )
 {
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
@@ -292,7 +292,7 @@ void SimpleDynArrayData< T >::Deserialize( ArchiveXML& archive )
 }
 
 template< class T >
-tostream& SimpleDynArrayData< T >::operator>>( tostream& stream ) const
+tostream& SimpleDynamicArrayData< T >::operator>>( tostream& stream ) const
 {
     size_t elementCount = m_Data->GetSize();
 
@@ -311,7 +311,7 @@ tostream& SimpleDynArrayData< T >::operator>>( tostream& stream ) const
 }
 
 template< class T >
-tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
+tistream& SimpleDynamicArrayData< T >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
@@ -330,7 +330,7 @@ tistream& SimpleDynArrayData< T >::operator<<( tistream& stream )
 // Specializations
 //
 
-void SerializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
+void SerializeStringDynamicArray( ArchiveXML& archive, DynamicArray<String> data )
 {
     archive.GetIndent().Push();
     archive.GetIndent().Get(archive.GetStream());
@@ -352,7 +352,7 @@ void SerializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
     archive.GetIndent().Pop();
 }
 
-void DeserializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
+void DeserializeStringDynamicArray( ArchiveXML& archive, DynamicArray<String> data )
 {
     archive.GetStream().SkipWhitespace(); 
     tstring value;
@@ -390,7 +390,7 @@ void DeserializeStringDynArray( ArchiveXML& archive, DynArray<String> data )
 }
 
 template<>
-void StringDynArrayData::Serialize( ArchiveBinary& archive )
+void StringDynamicArrayData::Serialize( ArchiveBinary& archive )
 {
     CharStream& stream = archive.GetStream();
 
@@ -406,7 +406,7 @@ void StringDynArrayData::Serialize( ArchiveBinary& archive )
 }
 
 template<>
-void StringDynArrayData::Deserialize( ArchiveBinary& archive )
+void StringDynamicArrayData::Deserialize( ArchiveBinary& archive )
 {
     m_Data->Clear();
 
@@ -427,19 +427,19 @@ void StringDynArrayData::Deserialize( ArchiveBinary& archive )
 }
 
 template<>
-void StringDynArrayData::Serialize( ArchiveXML& archive )
+void StringDynamicArrayData::Serialize( ArchiveXML& archive )
 {
-    SerializeStringDynArray(archive, *m_Data);
+    SerializeStringDynamicArray(archive, *m_Data);
 }
 
 template<>
-void StringDynArrayData::Deserialize( ArchiveXML& archive )
+void StringDynamicArrayData::Deserialize( ArchiveXML& archive )
 {
-    DeserializeStringDynArray(archive, *m_Data);
+    DeserializeStringDynamicArray(archive, *m_Data);
 }
 
 template<>
-void NameDynArrayData::Serialize( ArchiveBinary& archive )
+void NameDynamicArrayData::Serialize( ArchiveBinary& archive )
 {
     CharStream& stream = archive.GetStream();
 
@@ -455,7 +455,7 @@ void NameDynArrayData::Serialize( ArchiveBinary& archive )
 }
 
 template<>
-void NameDynArrayData::Deserialize( ArchiveBinary& archive )
+void NameDynamicArrayData::Deserialize( ArchiveBinary& archive )
 {
     m_Data->Clear();
 
@@ -478,9 +478,9 @@ void NameDynArrayData::Deserialize( ArchiveBinary& archive )
 }
 
 template<>
-void NameDynArrayData::Serialize( ArchiveXML& archive )
+void NameDynamicArrayData::Serialize( ArchiveXML& archive )
 {
-    DynArray<String> names_as_str;
+    DynamicArray<String> names_as_str;
     names_as_str.Resize(m_Data->GetSize());
 
     for( size_t index = 0; index < m_Data->GetSize(); ++index )
@@ -488,14 +488,14 @@ void NameDynArrayData::Serialize( ArchiveXML& archive )
         names_as_str[index] = *m_Data->GetElement( index );
     }
 
-    SerializeStringDynArray(archive, names_as_str);
+    SerializeStringDynamicArray(archive, names_as_str);
 }
 
 template<>
-void NameDynArrayData::Deserialize( ArchiveXML& archive )
+void NameDynamicArrayData::Deserialize( ArchiveXML& archive )
 {
-    DynArray<String> names_as_str;
-    DeserializeStringDynArray(archive, names_as_str);
+    DynamicArray<String> names_as_str;
+    DeserializeStringDynamicArray(archive, names_as_str);
 
     m_Data->Resize(names_as_str.GetSize());
     
@@ -514,7 +514,7 @@ void NameDynArrayData::Deserialize( ArchiveXML& archive )
 //
 
 template<>
-tistream& SimpleDynArrayData< uint8_t >::operator<<( tistream& stream )
+tistream& SimpleDynamicArrayData< uint8_t >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
@@ -530,7 +530,7 @@ tistream& SimpleDynArrayData< uint8_t >::operator<<( tistream& stream )
 }
 
 template<>
-tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
+tistream& SimpleDynamicArrayData< int8_t >::operator<<( tistream& stream )
 {
     m_Data->Clear();
 
@@ -547,34 +547,34 @@ tistream& SimpleDynArrayData< int8_t >::operator<<( tistream& stream )
 
 #endif // HELIUM_WCHAR_T
 
-template SimpleDynArrayData< Name >;
-template SimpleDynArrayData< String >;
-template SimpleDynArrayData< bool >;
-template SimpleDynArrayData< uint8_t >;
-template SimpleDynArrayData< int8_t >;
-template SimpleDynArrayData< uint16_t >;
-template SimpleDynArrayData< int16_t >;
-template SimpleDynArrayData< uint32_t >;
-template SimpleDynArrayData< int32_t >;
-template SimpleDynArrayData< uint64_t >;
-template SimpleDynArrayData< int64_t >;
-template SimpleDynArrayData< float32_t >;
-template SimpleDynArrayData< float64_t >;
-template SimpleDynArrayData< Helium::TUID >;
-template SimpleDynArrayData< Helium::FilePath >;
+template SimpleDynamicArrayData< Name >;
+template SimpleDynamicArrayData< String >;
+template SimpleDynamicArrayData< bool >;
+template SimpleDynamicArrayData< uint8_t >;
+template SimpleDynamicArrayData< int8_t >;
+template SimpleDynamicArrayData< uint16_t >;
+template SimpleDynamicArrayData< int16_t >;
+template SimpleDynamicArrayData< uint32_t >;
+template SimpleDynamicArrayData< int32_t >;
+template SimpleDynamicArrayData< uint64_t >;
+template SimpleDynamicArrayData< int64_t >;
+template SimpleDynamicArrayData< float32_t >;
+template SimpleDynamicArrayData< float64_t >;
+template SimpleDynamicArrayData< Helium::TUID >;
+template SimpleDynamicArrayData< Helium::FilePath >;
 
-REFLECT_DEFINE_OBJECT( Helium::Reflect::NameDynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::StringDynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolDynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Int8DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt16DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Int16DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64DynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDDynArrayData );
-REFLECT_DEFINE_OBJECT( Helium::Reflect::PathDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::NameDynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::StringDynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::BoolDynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt8DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int8DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt16DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int16DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt32DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int32DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::UInt64DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Int64DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float32DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::Float64DynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::TUIDDynamicArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::PathDynamicArrayData );

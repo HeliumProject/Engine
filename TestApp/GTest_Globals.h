@@ -77,7 +77,7 @@ static void GetFormattedValue( tchar_t ( &buffer )[ BufferSize ], const NonTrivi
 }
 
 template< typename T, typename Allocator >
-static void PrintArrayInfo( const tchar_t varName[], const Helium::DynArray< T, Allocator >& rArray )
+static void PrintArrayInfo( const tchar_t varName[], const Helium::DynamicArray< T, Allocator >& rArray )
 {
     HELIUM_UNREF( varName );
 

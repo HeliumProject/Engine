@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/API.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Foundation/Pair.h"
 
 namespace Helium
@@ -82,7 +82,7 @@ namespace Helium
 
     private:
         /// Internal array of table elements.
-        DynArray< InternalValue, Allocator > m_elements;
+        DynamicArray< InternalValue, Allocator > m_elements;
     };
 }
 

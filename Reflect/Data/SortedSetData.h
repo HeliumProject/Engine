@@ -17,7 +17,7 @@ namespace Helium
             REFLECT_DECLARE_ABSTRACT( SortedSetData, ContainerData );
 
             virtual const Class* GetItemClass() const = 0;
-            virtual void GetItems( DynArray< DataPtr >& items ) const = 0;
+            virtual void GetItems( DynamicArray< DataPtr >& items ) const = 0;
             virtual void AddItem( Data* value ) = 0;
             virtual void RemoveItem( Data* value ) = 0;
             virtual bool ContainsItem( Data* value ) const = 0;
@@ -42,7 +42,7 @@ namespace Helium
             virtual void Clear() HELIUM_OVERRIDE;
 
             virtual const Class* GetItemClass() const HELIUM_OVERRIDE;
-            virtual void GetItems( DynArray< DataPtr >& items ) const HELIUM_OVERRIDE;
+            virtual void GetItems( DynamicArray< DataPtr >& items ) const HELIUM_OVERRIDE;
             virtual void AddItem( Data* value ) HELIUM_OVERRIDE;
             virtual void RemoveItem( Data* value ) HELIUM_OVERRIDE;
             virtual bool ContainsItem( Data* value ) const HELIUM_OVERRIDE;

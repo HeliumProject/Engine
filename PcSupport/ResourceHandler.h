@@ -44,13 +44,13 @@ namespace Helium
         virtual bool CacheResource(
             ObjectPreprocessor* pObjectPreprocessor, Resource* pResource, const String& rSourceFilePath );
         
-        void SaveObjectToPersistentDataBuffer(Reflect::Object *_object, DynArray< uint8_t > &_buffer);
+        void SaveObjectToPersistentDataBuffer(Reflect::Object *_object, DynamicArray< uint8_t > &_buffer);
 #endif
         //@}
 
         /// @name Static Resource Handling Support
         //@{
-        static void GetAllResourceHandlers( DynArray< ResourceHandler* >& rResourceHandlers );
+        static void GetAllResourceHandlers( DynamicArray< ResourceHandler* >& rResourceHandlers );
         static ResourceHandler* FindResourceHandlerForType( const GameObjectType* pType );
         //@}
     };

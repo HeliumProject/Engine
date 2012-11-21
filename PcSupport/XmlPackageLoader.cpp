@@ -50,7 +50,7 @@
 //    // Package path.
 //    GameObjectPath packagePath;
 //    // GameObject list.
-//    DynArray< XmlPackageLoader::SerializedObjectData >* pObjects;
+//    DynamicArray< XmlPackageLoader::SerializedObjectData >* pObjects;
 //
 //    // Current parsing depth.
 //    size_t depth;
@@ -61,9 +61,9 @@
 //    uint32_t currentObjectIndex;
 //
 //    // Stack specifying the property being parsed (for handling properties within arrays or structs).
-//    DynArray< XmlPackageParseProperty > propertyStack;
+//    DynamicArray< XmlPackageParseProperty > propertyStack;
 //    // Buffer of character data streamed in for the current property.
-//    DynArray< XML_Char > propertyTextBuffer;
+//    DynamicArray< XML_Char > propertyTextBuffer;
 //};
 //
 ///// Parsing handler for start tags.
@@ -244,7 +244,7 @@
 //        objectData.typeName = typeName;
 //        objectData.templatePath = templatePath;
 //
-//        DynArray< XmlPackageLoader::SerializedObjectData >& rObjects = *pContext->pObjects;
+//        DynamicArray< XmlPackageLoader::SerializedObjectData >& rObjects = *pContext->pObjects;
 //        size_t existingObjectCount = rObjects.GetSize();
 //        size_t objectIndex;
 //        for( objectIndex = 0; objectIndex < existingObjectCount; ++objectIndex )
@@ -287,7 +287,7 @@
 //            return;
 //        }
 //
-//        DynArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
+//        DynamicArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
 //        HELIUM_ASSERT( !rPropertyStack.IsEmpty() );
 //
 //        XmlPackageParseProperty& rPropertyTop = rPropertyStack.GetLast();
@@ -370,7 +370,7 @@
 //    if( bArrayTag || CompareString( pName, TXT( "struct" ) ) == 0 )
 //    {
 //        // Make sure we are actively parsing a property.
-//        DynArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
+//        DynamicArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
 //        HELIUM_ASSERT( !rPropertyStack.IsEmpty() );
 //
 //        XmlPackageParseProperty& rPropertyTop = rPropertyStack.GetLast();
@@ -505,7 +505,7 @@
 //        return;
 //    }
 //
-//    DynArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
+//    DynamicArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
 //    size_t propertyStackSize = rPropertyStack.GetSize();
 //    HELIUM_ASSERT( propertyStackSize != 0 );
 //
@@ -711,7 +711,7 @@
 //    }
 //
 //    // Skip if we are not parsing property text.
-//    DynArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
+//    DynamicArray< XmlPackageParseProperty >& rPropertyStack = pContext->propertyStack;
 //    if( rPropertyStack.IsEmpty() )
 //    {
 //        return;
@@ -1175,7 +1175,7 @@
 //bool XmlPackageLoader::TryFinishLoadObject(
 //    size_t requestId,
 //    GameObjectPtr& rspObject,
-//    DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
+//    DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
 //{
 //    HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
 //    HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -1237,7 +1237,7 @@
 //
 //    pRequest->spObject.Release();
 //
-//    DynArray< LinkEntry >& rInternalLinkTable = pRequest->linkTable;
+//    DynamicArray< LinkEntry >& rInternalLinkTable = pRequest->linkTable;
 //    size_t linkTableSize = rInternalLinkTable.GetSize();
 //    rLinkTable.Resize( 0 );
 //    rLinkTable.Reserve( linkTableSize );
@@ -1456,7 +1456,7 @@
 //
 //#if HELIUM_TOOLS
 //    // Add all resource objects that exist in the package directory.
-//    DynArray< ResourceHandler* > resourceHandlers;
+//    DynamicArray< ResourceHandler* > resourceHandlers;
 //    ResourceHandler::GetAllResourceHandlers( resourceHandlers );
 //    size_t resourceHandlerCount = resourceHandlers.GetSize();
 //
@@ -1948,7 +1948,7 @@
 /////
 ///// @param[in] pObjectData  Pointer to the data containing data to be deserialized.
 ///// @param[in[ pLinkTable   Pointer to the object link table.
-//void XmlPackageLoader::Deserializer::Prepare( SerializedObjectData* pObjectData, DynArray< LinkEntry >* pLinkTable )
+//void XmlPackageLoader::Deserializer::Prepare( SerializedObjectData* pObjectData, DynamicArray< LinkEntry >* pLinkTable )
 //{
 //    m_pObjectData = pObjectData;
 //    m_pLinkTable = pLinkTable;
@@ -2010,7 +2010,7 @@
 //}
 //
 ///// @copydoc Serializer::GetPropertyTagNames()
-//void XmlPackageLoader::Deserializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
+//void XmlPackageLoader::Deserializer::GetPropertyTagNames( DynamicArray< String >& rTagNames ) const
 //{
 //    rTagNames.Resize( 0 );
 //
@@ -2292,8 +2292,8 @@
 //    SetInvalid( rTagElement.index );
 //}
 //
-///// @copydoc Serializer::BeginDynArray()
-//void XmlPackageLoader::Deserializer::BeginDynArray()
+///// @copydoc Serializer::BeginDynamicArray()
+//void XmlPackageLoader::Deserializer::BeginDynamicArray()
 //{
 //    // Set the index in the top-most tag to signify that we are starting a dynamic array.  The index is set to a
 //    // special value (invalid index minus 1) to signify that we are waiting for the dynamic array size.
@@ -2303,7 +2303,7 @@
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            ( TXT( "XmlPackageLoader::Deserializer: BeginDynArray() called without having properly serialized a " )
+//            ( TXT( "XmlPackageLoader::Deserializer: BeginDynamicArray() called without having properly serialized a " )
 //            TXT( "property tag.\n" ) ) );
 //
 //        return;
@@ -2313,7 +2313,7 @@
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            TXT( "XmlPackageLoader::Deserializer: BeginDynArray() called while already serializing an array.\n" ) );
+//            TXT( "XmlPackageLoader::Deserializer: BeginDynamicArray() called while already serializing an array.\n" ) );
 //
 //        return;
 //    }
@@ -2322,8 +2322,8 @@
 //    --rTagElement.index;
 //}
 //
-///// @copydoc Serializer::EndDynArray()
-//void XmlPackageLoader::Deserializer::EndDynArray()
+///// @copydoc Serializer::EndDynamicArray()
+//void XmlPackageLoader::Deserializer::EndDynamicArray()
 //{
 //    // Clear out the top-most tag.
 //    HELIUM_ASSERT( !m_tagStack.IsEmpty() );
@@ -2332,7 +2332,7 @@
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            TXT( "XmlPackageLoader::Deserializer: EndDynArray() called outside of array serialization.\n" ) );
+//            TXT( "XmlPackageLoader::Deserializer: EndDynamicArray() called outside of array serialization.\n" ) );
 //
 //        return;
 //    }
@@ -2920,7 +2920,7 @@
 ///// Constructor.
 /////
 ///// @param[in] pLinkTable  GameObject link table.
-//XmlPackageLoader::Deserializer::ObjectParser::ObjectParser( DynArray< LinkEntry >* pLinkTable )
+//XmlPackageLoader::Deserializer::ObjectParser::ObjectParser( DynamicArray< LinkEntry >* pLinkTable )
 //: m_pLinkTable( pLinkTable )
 //{
 //    HELIUM_ASSERT( pLinkTable );
@@ -3003,7 +3003,7 @@
 //}
 //
 ///// Constructor.
-//XmlPackageLoader::Deserializer::ObjectDefaultHandler::ObjectDefaultHandler( DynArray< LinkEntry >* pLinkTable )
+//XmlPackageLoader::Deserializer::ObjectDefaultHandler::ObjectDefaultHandler( DynamicArray< LinkEntry >* pLinkTable )
 //: m_pLinkTable( pLinkTable )
 //{
 //    HELIUM_ASSERT( pLinkTable );

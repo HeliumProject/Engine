@@ -28,7 +28,7 @@ namespace Helium
 
         virtual size_t BeginLoadObject( GameObjectPath path ) = 0;
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable ) = 0;
+            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable ) = 0;
 
         virtual void Tick() = 0;
         //@}

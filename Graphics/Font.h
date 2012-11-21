@@ -61,7 +61,7 @@ namespace Helium
         static const ECompression::Enum DEFAULT_TEXTURE_COMPRESSION = ECompression::COLOR_COMPRESSED;
 
         /// Character information.
-        //TODO: Would be nice if we had good structure support for DynArrays so we didn't have to make this an Object
+        //TODO: Would be nice if we had good structure support for DynamicArrays so we didn't have to make this an Object
         struct HELIUM_GRAPHICS_API Character //: public Object
         {
             REFLECT_DECLARE_BASE_STRUCTURE(Font::Character);
@@ -143,8 +143,8 @@ namespace Helium
             int32_t m_maxAdvance;
 
             /// Array of characters (ordered by code point value to allow for binary searching).
-            //DynArray<CharacterPtr> m_characters;
-            DynArray<Character> m_characters;
+            //DynamicArray<CharacterPtr> m_characters;
+            DynamicArray<Character> m_characters;
 
             /// Array of texture sheets.
             RTexture2dPtr* m_pspTextures;

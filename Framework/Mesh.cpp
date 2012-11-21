@@ -7,7 +7,7 @@
 #include "Rendering/RIndexBuffer.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/RVertexBuffer.h"
-#include "Reflect/Data/ObjectDynArrayData.h"
+#include "Reflect/Data/ObjectDynamicArrayData.h"
 #include "Reflect/Data/DataDeduction.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
@@ -64,7 +64,7 @@ void Mesh::PreDestroy()
 
 void Mesh::PopulateComposite(Reflect::Composite& comp)
 {
-    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynArrayData>());
+    comp.AddField(&Mesh::m_materials, TXT( "m_materials" ), 0, Reflect::GetClass<Reflect::ObjectDynamicArrayData>());
 }
 
 /// @copydoc GameObject::NeedsPrecacheResourceData()
@@ -265,9 +265,9 @@ void Mesh::PersistentResourceData::PopulateComposite( Reflect::Composite& comp )
 /// @copydoc Resource::SerializePersistentResourceData()
 // void Mesh::SerializePersistentResourceData( Serializer& s )
 // {
-//     s << Serializer::WrapDynArray( m_sectionVertexCounts );
-//     s << Serializer::WrapDynArray( m_sectionTriangleCounts );
-//     s << Serializer::WrapDynArray( m_skinningPaletteMap );
+//     s << Serializer::WrapDynamicArray( m_sectionVertexCounts );
+//     s << Serializer::WrapDynamicArray( m_sectionTriangleCounts );
+//     s << Serializer::WrapDynamicArray( m_skinningPaletteMap );
 //     s << m_vertexCount;
 //     s << m_triangleCount;
 //     s << m_bounds;

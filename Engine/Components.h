@@ -143,13 +143,13 @@ namespace Helium
                 std::vector<TypeId>       m_ImplementingTypes;      //< Child types IDs of this type
 
                 // parallel arrays
-                DynArray<uint16_t>        m_Roster;                 //< List of component indeces.. first all allocated then all deallocated components
+                DynamicArray<uint16_t>        m_Roster;                 //< List of component indeces.. first all allocated then all deallocated components
                 void *                    m_Pool;               //< Pointer to the memory block that contains our component instances contiguously
                 IComponentTypeTCallbacks *m_TCallbacks;          //< Pointer to template object that implements a couple useful functions.. it's a raw
-                //  pointer because auto ptrs can't be copied and this struct goes in a DynArray
+                //  pointer because auto ptrs can't be copied and this struct goes in a DynamicArray
 
             };
-            typedef DynArray<ComponentType> A_ComponentTypes;
+            typedef DynamicArray<ComponentType> A_ComponentTypes;
 
             template <class T>
             struct ComponentTypeTCallbacks : public IComponentTypeTCallbacks
@@ -179,13 +179,13 @@ namespace Helium
             IComponentContainerAdapter *CreateComponentContainerAdapter(T &_container);
 
             template <class T>
-            IComponentContainerAdapter *CreateComponentContainerAdapter(DynArray<T*> &_container)
+            IComponentContainerAdapter *CreateComponentContainerAdapter(DynamicArray<T*> &_container)
             {
-                class DynArrayAdapter : public IComponentContainerAdapter
+                class DynamicArrayAdapter : public IComponentContainerAdapter
                 {
                 public:
-                    virtual ~DynArrayAdapter() { }
-                    DynArrayAdapter(DynArray<T*> &_array)
+                    virtual ~DynamicArrayAdapter() { }
+                    DynamicArrayAdapter(DynamicArray<T*> &_array)
                         : m_Array(_array)
                     {
 
@@ -198,10 +198,10 @@ namespace Helium
                     }
 
                 private:
-                    DynArray<T*> &m_Array;
+                    DynamicArray<T*> &m_Array;
                 };
 
-                return new DynArrayAdapter(_container);
+                return new DynamicArrayAdapter(_container);
             }
 
 
@@ -261,7 +261,7 @@ namespace Helium
             return Private::InternalFindOneComponent(_set, _type, true);
         }
 
-        inline void        FindAllComponents(ComponentSet &_set, TypeId _type, DynArray<Component *> &_components)
+        inline void        FindAllComponents(ComponentSet &_set, TypeId _type, DynamicArray<Component *> &_components)
         {
             //AutoPtr<Private::IComponentContainerAdapter> container;
             Private::IComponentContainerAdapter *container;
@@ -270,7 +270,7 @@ namespace Helium
             delete container;
         }
 
-        inline void        FindAllComponentsThatImplement(ComponentSet &_set, TypeId _type, DynArray<Component *> &_components)
+        inline void        FindAllComponentsThatImplement(ComponentSet &_set, TypeId _type, DynamicArray<Component *> &_components)
         {
             //AutoPtr<Private::IComponentContainerAdapter> container;
             Private::IComponentContainerAdapter *container;
@@ -279,7 +279,7 @@ namespace Helium
             delete container;
         }
 
-        //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynArray<Component *> _components);
+        //HELIUM_ENGINE_API void        FindComponentsThatImplement(ComponentSet &_set, TypeId _type, DynamicArray<Component *> _components);
 
         //! Must be called before creating any systemsb
         HELIUM_ENGINE_API void Initialize();
@@ -308,7 +308,7 @@ namespace Helium
         }
 
         template <class T>
-        void FindAllComponents(ComponentSet &_set, DynArray<T *> &_components)
+        void FindAllComponents(ComponentSet &_set, DynamicArray<T *> &_components)
         {
             //AutoPtr<Private::IComponentContainerAdapter> container;
             Private::IComponentContainerAdapter *container;
@@ -318,7 +318,7 @@ namespace Helium
         }
 
         template <class T>
-        void FindAllComponentsThatImplement(ComponentSet &_set, DynArray<T *> &_components)
+        void FindAllComponentsThatImplement(ComponentSet &_set, DynamicArray<T *> &_components)
         {
             //AutoPtr<Private::IComponentContainerAdapter> container;
             Private::IComponentContainerAdapter *container;
@@ -328,7 +328,7 @@ namespace Helium
         }
 
         //     template <class T>
-        //     T*  FindComponentsThatImplement(ComponentSet &_set, DynArray<Component *> _components)
+        //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
         //     {
         //         return FindOneComponent(_host, GetType<T>);
         //     }
@@ -482,19 +482,19 @@ namespace Helium
             }
 
             template <class T>
-            void FindAllComponents(DynArray<T *> &_components)
+            void FindAllComponents(DynamicArray<T *> &_components)
             {
                 Helium::Components::FindAllComponents<T>(m_Components, _components);
             }
 
             template <class T>
-            void FindAllComponentsThatImplement(DynArray<T *> &_components)
+            void FindAllComponentsThatImplement(DynamicArray<T *> &_components)
             {
                 Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
             }
 
             //     template <class T>
-            //     T*  FindComponentsThatImplement(ComponentSet &_set, DynArray<Component *> _components)
+            //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
             //     {
             //         return FindComponentsThatImplement(_host, GetType<T>);
             //     }

@@ -180,7 +180,7 @@ namespace Helium
         inline const TextureParameter& GetTextureParameter( size_t index ) const;
 
 #if HELIUM_TOOLS
-        inline const DynArray< Shader::SelectPair >& GetUserOptions() const;
+        inline const DynamicArray< Shader::SelectPair >& GetUserOptions() const;
 
         inline size_t GetFloat1ParameterCount() const;
         inline const Float1Parameter& GetFloat1Parameter( size_t index ) const;
@@ -226,19 +226,19 @@ namespace Helium
         size_t m_constantBufferLoadIds[ RShader::TYPE_MAX ];
 
         /// Shader texture parameters.
-        DynArray< TextureParameter > m_textureParameters;
+        DynamicArray< TextureParameter > m_textureParameters;
 
 #if HELIUM_TOOLS
         /// User options cached during loading.
-        DynArray< Shader::SelectPair > m_userOptions;
+        DynamicArray< Shader::SelectPair > m_userOptions;
         /// Shader scalar float parameters.
-        DynArray< Float1Parameter > m_float1Parameters;
+        DynamicArray< Float1Parameter > m_float1Parameters;
         /// Shader two-component float vector parameters.
-        DynArray< Float2Parameter > m_float2Parameters;
+        DynamicArray< Float2Parameter > m_float2Parameters;
         /// Shader three-component float vector parameters.
-        DynArray< Float3Parameter > m_float3Parameters;
+        DynamicArray< Float3Parameter > m_float3Parameters;
         /// Shader four-component float vector parameters.
-        DynArray< Float4Parameter > m_float4Parameters;
+        DynamicArray< Float4Parameter > m_float4Parameters;
 
         /// True if shader options have been loaded and need to be resolved prior to resource precaching.
         bool m_bLoadedOptions;

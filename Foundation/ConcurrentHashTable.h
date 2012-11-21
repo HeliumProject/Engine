@@ -2,7 +2,7 @@
 
 #include "Platform/Locks.h"
 
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 namespace Helium
 {
@@ -215,7 +215,7 @@ namespace Helium
         struct Bucket
         {
             /// Bucket entries.
-            DynArray< InternalValue, Allocator > entries;
+            DynamicArray< InternalValue, Allocator > entries;
             /// Read-write lock for access synchronization.
             ReadWriteLock lock;
             /// State tag (incremented when entries are removed).

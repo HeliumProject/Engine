@@ -50,7 +50,7 @@ void Helium::Material::PreSerialize( const Reflect::Field* field )
     {
         const Shader::Options& rUserOptions = pShader->GetUserOptions();
 
-        DynArray< Name > enabledToggles;
+        DynamicArray< Name > enabledToggles;
         rUserOptions.GetOptionSetFromIndex(
             RShader::TYPE_FIRST,
             m_persistentResourceData.m_shaderVariantIndices[ 0 ],
@@ -64,7 +64,7 @@ void Helium::Material::PreSerialize( const Reflect::Field* field )
         Name enabledChoice( TXT( "1" ) );
         Name disabledChoice( TXT( "0" ) );
 
-        const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+        const DynamicArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
         size_t userToggleCount = rUserToggles.GetSize();
         for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
         {
@@ -142,7 +142,7 @@ void Material::PopulateComposite( Reflect::Composite& comp )
 //            {
 //                const Shader::Options& rUserOptions = pShader->GetUserOptions();
 //
-//                DynArray< Name > enabledToggles;
+//                DynamicArray< Name > enabledToggles;
 //                rUserOptions.GetOptionSetFromIndex(
 //                    RShader::TYPE_FIRST,
 //                    m_shaderVariantIndices[ 0 ],
@@ -156,7 +156,7 @@ void Material::PopulateComposite( Reflect::Composite& comp )
 //                Name enabledChoice( TXT( "1" ) );
 //                Name disabledChoice( TXT( "0" ) );
 //
-//                const DynArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
+//                const DynamicArray< Shader::Toggle >& rUserToggles = rUserOptions.GetToggles();
 //                size_t userToggleCount = rUserToggles.GetSize();
 //                for( size_t userToggleIndex = 0; userToggleIndex < userToggleCount; ++userToggleIndex )
 //                {
@@ -180,7 +180,7 @@ void Material::PopulateComposite( Reflect::Composite& comp )
 //        }
 //        else if( bLoading )
 //        {
-//            DynArray< String > propertyTagNames;
+//            DynamicArray< String > propertyTagNames;
 //            s.GetPropertyTagNames( propertyTagNames );
 //
 //            Shader::SelectPair optionPair;
@@ -461,10 +461,10 @@ void Material::SynchronizeShaderParameters()
     size_t existingFloat3Count = m_float3Parameters.GetSize();
     size_t existingFloat4Count = m_float4Parameters.GetSize();
 
-    DynArray< Float1Parameter > newFloat1Parameters;
-    DynArray< Float2Parameter > newFloat2Parameters;
-    DynArray< Float3Parameter > newFloat3Parameters;
-    DynArray< Float4Parameter > newFloat4Parameters;
+    DynamicArray< Float1Parameter > newFloat1Parameters;
+    DynamicArray< Float2Parameter > newFloat2Parameters;
+    DynamicArray< Float3Parameter > newFloat3Parameters;
+    DynamicArray< Float4Parameter > newFloat4Parameters;
     for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_shaderVariants ); ++shaderTypeIndex )
     {
         ShaderVariant* pShaderVariant = m_shaderVariants[ shaderTypeIndex ];
@@ -483,7 +483,7 @@ void Material::SynchronizeShaderParameters()
             ( !newFloat1Parameters.IsEmpty() || !newFloat2Parameters.IsEmpty() || !newFloat3Parameters.IsEmpty() ||
             !newFloat4Parameters.IsEmpty() );
 
-        const DynArray< ShaderConstantBufferInfo >& rBuffers = pBufferSet->buffers;
+        const DynamicArray< ShaderConstantBufferInfo >& rBuffers = pBufferSet->buffers;
         size_t bufferCount = rBuffers.GetSize();
         for( size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex )
         {
@@ -493,7 +493,7 @@ void Material::SynchronizeShaderParameters()
                 continue;
             }
 
-            const DynArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
+            const DynamicArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
             size_t constantCount = rConstants.GetSize();
             for( size_t constantIndex = 0; constantIndex < constantCount; ++constantIndex )
             {
@@ -675,7 +675,7 @@ void Material::SynchronizeShaderParameters()
     // Synchronize texture parameters.
     size_t existingTextureCount = m_textureParameters.GetSize();
 
-    DynArray< TextureParameter > newTextureParameters;
+    DynamicArray< TextureParameter > newTextureParameters;
     for( size_t shaderTypeIndex = 0; shaderTypeIndex < HELIUM_ARRAY_COUNT( m_shaderVariants ); ++shaderTypeIndex )
     {
         ShaderVariant* pShaderVariant = m_shaderVariants[ shaderTypeIndex ];
@@ -692,7 +692,7 @@ void Material::SynchronizeShaderParameters()
 
         bool bCheckDuplicates = !newTextureParameters.IsEmpty();
 
-        const DynArray< ShaderTextureInfo >& rTextureInputs = pTextureSet->inputs;
+        const DynamicArray< ShaderTextureInfo >& rTextureInputs = pTextureSet->inputs;
         size_t textureInputCount = rTextureInputs.GetSize();
         for( size_t textureIndex = 0; textureIndex < textureInputCount; ++textureIndex )
         {

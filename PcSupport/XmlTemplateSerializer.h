@@ -76,7 +76,7 @@
 //
 //    private:
 //        /// Serialized properties.
-//        DynArray< PropertyData > m_properties;
+//        DynamicArray< PropertyData > m_properties;
 //    };
 //}
 //

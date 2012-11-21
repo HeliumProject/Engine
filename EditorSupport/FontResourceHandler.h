@@ -49,7 +49,7 @@ namespace Helium
         //@{
         static void CompressTexture(
             const uint8_t* pGrayscaleData, uint16_t textureWidth, uint16_t textureHeight,
-            Font::ECompression compression, DynArray< DynArray< uint8_t > >& rTextureSheets );
+            Font::ECompression compression, DynamicArray< DynamicArray< uint8_t > >& rTextureSheets );
         //@}
     };
 }

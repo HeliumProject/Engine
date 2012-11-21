@@ -20,7 +20,7 @@
 //    /// Get the buffer to which the property data has been serialized.
 //    ///
 //    /// @return  Reference to the serialized property buffer.
-//    const DynArray< uint8_t >& BinarySerializer::GetPropertyStreamBuffer() const
+//    const DynamicArray< uint8_t >& BinarySerializer::GetPropertyStreamBuffer() const
 //    {
 //        return m_propertyStreamBuffer;
 //    }

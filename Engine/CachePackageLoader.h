@@ -33,7 +33,7 @@ namespace Helium
 
         virtual size_t BeginLoadObject( GameObjectPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -82,9 +82,9 @@ namespace Helium
             uint8_t* pPersistentResourceStreamEnd;
 
             /// Type link table (table stores type object instances).
-            DynArray< GameObjectTypePtr > typeLinkTable;
+            DynamicArray< GameObjectTypePtr > typeLinkTable;
             /// Object link table (table stores load request IDs for objects to link).
-            DynArray< size_t > objectLinkTable;
+            DynamicArray< size_t > objectLinkTable;
 
             /// Cached type reference.
             GameObjectTypePtr spType;

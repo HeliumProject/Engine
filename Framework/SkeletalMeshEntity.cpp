@@ -123,7 +123,7 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
     // If performing a full update, update the base bone information for the mesh.
     if( pSceneObject->GetUpdateMode() == GraphicsSceneObject::UPDATE_FULL )
     {
-        const DynArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
+        const DynamicArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
         size_t subMeshCount = rSubMeshDataIds.GetSize();
         size_t meshSectionCount = 0;
 

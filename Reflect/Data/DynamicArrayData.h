@@ -9,10 +9,10 @@ namespace Helium
 {
     namespace Reflect
     {
-        class HELIUM_REFLECT_API DynArrayData : public ContainerData
+        class HELIUM_REFLECT_API DynamicArrayData : public ContainerData
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( DynArrayData, ContainerData );
+            REFLECT_DECLARE_ABSTRACT( DynamicArrayData, ContainerData );
 
             virtual void SetSize( size_t size ) = 0;
 
@@ -26,17 +26,17 @@ namespace Helium
         };
 
         template< class T >
-        class HELIUM_REFLECT_API SimpleDynArrayData : public DynArrayData
+        class HELIUM_REFLECT_API SimpleDynamicArrayData : public DynamicArrayData
         {
         public:
-            typedef DynArray< T > DataType;
+            typedef DynamicArray< T > DataType;
             DataPointer< DataType > m_Data;
 
-            typedef SimpleDynArrayData< T > DynArrayDataT;
-            REFLECT_DECLARE_OBJECT( DynArrayDataT, DynArrayData )
+            typedef SimpleDynamicArrayData< T > DynamicArrayDataT;
+            REFLECT_DECLARE_OBJECT( DynamicArrayDataT, DynamicArrayData )
 
-            SimpleDynArrayData();
-            ~SimpleDynArrayData();
+            SimpleDynamicArrayData();
+            ~SimpleDynamicArrayData();
 
             virtual void ConnectData( void* data ) HELIUM_OVERRIDE;
 
@@ -65,20 +65,20 @@ namespace Helium
             virtual tistream& operator<<( tistream& stream ) HELIUM_OVERRIDE;
         };
         
-        typedef SimpleDynArrayData< Name > NameDynArrayData;
-        typedef SimpleDynArrayData< String > StringDynArrayData;
-        typedef SimpleDynArrayData< bool > BoolDynArrayData;
-        typedef SimpleDynArrayData< uint8_t > UInt8DynArrayData;
-        typedef SimpleDynArrayData< int8_t > Int8DynArrayData;
-        typedef SimpleDynArrayData< uint16_t > UInt16DynArrayData;
-        typedef SimpleDynArrayData< int16_t > Int16DynArrayData;
-        typedef SimpleDynArrayData< uint32_t > UInt32DynArrayData;
-        typedef SimpleDynArrayData< int32_t > Int32DynArrayData;
-        typedef SimpleDynArrayData< uint64_t > UInt64DynArrayData;
-        typedef SimpleDynArrayData< int64_t > Int64DynArrayData;
-        typedef SimpleDynArrayData< float32_t > Float32DynArrayData;
-        typedef SimpleDynArrayData< float64_t > Float64DynArrayData;
-        typedef SimpleDynArrayData< Helium::TUID > TUIDDynArrayData;
-        typedef SimpleDynArrayData< Helium::FilePath > PathDynArrayData;
+        typedef SimpleDynamicArrayData< Name > NameDynamicArrayData;
+        typedef SimpleDynamicArrayData< String > StringDynamicArrayData;
+        typedef SimpleDynamicArrayData< bool > BoolDynamicArrayData;
+        typedef SimpleDynamicArrayData< uint8_t > UInt8DynamicArrayData;
+        typedef SimpleDynamicArrayData< int8_t > Int8DynamicArrayData;
+        typedef SimpleDynamicArrayData< uint16_t > UInt16DynamicArrayData;
+        typedef SimpleDynamicArrayData< int16_t > Int16DynamicArrayData;
+        typedef SimpleDynamicArrayData< uint32_t > UInt32DynamicArrayData;
+        typedef SimpleDynamicArrayData< int32_t > Int32DynamicArrayData;
+        typedef SimpleDynamicArrayData< uint64_t > UInt64DynamicArrayData;
+        typedef SimpleDynamicArrayData< int64_t > Int64DynamicArrayData;
+        typedef SimpleDynamicArrayData< float32_t > Float32DynamicArrayData;
+        typedef SimpleDynamicArrayData< float64_t > Float64DynamicArrayData;
+        typedef SimpleDynamicArrayData< Helium::TUID > TUIDDynamicArrayData;
+        typedef SimpleDynamicArrayData< Helium::FilePath > PathDynamicArrayData;
     }
 }

@@ -70,20 +70,20 @@
 //
 //        /// @name Result Access
 //        //@{
-//        inline const DynArray< uint8_t >& GetPropertyStreamBuffer() const;
+//        inline const DynamicArray< uint8_t >& GetPropertyStreamBuffer() const;
 //        void WriteToStream( Stream* pStream ) const;
 //        //@}
 //
 //    private:
 //        /// Type dependency table.
-//        DynArray< Name > m_typeDependencies;
+//        DynamicArray< Name > m_typeDependencies;
 //        /// Object dependency table.
-//        DynArray< GameObjectPath > m_objectDependencies;
+//        DynamicArray< GameObjectPath > m_objectDependencies;
 //
 //        /// GameObject property stream.
 //        DynamicMemoryStream m_directPropertyStream;
 //        /// Memory buffer for the object property stream.
-//        DynArray< uint8_t > m_propertyStreamBuffer;
+//        DynamicArray< uint8_t > m_propertyStreamBuffer;
 //        /// Byte-swapping stream interface.
 //        ByteSwappingStream m_byteSwappingStream;
 //
@@ -91,7 +91,7 @@
 //        Stream* m_pPropertyStream;
 //
 //        /// Property flag state stack.
-//        DynArray< uint32_t > m_propertyFlagStack;
+//        DynamicArray< uint32_t > m_propertyFlagStack;
 //
 //        /// True if object references can be serialized.
 //        bool m_bAllowObjectReferences;

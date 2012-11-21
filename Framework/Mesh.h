@@ -51,11 +51,11 @@ namespace Helium
             static void PopulateComposite( Reflect::Composite& comp );
             
             /// Number of vertices used by each mesh section.
-            DynArray< uint16_t > m_sectionVertexCounts;
+            DynamicArray< uint16_t > m_sectionVertexCounts;
             /// Number of triangles in each mesh section.
-            DynArray< uint32_t > m_sectionTriangleCounts;
+            DynamicArray< uint32_t > m_sectionTriangleCounts;
             /// Skinning palette map (split by mesh section).
-            DynArray< uint8_t > m_skinningPaletteMap;
+            DynamicArray< uint8_t > m_skinningPaletteMap;
         
             /// Vertex count.
             uint32_t m_vertexCount;
@@ -71,11 +71,11 @@ namespace Helium
             uint8_t m_boneCount;
         
             /// Bone names (if the mesh is a skinned mesh).
-            DynArray<Name> m_pBoneNames;
+            DynamicArray<Name> m_pBoneNames;
             /// Parent bone indices (if the mesh is a skinned mesh).
-            DynArray<uint8_t> m_pParentBoneIndices;
+            DynamicArray<uint8_t> m_pParentBoneIndices;
             /// Reference pose bone transforms (if the mesh is a skinned mesh).
-            DynArray<Simd::Matrix44> m_pReferencePose;
+            DynamicArray<Simd::Matrix44> m_pReferencePose;
 #endif
 
         };
@@ -151,7 +151,7 @@ namespace Helium
 #endif
 
         /// Default material set.
-        DynArray< MaterialPtr > m_materials;
+        DynamicArray< MaterialPtr > m_materials;
         
         /// Vertex buffer.
         RVertexBufferPtr m_spVertexBuffer;

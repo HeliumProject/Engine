@@ -110,7 +110,7 @@ namespace Helium
 	
 	/// Resizable array (not thread-safe).
     template< typename T, typename Allocator = DefaultAllocator >
-    class DynArray
+    class DynamicArray
     {
     public:
         /// Type for array element values.
@@ -132,11 +132,11 @@ namespace Helium
 
         /// @name Construction/Destruction
         //@{
-        DynArray();
-        DynArray( const T* pSource, size_t size );
-        DynArray( const DynArray& rSource );
-        template< typename OtherAllocator > DynArray( const DynArray< T, OtherAllocator >& rSource );
-        ~DynArray();
+        DynamicArray();
+        DynamicArray( const T* pSource, size_t size );
+        DynamicArray( const DynamicArray& rSource );
+        template< typename OtherAllocator > DynamicArray( const DynamicArray< T, OtherAllocator >& rSource );
+        ~DynamicArray();
         //@}
 
         /// @name Array Operations
@@ -179,7 +179,7 @@ namespace Helium
         size_t Push( const T& rValue );
         void Pop();
 
-        void Swap( DynArray& rArray );
+        void Swap( DynamicArray& rArray );
 
         uint32_t GetIndexOfPointer(const T *_ptr) const;
         //@}
@@ -199,16 +199,16 @@ namespace Helium
 
         /// @name Overloaded Operators
         //@{
-        DynArray& operator=( const DynArray& rSource );
-        template< typename OtherAllocator > DynArray& operator=( const DynArray< T, OtherAllocator >& rSource );
+        DynamicArray& operator=( const DynamicArray& rSource );
+        template< typename OtherAllocator > DynamicArray& operator=( const DynamicArray< T, OtherAllocator >& rSource );
 
         T& operator[]( ptrdiff_t index );
         const T& operator[]( ptrdiff_t index ) const;
 
-        bool operator==( const DynArray& rOther ) const;
-        template< typename OtherAllocator > bool operator==( const DynArray< T, OtherAllocator >& rOther ) const;
-        bool operator!=( const DynArray& rOther ) const;
-        template< typename OtherAllocator > bool operator!=( const DynArray< T, OtherAllocator >& rOther ) const;
+        bool operator==( const DynamicArray& rOther ) const;
+        template< typename OtherAllocator > bool operator==( const DynamicArray< T, OtherAllocator >& rOther ) const;
+        bool operator!=( const DynamicArray& rOther ) const;
+        template< typename OtherAllocator > bool operator!=( const DynamicArray< T, OtherAllocator >& rOther ) const;
         //@}
 
     private:
@@ -224,12 +224,12 @@ namespace Helium
         size_t GetGrowCapacity( size_t desiredCount ) const;
         void Grow( size_t capacity );
 
-        template< typename OtherAllocator > void CopyConstruct( const DynArray< T, OtherAllocator >& rSource );
+        template< typename OtherAllocator > void CopyConstruct( const DynamicArray< T, OtherAllocator >& rSource );
         void Finalize();
 
-        template< typename OtherAllocator > DynArray& Assign( const DynArray< T, OtherAllocator >& rSource );
+        template< typename OtherAllocator > DynamicArray& Assign( const DynamicArray< T, OtherAllocator >& rSource );
 
-        template< typename OtherAllocator > bool Equals( const DynArray< T, OtherAllocator >& rOther ) const;
+        template< typename OtherAllocator > bool Equals( const DynamicArray< T, OtherAllocator >& rOther ) const;
 
         T* Allocate( size_t count );
         T* Allocate( size_t count, const std::true_type& rNeedsAlignment );
@@ -250,4 +250,4 @@ namespace Helium
     };
 }
 
-#include "Foundation/DynArray.inl"
+#include "Foundation/DynamicArray.inl"

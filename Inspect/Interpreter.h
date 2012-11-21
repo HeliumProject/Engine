@@ -172,8 +172,8 @@ namespace Helium
                 Choice* control = AddChoice<T>( property );
 
                 std::vector< ChoiceItem > items;
-                Reflect::DynArray< EnumerationElement >::ConstIterator itr = enumInfo->m_Elements.begin();
-                Reflect::DynArray< EnumerationElement >::ConstIterator end = enumInfo->m_Elements.end();
+                Reflect::DynamicArray< EnumerationElement >::ConstIterator itr = enumInfo->m_Elements.begin();
+                Reflect::DynamicArray< EnumerationElement >::ConstIterator end = enumInfo->m_Elements.end();
                 for ( ; itr != end; ++itr )
                 {
                     std::ostringstream str;

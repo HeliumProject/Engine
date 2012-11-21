@@ -134,7 +134,7 @@ namespace Helium
 
         private:
             /// Array of entry pointers.
-            DynArray< Entry* > m_entries;
+            DynamicArray< Entry* > m_entries;
             /// Read-write lock for synchronizing access.
             ReadWriteLock m_lock;
         };

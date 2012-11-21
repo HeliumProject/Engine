@@ -34,12 +34,12 @@ namespace Helium
         virtual size_t GetShaderProfileCount() const;
         virtual bool CompileShader(
             const FilePath& rShaderPath, size_t profileIndex, RShader::EType type, const void* pShaderCode,
-            size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynArray< uint8_t >& rCompiledCode,
-            DynArray< String >* pErrorMessages );
+            size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynamicArray< uint8_t >& rCompiledCode,
+            DynamicArray< String >* pErrorMessages );
         virtual bool FillShaderReflectionData(
             size_t profileIndex, const void* pCompiledCode, size_t compiledCodeSize,
-            DynArray< ShaderConstantBufferInfo >& rConstantBuffers, DynArray< ShaderSamplerInfo >& rSamplers,
-            DynArray< ShaderTextureInfo >& rTextures );
+            DynamicArray< ShaderConstantBufferInfo >& rConstantBuffers, DynamicArray< ShaderSamplerInfo >& rSamplers,
+            DynamicArray< ShaderTextureInfo >& rTextures );
         //@}
     };
 }

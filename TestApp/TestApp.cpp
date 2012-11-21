@@ -425,7 +425,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     GameObjectPath testPathX;
     testPathX.Set(TXT("/EngineTest/P2/P3:MyObject"));
 
-    DynArray<int> my_dyn_array;
+    DynamicArray<int> my_dyn_array;
     my_dyn_array.Add(10);
     my_dyn_array.Add(11);
     my_dyn_array.Add(12);
@@ -456,7 +456,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Helium::Package *package = Reflect::SafeCast< Helium::Package >( package_ptr.Get() );
 
     GameObject *game_object = package->GetFirstChild();
-    DynArray<GameObject *> go_iter_stack;
+    DynamicArray<GameObject *> go_iter_stack;
     bool returned_from_child = false;
     while (game_object)
     {

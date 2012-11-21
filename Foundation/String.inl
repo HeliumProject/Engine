@@ -1106,7 +1106,7 @@ bool Helium::StringBase< CharType, Allocator >::EndsWith( const CharType* pStrin
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	DynamicArray< ArrayType, ArrayAllocator >& rStringResults,
 	CharType separator,
 	bool bCombineAdjacentSeparators ) const
 {
@@ -1156,7 +1156,7 @@ void Helium::StringBase< CharType, Allocator >::Split(
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	DynamicArray< ArrayType, ArrayAllocator >& rStringResults,
 	const CharType* pSeparators,
 	size_t separatorCount,
 	bool bCombineAdjacentSeparators ) const
@@ -1219,7 +1219,7 @@ void Helium::StringBase< CharType, Allocator >::Split(
 template< typename CharType, typename Allocator >
 template< typename ArrayType, typename ArrayAllocator, typename StringAllocator >
 void Helium::StringBase< CharType, Allocator >::Split(
-	DynArray< ArrayType, ArrayAllocator >& rStringResults,
+	DynamicArray< ArrayType, ArrayAllocator >& rStringResults,
 	const StringBase< CharType, StringAllocator >& rSeparators,
 	bool bCombineAdjacentSeparators ) const
 {

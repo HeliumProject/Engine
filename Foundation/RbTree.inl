@@ -1053,7 +1053,7 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
 {
     HELIUM_ASSERT( m_pTree );
 
-    const DynArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
+    const DynamicArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
     size_t nodeIndex = m_index;
     HELIUM_ASSERT( nodeIndex < rLinks.GetSize() );
 
@@ -1136,7 +1136,7 @@ typename Helium::RbTree< Value, Key, ExtractKey, CompareKey, Allocator, Internal
         return *this;
     }
 
-    const DynArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
+    const DynamicArray< RbTree::LinkData, Allocator >& rLinks = m_pTree->m_links;
     HELIUM_ASSERT( nodeIndex < rLinks.GetSize() );
 
     const RbTree::LinkData& rLinkData = rLinks[ nodeIndex ];

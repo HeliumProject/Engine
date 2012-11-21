@@ -146,10 +146,10 @@ TEST(DataStructures, SortedSet)
     }
 }
 
-TEST(DataStructures, DynArray)
+TEST(DataStructures, DynamicArray)
 {
     {
-        DynArray< int > intArray;
+        DynamicArray< int > intArray;
         intArray.Reserve( 3 );
         intArray.Add( 4 );
         //intArray.Add( 2 );
@@ -162,7 +162,7 @@ TEST(DataStructures, DynArray)
     }
 
     {
-        DynArray< NonTrivialClass > objectArray;
+        DynamicArray< NonTrivialClass > objectArray;
         objectArray.Reserve( 3 );
         objectArray.Add( NonTrivialClass( 4.3f ) );
         objectArray.Add( NonTrivialClass( 12.4f ) );

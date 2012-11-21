@@ -17,7 +17,7 @@ namespace Helium
             REFLECT_DECLARE_ABSTRACT( ObjectMapData, ContainerData );
 
             typedef Pair< DataPtr, ObjectPtr* > ValueType;
-            typedef DynArray< ValueType > A_ValueType;
+            typedef DynamicArray< ValueType > A_ValueType;
 
             virtual const Class* GetKeyClass() const = 0;
             virtual void GetItems( A_ValueType& items ) = 0;

@@ -3,24 +3,24 @@
 #include "Reflect/Registry.h"
 #include "Reflect/Data/SimpleData.h"
 #include "Reflect/Data/ContainerData.h"
-#include "Reflect/Data/DynArrayData.h"
+#include "Reflect/Data/DynamicArrayData.h"
 
 namespace Helium
 {
     namespace Reflect
     {
-        class HELIUM_REFLECT_API ObjectDynArrayData : public DynArrayData
+        class HELIUM_REFLECT_API StructureDynamicArrayData : public DynamicArrayData
         {
         public:
-            typedef DynArray< ObjectPtr > DataType;
-            DataPointer< DataType > m_Data;
+            typedef void DataType;
+            VoidDataPointer m_Data;
 
-            REFLECT_DECLARE_OBJECT( ObjectDynArrayData, DynArrayData )
+            REFLECT_DECLARE_OBJECT( StructureDynamicArrayData, DynamicArrayData )
 
-            ObjectDynArrayData();
-            ~ObjectDynArrayData();
+            StructureDynamicArrayData();
+            ~StructureDynamicArrayData();
 
-            //DynArrayData Interface
+            //DynamicArrayData Interface
             
             virtual void SetSize( size_t size );
 
@@ -52,7 +52,11 @@ namespace Helium
             void Serialize( ArchiveT& archive );
 			template< class ArchiveT >
             void Deserialize( ArchiveT& archive );
+
+            const Structure* GetInternalStructure();
+
+            void *GetInternalPtr(const Structure* structure);
         };
-        typedef Helium::SmartPtr< ObjectDynArrayData > ObjectDynArrayDataPtr;
+        typedef Helium::SmartPtr< StructureDynamicArrayData > StructureDynamicArrayDataPtr;
     }
 }

@@ -42,7 +42,7 @@ namespace Helium
 
         private:
             /// Array of name pointers.
-            DynArray< const CharType* > m_entries;
+            DynamicArray< const CharType* > m_entries;
             /// Read-write lock for synchronizing access.
             ReadWriteLock m_lock;
         };

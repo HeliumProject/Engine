@@ -21,7 +21,7 @@ Pair< Name, GameObject::InstanceIndexSet >* GameObject::sm_pEmptyInstanceIndexSe
 
 ReadWriteLock GameObject::sm_objectListLock;
 
-DynArray< uint8_t > GameObject::sm_serializationBuffer;
+DynamicArray< uint8_t > GameObject::sm_serializationBuffer;
 
 /// Constructor.
 GameObject::GameObject()

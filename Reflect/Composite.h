@@ -6,7 +6,7 @@
 #include "Reflect/Visitor.h"
 #include "Foundation/Attribute.h"
 #include "Foundation/Set.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 //
 //  Composite Binary format:
@@ -362,13 +362,13 @@ namespace Helium
             }
 
             template < class CompositeT, class FieldT >
-            inline Reflect::Field* AddStructureField( DynArray< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
+            inline Reflect::Field* AddStructureField( DynamicArray< FieldT > CompositeT::* field, const tchar_t* name, int32_t flags = 0 )
             {
                 return AddField(
                     name,
                     GetOffset(field),
-                    sizeof(DynArray< FieldT >),
-                    Reflect::GetClass<Reflect::StructureDynArrayData>(),
+                    sizeof(DynamicArray< FieldT >),
+                    Reflect::GetClass<Reflect::StructureDynamicArrayData>(),
                     Reflect::GetStructure<FieldT>(),
                     flags );
             }
@@ -425,7 +425,7 @@ namespace Helium
             const Composite*                        m_Base;                 // the base type name
             mutable const Composite*                m_FirstDerived;         // head of the derived linked list, mutable since its populated by other objects
             mutable const Composite*                m_NextSibling;          // next in the derived linked list, mutable since its populated by other objects
-            DynArray< Field >                       m_Fields;               // fields in this composite
+            DynamicArray< Field >                       m_Fields;               // fields in this composite
             PopulateCompositeFunc                   m_Populate;             // function to populate this structure
             void*                                   m_Default;              // default instance
         };

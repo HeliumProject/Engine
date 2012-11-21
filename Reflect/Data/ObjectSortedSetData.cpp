@@ -145,7 +145,7 @@ void ObjectSortedSetData::Deserialize( ArchiveXML& archive )
 template< class ArchiveT >
 void ObjectSortedSetData::Serialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() );
 
     DataType::ConstIterator itr = m_Data->Begin();
@@ -161,15 +161,15 @@ void ObjectSortedSetData::Serialize( ArchiveT& archive )
 template< class ArchiveT >
 void ObjectSortedSetData::Deserialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     archive.DeserializeArray( components );
 
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
     m_Data->Reserve( components.GetSize() );
 
-    DynArray< ObjectPtr >::ConstIterator itr = components.Begin();
-    DynArray< ObjectPtr >::ConstIterator end = components.End();
+    DynamicArray< ObjectPtr >::ConstIterator itr = components.Begin();
+    DynamicArray< ObjectPtr >::ConstIterator end = components.End();
     for ( ; itr != end; ++itr )
     {
         m_Data->Insert( *itr );

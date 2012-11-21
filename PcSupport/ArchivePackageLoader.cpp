@@ -534,7 +534,7 @@ size_t ArchivePackageLoader::BeginLoadObject( GameObjectPath path )
 bool ArchivePackageLoader::TryFinishLoadObject(
     size_t requestId,
     GameObjectPtr& rspObject,
-    DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
+    DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
 {
     HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
     HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -596,7 +596,7 @@ bool ArchivePackageLoader::TryFinishLoadObject(
 
     pRequest->spObject.Release();
 
-    DynArray< LinkEntry >& rInternalLinkTable = pRequest->linkTable;
+    DynamicArray< LinkEntry >& rInternalLinkTable = pRequest->linkTable;
     size_t linkTableSize = rInternalLinkTable.GetSize();
     rLinkTable.Resize( 0 );
     rLinkTable.Reserve( linkTableSize );
@@ -922,7 +922,7 @@ void ArchivePackageLoader::TickPreload()
     HELIUM_ASSERT( pPackage->GetLoader() == this );
 
     // Add all resource objects that exist in the package directory.
-    DynArray< ResourceHandler* > resourceHandlers;
+    DynamicArray< ResourceHandler* > resourceHandlers;
     ResourceHandler::GetAllResourceHandlers( resourceHandlers );
     size_t resourceHandlerCount = resourceHandlers.GetSize();
 
@@ -1074,10 +1074,10 @@ namespace Helium
     class BuildLinkTableFromObjectVisitor : public Reflect::Visitor
     {
     private:
-        DynArray<ArchivePackageLoader::LinkEntry>& m_LinkTable;
+        DynamicArray<ArchivePackageLoader::LinkEntry>& m_LinkTable;
         
     public:
-        BuildLinkTableFromObjectVisitor(DynArray<ArchivePackageLoader::LinkEntry> &_link_table)
+        BuildLinkTableFromObjectVisitor(DynamicArray<ArchivePackageLoader::LinkEntry> &_link_table)
             : m_LinkTable( _link_table )
         {
         }

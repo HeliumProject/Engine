@@ -33,7 +33,7 @@ Layer::~Layer()
 //    bool bLinking = ( s.GetMode() == Serializer::MODE_LINK );
 //    if( bLinking )
 //    {
-//        s.BeginDynArray();
+//        s.BeginDynamicArray();
 //
 //        uint32_t entityCount = static_cast< uint32_t >( m_entities.GetSize() );
 //        s << entityCount;
@@ -52,11 +52,11 @@ Layer::~Layer()
 //            }
 //        }
 //
-//        s.EndDynArray();
+//        s.EndDynamicArray();
 //    }
 //    else
 //    {
-//        s << Serializer::WrapDynArray( m_entities );
+//        s << Serializer::WrapDynamicArray( m_entities );
 //    }
 //
 //#if HELIUM_DEBUG

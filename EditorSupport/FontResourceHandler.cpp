@@ -336,8 +336,8 @@ bool FontResourceHandler::CacheResource(
     Font::ECompression textureCompression = pFont->GetTextureCompression();
     bool bAntialiased = pFont->GetAntialiased();
 
-    DynArray< DynArray< uint8_t > > textureSheets;
-    DynArray< Font::Character > characters;
+    DynamicArray< DynamicArray< uint8_t > > textureSheets;
+    DynamicArray< Font::Character > characters;
 
     uint16_t penX = 1;
     uint16_t penY = 1;
@@ -589,11 +589,11 @@ void FontResourceHandler::CompressTexture(
     uint16_t textureWidth,
     uint16_t textureHeight,
     Font::ECompression compression,
-    DynArray< DynArray< uint8_t > >& rTextureSheets )
+    DynamicArray< DynamicArray< uint8_t > >& rTextureSheets )
 {
     HELIUM_ASSERT( pGrayscaleData );
 
-    DynArray< uint8_t >* pOutputSheet = rTextureSheets.New();
+    DynamicArray< uint8_t >* pOutputSheet = rTextureSheets.New();
     HELIUM_ASSERT( pOutputSheet );
 
     // If the output is to be uncompressed grayscale data, simply copy the data to the output texture, as it's already

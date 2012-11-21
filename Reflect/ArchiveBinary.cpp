@@ -28,12 +28,12 @@ public:
     }
 };
 
-class DynArrayPusher : NonCopyable
+class DynamicArrayPusher : NonCopyable
 {
 public:
-    DynArray< ObjectPtr >& m_ObjectArray;
+    DynamicArray< ObjectPtr >& m_ObjectArray;
 
-    explicit DynArrayPusher( DynArray< ObjectPtr >& objectArray )
+    explicit DynamicArrayPusher( DynamicArray< ObjectPtr >& objectArray )
         : m_ObjectArray( objectArray )
     {
     }
@@ -341,8 +341,8 @@ void ArchiveBinary::SerializeFields( Object* object )
         const Composite* current = bases.top();
         bases.pop();
 
-        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = current->m_Fields.End();
+        DynamicArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynamicArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
             const Field* field = &*itr;
@@ -395,8 +395,8 @@ void ArchiveBinary::SerializeFields( void* structure, const Structure* type )
         const Composite* current = bases.top();
         bases.pop();
 
-        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = current->m_Fields.End();
+        DynamicArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynamicArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
             const Field* field = &*itr;
@@ -439,7 +439,7 @@ void ArchiveBinary::SerializeArray(const std::vector< ObjectPtr >& objects, uint
     SerializeArray( objects.begin(), objects.end(), flags );
 }
 
-void ArchiveBinary::SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags )
+void ArchiveBinary::SerializeArray( const DynamicArray< ObjectPtr >& objects, uint32_t flags )
 {
     SerializeArray( objects.Begin(), objects.End(), flags );
 }
@@ -805,9 +805,9 @@ void ArchiveBinary::DeserializeArray( std::vector< ObjectPtr >& objects, uint32_
     DeserializeArray( StlVectorPusher( objects ), flags );
 }
 
-void ArchiveBinary::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags )
+void ArchiveBinary::DeserializeArray( DynamicArray< ObjectPtr >& objects, uint32_t flags )
 {
-    DeserializeArray( DynArrayPusher( objects ), flags );
+    DeserializeArray( DynamicArrayPusher( objects ), flags );
 }
 
 template< typename ArrayPusher >

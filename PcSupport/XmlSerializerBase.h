@@ -64,8 +64,8 @@
 //        virtual void BeginArray( uint32_t size );
 //        virtual void EndArray();
 //
-//        virtual void BeginDynArray();
-//        virtual void EndDynArray();
+//        virtual void BeginDynamicArray();
+//        virtual void EndDynamicArray();
 //        //@}
 //
 //    protected:
@@ -219,7 +219,7 @@
 //        /// Stream for the serialized data associated with the property currently being serialized.
 //        DynamicMemoryStream m_propertyStream;
 //        /// Buffer used by the property stream.
-//        DynArray< uint8_t > m_propertyStreamBuffer;
+//        DynamicArray< uint8_t > m_propertyStreamBuffer;
 //
 //        /// Tag for the top-most property being serialized.
 //        Tag m_propertyTag;
@@ -233,7 +233,7 @@
 //        bool m_bIgnoreNextValue;
 //
 //        /// Current output level stack.
-//        DynArray< EOutputLevel > m_outputLevelStack;
+//        DynamicArray< EOutputLevel > m_outputLevelStack;
 //
 //        /// @name Private Utility Functions
 //        //@{

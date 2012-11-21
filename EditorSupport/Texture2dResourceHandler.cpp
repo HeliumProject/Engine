@@ -322,7 +322,7 @@ bool Texture2dResourceHandler::CacheResource(
     //    rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
 
     //    // Serialize each mip level.
-    //    DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+    //    DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
     //    rSubDataBuffers.Reserve( mipLevelCount );
     //    rSubDataBuffers.Resize( mipLevelCount );
     //    rSubDataBuffers.Trim();

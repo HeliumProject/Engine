@@ -21,7 +21,7 @@ using namespace Helium;
 /// @return  Result code of the application.
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
 {
-    HELIUM_TRACE_SET_LEVEL( TRACE_DEBUG );
+    HELIUM_TRACE_SET_LEVEL( TraceLevels::Debug );
 
     int32_t result = 0;
 

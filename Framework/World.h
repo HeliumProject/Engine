@@ -85,7 +85,7 @@ namespace Helium
 
     private:
         /// Active layers.
-        DynArray< LayerPtr > m_layers;
+        DynamicArray< LayerPtr > m_layers;
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;

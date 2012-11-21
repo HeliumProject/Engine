@@ -208,7 +208,7 @@ bool StaticMemoryStream::CanSeek() const
 /// Constructor.
 ///
 /// @param[in] pBuffer  Dynamic array to use as this stream's memory buffer.
-DynamicMemoryStream::DynamicMemoryStream( DynArray< uint8_t >* pBuffer )
+DynamicMemoryStream::DynamicMemoryStream( DynamicArray< uint8_t >* pBuffer )
     : m_pBuffer( pBuffer )
     , m_offset( 0 )
 {
@@ -224,7 +224,7 @@ DynamicMemoryStream::~DynamicMemoryStream()
 /// Any currently assigned buffer will be unset, and the current stream offset will be reset to zero.
 ///
 /// @param[in] pBuffer  Dynamic array of bytes to use as this stream's memory buffer.
-void DynamicMemoryStream::Open( DynArray< uint8_t >* pBuffer )
+void DynamicMemoryStream::Open( DynamicArray< uint8_t >* pBuffer )
 {
     m_pBuffer = pBuffer;
     m_offset = 0;

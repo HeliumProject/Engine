@@ -296,11 +296,11 @@
 //void XmlSerializerBase::EndArray()
 //{
 //    // Arrays and dynamic arrays are handled the same when performing XML serialization.
-//    EndDynArray();
+//    EndDynamicArray();
 //}
 //
-///// @copydoc Serializer::BeginDynArray()
-//void XmlSerializerBase::BeginDynArray()
+///// @copydoc Serializer::BeginDynamicArray()
+//void XmlSerializerBase::BeginDynamicArray()
 //{
 //    // Opening property tags do not end with newline characters, so add one if we are just starting a property.
 //    if( ConditionalOpenPropertyTag() )
@@ -314,7 +314,7 @@
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            TXT( "XmlSerializerBase::BeginDynArray(): Called while not within a valid property or array tag.\n" ) );
+//            TXT( "XmlSerializerBase::BeginDynamicArray(): Called while not within a valid property or array tag.\n" ) );
 //
 //        return;
 //    }
@@ -330,8 +330,8 @@
 //    m_bIgnoreNextValue = true;
 //}
 //
-///// @copydoc Serializer::EndDynArray()
-//void XmlSerializerBase::EndDynArray()
+///// @copydoc Serializer::EndDynamicArray()
+//void XmlSerializerBase::EndDynamicArray()
 //{
 //    ConditionalClosePropertyTag();
 //
@@ -340,7 +340,7 @@
 //    {
 //        HELIUM_TRACE(
 //            TraceLevels::Error,
-//            TXT( "XmlSerializerBase::EndArray/EndDynArray(): Called while not within a valid array tag.\n" ) );
+//            TXT( "XmlSerializerBase::EndArray/EndDynamicArray(): Called while not within a valid array tag.\n" ) );
 //
 //        return;
 //    }

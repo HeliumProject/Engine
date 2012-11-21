@@ -27,7 +27,7 @@ PackageLoader::~PackageLoader()
 ///
 /// @see TryFinishLoadObject()
 
-/// @fn bool TryFinishLoadObject( size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
+/// @fn bool TryFinishLoadObject( size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
 /// Test for and finalize an asynchronous object preload request in a non-blocking fashion.
 ///
 /// @param[in]  requestId   ID of the preload request returned by BeginLoadObject() (NOT the object index).

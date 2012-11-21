@@ -44,7 +44,7 @@ namespace Helium
 
     private:
         /// Async load IDs for cached texture data.
-        DynArray< size_t > m_renderResourceLoadIds;
+        DynamicArray< size_t > m_renderResourceLoadIds;
     };
 }
 

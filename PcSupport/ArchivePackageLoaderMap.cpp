@@ -120,7 +120,7 @@ namespace Helium
     {        
         /// Cached list of package loaders iterated over in Tick() (separated to avoid deadlocks with concurrent hash
         /// map access).
-        DynArray< ArchivePackageLoader* > m_packageLoaderTickArray;
+        DynamicArray< ArchivePackageLoader* > m_packageLoaderTickArray;
 
         // Build the list of package loaders to update this tick from the loader map (the Tick() for a given package
         // loader could require modification to the package loader map, which would cause a deadlock if we have the same

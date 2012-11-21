@@ -98,9 +98,9 @@ namespace Helium
         //@}
 
 #if HELIUM_TOOLS
-        static void WriteCacheObjectToBuffer( Helium::Reflect::Object &_object, DynArray< uint8_t > &_buffer );
+        static void WriteCacheObjectToBuffer( Helium::Reflect::Object &_object, DynamicArray< uint8_t > &_buffer );
 #endif
-        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const DynArray< uint8_t > &_buffer );
+        static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer );
         static Reflect::ObjectPtr ReadCacheObjectFromBuffer( const uint8_t *_buffer, const size_t _offset, const size_t _count );
 
     private:
@@ -158,7 +158,7 @@ namespace Helium
         /// Cache entry pool.
         ObjectPool< Entry >* m_pEntryPool;
         /// Cache entry information.
-        DynArray< Entry* > m_entries;
+        DynamicArray< Entry* > m_entries;
         /// Entry lookup hash map.
         EntryMapType m_entryMap;
 

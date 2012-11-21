@@ -103,9 +103,9 @@ TEST_F(Components, HostFindOne)
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentThree>() != 0);
 
     {
-        DynArray<TestComponentOne *> component_list_1;
-        DynArray<TestComponentTwo *> component_list_2;
-        DynArray<TestComponentThree *> component_list_3;
+        DynamicArray<TestComponentOne *> component_list_1;
+        DynamicArray<TestComponentTwo *> component_list_2;
+        DynamicArray<TestComponentThree *> component_list_3;
 
         test_host.FindAllComponents<TestComponentOne>(component_list_1);
         test_host.FindAllComponents<TestComponentTwo>(component_list_2);
@@ -121,9 +121,9 @@ TEST_F(Components, HostFindOne)
     c3_2->MarkForDeletion();
 
     {
-        DynArray<TestComponentOne *> component_list_1;
-        DynArray<TestComponentTwo *> component_list_2;
-        DynArray<TestComponentThree *> component_list_3;
+        DynamicArray<TestComponentOne *> component_list_1;
+        DynamicArray<TestComponentTwo *> component_list_2;
+        DynamicArray<TestComponentThree *> component_list_3;
 
         test_host.FindAllComponents<TestComponentOne>(component_list_1);
         test_host.FindAllComponents<TestComponentTwo>(component_list_2);
@@ -141,9 +141,9 @@ TEST_F(Components, HostFindOne)
     EXPECT_TRUE(test_host.FindOneComponentThatImplements<TestComponentOne>() != 0);
 
     {
-        DynArray<TestComponentOne *> component_list_1;
-        DynArray<TestComponentTwo *> component_list_2;
-        DynArray<TestComponentThree *> component_list_3;
+        DynamicArray<TestComponentOne *> component_list_1;
+        DynamicArray<TestComponentTwo *> component_list_2;
+        DynamicArray<TestComponentThree *> component_list_3;
 
         test_host.FindAllComponents<TestComponentOne>(component_list_1);
         test_host.FindAllComponents<TestComponentTwo>(component_list_2);
@@ -155,19 +155,19 @@ TEST_F(Components, HostFindOne)
     }
 
     {
-        DynArray<TestComponentOne *> component_list;
+        DynamicArray<TestComponentOne *> component_list;
         test_host.FindAllComponents<TestComponentOne>(component_list);
         EXPECT_TRUE(component_list.GetSize() == 0);
     }
 
     {
-        DynArray<TestComponentOne *> component_list;
+        DynamicArray<TestComponentOne *> component_list;
         test_host.FindAllComponentsThatImplement<TestComponentOne>(component_list);
         EXPECT_TRUE(component_list.GetSize() == 2);
     }
 
     {
-        DynArray<TestComponentTwo *> component_list;
+        DynamicArray<TestComponentTwo *> component_list;
         test_host.FindAllComponentsThatImplement<TestComponentTwo>(component_list);
         EXPECT_TRUE(component_list.GetSize() == 1);
     }
@@ -184,7 +184,7 @@ TEST_F(Components, HostFindOne)
 TEST_F(Components, HostAttachDetachIterate)
 {
     TestHost test_host;
-    DynArray<Component *> all_components;
+    DynamicArray<Component *> all_components;
 
     Helium::Components::Component *c1 = 0;
     Helium::Components::Component *c2 = 0; 
@@ -371,7 +371,7 @@ TEST_F(Components, SmartPtr)
 //{
 //    Helium::Name m_Name;
 //    // Don't know about this.. and I would want it to be capable of holding references
-//    DynArray<uint8_t> m_SerializedValue;
+//    DynamicArray<uint8_t> m_SerializedValue;
 //};
 //
 //struct NamedStimulus
@@ -396,12 +396,12 @@ TEST_F(Components, SmartPtr)
 //
 //class ComponentDefinition
 //{
-//    DynArray<NamedProperty>      m_Properties;       // Declared externally provided properties
-//    DynArray<NamedStimulus>      m_Stimuli;          // Stimuli are exposed by name
-//    DynArray<NamedResponse>      m_Responses;        // Responses are exposed by name
+//    DynamicArray<NamedProperty>      m_Properties;       // Declared externally provided properties
+//    DynamicArray<NamedStimulus>      m_Stimuli;          // Stimuli are exposed by name
+//    DynamicArray<NamedResponse>      m_Responses;        // Responses are exposed by name
 //
 //    // Fields that can be filled by other 
-//    DynArray<FieldValue>    m_FieldValues;      // Overridden fields
+//    DynamicArray<FieldValue>    m_FieldValues;      // Overridden fields
 //
 //    ComponentDefinition*    m_BaseDefinition;   // Parent definition (we inherit its fields/params)
 //    Component*              m_Model;            // Preallocated component we can clone (not in the component pool)
@@ -409,18 +409,18 @@ TEST_F(Components, SmartPtr)
 //
 //class ComponentCluster
 //{
-//    DynArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
-//    DynArray<Linkage>               m_Linkages;
-//    DynArray<ComponentDefinition *> m_Components;
+//    DynamicArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
+//    DynamicArray<Linkage>               m_Linkages;
+//    DynamicArray<ComponentDefinition *> m_Components;
 //};
 //
 //class ObjectDefinition
 //{
-//    DynArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
-//    DynArray<Linkage>               m_Linkages;
+//    DynamicArray<NamedPropertyValue>    m_PropertyValues;  // Cluster can provide property values
+//    DynamicArray<Linkage>               m_Linkages;
 //
-//    DynArray<ComponentCluster *>    m_ComponentClusters;
-//    DynArray<ComponentDefinition *> m_Components;
+//    DynamicArray<ComponentCluster *>    m_ComponentClusters;
+//    DynamicArray<ComponentDefinition *> m_Components;
 //
 //    ObjectDefinition *m_BaseDefinition;
 //    Object *m_Model;
@@ -430,13 +430,13 @@ TEST_F(Components, SmartPtr)
 //class InstanceFactory
 //{
 //    // 1. Gather up all the things we want to fill out
-//    void AddProperties(DynArray<NamedProperty> &_properties);
-//    void AddStimuli(DynArray<NamedStimulus> &_stimuli);
-//    void AddResponses(DynArray<NamedResponse> &_responses);
+//    void AddProperties(DynamicArray<NamedProperty> &_properties);
+//    void AddStimuli(DynamicArray<NamedStimulus> &_stimuli);
+//    void AddResponses(DynamicArray<NamedResponse> &_responses);
 //
 //    // 2. Apply values to those things we can fill out
-//    void ApplyPropertyValues(DynArray<NamedPropertyValue> &_property_values);
-//    void ApplyLinkages(DynArray<Linkage> &_linkages);
+//    void ApplyPropertyValues(DynamicArray<NamedPropertyValue> &_property_values);
+//    void ApplyLinkages(DynamicArray<Linkage> &_linkages);
 //
 //    // 3. Verify all mandatory parameters defined
 //    bool ReadyToMaterialize();

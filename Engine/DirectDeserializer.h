@@ -11,7 +11,7 @@
 //
 //#include "Engine/Serializer.h"
 //
-//#include "Foundation/DynArray.h"
+//#include "Foundation/DynamicArray.h"
 //
 //namespace Helium
 //{
@@ -32,7 +32,7 @@
 //    public:
 //        /// @name Construction/Destruction
 //        //@{
-//        DirectDeserializer( const DynArray< uint8_t >& rBuffer, size_t startOffset = 0 );
+//        DirectDeserializer( const DynamicArray< uint8_t >& rBuffer, size_t startOffset = 0 );
 //        //@}
 //
 //        /// @name Data Access
@@ -70,7 +70,7 @@
 //
 //    private:
 //        /// Serialization buffer.
-//        const DynArray< uint8_t >& m_rBuffer;
+//        const DynamicArray< uint8_t >& m_rBuffer;
 //        /// Current buffer offset.
 //        size_t m_offset;
 //

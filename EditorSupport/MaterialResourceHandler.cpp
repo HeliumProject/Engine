@@ -48,7 +48,7 @@ bool MaterialResourceHandler::CacheResource(
     if( pShader )
     {
         const Shader::Options& rShaderUserOptions = pShader->GetUserOptions();
-        const DynArray< Shader::SelectPair >& rMaterialUserOptions = pMaterial->GetUserOptions();
+        const DynamicArray< Shader::SelectPair >& rMaterialUserOptions = pMaterial->GetUserOptions();
 
         for( size_t shaderTypeIndex = 0; shaderTypeIndex < RShader::TYPE_MAX; ++shaderTypeIndex )
         {
@@ -74,9 +74,9 @@ bool MaterialResourceHandler::CacheResource(
     //PMDTODO: Implement
     //BinarySerializer serializer;
     //BinaryDeserializer deserializer;
-    //DynArray< ShaderConstantBufferInfo > constantBuffers;
-    //DynArray< ShaderSamplerInfo > samplerInputs;
-    //DynArray< ShaderTextureInfo > textureInputs;
+    //DynamicArray< ShaderConstantBufferInfo > constantBuffers;
+    //DynamicArray< ShaderSamplerInfo > samplerInputs;
+    //DynamicArray< ShaderTextureInfo > textureInputs;
     //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
     //{
     //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
@@ -106,7 +106,7 @@ bool MaterialResourceHandler::CacheResource(
     //    // Write out the parameter constant buffer data as the resource sub-data.
     //    size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
 
-    //    DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+    //    DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
     //    rSubDataBuffers.Clear();
     //    rSubDataBuffers.Reserve( shaderProfileCount * RShader::TYPE_MAX );
     //    rSubDataBuffers.Resize( shaderProfileCount * RShader::TYPE_MAX );
@@ -141,7 +141,7 @@ bool MaterialResourceHandler::CacheResource(
     //                static_cast< Cache::EPlatform >( platformIndex ) );
     //            HELIUM_ASSERT( rVariantData.bLoaded );
 
-    //            const DynArray< DynArray< uint8_t > >& rVariantSubDataBuffers = rVariantData.subDataBuffers;
+    //            const DynamicArray< DynamicArray< uint8_t > >& rVariantSubDataBuffers = rVariantData.subDataBuffers;
     //            size_t variantSubDataCount = rVariantSubDataBuffers.GetSize();
     //            HELIUM_ASSERT( variantSubDataCount != 0 );
     //            HELIUM_ASSERT( variantSubDataCount % shaderProfileCount == 0 );
@@ -149,14 +149,14 @@ bool MaterialResourceHandler::CacheResource(
 
     //            for( size_t profileIndex = 0; profileIndex < shaderProfileCount; ++profileIndex )
     //            {
-    //                const DynArray< uint8_t >& rVariantSubData =
+    //                const DynamicArray< uint8_t >& rVariantSubData =
     //                    rVariantSubDataBuffers[ profileIndex * systemOptionSetCount ];
     //                deserializer.Prepare( rVariantSubData.GetData(), rVariantSubData.GetSize() );
     //                deserializer.BeginSerialize();
-    //                deserializer << Serializer::WrapStructDynArray( constantBuffers );
+    //                deserializer << Serializer::WrapStructDynamicArray( constantBuffers );
     //                // Can safely ignore sampler and texture inputs since we don't need them.
-    //                //deserializer << Serializer::WrapStructDynArray( samplerInputs );
-    //                //deserializer << Serializer::WrapStructDynArray( textureInputs );
+    //                //deserializer << Serializer::WrapStructDynamicArray( samplerInputs );
+    //                //deserializer << Serializer::WrapStructDynamicArray( textureInputs );
     //                deserializer.EndSerialize();
 
     //                size_t bufferCount = constantBuffers.GetSize();
@@ -170,7 +170,7 @@ bool MaterialResourceHandler::CacheResource(
 
     //                    size_t bufferSize = rBufferInfo.size;
 
-    //                    DynArray< uint8_t >& rMaterialSubData =
+    //                    DynamicArray< uint8_t >& rMaterialSubData =
     //                        rSubDataBuffers[ profileIndex * RShader::TYPE_MAX + shaderTypeIndex ];
     //                    rMaterialSubData.Clear();
     //                    rMaterialSubData.Reserve( bufferSize );
@@ -183,7 +183,7 @@ bool MaterialResourceHandler::CacheResource(
     //                        ? static_cast< Stream& >( byteSwapStream )
     //                        : static_cast< Stream& >( memoryStream ) );
 
-    //                    const DynArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
+    //                    const DynamicArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
     //                    size_t constantCount = rConstants.GetSize();
     //                    for( size_t constantIndex = 0; constantIndex < constantCount; ++constantIndex )
     //                    {

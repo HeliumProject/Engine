@@ -51,8 +51,8 @@ bool PcPreprocessor::CompileShader(
                                    size_t shaderCodeSize,
                                    const ShaderToken* pTokens,
                                    size_t tokenCount,
-                                   DynArray< uint8_t >& rCompiledCode,
-                                   DynArray< String >* pErrorMessages )
+                                   DynamicArray< uint8_t >& rCompiledCode,
+                                   DynamicArray< String >* pErrorMessages )
 {
     HELIUM_ASSERT( profileIndex < static_cast< size_t >( ShaderProfile::PC_MAX ) );
     HELIUM_ASSERT( static_cast< size_t >( type ) < static_cast< size_t >( RShader::TYPE_MAX ) );
@@ -65,7 +65,7 @@ bool PcPreprocessor::CompileShader(
         pErrorMessages->Resize( 0 );
     }
 
-    DynArray< D3D10_SHADER_MACRO > defines;
+    DynamicArray< D3D10_SHADER_MACRO > defines;
     D3D10_SHADER_MACRO macro;
 
     const char* pProfile;
@@ -351,9 +351,9 @@ bool PcPreprocessor::FillShaderReflectionData(
     size_t profileIndex,
     const void* pCompiledCode,
     size_t compiledCodeSize,
-    DynArray< ShaderConstantBufferInfo >& rConstantBuffers,
-    DynArray< ShaderSamplerInfo >& rSamplers,
-    DynArray< ShaderTextureInfo >& rTextures )
+    DynamicArray< ShaderConstantBufferInfo >& rConstantBuffers,
+    DynamicArray< ShaderSamplerInfo >& rSamplers,
+    DynamicArray< ShaderTextureInfo >& rTextures )
 {
     HELIUM_ASSERT( profileIndex < static_cast< size_t >( ShaderProfile::PC_MAX ) );
     HELIUM_ASSERT( pCompiledCode || compiledCodeSize == 0 );
@@ -455,7 +455,7 @@ bool PcPreprocessor::FillShaderReflectionData(
 
             size_t constantCount = bufferDesc.Variables;
 
-            DynArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
+            DynamicArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
             rConstants.Reserve( constantCount );
             rConstants.Resize( constantCount );
             rConstants.Trim();
@@ -638,7 +638,7 @@ bool PcPreprocessor::FillShaderReflectionData(
     {
         ShaderConstantBufferInfo& rBufferInfo = rConstantBuffers[ bufferIndex ];
 
-        DynArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
+        DynamicArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
         size_t constantCount = rConstants.GetSize();
         if( constantCount == 0 )
         {
@@ -810,7 +810,7 @@ bool PcPreprocessor::FillShaderReflectionData(
     if( IsValid( previousNonEmptyBufferIndex ) )
     {
         ShaderConstantBufferInfo& rBufferInfo = rConstantBuffers[ previousNonEmptyBufferIndex ];
-        DynArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
+        DynamicArray< ShaderConstantInfo >& rConstants = rBufferInfo.constants;
         HELIUM_ASSERT( !rConstants.IsEmpty() );
         ShaderConstantInfo& rConstantInfo = rConstants.GetLast();
         rBufferInfo.size = rConstantInfo.offset + rConstantInfo.size;
@@ -850,7 +850,7 @@ bool PcPreprocessor::FillShaderReflectionData(
             return false;
         }
 
-        DynArray< LPCSTR > samplerNames;
+        DynamicArray< LPCSTR > samplerNames;
         samplerNames.Reserve( samplerCount );
         samplerNames.Resize( samplerCount );
 

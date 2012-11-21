@@ -436,41 +436,41 @@ namespace Helium
         };
 
         /// Untextured draw call vertices.
-        DynArray< SimpleVertex > m_untexturedVertices;
+        DynamicArray< SimpleVertex > m_untexturedVertices;
         /// Textured draw call vertices.
-        DynArray< SimpleTexturedVertex > m_texturedVertices;
+        DynamicArray< SimpleTexturedVertex > m_texturedVertices;
 
         /// Untextured draw call indices.
-        DynArray< uint16_t > m_untexturedIndices;
+        DynamicArray< uint16_t > m_untexturedIndices;
         /// Textured draw call indices.
-        DynArray< uint16_t > m_texturedIndices;
+        DynamicArray< uint16_t > m_texturedIndices;
 
         /// Untextured draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_untexturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< UntexturedDrawCall > m_untexturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Textured draw call data using internal vertex/index buffers.
-        DynArray< TexturedDrawCall > m_texturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< TexturedDrawCall > m_texturedDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Point draw call data using internal vertex/index buffers.
-        DynArray< UntexturedDrawCall > m_pointDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< UntexturedDrawCall > m_pointDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
         /// Untextured draw call data using external vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_untexturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< UntexturedBufferDrawCall > m_untexturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Textured draw call data using external vertex/index buffers.
-        DynArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< TexturedBufferDrawCall > m_texturedBufferDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
         /// Point draw call data using external vertex/index buffers.
-        DynArray< UntexturedBufferDrawCall > m_pointBufferDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< UntexturedBufferDrawCall > m_pointBufferDrawCalls[ RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
         /// World-space text draw call data.
-        DynArray< TexturedDrawCall > m_worldTextDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
+        DynamicArray< TexturedDrawCall > m_worldTextDrawCalls[ RenderResourceManager::RASTERIZER_STATE_MAX * RenderResourceManager::DEPTH_STENCIL_STATE_MAX ];
 
         /// Screen-space text draw call data.
-        DynArray< ScreenTextDrawCall > m_screenTextDrawCalls;
+        DynamicArray< ScreenTextDrawCall > m_screenTextDrawCalls;
         /// Screen-space text draw call glyph indices.
-        DynArray< uint32_t > m_screenTextGlyphIndices;
+        DynamicArray< uint32_t > m_screenTextGlyphIndices;
 
         /// Projected text draw call data.
-        DynArray< ProjectedTextDrawCall > m_projectedTextDrawCalls;
+        DynamicArray< ProjectedTextDrawCall > m_projectedTextDrawCalls;
         /// Projected text draw call glyph indices.
-        DynArray< uint32_t > m_projectedTextGlyphIndices;
+        DynamicArray< uint32_t > m_projectedTextGlyphIndices;
 
         /// Index buffer for screen-space text rendering.
         RIndexBufferPtr m_spScreenSpaceTextIndexBuffer;

@@ -25,7 +25,7 @@
 //    public:
 //        /// @name Construction/Destruction
 //        //@{
-//        DirectSerializer( DynArray< uint8_t >& rBuffer );
+//        DirectSerializer( DynamicArray< uint8_t >& rBuffer );
 //        //@}
 //
 //        /// @name Serialization Interface
@@ -57,7 +57,7 @@
 //
 //    private:
 //        /// Serialization buffer.
-//        DynArray< uint8_t >& m_rBuffer;
+//        DynamicArray< uint8_t >& m_rBuffer;
 //
 //        /// @name Private Utility Functions
 //        //@{

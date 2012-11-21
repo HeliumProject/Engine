@@ -309,13 +309,13 @@ void FbxSupport::Release()
 /// @return  True if loading was successful, false if not.
 bool FbxSupport::LoadMesh(
                           const String& rSourceFilePath,
-                          DynArray< StaticMeshVertex< 1 > >& rVertices,
-                          DynArray< uint16_t >& rIndices,
-                          DynArray< uint16_t >& rSectionVertexCounts,
-                          DynArray< uint32_t >& rSectionTriangleCounts,
-                          DynArray< BoneData >& rBones,
-                          DynArray< BlendData >& rVertexBlendData,
-                          DynArray< uint8_t >& rSkinningPaletteMap,
+                          DynamicArray< StaticMeshVertex< 1 > >& rVertices,
+                          DynamicArray< uint16_t >& rIndices,
+                          DynamicArray< uint16_t >& rSectionVertexCounts,
+                          DynamicArray< uint32_t >& rSectionTriangleCounts,
+                          DynamicArray< BoneData >& rBones,
+                          DynamicArray< BlendData >& rVertexBlendData,
+                          DynamicArray< uint8_t >& rSkinningPaletteMap,
                           bool bStripNamespaces )
 {
     LazyInitialize();
@@ -409,7 +409,7 @@ bool FbxSupport::LoadMesh(
 bool FbxSupport::LoadAnimation(
                                const String& rSourceFilePath,
                                uint8_t oversampling,
-                               DynArray< AnimTrackData >& rTracks,
+                               DynamicArray< AnimTrackData >& rTracks,
                                uint_fast32_t& rSamplesPerSecond,
                                bool bStripNamespaces )
 {
@@ -557,11 +557,11 @@ void FbxSupport::BuildSkinningInformation(
     KFbxScene* pScene,
     KFbxMesh* pMesh,
     KFbxNode* pSkeletonRootNode,
-    const DynArray< int >& rControlPointIndices,
-    const DynArray< uint16_t >& rSectionVertexCounts,
-    DynArray< BoneData >& rBones,
-    DynArray< BlendData >& rVertexBlendData,
-    DynArray< uint8_t >& rSkinningPaletteMap,
+    const DynamicArray< int >& rControlPointIndices,
+    const DynamicArray< uint16_t >& rSectionVertexCounts,
+    DynamicArray< BoneData >& rBones,
+    DynamicArray< BlendData >& rVertexBlendData,
+    DynamicArray< uint8_t >& rSkinningPaletteMap,
     bool bStripNamespaces )
 {
     HELIUM_ASSERT( pScene );
@@ -599,7 +599,7 @@ void FbxSupport::BuildSkinningInformation(
         HELIUM_TRACE( TraceLevels::Debug, TXT( "FbxSupport::BuildSkinningInformation(): Parsing skinning data...\n" ) );
 
         // Assemble the bone hierarchy for the mesh.
-        DynArray< WorkingBoneData > workingBones;
+        DynamicArray< WorkingBoneData > workingBones;
         RecursiveAddMeshSkeletonData(
             pSkeletonRootNode,
             Invalid< uint8_t >(),
@@ -717,7 +717,7 @@ void FbxSupport::BuildSkinningInformation(
         int_fast32_t controlPointCount = pMesh->GetControlPointsCount();
         HELIUM_ASSERT( controlPointCount >= 0 );
 
-        DynArray< BlendData > controlPointBlendData;
+        DynamicArray< BlendData > controlPointBlendData;
         controlPointBlendData.Reserve( controlPointCount );
         controlPointBlendData.Resize( controlPointCount );
         MemoryZero( controlPointBlendData.GetData(), controlPointCount * sizeof( BlendData ) );
@@ -1020,8 +1020,8 @@ void FbxSupport::BuildSkinningInformation(
 void FbxSupport::RecursiveAddMeshSkeletonData(
     const KFbxNode* pCurrentBoneNode,
     uint8_t parentBoneIndex,
-    DynArray< BoneData >& rBones,
-    DynArray< WorkingBoneData >& rWorkingBones,
+    DynamicArray< BoneData >& rBones,
+    DynamicArray< WorkingBoneData >& rWorkingBones,
     bool bStripNamespaces )
 {
     HELIUM_ASSERT( pCurrentBoneNode );
@@ -1074,8 +1074,8 @@ void FbxSupport::RecursiveAddMeshSkeletonData(
 void FbxSupport::RecursiveAddAnimationSkeletonData(
     KFbxNode* pCurrentBoneNode,
     uint8_t parentTrackIndex,
-    DynArray< AnimTrackData >& rTracks,
-    DynArray< WorkingTrackData >& rWorkingTracks,
+    DynamicArray< AnimTrackData >& rTracks,
+    DynamicArray< WorkingTrackData >& rWorkingTracks,
     bool bStripNamespaces )
 {
     HELIUM_ASSERT( pCurrentBoneNode );
@@ -1143,13 +1143,13 @@ void FbxSupport::RecursiveAddAnimationSkeletonData(
 /// @return  True if processing of the scene was successful, false if an error occurred.
 bool FbxSupport::BuildMeshFromScene(
                                     KFbxScene* pScene,
-                                    DynArray< StaticMeshVertex< 1 > >& rVertices,
-                                    DynArray< uint16_t >& rIndices,
-                                    DynArray< uint16_t >& rSectionVertexCounts,
-                                    DynArray< uint32_t >& rSectionTriangleCounts,
-                                    DynArray< BoneData >& rBones,
-                                    DynArray< BlendData >& rVertexBlendData,
-                                    DynArray< uint8_t >& rSkinningPaletteMap,
+                                    DynamicArray< StaticMeshVertex< 1 > >& rVertices,
+                                    DynamicArray< uint16_t >& rIndices,
+                                    DynamicArray< uint16_t >& rSectionVertexCounts,
+                                    DynamicArray< uint32_t >& rSectionTriangleCounts,
+                                    DynamicArray< BoneData >& rBones,
+                                    DynamicArray< BlendData >& rVertexBlendData,
+                                    DynamicArray< uint8_t >& rSkinningPaletteMap,
                                     bool bStripNamespaces )
 {
     HELIUM_ASSERT( pScene );
@@ -1312,9 +1312,9 @@ bool FbxSupport::BuildMeshFromScene(
         HELIUM_ASSERT( pMaterialLayer );
     }
 
-    DynArray< DynArray< StaticMeshVertex< 1 > > > sectionVertices;
-    DynArray< DynArray< uint16_t > > sectionVertexIndices;
-    DynArray< DynArray< int > > sectionControlPointIndices;
+    DynamicArray< DynamicArray< StaticMeshVertex< 1 > > > sectionVertices;
+    DynamicArray< DynamicArray< uint16_t > > sectionVertexIndices;
+    DynamicArray< DynamicArray< int > > sectionControlPointIndices;
 
     size_t totalVertexCount = 0;
     size_t totalTriangleCount = 0;
@@ -1380,9 +1380,9 @@ bool FbxSupport::BuildMeshFromScene(
             sectionControlPointIndices.Resize( newSectionCount );
         }
 
-        DynArray< StaticMeshVertex< 1 > >& rCurrentSectionVertices = sectionVertices[ sectionIndex ];
-        DynArray< uint16_t >& rCurrentSectionIndices = sectionVertexIndices[ sectionIndex ];
-        DynArray< int >& rCurrentSectionControlPointIndices = sectionControlPointIndices[ sectionIndex ];
+        DynamicArray< StaticMeshVertex< 1 > >& rCurrentSectionVertices = sectionVertices[ sectionIndex ];
+        DynamicArray< uint16_t >& rCurrentSectionIndices = sectionVertexIndices[ sectionIndex ];
+        DynamicArray< int >& rCurrentSectionControlPointIndices = sectionControlPointIndices[ sectionIndex ];
 
         for( int_fast32_t polygonVertexIndex = 0;
             polygonVertexIndex < polygonVertexCount;
@@ -1510,7 +1510,7 @@ bool FbxSupport::BuildMeshFromScene(
     rVertices.Reserve( totalVertexCount );
     rIndices.Reserve( totalTriangleCount * 3 );
 
-    DynArray< int > controlPointIndices;
+    DynamicArray< int > controlPointIndices;
     controlPointIndices.Reserve( totalVertexCount );
 
     size_t meshSectionCount = sectionVertexIndices.GetSize();
@@ -1519,9 +1519,9 @@ bool FbxSupport::BuildMeshFromScene(
 
     for( size_t sectionIndex = 0; sectionIndex < meshSectionCount; ++sectionIndex )
     {
-        const DynArray< StaticMeshVertex< 1 > >& rCurrentSectionVertices = sectionVertices[ sectionIndex ];
-        const DynArray< uint16_t >& rCurrentSectionIndices = sectionVertexIndices[ sectionIndex ];
-        const DynArray< int >& rCurrentSectionControlPointIndices = sectionControlPointIndices[ sectionIndex ];
+        const DynamicArray< StaticMeshVertex< 1 > >& rCurrentSectionVertices = sectionVertices[ sectionIndex ];
+        const DynamicArray< uint16_t >& rCurrentSectionIndices = sectionVertexIndices[ sectionIndex ];
+        const DynamicArray< int >& rCurrentSectionControlPointIndices = sectionControlPointIndices[ sectionIndex ];
 
         size_t sectionVertexCount = rCurrentSectionVertices.GetSize();
         HELIUM_ASSERT( rCurrentSectionControlPointIndices.GetSize() == sectionVertexCount );
@@ -1571,11 +1571,11 @@ bool FbxSupport::BuildMeshFromScene(
 
     size_t vertexCount = rVertices.GetSize();
 
-    DynArray< Simd::Vector3 > intermediateTangents;
+    DynamicArray< Simd::Vector3 > intermediateTangents;
     intermediateTangents.Reserve( vertexCount );
     intermediateTangents.Add( Simd::Vector3( 0.0f ), vertexCount );
 
-    DynArray< Simd::Vector3 > intermediateBinormals;
+    DynamicArray< Simd::Vector3 > intermediateBinormals;
     intermediateBinormals.Reserve( vertexCount );
     intermediateBinormals.Add( Simd::Vector3( 0.0f ), vertexCount );
 
@@ -1692,7 +1692,7 @@ bool FbxSupport::BuildMeshFromScene(
 bool FbxSupport::BuildAnimationFromScene(
     KFbxScene* pScene,
     uint_fast32_t oversampling,
-    DynArray< AnimTrackData >& rTracks,
+    DynamicArray< AnimTrackData >& rTracks,
     uint_fast32_t& rSamplesPerSecond,
     bool bStripNamespaces )
 {
@@ -1764,7 +1764,7 @@ bool FbxSupport::BuildAnimationFromScene(
 
     // Initialize the track array with the names of each bone node in the skeleton.
     rTracks.Remove( 0, rTracks.GetSize() );
-    DynArray< WorkingTrackData > workingTracks;
+    DynamicArray< WorkingTrackData > workingTracks;
 
     RecursiveAddAnimationSkeletonData(
         pSkeletonRootNode,

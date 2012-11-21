@@ -615,11 +615,11 @@ void GraphicsScene::SwapDynamicConstantBuffers()
     m_constantBufferSetIndex = bufferSetIndex;
 
     // Update view constant buffers.
-    DynArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers = m_viewVertexGlobalDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers = m_viewVertexBasePassDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rViewVertexScreenDataBuffers = m_viewVertexScreenDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers = m_viewPixelBasePassDataBuffers[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rShadowViewVertexDataBuffers = m_shadowViewVertexDataBuffers[ bufferSetIndex ];
+    DynamicArray< RConstantBufferPtr >& rViewVertexGlobalDataBuffers = m_viewVertexGlobalDataBuffers[ bufferSetIndex ];
+    DynamicArray< RConstantBufferPtr >& rViewVertexBasePassDataBuffers = m_viewVertexBasePassDataBuffers[ bufferSetIndex ];
+    DynamicArray< RConstantBufferPtr >& rViewVertexScreenDataBuffers = m_viewVertexScreenDataBuffers[ bufferSetIndex ];
+    DynamicArray< RConstantBufferPtr >& rViewPixelBasePassDataBuffers = m_viewPixelBasePassDataBuffers[ bufferSetIndex ];
+    DynamicArray< RConstantBufferPtr >& rShadowViewVertexDataBuffers = m_shadowViewVertexDataBuffers[ bufferSetIndex ];
 
     size_t sceneViewCount = m_sceneViews.GetSize();
     size_t viewBufferCount = rViewVertexGlobalDataBuffers.GetSize();
@@ -912,9 +912,9 @@ void GraphicsScene::SwapDynamicConstantBuffers()
     }
 
     // Map each instance constant buffer for updating.
-    DynArray< RConstantBufferPtr >& rStaticInstanceVertexGlobalDataBufferPool =
+    DynamicArray< RConstantBufferPtr >& rStaticInstanceVertexGlobalDataBufferPool =
         m_staticInstanceVertexGlobalDataBufferPool[ bufferSetIndex ];
-    DynArray< RConstantBufferPtr >& rSkinnedInstanceVertexGlobalDataBufferPool =
+    DynamicArray< RConstantBufferPtr >& rSkinnedInstanceVertexGlobalDataBufferPool =
         m_skinnedInstanceVertexGlobalDataBufferPool[ bufferSetIndex ];
     HELIUM_UNREF( rSkinnedInstanceVertexGlobalDataBufferPool );
 
@@ -2037,7 +2037,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
         const ShaderSamplerInfoSet* pSamplerInfoSet = pPixelShaderVariant->GetSamplerInfoSet( 0 );
         if( pSamplerInfoSet )
         {
-            const DynArray< ShaderSamplerInfo >& samplerInputs = pSamplerInfoSet->inputs;
+            const DynamicArray< ShaderSamplerInfo >& samplerInputs = pSamplerInfoSet->inputs;
             size_t samplerInputCount = samplerInputs.GetSize();
             for( size_t inputIndex = 0; inputIndex < samplerInputCount; ++inputIndex )
             {
@@ -2064,7 +2064,7 @@ void GraphicsScene::DrawBasePass( uint_fast32_t viewIndex )
         {
             size_t materialTextureCount = pMaterial->GetTextureParameterCount();
 
-            const DynArray< ShaderTextureInfo >& textureInputs = pTextureInfoSet->inputs;
+            const DynamicArray< ShaderTextureInfo >& textureInputs = pTextureInfoSet->inputs;
             size_t textureInputCount = textureInputs.GetSize();
             for( size_t inputIndex = 0; inputIndex < textureInputCount; ++inputIndex )
             {

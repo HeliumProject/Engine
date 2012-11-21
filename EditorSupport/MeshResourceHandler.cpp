@@ -56,13 +56,13 @@ bool MeshResourceHandler::CacheResource(
     Mesh::PersistentResourceData persistentResourceData;
 
     // Load and parse the mesh data.
-    DynArray< StaticMeshVertex< 1 > > vertices;
-    DynArray< uint16_t > indices;
-    //DynArray< uint16_t > sectionVertexCounts;
-    //DynArray< uint32_t > sectionTriangleCounts;
-    DynArray< FbxSupport::BoneData > bones;
-    DynArray< FbxSupport::BlendData > vertexBlendData;
-    //DynArray< uint8_t > skinningPaletteMap;
+    DynamicArray< StaticMeshVertex< 1 > > vertices;
+    DynamicArray< uint16_t > indices;
+    //DynamicArray< uint16_t > sectionVertexCounts;
+    //DynamicArray< uint32_t > sectionTriangleCounts;
+    DynamicArray< FbxSupport::BoneData > bones;
+    DynamicArray< FbxSupport::BlendData > vertexBlendData;
+    //DynamicArray< uint8_t > skinningPaletteMap;
 
     bool bLoadSuccess = m_rFbxSupport.LoadMesh(
         rSourceFilePath,
@@ -136,7 +136,7 @@ bool MeshResourceHandler::CacheResource(
         Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
             static_cast< Cache::EPlatform >( platformIndex ) );
 
-        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+        DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
         rSubDataBuffers.Reserve( 2 );
         rSubDataBuffers.Resize( 2 );
         rSubDataBuffers.Trim();

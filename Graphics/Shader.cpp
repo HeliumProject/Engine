@@ -422,7 +422,7 @@ size_t Shader::Options::GetOptionSetIndex(
             const SelectPair& rPair = pSelectPairs[ selectPairIndex ];
             if( rPair.name == shaderSelectName )
             {
-                const DynArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
+                const DynamicArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
                 size_t shaderSelectChoiceCount = rShaderSelectChoices.GetSize();
 
                 Name targetChoiceName = rPair.choice;
@@ -541,7 +541,7 @@ size_t Shader::Options::GetOptionSetIndex(
             const SelectPair& rPair = pOptionPairs[ optionPairIndex ];
             if( rPair.name == shaderSelectName )
             {
-                const DynArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
+                const DynamicArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
                 size_t shaderSelectChoiceCount = rShaderSelectChoices.GetSize();
 
                 Name targetChoiceName = rPair.choice;
@@ -586,8 +586,8 @@ size_t Shader::Options::GetOptionSetIndex(
 void Shader::Options::GetOptionSetFromIndex(
     RShader::EType shaderType,
     size_t index,
-    DynArray< Name >& rToggleNames,
-    DynArray< SelectPair >& rSelectPairs ) const
+    DynamicArray< Name >& rToggleNames,
+    DynamicArray< SelectPair >& rSelectPairs ) const
 {
     HELIUM_ASSERT( static_cast< size_t >( shaderType ) < static_cast< size_t >( RShader::TYPE_MAX ) );
 
@@ -622,7 +622,7 @@ void Shader::Options::GetOptionSetFromIndex(
             continue;
         }
 
-        const DynArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
+        const DynamicArray< Name >& rShaderSelectChoices = rShaderSelect.choices;
         size_t shaderSelectChoiceCount = rShaderSelectChoices.GetSize();
 
         size_t selectIndexMultiplier = shaderSelectChoiceCount + rShaderSelect.bOptional;

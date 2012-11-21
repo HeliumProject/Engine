@@ -36,12 +36,12 @@ public:
     }
 };
 
-class DynArrayPusher : NonCopyable
+class DynamicArrayPusher : NonCopyable
 {
 public:
-    DynArray< ObjectPtr >& m_ObjectArray;
+    DynamicArray< ObjectPtr >& m_ObjectArray;
 
-    explicit DynArrayPusher( DynArray< ObjectPtr >& objectArray )
+    explicit DynamicArrayPusher( DynamicArray< ObjectPtr >& objectArray )
         : m_ObjectArray( objectArray )
     {
     }
@@ -274,8 +274,8 @@ void ArchiveXML::SerializeFields( Object* object )
     const Class* type = object->GetClass();
     HELIUM_ASSERT(type != NULL);
 
-    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
-    DynArray< Field >::ConstIterator end = type->m_Fields.End();
+    DynamicArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynamicArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
         const Field* field = &*itr;
@@ -294,8 +294,8 @@ void ArchiveXML::SerializeFields( Object* object )
 
 void ArchiveXML::SerializeFields( void* structure, const Structure* type )
 {
-    DynArray< Field >::ConstIterator itr = type->m_Fields.Begin();
-    DynArray< Field >::ConstIterator end = type->m_Fields.End();
+    DynamicArray< Field >::ConstIterator itr = type->m_Fields.Begin();
+    DynamicArray< Field >::ConstIterator end = type->m_Fields.End();
     for ( ; itr != end; ++itr )
     {
         const Field* field = &*itr;
@@ -315,7 +315,7 @@ void ArchiveXML::SerializeArray(const std::vector< ObjectPtr >& objects, uint32_
     SerializeArray( objects.begin(), objects.end(), flags );
 }
 
-void ArchiveXML::SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags )
+void ArchiveXML::SerializeArray( const DynamicArray< ObjectPtr >& objects, uint32_t flags )
 {
     SerializeArray( objects.Begin(), objects.End(), flags );
 }
@@ -659,9 +659,9 @@ void ArchiveXML::DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t f
     DeserializeArray( StlVectorPusher( objects ), flags );
 }
 
-void ArchiveXML::DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags )
+void ArchiveXML::DeserializeArray( DynamicArray< ObjectPtr >& objects, uint32_t flags )
 {
-    DeserializeArray( DynArrayPusher( objects ), flags );
+    DeserializeArray( DynamicArrayPusher( objects ), flags );
 }
 
 template< typename ArrayPusher >

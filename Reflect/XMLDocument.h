@@ -79,8 +79,8 @@ namespace Helium
         static void EndElementHandler(void *pUserData, const tchar_t* pszName);
 
         XML_Parser              m_Parser;
-        DynArray< int32_t >     m_Stack;
-        DynArray< XMLElement >  m_Elements;
+        DynamicArray< int32_t >     m_Stack;
+        DynamicArray< XMLElement >  m_Elements;
     };
 }
 

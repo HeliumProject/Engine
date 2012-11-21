@@ -13,7 +13,7 @@
 #include "Rendering/Renderer.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 #include <d3d9.h>
 
@@ -213,7 +213,7 @@ namespace Helium
         D3DDISPLAYMODEEX m_fullscreenDisplayMode;
 
         /// Static texture map target pools for each supported texture pixel format at varying resolutions.
-        DynArray< IDirect3DTexture9* >
+        DynamicArray< IDirect3DTexture9* >
             m_staticTextureMapTargetPools[ 2 * STATIC_TEXTURE_MAP_TARGET_LOG2_MAX + 1 ][ RENDERER_PIXEL_FORMAT_MAX ];
 
         /// Depth texture format (for shadow mapping support).

@@ -61,7 +61,7 @@ namespace Helium
         /// Constant buffer name.
         Name name;
         /// Shader constants.
-        DynArray< ShaderConstantInfo > constants;
+        DynamicArray< ShaderConstantInfo > constants;
         /// Index of the buffer within the shader.
         uint16_t index;
         /// Buffer size, in bytes.
@@ -83,7 +83,7 @@ namespace Helium
         inline bool operator!=( const ShaderConstantBufferInfoSet& _rhs ) const;
 
         /// Constant buffers.
-        DynArray< ShaderConstantBufferInfo > buffers;
+        DynamicArray< ShaderConstantBufferInfo > buffers;
 
         /// @name Serialization
         //@{
@@ -121,7 +121,7 @@ namespace Helium
         inline bool operator!=( const ShaderSamplerInfoSet& _rhs ) const;
 
         /// Sampler inputs.
-        DynArray< ShaderSamplerInfo > inputs;
+        DynamicArray< ShaderSamplerInfo > inputs;
 
         /// @name Serialization
         //@{
@@ -159,7 +159,7 @@ namespace Helium
         inline bool operator!=( const ShaderTextureInfoSet& _rhs ) const;
 
         /// Texture inputs.
-        DynArray< ShaderTextureInfo > inputs;
+        DynamicArray< ShaderTextureInfo > inputs;
 
         /// @name Serialization
         //@{
@@ -178,10 +178,10 @@ namespace Helium
         inline bool operator==( const CompiledShaderData& _rhs ) const;
         inline bool operator!=( const CompiledShaderData& _rhs ) const;
         
-        DynArray< uint8_t > compiledCodeBuffer;
-        DynArray< ShaderConstantBufferInfo > constantBuffers;
-        DynArray< ShaderSamplerInfo > samplerInputs;
-        DynArray< ShaderTextureInfo > textureInputs;
+        DynamicArray< uint8_t > compiledCodeBuffer;
+        DynamicArray< ShaderConstantBufferInfo > constantBuffers;
+        DynamicArray< ShaderSamplerInfo > samplerInputs;
+        DynamicArray< ShaderTextureInfo > textureInputs;
     };
 
     /// Graphics shader resource.
@@ -231,7 +231,7 @@ namespace Helium
             /// Selection name.
             Name name;
             /// Selection choices.
-            DynArray< Name > choices;
+            DynamicArray< Name > choices;
 
             union
             {
@@ -284,11 +284,11 @@ namespace Helium
 
             /// @name Data Access
             //@{
-            inline DynArray< Toggle >& GetToggles();
-            inline const DynArray< Toggle >& GetToggles() const;
+            inline DynamicArray< Toggle >& GetToggles();
+            inline const DynamicArray< Toggle >& GetToggles() const;
 
-            inline DynArray< Select >& GetSelects();
-            inline const DynArray< Select >& GetSelects() const;
+            inline DynamicArray< Select >& GetSelects();
+            inline const DynamicArray< Select >& GetSelects() const;
             //@}
 
             /// @name Serialization
@@ -305,17 +305,17 @@ namespace Helium
                 RShader::EType shaderType, const SelectPair* pOptionPairs, size_t optionPairCount ) const;
 
             void GetOptionSetFromIndex(
-                RShader::EType shaderType, size_t index, DynArray< Name >& rToggleNames,
-                DynArray< SelectPair >& rSelectPairs ) const;
+                RShader::EType shaderType, size_t index, DynamicArray< Name >& rToggleNames,
+                DynamicArray< SelectPair >& rSelectPairs ) const;
 
             size_t ComputeOptionSetCount( RShader::EType shaderType ) const;
             //@}
 
         private:
             /// Preprocessor toggles.
-            DynArray< Toggle > m_toggles;
+            DynamicArray< Toggle > m_toggles;
             /// Preprocessor selections.
-            DynArray< Select > m_selects;
+            DynamicArray< Select > m_selects;
         };
 
         /// Persistent shader resource data.
@@ -490,16 +490,16 @@ namespace Helium
         };
 
         /// Shader render resources.
-        DynArray< RShaderPtr > m_renderResources;
+        DynamicArray< RShaderPtr > m_renderResources;
         /// Shader constant buffers.
-        DynArray< ShaderConstantBufferInfoSet > m_constantBufferSets;
+        DynamicArray< ShaderConstantBufferInfoSet > m_constantBufferSets;
         /// Sampler inputs.
-        DynArray< ShaderSamplerInfoSet > m_samplerInputSets;
+        DynamicArray< ShaderSamplerInfoSet > m_samplerInputSets;
         /// Texture inputs.
-        DynArray< ShaderTextureInfoSet > m_textureInputSets;
+        DynamicArray< ShaderTextureInfoSet > m_textureInputSets;
 
         /// Async load data for cached shader code.
-        DynArray< LoadData > m_renderResourceLoads;
+        DynamicArray< LoadData > m_renderResourceLoads;
         /// Buffer for async loading of cached shader code.
         void* m_pRenderResourceLoadBuffer;
     };

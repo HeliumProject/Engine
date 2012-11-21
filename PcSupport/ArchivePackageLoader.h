@@ -84,7 +84,7 @@ namespace Helium
 
         virtual size_t BeginLoadObject( GameObjectPath path );
         virtual bool TryFinishLoadObject(
-            size_t requestId, GameObjectPtr& rspObject, DynArray< GameObjectLoader::LinkEntry >& rLinkTable );
+            size_t requestId, GameObjectPtr& rspObject, DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable );
 
         virtual void Tick();
         //@}
@@ -142,7 +142,7 @@ namespace Helium
             size_t index;
 
             /// Link table.
-            DynArray< LinkEntry > linkTable;
+            DynamicArray< LinkEntry > linkTable;
 
             /// Cached type reference.
             GameObjectTypePtr spType;
@@ -182,7 +182,7 @@ namespace Helium
         volatile int32_t m_preloadedCounter;
 
         /// Serialized object data parsed from the XML package.
-        DynArray< SerializedObjectData > m_objects;
+        DynamicArray< SerializedObjectData > m_objects;
 
         /// Pending load requests.
         SparseArray< LoadRequest* > m_loadRequests;
@@ -207,7 +207,7 @@ namespace Helium
             size_t asyncLoadId;
             uint64_t expectedSize;
         };
-        DynArray<FileReadRequest> m_fileReadRequests;
+        DynamicArray<FileReadRequest> m_fileReadRequests;
 
 
         /// Parent package load request ID.

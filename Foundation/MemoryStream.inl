@@ -9,7 +9,7 @@ const void* Helium::StaticMemoryStream::GetData() const
 /// Get a pointer to the dynamic array currently in use as this stream's memory buffer.
 ///
 /// @return  Dynamic array in use by this stream.
-Helium::DynArray< uint8_t >* Helium::DynamicMemoryStream::GetBuffer() const
+Helium::DynamicArray< uint8_t >* Helium::DynamicMemoryStream::GetBuffer() const
 {
     return m_pBuffer;
 }

@@ -100,7 +100,7 @@ const Class* SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItemClass() const
 }
 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT >
-void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItems( DynArray< DataPtr >& items ) const
+void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::GetItems( DynamicArray< DataPtr >& items ) const
 {
     items.Clear();
     items.Reserve( m_Data->GetSize() );
@@ -244,7 +244,7 @@ tistream& SimpleSetData< KeyT, EqualKeyT, AllocatorT >::operator<<( tistream& st
 template< typename KeyT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
 void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() );
 
     {
@@ -267,8 +267,8 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& archive 
 
     archive.SerializeArray( components );
 
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
+    DynamicArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynamicArray< ObjectPtr >::Iterator end = components.End();
     for ( ; itr != end; ++itr )
     {
         Data* ser = AssertCast< Data >( *itr );
@@ -281,15 +281,15 @@ void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& archive 
 template< typename KeyT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
 void SimpleSetData< KeyT, EqualKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     archive.DeserializeArray( components );
 
     // if we are referring to a real field, clear its contents
     m_Data->Clear();
     m_Data->Reserve( components.GetSize() );
 
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
+    DynamicArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynamicArray< ObjectPtr >::Iterator end = components.End();
     for ( ; itr != end; ++itr )
     {
         Data* data = SafeCast< Data >( *itr );

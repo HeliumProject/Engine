@@ -71,7 +71,7 @@
 /// Tag and serialize a dynamic array.
 ///
 /// @param[in] X  Dynamic array to serialize.
-#define HELIUM_TAGGED_DYNARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapDynArray( X )
+#define HELIUM_TAGGED_DYNARRAY( X ) Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapDynamicArray( X )
 
 /// Tag and serialize an array of structs.
 ///
@@ -83,7 +83,7 @@
 ///
 /// @param[in] X  Dynamic array of structs to serialize.
 #define HELIUM_TAGGED_STRUCT_DYNARRAY( X ) \
-    Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructDynArray( X )
+    Helium::Serializer::Tag( HELIUM_TSTRINGIZE( X ) ) << Helium::Serializer::WrapStructDynamicArray( X )
 
 /// Serialize the parent class properties within a group named after the class.
 ///
@@ -220,21 +220,21 @@ namespace Helium
 
     /// Dynamic array serialization wrapper.
     template< typename T >
-    class DynArraySerializeProxy
+    class DynamicArraySerializeProxy
     {
     public:
         /// Array being serialized.
-        DynArray< T >& m_rArray;
+        DynamicArray< T >& m_rArray;
 
         /// @name Construction/Destruction
         //@{
-        inline explicit DynArraySerializeProxy( DynArray< T >& rArray );
+        inline explicit DynamicArraySerializeProxy( DynamicArray< T >& rArray );
         //@}
 
     private:
         /// @name Overloaded Operators
         //@{
-        DynArraySerializeProxy& operator=( const DynArraySerializeProxy& );  // Not implemented.
+        DynamicArraySerializeProxy& operator=( const DynamicArraySerializeProxy& );  // Not implemented.
         //@}
     };
 
@@ -260,21 +260,21 @@ namespace Helium
 
     /// Dynamic array of structures serialization wrapper.
     template< typename T >
-    class StructDynArraySerializeProxy
+    class StructDynamicArraySerializeProxy
     {
     public:
         /// Array being serialized.
-        DynArray< T >& m_rArray;
+        DynamicArray< T >& m_rArray;
 
         /// @name Construction/Destruction
         //@{
-        inline explicit StructDynArraySerializeProxy( DynArray< T >& rArray );
+        inline explicit StructDynamicArraySerializeProxy( DynamicArray< T >& rArray );
         //@}
 
     private:
         /// @name Overloaded Operators
         //@{
-        StructDynArraySerializeProxy& operator=( const StructDynArraySerializeProxy& );  // Not implemented.
+        StructDynamicArraySerializeProxy& operator=( const StructDynamicArraySerializeProxy& );  // Not implemented.
         //@}
     };
 
@@ -404,7 +404,7 @@ namespace Helium
         virtual void SerializeTag( const Tag& rTag ) = 0;
         virtual bool CanResolveTags() const = 0;
 
-        virtual void GetPropertyTagNames( DynArray< String >& rTagNames ) const;
+        virtual void GetPropertyTagNames( DynamicArray< String >& rTagNames ) const;
 
         virtual void SerializeBool( bool& rValue ) = 0;
         virtual void SerializeInt8( int8_t& rValue ) = 0;
@@ -430,8 +430,8 @@ namespace Helium
         virtual void BeginArray( uint32_t size );
         virtual void EndArray();
 
-        virtual void BeginDynArray();
-        virtual void EndDynArray();
+        virtual void BeginDynamicArray();
+        virtual void EndDynamicArray();
 
         virtual void BeginPropertyGroup( const tchar_t* pName );
         virtual void EndPropertyGroup();
@@ -444,10 +444,10 @@ namespace Helium
         //@{
         template< typename T > static StructSerializeProxy< T > WrapStruct( T& rStruct );
         template< typename T, size_t Size > static ArraySerializeProxy< T, Size > WrapArray( T ( &rArray )[ Size ] );
-        template< typename T > static DynArraySerializeProxy< T > WrapDynArray( DynArray< T >& rArray );
+        template< typename T > static DynamicArraySerializeProxy< T > WrapDynamicArray( DynamicArray< T >& rArray );
         template< typename T, size_t Size > static StructArraySerializeProxy< T, Size > WrapStructArray(
             T ( &rArray )[ Size ] );
-        template< typename T > static StructDynArraySerializeProxy< T > WrapStructDynArray( DynArray< T >& rArray );
+        template< typename T > static StructDynamicArraySerializeProxy< T > WrapStructDynamicArray( DynamicArray< T >& rArray );
         //@}
 
         /// @name Overloaded Operators
@@ -472,10 +472,10 @@ namespace Helium
 
         template< typename T > Serializer& operator<<( const StructSerializeProxy< T >& rValue );
         template< typename T, size_t Size > Serializer& operator<<( const ArraySerializeProxy< T, Size >& rValue );
-        template< typename T > Serializer& operator<<( const DynArraySerializeProxy< T >& rValue );
+        template< typename T > Serializer& operator<<( const DynamicArraySerializeProxy< T >& rValue );
         template< typename T, size_t Size > Serializer& operator<<(
             const StructArraySerializeProxy< T, Size >& rValue );
-        template< typename T > Serializer& operator<<( const StructDynArraySerializeProxy< T >& rValue );
+        template< typename T > Serializer& operator<<( const StructDynamicArraySerializeProxy< T >& rValue );
 
         Serializer& operator<<( Simd::Vector2& rValue );
         Serializer& operator<<( Simd::Vector3& rValue );

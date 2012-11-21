@@ -96,7 +96,7 @@ namespace Helium
 			void SerializeFields( Object* object );
             void SerializeFields( void* structure, const Structure* type );
             void SerializeArray( const std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
-            void SerializeArray( const DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
+            void SerializeArray( const DynamicArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         protected:
             template< typename ConstIteratorType >
@@ -109,7 +109,7 @@ namespace Helium
             void DeserializeFields( Object* object );
             void DeserializeFields( void* object, const Structure* type );
             void DeserializeArray( std::vector< ObjectPtr >& elements, uint32_t flags = 0 );
-            void DeserializeArray( DynArray< ObjectPtr >& elements, uint32_t flags = 0 );
+            void DeserializeArray( DynamicArray< ObjectPtr >& elements, uint32_t flags = 0 );
 
         public:
             void WriteFileHeader();
@@ -167,7 +167,7 @@ namespace Helium
             }
        
         private:
-            DynArray<DeserializingField> m_DeserializingFieldStack;
+            DynamicArray<DeserializingField> m_DeserializingFieldStack;
         };
     }
 }

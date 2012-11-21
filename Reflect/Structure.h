@@ -8,9 +8,9 @@ namespace Helium
 {
     namespace Reflect
     {
-        struct IStructureDynArrayAdapter
+        struct IStructureDynamicArrayAdapter
         {
-            virtual uint32_t GetDynArrayByteSize() const = 0;
+            virtual uint32_t GetDynamicArrayByteSize() const = 0;
             virtual size_t GetSize(const void* dyn_array) const = 0;
             virtual void Clear(void* dyn_array) const = 0;
             virtual DataPtr GetItem(void* dyn_array, size_t at, void* _instance, const Field* _field) const = 0;
@@ -25,41 +25,41 @@ namespace Helium
         };
 
         template <class T>
-        class StructureDynArrayAdapter : public IStructureDynArrayAdapter
+        class StructureDynamicArrayAdapter : public IStructureDynamicArrayAdapter
         {
-            virtual uint32_t GetDynArrayByteSize() const
+            virtual uint32_t GetDynamicArrayByteSize() const
             {
-                return sizeof(DynArray<T>);
+                return sizeof(DynamicArray<T>);
             }
 
             virtual size_t GetSize(const void* dyn_array) const
             {
-                const DynArray<T> *dyn_array_t = static_cast< const DynArray<T> *>(dyn_array);
+                const DynamicArray<T> *dyn_array_t = static_cast< const DynamicArray<T> *>(dyn_array);
                 return dyn_array_t->GetSize();
             }
             
             virtual void Clear(void* dyn_array) const
             {
-                DynArray<T> *dyn_array_t = static_cast< DynArray<T> * >(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast< DynamicArray<T> * >(dyn_array);
                 dyn_array_t->Clear();
             }
             
             virtual DataPtr GetItem(void* dyn_array, size_t at, void* instance, const Field* field) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 return Data::BindStructure(&dyn_array_t->GetElement(at), instance, field);
             }
             
             virtual void SetItem(void* dyn_array, size_t at, Data* value, void* instance, const Field* field) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 DataPtr data = Data::BindStructure(&dyn_array_t->GetElement(at), instance, field);
                 data->Set(value);
             }
             
             virtual void Insert(void* dyn_array, size_t at, Data* value) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 Data::GetValue( value, dyn_array_t->GetElement(at) );
                 
                 T temp;
@@ -69,26 +69,26 @@ namespace Helium
             
             virtual void Remove(void* dyn_array, size_t at) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 dyn_array_t->Remove(at);
             }
             
             virtual void Swap(void* dyn_array, size_t at_rhs, size_t at_lhs) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 Helium::Swap(dyn_array_t->GetElement(at_lhs), dyn_array_t->GetElement(at_rhs));
             }
             
             virtual void Resize(void* dyn_array, size_t size) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
                 dyn_array_t->Resize(size);
             }
                         
             virtual bool Set( void* dyn_array, void* src, uint32_t flags ) const
             {
-                DynArray<T> *dyn_array_t = static_cast<DynArray<T> *>(dyn_array);
-                DynArray<T> *src_t = static_cast<DynArray<T> *>(src);
+                DynamicArray<T> *dyn_array_t = static_cast<DynamicArray<T> *>(dyn_array);
+                DynamicArray<T> *src_t = static_cast<DynamicArray<T> *>(src);
 
                 *dyn_array_t = *src_t;
                 return true;
@@ -96,18 +96,18 @@ namespace Helium
             
             virtual bool Equals( void* dyn_array, void* src ) const
             {
-                DynArray<T> *data = static_cast<DynArray<T> *>(dyn_array);
-                DynArray<T> *rhs_data = static_cast<DynArray<T> *>(src);
+                DynamicArray<T> *data = static_cast<DynamicArray<T> *>(dyn_array);
+                DynamicArray<T> *rhs_data = static_cast<DynamicArray<T> *>(src);
 
                 return *data == *rhs_data;
             }
             
             virtual bool Accept( const Composite *composite, void* dyn_array, Visitor& visitor ) const
             {
-                DynArray<T> *data = static_cast<DynArray<T> *>(dyn_array);
+                DynamicArray<T> *data = static_cast<DynamicArray<T> *>(dyn_array);
 
-                DynArray< T >::Iterator itr = data->Begin();
-                DynArray< T >::Iterator end = data->End();
+                DynamicArray< T >::Iterator itr = data->Begin();
+                DynamicArray< T >::Iterator end = data->End();
                 for ( ; itr != end; ++itr )
                 {
                     composite->Visit(&*itr, visitor);
@@ -144,10 +144,10 @@ namespace Helium
                 Composite::Create< StructureT >( name, baseName, &StructureT::PopulateComposite, type );
 
                 type->m_Default = new StructureT;
-                type->m_DynArrayAdapter.Reset(new StructureDynArrayAdapter<StructureT>());
+                type->m_DynamicArrayAdapter.Reset(new StructureDynamicArrayAdapter<StructureT>());
             }
 
-            Helium::AutoPtr<IStructureDynArrayAdapter> m_DynArrayAdapter;
+            Helium::AutoPtr<IStructureDynamicArrayAdapter> m_DynamicArrayAdapter;
         };
 
         template< class ClassT, class BaseT >

@@ -818,7 +818,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     Bucket& rBucket = m_pBuckets[ bucketIndex ];
     rBucket.lock.LockWrite();
 
-    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
+    DynamicArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -858,7 +858,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     Bucket& rBucket = m_pBuckets[ bucketIndex ];
     rBucket.lock.LockRead();
 
-    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
+    DynamicArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -907,7 +907,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     for( ; ; )
     {
         // Search for an existing entry.
-        DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
+        DynamicArray< InternalValue, Allocator >& rEntries = rBucket.entries;
         size_t entryCount = rEntries.GetSize();
         size_t entryIndex;
         for( entryIndex = 0; entryIndex < entryCount; ++entryIndex )
@@ -996,7 +996,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     rBucket.lock.LockWrite();
 
     // Search for an existing entry.
-    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
+    DynamicArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {
@@ -1035,7 +1035,7 @@ bool Helium::ConcurrentHashTable< Value, Key, HashFunction, ExtractKey, EqualKey
     rBucket.lock.LockWrite();
 
     // Search for an entry with the specified key.
-    DynArray< InternalValue, Allocator >& rEntries = rBucket.entries;
+    DynamicArray< InternalValue, Allocator >& rEntries = rBucket.entries;
     size_t entryCount = rEntries.GetSize();
     for( size_t entryIndex = 0; entryIndex < entryCount; ++entryIndex )
     {

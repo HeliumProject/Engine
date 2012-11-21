@@ -1685,7 +1685,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
         size_t stateIndex = GetStateIndex( rasterizerState, depthStencilState );
 
         // Draw textured primitives first.
-        const DynArray< TexturedBufferDrawCall >& rTexturedBufferDrawCalls = m_texturedBufferDrawCalls[ stateIndex ];
+        const DynamicArray< TexturedBufferDrawCall >& rTexturedBufferDrawCalls = m_texturedBufferDrawCalls[ stateIndex ];
         size_t texturedBufferDrawCallCount = rTexturedBufferDrawCalls.GetSize();
         if( texturedBufferDrawCallCount != 0 && rWorldResources.spTextureBlendVertexShader )
         {
@@ -1749,8 +1749,8 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 
         if( rResourceSet.spTexturedVertexBuffer && rResourceSet.spTexturedIndexBuffer )
         {
-            const DynArray< TexturedDrawCall >& rTexturedDrawCalls = m_texturedDrawCalls[ stateIndex ];
-            const DynArray< TexturedDrawCall >& rWorldTextDrawCalls = m_worldTextDrawCalls[ stateIndex ];
+            const DynamicArray< TexturedDrawCall >& rTexturedDrawCalls = m_texturedDrawCalls[ stateIndex ];
+            const DynamicArray< TexturedDrawCall >& rWorldTextDrawCalls = m_worldTextDrawCalls[ stateIndex ];
             size_t texturedDrawCallCount = rTexturedDrawCalls.GetSize();
             size_t worldTextDrawCallCount = rWorldTextDrawCalls.GetSize();
 
@@ -1866,7 +1866,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
         // Draw untextured data.
         if( rWorldResources.spUntexturedVertexShader )
         {
-            const DynArray< UntexturedBufferDrawCall >& rUntexturedBufferDrawCalls =
+            const DynamicArray< UntexturedBufferDrawCall >& rUntexturedBufferDrawCalls =
                 m_untexturedBufferDrawCalls[ stateIndex ];
             size_t untexturedBufferDrawCallCount = rUntexturedBufferDrawCalls.GetSize();
             if( untexturedBufferDrawCallCount != 0 )
@@ -1935,7 +1935,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 
             if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
             {
-                const DynArray< UntexturedDrawCall >& rUntexturedDrawCalls = m_untexturedDrawCalls[ stateIndex ];
+                const DynamicArray< UntexturedDrawCall >& rUntexturedDrawCalls = m_untexturedDrawCalls[ stateIndex ];
                 size_t untexturedDrawCallCount = rUntexturedDrawCalls.GetSize();
                 if( untexturedDrawCallCount != 0 )
                 {
@@ -2011,7 +2011,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
             RenderResourceManager::RASTERIZER_STATE_DEFAULT );
         HELIUM_ASSERT( pRasterizerState );
 
-        const DynArray< UntexturedBufferDrawCall >& rPointBufferDrawCalls = m_pointBufferDrawCalls[ depthStencilState ];
+        const DynamicArray< UntexturedBufferDrawCall >& rPointBufferDrawCalls = m_pointBufferDrawCalls[ depthStencilState ];
         size_t pointBufferDrawCallCount = rPointBufferDrawCalls.GetSize();
         if( pointBufferDrawCallCount != 0 )
         {
@@ -2065,7 +2065,7 @@ void BufferedDrawer::DrawDepthStencilStateWorldElements(
 
         if( rResourceSet.spUntexturedVertexBuffer && rResourceSet.spUntexturedIndexBuffer )
         {
-            const DynArray< UntexturedDrawCall >& rPointDrawCalls = m_pointDrawCalls[ depthStencilState ];
+            const DynamicArray< UntexturedDrawCall >& rPointDrawCalls = m_pointDrawCalls[ depthStencilState ];
             size_t pointDrawCallCount = rPointDrawCalls.GetSize();
             if( pointDrawCallCount != 0 )
             {

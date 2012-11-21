@@ -4,7 +4,7 @@
 
 #include "Foundation/ConcurrentHashMap.h"
 #include "Foundation/ConcurrentHashSet.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Foundation/SparseArray.h"
 #include "Foundation/ReferenceCounting.h"
 #include "Foundation/SmartPtr.h"
@@ -351,7 +351,7 @@ namespace Helium
         static ReadWriteLock sm_objectListLock;
 
         /// Cached serialization buffer.
-        static DynArray< uint8_t > sm_serializationBuffer;
+        static DynamicArray< uint8_t > sm_serializationBuffer;
 
         /// @name Private Utility Functions
         //@{

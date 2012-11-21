@@ -125,11 +125,11 @@ bool ShaderVariantResourceHandler::CacheResource(
     // Acquire the user preprocessor option set associated with the target shader type and user option set index.
     const Shader::Options& rUserOptions = pShader->GetUserOptions();
 
-    DynArray< Name > toggleNames;
-    DynArray< Shader::SelectPair > selectPairs;
+    DynamicArray< Name > toggleNames;
+    DynamicArray< Shader::SelectPair > selectPairs;
     rUserOptions.GetOptionSetFromIndex( shaderType, userOptionIndex, toggleNames, selectPairs );
 
-    DynArray< PlatformPreprocessor::ShaderToken > shaderTokens;
+    DynamicArray< PlatformPreprocessor::ShaderToken > shaderTokens;
 
     size_t userToggleNameCount = toggleNames.GetSize();
     for( size_t toggleNameIndex = 0; toggleNameIndex < userToggleNameCount; ++toggleNameIndex )
@@ -250,7 +250,7 @@ bool ShaderVariantResourceHandler::CacheResource(
         size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
         size_t shaderCount = shaderProfileCount * systemOptionSetCount;
 
-        DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+        DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
         rSubDataBuffers.Reserve( shaderCount );
         rSubDataBuffers.Resize( 0 );
         rSubDataBuffers.Resize( shaderCount );
@@ -259,10 +259,10 @@ bool ShaderVariantResourceHandler::CacheResource(
         rPreprocessedData.bLoaded = true;
     }
 
-//     DynArray< uint8_t > compiledCodeBuffer;
-//     DynArray< ShaderConstantBufferInfo > constantBuffers, pcSm4ConstantBuffers;
-//     DynArray< ShaderSamplerInfo > samplerInputs;
-//     DynArray< ShaderTextureInfo > textureInputs;
+//     DynamicArray< uint8_t > compiledCodeBuffer;
+//     DynamicArray< ShaderConstantBufferInfo > constantBuffers, pcSm4ConstantBuffers;
+//     DynamicArray< ShaderSamplerInfo > samplerInputs;
+//     DynamicArray< ShaderTextureInfo > textureInputs;
     
     CompiledShaderData csd_pc_sm4;
 
@@ -340,8 +340,8 @@ bool ShaderVariantResourceHandler::CacheResource(
             {
                 Resource::PreprocessedData& rPcPreprocessedData = pVariant->GetPreprocessedData(
                     Cache::PLATFORM_PC );
-                DynArray< DynArray< uint8_t > >& rPcSubDataBuffers = rPcPreprocessedData.subDataBuffers;
-                DynArray< uint8_t >& rPcSm4SubDataBuffer =
+                DynamicArray< DynamicArray< uint8_t > >& rPcSubDataBuffers = rPcPreprocessedData.subDataBuffers;
+                DynamicArray< uint8_t >& rPcSm4SubDataBuffer =
                     rPcSubDataBuffers[ ShaderProfile::PC_SM4 * systemOptionSetCount + systemOptionSetIndex ];
 
                 Cache::WriteCacheObjectToBuffer(csd_pc_sm4, rPcSm4SubDataBuffer);
@@ -361,7 +361,7 @@ bool ShaderVariantResourceHandler::CacheResource(
                     // GET PLATFORM'S SUBDATA BUFFER
                     Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
                         static_cast< Cache::EPlatform >( platformIndex ) );
-                    DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+                    DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
 
                     size_t shaderProfileCount = pPreprocessor->GetShaderProfileCount();
                     for( size_t shaderProfileIndex = 0;
@@ -406,7 +406,7 @@ bool ShaderVariantResourceHandler::CacheResource(
                             continue;
                         }
 
-                        DynArray< uint8_t >& rTargetSubDataBuffer =
+                        DynamicArray< uint8_t >& rTargetSubDataBuffer =
                             rSubDataBuffers[ shaderProfileIndex * systemOptionSetCount + systemOptionSetIndex ];
                         Cache::WriteCacheObjectToBuffer(csd, rTargetSubDataBuffer);
                     }
@@ -528,7 +528,7 @@ size_t ShaderVariantResourceHandler::BeginLoadVariant(
         CacheManager& rCacheManager = CacheManager::GetStaticInstance();
         const Resource::PreprocessedData& rPreprocessedData = pVariant->GetPreprocessedData(
             rCacheManager.GetCurrentPlatform() );
-        const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
+        const DynamicArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 
         //PMDTODO: Implmenet this
 //         BinaryDeserializer deserializer;
@@ -670,8 +670,8 @@ bool ShaderVariantResourceHandler::CompileShader(
     RShader::EType shaderType,
     const void* pShaderSourceData,
     size_t shaderSourceSize,
-    const DynArray< PlatformPreprocessor::ShaderToken >& rTokens,
-    DynArray< uint8_t >& rCompiledCodeBuffer )
+    const DynamicArray< PlatformPreprocessor::ShaderToken >& rTokens,
+    DynamicArray< uint8_t >& rCompiledCodeBuffer )
 {
     HELIUM_ASSERT( pVariant );
     HELIUM_ASSERT( pPreprocessor );
@@ -683,7 +683,7 @@ bool ShaderVariantResourceHandler::CompileShader(
     rCompiledCodeBuffer.Resize( 0 );
 
 #if HELIUM_ENABLE_TRACE
-    DynArray< String > errorMessages;
+    DynamicArray< String > errorMessages;
 #endif
 
     FilePath shaderFilePath;

@@ -131,7 +131,7 @@ namespace Helium
             void SerializeFields( Object* object );
             void SerializeFields( void* structure, const Structure* type );
             void SerializeArray( const std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
-            void SerializeArray( const DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
+            void SerializeArray( const DynamicArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         protected:
             // Helpers
@@ -145,7 +145,7 @@ namespace Helium
             void DeserializeFields( Object* object );
             void DeserializeFields( void* object, const Structure* type );
             void DeserializeArray( std::vector< ObjectPtr >& objects, uint32_t flags = 0 );
-            void DeserializeArray( DynArray< ObjectPtr >& objects, uint32_t flags = 0 );
+            void DeserializeArray( DynamicArray< ObjectPtr >& objects, uint32_t flags = 0 );
 
         public:
             // This function exists to support deserialization of an object into an existing object. 
@@ -196,7 +196,7 @@ namespace Helium
             }
        
         private:
-            DynArray<DeserializingField> m_DeserializingFieldStack;
+            DynamicArray<DeserializingField> m_DeserializingFieldStack;
         };
     }
 }

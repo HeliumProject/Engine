@@ -104,8 +104,8 @@ namespace Helium
         static bool CompileShader(
             ShaderVariant* pVariant, PlatformPreprocessor* pPreprocessor, size_t platformIndex,
             size_t shaderProfileIndex, RShader::EType shaderType, const void* pShaderSourceData,
-            size_t shaderSourceSize, const DynArray< PlatformPreprocessor::ShaderToken >& rTokens,
-            DynArray< uint8_t >& rCompiledCodeBuffer );
+            size_t shaderSourceSize, const DynamicArray< PlatformPreprocessor::ShaderToken >& rTokens,
+            DynamicArray< uint8_t >& rCompiledCodeBuffer );
         //@}
     };
 }

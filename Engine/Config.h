@@ -76,12 +76,12 @@ namespace Helium
         PackagePtr m_spUserConfigPackage;
 
         /// Default configuration objects (only used while loading).
-        DynArray< GameObjectPtr > m_defaultConfigObjects;
+        DynamicArray< GameObjectPtr > m_defaultConfigObjects;
         /// Configuration objects.
-        DynArray< GameObjectPtr > m_configObjects;
+        DynamicArray< GameObjectPtr > m_configObjects;
 
         /// Async object load IDs.
-        DynArray< size_t > m_objectLoadIds;
+        DynamicArray< size_t > m_objectLoadIds;
         /// True if we're waiting on an async load of the configuration package.
         bool m_bLoadingConfigPackage;
 

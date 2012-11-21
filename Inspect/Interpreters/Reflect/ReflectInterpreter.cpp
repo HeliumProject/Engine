@@ -89,8 +89,8 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Object*>& inst
         bases.pop();
 
         // for each field in the type
-        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = current->m_Fields.End();
+        DynamicArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynamicArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
             const Field* field = &*itr;

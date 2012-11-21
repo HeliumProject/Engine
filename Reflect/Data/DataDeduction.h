@@ -31,7 +31,7 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathData );
 //
 
 #include "Reflect/Data/ContainerData.h"
-#include "Reflect/Data/StructureDynArrayData.h"
+#include "Reflect/Data/StructureDynamicArrayData.h"
 
 #include "Reflect/Data/SimpleData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StlStringData );
@@ -90,22 +90,22 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt32StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64UInt64StlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDUInt32StlMapData );
 
-#include "Reflect/Data/DynArrayData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameDynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringDynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolDynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt16DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int16DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64DynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDDynArrayData );
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathDynArrayData );
+#include "Reflect/Data/DynamicArrayData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::NameDynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringDynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::BoolDynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt8DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int8DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt16DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int16DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt32DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int32DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float32DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::Float64DynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDDynamicArrayData );
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::PathDynamicArrayData );
 
 #include "Reflect/Data/SetData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::StringSetData );
@@ -172,8 +172,8 @@ REFLECT_SPECIALIZE_DATA( Helium::Reflect::UInt64ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::Int64ObjectStlMapData );
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::TUIDObjectStlMapData );
 
-#include "Reflect/Data/ObjectDynArrayData.h"
-REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectDynArrayData );
+#include "Reflect/Data/ObjectDynamicArrayData.h"
+REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectDynamicArrayData );
 
 #include "Reflect/Data/ObjectSetData.h"
 REFLECT_SPECIALIZE_DATA( Helium::Reflect::ObjectSetData );

@@ -8,7 +8,7 @@
 #include "Foundation/API.h"
 #include "Foundation/Math.h"
 #include "Foundation/HashFunctions.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 #include <string>
 #include <stdlib.h>
@@ -127,13 +127,13 @@ namespace Helium
 		bool EndsWith( const CharType* pString ) const;
 
 		template< typename ArrayType, typename ArrayAllocator > void Split(
-			DynArray< ArrayType, ArrayAllocator >& rStringResults, CharType separator,
+			DynamicArray< ArrayType, ArrayAllocator >& rStringResults, CharType separator,
 			bool bCombineAdjacentSeparators = false ) const;
 		template< typename ArrayType, typename ArrayAllocator > void Split(
-			DynArray< ArrayType, ArrayAllocator >& rStringResults, const CharType* pSeparators,
+			DynamicArray< ArrayType, ArrayAllocator >& rStringResults, const CharType* pSeparators,
 			size_t separatorCount = Invalid< size_t >(), bool bCombineAdjacentSeparators = false ) const;
 		template< typename ArrayType, typename ArrayAllocator, typename StringAllocator > void Split(
-			DynArray< ArrayType, ArrayAllocator >& rStringResults,
+			DynamicArray< ArrayType, ArrayAllocator >& rStringResults,
 			const StringBase< CharType, StringAllocator >& rSeparators, bool bCombineAdjacentSeparators = false ) const;
 		//@}
 
@@ -164,7 +164,7 @@ namespace Helium
 
 	protected:
 		/// Allocated string buffer.
-		DynArray< CharType, Allocator > m_buffer;
+		DynamicArray< CharType, Allocator > m_buffer;
 
 		/// @name Protected String Operations
 		//@{

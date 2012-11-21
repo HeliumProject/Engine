@@ -52,7 +52,7 @@ bool ResourceHandler::CacheResource(
 
 
 #if HELIUM_TOOLS
-void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object *_object, DynArray< uint8_t > &_buffer )
+void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object *_object, DynamicArray< uint8_t > &_buffer )
 {
     _buffer.Resize(0);
     if (!_object)
@@ -69,7 +69,7 @@ void Helium::ResourceHandler::SaveObjectToPersistentDataBuffer( Reflect::Object 
 /// This will iterate through all sub-types of ResourceHandler and add their template objects to a dynamic array.
 ///
 /// @param[out] rResourceHandlers  List of existing resource handlers.
-void ResourceHandler::GetAllResourceHandlers( DynArray< ResourceHandler* >& rResourceHandlers )
+void ResourceHandler::GetAllResourceHandlers( DynamicArray< ResourceHandler* >& rResourceHandlers )
 {
     rResourceHandlers.Resize( 0 );
 

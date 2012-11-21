@@ -24,7 +24,7 @@ namespace Helium
 
         /// @name Command-line Initialization
         //@{
-        virtual bool Initialize( String& rModuleName, DynArray< String >& rArguments ) = 0;
+        virtual bool Initialize( String& rModuleName, DynamicArray< String >& rArguments ) = 0;
         //@}
     };
 }

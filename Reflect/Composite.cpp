@@ -113,8 +113,8 @@ void Composite::Register() const
     Type::Register();
 
     uint32_t computedSize = 0;
-    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
-    DynArray< Field >::ConstIterator end = m_Fields.End();
+    DynamicArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynamicArray< Field >::ConstIterator end = m_Fields.End();
     for ( ; itr != end; ++itr )
     {
         computedSize += itr->m_Size;
@@ -188,8 +188,8 @@ bool Composite::Equals(void* a, void* b) const
         return false;
     }
 
-    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
-    DynArray< Field >::ConstIterator end = m_Fields.End();
+    DynamicArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynamicArray< Field >::ConstIterator end = m_Fields.End();
     for ( ; itr != end; ++itr )
     {
         const Field* field = &*itr;
@@ -224,8 +224,8 @@ void Composite::Visit(void* instance, Visitor& visitor) const
         return;
     }
 
-    DynArray< Field >::ConstIterator itr = m_Fields.Begin();
-    DynArray< Field >::ConstIterator end = m_Fields.End();
+    DynamicArray< Field >::ConstIterator itr = m_Fields.Begin();
+    DynamicArray< Field >::ConstIterator end = m_Fields.End();
     for ( ; itr != end; ++itr )
     {
         const Field* field = &*itr;
@@ -258,8 +258,8 @@ void Composite::Copy( void* source, void* destination ) const
         }
         else
         {
-            DynArray< Field >::ConstIterator itr = m_Fields.Begin();
-            DynArray< Field >::ConstIterator end = m_Fields.End();
+            DynamicArray< Field >::ConstIterator itr = m_Fields.Begin();
+            DynamicArray< Field >::ConstIterator end = m_Fields.End();
             for ( ; itr != end; ++itr )
             {
                 const Field* field = &*itr;
@@ -290,8 +290,8 @@ const Field* Composite::FindFieldByName(uint32_t crc) const
 {
     for ( const Composite* current = this; current != NULL; current = current->m_Base )
     {
-        DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
-        DynArray< Field >::ConstIterator end = current->m_Fields.End();
+        DynamicArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+        DynamicArray< Field >::ConstIterator end = current->m_Fields.End();
         for ( ; itr != end; ++itr )
         {
             if ( Crc32( itr->m_Name ) == crc )
@@ -324,8 +324,8 @@ const Field* Composite::FindFieldByOffset(uint32_t offset) const
     {
         if ( current->m_Fields.GetSize() && offset >= current->m_Fields.GetFirst().m_Offset && offset <= current->m_Fields.GetFirst().m_Offset )
         {
-            DynArray< Field >::ConstIterator itr = current->m_Fields.Begin();
-            DynArray< Field >::ConstIterator end = current->m_Fields.End();
+            DynamicArray< Field >::ConstIterator itr = current->m_Fields.Begin();
+            DynamicArray< Field >::ConstIterator end = current->m_Fields.End();
             for ( ; itr != end; ++itr )
             {
                 if ( itr->m_Offset == offset )

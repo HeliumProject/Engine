@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Foundation/Pair.h"
 
 namespace Helium
@@ -196,7 +196,7 @@ namespace Helium
 
     protected:
         /// Hash table bucket.
-        typedef DynArray< InternalValue, Allocator > Bucket;
+        typedef DynamicArray< InternalValue, Allocator > Bucket;
 
         /// Hash table buckets.
         Bucket* m_pBuckets;

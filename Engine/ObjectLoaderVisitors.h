@@ -4,7 +4,7 @@
 
 #include "Reflect/Visitor.h"
 #include "Reflect/Composite.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 namespace Helium
 {

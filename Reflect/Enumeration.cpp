@@ -36,8 +36,8 @@ void Enumeration::Register() const
     Type::Register();
 
     uint32_t computedSize = 0;
-    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
-    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    DynamicArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynamicArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
         Log::Debug( TXT( "  Value: %8d, Name: %s\n" ), itr->m_Value, itr->m_Name.c_str() );
@@ -58,8 +58,8 @@ void Enumeration::AddElement( uint32_t value, const tstring& name, const tstring
 
 bool Enumeration::IsValid(uint32_t value) const
 {
-    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
-    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    DynamicArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynamicArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
         if ( itr->m_Value == value )
@@ -73,8 +73,8 @@ bool Enumeration::IsValid(uint32_t value) const
 
 bool Enumeration::GetElementValue(const tstring& name, uint32_t& value) const
 {
-    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
-    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    DynamicArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynamicArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
         if ( itr->m_Name == name )
@@ -89,8 +89,8 @@ bool Enumeration::GetElementValue(const tstring& name, uint32_t& value) const
 
 bool Enumeration::GetElementName(const uint32_t value, tstring& name) const
 {
-    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
-    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    DynamicArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynamicArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
         if ( itr->m_Value == value )
@@ -183,8 +183,8 @@ bool Enumeration::GetBitfieldString(const uint32_t value, tstring& str) const
 bool Enumeration::GetBitfieldStrings(const uint32_t value, std::vector< tstring >& strs) const
 {
     // search the map
-    DynArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
-    DynArray< EnumerationElement >::ConstIterator end = m_Elements.End();
+    DynamicArray< EnumerationElement >::ConstIterator itr = m_Elements.Begin();
+    DynamicArray< EnumerationElement >::ConstIterator end = m_Elements.End();
     for ( ; itr != end; ++itr )
     {
         if ( IsFlagSet( value, itr->m_Value ) )

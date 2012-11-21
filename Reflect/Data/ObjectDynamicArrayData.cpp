@@ -1,71 +1,71 @@
 #include "ReflectPch.h"
-#include "Reflect/Data/ObjectDynArrayData.h"
+#include "Reflect/Data/ObjectDynamicArrayData.h"
 
 #include "Reflect/Data/DataDeduction.h"
 #include "Reflect/ArchiveBinary.h"
 #include "Reflect/ArchiveXML.h"
 
-REFLECT_DEFINE_OBJECT( Helium::Reflect::ObjectDynArrayData );
+REFLECT_DEFINE_OBJECT( Helium::Reflect::ObjectDynamicArrayData );
 
 using namespace Helium;
 using namespace Helium::Reflect;
 
-ObjectDynArrayData::ObjectDynArrayData()
+ObjectDynamicArrayData::ObjectDynamicArrayData()
 {
 }
 
-ObjectDynArrayData::~ObjectDynArrayData()
+ObjectDynamicArrayData::~ObjectDynamicArrayData()
 {
 }
 
-void ObjectDynArrayData::ConnectData( void* data )
+void ObjectDynamicArrayData::ConnectData( void* data )
 {
     m_Data.Connect( data );
 }
 
-size_t ObjectDynArrayData::GetSize() const 
+size_t ObjectDynamicArrayData::GetSize() const 
 { 
     return m_Data->GetSize(); 
 }
 
-void ObjectDynArrayData::SetSize( size_t size )
+void ObjectDynamicArrayData::SetSize( size_t size )
 {
     return m_Data->Resize( size );
 }
 
-void ObjectDynArrayData::Clear()
+void ObjectDynamicArrayData::Clear()
 { 
     return m_Data->Clear(); 
 }
 
-const Class* ObjectDynArrayData::GetItemClass() const
+const Class* ObjectDynamicArrayData::GetItemClass() const
 {
     return Reflect::GetDataClass< Reflect::Object >();
 }
 
-DataPtr ObjectDynArrayData::GetItem( size_t at )
+DataPtr ObjectDynamicArrayData::GetItem( size_t at )
 {
     return Data::Bind( m_Data->GetElement( at ), m_Instance, m_Field );
 }
 
-void ObjectDynArrayData::SetItem( size_t at, Data* value )
+void ObjectDynamicArrayData::SetItem( size_t at, Data* value )
 {
     Data::GetValue( value, m_Data->GetElement( at ) );
 }
 
-void ObjectDynArrayData::Insert( size_t at, Data* value )
+void ObjectDynamicArrayData::Insert( size_t at, Data* value )
 {
     ObjectPtr temp;
     Data::GetValue( value, temp );
     m_Data->Insert( at, temp );
 }
 
-void ObjectDynArrayData::Remove( size_t at )
+void ObjectDynamicArrayData::Remove( size_t at )
 {
     m_Data->Remove( at );
 }
 
-void ObjectDynArrayData::MoveUp( std::set< size_t >& selectedIndices )
+void ObjectDynamicArrayData::MoveUp( std::set< size_t >& selectedIndices )
 {
     std::set< size_t > newSelectedIndices;
 
@@ -88,7 +88,7 @@ void ObjectDynArrayData::MoveUp( std::set< size_t >& selectedIndices )
     selectedIndices = newSelectedIndices;
 }
 
-void ObjectDynArrayData::MoveDown( std::set< size_t >& selectedIndices )
+void ObjectDynamicArrayData::MoveDown( std::set< size_t >& selectedIndices )
 {
     std::set< size_t > newSelectedIndices;
 
@@ -112,9 +112,9 @@ void ObjectDynArrayData::MoveDown( std::set< size_t >& selectedIndices )
 }
 
 
-bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
+bool ObjectDynamicArrayData::Set( Data* src, uint32_t flags )
 {
-    const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >(src);
+    const ObjectDynamicArrayData* rhs = SafeCast< ObjectDynamicArrayData >(src);
     if (!rhs)
     {
         return false;
@@ -129,8 +129,8 @@ bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
     }
     else
     {
-        DynArray< ObjectPtr >::ConstIterator itr = rhs->m_Data->Begin();
-        DynArray< ObjectPtr >::ConstIterator end = rhs->m_Data->End();
+        DynamicArray< ObjectPtr >::ConstIterator itr = rhs->m_Data->Begin();
+        DynamicArray< ObjectPtr >::ConstIterator end = rhs->m_Data->End();
         for( size_t index = 0; itr != end; ++itr, ++index )
         {
             Object* object = *itr;
@@ -141,9 +141,9 @@ bool ObjectDynArrayData::Set( Data* src, uint32_t flags )
     return true;
 }
 
-bool ObjectDynArrayData::Equals( Object* object )
+bool ObjectDynamicArrayData::Equals( Object* object )
 {
-    const ObjectDynArrayData* rhs = SafeCast< ObjectDynArrayData >( object );
+    const ObjectDynamicArrayData* rhs = SafeCast< ObjectDynamicArrayData >( object );
     if (!rhs)
     {
         return false;
@@ -154,10 +154,10 @@ bool ObjectDynArrayData::Equals( Object* object )
         return false;
     }
 
-    DynArray< ObjectPtr >::ConstIterator itrLHS = m_Data->Begin();
-    DynArray< ObjectPtr >::ConstIterator endLHS = m_Data->End();
-    DynArray< ObjectPtr >::ConstIterator itrRHS = rhs->m_Data->Begin();
-    DynArray< ObjectPtr >::ConstIterator endRHS = rhs->m_Data->End();
+    DynamicArray< ObjectPtr >::ConstIterator itrLHS = m_Data->Begin();
+    DynamicArray< ObjectPtr >::ConstIterator endLHS = m_Data->End();
+    DynamicArray< ObjectPtr >::ConstIterator itrRHS = rhs->m_Data->Begin();
+    DynamicArray< ObjectPtr >::ConstIterator endRHS = rhs->m_Data->End();
     for( ; itrLHS != endLHS; ++itrLHS, ++itrRHS )
     {
         HELIUM_ASSERT( itrRHS != endRHS );
@@ -174,10 +174,10 @@ bool ObjectDynArrayData::Equals( Object* object )
     return true;
 }
 
-void ObjectDynArrayData::Accept( Visitor& visitor )
+void ObjectDynamicArrayData::Accept( Visitor& visitor )
 {
-    DynArray< ObjectPtr >::Iterator itr = m_Data->Begin();
-    DynArray< ObjectPtr >::Iterator end = m_Data->End();
+    DynamicArray< ObjectPtr >::Iterator itr = m_Data->Begin();
+    DynamicArray< ObjectPtr >::Iterator end = m_Data->End();
     for ( ; itr != end; ++itr )
     {
         ObjectPtr& object = *itr;
@@ -195,34 +195,34 @@ void ObjectDynArrayData::Accept( Visitor& visitor )
     }
 }
 
-void ObjectDynArrayData::Serialize( ArchiveBinary& archive )
+void ObjectDynamicArrayData::Serialize( ArchiveBinary& archive )
 {
     Serialize<ArchiveBinary>( archive );
 }
 
-void ObjectDynArrayData::Deserialize( ArchiveBinary& archive )
+void ObjectDynamicArrayData::Deserialize( ArchiveBinary& archive )
 {
     Deserialize<ArchiveBinary>( archive );
 }
 
-void ObjectDynArrayData::Serialize( ArchiveXML& archive )
+void ObjectDynamicArrayData::Serialize( ArchiveXML& archive )
 {
     Serialize<ArchiveXML>( archive );
 }
 
-void ObjectDynArrayData::Deserialize( ArchiveXML& archive )
+void ObjectDynamicArrayData::Deserialize( ArchiveXML& archive )
 {
     Deserialize<ArchiveXML>( archive );
 }
 
 template< class ArchiveT >
-void ObjectDynArrayData::Serialize( ArchiveT& archive )
+void ObjectDynamicArrayData::Serialize( ArchiveT& archive )
 {
     archive.SerializeArray( *m_Data );
 }
 
 template< class ArchiveT >
-void ObjectDynArrayData::Deserialize( ArchiveT& archive )
+void ObjectDynamicArrayData::Deserialize( ArchiveT& archive )
 {
     // if we are referring to a real field, clear its contents
     m_Data->Clear();

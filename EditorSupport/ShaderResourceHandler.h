@@ -47,7 +47,7 @@ namespace Helium
             GameObjectPath shaderPath, Shader::PersistentResourceData& rResourceData, const char* pLineStart,
             const char* pLineEnd );
         template< typename OptionType > bool ParseLineDuplicateOptionCheck(
-            Name optionName, const DynArray< OptionType >& rOptions );
+            Name optionName, const DynamicArray< OptionType >& rOptions );
         //@}
     };
 }

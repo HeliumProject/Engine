@@ -74,7 +74,7 @@ bool ObjectPreprocessor::CacheObject(
 
 	bool bCacheFailure = false;
 
-	DynArray< uint8_t > objectStreamBuffer;
+	DynamicArray< uint8_t > objectStreamBuffer;
 
 	Helium::DynamicMemoryStream directStream;
 	Helium::ByteSwappingStream byteSwappingStream( &directStream );
@@ -129,7 +129,7 @@ bool ObjectPreprocessor::CacheObject(
 		Stream& rObjectStream =
 			( bSwapBytes ? static_cast< Stream& >( byteSwappingStream ) : static_cast< Stream& >( directStream ) );
 		
-		DynArray<uint8_t> data_buffer;
+		DynamicArray<uint8_t> data_buffer;
 		Cache::WriteCacheObjectToBuffer(*pObject, data_buffer);
 
 		if (!data_buffer.IsEmpty())
@@ -205,7 +205,7 @@ bool ObjectPreprocessor::CacheObject(
 				static_cast< Cache::EPlatform >( platformIndex ) );
 			if( rResourceData.bLoaded )
 			{
-				const DynArray< DynArray< uint8_t > >& rSubDataBuffers = rResourceData.subDataBuffers;
+				const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rResourceData.subDataBuffers;
 				size_t subDataBufferCount = rSubDataBuffers.GetSize();
 				if( subDataBufferCount != 0 )
 				{
@@ -223,7 +223,7 @@ bool ObjectPreprocessor::CacheObject(
 						subDataBufferIndex < subDataBufferCount;
 						++subDataBufferIndex )
 					{
-						const DynArray< uint8_t >& rSubData = rSubDataBuffers[ subDataBufferIndex ];
+						const DynamicArray< uint8_t >& rSubData = rSubDataBuffers[ subDataBufferIndex ];
 
 						bCacheResult = pResourceCache->CacheEntry(
 							objectPath,
@@ -416,7 +416,7 @@ void ObjectPreprocessor::LoadResourceData( Resource* pResource, int64_t objectTi
 uint32_t ObjectPreprocessor::LoadPersistentResourceData(
 	GameObjectPath resourcePath,
 	Cache::EPlatform platform,
-	DynArray< uint8_t >& rPersistentDataBuffer )
+	DynamicArray< uint8_t >& rPersistentDataBuffer )
 {
 	HELIUM_ASSERT( !resourcePath.IsEmpty() );
 	HELIUM_ASSERT( static_cast< size_t >( platform ) < static_cast< size_t >( Cache::PLATFORM_MAX ) );
@@ -724,7 +724,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 			return false;
 		}
 
-		DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+		DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
 		rSubDataBuffers.Reserve( subDataCount );
 		rSubDataBuffers.Resize( subDataCount );
 
@@ -765,7 +765,7 @@ bool ObjectPreprocessor::LoadCachedResourceData( Resource* pResource, Cache::EPl
 
 			uint32_t subDataSize = pResourceCacheEntry->size;
 
-			DynArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
+			DynamicArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
 			rSubData.Reserve( subDataSize );
 			rSubData.Resize( subDataSize );
 			rSubData.Trim();
@@ -862,7 +862,7 @@ bool ObjectPreprocessor::PreprocessResource( Resource* pResource, const String& 
 		const Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData( platform );
 		if( rPreprocessedData.bLoaded )
 		{
-			const DynArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
+			const DynamicArray< uint8_t >& rPersistentDataBuffer = rPreprocessedData.persistentDataBuffer;
 			size_t persistentDataBufferSize = rPersistentDataBuffer.GetSize();
 			if( persistentDataBufferSize != 0 )
 			{

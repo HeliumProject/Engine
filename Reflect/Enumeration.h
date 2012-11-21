@@ -2,7 +2,7 @@
 
 #include <hash_map>
 
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Reflect/Type.h"
 
 namespace Helium
@@ -66,7 +66,7 @@ namespace Helium
             }
 
         public:
-            DynArray< EnumerationElement >  m_Elements;
+            DynamicArray< EnumerationElement >  m_Elements;
         };
 
         template< class EnumT >

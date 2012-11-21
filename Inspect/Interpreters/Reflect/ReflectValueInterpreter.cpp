@@ -55,8 +55,8 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
             std::vector< ChoiceItem > items;
             items.resize( enumeration->m_Elements.GetSize() );
 
-            DynArray< EnumerationElement >::ConstIterator itr = enumeration->m_Elements.Begin();
-            DynArray< EnumerationElement >::ConstIterator end = enumeration->m_Elements.End();
+            DynamicArray< EnumerationElement >::ConstIterator itr = enumeration->m_Elements.Begin();
+            DynamicArray< EnumerationElement >::ConstIterator end = enumeration->m_Elements.End();
             for ( size_t index=0; itr != end; ++itr, ++index )
             {
                 ChoiceItem& item = items[index];

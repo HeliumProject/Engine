@@ -61,7 +61,7 @@ size_t Resource::GetSubDataSize( uint32_t subDataIndex ) const
     const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
     if( rPreprocessedData.bLoaded )
     {
-        const DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+        const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
 
         return ( subDataIndex < rSubDataBuffers.GetSize()
             ? rSubDataBuffers[ subDataIndex ].GetSize()
@@ -106,14 +106,14 @@ size_t Resource::BeginLoadSubData( void* pBuffer, uint32_t subDataIndex, size_t 
     const PreprocessedData& rPreprocessedData = GetPreprocessedData( platform );
     if( rPreprocessedData.bLoaded )
     {
-        const DynArray< DynArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
+        const DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
         if( subDataIndex >= rSubDataBuffers.GetSize() )
         {
             return Invalid< size_t >();
         }
 
         // Copy the sub-data immediately and assign a dummy ID.
-        const DynArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
+        const DynamicArray< uint8_t >& rSubData = rSubDataBuffers[ subDataIndex ];
 
         size_t subDataSize = rSubData.GetSize();
         size_t copySize = Min( subDataSize, loadSizeMax );

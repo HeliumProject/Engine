@@ -800,7 +800,7 @@ size_t Cache::EntryKeyHash::operator()( const EntryKey& rKey ) const
 }
 
 #if HELIUM_TOOLS
-void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynArray< uint8_t > &_buffer )
+void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynamicArray< uint8_t > &_buffer )
 {
 #if USE_XML_FOR_CACHE_DATA
     {
@@ -841,7 +841,7 @@ void Helium::Cache::WriteCacheObjectToBuffer( Reflect::Object &_object, DynArray
 }
 #endif
 
-Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynArray< uint8_t > &_buffer )
+Reflect::ObjectPtr Helium::Cache::ReadCacheObjectFromBuffer( const DynamicArray< uint8_t > &_buffer )
 {
     if (_buffer.GetSize() == 0)
     {

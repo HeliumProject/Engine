@@ -156,13 +156,13 @@ namespace Helium
         /// Pool of buffered drawing objects for various scene views.
         ObjectPool< BufferedDrawer > m_viewBufferedDrawerPool;
         /// Buffered drawing objects for each scene view.
-        DynArray< BufferedDrawer* > m_viewBufferedDrawers;
+        DynamicArray< BufferedDrawer* > m_viewBufferedDrawers;
 #endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
         /// Visible scene objects for the current view.
         BitArray<> m_visibleSceneObjects;
         /// Scene object sub-data index list (for sorting during rendering).
-        DynArray< size_t > m_sceneObjectSubMeshIndices;
+        DynamicArray< size_t > m_sceneObjectSubMeshIndices;
 
         /// Ambient light top color.
         Color m_ambientLightTopColor;
@@ -184,35 +184,35 @@ namespace Helium
         uint32_t m_activeViewId;
 
         /// Pre-computed shadow depth pass inverse view/projection matrices.
-        DynArray< Simd::Matrix44 > m_shadowViewInverseViewProjectionMatrices;
+        DynamicArray< Simd::Matrix44 > m_shadowViewInverseViewProjectionMatrices;
 
         /// Per-view global vertex constant buffers.
-        DynArray< RConstantBufferPtr > m_viewVertexGlobalDataBuffers[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_viewVertexGlobalDataBuffers[ 2 ];
         /// Per-view base-pass vertex constant buffers.
-        DynArray< RConstantBufferPtr > m_viewVertexBasePassDataBuffers[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_viewVertexBasePassDataBuffers[ 2 ];
         /// Per-view screen-space vertex constant buffers.
-        DynArray< RConstantBufferPtr > m_viewVertexScreenDataBuffers[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_viewVertexScreenDataBuffers[ 2 ];
 
         /// Per-view base-pass pixel constant buffers.
-        DynArray< RConstantBufferPtr > m_viewPixelBasePassDataBuffers[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_viewPixelBasePassDataBuffers[ 2 ];
 
         /// Per-view vertex constant buffers for shadow depth rendering.
-        DynArray< RConstantBufferPtr > m_shadowViewVertexDataBuffers[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_shadowViewVertexDataBuffers[ 2 ];
 
         /// Pool of per-instance vertex constant buffers for non-skinned meshes.
-        DynArray< RConstantBufferPtr > m_staticInstanceVertexGlobalDataBufferPool[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_staticInstanceVertexGlobalDataBufferPool[ 2 ];
         /// Pool of per-instance vertex constant buffers for skinned meshes.
-        DynArray< RConstantBufferPtr > m_skinnedInstanceVertexGlobalDataBufferPool[ 2 ];
+        DynamicArray< RConstantBufferPtr > m_skinnedInstanceVertexGlobalDataBufferPool[ 2 ];
 
         /// Scene object global vertex constant buffers.
-        DynArray< RConstantBuffer* > m_objectVertexGlobalDataBuffers;
+        DynamicArray< RConstantBuffer* > m_objectVertexGlobalDataBuffers;
         /// Mapped scene object global vertex constant buffer addresses.
-        DynArray< float32_t* > m_mappedObjectVertexGlobalDataBuffers;
+        DynamicArray< float32_t* > m_mappedObjectVertexGlobalDataBuffers;
 
         /// Sub-mesh global vertex constant buffers.
-        DynArray< RConstantBuffer* > m_subMeshVertexGlobalDataBuffers;
+        DynamicArray< RConstantBuffer* > m_subMeshVertexGlobalDataBuffers;
         /// Mapped sub-mesh global veretex constant buffer addresses.
-        DynArray< float32_t* > m_mappedSubMeshVertexGlobalDataBuffers;
+        DynamicArray< float32_t* > m_mappedSubMeshVertexGlobalDataBuffers;
 
         /// Current dynamic constant buffer set index.
         size_t m_constantBufferSetIndex;

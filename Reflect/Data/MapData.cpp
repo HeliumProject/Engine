@@ -380,7 +380,7 @@ tistream& SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::operator<<( tist
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
 void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     components.Reserve( m_Data->GetSize() * 2 );
 
     {
@@ -408,8 +408,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& 
 
     archive.SerializeArray( components );
 
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
+    DynamicArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynamicArray< ObjectPtr >::Iterator end = components.End();
     for ( ; itr != end; ++itr )
     {
         Data* ser = AssertCast< Data >( *itr );
@@ -423,7 +423,7 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Serialize( ArchiveT& 
 template< typename KeyT, typename ValueT, typename EqualKeyT, typename AllocatorT > template< class ArchiveT >
 void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( ArchiveT& archive )
 {
-    DynArray< ObjectPtr > components;
+    DynamicArray< ObjectPtr > components;
     archive.DeserializeArray( components, ArchiveFlags::Sparse );
 
     size_t componentCount = components.GetSize();
@@ -436,8 +436,8 @@ void SimpleMapData< KeyT, ValueT, EqualKeyT, AllocatorT >::Deserialize( ArchiveT
     m_Data->Clear();
     m_Data->Reserve( componentCount / 2 );
 
-    DynArray< ObjectPtr >::Iterator itr = components.Begin();
-    DynArray< ObjectPtr >::Iterator end = components.End();
+    DynamicArray< ObjectPtr >::Iterator itr = components.Begin();
+    DynamicArray< ObjectPtr >::Iterator end = components.End();
     while( itr != end )
     {
         Data* key = SafeCast< Data >( *itr );

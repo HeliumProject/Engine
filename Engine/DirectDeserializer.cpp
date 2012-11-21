@@ -14,7 +14,7 @@
 /////
 ///// @param[in] rBuffer      Buffer from which the data should be de-serialized.
 ///// @param[in] startOffset  Byte offset within the buffer from which to start de-serialization.
-//DirectDeserializer::DirectDeserializer( const DynArray< uint8_t >& rBuffer, size_t startOffset )
+//DirectDeserializer::DirectDeserializer( const DynamicArray< uint8_t >& rBuffer, size_t startOffset )
 //: m_rBuffer( rBuffer )
 //{
 //    // Check if we have attempted to start past the end of the stream.

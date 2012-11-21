@@ -4,7 +4,7 @@
 #include "Foundation/BitArray.h"
 #include "Foundation/ConcurrentHashMap.h"
 #include "Foundation/ConcurrentHashSet.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Foundation/HashMap.h"
 #include "Foundation/HashSet.h"
 #include "Foundation/Map.h"

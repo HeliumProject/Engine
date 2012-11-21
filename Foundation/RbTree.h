@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/BitArray.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 #include "Foundation/Pair.h"
 #include "Foundation/Functions.h"
 
@@ -175,9 +175,9 @@ namespace Helium
         };
 
         /// Tree node values.
-        DynArray< InternalValue, Allocator > m_values;
+        DynamicArray< InternalValue, Allocator > m_values;
         /// Tree node link data.
-        DynArray< LinkData, Allocator > m_links;
+        DynamicArray< LinkData, Allocator > m_links;
         /// Red-black state bits for each node (set = black, clear = red).
         BitArray< Allocator > m_blackNodes;
 

@@ -8,7 +8,7 @@
 using namespace Helium;
 
 /// @copydoc CommandLineInitializer::Initialize()
-bool CommandLineInitializationWin::Initialize( String& rModuleName, DynArray< String >& rArguments )
+bool CommandLineInitializationWin::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
 {
     rModuleName.Clear();
     rArguments.Clear();

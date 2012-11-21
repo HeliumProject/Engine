@@ -15,7 +15,7 @@ CommandLineInitialization::~CommandLineInitialization()
 {
 }
 
-/// @fn bool CommandLineInitialization::Initialize( String& rModuleName, DynArray< String >& rArguments )
+/// @fn bool CommandLineInitialization::Initialize( String& rModuleName, DynamicArray< String >& rArguments )
 /// Initialize the command-line information for the application.
 ///
 /// @param[out] rModuleName  Name of the application module (executable, etc.).

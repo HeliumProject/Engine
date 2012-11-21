@@ -36,7 +36,7 @@
 //        ConcurrentHashMap< GameObjectPath, XmlPackageLoader* > m_packageLoaderMap;
 //        /// Cached list of package loaders iterated over in Tick() (separated to avoid deadlocks with concurrent hash
 //        /// map access).
-//        DynArray< XmlPackageLoader* > m_packageLoaderTickArray;
+//        DynamicArray< XmlPackageLoader* > m_packageLoaderTickArray;
 //    };
 //}
 //

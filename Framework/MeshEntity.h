@@ -72,12 +72,12 @@ namespace Helium
         /// Mesh resource.
         MeshPtr m_spMesh;
         /// Override material set.
-        DynArray< MaterialPtr > m_overrideMaterials;
+        DynamicArray< MaterialPtr > m_overrideMaterials;
 
         /// ID of the scene object representing this entity in the graphics scene.
         size_t m_graphicsSceneObjectId;
         /// IDs of scene object sub-mesh data for each sub-mesh of this entity's mesh.
-        DynArray< size_t > m_graphicsSceneObjectSubMeshDataIds;
+        DynamicArray< size_t > m_graphicsSceneObjectSubMeshDataIds;
 
         /// @name Graphics Scene GameObject Updating
         //@{

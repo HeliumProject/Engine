@@ -143,8 +143,8 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
     // build the child gui elements
     bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
-    DynArray< Reflect::EnumerationElement >::ConstIterator enumItr = enumeration->m_Elements.Begin();
-    DynArray< Reflect::EnumerationElement >::ConstIterator enumEnd = enumeration->m_Elements.End();
+    DynamicArray< Reflect::EnumerationElement >::ConstIterator enumItr = enumeration->m_Elements.Begin();
+    DynamicArray< Reflect::EnumerationElement >::ConstIterator enumEnd = enumeration->m_Elements.End();
     for ( ; enumItr != enumEnd; ++enumItr )
     {
         ContainerPtr row = CreateControl< Container >();

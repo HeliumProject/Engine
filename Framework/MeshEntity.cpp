@@ -222,7 +222,7 @@ void MeshEntity::GraphicsSceneObjectUpdate(
 
     pSceneObject->SetWorldBounds( worldBounds );
 
-    const DynArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
+    const DynamicArray< size_t >& rSubMeshDataIds = pThis->m_graphicsSceneObjectSubMeshDataIds;
     size_t subMeshCount = rSubMeshDataIds.GetSize();
     size_t meshSectionCount = 0;
 

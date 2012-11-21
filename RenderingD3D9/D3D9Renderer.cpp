@@ -207,13 +207,13 @@ void D3D9Renderer::Shutdown()
 
     for( size_t mapPoolIndex = 0; mapPoolIndex < HELIUM_ARRAY_COUNT( m_staticTextureMapTargetPools ); ++mapPoolIndex )
     {
-        DynArray< IDirect3DTexture9* >* pTextureMapPools = m_staticTextureMapTargetPools[ mapPoolIndex ];
+        DynamicArray< IDirect3DTexture9* >* pTextureMapPools = m_staticTextureMapTargetPools[ mapPoolIndex ];
 
         for( size_t pixelFormatIndex = 0;
             pixelFormatIndex < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX );
             ++pixelFormatIndex )
         {
-            DynArray< IDirect3DTexture9* >& rPool = pTextureMapPools[ pixelFormatIndex ];
+            DynamicArray< IDirect3DTexture9* >& rPool = pTextureMapPools[ pixelFormatIndex ];
 
             size_t textureCount = rPool.GetSize();
             for( size_t textureIndex = 0; textureIndex < textureCount; ++textureIndex )
@@ -999,11 +999,11 @@ RVertexDescription* D3D9Renderer::CreateVertexDescription(
         D3DDECLUSAGE_COLOR          // RENDERER_VERTEX_SEMANTIC_COLOR
     };
 
-    DynArray< WORD > d3dStreamOffsets;
+    DynamicArray< WORD > d3dStreamOffsets;
 
     D3DVERTEXELEMENT9 d3dCurrentElement;
 
-    DynArray< D3DVERTEXELEMENT9 > d3dElements;
+    DynamicArray< D3DVERTEXELEMENT9 > d3dElements;
     for( size_t elementIndex = 0; elementIndex < elementCount; ++elementIndex )
     {
         const RVertexDescription::Element& rElement = pElements[ elementIndex ];
@@ -1403,7 +1403,7 @@ IDirect3DTexture9* D3D9Renderer::GetPooledStaticTextureMapTarget(
         poolTextureHeight,
         rStartMipLevel );
 
-    DynArray< IDirect3DTexture9* >& rTexturePool = m_staticTextureMapTargetPools[ poolIndex ][ format ];
+    DynamicArray< IDirect3DTexture9* >& rTexturePool = m_staticTextureMapTargetPools[ poolIndex ][ format ];
 
     // Use a texture from the pool if the pool is not empty.
     if( !rTexturePool.IsEmpty() )
@@ -1484,7 +1484,7 @@ void D3D9Renderer::ReleasePooledStaticTextureMapTarget( IDirect3DTexture9* pText
     ERendererPixelFormat format = D3DFormatToPixelFormat( surfaceDesc.Format, bSrgb );
     HELIUM_ASSERT( static_cast< size_t >( format ) < static_cast< size_t >( RENDERER_PIXEL_FORMAT_MAX ) );
 
-    DynArray< IDirect3DTexture9* >& rTexturePool = m_staticTextureMapTargetPools[ poolIndex ][ format ];
+    DynamicArray< IDirect3DTexture9* >& rTexturePool = m_staticTextureMapTargetPools[ poolIndex ][ format ];
 
     // Return the texture to the pool.
     rTexturePool.Push( pTexture );

@@ -281,7 +281,7 @@ size_t CachePackageLoader::BeginLoadObject( GameObjectPath path )
 bool CachePackageLoader::TryFinishLoadObject(
     size_t requestId,
     GameObjectPtr& rspObject,
-    DynArray< GameObjectLoader::LinkEntry >& rLinkTable )
+    DynamicArray< GameObjectLoader::LinkEntry >& rLinkTable )
 {
     HELIUM_ASSERT( requestId < m_loadRequests.GetSize() );
     HELIUM_ASSERT( m_loadRequests.IsElementValid( requestId ) );
@@ -297,7 +297,7 @@ bool CachePackageLoader::TryFinishLoadObject(
     GameObjectLoader* pObjectLoader = GameObjectLoader::GetStaticInstance();
     HELIUM_ASSERT( pObjectLoader );
 
-    DynArray< size_t >& rInternalLinkTable = pRequest->objectLinkTable;
+    DynamicArray< size_t >& rInternalLinkTable = pRequest->objectLinkTable;
 
     if( IsValid( pRequest->templateLinkIndex ) )
     {

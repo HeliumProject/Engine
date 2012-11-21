@@ -105,7 +105,7 @@ namespace Helium
             /// Track name.
             Name name;
             /// Bone transform key frames.
-            DynArray< Key > keys;
+            DynamicArray< Key > keys;
         };
 
         /// @name Access Reference Counting
@@ -116,12 +116,12 @@ namespace Helium
         /// @name Resource Loading
         //@{
         bool LoadMesh(
-            const String& rSourceFilePath, DynArray< StaticMeshVertex< 1 > >& rVertices, DynArray< uint16_t >& rIndices,
-            DynArray< uint16_t >& rSectionVertexCounts, DynArray< uint32_t >& rSectionTriangleCounts,
-            DynArray< BoneData >& rBones, DynArray< BlendData >& rVertexBlendData,
-            DynArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces = true );
+            const String& rSourceFilePath, DynamicArray< StaticMeshVertex< 1 > >& rVertices, DynamicArray< uint16_t >& rIndices,
+            DynamicArray< uint16_t >& rSectionVertexCounts, DynamicArray< uint32_t >& rSectionTriangleCounts,
+            DynamicArray< BoneData >& rBones, DynamicArray< BlendData >& rVertexBlendData,
+            DynamicArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces = true );
         bool LoadAnimation(
-            const String& rSourceFilePath, uint8_t oversampling, DynArray< AnimTrackData >& rTracks,
+            const String& rSourceFilePath, uint8_t oversampling, DynamicArray< AnimTrackData >& rTracks,
             uint_fast32_t& rSamplesPerSecond, bool bStripNamespaces = true );
         //@}
 
@@ -183,25 +183,25 @@ namespace Helium
 
         void BuildSkinningInformation(
             KFbxScene* pScene, KFbxMesh* pMesh, KFbxNode* pSkeletonRootNode,
-            const DynArray< int >& rControlPointIndices, const DynArray< uint16_t >& rSectionVertexCounts,
-            DynArray< BoneData >& rBones, DynArray< BlendData >& rVertexBlendData,
-            DynArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
+            const DynamicArray< int >& rControlPointIndices, const DynamicArray< uint16_t >& rSectionVertexCounts,
+            DynamicArray< BoneData >& rBones, DynamicArray< BlendData >& rVertexBlendData,
+            DynamicArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
 
         void RecursiveAddMeshSkeletonData(
-            const KFbxNode* pCurrentBoneNode, uint8_t parentBoneIndex, DynArray< BoneData >& rBones,
-            DynArray< WorkingBoneData >& rWorkingBones, bool bStripNamespaces );
+            const KFbxNode* pCurrentBoneNode, uint8_t parentBoneIndex, DynamicArray< BoneData >& rBones,
+            DynamicArray< WorkingBoneData >& rWorkingBones, bool bStripNamespaces );
 
         void RecursiveAddAnimationSkeletonData(
-            KFbxNode* pCurrentBoneNode, uint8_t parentTrackIndex, DynArray< AnimTrackData >& rTracks,
-            DynArray< WorkingTrackData >& rWorkingTracks, bool bStripNamespaces );
+            KFbxNode* pCurrentBoneNode, uint8_t parentTrackIndex, DynamicArray< AnimTrackData >& rTracks,
+            DynamicArray< WorkingTrackData >& rWorkingTracks, bool bStripNamespaces );
 
         bool BuildMeshFromScene(
-            KFbxScene* pScene, DynArray< StaticMeshVertex< 1 > >& rVertices, DynArray< uint16_t >& rIndices,
-            DynArray< uint16_t >& rSectionVertexCounts, DynArray< uint32_t >& rSectionTriangleCounts,
-            DynArray< BoneData >& rBones, DynArray< BlendData >& rVertexBlendData,
-            DynArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
+            KFbxScene* pScene, DynamicArray< StaticMeshVertex< 1 > >& rVertices, DynamicArray< uint16_t >& rIndices,
+            DynamicArray< uint16_t >& rSectionVertexCounts, DynamicArray< uint32_t >& rSectionTriangleCounts,
+            DynamicArray< BoneData >& rBones, DynamicArray< BlendData >& rVertexBlendData,
+            DynamicArray< uint8_t >& rSkinningPaletteMap, bool bStripNamespaces );
         bool BuildAnimationFromScene(
-            KFbxScene* pScene, uint_fast32_t oversampling, DynArray< AnimTrackData >& rTracks,
+            KFbxScene* pScene, uint_fast32_t oversampling, DynamicArray< AnimTrackData >& rTracks,
             uint_fast32_t& rSamplesPerSecond, bool bStripNamespaces );
         //@}
 

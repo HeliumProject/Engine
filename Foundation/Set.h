@@ -8,7 +8,7 @@ namespace Helium
 {
     /// Unique set container type (not thread-safe).
     ///
-    /// Set stores elements in a contiguous array, similar to DynArray.  Compared to SortedSet and HashSet, the memory
+    /// Set stores elements in a contiguous array, similar to DynamicArray.  Compared to SortedSet and HashSet, the memory
     /// footprint is smaller, as no additional data is stored aside from the set values.  Performance is potentially
     /// worse than HashSet and SortedSet, with element lookups and deletions taking O(n) time in the worst-case
     /// scenario, while element insertions will always take O(n) time, but for sets with a small enough number of

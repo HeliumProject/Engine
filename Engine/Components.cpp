@@ -391,7 +391,7 @@ HELIUM_ENGINE_API void Helium::Components::ProcessPendingDeletes()
     ++g_ComponentProcessPendingDeletesCallCount;
 
     // Delete all components that have m_PendingDelete flag set to true
-    for (DynArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
+    for (DynamicArray<ComponentType>::Iterator iter = g_ComponentTypes.Begin();
         iter != g_ComponentTypes.End(); ++iter)
     {
         // Algorithm could be "skip around, looking at allocated components" or "look at all components in sequence

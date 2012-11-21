@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Stream.h"
-#include "Foundation/DynArray.h"
+#include "Foundation/DynamicArray.h"
 
 namespace Helium
 {
@@ -54,19 +54,19 @@ namespace Helium
         uint8_t* m_pCurrent;
     };
 
-    /// Stream for reading from and writing to a dynamic memory buffer (backed using a DynArray of bytes).
+    /// Stream for reading from and writing to a dynamic memory buffer (backed using a DynamicArray of bytes).
     class HELIUM_FOUNDATION_API DynamicMemoryStream : public Stream
     {
     public:
         /// @name Construction/Destruction
         //@{
-        explicit DynamicMemoryStream( DynArray< uint8_t >* pBuffer = NULL );
+        explicit DynamicMemoryStream( DynamicArray< uint8_t >* pBuffer = NULL );
         virtual ~DynamicMemoryStream();
         //@}
 
         /// @name Stream Assignment
         //@{
-        virtual void Open( DynArray< uint8_t >* pBuffer );
+        virtual void Open( DynamicArray< uint8_t >* pBuffer );
         //@}
 
         /// @name Stream Interface
@@ -93,12 +93,12 @@ namespace Helium
 
         /// @name Data Access
         //@{
-        inline DynArray< uint8_t >* GetBuffer() const;
+        inline DynamicArray< uint8_t >* GetBuffer() const;
         //@}
 
     private:
         /// Memory buffer.
-        DynArray< uint8_t >* m_pBuffer;
+        DynamicArray< uint8_t >* m_pBuffer;
         /// Current buffer read/write offset.
         size_t m_offset;
     };

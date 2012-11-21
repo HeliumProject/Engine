@@ -27,7 +27,7 @@ PlatformPreprocessor::~PlatformPreprocessor()
 ///
 /// @see CompileShader()
 
-/// @fn bool PlatformPreprocessor::CompileShader( size_t profileIndex, RShader::EType type, const void* pShaderCode, size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynArray< uint8_t >& rMicrocode, DynArray< String >* pErrorMessages )
+/// @fn bool PlatformPreprocessor::CompileShader( size_t profileIndex, RShader::EType type, const void* pShaderCode, size_t shaderCodeSize, const ShaderToken* pTokens, size_t tokenCount, DynamicArray< uint8_t >& rMicrocode, DynamicArray< String >* pErrorMessages )
 /// Compile a shader for the target platform.
 ///
 /// @param[in]  rShaderPath     FilePath to the shader file being compiled.
@@ -46,7 +46,7 @@ PlatformPreprocessor::~PlatformPreprocessor()
 ///
 /// @see GetShaderProfileCount()
 
-/// @fn bool PlatformPreprocessor::FillShaderReflectionData( size_t profileIndex, const void* pCompiledCode, size_t compiledCodeSize, DynArray< ShaderConstantBufferInfo >& rConstantBuffers, DynArray< ShaderSamplerInfo >& rSamplers, DynArray< ShaderTextureInfo >& rTextures )
+/// @fn bool PlatformPreprocessor::FillShaderReflectionData( size_t profileIndex, const void* pCompiledCode, size_t compiledCodeSize, DynamicArray< ShaderConstantBufferInfo >& rConstantBuffers, DynamicArray< ShaderSamplerInfo >& rSamplers, DynamicArray< ShaderTextureInfo >& rTextures )
 /// Fill out data about the shader constants and texture inputs.
 ///
 /// @param[in]     profileIndex      Index of the target shader profile (must be a value less than that returned by

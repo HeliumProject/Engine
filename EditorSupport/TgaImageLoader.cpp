@@ -510,7 +510,7 @@ bool TgaImageLoader::Load( Image& rImage, Stream* pSourceStream )
     }
 
     // Read the color map data.
-    DynArray< Color > colorMap;
+    DynamicArray< Color > colorMap;
     if( colorMapSize != 0 )
     {
         colorMap.Reserve( colorMapSize );

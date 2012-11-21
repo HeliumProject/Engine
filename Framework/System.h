@@ -35,7 +35,7 @@ namespace Helium
         /// Module file name.
         String m_moduleName;
         /// Command-line arguments (not including the module name).
-        DynArray< String > m_arguments;
+        DynamicArray< String > m_arguments;
 
         /// Singleton instance.
         static System* sm_pInstance;

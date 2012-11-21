@@ -22,9 +22,9 @@ namespace Helium
     {
     public:
         /// Buffer type for mip level data.
-        typedef DynArray< uint8_t > MipDataArray;
+        typedef DynamicArray< uint8_t > MipDataArray;
         /// Buffer type for an entire set of mip levels.
-        typedef DynArray< MipDataArray > MipLevelArray;
+        typedef DynamicArray< MipDataArray > MipLevelArray;
 
         /// @name Construction/Destruction
         //@{

@@ -29,7 +29,7 @@ namespace Helium
     ///
     /// @param[in] rArray  Dynamic array to wrap for serialization.
     template< typename T >
-    DynArraySerializeProxy< T >::DynArraySerializeProxy( DynArray< T >& rArray )
+    DynamicArraySerializeProxy< T >::DynamicArraySerializeProxy( DynamicArray< T >& rArray )
         : m_rArray( rArray )
     {
     }
@@ -47,7 +47,7 @@ namespace Helium
     ///
     /// @param[in] rArray  Dynamic array of structs to wrap for serialization.
     template< typename T >
-    StructDynArraySerializeProxy< T >::StructDynArraySerializeProxy( DynArray< T >& rArray )
+    StructDynamicArraySerializeProxy< T >::StructDynamicArraySerializeProxy( DynamicArray< T >& rArray )
         : m_rArray( rArray )
     {
     }
@@ -58,7 +58,7 @@ namespace Helium
     ///
     /// @return  Structure serialization proxy.
     ///
-    /// @see WrapArray(), WrapDynArray(), WrapStructArray(), WrapStructDynArray()
+    /// @see WrapArray(), WrapDynamicArray(), WrapStructArray(), WrapStructDynamicArray()
     template< typename T >
     StructSerializeProxy< T > Serializer::WrapStruct( T& rStruct )
     {
@@ -71,7 +71,7 @@ namespace Helium
     ///
     /// @return  Array serialization proxy.
     ///
-    /// @see WrapStruct(), WrapDynArray(), WrapStructArray(), WrapStructDynArray()
+    /// @see WrapStruct(), WrapDynamicArray(), WrapStructArray(), WrapStructDynamicArray()
     template< typename T, size_t Size >
     ArraySerializeProxy< T, Size > Serializer::WrapArray( T ( &rArray )[ Size ] )
     {
@@ -84,11 +84,11 @@ namespace Helium
     ///
     /// @return  Dynamic array serialization proxy.
     ///
-    /// @see WrapStruct(), WrapArray(), WrapStructArray(), WrapStructDynArray()
+    /// @see WrapStruct(), WrapArray(), WrapStructArray(), WrapStructDynamicArray()
     template< typename T >
-    DynArraySerializeProxy< T > Serializer::WrapDynArray( DynArray< T >& rArray )
+    DynamicArraySerializeProxy< T > Serializer::WrapDynamicArray( DynamicArray< T >& rArray )
     {
-        return DynArraySerializeProxy< T >( rArray );
+        return DynamicArraySerializeProxy< T >( rArray );
     }
 
     /// Wrap a static array of structs for serialization.
@@ -97,7 +97,7 @@ namespace Helium
     ///
     /// @return  Struct array serialization proxy.
     ///
-    /// @see WrapStruct(), WrapArray(), WrapDynArray(), WrapStructDynArray()
+    /// @see WrapStruct(), WrapArray(), WrapDynamicArray(), WrapStructDynamicArray()
     template< typename T, size_t Size >
     StructArraySerializeProxy< T, Size > Serializer::WrapStructArray( T ( &rArray )[ Size ] )
     {
@@ -110,11 +110,11 @@ namespace Helium
     ///
     /// @return  Struct dynamic array serialization proxy.
     ///
-    /// @see WrapStruct(), WrapArray(), WrapDynArray(), WrapStructArray()
+    /// @see WrapStruct(), WrapArray(), WrapDynamicArray(), WrapStructArray()
     template< typename T >
-    StructDynArraySerializeProxy< T > Serializer::WrapStructDynArray( DynArray< T >& rArray )
+    StructDynamicArraySerializeProxy< T > Serializer::WrapStructDynamicArray( DynamicArray< T >& rArray )
     {
-        return StructDynArraySerializeProxy< T >( rArray );
+        return StructDynamicArraySerializeProxy< T >( rArray );
     }
 
     /// Apply a tag for an upcoming property.
@@ -349,9 +349,9 @@ namespace Helium
     ///
     /// @return  Reference to this object.
     template< typename T >
-    Serializer& Serializer::operator<<( const DynArraySerializeProxy< T >& rValue )
+    Serializer& Serializer::operator<<( const DynamicArraySerializeProxy< T >& rValue )
     {
-        BeginDynArray();
+        BeginDynamicArray();
 
         HELIUM_ASSERT( rValue.m_rArray.GetSize() <= static_cast< size_t >( UINT32_MAX ) );
         uint32_t size = static_cast< uint32_t >( rValue.m_rArray.GetSize() );
@@ -369,7 +369,7 @@ namespace Helium
             *this << rValue.m_rArray[ index ];
         }
 
-        EndDynArray();
+        EndDynamicArray();
 
         return *this;
     }
@@ -403,9 +403,9 @@ namespace Helium
     ///
     /// @return  Reference to this object.
     template< typename T >
-    Serializer& Serializer::operator<<( const StructDynArraySerializeProxy< T >& rValue )
+    Serializer& Serializer::operator<<( const StructDynamicArraySerializeProxy< T >& rValue )
     {
-        BeginDynArray();
+        BeginDynamicArray();
 
         HELIUM_ASSERT( rValue.m_rArray.GetSize() <= static_cast< size_t >( UINT32_MAX ) );
         uint32_t size = static_cast< uint32_t >( rValue.m_rArray.GetSize() );
@@ -425,7 +425,7 @@ namespace Helium
             EndStruct();
         }
 
-        EndDynArray();
+        EndDynamicArray();
 
         return *this;
     }

@@ -66,7 +66,7 @@ Serializer::~Serializer()
 /// production runtime code.
 ///
 /// @param[out] rTagNames  List of property tag names.  The existing contents of this array will be erased.
-void Serializer::GetPropertyTagNames( DynArray< String >& rTagNames ) const
+void Serializer::GetPropertyTagNames( DynamicArray< String >& rTagNames ) const
 {
     HELIUM_TRACE( TraceLevels::Warning, TXT( "Serializer::GetPropertyTagNames(): Called on an unsupported serializer.\n" ) );
 
@@ -218,22 +218,22 @@ void Serializer::EndArray()
 
 /// Begin serializing a dynamic array.
 ///
-/// This is called automatically when serializing a dynamic array using a DynArraySerializeProxy wrapper.  If
-/// calling this function manually, EndDynArray() must always be called when array serialization is completed.
+/// This is called automatically when serializing a dynamic array using a DynamicArraySerializeProxy wrapper.  If
+/// calling this function manually, EndDynamicArray() must always be called when array serialization is completed.
 ///
-/// @see EndDynArray()
-void Serializer::BeginDynArray()
+/// @see EndDynamicArray()
+void Serializer::BeginDynamicArray()
 {
     // Behavior defined by subclasses.
 }
 
 /// Finish serializing a dynamic array.
 ///
-/// This is called automatically when serializing a dynamic array using a DynArraySerializeProxy wrapper.  If
-/// BeginDynArray() was called manually, this must always be called when array serialization is completed.
+/// This is called automatically when serializing a dynamic array using a DynamicArraySerializeProxy wrapper.  If
+/// BeginDynamicArray() was called manually, this must always be called when array serialization is completed.
 ///
-/// @see BeginDynArray()
-void Serializer::EndDynArray()
+/// @see BeginDynamicArray()
+void Serializer::EndDynamicArray()
 {
     // Behavior defined by subclasess.
 }

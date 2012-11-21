@@ -20,7 +20,7 @@ namespace Helium
     public:
         /// @name Command-line Initialization
         //@{
-        virtual bool Initialize( String& rModuleName, DynArray< String >& rArguments );
+        virtual bool Initialize( String& rModuleName, DynamicArray< String >& rArguments );
         //@}
     };
 }

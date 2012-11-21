@@ -69,10 +69,7 @@ namespace Helium
     // This is provided as a placeholder because 'void' is not instantiatable in C++
     //
 
-    class Void
-    {
-
-    };
+    enum Void {};
 
     //
     // The different delegate types that are supported, probably won't change very often
@@ -95,6 +92,40 @@ namespace Helium
     template< typename ArgsType, template< typename T > class RefCountBaseType = RefCountBase >
     class Delegate
     {
+    public:
+        Delegate();
+
+        Delegate( const Delegate& rhs );
+
+        template < typename FunctionType >
+        Delegate( FunctionType function );
+
+        template < class ClassType, typename MethodType >
+        Delegate( ClassType* instance, MethodType method );
+
+        template < typename FunctionType >
+        inline static Delegate Create( FunctionType function );
+
+        template < class ClassType, typename MethodType >
+        inline static Delegate Create( ClassType* instance, MethodType method );
+
+        void Clear();
+        bool Valid() const;
+
+        void Set( const Delegate& delegate );
+        template < typename FunctionType >
+        void Set( FunctionType function );
+        template < class ClassType, typename MethodType >
+        void Set( ClassType* instance, MethodType method );
+
+        bool Equals( const Delegate& rhs ) const;
+        template <typename FunctionType>
+        bool Equals( FunctionType function ) const;
+        template <class ClassType, typename MethodType>
+        bool Equals( const ClassType* instance, MethodType method ) const;
+
+        void Invoke( ArgsType parameter ) const;
+
     private:
         //
         // DelegateImpl implements the guts of Delegate and is heap allocated and reference counted.
@@ -123,42 +154,20 @@ namespace Helium
 
         class Function : public DelegateImpl
         {
-        private:
-            friend class Delegate;
-
+        public:
             typedef void (*FunctionType)(ArgsType);
 
+			Function( FunctionType function );
+
+            virtual DelegateType GetType() const;
+            virtual bool Equals( const DelegateImpl* rhs ) const;
+            virtual void Invoke( ArgsType parameter ) const;
+
+        private:
             FunctionType m_Function;
 
-        public:
-            Function( FunctionType function )
-                : m_Function( function )
-            {
-                HELIUM_ASSERT( function );
-            }
-
-            virtual DelegateType GetType() const
-            {
-                return DelegateTypes::Function;
-            }
-
-            virtual bool Equals( const DelegateImpl* rhs ) const
-            {
-                if ( GetType() != rhs->GetType() )
-                {
-                    return false;
-                }
-
-                const Function* f = static_cast<const Function*>(rhs);
-
-                return m_Function == f->m_Function;
-            }
-
-            virtual void Invoke( ArgsType parameter ) const
-            {
-                m_Function( parameter );
-            }
-        };
+            friend class Delegate;
+		};
 
         //
         // Method implements Delegate for a member function of an instance of a class or struct
@@ -167,163 +176,24 @@ namespace Helium
         template<class ClassType>
         class Method : public DelegateImpl
         {
-        private:
-            friend class Delegate;
-
+        public:
             typedef void (ClassType::*MethodType)(ArgsType);
+
+			Method( ClassType* instance, MethodType method );
+
+            virtual DelegateType GetType() const;
+            virtual bool Equals( const DelegateImpl* rhs ) const;
+            virtual void Invoke( ArgsType parameter ) const;
+
+		private:
             ClassType* m_Instance;
             MethodType m_Method;
 
-        public:
-            Method( ClassType* instance, MethodType method )
-                : m_Instance( instance )
-                , m_Method( method )
-            {
-                HELIUM_ASSERT( instance );
-                HELIUM_ASSERT( method );
-            }
-
-            virtual DelegateType GetType() const
-            {
-                return DelegateTypes::Method;
-            }
-
-            virtual bool Equals( const DelegateImpl* rhs ) const
-            {
-                if ( GetType() != rhs->GetType() )
-                {
-                    return false;
-                }
-
-                const Method* m = static_cast<const Method*>(rhs);
-
-                return m_Instance == m->m_Instance && m_Method == m->m_Method;
-            }
-
-            virtual void Invoke( ArgsType parameter ) const
-            {
-                (m_Instance->*m_Method)( parameter );
-            }
+			friend class Delegate;
         };
 
         Helium::SmartPtr< DelegateImpl > m_Impl;
-
-    public:
-        Delegate()
-        {
-
-        }
-
-        Delegate( const Delegate& rhs )
-            : m_Impl( rhs.m_Impl )
-        {
-
-        }
-
-        template < typename FunctionType >
-        Delegate( FunctionType function )
-        {
-            m_Impl = new Function (function);
-        }
-
-        template < class ClassType, typename MethodType >
-        Delegate( ClassType* instance, MethodType method )
-        {
-            m_Impl = new Method<ClassType> (instance, method);
-        }
-
-        template < typename FunctionType >
-        inline static Delegate Create( FunctionType function )
-        {
-            return Delegate(function);
-        }
-
-        template < class ClassType, typename MethodType >
-        inline static Delegate Create( ClassType* instance, MethodType method )
-        {
-            return Delegate (instance, method);
-        }
-
-        void Clear()
-        {
-            m_Impl = NULL;
-        }
-
-        bool Valid() const
-        {
-            return m_Impl.ReferencesObject();
-        }
-
-        void Set( const Delegate& delegate )
-        {
-            m_Impl = delegate.m_Impl;
-        }
-
-        template < typename FunctionType >
-        void Set( FunctionType function )
-        {
-            m_Impl = new Function (function);
-        }
-
-        template < class ClassType, typename MethodType >
-        void Set( ClassType* instance, MethodType method )
-        {
-            m_Impl = new Method<ClassType> (instance, method);
-        }
-
-        bool Equals( const Delegate& rhs ) const
-        {
-            if (m_Impl.ReferencesObject() != rhs.m_Impl.ReferencesObject())
-            {
-                return false;
-            }
-
-            if (!m_Impl.ReferencesObject())
-            {
-                return false;
-            }
-
-            return m_Impl->Equals( rhs.m_Impl );
-        }
-
-        template <typename FunctionType>
-        bool Equals( FunctionType function ) const
-        {
-            if (m_Impl.ReferencesObject() && m_Impl->GetType() == DelegateTypes::Function)
-            {
-                Function* func = static_cast<Function*>(m_Impl.Ptr());
-
-                return func->m_Function == function;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        template <class ClassType, typename MethodType>
-        bool Equals( const ClassType* instance, MethodType method ) const
-        {
-            if (m_Impl.ReferencesObject() && m_Impl->GetType() == DelegateTypes::Method)
-            {
-                Method<ClassType>* meth = static_cast<Method<ClassType>*>(m_Impl.Ptr());
-
-                return meth->m_Instance == instance && meth->m_Method == method;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        void Invoke( ArgsType parameter ) const
-        {
-            if (m_Impl.ReferencesObject())
-            {
-                m_Impl->Invoke(parameter);
-            }
-        }
-    };
+	};
 
     //
     // Event is a collection of delegates that are invoked together
@@ -335,116 +205,23 @@ namespace Helium
     public:
         typedef Helium::Delegate< ArgsType, RefCountBaseType > Delegate;
 
-        uint32_t Count() const
-        {
-            return m_Impl.ReferencesObject() ? (uint32_t)m_Impl->Count() : 0;
-        }
+        uint32_t Count() const;
+        bool Valid() const;
 
-        bool Valid() const
-        {
-            return Count() > 0;
-        }
-
-        void Add( const Delegate& delegate )
-        {
-            if ( !m_Impl.ReferencesObject() )
-            {
-                m_Impl = new EventImpl;
-            }
-
-            m_Impl->Add( delegate );
-        }
-
+        void Add( const Delegate& delegate );
         template < typename FunctionType >
-        void AddFunction( FunctionType function )
-        {
-            if ( !m_Impl.ReferencesObject() )
-            {
-                m_Impl = new EventImpl;
-            }
-
-            m_Impl->AddFunction( function );
-        }
-
+        void AddFunction( FunctionType function );
         template < class ClassType, typename MethodType >
-        void AddMethod( ClassType* instance, MethodType method )
-        {
-            if ( !m_Impl.ReferencesObject() )
-            {
-                m_Impl = new EventImpl;
-            }
+        void AddMethod( ClassType* instance, MethodType method );
 
-            m_Impl->AddMethod( instance, method );
-        }
-
-        void Remove( const Delegate& delegate )
-        {
-            if ( m_Impl.ReferencesObject() )
-            {
-                m_Impl->Remove( delegate );
-
-                if (m_Impl->Count() == 0)
-                {
-                    m_Impl = NULL;
-                }
-            }
-        }
-
+        void Remove( const Delegate& delegate );
         template < typename FunctionType >
-        void RemoveFunction( FunctionType function )
-        {
-            if ( m_Impl.ReferencesObject() )
-            {
-                m_Impl->RemoveFunction( function );
-
-                if (m_Impl->Count() == 0)
-                {
-                    m_Impl = NULL;
-                }
-            }
-        }
-
+        void RemoveFunction( FunctionType function );
         template < class ClassType, typename MethodType >
-        void RemoveMethod( const ClassType* instance, MethodType method )
-        {
-            if ( m_Impl.ReferencesObject() )
-            {
-                m_Impl->RemoveMethod( instance, method );
+        void RemoveMethod( const ClassType* instance, MethodType method );
 
-                if (m_Impl->Count() == 0)
-                {
-                    m_Impl = NULL;
-                }
-            }
-        }
-
-        void Raise( ArgsType parameter )
-        {
-            if ( m_Impl.ReferencesObject() )
-            {
-                // hold a pointer on the stack in case the object we are aggregated into deletes inside this function
-                // use impl and not m_Impl in case _we_ are deleted and m_Impl is trashed
-                Helium::SmartPtr<EventImpl> impl = m_Impl;
-
-                return impl->Raise( parameter, Delegate () );
-            }
-
-            return void ();
-        }
-
-        void RaiseWithEmitter( ArgsType parameter, const Delegate& emitter )
-        {
-            if ( m_Impl.ReferencesObject() )
-            {
-                // hold a pointer on the stack in case the object we are aggregated into deletes inside this function
-                // use impl and not m_Impl in case _we_ are deleted and m_Impl is trashed
-                Helium::SmartPtr<EventImpl> impl = m_Impl;
-
-                return impl->Raise( parameter, emitter );
-            }
-
-            return void ();
-        }
+        void Raise( ArgsType parameter );
+        void RaiseWithEmitter( ArgsType parameter, const Delegate& emitter );
 
     private:
 
@@ -458,204 +235,30 @@ namespace Helium
         class EventImpl : public RefCountBaseType< EventImpl >
         {
         public:
-            EventImpl()
-                : m_EntryCount (0)
-                , m_EmptySlots (0)
-            {
+            EventImpl();
 
-            }
-
-            //
             // Query for count
-            //
+            uint32_t Count() const;
 
-            uint32_t Count() const
-            {
-                return (uint32_t)m_Delegates.size();
-            }
-
-            //
             // Compact dead pointers caused by Remove() inside Raise()
-            //
+            void Compact();
 
-            void Compact()
-            {
-                if (m_EmptySlots)
-                {
-                    typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
-                    typename std::vector<Delegate>::iterator end = m_Delegates.end();
-                    for ( uint32_t slotsLeft = m_EmptySlots; itr != end && slotsLeft; ++itr )
-                    {
-                        if ( !itr->Valid() )
-                        {
-                            typename std::vector<Delegate>::iterator next = itr + 1;
-                            for ( ; next != end; ++next )
-                            {
-                                if (next->Valid())
-                                {
-                                    *itr = *next;
-                                    next->Clear();
-                                    --slotsLeft;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    m_Delegates.resize( m_Delegates.size() - m_EmptySlots );
-                    m_EmptySlots = 0;
-                }
-            }
-
-            //
             // Add the delegate function to the list
-            //
-
-            void Add( const Delegate& delegate )
-            {
-                typename std::vector<Delegate>::const_iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::const_iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(delegate) )
-                    {
-                        return;
-                    }
-                }
-
-                m_Delegates.push_back( delegate );
-            }
-
+            void Add( const Delegate& delegate );
             template < typename FunctionType >
-            void AddFunction( FunctionType function )
-            {
-                typename std::vector<Delegate>::const_iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::const_iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(function) )
-                    {
-                        return;
-                    }
-                }
-
-                m_Delegates.push_back( Delegate (function) );
-            }
-
+            void AddFunction( FunctionType function );
             template < class ClassType, typename MethodType >
-            void AddMethod( ClassType* instance, MethodType method )
-            {
-                typename std::vector<Delegate>::const_iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::const_iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(instance, method ))
-                    {
-                        return;
-                    }
-                }
+            void AddMethod( ClassType* instance, MethodType method );
 
-                m_Delegates.push_back( Delegate (instance, method) );
-            }
-
-            //
             // Remove the delegate function from the list
-            //
-
-            void Remove( const Delegate& delegate )
-            {
-                typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(delegate) )
-                    {
-                        if ( GetRefCount() == 1 )
-                        {
-                            m_Delegates.erase( itr );
-                        }
-                        else
-                        {
-                            m_EmptySlots++;
-                            itr->Clear();
-                        }
-                        break;
-                    }
-                }
-            }
-
+            void Remove( const Delegate& delegate );
             template < typename FunctionType >
-            void RemoveFunction( FunctionType function )
-            {
-                typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(function) )
-                    {
-                        if ( GetRefCount() == 1 )
-                        {
-                            m_Delegates.erase( itr );
-                        }
-                        else
-                        {
-                            m_EmptySlots++;
-                            itr->Clear();
-                        }
-                        break;
-                    }
-                }
-            }
-
+            void RemoveFunction( FunctionType function );
             template < class ClassType, typename MethodType >
-            void RemoveMethod( const ClassType* instance, MethodType method )
-            {
-                typename std::vector<Delegate>::iterator itr = m_Delegates.begin();
-                typename std::vector<Delegate>::iterator end = m_Delegates.end();
-                for ( ; itr != end; ++itr )
-                {
-                    if ( itr->Valid() && itr->Equals(instance, method) )
-                    {
-                        if ( GetRefCount() == 1 )
-                        {
-                            m_Delegates.erase( itr );
-                        }
-                        else
-                        {
-                            m_EmptySlots++;
-                            itr->Clear();
-                        }
-                        break;
-                    }
-                }
-            }
+            void RemoveMethod( const ClassType* instance, MethodType method );
 
-            //
-            // Invoke all of the delegates for this event occurrence
-            //  Pays no mind about the return value of the invocation
-            //
-
-            void Raise( ArgsType parameter, const Delegate& emitter )
-            {
-                ++m_EntryCount;
-
-                for ( size_t i=0; i<m_Delegates.size(); ++i )
-                {
-                    Delegate& d ( m_Delegates[i] );
-
-                    if ( !d.Valid() || ( emitter.Valid() && emitter.Equals( d ) ) )
-                    {
-                        continue;
-                    }
-
-                    d.Invoke(parameter); 
-                }
-
-                if ( --m_EntryCount == 0 )
-                {
-                    Compact();
-                }
-            }
+            // Invoke all of the delegates for this event occurrence. Pays no mind about the return value of the invocation
+            void Raise( ArgsType parameter, const Delegate& emitter );
 
         private:
             std::vector<Delegate>   m_Delegates;
@@ -680,3 +283,5 @@ namespace Helium
 
     typedef Helium::Signature<Helium::Void> VoidSignature;
 }
+
+#include "Foundation/Event.inl"

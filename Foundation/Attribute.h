@@ -10,12 +10,7 @@ namespace Helium
     public:
         struct ChangeArgs
         {
-            ChangeArgs( const T& oldValue, const T& newValue )
-                : m_OldValue( oldValue )
-                , m_NewValue( newValue )
-            {
-
-            }
+            ChangeArgs( const T& oldValue, const T& newValue );
 
             const T& m_OldValue;
             const T& m_NewValue;
@@ -23,12 +18,7 @@ namespace Helium
 
         struct ChangingArgs : public ChangeArgs
         {
-            ChangingArgs( const T& oldValue, const T& newValue )
-                : ChangeArgs( oldValue, newValue )
-                , m_Veto( false )
-            {
-
-            }
+            ChangingArgs( const T& oldValue, const T& newValue );
 
             mutable bool m_Veto;
         };
@@ -36,60 +26,18 @@ namespace Helium
         typedef Helium::Signature< const ChangingArgs& >  ChangingSignature;
         typedef Helium::Signature< const ChangeArgs& >    ChangedSignature;
 
-        Attribute()
-            : m_Value ()
-        {
+        Attribute();
+        Attribute( const T& value );
 
-        }
+        T& Value();
 
-        Attribute( const T& value )
-            : m_Value ( value )
-        {
+        const T& Get() const;
+        bool Set(const T& value);
 
-        }
+        typename ChangingSignature::Event& Changing();
+        typename ChangedSignature::Event& Changed();
 
-        T& Value()
-        {
-            return m_Value;
-        }
-
-        const T& Get() const
-        {
-            return m_Value;
-        }
-
-        bool Set(const T& value)
-        {
-            if ( m_Value != value )
-            {
-                ChangingArgs args ( m_Value, value );
-                m_Changing.Raise( args );
-                if ( !args.m_Veto )
-                {
-                    T previous = m_Value;
-                    m_Value = value;
-                    m_Changed.Raise( ChangeArgs( previous, m_Value ) );
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        typename ChangingSignature::Event& Changing()
-        {
-            return m_Changing;
-        }
-
-        typename ChangedSignature::Event& Changed()
-        {
-            return m_Changed;
-        }
-
-        void RaiseChanged( const T& previous = T() )
-        {
-            m_Changed.Raise( ChangeArgs( previous, m_Value ) );
-        }
+        void RaiseChanged( const T& previous = T() );
 
     protected:
         T                                   m_Value;
@@ -97,3 +45,5 @@ namespace Helium
         typename ChangedSignature::Event    m_Changed;
     };
 }
+
+#include "Foundation/Attribute.inl"

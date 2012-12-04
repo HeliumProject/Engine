@@ -9,15 +9,17 @@
 
 #include "Foundation/String.h"
 
-#include <cstdio>
+#include <stdio.h>
+#include <io.h>
+#include <time.h>
+#include <sys/timeb.h>
+
 #include <fstream>
 #include <iostream>
-#include <crtdbg.h>
-#include <io.h>
 #include <map>
+
+#include <crtdbg.h>
 #include <shlobj.h>
-#include <sys/timeb.h>
-#include <time.h>
 
 using namespace Helium;
 using namespace Helium::Log;

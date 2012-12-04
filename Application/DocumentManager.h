@@ -4,7 +4,7 @@
 #include "Foundation/Event.h"
 #include "Foundation/FilePath.h"
 #include "Foundation/SmartPtr.h"
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 
 #include "Application/API.h"
 #include "Application/Message.h"

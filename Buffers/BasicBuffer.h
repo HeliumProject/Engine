@@ -114,20 +114,20 @@ namespace Helium
         uint32_t AddVector4( const Vector3& v, float32_t w, const tchar_t* debugStr = NULL);
         uint32_t AddVector4( float32_t x, float32_t y, float32_t z, float32_t w, const tchar_t* debugStr = NULL);
 
-        void AddAtLocI8(int8_t val, const BufferLocation& destination);
-        void AddAtLocU8(uint8_t val, const BufferLocation& destination);
+        void AddAtLocI8(int8_t val, const StrongBufferLocation& destination);
+        void AddAtLocU8(uint8_t val, const StrongBufferLocation& destination);
 
-        void AddAtLocI16(int16_t val, const BufferLocation& destination);
-        void AddAtLocU16(uint16_t val, const BufferLocation& destination);
+        void AddAtLocI16(int16_t val, const StrongBufferLocation& destination);
+        void AddAtLocU16(uint16_t val, const StrongBufferLocation& destination);
 
-        void AddAtLocI32(int32_t val, const BufferLocation& destination);
-        void AddAtLocU32(uint32_t val, const BufferLocation& destination);
+        void AddAtLocI32(int32_t val, const StrongBufferLocation& destination);
+        void AddAtLocU32(uint32_t val, const StrongBufferLocation& destination);
 
-        void AddAtLocI64(int64_t val, const BufferLocation& destination);
-        void AddAtLocU64(uint64_t val, const BufferLocation& destination);
+        void AddAtLocI64(int64_t val, const StrongBufferLocation& destination);
+        void AddAtLocU64(uint64_t val, const StrongBufferLocation& destination);
 
-        void AddAtLocF32(float32_t val, const BufferLocation& destination);
-        void AddAtLocF64(float64_t val, const BufferLocation& destination);
+        void AddAtLocF32(float32_t val, const StrongBufferLocation& destination);
+        void AddAtLocF64(float64_t val, const StrongBufferLocation& destination);
 
         void AddPad ( uint32_t pad_length );
         void PadToArb ( uint32_t align_size );
@@ -144,27 +144,27 @@ namespace Helium
         /// Sets maximum capacity for buffer, reallocating if necessary.
         void SetCapacity(uint32_t capacity);
 
-        /// Reserves 'size' space in the buffer and returns a BufferLocation object, advances the write location
-        BufferLocation Reserve(uint32_t size, const tchar_t* dbgStr = NULL, ...);
-        void Reserve(BufferLocation& loc, uint32_t size, const tchar_t* dbgStr = NULL, ...);
+        /// Reserves 'size' space in the buffer and returns a StrongBufferLocation object, advances the write location
+        StrongBufferLocation Reserve(uint32_t size, const tchar_t* dbgStr = NULL, ...);
+        void Reserve(StrongBufferLocation& loc, uint32_t size, const tchar_t* dbgStr = NULL, ...);
 
-        /// Reserves space for a pointer in the buffer and returns a BufferLocation object, advances the write location
+        /// Reserves space for a pointer in the buffer and returns a StrongBufferLocation object, advances the write location
         // if size is zero an automatically sized pointer is reserved based on the platform otherwise size
         // must be 4 or 8 and in either case a pointer of this size will be created
-        BufferLocation ReservePointer(uint32_t size, const tchar_t* dbgStr = NULL, ... );
-        void ReservePointer(BufferLocation& loc, uint32_t size, const tchar_t* dbgStr = NULL, ... );
+        StrongBufferLocation ReservePointer(uint32_t size, const tchar_t* dbgStr = NULL, ... );
+        void ReservePointer(StrongBufferLocation& loc, uint32_t size, const tchar_t* dbgStr = NULL, ... );
 
-        /// Reserves space for an offset in the buffer and returns a BufferLocation object, advances the write location
-        BufferLocation ReserveOffset(const tchar_t* dbgStr = NULL, ... );
-        void ReserveOffset(BufferLocation& loc, const tchar_t* dbgStr = NULL, ... );
+        /// Reserves space for an offset in the buffer and returns a StrongBufferLocation object, advances the write location
+        StrongBufferLocation ReserveOffset(const tchar_t* dbgStr = NULL, ... );
+        void ReserveOffset(StrongBufferLocation& loc, const tchar_t* dbgStr = NULL, ... );
 
         /// At the current offset write a pointer to the destination, advances the write location
-        void WritePointer( const BufferLocation& destination );
-        void WritePointer32( const BufferLocation& destination );
-        void WritePointer64( const BufferLocation& destination );
+        void WritePointer( const StrongBufferLocation& destination );
+        void WritePointer32( const StrongBufferLocation& destination );
+        void WritePointer64( const StrongBufferLocation& destination );
 
         /// At the current offset write an offset to the destination, advances the write location
-        void WriteOffset( const BufferLocation& destination, bool absolute = false );
+        void WriteOffset( const StrongBufferLocation& destination, bool absolute = false );
     };
 
     // this is a handy function for checking to make sure you have written all of the 

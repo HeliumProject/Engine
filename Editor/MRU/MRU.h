@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
 
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Reflect/Object.h"
 
 #include "Editor/API.h"

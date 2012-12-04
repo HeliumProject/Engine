@@ -4,7 +4,7 @@
 
 #include "Foundation/FilePath.h"
 #include "Foundation/SmartPtr.h"
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 
 namespace Helium
 {

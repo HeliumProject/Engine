@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
 
 using namespace Helium;
 
@@ -53,13 +54,16 @@ BasicBufferPtr BufferSerializer::CreateBasic( uint32_t type, bool track )
 
 void BufferSerializer::AddBuffer( const SmartBufferPtr& buffer )
 {
-    m_Buffers.Append( buffer );
+	if ( std::find( m_Buffers.begin(), m_Buffers.end(), buffer ) == m_Buffers.end() )
+	{
+		m_Buffers.push_back( buffer );
+	}
 }
 
 void BufferSerializer::AddBuffers( const BufferSerializer& data )
 {
-    S_SmartBufferPtr::Iterator itr = data.begin();
-    S_SmartBufferPtr::Iterator end = data.end();
+    std::vector< SmartBufferPtr >::const_iterator itr = data.begin();
+    std::vector< SmartBufferPtr >::const_iterator end = data.end();
     for ( ; itr != end; ++itr )
     {
         AddBuffer( *itr );
@@ -86,10 +90,10 @@ uint32_t BufferSerializer::ComputeSize() const
     bool align        = m_ByteOrder == ByteOrders::BigEndian;
 
     // make a unique list of contained buffers
-    S_SmartBufferPtr buffers;
+    std::vector< SmartBufferPtr > buffers;
     {
-        S_SmartBufferPtr::Iterator itr = m_Buffers.Begin();
-        S_SmartBufferPtr::Iterator end = m_Buffers.End();
+        std::vector< SmartBufferPtr >::const_iterator itr = m_Buffers.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = m_Buffers.end();
         for ( ; itr != end; ++itr )
         {
             (*itr)->CollectChildren( buffers );
@@ -100,7 +104,7 @@ uint32_t BufferSerializer::ComputeSize() const
     computed_size += sizeof ( ChunkFileHeader );
 
     // 
-    uint32_t num_chunks = (uint32_t)buffers.Size();
+    uint32_t num_chunks = (uint32_t)buffers.size();
 
     if ( num_chunks == 0 )
     {
@@ -109,15 +113,15 @@ uint32_t BufferSerializer::ComputeSize() const
     else
     {
         // and N chunk headers
-        computed_size += (uint32_t)(buffers.Size() * sizeof( ChunkHeader ));
+        computed_size += (uint32_t)(buffers.size() * sizeof( ChunkHeader ));
     }
 
     {
         uint32_t num_fixups_32 = 0;
         uint32_t num_fixups_64 = 0;
 
-        S_SmartBufferPtr::Iterator itr = buffers.Begin();
-        S_SmartBufferPtr::Iterator end = buffers.End();
+        std::vector< SmartBufferPtr >::const_iterator itr = buffers.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = buffers.end();
         for ( ; itr != end; ++itr )
         {
             // the size of each buffer
@@ -130,8 +134,8 @@ uint32_t BufferSerializer::ComputeSize() const
                 computed_size += (buffer_size & BF_ALIGN_MINUS_ONE) != 0 ? BF_ALIGN - ( buffer_size & BF_ALIGN_MINUS_ONE ) : 0; 
             }
 
-            SmartBuffer::M_OffsetToFixup::const_iterator of_itr = (*itr)->GetOutgoingFixups().begin();
-            SmartBuffer::M_OffsetToFixup::const_iterator of_end = (*itr)->GetOutgoingFixups().end();
+            std::map< uint32_t, FixupPtr >::const_iterator of_itr = (*itr)->GetOutgoingFixups().begin();
+            std::map< uint32_t, FixupPtr >::const_iterator of_end = (*itr)->GetOutgoingFixups().end();
             for ( ; of_itr != of_end; ++of_itr )
             {
                 if( (*of_itr).second->GetType() == FixupTypes::Pointer )
@@ -215,10 +219,10 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
     V_Fixup fixup_64;
 
     // make a unique list of contained buffers
-    S_SmartBufferPtr buffers;
+    std::vector< SmartBufferPtr > buffers;
     {
-        S_SmartBufferPtr::Iterator itr = m_Buffers.Begin();
-        S_SmartBufferPtr::Iterator end = m_Buffers.End();
+        std::vector< SmartBufferPtr >::const_iterator itr = m_Buffers.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = m_Buffers.end();
 
         for ( ; itr != end; ++itr )
         {
@@ -233,13 +237,13 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
 
         file_header.m_Magic      = ConvertEndian( swizzle ? CHUNK_MAGIC_BIG_ENDIAN : CHUNK_MAGIC_LITTLE_ENDIAN, swizzle );
         file_header.m_Version    = ConvertEndian( CHUNK_VERSION_16_ALIGN, swizzle );
-        file_header.m_ChunkCount = ConvertEndian( (uint32_t)buffers.Size(), swizzle );
+        file_header.m_ChunkCount = ConvertEndian( (uint32_t)buffers.size(), swizzle );
 
         strm.write( (const tchar_t*)&file_header, sizeof( ChunkFileHeader ) );
     }
 
     // how many chunks?
-    uint32_t num_chunks = (uint32_t)buffers.Size();
+    uint32_t num_chunks = (uint32_t)buffers.size();
 
     // write a header for each chunk
     if ( num_chunks == 0 )
@@ -251,8 +255,8 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         // where are the buffers going to start? 
         uint32_t buffer_offset = ( num_chunks * sizeof( ChunkHeader ) ) + sizeof( ChunkFileHeader );
 
-        S_SmartBufferPtr::Iterator itr = buffers.Begin();
-        S_SmartBufferPtr::Iterator end = buffers.End();
+        std::vector< SmartBufferPtr >::const_iterator itr = buffers.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = buffers.end();
         for ( uint32_t chunk_index = 0; itr != end; ++itr, ++chunk_index )
         {
             // a little sanity check
@@ -284,8 +288,8 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
     }
 
     {
-        S_SmartBufferPtr::Iterator itr = buffers.Begin();
-        S_SmartBufferPtr::Iterator end = buffers.End();
+        std::vector< SmartBufferPtr >::const_iterator itr = buffers.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = buffers.end();
         for ( uint32_t chunk_index = 0; itr != end; ++itr, ++chunk_index )
         {
             // go back and write the offset
@@ -307,10 +311,10 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
             P_Fixup fix;
             fix.source_chunk_offset = chunk_start_loc;
 
-            BufferLocation destination;
+            StrongBufferLocation destination;
 
-            SmartBuffer::M_OffsetToFixup::const_iterator of_itr = (*itr)->GetOutgoingFixups().begin();
-            SmartBuffer::M_OffsetToFixup::const_iterator of_end = (*itr)->GetOutgoingFixups().end();
+            std::map< uint32_t, FixupPtr >::const_iterator of_itr = (*itr)->GetOutgoingFixups().begin();
+            std::map< uint32_t, FixupPtr >::const_iterator of_end = (*itr)->GetOutgoingFixups().end();
             for ( ; of_itr != of_end; ++of_itr )
             {
                 if( (*of_itr).second->GetType() == FixupTypes::Pointer )
@@ -591,14 +595,17 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
     }
 
     // store the chunks
-    m_Buffers.Clear();
+    m_Buffers.clear();
 
     {
-        V_SmartBufferPtr::const_iterator itr = chunks.begin();
-        V_SmartBufferPtr::const_iterator end = chunks.end();
+        std::vector< SmartBufferPtr >::const_iterator itr = chunks.begin();
+        std::vector< SmartBufferPtr >::const_iterator end = chunks.end();
         for ( ; itr != end; ++itr )
         {
-            m_Buffers.Append( *itr );
+			if ( std::find( m_Buffers.begin(), m_Buffers.end(), *itr ) == m_Buffers.end() )
+			{
+	            m_Buffers.push_back( *itr );
+			}
         }
     }
 

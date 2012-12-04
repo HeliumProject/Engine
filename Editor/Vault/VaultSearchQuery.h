@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Foundation/SmartPtr.h"
 #include "Reflect/Object.h"
 #include "Reflect/Data/DataDeduction.h"

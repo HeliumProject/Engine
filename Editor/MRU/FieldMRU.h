@@ -4,7 +4,7 @@
 
 #include "Platform/Assert.h"
 #include "Foundation/SmartPtr.h"
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Editor/API.h"
 
 #include "MRU.h"

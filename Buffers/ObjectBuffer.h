@@ -79,7 +79,7 @@ namespace Helium
       return *((T*)(m_Data + ( sizeof( T ) * index ) ));
     }
 
-    inline BufferLocation GetIndexOffsetLocation( uint32_t index, uint32_t offset )
+    inline StrongBufferLocation GetIndexOffsetLocation( uint32_t index, uint32_t offset )
     {
       return GetOffsetLocation( ( sizeof(T) * index ) + offset );
     }

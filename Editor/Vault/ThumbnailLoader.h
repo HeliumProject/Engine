@@ -3,7 +3,7 @@
 #include "Platform/Locks.h"
 #include "Platform/Semaphore.h"
 #include "Foundation/Event.h"
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Foundation/FilePath.h"
 
 #include "SceneGraph/DeviceManager.h"

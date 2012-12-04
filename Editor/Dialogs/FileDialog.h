@@ -3,7 +3,7 @@
 #include <wx/filedlg.h>
 
 #include "Platform/Types.h"
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 
 ///////////////////////////////////////////////////////////////////////////
 

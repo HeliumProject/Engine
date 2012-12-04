@@ -2,7 +2,7 @@
 
 #include <hash_map>
 
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Application/UndoQueue.h"
 
 #include "Reflect/Object.h"

@@ -17,7 +17,7 @@ namespace Helium
 
     protected:
         ByteOrder m_ByteOrder;
-        S_SmartBufferPtr m_Buffers;
+        std::vector< SmartBufferPtr > m_Buffers;
 
     public:
         BufferSerializer();
@@ -33,19 +33,19 @@ namespace Helium
             m_ByteOrder = platform;
         }
 
-        S_SmartBufferPtr::Iterator begin() const
+        std::vector< SmartBufferPtr >::const_iterator begin() const
         {
-            return m_Buffers.Begin();
+            return m_Buffers.begin();
         }
 
-        S_SmartBufferPtr::Iterator end() const
+        std::vector< SmartBufferPtr >::const_iterator end() const
         {
-            return m_Buffers.End();
+            return m_Buffers.end();
         }
 
         void Reset()
         {
-            m_Buffers.Clear();
+            m_Buffers.clear();
         }
 
         template< typename T >

@@ -2,7 +2,7 @@
 
 #include "ProjectViewModel.h"
 
-#include "Foundation/OrderedSet.h"
+#include "Application/OrderedSet.h"
 #include "Application/DocumentManager.h"
 
 #include "SceneGraph/Project.h"

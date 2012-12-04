@@ -28,3 +28,12 @@
 [submodule "Dependencies/libpng"]
 	path = Dependencies/libpng
 	url = git://libpng.git.sourceforge.net/gitroot/libpng/libpng
+[submodule "Platform"]
+	path = Platform
+	url = https://github.com/HeliumProject/Platform.git
+[submodule "Foundation"]
+	path = Foundation
+	url = https://github.com/HeliumProject/Foundation.git
+[submodule "Reflect"]
+	path = Reflect
+	url = https://github.com/HeliumProject/Reflect.git

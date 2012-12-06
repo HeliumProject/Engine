@@ -37,3 +37,6 @@
 [submodule "Reflect"]
 	path = Reflect
 	url = https://github.com/HeliumProject/Reflect.git
+[submodule "Math"]
+	path = Math
+	url = https://github.com/HeliumProject/Math.git

@@ -2,7 +2,7 @@
 
 #include <d3d9.h>
 
-#include "Math/FpuColor4.h"
+#include "Math/Color4.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SceneNode.h"

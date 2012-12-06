@@ -3,7 +3,7 @@
 
 #include "Application/UndoQueue.h"
 
-#include "Math/FpuEulerAngles.h"
+#include "Math/EulerAngles.h"
 
 #include "SceneGraph/Color.h"
 #include "SceneGraph/PrimitiveAxes.h"

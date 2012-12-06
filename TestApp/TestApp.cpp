@@ -4,7 +4,7 @@
 #include "Reflect/Registry.h"
 #include "Reflect/Data/DataDeduction.h"
 
-#include "Math/FpuColor4.h"
+#include "Math/Color4.h"
 
 #include "Engine/GameObject.h"
 

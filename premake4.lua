@@ -88,13 +88,6 @@ function PublishIcons( bin )
 
 end
 
--- Use wchar_t support for strings
-newoption
-{
-	trigger = "wchar_t",
-	description = "Build using wchar_t instead of UTF-8 strings"
-}
-
 -- Do nothing if there is no action (--help, etc...)
 if _ACTION then
 

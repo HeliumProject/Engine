@@ -5,8 +5,8 @@
 #include "Platform/File.h"
 
 #include "Math/Float16.h"
-#include "Math/FpuVector3.h"
-#include "Math/FpuVector4.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 #include "Foundation/Log.h"
 

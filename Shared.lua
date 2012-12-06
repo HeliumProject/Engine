@@ -122,6 +122,29 @@ project( prefix .. "Math" )
 			prefix .. "Reflect",
 		}
 
+project( prefix .. "MathSimd" )
+	uuid "B9ED7386-82FE-4a13-8EC6-59931FADB7C5"
+
+	Helium.DoModuleProjectSettings( ".", "HELIUM", "MathSimd", "MATH_SIMD" )
+
+	files
+	{
+		"MathSimd/**",
+	}
+
+	includedirs
+	{
+		"Dependencies/boost-preprocessor/include",
+	}
+
+	configuration "SharedLib"
+		links
+		{
+			prefix .. "Platform",
+			prefix .. "Foundation",
+			prefix .. "Reflect",
+		}
+
 project( prefix .. "Engine" )
 	uuid "CDD089F1-EC6E-469B-BF06-8DF56C5B1489"
 
@@ -145,6 +168,7 @@ project( prefix .. "Engine" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 		}
 
 project( prefix .. "EngineJobs" )
@@ -170,6 +194,7 @@ project( prefix .. "EngineJobs" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 		}
 
@@ -195,6 +220,7 @@ project( prefix .. "Windowing" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -222,6 +248,7 @@ project( prefix .. "Rendering" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -266,6 +293,7 @@ project( prefix .. "GraphicsTypes" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -335,6 +363,7 @@ project( prefix .. "GraphicsJobs" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -405,6 +434,7 @@ project( prefix .. "Graphics" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -475,6 +505,7 @@ project( prefix .. "Framework" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -529,6 +560,7 @@ project( prefix .. "WindowingWin" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -557,6 +589,7 @@ project( prefix .. "RenderingD3D9" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -586,6 +619,7 @@ project( prefix .. "PcSupport" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -614,6 +648,7 @@ project( prefix .. "PreprocessingPc" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Rendering",
@@ -670,6 +705,7 @@ project( prefix .. "EditorSupport" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -728,6 +764,7 @@ project( prefix .. "FrameworkWin" )
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 			prefix .. "Windowing",
@@ -766,6 +803,7 @@ project( prefix .. "TestJobs" )-- DEPRECATED
 			prefix .. "Foundation",
 			prefix .. "Reflect",
 			prefix .. "Math",
+			prefix .. "MathSimd",
 			prefix .. "Engine",
 			prefix .. "EngineJobs",
 		}
@@ -808,6 +846,7 @@ project( prefix .. "TestApp" )-- DEPRECATED
 		prefix .. "Foundation",
 		prefix .. "Reflect",
 		prefix .. "Math",
+		prefix .. "MathSimd",
 		prefix .. "Engine",
 		prefix .. "EngineJobs",
 		prefix .. "Windowing",

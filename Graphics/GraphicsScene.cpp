@@ -8,9 +8,9 @@
 #include "GraphicsPch.h"
 #include "Graphics/GraphicsScene.h"
 
-#include "Math/SimdPlane.h"
-#include "Math/SimdVector3Soa.h"
-#include "Math/SimdVectorConversion.h"
+#include "MathSimd/Plane.h"
+#include "MathSimd/Vector3Soa.h"
+#include "MathSimd/VectorConversion.h"
 #include "Engine/JobContext.h"
 #include "EngineJobs/EngineJobsInterface.h"
 #include "Rendering/RConstantBuffer.h"

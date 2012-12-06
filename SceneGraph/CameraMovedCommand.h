@@ -2,7 +2,7 @@
 
 #include "Application/UndoQueue.h"
 
-#include "Math/FpuMatrix4.h"
+#include "Math/Matrix4.h"
 
 namespace Helium
 {

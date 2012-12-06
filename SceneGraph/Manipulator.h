@@ -5,7 +5,7 @@
 
 #include "Reflect/Enumeration.h"
 #include "Inspect/DataBinding.h"
-#include "Math/FpuMatrix4.h"
+#include "Math/Matrix4.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/Selection.h"

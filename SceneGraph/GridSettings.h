@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/FpuColor3.h"
+#include "Math/Color3.h"
 
 #include "SceneGraph/API.h"
 #include "SceneGraph/SettingsManager.h"

@@ -4,9 +4,9 @@
 #include "Foundation/Log.h"
 #include "Application/UndoQueue.h"
 
-#include "Math/FpuCalculateCurve.h"
-#include "Math/FpuAngleAxis.h"
-#include "Math/SimdQuat.h"
+#include "Math/CalculateCurve.h"
+#include "Math/AngleAxis.h"
+#include "MathSimd/Quat.h"
 
 #include "Graphics/BufferedDrawer.h"
 

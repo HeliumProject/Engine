@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Math/Axes.h"
-#include "Math/FpuVector3.h"
-#include "Math/FpuAlignedBox.h"
+#include "Math/Vector3.h"
+#include "Math/AlignedBox.h"
 
 #include "Reflect/Enumeration.h"
 #include "Application/UndoQueue.h"

@@ -329,12 +329,14 @@ bool ArchivePackageLoader::BeginPreload()
             FileReadRequest *request = m_fileReadRequests.New();
             request->expectedSize = item.m_Size;
 
+			HELIUM_ASSERT( item.m_Size < UINT32_MAX );
+
             // Create a buffer for the file to be read into temporarily
-            request->pLoadBuffer = DefaultAllocator().Allocate( item.m_Size );
+            request->pLoadBuffer = DefaultAllocator().Allocate( static_cast< size_t > ( item.m_Size ) );
             HELIUM_ASSERT( request->pLoadBuffer );
 
             // Queue up the read
-            request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, item.m_Size );
+            request->asyncLoadId = rAsyncLoader.QueueRequest( request->pLoadBuffer, String( item.m_Path.c_str() ), 0, static_cast< size_t >( item.m_Size ) );
             HELIUM_ASSERT( IsValid( request->asyncLoadId ) );
 
             request->filePath = item.m_Path;

@@ -2,7 +2,7 @@
 
 #include "Foundation/Flags.h"
 
-#include "Math/FpuPoint.h"
+#include "Math/Point.h"
 
 #include "SceneGraph/API.h"
 

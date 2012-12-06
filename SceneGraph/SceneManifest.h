@@ -2,7 +2,7 @@
 
 #include "Foundation/FilePath.h"
 #include "Reflect/Data/DataDeduction.h"
-#include "Math/FpuVector3.h"
+#include "Math/Vector3.h"
 
 #include "SceneGraph/API.h"
 

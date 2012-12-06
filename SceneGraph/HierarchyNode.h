@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/FpuAlignedBox.h"
+#include "Math/AlignedBox.h"
 #include "Application/OrderedSet.h"
 
 #include "SceneGraph/API.h"

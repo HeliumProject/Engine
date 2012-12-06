@@ -12,8 +12,8 @@
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
 
-#include "Math/SimdQuat.h"
-#include "Math/SimdVector3.h"
+#include "MathSimd/Quat.h"
+#include "MathSimd/Vector3.h"
 #include "Graphics/GraphicsScene.h"
 
 namespace Helium

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/FpuPoint.h"
+#include "Math/Point.h"
 #include "Reflect/Object.h"
 #include "Foundation/Attribute.h"
 

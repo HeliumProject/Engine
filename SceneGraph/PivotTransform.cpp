@@ -3,8 +3,8 @@
 
 #include "Application/UndoQueue.h"
 
-#include "Math/FpuMatrix3.h"
-#include "Math/FpuEulerAngles.h"
+#include "Math/Matrix3.h"
+#include "Math/EulerAngles.h"
 #include "Math/Axes.h"
 
 #include "SceneGraph/Scene.h"

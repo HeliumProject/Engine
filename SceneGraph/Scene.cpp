@@ -6,7 +6,7 @@
 #include <cctype>
 
 #include "Foundation/Log.h"
-#include "Math/FpuAngleAxis.h"
+#include "Math/AngleAxis.h"
 #include "Reflect/ArchiveXML.h"
 #include "Reflect/Version.h"
 #include "Inspect/DataBinding.h"

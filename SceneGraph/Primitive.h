@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Math/SimdMatrix44.h"
+#include "MathSimd/Matrix44.h"
 
-#include "Math/FpuAlignedBox.h"
-#include "Math/FpuColor3.h"
+#include "Math/AlignedBox.h"
+#include "Math/Color3.h"
 
 #include "SceneGraph/Color.h"
 #include "SceneGraph/Camera.h"

@@ -2,8 +2,8 @@
 
 #include "SceneGraph/API.h"
 
-#include "Math/FpuLine.h"
-#include "Math/FpuFrustum.h"
+#include "Math/Line.h"
+#include "Math/Frustum.h"
 
 #include "Foundation/SmartPtr.h"
 

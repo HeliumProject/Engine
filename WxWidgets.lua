@@ -35,7 +35,7 @@ Helium.BuildWxWidgets = function()
 
 		os.chdir( "Dependencies/wxWidgets" );
 		
-		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=10.6 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
+		local flags = " --enable-monolithic --with-osx_cocoa --with-macosx-version-min=10.8 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk --with-opengl --with-libjpeg=builtin --with-libpng=builtin --with-regex=builtin --with-libtiff=builtin --with-zlib=builtin --with-expat=builtin"
 		
 		local arch32 = "-arch i386"
 		local archFlags32 = " CFLAGS=\"" .. arch32 .. "\" CXXFLAGS=\"" .. arch32 .. "\" CPPFLAGS=\"" .. arch32 .. "\" LDFLAGS=\"" .. arch32 .. "\" OBJCFLAGS=\"" .. arch32 .. "\" OBJCXXFLAGS=\"" .. arch32 .. "\""

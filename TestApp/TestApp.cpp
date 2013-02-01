@@ -1655,6 +1655,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     FontResourceHandler::DestroyStaticLibrary();
 #endif
 
+	UnregisterTestAppTypes();
 #if HELIUM_TOOLS
     UnregisterEditorSupportTypes();
 #endif

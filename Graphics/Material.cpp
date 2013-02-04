@@ -298,6 +298,7 @@ bool Material::BeginPrecacheResourceData()
             HELIUM_ASSERT( IsInvalid( m_constantBufferLoadIds[ shaderTypeIndex ] ) );
 
             size_t bufferSize = GetSubDataSize( static_cast< uint32_t >( shaderTypeIndex ) );
+            HELIUM_ASSERT( IsValid(bufferSize) );
             if( bufferSize == 0 )
             {
                 continue;

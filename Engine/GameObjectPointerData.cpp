@@ -5,10 +5,10 @@
 #include "Reflect/ArchiveXML.h"
 #include "Engine/GameObject.h"
 
+REFLECT_DEFINE_OBJECT( Helium::GameObjectPointerData );
+
 using namespace Helium;
 using namespace Helium::Reflect;
-
-REFLECT_DEFINE_OBJECT( GameObjectPointerData );
 
 GameObjectPointerData::GameObjectPointerData()
 {

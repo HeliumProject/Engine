@@ -68,6 +68,10 @@ Helium.BuildTbb = function()
 
 	os.chdir( cwd )
 
+	local file = io.open(".git/modules/Dependencies/tbb/info/exclude", "w");
+	file:write("build/*\n");
+	file:close();
+
 end
 
 Helium.CleanTbb = function()

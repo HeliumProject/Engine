@@ -81,6 +81,12 @@ Helium.BuildWxWidgets = function()
 	
 	os.chdir( cwd )
 
+	local file = io.open(".git/modules/Dependencies/wxWidgets/info/exclude", "w");
+	file:write("include/wx/msw/setup.h\n")
+	file:write("build/*\n");
+	file:write("lib/vc_*/*\n");
+	file:close();
+
 end
 
 Helium.CleanWxWidgets = function()

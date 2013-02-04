@@ -112,6 +112,10 @@ project "libpng"
 		os.copyfile( "Dependencies/libpng/scripts/pnglibconf.h.prebuilt", "Dependencies/libpng/pnglibconf.h" );
 	end
 
+	local file = io.open(".git/modules/Dependencies/libpng/info/exclude", "w");
+	file:write("pnglibconf.h\n");
+	file:close();
+
 project "nvtt"
 	uuid "6753B918-F16E-4C13-8DA7-4F9A6DB58B77"
 	kind "StaticLib"

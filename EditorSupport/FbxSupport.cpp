@@ -1319,6 +1319,8 @@ bool FbxSupport::BuildMeshFromScene(
     size_t totalVertexCount = 0;
     size_t totalTriangleCount = 0;
 
+    size_t polygonsTriangulated = 0;
+
     StaticMeshVertex< 1 > vertex;
 
     int meshVertexIndex = 0;
@@ -1344,12 +1346,7 @@ bool FbxSupport::BuildMeshFromScene(
 
         if( polygonVertexCount > 3 )
         {
-            HELIUM_TRACE(
-                TraceLevels::Warning,
-                ( TXT( "FbxSupport::BuildMeshFromScene(): Polygon %" ) TPRIuFAST32 TXT( " has %" ) TPRIuFAST32
-                TXT( " vertices, will be split into triangles automatically.\n" ) ),
-                polygonIndex,
-                polygonVertexCount );
+            ++polygonsTriangulated;
         }
 
         uint16_t vertexIndex0 = 0;
@@ -1500,6 +1497,15 @@ bool FbxSupport::BuildMeshFromScene(
                 vertexIndexPrev = vertexIndex16;
             }
         }
+    }
+
+    if ( polygonsTriangulated > 0 )
+    {
+        HELIUM_TRACE(
+            TraceLevels::Warning,
+            ( TXT( "FbxSupport::BuildMeshFromScene(): %" ) TPRIuSZ TXT( " polygon(s) had more than 3 vertices and " )
+                TXT( "were automatically triangulated.\n" ) ),
+            polygonsTriangulated );
     }
 
     rVertices.Clear();

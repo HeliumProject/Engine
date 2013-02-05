@@ -337,7 +337,6 @@ bool FontResourceHandler::CacheResource(
     bool bAntialiased = pFont->GetAntialiased();
 
     DynamicArray< DynamicArray< uint8_t > > textureSheets;
-    DynamicArray< Font::Character > characters;
 
     uint16_t penX = 1;
     uint16_t penY = 1;
@@ -456,7 +455,7 @@ bool FontResourceHandler::CacheResource(
         }
 
         // Store the character information in our character array.
-        Font::Character* pCharacter = characters.New();
+        Font::Character* pCharacter = resource_data.m_characters.New();
         HELIUM_ASSERT( pCharacter );
     
         pCharacter->codePoint = static_cast< uint32_t >( codePoint );
@@ -483,7 +482,7 @@ bool FontResourceHandler::CacheResource(
     }
 
     // Compress and store the last texture in the sheet.
-    if( !characters.IsEmpty() )
+    if( !resource_data.m_characters.IsEmpty() )
     {
         CompressTexture( pTextureBuffer, textureSheetWidth, textureSheetHeight, textureCompression, textureSheets );
     }
@@ -495,7 +494,7 @@ bool FontResourceHandler::CacheResource(
     delete [] pFileData;
 
     // Cache the font data.
-    size_t characterCountActual = characters.GetSize();
+    size_t characterCountActual = resource_data.m_characters.GetSize();
     HELIUM_ASSERT( characterCountActual <= UINT32_MAX );
     uint32_t characterCount = static_cast< uint32_t >( characterCountActual );
 

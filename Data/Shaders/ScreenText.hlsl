@@ -33,7 +33,7 @@ cbuffer ViewportData
     float4 PositionScaleOffset : register( c0 );
 
 #if PROJECT
-    matrix WorldInverseViewProjection : register( c0 );
+    matrix WorldInverseViewProjection : register( c1 );
 #endif
 }
 
@@ -55,7 +55,7 @@ float4 main( VertexInput vIn, out VertexOutput vOut ) : POSITION
     screenPos += round( position.xy / position.w - PositionScaleOffset.zw ) + PositionScaleOffset.zw;
 #endif
 
-    return screenPos;
+    return float4(screenPos.xy, 0.0f, 1.0f);
 }
 
 #endif  // HELIUM_TYPE_VERTEX

@@ -507,9 +507,11 @@ namespace Helium
         {
             if (_pointer.HasLinkIndex())
             {
+                // All non-null game objects should be a link index and not a pointer
                 size_t link_index = _pointer.GetLinkIndex();
                 _pointer.ClearLinkIndex();
 
+                // There should definitely be an entry for this object
                 if( link_index >= m_LinkTable.GetSize() )
                 {
                     HELIUM_TRACE(
@@ -522,6 +524,8 @@ namespace Helium
                     return false;
                 }
 
+                // If the link index has a pointer, fill it in but don't decend into the object.. a linked in game object
+                // will run through its own link indices when it is linked (or it could already be linked)
                 GameObject* pObject = m_LinkTable[ link_index ].spObject;
                 if( pObject )
                 {
@@ -541,7 +545,8 @@ namespace Helium
 //                     {
 ////                             if (field->m_Flags & Reflect::FieldFlags::Share)
 ////                             {
-                            _pointer.Set(pObject);
+                            _pointer = m_LinkTable[ link_index ].spObject;
+                            return false;
 ////                             }
 ////                             else
 ////                             {
@@ -564,6 +569,7 @@ namespace Helium
                 }
             }
 
+            // Non game-objects should be followed in to get linked
             return true;
         }
 
@@ -613,7 +619,7 @@ bool GameObjectLoader::TickLink( LoadRequest* pRequest )
 	}
 
 	// Ready to link.
-	GameObject* pObject = pRequest->spObject;
+    GameObject* pObject = pRequest->spObject.Get();
 	if( pObject )
 	{
 		uint32_t objectFlags = pObject->GetFlags();
@@ -622,7 +628,7 @@ bool GameObjectLoader::TickLink( LoadRequest* pRequest )
 			if( !( objectFlags & GameObject::FLAG_BROKEN ) )
 			{
 				PopulateObjectFromLinkTable visitor(*pObject, rLinkTable);
-				pObject->Accept(visitor);
+                pObject->Accept(visitor);
 			}
 
 			pObject->SetFlags( GameObject::FLAG_LINKED );

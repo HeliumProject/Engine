@@ -8,7 +8,7 @@
 #include "Reflect/Data/DataDeduction.h"
 #include "Engine/GameObjectPointerData.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, 0 );
+HELIUM_IMPLEMENT_OBJECT( Helium::Material, Graphics, GameObjectType::FLAG_ABSTRACT | GameObjectType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float1Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float2Parameter );
 REFLECT_DEFINE_BASE_STRUCTURE( Helium::Material::Float3Parameter );

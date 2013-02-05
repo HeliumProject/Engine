@@ -88,7 +88,7 @@ Helium.Publish = function( files )
 
 		-- if creating a hardlink failed, bail
 		if os.execute( linkCommand ) ~= 0 then
-			print( "Creating hardlink: " .. destination .. " failed." )
+			print( "Creating hardlink: FROM '" .. path .. "'   TO   '" .. destination .. "' failed." )
 			os.exit( 1 )
 		end
 

@@ -503,70 +503,40 @@ namespace Helium
         {
         }
         
+        // PMDTODO: Handle the reflect "Share" flag
+        // PMDTODO: Warn/Assert if assigned object is different type from field
         virtual bool VisitPointer(Reflect::ObjectPtr& _pointer)
         {
             if (_pointer.HasLinkIndex())
             {
-                // All non-null game objects should be a link index and not a pointer
+                // This branch is usually taken for simple references from one object to another
+
+                //// All non-null game objects should be a link index and not a pointer
                 size_t link_index = _pointer.GetLinkIndex();
                 _pointer.ClearLinkIndex();
 
                 // There should definitely be an entry for this object
-                if( link_index >= m_LinkTable.GetSize() )
+                VerifyLinkIndex(link_index);
+                
+                _pointer = m_LinkTable[ link_index ].spObject;
+                return false;
+            }
+            else if (_pointer.ReferencesObject())
+            {
+                // This branch is taken for something like GameObjectPointerDatas inside a dynamic array.
+                // TODO: I need to better understand why dynamic arrays get GOPDs instead of raw pointers
+                GameObjectPointerData* gop = Reflect::SafeCast<GameObjectPointerData>(_pointer.Get());
+                if (gop)
                 {
-                    HELIUM_TRACE(
-                        TraceLevels::Error,
-                        TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
-                        link_index );
+                    uint32_t link_index = gop->GetLinkIndex();
+                    VerifyLinkIndex(link_index);
 
-                    m_bError = true;
+                    gop->ClearLinkIndex();
+                    _pointer = m_LinkTable[ link_index ].spObject;
 
                     return false;
                 }
 
-                // If the link index has a pointer, fill it in but don't decend into the object.. a linked in game object
-                // will run through its own link indices when it is linked (or it could already be linked)
-                GameObject* pObject = m_LinkTable[ link_index ].spObject;
-                if( pObject )
-                {
-//                     HELIUM_ASSERT(field->m_Type->HasReflectionType(Reflect::ReflectionTypes::GameObjectType));
-//                     const GameObjectType *go_type = static_cast<const GameObjectType *>(field->m_Type);
-//                     if( !pObject->IsClass( go_type ) )
-//                     {
-//                         HELIUM_TRACE(
-//                             TraceLevels::Error,
-//                             TXT( "GameObjectLoader: GameObject reference \"%s\" is not of the correct type (\"%s\").\n" ),
-//                             *pObject->GetPath().ToString(),
-//                             *go_type->GetName() );
-// 
-//                         m_bError = true;
-//                     }
-//                     else
-//                     {
-////                             if (field->m_Flags & Reflect::FieldFlags::Share)
-////                             {
-                            _pointer = m_LinkTable[ link_index ].spObject;
-                            return false;
-////                             }
-////                             else
-////                             {
-////                                 GameObjectPtr new_object_ptr;
-////                                 bool success = GameObject::CreateObject(new_object_ptr, pObject->GetGameObjectType(), pObject->GetName(), &m_Owner, pObject, true);
-//// 
-////                                 if (!success)
-////                                 {
-////                                     HELIUM_TRACE(
-////                                         TraceLevels::Error,
-////                                         TXT( "GameObjectLoader: Could not create GameObject for non-shared GameObject reference \"%s\" .\n" ),
-////                                         *pObject->GetPath().ToString());
-//// 
-////                                     m_bError = true;
-////                                 }
-//// 
-////                                 go_data->m_Data->Set(new_object_ptr);
-////                             }
-//                    }
-                }
             }
 
             // Non game-objects should be followed in to get linked
@@ -577,8 +547,24 @@ namespace Helium
         {
             return true;
         }
+
+        bool VerifyLinkIndex( size_t link_index ) 
+        {
+            if( link_index >= m_LinkTable.GetSize() )
+            {
+                HELIUM_TRACE(
+                    TraceLevels::Error,
+                    TXT( "GameObjectLoader: Invalid link index %" ) TPRIu32 TXT( " encountered.  Setting null reference.\n" ),
+                    link_index );
+
+                m_bError = true;
+
+                return false;
+            }
+        }
     };
 }
+
 
 /// Update object reference linking for the given object load request.
 ///

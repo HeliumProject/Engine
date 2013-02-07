@@ -1195,6 +1195,63 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
     }
 
+    
+    {
+        GameObjectPath meshPath;
+        HELIUM_VERIFY( meshPath.Set(
+            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
+ 
+        GameObjectPtr spMeshObject;
+        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
+        HELIUM_ASSERT( spMeshObject );
+        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
+
+        GameObjectPath materialPath;
+        HELIUM_VERIFY( materialPath.Set(
+            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Materials" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull" ) ) );
+ 
+        GameObjectPtr spMaterialObject;
+        HELIUM_VERIFY( gObjectLoader->LoadObject( materialPath, spMaterialObject ) );
+        HELIUM_ASSERT( spMaterialObject );
+        HELIUM_ASSERT( spMaterialObject->IsClass( Material::GetStaticType()->GetClass() ) );
+
+        GameObjectPath shaderPath;
+        HELIUM_VERIFY( shaderPath.Set(
+            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
+ 
+        GameObjectPtr spShaderObject;
+        HELIUM_VERIFY( gObjectLoader->LoadObject( shaderPath, spShaderObject ) );
+        HELIUM_ASSERT( spShaderObject );
+        HELIUM_ASSERT( spShaderObject->IsClass( Shader::GetStaticType()->GetClass() ) );
+
+        Log::Debug("Done!");
+
+        tstringstream ss;
+        ss.str("");
+        ss << "-----Mesh " << spMeshObject.Get() <<std::endl;
+        Log::PrintString(ss.str().c_str());
+
+        ss.str("");
+        ss << "-----Material " << spMaterialObject.Get() <<std::endl;
+        Log::PrintString(ss.str().c_str());
+        
+        ss.str("");
+        ss << "-----Shader " << spShaderObject.Get() <<std::endl;
+        Log::PrintString(ss.str().c_str());
+        
+        ss.str("");
+        ss << "-----spMeshObject->Material " << static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) << std::endl;
+        Log::PrintString(ss.str().c_str());
+        
+        ss.str("");
+        ss << "-----spMaterialObject->Shader " << static_cast<Material *>(spMaterialObject.Get())->GetShader() << std::endl;
+        Log::PrintString(ss.str().c_str());
+
+        // This works now because the linking is fixed! :)  But commenting out so that messing with Data files doesn't cause asserts
+        //HELIUM_ASSERT(static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) == spMaterialObject.Get());
+        //HELIUM_ASSERT(static_cast<Material *>(spMaterialObject.Get())->GetShader() == spShaderObject.Get());
+    }
+
     float32_t meshRotation = 0.0f;
 
     spSubRenderContext.Release();

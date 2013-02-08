@@ -561,6 +561,8 @@ namespace Helium
 
                 return false;
             }
+
+            return true;
         }
     };
 }

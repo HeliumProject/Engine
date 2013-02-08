@@ -296,45 +296,31 @@ bool Texture2dResourceHandler::CacheResource(
 
     int32_t pixelFormatIndex = static_cast< int32_t >( pixelFormat );
 
-    //PMDTODO: Implement this
-    //BinarySerializer serializer;
-    //for( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
-    //{
-    //    PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
-    //    if( !pPreprocessor )
-    //    {
-    //        continue;
-    //    }
+    Texture2d::PersistentResourceData persistentResourceData;
+    persistentResourceData.m_baseLevelWidth = imageWidth;
+    persistentResourceData.m_baseLevelHeight = imageHeight;
+    persistentResourceData.m_mipCount = mipLevelCount;
+    persistentResourceData.m_pixelFormatIndex = pixelFormatIndex;
 
-    //    Resource::PreprocessedData& rPreprocessedData = pTexture->GetPreprocessedData(
-    //        static_cast< Cache::EPlatform >( platformIndex ) );
+    // Cache the data for each supported platform.
+    for ( size_t platformIndex = 0; platformIndex < static_cast< size_t >( Cache::PLATFORM_MAX ); ++platformIndex )
+    {
+        PlatformPreprocessor* pPreprocessor = pObjectPreprocessor->GetPlatformPreprocessor(
+            static_cast< Cache::EPlatform >( platformIndex ) );
+        if ( !pPreprocessor )
+        {
+            continue;
+        }
 
-    //    // Serialize the persistent data about the texture first.
-    //    serializer.SetByteSwapping( pPreprocessor->SwapBytes() );
-    //    serializer.BeginSerialize();
-    //    serializer << imageWidth;
-    //    serializer << imageHeight;
-    //    serializer << mipLevelCount;
-    //    serializer << pixelFormatIndex;
-    //    serializer.EndSerialize();
+        Resource::PreprocessedData& rPreprocessedData = pResource->GetPreprocessedData(
+            static_cast< Cache::EPlatform >( platformIndex ) );
 
-    //    rPreprocessedData.persistentDataBuffer = serializer.GetPropertyStreamBuffer();
+        SaveObjectToPersistentDataBuffer(&persistentResourceData, rPreprocessedData.persistentDataBuffer);
 
-    //    // Serialize each mip level.
-    //    DynamicArray< DynamicArray< uint8_t > >& rSubDataBuffers = rPreprocessedData.subDataBuffers;
-    //    rSubDataBuffers.Reserve( mipLevelCount );
-    //    rSubDataBuffers.Resize( mipLevelCount );
-    //    rSubDataBuffers.Trim();
+        rPreprocessedData.subDataBuffers = rMipLevels;
 
-    //    for( uint32_t mipLevelIndex = 0; mipLevelIndex < mipLevelCount; ++mipLevelIndex )
-    //    {
-    //        rSubDataBuffers[ mipLevelIndex ] = rMipLevels[ mipLevelIndex ];
-    //    }
-
-    //    // Platform data is now loaded.
-    //    rPreprocessedData.bLoaded = true;
-    //}
+        rPreprocessedData.bLoaded = true;
+    }
 
     return true;
 }

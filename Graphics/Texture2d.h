@@ -25,6 +25,22 @@ namespace Helium
         virtual ~Texture2d();
         //@}
 
+        struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
+        {
+            REFLECT_DECLARE_OBJECT(Texture2d::PersistentResourceData, Reflect::Object);
+
+            PersistentResourceData();
+            static void PopulateComposite( Reflect::Composite& comp );
+
+            uint32_t m_baseLevelWidth;
+            uint32_t m_baseLevelHeight;
+            uint32_t m_mipCount;
+            int32_t m_pixelFormatIndex;
+        };
+
+        /// Persistent texture resource data.
+        PersistentResourceData m_persistentResourceData;
+
         /// @name Serialization
         //@{
         virtual bool NeedsPrecacheResourceData() const;
@@ -34,7 +50,7 @@ namespace Helium
 
         /// @name Resource Serialization
         //@{
-        virtual void SerializePersistentResourceData( Serializer& s );
+        virtual bool LoadPersistentResourceObject( Reflect::ObjectPtr& _object );
         //@}
 
         /// @name Data Access

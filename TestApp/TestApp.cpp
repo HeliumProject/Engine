@@ -1195,7 +1195,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
     }
 
-    
+#if 0
     {
         GameObjectPath meshPath;
         HELIUM_VERIFY( meshPath.Set(
@@ -1251,6 +1251,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         //HELIUM_ASSERT(static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) == spMaterialObject.Get());
         //HELIUM_ASSERT(static_cast<Material *>(spMaterialObject.Get())->GetShader() == spShaderObject.Get());
     }
+#endif
 
     float32_t meshRotation = 0.0f;
 

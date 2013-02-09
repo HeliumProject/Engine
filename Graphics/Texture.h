@@ -25,6 +25,7 @@ namespace Helium
     class HELIUM_GRAPHICS_API Texture : public Resource
     {
         HELIUM_DECLARE_OBJECT( Texture, Resource );
+        static void PopulateComposite( Reflect::Composite& comp );
 
     public:
         class ECompression

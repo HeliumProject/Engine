@@ -207,10 +207,6 @@ namespace Helium
         /// Main rendering context.
         D3D9MainContextPtr m_spMainContext;
 
-        /// Cached adapter index for the main context.
-        UINT m_adapter;
-        /// Cached device type for the main context.
-        D3DDEVTYPE m_deviceType;
         /// Cached presentation parameters for the main context.
         D3DPRESENT_PARAMETERS m_presentParameters;
         /// Cached fullscreen display mode information for the main context (9Ex only).
@@ -237,7 +233,6 @@ namespace Helium
 
         /// @name Private Utility Functions
         //@{
-        void DetermineAdapterSettings();
         HRESULT ResetDevice( D3DPRESENT_PARAMETERS& rPresentParameters, D3DDISPLAYMODEEX& rFullscreenDisplayMode );
         //@}
 

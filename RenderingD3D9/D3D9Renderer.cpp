@@ -44,7 +44,7 @@ namespace Helium
 using namespace Helium;
 
 // Non-zero to disable Direct3D 9Ex support (for testing purposes only; shipping builds should leave support enabled).
-#define L_DISABLE_DIRECT3D9EX 1
+#define L_DISABLE_DIRECT3D9EX 0
 
 // Direct3DCreate9Ex() function signature.
 typedef HRESULT ( WINAPI DIRECT3DCREATE9EX_FUNC )( UINT, IDirect3D9Ex** );
@@ -65,8 +65,6 @@ D3D9Renderer::D3D9Renderer()
     , m_pD3DDevice( NULL )
     , m_bExDevice( false )
     , m_bLost( false )
-    , m_adapter( D3DADAPTER_DEFAULT )
-    , m_deviceType( D3DDEVTYPE_HAL )
     , m_depthTextureFormat( D3DFMT_UNKNOWN )
 {
 }
@@ -160,8 +158,8 @@ bool D3D9Renderer::Initialize()
     {
         D3DFORMAT format = depthTextureFormats[ depthFormatIndex ];
         HRESULT checkResult = m_pD3D->CheckDeviceFormat(
-            m_adapter,
-            m_deviceType,
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
             D3DFMT_X8R8G8B8,
             D3DUSAGE_DEPTHSTENCIL,
             D3DRTYPE_TEXTURE,
@@ -264,8 +262,6 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
         return false;
     }
 
-    DetermineAdapterSettings();
-
     HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: Creating main display context.\n" ) );
 
     // Build the presentation parameters.
@@ -283,8 +279,8 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     {
         IDirect3DDevice9Ex* pD3DDeviceEx = NULL;
         createResult = static_cast< IDirect3D9Ex* >( m_pD3D )->CreateDeviceEx(
-            m_adapter,
-            m_deviceType,
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
             static_cast< HWND >( rInitParameters.pWindow ),
             D3DCREATE_HARDWARE_VERTEXPROCESSING,
             &m_presentParameters,
@@ -296,8 +292,8 @@ bool D3D9Renderer::CreateMainContext( const ContextInitParameters& rInitParamete
     else
     {
         createResult = m_pD3D->CreateDevice(
-            m_adapter,
-            m_deviceType,
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
             static_cast< HWND >( rInitParameters.pWindow ),
             D3DCREATE_HARDWARE_VERTEXPROCESSING,
             &m_presentParameters,
@@ -1586,12 +1582,12 @@ bool D3D9Renderer::GetPresentParameters(
             modeFilter.ScanLineOrdering = D3DSCANLINEORDERING_PROGRESSIVE;
 
             UINT modeCount = static_cast< IDirect3D9Ex* >( m_pD3D )->GetAdapterModeCountEx(
-                m_adapter,
+                D3DADAPTER_DEFAULT,
                 &modeFilter );
             for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
             {
                 L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
-                    m_adapter,
+                    D3DADAPTER_DEFAULT,
                     &modeFilter,
                     modeIndex,
                     &mode ) );
@@ -1613,12 +1609,12 @@ bool D3D9Renderer::GetPresentParameters(
                 modeFilter.ScanLineOrdering = D3DSCANLINEORDERING_INTERLACED;
 
                 modeCount = static_cast< IDirect3D9Ex* >( m_pD3D )->GetAdapterModeCountEx(
-                    m_adapter,
+                    D3DADAPTER_DEFAULT,
                     &modeFilter );
                 for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
                 {
                     L_D3D9_VERIFY( static_cast< IDirect3D9Ex* >( m_pD3D )->EnumAdapterModesEx(
-                        m_adapter,
+                        D3DADAPTER_DEFAULT,
                         &modeFilter,
                         modeIndex,
                         &mode ) );
@@ -1641,10 +1637,10 @@ bool D3D9Renderer::GetPresentParameters(
             D3DDISPLAYMODE mode;
             MemoryZero( &mode, sizeof( mode ) );
 
-            UINT modeCount = m_pD3D->GetAdapterModeCount( m_adapter, D3DFMT_X8R8G8B8 );
+            UINT modeCount = m_pD3D->GetAdapterModeCount( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8 );
             for( UINT modeIndex = 0; modeIndex < modeCount; ++modeIndex )
             {
-                L_D3D9_VERIFY( m_pD3D->EnumAdapterModes( m_adapter, D3DFMT_X8R8G8B8, modeIndex, &mode ) );
+                L_D3D9_VERIFY( m_pD3D->EnumAdapterModes( D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8, modeIndex, &mode ) );
                 if( mode.Width == rContextInitParameters.displayWidth &&
                     mode.Height == rContextInitParameters.displayHeight )
                 {
@@ -1695,8 +1691,8 @@ bool D3D9Renderer::GetPresentParameters(
             static_cast< uint32_t >( D3DMULTISAMPLE_2_SAMPLES ) + multisampleCount - 2 );
 
         HRESULT checkResult = m_pD3D->CheckDeviceMultiSampleType(
-            m_adapter,
-            m_deviceType,
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
             D3DFMT_X8R8G8B8,
             !rContextInitParameters.bFullscreen,
             multisampleType,
@@ -1781,34 +1777,6 @@ ERendererPixelFormat D3D9Renderer::D3DFormatToPixelFormat( D3DFORMAT d3dFormat, 
     }
 
     return RENDERER_PIXEL_FORMAT_INVALID;
-}
-
-/// Sets the cached device type and adapter index to be used when calling CreateDevice.
-void D3D9Renderer::DetermineAdapterSettings()
-{
-#if !HELIUM_RELEASE
-    if ( m_pD3D )
-    {
-        const UINT adapterCount = m_pD3D->GetAdapterCount();
-        for ( UINT iAdapter = 0; iAdapter < adapterCount; ++iAdapter )
-        {
-            D3DADAPTER_IDENTIFIER9 identifier;
-            HELIUM_VERIFY( SUCCEEDED( m_pD3D->GetAdapterIdentifier(iAdapter, 0, &identifier) ) );
-            HELIUM_TRACE( TraceLevels::Info, TXT( "Enumerating device: %s" ), identifier.Description );
-            if (strstr(identifier.Description, "PerfHUD"))
-            {
-                HELIUM_TRACE( TraceLevels::Info, TXT( "D3D9Renderer: NVPerfHUD device was detected and will be used.\n" ) );
-
-                m_adapter = iAdapter;
-                m_deviceType = D3DDEVTYPE_REF;
-                return;
-            }
-        }
-    }
-#endif
-
-    m_adapter = D3DADAPTER_DEFAULT;
-    m_deviceType = D3DDEVTYPE_HAL;
 }
 
 /// Reset the device with the specified parameters.

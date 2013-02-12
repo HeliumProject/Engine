@@ -613,8 +613,8 @@ int Main( int argc, const tchar_t** argv )
     bool profileFlag = false;
     success &= processor.AddOption( new FlagOption( &profileFlag, StartupArgs::Profile, TXT( "enable profile output to the console windows" ) ), error );
 
-    bool vreboseFlag = false;
-    success &= processor.AddOption( new FlagOption( &vreboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
+    bool verboseFlag = false;
+    success &= processor.AddOption( new FlagOption( &verboseFlag, StartupArgs::Verbose, TXT( "output a verbose level of console output" ) ), error );
 
     bool extremeFlag = false;
     success &= processor.AddOption( new FlagOption( &extremeFlag, StartupArgs::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );

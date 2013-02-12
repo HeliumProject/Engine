@@ -6,6 +6,8 @@
 
 #include "SceneGraph/Scene.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Layer );
 
 using namespace Helium;

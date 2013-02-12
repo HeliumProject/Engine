@@ -7,6 +7,8 @@
 #include "SceneGraph/Shader.h"
 #include "SceneGraph/Transform.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_OBJECT( Helium::SceneGraph::Mesh );
 
 using namespace Helium;

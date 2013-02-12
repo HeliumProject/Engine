@@ -11,6 +11,8 @@
 #include "SceneGraph/Scene.h"
 #include "SceneGraph/Color.h"
 
+#include "Framework/FrameworkDataDeduction.h"
+
 REFLECT_DEFINE_ABSTRACT( Helium::SceneGraph::Transform );
 
 using namespace Helium;

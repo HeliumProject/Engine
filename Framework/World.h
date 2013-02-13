@@ -90,6 +90,9 @@ namespace Helium
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
     };
+
+    typedef Helium::StrongPtr< World > WorldPtr;
+    typedef Helium::StrongPtr< const World > ConstWorldPtr;
 }
 
 #include "Framework/World.inl"

@@ -3,6 +3,7 @@
 
 #include "Reflect/Registry.h"
 #include "Reflect/Data/DataDeduction.h"
+#include "Framework/FrameworkDataDeduction.h"
 
 #include "Math/Color4.h"
 

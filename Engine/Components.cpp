@@ -4,7 +4,7 @@
 
 #include "Reflect/Data/DataDeduction.h"
 
-REFLECT_DEFINE_ABSTRACT( Helium::Components::Component );
+REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);
 
 using namespace Helium;
 using namespace Helium::Components;
@@ -13,11 +13,6 @@ using namespace Helium::Components::Private;
 inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
 {
     return reinterpret_cast<Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
-}
-
-void Component::AcceptCompositeVisitor( Reflect::Composite& comp )
-{
-    HELIUM_UNREF(comp);
 }
 
 const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
@@ -37,17 +32,17 @@ namespace
     uint32_t                          g_ComponentProcessPendingDeletesCallCount = 0;
 }
 
-TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
+TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, TypeData &_type_data, TypeData *_base_type_data, uint16_t _count, void *_data, IComponentTypeTCallbacks *_callbacks )
 {
     // Some validation of parameters/state
-    HELIUM_ASSERT(_class);
-    HELIUM_ASSERT(_count == 0 || _class->m_Creator);
+    HELIUM_ASSERT(_structure);
+    //HELIUM_ASSERT(_count == 0 || _structure->m_Creator);
     HELIUM_ASSERT(_count >= 0);
     HELIUM_ASSERT(Reflect::Registry::GetInstance());
 
     // Component must be registered already
-    HELIUM_ASSERT(Component::s_Class);
-    HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
+    //HELIUM_ASSERT(Component::s_Class);
+    //HELIUM_ASSERT_MSG(_class->IsType(Component::s_Class), (TXT("Component registered that does not actually extend Component")));
 
     // Add a bookkeeping struct instance for this type of component
     ComponentType component_type_temp;
@@ -64,9 +59,9 @@ TypeId Components::Private::RegisterType( const Reflect::Class *_class, TypeData
     _type_data.m_TypeId = type_id;
 
     // Update bookkeeping fields
-    component_type.m_Class = _class;
+    component_type.m_Structure = _structure;
     component_type.m_FirstUnallocatedIndex = 0;
-    component_type.m_InstanceSize = component_type.m_Class->m_Size;
+    component_type.m_InstanceSize = component_type.m_Structure->m_Size;
     component_type.m_Pool = _data;
     component_type.m_TCallbacks = _callbacks;
 

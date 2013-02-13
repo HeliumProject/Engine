@@ -947,6 +947,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 #endif
     }
     */
+    
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;

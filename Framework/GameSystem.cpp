@@ -29,7 +29,7 @@
 #include "Framework/ConfigInitialization.h"
 #include "Framework/WindowManagerInitialization.h"
 #include "Framework/RendererInitialization.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 #include "Framework/WorldManager.h"
 
 using namespace Helium;
@@ -293,16 +293,16 @@ bool GameSystem::Initialize(
         return false;
     }
 
-    PackagePtr spLayerPackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
-    HELIUM_ASSERT( spLayerPackage );
+    PackagePtr spSlicePackage;
+    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
+    HELIUM_ASSERT( spSlicePackage );
 
-    LayerPtr spLayer;
-    HELIUM_VERIFY( GameObject::Create< Layer >( spLayer, Name( TXT( "Layer" ) ), spLayerPackage ) );
-    HELIUM_ASSERT( spLayer );
-    spLayer->BindPackage( spLayerPackage );
+    SlicePtr spSlice;
+    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
+    HELIUM_ASSERT( spSlice );
+    spSlice->BindPackage( spSlicePackage );
 
-    HELIUM_VERIFY( spDefaultWorld->AddLayer( spLayer ) );
+    HELIUM_VERIFY( spDefaultWorld->AddSlice( spSlice ) );
 
     // Initialization complete.
     return true;

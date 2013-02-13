@@ -40,8 +40,8 @@ public:
         const WorldPtr* pspWorlds;
         /// [in] Number of worlds in the given array.
         size_t worldCount;
-        /// [in] Index of the layer from which to start spawning update jobs.
-        size_t startLayerIndex;
+        /// [in] Index of the slice from which to start spawning update jobs.
+        size_t startSliceIndex;
         /// [in] Index of the entity from which to start spawning update jobs.
         size_t startEntityIndex;
 

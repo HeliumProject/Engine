@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Layer.h
+// Slice.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
 //----------------------------------------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef HELIUM_FRAMEWORK_LAYER_H
-#define HELIUM_FRAMEWORK_LAYER_H
+#ifndef HELIUM_FRAMEWORK_SLICE_H
+#define HELIUM_FRAMEWORK_SLICE_H
 
 #include "Framework/Framework.h"
 #include "Engine/GameObject.h"
@@ -28,22 +28,22 @@ namespace Helium
 
     /// Container for entities.
     ///
-    /// Layers typically fall under one of two categories.
-    /// - Level layers.  The Level instance is either created from the package information and cached (in editor mode)
+    /// Slices typically fall under one of two categories.
+    /// - Level slices.  The Level instance is either created from the package information and cached (in editor mode)
     ///   or loaded from the cache file (in runtime mode).  When in runtime mode, the loaded level is typically linked
     ///   directly to a world, with all of its entities attached when linked.
-    /// - Dynamic layers.  These can be constructed in editor mode for use with special-case worlds (such as for a
-    ///   preview window).  In runtime mode, dynamic layers can be created as necessary for various runtime-created
+    /// - Dynamic slices.  These can be constructed in editor mode for use with special-case worlds (such as for a
+    ///   preview window).  In runtime mode, dynamic slices can be created as necessary for various runtime-created
     ///   entities.
-    class HELIUM_FRAMEWORK_API Layer : public GameObject
+    class HELIUM_FRAMEWORK_API Slice : public GameObject
     {
-        HELIUM_DECLARE_OBJECT( Layer, GameObject );
+        HELIUM_DECLARE_OBJECT( Slice, GameObject );
 
     public:
         /// @name Construction/Destruction
         //@{
-        Layer();
-        virtual ~Layer();
+        Slice();
+        virtual ~Slice();
         //@}
 
         /// @name Serialization
@@ -87,9 +87,9 @@ namespace Helium
         /// Entities.
         DynamicArray< EntityPtr > m_entities;
 
-        /// Layer world.
+        /// Slice world.
         WorldWPtr m_spWorld;
-        /// Runtime index for the layer within its world.
+        /// Runtime index for the slice within its world.
         size_t m_worldIndex;
 
         /// @name Private Utility Functions
@@ -100,6 +100,6 @@ namespace Helium
     };
 }
 
-#include "Framework/Layer.inl"
+#include "Framework/Slice.inl"
 
-#endif  // HELIUM_FRAMEWORK_LAYER_H
+#endif  // HELIUM_FRAMEWORK_SLICE_H

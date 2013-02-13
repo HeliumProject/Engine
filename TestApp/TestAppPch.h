@@ -41,7 +41,7 @@
 #include "Graphics/RenderResourceManager.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Framework/Camera.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 #include "Framework/Mesh.h"
 #include "Framework/SkeletalMeshEntity.h"
 #include "Framework/StaticMeshEntity.h"

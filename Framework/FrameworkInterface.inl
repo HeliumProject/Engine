@@ -68,7 +68,7 @@ void WorldManagerUpdate< EntityUpdateJobType >::RunCallback( void* pJob, JobCont
 /// Constructor.
 template< typename EntityUpdateJobType >
 WorldManagerUpdate< EntityUpdateJobType >::Parameters::Parameters()
-    : startLayerIndex(0)
+    : startSliceIndex(0)
     , startEntityIndex(0)
 {
 }

@@ -238,28 +238,28 @@ namespace Helium
         return m_scale;
     }
 
-    /// Get the layer to which this entity is currently bound.
+    /// Get the slice to which this entity is currently bound.
     ///
-    /// @return  Entity layer.
+    /// @return  Entity slice.
     ///
-    /// @see GetLayerIndex(), SetLayerInfo(), SetLayerIndex(), ClearLayerInfo()
-    const LayerWPtr& Entity::GetLayer() const
+    /// @see GetSliceIndex(), SetSliceInfo(), SetSliceIndex(), ClearSliceInfo()
+    const SliceWPtr& Entity::GetSlice() const
     {
         VerifySafety();
-        return m_spLayer;
+        return m_spSlice;
     }
 
-    /// Get the index of this entity in the layer to which it is currently bound.
+    /// Get the index of this entity in the slice to which it is currently bound.
     ///
     /// Note that this index may change at runtime, so it should not be used to track an entity.
     ///
-    /// @return  Entity index within its layer.
+    /// @return  Entity index within its slice.
     ///
-    /// @see GetLayer(), SetLayerInfo(), SetLayerIndex(), ClearLayerInfo()
-    size_t Entity::GetLayerIndex() const
+    /// @see GetSlice(), SetSliceInfo(), SetSliceIndex(), ClearSliceInfo()
+    size_t Entity::GetSliceIndex() const
     {
         VerifySafety();
-        return m_layerIndex;
+        return m_sliceIndex;
     }
 
     /// Get the set of deferred work flags that will be applied during the post-update phase.

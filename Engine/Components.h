@@ -7,38 +7,6 @@
 #include "Foundation/SmartPtr.h"
 #include "Engine/Engine.h"
 
-//TODO: OnAttach/OnDetach events for components?
-//TODO: API for systems to iterate over allocated components
-//TODO: Review compiled code to make sure that iterators, function objects, etc.
-//      are getting inlined properly
-//TODO: Smart pointer
-namespace Helium
-{
-    namespace Components
-    {
-        //! Component type id (not the same as the reflect class id).
-        typedef uint16_t TypeId;
-        const static TypeId NULL_TYPE_ID = 0xFFFF;
-
-        typedef uint8_t GenerationIndex;
-        const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
-
-        class Host;
-        class Component;
-        class System;
-        class ComponentPtrBase;
-
-        namespace Private
-        {
-            //! A static member of every component type (instrumented via the DECLARE_COMPONENT macro)
-
-            /// TODO: Avoid this macro by using reflect a bit more directly like AssetClasses do
-            struct TypeData
-            {
-                TypeData() : m_TypeId(NULL_TYPE_ID) { }
-                TypeId m_TypeId;
-            };
-        }
 
 #define _COMPONENT_BOILERPLATE(__Type)                        \
     public:                                                             \
@@ -97,6 +65,39 @@ namespace Helium
     REFLECT_DEFINE_DERIVED_STRUCTURE( __Type )
 
 
+//TODO: OnAttach/OnDetach events for components?
+//TODO: API for systems to iterate over allocated components
+//TODO: Review compiled code to make sure that iterators, function objects, etc.
+//      are getting inlined properly
+//TODO: Smart pointer
+namespace Helium
+{
+    namespace Components
+    {
+        //! Component type id (not the same as the reflect class id).
+        typedef uint16_t TypeId;
+        const static TypeId NULL_TYPE_ID = 0xFFFF;
+
+        typedef uint8_t GenerationIndex;
+        const static uint32_t COMPONENT_PTR_CHECK_FREQUENCY = 256;
+
+        class Host;
+        class Component;
+        class System;
+        class ComponentPtrBase;
+
+        namespace Private
+        {
+            //! A static member of every component type (instrumented via the DECLARE_COMPONENT macro)
+
+            /// TODO: Avoid this macro by using reflect a bit more directly like AssetClasses do
+            struct TypeData
+            {
+                TypeData() : m_TypeId(NULL_TYPE_ID) { }
+                TypeId m_TypeId;
+            };
+        }
+
         typedef std::vector<Component *> V_Components;
         typedef Helium::Map<TypeId, Component *> M_Components;
 
@@ -124,12 +125,14 @@ namespace Helium
                 m_PendingDelete = true;
             }
 
-            TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>
-            uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
+            ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
+
+            // TODO: We could save some bytes here on at least x64 if we were to exchange these 8-byte pointers for index or byte offsets.
             Component*      m_Next;             //< Next component of this same type
             Component*      m_Previous;         //< Previous component of this same type
+            TypeId          m_TypeId;           //< TypeId.. will eventually be polymorphic pointer to ComponentType<T>. (NOTE: Actualy, TypeID is smaller than a pointer so maybe keep the ID)
+            uint16_t        m_RosterIndex;      //< Index/position of roster entry for this component instance
             GenerationIndex m_Generation;       //< Incremented on every deallocation to tell when a component has been dealloc'ed and realloc'ed
-            ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
             bool            m_PendingDelete; //< If true, we will deallocate at end of frame
         };
 
@@ -423,55 +426,7 @@ namespace Helium
             uint32_t m_ComponentPtrRegistryHeadIndex;
         };
 
-        // Code that uses T goes here
-        template <class T>
-        class ComponentPtr : public ComponentPtrBase
-        {
-        public:
-            ComponentPtr()
-            {
-                AssignComponent(0);
-            }
-
-            ComponentPtr(T *_component)
-            {
-                AssignComponent(_component);
-            }
-
-            T &operator*()
-            {
-                Check();
-                return *static_cast<T*>(m_Component);
-            }
-
-            T *operator->()
-            {
-                Check();
-                return static_cast<T*>(m_Component);
-            }
-
-
-        private:
-        };
-
-        //class ComponentPtrTracker
-        //{
-        //public:
-        //    void CheckPointersValid(u8 _frame_count)
-        //    {
-        //        uint32_t list_index = _frame_count % COMPONENT_PTR_CHECK_FREQUENCY;
-        //        
-        //        ComponentPtr *component_ptr = m_Ptr[list_index];
-        //        while (component_ptr)
-        //        {
-        //            component_ptr->Check();
-        //        }
-        //    }
-
-        //private:
-        //    ComponentPtrBase *m_Ptr[COMPONENT_PTR_CHECK_FREQUENCY];
-        //};
-
+        //Anything that has components can inherit from this class to get a nice API
         class HasComponents
         {
         public:
@@ -505,15 +460,42 @@ namespace Helium
             {
                 Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
             }
-
-            //     template <class T>
-            //     T*  FindComponentsThatImplement(ComponentSet &_set, DynamicArray<Component *> _components)
-            //     {
-            //         return FindComponentsThatImplement(_host, GetType<T>);
-            //     }
-
+            
         protected:
             ComponentSet m_Components;
         };
     }
+
+    typedef Components::Component Component;
+    
+    // Code that uses T goes here
+    template <class T>
+    class ComponentPtr : public Helium::Components::ComponentPtrBase
+    {
+    public:
+        ComponentPtr()
+        {
+            AssignComponent(0);
+        }
+
+        ComponentPtr(T *_component)
+        {
+            AssignComponent(_component);
+        }
+
+        T &operator*()
+        {
+            Check();
+            return *static_cast<T*>(m_Component);
+        }
+
+        T *operator->()
+        {
+            Check();
+            return static_cast<T*>(m_Component);
+        }
+
+
+    private:
+    };
 }

@@ -77,10 +77,10 @@ namespace Helium
         //   o Dependencies of this object are traversed by Graph to compute the order of evaluation.
         //
 
-        class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public Component::ComponentCollection
+        class HELIUM_SCENE_GRAPH_API SceneNode HELIUM_ABSTRACT : public OldComponentSystem::ComponentCollection
         {
         public:
-            REFLECT_DECLARE_ABSTRACT( SceneNode, Component::ComponentCollection );
+            REFLECT_DECLARE_ABSTRACT( SceneNode, OldComponentSystem::ComponentCollection );
             static void PopulateComposite( Reflect::Composite& comp );
             static void InitializeType();
             static void CleanupType();

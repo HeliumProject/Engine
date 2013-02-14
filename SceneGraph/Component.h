@@ -1,3 +1,5 @@
+
+#if 0
 #pragma once
 
 #include "Foundation/Event.h"
@@ -12,7 +14,7 @@
 
 namespace Helium
 {
-    namespace Component
+    namespace OldComponentSystem
     {
         class ComponentCategory;
         class ComponentCollection;
@@ -125,3 +127,5 @@ namespace Helium
     }
 
 }
+
+#endif

@@ -1,3 +1,5 @@
+
+
 #pragma once
 
 #include <hash_map>
@@ -6,6 +8,22 @@
 #include "Reflect/Data/DataDeduction.h"
 
 #include "Component.h"
+
+#include "SceneGraph/API.h"
+
+namespace Helium
+{
+    namespace OldComponentSystem
+    {
+        class HELIUM_SCENE_GRAPH_API ComponentCollection : public Reflect::Object
+        {
+        public:
+            REFLECT_DECLARE_OBJECT(ComponentCollection, Reflect::Object);
+        };
+    }
+}
+        
+#if 0
 
 namespace Helium
 {
@@ -189,3 +207,4 @@ namespace Helium
         typedef Helium::StrongPtr<ComponentCollection> ComponentCollectionPtr;
     }
 }
+#endif

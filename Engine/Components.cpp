@@ -10,9 +10,9 @@ using namespace Helium;
 using namespace Helium::Components;
 using namespace Helium::Components::Private;
 
-inline Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
+inline Helium::Components::Component *GetComponentFromIndex(ComponentType &_type, uint32_t _index)
 {
-    return reinterpret_cast<Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
+    return reinterpret_cast<Helium::Components::Component *>(reinterpret_cast<char *>(_type.m_Pool) + (_index * _type.m_InstanceSize));
 }
 
 const static TypeId MAX_TYPE_ID = 0xFFFF - 1;
@@ -39,6 +39,7 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
     //HELIUM_ASSERT(_count == 0 || _structure->m_Creator);
     HELIUM_ASSERT(_count >= 0);
     HELIUM_ASSERT(Reflect::Registry::GetInstance());
+    HELIUM_ASSERT(!_base_type_data || _base_type_data->m_TypeId != NULL_TYPE_ID);
 
     // Component must be registered already
     //HELIUM_ASSERT(Component::s_Class);
@@ -105,7 +106,7 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         return type_id;
 }
 
-Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
+Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
 {
     HELIUM_UNREF(_init_data);
 
@@ -269,7 +270,7 @@ void Components::Private::RemoveFromChain(Component *_component)
     _component->m_Previous = NULL;
 }
 
-Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
+Helium::Components::Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, TypeId _type_id, bool _implements )
 {
     // First search for this type explicitly
     {
@@ -304,7 +305,7 @@ Component* Components::Private::InternalFindOneComponent( ComponentSet &_host, T
     return 0;
 }
 
-Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
+Helium::Components::Component* Components::Private::InternalFindAllComponents( ComponentSet &_host, TypeId _type_id, bool _implements, IComponentContainerAdapter &_components )
 {
     // First search for this type explicitly
     {

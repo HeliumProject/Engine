@@ -1,10 +1,12 @@
+#if 0
+
 #pragma once
 
 #include "Platform/Exception.h"
 
 namespace Helium
 {
-    namespace Component
+    namespace OldComponentSystem
     {
         class InvalidComponentCollectionException : public Helium::Exception
         {
@@ -25,3 +27,5 @@ namespace Helium
         };
     }
 }
+
+#endif

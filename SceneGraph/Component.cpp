@@ -1,6 +1,10 @@
+
+
 #include "SceneGraphPch.h"
 #include "Component.h"
 #include "ComponentCollection.h"
+
+#if 0
 
 REFLECT_DEFINE_ABSTRACT( Helium::Component::ComponentBase )
 
@@ -43,3 +47,5 @@ bool ComponentBase::ValidateSibling( const ComponentBase* attribute, tstring& er
 {
     return true;
 }
+
+#endif

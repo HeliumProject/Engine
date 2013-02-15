@@ -3,6 +3,7 @@
 #include "EditorEngine.h"
 
 #include "RenderingD3D9/D3D9Renderer.h"
+#include "Graphics/DynamicDrawer.h"
 
 
 using namespace Helium;
@@ -46,10 +47,16 @@ void EditorEngine::InitRenderer( HWND hwnd )
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Initialize();
     rRenderResourceManager.UpdateMaxViewportSize( wxSystemSettings::GetMetric(wxSYS_SCREEN_X), wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
+
+    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+    HELIUM_VERIFY( rDynamicDrawer.Initialize() );
 }
 
 void EditorEngine::Shutdown()
 {
+    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+    rDynamicDrawer.Shutdown();
+
     RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
     rRenderResourceManager.Shutdown();
     RenderResourceManager::DestroyStaticInstance();

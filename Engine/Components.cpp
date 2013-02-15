@@ -3,6 +3,7 @@
 #include "Engine/Components.h"
 
 #include "Reflect/Data/DataDeduction.h"
+#include "Engine/GameObjectType.h"
 
 REFLECT_DEFINE_BASE_STRUCTURE(Helium::Components::Component);
 
@@ -106,10 +107,8 @@ TypeId Components::Private::RegisterType( const Reflect::Structure *_structure, 
         return type_id;
 }
 
-Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type, void *_init_data)
+Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId _type)
 {
-    HELIUM_UNREF(_init_data);
-
     // Make sure type id is good
     HELIUM_ASSERT(_type < g_ComponentTypes.GetSize());
     ComponentType &type = g_ComponentTypes[_type];
@@ -141,11 +140,6 @@ Helium::Components::Component* Components::Allocate(ComponentSet &_host, TypeId 
     }
 
     component->m_OwningSet = &_host;
-
-    //_host.OnAttach(*instance.Component, _init_data);
-    // Should we call back into component here to let it do stuff?
-    // Not going to as we have this callback on the host, and the host
-    // will pass itself
 
     HELIUM_ASSERT(!component->m_PendingDelete);
 
@@ -478,4 +472,20 @@ void Helium::Components::ComponentPtrBase::Unlink()
 
     m_Previous = 0;
     m_Next = 0;
+}
+
+HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDescriptor, Engine, GameObjectType::FLAG_ABSTRACT);
+
+Helium::Component *Helium::ComponentDescriptor::CreateComponent( Helium::Components::ComponentSet &_target ) const
+{
+    m_Instance.AssignComponent(CreateComponentInternal(_target));
+    return m_Instance.Get();
+}
+
+void Helium::ComponentDescriptor::FinalizeComponent() const
+{
+    if (m_Instance.IsGood())
+    {
+        m_Instance->FinalizeComponent(this);
+    }
 }

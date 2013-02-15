@@ -10,33 +10,30 @@
 
 namespace Helium
 {
-    class HELIUM_FRAMEWORK_API ComponentDescriptor : public Helium::GameObject
-    {
-    public:
-        HELIUM_DECLARE_OBJECT(ComponentDescriptor, Helium::GameObject);
 
-        virtual Helium::Component *CreateComponent() { return NULL; }
-        //virtual void LinkComponent(
-    };
-    typedef Helium::StrongPtr<ComponentDescriptor> ComponentDescriptorPtr;
     
     class HELIUM_FRAMEWORK_API ColorComponent : public Helium::Components::Component
     {
     public:
         OBJECT_DECLARE_COMPONENT(Helium::ColorComponent, Helium::Components::Component);
-
+        
+        virtual void FinalizeComponent(const Helium::ComponentDescriptor *_descriptor);
+        
     private:
         Color4 m_Color;
+        ComponentPtr<ColorComponent> m_Pointer;
     };
 
     class HELIUM_FRAMEWORK_API ComponentDescriptor_ColorComponent : public Helium::ComponentDescriptor
     {
         HELIUM_DECLARE_OBJECT(ComponentDescriptor_ColorComponent, Helium::ComponentDescriptor);
         static void PopulateComposite( Reflect::Composite& comp );
+        
+        virtual Helium::Component *CreateComponentInternal(Helium::Components::ComponentSet &_target) const;
 
     public:
         Color4 m_Color;
-        GameObjectPtr m_Pointer;
+        ComponentDescriptorPtr m_Pointer;
     };
 
 }

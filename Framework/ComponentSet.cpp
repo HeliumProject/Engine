@@ -114,6 +114,18 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
     }
 
     // 5. Create components and populate component table
+    for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
+    {
+        //iter.->m_Component = iter.Second()->m_Descriptor->CreateComponent(_target);
+        iter->Second().m_Component = iter->Second().m_Descriptor->CreateComponent(_target);
+    }
+    
+    // 5. Create components and populate component table
+    for (M_NewComponents::Iterator iter = components.Begin(); iter != components.End(); ++iter)
+    {
+        iter->Second().m_Descriptor->FinalizeComponent();
+    }
+
     // 6. Destroy descriptor clones? Maybe keep them in TOOLS builds?
     // 7. Make each component point back to the original descriptor that made it?
 }

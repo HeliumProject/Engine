@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "Engine/GameObject.h"
 #include "Reflect/Structure.h"
 #include "Foundation/Map.h"
 #include "Foundation/SmartPtr.h"
@@ -72,6 +73,8 @@
 //TODO: Smart pointer
 namespace Helium
 {
+    class ComponentDescriptor;
+
     namespace Components
     {
         //! Component type id (not the same as the reflect class id).
@@ -124,6 +127,8 @@ namespace Helium
                 HELIUM_ASSERT(m_OwningSet);
                 m_PendingDelete = true;
             }
+
+            virtual void FinalizeComponent(const Helium::ComponentDescriptor *_descriptor) { }
 
             ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
 
@@ -262,7 +267,7 @@ namespace Helium
         }
 
         //! Provides a component to the caller of the given type, attached to the given host. Init data is passed.
-        HELIUM_ENGINE_API Component*  Allocate(ComponentSet &_host, TypeId _type, void *_init_data = NULL);
+        HELIUM_ENGINE_API Component*  Allocate(ComponentSet &_host, TypeId _type);
 
         //! Check that _implementor implements _implementee
         HELIUM_ENGINE_API bool        TypeImplementsType(TypeId _implementor, TypeId _implementee);
@@ -306,9 +311,9 @@ namespace Helium
         HELIUM_ENGINE_API void ProcessPendingDeletes();
 
         template <class T>
-        T*  Allocate(ComponentSet &_host, void *_init_data = NULL)
+        T*  Allocate(ComponentSet &_host)
         {
-            return static_cast<T *>(Allocate(_host, GetType<T>(), _init_data));
+            return static_cast<T *>(Allocate(_host, GetType<T>()));
         }
 
         template <class T>
@@ -432,9 +437,9 @@ namespace Helium
         public:
 
             template <class T>
-            T*  Allocate(void *_init_data = NULL)
+            T*  Allocate()
             {
-                return Helium::Components::Allocate<T>(m_Components, _init_data);
+                return Helium::Components::Allocate<T>(m_Components);
             }
 
             template <class T>
@@ -482,20 +487,40 @@ namespace Helium
         {
             AssignComponent(_component);
         }
-
-        T &operator*()
-        {
-            Check();
-            return *static_cast<T*>(m_Component);
-        }
-
-        T *operator->()
+        
+        T *Get()
         {
             Check();
             return static_cast<T*>(m_Component);
         }
 
+        T &operator*()
+        {
+            return *Get();
+        }
+
+        T *operator->()
+        {
+            return Get();
+        }
 
     private:
     };
+
+    class HELIUM_ENGINE_API ComponentDescriptor : public Helium::GameObject
+    {
+    public:
+        HELIUM_DECLARE_OBJECT(ComponentDescriptor, Helium::GameObject);
+
+        Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;
+
+        virtual Helium::Component *CreateComponentInternal(Helium::Components::ComponentSet &_target) const { return NULL; }
+        virtual void FinalizeComponent() const;
+
+        Helium::Component *GetCreatedComponent() const { return m_Instance.Get(); };
+
+    protected:
+        mutable Helium::ComponentPtr<Helium::Component> m_Instance;
+    };
+    typedef Helium::StrongPtr<Helium::ComponentDescriptor> ComponentDescriptorPtr;
 }

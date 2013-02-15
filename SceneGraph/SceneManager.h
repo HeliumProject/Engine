@@ -9,8 +9,6 @@
 #include "SceneGraph/Pick.h"
 #include "SceneGraph/Render.h"
 
-#include "Framework/World.h"
-
 namespace Helium
 {
     namespace SceneGraph
@@ -58,8 +56,6 @@ namespace Helium
 
             // the current scene
             SceneGraph::Scene* m_CurrentScene;
-
-            Helium::WorldPtr m_World;
 
         public:
             SceneManager();

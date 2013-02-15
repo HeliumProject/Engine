@@ -7,8 +7,6 @@
 #include "SceneGraph/SwitchSceneCommand.h"
 #include "SceneGraph/Viewport.h"
 
-#include "Framework/WorldManager.h"
-
 using namespace Helium;
 using namespace Helium::SceneGraph;
 
@@ -18,16 +16,11 @@ using namespace Helium::SceneGraph;
 SceneManager::SceneManager()
 : m_CurrentScene( NULL )
 {
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
 
-    m_World = rWorldManager.CreateDefaultWorld();
-    HELIUM_ASSERT( m_World );
-    HELIUM_VERIFY( m_World->Initialize() );
 }
 
 SceneManager::~SceneManager()
 {
-    m_World->Shutdown();
     m_Scenes.clear();
     m_DocumentToSceneTable.clear();
     m_SceneToDocumentTable.clear();
@@ -300,7 +293,6 @@ void SceneManager::SetCurrentScene( SceneGraph::Scene* scene )
 
     e_CurrentSceneChanged.Raise( SceneChangeArgs( previousScene, m_CurrentScene ) );
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over the scenes and returns the first one that is not allocated

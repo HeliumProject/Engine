@@ -9,6 +9,7 @@
 
 #include "Editor/MainFrame.h"
 #include "Editor/Tracker.h"
+#include "Editor/EditorEngine.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -61,17 +62,23 @@ namespace Helium
                 return &m_Tracker;
             }
 
+            EditorEngine* GetEngine()
+            {
+                return &m_Engine;
+            }
+
         protected:
             Helium::InitializerStack m_InitializerStack;
             bool m_Running;
 
             tstring m_AppVersion;
             tstring m_AppName;
-            tstring m_AppVerName;           
-            
+            tstring m_AppVerName;
+
             SettingsManagerPtr m_SettingsManager;
             MainFrame* m_Frame;
             Tracker m_Tracker;
+            EditorEngine m_Engine;
 
             DECLARE_EVENT_TABLE();
         };

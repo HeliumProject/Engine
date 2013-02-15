@@ -10,7 +10,6 @@
 
 #include <algorithm>
 
-using namespace Helium;
 using namespace Helium::SceneGraph;
 
 void Resource::Create()

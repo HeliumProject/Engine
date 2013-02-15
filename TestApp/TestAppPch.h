@@ -67,10 +67,6 @@
 
 namespace Helium
 {
-    class Camera;
-    typedef Helium::StrongPtr< Camera > CameraPtr;
-    typedef Helium::StrongPtr< const Camera > ConstCameraPtr;
-
     class SkeletalMeshEntity;
     typedef Helium::StrongPtr< SkeletalMeshEntity > SkeletalMeshEntityPtr;
     typedef Helium::StrongPtr< const SkeletalMeshEntity > ConstSkeletalMeshEntityPtr;

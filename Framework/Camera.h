@@ -59,6 +59,9 @@ namespace Helium
         /// Horizontal field-of-view angle, in degrees.
         float32_t m_fov;
     };
+
+    typedef Helium::StrongPtr< Camera > CameraPtr;
+    typedef Helium::StrongPtr< const Camera > ConstCameraPtr;
 }
 
 #include "Framework/Camera.inl"

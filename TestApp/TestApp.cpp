@@ -169,12 +169,16 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
     component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
-    component_set->AddLinkage(Name(TXT("ColorComponent1")), Name(TXT("ColorComponent2")), Name(TXT("m_Pointer")));
+    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
+    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
 
     Helium::Components::ComponentSet instantiated_components;
 
-    ComponentFactory factory;
-    factory.DeployComponents(*component_set, instantiated_components);
+    ParameterSet param_set;
+    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
+
+    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
+
 
     uint32_t displayWidth;
     uint32_t displayHeight;

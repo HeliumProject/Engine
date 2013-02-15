@@ -10,31 +10,26 @@
 #include "Engine/Components.h"
 
 #include "Framework/ComponentDescriptor.h"
+#include "Reflect/Data/Data.h"
 
 namespace Helium
 {
-    class HELIUM_FRAMEWORK_API ComponentInitContext
+    class ComponentSet;
+    class ParameterSet;
+
+    namespace Components
     {
-        struct ComponentListEntry
-        {
-            Name m_Name;
-            ComponentDescriptor *m_Descriptor;
-            Helium::Components::Component *m_Component;
-        };
-
-        DynamicArray<ComponentListEntry> m_Components;
-    };
-
-    class ComponentFactory;
+        void HELIUM_FRAMEWORK_API DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+    }
 
     class HELIUM_FRAMEWORK_API ComponentSet : public Helium::GameObject
     {
     public:
         HELIUM_DECLARE_OBJECT(Helium::ComponentSet, Helium::GameObject);
         void AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDescriptor> _color_descriptor );
-        void AddLinkage( Helium::Name _to, Helium::Name _from, Helium::Name _field_name );
+        void AddParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name );
         
-        friend ComponentFactory;
+        friend void Helium::Components::DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
 
     private:
 
@@ -44,15 +39,7 @@ namespace Helium
             Helium::StrongPtr<ComponentDescriptor> m_ComponentDescriptor;
         };
 
-        struct Linkage
-        {
-            Name m_ComponentName;
-            Name m_ComponentFieldName;
-            
-            Name m_OtherComponentName;
-        };
-
-        struct NamedParameter
+        struct Parameter
         {
             Name m_ComponentName;
             Name m_ComponentFieldName;
@@ -61,32 +48,46 @@ namespace Helium
         };
 
         DynamicArray<DescriptorListEntry> m_Descriptors;
-        DynamicArray<Linkage> m_Linkages;
-        DynamicArray<NamedParameter> m_NamedParameter;
-    };
-    
-    struct IParameter
-    {
-        virtual ~IParameter() { }
-    };
-    
-    template <class T>
-    struct Parameter : public IParameter
-    {
-        Name m_Name;
-        T m_Parameter;
+        DynamicArray<Parameter> m_Parameters;
     };
 
-    class HELIUM_FRAMEWORK_API ComponentFactory
+    class HELIUM_FRAMEWORK_API ParameterSet
     {
     public:
-        ComponentFactory()
-            : m_Heap(64)
+        struct IParameter
+        {
+            virtual Name GetName() = 0;
+            virtual Reflect::DataPtr GetDataPtr() = 0;
+
+            // This has to be here or I get warnings. TODO: Figure out what needs to be in this function if anything.
+            void operator delete(void *, Helium::MemoryHeap &) { }
+            virtual ~IParameter() { }
+        };
+    
+        template <class T>
+        struct Parameter : public IParameter
+        {
+            virtual ~Parameter() { }
+
+            virtual Name GetName() { return m_Name; }
+            virtual Reflect::DataPtr GetDataPtr()
+            {
+                Reflect::DataPtr data(Reflect::AssertCast<Helium::Reflect::Data>(Reflect::GetDataClass<T>()->m_Creator()));
+                data->ConnectData(&m_Parameter);
+                return data;
+            }
+
+            Name m_Name;
+            T m_Parameter;
+        };
+
+        ParameterSet(size_t _block_size = 128)
+            : m_Heap(_block_size)
         {
 
         }
 
-        ~ComponentFactory()
+        ~ParameterSet()
         {
             for (size_t count = m_Parameters.GetSize() - 1; count >= 0; --count)
             {
@@ -106,8 +107,9 @@ namespace Helium
             param->m_Parameter = value;
             m_Parameters.Add(param);
         }
+        
+        friend void Helium::Components::DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
 
-        void DeployComponents(ComponentSet &set, Helium::Components::ComponentSet &_components);
     };
 }
 

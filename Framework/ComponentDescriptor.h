@@ -10,12 +10,6 @@
 
 namespace Helium
 {
-    struct IComponentLinkContext
-    {
-        virtual void GetComponentByName() = 0;
-        virtual void GetComponentByType() = 0;
-    };
-
     class HELIUM_FRAMEWORK_API ComponentDescriptor : public Helium::GameObject
     {
     public:
@@ -25,9 +19,7 @@ namespace Helium
         //virtual void LinkComponent(
     };
     typedef Helium::StrongPtr<ComponentDescriptor> ComponentDescriptorPtr;
-
-
-
+    
     class HELIUM_FRAMEWORK_API ColorComponent : public Helium::Components::Component
     {
     public:

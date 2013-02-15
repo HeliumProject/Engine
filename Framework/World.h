@@ -24,9 +24,9 @@ namespace Helium
     typedef Helium::StrongPtr< GraphicsScene > GraphicsScenePtr;
     typedef Helium::StrongPtr< const GraphicsScene > ConstGraphicsScenePtr;
 
-    class Layer;
-    typedef Helium::StrongPtr< Layer > LayerPtr;
-    typedef Helium::StrongPtr< const Layer > ConstLayerPtr;
+    class Slice;
+    typedef Helium::StrongPtr< Slice > SlicePtr;
+    typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
 
     /// World instance.
     ///
@@ -63,19 +63,19 @@ namespace Helium
         /// @name Entity Creation
         //@{
         virtual Entity* CreateEntity(
-            Layer* pLayer, const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
+            Slice* pSlice, const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
             const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
             Entity* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
         virtual bool DestroyEntity( Entity* pEntity );
         //@}
 
-        /// @name Layer Registration
+        /// @name Slice Registration
         //@{
-        virtual bool AddLayer( Layer* pLayer );
-        virtual bool RemoveLayer( Layer* pLayer );
+        virtual bool AddSlice( Slice* pSlice );
+        virtual bool RemoveSlice( Slice* pSlice );
 
-        inline size_t GetLayerCount() const;
-        Layer* GetLayer( size_t index ) const;
+        inline size_t GetSliceCount() const;
+        Slice* GetSlice( size_t index ) const;
         //@}
 
         /// @name Scene Access
@@ -84,12 +84,15 @@ namespace Helium
         //@}
 
     private:
-        /// Active layers.
-        DynamicArray< LayerPtr > m_layers;
+        /// Active slices.
+        DynamicArray< SlicePtr > m_slices;
 
         /// Graphics scene instance.
         GraphicsScenePtr m_spGraphicsScene;
     };
+
+    typedef Helium::StrongPtr< World > WorldPtr;
+    typedef Helium::StrongPtr< const World > ConstWorldPtr;
 }
 
 #include "Framework/World.inl"

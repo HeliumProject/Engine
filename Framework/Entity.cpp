@@ -1,7 +1,7 @@
 #include "FrameworkPch.h"
 #include "Framework/Entity.h"
 
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::Entity, Framework, 0 );
 
@@ -12,7 +12,7 @@ Entity::Entity()
 : m_position( 0.0f )
 , m_rotation( Simd::Quat::IDENTITY )
 , m_scale( 1.0f )
-, m_layerIndex( Invalid< size_t >() )
+, m_sliceIndex( Invalid< size_t >() )
 , m_updatePhaseFlags( 0 )
 , m_pendingDeferredWorkFlags( 0 )
 , m_deferredWorkFlags( 0 )
@@ -22,7 +22,7 @@ Entity::Entity()
 /// Destructor.
 Entity::~Entity()
 {
-    HELIUM_ASSERT( !m_spLayer );
+    HELIUM_ASSERT( !m_spSlice );
 }
 
 //PMDTODO: Implement this
@@ -193,52 +193,52 @@ void Entity::SetScale( const Simd::Vector3& rScale )
     m_scale = rScale;
 }
 
-/// Set the layer to which this entity is currently bound, along with the index of this entity within the layer.
+/// Set the slice to which this entity is currently bound, along with the index of this entity within the slice.
 ///
-/// @param[in] pLayer      Layer to set.
-/// @param[in] layerIndex  Index within the layer to set.
+/// @param[in] pSlice      Slice to set.
+/// @param[in] sliceIndex  Index within the slice to set.
 ///
-/// @see SetLayerIndex(), GetLayer(), GetLayerIndex(), ClearLayerInfo()
-void Entity::SetLayerInfo( Layer* pLayer, size_t layerIndex )
+/// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
+void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
 {
-    HELIUM_ASSERT( pLayer );
-    HELIUM_ASSERT( IsValid( layerIndex ) );
+    HELIUM_ASSERT( pSlice );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
 
-    m_spLayer = pLayer;
-    m_layerIndex = layerIndex;
+    m_spSlice = pSlice;
+    m_sliceIndex = sliceIndex;
 }
 
-/// Update the index of this entity within its layer.
+/// Update the index of this entity within its slice.
 ///
-/// @param[in] layerIndex  Index within the layer to set.
+/// @param[in] sliceIndex  Index within the slice to set.
 ///
-/// @see SetLayerInfo(), GetLayer(), GetLayerIndex(), ClearLayerInfo()
-void Entity::SetLayerIndex( size_t layerIndex )
+/// @see SetSliceInfo(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
+void Entity::SetSliceIndex( size_t sliceIndex )
 {
-    HELIUM_ASSERT( m_spLayer );
-    HELIUM_ASSERT( IsValid( layerIndex ) );
+    HELIUM_ASSERT( m_spSlice );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
 
-    m_layerIndex = layerIndex;
+    m_sliceIndex = sliceIndex;
 }
 
-/// Clear out any currently set layer binding information.
+/// Clear out any currently set slice binding information.
 ///
-/// @see SetLayerInfo(), SetLayerIndex(), GetLayer(), GetLayerIndex()
-void Entity::ClearLayerInfo()
+/// @see SetSliceInfo(), SetSliceIndex(), GetSlice(), GetSliceIndex()
+void Entity::ClearSliceInfo()
 {
-    m_spLayer.Release();
-    SetInvalid( m_layerIndex );
+    m_spSlice.Release();
+    SetInvalid( m_sliceIndex );
 }
 
 /// Get the world to which this entity is currently bound.
 ///
 /// @return  Entity world.
 ///
-/// @see GetLayer()
+/// @see GetSlice()
 WorldWPtr Entity::GetWorld() const
 {
     VerifySafety();
-    return ( m_spLayer ? m_spLayer->GetWorld() : WorldWPtr() );
+    return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
 }
 
 /// Set the update phase flags for this entity.

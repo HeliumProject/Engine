@@ -302,19 +302,19 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_VERIFY( spWorld->Initialize() );
     HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
 
-    PackagePtr spLayerPackage;
-    HELIUM_VERIFY( GameObject::Create< Package >( spLayerPackage, Name( TXT( "DefaultLayerPackage" ) ), NULL ) );
-    HELIUM_ASSERT( spLayerPackage );
+    PackagePtr spSlicePackage;
+    HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
+    HELIUM_ASSERT( spSlicePackage );
 
-    LayerPtr spLayer;
-    HELIUM_VERIFY( GameObject::Create< Layer >( spLayer, Name( TXT( "Layer" ) ), spLayerPackage ) );
-    HELIUM_ASSERT( spLayer );
-    spLayer->BindPackage( spLayerPackage );
+    SlicePtr spSlice;
+    HELIUM_VERIFY( GameObject::Create< Slice >( spSlice, Name( TXT( "Slice" ) ), spSlicePackage ) );
+    HELIUM_ASSERT( spSlice );
+    spSlice->BindPackage( spSlicePackage );
 
-    HELIUM_VERIFY( spWorld->AddLayer( spLayer ) );
+    HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
 
     CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         Camera::GetStaticType(),
         Simd::Vector3( 0.0f, 200.0f, 750.0f ),
         Simd::Quat( 0.0f, static_cast< float32_t >( HELIUM_PI ), 0.0f ),
@@ -325,7 +325,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     HELIUM_ASSERT( spMainCamera );
 
     CameraPtr spSubCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         Camera::GetStaticType(),
         Simd::Vector3( 750.0f, 200.0f, 0.0f ),
         Simd::Quat( 0.0f, static_cast< float32_t >( -HELIUM_PI_2 ), 0.0f ),
@@ -395,7 +395,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
     Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
     SkeletalMeshEntityPtr spMeshEntity( Reflect::AssertCast< SkeletalMeshEntity >( spWorld->CreateEntity(
-        spLayer,
+        spSlice,
         SkeletalMeshEntity::GetStaticType(),
         Simd::Vector3( 0.0f, -20.0f, 0.0f ),
         meshEntityBaseRotation ) ) );
@@ -507,13 +507,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     spWorld->Shutdown();
                 }
 
-                if( spLayer )
+                if( spSlice )
                 {
-                    spLayer->BindPackage( NULL );
+                    spSlice->BindPackage( NULL );
                 }
 
-                spLayerPackage.Release();
-                spLayer.Release();
+                spSlicePackage.Release();
+                spSlice.Release();
                 spWorld.Release();
                 WorldManager::DestroyStaticInstance();
 
@@ -623,13 +623,13 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         spWorld->Shutdown();
     }
 
-    if( spLayer )
+    if( spSlice )
     {
-        spLayer->BindPackage( NULL );
+        spSlice->BindPackage( NULL );
     }
 
-    spLayerPackage.Release();
-    spLayer.Release();
+    spSlicePackage.Release();
+    spSlice.Release();
     spWorld.Release();
     WorldManager::DestroyStaticInstance();
 

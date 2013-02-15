@@ -14,7 +14,9 @@
 #include "SceneGraph/Camera.h"
 #include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/ViewportSettings.h"
-#include "SceneGraph/DeviceManager.h"
+
+#include "Framework/Camera.h"
+#include "Framework/Slice.h"
 
 namespace Helium
 {
@@ -215,7 +217,7 @@ namespace Helium
             static const Helium::Color s_GreenMaterial;
             static const Helium::Color s_BlueMaterial;
 
-            Viewport( HWND wnd, SettingsManager* settingsManager );
+            Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorSlice );
             ~Viewport();
 
             void Reset();
@@ -327,9 +329,10 @@ namespace Helium
             SceneGraph::Primitive* GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which );
 
         private:
-            void InitDevice( HWND wnd );
             void InitWidgets();
             void InitCameras();
+
+            void RefreshContext();
 
         public:
             void SetSize(uint32_t x, uint32_t y);
@@ -458,8 +461,11 @@ namespace Helium
 
             SettingsManager*        m_SettingsManager;
 
-            DeviceManager           m_DeviceManager;
             RenderVisitor           m_RenderVisitor;
+
+            SlicePtr                m_EditorSlice;
+            CameraPtr               m_CameraEntity;
+            uint32_t                m_SceneViewId;
 
             Tool*                   m_Tool;
             Camera                  m_Cameras[CameraMode::Count];

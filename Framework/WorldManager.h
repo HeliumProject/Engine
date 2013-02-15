@@ -11,6 +11,8 @@
 
 #include "Framework/World.h"
 
+#include "Engine/Package.h"
+
 #include "Platform/Thread.h"
 
 /// Non-zero to enable debug verification of methods called on Entity-based instances during world updates.
@@ -18,10 +20,6 @@
 
 namespace Helium
 {
-    class World;
-    typedef Helium::StrongPtr< World > WorldPtr;
-    typedef Helium::StrongPtr< const World > ConstWorldPtr;
-
     /// Manager for individual World instances.
     class HELIUM_FRAMEWORK_API WorldManager : NonCopyable
     {

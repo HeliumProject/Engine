@@ -16,7 +16,7 @@
         <parameters>
             <input name="pspWorlds" type="const WorldPtr*" description="Array of worlds to update." />
             <input name="worldCount" type="size_t" description="Number of worlds in the given array." />
-            <input name="startLayerIndex" type="size_t" default="0" description="Index of the layer from which to start spawning update jobs." />
+            <input name="startSliceIndex" type="size_t" default="0" description="Index of the slice from which to start spawning update jobs." />
             <input name="startEntityIndex" type="size_t" default="0" description="Index of the entity from which to start spawning update jobs." />
         </parameters>
     </job>

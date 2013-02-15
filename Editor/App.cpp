@@ -96,7 +96,6 @@
 using namespace Helium;
 using namespace Helium::Editor;
 using namespace Helium::CommandLine;
-using namespace Helium;
 
 extern void RegisterEngineTypes();
 extern void RegisterGraphicsTypes();
@@ -333,6 +332,12 @@ bool App::OnInit()
     HELIUM_VERIFY( rJobManager.Initialize() );
     m_InitializerStack.Push( JobManager::DestroyStaticInstance );
 
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    HELIUM_VERIFY( rWorldManager.Initialize() );
+    m_InitializerStack.Push( WorldManager::DestroyStaticInstance );
+
+    m_Engine.Initialize();
+
     LoadSettings();
 
     if ( Log::GetErrorCount() )
@@ -342,7 +347,8 @@ bool App::OnInit()
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
-    m_Frame = new MainFrame( m_SettingsManager );
+    // The MainFrame ctor calls EditorEngine::InitRendering since we need its hwnd to create the device.
+    m_Frame = new MainFrame( m_SettingsManager, &m_Engine );
     m_Frame->Show();
 
     if ( GetSettingsManager()->GetSettings< EditorSettings >()->GetReopenLastProjectOnStartup() )
@@ -378,6 +384,8 @@ int App::OnExit()
     Disconnect( wxEVT_CHAR, wxKeyEventHandler( App::OnChar ), NULL, this );
 
     SaveSettings();
+
+    m_Engine.Shutdown();
 
     m_SettingsManager.Release();
 

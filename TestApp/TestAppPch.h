@@ -41,7 +41,7 @@
 #include "Graphics/RenderResourceManager.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Framework/Camera.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 #include "Framework/Mesh.h"
 #include "Framework/SkeletalMeshEntity.h"
 #include "Framework/StaticMeshEntity.h"
@@ -67,10 +67,6 @@
 
 namespace Helium
 {
-    class Camera;
-    typedef Helium::StrongPtr< Camera > CameraPtr;
-    typedef Helium::StrongPtr< const Camera > ConstCameraPtr;
-
     class SkeletalMeshEntity;
     typedef Helium::StrongPtr< SkeletalMeshEntity > SkeletalMeshEntityPtr;
     typedef Helium::StrongPtr< const SkeletalMeshEntity > ConstSkeletalMeshEntityPtr;

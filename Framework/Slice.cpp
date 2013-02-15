@@ -1,33 +1,33 @@
 #include "FrameworkPch.h"
-#include "Framework/Layer.h"
+#include "Framework/Slice.h"
 
 #include "Framework/World.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Layer, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Helium::Slice, Framework, 0 );
 
 using namespace Helium;
 
 /// Constructor.
-Layer::Layer()
+Slice::Slice()
 : m_worldIndex( Invalid< size_t >() )
 {
 }
 
 /// Destructor.
-Layer::~Layer()
+Slice::~Slice()
 {
     HELIUM_ASSERT( !m_spWorld );
 }
 
 //PMDTODO: Implement this
 ///// @copydoc GameObject::Serialize()
-//void Layer::Serialize( Serializer& s )
+//void Slice::Serialize( Serializer& s )
 //{
 //    HELIUM_SERIALIZE_BASE( s );
 //
 //    s << HELIUM_TAGGED( m_spPackage );
 //
-//    // Serialize entities manually when linking so that we can update their layer references at the same time.
+//    // Serialize entities manually when linking so that we can update their slice references at the same time.
 //    s << Serializer::Tag( TXT( "m_entities" ) );
 //
 //    bool bLinking = ( s.GetMode() == Serializer::MODE_LINK );
@@ -47,8 +47,8 @@ Layer::~Layer()
 //            Entity* pEntity = rspEntity;
 //            if( pEntity )
 //            {
-//                HELIUM_ASSERT( pEntity->GetLayer().Get() == NULL );
-//                pEntity->SetLayerInfo( this, entityIndex );
+//                HELIUM_ASSERT( pEntity->GetSlice().Get() == NULL );
+//                pEntity->SetSliceInfo( this, entityIndex );
 //            }
 //        }
 //
@@ -63,20 +63,20 @@ Layer::~Layer()
 //    size_t entityCount = m_entities.GetSize();
 //    HELIUM_UNREF( entityCount );
 //    StripNonPackageEntities();
-//    HELIUM_ASSERT_MSG( entityCount == m_entities.GetSize(), TXT( "Layer contained non-package entities." ) );
+//    HELIUM_ASSERT_MSG( entityCount == m_entities.GetSize(), TXT( "Slice contained non-package entities." ) );
 //#endif
 //}
 
-/// Bind a package with this layer.
+/// Bind a package with this slice.
 ///
 /// When a package is initially bound, all entities currently within the package will also be registered with the
-/// layer.  Entities belonging to the any previously bound package will be unregistered.  Nothing will happen if the
-/// given package is already bound to this layer.
+/// slice.  Entities belonging to the any previously bound package will be unregistered.  Nothing will happen if the
+/// given package is already bound to this slice.
 ///
 /// @param[in] pPackage  Package to bind.
 ///
 /// @see GetPackage()
-void Layer::BindPackage( Package* pPackage )
+void Slice::BindPackage( Package* pPackage )
 {
     if( m_spPackage.Get() == pPackage )
     {
@@ -87,7 +87,7 @@ void Layer::BindPackage( Package* pPackage )
     AddPackageEntities();
 }
 
-/// Create an entity within this layer and store it in the entity list.
+/// Create an entity within this slice and store it in the entity list.
 ///
 /// @param[in] pType                 Type of entity to create.
 /// @param[in] rPosition             Entity position.
@@ -102,7 +102,7 @@ void Layer::BindPackage( Package* pPackage )
 /// @return  Pointer to the entity instance if created successfully, null if not.
 ///
 /// @see DestroyEntity()
-Entity* Layer::CreateEntity(
+Entity* Slice::CreateEntity(
     const GameObjectType* pType,
     const Simd::Vector3& rPosition,
     const Simd::Quat& rRotation,
@@ -116,7 +116,7 @@ Entity* Layer::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Layer::CreateEntity(): Layer \"%s\" is not bound to a package.\n" ),
+            TXT( "Slice::CreateEntity(): Slice \"%s\" is not bound to a package.\n" ),
             *GetPath().ToString() );
 
         return NULL;
@@ -125,7 +125,7 @@ Entity* Layer::CreateEntity(
     HELIUM_ASSERT( pType );
     if( !pType )
     {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "Layer::CreateEntity(): No entity type specified.\n" ) );
+        HELIUM_TRACE( TraceLevels::Error, TXT( "Slice::CreateEntity(): No entity type specified.\n" ) );
 
         return NULL;
     }
@@ -136,7 +136,7 @@ Entity* Layer::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Layer::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
+            TXT( "Slice::CreateEntity(): GameObjectType \"%s\" specified is not an entity type.\n" ),
             *pType->GetName() );
 
         return NULL;
@@ -152,7 +152,7 @@ Entity* Layer::CreateEntity(
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            ( TXT( "Layer::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in layer package \"%s\" " )
+            ( TXT( "Slice::CreateEntity(): Failed to create entity \"%s\" of type \"%s\" in slice package \"%s\" " )
               TXT( "(template: %s; assign instance index: %s).\n" ) ),
             *name,
             *pType->GetName(),
@@ -170,41 +170,41 @@ Entity* Layer::CreateEntity(
     pEntity->SetRotation( rRotation );
     pEntity->SetScale( rScale );
 
-    size_t layerIndex = m_entities.Push( pEntity );
-    HELIUM_ASSERT( IsValid( layerIndex ) );
-    pEntity->SetLayerInfo( this, layerIndex );
+    size_t sliceIndex = m_entities.Push( pEntity );
+    HELIUM_ASSERT( IsValid( sliceIndex ) );
+    pEntity->SetSliceInfo( this, sliceIndex );
 
     return pEntity;
 }
 
-/// Destroy an entity in this layer.
+/// Destroy an entity in this slice.
 ///
 /// @param[in] pEntity  Entity to destroy.
 ///
 /// @return  True if entity destruction was successful, false if not.
 ///
 /// @see CreateEntity()
-bool Layer::DestroyEntity( Entity* pEntity )
+bool Slice::DestroyEntity( Entity* pEntity )
 {
     HELIUM_ASSERT( pEntity );
 
-    // Make sure the entity is part of this layer.
-    if( pEntity->GetLayer().Get() != this )
+    // Make sure the entity is part of this slice.
+    if( pEntity->GetSlice().Get() != this )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "Layer::DestroyEntity(): Entity \"%s\" is not part of layer \"%s\".\n" ),
+            TXT( "Slice::DestroyEntity(): Entity \"%s\" is not part of slice \"%s\".\n" ),
             *pEntity->GetPath().ToString(),
             *GetPath().ToString() );
 
         return false;
     }
 
-    // Clear the entity's references back to this layer and remove it from the entity list.
-    size_t index = pEntity->GetLayerIndex();
+    // Clear the entity's references back to this slice and remove it from the entity list.
+    size_t index = pEntity->GetSliceIndex();
     HELIUM_ASSERT( index < m_entities.GetSize() );
 
-    pEntity->ClearLayerInfo();
+    pEntity->ClearSliceInfo();
     m_entities.RemoveSwap( index );
 
     // Update the index of the entity which has been moved to fill the entity list entry we just removed.
@@ -213,20 +213,20 @@ bool Layer::DestroyEntity( Entity* pEntity )
     {
         Entity* pMovedEntity = m_entities[ index ];
         HELIUM_ASSERT( pMovedEntity );
-        HELIUM_ASSERT( pMovedEntity->GetLayerIndex() == entityCount );
-        pMovedEntity->SetLayerIndex( index );
+        HELIUM_ASSERT( pMovedEntity->GetSliceIndex() == entityCount );
+        pMovedEntity->SetSliceIndex( index );
     }
 
     return true;
 }
 
-/// Set the world to which this layer is currently bound, along with the index of this layer within the world.
+/// Set the world to which this slice is currently bound, along with the index of this slice within the world.
 ///
 /// @param[in] pWorld      World to set.
 /// @param[in] worldIndex  Index within the world to set.
 ///
 /// @see SetWorldIndex(), GetWorld(), GetWorldIndex(), ClearWorldInfo()
-void Layer::SetWorldInfo( World* pWorld, size_t worldIndex )
+void Slice::SetWorldInfo( World* pWorld, size_t worldIndex )
 {
     HELIUM_ASSERT( pWorld );
     HELIUM_ASSERT( IsValid( worldIndex ) );
@@ -235,12 +235,12 @@ void Layer::SetWorldInfo( World* pWorld, size_t worldIndex )
     m_worldIndex = worldIndex;
 }
 
-/// Update the index of this layer within its world.
+/// Update the index of this slice within its world.
 ///
 /// @param[in] worldIndex  Index within the world to set.
 ///
 /// @see SetWorldInfo(), GetWorld(), GetWorldIndex(), ClearWorldInfo()
-void Layer::SetWorldIndex( size_t worldIndex )
+void Slice::SetWorldIndex( size_t worldIndex )
 {
     HELIUM_ASSERT( m_spWorld );
     HELIUM_ASSERT( IsValid( worldIndex ) );
@@ -251,14 +251,14 @@ void Layer::SetWorldIndex( size_t worldIndex )
 /// Clear out any currently set world binding information.
 ///
 /// @see SetWorldInfo(), SetWorldIndex(), GetWorld(), GetWorldIndex()
-void Layer::ClearWorldInfo()
+void Slice::ClearWorldInfo()
 {
     m_spWorld.Release();
     SetInvalid( m_worldIndex );
 }
 
-/// Register entities with this layer that are directly part of the bound package.
-void Layer::AddPackageEntities()
+/// Register entities with this slice that are directly part of the bound package.
+void Slice::AddPackageEntities()
 {
     // Clear out all existing entities.
     size_t entityCount = m_entities.GetSize();
@@ -266,7 +266,7 @@ void Layer::AddPackageEntities()
     {
         Entity* pEntity = m_entities[ entityIndex ];
         HELIUM_ASSERT( pEntity );
-        pEntity->ClearLayerInfo();
+        pEntity->ClearSliceInfo();
     }
 
     m_entities.Clear();
@@ -284,17 +284,17 @@ void Layer::AddPackageEntities()
         EntityPtr spEntity( Reflect::SafeCast< Entity >( pChild ) );
         if( spEntity )
         {
-            HELIUM_ASSERT( spEntity->GetLayer().Get() == NULL );
+            HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );
 
             size_t entityIndex = m_entities.Push( spEntity );
             HELIUM_ASSERT( IsValid( entityIndex ) );
-            spEntity->SetLayerInfo( this, entityIndex );
+            spEntity->SetSliceInfo( this, entityIndex );
         }
     }
 }
 
-/// Unregister entities in this layer than are not directly part of the bound package.
-void Layer::StripNonPackageEntities()
+/// Unregister entities in this slice than are not directly part of the bound package.
+void Slice::StripNonPackageEntities()
 {
     // If no package is bound, no entities should be bound.
     Package* pPackage = m_spPackage;
@@ -304,7 +304,7 @@ void Layer::StripNonPackageEntities()
         {
             HELIUM_TRACE(
                 TraceLevels::Warning,
-                ( TXT( "Layer::StripNonPackageEntities(): Layer contains %" ) TPRIuSZ TXT( " entities, but has " )
+                ( TXT( "Slice::StripNonPackageEntities(): Slice contains %" ) TPRIuSZ TXT( " entities, but has " )
                 TXT( "no package bound.  Entities will be removed.\n" ) ),
                 m_entities.GetSize() );
         }
@@ -325,12 +325,12 @@ void Layer::StripNonPackageEntities()
         {
             HELIUM_TRACE(
                 TraceLevels::Warning,
-                ( TXT( "Layer::StripNonPackageEntities(): Entity \"%s\" is not directly part of the bound " )
+                ( TXT( "Slice::StripNonPackageEntities(): Entity \"%s\" is not directly part of the bound " )
                 TXT( "package \"%s\".  Entity will be removed.\n" ) ),
                 *pEntity->GetPath().ToString(),
                 *pPackage->GetPath().ToString() );
 
-            pEntity->ClearLayerInfo();
+            pEntity->ClearSliceInfo();
             m_entities.RemoveSwap( entityIndex );
 
             --entityIndex;

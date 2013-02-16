@@ -5,7 +5,7 @@
 #include "Rendering/RSurface.h"
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/RenderResourceManager.h"
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -94,10 +94,10 @@ void World::PreDestroy()
 /// Create an entity in this world.
 ///
 /// @param[in] pSlice                Slice in which to create the entity.
-/// @param[in] pType                 Entity type.
-/// @param[in] rPosition             Entity position.
-/// @param[in] rRotation             Entity rotation.
-/// @param[in] rScale                Entity scale.
+/// @param[in] pType                 EntityDefinition type.
+/// @param[in] rPosition             EntityDefinition position.
+/// @param[in] rRotation             EntityDefinition rotation.
+/// @param[in] rScale                EntityDefinition scale.
 /// @param[in] pTemplate             Template from which to create the entity.
 /// @param[in] name                  GameObject name to assign to the entity, or a null name to automatically generate a
 ///                                  name based on the entity type.
@@ -107,13 +107,13 @@ void World::PreDestroy()
 /// @return  Pointer to the entity instance if created successfully, null if not.
 ///
 /// @see DestroyEntity()
-Entity* World::CreateEntity(
+EntityDefinition* World::CreateEntity(
     Slice* pSlice,
     const GameObjectType* pType,
     const Simd::Vector3& rPosition,
     const Simd::Quat& rRotation,
     const Simd::Vector3& rScale,
-    Entity* pTemplate,
+    EntityDefinition* pTemplate,
     Name name,
     bool bAssignInstanceIndex )
 {
@@ -140,7 +140,7 @@ Entity* World::CreateEntity(
     }
 
     // Attempt to create the entity.
-    Entity* pEntity = pSlice->CreateEntity(
+    EntityDefinition* pEntity = pSlice->CreateEntity(
         pType,
         rPosition,
         rRotation,
@@ -164,12 +164,12 @@ Entity* World::CreateEntity(
 
 /// Destroy an entity in this world.
 ///
-/// @param[in] pEntity  Entity to destroy.
+/// @param[in] pEntity  EntityDefinition to destroy.
 ///
 /// @return  True if the entity was destroyed successfully, false if not.
 ///
 /// @see CreateEntity()
-bool World::DestroyEntity( Entity* pEntity )
+bool World::DestroyEntity( EntityDefinition* pEntity )
 {
     HELIUM_ASSERT( pEntity );
 
@@ -179,7 +179,7 @@ bool World::DestroyEntity( Entity* pEntity )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::DestroyEntity(): Entity \"%s\" is not bound to a slice.\n" ),
+            TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not bound to a slice.\n" ),
             *pEntity->GetPath().ToString() );
 
         return false;
@@ -190,7 +190,7 @@ bool World::DestroyEntity( Entity* pEntity )
     {
         HELIUM_TRACE(
             TraceLevels::Error,
-            TXT( "World::DestroyEntity(): Entity \"%s\" is not part of world \"%s\".\n" ),
+            TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not part of world \"%s\".\n" ),
             *pEntity->GetPath().ToString() );
 
         return false;
@@ -241,7 +241,7 @@ bool World::AddSlice( Slice* pSlice )
     size_t entityCount = pSlice->GetEntityCount();
     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
     {
-        Entity* pEntity = pSlice->GetEntity( entityIndex );
+        EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
     }
 
@@ -275,7 +275,7 @@ bool World::RemoveSlice( Slice* pSlice )
     size_t entityCount = pSlice->GetEntityCount();
     for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
     {
-        Entity* pEntity = pSlice->GetEntity( entityIndex );
+        EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
     }
 

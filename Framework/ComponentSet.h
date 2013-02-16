@@ -9,7 +9,7 @@
 #include "Engine/GameObject.h"
 #include "Engine/Components.h"
 
-#include "Framework/ComponentDescriptor.h"
+#include "Framework/ComponentDefinition.h"
 #include "Reflect/Data/Data.h"
 
 namespace Helium
@@ -26,7 +26,7 @@ namespace Helium
     {
     public:
         HELIUM_DECLARE_OBJECT(Helium::ComponentSet, Helium::GameObject);
-        void AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDescriptor> _color_descriptor );
+        void AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDefinition> _color_descriptor );
         void AddParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name );
         
         friend void Helium::Components::DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
@@ -36,7 +36,7 @@ namespace Helium
         struct DescriptorListEntry
         {
             Name m_ComponentName;
-            Helium::StrongPtr<ComponentDescriptor> m_ComponentDescriptor;
+            Helium::StrongPtr<ComponentDefinition> m_ComponentDescriptor;
         };
 
         struct Parameter

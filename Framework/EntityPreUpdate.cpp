@@ -9,7 +9,7 @@
 #include "Framework/FrameworkInterface.h"
 
 #include "Engine/JobManager.h"
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 #include "Framework/WorldManager.h"
 
 using namespace Helium;
@@ -20,7 +20,7 @@ using namespace Helium;
 void EntityPreUpdate::Run( JobContext* /*pContext*/ )
 {
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    Entity* pEntity = GetParameters().pEntity;
+    EntityDefinition* pEntity = GetParameters().pEntity;
     pEntity->PreUpdate( rWorldManager.GetFrameDeltaSeconds() );
 #if 0
     HELIUM_ASSERT( pEntity );

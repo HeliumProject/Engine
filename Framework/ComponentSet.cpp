@@ -7,7 +7,7 @@ HELIUM_IMPLEMENT_OBJECT(Helium::ComponentSet, Framework, 0);
 struct NewComponent
 {
     Helium::Component *m_Component;
-    Helium::StrongPtr<Helium::ComponentDescriptor> m_Descriptor;
+    Helium::StrongPtr<Helium::ComponentDefinition> m_Descriptor;
 };
 
 struct DefinedParameter
@@ -35,7 +35,7 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
 
         // Clone it
         Reflect::ObjectPtr object_ptr = _components.m_Descriptors[i].m_ComponentDescriptor->Clone();
-        Helium::ComponentDescriptorPtr descriptor_ptr = Reflect::AssertCast<Helium::ComponentDescriptor>(object_ptr.Get());
+        Helium::ComponentDescriptorPtr descriptor_ptr = Reflect::AssertCast<Helium::ComponentDefinition>(object_ptr.Get());
 
         // Add it to the list
         NewComponent new_component;
@@ -130,7 +130,7 @@ void Helium::Components::DeployComponents( Helium::ComponentSet &_components, He
     // 7. Make each component point back to the original descriptor that made it?
 }
 
-void Helium::ComponentSet::AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDescriptor> _descriptor )
+void Helium::ComponentSet::AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDefinition> _descriptor )
 {
     DescriptorListEntry entry;
     entry.m_ComponentName = _name;

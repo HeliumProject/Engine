@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Entity.inl
+// EntityDefinition.inl
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -12,7 +12,7 @@ namespace Helium
     /// @return  Current position.
     ///
     /// @see GetRotation(), GetScale()
-    const Simd::Vector3& Entity::GetPosition() const
+    const Simd::Vector3& EntityDefinition::GetPosition() const
     {
         return m_position;
     }
@@ -22,7 +22,7 @@ namespace Helium
     /// @return  Current rotation.
     ///
     /// @see GetPosition(), GetScale()
-    const Simd::Quat& Entity::GetRotation() const
+    const Simd::Quat& EntityDefinition::GetRotation() const
     {
         return m_rotation;
     }
@@ -32,17 +32,17 @@ namespace Helium
     /// @return  Current scale.
     ///
     /// @see GetPosition(), GetRotation()
-    const Simd::Vector3& Entity::GetScale() const
+    const Simd::Vector3& EntityDefinition::GetScale() const
     {
         return m_scale;
     }
 
     /// Get the slice to which this entity is currently bound.
     ///
-    /// @return  Entity slice.
+    /// @return  EntityDefinition slice.
     ///
     /// @see GetSliceIndex(), SetSliceInfo(), SetSliceIndex(), ClearSliceInfo()
-    const SliceWPtr& Entity::GetSlice() const
+    const SliceWPtr& EntityDefinition::GetSlice() const
     {
         return m_spSlice;
     }
@@ -51,10 +51,10 @@ namespace Helium
     ///
     /// Note that this index may change at runtime, so it should not be used to track an entity.
     ///
-    /// @return  Entity index within its slice.
+    /// @return  EntityDefinition index within its slice.
     ///
     /// @see GetSlice(), SetSliceInfo(), SetSliceIndex(), ClearSliceInfo()
-    size_t Entity::GetSliceIndex() const
+    size_t EntityDefinition::GetSliceIndex() const
     {
         return m_sliceIndex;
     }

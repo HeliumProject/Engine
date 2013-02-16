@@ -17,16 +17,16 @@ namespace Helium
     public:
         OBJECT_DECLARE_COMPONENT(Helium::ColorComponent, Helium::Components::Component);
         
-        virtual void FinalizeComponent(const Helium::ComponentDescriptor *_descriptor);
+        virtual void FinalizeComponent(const Helium::ComponentDefinition *_descriptor);
         
     private:
         Color4 m_Color;
         ComponentPtr<ColorComponent> m_Pointer;
     };
 
-    class HELIUM_FRAMEWORK_API ComponentDescriptor_ColorComponent : public Helium::ComponentDescriptor
+    class HELIUM_FRAMEWORK_API ComponentDescriptor_ColorComponent : public Helium::ComponentDefinition
     {
-        HELIUM_DECLARE_OBJECT(ComponentDescriptor_ColorComponent, Helium::ComponentDescriptor);
+        HELIUM_DECLARE_OBJECT(ComponentDescriptor_ColorComponent, Helium::ComponentDefinition);
         static void PopulateComposite( Reflect::Composite& comp );
         
         virtual Helium::Component *CreateComponentInternal(Helium::Components::ComponentSet &_target) const;

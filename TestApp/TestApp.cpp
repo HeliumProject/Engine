@@ -22,7 +22,7 @@
 #include <cfloat>
 #include <ctime>
 
-#include "Framework/ComponentDescriptor.h"
+#include "Framework/ComponentDefinition.h"
 #include "Framework/ComponentSet.h"
 
 using namespace Helium;
@@ -316,7 +316,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     spSlice->BindPackage( spSlicePackage );
 
     HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
-#if 1
+#if 0
     CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
         spSlice,
         Camera::GetStaticType(),
@@ -451,8 +451,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             if( windowData.bShutdownRendering )
             {
                 //spMeshEntity.Release();
-                spSubCamera.Release();
-                spMainCamera.Release();
+                //spSubCamera.Release();
+                //spMainCamera.Release();
 
                 if( spWorld )
                 {
@@ -572,8 +572,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     
 #endif
 
-    spSubCamera.Release();
-    spMainCamera.Release();
+    //spSubCamera.Release();
+    //spMainCamera.Release();
 
     if( spWorld )
     {

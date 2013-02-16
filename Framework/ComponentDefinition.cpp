@@ -1,6 +1,6 @@
 
 #include "FrameworkPch.h"
-#include "ComponentDescriptor.h"
+#include "ComponentDefinition.h"
 
 #include "Framework/FrameworkDataDeduction.h"
 
@@ -14,7 +14,7 @@ void Helium::ComponentDescriptor_ColorComponent::PopulateComposite( Reflect::Com
 
 OBJECT_DEFINE_COMPONENT(Helium::ColorComponent);
 
-void Helium::ColorComponent::FinalizeComponent(const Helium::ComponentDescriptor *_descriptor)
+void Helium::ColorComponent::FinalizeComponent(const Helium::ComponentDefinition *_descriptor)
 {
     const ComponentDescriptor_ColorComponent *d = Reflect::AssertCast<ComponentDescriptor_ColorComponent>(_descriptor);
     m_Color = d->m_Color;

@@ -15,7 +15,7 @@
 
 #include "Platform/Thread.h"
 
-/// Non-zero to enable debug verification of methods called on Entity-based instances during world updates.
+/// Non-zero to enable debug verification of methods called on EntityDefinition-based instances during world updates.
 #define HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING ( !HELIUM_RELEASE )
 
 namespace Helium
@@ -73,8 +73,8 @@ namespace Helium
         //@{
         inline EUpdatePhase GetUpdatePhase() const;
 #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-        inline const Entity* GetCurrentThreadUpdateEntity() const;
-        inline void SetCurrentThreadUpdateEntity( const Entity* pEntity );
+        inline const EntityDefinition* GetCurrentThreadUpdateEntity() const;
+        inline void SetCurrentThreadUpdateEntity( const EntityDefinition* pEntity );
 #endif
         //@}
 

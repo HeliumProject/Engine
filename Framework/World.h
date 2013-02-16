@@ -18,7 +18,7 @@
 
 namespace Helium
 {
-    class Entity;
+    class EntityDefinition;
 
     class GraphicsScene;
     typedef Helium::StrongPtr< GraphicsScene > GraphicsScenePtr;
@@ -60,13 +60,13 @@ namespace Helium
         virtual void PreDestroy();
         //@}
 
-        /// @name Entity Creation
+        /// @name EntityDefinition Creation
         //@{
-        virtual Entity* CreateEntity(
+        virtual EntityDefinition* CreateEntity(
             Slice* pSlice, const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
             const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
-            Entity* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
-        virtual bool DestroyEntity( Entity* pEntity );
+            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
+        virtual bool DestroyEntity( EntityDefinition* pEntity );
         //@}
 
         /// @name Slice Registration

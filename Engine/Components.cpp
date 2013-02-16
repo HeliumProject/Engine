@@ -474,15 +474,15 @@ void Helium::Components::ComponentPtrBase::Unlink()
     m_Next = 0;
 }
 
-HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDescriptor, Engine, GameObjectType::FLAG_ABSTRACT);
+HELIUM_IMPLEMENT_OBJECT(Helium::ComponentDefinition, Engine, GameObjectType::FLAG_ABSTRACT);
 
-Helium::Component *Helium::ComponentDescriptor::CreateComponent( Helium::Components::ComponentSet &_target ) const
+Helium::Component *Helium::ComponentDefinition::CreateComponent( Helium::Components::ComponentSet &_target ) const
 {
     m_Instance.AssignComponent(CreateComponentInternal(_target));
     return m_Instance.Get();
 }
 
-void Helium::ComponentDescriptor::FinalizeComponent() const
+void Helium::ComponentDefinition::FinalizeComponent() const
 {
     if (m_Instance.IsGood())
     {

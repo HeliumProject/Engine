@@ -1,11 +1,11 @@
 #include "FrameworkPch.h"
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 
 #include "Framework/Slice.h"
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Entity, Framework, 0 );
+HELIUM_IMPLEMENT_OBJECT( Helium::EntityDefinition, Framework, 0 );
 
-void Helium::Entity::PreUpdate( float dt )
+void Helium::EntityDefinition::PreUpdate( float dt )
 {
     Log::Print("Frame %f", dt);
 }
@@ -13,7 +13,7 @@ void Helium::Entity::PreUpdate( float dt )
 using namespace Helium;
 
 /// Constructor.
-Entity::Entity()
+EntityDefinition::EntityDefinition()
 : m_position( 0.0f )
 , m_rotation( Simd::Quat::IDENTITY )
 , m_scale( 1.0f )
@@ -22,7 +22,7 @@ Entity::Entity()
 }
 
 /// Destructor.
-Entity::~Entity()
+EntityDefinition::~EntityDefinition()
 {
     HELIUM_ASSERT( !m_spSlice );
 }
@@ -34,7 +34,7 @@ Entity::~Entity()
 /// @param[in] rPosition  Position to set.
 ///
 /// @see GetPosition(), SetRotation(), SetScale()
-void Entity::SetPosition( const Simd::Vector3& rPosition )
+void EntityDefinition::SetPosition( const Simd::Vector3& rPosition )
 {
     m_position = rPosition;
 }
@@ -46,7 +46,7 @@ void Entity::SetPosition( const Simd::Vector3& rPosition )
 /// @param[in] rRotation  Rotation to set.
 ///
 /// @see GetRotation(), SetPosition(), SetScale()
-void Entity::SetRotation( const Simd::Quat& rRotation )
+void EntityDefinition::SetRotation( const Simd::Quat& rRotation )
 {
     m_rotation = rRotation;
 }
@@ -58,7 +58,7 @@ void Entity::SetRotation( const Simd::Quat& rRotation )
 /// @param[in] rScale  Scale to set.
 ///
 /// @see GetScale(), SetPosition(), SetRotation()
-void Entity::SetScale( const Simd::Vector3& rScale )
+void EntityDefinition::SetScale( const Simd::Vector3& rScale )
 {
     m_scale = rScale;
 }
@@ -69,7 +69,7 @@ void Entity::SetScale( const Simd::Vector3& rScale )
 /// @param[in] sliceIndex  Index within the slice to set.
 ///
 /// @see SetSliceIndex(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
-void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
+void EntityDefinition::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
 {
     HELIUM_ASSERT( pSlice );
     HELIUM_ASSERT( IsValid( sliceIndex ) );
@@ -83,7 +83,7 @@ void Entity::SetSliceInfo( Slice* pSlice, size_t sliceIndex )
 /// @param[in] sliceIndex  Index within the slice to set.
 ///
 /// @see SetSliceInfo(), GetSlice(), GetSliceIndex(), ClearSliceInfo()
-void Entity::SetSliceIndex( size_t sliceIndex )
+void EntityDefinition::SetSliceIndex( size_t sliceIndex )
 {
     HELIUM_ASSERT( m_spSlice );
     HELIUM_ASSERT( IsValid( sliceIndex ) );
@@ -94,7 +94,7 @@ void Entity::SetSliceIndex( size_t sliceIndex )
 /// Clear out any currently set slice binding information.
 ///
 /// @see SetSliceInfo(), SetSliceIndex(), GetSlice(), GetSliceIndex()
-void Entity::ClearSliceInfo()
+void EntityDefinition::ClearSliceInfo()
 {
     m_spSlice.Release();
     SetInvalid( m_sliceIndex );
@@ -102,10 +102,10 @@ void Entity::ClearSliceInfo()
 
 /// Get the world to which this entity is currently bound.
 ///
-/// @return  Entity world.
+/// @return  EntityDefinition world.
 ///
 /// @see GetSlice()
-WorldWPtr Entity::GetWorld() const
+WorldWPtr EntityDefinition::GetWorld() const
 {
     return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
 }

@@ -14,13 +14,13 @@
 
 #include "MathSimd/Quat.h"
 #include "MathSimd/Vector3.h"
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 
 namespace Helium
 {
-    class Entity;
-    typedef Helium::StrongPtr< Entity > EntityPtr;
-    typedef Helium::StrongPtr< const Entity > ConstEntityPtr;
+    class EntityDefinition;
+    typedef Helium::StrongPtr< EntityDefinition > EntityPtr;
+    typedef Helium::StrongPtr< const EntityDefinition > ConstEntityPtr;
 
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
@@ -57,19 +57,19 @@ namespace Helium
         inline Package* GetPackage() const;
         //@}
 
-        /// @name Entity Creation
+        /// @name EntityDefinition Creation
         //@{
-        virtual Entity* CreateEntity(
+        virtual EntityDefinition* CreateEntity(
             const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
             const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
-            Entity* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
-        virtual bool DestroyEntity( Entity* pEntity );
+            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
+        virtual bool DestroyEntity( EntityDefinition* pEntity );
         //@}
 
-        /// @name Entity Access
+        /// @name EntityDefinition Access
         //@{
         inline size_t GetEntityCount() const;
-        inline Entity* GetEntity( size_t index ) const;
+        inline EntityDefinition* GetEntity( size_t index ) const;
         //@}
 
         /// @name World Registration

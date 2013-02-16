@@ -57,9 +57,9 @@ namespace Helium
     /// @return  Current entity being updated.
     ///
     /// @see SetCurrentThreadUpdateEntity()
-    const Entity* WorldManager::GetCurrentThreadUpdateEntity() const
+    const EntityDefinition* WorldManager::GetCurrentThreadUpdateEntity() const
     {
-        const Entity* pEntity = static_cast< const Entity* >( m_currentEntityTls.GetPointer() );
+        const EntityDefinition* pEntity = static_cast< const EntityDefinition* >( m_currentEntityTls.GetPointer() );
 
         return pEntity;
     }
@@ -68,12 +68,12 @@ namespace Helium
     ///
     /// Note that only the pointer value is stored, so the reference count of the entity will not be increased.
     ///
-    /// @param[in] pEntity  Entity to set.
+    /// @param[in] pEntity  EntityDefinition to set.
     ///
     /// @see GetCurrentThreadUpdateEntity()
-    void WorldManager::SetCurrentThreadUpdateEntity( const Entity* pEntity )
+    void WorldManager::SetCurrentThreadUpdateEntity( const EntityDefinition* pEntity )
     {
-        m_currentEntityTls.SetPointer( const_cast< Entity* >( pEntity ) );
+        m_currentEntityTls.SetPointer( const_cast< EntityDefinition* >( pEntity ) );
     }
 #endif
 }

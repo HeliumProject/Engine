@@ -244,7 +244,7 @@ void WorldManager::Update()
             size_t entityCount = pSlice->GetEntityCount();
             for( size_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
             {
-                Entity* pEntity = pSlice->GetEntity( entityIndex );
+                EntityDefinition* pEntity = pSlice->GetEntity( entityIndex );
                 HELIUM_ASSERT( pEntity );
 
 #if 0

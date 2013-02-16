@@ -73,7 +73,7 @@
 //TODO: Smart pointer
 namespace Helium
 {
-    class ComponentDescriptor;
+    class ComponentDefinition;
 
     namespace Components
     {
@@ -128,7 +128,7 @@ namespace Helium
                 m_PendingDelete = true;
             }
 
-            virtual void FinalizeComponent(const Helium::ComponentDescriptor *_descriptor) { }
+            virtual void FinalizeComponent(const Helium::ComponentDefinition *_descriptor) { }
 
             ComponentSet*   m_OwningSet;        //< Need pointer back to our owning set in order to detach ourselves from it
 
@@ -507,10 +507,10 @@ namespace Helium
     private:
     };
 
-    class HELIUM_ENGINE_API ComponentDescriptor : public Helium::GameObject
+    class HELIUM_ENGINE_API ComponentDefinition : public Helium::GameObject
     {
     public:
-        HELIUM_DECLARE_OBJECT(ComponentDescriptor, Helium::GameObject);
+        HELIUM_DECLARE_OBJECT(ComponentDefinition, Helium::GameObject);
 
         Helium::Component *CreateComponent(struct Components::ComponentSet &_target) const;
 
@@ -522,5 +522,5 @@ namespace Helium
     protected:
         mutable Helium::ComponentPtr<Helium::Component> m_Instance;
     };
-    typedef Helium::StrongPtr<Helium::ComponentDescriptor> ComponentDescriptorPtr;
+    typedef Helium::StrongPtr<Helium::ComponentDefinition> ComponentDescriptorPtr;
 }

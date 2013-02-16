@@ -19,7 +19,7 @@ namespace Helium
 
     /// Get the number of entities in this slice.
     ///
-    /// @return  Entity count.
+    /// @return  EntityDefinition count.
     ///
     /// @see GetEntity()
     size_t Slice::GetEntityCount() const
@@ -29,12 +29,12 @@ namespace Helium
 
     /// Get the entity associated with the given index in this slice.
     ///
-    /// @param[in] index  Entity index.
+    /// @param[in] index  EntityDefinition index.
     ///
-    /// @return  Entity instance.
+    /// @return  EntityDefinition instance.
     ///
     /// @see GetEntityCount()
-    Entity* Slice::GetEntity( size_t index ) const
+    EntityDefinition* Slice::GetEntity( size_t index ) const
     {
         HELIUM_ASSERT( index < m_entities.GetSize() );
 

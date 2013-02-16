@@ -21,7 +21,7 @@ namespace Helium
 
 namespace Helium
 {
-    class Entity;
+    class EntityDefinition;
     class World;
     typedef Helium::StrongPtr< World > WorldPtr;
     typedef Helium::StrongPtr< const World > ConstWorldPtr;
@@ -68,8 +68,8 @@ namespace Helium
     struct EntityPreUpdateParameters
     {
     public:
-        /// [in] Entity to update.
-        Entity* pEntity;
+        /// [in] EntityDefinition to update.
+        EntityDefinition* pEntity;
 
         /// @name Construction/Destruction
         //@{
@@ -91,8 +91,8 @@ namespace Helium
     struct EntityPostUpdateParameters
     {
     public:
-        /// [in] Entity to update.
-        Entity* pEntity;
+        /// [in] EntityDefinition to update.
+        EntityDefinition* pEntity;
 
         /// @name Construction/Destruction
         //@{

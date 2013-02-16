@@ -9,7 +9,7 @@
 #include "Framework/FrameworkInterface.h"
 
 #include "Engine/JobManager.h"
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 #include "Framework/WorldManager.h"
 
 using namespace Helium;

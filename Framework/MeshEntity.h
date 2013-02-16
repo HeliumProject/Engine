@@ -12,7 +12,7 @@
 #ifndef HELIUM_FRAMEWORK_MESH_ENTITY_H
 #define HELIUM_FRAMEWORK_MESH_ENTITY_H
 
-#include "Framework/Entity.h"
+#include "Framework/EntityDefinition.h"
 
 #include "GraphicsTypes/GraphicsSceneObject.h"
 #include "Framework/Mesh.h"

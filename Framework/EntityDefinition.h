@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------------------------------------
-// Entity.h
+// EntityDefinition.h
 //
 // Copyright (C) 2010 WhiteMoon Dreams, Inc.
 // All Rights Reserved
@@ -29,16 +29,16 @@ namespace Helium
     typedef Helium::WeakPtr< const World > ConstWorldWPtr;
 
     /// Base type for in-world entities.
-    class HELIUM_FRAMEWORK_API Entity : public GameObject
+    class HELIUM_FRAMEWORK_API EntityDefinition : public GameObject
     {
-        HELIUM_DECLARE_OBJECT( Entity, GameObject );
+        HELIUM_DECLARE_OBJECT( EntityDefinition, GameObject );
 
     public:
 
         /// @name Construction/Destruction
         //@{
-        Entity();
-        virtual ~Entity();
+        EntityDefinition();
+        virtual ~EntityDefinition();
         //@}
 
         //@{
@@ -68,20 +68,20 @@ namespace Helium
     protected:
 
     private:
-        /// Entity position.
+        /// EntityDefinition position.
         Simd::Vector3 m_position;
-        /// Entity rotation.
+        /// EntityDefinition rotation.
         Simd::Quat m_rotation;
-        /// Entity scale.
+        /// EntityDefinition scale.
         Simd::Vector3 m_scale;
 
-        /// Entity slice.
+        /// EntityDefinition slice.
         SliceWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
     };
 }
 
-#include "Framework/Entity.inl"
+#include "Framework/EntityDefinition.inl"
 
 #endif  // HELIUM_FRAMEWORK_ENTITY_H

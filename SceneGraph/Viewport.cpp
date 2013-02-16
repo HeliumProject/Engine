@@ -282,12 +282,8 @@ void Viewport::InitCameras()
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_CameraEntity = Reflect::AssertCast< Helium::Camera >(
-        m_EditorSlice->CreateEntity( Helium::Camera::GetStaticType() ) );
-
     GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
     m_SceneViewId = pGraphicsScene->AllocateSceneView();
-    m_CameraEntity->SetSceneViewId( m_SceneViewId );
 }
 
 void Viewport::OnResize()
@@ -714,6 +710,7 @@ void Viewport::Draw()
     uint64_t start = Helium::TimerGetClock();
 
     GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
     BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
 
     DrawArgs args;
@@ -725,13 +722,17 @@ void Viewport::Draw()
 
         Vector3 pos;
         camera.GetPosition( pos );
-        m_CameraEntity->SetPosition( Simd::Vector3( pos.x, pos.y, pos.z ) );
-
         Vector3 dir;
         camera.GetDirection( dir );
-        const float32_t yaw = Atan2( dir.x, dir.z );
-        const float32_t pitch = Acos( dir.y ) - static_cast< float32_t >( HELIUM_PI_2 );
-        m_CameraEntity->SetRotation( Simd::Quat( pitch, yaw, 0.0f ) );
+
+        const Matrix4& invView = camera.GetInverseView();
+
+        pSceneView->SetView(
+            Simd::Vector3( &pos.x ),
+            -Simd::Vector3( &invView.z.x ),
+            Simd::Vector3( &invView.y.x ) );
+
+        pSceneView->SetHorizontalFov( Camera::FieldOfView * static_cast< float32_t >(HELIUM_RAD_TO_DEG) );
     }
 
     if (m_GridVisible)

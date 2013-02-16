@@ -15,7 +15,6 @@
 #include "SceneGraph/SettingsManager.h"
 #include "SceneGraph/ViewportSettings.h"
 
-#include "Framework/Camera.h"
 #include "Framework/Slice.h"
 
 namespace Helium
@@ -464,7 +463,6 @@ namespace Helium
             RenderVisitor           m_RenderVisitor;
 
             SlicePtr                m_EditorSlice;
-            CameraPtr               m_CameraEntity;
             uint32_t                m_SceneViewId;
 
             Tool*                   m_Tool;

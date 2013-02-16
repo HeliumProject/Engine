@@ -1,4 +1,8 @@
+
 #include "FrameworkPch.h"
+
+#if 0
+
 #include "Framework/StaticMeshEntity.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::StaticMeshEntity, Framework, 0 );
@@ -14,3 +18,5 @@ StaticMeshEntity::StaticMeshEntity()
 StaticMeshEntity::~StaticMeshEntity()
 {
 }
+
+#endif

@@ -282,12 +282,12 @@ void Viewport::InitCameras()
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    m_CameraEntity = Reflect::AssertCast< Helium::Camera >(
-        m_EditorSlice->CreateEntity( Helium::Camera::GetStaticType() ) );
+    //m_CameraEntity = Reflect::AssertCast< Helium::Camera >(
+    //    m_EditorSlice->CreateEntity( Helium::Camera::GetStaticType() ) );
 
     GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
     m_SceneViewId = pGraphicsScene->AllocateSceneView();
-    m_CameraEntity->SetSceneViewId( m_SceneViewId );
+    //m_CameraEntity->SetSceneViewId( m_SceneViewId );
 }
 
 void Viewport::RefreshContext()

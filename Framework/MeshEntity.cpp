@@ -1,4 +1,8 @@
+
 #include "FrameworkPch.h"
+
+#if 0
+
 #include "Framework/MeshEntity.h"
 
 #include "Rendering/RVertexDescription.h"
@@ -294,3 +298,5 @@ void MeshEntity::GraphicsSceneObjectUpdate(
         pSubMeshData->SetStartIndex( 0 );
     }
 }
+
+#endif

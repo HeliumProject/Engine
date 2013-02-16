@@ -208,9 +208,9 @@ void WorldManager::Update()
         JobContext::Spawner< 1 > entityUpdateSpawner;
         JobContext* pContext = entityUpdateSpawner.Allocate();
         HELIUM_ASSERT( pContext );
-        WorldManagerUpdate< EntityPreUpdate >* pJob = pContext->Create< WorldManagerUpdate< EntityPreUpdate > >();
+        WorldManagerPreUpdate* pJob = pContext->Create< WorldManagerPreUpdate >();
         HELIUM_ASSERT( pJob );
-        WorldManagerUpdate< EntityPreUpdate >::Parameters& rParameters = pJob->GetParameters();
+        WorldManagerPreUpdate::Parameters& rParameters = pJob->GetParameters();
         rParameters.pspWorlds = m_worlds.GetData();
         rParameters.worldCount = m_worlds.GetSize();
     }
@@ -221,9 +221,9 @@ void WorldManager::Update()
         JobContext::Spawner< 1 > entityUpdateSpawner;
         JobContext* pContext = entityUpdateSpawner.Allocate();
         HELIUM_ASSERT( pContext );
-        WorldManagerUpdate< EntityPostUpdate >* pJob = pContext->Create< WorldManagerUpdate< EntityPostUpdate > >();
+        WorldManagerPostUpdate* pJob = pContext->Create< WorldManagerPostUpdate >();
         HELIUM_ASSERT( pJob );
-        WorldManagerUpdate< EntityPostUpdate >::Parameters& rParameters = pJob->GetParameters();
+        WorldManagerPostUpdate::Parameters& rParameters = pJob->GetParameters();
         rParameters.pspWorlds = m_worlds.GetData();
         rParameters.worldCount = m_worlds.GetSize();
     }
@@ -247,6 +247,7 @@ void WorldManager::Update()
                 Entity* pEntity = pSlice->GetEntity( entityIndex );
                 HELIUM_ASSERT( pEntity );
 
+#if 0
                 bool bNeedsSynchronousUpdate = pEntity->NeedsSynchronousUpdate();
                 uint32_t deferredWorkFlags = pEntity->GetDeferredWorkFlags();
                 if( !bNeedsSynchronousUpdate && !deferredWorkFlags )
@@ -304,6 +305,7 @@ void WorldManager::Update()
                 }
 
                 pEntity->ClearDeferredWorkFlags();
+#endif
             }
         }
     }

@@ -1,3 +1,5 @@
+#if 0
+
 //----------------------------------------------------------------------------------------------------------------------
 // MeshEntity.inl
 //
@@ -63,3 +65,6 @@ namespace Helium
         return ( m_spMesh ? m_spMesh->GetMaterial( index ) : NULL );
     }
 }
+
+
+#endif

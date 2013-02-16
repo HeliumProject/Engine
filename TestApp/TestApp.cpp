@@ -316,7 +316,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     spSlice->BindPackage( spSlicePackage );
 
     HELIUM_VERIFY( spWorld->AddSlice( spSlice ) );
-
+#if 1
     CameraPtr spMainCamera( Reflect::AssertCast< Camera >( spWorld->CreateEntity(
         spSlice,
         Camera::GetStaticType(),
@@ -339,6 +339,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
         true ) ) );
     HELIUM_ASSERT( spSubCamera );
 
+#endif
+
     GraphicsScene* pGraphicsScene = spWorld->GetGraphicsScene();
     HELIUM_ASSERT( pGraphicsScene );
     if( pGraphicsScene )
@@ -360,7 +362,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
             pMainSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
             pMainSceneView->SetClearColor( Color( 0x00202020 ) );
 
-            spMainCamera->SetSceneViewId( mainSceneViewId );
+            //spMainCamera->SetSceneViewId( mainSceneViewId );
 
             uint32_t subSceneViewId = pGraphicsScene->AllocateSceneView();
             if( IsValid( subSceneViewId ) )
@@ -373,7 +375,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 pSubSceneView->SetViewport( 0, 0, displayWidth, displayHeight );
                 pSubSceneView->SetClearColor( Color( 0x00202020 ) );
 
-                spSubCamera->SetSceneViewId( subSceneViewId );
+                //spSubCamera->SetSceneViewId( subSceneViewId );
             }
         }
     
@@ -395,6 +397,9 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     }
 
     rWorldManager.Update();
+
+#if 0
+    
 
     //Quat meshEntityBaseRotation( Simd::Vector3( 1.0f, 0.0f, 0.0f ), static_cast< float32_t >( -HELIUM_PI_2 ) );
     Simd::Quat meshEntityBaseRotation = Simd::Quat::IDENTITY;
@@ -428,65 +433,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
         spMeshEntity->SetAnimation( Reflect::AssertCast< Animation >( spAnimationObject.Get() ) );
     }
-
-#if 0
-    {
-        GameObjectPath meshPath;
-        HELIUM_VERIFY( meshPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Meshes" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull.fbx" ) ) );
- 
-        GameObjectPtr spMeshObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( meshPath, spMeshObject ) );
-        HELIUM_ASSERT( spMeshObject );
-        HELIUM_ASSERT( spMeshObject->IsClass( Mesh::GetStaticType()->GetClass() ) );
-
-        GameObjectPath materialPath;
-        HELIUM_VERIFY( materialPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Materials" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "TestBull" ) ) );
- 
-        GameObjectPtr spMaterialObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( materialPath, spMaterialObject ) );
-        HELIUM_ASSERT( spMaterialObject );
-        HELIUM_ASSERT( spMaterialObject->IsClass( Material::GetStaticType()->GetClass() ) );
-
-        GameObjectPath shaderPath;
-        HELIUM_VERIFY( shaderPath.Set(
-            HELIUM_PACKAGE_PATH_CHAR_STRING TXT( "Shaders" ) HELIUM_OBJECT_PATH_CHAR_STRING TXT( "Simple.hlsl" ) ) );
- 
-        GameObjectPtr spShaderObject;
-        HELIUM_VERIFY( gObjectLoader->LoadObject( shaderPath, spShaderObject ) );
-        HELIUM_ASSERT( spShaderObject );
-        HELIUM_ASSERT( spShaderObject->IsClass( Shader::GetStaticType()->GetClass() ) );
-
-        Log::Debug("Done!");
-
-        tstringstream ss;
-        ss.str("");
-        ss << "-----Mesh " << spMeshObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-
-        ss.str("");
-        ss << "-----Material " << spMaterialObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----Shader " << spShaderObject.Get() <<std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----spMeshObject->Material " << static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) << std::endl;
-        Log::PrintString(ss.str().c_str());
-        
-        ss.str("");
-        ss << "-----spMaterialObject->Shader " << static_cast<Material *>(spMaterialObject.Get())->GetShader() << std::endl;
-        Log::PrintString(ss.str().c_str());
-
-        // This works now because the linking is fixed! :)  But commenting out so that messing with Data files doesn't cause asserts
-        //HELIUM_ASSERT(static_cast<Mesh *>(spMeshObject.Get())->GetMaterial(0) == spMaterialObject.Get());
-        //HELIUM_ASSERT(static_cast<Material *>(spMaterialObject.Get())->GetShader() == spShaderObject.Get());
-    }
 #endif
-
+    
     float32_t meshRotation = 0.0f;
 
     spSubRenderContext.Release();
@@ -502,7 +450,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
             if( windowData.bShutdownRendering )
             {
-                spMeshEntity.Release();
+                //spMeshEntity.Release();
                 spSubCamera.Release();
                 spMainCamera.Release();
 
@@ -535,14 +483,14 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                 break;
             }
         }
-
-        if( spMeshEntity )
+        
+        //if( spMeshEntity )
         {
-            Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
+            //Simd::Quat rotation( 0.0f, meshRotation, 0.0f );
             //Simd::Quat rotation( meshRotation * 0.438f, static_cast< float32_t >( HELIUM_PI_2 ), meshRotation );
-            spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
+            //spMeshEntity->SetRotation( meshEntityBaseRotation * rotation );
 
-            meshRotation += 0.01f;
+            //meshRotation += 0.01f;
 
 #if 0 //!HELIUM_RELEASE && !HELIUM_PROFILE
             if( pGraphicsScene )
@@ -612,13 +560,18 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
                     String( TXT( "Debug text test!" ) ),
                     Color( 0xffffffff ) );
             }
-#endif  // !HELIUM_RELEASE && !HELIUM_PROFILE
 
             rWorldManager.Update();
         }
     }
 
+
+#if 0
     spMeshEntity.Release();
+#endif
+    
+#endif
+
     spSubCamera.Release();
     spMainCamera.Release();
 

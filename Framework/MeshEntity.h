@@ -1,3 +1,6 @@
+#if 0
+
+
 //----------------------------------------------------------------------------------------------------------------------
 // MeshEntity.h
 //
@@ -97,3 +100,5 @@ namespace Helium
 #include "Framework/MeshEntity.inl"
 
 #endif  // HELIUM_FRAMEWORK_MESH_ENTITY_H
+
+#endif

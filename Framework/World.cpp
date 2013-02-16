@@ -159,9 +159,6 @@ Entity* World::CreateEntity(
         return NULL;
     }
 
-    // Attach the entity to the world.
-    pEntity->Attach();
-
     return pEntity;
 }
 
@@ -198,9 +195,6 @@ bool World::DestroyEntity( Entity* pEntity )
 
         return false;
     }
-
-    // Detach the entity from this world and destroy it.
-    pEntity->Detach();
 
     bool bDestroyResult = spEntitySlice->DestroyEntity( pEntity );
 
@@ -249,7 +243,6 @@ bool World::AddSlice( Slice* pSlice )
     {
         Entity* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
-        pEntity->Attach();
     }
 
     return true;
@@ -284,7 +277,6 @@ bool World::RemoveSlice( Slice* pSlice )
     {
         Entity* pEntity = pSlice->GetEntity( entityIndex );
         HELIUM_ASSERT( pEntity );
-        pEntity->Detach();
     }
 
     // Remove the slice from the slice list and clear out all references back to this world.

@@ -58,9 +58,9 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
     HELIUM_VERIFY( Helium::Entity::InitStaticType() );
     HELIUM_VERIFY( Helium::Slice::InitStaticType() );
     HELIUM_VERIFY( Helium::Mesh::InitStaticType() );
-    HELIUM_VERIFY( Helium::MeshEntity::InitStaticType() );
-    HELIUM_VERIFY( Helium::SkeletalMeshEntity::InitStaticType() );
-    HELIUM_VERIFY( Helium::StaticMeshEntity::InitStaticType() );
+    //HELIUM_VERIFY( Helium::MeshEntity::InitStaticType() );
+    //HELIUM_VERIFY( Helium::SkeletalMeshEntity::InitStaticType() );
+    //HELIUM_VERIFY( Helium::StaticMeshEntity::InitStaticType() );
     HELIUM_VERIFY( Helium::World::InitStaticType() );
 }
 
@@ -73,9 +73,9 @@ HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
     Helium::Entity::ReleaseStaticType();
     Helium::Slice::ReleaseStaticType();
     Helium::Mesh::ReleaseStaticType();
-    Helium::MeshEntity::ReleaseStaticType();
-    Helium::SkeletalMeshEntity::ReleaseStaticType();
-    Helium::StaticMeshEntity::ReleaseStaticType();
+    //Helium::MeshEntity::ReleaseStaticType();
+    //Helium::SkeletalMeshEntity::ReleaseStaticType();
+    //Helium::StaticMeshEntity::ReleaseStaticType();
     Helium::World::ReleaseStaticType();
 
     ReleaseFrameworkTypePackage();

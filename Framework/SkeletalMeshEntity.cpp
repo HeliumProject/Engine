@@ -1,4 +1,8 @@
+
 #include "FrameworkPch.h"
+
+#if 0
+
 #include "Framework/SkeletalMeshEntity.h"
 
 #if HELIUM_USE_GRANNY_ANIMATION
@@ -172,3 +176,5 @@ void SkeletalMeshEntity::GraphicsSceneObjectUpdate(
     pThis->m_grannyData.SetSceneObjectBonePalette( pSceneObject );
 #endif  // HELIUM_USE_GRANNY_ANIMATION
 }
+
+#endif

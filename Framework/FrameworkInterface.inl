@@ -7,7 +7,7 @@
 
 namespace Helium
 {
-
+#if 0
 /// Constructor.
 template< typename EntityUpdateJobType >
 WorldManagerUpdate< EntityUpdateJobType >::WorldManagerUpdate()
@@ -129,6 +129,7 @@ EntityPreUpdate::Parameters::Parameters()
 {
 }
 
+
 /// Constructor.
 EntityPostUpdate::EntityPostUpdate()
 {
@@ -184,6 +185,6 @@ void EntityPostUpdate::RunCallback( void* pJob, JobContext* pContext )
 EntityPostUpdate::Parameters::Parameters()
 {
 }
-
+#endif
 }  // namespace Helium
 

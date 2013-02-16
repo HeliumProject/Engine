@@ -14,7 +14,6 @@
 
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Quat.h"
-#include "Framework/FrameworkInterface.h"
 #include "Framework/WorldManager.h"
 
 namespace Helium
@@ -35,25 +34,6 @@ namespace Helium
         HELIUM_DECLARE_OBJECT( Entity, GameObject );
 
     public:
-        /// Valid entity update phase flags.
-        enum EUpdatePhaseFlag
-        {
-            /// Entity needs PreUpdate()/PostUpdate() called during asynchronous update phases.
-            UPDATE_PHASE_FLAG_ASYNCHRONOUS = ( 1 << 0 ),
-            /// Entity needs SynchronousUpdate() called each frame (regardless of deferred work status).
-            UPDATE_PHASE_FLAG_SYNCHRONOUS  = ( 1 << 1 )
-        };
-
-        /// Deferred entity work flags.
-        enum EDeferredWorkFlag
-        {
-            /// Destroy this entity.
-            DEFERRED_WORK_FLAG_DESTROY  = ( 1 << 0 ),
-            /// Generic call to SynchronousUpdate() required (performed before any entity reattachment).
-            DEFERRED_WORK_FLAG_UPDATE   = ( 1 << 1 ),
-            /// Reattach this entity to the world.
-            DEFERRED_WORK_FLAG_REATTACH = ( 1 << 2 ),
-        };
 
         /// @name Construction/Destruction
         //@{
@@ -61,40 +41,6 @@ namespace Helium
         virtual ~Entity();
         //@}
 
-        /// @name Serialization
-        //@{
-        //virtual void Serialize( Serializer& s );
-        //@}
-
-        /// @name Entity Registration
-        //@{
-        virtual void Attach();
-        virtual void Detach();
-        void DeferredReattach();
-        //@}
-
-        /// @name Entity Updating
-        //@{
-        virtual void PreUpdate( float32_t deltaSeconds );
-        inline void CommitPendingDeferredWorkFlags();
-        virtual void PostUpdate( float32_t deltaSeconds );
-        virtual void SynchronousUpdate( float32_t deltaSeconds );
-
-        inline uint32_t GetUpdatePhaseFlags() const;
-        inline bool NeedsAsynchronousUpdate() const;
-        inline bool NeedsSynchronousUpdate() const;
-
-        inline void VerifySafety() const;
-        inline void VerifySafety();
-        inline void VerifySafetySelfOnly() const;
-        inline void VerifySafetySelfOnly();
-
-        inline uint32_t GetDeferredWorkFlags() const;
-        inline void ApplyDeferredWorkFlags( uint32_t flags );
-        inline void ClearDeferredWorkFlags();
-        //@}
-
-        /// @name Transform Data
         //@{
         inline const Simd::Vector3& GetPosition() const;
         virtual void SetPosition( const Simd::Vector3& rPosition );
@@ -117,15 +63,9 @@ namespace Helium
         WorldWPtr GetWorld() const;
         //@}
 
-    protected:
-        /// @name Entity Updating Support
-        //@{
-        void SetUpdatePhaseFlags( uint32_t flags );
+        virtual void PreUpdate(float dt);
 
-        inline uint32_t GetPendingDeferredWorkFlags() const;
-        inline void ApplyPendingDeferredWorkFlags( uint32_t flags );
-        inline void ClearPendingDeferredWorkFlags();
-        //@}
+    protected:
 
     private:
         /// Entity position.
@@ -139,14 +79,6 @@ namespace Helium
         SliceWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
-
-        /// Required update phase flags.
-        uint32_t m_updatePhaseFlags;
-
-        /// Pending deferred work flags (can be set during read-only updates without the need for message passing).
-        uint32_t m_pendingDeferredWorkFlags;
-        /// Deferred work flags.
-        uint32_t m_deferredWorkFlags;
     };
 }
 

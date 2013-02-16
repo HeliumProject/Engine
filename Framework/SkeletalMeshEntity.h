@@ -1,3 +1,5 @@
+#if 0
+
 //----------------------------------------------------------------------------------------------------------------------
 // SkeletalMeshEntity.h
 //
@@ -96,3 +98,5 @@ namespace Helium
 #include "Framework/SkeletalMeshEntity.inl"
 
 #endif  // HELIUM_FRAMEWORK_SKELETAL_MESH_ENTITY_H
+
+#endif

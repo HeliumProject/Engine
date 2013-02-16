@@ -464,7 +464,7 @@ namespace Helium
             RenderVisitor           m_RenderVisitor;
 
             SlicePtr                m_EditorSlice;
-            CameraPtr               m_CameraEntity;
+            //CameraPtr               m_CameraEntity;
             uint32_t                m_SceneViewId;
 
             Tool*                   m_Tool;

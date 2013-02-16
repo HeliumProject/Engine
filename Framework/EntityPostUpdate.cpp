@@ -19,6 +19,7 @@ using namespace Helium;
 /// @param[in] pContext  Context in which this job is running.
 void EntityPostUpdate::Run( JobContext* /*pContext*/ )
 {
+#if 0
     Entity* pEntity = m_parameters.pEntity;
     HELIUM_ASSERT( pEntity );
     HELIUM_ASSERT( pEntity->NeedsAsynchronousUpdate() );
@@ -38,4 +39,5 @@ void EntityPostUpdate::Run( JobContext* /*pContext*/ )
 
     JobManager& rJobManager = JobManager::GetStaticInstance();
     rJobManager.ReleaseJob( this );
+#endif
 }

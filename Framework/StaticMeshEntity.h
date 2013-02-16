@@ -1,3 +1,5 @@
+#if 0
+
 //----------------------------------------------------------------------------------------------------------------------
 // StaticMeshEntity.h
 //
@@ -28,3 +30,5 @@ namespace Helium
 }
 
 #endif  // HELIUM_FRAMEWORK_STATIC_MESH_ENTITY_H
+
+#endif

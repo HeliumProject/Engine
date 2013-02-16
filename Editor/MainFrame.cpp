@@ -115,7 +115,7 @@ MainFrame::MainFrame( SettingsManager* settingsManager, EditorEngine* editorEngi
 
 	SetLabel( TXT("Helium Editor") );
 
-    editorEngine->InitRenderer( GetHwnd() );
+    editorEngine->Initialize( GetHwnd() );
 
 	//
 	// Frame Key events

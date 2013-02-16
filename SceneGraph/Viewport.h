@@ -332,7 +332,7 @@ namespace Helium
             void InitWidgets();
             void InitCameras();
 
-            void RefreshContext();
+            void OnResize();
 
         public:
             void SetSize(uint32_t x, uint32_t y);

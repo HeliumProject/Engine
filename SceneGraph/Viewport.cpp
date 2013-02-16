@@ -56,9 +56,9 @@ Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorS
     InitWidgets();
     InitCameras();
 
-    RefreshContext();
-
     Reset();
+
+    OnResize();
 }
 
 Viewport::~Viewport()
@@ -290,7 +290,7 @@ void Viewport::InitCameras()
     m_CameraEntity->SetSceneViewId( m_SceneViewId );
 }
 
-void Viewport::RefreshContext()
+void Viewport::OnResize()
 {
     const uint32_t width = (m_Size.x > 0) ? m_Size.x : 64;
     const uint32_t height = (m_Size.y > 0) ? m_Size.y : 64;
@@ -315,7 +315,7 @@ void Viewport::RefreshContext()
     pSceneView->SetDepthStencilSurface( rRenderResourceManager.GetDepthStencilSurface() );
     pSceneView->SetAspectRatio( aspectRatio );
     pSceneView->SetViewport( 0, 0, width, height );
-    pSceneView->SetClearColor( Helium::Color( 0x00404040 ) );
+    pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );
 }
 
 void Viewport::SetSize(uint32_t x, uint32_t y)
@@ -323,7 +323,7 @@ void Viewport::SetSize(uint32_t x, uint32_t y)
     m_Size.x = x;
     m_Size.y = y;
 
-    RefreshContext();
+    OnResize();
 }
 
 void Viewport::SetFocused(bool focused)
@@ -709,16 +709,35 @@ void Viewport::MouseScroll( const Helium::MouseScrollInput& input )
 
 void Viewport::Draw()
 {
-//    if ( !m_DeviceManager.TestDeviceReady() )
-    {
-        return;
-    }
-
     SCENE_GRAPH_RENDER_SCOPE_TIMER( ("") );
 
     uint64_t start = Helium::TimerGetClock();
 
+    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
+
     DrawArgs args;
+
+    {
+        SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
+
+        Camera& camera = m_Cameras[m_CameraMode];
+
+        Vector3 pos;
+        camera.GetPosition( pos );
+        m_CameraEntity->SetPosition( Simd::Vector3( pos.x, pos.y, pos.z ) );
+
+        Vector3 dir;
+        camera.GetDirection( dir );
+        const float32_t yaw = Atan2( dir.x, dir.z );
+        const float32_t pitch = Acos( dir.y ) - static_cast< float32_t >( HELIUM_PI_2 );
+        m_CameraEntity->SetRotation( Simd::Quat( pitch, yaw, 0.0f ) );
+    }
+
+    if (m_GridVisible)
+    {
+        m_GlobalPrimitives[GlobalPrimitives::StandardGrid]->Draw( pDrawer, &args );
+    }
 
 #ifdef VIEWPORT_REFACTOR
     // this seems like a bad place to do this

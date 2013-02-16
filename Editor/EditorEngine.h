@@ -15,13 +15,15 @@ namespace Helium
             EditorEngine();
             ~EditorEngine();
 
-            bool Initialize();
-            void InitRenderer( HWND hwnd );
+            bool Initialize( HWND hwnd );
             void Shutdown();
+
+            void Update();
 
             SlicePtr GetEditorSlice() const { return m_EditorSlice; }
 
         private:
+            void InitRenderer( HWND hwnd );
             void CreateEditorWorld();
 
             PackagePtr m_EditorPackage;

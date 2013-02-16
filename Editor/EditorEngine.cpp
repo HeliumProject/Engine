@@ -20,11 +20,34 @@ EditorEngine::~EditorEngine()
 
 }
 
-bool EditorEngine::Initialize()
+bool EditorEngine::Initialize( HWND hwnd )
 {
+    InitRenderer( hwnd );
+
+    // Create after the renderer so the World's BufferedDrawer can initialize.
     CreateEditorWorld();
 
     return true;
+}
+
+void EditorEngine::Shutdown()
+{
+    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
+    rDynamicDrawer.Shutdown();
+
+    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
+    rRenderResourceManager.Shutdown();
+    RenderResourceManager::DestroyStaticInstance();
+
+    m_EditorSlice.Release();
+    m_EditorWorld.Release();
+    m_EditorPackage.Release();
+}
+
+void EditorEngine::Update()
+{
+    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+    rWorldManager.Update();
 }
 
 void EditorEngine::InitRenderer( HWND hwnd )
@@ -50,20 +73,6 @@ void EditorEngine::InitRenderer( HWND hwnd )
 
     DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
     HELIUM_VERIFY( rDynamicDrawer.Initialize() );
-}
-
-void EditorEngine::Shutdown()
-{
-    DynamicDrawer& rDynamicDrawer = DynamicDrawer::GetStaticInstance();
-    rDynamicDrawer.Shutdown();
-
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
-    rRenderResourceManager.Shutdown();
-    RenderResourceManager::DestroyStaticInstance();
-
-    m_EditorSlice.Release();
-    m_EditorWorld.Release();
-    m_EditorPackage.Release();
 }
 
 void EditorEngine::CreateEditorWorld()

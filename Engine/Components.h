@@ -522,5 +522,5 @@ namespace Helium
     protected:
         mutable Helium::ComponentPtr<Helium::Component> m_Instance;
     };
-    typedef Helium::StrongPtr<Helium::ComponentDefinition> ComponentDescriptorPtr;
+    typedef Helium::StrongPtr<Helium::ComponentDefinition> ComponentDefinitionPtr;
 }

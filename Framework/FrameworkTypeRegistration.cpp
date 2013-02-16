@@ -18,7 +18,7 @@
 #include "Framework/StaticMeshEntity.h"
 #include "Framework/World.h"
 #include "Framework/ComponentDefinition.h"
-#include "Framework/ComponentSet.h"
+#include "Framework/ComponentDefinitionSet.h"
 
 static Helium::StrongPtr< Helium::Package > spFrameworkTypePackage;
 
@@ -53,7 +53,7 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
     
     HELIUM_VERIFY( Helium::ComponentDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::ComponentDescriptor_ColorComponent::InitStaticType() );
-    HELIUM_VERIFY( Helium::ComponentSet::InitStaticType() );
+    HELIUM_VERIFY( Helium::ComponentDefinitionSet::InitStaticType() );
     //HELIUM_VERIFY( Helium::Camera::InitStaticType() );
     HELIUM_VERIFY( Helium::EntityDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::Slice::InitStaticType() );
@@ -68,7 +68,7 @@ HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
 {
     Helium::ComponentDefinition::ReleaseStaticType();
     Helium::ComponentDescriptor_ColorComponent::ReleaseStaticType();
-    Helium::ComponentSet::ReleaseStaticType();
+    Helium::ComponentDefinitionSet::ReleaseStaticType();
     //Helium::Camera::ReleaseStaticType();
     Helium::EntityDefinition::ReleaseStaticType();
     Helium::Slice::ReleaseStaticType();

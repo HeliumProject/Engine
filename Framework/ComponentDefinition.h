@@ -33,7 +33,7 @@ namespace Helium
 
     public:
         Color4 m_Color;
-        ComponentDescriptorPtr m_Pointer;
+        ComponentDefinitionPtr m_Pointer;
     };
 
 }

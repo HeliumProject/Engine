@@ -14,22 +14,22 @@
 
 namespace Helium
 {
-    class ComponentSet;
+    class ComponentDefinitionSet;
     class ParameterSet;
 
     namespace Components
     {
-        void HELIUM_FRAMEWORK_API DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+        void HELIUM_FRAMEWORK_API DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
     }
 
-    class HELIUM_FRAMEWORK_API ComponentSet : public Helium::GameObject
+    class HELIUM_FRAMEWORK_API ComponentDefinitionSet : public Helium::GameObject
     {
     public:
-        HELIUM_DECLARE_OBJECT(Helium::ComponentSet, Helium::GameObject);
+        HELIUM_DECLARE_OBJECT(Helium::ComponentDefinitionSet, Helium::GameObject);
         void AddDescriptor( Helium::Name _name, Helium::StrongPtr<Helium::ComponentDefinition> _color_descriptor );
         void AddParameter( Helium::Name _param_name, Helium::Name _component_name, Helium::Name _field_name );
         
-        friend void Helium::Components::DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+        friend void Helium::Components::DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
 
     private:
 
@@ -108,7 +108,7 @@ namespace Helium
             m_Parameters.Add(param);
         }
         
-        friend void Helium::Components::DeployComponents(Helium::ComponentSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
+        friend void Helium::Components::DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters, Helium::Components::ComponentSet &_target);
 
     };
 }

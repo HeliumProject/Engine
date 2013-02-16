@@ -2,6 +2,7 @@
 #include "Framework/EntityDefinition.h"
 
 #include "Framework/Slice.h"
+#include "Framework/FrameworkDataDeduction.h"
 
 HELIUM_IMPLEMENT_OBJECT( Helium::EntityDefinition, Framework, 0 );
 
@@ -108,4 +109,11 @@ void EntityDefinition::ClearSliceInfo()
 WorldWPtr EntityDefinition::GetWorld() const
 {
     return ( m_spSlice ? m_spSlice->GetWorld() : WorldWPtr() );
+}
+
+REFLECT_DEFINE_OBJECT(Helium::Entity);
+
+void Helium::Entity::PopulateComposite( Reflect::Composite& comp )
+{
+
 }

@@ -16,6 +16,8 @@
 #include "MathSimd/Quat.h"
 #include "Framework/WorldManager.h"
 
+#include "Framework/ComponentDefinitionSet.h"
+
 namespace Helium
 {
     class World;
@@ -79,6 +81,18 @@ namespace Helium
         SliceWPtr m_spSlice;
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
+
+        ComponentDefinitionSet m_ComponentDefinitions;
+    };
+
+    class Entity : public Reflect::Object, Helium::Components::HasComponents
+    {
+    public:
+        REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
+        static void PopulateComposite( Reflect::Composite& comp );
+
+    private:
+
     };
 }
 

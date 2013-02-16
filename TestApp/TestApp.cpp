@@ -23,7 +23,7 @@
 #include <ctime>
 
 #include "Framework/ComponentDefinition.h"
-#include "Framework/ComponentSet.h"
+#include "Framework/ComponentDefinitionSet.h"
 
 using namespace Helium;
 
@@ -164,8 +164,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     color_descriptor1->m_Color = Color4(255, 0, 0, 255);
 
-    Helium::StrongPtr<ComponentSet> component_set;
-    ComponentSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
+    Helium::StrongPtr<ComponentDefinitionSet> component_set;
+    ComponentDefinitionSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
 
     component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
     component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);

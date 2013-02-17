@@ -52,7 +52,7 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
     HELIUM_VERIFY( GetFrameworkTypePackage() );
     
     HELIUM_VERIFY( Helium::ComponentDefinition::InitStaticType() );
-    HELIUM_VERIFY( Helium::ComponentDescriptor_ColorComponent::InitStaticType() );
+    HELIUM_VERIFY( Helium::ColorComponentDefinition::InitStaticType() );
     HELIUM_VERIFY( Helium::ComponentDefinitionSet::InitStaticType() );
     //HELIUM_VERIFY( Helium::Camera::InitStaticType() );
     HELIUM_VERIFY( Helium::EntityDefinition::InitStaticType() );
@@ -67,7 +67,7 @@ HELIUM_FRAMEWORK_API void RegisterFrameworkTypes()
 HELIUM_FRAMEWORK_API void UnregisterFrameworkTypes()
 {
     Helium::ComponentDefinition::ReleaseStaticType();
-    Helium::ComponentDescriptor_ColorComponent::ReleaseStaticType();
+    Helium::ColorComponentDefinition::ReleaseStaticType();
     Helium::ComponentDefinitionSet::ReleaseStaticType();
     //Helium::Camera::ReleaseStaticType();
     Helium::EntityDefinition::ReleaseStaticType();

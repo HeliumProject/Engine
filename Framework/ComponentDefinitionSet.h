@@ -50,6 +50,7 @@ namespace Helium
         DynamicArray<DescriptorListEntry> m_Descriptors;
         DynamicArray<Parameter> m_Parameters;
     };
+    typedef Helium::StrongPtr<ComponentDefinitionSet> ComponentDefinitionSetPtr;
 
     class HELIUM_FRAMEWORK_API ParameterSet
     {
@@ -89,9 +90,9 @@ namespace Helium
 
         ~ParameterSet()
         {
-            for (size_t count = m_Parameters.GetSize() - 1; count >= 0; --count)
+            for (size_t index = 0; index < m_Parameters.GetSize(); ++index)
             {
-                HELIUM_DELETE(m_Heap, m_Parameters[count]);
+                HELIUM_DELETE(m_Heap, m_Parameters[m_Parameters.GetSize() - index - 1]);
                 m_Parameters.Clear();
             }
         }

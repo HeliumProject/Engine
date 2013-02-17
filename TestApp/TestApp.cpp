@@ -47,35 +47,46 @@ extern void UnregisterTestAppTypes();
 
 #include "Engine/Components.h"
 
-
-class TestComponentFour : public Helium::Components::Component
+void TestComponents()
 {
-public:
-    TestComponentFour()
+    struct TestObj : public Helium::Components::HasComponents
     {
-        //static int32_t next_id = 100;
-        //m_Id = next_id++;
-    }
 
-    //int32_t m_Id;
-    Helium::Color4 m_Color;
+    };
 
-    OBJECT_DECLARE_COMPONENT( TestComponentFour, Components::Component );
+    //GameObject::Create(
 
-    static void PopulateComposite( Reflect::Composite& comp );
-};
+    //TestObj.Allocate<ColorComponent>();
 
-OBJECT_DEFINE_COMPONENT(TestComponentFour);
+    Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor1;
+    ColorComponentDefinition::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
+    
+    Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor2;
+    ColorComponentDefinition::Create(color_descriptor2, Name(TXT("ColorComponent2")), NULL);
 
-void TestComponentFour::PopulateComposite( Reflect::Composite& comp )
-{
-    comp.AddField( &TestComponentFour::m_Color, TXT( "m_Color" ) );
+    Log::Print("ColorComponent1: %x\n", color_descriptor1.Get());
+    Log::Print("ColorComponent2: %x\n", color_descriptor2.Get());
+
+    color_descriptor1->m_Color = Color4(255, 0, 0, 255);
+
+    Helium::StrongPtr<ComponentDefinitionSet> component_set;
+    ComponentDefinitionSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
+
+    component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
+    component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
+    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
+    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
+
+    Helium::Components::ComponentSet instantiated_components;
+
+    ParameterSet param_set;
+    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
+
+    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
+    component_set.Release();
+
+    Helium::Components::RemoveAllComponents(instantiated_components);
 }
-
-
-
-
-
 
 
 int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int nCmdShow )
@@ -139,47 +150,10 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     ConfigPc::SaveUserConfig();
 
-
-
     Helium::Components::Initialize();
     ColorComponent::RegisterComponentType(64);
 
-    struct TestObj : public Helium::Components::HasComponents
-    {
-
-    };
-
-    //GameObject::Create(
-
-    //TestObj.Allocate<ColorComponent>();
-
-    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor1;
-    ComponentDescriptor_ColorComponent::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
-    
-    Helium::StrongPtr<Helium::ComponentDescriptor_ColorComponent> color_descriptor2;
-    ComponentDescriptor_ColorComponent::Create(color_descriptor2, Name(TXT("ColorComponent2")), NULL);
-
-    Log::Print("ColorComponent1: %x\n", color_descriptor1.Get());
-    Log::Print("ColorComponent2: %x\n", color_descriptor2.Get());
-
-    color_descriptor1->m_Color = Color4(255, 0, 0, 255);
-
-    Helium::StrongPtr<ComponentDefinitionSet> component_set;
-    ComponentDefinitionSet::Create(component_set, Name(TXT("MyComponentSet")), NULL);
-
-    component_set->AddDescriptor(Name(TXT("ColorComponent1")), color_descriptor1);
-    component_set->AddDescriptor(Name(TXT("ColorComponent2")), color_descriptor2);
-    component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
-    component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
-
-    Helium::Components::ComponentSet instantiated_components;
-
-    ParameterSet param_set;
-    param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
-
-    Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
-
-
+    //TestComponents();
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;
@@ -297,7 +271,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     RRenderContextPtr spMainRenderContext = pRenderer->GetMainContext();
     HELIUM_ASSERT( spMainRenderContext );
-
+    
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
@@ -595,296 +569,8 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
 
     Renderer::DestroyStaticInstance();
 
-    int defaultTaskThreadCount = tbb::task_scheduler_init::default_num_threads();
-    HELIUM_TRACE( TraceLevels::Info, TXT( "TBB default task thread count: %d\n" ), defaultTaskThreadCount );
-    HELIUM_UNREF( defaultTaskThreadCount );
-
-    LARGE_INTEGER perfFrequency, startCounter, endCounter;
-    HELIUM_VERIFY( QueryPerformanceFrequency( &perfFrequency ) );
-
-    // 600 seems to be a good grain size during testing (see benchmark results below for more information about the test
-    // system).  Different values make work better for different platforms and CPU types.
-    const size_t sortJobGrainSize = 600;
-
-    float32_t SAMPLE_FLOAT32_SET[ 1024 ];
-    String floatSetString, formatString;
-    for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-    {
-        SAMPLE_FLOAT32_SET[ floatIndex ] =
-            ( static_cast< float32_t >( rand() ) / static_cast< float32_t >( RAND_MAX ) ) * 2.0f - 1.0f;
-
-        formatString.Format( TXT( " %f" ), SAMPLE_FLOAT32_SET[ floatIndex ] );
-        floatSetString += formatString;
-    }
-
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "Float set:%s.\n" ), *floatSetString );
-
-    HELIUM_SIMD_ALIGN_PRE float32_t sortedFloat32Set[ HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ) ] HELIUM_SIMD_ALIGN_POST;
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        std::sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( sortTime );
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (std::sort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (std::sort()): %f msec\n" ), sortTime );
-    }
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        qsort( sortedFloat32Set, HELIUM_ARRAY_COUNT( sortedFloat32Set ), sizeof( sortedFloat32Set[ 0 ] ), FloatCompare );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( sortTime );
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (qsort()):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (qsort()): %f msec\n" ), sortTime );
-    }
-
-    {
-        // Lazy method of making sure we use the time from a run-through after the job cache has already been prepared
-        // (first couple run-throughs or so will create a bunch of job objects for the first time, which is inherently
-        // slow, while the subsequent runs will reuse the pooled objects).
-        float sortTime = 0.0f;
-        for( size_t i = 0; i < 5; ++i )
-        {
-            MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-            floatSetString.Clear();
-
-            HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-            {
-                // Yes, I do want to time job preparation as well...
-                JobContext::Spawner< 1 > rootSpawner;
-
-                JobContext* pContext = rootSpawner.Allocate();
-                HELIUM_ASSERT( pContext );
-                SortJob< float32_t >* pJob = pContext->Create< SortJob< float32_t > >();
-                HELIUM_ASSERT( pJob );
-
-                SortJob< float32_t >::Parameters& rParameters = pJob->GetParameters();
-                rParameters.pBase = sortedFloat32Set;
-                rParameters.count = HELIUM_ARRAY_COUNT( sortedFloat32Set );
-                rParameters.singleJobCount = sortJobGrainSize;
-            }
-            HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-            sortTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-                static_cast< float32_t >( perfFrequency.QuadPart );
-        }
-
-        for( size_t floatIndex = 0; floatIndex < HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ); ++floatIndex )
-        {
-            formatString.Format( TXT( " %f" ), sortedFloat32Set[ floatIndex ] );
-            floatSetString += formatString;
-        }
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sorted float set (SortJob):%s\n" ), *floatSetString );
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "Sort time (SortJob): %f msec\n" ), sortTime );
-    }
-
-#if 0
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        for( size_t j = 0; j < 1000; ++j )
-        {
-            float32_t* pFloat = sortedFloat32Set;
-            for( size_t i = 0; i < HELIUM_ARRAY_COUNT( sortedFloat32Set ); i += 4, pFloat += 4 )
-            {
-                __m128 vec = _mm_load_ps( pFloat );
-#define MOVEHL_REP( Z, N, DATA ) vec = _mm_movehl_ps( vec, vec );
-                BOOST_PP_REPEAT( 200, MOVEHL_REP, );
-#undef MOVEHL_REP
-                _mm_store_ps( pFloat, vec );
-            }
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t processTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( processTime );
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_movhl_ps() work time: %f msec\n" ), processTime );
-    }
-
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-        floatSetString.Clear();
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        for( size_t j = 0; j < 1000; ++j )
-        {
-            float32_t* pFloat = sortedFloat32Set;
-            for( size_t i = 0; i < HELIUM_ARRAY_COUNT( sortedFloat32Set ); i += 4, pFloat += 4 )
-            {
-                __m128 vec = _mm_load_ps( pFloat );
-#define SHUFFLE_REP( Z, N, DATA ) vec = _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 1, 0, 3, 2 ) );
-                BOOST_PP_REPEAT( 200, SHUFFLE_REP, );
-#undef SHUFFLE_REP
-                _mm_store_ps( pFloat, vec );
-            }
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        float32_t processTime = static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-        HELIUM_UNREF( processTime );
-
-        HELIUM_TRACE( TraceLevels::Debug, TXT( "_mm_shuffle_ps() work time: %f msec\n" ), processTime );
-    }
-#endif
-
-    floatSetString.Clear();
-    formatString.Clear();
-
-    // Average timing, comparing qsort(), std::sort(), TBB parallel_sort() (as compact as you will likely get using TBB
-    // directly), and our SortJob implementation (runs through additional abstraction layers provided by the engine, but
-    // provides a decent starting optimization target for the job system as a whole).
-    //
-    // Note that non-release builds can have additional overhead due to logging and debug assertions.  It may be
-    // preferable to create a release build with logging explicitly enabled (see Platform/Trace.h).
-    //
-    // Benchmark results on 2010-08-25 from 50,000 iterations of sorting of a pseudo-random list of 32-bit floats
-    // (average times recorded):
-    // - Windows 64-bit release build (w/ logging enabled)
-    // - Intel Core i7-860 (4 cores w/ hyper-threading @ 2.8 GHz each, 256 KB L2 cache per core, 8 MB shared L3 cache)
-    // - 8 GB RAM
-    // - 64-bit Vista
-    // - A whole bunch of other processes in the background (I didn't bother to shut anything down...)
-    // Grain size for SortJob was tuned to 600 (that is, a job receiving 600 or less values will sort the entire chunk
-    // serially instead of spawning additional children in order to reduce job scheduling overhead).  This seemed like a
-    // reasonable sweet-spot for performance on the aforementioned benchmark system (both 32-bit and 64-bit builds
-    // tested).
-    //
-    // - 100 floats:
-    //   - qsort(): 0.007408 msec
-    //   - std::sort(): 0.003120 msec
-    //   - tbb::parallel_sort(): 0.003329 msec
-    //   - SortJob: 0.001976 msec
-    // - 500 floats:
-    //   - qsort(): 0.044920 msec
-    //   - std::sort(): 0.024747 msec
-    //   - tbb::parallel_sort(): 0.023207 msec
-    //   - SortJob: 0.019501 msec
-    // - 1000 floats:
-    //   - qsort(): 0.098956 msec
-    //   - std::sort() (C++ STL): 0.054019 msec
-    //   - tbb::parallel_sort(): 0.037225 msec
-    //   - SortJob: 0.042649 msec
-    // - 5000 floats:
-    //   - qsort(): 0.577524 msec
-    //   - std::sort(): 0.350688 msec
-    //   - tbb::parallel_sort(): 0.123013 msec
-    //   - SortJob: 0.128522 msec
-    // - 10000 floats:
-    //   - qsort(): 1.240391 msec
-    //   - std::sort(): 0.754110 msec
-    //   - tbb::parallel_sort(): 0.221948 msec
-    //   - SortJob: 0.222561 msec
-    // - 20000 floats:
-    //   - qsort(): 2.669877 msec
-    //   - std::sort(): 1.611734 msec
-    //   - tbb::parallel_sort(): 0.431200 msec
-    //   - SortJob: 0.402075 msec
-    float32_t qsortAvg = 0.0f;
-    float32_t stdSortAvg = 0.0f;
-    float32_t tbbParallelAvg = 0.0f;
-    float32_t jobParallelAvg = 0.0f;
-
-    const size_t iterationCount = 500;
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        qsort( sortedFloat32Set, HELIUM_ARRAY_COUNT( sortedFloat32Set ), sizeof( sortedFloat32Set[ 0 ] ), FloatCompare );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        qsortAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        std::sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        stdSortAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        tbb::parallel_sort( &sortedFloat32Set[ 0 ], &sortedFloat32Set[ HELIUM_ARRAY_COUNT( sortedFloat32Set ) ] );
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        tbbParallelAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    for( size_t i = 0; i < iterationCount; ++i )
-    {
-        MemoryCopy( sortedFloat32Set, SAMPLE_FLOAT32_SET, sizeof( SAMPLE_FLOAT32_SET ) );
-
-        HELIUM_VERIFY( QueryPerformanceCounter( &startCounter ) );
-        {
-            // Yes, I do want to time job preparation as well...
-            JobContext::Spawner< 1 > rootSpawner;
-
-            JobContext* pContext = rootSpawner.Allocate();
-            HELIUM_ASSERT( pContext );
-            SortJob< float32_t >* pJob = pContext->Create< SortJob< float32_t > >();
-            HELIUM_ASSERT( pJob );
-
-            SortJob< float32_t >::Parameters& rParameters = pJob->GetParameters();
-            rParameters.pBase = sortedFloat32Set;
-            rParameters.count = HELIUM_ARRAY_COUNT( sortedFloat32Set );
-            rParameters.singleJobCount = sortJobGrainSize;
-        }
-        HELIUM_VERIFY( QueryPerformanceCounter( &endCounter ) );
-        jobParallelAvg += static_cast< float32_t >( endCounter.QuadPart - startCounter.QuadPart ) * 1000.0f /
-            static_cast< float32_t >( perfFrequency.QuadPart );
-    }
-
-    qsortAvg /= static_cast< float32_t >( iterationCount );
-    stdSortAvg /= static_cast< float32_t >( iterationCount );
-    tbbParallelAvg /= static_cast< float32_t >( iterationCount );
-    jobParallelAvg /= static_cast< float32_t >( iterationCount );
-
-    HELIUM_TRACE(
-        TraceLevels::Debug,
-        TXT( "Sorting benchmark (%" ) TPRIuSZ TXT( " 32-bit floats, average over %" ) TPRIuSZ TXT( " iterations):\n" ),
-        HELIUM_ARRAY_COUNT( SAMPLE_FLOAT32_SET ),
-        iterationCount );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- qsort() (C-standard library): %f msec\n" ), qsortAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- std::sort() (C++ STL): %f msec\n" ), stdSortAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- TBB parallel_sort(): %f msec\n" ), tbbParallelAvg );
-    HELIUM_TRACE( TraceLevels::Debug, TXT( "- Helium SortJob: %f msec\n" ), jobParallelAvg );
+    
+    Helium::Components::Cleanup();
 
     JobManager::DestroyStaticInstance();
 

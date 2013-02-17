@@ -82,7 +82,7 @@ namespace Helium
         /// Runtime index for the entity within its slice.
         size_t m_sliceIndex;
 
-        ComponentDefinitionSet m_ComponentDefinitions;
+        ComponentDefinitionSetPtr m_ComponentDefinitions;
     };
 
     class Entity : public Reflect::Object, Helium::Components::HasComponents

@@ -19,14 +19,15 @@ namespace Helium
             void InitRenderer( HWND hwnd );
             void Shutdown();
 
-            SlicePtr GetEditorSlice() const { return m_EditorSlice; }
+            WorldPtr GetCurrentWorld() const { return m_EditorWorld; }
+            //SlicePtr GetEditorSlice() const { return m_EditorSlice; }
 
         private:
-            void CreateEditorWorld();
+            //void CreateEditorWorld();
 
-            PackagePtr m_EditorPackage;
+            //PackagePtr m_EditorPackage;
             WorldPtr m_EditorWorld;
-            SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities
+            //SlicePtr m_EditorSlice; // the slice that holds transient editor-only entities
         };
     }
 }

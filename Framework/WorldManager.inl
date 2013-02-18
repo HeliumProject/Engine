@@ -42,38 +42,4 @@ namespace Helium
     {
         return m_frameDeltaSeconds;
     }
-
-    /// Get the current entity update phase.
-    ///
-    /// @return  Current entity update phase.
-    WorldManager::EUpdatePhase WorldManager::GetUpdatePhase() const
-    {
-        return m_updatePhase;
-    }
-
-#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-    /// Get the entity being updated by the current thread.
-    ///
-    /// @return  Current entity being updated.
-    ///
-    /// @see SetCurrentThreadUpdateEntity()
-    const EntityDefinition* WorldManager::GetCurrentThreadUpdateEntity() const
-    {
-        const EntityDefinition* pEntity = static_cast< const EntityDefinition* >( m_currentEntityTls.GetPointer() );
-
-        return pEntity;
-    }
-
-    /// Set the entity being updated by the current thread.
-    ///
-    /// Note that only the pointer value is stored, so the reference count of the entity will not be increased.
-    ///
-    /// @param[in] pEntity  EntityDefinition to set.
-    ///
-    /// @see GetCurrentThreadUpdateEntity()
-    void WorldManager::SetCurrentThreadUpdateEntity( const EntityDefinition* pEntity )
-    {
-        m_currentEntityTls.SetPointer( const_cast< EntityDefinition* >( pEntity ) );
-    }
-#endif
 }

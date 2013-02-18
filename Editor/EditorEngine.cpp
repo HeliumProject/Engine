@@ -22,7 +22,7 @@ EditorEngine::~EditorEngine()
 
 bool EditorEngine::Initialize()
 {
-    CreateEditorWorld();
+    //CreateEditorWorld();
 
     return true;
 }
@@ -61,21 +61,21 @@ void EditorEngine::Shutdown()
     rRenderResourceManager.Shutdown();
     RenderResourceManager::DestroyStaticInstance();
 
-    m_EditorSlice.Release();
+    //m_EditorSlice.Release();
     m_EditorWorld.Release();
-    m_EditorPackage.Release();
+    //m_EditorPackage.Release();
 }
 
-void EditorEngine::CreateEditorWorld()
-{
-    HELIUM_VERIFY( GameObject::Create< Package >( m_EditorPackage, Name( TXT( "EditorInternalPackage" ) ), NULL ) );
-
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    m_EditorWorld = rWorldManager.CreateDefaultWorld();
-    HELIUM_ASSERT( m_EditorWorld );
-    HELIUM_VERIFY( m_EditorWorld->Initialize() );
-
-    HELIUM_VERIFY( GameObject::Create< Slice >( m_EditorSlice, Name( TXT( "EditorInternalSlice" ) ), m_EditorPackage ) );
-    HELIUM_VERIFY( m_EditorWorld->AddSlice( m_EditorSlice ) );
-    m_EditorSlice->BindPackage( m_EditorPackage );
-}
+//void EditorEngine::CreateEditorWorld()
+//{
+//    HELIUM_VERIFY( GameObject::Create< Package >( m_EditorPackage, Name( TXT( "EditorInternalPackage" ) ), NULL ) );
+//
+//    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
+//    m_EditorWorld = rWorldManager.CreateDefaultWorld();
+//    HELIUM_ASSERT( m_EditorWorld );
+//    HELIUM_VERIFY( m_EditorWorld->Initialize() );
+//
+//    HELIUM_VERIFY( GameObject::Create< Slice >( m_EditorSlice, Name( TXT( "EditorInternalSlice" ) ), m_EditorPackage ) );
+//    HELIUM_VERIFY( m_EditorWorld->AddSlice( m_EditorSlice ) );
+//    m_EditorSlice->BindPackage( m_EditorPackage );
+//}

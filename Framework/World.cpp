@@ -15,9 +15,21 @@ namespace Helium
     typedef Helium::StrongPtr< const World > ConstWorldPtr;
 }
 
-HELIUM_IMPLEMENT_OBJECT( Helium::World, Framework, 0 );
-
 using namespace Helium;
+
+HELIUM_IMPLEMENT_OBJECT( Helium::WorldDefinition, Framework, 0 );
+
+//WorldDefinition::WorldDefinition()
+//{
+//}
+//
+//WorldDefinition::~WorldDefinition()
+//{
+//
+//}
+
+
+REFLECT_DEFINE_OBJECT( Helium::World );
 
 /// Constructor.
 World::World()
@@ -27,7 +39,7 @@ World::World()
 /// Destructor.
 World::~World()
 {
-    HELIUM_ASSERT( m_slices.IsEmpty() );
+    //HELIUM_ASSERT( m_slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
 }
 
@@ -36,15 +48,17 @@ World::~World()
 /// @return  True if initialization was successful, false if not.
 ///
 /// @see Shutdown()
-bool World::Initialize()
+bool World::Initialize(WorldDefinitionPtr _world_definition)
 {
-    HELIUM_ASSERT( m_slices.IsEmpty() );
+    m_spWorldDefinition = _world_definition;
+
+    //HELIUM_ASSERT( m_slices.IsEmpty() );
     HELIUM_ASSERT( !m_spGraphicsScene );
 
     // Create the main graphics scene.
     const GameObjectType* pSceneType = GraphicsScene::GetStaticType();
     HELIUM_ASSERT( pSceneType );
-    bool bCreateResult = GameObject::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), this );
+    bool bCreateResult = GameObject::Create< GraphicsScene >( m_spGraphicsScene, pSceneType->GetName(), GetWorldDefinition() );
     HELIUM_ASSERT( bCreateResult );
     if( !bCreateResult )
     {
@@ -64,12 +78,12 @@ bool World::Initialize()
 void World::Shutdown()
 {
     // Remove all slices first.
-    while( !m_slices.IsEmpty() )
-    {
-        Slice* pSlice = m_slices.GetLast();
-        HELIUM_ASSERT( pSlice );
-        HELIUM_VERIFY( RemoveSlice( pSlice ) );
-    }
+//     while( !m_slices.IsEmpty() )
+//     {
+//         Slice* pSlice = m_slices.GetLast();
+//         HELIUM_ASSERT( pSlice );
+//         HELIUM_VERIFY( RemoveSlice( pSlice ) );
+//     }
 
     // Release the graphics scene for the world.
     m_spGraphicsScene.Release();
@@ -109,57 +123,53 @@ void World::PreDestroy()
 /// @see DestroyEntity()
 EntityDefinition* World::CreateEntity(
     Slice* pSlice,
-    const GameObjectType* pType,
-    const Simd::Vector3& rPosition,
-    const Simd::Quat& rRotation,
-    const Simd::Vector3& rScale,
-    EntityDefinition* pTemplate,
-    Name name,
-    bool bAssignInstanceIndex )
+    Entity* pEntity)
 {
-    // Make sure the destination slice is valid.
-    HELIUM_ASSERT( pSlice );
-    if( !pSlice )
-    {
-        HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity slice.\n" ) );
+    return 0;
 
-        return NULL;
-    }
+    //// Make sure the destination slice is valid.
+    //HELIUM_ASSERT( pSlice );
+    //if( !pSlice )
+    //{
+    //    HELIUM_TRACE( TraceLevels::Error, TXT( "World::CreateEntity(): Missing entity slice.\n" ) );
 
-    World* pSliceWorld = pSlice->GetWorld();
-    HELIUM_ASSERT( pSliceWorld == this );
-    if( pSliceWorld != this )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "World::CreateEntity(): Slice \"%s\" is not bound to world \"%s\".\n" ),
-            *pSlice->GetPath().ToString(),
-            *GetPath().ToString() );
+    //    return NULL;
+    //}
 
-        return NULL;
-    }
+    //World* pSliceWorld = pSlice->GetWorld();
+    //HELIUM_ASSERT( pSliceWorld == this );
+    //if( pSliceWorld != this )
+    //{
+    //    HELIUM_TRACE(
+    //        TraceLevels::Error,
+    //        TXT( "World::CreateEntity(): Slice \"%s\" is not bound to world \"%s\".\n" ),
+    //        *pSlice->GetPath().ToString(),
+    //        *GetPath().ToString() );
 
-    // Attempt to create the entity.
-    EntityDefinition* pEntity = pSlice->CreateEntity(
-        pType,
-        rPosition,
-        rRotation,
-        rScale,
-        pTemplate,
-        name,
-        bAssignInstanceIndex );
-    if( !pEntity )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", slice \"%s\".\n" ),
-            *GetPath().ToString(),
-            *pSlice->GetPath().ToString() );
+    //    return NULL;
+    //}
 
-        return NULL;
-    }
+    //// Attempt to create the entity.
+    //EntityDefinition* pEntity = pSlice->CreateEntity(
+    //    pType,
+    //    rPosition,
+    //    rRotation,
+    //    rScale,
+    //    pTemplate,
+    //    name,
+    //    bAssignInstanceIndex );
+    //if( !pEntity )
+    //{
+    //    HELIUM_TRACE(
+    //        TraceLevels::Error,
+    //        TXT( "World::CreateEntity(): Failed to create entity in world \"%s\", slice \"%s\".\n" ),
+    //        *GetPath().ToString(),
+    //        *pSlice->GetPath().ToString() );
 
-    return pEntity;
+    //    return NULL;
+    //}
+
+    //return pEntity;
 }
 
 /// Destroy an entity in this world.
@@ -169,36 +179,37 @@ EntityDefinition* World::CreateEntity(
 /// @return  True if the entity was destroyed successfully, false if not.
 ///
 /// @see CreateEntity()
-bool World::DestroyEntity( EntityDefinition* pEntity )
+bool World::DestroyEntity( Entity* pEntity )
 {
-    HELIUM_ASSERT( pEntity );
+    return false;
+    //HELIUM_ASSERT( pEntity );
 
-    // Get the entity slice and make sure the entity is part of this world.
-    SlicePtr spEntitySlice( pEntity->GetSlice() );
-    if( !spEntitySlice )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not bound to a slice.\n" ),
-            *pEntity->GetPath().ToString() );
+    //// Get the entity slice and make sure the entity is part of this world.
+    //SlicePtr spEntitySlice( pEntity->GetSlice() );
+    //if( !spEntitySlice )
+    //{
+    //    HELIUM_TRACE(
+    //        TraceLevels::Error,
+    //        TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not bound to a slice.\n" ),
+    //        *pEntity->GetPath().ToString() );
 
-        return false;
-    }
+    //    return false;
+    //}
 
-    WorldPtr spEntityWorld( spEntitySlice->GetWorld() );
-    if( spEntityWorld.Get() != this )
-    {
-        HELIUM_TRACE(
-            TraceLevels::Error,
-            TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not part of world \"%s\".\n" ),
-            *pEntity->GetPath().ToString() );
+    //WorldPtr spEntityWorld( spEntitySlice->GetWorld() );
+    //if( spEntityWorld.Get() != this )
+    //{
+    //    HELIUM_TRACE(
+    //        TraceLevels::Error,
+    //        TXT( "World::DestroyEntity(): EntityDefinition \"%s\" is not part of world \"%s\".\n" ),
+    //        *pEntity->GetPath().ToString() );
 
-        return false;
-    }
+    //    return false;
+    //}
 
-    bool bDestroyResult = spEntitySlice->DestroyEntity( pEntity );
+    //bool bDestroyResult = spEntitySlice->DestroyEntity( pEntity );
 
-    return bDestroyResult;
+    //return bDestroyResult;
 }
 
 /// Add a slice to this world.
@@ -219,7 +230,7 @@ bool World::AddSlice( Slice* pSlice )
         return false;
     }
 
-    World* pExistingWorld = pSlice->GetWorld();
+    WorldDefinition* pExistingWorld = pSlice->GetWorld() ? pSlice->GetWorld()->GetWorldDefinition() : NULL;
     HELIUM_ASSERT( !pExistingWorld );
     if( pExistingWorld )
     {
@@ -266,7 +277,7 @@ bool World::RemoveSlice( Slice* pSlice )
             TraceLevels::Error,
             TXT( "World::RemoveSlice(): Slice \"%s\" is not part of world \"%s\".\n" ),
             *pSlice->GetPath().ToString(),
-            *GetPath().ToString() );
+            *GetWorldDefinition()->GetPath().ToString() );
 
         return false;
     }

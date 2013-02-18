@@ -272,10 +272,12 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     WorldManager& rWorldManager = WorldManager::GetStaticInstance();
     HELIUM_VERIFY( rWorldManager.Initialize() );
 
-    WorldPtr spWorld( rWorldManager.CreateDefaultWorld() );
+    WorldDefinitionPtr spWorldDefinition;
+    spWorldDefinition = Reflect::AssertCast<WorldDefinition>(WorldDefinition::CreateObject());
+
+    WorldPtr spWorld( rWorldManager.CreateWorld(spWorldDefinition) );
     HELIUM_ASSERT( spWorld );
-    HELIUM_VERIFY( spWorld->Initialize() );
-    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorld->GetPath().ToString() );
+    HELIUM_TRACE( TraceLevels::Info, TXT( "Created world \"%s\".\n" ), *spWorldDefinition->GetPath().ToString() );
 
     PackagePtr spSlicePackage;
     HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );

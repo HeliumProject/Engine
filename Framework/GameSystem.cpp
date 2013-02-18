@@ -71,8 +71,8 @@ bool GameSystem::Initialize(
     ObjectLoaderInitialization& rObjectLoaderInitialization,
     ConfigInitialization& rConfigInitialization,
     WindowManagerInitialization& rWindowManagerInitialization,
-    RendererInitialization& rRendererInitialization,
-    const GameObjectType* pWorldType )
+    RendererInitialization& rRendererInitialization/*,
+    const GameObjectType* pWorldType */)
 {
     // Initialize the timer first of all, in case someone wants to use it.
     Timer::StaticInitialize();
@@ -266,14 +266,48 @@ bool GameSystem::Initialize(
 
         return false;
     }
-
+    
+#if 0
     if( !pWorldType )
     {
-        pWorldType = World::GetStaticType();
+        pWorldType = WorldDefinition::GetStaticType();
         HELIUM_ASSERT( pWorldType );
     }
+    
+    bool bIsWorldType = pWorldType->GetClass()->IsType( WorldDefinition::GetStaticType()->GetClass() );
+    HELIUM_ASSERT( bIsWorldType );
+    if( !bIsWorldType )
+    {
+        HELIUM_TRACE(
+            TraceLevels::Error,
+            TXT( "GameSystem::Initialize(): Type \"%s\" specified is not a World subtype.\n" ),
+            *pWorldType->GetName() );
 
-    WorldPtr spDefaultWorld( rWorldManager.CreateDefaultWorld( pWorldType ) );
+        return NULL;
+    }
+
+    GameObjectPtr spWorldObject;
+    bool bCreateResult = GameObject::CreateObject(
+        spWorldObject,
+        pWorldType,
+        WorldManager::GetDefaultWorldName(),
+        WorldManager::GetWorldPackage());
+    HELIUM_ASSERT( bCreateResult );
+    if( !bCreateResult )
+    {
+        HELIUM_TRACE(
+            TraceLevels::Error,
+            TXT( "WorldManager::CreateDefaultWorld(): Failed to create world of type \"%s\".\n" ),
+            *pType->GetName() );
+
+        return NULL;
+    }
+
+    WorldPtr spDefaultWorld( Reflect::AssertCast< World >( spDefaultWorldObject.Get() ) );
+    HELIUM_ASSERT( spDefaultWorld );
+
+
+    WorldPtr spDefaultWorld( rWorldManager.CreateWorld( pWorldType ) );
     HELIUM_ASSERT( spDefaultWorld );
     if( !spDefaultWorld )
     {
@@ -293,6 +327,8 @@ bool GameSystem::Initialize(
         return false;
     }
 
+
+
     PackagePtr spSlicePackage;
     HELIUM_VERIFY( GameObject::Create< Package >( spSlicePackage, Name( TXT( "DefaultSlicePackage" ) ), NULL ) );
     HELIUM_ASSERT( spSlicePackage );
@@ -303,6 +339,7 @@ bool GameSystem::Initialize(
     spSlice->BindPackage( spSlicePackage );
 
     HELIUM_VERIFY( spDefaultWorld->AddSlice( spSlice ) );
+#endif
 
     // Initialization complete.
     return true;

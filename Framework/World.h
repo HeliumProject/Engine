@@ -18,6 +18,7 @@
 
 namespace Helium
 {
+    class Entity;
     class EntityDefinition;
 
     class GraphicsScene;
@@ -28,14 +29,22 @@ namespace Helium
     typedef Helium::StrongPtr< Slice > SlicePtr;
     typedef Helium::StrongPtr< const Slice > ConstSlicePtr;
 
+    class HELIUM_FRAMEWORK_API WorldDefinition : public GameObject
+    {
+        HELIUM_DECLARE_OBJECT( WorldDefinition, GameObject );
+    };
+
+    typedef Helium::StrongPtr< WorldDefinition > WorldDefinitionPtr;
+    typedef Helium::StrongPtr< const WorldDefinition > ConstWorldDefinitionPtr;
+
     /// World instance.
     ///
     /// A world contains a discrete group of entities that can be simulated within an application environment.  Multiple
     /// world instances can exist at the same time, allowing the use of specific worlds for special-case scenarios, such
     /// as rendering scenes outside the game world to a texture or editor preview windows.
-    class HELIUM_FRAMEWORK_API World : public GameObject
+    class HELIUM_FRAMEWORK_API World : public Reflect::Object
     {
-        HELIUM_DECLARE_OBJECT( World, GameObject );
+        REFLECT_DECLARE_OBJECT( Helium::World, Reflect::Object);
 
     public:
         /// @name Construction/Destruction
@@ -46,7 +55,7 @@ namespace Helium
 
         /// @name World Initialization
         //@{
-        virtual bool Initialize();
+        virtual bool Initialize(WorldDefinitionPtr _world_definition);
         virtual void Shutdown();
         //@}
 
@@ -63,10 +72,8 @@ namespace Helium
         /// @name EntityDefinition Creation
         //@{
         virtual EntityDefinition* CreateEntity(
-            Slice* pSlice, const GameObjectType* pType, const Simd::Vector3& rPosition = Simd::Vector3( 0.0f ),
-            const Simd::Quat& rRotation = Simd::Quat::IDENTITY, const Simd::Vector3& rScale = Simd::Vector3( 1.0f ),
-            EntityDefinition* pTemplate = NULL, Name name = NULL_NAME, bool bAssignInstanceIndex = true );
-        virtual bool DestroyEntity( EntityDefinition* pEntity );
+            Slice* pSlice, Entity* pEntity);
+        virtual bool DestroyEntity( Entity* pEntity );
         //@}
 
         /// @name Slice Registration
@@ -81,9 +88,12 @@ namespace Helium
         /// @name Scene Access
         //@{
         GraphicsScene* GetGraphicsScene() const;
+        WorldDefinition* GetWorldDefinition() { return m_spWorldDefinition.Get(); }
         //@}
 
     private:
+        Helium::StrongPtr<WorldDefinition> m_spWorldDefinition;
+
         /// Active slices.
         DynamicArray< SlicePtr > m_slices;
 

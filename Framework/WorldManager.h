@@ -25,21 +25,21 @@ namespace Helium
     {
     public:
         /// Update phases.
-        enum EUpdatePhase
-        {
-            UPDATE_PHASE_FIRST   =  0,
-            UPDATE_PHASE_INVALID = -1,
+        //enum EUpdatePhase
+        //{
+        //    UPDATE_PHASE_FIRST   =  0,
+        //    UPDATE_PHASE_INVALID = -1,
 
-            /// Pre-update (entities can read data, write only to private scratch space, can access other entities).
-            UPDATE_PHASE_PRE,
-            /// Post-update (entities can only read and write their own data, cannot access other entities).
-            UPDATE_PHASE_POST,
-            /// Synchronous update (slow, necessary for object creation, deletion, and entity reattachment).
-            UPDATE_PHASE_SYNCHRONOUS,
+        //    /// Pre-update (entities can read data, write only to private scratch space, can access other entities).
+        //    UPDATE_PHASE_PRE,
+        //    /// Post-update (entities can only read and write their own data, cannot access other entities).
+        //    UPDATE_PHASE_POST,
+        //    /// Synchronous update (slow, necessary for object creation, deletion, and entity reattachment).
+        //    UPDATE_PHASE_SYNCHRONOUS,
 
-            UPDATE_PHASE_MAX,
-            UPDATE_PHASE_LAST = UPDATE_PHASE_MAX - 1
-        };
+        //    UPDATE_PHASE_MAX,
+        //    UPDATE_PHASE_LAST = UPDATE_PHASE_MAX - 1
+        //};
 
         /// @name Initialization
         //@{
@@ -49,12 +49,10 @@ namespace Helium
 
         /// @name World Creation
         //@{
-        GameObjectPath GetWorldPackagePath() const;
-        Package* GetWorldPackage() const;
-
-        Name GetDefaultWorldName() const;
-
-        World* CreateDefaultWorld( const GameObjectType* pType = World::GetStaticType() );
+        //GameObjectPath GetWorldPackagePath() const;
+        //Package* GetWorldPackage() const;
+        //Name GetDefaultWorldName() const;
+        WorldPtr CreateWorld( WorldDefinitionPtr _world_definition );
         //@}
 
         /// @name Updating
@@ -71,11 +69,11 @@ namespace Helium
 
         /// @name Data Access
         //@{
-        inline EUpdatePhase GetUpdatePhase() const;
-#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-        inline const EntityDefinition* GetCurrentThreadUpdateEntity() const;
-        inline void SetCurrentThreadUpdateEntity( const EntityDefinition* pEntity );
-#endif
+//         inline EUpdatePhase GetUpdatePhase() const;
+// #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+//         inline const EntityDefinition* GetCurrentThreadUpdateEntity() const;
+//         inline void SetCurrentThreadUpdateEntity( const EntityDefinition* pEntity );
+// #endif
         //@}
 
         /// @name Static Access
@@ -86,7 +84,7 @@ namespace Helium
 
     private:
         /// World package.
-        PackagePtr m_spWorldPackage;
+        //PackagePtr m_spWorldPackage;
         /// World instances.
         DynamicArray< WorldPtr > m_worlds;
 
@@ -100,12 +98,12 @@ namespace Helium
         float32_t m_frameDeltaSeconds;
 
         /// Current world update phase.
-        EUpdatePhase m_updatePhase;
+        //EUpdatePhase m_updatePhase;
 
-#if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
-        /// Thread-local storage for the entity currently being updated on a given thread.
-        ThreadLocalPointer m_currentEntityTls;
-#endif
+// #if HELIUM_ENABLE_WORLD_UPDATE_SAFETY_CHECKING
+//         /// Thread-local storage for the entity currently being updated on a given thread.
+//         ThreadLocalPointer m_currentEntityTls;
+// #endif
 
         /// True if the first frame has been processed.
         bool m_bProcessedFirstFrame;

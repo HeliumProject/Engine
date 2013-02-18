@@ -414,7 +414,12 @@ namespace Helium
               m_Previous(0),
               m_Component(0),
               m_ComponentPtrRegistryHeadIndex(Helium::Invalid<uint32_t>())
-            { }            
+            { }
+
+            ~ComponentPtrBase()
+            {
+                Unlink();
+            }
             
             // Component we point to. NOTE: This will ALWAYS be a type T component because 
             // this class never sets m_Component to anything but NULL. Our non-base template
@@ -433,50 +438,6 @@ namespace Helium
             // linked list and is pointed to by g_ComponentPtrRegistry. Destruction of this
             // Ptr will automatically fix that reference.
             uint32_t m_ComponentPtrRegistryHeadIndex;
-        };
-
-        //Anything that has components can inherit from this class to get a nice API
-        class HasComponents
-        {
-        public:
-
-            ~HasComponents()
-            {
-                Helium::Components::RemoveAllComponents(m_Components);
-            }
-
-            template <class T>
-            T*  Allocate()
-            {
-                return Helium::Components::Allocate<T>(m_Components);
-            }
-
-            template <class T>
-            T*  FindOneComponent()
-            {
-                return Helium::Components::FindOneComponent<T>(m_Components);
-            }
-
-            template <class T>
-            T*  FindOneComponentThatImplements()
-            {
-                return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
-            }
-
-            template <class T>
-            void FindAllComponents(DynamicArray<T *> &_components)
-            {
-                Helium::Components::FindAllComponents<T>(m_Components, _components);
-            }
-
-            template <class T>
-            void FindAllComponentsThatImplement(DynamicArray<T *> &_components)
-            {
-                Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
-            }
-            
-        protected:
-            ComponentSet m_Components;
         };
     }
 

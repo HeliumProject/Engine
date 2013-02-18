@@ -84,16 +84,60 @@ namespace Helium
 
         ComponentDefinitionSetPtr m_ComponentDefinitions;
     };
+    typedef Helium::StrongPtr<EntityDefinition> EntityDefinitionPtr;
 
-    class Entity : public Reflect::Object, Helium::Components::HasComponents
+    class HELIUM_FRAMEWORK_API Entity : public Reflect::Object
     {
     public:
         REFLECT_DECLARE_OBJECT(Helium::Entity, Helium::Reflect::Object);
         static void PopulateComposite( Reflect::Composite& comp );
 
-    private:
+        
+        ~Entity()
+        {
+            Helium::Components::RemoveAllComponents(m_Components);
+        }
 
+        template <class T>
+        T*  Allocate()
+        {
+            return Helium::Components::Allocate<T>(m_Components);
+        }
+
+        template <class T>
+        T*  FindOneComponent()
+        {
+            return Helium::Components::FindOneComponent<T>(m_Components);
+        }
+
+        template <class T>
+        T*  FindOneComponentThatImplements()
+        {
+            return Helium::Components::FindOneComponentThatImplements<T>(m_Components);
+        }
+
+        template <class T>
+        void FindAllComponents(DynamicArray<T *> &_components)
+        {
+            Helium::Components::FindAllComponents<T>(m_Components, _components);
+        }
+
+        template <class T>
+        void FindAllComponentsThatImplement(DynamicArray<T *> &_components)
+        {
+            Helium::Components::FindAllComponentsThatImplement<T>(m_Components, _components);
+        }
+
+        void DeployComponents(Helium::ComponentDefinitionSet &_components, ParameterSet &_parameters)
+        {
+            Helium::Components::DeployComponents(_components, _parameters, m_Components);
+        }
+
+    private:
+        Helium::Components::ComponentSet m_Components;
+        
     };
+    typedef Helium::StrongPtr<Entity> EntityPtr;
 }
 
 #include "Framework/EntityDefinition.inl"

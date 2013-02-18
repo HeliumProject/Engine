@@ -41,7 +41,7 @@ Slice::~Slice()
 //
 //        for( uint32_t entityIndex = 0; entityIndex < entityCount; ++entityIndex )
 //        {
-//            EntityPtr& rspEntity = m_entities[ entityIndex ];
+//            EntityDefinitionPtr& rspEntity = m_entities[ entityIndex ];
 //            s << rspEntity;
 //
 //            EntityDefinition* pEntity = rspEntity;
@@ -281,7 +281,7 @@ void Slice::AddPackageEntities()
     // Add package entities.
     for( GameObject* pChild = pPackage->GetFirstChild(); pChild != NULL; pChild = pChild->GetNextSibling() )
     {
-        EntityPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
+        EntityDefinitionPtr spEntity( Reflect::SafeCast< EntityDefinition >( pChild ) );
         if( spEntity )
         {
             HELIUM_ASSERT( spEntity->GetSlice().Get() == NULL );

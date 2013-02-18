@@ -19,8 +19,8 @@
 namespace Helium
 {
     class EntityDefinition;
-    typedef Helium::StrongPtr< EntityDefinition > EntityPtr;
-    typedef Helium::StrongPtr< const EntityDefinition > ConstEntityPtr;
+    typedef Helium::StrongPtr< EntityDefinition > EntityDefinitionPtr;
+    typedef Helium::StrongPtr< const EntityDefinition > ConstEntityDefinitionPtr;
 
     class World;
     typedef Helium::WeakPtr< World > WorldWPtr;
@@ -85,7 +85,7 @@ namespace Helium
         /// Bound package.
         PackagePtr m_spPackage;
         /// Entities.
-        DynamicArray< EntityPtr > m_entities;
+        DynamicArray< EntityDefinitionPtr > m_entities;
 
         /// Slice world.
         WorldWPtr m_spWorld;

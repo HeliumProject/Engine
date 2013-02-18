@@ -59,6 +59,7 @@ namespace Helium
         virtual void FinalizeComponent() const
         {
             ColorComponent *color_component = static_cast<ColorComponent *>(GetCreatedComponent());
+            color_component->Finalize(this);
         }
 
         Color4 m_Color;

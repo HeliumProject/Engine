@@ -49,15 +49,6 @@ extern void UnregisterTestAppTypes();
 
 void TestComponents()
 {
-    struct TestObj : public Helium::Components::HasComponents
-    {
-
-    };
-
-    //GameObject::Create(
-
-    //TestObj.Allocate<ColorComponent>();
-
     Helium::StrongPtr<Helium::ColorComponentDefinition> color_descriptor1;
     ColorComponentDefinition::Create(color_descriptor1, Name(TXT("ColorComponent1")), NULL);
     
@@ -77,14 +68,20 @@ void TestComponents()
     component_set->AddParameter(Name(TXT("ColorComponent2")), Name(TXT("ColorComponent1")), Name(TXT("m_Pointer")));
     component_set->AddParameter(Name(TXT("Color")), Name(TXT("ColorComponent1")), Name(TXT("m_Color")));
 
-    Helium::Components::ComponentSet instantiated_components;
-
     ParameterSet param_set;
     param_set.SetParameter(Name(TXT("Color")), Color4(0, 0, 255, 255));
 
+    Helium::Components::ComponentSet instantiated_components;
     Helium::Components::DeployComponents(*component_set, param_set, instantiated_components);
-    component_set.Release();
 
+    EntityDefinitionPtr edp;
+    EntityDefinition::Create(edp, Name(TXT("TestEntityDef")), 0);
+
+    EntityPtr ep = Reflect::AssertCast<Entity>(Entity::CreateObject());
+    ep->DeployComponents(*component_set, param_set);
+    
+    component_set.Release();
+        
     Helium::Components::RemoveAllComponents(instantiated_components);
 }
 
@@ -153,7 +150,7 @@ int APIENTRY _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR
     Helium::Components::Initialize();
     ColorComponent::RegisterComponentType(64);
 
-    //TestComponents();
+    TestComponents();
     uint32_t displayWidth;
     uint32_t displayHeight;
     //bool bFullscreen;

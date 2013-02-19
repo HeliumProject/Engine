@@ -216,7 +216,7 @@ namespace Helium
             static const Helium::Color s_GreenMaterial;
             static const Helium::Color s_BlueMaterial;
 
-            Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorSlice );
+            Viewport( HWND wnd, SettingsManager* settingsManager, World* editorWorld );
             ~Viewport();
 
             void Reset();
@@ -462,7 +462,7 @@ namespace Helium
 
             RenderVisitor           m_RenderVisitor;
 
-            SlicePtr                m_EditorSlice;
+            World*                  m_EditorWorld;
             uint32_t                m_SceneViewId;
 
             Tool*                   m_Tool;

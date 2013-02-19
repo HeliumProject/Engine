@@ -334,10 +334,6 @@ bool App::OnInit()
     HELIUM_VERIFY( rJobManager.Initialize() );
     m_InitializerStack.Push( JobManager::DestroyStaticInstance );
 
-    WorldManager& rWorldManager = WorldManager::GetStaticInstance();
-    HELIUM_VERIFY( rWorldManager.Initialize() );
-    m_InitializerStack.Push( WorldManager::DestroyStaticInstance );
-
     LoadSettings();
 
     if ( Log::GetErrorCount() )

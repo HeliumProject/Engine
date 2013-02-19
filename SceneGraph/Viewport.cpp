@@ -33,10 +33,10 @@ const Helium::Color Viewport::s_YellowMaterial = SceneGraph::Color::YELLOW;
 const Helium::Color Viewport::s_GreenMaterial = SceneGraph::Color::GREEN;
 const Helium::Color Viewport::s_BlueMaterial = SceneGraph::Color::BLUE;
 
-Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, SlicePtr editorSlice )
+Viewport::Viewport( HWND wnd, SettingsManager* settingsManager, World* editorWorld )
 : m_Window( wnd )
 , m_SettingsManager( settingsManager )
-, m_EditorSlice( editorSlice )
+, m_EditorWorld( editorWorld )
 , m_SceneViewId( Invalid< uint32_t >() )
 , m_Focused( false )
 , m_Tool( NULL )
@@ -282,7 +282,7 @@ void Viewport::InitCameras()
 
     m_Cameras[ CameraMode::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    GraphicsScene* pGraphicsScene = m_EditorWorld->GetGraphicsScene();
     m_SceneViewId = pGraphicsScene->AllocateSceneView();
 }
 
@@ -294,7 +294,6 @@ void Viewport::OnResize()
         static_cast< float32_t >( width ) / static_cast< float32_t >( height );
 
     Renderer* pRenderer = Renderer::GetStaticInstance();
-    RenderResourceManager& rRenderResourceManager = RenderResourceManager::GetStaticInstance();
 
     Renderer::ContextInitParameters ctxParams;
     ctxParams.pWindow = m_Window;
@@ -305,10 +304,10 @@ void Viewport::OnResize()
 
     RRenderContextPtr renderCtx = pRenderer->CreateSubContext( ctxParams );
 
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    GraphicsScene* pGraphicsScene = m_EditorWorld->GetGraphicsScene();
     GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
     pSceneView->SetRenderContext( renderCtx );
-    pSceneView->SetDepthStencilSurface( rRenderResourceManager.GetDepthStencilSurface() );
+    pSceneView->SetDepthStencilSurface( RenderResourceManager::GetStaticInstance().GetDepthStencilSurface() );
     pSceneView->SetAspectRatio( aspectRatio );
     pSceneView->SetViewport( 0, 0, width, height );
     pSceneView->SetClearColor( Helium::Color( 0x00505050 ) );
@@ -709,7 +708,9 @@ void Viewport::Draw()
 
     uint64_t start = Helium::TimerGetClock();
 
-    GraphicsScene* pGraphicsScene = m_EditorSlice->GetWorld()->GetGraphicsScene();
+    Camera& camera = m_Cameras[m_CameraMode];
+
+    GraphicsScene* pGraphicsScene = m_EditorWorld->GetGraphicsScene();
     GraphicsSceneView* pSceneView = pGraphicsScene->GetSceneView( m_SceneViewId );
     BufferedDrawer* pDrawer = pGraphicsScene->GetSceneViewBufferedDrawer( m_SceneViewId );
 
@@ -718,12 +719,8 @@ void Viewport::Draw()
     {
         SCENE_GRAPH_RENDER_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
-        Camera& camera = m_Cameras[m_CameraMode];
-
         Vector3 pos;
         camera.GetPosition( pos );
-        Vector3 dir;
-        camera.GetDirection( dir );
 
         const Matrix4& invView = camera.GetInverseView();
 

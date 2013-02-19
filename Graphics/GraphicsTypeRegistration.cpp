@@ -17,6 +17,7 @@
 #include "Graphics/GraphicsConfig.h"
 #include "Graphics/GraphicsScene.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Mesh.h"
 
 static Helium::StrongPtr< Helium::Package > spGraphicsTypePackage;
 
@@ -58,6 +59,7 @@ HELIUM_GRAPHICS_API void RegisterGraphicsTypes()
     HELIUM_VERIFY( Helium::ShaderVariant::InitStaticType() );
     HELIUM_VERIFY( Helium::Texture::InitStaticType() );
     HELIUM_VERIFY( Helium::Texture2d::InitStaticType() );
+    HELIUM_VERIFY( Helium::Mesh::InitStaticType() );
 }
 
 HELIUM_GRAPHICS_API void UnregisterGraphicsTypes()
@@ -71,6 +73,7 @@ HELIUM_GRAPHICS_API void UnregisterGraphicsTypes()
     Helium::ShaderVariant::ReleaseStaticType();
     Helium::Texture::ReleaseStaticType();
     Helium::Texture2d::ReleaseStaticType();
+    Helium::Mesh::ReleaseStaticType();
 
     ReleaseGraphicsTypePackage();
 }

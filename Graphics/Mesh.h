@@ -36,14 +36,14 @@ namespace Helium
     typedef Helium::StrongPtr< const Material > ConstMaterialPtr;
 
     /// Mesh resource type.
-    class HELIUM_FRAMEWORK_API Mesh : public Resource
+    class HELIUM_GRAPHICS_API Mesh : public Resource
     {
         HELIUM_DECLARE_OBJECT( Mesh, Resource );
         static void PopulateComposite( Reflect::Composite& comp );
 
     public:
 
-        struct HELIUM_FRAMEWORK_API PersistentResourceData : public Object
+        struct HELIUM_GRAPHICS_API PersistentResourceData : public Object
         {
             REFLECT_DECLARE_OBJECT(Mesh::PersistentResourceData, Reflect::Object);
 
@@ -166,6 +166,6 @@ namespace Helium
     };
 }
 
-#include "Framework/Mesh.inl"
+#include "Graphics/Mesh.inl"
 
 #endif  // HELIUM_FRAMEWORK_MESH_H

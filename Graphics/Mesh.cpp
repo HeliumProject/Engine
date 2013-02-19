@@ -1,5 +1,5 @@
-#include "FrameworkPch.h"
-#include "Framework/Mesh.h"
+#include "GraphicsPch.h"
+#include "Graphics/Mesh.h"
 
 #include "Engine/AsyncLoader.h"
 #include "MathSimd/Matrix44.h"
@@ -14,7 +14,7 @@
 #include "GrannyMeshInterface.cpp.inl"
 #endif
 
-HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Framework, GameObjectType::FLAG_NO_TEMPLATE );
+HELIUM_IMPLEMENT_OBJECT( Helium::Mesh, Graphics, GameObjectType::FLAG_NO_TEMPLATE );
 REFLECT_DEFINE_OBJECT( Helium::Mesh::PersistentResourceData );
 
 using namespace Helium;

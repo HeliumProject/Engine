@@ -16,6 +16,7 @@
 #include "MathSimd/Vector3.h"
 #include "MathSimd/Vector4.h"
 #include "Graphics/Shader.h"
+#include "Graphics/Texture.h"
 
 namespace Helium
 {

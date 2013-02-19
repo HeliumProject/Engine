@@ -41,7 +41,7 @@
 #include "Graphics/RenderResourceManager.h"
 #include "GraphicsJobs/GraphicsJobs.h"
 #include "Framework/Slice.h"
-#include "Framework/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Framework/World.h"
 #include "Framework/WorldManager.h"
 #include "RenderingD3D9/D3D9Renderer.h"

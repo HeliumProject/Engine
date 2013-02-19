@@ -15,7 +15,7 @@
 
 #include "PcSupport/ResourceHandler.h"
 
-#include "Framework/Mesh.h"
+#include "Graphics/Mesh.h"
 
 namespace Helium
 {
